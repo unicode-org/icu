@@ -54,18 +54,18 @@ static void debug_islamcal_msg(const char *pat, ...)
 
 // --- The cache --
 // cache of months
-static icu::CalendarCache *gMonthCache = NULL;
-static icu::CalendarAstronomer *gIslamicCalendarAstro = NULL;
+static icu::CalendarCache *gMonthCache = nullptr;
+static icu::CalendarAstronomer *gIslamicCalendarAstro = nullptr;
 
 U_CDECL_BEGIN
 static UBool calendar_islamic_cleanup(void) {
     if (gMonthCache) {
         delete gMonthCache;
-        gMonthCache = NULL;
+        gMonthCache = nullptr;
     }
     if (gIslamicCalendarAstro) {
         delete gIslamicCalendarAstro;
-        gIslamicCalendarAstro = NULL;
+        gIslamicCalendarAstro = nullptr;
     }
     return true;
 }
@@ -259,6 +259,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+    {        0,        0,       11,       11}, // ORDINAL_MONTH
 };
 
 /**
@@ -404,9 +405,9 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
 
     static UMutex astroLock;      // pod bay door lock
     umtx_lock(&astroLock);
-    if(gIslamicCalendarAstro == NULL) {
+    if(gIslamicCalendarAstro == nullptr) {
         gIslamicCalendarAstro = new CalendarAstronomer();
-        if (gIslamicCalendarAstro == NULL) {
+        if (gIslamicCalendarAstro == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return age;
         }
@@ -546,6 +547,7 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     internalSet(UCAL_YEAR, year);
     internalSet(UCAL_EXTENDED_YEAR, year);
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }
@@ -629,6 +631,14 @@ int32_t IslamicCalendar::defaultCenturyStartYear() const
     // lazy-evaluate systemDefaultCenturyStartYear
     umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
     return gSystemDefaultCenturyStartYear;
+}
+
+bool
+IslamicCalendar::inTemporalLeapYear(UErrorCode &status) const
+{
+    int32_t days = getActualMaximum(UCAL_DAY_OF_YEAR, status);
+    if (U_FAILURE(status)) return false;
+    return days == 355;
 }
 
 
@@ -757,6 +767,7 @@ void IslamicCivilCalendar::handleComputeFields(int32_t julianDay, UErrorCode &st
     internalSet(UCAL_YEAR, year);
     internalSet(UCAL_EXTENDED_YEAR, year);
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }
@@ -932,6 +943,7 @@ void IslamicUmalquraCalendar::handleComputeFields(int32_t julianDay, UErrorCode 
     internalSet(UCAL_YEAR, year);
     internalSet(UCAL_EXTENDED_YEAR, year);
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }

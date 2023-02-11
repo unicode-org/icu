@@ -69,8 +69,8 @@ UBool TokenIterator::nextToken(UnicodeString& token, UErrorCode& ec) {
     if (pos == line.length()) {
         return false;
     }
-    UChar c = line.charAt(pos++);
-    UChar quote = 0;
+    char16_t c = line.charAt(pos++);
+    char16_t quote = 0;
     switch (c) {
     case 34/*'"'*/:
     case 39/*'\\'*/:

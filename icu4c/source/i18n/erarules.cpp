@@ -31,8 +31,8 @@ static const int32_t DAY_MASK = 0x000000FF;
 static const int32_t MAX_INT32 = 0x7FFFFFFF;
 static const int32_t MIN_INT32 = 0xFFFFFFFF;
 
-static const UChar VAL_FALSE[] = {0x66, 0x61, 0x6c, 0x73, 0x65};    // "false"
-static const UChar VAL_FALSE_LEN = 5;
+static const char16_t VAL_FALSE[] = {0x66, 0x61, 0x6c, 0x73, 0x65};    // "false"
+static const char16_t VAL_FALSE_LEN = 5;
 
 static UBool isSet(int startDate) {
     return startDate != 0;
@@ -176,7 +176,7 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
                 }
                 startDates[eraIdx] = encodeDate(fields[0], fields[1], fields[2]);
             } else if (uprv_strcmp(key, "named") == 0) {
-                const UChar *val = ures_getString(res.getAlias(), &len, &status);
+                const char16_t *val = ures_getString(res.getAlias(), &len, &status);
                 if (u_strncmp(val, VAL_FALSE, VAL_FALSE_LEN) == 0) {
                     hasName = false;
                 }

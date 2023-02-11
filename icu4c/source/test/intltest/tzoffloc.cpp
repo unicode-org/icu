@@ -131,7 +131,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
     // Set up TimeZone objects - OlsonTimeZone, SimpleTimeZone and RuleBasedTimeZone
     BasicTimeZone *TESTZONES[NUM_TIMEZONES];
 
-    TESTZONES[0] = (BasicTimeZone*)TimeZone::createTimeZone("America/Los_Angeles");
+    TESTZONES[0] = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("America/Los_Angeles"));
     TESTZONES[1] = new SimpleTimeZone(-8*HOUR, "Simple Pacific Time",
                                         UCAL_APRIL, 1, UCAL_SUNDAY, 2*HOUR,
                                         UCAL_OCTOBER, -1, UCAL_SUNDAY, 2*HOUR, status);

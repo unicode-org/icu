@@ -61,14 +61,14 @@ compareFlagsForRange(uint32_t start, uint32_t end,UStringPrepType option);
 static void
 testAllCodepoints(TestIDNA& test);
 
-static TestIDNA* pTestIDNA =NULL;
+static TestIDNA* pTestIDNA =nullptr;
 
 static const char* fileNames[] = {
                                     "rfc3491.txt"
                                  };
-static const UTrie *idnTrie              = NULL;
-static const int32_t *indexes            = NULL;
-static const uint16_t *mappingData       = NULL;
+static const UTrie *idnTrie              = nullptr;
+static const int32_t *indexes            = nullptr;
+static const uint16_t *mappingData       = nullptr;
 /* -------------------------------------------------------------------------- */
 
 /* file definitions */
@@ -78,9 +78,9 @@ static const uint16_t *mappingData       = NULL;
 
 extern int
 testData(TestIDNA& test) {
-    char *basename=NULL;
+    char *basename=nullptr;
     UErrorCode errorCode=U_ZERO_ERROR;
-    char *saveBasename =NULL;
+    char *saveBasename =nullptr;
 
     LocalUStringPrepProfilePointer profile(usprep_openByType(USPREP_RFC3491_NAMEPREP, &errorCode));
     if(U_FAILURE(errorCode)){
@@ -100,7 +100,7 @@ testData(TestIDNA& test) {
     pTestIDNA = &test;
     
     /* prepare the filename beginning with the source dir */
-    if(uprv_strchr(srcDir,U_FILE_SEP_CHAR) == NULL){
+    if(uprv_strchr(srcDir,U_FILE_SEP_CHAR) == nullptr){
         filename[0] = 0x2E;
         filename[1] = U_FILE_SEP_CHAR;
         uprv_strcpy(filename+2,srcDir);
@@ -135,7 +135,7 @@ testData(TestIDNA& test) {
 
     testAllCodepoints(test);
 
-    pTestIDNA = NULL;
+    pTestIDNA = nullptr;
     free(filename);
     return errorCode;
 }
@@ -168,21 +168,21 @@ strprepProfileLineFn(void * /*context*/,
     typeName = fields[2][0];
     map = fields[1][0];
    
-    if(uprv_strstr(typeName, usprepTypeNames[USPREP_UNASSIGNED])!=NULL){
+    if(uprv_strstr(typeName, usprepTypeNames[USPREP_UNASSIGNED])!=nullptr){
 
         u_parseCodePointRange(s, &rangeStart,&rangeEnd, pErrorCode);
 
         /* store the range */
         compareFlagsForRange(rangeStart,rangeEnd,USPREP_UNASSIGNED);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_PROHIBITED])!=NULL){
+    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_PROHIBITED])!=nullptr){
 
         u_parseCodePointRange(s, &rangeStart,&rangeEnd, pErrorCode);
 
         /* store the range */
         compareFlagsForRange(rangeStart,rangeEnd,USPREP_PROHIBITED);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_MAP])!=NULL){
+    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_MAP])!=nullptr){
         /* get the character code, field 0 */
         code=(uint32_t)uprv_strtoul(s, &end, 16);
 
@@ -204,7 +204,7 @@ static void
 parseMappings(const char *filename,UBool reportError, TestIDNA& test, UErrorCode *pErrorCode) {
     char *fields[3][2];
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return;
     }
 
@@ -265,7 +265,7 @@ static void
 testAllCodepoints(TestIDNA& test){
     /*
     {
-        UChar str[19] = {            
+        char16_t str[19] = {
                             0xC138, 0xACC4, 0xC758, 0xBAA8, 0xB4E0, 0xC0AC, 0xB78C, 0xB4E4, 0xC774,
                             0x070F,//prohibited
                             0xD55C, 0xAD6D, 0xC5B4, 0xB97C, 0xC774, 0xD574, 0xD55C, 0xB2E4, 0xBA74
@@ -277,7 +277,7 @@ testAllCodepoints(TestIDNA& test){
         punycode_status error;
         u_strToUTF32((UChar32*)in,19,&inLength,str,19,&status);
 
-        error= punycode_encode(inLength, in, NULL, (uint32_t*)&outLength, output);
+        error= punycode_encode(inLength, in, nullptr, (uint32_t*)&outLength, output);
         printf(output);
 
     }
@@ -385,8 +385,8 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
                     pTestIDNA->errln("Did not get the expected result. Expected: 0x%04X Got: 0x%04X \n", mapping[i], mappingData[index+i]);
                 }
             }else{
-                UChar lead  = U16_LEAD(mapping[i]);
-                UChar trail = U16_TRAIL(mapping[i]);
+                char16_t lead  = U16_LEAD(mapping[i]);
+                char16_t trail = U16_TRAIL(mapping[i]);
                 if(mappingData[index+i] != lead ||
                     mappingData[index+i+1] != trail){
                     pTestIDNA->errln( "Did not get the expected result. Expected: 0x%04X 0x%04X  Got: 0x%04X 0x%04X", lead, trail, mappingData[index+i], mappingData[index+i+1]);
@@ -411,7 +411,7 @@ compareFlagsForRange(uint32_t start, uint32_t end,
     int32_t value=0;
 /*
     // supplementary code point 
-    UChar __lead16=U16_LEAD(0x2323E);
+    char16_t __lead16=U16_LEAD(0x2323E);
     int32_t __offset;
 
     // get data for lead surrogate 

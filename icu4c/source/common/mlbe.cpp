@@ -18,11 +18,12 @@
 
 U_NAMESPACE_BEGIN
 
+enum class ModelIndex { kUWStart = 0, kBWStart = 6, kTWStart = 9 };
+
 MlBreakEngine::MlBreakEngine(const UnicodeSet &digitOrOpenPunctuationOrAlphabetSet,
-                                 const UnicodeSet &closePunctuationSet, UErrorCode &status)
+                             const UnicodeSet &closePunctuationSet, UErrorCode &status)
     : fDigitOrOpenPunctuationOrAlphabetSet(digitOrOpenPunctuationOrAlphabetSet),
       fClosePunctuationSet(closePunctuationSet),
-      fModel(status),
       fNegativeSum(0) {
     if (U_FAILURE(status)) {
         return;
@@ -32,28 +33,10 @@ MlBreakEngine::MlBreakEngine(const UnicodeSet &digitOrOpenPunctuationOrAlphabetS
 
 MlBreakEngine::~MlBreakEngine() {}
 
-namespace {
-    const char16_t INVALID = u'|';
-    const int32_t MAX_FEATURE = 13;
-    const int32_t MAX_FEATURE_LENGTH = 11;
-
-    void concatChar(const char16_t *str, const UChar32 *arr, int32_t length, char16_t *feature, UErrorCode &status) {
-        if (U_FAILURE(status)) {
-            return;
-        }
-        UnicodeString result(str);
-        for (int i = 0; i < length; i++) {
-            result.append(arr[i]);
-        }
-        U_ASSERT(result.length() < MAX_FEATURE_LENGTH);
-        result.extract(feature, MAX_FEATURE_LENGTH, status);  // NUL-terminates
-    }
-}
-
 int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t rangeEnd,
-                                       UVector32 &foundBreaks, const UnicodeString &inString,
-                                       const LocalPointer<UVector32> &inputMap,
-                                       UErrorCode &status) const {
+                                     UVector32 &foundBreaks, const UnicodeString &inString,
+                                     const LocalPointer<UVector32> &inputMap,
+                                     UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -67,30 +50,35 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
         return 0;
     }
     int32_t numBreaks = 0;
-    UnicodeString index;
-    // The ML model groups six char to evaluate if the 4th char is a breakpoint.
-    // Like a sliding window, the elementList removes the first char and appends the new char from
-    // inString in each iteration so that its size always remains at six.
-    UChar32 elementList[6];
-
-    int32_t codeUts = initElementList(inString, elementList, status);
-    int32_t length = inString.countChar32();
+    int32_t codePointLength = inString.countChar32();
+    // The ML algorithm groups six char and evaluates whether the 4th char is a breakpoint.
+    // In each iteration, it evaluates the 4th char and then moves forward one char like a sliding
+    // window. Initially, the first six values in the indexList are [-1, -1, 0, 1, 2, 3]. After
+    // moving forward, finally the last six values in the indexList are
+    // [length-4, length-3, length-2, length-1, -1, -1]. The "+4" here means four extra "-1".
+    int32_t indexSize = codePointLength + 4;
+    int32_t *indexList = (int32_t *)uprv_malloc(indexSize * sizeof(int32_t));
+    if (indexList == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
+    int32_t numCodeUnits = initIndexList(inString, indexList, status);
 
     // Add a break for the start.
     boundary.addElement(0, status);
     numBreaks++;
     if (U_FAILURE(status)) return 0;
 
-    for (int32_t i = 1; i < length && U_SUCCESS(status); i++) {
-        evaluateBreakpoint(elementList, i, numBreaks, boundary, status);
-        if (i + 1 >= inString.countChar32()) break;
-        // Remove the first element and append a new element
-        uprv_memmove(elementList, elementList + 1, 5 * sizeof(UChar32));
-        elementList[5] = inString.countChar32(0, codeUts) < length ? inString.char32At(codeUts) : INVALID;
-        if (elementList[5] != INVALID) {
-            codeUts += U16_LENGTH(elementList[5]);
+    for (int32_t idx = 0; idx + 1 < codePointLength && U_SUCCESS(status); idx++) {
+        numBreaks =
+            evaluateBreakpoint(inString, indexList, idx, numCodeUnits, numBreaks, boundary, status);
+        if (idx + 4 < codePointLength) {
+            indexList[idx + 6] = numCodeUnits;
+            numCodeUnits += U16_LENGTH(inString.char32At(indexList[idx + 6]));
         }
     }
+    uprv_free(indexList);
+
     if (U_FAILURE(status)) return 0;
 
     // Add a break for the end if there is not one there already.
@@ -142,147 +130,112 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
     return correctedNumBreaks;
 }
 
-void MlBreakEngine::evaluateBreakpoint(UChar32* elementList, int32_t index, int32_t &numBreaks,
-                                         UVector32 &boundary, UErrorCode &status) const {
-    char16_t featureList[MAX_FEATURE][MAX_FEATURE_LENGTH];
+int32_t MlBreakEngine::evaluateBreakpoint(const UnicodeString &inString, int32_t *indexList,
+                                          int32_t startIdx, int32_t numCodeUnits, int32_t numBreaks,
+                                          UVector32 &boundary, UErrorCode &status) const {
     if (U_FAILURE(status)) {
-        return;
+        return numBreaks;
     }
-
-    UChar32 arr[4] = {-1, -1, -1, -1};
-    int32_t length = 0, listLength = 0;
-
-    const UChar32 w1 = elementList[0];
-    const UChar32 w2 = elementList[1];
-    const UChar32 w3 = elementList[2];
-    const UChar32 w4 = elementList[3];
-    const UChar32 w5 = elementList[4];
-    const UChar32 w6 = elementList[5];
-
-    length = 1;
-    if (w1 != INVALID) {
-        arr[0] = w1;
-        concatChar(u"UW1:", arr, length, featureList[listLength++], status);
-    }
-    if (w2 != INVALID) {
-        arr[0] = w2;
-        concatChar(u"UW2:", arr, length, featureList[listLength++], status);
-    }
-    if (w3 != INVALID) {
-        arr[0] = w3;
-        concatChar(u"UW3:", arr, length, featureList[listLength++], status);
-    }
-    if (w4 != INVALID) {
-        arr[0] = w4;
-        concatChar(u"UW4:", arr, length, featureList[listLength++], status);
-    }
-    if (w5 != INVALID) {
-        arr[0] = w5;
-        concatChar(u"UW5:", arr, length, featureList[listLength++], status);
-    }
-    if (w6 != INVALID) {
-        arr[0] = w6;
-        concatChar(u"UW6:", arr, length, featureList[listLength++], status);
-    }
-    length = 2;
-    if (w2 != INVALID && w3 != INVALID) {
-        arr[0] = w2;
-        arr[1] = w3;
-        concatChar(u"BW1:", arr, length, featureList[listLength++], status);
-    }
-    if (w3 != INVALID && w4 != INVALID) {
-        arr[0] = w3;
-        arr[1] = w4;
-        concatChar(u"BW2:", arr, length, featureList[listLength++], status);
-    }
-    if (w4 != INVALID && w5 != INVALID) {
-        arr[0] = w4;
-        arr[1] = w5;
-        concatChar(u"BW3:", arr, length, featureList[listLength++], status);
-    }
-    length = 3;
-    if (w1 != INVALID && w2 != INVALID && w3 != INVALID) {
-        arr[0] = w1;
-        arr[1] = w2;
-        arr[2] = w3;
-        concatChar(u"TW1:", arr, length, featureList[listLength++], status);
-    }
-    if (w2 != INVALID && w3 != INVALID && w4 != INVALID) {
-        arr[0] = w2;
-        arr[1] = w3;
-        arr[2] = w4;
-        concatChar(u"TW2:", arr, length, featureList[listLength++], status);
-    }
-    if (w3 != INVALID && w4 != INVALID && w5 != INVALID) {
-        arr[0] = w3;
-        arr[1] = w4;
-        arr[2] = w5;
-        concatChar(u"TW3:", arr, length, featureList[listLength++], status);
-    }
-    if (w4 != INVALID && w5 != INVALID && w6 != INVALID) {
-        arr[0] = w4;
-        arr[1] = w5;
-        arr[2] = w6;
-        concatChar(u"TW4:", arr, length, featureList[listLength++], status);
-    }
-    if (U_FAILURE(status)) {
-        return;
-    }
+    int32_t start = 0, end = 0;
     int32_t score = fNegativeSum;
-    for (int32_t j = 0; j < listLength; j++) {
-        UnicodeString key(featureList[j]);
-        if (fModel.containsKey(key)) {
-            score += (2 * fModel.geti(key));
+
+    for (int i = 0; i < 6; i++) {
+        // UW1 ~ UW6
+        start = startIdx + i;
+        if (indexList[start] != -1) {
+            end = (indexList[start + 1] != -1) ? indexList[start + 1] : numCodeUnits;
+            score += fModel[static_cast<int32_t>(ModelIndex::kUWStart) + i].geti(
+                inString.tempSubString(indexList[start], end - indexList[start]));
         }
     }
+    for (int i = 0; i < 3; i++) {
+        // BW1 ~ BW3
+        start = startIdx + i + 1;
+        if (indexList[start] != -1 && indexList[start + 1] != -1) {
+            end = (indexList[start + 2] != -1) ? indexList[start + 2] : numCodeUnits;
+            score += fModel[static_cast<int32_t>(ModelIndex::kBWStart) + i].geti(
+                inString.tempSubString(indexList[start], end - indexList[start]));
+        }
+    }
+    for (int i = 0; i < 4; i++) {
+        // TW1 ~ TW4
+        start = startIdx + i;
+        if (indexList[start] != -1 && indexList[start + 1] != -1 && indexList[start + 2] != -1) {
+            end = (indexList[start + 3] != -1) ? indexList[start + 3] : numCodeUnits;
+            score += fModel[static_cast<int32_t>(ModelIndex::kTWStart) + i].geti(
+                inString.tempSubString(indexList[start], end - indexList[start]));
+        }
+    }
+
     if (score > 0) {
-        boundary.addElement(index, status);
+        boundary.addElement(startIdx + 1, status);
         numBreaks++;
     }
+    return numBreaks;
 }
 
-int32_t MlBreakEngine::initElementList(const UnicodeString &inString, UChar32* elementList,
-                                         UErrorCode &status) const {
+int32_t MlBreakEngine::initIndexList(const UnicodeString &inString, int32_t *indexList,
+                                     UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return 0;
     }
     int32_t index = 0;
     int32_t length = inString.countChar32();
-    UChar32 w1, w2, w3, w4, w5, w6;
-    w1 = w2 = w3 = w4 = w5 = w6 = INVALID;
+    // Set all (lenght+4) items inside indexLength to -1 presuming -1 is 4 bytes of 0xff.
+    uprv_memset(indexList, 0xff, (length + 4) * sizeof(int32_t));
     if (length > 0) {
-        w3 = inString.char32At(0);
-        index += U16_LENGTH(w3);
+        indexList[2] = 0;
+        index = U16_LENGTH(inString.char32At(0));
         if (length > 1) {
-            w4 = inString.char32At(index);
-            index += U16_LENGTH(w4);
+            indexList[3] = index;
+            index += U16_LENGTH(inString.char32At(index));
             if (length > 2) {
-                w5 = inString.char32At(index);
-                index += U16_LENGTH(w5);
+                indexList[4] = index;
+                index += U16_LENGTH(inString.char32At(index));
                 if (length > 3) {
-                    w6 = inString.char32At(index);
-                    index += U16_LENGTH(w6);
+                    indexList[5] = index;
+                    index += U16_LENGTH(inString.char32At(index));
                 }
             }
         }
     }
-    elementList[0] = w1;
-    elementList[1] = w2;
-    elementList[2] = w3;
-    elementList[3] = w4;
-    elementList[4] = w5;
-    elementList[5] = w6;
-
     return index;
 }
 
 void MlBreakEngine::loadMLModel(UErrorCode &error) {
-    // BudouX's model consists of pairs of the feature and its score.
-    // As integrating it into jaml.txt, modelKeys denotes the ML feature; modelValues means the
-    // corresponding feature's score.
+    // BudouX's model consists of thirteen categories, each of which is make up of pairs of the
+    // feature and its score. As integrating it into jaml.txt, we define thirteen kinds of key and
+    // value to represent the feature and the corresponding score respectively.
 
     if (U_FAILURE(error)) return;
 
+    UnicodeString key;
+    StackUResourceBundle stackTempBundle;
+    ResourceDataValue modelKey;
+
+    LocalUResourceBundlePointer rbp(ures_openDirect(U_ICUDATA_BRKITR, "jaml", &error));
+    UResourceBundle *rb = rbp.getAlias();
+    if (U_FAILURE(error)) return;
+
+    int32_t index = 0;
+    initKeyValue(rb, "UW1Keys", "UW1Values", fModel[index++], error);
+    initKeyValue(rb, "UW2Keys", "UW2Values", fModel[index++], error);
+    initKeyValue(rb, "UW3Keys", "UW3Values", fModel[index++], error);
+    initKeyValue(rb, "UW4Keys", "UW4Values", fModel[index++], error);
+    initKeyValue(rb, "UW5Keys", "UW5Values", fModel[index++], error);
+    initKeyValue(rb, "UW6Keys", "UW6Values", fModel[index++], error);
+    initKeyValue(rb, "BW1Keys", "BW1Values", fModel[index++], error);
+    initKeyValue(rb, "BW2Keys", "BW2Values", fModel[index++], error);
+    initKeyValue(rb, "BW3Keys", "BW3Values", fModel[index++], error);
+    initKeyValue(rb, "TW1Keys", "TW1Values", fModel[index++], error);
+    initKeyValue(rb, "TW2Keys", "TW2Values", fModel[index++], error);
+    initKeyValue(rb, "TW3Keys", "TW3Values", fModel[index++], error);
+    initKeyValue(rb, "TW4Keys", "TW4Values", fModel[index++], error);
+    fNegativeSum /= 2;
+}
+
+void MlBreakEngine::initKeyValue(UResourceBundle *rb, const char *keyName, const char *valueName,
+                                 Hashtable &model, UErrorCode &error) {
     int32_t keySize = 0;
     int32_t valueSize = 0;
     int32_t stringLength = 0;
@@ -290,15 +243,13 @@ void MlBreakEngine::loadMLModel(UErrorCode &error) {
     StackUResourceBundle stackTempBundle;
     ResourceDataValue modelKey;
 
-    LocalUResourceBundlePointer rbp(ures_openDirect(U_ICUDATA_BRKITR, "jaml", &error));
-    UResourceBundle* rb = rbp.orphan();
     // get modelValues
-    LocalUResourceBundlePointer modelValue(ures_getByKey(rb, "modelValues", nullptr, &error));
-    const int32_t* value = ures_getIntVector(modelValue.getAlias(), &valueSize, &error);
+    LocalUResourceBundlePointer modelValue(ures_getByKey(rb, valueName, nullptr, &error));
+    const int32_t *value = ures_getIntVector(modelValue.getAlias(), &valueSize, &error);
     if (U_FAILURE(error)) return;
 
     // get modelKeys
-    ures_getValueWithFallback(rb, "modelKeys", stackTempBundle.getAlias(), modelKey, error);
+    ures_getValueWithFallback(rb, keyName, stackTempBundle.getAlias(), modelKey, error);
     ResourceArray stringArray = modelKey.getArray(error);
     keySize = stringArray.getSize();
     if (U_FAILURE(error)) return;
@@ -309,7 +260,7 @@ void MlBreakEngine::loadMLModel(UErrorCode &error) {
         if (U_SUCCESS(error)) {
             U_ASSERT(idx < valueSize);
             fNegativeSum -= value[idx];
-            fModel.puti(key, value[idx], error);
+            model.puti(key, value[idx], error);
         }
     }
 }

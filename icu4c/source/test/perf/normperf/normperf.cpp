@@ -68,21 +68,21 @@ UPerfFunction* NormalizerPerformanceTest::runIndexedTest(int32_t index, UBool ex
 
         default: 
             name = ""; 
-            return NULL;
+            return nullptr;
     }
-    return NULL;
+    return nullptr;
 
 }
 
-void NormalizerPerformanceTest::normalizeInput(ULine* dest,const UChar* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
+void NormalizerPerformanceTest::normalizeInput(ULine* dest,const char16_t* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
     int32_t reqLen = 0;
     UErrorCode status = U_ZERO_ERROR;
     for(;;){
         /* pure pre-flight */
-        reqLen=unorm_normalize(src,srcLen,mode, options,NULL,0,&status);
+        reqLen=unorm_normalize(src,srcLen,mode, options,nullptr,0,&status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
-            dest->name = new UChar[reqLen+1];
+            dest->name = new char16_t[reqLen+1];
             reqLen= unorm_normalize(src,srcLen,mode, options,dest->name,reqLen+1,&status);
             dest->len=reqLen;
             break;
@@ -91,22 +91,22 @@ void NormalizerPerformanceTest::normalizeInput(ULine* dest,const UChar* src ,int
         }
     }
 }
-UChar* NormalizerPerformanceTest::normalizeInput(int32_t& len, const UChar* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
+char16_t* NormalizerPerformanceTest::normalizeInput(int32_t& len, const char16_t* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
     int32_t reqLen = 0;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* dest = NULL;
+    char16_t* dest = nullptr;
     for(;;){
         /* pure pre-flight */
-        reqLen=unorm_normalize(src,srcLen,mode, options,NULL,0,&status);
+        reqLen=unorm_normalize(src,srcLen,mode, options,nullptr,0,&status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
-            dest = new UChar[reqLen+1];
+            dest = new char16_t[reqLen+1];
             reqLen= unorm_normalize(src,srcLen,mode, options,dest,reqLen+1,&status);
             len=reqLen;
             break;
         }else if(U_FAILURE(status)){
             printf("Could not normalize input. Error: %s", u_errorName(status));
-            return NULL;
+            return nullptr;
         }
     }
     return dest;
@@ -118,12 +118,12 @@ static UOption cmdLineOptions[]={
 
 NormalizerPerformanceTest::NormalizerPerformanceTest(int32_t argc, const char* argv[], UErrorCode& status)
 : UPerfTest(argc,argv,status), options(0) {
-    NFDBuffer = NULL;
-    NFCBuffer = NULL;
+    NFDBuffer = nullptr;
+    NFCBuffer = nullptr;
     NFDBufferLen = 0;
     NFCBufferLen = 0;
-    NFDFileLines = NULL;
-    NFCFileLines = NULL;
+    NFDFileLines = nullptr;
+    NFCFileLines = nullptr;
 
     if(status== U_ILLEGAL_ARGUMENT_ERROR){
        fprintf(stderr,gUsageString, "normperf");
@@ -136,8 +136,8 @@ NormalizerPerformanceTest::NormalizerPerformanceTest(int32_t argc, const char* a
     }
 
     _remainingArgc = u_parseArgs(_remainingArgc, (char **)argv, UPRV_LENGTHOF(cmdLineOptions), cmdLineOptions);
-    if(cmdLineOptions[0].doesOccur && cmdLineOptions[0].value!=NULL) {
-        options=(int32_t)strtol(cmdLineOptions[0].value, NULL, 16);
+    if(cmdLineOptions[0].doesOccur && cmdLineOptions[0].value!=nullptr) {
+        options=(int32_t)strtol(cmdLineOptions[0].value, nullptr, 16);
     }
 
     if(line_mode){
@@ -156,7 +156,7 @@ NormalizerPerformanceTest::NormalizerPerformanceTest(int32_t argc, const char* a
         }
     }else if(bulk_mode){
         int32_t srcLen = 0;
-        const UChar* src = getBuffer(srcLen,status);
+        const char16_t* src = getBuffer(srcLen,status);
         NFDBufferLen = 0;
         NFCBufferLen = 0;
 

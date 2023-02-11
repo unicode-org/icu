@@ -125,7 +125,7 @@ testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTri
         // No need to go from each iteration start to the very end.
         int32_t innerLoopCount;
 
-        sprintf(name, "%s/%s(%s) min=U+%04lx", typeName, optionName, testName, (long)start);
+        snprintf(name, sizeof(name), "%s/%s(%s) min=U+%04lx", typeName, optionName, testName, (long)start);
 
         // Skip over special values and low ranges.
         for (i = 0; i < countCheckRanges && checkRanges[i].limit <= start; ++i) {}
@@ -718,7 +718,7 @@ trieTestGolden(const char *testName,
     const char *testdatapath = loadSourceTestData(&status);
     char goldendatapath[512];
     // note: snprintf always writes a NUL terminator.
-    snprintf(goldendatapath, 512, "%scodepointtrie%s%s.toml",
+    snprintf(goldendatapath, sizeof(goldendatapath), "%scodepointtrie%s%s.toml",
         testdatapath, U_FILE_SEP_STRING, testName);
 
     // Write the data into a tmpfile (memstream is not portable)

@@ -63,9 +63,9 @@ char const *opt_source      = "International Components for Unicode";
 char const *opt_pattern     = "Unicode";
 UCollator * collator   = 0;
 UStringSearch * search = 0;
-UChar rules[100];
-UChar source[100];
-UChar pattern[100];
+char16_t rules[100];
+char16_t source[100];
+char16_t pattern[100];
 
 /** 
  * Definitions for the command line options
@@ -158,7 +158,7 @@ UBool processCollator()
     if (opt_rules != 0) {
 		u_unescape(opt_rules, rules, 100);
         collator = ucol_openRules(rules, -1, UCOL_OFF, UCOL_TERTIARY, 
-			                  NULL, &status);
+			                  nullptr, &status);
     }
     else {
         collator = ucol_open(opt_locale, &status);
@@ -236,7 +236,7 @@ UBool processStringSearch()
 	u_unescape(opt_source, source, 100);
 	u_unescape(opt_pattern, pattern, 100);
 	UErrorCode status = U_ZERO_ERROR;
-	search = usearch_openFromCollator(pattern, -1, source, -1, collator, NULL, 
+	search = usearch_openFromCollator(pattern, -1, source, -1, collator, nullptr, 
 		                              &status);
 	if (U_FAILURE(status)) {
 		return false;

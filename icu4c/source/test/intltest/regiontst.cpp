@@ -30,18 +30,18 @@ typedef struct KnownRegion {
 static KnownRegion knownRegions[] = {
     // Code, Num, Parent, Type,             Containing Continent
     { "TP" , 626, "035", URGN_TERRITORY, "142" },
-    { "001", 1,  NULL ,  URGN_WORLD,        NULL },
-    { "002", 2,  "001",  URGN_CONTINENT,    NULL },
-    { "003", 3,  NULL,   URGN_GROUPING,     NULL },
+    { "001", 1,  nullptr ,  URGN_WORLD,        nullptr },
+    { "002", 2,  "001",  URGN_CONTINENT,    nullptr },
+    { "003", 3,  nullptr,   URGN_GROUPING,     nullptr },
     { "005", 5,  "019",  URGN_SUBCONTINENT, "019" },
-    { "009", 9,  "001",  URGN_CONTINENT,    NULL},
+    { "009", 9,  "001",  URGN_CONTINENT,    nullptr},
     { "011", 11, "002",  URGN_SUBCONTINENT, "002" },
     { "013", 13, "019",  URGN_SUBCONTINENT, "019" },
     { "014", 14, "002",  URGN_SUBCONTINENT, "002" },
     { "015", 15, "002",  URGN_SUBCONTINENT, "002" },
     { "017", 17, "002",  URGN_SUBCONTINENT, "002" },
     { "018", 18, "002",  URGN_SUBCONTINENT, "002" },
-    { "019", 19, "001",  URGN_CONTINENT, NULL },
+    { "019", 19, "001",  URGN_CONTINENT, nullptr },
     { "021", 21, "019",  URGN_SUBCONTINENT, "019" },
     { "029", 29, "019",  URGN_SUBCONTINENT, "019" },
     { "030", 30, "142",  URGN_SUBCONTINENT, "142" },
@@ -52,14 +52,14 @@ static KnownRegion knownRegions[] = {
     { "054", 54, "009",  URGN_SUBCONTINENT, "009" },
     { "057", 57, "009",  URGN_SUBCONTINENT, "009" },
     { "061", 61, "009",  URGN_SUBCONTINENT, "009" },
-    { "142", 142, "001", URGN_CONTINENT, NULL },
+    { "142", 142, "001", URGN_CONTINENT, nullptr },
     { "143", 143, "142", URGN_SUBCONTINENT, "142" },
     { "145", 145, "142", URGN_SUBCONTINENT, "142" },
-    { "150", 150, "001", URGN_CONTINENT, NULL },
+    { "150", 150, "001", URGN_CONTINENT, nullptr },
     { "151", 151, "150", URGN_SUBCONTINENT, "150" },
     { "154", 154, "150", URGN_SUBCONTINENT, "150" },
     { "155", 155, "150", URGN_SUBCONTINENT, "150" },
-    { "419", 419, NULL,  URGN_GROUPING , NULL},
+    { "419", 419, nullptr,  URGN_GROUPING , nullptr},
     { "AC" ,  -1, "QO" , URGN_TERRITORY, "009" },
     { "AD" ,  20, "039", URGN_TERRITORY, "150" },
     { "AE" , 784, "145", URGN_TERRITORY, "142" },
@@ -68,7 +68,7 @@ static KnownRegion knownRegions[] = {
     { "AI" , 660, "029", URGN_TERRITORY, "019" },
     { "AL" ,   8, "039", URGN_TERRITORY, "150" },
     { "AM" ,  51, "145", URGN_TERRITORY, "142" },
-    { "AN" , 530, NULL,  URGN_DEPRECATED, NULL },
+    { "AN" , 530, nullptr,  URGN_DEPRECATED, nullptr },
     { "AO" ,  24, "017", URGN_TERRITORY, "002" },
     { "AQ" ,  10, "QO" , URGN_TERRITORY, "009" },
     { "AR" ,  32, "005", URGN_TERRITORY, "019" },
@@ -136,7 +136,7 @@ static KnownRegion knownRegions[] = {
     { "ER" , 232, "014", URGN_TERRITORY, "002" },
     { "ES" , 724, "039", URGN_TERRITORY, "150" },
     { "ET" , 231, "014", URGN_TERRITORY, "002" },
-    { "EU" , 967, NULL,  URGN_GROUPING, NULL },
+    { "EU" , 967, nullptr,  URGN_GROUPING, nullptr },
     { "FI" , 246, "154", URGN_TERRITORY, "150" },
     { "FJ" , 242, "054", URGN_TERRITORY, "009" },
     { "FK" , 238, "005", URGN_TERRITORY, "019" },
@@ -239,7 +239,7 @@ static KnownRegion knownRegions[] = {
     { "NO" , 578, "154", URGN_TERRITORY, "150" },
     { "NP" , 524, "034", URGN_TERRITORY, "142" },
     { "NR" , 520, "057", URGN_TERRITORY, "009" },
-    { "NT" , 536, NULL , URGN_DEPRECATED, NULL },
+    { "NT" , 536, nullptr , URGN_DEPRECATED, nullptr },
     { "NU" , 570, "061", URGN_TERRITORY, "009" },
     { "NZ" , 554, "053", URGN_TERRITORY, "009" },
     { "OM" , 512, "145", URGN_TERRITORY, "142" },
@@ -259,7 +259,7 @@ static KnownRegion knownRegions[] = {
     { "PY" , 600, "005", URGN_TERRITORY, "019" },
     { "QA" , 634, "145", URGN_TERRITORY, "142" },
     { "QO" , 961, "009", URGN_SUBCONTINENT, "009" },
-    { "QU" , 967, NULL,  URGN_GROUPING, NULL },
+    { "QU" , 967, nullptr,  URGN_GROUPING, nullptr },
     { "RE" , 638, "014", URGN_TERRITORY, "002" },
     { "RO" , 642, "151", URGN_TERRITORY, "150" },
     { "RS" , 688, "039", URGN_TERRITORY, "150" },
@@ -282,7 +282,7 @@ static KnownRegion knownRegions[] = {
     { "SR" , 740, "005", URGN_TERRITORY, "019" },
     { "SS" , 728, "014", URGN_TERRITORY, "002" },
     { "ST" , 678, "017", URGN_TERRITORY, "002" },
-    { "SU" , 810, NULL , URGN_DEPRECATED , NULL},
+    { "SU" , 810, nullptr , URGN_DEPRECATED , nullptr},
     { "SV" , 222, "013", URGN_TERRITORY, "019" },
     { "SX" , 534, "029", URGN_TERRITORY, "019" },
     { "SY" , 760, "145", URGN_TERRITORY, "142" },
@@ -327,7 +327,7 @@ static KnownRegion knownRegions[] = {
     { "ZM" , 894, "014", URGN_TERRITORY, "002" },
     { "ZR" , 180, "017", URGN_TERRITORY, "002" },
     { "ZW" , 716, "014", URGN_TERRITORY, "002" },
-    { "ZZ" , 999, NULL , URGN_UNKNOWN, NULL }
+    { "ZZ" , 999, nullptr , URGN_UNKNOWN, nullptr }
     };
 
 // *****************************************************************************
@@ -414,9 +414,9 @@ void RegionTest::TestGetInstanceString() {
 
 
     UErrorCode status = U_ZERO_ERROR;
-    const Region *r = Region::getInstance((const char *)NULL,status);
+    const Region *r = Region::getInstance((const char *)nullptr,status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
-        errcheckln(status, "Calling Region::getInstance(NULL) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't. - %s", u_errorName(status));
+        errcheckln(status, "Calling Region::getInstance(nullptr) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't. - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
@@ -436,7 +436,7 @@ void RegionTest::TestGetInstanceString() {
             id = r->getRegionCode();
             type = r->getType();
         } else {
-            id = "NULL";
+            id = "nullptr";
             type = URGN_UNKNOWN;
         }
         if ( uprv_strcmp(id,data.expectedID)) {
@@ -480,7 +480,7 @@ void RegionTest::TestGetInstanceInt() {
             id = r->getRegionCode();
             type = r->getType();
         } else {
-            id = "NULL";
+            id = "nullptr";
             type = URGN_UNKNOWN;
         }
         if ( uprv_strcmp(data.expectedID,id)) {
@@ -508,12 +508,12 @@ void RegionTest::TestGetContainedRegions() {
               continue;
             }
             for ( int32_t i = 0 ; i < containedRegions->count(status); i++ ) {
-                const char *crID = containedRegions->next(NULL,status);
+                const char *crID = containedRegions->next(nullptr,status);
                 const Region *cr = Region::getInstance(crID,status);
-                const Region *containingRegion = cr ? cr->getContainingRegion() : NULL;
+                const Region *containingRegion = cr ? cr->getContainingRegion() : nullptr;
                 if ( !containingRegion || *containingRegion != *r ) {
                     errln("Region: %s contains region %s. Expected containing region of this region to be the original region, but got %s",
-                        r->getRegionCode(),cr->getRegionCode(),containingRegion?containingRegion->getRegionCode():"NULL"); 
+                        r->getRegionCode(),cr->getRegionCode(),containingRegion?containingRegion->getRegionCode():"nullptr"); 
                 }
             }
             delete containedRegions;
@@ -539,12 +539,12 @@ void RegionTest::TestGetContainedRegionsWithType() {
               continue;
             }
             for ( int32_t j = 0 ; j < containedRegions->count(status); j++ ) {
-                const char *crID = containedRegions->next(NULL,status);
+                const char *crID = containedRegions->next(nullptr,status);
                 const Region *cr = Region::getInstance(crID,status);
-                const Region *containingRegion = cr ? cr->getContainingRegion(URGN_CONTINENT) : NULL;
+                const Region *containingRegion = cr ? cr->getContainingRegion(URGN_CONTINENT) : nullptr;
                 if ( !containingRegion || *containingRegion != *r ) {
                     errln("Continent: %s contains territory %s. Expected containing continent of this region to be the original region, but got %s",
-                        r->getRegionCode(),cr->getRegionCode(),containingRegion?containingRegion->getRegionCode():"NULL"); 
+                        r->getRegionCode(),cr->getRegionCode(),containingRegion?containingRegion->getRegionCode():"nullptr"); 
                 }
             }
             delete containedRegions;
@@ -561,15 +561,15 @@ void RegionTest::TestGetContainingRegion() {
         const Region *r = Region::getInstance(rd.code,status);
         if (r) {
             const Region *c = r->getContainingRegion();
-            if (rd.parent == NULL) {                   
+            if (rd.parent == nullptr) {                   
                 if ( c ) {
-                    errln("Containing region for %s should have been NULL.  Got: %s",r->getRegionCode(),c->getRegionCode());
+                    errln("Containing region for %s should have been nullptr.  Got: %s",r->getRegionCode(),c->getRegionCode());
                 }
             } else {
                 const Region *p = Region::getInstance(rd.parent,status);                   
                 if ( !c || *p != *c ) {
                     errln("Expected containing continent of region %s to be %s. Got: %s",
-                        r->getRegionCode(),p?p->getRegionCode():"NULL",c?c->getRegionCode():"NULL" );
+                        r->getRegionCode(),p?p->getRegionCode():"nullptr",c?c->getRegionCode():"nullptr" );
                 }
             }
         } else {
@@ -586,15 +586,15 @@ void RegionTest::TestGetContainingRegionWithType() {
         const Region *r = Region::getInstance(rd.code,status);
         if (r) {
             const Region *c = r->getContainingRegion(URGN_CONTINENT);
-            if (rd.containingContinent == NULL) {
-                 if ( c != NULL) {
-                     errln("Containing continent for %s should have been NULL.  Got: %s",r->getRegionCode(), c->getRegionCode());
+            if (rd.containingContinent == nullptr) {
+                 if ( c != nullptr) {
+                     errln("Containing continent for %s should have been nullptr.  Got: %s",r->getRegionCode(), c->getRegionCode());
                  }
             } else {
                 const Region *p = Region::getInstance(rd.containingContinent,status);                   
                 if ( *p != *c ) {
                     errln("Expected containing continent of region %s to be %s. Got: %s",
-                        r->getRegionCode(),p?p->getRegionCode():"NULL",c?c->getRegionCode():"NULL" );
+                        r->getRegionCode(),p?p->getRegionCode():"nullptr",c?c->getRegionCode():"nullptr" );
                 }
             }
         } else {
@@ -606,12 +606,12 @@ void RegionTest::TestGetContainingRegionWithType() {
 void RegionTest::TestGetPreferredValues() {
     static const char *testData[6][17] = {
         //  Input ID, Expected Preferred Values...
-        { "AN", "CW", "SX", "BQ", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }, // Netherlands Antilles
-        { "CS", "RS", "ME", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },     // Serbia & Montenegro
-        { "FQ", "AQ", "TF", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },     // French Southern and Antarctic Territories
-        { "NT", "IQ", "SA", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },     // Neutral Zone
-        { "PC", "FM", "MH", "MP", "PW", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, }, // Pacific Islands Trust Territory
-        { "SU", "RU", "AM", "AZ", "BY", "EE", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UA", "UZ" , NULL}, // Soviet Union
+        { "AN", "CW", "SX", "BQ", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }, // Netherlands Antilles
+        { "CS", "RS", "ME", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },     // Serbia & Montenegro
+        { "FQ", "AQ", "TF", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },     // French Southern and Antarctic Territories
+        { "NT", "IQ", "SA", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },     // Neutral Zone
+        { "PC", "FM", "MH", "MP", "PW", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, }, // Pacific Islands Trust Territory
+        { "SU", "RU", "AM", "AZ", "BY", "EE", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UA", "UZ" , nullptr}, // Soviet Union
     };
 
     for ( int32_t i = 0 ; i < 6 ; i++ ) {
@@ -627,7 +627,7 @@ void RegionTest::TestGetPreferredValues() {
             for ( int i = 1 ; data[i] ; i++ ) {
                 UBool found = false;
                 preferredValues->reset(status);
-                while ( const char *check = preferredValues->next(NULL,status) ) {
+                while ( const char *check = preferredValues->next(nullptr,status) ) {
                     if ( !uprv_strcmp(check,data[i]) ) {
                         found = true;
                         break;
@@ -691,20 +691,20 @@ void RegionTest::TestAvailableTerritories() {
                 if ( i > 0 ) {
                     uprv_strcat(availableTerritoriesString," ");
                 }
-                uprv_strcat(availableTerritoriesString,availableTerritories->next(NULL,status));
+                uprv_strcat(availableTerritoriesString,availableTerritories->next(nullptr,status));
             }
         } else {
-            uprv_strcpy(availableTerritoriesString,"NULL");
+            uprv_strcpy(availableTerritoriesString,"nullptr");
         }
         if ( containedInWorld ) {
             for (int32_t i = 0 ; i < containedInWorld->count(status) ; i++ ) {
                 if ( i > 0 ) {
                     uprv_strcat(containedInWorldString," ");
                 }
-                uprv_strcat(containedInWorldString,containedInWorld->next(NULL,status));
+                uprv_strcat(containedInWorldString,containedInWorld->next(nullptr,status));
             }
         } else {
-            uprv_strcpy(containedInWorldString,"NULL");
+            uprv_strcpy(containedInWorldString,"nullptr");
         }
         errln("Available territories and all territories contained in world should be the same set.\nAvailable          = %s\nContained in World = %s",
             availableTerritoriesString,containedInWorldString);
@@ -716,7 +716,7 @@ void RegionTest::TestAvailableTerritories() {
 void RegionTest::TestNoContainedRegions(void) {
   UErrorCode status = U_ZERO_ERROR;
   const Region *region = Region::getInstance("BM",status);
-  if (U_FAILURE(status) || region == NULL) {
+  if (U_FAILURE(status) || region == nullptr) {
       dataerrln("Fail called to Region::getInstance(\"BM\", status) - %s", u_errorName(status));
       return;
   }
@@ -725,8 +725,8 @@ void RegionTest::TestNoContainedRegions(void) {
       errln("%s->getContainedRegions(status) failed: %s", region->getRegionCode(), u_errorName(status));
       return;
   }
-  const char *emptyStr = containedRegions->next(NULL, status);
-  if (U_FAILURE(status)||(emptyStr!=NULL)) {
+  const char *emptyStr = containedRegions->next(nullptr, status);
+  if (U_FAILURE(status)||(emptyStr!=nullptr)) {
     errln("Error, 'BM' should have no subregions, but returned str=%p, err=%s\n", emptyStr, u_errorName(status));
   } else {
     logln("Success - BM has no subregions\n");
@@ -753,11 +753,11 @@ void RegionTest::TestGroupingChildren(void) {
                 int32_t numActualChildren = actualChildren->count(err);
                 int32_t numExpectedChildren = 0;
                 const char* expectedChildStart = expectedChildren;
-                const char* expectedChildEnd = NULL;
-                const char* actualChild = NULL;
-                while ((actualChild = actualChildren->next(NULL, err)) != NULL && *expectedChildStart != '\0') {
+                const char* expectedChildEnd = nullptr;
+                const char* actualChild = nullptr;
+                while ((actualChild = actualChildren->next(nullptr, err)) != nullptr && *expectedChildStart != '\0') {
                     expectedChildEnd = uprv_strchr(expectedChildStart, ',');
-                    if (expectedChildEnd == NULL) {
+                    if (expectedChildEnd == nullptr) {
                         expectedChildEnd = expectedChildStart + uprv_strlen(expectedChildStart);
                     }
                     if (uprv_strlen(actualChild) != size_t(expectedChildEnd - expectedChildStart) || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
@@ -766,7 +766,7 @@ void RegionTest::TestGroupingChildren(void) {
                     expectedChildStart = (*expectedChildEnd != '\0') ? expectedChildEnd + 1 : expectedChildEnd;
                     ++numExpectedChildren;
                 }
-                while (expectedChildEnd != NULL && *expectedChildEnd != '\0') {
+                while (expectedChildEnd != nullptr && *expectedChildEnd != '\0') {
                     expectedChildEnd = uprv_strchr(expectedChildEnd + 1, ',');
                     ++numExpectedChildren;
                 }

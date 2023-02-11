@@ -130,6 +130,49 @@
         </configuration>
       </plugin>
 
+      <!-- 
+        Mainly for running localespi tests in Java 8:
+        The easiest way to get the integration tests to pass (in particular, to get the JVM that is
+        spawned with the `-Djava.ext.dirs` system property value to be interpreted properly in order 
+        for the extensions jars therein to be loaded correctly) was to copy the jars needed to a
+        separate directory. (The alternative of pointing to the build directories of the respective
+        submodules didn't seem to work.)
+
+        This isn't of much use for Java 9+, in which extensions are deprecated and the regular
+        classpath is to be used instead.
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>it-test-copy-localespi-extension-jars</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>icu4j</artifactId>
+                  <version>${project.version}</version>
+                  <type>${project.packaging}</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>icu4j-localespi</artifactId>
+                  <version>${project.version}</version>
+                  <type>${project.packaging}</type>
+                </artifactItem>
+              </artifactItems>
+              <!-- https://stackoverflow.com/questions/36181371/how-can-i-get-the-temp-folder-of-a-machine-running-maven -->
+              <outputDirectory>${java.io.tmpdir}/ext-test-jars</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -150,9 +193,17 @@
             <include>**/*ITCase.java</include>
           </includes>
 
-          <!-- Set up the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase -->
-          <systemPropertyVariables>
-            <!-- 
+          <!-- 
+            For Java 8:
+            Set up the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase
+
+            Leave empty for Java 9+.
+            Using the `java.ext.dirs` special Java system property on Java 9+ runtimes triggers an
+             error that tells the user to place those jars on the classpath instead.
+          -->
+          <!-- 
+              Notes:
+
               https://stackoverflow.com/a/5039973/2077918
               The `java.ext.dirs` is a special Java system property that activates the Java extension mechanism.
               The Java extension mechanism was deprecated in Java 8 (users are recommended to use `-classpath` instead),
@@ -160,12 +211,24 @@
               For backwards compatibility testing for users of the Java extension mechansim,
               this configuration achieves the effect of having the localespi code in a .jar file that gets loaded
               by running this test in a phase following the `package` phase in which the .jar file is created.
-            -->
-            <java.ext.dirs>${project.build.directory}</java.ext.dirs>
-            <!--
+
               https://stackoverflow.com/questions/45223908/why-does-the-java-extension-mechanism-not-check-the-classpath-for-an-optional-pa
+
+              For some reason, the plugin was effectively not honoring the values as expected that were set in
+              <systemPropertyVariables>, so instead, the <argLine> value was used to set the JVM options. This
+              approach was inspired by: https://stackoverflow.com/a/48213614/2077918
+          -->
+          <argLine>${localespi-tests.jvm.args}</argLine>
+
+          <!-- 
+              For Java 9+:
+              Configure to use the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase
+
+              Leave empty for Java 8 to take defaults ("SPI,JRE").
+              See: https://stackoverflow.com/questions/45223908/why-does-the-java-extension-mechanism-not-check-the-classpath-for-an-optional-pa
             -->
-            <java.locale.providers>SPI,JRE</java.locale.providers>
+          <systemPropertyVariables>
+            <java.locale.providers>${localespi-tests.locale-providers}</java.locale.providers>
           </systemPropertyVariables>
 
         </configuration>

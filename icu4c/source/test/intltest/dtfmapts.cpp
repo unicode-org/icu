@@ -81,7 +81,7 @@ void IntlTestDateFormatAPI::TestCoverage(void)
 
     for (int32_t i = 0; i < numOfLocales; i++) {
         DateFormat *df = DateFormat::createDateTimeInstance(DateFormat::kMedium, DateFormat::kMedium, Locale(LOCALES[i]));
-        if (df == NULL){
+        if (df == nullptr){
             dataerrln("Error creating DateFormat instances.");
             return;
         }
@@ -100,7 +100,7 @@ void IntlTestDateFormatAPI::TestEquals(void)
     while (Calendar::getNow() == start) ; // Wait for time to change
     DateFormat *b = DateFormat::createInstance();
 
-    if (a == NULL || b == NULL){
+    if (a == nullptr || b == nullptr){
         dataerrln("Error calling DateFormat::createInstance()");
         delete a;
         delete b;
@@ -111,7 +111,7 @@ void IntlTestDateFormatAPI::TestEquals(void)
         errln("FAIL: DateFormat objects created at different times are unequal.");
 
     SimpleDateFormat *sdtfmt = dynamic_cast<SimpleDateFormat *>(b);
-    if (sdtfmt != NULL)
+    if (sdtfmt != nullptr)
     {
         double ONE_YEAR = 365*24*60*60*1000.0;
         sdtfmt->set2DigitYearStart(start + 50*ONE_YEAR, status);
@@ -141,12 +141,12 @@ void IntlTestDateFormatAPI::testAPI(/* char* par */)
     DateFormat *it = DateFormat::createDateInstance(DateFormat::MEDIUM, Locale::getItalian());
     DateFormat *de = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG, Locale::getGerman());
 
-    if (def == NULL || fr == NULL || it == NULL || de == NULL){
+    if (def == nullptr || fr == nullptr || it == nullptr || de == nullptr){
         dataerrln("Error creating DateFormat instances.");
     }
 
 // ======= Test equality
-if (fr != NULL && def != NULL)
+if (fr != nullptr && def != nullptr)
 {
     logln("Testing equality operator");
     
@@ -156,7 +156,7 @@ if (fr != NULL && def != NULL)
 }
 
 // ======= Test various format() methods
-if (fr != NULL && it != NULL && de != NULL)
+if (fr != nullptr && it != nullptr && de != nullptr)
 {
     logln("Testing various format() methods");
 
@@ -181,7 +181,7 @@ if (fr != NULL && it != NULL && de != NULL)
 }
 
 // ======= Test parse()
-if (def != NULL)
+if (def != nullptr)
 {
     logln("Testing parse()");
 
@@ -208,7 +208,7 @@ if (def != NULL)
 }
 
 // ======= Test getters and setters
-if (fr != NULL && it != NULL && de != NULL)
+if (fr != nullptr && it != nullptr && de != nullptr)
 {
     logln("Testing getters and setters");
 

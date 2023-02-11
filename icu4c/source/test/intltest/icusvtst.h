@@ -26,7 +26,7 @@ class ICUServiceTest : public IntlTest
   ICUServiceTest();
   virtual ~ICUServiceTest();
 
-  void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL) override;
+  void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr) override;
 
   void testAPI_One(void);
   void testAPI_Two(void);

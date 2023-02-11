@@ -119,8 +119,8 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         DWORD value = 0;
         int32_t calType = 0;
 
-        // NULL localeID means ICU didn't recognize this locale
-        if (lcidRecords[i].localeID == NULL) {
+        // nullptr localeID means ICU didn't recognize this locale
+        if (lcidRecords[i].localeID == nullptr) {
             continue;
         }
 
@@ -153,8 +153,8 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         Locale ulocale(localeID);
         int32_t wdLength, wtLength;
 
-        wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, NULL, wdBuffer, UPRV_LENGTHOF(wdBuffer));
-        wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, NULL, wtBuffer, UPRV_LENGTHOF(wtBuffer));
+        wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, nullptr, wdBuffer, UPRV_LENGTHOF(wdBuffer));
+        wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, nullptr, wtBuffer, UPRV_LENGTHOF(wtBuffer));
 
         if (uprv_strchr(localeID, '@')) {
             uprv_strcat(localeID, ";");
@@ -173,33 +173,33 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         wdf->format(icuNow, udBuffer);
         wtf->format(icuNow, utBuffer);
 
-        if (ubBuffer.indexOf((const UChar *)wdBuffer, wdLength - 1, 0) < 0) {
+        if (ubBuffer.indexOf((const char16_t *)wdBuffer, wdLength - 1, 0) < 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wdBuffer);
+            UnicodeString expected((const char16_t *)wdBuffer);
 
             log->errln("DateTime format error for locale " + baseName + ": expected date \"" + expected +
                        "\" got \"" + ubBuffer + "\"");
         }
 
-        if (ubBuffer.indexOf((const UChar *)wtBuffer, wtLength - 1, 0) < 0) {
+        if (ubBuffer.indexOf((const char16_t *)wtBuffer, wtLength - 1, 0) < 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wtBuffer);
+            UnicodeString expected((const char16_t *)wtBuffer);
 
             log->errln("DateTime format error for locale " + baseName + ": expected time \"" + expected +
                        "\" got \"" + ubBuffer + "\"");
         }
 
-        if (udBuffer.compare((const UChar *)wdBuffer) != 0) {
+        if (udBuffer.compare((const char16_t *)wdBuffer) != 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wdBuffer);
+            UnicodeString expected((const char16_t *)wdBuffer);
 
             log->errln("Date format error for locale " + baseName + ": expected \"" + expected +
                        "\" got \"" + udBuffer + "\"");
         }
 
-        if (utBuffer.compare((const UChar *)wtBuffer) != 0) {
+        if (utBuffer.compare((const char16_t *)wtBuffer) != 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wtBuffer);
+            UnicodeString expected((const char16_t *)wtBuffer);
 
             log->errln("Time format error for locale " + baseName + ": expected \"" + expected +
                        "\" got \"" + utBuffer + "\"");

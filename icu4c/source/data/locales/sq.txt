@@ -2088,11 +2088,6 @@ sq{
         metric{"metrik"}
     }
     personNames{
-        foreignSpaceReplacement{" "}
-        initialPattern{
-            initial{"{0}."}
-            initialSequence{"{0} {1}"}
-        }
         nameOrderLocales{
             givenFirst{
                 "und",
@@ -2108,7 +2103,7 @@ sq{
         namePattern{
             givenFirst-long-addressing-formal{"{title} {surname}"}
             givenFirst-long-addressing-informal{"{title} {given-informal}"}
-            givenFirst-long-monogram-formal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-long-monogram-formal{"{given-monogram-allCaps}{surname-monogram-allCaps}"}
             givenFirst-long-referring-formal{"{title} {given} {surname}, {credentials}"}
             givenFirst-long-referring-informal{"{title} {given} {surname}"}
             givenFirst-medium-addressing-formal{"{title} {surname}"}
@@ -2124,10 +2119,10 @@ sq{
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{title} {given-informal}"}
             surnameFirst-long-monogram-formal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}."
+                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
+                "llCaps}"
             }
-            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}.{given-informal-monogram-allCaps}."}
+            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
             surnameFirst-long-referring-formal{"{title} {surname}, {given} {given2-initial}, {credentials}"}
             surnameFirst-long-referring-informal{"{title} {surname}, {given}"}
             surnameFirst-medium-addressing-formal{"{title} {surname}"}

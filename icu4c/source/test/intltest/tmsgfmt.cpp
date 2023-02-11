@@ -139,7 +139,7 @@ void TestMessageFormat::testBug3()
         logln(locale[i].getDisplayName(buffer));
         UErrorCode success = U_ZERO_ERROR;
 //        form = (DecimalFormat*)NumberFormat::createCurrencyInstance(locale[i], success);
-        form = (DecimalFormat*)NumberFormat::createInstance(locale[i], success);
+        form = dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(locale[i], success));
         if (U_FAILURE(success)) {
             errln("Err: Number Format ");
             logln("Number format creation failed.");
@@ -226,7 +226,7 @@ operator<<( IntlTest&           stream,
             break;
         case Formattable::kDouble :
             char convert[20];
-            sprintf( convert, "%lf", obj.getDouble() );
+            snprintf( convert, sizeof(convert), "%lf", obj.getDouble() );
             stream << convert << "D";
             break;
         case Formattable::kLong :
@@ -995,14 +995,14 @@ void TestMessageFormat::testSetLocale()
     // Just use unlocalized currency symbol.
     //UnicodeString compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of $456.83.";
     UnicodeString compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of ";
-    compareStrEng += (UChar) 0x00a4;
+    compareStrEng += (char16_t) 0x00a4;
     compareStrEng += "456.83.";
     // {sfb} to get DM, would need Locale::GERMANY, not Locale::GERMAN
     // Just use unlocalized currency symbol.
     //UnicodeString compareStrGer = "At <time> on 08.08.1997, you made a deposit of 456,83 DM.";
     UnicodeString compareStrGer = "At <time> on 08.08.1997, you made a deposit of ";
     compareStrGer += "456,83";
-    compareStrGer += (UChar) 0x00a0;
+    compareStrGer += (char16_t) 0x00a0;
     compareStrGer += "XXX.";
 
     MessageFormat msg( formatStr, err);
@@ -1229,13 +1229,13 @@ void TestMessageFormat::testAdopt()
     for (i = 0; i < count; i++) {
         a = formats[i];
         b = formatsCmp[i];
-        if ((a != NULL) && (b != NULL)) {
+        if ((a != nullptr) && (b != nullptr)) {
             if (*a != *b) {
                 errln("a != b");
                 return;
             }
-        }else if ((a != NULL) || (b != NULL)) {
-            errln("(a != NULL) || (b != NULL)");
+        }else if ((a != nullptr) || (b != nullptr)) {
+            errln("(a != nullptr) || (b != nullptr)");
             return;
         }
     }
@@ -1253,7 +1253,7 @@ void TestMessageFormat::testAdopt()
     for (i = 0; i < count; i++) {
         a = formatsChg[i];
         b = formatsCmp[i];
-        if ((a != NULL) && (b != NULL)) {
+        if ((a != nullptr) && (b != nullptr)) {
             if (*a == *b) {
                 logln("formatsChg == formatsCmp at index %d", i);
                 diff = false;
@@ -1286,14 +1286,14 @@ void TestMessageFormat::testAdopt()
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
         b = formatsCmp[i];
-        if ((a != NULL) && (b != NULL)) {
+        if ((a != nullptr) && (b != nullptr)) {
             if (*a != *b) {
                 logln("formatsAct != formatsCmp at index %d", i);
                 errln("a != b");
                 return;
             }
-        }else if ((a != NULL) || (b != NULL)) {
-            errln("(a != NULL) || (b != NULL)");
+        }else if ((a != nullptr) || (b != nullptr)) {
+            errln("(a != nullptr) || (b != nullptr)");
             return;
         }
     }
@@ -1310,8 +1310,8 @@ void TestMessageFormat::testAdopt()
     }
 
     for (i = 0; i < countCmp; i++) {
-        if (formatsCmp[i] == NULL) {
-            formatsToAdopt[i] = NULL;
+        if (formatsCmp[i] == nullptr) {
+            formatsToAdopt[i] = nullptr;
         }else{
             formatsToAdopt[i] = formatsCmp[i]->clone();
             if (!formatsToAdopt[i]) {
@@ -1336,13 +1336,13 @@ void TestMessageFormat::testAdopt()
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
         b = formatsCmp[i];
-        if ((a != NULL) && (b != NULL)) {
+        if ((a != nullptr) && (b != nullptr)) {
             if (*a != *b) {
                 errln("a != b");
                 return;
             }
-        }else if ((a != NULL) || (b != NULL)) {
-            errln("(a != NULL) || (b != NULL)");
+        }else if ((a != nullptr) || (b != nullptr)) {
+            errln("(a != nullptr) || (b != nullptr)");
             return;
         }
     }
@@ -1359,8 +1359,8 @@ void TestMessageFormat::testAdopt()
     }
 
     for (i = 0; i < countCmp; i++) {
-        if (formatsCmp[i] == NULL) {
-            formatsToAdopt[i] = NULL;
+        if (formatsCmp[i] == nullptr) {
+            formatsToAdopt[i] = nullptr;
         }else{
             formatsToAdopt[i] = formatsCmp[i]->clone();
             if (!formatsToAdopt[i]) {
@@ -1388,13 +1388,13 @@ void TestMessageFormat::testAdopt()
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
         b = formatsCmp[i];
-        if ((a != NULL) && (b != NULL)) {
+        if ((a != nullptr) && (b != nullptr)) {
             if (*a != *b) {
                 errln("a != b");
                 return;
             }
-        }else if ((a != NULL) || (b != NULL)) {
-            errln("(a != NULL) || (b != NULL)");
+        }else if ((a != nullptr) || (b != nullptr)) {
+            errln("(a != nullptr) || (b != nullptr)");
             return;
         }
     }
@@ -1418,32 +1418,32 @@ static void _testCopyConstructor2()
     const Formattable fargs( d, Formattable::kIsDate );
 
     MessageFormat* fmt1 = new MessageFormat( formatStr, status );
-    MessageFormat* fmt2 = NULL;
-    MessageFormat* fmt3 = NULL;
-    MessageFormat* fmt4 = NULL;
+    MessageFormat* fmt2 = nullptr;
+    MessageFormat* fmt3 = nullptr;
+    MessageFormat* fmt4 = nullptr;
 
-    if (fmt1 == NULL) {
-        it_err("testCopyConstructor2: (fmt1 != NULL)");
+    if (fmt1 == nullptr) {
+        it_err("testCopyConstructor2: (fmt1 != nullptr)");
         goto cleanup;
     }
 
     fmt2 = new MessageFormat( *fmt1 );
     result = fmt1->format( &fargs, 1, resultStr, fp, status );
 
-    if (fmt2 == NULL) {
-        it_err("testCopyConstructor2: (fmt2 != NULL)");
+    if (fmt2 == nullptr) {
+        it_err("testCopyConstructor2: (fmt2 != nullptr)");
         goto cleanup;
     }
 
     fmt3 = fmt1->clone();
     fmt4 = fmt2->clone();
 
-    if (fmt3 == NULL) {
-        it_err("testCopyConstructor2: (fmt3 != NULL)");
+    if (fmt3 == nullptr) {
+        it_err("testCopyConstructor2: (fmt3 != nullptr)");
         goto cleanup;
     }
-    if (fmt4 == NULL) {
-        it_err("testCopyConstructor2: (fmt4 != NULL)");
+    if (fmt4 == nullptr) {
+        it_err("testCopyConstructor2: (fmt4 != nullptr)");
         goto cleanup;
     }
 
@@ -1621,10 +1621,10 @@ void TestMessageFormat::TestApostropheMode() {
       UErrorCode status = U_ZERO_ERROR;
       assertEquals("DOUBLE_OPTIONAL failure",
                    desired,
-                   GetPatternAndSkipSyntax(ado_mp->parse(ado_pattern, NULL, status)));
+                   GetPatternAndSkipSyntax(ado_mp->parse(ado_pattern, nullptr, status)));
       UnicodeString& adr_pattern = tuples[i + 2].isEmpty() ? ado_pattern : tuples[i + 2];
       assertEquals("DOUBLE_REQUIRED failure", desired,
-          GetPatternAndSkipSyntax(adr_mp->parse(adr_pattern, NULL, status)));
+          GetPatternAndSkipSyntax(adr_mp->parse(adr_pattern, nullptr, status)));
     }
     delete adr_mp;
     delete ado_mp;
@@ -1639,13 +1639,13 @@ void TestMessageFormat::TestCompatibleApostrophe() {
 
     UErrorCode ec = U_ZERO_ERROR;
     MessageFormat compMsg("", Locale::getUS(), ec);
-    compMsg.applyPattern(pattern, UMSGPAT_APOS_DOUBLE_REQUIRED, NULL, ec);
+    compMsg.applyPattern(pattern, UMSGPAT_APOS_DOUBLE_REQUIRED, nullptr, ec);
     if (compMsg.getApostropheMode() != UMSGPAT_APOS_DOUBLE_REQUIRED) {
         errln("wrong value from  compMsg.getApostropheMode().");
     }
 
     MessageFormat icuMsg("", Locale::getUS(), ec);
-    icuMsg.applyPattern(pattern, UMSGPAT_APOS_DOUBLE_OPTIONAL, NULL, ec);
+    icuMsg.applyPattern(pattern, UMSGPAT_APOS_DOUBLE_OPTIONAL, nullptr, ec);
     if (icuMsg.getApostropheMode() != UMSGPAT_APOS_DOUBLE_OPTIONAL) {
         errln("wrong value from  icuMsg.getApostropheMode().");
     }
@@ -1724,7 +1724,7 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
             if (len >= BUF2_LEN) {
                 buf2[BUF2_LEN-1] = 0;
             }
-            sprintf(buf, "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
+            snprintf(buf, sizeof(buf), "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
             errln(buf);
         }
     }
@@ -1734,7 +1734,7 @@ void TestMessageFormat::testCoverage(void) {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString testformat("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
     MessageFormat *msgfmt = new MessageFormat(testformat, Locale("fr"), status);
-    if (msgfmt == NULL || U_FAILURE(status)) {
+    if (msgfmt == nullptr || U_FAILURE(status)) {
         dataerrln("FAIL: Unable to create MessageFormat.: %s", u_errorName(status));
         return;
     }
@@ -1750,7 +1750,7 @@ void TestMessageFormat::testCoverage(void) {
     msgfmt->setFormat("set", cf, status);
 
     StringEnumeration *en = msgfmt->getFormatNames(status);
-    if (en == NULL || U_FAILURE(status)) {
+    if (en == nullptr || U_FAILURE(status)) {
         errln("FAIL: Unable to get format names enumeration.");
     } else {
         int32_t count = 0;
@@ -1778,7 +1778,7 @@ void TestMessageFormat::testCoverage(void) {
     delete msgfmt;
 
     msgfmt = new MessageFormat("'", status);
-    if (msgfmt == NULL || U_FAILURE(status)) {
+    if (msgfmt == nullptr || U_FAILURE(status)) {
         errln("FAIL: Unable to create MessageFormat.");
         return;
     }
@@ -1814,7 +1814,7 @@ void TestMessageFormat::testGetFormatNames() {
     }
     const UnicodeString *name;
     name = names->snext(errorCode);
-    if (name == NULL || errorCode.isFailure()) {
+    if (name == nullptr || errorCode.isFailure()) {
         errln("msgfmt.getFormatNames()[0] failed: %s", errorCode.errorName());
         errorCode.reset();
         return;
@@ -1823,7 +1823,7 @@ void TestMessageFormat::testGetFormatNames() {
         return;
     }
     name = names->snext(errorCode);
-    if (name == NULL || errorCode.isFailure()) {
+    if (name == nullptr || errorCode.isFailure()) {
         errln("msgfmt.getFormatNames()[1] failed: %s", errorCode.errorName());
         errorCode.reset();
         return;
@@ -1832,7 +1832,7 @@ void TestMessageFormat::testGetFormatNames() {
         return;
     }
     name = names->snext(errorCode);
-    if (name == NULL || errorCode.isFailure()) {
+    if (name == nullptr || errorCode.isFailure()) {
         errln("msgfmt.getFormatNames()[2] failed: %s", errorCode.errorName());
         errorCode.reset();
         return;
@@ -1841,8 +1841,8 @@ void TestMessageFormat::testGetFormatNames() {
         return;
     }
     name = names->snext(errorCode);
-    if (name != NULL) {
-        errln(UnicodeString("msgfmt.getFormatNames()[3] should be NULL but is: ") + *name);
+    if (name != nullptr) {
+        errln(UnicodeString("msgfmt.getFormatNames()[3] should be nullptr but is: ") + *name);
         return;
     }
 }

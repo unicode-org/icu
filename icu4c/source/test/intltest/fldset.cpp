@@ -67,7 +67,7 @@ UnicodeString FieldsSet::diffFrom(const FieldsSet& other, UErrorCode& status) co
     return str;
 }
 
-static UnicodeString *split(const UnicodeString &src, UChar ch, int32_t &splits)
+static UnicodeString *split(const UnicodeString &src, char16_t ch, int32_t &splits)
 {
     int32_t offset = -1;
 
@@ -116,7 +116,7 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
 
         if(U_FAILURE(status)) {
             char ch[256];
-            const UChar *u = kv[0].getBuffer();
+            const char16_t *u = kv[0].getBuffer();
             int32_t len = kv[0].length();
             u_UCharsToChars(u, ch, len);
             ch[len] = 0; /* include terminating \0 */
@@ -131,7 +131,7 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
 
             if(U_FAILURE(status)) {
                 char ch[256];
-                const UChar *u = kv[1].getBuffer();
+                const char16_t *u = kv[1].getBuffer();
                 int32_t len = kv[1].length();
                 u_UCharsToChars(u, ch, len);
                 ch[len] = 0; /* include terminating \0 */
@@ -210,7 +210,7 @@ void FieldsSet::parseValueDefault(const FieldsSet* inheritFrom, int32_t field, c
     int32_t value = -1;
     if(substr.length()==0) { // inherit requested
         // inherit
-        if((inheritFrom == NULL) || !inheritFrom->isSet((UCalendarDateFields)field)) {
+        if((inheritFrom == nullptr) || !inheritFrom->isSet((UCalendarDateFields)field)) {
             // couldn't inherit from field 
             it_errln(UnicodeString("Parse Failed: Couldn't inherit field ") + field + UnicodeString(" [") + UnicodeString(udbg_enumName(fEnum, field)) + UnicodeString("]"));
             status = U_ILLEGAL_ARGUMENT_ERROR;

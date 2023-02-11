@@ -27,7 +27,7 @@
 #include "cmemory.h"
 #if !UCONFIG_NO_BREAK_ITERATION
 #include "unicode/filteredbrk.h"
-#include <stdio.h> // for sprintf
+#include <stdio.h> // for snprintf
 #endif
 /**
  * API Test the RuleBasedBreakIterator class
@@ -50,10 +50,10 @@ void RBBIAPITest::TestCloneEquals()
 {
 
     UErrorCode status=U_ZERO_ERROR;
-    RuleBasedBreakIterator* bi1     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    RuleBasedBreakIterator* biequal = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    RuleBasedBreakIterator* bi3     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    RuleBasedBreakIterator* bi2     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    RuleBasedBreakIterator* bi1     = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
+    RuleBasedBreakIterator* biequal = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
+    RuleBasedBreakIterator* bi3     = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
+    RuleBasedBreakIterator* bi2     = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status));
     if(U_FAILURE(status)){
         errcheckln(status, "Fail : in construction - %s", u_errorName(status));
         return;
@@ -88,7 +88,7 @@ void RBBIAPITest::TestCloneEquals()
     //    source and dest iterator produce the same next() after assignment.
     //    deleting one doesn't disable the other.
     logln("Testing assignment");
-    RuleBasedBreakIterator *bix = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
+    RuleBasedBreakIterator *bix = dynamic_cast<RuleBasedBreakIterator *>(BreakIterator::createLineInstance(Locale::getDefault(), status));
     if(U_FAILURE(status)){
         errcheckln(status, "Fail : in construction - %s", u_errorName(status));
         return;
@@ -190,9 +190,9 @@ void RBBIAPITest::TestgetRules()
     UErrorCode status=U_ZERO_ERROR;
 
     LocalPointer<RuleBasedBreakIterator> bi1(
-            (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status), status);
+            dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status)), status);
     LocalPointer<RuleBasedBreakIterator> bi2(
-            (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status), status);
+            dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status)), status);
     if(U_FAILURE(status)){
         errcheckln(status, "%s:%d, FAIL: in construction - %s", __FILE__, __LINE__, u_errorName(status));
         return;
@@ -220,9 +220,9 @@ void RBBIAPITest::TestgetRules()
 void RBBIAPITest::TestHashCode()
 {
     UErrorCode status=U_ZERO_ERROR;
-    RuleBasedBreakIterator* bi1     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    RuleBasedBreakIterator* bi3     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    RuleBasedBreakIterator* bi2     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    RuleBasedBreakIterator* bi1     = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
+    RuleBasedBreakIterator* bi3     = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
+    RuleBasedBreakIterator* bi2     = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status));
     if(U_FAILURE(status)){
         errcheckln(status, "Fail : in construction - %s", u_errorName(status));
         delete bi1;
@@ -262,8 +262,8 @@ void RBBIAPITest::TestGetSetAdoptText()
     IcuTestErrorCode status(*this, "TestGetSetAdoptText");
     UnicodeString str1="first string.";
     UnicodeString str2="Second string.";
-    LocalPointer<RuleBasedBreakIterator> charIter1((RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
-    LocalPointer<RuleBasedBreakIterator> wordIter1((RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status));
+    LocalPointer<RuleBasedBreakIterator> charIter1(dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status)));
+    LocalPointer<RuleBasedBreakIterator> wordIter1(dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status)));
     if(status.isFailure()){
         errcheckln(status, "Fail : in construction - %s", status.errorName());
             return;
@@ -385,42 +385,42 @@ void RBBIAPITest::TestIteration()
     // Testing for correct operation of the break rules happens elsewhere.
 
     UErrorCode status=U_ZERO_ERROR;
-    RuleBasedBreakIterator* bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    RuleBasedBreakIterator* bi  = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
     if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating character break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
-    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    bi  = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status));
     if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Word break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
-    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
+    bi  = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status));
     if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Line break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
-    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    bi  = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status));
     if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Sentence break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
-    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createTitleInstance(Locale::getDefault(), status);
+    bi  = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createTitleInstance(Locale::getDefault(), status));
     if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Title break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
-    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    bi  = dynamic_cast<RuleBasedBreakIterator*>(RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status));
     if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating character break iterator.  Status = %s", u_errorName(status));
         return;   // Skip the rest of these tests.
@@ -651,7 +651,7 @@ void RBBIAPITest::TestQuoteGrouping() {
 //      Test word break rule status constants.
 //
 void RBBIAPITest::TestRuleStatus() {
-     UChar str[30];
+     char16_t str[30];
      //no longer test Han or hiragana breaking here: ruleStatusVec would return nothing
      // changed UBRK_WORD_KANA to UBRK_WORD_IDEO
      u_unescape("plain word 123.45 \\u30a1\\u30a2 ",
@@ -1125,12 +1125,12 @@ void RBBIAPITest::TestRefreshInputText() {
      *    runs BreakIterator::next() repeatedly, moving the text in the middle of the sequence.
      *    The right set of boundaries should still be found.
      */
-    UChar testStr[]  = {0x20, 0x41, 0x20, 0x42, 0x20, 0x43, 0x20, 0x44, 0x0};  /* = " A B C D"  */
-    UChar movedStr[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  0};
+    char16_t testStr[]  = {0x20, 0x41, 0x20, 0x42, 0x20, 0x43, 0x20, 0x44, 0x0};  /* = " A B C D"  */
+    char16_t movedStr[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  0};
     UErrorCode status = U_ZERO_ERROR;
     UText ut1 = UTEXT_INITIALIZER;
     UText ut2 = UTEXT_INITIALIZER;
-    RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
+    RuleBasedBreakIterator *bi = dynamic_cast<RuleBasedBreakIterator *>(BreakIterator::createLineInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
 
     utext_openUChars(&ut1, testStr, -1, &status);
@@ -1168,7 +1168,7 @@ void RBBIAPITest::TestRefreshInputText() {
 
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
 static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it) {
-  static const UChar PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
+  static const char16_t PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
   it.logln(UnicodeString("String:'")+ustr+UnicodeString("'"));
 
   int32_t *pos = new int32_t[ustr.length()];
@@ -1184,22 +1184,22 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
     }
   }
   UnicodeString out;
-  out.append((UChar)CHSTR);
+  out.append((char16_t)CHSTR);
   int32_t prev = 0;
   for(int32_t i=0;i<posCount;i++) {
     int32_t n=pos[i];
     out.append(ustr.tempSubString(prev,n-prev));
-    out.append((UChar)PILCROW);
+    out.append((char16_t)PILCROW);
     prev=n;
   }
   out.append(ustr.tempSubString(prev,ustr.length()-prev));
-  out.append((UChar)CHEND);
+  out.append((char16_t)CHEND);
   it.logln(out);
 
   out.remove();
   for(int32_t i=0;i<posCount;i++) {
     char tmp[100];
-    sprintf(tmp,"%d ",pos[i]);
+    snprintf(tmp, sizeof(tmp), "%d ",pos[i]);
     out.append(UnicodeString(tmp));
   }
   it.logln(out);

@@ -140,7 +140,7 @@ void
 IntlTestDateFormat::describeTest()
 {
     // Assume it's a SimpleDateFormat and get some info
-    SimpleDateFormat *s = (SimpleDateFormat*)fFormat;
+    SimpleDateFormat *s = dynamic_cast<SimpleDateFormat*>(fFormat);
     UnicodeString str;
     logln(fTestName + " Pattern " + s->toPattern(str));
 }

@@ -134,7 +134,7 @@ void TimeUnitTest::testBasic() {
                 UnicodeString formatted;
                 Formattable formattable;
                 formattable.adoptObject(source);
-                formatted = ((Format*)formats[style])->format(formattable, formatted, status);
+                formatted = (dynamic_cast<Format*>(formats[style]))->format(formattable, formatted, status);
                 if (!assertSuccess("format()", status)) return;
 #ifdef TUFMTTS_DEBUG
                 char formatResult[1000];
@@ -142,16 +142,16 @@ void TimeUnitTest::testBasic() {
                 std::cout << "format result: " << formatResult << "\n";
 #endif
                 Formattable result;
-                ((Format*)formats[style])->parseObject(formatted, result, status);
+                (dynamic_cast<Format*>(formats[style]))->parseObject(formatted, result, status);
                 if (!assertSuccess("parseObject()", status)) return;
-                if (!tmaEqual(*((TimeUnitAmount *)result.getObject()), *((TimeUnitAmount *) formattable.getObject()))) {
+                if (!tmaEqual(*(dynamic_cast<const TimeUnitAmount*>(result.getObject())), *(dynamic_cast<const TimeUnitAmount*>(formattable.getObject())))) {
                     dataerrln("No round trip: ");
                 }
                 // other style parsing
                 Formattable result_1;
-                ((Format*)formats[1-style])->parseObject(formatted, result_1, status);
+                (dynamic_cast<Format*>(formats[1-style]))->parseObject(formatted, result_1, status);
                 if (!assertSuccess("parseObject()", status)) return;
-                if (!tmaEqual(*((TimeUnitAmount *)result_1.getObject()), *((TimeUnitAmount *) formattable.getObject()))) {
+                if (!tmaEqual(*(dynamic_cast<const TimeUnitAmount*>(result_1.getObject())), *(dynamic_cast<const TimeUnitAmount*>(formattable.getObject())))) {
                     dataerrln("No round trip: ");
                 }
             }
@@ -312,28 +312,28 @@ void TimeUnitTest::testGreekWithFallback() {
     UTimeUnitFormatStyle styles[] = {UTMUTFMT_FULL_STYLE, UTMUTFMT_ABBREVIATED_STYLE};
     const int numbers[] = {1, 7};
 
-    const UChar oneSecond[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03bf, 0};
-    const UChar oneSecondShort[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x002e, 0};
-    const UChar oneMinute[] = {0x0031, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03cc, 0};
-    const UChar oneMinuteShort[] = {0x0031, 0x0020, 0x03bb, 0x002e, 0};
-    const UChar oneHour[] = {0x0031, 0x0020, 0x03ce, 0x03c1, 0x03b1, 0};
-    const UChar oneHourShort[] = {0x0031, 0x0020, 0x03ce, 0x002e, 0};
-    const UChar oneDay[] = {0x0031, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b1, 0};
-    const UChar oneMonth[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b1, 0x03c2, 0};
-    const UChar oneMonthShort[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x002e, 0};
-    const UChar oneYear[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x03bf, 0x03c2, 0};
-    const UChar oneYearShort[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x002e, 0};
-    const UChar sevenSeconds[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
-    const UChar sevenSecondsShort[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x002e, 0};
-    const UChar sevenMinutes[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
-    const UChar sevenMinutesShort[] = {0x0037, 0x0020, 0x03bb, 0x002e, 0};
-    const UChar sevenHours[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
-    const UChar sevenHoursShort[] = {0x0037, 0x0020, 0x03ce, 0x002e, 0};
-    const UChar sevenDays[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
-    const UChar sevenMonths[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
-    const UChar sevenMonthsShort[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x002e, 0};
-    const UChar sevenYears[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x03b7, 0};
-    const UChar sevenYearsShort[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x002e, 0};
+    const char16_t oneSecond[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03bf, 0};
+    const char16_t oneSecondShort[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x002e, 0};
+    const char16_t oneMinute[] = {0x0031, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03cc, 0};
+    const char16_t oneMinuteShort[] = {0x0031, 0x0020, 0x03bb, 0x002e, 0};
+    const char16_t oneHour[] = {0x0031, 0x0020, 0x03ce, 0x03c1, 0x03b1, 0};
+    const char16_t oneHourShort[] = {0x0031, 0x0020, 0x03ce, 0x002e, 0};
+    const char16_t oneDay[] = {0x0031, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b1, 0};
+    const char16_t oneMonth[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b1, 0x03c2, 0};
+    const char16_t oneMonthShort[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x002e, 0};
+    const char16_t oneYear[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x03bf, 0x03c2, 0};
+    const char16_t oneYearShort[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x002e, 0};
+    const char16_t sevenSeconds[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
+    const char16_t sevenSecondsShort[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x002e, 0};
+    const char16_t sevenMinutes[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
+    const char16_t sevenMinutesShort[] = {0x0037, 0x0020, 0x03bb, 0x002e, 0};
+    const char16_t sevenHours[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
+    const char16_t sevenHoursShort[] = {0x0037, 0x0020, 0x03ce, 0x002e, 0};
+    const char16_t sevenDays[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
+    const char16_t sevenMonths[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
+    const char16_t sevenMonthsShort[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x002e, 0};
+    const char16_t sevenYears[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x03b7, 0};
+    const char16_t sevenYearsShort[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x002e, 0};
 
     const UnicodeString oneSecondStr(oneSecond);
     const UnicodeString oneSecondShortStr(oneSecondShort);
@@ -410,7 +410,7 @@ void TimeUnitTest::testGreekWithFallback() {
                     UnicodeString str;
 
                     fmt.adoptObject(tamt.orphan());
-                    str = ((Format *)tfmt.getAlias())->format(fmt, str, status);
+                    str = (dynamic_cast<Format*>(tfmt.getAlias()))->format(fmt, str, status);
                     if (!assertSuccess("formatting relative time failed", status)) {
 #ifdef TUFMTTS_DEBUG
                         std::cout <<  "Failed to format" << "\n";
@@ -469,7 +469,7 @@ void TimeUnitTest::test10219Plurals() {
         dataerrln("generating TimeUnitFormat Object failed: %s", u_errorName(status));
         return;
     }
-    LocalPointer<DecimalFormat> nf((DecimalFormat *) NumberFormat::createInstance(usLocale, status));
+    LocalPointer<DecimalFormat> nf(dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(usLocale, status)));
     if (U_FAILURE(status)) {
         dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
         return;

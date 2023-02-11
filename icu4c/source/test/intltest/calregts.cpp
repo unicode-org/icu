@@ -99,6 +99,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(55,Test13745);
         CASE(56,TestUTCWrongAMPM22023);
         CASE(57,TestAsiaManilaAfterSetGregorianChange22043);
+        CASE(58,TestRespectUExtensionFw);
     default: name = ""; break;
     }
 }
@@ -143,7 +144,7 @@ void
 CalendarRegressionTest::test4100311()
 {
     UErrorCode status = U_ZERO_ERROR;
-    GregorianCalendar *cal = (GregorianCalendar*)Calendar::createInstance(status);
+    GregorianCalendar *cal = dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status));
     if(U_FAILURE(status)) {
       dataerrln("Error creating Calendar: %s", u_errorName(status));
       delete cal;
@@ -619,7 +620,7 @@ void CalendarRegressionTest::dowTest(UBool lenient)
     if(cal->getActualMinimum(Calendar::DAY_OF_WEEK) != min) {
         errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK) differs from minimum");
     }
-    if(((Calendar*)cal)->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
+    if(cal->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
         errln("FAIL: actual minimum (UCAL_DAY_OF_WEEK, status) differs from minimum");
     }
 // NOTE: This function does not exist!  jitterbug #3016
@@ -970,7 +971,7 @@ void CalendarRegressionTest::test4096539()
 void CalendarRegressionTest::test41003112()
 {
     UErrorCode status = U_ZERO_ERROR;
-    GregorianCalendar *cal = (GregorianCalendar*)Calendar::createInstance(status);
+    GregorianCalendar *cal = dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status));
     if(U_FAILURE(status)) {
       dataerrln("Error creating calendar: %s", u_errorName(status));
       delete cal;
@@ -994,7 +995,7 @@ void CalendarRegressionTest::test4103271()
     SimpleDateFormat sdf(status);
     int32_t numYears=40, startYear=1997, numDays=15;
     UnicodeString output, testDesc, str, str2;
-    GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status);
+    GregorianCalendar *testCal = dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status));
     if(U_FAILURE(status)) {
       dataerrln("Error creating calendar: %s", u_errorName(status));
       delete testCal;
@@ -1458,7 +1459,7 @@ void CalendarRegressionTest::test4118384()
 void CalendarRegressionTest::test4125881()
 {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<GregorianCalendar> cal((GregorianCalendar*) Calendar::createInstance(status), status);
+    LocalPointer<GregorianCalendar> cal(dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status)), status);
     if(U_FAILURE(status)) {
         dataerrln("Error creating calendar %s", u_errorName(status));
         return;
@@ -1487,7 +1488,7 @@ void CalendarRegressionTest::test4125881()
  */
 void CalendarRegressionTest::test4125892() {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<GregorianCalendar> cal((GregorianCalendar*) Calendar::createInstance(status), status);
+    LocalPointer<GregorianCalendar> cal(dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status)), status);
     if(U_FAILURE(status)) {
         dataerrln("Error creating calendar %s", u_errorName(status));
         return;
@@ -2041,7 +2042,7 @@ void CalendarRegressionTest::Test4197699() {
     int32_t DATA_length = UPRV_LENGTHOF(DATA);
 
     UnicodeString str;
-    DateFormat& dfmt = *(DateFormat*)&fmt;
+    DateFormat& dfmt = *dynamic_cast<DateFormat*>(&fmt);
     for (int32_t i=0; i<DATA_length; ) {
         cal.clear();
         cal.set(DATA[i], DATA[i+1], DATA[i+2]);
@@ -2406,7 +2407,7 @@ void CalendarRegressionTest::TestT5555()
     UErrorCode ec = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(ec);
 
-    if (cal == NULL || U_FAILURE(ec)) {
+    if (cal == nullptr || U_FAILURE(ec)) {
         dataerrln("FAIL: Calendar::createInstance(): %s", u_errorName(ec));
         delete cal;
         return;
@@ -2473,13 +2474,13 @@ typedef struct {
 static const CoptEthCalLocale copEthCalLocales[] = {
     { "en@calendar=coptic",   0    },
     { "en@calendar=ethiopic", 276  },
-    { NULL,                   0    } // terminator
+    { nullptr,                0    } // terminator
 };
 
 void CalendarRegressionTest::TestT6745()
 {
     const CoptEthCalLocale * testLocalePtr;
-    for ( testLocalePtr = copEthCalLocales; testLocalePtr->locale != NULL; ++testLocalePtr) {
+    for ( testLocalePtr = copEthCalLocales; testLocalePtr->locale != nullptr; ++testLocalePtr) {
         UErrorCode status = U_ZERO_ERROR;
         Calendar *cal = Calendar::createInstance(Locale(testLocalePtr->locale), status);
         if ( U_FAILURE(status) ) {
@@ -2518,7 +2519,7 @@ void CalendarRegressionTest::TestT6745()
 void CalendarRegressionTest::TestLeapFieldDifference() {
     UErrorCode ec = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(ec);
-    if (cal == NULL || U_FAILURE(ec)) {
+    if (cal == nullptr || U_FAILURE(ec)) {
         dataerrln("FAIL: Calendar::createInstance(): %s", u_errorName(ec));
         delete cal;
         return;
@@ -2697,22 +2698,22 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
 
     UnicodeString buf1, buf2;
 
-    const UChar* id;
-    while ((id = tz->unext(NULL, ec)) != NULL && U_SUCCESS(ec)) {
+    const char16_t* id;
+    while ((id = tz->unext(nullptr, ec)) != nullptr && U_SUCCESS(ec)) {
         if (U_FAILURE(ec)) {
             errln("FAIL: StringEnumeration::unext");
             break;
         }
 
         TimeZone *t = TimeZone::createTimeZone(id);
-        if (t == NULL) {
+        if (t == nullptr) {
             errln("FAIL: TimeZone::createTimeZone");
             break;
         }
         dateFormat.setTimeZone(*t);
 
         Calendar *cal = Calendar::createInstance(t, locale, ec);
-        if (cal == NULL || U_FAILURE(ec)) {
+        if (cal == nullptr || U_FAILURE(ec)) {
             errln("FAIL: Calendar::createTimeZone");
             delete cal;
             break;
@@ -2870,7 +2871,7 @@ void CalendarRegressionTest::TestDeprecates(void)
 void CalendarRegressionTest::TestT8057(void) {
     // Set the calendar to the last day in a leap year
     UErrorCode status = U_ZERO_ERROR;
-    GregorianCalendar *cal = (GregorianCalendar*)Calendar::createInstance(status);
+    GregorianCalendar *cal = dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status));
     if(U_FAILURE(status)) {
         errln("Error creating Calendar: %s", u_errorName(status));
         delete cal;
@@ -3202,7 +3203,7 @@ void CalendarRegressionTest::VerifyNoAssertWithSetGregorianChange(const char* ti
     if (cal->getDynamicClassID() ==
         GregorianCalendar::getStaticClassID()) {
         GregorianCalendar* gc =
-            static_cast<GregorianCalendar*>(cal.get());
+            dynamic_cast<GregorianCalendar*>(cal.get());
         // The beginning of ECMAScript time, namely -(2**53)
         const double start_of_time = -9007199254740992;
         gc->setGregorianChange(start_of_time, status);
@@ -3240,4 +3241,40 @@ void CalendarRegressionTest::TestWeekOfYear13548(void) {
     }
 }
 
+void CalendarRegressionTest::TestRespectUExtensionFw(void) { // ICU-22226
+    static const char* LOCALE_IDS[] = {
+        "en-US",
+        "en-US-u-fw-xyz",
+        "en-US-u-fw-sun",
+        "en-US-u-fw-mon",
+        "en-US-u-fw-thu",
+        "en-US-u-fw-sat"
+    };
+    static const UCalendarDaysOfWeek EXPECTED_VAL[] = {
+        UCAL_SUNDAY,
+        UCAL_SUNDAY,
+        UCAL_SUNDAY,
+        UCAL_MONDAY,
+        UCAL_THURSDAY,
+        UCAL_SATURDAY
+    };
+
+    int32_t EXPECTED_VAL_count = UPRV_LENGTHOF(EXPECTED_VAL);
+    assertEquals("The number of locales should be equal to the number of expected results.",
+        EXPECTED_VAL_count, UPRV_LENGTHOF(LOCALE_IDS));
+
+    for (int32_t i=0; i<EXPECTED_VAL_count; ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        const char * localeId = LOCALE_IDS[i];
+        UCalendarDaysOfWeek expected = EXPECTED_VAL[i];
+
+        Locale locale = Locale::forLanguageTag(localeId, status);
+        LocalPointer<Calendar> cal(Calendar::createInstance(locale, status));
+        UCalendarDaysOfWeek actual = cal->getFirstDayOfWeek(status);
+        failure(status, "Calendar::getFirstDayOfWeek(status)");
+
+        assertEquals((UnicodeString)"Calendar.getFirstDayOfWeek() ignores the 'fw' extension u in '"
+            + localeId + "' locale", expected, actual);
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */

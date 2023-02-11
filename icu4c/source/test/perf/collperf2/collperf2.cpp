@@ -30,11 +30,11 @@ struct CompactArrays{\
     UNIT    * data; /*the real space to hold strings*/ \
     \
     ~CompactArrays(){free(index);free(data);} \
-    CompactArrays() : count(0), index(NULL), data(NULL) { \
+    CompactArrays() : count(0), index(nullptr), data(nullptr) { \
         index = (int32_t *) realloc(index, sizeof(int32_t)); \
         index[0] = 0; \
     } \
-    void append_one(int32_t theLen){ /*include terminal NULL*/ \
+    void append_one(int32_t theLen){ /*include terminal NUL*/ \
         count++; \
         index = (int32_t *) realloc(index, sizeof(int32_t) * (count + 1)); \
         index[count] = index[count - 1] + theLen; \
@@ -42,10 +42,10 @@ struct CompactArrays{\
     } \
     UNIT * last(){return data + index[count - 1];} \
     const UNIT * dataOf(int32_t i) const {return data + index[i];} \
-    int32_t lengthOf(int i) const {return index[i+1] - index[i] - 1; } /*exclude terminating NULL*/  \
+    int32_t lengthOf(int i) const {return index[i+1] - index[i] - 1; } /*exclude terminating NUL*/  \
 };
 
-COMPACT_ARRAY(CA_uchar, UChar)
+COMPACT_ARRAY(CA_uchar, char16_t)
 COMPACT_ARRAY(CA_char, char)
 
 #define MAX_TEST_STRINGS_FOR_PERMUTING 1000
@@ -746,7 +746,7 @@ long CppGetCollationKey::getOperationsPerIteration() {
 namespace {
 
 struct CollatorAndCounter {
-    CollatorAndCounter(const Collator& coll) : coll(coll), ucoll(NULL), counter(0) {}
+    CollatorAndCounter(const Collator& coll) : coll(coll), ucoll(nullptr), counter(0) {}
     CollatorAndCounter(const Collator& coll, const UCollator *ucoll)
             : coll(coll), ucoll(ucoll), counter(0) {}
     const Collator& coll;
@@ -1046,7 +1046,7 @@ public:
     CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &status);
     ~CollPerf2Test();
     virtual UPerfFunction* runIndexedTest(
-        int32_t index, UBool exec, const char *&name, char *par = NULL);
+        int32_t index, UBool exec, const char *&name, char *par = nullptr);
 
 private:
     UCollator* coll;
@@ -1130,23 +1130,23 @@ private:
 
 CollPerf2Test::CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &status) :
     UPerfTest(argc, argv, status),
-    coll(NULL),
-    collObj(NULL),
+    coll(nullptr),
+    collObj(nullptr),
     count(0),
-    data16(NULL),
-    data8(NULL),
-    modData16(NULL),
-    modData8(NULL),
-    sortedData16(NULL),
-    sortedData8(NULL),
-    randomData16(NULL),
-    randomData8(NULL)
+    data16(nullptr),
+    data8(nullptr),
+    modData16(nullptr),
+    modData8(nullptr),
+    sortedData16(nullptr),
+    sortedData8(nullptr),
+    randomData16(nullptr),
+    randomData8(nullptr)
 {
     if (U_FAILURE(status)) {
         return;
     }
 
-    if (locale == NULL){
+    if (locale == nullptr){
         locale = "root";
     }
 
@@ -1175,17 +1175,17 @@ CollPerf2Test::~CollPerf2Test()
 
 const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
 {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (data16) return data16;
 
     CA_uchar* d16 = new CA_uchar();
-    const UChar *line = NULL;
+    const char16_t *line = nullptr;
     int32_t len = 0;
     int32_t numData = 0;
 
     for (;;) {
         line = ucbuf_readline(ucharBuf, &len, &status);
-        if (line == NULL || U_FAILURE(status)) break;
+        if (line == nullptr || U_FAILURE(status)) break;
 
         // Refer to the source code of ucbuf_readline()
         // 1. 'len' includes the line terminal symbols
@@ -1196,7 +1196,7 @@ const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
             continue; // skip empty/comment line
         } else {
             d16->append_one(len);
-            UChar *p = d16->last();
+            char16_t *p = d16->last();
             u_memcpy(p, line, len - 1);  // exclude the CR
             p[len - 1] = 0;  // NUL-terminate
 
@@ -1216,36 +1216,36 @@ const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
 
 const CA_char* CollPerf2Test::getData8(UErrorCode &status)
 {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (data8) return data8;
     return data8 = getData8FromData16(getData16(status), status);
 }
 
 const CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
 {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (modData16) return modData16;
 
     const CA_uchar* d16 = getData16(status);
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
 
     CA_uchar* modData16 = new CA_uchar();
 
     for (int32_t i = 0; i < d16->count; i++) {
-        const UChar *s = d16->dataOf(i);
-        int32_t len = d16->lengthOf(i) + 1; // including NULL terminator
+        const char16_t *s = d16->dataOf(i);
+        int32_t len = d16->lengthOf(i) + 1; // including NUL terminator
 
         modData16->append_one(len);
         u_memcpy(modData16->last(), s, len);
 
         // replacing the last character with a different character
-        UChar *lastChar = &modData16->last()[len -2];
+        char16_t *lastChar = &modData16->last()[len -2];
         for (int32_t j = i + 1; j != i; j++) {
             if (j >= d16->count) {
                 j = 0;
             }
-            const UChar *s1 = d16->dataOf(j);
-            UChar lastChar1 = s1[d16->lengthOf(j) - 1];
+            const char16_t *s1 = d16->dataOf(j);
+            char16_t lastChar1 = s1[d16->lengthOf(j) - 1];
             if (*lastChar != lastChar1) {
                 *lastChar = lastChar1;
                 break;
@@ -1258,7 +1258,7 @@ const CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
 
 const CA_char* CollPerf2Test::getModData8(UErrorCode &status)
 {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (modData8) return modData8;
     return modData8 = getData8FromData16(getModData16(status), status);
 }
@@ -1296,7 +1296,7 @@ U16HashComparator(const void* context, const void* left, const void* right) {
 }  // namespace
 
 const CA_uchar* CollPerf2Test::getSortedData16(UErrorCode &status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (sortedData16) return sortedData16;
 
     ArrayAndColl ac(getData16(status), *collObj);
@@ -1304,13 +1304,13 @@ const CA_uchar* CollPerf2Test::getSortedData16(UErrorCode &status) {
 }
 
 const CA_char* CollPerf2Test::getSortedData8(UErrorCode &status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (sortedData8) return sortedData8;
     return sortedData8 = getData8FromData16(getSortedData16(status), status);
 }
 
 const CA_uchar* CollPerf2Test::getRandomData16(UErrorCode &status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (randomData16) return randomData16;
 
     // Sort the strings by their hash codes, which should be a reasonably pseudo-random order.
@@ -1319,7 +1319,7 @@ const CA_uchar* CollPerf2Test::getRandomData16(UErrorCode &status) {
 }
 
 const CA_char* CollPerf2Test::getRandomData8(UErrorCode &status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
     if (randomData8) return randomData8;
     return randomData8 = getData8FromData16(getRandomData16(status), status);
 }
@@ -1327,22 +1327,22 @@ const CA_char* CollPerf2Test::getRandomData8(UErrorCode &status) {
 CA_uchar* CollPerf2Test::sortData16(const CA_uchar* d16,
                                     UComparator *cmp, const void *context,
                                     UErrorCode &status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
 
     LocalArray<int32_t> indexes(new int32_t[d16->count]);
     for (int32_t i = 0; i < d16->count; ++i) {
         indexes[i] = i;
     }
     uprv_sortArray(indexes.getAlias(), d16->count, 4, cmp, context, true, &status);
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
 
     // Copy the strings in sorted order into a new array.
     LocalPointer<CA_uchar> newD16(new CA_uchar());
     for (int32_t i = 0; i < d16->count; i++) {
         int32_t j = indexes[i];
-        const UChar* s = d16->dataOf(j);
+        const char16_t* s = d16->dataOf(j);
         int32_t len = d16->lengthOf(j);
-        int32_t capacity = len + 1;  // including NULL terminator
+        int32_t capacity = len + 1;  // including NUL terminator
         newD16->append_one(capacity);
         u_memcpy(newD16->last(), s, capacity);
     }
@@ -1350,44 +1350,44 @@ CA_uchar* CollPerf2Test::sortData16(const CA_uchar* d16,
     if (U_SUCCESS(status)) {
         return newD16.orphan();
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 CA_char* CollPerf2Test::getData8FromData16(const CA_uchar* d16, UErrorCode &status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
 
     // UTF-16 -> UTF-8 conversion
     LocalPointer<CA_char> d8(new CA_char());
     for (int32_t i = 0; i < d16->count; i++) {
-        const UChar *s16 = d16->dataOf(i);
+        const char16_t *s16 = d16->dataOf(i);
         int32_t length16 = d16->lengthOf(i);
 
         // get length in UTF-8
         int32_t length8;
-        u_strToUTF8(NULL, 0, &length8, s16, length16, &status);
+        u_strToUTF8(nullptr, 0, &length8, s16, length16, &status);
         if (status == U_BUFFER_OVERFLOW_ERROR || status == U_ZERO_ERROR){
             status = U_ZERO_ERROR;
         } else {
             break;
         }
-        int32_t capacity8 = length8 + 1;  // plus terminal NULL
+        int32_t capacity8 = length8 + 1;  // plus terminal NUL
         d8->append_one(capacity8);
 
         // convert to UTF-8
-        u_strToUTF8(d8->last(), capacity8, NULL, s16, length16, &status);
+        u_strToUTF8(d8->last(), capacity8, nullptr, s16, length16, &status);
         if (U_FAILURE(status)) break;
     }
 
     if (U_SUCCESS(status)) {
         return d8.orphan();
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 UPerfFunction*
-CollPerf2Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par /*= NULL*/)
+CollPerf2Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par /*= nullptr*/)
 {
     (void)par;
     TESTCASE_AUTO_BEGIN;
@@ -1435,7 +1435,7 @@ CollPerf2Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char
     TESTCASE_AUTO(TestStringPieceBinSearchC);
 
     TESTCASE_AUTO_END;
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1446,7 +1446,7 @@ UPerfFunction* CollPerf2Test::TestStrcoll()
     Strcoll *testCase = new Strcoll(coll, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1457,7 +1457,7 @@ UPerfFunction* CollPerf2Test::TestStrcollNull()
     Strcoll *testCase = new Strcoll(coll, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1468,7 +1468,7 @@ UPerfFunction* CollPerf2Test::TestStrcollSimilar()
     Strcoll_2 *testCase = new Strcoll_2(coll, getData16(status), getModData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1479,7 +1479,7 @@ UPerfFunction* CollPerf2Test::TestStrcollUTF8()
     StrcollUTF8 *testCase = new StrcollUTF8(coll, getData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1490,7 +1490,7 @@ UPerfFunction* CollPerf2Test::TestStrcollUTF8Null()
     StrcollUTF8 *testCase = new StrcollUTF8(coll, getData8(status),false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1501,7 +1501,7 @@ UPerfFunction* CollPerf2Test::TestStrcollUTF8Similar()
     StrcollUTF8_2 *testCase = new StrcollUTF8_2(coll, getData8(status), getModData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1512,7 +1512,7 @@ UPerfFunction* CollPerf2Test::TestGetSortKey()
     GetSortKey *testCase = new GetSortKey(coll, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1523,7 +1523,7 @@ UPerfFunction* CollPerf2Test::TestGetSortKeyNull()
     GetSortKey *testCase = new GetSortKey(coll, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1534,7 +1534,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart_4All()
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 4 /* bufSize */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1545,7 +1545,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart_4x4()
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 4 /* bufSize */, 4 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1556,7 +1556,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart_4x8()
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 4 /* bufSize */, 8 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1567,7 +1567,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart_32All()
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 32 /* bufSize */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1578,7 +1578,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart_32x2()
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 32 /* bufSize */, 2 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1589,7 +1589,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_4All()
     NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 4 /* bufSize */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1600,7 +1600,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_4x4()
     NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 4 /* bufSize */, 4 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1611,7 +1611,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_4x8()
     NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 4 /* bufSize */, 8 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1622,7 +1622,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_32All()
     NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 32 /* bufSize */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1633,7 +1633,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_32x2()
     NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 32 /* bufSize */, 2 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1644,7 +1644,7 @@ UPerfFunction* CollPerf2Test::TestCppCompare()
     CppCompare *testCase = new CppCompare(collObj, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1655,7 +1655,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareNull()
     CppCompare *testCase = new CppCompare(collObj, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1666,7 +1666,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareSimilar()
     CppCompare_2 *testCase = new CppCompare_2(collObj, getData16(status), getModData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1677,7 +1677,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareUTF8()
     CppCompareUTF8 *testCase = new CppCompareUTF8(collObj, getData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1688,7 +1688,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareUTF8Null()
     CppCompareUTF8 *testCase = new CppCompareUTF8(collObj, getData8(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1699,7 +1699,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareUTF8Similar()
     CppCompareUTF8_2 *testCase = new CppCompareUTF8_2(collObj, getData8(status), getModData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1710,7 +1710,7 @@ UPerfFunction* CollPerf2Test::TestCppGetCollationKey()
     CppGetCollationKey *testCase = new CppGetCollationKey(collObj, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1721,7 +1721,7 @@ UPerfFunction* CollPerf2Test::TestCppGetCollationKeyNull()
     CppGetCollationKey *testCase = new CppGetCollationKey(collObj, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1731,7 +1731,7 @@ UPerfFunction* CollPerf2Test::TestUniStrSort() {
     UPerfFunction *testCase = new UniStrSort(*collObj, coll, getRandomData16(status));
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1741,7 +1741,7 @@ UPerfFunction* CollPerf2Test::TestStringPieceSortCpp() {
     UPerfFunction *testCase = new StringPieceSortCpp(*collObj, coll, getRandomData8(status));
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1751,7 +1751,7 @@ UPerfFunction* CollPerf2Test::TestStringPieceSortC() {
     UPerfFunction *testCase = new StringPieceSortC(*collObj, coll, getRandomData8(status));
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1761,7 +1761,7 @@ UPerfFunction* CollPerf2Test::TestUniStrBinSearch() {
     UPerfFunction *testCase = new UniStrBinSearch(*collObj, coll, getSortedData16(status));
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1771,7 +1771,7 @@ UPerfFunction* CollPerf2Test::TestStringPieceBinSearchCpp() {
     UPerfFunction *testCase = new StringPieceBinSearchCpp(*collObj, coll, getSortedData8(status));
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }
@@ -1781,7 +1781,7 @@ UPerfFunction* CollPerf2Test::TestStringPieceBinSearchC() {
     UPerfFunction *testCase = new StringPieceBinSearchC(*collObj, coll, getSortedData8(status));
     if (U_FAILURE(status)) {
         delete testCase;
-        return NULL;
+        return nullptr;
     }
     return testCase;
 }

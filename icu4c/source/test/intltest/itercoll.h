@@ -33,7 +33,7 @@ public:
     CollationIteratorTest();
     virtual ~CollationIteratorTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr) override;
 
     /**
     * Test that results from CollationElementIterator.next is equivalent to
@@ -93,7 +93,7 @@ private:
 
     struct ExpansionRecord
     {
-        UChar character;
+        char16_t character;
         int32_t count;
     };
 

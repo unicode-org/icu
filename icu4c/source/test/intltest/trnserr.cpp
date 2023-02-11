@@ -153,7 +153,7 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     }
     status = U_ZERO_ERROR;
     Transliterator* t4 = Transliterator::createFromRules(newID, bogusRules, UTRANS_FORWARD, parseError, status);
-    if (t4 != NULL || U_SUCCESS(status)) {
+    if (t4 != nullptr || U_SUCCESS(status)) {
         errln("FAIL: The rules is malformed but error was not reported.");
         if (parseError.offset != -1) {
             errln("FAIL: The parse error offset isn't set correctly when fails.");
@@ -189,14 +189,14 @@ void TransliteratorErrorTest::TestUnicodeSetErrors() {
 
 //void TransliteratorErrorTest::TestUniToHexErrors() {
 //    UErrorCode status = U_ZERO_ERROR;
-//    Transliterator *t = new UnicodeToHexTransliterator("", true, NULL, status);
+//    Transliterator *t = new UnicodeToHexTransliterator("", true, nullptr, status);
 //    if (U_SUCCESS(status)) {
 //        errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
 //    }
 //    delete t;
 //
 //    status = U_ZERO_ERROR;
-//    t = new UnicodeToHexTransliterator("\\x", true, NULL, status);
+//    t = new UnicodeToHexTransliterator("\\x", true, nullptr, status);
 //    if (U_SUCCESS(status)) {
 //        errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
 //    }
@@ -241,13 +241,13 @@ void TransliteratorErrorTest::TestRBTErrors() {
 
 //void TransliteratorErrorTest::TestHexToUniErrors() {
 //    UErrorCode status = U_ZERO_ERROR;
-//    Transliterator *t = new HexToUnicodeTransliterator("", NULL, status);
+//    Transliterator *t = new HexToUnicodeTransliterator("", nullptr, status);
 //    if (U_FAILURE(status)) {
 //        errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
 //    }
 //    delete t;
 //    status = U_ZERO_ERROR;
-//    t = new HexToUnicodeTransliterator("\\x", NULL, status);
+//    t = new HexToUnicodeTransliterator("\\x", nullptr, status);
 //    if (U_SUCCESS(status)) {
 //        errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
 //    }
@@ -277,8 +277,8 @@ public:
 void TransliteratorErrorTest::TestCoverage() {
     StubTransliterator stub;
 
-    if (stub.clone() != NULL){
-        errln("FAIL: default Transliterator::clone() should return NULL");
+    if (stub.clone() != nullptr){
+        errln("FAIL: default Transliterator::clone() should return nullptr");
     }
 }
 

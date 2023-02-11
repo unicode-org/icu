@@ -1182,6 +1182,16 @@ or{
                 one{"{0} ବିନ୍ଦୁ"}
                 other{"{0} ବିନ୍ଦୁ"}
             }
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                one{"{0}dpcm"}
+                other{"{0}dpcm"}
+            }
+            dot-per-inch{
+                dnam{"dpi"}
+                one{"{0}dpi"}
+                other{"{0}dpi"}
+            }
         }
         length{
             astronomical-unit{

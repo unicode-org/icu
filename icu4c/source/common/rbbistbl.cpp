@@ -41,7 +41,7 @@ U_CDECL_END
 U_NAMESPACE_BEGIN
 
 RBBISymbolTable::RBBISymbolTable(RBBIRuleScanner *rs, const UnicodeString &rules, UErrorCode &status)
-    :fRules(rules), fRuleScanner(rs), ffffString(UChar(0xffff))
+    :fRules(rules), fRuleScanner(rs), ffffString(char16_t(0xffff))
 {
     fHashTable       = nullptr;
     fCachedSetLookup = nullptr;
@@ -144,7 +144,7 @@ UnicodeString   RBBISymbolTable::parseReference(const UnicodeString& text,
     int32_t i = start;
     UnicodeString result;
     while (i < limit) {
-        UChar c = text.charAt(i);
+        char16_t c = text.charAt(i);
         if ((i==start && !u_isIDStart(c)) || !u_isIDPart(c)) {
             break;
         }

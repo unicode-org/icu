@@ -80,6 +80,7 @@ EthiopicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/)
     internalSet(UCAL_ERA, (eyear > 0) ? AMETE_MIHRET : AMETE_ALEM);
     internalSet(UCAL_YEAR, (eyear > 0) ? eyear : (eyear + AMETE_MIHRET_DELTA));
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DATE, day);
     internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
 }
@@ -216,6 +217,7 @@ EthiopicAmeteAlemCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*
     internalSet(UCAL_ERA, AMETE_ALEM);
     internalSet(UCAL_YEAR, eyear + AMETE_MIHRET_DELTA);
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DATE, day);
     internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
 }

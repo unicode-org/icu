@@ -46,7 +46,7 @@
 //              source form of the state transition table for the RBBI rule parser.
 //
 //------------------------------------------------------------------------------
-static const UChar gRuleSet_rule_char_pattern[]       = {
+static const char16_t gRuleSet_rule_char_pattern[]       = {
  // Characters that may appear as literals in patterns without escaping or quoting.
  //   [    ^      [    \     p     {      Z     }     \     u    0      0    2      0
     0x5b, 0x5e, 0x5b, 0x5c, 0x70, 0x7b, 0x5a, 0x7d, 0x5c, 0x75, 0x30, 0x30, 0x32, 0x30,
@@ -55,19 +55,19 @@ static const UChar gRuleSet_rule_char_pattern[]       = {
  //   {     L     }    ]     -     [      \     p     {     N    }      ]     ]
     0x7b, 0x4c, 0x7d, 0x5d, 0x2d, 0x5b, 0x5c, 0x70, 0x7b, 0x4e, 0x7d, 0x5d, 0x5d, 0};
 
-static const UChar gRuleSet_name_char_pattern[]       = {
+static const char16_t gRuleSet_name_char_pattern[]       = {
 //    [    _      \    p     {     L      }     \     p     {    N      }     ]
     0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5c, 0x70, 0x7b, 0x4e, 0x7d, 0x5d, 0};
 
-static const UChar gRuleSet_digit_char_pattern[] = {
+static const char16_t gRuleSet_digit_char_pattern[] = {
 //    [    0      -    9     ]
     0x5b, 0x30, 0x2d, 0x39, 0x5d, 0};
 
-static const UChar gRuleSet_name_start_char_pattern[] = {
+static const char16_t gRuleSet_name_start_char_pattern[] = {
 //    [    _      \    p     {     L      }     ]
     0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5d, 0 };
 
-static const UChar kAny[] = {0x61, 0x6e, 0x79, 0x00};  // "any"
+static const char16_t kAny[] = {0x61, 0x6e, 0x79, 0x00};  // "any"
 
 
 U_CDECL_BEGIN
@@ -809,15 +809,15 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
 //     Numeric because there is no portable way to enter them as literals.
 //     (Think EBCDIC).
 //
-static const UChar      chCR        = 0x0d;      // New lines, for terminating comments.
-static const UChar      chLF        = 0x0a;
-static const UChar      chNEL       = 0x85;      //    NEL newline variant
-static const UChar      chLS        = 0x2028;    //    Unicode Line Separator
-static const UChar      chApos      = 0x27;      //  single quote, for quoted chars.
-static const UChar      chPound     = 0x23;      // '#', introduces a comment.
-static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
-static const UChar      chLParen    = 0x28;
-static const UChar      chRParen    = 0x29;
+static const char16_t   chCR        = 0x0d;      // New lines, for terminating comments.
+static const char16_t   chLF        = 0x0a;
+static const char16_t   chNEL       = 0x85;      //    NEL newline variant
+static const char16_t   chLS        = 0x2028;    //    Unicode Line Separator
+static const char16_t   chApos      = 0x27;      //  single quote, for quoted chars.
+static const char16_t   chPound     = 0x23;      // '#', introduces a comment.
+static const char16_t   chBackSlash = 0x5c;      // '\'  introduces a char escape
+static const char16_t   chLParen    = 0x28;
+static const char16_t   chRParen    = 0x29;
 
 
 //------------------------------------------------------------------------------

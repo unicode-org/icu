@@ -67,7 +67,7 @@ void FieldPositionOnlyHandler::setAcceptFirstOnly(UBool acceptFirstOnly) {
 
 FieldPositionIteratorHandler::FieldPositionIteratorHandler(FieldPositionIterator* posIter,
                                                            UErrorCode& _status)
-    : iter(posIter), vec(NULL), status(_status), fCategory(UFIELD_CATEGORY_UNDEFINED) {
+    : iter(posIter), vec(nullptr), status(_status), fCategory(UFIELD_CATEGORY_UNDEFINED) {
   if (iter && U_SUCCESS(status)) {
     vec = new UVector32(status);
   }
@@ -85,7 +85,7 @@ FieldPositionIteratorHandler::~FieldPositionIteratorHandler() {
     iter->setData(vec, status);
   }
   // if iter is null, we never allocated vec, so no need to free it
-  vec = NULL;
+  vec = nullptr;
 }
 
 void

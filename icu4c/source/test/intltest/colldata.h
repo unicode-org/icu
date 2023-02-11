@@ -158,14 +158,14 @@ public:
      * @param count - the number of code points in the array
      * @param status - will be set if any errors occur. 
      */
-    void add(const UChar *chars, int32_t count, UErrorCode &status);
+    void add(const char16_t *chars, int32_t count, UErrorCode &status);
 
     /**
      * Get a particular string from the list.
      *
      * @param index - the index of the string
      *
-     * @return a pointer to the <code>UnicodeString</code> or <code>NULL</code> 
+     * @return a pointer to the <code>UnicodeString</code> or <code>nullptr</code>
      *         if <code>index</code> is out of bounds.
      */
     const UnicodeString *get(int32_t index) const;
@@ -236,7 +236,7 @@ public:
      * @param ce - the CE
      *
      * return a <code>StringList</code> object containing all
-     *        the strings, or <code>NULL</code> if there are
+     *        the strings, or <code>nullptr</code> if there are
      *        no such strings.
      */
     const StringList *getStringList(int32_t ce) const;

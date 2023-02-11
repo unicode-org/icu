@@ -1274,6 +1274,14 @@ ka{
                 one{"{0}კგ"}
                 other{"{0}კგ"}
             }
+            microgram{
+                one{"{0}მკგ"}
+                other{"{0}მკგ"}
+            }
+            milligram{
+                one{"{0}მგ"}
+                other{"{0}მგ"}
+            }
             ounce{
                 one{"{0} უნც"}
                 other{"{0} უნც"}
@@ -1281,6 +1289,10 @@ ka{
             pound{
                 one{"{0} ფნტ"}
                 other{"{0} ფნტ"}
+            }
+            ton{
+                one{"{0}ტ"}
+                other{"{0}ტ"}
             }
         }
         power{

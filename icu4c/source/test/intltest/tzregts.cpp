@@ -316,7 +316,7 @@ void TimeZoneRegressionTest:: Test4096952() {
  */
 void TimeZoneRegressionTest:: Test4109314() {
     UErrorCode status = U_ZERO_ERROR;
-    GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
+    GregorianCalendar *testCal = dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status));
     if(U_FAILURE(status)) {
       dataerrln("Error creating calendar %s", u_errorName(status));
       delete testCal;
@@ -911,7 +911,7 @@ TimeZoneRegressionTest::Test4162593()
     }
 
     for(int32_t j = 0; j < 3; j++) {
-        TimeZone *tz = (TimeZone*)DATA_TZ[j];
+        TimeZone *tz = DATA_TZ[j];
         TimeZone::setDefault(*tz);
         fmt->setTimeZone(*tz);
 
@@ -1159,7 +1159,7 @@ TimeZoneRegressionTest::TestJDK12API()
  * SimpleTimeZone allows invalid DOM values.
  */
 void TimeZoneRegressionTest::Test4184229() {
-    SimpleTimeZone* zone = NULL;
+    SimpleTimeZone* zone = nullptr;
     UErrorCode status = U_ZERO_ERROR;
     zone = new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0, status);
     if(U_SUCCESS(status)){

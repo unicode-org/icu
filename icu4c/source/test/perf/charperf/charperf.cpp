@@ -122,9 +122,9 @@ UPerfFunction* CharPerformanceTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(21, TestStdLibIsWhiteSpace);
         default: 
             name = ""; 
-            return NULL;
+            return nullptr;
     }
-    return NULL;
+    return nullptr;
 }
 
 UPerfFunction* CharPerformanceTest::TestIsAlpha()

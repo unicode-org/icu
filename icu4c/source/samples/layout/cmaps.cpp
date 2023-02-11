@@ -66,7 +66,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
 {
     le_uint16 i;
     le_uint16 nSubtables = SWAPW(cmap->numberSubtables);
-    const CMAPEncodingSubtable *subtable = NULL;
+    const CMAPEncodingSubtable *subtable = nullptr;
     le_uint32 offset1 = 0, offset10 = 0;
 
     for (i = 0; i < nSubtables; i += 1) {
@@ -92,7 +92,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
     } else if (offset1 != 0) {
         subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset1);
     } else {
-        return NULL;
+        return nullptr;
     }
 
     switch (SWAPW(subtable->format)) {
@@ -110,7 +110,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CMAPFormat4Mapper::CMAPFormat4Mapper(const CMAPTable *cmap, const CMAPFormat4Encoding *header)

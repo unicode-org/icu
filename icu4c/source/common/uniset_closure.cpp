@@ -123,7 +123,7 @@ _set_addRange(USet *set, UChar32 start, UChar32 end) {
 }
 
 static void U_CALLCONV
-_set_addString(USet *set, const UChar *str, int32_t length) {
+_set_addString(USet *set, const char16_t *str, int32_t length) {
     ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
 }
 
@@ -134,7 +134,7 @@ _set_addString(USet *set, const UChar *str, int32_t length) {
 // add the result of a full case mapping to the set
 // use str as a temporary string to avoid constructing one
 static inline void
-addCaseMapping(UnicodeSet &set, int32_t result, const UChar *full, UnicodeString &str) {
+addCaseMapping(UnicodeSet &set, int32_t result, const char16_t *full, UnicodeString &str) {
     if(result >= 0) {
         if(result > UCASE_MAX_STRING_LENGTH) {
             // add a single-code point case mapping
@@ -162,8 +162,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 _set_add,
                 _set_addRange,
                 _set_addString,
-                NULL, // don't need remove()
-                NULL // don't need removeRange()
+                nullptr, // don't need remove()
+                nullptr // don't need removeRange()
             };
 
             // start with input set to guarantee inclusion
@@ -175,7 +175,7 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
 
             int32_t n = getRangeCount();
             UChar32 result;
-            const UChar *full;
+            const char16_t *full;
 
             for (int32_t i=0; i<n; ++i) {
                 UChar32 start = getRangeStart(i);
@@ -190,13 +190,13 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                     // add case mappings
                     // (does not add long s for regular s, or Kelvin for k, for example)
                     for (UChar32 cp=start; cp<=end; ++cp) {
-                        result = ucase_toFullLower(cp, NULL, NULL, &full, UCASE_LOC_ROOT);
+                        result = ucase_toFullLower(cp, nullptr, nullptr, &full, UCASE_LOC_ROOT);
                         addCaseMapping(foldSet, result, full, str);
 
-                        result = ucase_toFullTitle(cp, NULL, NULL, &full, UCASE_LOC_ROOT);
+                        result = ucase_toFullTitle(cp, nullptr, nullptr, &full, UCASE_LOC_ROOT);
                         addCaseMapping(foldSet, result, full, str);
 
-                        result = ucase_toFullUpper(cp, NULL, NULL, &full, UCASE_LOC_ROOT);
+                        result = ucase_toFullUpper(cp, nullptr, nullptr, &full, UCASE_LOC_ROOT);
                         addCaseMapping(foldSet, result, full, str);
 
                         result = ucase_toFullFolding(cp, &full, 0);

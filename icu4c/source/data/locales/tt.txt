@@ -1368,5 +1368,9 @@ tt{
                 "zh",
             }
         }
+        namePattern{
+            givenFirst-short-addressing-formal{"{title} {surname}"}
+            surnameFirst-long-referring-formal{"{surname} {title} {given} {given2} {generation}, {credentials}"}
+        }
     }
 }

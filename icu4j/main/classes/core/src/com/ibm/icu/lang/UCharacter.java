@@ -4550,20 +4550,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isUnicodeIdentifierPart(int ch)
     {
-        // if props == 0, it will just fall through and return false
-        // cat == format
-        return ((1 << getType(ch))
-                & ((1 << UCharacterCategory.UPPERCASE_LETTER)
-                        | (1 << UCharacterCategory.LOWERCASE_LETTER)
-                        | (1 << UCharacterCategory.TITLECASE_LETTER)
-                        | (1 << UCharacterCategory.MODIFIER_LETTER)
-                        | (1 << UCharacterCategory.OTHER_LETTER)
-                        | (1 << UCharacterCategory.LETTER_NUMBER)
-                        | (1 << UCharacterCategory.CONNECTOR_PUNCTUATION)
-                        | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)
-                        | (1 << UCharacterCategory.COMBINING_SPACING_MARK)
-                        | (1 << UCharacterCategory.NON_SPACING_MARK))) != 0
-                        || isIdentifierIgnorable(ch);
+        return hasBinaryProperty(ch, UProperty.ID_CONTINUE);  // single code point
     }
 
     /**
@@ -4588,15 +4575,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isUnicodeIdentifierStart(int ch)
     {
-        /*int cat = getType(ch);*/
-        // if props == 0, it will just fall through and return false
-        return ((1 << getType(ch))
-                & ((1 << UCharacterCategory.UPPERCASE_LETTER)
-                        | (1 << UCharacterCategory.LOWERCASE_LETTER)
-                        | (1 << UCharacterCategory.TITLECASE_LETTER)
-                        | (1 << UCharacterCategory.MODIFIER_LETTER)
-                        | (1 << UCharacterCategory.OTHER_LETTER)
-                        | (1 << UCharacterCategory.LETTER_NUMBER))) != 0;
+        return hasBinaryProperty(ch, UProperty.ID_START);  // single code point
     }
 
     /**

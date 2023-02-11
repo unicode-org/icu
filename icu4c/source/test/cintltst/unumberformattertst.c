@@ -418,7 +418,7 @@ static void TestPerUnitInArabic() {
     for(int32_t i=0; i < UPRV_LENGTHOF(simpleMeasureUnits); ++i) {
         for(int32_t j=0; j < UPRV_LENGTHOF(simpleMeasureUnits); ++j) {
             status = U_ZERO_ERROR;
-            sprintf(buffer, "measure-unit/%s per-measure-unit/%s",
+            snprintf(buffer, sizeof(buffer), "measure-unit/%s per-measure-unit/%s",
                     simpleMeasureUnits[i], simpleMeasureUnits[j]);
             int32_t outputlen = 0;
             u_strFromUTF8(ubuffer, BUFFER_LEN, &outputlen, buffer, (int32_t)strlen(buffer), &status);

@@ -162,4 +162,10 @@ en_GB{
             }
         }
     }
+    personNames{
+        initialPattern{
+            initial{"{0}"}
+            initialSequence{"{0}{1}"}
+        }
+    }
 }

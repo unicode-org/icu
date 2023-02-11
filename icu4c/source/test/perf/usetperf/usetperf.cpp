@@ -101,7 +101,7 @@ public:
     UsetPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status) :UPerfTest(argc,argv,status){
     }
 
-    virtual UPerfFunction* runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ){
+    virtual UPerfFunction* runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ){
         switch (index) {
             case 0: name = "titlecase_letter_add"; 
                 if (exec) return new CmdOp(U_TITLECASE_LETTER, &CmdOp::add) ; break;
@@ -123,7 +123,7 @@ public:
                 if (exec) return new CmdPattern(PAT[2])  ; break;
             default: name = ""; break;
         }
-        return NULL;
+        return nullptr;
     }
 };
 

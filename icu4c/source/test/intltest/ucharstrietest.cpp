@@ -37,7 +37,7 @@ public:
     UCharsTrieTest();
     virtual ~UCharsTrieTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
     void TestBuilder();
     void TestEmpty();
     void Test_a();
@@ -84,7 +84,7 @@ extern IntlTest *createUCharsTrieTest() {
     return new UCharsTrieTest();
 }
 
-UCharsTrieTest::UCharsTrieTest() : builder_(NULL) {
+UCharsTrieTest::UCharsTrieTest() : builder_(nullptr) {
     IcuTestErrorCode errorCode(*this, "UCharsTrieTest()");
     builder_=new UCharsTrieBuilder(errorCode);
 }
@@ -343,12 +343,12 @@ class Generator {
 public:
     Generator() : value(4711), num(0) {}
     void next() {
-        UChar c;
+        char16_t c;
         s.truncate(0);
-        s.append(c=(UChar)(value>>16));
-        s.append((UChar)(value>>4));
+        s.append(c=(char16_t)(value>>16));
+        s.append((char16_t)(value>>4));
         if(value&1) {
-            s.append((UChar)value);
+            s.append((char16_t)value);
         }
         set.add(c);
         value+=((value>>5)&0x7ff)*3+1;
@@ -807,7 +807,7 @@ UCharsTrie *UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataL
         errln("builder.buildUnicodeString() before & after build() returned same array");
     }
     if(errorCode.isFailure()) {
-        return NULL;
+        return nullptr;
     }
     // Tries from either build() method should be identical but
     // UCharsTrie does not implement equals().
@@ -925,7 +925,7 @@ void UCharsTrieTest::checkNext(UCharsTrie &trie,
         }
         if((result==USTRINGTRIE_INTERMEDIATE_VALUE)!=nextContinues) {
             errln("(trie.current()==USTRINGTRIE_INTERMEDIATE_VALUE) contradicts "
-                  "(trie.next(some UChar)!=USTRINGTRIE_NO_MATCH) after end of %s", data[i].s);
+                  "(trie.next(some char16_t)!=USTRINGTRIE_NO_MATCH) after end of %s", data[i].s);
         }
         trie.reset();
     }

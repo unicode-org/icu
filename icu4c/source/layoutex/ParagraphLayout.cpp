@@ -53,7 +53,7 @@ private:
 };
 
 StyleRuns::StyleRuns(const RunArray *styleRunArrays[], le_int32 styleCount)
-    : fStyleCount(styleCount), fRunCount(0), fRunLimits(NULL), fStyleIndices(NULL)
+    : fStyleCount(styleCount), fRunCount(0), fRunLimits(nullptr), fStyleIndices(nullptr)
 {
     le_int32 maxRunCount = 0;
     le_int32 style, run, runStyle;
@@ -112,19 +112,19 @@ StyleRuns::~StyleRuns()
     fRunCount = 0;
 
     LE_DELETE_ARRAY(fStyleIndices);
-    fStyleIndices = NULL;
+    fStyleIndices = nullptr;
 
     LE_DELETE_ARRAY(fRunLimits);
-    fRunLimits = NULL;
+    fRunLimits = nullptr;
 }
 
 le_int32 StyleRuns::getRuns(le_int32 runLimits[], le_int32 styleIndices[])
 {
-    if (runLimits != NULL) {
+    if (runLimits != nullptr) {
         LE_ARRAY_COPY(runLimits, fRunLimits, fRunCount);
     }
 
-    if (styleIndices != NULL) {
+    if (styleIndices != nullptr) {
         LE_ARRAY_COPY(styleIndices, fStyleIndices, fRunCount * fStyleCount);
     }
 
@@ -318,14 +318,14 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
                                  UBiDiLevel paragraphLevel, le_bool vertical,
                                  LEErrorCode &status)
                                  : fChars(chars), fCharCount(count),
-                                   fFontRuns(NULL), fLevelRuns(levelRuns), fScriptRuns(scriptRuns), fLocaleRuns(localeRuns),
-                                   fVertical(vertical), fClientLevels(true), fClientScripts(true), fClientLocales(true), fEmbeddingLevels(NULL),
+                                   fFontRuns(nullptr), fLevelRuns(levelRuns), fScriptRuns(scriptRuns), fLocaleRuns(localeRuns),
+                                   fVertical(vertical), fClientLevels(true), fClientScripts(true), fClientLocales(true), fEmbeddingLevels(nullptr),
                                    fAscent(0), fDescent(0), fLeading(0),
-                                   fGlyphToCharMap(NULL), fCharToMinGlyphMap(NULL), fCharToMaxGlyphMap(NULL), fGlyphWidths(NULL), fGlyphCount(0),
-                                   fParaBidi(NULL), fLineBidi(NULL),
-                                   fStyleRunLimits(NULL), fStyleIndices(NULL), fStyleRunCount(0),
-                                   fBreakIterator(NULL), fLineStart(-1), fLineEnd(0),
-                                 /*fVisualRuns(NULL), fStyleRunInfo(NULL), fVisualRunCount(-1),
+                                   fGlyphToCharMap(nullptr), fCharToMinGlyphMap(nullptr), fCharToMaxGlyphMap(nullptr), fGlyphWidths(nullptr), fGlyphCount(0),
+                                   fParaBidi(nullptr), fLineBidi(nullptr),
+                                   fStyleRunLimits(nullptr), fStyleIndices(nullptr), fStyleRunCount(0),
+                                   fBreakIterator(nullptr), fLineStart(-1), fLineEnd(0),
+                                 /*fVisualRuns(nullptr), fStyleRunInfo(nullptr), fVisualRunCount(-1),
                                    fFirstVisualRun(-1), fLastVisualRun(-1),*/ fVisualRunLastX(0), fVisualRunLastY(0)
 {
 
@@ -341,11 +341,11 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
     computeLevels(paragraphLevel);
 
-    if (scriptRuns == NULL) {
+    if (scriptRuns == nullptr) {
         computeScripts();
     }
 
-    if (localeRuns == NULL) {
+    if (localeRuns == nullptr) {
         computeLocales();
     }
 
@@ -363,11 +363,11 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     StyleRuns styleRuns(styleRunArrays, styleCount);
     LEErrorCode layoutStatus = LE_NO_ERROR;
 
-    fStyleRunCount = styleRuns.getRuns(NULL, NULL);
+    fStyleRunCount = styleRuns.getRuns(nullptr, nullptr);
 
     fStyleRunLimits = LE_NEW_ARRAY(le_int32, fStyleRunCount);
     fStyleIndices   = LE_NEW_ARRAY(le_int32, fStyleRunCount * styleCount);
-    if ((fStyleRunLimits == NULL) || (fStyleIndices == NULL)) {
+    if ((fStyleRunLimits == nullptr) || (fStyleIndices == nullptr)) {
         status = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -379,24 +379,24 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     le_int32 run, runStart;
 
     fStyleRunInfo = LE_NEW_ARRAY(StyleRunInfo, fStyleRunCount);
-    if (fStyleRunInfo == NULL) {
+    if (fStyleRunInfo == nullptr) {
         status = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
     else {
         // initialize
         for (run = 0; run < fStyleRunCount; run += 1) {
-            fStyleRunInfo[run].font = NULL;
+            fStyleRunInfo[run].font = nullptr;
             fStyleRunInfo[run].runBase = 0;
             fStyleRunInfo[run].runLimit = 0;
             fStyleRunInfo[run].script = (UScriptCode)0;
-            fStyleRunInfo[run].locale = NULL;
+            fStyleRunInfo[run].locale = nullptr;
             fStyleRunInfo[run].level = 0;
             fStyleRunInfo[run].glyphBase = 0;
-            fStyleRunInfo[run].engine = NULL;
+            fStyleRunInfo[run].engine = nullptr;
             fStyleRunInfo[run].glyphCount = 0;
-            fStyleRunInfo[run].glyphs = NULL;
-            fStyleRunInfo[run].positions = NULL;
+            fStyleRunInfo[run].glyphs = nullptr;
+            fStyleRunInfo[run].positions = nullptr;
         }
     }
 
@@ -440,8 +440,8 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     fGlyphToCharMap    = LE_NEW_ARRAY(le_int32, fGlyphCount + 1);
     fCharToMinGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
     fCharToMaxGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
-    if ((fGlyphWidths == NULL) || (fGlyphToCharMap == NULL) ||
-        (fCharToMinGlyphMap == NULL) || (fCharToMaxGlyphMap == NULL)) {
+    if ((fGlyphWidths == nullptr) || (fGlyphToCharMap == nullptr) ||
+        (fCharToMinGlyphMap == nullptr) || (fCharToMaxGlyphMap == nullptr)) {
         status = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -455,8 +455,8 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
         fStyleRunInfo[run].glyphs = LE_NEW_ARRAY(LEGlyphID, glyphCount);
         fStyleRunInfo[run].positions = LE_NEW_ARRAY(float, glyphCount * 2 + 2);
-        if ((fStyleRunInfo[run].glyphs == NULL) ||
-            (fStyleRunInfo[run].positions == NULL)) {
+        if ((fStyleRunInfo[run].glyphs == nullptr) ||
+            (fStyleRunInfo[run].positions == nullptr)) {
             status = LE_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -491,7 +491,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         runStart = fStyleRunLimits[run];
 
         delete engine;
-        fStyleRunInfo[run].engine = NULL;
+        fStyleRunInfo[run].engine = nullptr;
     }
 
     fGlyphToCharMap[fGlyphCount] = fCharCount;
@@ -531,58 +531,58 @@ ParagraphLayout::~ParagraphLayout()
 
     if (! fClientLevels) {
         delete (ValueRuns *) fLevelRuns;
-        fLevelRuns = NULL;
+        fLevelRuns = nullptr;
 
         fClientLevels = true;
     }
 
     if (! fClientScripts) {
         delete (ValueRuns *) fScriptRuns;
-        fScriptRuns = NULL;
+        fScriptRuns = nullptr;
 
         fClientScripts = true;
     }
 
     if (! fClientLocales) {
         delete (LocaleRuns *) fLocaleRuns;
-        fLocaleRuns = NULL;
+        fLocaleRuns = nullptr;
 
         fClientLocales = true;
     }
 
-    if (fEmbeddingLevels != NULL) {
+    if (fEmbeddingLevels != nullptr) {
         LE_DELETE_ARRAY(fEmbeddingLevels);
-        fEmbeddingLevels = NULL;
+        fEmbeddingLevels = nullptr;
     }
 
-    if (fGlyphToCharMap != NULL) {
+    if (fGlyphToCharMap != nullptr) {
         LE_DELETE_ARRAY(fGlyphToCharMap);
-        fGlyphToCharMap = NULL;
+        fGlyphToCharMap = nullptr;
     }
 
-    if (fCharToMinGlyphMap != NULL) {
+    if (fCharToMinGlyphMap != nullptr) {
         LE_DELETE_ARRAY(fCharToMinGlyphMap);
-        fCharToMinGlyphMap = NULL;
+        fCharToMinGlyphMap = nullptr;
     }
 
-    if (fCharToMaxGlyphMap != NULL) {
+    if (fCharToMaxGlyphMap != nullptr) {
         LE_DELETE_ARRAY(fCharToMaxGlyphMap);
-        fCharToMaxGlyphMap = NULL;
+        fCharToMaxGlyphMap = nullptr;
     }
 
-    if (fGlyphWidths != NULL) {
+    if (fGlyphWidths != nullptr) {
         LE_DELETE_ARRAY(fGlyphWidths);
-        fGlyphWidths = NULL;
+        fGlyphWidths = nullptr;
     }
 
-    if (fParaBidi != NULL) {
+    if (fParaBidi != nullptr) {
         ubidi_close(fParaBidi);
-        fParaBidi = NULL;
+        fParaBidi = nullptr;
     }
 
-    if (fLineBidi != NULL) {
+    if (fLineBidi != nullptr) {
         ubidi_close(fLineBidi);
-        fLineBidi = NULL;
+        fLineBidi = nullptr;
     }
 
     if (fStyleRunCount > 0) {
@@ -595,21 +595,21 @@ ParagraphLayout::~ParagraphLayout()
             LE_DELETE_ARRAY(fStyleRunInfo[run].glyphs);
             LE_DELETE_ARRAY(fStyleRunInfo[run].positions);
 
-            fStyleRunInfo[run].glyphs    = NULL;
-            fStyleRunInfo[run].positions = NULL;
+            fStyleRunInfo[run].glyphs    = nullptr;
+            fStyleRunInfo[run].positions = nullptr;
         }
 
         LE_DELETE_ARRAY(fStyleRunInfo);
 
-        fStyleRunLimits = NULL;
-        fStyleIndices   = NULL;
-        fStyleRunInfo        = NULL;
+        fStyleRunLimits = nullptr;
+        fStyleIndices   = nullptr;
+        fStyleRunInfo        = nullptr;
         fStyleRunCount  = 0;
     }
 
-    if (fBreakIterator != NULL) {
+    if (fBreakIterator != nullptr) {
         delete fBreakIterator;
-        fBreakIterator = NULL;
+        fBreakIterator = nullptr;
     }
 }
 
@@ -621,7 +621,7 @@ le_bool ParagraphLayout::isComplex(const LEUnicode chars[], le_int32 count)
     UScriptRun *sr = uscript_openRun(chars, count, &scriptStatus);
     le_bool result = false;
 
-    while (uscript_nextRun(sr, NULL, NULL, &scriptCode)) {
+    while (uscript_nextRun(sr, nullptr, nullptr, &scriptCode)) {
         if (isComplex(scriptCode)) {
             result = true;
             break;
@@ -667,7 +667,7 @@ le_bool ParagraphLayout::isDone() const
 ParagraphLayout::Line *ParagraphLayout::nextLine(float width)
 {
     if (isDone()) {
-        return NULL;
+        return nullptr;
     }
 
     fLineStart = fLineEnd;
@@ -710,7 +710,7 @@ void ParagraphLayout::computeLevels(UBiDiLevel paragraphLevel)
 {
     UErrorCode bidiStatus = U_ZERO_ERROR;
 
-    if (fLevelRuns != NULL) {
+    if (fLevelRuns != nullptr) {
         le_int32 ch;
         le_int32 run;
 
@@ -729,7 +729,7 @@ void ParagraphLayout::computeLevels(UBiDiLevel paragraphLevel)
     fParaBidi = ubidi_openSized(fCharCount, 0, &bidiStatus);
     ubidi_setPara(fParaBidi, fChars, fCharCount, paragraphLevel, fEmbeddingLevels, &bidiStatus);
 
-    if (fLevelRuns == NULL) {
+    if (fLevelRuns == nullptr) {
         le_int32 levelRunCount = ubidi_countRuns(fParaBidi, &bidiStatus);
         ValueRuns *levelRuns = new ValueRuns(levelRunCount);
 
@@ -757,7 +757,7 @@ void ParagraphLayout::computeScripts()
     le_int32 limit;
     UScriptCode script;
 
-    while (uscript_nextRun(sr, NULL, &limit, &script)) {
+    while (uscript_nextRun(sr, nullptr, &limit, &script)) {
         scriptRuns->add(script, limit);
     }
 
@@ -787,7 +787,7 @@ void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns, LEErrorCode &sta
     const RunArray *styleRunArrays[] = {fontRuns, fScriptRuns};
     le_int32 styleCount = sizeof styleRunArrays / sizeof styleRunArrays[0];
     StyleRuns styleRuns(styleRunArrays, styleCount);
-    le_int32 styleRunCount = styleRuns.getRuns(NULL, NULL);
+    le_int32 styleRunCount = styleRuns.getRuns(nullptr, nullptr);
     le_int32 *styleRunLimits = LE_NEW_ARRAY(le_int32, styleRunCount);
     le_int32 *styleIndices = LE_NEW_ARRAY(le_int32, styleRunCount * styleCount);
     FontRuns *subFontRuns  = new FontRuns(0);
@@ -950,7 +950,7 @@ le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
 
     uprv_strcat(code, language);
 
-    if ((uprv_strcmp(language, "zho") == 0) && country != NULL) {
+    if ((uprv_strcmp(language, "zho") == 0) && country != nullptr) {
         uprv_strcat(code, "_");
         uprv_strcat(code, country);
     }
@@ -992,7 +992,7 @@ le_int32 ParagraphLayout::previousBreak(le_int32 charIndex)
     }
 
     // Create the BreakIterator if we don't already have one
-    if (fBreakIterator == NULL) {
+    if (fBreakIterator == nullptr) {
         Locale thai("th");
         UCharCharacterIterator *iter = new UCharCharacterIterator(fChars, fCharCount);
         UErrorCode status = U_ZERO_ERROR;
@@ -1018,7 +1018,7 @@ ParagraphLayout::Line *ParagraphLayout::computeVisualRuns()
     fFirstVisualRun = getCharRun(fLineStart);
     fLastVisualRun  = getCharRun(fLineEnd - 1);
 
-    if (fLineBidi == NULL) {
+    if (fLineBidi == nullptr) {
         fLineBidi = ubidi_openSized(fCharCount, 0, &bidiStatus);
     }
 
@@ -1201,7 +1201,7 @@ le_int32 ParagraphLayout::Line::getWidth() const
 {
     const VisualRun *lastRun = getVisualRun(fRunCount - 1);
 
-    if (lastRun == NULL) {
+    if (lastRun == nullptr) {
         return 0;
     }
 
@@ -1214,7 +1214,7 @@ le_int32 ParagraphLayout::Line::getWidth() const
 const ParagraphLayout::VisualRun *ParagraphLayout::Line::getVisualRun(le_int32 runIndex) const
 {
     if (runIndex < 0 || runIndex >= fRunCount) {
-        return NULL;
+        return nullptr;
     }
 
     return fRuns[runIndex];

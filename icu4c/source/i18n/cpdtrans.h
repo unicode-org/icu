@@ -70,7 +70,7 @@ public:
      * @param id compound ID
      * @param dir either UTRANS_FORWARD or UTRANS_REVERSE
      * @param adoptedFilter a global filter for this compound transliterator
-     * or NULL
+     * or nullptr
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -80,7 +80,7 @@ public:
 
     /**
      * Constructs a new compound transliterator in the FORWARD
-     * direction with a NULL filter.
+     * direction with a nullptr filter.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
@@ -171,7 +171,7 @@ public:
     static UClassID U_EXPORT2 getStaticClassID();
 
     /* @internal */
-    static const UChar PASS_STRING[];
+    static const char16_t PASS_STRING[];
 
 private:
 

@@ -34,10 +34,10 @@
 
 class UTS46Test : public IntlTest {
 public:
-    UTS46Test() : trans(NULL), nontrans(NULL) {}
+    UTS46Test() : trans(nullptr), nontrans(nullptr) {}
     virtual ~UTS46Test();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
     void TestAPI();
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
@@ -67,7 +67,7 @@ UTS46Test::~UTS46Test() {
 void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if(exec) {
         logln("TestSuite UTS46Test: ");
-        if(trans==NULL) {
+        if(trans==nullptr) {
             IcuTestErrorCode errorCode(*this, "init/createUTS46Instance()");
             uint32_t commonOptions=
                 UIDNA_USE_STD3_RULES|UIDNA_CHECK_BIDI|
@@ -102,7 +102,7 @@ const uint32_t severeErrors=
     UIDNA_ERROR_INVALID_ACE_LABEL;
 
 static UBool isASCII(const UnicodeString &str) {
-    const UChar *s=str.getBuffer();
+    const char16_t *s=str.getBuffer();
     int32_t length=str.length();
     for(int32_t i=0; i<length; ++i) {
         if(s[i]>=0x80) {
@@ -167,9 +167,9 @@ void UTS46Test::TestAPI() {
     char buffer[100];
     TestCheckedArrayByteSink sink(buffer, UPRV_LENGTHOF(buffer));
     errorCode=U_ZERO_ERROR;
-    nontrans->labelToUnicodeUTF8(StringPiece((const char *)NULL, 5), sink, info, errorCode);
+    nontrans->labelToUnicodeUTF8(StringPiece((const char *)nullptr, 5), sink, info, errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || sink.NumberOfBytesWritten()!=0) {
-        errln("N.labelToUnicodeUTF8(StringPiece(NULL, 5)) did not set illegal-argument-error ",
+        errln("N.labelToUnicodeUTF8(StringPiece(nullptr, 5)) did not set illegal-argument-error ",
               "or did output something - %s",
               u_errorName(errorCode));
     }
@@ -852,7 +852,7 @@ void UTS46Test::TestSomeCases() {
         ) {
             continue;
         }
-        if(aN.indexOf((UChar)0x2e)<0) {
+        if(aN.indexOf((char16_t)0x2e)<0) {
             if(aN!=aNL || aNInfo.getErrors()!=aNLInfo.getErrors()) {
                 prettify(aN).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(aNL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));
@@ -868,7 +868,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        if(aT.indexOf((UChar)0x2e)<0) {
+        if(aT.indexOf((char16_t)0x2e)<0) {
             if(aT!=aTL || aTInfo.getErrors()!=aTLInfo.getErrors()) {
                 prettify(aT).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(aTL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));
@@ -884,7 +884,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        if(uN.indexOf((UChar)0x2e)<0) {
+        if(uN.indexOf((char16_t)0x2e)<0) {
             if(uN!=uNL || uNInfo.getErrors()!=uNLInfo.getErrors()) {
                 prettify(uN).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(uNL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));
@@ -900,7 +900,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        if(uT.indexOf((UChar)0x2e)<0) {
+        if(uT.indexOf((char16_t)0x2e)<0) {
             if(uT!=uTL || uTInfo.getErrors()!=uTLInfo.getErrors()) {
                 prettify(uT).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(uTL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));

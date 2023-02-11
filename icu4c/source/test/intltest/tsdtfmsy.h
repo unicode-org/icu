@@ -19,7 +19,7 @@
  * Tests for DateFormatSymbols
  **/
 class IntlTestDateFormatSymbols: public IntlTest {
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
 private:
     /**

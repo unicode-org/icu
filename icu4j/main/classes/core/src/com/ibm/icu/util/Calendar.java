@@ -1595,6 +1595,25 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // week data
         setWeekData(getRegionForCalendar(locale));
 
+        // Check if the locale has a "fw" u extension and we honor it if present.
+        String fw = locale.getKeywordValue("fw");
+        if (fw != null) {
+            int fwOverride;
+            switch (fw) {
+                case "sun": fwOverride = SUNDAY; break;
+                case "mon": fwOverride = MONDAY; break;
+                case "tue": fwOverride = TUESDAY; break;
+                case "wed": fwOverride = WEDNESDAY; break;
+                case "thu": fwOverride = THURSDAY; break;
+                case "fri": fwOverride = FRIDAY; break;
+                case "sat": fwOverride = SATURDAY; break;
+                default: fwOverride = -1;
+            }
+            if (fwOverride != -1) {
+                setFirstDayOfWeek(fwOverride);
+            }
+        }
+
         // set valid/actual locale
         setCalendarLocale(locale);
 

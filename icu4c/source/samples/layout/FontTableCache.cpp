@@ -27,14 +27,14 @@ FontTableCache::FontTableCache()
 {
     fTableCache = LE_NEW_ARRAY(FontTableCacheEntry, fTableCacheSize);
 
-    if (fTableCache == NULL) {
+    if (fTableCache == nullptr) {
         fTableCacheSize = 0;
         return;
     }
 
     for (int i = 0; i < fTableCacheSize; i += 1) {
         fTableCache[i].tag   = 0;
-        fTableCache[i].table = NULL;
+        fTableCache[i].table = nullptr;
     }
 }
 
@@ -44,13 +44,13 @@ FontTableCache::~FontTableCache()
         freeFontTable(fTableCache[i].table);
 
         fTableCache[i].tag   = 0;
-        fTableCache[i].table = NULL;
+        fTableCache[i].table = nullptr;
     }
 
     fTableCacheCurr = 0;
 
     LE_DELETE_ARRAY(fTableCache);
-    fTableCache = NULL;
+    fTableCache = nullptr;
 }
 
 void FontTableCache::freeFontTable(const void *table) const
@@ -82,7 +82,7 @@ void FontTableCache::add(LETag tableTag, const void *table)
 
         for (le_int32 i = fTableCacheSize; i < newSize; i += 1) {
             fTableCache[i].tag   = 0;
-            fTableCache[i].table = NULL;
+            fTableCache[i].table = nullptr;
         }
 
         fTableCacheSize = newSize;

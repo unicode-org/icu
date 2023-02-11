@@ -293,7 +293,7 @@ static UnicodeString parseHex(const UnicodeString &in) {
     UnicodeString result;
     UChar32 cc = 0;
     for (int32_t i=0; i<in.length(); i++) {
-        UChar c = in.charAt(i);
+        char16_t c = in.charAt(i);
         if (c == 0x20) {   // Space
             if (cc > 0) {
                result.append(cc);
@@ -328,10 +328,10 @@ static void appendHexUChar(UnicodeString &dest, UChar32 c) {
         int hexDigit = (c>>bitNum) & 0x0f;
         if (hexDigit != 0 || doZeroes) {
             doZeroes = true;
-            dest.append((UChar)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
+            dest.append((char16_t)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
         }
     }
-    dest.append((UChar)0x20);
+    dest.append((char16_t)0x20);
 }
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
@@ -341,7 +341,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 //
 void IntlTestSpoof::testConfData() {
     char buffer[2000];
-    if (getUnidataPath(buffer) == NULL) {
+    if (getUnidataPath(buffer) == nullptr) {
         errln("Skipping test spoof/testConfData. Unable to find path to source/data/unidata/.");
         return;
     }
@@ -596,14 +596,14 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setAllowedChars(sc, allowedChars.toUSet(), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             uspoof_setChecks(sc, USPOOF_RESTRICTION_LEVEL, &status);
-            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, nullptr, &status);
             
             // we want to fail if the text is (say) MODERATE and the testLevel is ASCII
             int32_t expectedValue = 0;
             if (expectedLevel > levelSetInSpoofChecker) {
                 expectedValue |= USPOOF_RESTRICTION_LEVEL;
             }
-            sprintf(msgBuffer, "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
+            snprintf(msgBuffer, sizeof(msgBuffer), "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
                     testNum, levelIndex, expectedValue, actualValue);
             TEST_ASSERT_MSG(expectedValue == actualValue, msgBuffer);
             TEST_ASSERT_SUCCESS(status);
@@ -613,7 +613,7 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setAllowedChars(sc, allowedChars.toUSet(), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             uspoof_setChecks(sc, USPOOF_AUX_INFO | USPOOF_RESTRICTION_LEVEL, &status);
-            int32_t result = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            int32_t result = uspoof_checkUnicodeString(sc, testString, nullptr, &status);
             TEST_ASSERT_SUCCESS(status);
             if (U_SUCCESS(status)) {
                 TEST_ASSERT_EQ(expectedLevel, result & USPOOF_RESTRICTION_LEVEL_MASK);
@@ -647,7 +647,7 @@ void IntlTestSpoof::testMixedNumbers() {
     UErrorCode status = U_ZERO_ERROR;
     for (int32_t testNum=0; testNum < UPRV_LENGTHOF(tests); testNum++) {
         char msgBuf[100];
-        sprintf(msgBuf, "testNum = %d ", testNum);
+        snprintf(msgBuf, sizeof(msgBuf), "testNum = %d ", testNum);
         Test &test = tests[testNum];
 
         status = U_ZERO_ERROR;
@@ -692,7 +692,7 @@ void IntlTestSpoof::testBug12825() {
     TEST_ASSERT_SUCCESS(status);
     uspoof_setChecks(sc.getAlias(), USPOOF_ALL_CHECKS | USPOOF_AUX_INFO, &status);
     TEST_ASSERT_SUCCESS(status);
-    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), NULL, &status);
+    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
 }
 

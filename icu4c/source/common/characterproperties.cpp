@@ -67,7 +67,7 @@ _set_addRange(USet *set, UChar32 start, UChar32 end) {
 }
 
 void U_CALLCONV
-_set_addString(USet *set, const UChar *str, int32_t length) {
+_set_addString(USet *set, const char16_t *str, int32_t length) {
     ((UnicodeSet *)set)->add(icu::UnicodeString((UBool)(length<0), str, length));
 }
 

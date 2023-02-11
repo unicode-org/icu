@@ -58,9 +58,9 @@ static void U_CALLCONV ParamTest(void)
     LEErrorCode status = LE_NO_ERROR;
     SimpleFontInstance *font = new SimpleFontInstance(12, status);
     LayoutEngine *engine = LayoutEngine::layoutEngineFactory(font, arabScriptCode, -1, status);
-    LEGlyphID *glyphs    = NULL;
-    le_int32  *indices   = NULL;
-    float     *positions = NULL;
+    LEGlyphID *glyphs    = nullptr;
+    le_int32  *indices   = nullptr;
+    float     *positions = nullptr;
     le_int32   glyphCount = 0;
 
     glyphCount = engine->getGlyphCount();
@@ -72,10 +72,10 @@ static void U_CALLCONV ParamTest(void)
     indices   = NEW_ARRAY(le_int32, glyphCount + 10);
     positions = NEW_ARRAY(float, glyphCount + 10);
 
-    engine->getGlyphs(NULL, status);
+    engine->getGlyphs(nullptr, status);
 
     if (status != LE_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("Calling getGlyphs(NULL, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
+        log_err("Calling getGlyphs(nullptr, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 
     status = LE_NO_ERROR;
@@ -86,10 +86,10 @@ static void U_CALLCONV ParamTest(void)
     }
 
     status = LE_NO_ERROR;
-    engine->getGlyphs(NULL, 0xFF000000L, status);
+    engine->getGlyphs(nullptr, 0xFF000000L, status);
 
     if (status != LE_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("Calling getGlyphs(NULL, 0xFF000000L, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
+        log_err("Calling getGlyphs(nullptr, 0xFF000000L, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 
     status = LE_NO_ERROR;
@@ -100,10 +100,10 @@ static void U_CALLCONV ParamTest(void)
     }
 
     status = LE_NO_ERROR;
-    engine->getCharIndices(NULL, status);
+    engine->getCharIndices(nullptr, status);
 
     if (status != LE_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("Calling getCharIndices(NULL, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
+        log_err("Calling getCharIndices(nullptr, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 
     status = LE_NO_ERROR;
@@ -114,10 +114,10 @@ static void U_CALLCONV ParamTest(void)
     }
 
     status = LE_NO_ERROR;
-    engine->getCharIndices(NULL, 1024, status);
+    engine->getCharIndices(nullptr, 1024, status);
 
     if (status != LE_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("Calling getCharIndices(NULL, 1024, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
+        log_err("Calling getCharIndices(nullptr, 1024, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 
     status = LE_NO_ERROR;
@@ -128,10 +128,10 @@ static void U_CALLCONV ParamTest(void)
     }
 
     status = LE_NO_ERROR;
-    engine->getGlyphPositions(NULL, status);
+    engine->getGlyphPositions(nullptr, status);
 
     if (status != LE_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("Calling getGlyphPositions(NULL, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
+        log_err("Calling getGlyphPositions(nullptr, status) did not return LE_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 
     status = LE_NO_ERROR;
@@ -146,10 +146,10 @@ static void U_CALLCONV ParamTest(void)
     DELETE_ARRAY(glyphs);
 
     status = LE_NO_ERROR;
-    glyphCount = engine->layoutChars(NULL, 0, 0, 0, false, 0.0, 0.0, status);
+    glyphCount = engine->layoutChars(nullptr, 0, 0, 0, false, 0.0, 0.0, status);
 
     if (status != LE_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("Calling layoutChars(NULL, 0, 0, 0, false, 0.0, 0.0, status) did not fail w/ LE_ILLEGAL_ARGUMENT_ERROR.\n");
+        log_err("Calling layoutChars(nullptr, 0, 0, 0, false, 0.0, 0.0, status) did not fail w/ LE_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 
     LEUnicode chars[] = {
@@ -220,7 +220,7 @@ static void U_CALLCONV FactoryTest(void)
 {
     LEErrorCode status = LE_NO_ERROR;
     SimpleFontInstance *font = new SimpleFontInstance(12, status);
-    LayoutEngine *engine = NULL;
+    LayoutEngine *engine = nullptr;
 
     for(le_int32 scriptCode = 0; scriptCode < scriptCodeCount; scriptCode += 1) {
         status = LE_NO_ERROR;
@@ -387,18 +387,18 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
     if (fontChecksum != testChecksum) {
         const char *fontVersionString = fontInstance->getNameString(NAME_VERSION_STRING,
             PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
-        const LEUnicode *uFontVersionString = NULL;
+        const LEUnicode *uFontVersionString = nullptr;
 
             // The standard recommends that the Macintosh Roman/English name string be present, but
             // if it's not, try the Microsoft Unicode/English string.
-            if (fontVersionString == NULL) {
+            if (fontVersionString == nullptr) {
                 uFontVersionString = fontInstance->getUnicodeNameString(NAME_VERSION_STRING,
                     PLATFORM_MICROSOFT, MICROSOFT_UNICODE_BMP, MICROSOFT_ENGLISH);
             }
 
         log_info("Test %s: this may not be the same font used to generate the test data.\n", testID);
 
-        if (uFontVersionString != NULL) {
+        if (uFontVersionString != nullptr) {
             log_info("Your font's version string is \"%S\"\n", uFontVersionString);
             fontInstance->deleteNameString(uFontVersionString);
         } else {
@@ -413,14 +413,14 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
 
 /* Returns the path to icu/source/test/testdata/ */
 const char *getSourceTestData() {
-    const char *srcDataDir = NULL;
+    const char *srcDataDir = nullptr;
 #ifdef U_TOPSRCDIR
     srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
 #else
     srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
     FILE *f = fopen(".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING "rbbitst.txt", "r");
 
-    if (f != NULL) {
+    if (f != nullptr) {
         /* We're in icu/source/test/letest/ */
         fclose(f);
     } else {
@@ -550,7 +550,7 @@ LEFontInstance *openFont(const char *fontName, const char *checksum, const char 
     if (LE_FAILURE(fontStatus)) {
         log_info("Test %s: can't open font %s - test skipped.\n", testID, fontName);
         delete font;
-        return NULL;
+        return nullptr;
     } else {
         le_uint32 cksum = 0;
 
@@ -573,7 +573,7 @@ static void U_CALLCONV DataDrivenTest(void)
     UXMLParser  *parser = UXMLParser::createParser(status);
     UXMLElement *root   = parser->parseFile(testFilePath, status);
 
-    if (root == NULL) {
+    if (root == nullptr) {
         log_err("Could not open the test data file: %s\n", testFilePath);
         delete parser;
         return;
@@ -599,12 +599,12 @@ static void U_CALLCONV DataDrivenTest(void)
     const UXMLElement *testCase;
     int32_t tc = 0;
 
-    while((testCase = root->nextChildElement(tc)) != NULL) {
+    while((testCase = root->nextChildElement(tc)) != nullptr) {
         if (testCase->getTagName().compare(test_case) == 0) {
             char *id = getCString(testCase->getAttribute(id_attr));
             char *script = getCString(testCase->getAttribute(script_attr));
             char *lang   = getCString(testCase->getAttribute(lang_attr));
-            LEFontInstance *font = NULL;
+            LEFontInstance *font = nullptr;
             const UXMLElement *element;
             int32_t ec = 0;
             int32_t charCount = 0;
@@ -613,10 +613,10 @@ static void U_CALLCONV DataDrivenTest(void)
             le_int32 languageCode = -1;
             UnicodeString text, glyphs, indices, positions;
             int32_t glyphCount = 0, indexCount = 0, positionCount = 0;
-            TestResult expected = {0, NULL, NULL, NULL};
-            TestResult actual   = {0, NULL, NULL, NULL};
+            TestResult expected = {0, nullptr, nullptr, nullptr};
+            TestResult actual   = {0, nullptr, nullptr, nullptr};
             LEErrorCode success = LE_NO_ERROR;
-            LayoutEngine *engine = NULL;
+            LayoutEngine *engine = nullptr;
 
             uscript_getCode(script, &scriptCode, 1, &status);
             if (LE_FAILURE(status)) {
@@ -624,7 +624,7 @@ static void U_CALLCONV DataDrivenTest(void)
                 goto free_c_strings;
             }
 
-            if (lang != NULL) {
+            if (lang != nullptr) {
                 languageCode = getLanguageCode(lang);
 
                 if (languageCode < 0) {
@@ -633,7 +633,7 @@ static void U_CALLCONV DataDrivenTest(void)
                 }
             }
 
-            while((element = testCase->nextChildElement(ec)) != NULL) {
+            while((element = testCase->nextChildElement(ec)) != nullptr) {
                 UnicodeString tag = element->getTagName();
 
                 // TODO: make sure that each element is only used once.
@@ -647,7 +647,7 @@ static void U_CALLCONV DataDrivenTest(void)
                     freeCString(fontVer);
                     freeCString(fontName);
 
-                    if (font == NULL) {
+                    if (font == nullptr) {
                         // warning message already displayed...
                         goto free_c_strings;
                     }
@@ -671,7 +671,7 @@ static void U_CALLCONV DataDrivenTest(void)
 
             // TODO: make sure that the font, test-text, result-glyphs, result-indices and result-positions
             // have all been provided
-            if (font == NULL) {
+            if (font == nullptr) {
                 LEErrorCode fontStatus = LE_NO_ERROR;
 
                 font = new SimpleFontInstance(12, fontStatus);
@@ -885,14 +885,14 @@ static void U_CALLCONV GlyphToCharTest(void)
 
     fontRuns.add(font, charCount);
 
-    paragraphLayout = new ParagraphLayout(chars, charCount, &fontRuns, NULL, NULL, NULL, 0, false, status);
+    paragraphLayout = new ParagraphLayout(chars, charCount, &fontRuns, nullptr, nullptr, nullptr, 0, false, status);
 
     if (LE_FAILURE(status)) {
         goto close_font;
     }
 
     paragraphLayout->reflow();
-    while ((line = paragraphLayout->nextLine(lineWidth)) != NULL) {
+    while ((line = paragraphLayout->nextLine(lineWidth)) != nullptr) {
         le_int32 runCount = line->countRuns();
 
         for(le_int32 run = 0; run < runCount; run += 1) {
@@ -983,7 +983,7 @@ static void addAllTests(TestNode **root)
 /* returns the path to icu/source/data/out */
 static const char *ctest_dataOutDir()
 {
-    static const char *dataOutDir = NULL;
+    static const char *dataOutDir = nullptr;
 
     if(dataOutDir) {
         return dataOutDir;
@@ -1017,12 +1017,12 @@ static const char *ctest_dataOutDir()
         /*   Only Windows should end up here, so looking for '\' is safe.   */
         for (i=1; i<=3; i++) {
             pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
-            if (pBackSlash != NULL) {
+            if (pBackSlash != nullptr) {
                 *pBackSlash = 0;        /* Truncate the string at the '\'   */
             }
         }
 
-        if (pBackSlash != NULL) {
+        if (pBackSlash != nullptr) {
             /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
@@ -1060,7 +1060,7 @@ static void ctest_setICU_DATA() {
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
      */
-    if (getenv("ICU_DATA") == NULL) {
+    if (getenv("ICU_DATA") == nullptr) {
         /* If ICU_DATA isn't set, set it to the usual location */
         u_setDataDirectory(ctest_dataOutDir());
     }
@@ -1069,14 +1069,14 @@ static void ctest_setICU_DATA() {
 int main(int argc, char* argv[])
 {
     int32_t nerrors = 0;
-    TestNode *root = NULL;
+    TestNode *root = nullptr;
     UErrorCode errorCode = U_ZERO_ERROR;
     UDate startTime, endTime;
     int32_t diffTime;
 
     startTime = uprv_getUTCtime();
 
-    if (!initArgs(argc, argv, NULL, NULL)) {
+    if (!initArgs(argc, argv, nullptr, nullptr)) {
         /* Error already displayed. */
         return -1;
     }
@@ -1099,7 +1099,7 @@ int main(int argc, char* argv[])
     u_cleanup();
     errorCode = U_ZERO_ERROR;
 
-    if (!initArgs(argc, argv, NULL, NULL)) {
+    if (!initArgs(argc, argv, nullptr, nullptr)) {
         /* Error already displayed. */
         return -1;
     }

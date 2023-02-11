@@ -161,6 +161,13 @@ cd $ICU4J_ROOT
 ant clean
 ant check 2>&1 | tee $NOTES/icu4j-oldData-antCheck.txt
 
+# 2c. Additionally for ICU4J, repeat the same as 2b, but for building with
+# Maven instead of with Ant.
+
+cd $ICU4J_ROOT/maven-build
+mvn clean
+mvn verify
+
 # 3. Make pre-adjustments as necessary
 # 3a. Copy latest relevant CLDR dtds to ICU
 cp -p $CLDR_DIR/common/dtd/ldml.dtd $ICU4C_DIR/source/data/dtd/cldr/common/dtd/
@@ -307,11 +314,23 @@ make icu4j-data-install
 cd $ICU4C_DIR/source/test/testdata
 make icu4j-data-install
 
+# 12c. Replace the extracted {main, test} data files in the Maven build
+
+cd $ICU4J_ROOT/maven-build
+sh ./extract-data-files.sh
+
 # 13. Now rebuild ICU4J with the new data and run tests:
 # Keep a log so you can investigate the errors.
 
+# 13a. Run the tests using the ant build
+
 cd $ICU4J_ROOT
 ant check 2>&1 | tee $NOTES/icu4j-newData-antCheck.txt
+
+# 13b. Run the tests using the Maven build
+
+cd $ICU4J_ROOT/maven-build
+mvn verify 2>&1 | tee $NOTES/icu4j-newData-mavenVerify.txt
 
 # 14. Investigate test case failures; fix test cases and repeat from step 12,
 # or fix CLDR data and repeat from step 4, as appropriate, until there are no

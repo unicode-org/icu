@@ -36,7 +36,7 @@ public:
         directionBits(0), lineNumber(0), levelsCount(0), orderingCount(0),
         errorCount(0) {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
 
     void TestBidiTest();
     void TestBidiCharacterTest();
@@ -119,7 +119,7 @@ UBool BiDiConformanceTest::parseOrdering(const char *start) {
     return true;
 }
 
-static const UChar charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
+static const char16_t charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
     0x6c,   // 'l' for L
     0x52,   // 'R' for R
     0x33,   // '3' for EN
@@ -273,8 +273,8 @@ void BiDiConformanceTest::TestBidiTest() {
         return;
     }
     LocalUBiDiPointer ubidi(ubidi_open());
-    ubidi_setClassCallback(ubidi.getAlias(), biDiConfUBiDiClassCallback, NULL,
-                           NULL, NULL, errorCode);
+    ubidi_setClassCallback(ubidi.getAlias(), biDiConfUBiDiClassCallback, nullptr,
+                           nullptr, nullptr, errorCode);
     if(errorCode.errIfFailureAndReset("ubidi_setClassCallback()")) {
         return;
     }
@@ -284,11 +284,11 @@ void BiDiConformanceTest::TestBidiTest() {
     errorCount=0;
     // paraLevelName must be initialized in case the first non-comment line is in error
     paraLevelName="N/A";
-    while(errorCount<10 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=NULL) {
+    while(errorCount<10 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=nullptr) {
         ++lineNumber;
         // Remove trailing comments and whitespace.
         char *commentStart=strchr(line, '#');
-        if(commentStart!=NULL) {
+        if(commentStart!=nullptr) {
             *commentStart=0;
         }
         u_rtrim(line);
@@ -331,7 +331,7 @@ void BiDiConformanceTest::TestBidiTest() {
             for(int i=0; i<=3; ++i) {
                 if(bitset&(1<<i)) {
                     ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
-                                  paraLevels[i], NULL, errorCode);
+                                  paraLevels[i], nullptr, errorCode);
                     const UBiDiLevel *actualLevels=ubidi_getLevels(ubidi.getAlias(), errorCode);
                     if(errorCode.errIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
                         errln("Input line %d: %s", (int)lineNumber, line);
@@ -446,13 +446,13 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
     levelsCount=0;
     orderingCount=0;
     errorCount=0;
-    while(errorCount<20 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=NULL) {
+    while(errorCount<20 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=nullptr) {
         ++lineNumber;
         paraLevelName="N/A";
         inputString="N/A";
         // Remove trailing comments and whitespace.
         char *commentStart=strchr(line, '#');
-        if(commentStart!=NULL) {
+        if(commentStart!=nullptr) {
             *commentStart=0;
         }
         u_rtrim(line);
@@ -461,8 +461,8 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
             continue;  // Skip empty and comment-only lines.
         }
         // Parse the code point string in field 0.
-        UChar *buffer=inputString.getBuffer(200);
-        int32_t length=u_parseString(start, buffer, inputString.getCapacity(), NULL, errorCode);
+        char16_t *buffer=inputString.getBuffer(200);
+        int32_t length=u_parseString(start, buffer, inputString.getCapacity(), nullptr, errorCode);
         if(errorCode.errIfFailureAndReset("Invalid string in field 0")) {
             errln("Input line %d: %s", (int)lineNumber, line);
             inputString.remove();
@@ -470,7 +470,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         }
         inputString.releaseBuffer(length);
         start=strchr(start, ';');
-        if(start==NULL) {
+        if(start==nullptr) {
             errorCount++;
             errln("\nError on line %d: Missing ; separator on line: %s", (int)lineNumber, line);
             continue;
@@ -497,7 +497,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         }
         else if(paraDirection<0 && -paraDirection<=(UBIDI_MAX_EXPLICIT_LEVEL+1)) {
             paraLevel=(UBiDiLevel)(-paraDirection);
-            sprintf(levelNameString, "%d", (int)paraLevel);
+            snprintf(levelNameString, sizeof(levelNameString), "%d", (int)paraLevel);
             paraLevelName=levelNameString;
         }
         if(end<=start || (!U_IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) ||
@@ -540,7 +540,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
             orderingCount=-1;
 
         ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
-                      paraLevel, NULL, errorCode);
+                      paraLevel, nullptr, errorCode);
         const UBiDiLevel *actualLevels=ubidi_getLevels(ubidi.getAlias(), errorCode);
         if(errorCode.errIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
             errln("Input line %d: %s", (int)lineNumber, line);
@@ -562,7 +562,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
     }
 }
 
-static UChar printLevel(UBiDiLevel level) {
+static char16_t printLevel(UBiDiLevel level) {
     if(level<UBIDI_DEFAULT_LTR) {
         return 0x30+level;
     } else {
@@ -607,11 +607,11 @@ UBool BiDiConformanceTest::checkLevels(const UBiDiLevel actualLevels[], int32_t 
         UnicodeString els("Expected levels:   ");
         int32_t i;
         for(i=0; i<levelsCount; ++i) {
-            els.append((UChar)0x20).append(printLevel(levels[i]));
+            els.append((char16_t)0x20).append(printLevel(levels[i]));
         }
         UnicodeString als("Actual   levels:   ");
         for(i=0; i<actualCount; ++i) {
-            als.append((UChar)0x20).append(printLevel(actualLevels[i]));
+            als.append((char16_t)0x20).append(printLevel(actualLevels[i]));
         }
         errln(els);
         errln(als);
@@ -659,13 +659,13 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
         printErrorLine();
         UnicodeString eord("Expected ordering: ");
         for(i=0; i<orderingCount; ++i) {
-            eord.append((UChar)0x20).append((UChar)(0x30+ordering[i]));
+            eord.append((char16_t)0x20).append((char16_t)(0x30+ordering[i]));
         }
         UnicodeString aord("Actual   ordering: ");
         for(i=0; i<resultLength; ++i) {
             int32_t logicalIndex=ubidi_getLogicalIndex(ubidi, i, errorCode);
             if(levels[logicalIndex]<UBIDI_DEFAULT_LTR) {
-                aord.append((UChar)0x20).append((UChar)(0x30+logicalIndex));
+                aord.append((char16_t)0x20).append((char16_t)(0x30+logicalIndex));
             }
         }
         errln(eord);

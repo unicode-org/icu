@@ -895,10 +895,10 @@ static void TestIdentifier()
     const UChar32 sampleNonJavaIDStart[] = {0x0020, 0x2030, 0x0082};
     const UChar32 sampleJavaIDPart[] = {0x005f, 0x0032, 0x0045};
     const UChar32 sampleNonJavaIDPart[] = {0x2030, 0x2020, 0x0020};
-    const UChar32 sampleUnicodeIDStart[] = {0x0250, 0x00e2, 0x0061};
-    const UChar32 sampleNonUnicodeIDStart[] = {0x2000, 0x000a, 0x2019};
-    const UChar32 sampleUnicodeIDPart[] = {0x005f, 0x0032, 0x0045};
-    const UChar32 sampleNonUnicodeIDPart[] = {0x2030, 0x00a3, 0x0020};
+    const UChar32 sampleUnicodeIDStart[] = {0x0250, 0x00e2, 0x0061, 0x1885, 0x212e, 0x309b};
+    const UChar32 sampleNonUnicodeIDStart[] = {0x2000, 0x000a, 0x2019, 0x2e2f};
+    const UChar32 sampleUnicodeIDPart[] = {0x005f, 0x0032, 0x0045, 0x1886, 0x212e, 0x309c};
+    const UChar32 sampleNonUnicodeIDPart[] = {0x2030, 0x00a3, 0x0020, 0x2019, 0x2e2f};
     const UChar32 sampleIDIgnore[] = {0x0006, 0x0010, 0x206b, 0x85};
     const UChar32 sampleNonIDIgnore[] = {0x0075, 0x00a3, 0x0061};
 

@@ -35,7 +35,7 @@ class XMLFile {
 
 class XMLElement {
     public:
-        XMLElement(XMLFile &f, const char *name, const char *attribs  = NULL, bool single=false);
+        XMLElement(XMLFile &f, const char *name, const char *attribs  = nullptr, bool single=false);
         ~XMLElement();
         
         const char *name;

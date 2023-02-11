@@ -163,13 +163,13 @@ class TransliteratorRegistry : public UMemory {
      * compound) attempt to instantiate it from the registry.  Return
      * 0 on failure.
      *
-     * Return a non-NULL aliasReturn value if the ID points to an alias.
+     * Return a non-nullptr aliasReturn value if the ID points to an alias.
      * We cannot instantiate it ourselves because the alias may contain
      * filters or compounds, which we do not understand.  Caller should
-     * make aliasReturn NULL before calling.
+     * make aliasReturn nullptr before calling.
      * @param ID          the given ID
      * @param aliasReturn output param to receive TransliteratorAlias;
-     *                    should be NULL on entry
+     *                    should be nullptr on entry
      * @param parseError  Struct to receive information on position
      *                    of error if an error is encountered
      * @param status      Output param set to success/failure code.
@@ -191,7 +191,7 @@ class TransliteratorRegistry : public UMemory {
      * from within the TransliteratorRegistry mutex.
      *
      * @param aliasReturn output param to receive TransliteratorAlias;
-     *                    should be NULL on entry
+     *                    should be nullptr on entry
      */
     Transliterator* reget(const UnicodeString& ID,
                           TransliteratorParser& parser,

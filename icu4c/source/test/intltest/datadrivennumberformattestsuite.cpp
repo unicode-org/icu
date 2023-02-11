@@ -15,8 +15,8 @@
 #include "unicode/localpointer.h"
 #include "ustrfmt.h"
 
-static UBool isCROrLF(UChar c) { return c == 0xa || c == 0xd; }
-static UBool isSpace(UChar c) { return c == 9 || c == 0x20 || c == 0x3000; }
+static UBool isCROrLF(char16_t c) { return c == 0xa || c == 0xd; }
+static UBool isSpace(char16_t c) { return c == 9 || c == 0x20 || c == 0x3000; }
 
 void DataDrivenNumberFormatTestSuite::run(const char *fileName, UBool runAllTests) {
     fFileLineNumber = 0;
@@ -119,7 +119,7 @@ DataDrivenNumberFormatTestSuite::~DataDrivenNumberFormatTestSuite() {
 }
 
 UBool DataDrivenNumberFormatTestSuite::breaksC() {
-    return (NFTT_GET_FIELD(fTuple, breaks, "").toUpper().indexOf((UChar)0x43) != -1);
+    return (NFTT_GET_FIELD(fTuple, breaks, "").toUpper().indexOf((char16_t)0x43) != -1);
 }
 
 void DataDrivenNumberFormatTestSuite::setTupleField(UErrorCode &status) {
@@ -146,12 +146,12 @@ int32_t
 DataDrivenNumberFormatTestSuite::splitBy(
         UnicodeString *columnValues,
         int32_t columnValuesCount,
-        UChar delimiter) {
+        char16_t delimiter) {
     int32_t colIdx = 0;
     int32_t colStart = 0;
     int32_t len = fFileLine.length();
     for (int32_t idx = 0; colIdx < columnValuesCount - 1 && idx < len; ++idx) {
-        UChar ch = fFileLine.charAt(idx);
+        char16_t ch = fFileLine.charAt(idx);
         if (ch == delimiter) {
             columnValues[colIdx++] = 
                     fFileLine.tempSubString(colStart, idx - colStart);
@@ -175,7 +175,7 @@ void DataDrivenNumberFormatTestSuite::showError(const char *message) {
 }
 
 void DataDrivenNumberFormatTestSuite::showFailure(const UnicodeString &message) {
-    UChar lineStr[20];
+    char16_t lineStr[20];
     uprv_itou(
             lineStr, UPRV_LENGTHOF(lineStr), (uint32_t) fFileLineNumber, 10, 1);
     UnicodeString fullMessage("line ");
@@ -187,8 +187,8 @@ void DataDrivenNumberFormatTestSuite::showFailure(const UnicodeString &message) 
 UBool DataDrivenNumberFormatTestSuite::readLine(
         UCHARBUF *f, UErrorCode &status) {
     int32_t lineLength;
-    const UChar *line = ucbuf_readline(f, &lineLength, &status);
-    if(line == NULL || U_FAILURE(status)) {
+    const char16_t *line = ucbuf_readline(f, &lineLength, &status);
+    if(line == nullptr || U_FAILURE(status)) {
         if (U_FAILURE(status)) {
             errln("Error reading line from file.");
         }
@@ -269,7 +269,7 @@ UBool DataDrivenNumberFormatTestSuite::isFormatPass(
 
 UObject *DataDrivenNumberFormatTestSuite::newFormatter(
         UErrorCode & /*status*/) {
-    return NULL;
+    return nullptr;
 }
 
 UBool DataDrivenNumberFormatTestSuite::isToPatternPass(

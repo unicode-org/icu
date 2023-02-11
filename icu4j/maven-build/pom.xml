@@ -148,6 +148,37 @@
     </snapshotRepository>
   </distributionManagement>
 
+  <profiles>
+    <!-- 
+      For testing localespi using the Java extensions feature, which last existed in Java 8.
+      ICU4J currently has a minimum supported version of 8.
+    -->
+    <profile>
+      <id>localespi-tests-java8</id>
+      <activation>
+        <jdk>(,8]</jdk>
+      </activation>
+      <properties>
+        <localespi-tests.jvm.args>-Djava.ext.dirs="${java.io.tmpdir}/ext-test-jars"</localespi-tests.jvm.args>
+        <localespi-tests.locale-providers></localespi-tests.locale-providers>
+      </properties>
+    </profile>
+    <!--
+      For testing localespi using the classpath for Java 9+, since Java extensions were
+      deprecated after Java 8.
+    -->
+    <profile>
+      <id>localespi-tests-java9</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <localespi-tests.jvm.args></localespi-tests.jvm.args>
+        <localespi-tests.locale-providers>CLDR,COMPAT,SPI</localespi-tests.locale-providers>
+      </properties>
+    </profile>
+  </profiles>
+
   <properties>
     <!-- 
       Main ICU4J version number.
@@ -204,41 +235,6 @@
     <!-- Main-Class -->
     <jar.main.class>com.ibm.icu.util.VersionInfo</jar.main.class>
   </properties>
-
-  <!-- 
-    Note: the .jar files in ./local-maven-repo are copies of the files at
-    icu4j/main/shared/data/*.jar
-  -->
-  <!--
-    Note: this overall solution of a local filesystem repository is based on the
-    answer here: https://stackoverflow.com/a/28762617/2077918
-    The directory structure and files were created using the `mvn install-file` command, 
-    with the copied .jar files being replaced by symlinks to avoid duplicating files on
-    developers' local filesystems.
-    Ex: for version 73.1-SNAPSHOT, when running the current directory (<ICU>/icu4j/maven-build):
-    ```
-    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  \
-    -Dfile=../main/shared/data/icudata.jar \
-    -DgroupId=com.ibm.icu -DartifactId=icudata \
-    -Dversion=73.1-SNAPSHOT -Dpackaging=jar \
-    -DlocalRepositoryPath=./local-maven-repo \
-    -DgeneratePom=true
-
-    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  \
-    -Dfile=../main/shared/data/icutzdata.jar \
-    -DgroupId=com.ibm.icu -DartifactId=icutzdata \
-    -Dversion=73.1-SNAPSHOT -Dpackaging=jar \
-    -DlocalRepositoryPath=./local-maven-repo \
-    -DgeneratePom=true
-
-    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  \
-    -Dfile=../main/shared/data/testdata.jar \
-    -DgroupId=com.ibm.icu -DartifactId=testdata \
-    -Dversion=73.1-SNAPSHOT -Dpackaging=jar \
-    -DlocalRepositoryPath=./local-maven-repo \
-    -DgeneratePom=true
-    ```    
-  -->
 
   <modules>
     <module>maven-icu4j</module>
@@ -336,24 +332,6 @@
       <dependency>
         <groupId>com.ibm.icu</groupId>
         <artifactId>icu4j</artifactId>
-        <version>${icu4j.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.ibm.icu</groupId>
-        <artifactId>icudata</artifactId>
-        <version>${icu4j.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.ibm.icu</groupId>
-        <artifactId>icutzdata</artifactId>
-        <version>${icu4j.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.ibm.icu</groupId>
-        <artifactId>testdata</artifactId>
         <version>${icu4j.version}</version>
       </dependency>
 

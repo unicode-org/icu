@@ -32,7 +32,7 @@ void TestChoiceFormat::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
-static UBool chkstatus( UErrorCode &status, const char* msg = NULL )
+static UBool chkstatus( UErrorCode &status, const char* msg = nullptr )
 {
     UBool ok = U_SUCCESS(status);
     if (!ok) it_errln( msg );
@@ -86,15 +86,15 @@ TestChoiceFormat::TestSimpleExample( void )
     int32_t count=0;
     const double *gotLimits=form->getLimits(count);
 #if 1  // ICU 4.8 deprecates and disables the ChoiceFormat getters.
-    if(count != 0 || gotLimits != NULL) {
+    if(count != 0 || gotLimits != nullptr) {
         errln("getLimits() returns something, should be disabled");
     }
     const UnicodeString *gotFormats=form->getFormats(count);
-    if(count != 0 || gotFormats != NULL) {
+    if(count != 0 || gotFormats != nullptr) {
         errln("getFormats() returns something, should be disabled");
     }
     const UBool *gotClosures=form->getClosures(count);
-    if(count != 0 || gotClosures != NULL) {
+    if(count != 0 || gotClosures != nullptr) {
         errln("getClosures() returns something, should be disabled");
     }
 #else
@@ -148,7 +148,7 @@ TestChoiceFormat::TestComplexExample( void )
         return;
     }
 
-    //const Format* testFormats[] = { fileform, NULL, filenumform };
+    //const Format* testFormats[] = { fileform, nullptr, filenumform };
     //pattform->setFormats( testFormats, 3 );
 
     MessageFormat* pattform = new MessageFormat("There {0} on {1}", status );

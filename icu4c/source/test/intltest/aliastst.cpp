@@ -177,10 +177,10 @@ void LocaleAliasTest::TestULocale() {
 }
 LocaleAliasTest::LocaleAliasTest(){
     UErrorCode status = U_ZERO_ERROR;
-    resIndex = ures_open(NULL,"res_index", &status);
+    resIndex = ures_open(nullptr,"res_index", &status);
     if(U_FAILURE(status)){
         errln("Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
-        resIndex=NULL;
+        resIndex=nullptr;
     }
     defLocale = Locale::getDefault();
     Locale::setDefault(Locale::getUS(), status); 
@@ -195,7 +195,7 @@ LocaleAliasTest::~LocaleAliasTest(){
     }
 }
 UBool LocaleAliasTest::isLocaleAvailable(const char* loc){
-    if(resIndex==NULL){
+    if(resIndex==nullptr){
         return false;
     }
     UErrorCode status = U_ZERO_ERROR;
@@ -250,13 +250,13 @@ void LocaleAliasTest::TestUResourceBundle() {
         }
         logln("\nold locale:%s   new locale:%s",oldLoc.getName(),newLoc.getName());
 
-        ResourceBundle* rb1 = NULL;
-        ResourceBundle* rb2 = NULL;
+        ResourceBundle* rb1 = nullptr;
+        ResourceBundle* rb2 = nullptr;
 
         const char* testdatapath=loadTestData(status);
 
-        UnicodeString us1("NULL");
-        UnicodeString us2("NULL");
+        UnicodeString us1("nullptr");
+        UnicodeString us2("nullptr");
         rb1 = new ResourceBundle(testdatapath, oldLoc, status);
         if (U_FAILURE(U_ZERO_ERROR)) {
 
@@ -278,10 +278,10 @@ void LocaleAliasTest::TestUResourceBundle() {
         log("   new:");
         logln(us2);
 
-        if (rb1!=NULL) {
+        if (rb1!=nullptr) {
             delete rb1;
         }
-        if (rb2!=NULL) {
+        if (rb2!=nullptr) {
             delete rb2;
         }
     }

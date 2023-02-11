@@ -23,7 +23,7 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
-AstroTest::AstroTest(): astro(NULL), gc(NULL) {
+AstroTest::AstroTest(): astro(nullptr), gc(nullptr) {
 }
 
 void AstroTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
@@ -55,7 +55,7 @@ void AstroTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
 void AstroTest::initAstro(UErrorCode &status) {
   if(U_FAILURE(status)) return;
 
-  if((astro != NULL) || (gc != NULL)) {
+  if((astro != nullptr) || (gc != nullptr)) {
     dataerrln("Err: initAstro() called twice!");
     closeAstro(status);
     if(U_SUCCESS(status)) {
@@ -70,13 +70,13 @@ void AstroTest::initAstro(UErrorCode &status) {
 }
 
 void AstroTest::closeAstro(UErrorCode &/*status*/) {
-  if(astro != NULL) {
+  if(astro != nullptr) {
     delete astro;
-    astro = NULL;
+    astro = nullptr;
   }
-  if(gc != NULL) {
+  if(gc != nullptr) {
     delete gc;
-    gc = NULL;
+    gc = nullptr;
   }
 }
 

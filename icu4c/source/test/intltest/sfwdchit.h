@@ -15,7 +15,7 @@
 class SimpleFwdCharIterator : public ForwardCharacterIterator {
 public:
     // not used -- SimpleFwdCharIterator(const UnicodeString& s);
-    SimpleFwdCharIterator(UChar *s, int32_t len, UBool adopt = false);
+    SimpleFwdCharIterator(char16_t *s, int32_t len, UBool adopt = false);
 
     virtual ~SimpleFwdCharIterator();
 
@@ -43,7 +43,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
    */
-  virtual UChar         nextPostInc(void) override;
+  virtual char16_t      nextPostInc(void) override;
         
   /**
    * Gets the current code point for returning and advances to the next code point
@@ -70,7 +70,7 @@ private:
     static const int32_t            kInvalidHashCode;
     static const int32_t            kEmptyHashCode;
 
-    UChar *fStart, *fEnd, *fCurrent;
+    char16_t *fStart, *fEnd, *fCurrent;
     int32_t fLen;
     UBool fBogus;
     int32_t fHashCode;

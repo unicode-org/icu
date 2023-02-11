@@ -17,7 +17,7 @@ public:
     LocaleTest();
     virtual ~LocaleTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     /**
      * Test methods to set and get data fields
@@ -234,6 +234,6 @@ private:
      * Check on registered collators.
      * @param expectExtra if non-null, the locale ID of an 'extra' locale that is registered.
      */
-    void checkRegisteredCollators(const char *expectExtra = NULL);
+    void checkRegisteredCollators(const char *expectExtra = nullptr);
 #endif
 };

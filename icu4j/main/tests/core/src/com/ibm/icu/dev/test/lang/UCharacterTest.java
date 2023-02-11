@@ -623,15 +623,14 @@ public final class UCharacterTest extends TestFmwk
     @Test
     public void TestIdentifier()
     {
-        int unicodeidstart[] = {0x0250, 0x0000e2, 0x000061};
-        int nonunicodeidstart[] = {0x2000, 0x00000a, 0x002019};
-        int unicodeidpart[] = {0x005f, 0x000032, 0x000045};
-        int nonunicodeidpart[] = {0x2030, 0x0000a3, 0x000020};
+        int unicodeidstart[] = {0x0250, 0x0000e2, 0x000061, 0x001885, 0x00212e, 0x00309b};
+        int nonunicodeidstart[] = {0x2000, 0x00000a, 0x002019, 0x002e2f};
+        int unicodeidpart[] = {0x005f, 0x000032, 0x000045, 0x001886, 0x00212e, 0x00309c};
+        int nonunicodeidpart[] = {0x2030, 0x0000a3, 0x000020, 0x002019, 0x002e2f};
         int idignore[] = {0x0006, 0x0010, 0x206b};
         int nonidignore[] = {0x0075, 0x0000a3, 0x000061};
 
-        int size = unicodeidstart.length;
-        for (int i = 0; i < size; i ++)
+        for (int i = 0; i < unicodeidstart.length; i ++)
         {
             if (!UCharacter.isUnicodeIdentifierStart(unicodeidstart[i]))
             {
@@ -639,6 +638,9 @@ public final class UCharacterTest extends TestFmwk
                     " expected to be a unicode identifier start character");
                 break;
             }
+        }
+        for (int i = 0; i < nonunicodeidstart.length; i ++)
+        {
             if (UCharacter.isUnicodeIdentifierStart(nonunicodeidstart[i]))
             {
                 errln("FAIL \\u" + hex(nonunicodeidstart[i]) +
@@ -646,12 +648,18 @@ public final class UCharacterTest extends TestFmwk
                         "character");
                 break;
             }
+        }
+        for (int i = 0; i < unicodeidpart.length; i ++)
+        {
             if (!UCharacter.isUnicodeIdentifierPart(unicodeidpart[i]))
             {
                 errln("FAIL \\u" + hex(unicodeidpart[i]) +
                     " expected to be a unicode identifier part character");
                 break;
             }
+        }
+        for (int i = 0; i < nonunicodeidpart.length; i ++)
+        {
             if (UCharacter.isUnicodeIdentifierPart(nonunicodeidpart[i]))
             {
                 errln("FAIL \\u" + hex(nonunicodeidpart[i]) +
@@ -659,23 +667,24 @@ public final class UCharacterTest extends TestFmwk
                         "character");
                 break;
             }
+         }
+        for (int i = 0; i < idignore.length; i ++)
+        {
             if (!UCharacter.isIdentifierIgnorable(idignore[i]))
             {
                 errln("FAIL \\u" + hex(idignore[i]) +
                         " expected to be a ignorable unicode character");
                 break;
             }
+        }
+        for (int i = 0; i < nonidignore.length; i ++)
+        {
             if (UCharacter.isIdentifierIgnorable(nonidignore[i]))
             {
                 errln("FAIL \\u" + hex(nonidignore[i]) +
                     " expected not to be a ignorable unicode character");
                 break;
             }
-            logln("Ok    \\u" + hex(unicodeidstart[i]) + " and \\u" +
-                    hex(nonunicodeidstart[i]) + " and \\u" +
-                    hex(unicodeidpart[i]) + " and \\u" +
-                    hex(nonunicodeidpart[i]) + " and \\u" +
-                    hex(idignore[i]) + " and \\u" + hex(nonidignore[i]));
         }
     }
 

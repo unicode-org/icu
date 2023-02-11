@@ -350,6 +350,15 @@ class U_I18N_API IslamicCalendar : public Calendar {
    */
   virtual void setRelatedYear(int32_t year) override;
 
+  /**
+   * Returns true if the date is in a leap year.
+   *
+   * @param status        ICU Error Code
+   * @return       True if the date in the fields is in a Temporal proposal
+   *               defined leap year. False otherwise.
+   */
+  virtual bool inTemporalLeapYear(UErrorCode &status) const override;
+
  private:
   IslamicCalendar() = delete; // default constructor not implemented
 

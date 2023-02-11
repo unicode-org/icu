@@ -35,16 +35,16 @@
 class TrieSet : public UObject, public UnicodeContainable {
 public:
     TrieSet(const UnicodeSet &set, UErrorCode &errorCode)
-            : trieData(NULL), latin1(NULL), restSet(set.clone()) {
+            : trieData(nullptr), latin1(nullptr), restSet(set.clone()) {
         if(U_FAILURE(errorCode)) {
             return;
         }
-        if(restSet==NULL) {
+        if(restSet==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
         }
 
-        UNewTrie *newTrie=utrie_open(NULL, NULL, 0x11000, 0, 0, true);
+        UNewTrie *newTrie=utrie_open(nullptr, nullptr, 0x11000, 0, 0, true);
         UChar32 start, end;
 
         UnicodeSetIterator iter(set);
@@ -65,19 +65,19 @@ public:
         }
 
         // Preflight the trie length.
-        int32_t length=utrie_serialize(newTrie, NULL, 0, NULL, 8, &errorCode);
+        int32_t length=utrie_serialize(newTrie, nullptr, 0, nullptr, 8, &errorCode);
         if(errorCode!=U_BUFFER_OVERFLOW_ERROR) {
             return;
         }
 
         trieData=(uint32_t *)uprv_malloc(length);
-        if(trieData==NULL) {
+        if(trieData==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
         }
 
         errorCode=U_ZERO_ERROR;
-        utrie_serialize(newTrie, trieData, length, NULL, 8, &errorCode);
+        utrie_serialize(newTrie, trieData, length, nullptr, 8, &errorCode);
         utrie_unserialize(&trie, trieData, length, &errorCode);  // TODO: Implement for 8-bit UTrie!
 
         if(U_SUCCESS(errorCode)) {

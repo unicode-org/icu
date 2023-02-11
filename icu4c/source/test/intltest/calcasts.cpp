@@ -173,13 +173,13 @@ void CalendarCaseTest::IslamicCivil()
     c->setLenient(true);
     doTestCases(tests, c);
 
-    static const UChar expectedUChars[] = {
+    static const char16_t expectedUChars[] = {
         0x0627, 0x0644, 0x062e, 0x0645, 0x064a, 0x0633, 0x060c, 0x0020, 0x0662, 0x0662, 0x0020,
         0x0634, 0x0648, 0x0627, 0x0644, 0x0020, 0x0661, 0x0663, 0x0668, 0x0669, 0x0020, 0x0647, 0x0640, 0
      };
     UnicodeString result;
     DateFormat *fmt = DateFormat::createDateInstance(DateFormat::kFull, Locale("ar_JO@calendar=islamic-civil"));
-    if (fmt == NULL) {
+    if (fmt == nullptr) {
         dataerrln("Error calling DateFormat::createDateInstance");
         delete c;
         return;

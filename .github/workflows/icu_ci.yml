@@ -60,13 +60,17 @@ jobs:
 
   # Run `test` to execute unit tests and ensure it is possible for tests to run even without packaging submodule
   # dependencies as jar files
-  java8-icu4j-test-maven:
-    name: Run unit tests with Maven using JDK 8
+  icu4j-test-maven:
+    name: Run unit tests with Maven for Java version
     runs-on: ubuntu-latest
     # Make this unit test target job depend on a later phase target job to prevent race condition when
     # trying to persist the Maven cache to the Github cache, knowing that artifacts needed for
     # the later phase `verify` are a superset of the artifacts needed for the earlier phase `test`.
-    needs: java8-icu4j-verify-maven
+    needs: icu4j-verify-maven
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [ '8', '11' ]
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
@@ -77,7 +81,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: ${{ matrix.java-version }}
           cache: maven
       - name: Run Maven test
         run: |
@@ -85,9 +89,13 @@ jobs:
           mvn --batch-mode test
 
   # Run `verify` to ensure that `package` (creating .jar files) and `integration-test` (special setup for localespi tests) work
-  java8-icu4j-verify-maven:
-    name: Run integration tests with Maven using JDK 8
+  icu4j-verify-maven:
+    name: Run integration tests with Maven for Java version
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [ '8', '11' ]
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
@@ -98,7 +106,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: ${{ matrix.java-version }}
           cache: maven
       # The Maven `verify` phase causes the following to happen first, and in order:
       # build/compile (`compile`), unit tests (`test`), Jar building (`package`),
@@ -312,6 +320,25 @@ jobs:
         env:
           CPPFLAGS: -fsanitize=address
           LDFLAGS: -fsanitize=address
+  # Control Flow Integrity.
+  clang-cfi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang using CFI
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux --disable-renaming;
+          make -j2;
+          make -j2 check
+        env:
+          CC: clang
+          CXX: clang++
+          # add -fsanitize=cfi-vcall -fsanitize=cfi-icall  later
+          CXXFLAGS: -flto -fvisibility=hidden -fsanitize=cfi-derived-cast -fno-sanitize-trap=cfi -fno-inline-functions -fno-inline -fno-omit-frame-pointer -O1
+          # add -fsanitize=cfi-vcall -fsanitize=cfi-icall  later
+          LDFLAGS: -flto -fvisibility=hidden -fuse-ld=gold -fsanitize=cfi-derived-cast -fsanitize=cfi-unrelated-cast -fno-sanitize-trap=cfi -fsanitize-cfi-icall-generalize-pointers
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
@@ -490,11 +517,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: bazelbuild/setup-bazelisk@v1
+    - name: Get CI Linux runner VM version
+      id: linux-version
+      run: |
+        echo "LINUX_VERSION=$(grep -F VERSION_ID /etc/os-release | cut -d'"' -f2)" >> $GITHUB_OUTPUT
     - name: Mount bazel cache
       uses: actions/cache@v2
       with:
         path: "~/.cache/bazel"
-        key: ${{ runner.os }}-bazel
+        key: bazel-${{ runner.os }}-${{ steps.linux-version.outputs.LINUX_VERSION }}
 
     - name: Generate the data
       run: |

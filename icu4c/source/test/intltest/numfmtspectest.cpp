@@ -22,7 +22,7 @@
 #include "unicode/dtfmtsym.h"
 #include "uassert.h"
 
-static const UChar kJPY[] = {0x4A, 0x50, 0x59};
+static const char16_t kJPY[] = {0x4A, 0x50, 0x59};
 
 static void fixNonBreakingSpace(UnicodeString &str) {
     for (int32_t i = 0; i < str.length(); ++i) {
@@ -39,7 +39,7 @@ static NumberFormat *nfWithPattern(const char *pattern) {
     DecimalFormat *result = new DecimalFormat(
             upattern, new DecimalFormatSymbols("fr", status), status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     return result;
@@ -101,7 +101,7 @@ void NumberFormatSpecificationTest::TestBasicPatterns() {
 
 void NumberFormatSpecificationTest::TestNfSetters() {
     LocalPointer<NumberFormat> nf(nfWithPattern("#,##0.##"));
-    if (nf == NULL) {
+    if (nf == nullptr) {
         dataerrln("Error creating NumberFormat");
         return;
     }

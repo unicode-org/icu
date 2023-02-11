@@ -108,7 +108,7 @@ const DecimalQuantity* icu::number::impl::validateUFormattedNumberToDecimalQuant
 
 
 U_CAPI UNumberFormatter* U_EXPORT2
-unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
+unumf_openForSkeletonAndLocale(const char16_t* skeleton, int32_t skeletonLen, const char* locale,
                                UErrorCode* ec) {
     auto* impl = new UNumberFormatterData();
     if (impl == nullptr) {
@@ -122,7 +122,7 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
 }
 
 U_CAPI UNumberFormatter* U_EXPORT2
-unumf_openForSkeletonAndLocaleWithError(const UChar* skeleton, int32_t skeletonLen, const char* locale,
+unumf_openForSkeletonAndLocaleWithError(const char16_t* skeleton, int32_t skeletonLen, const char* locale,
                                          UParseError* perror, UErrorCode* ec) {
     auto* impl = new UNumberFormatterData();
     if (impl == nullptr) {
@@ -176,7 +176,7 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
 }
 
 U_CAPI int32_t U_EXPORT2
-unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t bufferCapacity,
+unumf_resultToString(const UFormattedNumber* uresult, char16_t* buffer, int32_t bufferCapacity,
                      UErrorCode* ec) {
     const auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return 0; }

@@ -133,7 +133,7 @@ static uint32_t parseWeight(char *&s, const char *separators,
         ++s;
     }
     char c = *s;
-    if(c == 0 || strchr(separators, c) == NULL) {
+    if(c == 0 || strchr(separators, c) == nullptr) {
         errorCode = U_INVALID_FORMAT_ERROR;
         return 0;
     }
@@ -446,8 +446,8 @@ private:
     UBool done;
 };
 
-static HanOrder *implicitHanOrder = NULL;
-static HanOrder *radicalStrokeOrder = NULL;
+static HanOrder *implicitHanOrder = nullptr;
+static HanOrder *radicalStrokeOrder = nullptr;
 
 enum ActionType {
   READCE,
@@ -545,7 +545,7 @@ static void readAnOption(
                     return;
                 }
             } else if(what_to_do == READUNIFIEDIDEOGRAPH) {
-                if(implicitHanOrder != NULL) {
+                if(implicitHanOrder != nullptr) {
                     fprintf(stderr, "duplicate [Unified_Ideograph] lines\n");
                     *status = U_INVALID_FORMAT_ERROR;
                     return;
@@ -579,8 +579,8 @@ static void readAnOption(
                 }
                 implicitHanOrder->setDone();
             } else if(what_to_do == READRADICAL) {
-                if(radicalStrokeOrder == NULL) {
-                    if(implicitHanOrder == NULL) {
+                if(radicalStrokeOrder == nullptr) {
+                    if(implicitHanOrder == nullptr) {
                         fprintf(stderr, "[radical] section before [Unified_Ideograph] line\n");
                         *status = U_INVALID_FORMAT_ERROR;
                         return;
@@ -608,7 +608,7 @@ static void readAnOption(
                     // Ignore the radical data before the :.
                     char *startPointer = uprv_strchr(pointer, ':');
                     char *limitPointer = uprv_strchr(pointer, ']');
-                    if(startPointer == NULL || limitPointer == NULL ||
+                    if(startPointer == nullptr || limitPointer == nullptr ||
                             (startPointer + 1) >= limitPointer) {
                         fprintf(stderr, "[radical]: no Han characters listed between : and ]\n");
                         *status = U_INVALID_FORMAT_ERROR;
@@ -661,7 +661,7 @@ static void readAnOption(
                     fprintf(stderr, "warning: UCA version %s != UCD version %s\n", uca, ucd);
                 }
             } else if (what_to_do == READLEADBYTETOSCRIPTS) {
-                if (strstr(pointer, "COMPRESS") != NULL) {
+                if (strstr(pointer, "COMPRESS") != nullptr) {
                     uint16_t leadByte = (hex2num(*pointer++) * 16);
                     leadByte += hex2num(*pointer++);
                     builder.setCompressibleLeadByte(leadByte);
@@ -708,21 +708,21 @@ readAnElement(char *line,
     CharString input;
     char *startCodePoint = line;
     char *endCodePoint = strchr(startCodePoint, ';');
-    if(endCodePoint == NULL) {
+    if(endCodePoint == nullptr) {
         fprintf(stderr, "error - line with no code point:\n%s\n", line);
         *status = U_INVALID_FORMAT_ERROR; /* No code point - could be an error, but probably only an empty line */
         return false;
     }
 
     char *pipePointer = strchr(line, '|');
-    if (pipePointer != NULL) {
+    if (pipePointer != nullptr) {
         // Read the prefix string which precedes the actual string.
         input.append(startCodePoint, (int32_t)(pipePointer - startCodePoint), *status);
-        UChar *prefixChars = prefix.getBuffer(32);
+        char16_t *prefixChars = prefix.getBuffer(32);
         int32_t prefixSize =
             u_parseString(input.data(),
                           prefixChars, prefix.getCapacity(),
-                          NULL, status);
+                          nullptr, status);
         if(U_FAILURE(*status)) {
             prefix.releaseBuffer(0);
             fprintf(stderr, "error - parsing of prefix \"%s\" failed: %s\n%s\n",
@@ -737,11 +737,11 @@ readAnElement(char *line,
 
     // Read the string which gets the CE(s) assigned.
     input.append(startCodePoint, (int32_t)(endCodePoint - startCodePoint), *status);
-    UChar *uchars = s.getBuffer(32);
+    char16_t *uchars = s.getBuffer(32);
     int32_t cSize =
         u_parseString(input.data(),
                       uchars, s.getCapacity(),
-                      NULL, status);
+                      nullptr, status);
     if(U_FAILURE(*status)) {
         s.releaseBuffer(0);
         fprintf(stderr, "error - parsing of code point(s) \"%s\" failed: %s\n%s\n",
@@ -754,7 +754,7 @@ readAnElement(char *line,
     char *pointer = endCodePoint + 1;
 
     char *commentStart = strchr(pointer, '#');
-    if(commentStart == NULL) {
+    if(commentStart == nullptr) {
         commentStart = strchr(pointer, 0);
     }
 
@@ -825,7 +825,7 @@ parseFractionalUCA(const char *filename,
 {
     if(U_FAILURE(*status)) { return; }
     FILE *data = fopen(filename, "r");
-    if(data == NULL) {
+    if(data == nullptr) {
         fprintf(stderr, "Couldn't open file: %s\n", filename);
         *status = U_FILE_ACCESS_ERROR;
         return;
@@ -848,7 +848,7 @@ parseFractionalUCA(const char *filename,
 
         lineNumber++;
         char *line = fgets(buffer, sizeof(buffer), data);
-        if(line == NULL) {
+        if(line == nullptr) {
             if(feof(data)) {
                 break;
             } else {
@@ -1125,7 +1125,7 @@ buildAndWriteBaseData(CollationBaseDataBuilder &builder,
     LocalMemory<uint8_t> buffer;
     int32_t capacity = 1000000;
     uint8_t *dest = buffer.allocateInsteadAndCopy(capacity);
-    if(dest == NULL) {
+    if(dest == nullptr) {
         fprintf(stderr, "memory allocation (%ld bytes) for file contents failed\n",
                 (long)capacity);
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -1153,7 +1153,7 @@ buildAndWriteBaseData(CollationBaseDataBuilder &builder,
             (icu4xMode ? "ucadata-implicithan-icu4x" : "ucadata-implicithan") :
             (icu4xMode ? "ucadata-unihan-icu4x" : "ucadata-unihan");
     UNewDataMemory *pData=udata_create(path, "icu", dataName, &ucaDataInfo,
-                                       withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+                                       withCopyright ? U_COPYRIGHT_STRING : nullptr, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genuca: udata_create(%s, ucadata.icu) failed - %s\n",
                 path, u_errorName(errorCode));
@@ -1183,7 +1183,7 @@ buildAndWriteBaseData(CollationBaseDataBuilder &builder,
 static void
 setLeadSurrogatesForAssociatedSupplementary(UnicodeSet &bmp, const UnicodeSet &supp) {
     UChar32 c = 0x10000;
-    for(UChar lead = 0xd800; lead < 0xdc00; ++lead, c += 0x400) {
+    for(char16_t lead = 0xd800; lead < 0xdc00; ++lead, c += 0x400) {
         if(supp.containsSome(c, c + 0x3ff)) {
             bmp.add(lead);
         }
@@ -1263,7 +1263,7 @@ buildAndWriteFCDData(const char *path, UErrorCode &errorCode) {
 
     FILE *f=usrc_create(path, "collationfcd.cpp", 2016,
                         "icu/tools/unicode/c/genuca/genuca.cpp");
-    if(f==NULL) {
+    if(f==nullptr) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }

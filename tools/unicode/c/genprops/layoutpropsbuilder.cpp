@@ -253,7 +253,7 @@ LayoutPropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErro
 
     UNewDataMemory *pData = udata_create(
         path, ULAYOUT_DATA_TYPE, ULAYOUT_DATA_NAME, &dataInfo,
-        withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+        withCopyright ? U_COPYRIGHT_STRING : nullptr, &errorCode);
     if (U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops: udata_create(%s, ulayout.icu) failed - %s\n",
                 path, u_errorName(errorCode));

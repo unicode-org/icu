@@ -313,7 +313,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
 
-    void expectParseCurrency(const NumberFormat &fmt, const UChar* currency, double amount, const char *text);
+    void expectParseCurrency(const NumberFormat &fmt, const char16_t* currency, double amount, const char *text);
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
 
@@ -373,10 +373,10 @@ class NumberFormatTest: public CalendarTimeZoneTest {
                         double value, const UnicodeString& string);
 
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                   int32_t pos, int32_t width, UChar pad);
+                   int32_t pos, int32_t width, char16_t pad);
 
     void expectPad(DecimalFormat& fmt, const char *pat,
-                   int32_t pos, int32_t width, UChar pad) {
+                   int32_t pos, int32_t width, char16_t pad) {
         expectPad(fmt, UnicodeString(pat, ""), pos, width, pad);
     }
 
@@ -399,7 +399,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void expectPad(DecimalFormat& fmt, const char *pat,
                    int32_t pos) {
-        expectPad(fmt, pat, pos, 0, (UChar)0);
+        expectPad(fmt, pat, pos, 0, (char16_t)0);
     }
 
     void expect_rbnf(NumberFormat& fmt, const UnicodeString& str, const Formattable& n);

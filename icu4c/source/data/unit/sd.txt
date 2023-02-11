@@ -994,6 +994,22 @@ sd{
         }
     }
     unitsNarrow{
+        angle{
+            radian{
+                one{"{0}رئڊ"}
+                other{"{0}رئڊ"}
+            }
+        }
+        area{
+            hectare{
+                one{"{0}ھيڪٽر"}
+                other{"{0}ھيڪٽر"}
+            }
+            square-meter{
+                one{"{0}m²"}
+                other{"{0}m²"}
+            }
+        }
         compound{
             10p-1{"d{0}"}
             10p-15{"f{0}"}
@@ -1164,10 +1180,24 @@ sd{
                 one{"{0} ميٽر"}
                 other{"{0} ميٽر"}
             }
+            mile-scandinavian{
+                dnam{"ايس ايم آئي"}
+                one{"{0}ايس ايم آئي"}
+                other{"{0}ايس ايم آئي"}
+            }
             millimeter{
                 dnam{"ملي ميٽر"}
                 one{"{0} ملي ميٽر"}
                 other{"{0} ملي ميٽر"}
+            }
+            point{
+                one{"{0}پوائينٽ"}
+                other{"{0}پوائينٽ"}
+            }
+            solar-radius{
+                dnam{"R☉"}
+                one{"{0}R☉"}
+                other{"{0}R☉"}
             }
         }
         mass{

@@ -83,7 +83,7 @@ static void adjustDecimalFormat(const NumberFormatTestTuple& tuple, DecimalForma
     if (tuple.currencyFlag) {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString currency(tuple.currency);
-        const UChar* terminatedCurrency = currency.getTerminatedBuffer();
+        const char16_t* terminatedCurrency = currency.getTerminatedBuffer();
         fmt.setCurrency(terminatedCurrency, status);
         if (U_FAILURE(status)) {
             appendErrorMessage.append("Error setting currency.");
@@ -194,12 +194,12 @@ static void adjustDecimalFormat(const NumberFormatTestTuple& tuple, DecimalForma
 static DecimalFormat*
 newDecimalFormat(const Locale& locale, const UnicodeString& pattern, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<DecimalFormatSymbols> symbols(
             new DecimalFormatSymbols(locale, status), status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     UParseError perror;
     LocalPointer<DecimalFormat> result(
@@ -209,14 +209,14 @@ newDecimalFormat(const Locale& locale, const UnicodeString& pattern, UErrorCode&
         symbols.orphan();
     }
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     return result.orphan();
 }
 
 static DecimalFormat* newDecimalFormat(const NumberFormatTestTuple& tuple, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     Locale en("en");
     return newDecimalFormat(NFTT_GET_FIELD(tuple, locale, en),

@@ -169,7 +169,7 @@ main(int argc, char* argv[]) {
             UChar32 start, end;
             if(ppucd.getRangeForAlgNames(start, end, errorCode)) {
                 const char *type=ppucd.nextField();
-                const char *prefix=ppucd.nextField();  // NULL if type==hangul
+                const char *prefix=ppucd.nextField();  // nullptr if type==hangul
                 namesPropsBuilder->setAlgNamesRange(start, end, type, prefix, errorCode);
             }
         }

@@ -57,7 +57,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
     for(uint32_t s=0;s<sizeof(styles)/sizeof(styles[0]);s++) {
       for(int l=0;l<LOCALE_COUNT;l++) {
         printf("\n");
-        UChar oldChars[200];
+        char16_t oldChars[200];
         int32_t oldLen = -1;
         for(int v=0;v<=expected;v++) {
           
@@ -72,20 +72,20 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
           printf("%18s : ", locID);
           
           UErrorCode subStatus = U_ZERO_ERROR;
-          UChar outchars[200];
+          char16_t outchars[200];
           
-          UDateFormat *dat = udat_open(styles[s],styles[s], locID, NULL, -1, NULL, 0, &subStatus);
+          UDateFormat *dat = udat_open(styles[s],styles[s], locID, nullptr, -1, nullptr, 0, &subStatus);
           
           if(U_FAILURE(subStatus)) {
             printf("ERR: %s\n", u_errorName(subStatus));
             continue;
           }
           
-          int32_t len = udat_format(dat, stuff, outchars, 200, NULL, &subStatus); 
+          int32_t len = udat_format(dat, stuff, outchars, 200, nullptr, &subStatus); 
           
           //printf("\n");
           char utf8[200];
-          u_strToUTF8(utf8, 200, NULL, outchars, len, &subStatus);
+          u_strToUTF8(utf8, 200, nullptr, outchars, len, &subStatus);
           if(oldLen!=len || memcmp(outchars,oldChars,len*sizeof(outchars[0]))) {
             putchar ('!');
             diffs++;

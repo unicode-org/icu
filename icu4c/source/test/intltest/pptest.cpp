@@ -185,7 +185,7 @@ void ParsePositionTest::TestFieldPosition_example()
     }
 
     DecimalFormat *fmt = dynamic_cast<DecimalFormat *>(nf);
-    if(fmt == NULL) {
+    if(fmt == nullptr) {
         errln("NumberFormat::createInstance returned unexpected class type");
         return;
     }

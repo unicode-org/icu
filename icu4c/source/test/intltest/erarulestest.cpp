@@ -44,10 +44,10 @@ void EraRulesTest::testAPIs() {
         "persian",
         "roc",
         //"unknown",
-        NULL
+        nullptr
     };
 
-    for (int32_t i = 0; calTypes[i] != NULL; i++) {
+    for (int32_t i = 0; calTypes[i] != nullptr; i++) {
         UErrorCode status = U_ZERO_ERROR;
         const char *calId = calTypes[i];
 

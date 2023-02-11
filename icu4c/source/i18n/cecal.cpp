@@ -13,6 +13,7 @@
 
 #include "cecal.h"
 #include "gregoimp.h"   //Math
+#include "cstring.h"
 
 U_NAMESPACE_BEGIN
 
@@ -42,6 +43,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+    {        0,        0,       12,       12}, // ORDINAL_MONTH
 };
 
 //-------------------------------------------------------------------------
@@ -130,6 +132,24 @@ CECalendar::jdToCE(int32_t julianDay, int32_t jdEpochOffset, int32_t& year, int3
 
     month = doy / 30;       // 30 -> Coptic/Ethiopic month length up to 12th month
     day = (doy % 30) + 1;   // 1-based days in a month
+}
+
+static const char* kMonthCode13 = "M13";
+
+const char* CECalendar::getTemporalMonthCode(UErrorCode& status) const {
+    if (get(UCAL_MONTH, status) == 12) return kMonthCode13;
+    return Calendar::getTemporalMonthCode(status);
+}
+
+void
+CECalendar::setTemporalMonthCode(const char* code, UErrorCode& status) {
+    if (U_FAILURE(status)) return;
+    if (uprv_strcmp(code, kMonthCode13) == 0) {
+        set(UCAL_MONTH, 12);
+        set(UCAL_IS_LEAP_MONTH, 0);
+        return;
+    }
+    Calendar::setTemporalMonthCode(code, status);
 }
 
 U_NAMESPACE_END

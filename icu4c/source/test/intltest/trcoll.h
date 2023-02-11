@@ -29,7 +29,7 @@ public:
 
     CollationTurkishTest();
     virtual ~CollationTurkishTest();
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     // perform tests for turkish locale with strength PRIMARY
     void TestPrimary(/* char* par */);
@@ -39,8 +39,8 @@ public:
 
 private:
     // static constants
-    static const UChar testSourceCases[][MAX_TOKEN_LEN];
-    static const UChar testTargetCases[][MAX_TOKEN_LEN];
+    static const char16_t testSourceCases[][MAX_TOKEN_LEN];
+    static const char16_t testTargetCases[][MAX_TOKEN_LEN];
     static const Collator::EComparisonResult results[];
 
     Collator *myCollation;

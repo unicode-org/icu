@@ -20,7 +20,7 @@
 #include "line.h"
 #include <stdio.h>
 
-UnicodeSet * Line::needsQuoting = NULL;
+UnicodeSet * Line::needsQuoting = nullptr;
 
 void
 Line::init()
@@ -31,10 +31,10 @@ Line::init()
         strengthFromEmpty = UCOL_OFF;
         cumulativeStrength = UCOL_OFF;
         expStrength = UCOL_OFF;
-        previous = NULL;
-        next = NULL;
-        left = NULL;
-        right = NULL;
+        previous = nullptr;
+        next = nullptr;
+        left = nullptr;
+        right = nullptr;
         isContraction = false;
         isExpansion = false;
         isRemoved = false;
@@ -42,22 +42,22 @@ Line::init()
         expIndex = 0;
         firstCC = 0;
         lastCC = 0;
-        sortKey = NULL;
+        sortKey = nullptr;
 }
 
 Line::Line()
 {
   init();
-  memset(name, 0, 25*sizeof(UChar));
-  memset(expansionString, 0, 25*sizeof(UChar));
+  memset(name, 0, 25*sizeof(char16_t));
+  memset(expansionString, 0, 25*sizeof(char16_t));
 }
 
-Line::Line(const UChar* name, int32_t len)
+Line::Line(const char16_t* name, int32_t len)
 {
   init();
   this->len = len;
   u_memcpy(this->name, name, len);
-  memset(expansionString, 0, 25*sizeof(UChar));
+  memset(expansionString, 0, 25*sizeof(char16_t));
   UChar32 c;
   U16_GET(name, 0, 0, len, c);
   firstCC = u_getCombiningClass(c);
@@ -65,13 +65,13 @@ Line::Line(const UChar* name, int32_t len)
   lastCC = u_getCombiningClass(c);
 }
 
-Line::Line(const UChar name)
+Line::Line(const char16_t name)
 {
     init();
     len = 1;
     this->name[0] = name;
     this->name[1] = 0;
-  memset(expansionString, 0, 25*sizeof(UChar));
+  memset(expansionString, 0, 25*sizeof(char16_t));
   firstCC = u_getCombiningClass(name);
   lastCC = firstCC;
 }
@@ -83,19 +83,19 @@ Line::Line(const UnicodeString &string)
 }
 
 Line::Line(const char *buff, int32_t buffLen, UErrorCode &status) :
-previous(NULL),
-next(NULL),
-left(NULL),
-right(NULL)
+previous(nullptr),
+next(nullptr),
+left(nullptr),
+right(nullptr)
 {
   initFromString(buff, buffLen, status);
 }
 
 Line::Line(const Line &other) :
-  previous(NULL),
-  next(NULL),
-left(NULL),
-right(NULL)
+  previous(nullptr),
+  next(nullptr),
+left(nullptr),
+right(nullptr)
 {
   *this = other;
 }
@@ -178,7 +178,7 @@ Line::copyArray(Line *dest, const Line *src, int32_t size) {
 }
 
 void
-Line::setName(const UChar* name, int32_t len) {
+Line::setName(const char16_t* name, int32_t len) {
   this->len = len;
   u_memcpy(this->name, name, len);
   UChar32 c;
@@ -198,7 +198,7 @@ Line::setToConcat(const Line *first, const Line *second) {
 }
 
 UnicodeString
-Line::stringToName(UChar *string, int32_t len) {
+Line::stringToName(char16_t *string, int32_t len) {
   UErrorCode status = U_ZERO_ERROR;
   UnicodeString result;
   char buffer[256];
@@ -245,7 +245,7 @@ Line::toBundleString()
   if(!needsQuoting) {
     needsQuoting = new UnicodeSet("[[:whitespace:][:c:][:z:][[:ascii:]-[a-zA-Z0-9]]]", status);
   }
-  UChar NFC[50];
+  char16_t NFC[50];
   int32_t NFCLen = unorm_normalize(name, len, UNORM_NFC, 0, NFC, 50, &status);
   result.append("\"");
   if(isReset) {
@@ -292,7 +292,7 @@ Line::toHTMLString()
 {
   UnicodeString result;
   UErrorCode status = U_ZERO_ERROR;
-  UChar NFC[50];
+  char16_t NFC[50];
   int32_t NFCLen = unorm_normalize(name, len, UNORM_NFC, 0, NFC, 50, &status);
   result.append("<span title=\"");
   result.append(stringToName(NFC, NFCLen));
@@ -326,7 +326,7 @@ Line::toString(UBool pretty) {
     }
   } else {
     UErrorCode status = U_ZERO_ERROR;
-    UChar NFC[50];
+    char16_t NFC[50];
     int32_t NFCLen = unorm_normalize(name, len, UNORM_NFC, 0, NFC, 50, &status);
     result.setTo(NFC, NFCLen);
     if(expLen) {
@@ -475,7 +475,7 @@ Line::nextInteresting() {
 }
 
 void
-Line::append(const UChar* n, int32_t length) 
+Line::append(const char16_t* n, int32_t length)
 {
   u_strncat(name, n, length);
   name[len+length] = 0;
@@ -486,7 +486,7 @@ Line::append(const UChar* n, int32_t length)
 }
 
 void
-Line::append(const UChar n) 
+Line::append(const char16_t n)
 {
   name[len] = n;
   name[len+1] = 0;
@@ -512,9 +512,9 @@ int32_t
 Line::write(char *buff, int32_t, UErrorCode &) 
 {
   /*
-    UChar     name[25];
+    char16_t  name[25];
     int32_t   len;
-    UChar     expansionString[25];
+    char16_t  expansionString[25];
     int32_t   expLen;
 
     UColAttributeValue strength;
@@ -652,11 +652,11 @@ Line::initFromString(const char *buff, int32_t, UErrorCode &)
 }
 
 void
-Line::swapCase(UChar *string, int32_t &sLen)
+Line::swapCase(char16_t *string, int32_t &sLen)
 {
   UChar32 c = 0;
   int32_t i = 0, j = 0;
-  UChar buff[256];
+  char16_t buff[256];
   UBool isError = false;
   while(i < sLen) {
     U16_NEXT(string, i, sLen, c);

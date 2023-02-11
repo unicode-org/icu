@@ -39,7 +39,7 @@ UnicodeTest::UnicodeTest()
     unknownPropertyNames=new U_NAMESPACE_QUALIFIER Hashtable(errorCode);
     if(U_FAILURE(errorCode)) {
         delete unknownPropertyNames;
-        unknownPropertyNames=NULL;
+        unknownPropertyNames=nullptr;
     }
     // Ignore some property names altogether.
     for(int32_t i=0; i<UPRV_LENGTHOF(ignorePropNames); ++i) {
@@ -93,7 +93,7 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
     s=u_skipWhitespace(s);
     for(i=0; i<countTokens; ++i) {
         t=tokens[i];
-        if(t!=NULL) {
+        if(t!=nullptr) {
             for(j=0;; ++j) {
                 if(t[j]!=0) {
                     if(s[j]!=t[j]) {
@@ -172,7 +172,7 @@ derivedPropsLineFn(void *context,
                    char *fields[][2], int32_t /* fieldCount */,
                    UErrorCode *pErrorCode)
 {
-    UnicodeTest *me=(UnicodeTest *)context;
+    UnicodeTest *me=static_cast<UnicodeTest*>(context);
     uint32_t start, end;
     int32_t i;
 
@@ -187,7 +187,7 @@ derivedPropsLineFn(void *context,
     if(i<0) {
         UnicodeString propName(fields[1][0], (int32_t)(fields[1][1]-fields[1][0]));
         propName.trim();
-        if(me->unknownPropertyNames->find(propName)==NULL) {
+        if(me->unknownPropertyNames->find(propName)==nullptr) {
             UErrorCode errorCode=U_ZERO_ERROR;
             me->unknownPropertyNames->puti(propName, 1, errorCode);
             me->errln("UnicodeTest warning: unknown property name '%s' in DerivedCoreProperties.txt or DerivedNormalizationProps.txt\n", fields[1][0]);
@@ -212,7 +212,7 @@ void UnicodeTest::TestAdditionalProperties() {
     }
 
     char path[500];
-    if(getUnidataPath(path) == NULL) {
+    if(getUnidataPath(path) == nullptr) {
         errln("unable to find path to source/data/unidata/");
         return;
     }
@@ -351,7 +351,7 @@ void UnicodeTest::TestConsistency() {
     UnicodeSet set1, set2;
     if (nfcImpl->getCanonStartSet(0x49, set1)) {
         /* enumerate all characters that are plausible to be latin letters */
-        for(UChar start=0xa0; start<0x2000; ++start) {
+        for(char16_t start=0xa0; start<0x2000; ++start) {
             UnicodeString decomp=nfd->normalize(UnicodeString(start), errorCode);
             if(decomp.length()>1 && decomp[0]==0x49) {
                 set2.add(start);
@@ -548,11 +548,11 @@ void UnicodeTest::TestEmojiProperties() {
 
 namespace {
 
-UBool hbp(const UChar *s, int32_t length, UProperty which) {
+UBool hbp(const char16_t *s, int32_t length, UProperty which) {
     return u_stringHasBinaryProperty(s, length, which);
 }
 
-UBool hbp(const UChar *s, UProperty which) {
+UBool hbp(const char16_t *s, UProperty which) {
     return u_stringHasBinaryProperty(s, -1, which);
 }
 

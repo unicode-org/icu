@@ -258,7 +258,7 @@ public:
 protected:
     /**
      * Utility method used by create(ICUServiceKey, ICUService).  Subclasses can implement
-     * this instead of create.  The default returns NULL.
+     * this instead of create.  The default returns nullptr.
      */
     virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const;
 

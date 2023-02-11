@@ -159,7 +159,7 @@ inline Hashtable::Hashtable(UBool ignoreKeyCase, UErrorCode& status)
                         : uhash_hashUnicodeString,
             ignoreKeyCase ? uhash_compareCaselessUnicodeString
                         : uhash_compareUnicodeString,
-            NULL,
+            nullptr,
             status);
 }
 
@@ -170,25 +170,25 @@ inline Hashtable::Hashtable(UBool ignoreKeyCase, int32_t size, UErrorCode& statu
                         : uhash_hashUnicodeString,
             ignoreKeyCase ? uhash_compareCaselessUnicodeString
                         : uhash_compareUnicodeString,
-            NULL, size,
+            nullptr, size,
             status);
 }
 
 inline Hashtable::Hashtable(UErrorCode& status)
  : hash(0)
 {
-    init(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, status);
+    init(uhash_hashUnicodeString, uhash_compareUnicodeString, nullptr, status);
 }
 
 inline Hashtable::Hashtable()
  : hash(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    init(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, status);
+    init(uhash_hashUnicodeString, uhash_compareUnicodeString, nullptr, status);
 }
 
 inline Hashtable::~Hashtable() {
-    if (hash != NULL) {
+    if (hash != nullptr) {
         uhash_close(hash);
     }
 }

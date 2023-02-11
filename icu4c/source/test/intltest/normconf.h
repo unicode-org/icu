@@ -28,7 +28,7 @@ class NormalizerConformanceTest : public IntlTest {
     NormalizerConformanceTest();
     virtual ~NormalizerConformanceTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     /**
      * Test the conformance of Normalizer to

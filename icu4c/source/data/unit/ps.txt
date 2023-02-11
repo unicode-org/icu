@@ -978,6 +978,10 @@ ps{
                 one{"{0} ورځ"}
                 other{"{0}d"}
             }
+            decade{
+                one{"{0} لسیز"}
+                other{"{0} لسیز"}
+            }
             hour{
                 dnam{"hr"}
                 one{"{0} h"}

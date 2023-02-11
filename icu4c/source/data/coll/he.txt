@@ -3,22 +3,10 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 he{
     collations{
-        search{
-            Sequence{
-                "[import und-u-co-search]"
-                "‎&׳"
-                "<<''"
-                "‎&״"
-                "<<'\u0022'"
-            }
-            Version{"43"}
-        }
         standard{
             Sequence{
                 "[normalization on]"
                 "[reorder Hebr]"
-                "&[before 2]''<<׳"
-                "&[before 2]'\u0022'<<״"
             }
             Version{"43"}
         }

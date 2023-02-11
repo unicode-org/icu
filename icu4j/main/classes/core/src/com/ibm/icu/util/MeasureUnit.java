@@ -1764,6 +1764,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit POUND_PER_SQUARE_INCH = MeasureUnit.internalGetInstance("pressure", "pound-force-per-square-inch");
 
     /**
+     * Constant for unit of speed: beaufort
+     * @draft ICU 73
+     */
+    public static final MeasureUnit BEAUFORT = MeasureUnit.internalGetInstance("speed", "beaufort");
+
+    /**
      * Constant for unit of speed: kilometer-per-hour
      * @stable ICU 53
      */

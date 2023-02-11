@@ -43,8 +43,8 @@ public:
             dest.setToBogus();
             return dest;
         }
-        const UChar *sArray=src.getBuffer();
-        if(&dest==&src || sArray==NULL) {
+        const char16_t *sArray=src.getBuffer();
+        if(&dest==&src || sArray==nullptr) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             dest.setToBogus();
             return dest;
@@ -57,7 +57,7 @@ public:
         return dest;
     }
     virtual void
-    normalize(const UChar *src, const UChar *limit,
+    normalize(const char16_t *src, const char16_t *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const = 0;
 
     // normalize and append
@@ -82,8 +82,8 @@ public:
         if(U_FAILURE(errorCode)) {
             return first;
         }
-        const UChar *secondArray=second.getBuffer();
-        if(&first==&second || secondArray==NULL) {
+        const char16_t *secondArray=second.getBuffer();
+        if(&first==&second || secondArray==nullptr) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return first;
         }
@@ -103,15 +103,15 @@ public:
         return first;
     }
     virtual void
-    normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+    normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const = 0;
     virtual UBool
     getDecomposition(UChar32 c, UnicodeString &decomposition) const U_OVERRIDE {
-        UChar buffer[4];
+        char16_t buffer[4];
         int32_t length;
-        const UChar *d=impl.getDecomposition(c, buffer, length);
-        if(d==NULL) {
+        const char16_t *d=impl.getDecomposition(c, buffer, length);
+        if(d==nullptr) {
             return false;
         }
         if(d==buffer) {
@@ -123,10 +123,10 @@ public:
     }
     virtual UBool
     getRawDecomposition(UChar32 c, UnicodeString &decomposition) const U_OVERRIDE {
-        UChar buffer[30];
+        char16_t buffer[30];
         int32_t length;
-        const UChar *d=impl.getRawDecomposition(c, buffer, length);
-        if(d==NULL) {
+        const char16_t *d=impl.getRawDecomposition(c, buffer, length);
+        if(d==nullptr) {
             return false;
         }
         if(d==buffer) {
@@ -152,12 +152,12 @@ public:
         if(U_FAILURE(errorCode)) {
             return false;
         }
-        const UChar *sArray=s.getBuffer();
-        if(sArray==NULL) {
+        const char16_t *sArray=s.getBuffer();
+        if(sArray==nullptr) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return false;
         }
-        const UChar *sLimit=sArray+s.length();
+        const char16_t *sLimit=sArray+s.length();
         return sLimit==spanQuickCheckYes(sArray, sLimit, errorCode);
     }
     virtual UNormalizationCheckResult
@@ -169,15 +169,15 @@ public:
         if(U_FAILURE(errorCode)) {
             return 0;
         }
-        const UChar *sArray=s.getBuffer();
-        if(sArray==NULL) {
+        const char16_t *sArray=s.getBuffer();
+        if(sArray==nullptr) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
         return (int32_t)(spanQuickCheckYes(sArray, sArray+s.length(), errorCode)-sArray);
     }
-    virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const = 0;
+    virtual const char16_t *
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const = 0;
 
     virtual UNormalizationCheckResult getQuickCheck(UChar32) const {
         return UNORM_YES;
@@ -193,13 +193,13 @@ public:
 
 private:
     virtual void
-    normalize(const UChar *src, const UChar *limit,
+    normalize(const char16_t *src, const char16_t *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.decompose(src, limit, &buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
-    normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+    normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.decomposeAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
@@ -228,9 +228,9 @@ private:
         return sLimit == impl.decomposeUTF8(0, s, sLimit, nullptr, nullptr, errorCode);
     }
 
-    virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const U_OVERRIDE {
-        return impl.decompose(src, limit, NULL, errorCode);
+    virtual const char16_t *
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const U_OVERRIDE {
+        return impl.decompose(src, limit, nullptr, errorCode);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
     virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const U_OVERRIDE {
@@ -255,7 +255,7 @@ public:
 
 private:
     virtual void
-    normalize(const UChar *src, const UChar *limit,
+    normalize(const char16_t *src, const char16_t *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.compose(src, limit, onlyContiguous, true, buffer, errorCode);
     }
@@ -277,7 +277,7 @@ private:
     }
 
     virtual void
-    normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+    normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.composeAndAppend(src, limit, doNormalize, onlyContiguous, safeMiddle, buffer, errorCode);
@@ -288,8 +288,8 @@ private:
         if(U_FAILURE(errorCode)) {
             return false;
         }
-        const UChar *sArray=s.getBuffer();
-        if(sArray==NULL) {
+        const char16_t *sArray=s.getBuffer();
+        if(sArray==nullptr) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return false;
         }
@@ -313,8 +313,8 @@ private:
         if(U_FAILURE(errorCode)) {
             return UNORM_MAYBE;
         }
-        const UChar *sArray=s.getBuffer();
-        if(sArray==NULL) {
+        const char16_t *sArray=s.getBuffer();
+        if(sArray==nullptr) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return UNORM_MAYBE;
         }
@@ -322,9 +322,9 @@ private:
         impl.composeQuickCheck(sArray, sArray+s.length(), onlyContiguous, &qcResult);
         return qcResult;
     }
-    virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &) const U_OVERRIDE {
-        return impl.composeQuickCheck(src, limit, onlyContiguous, NULL);
+    virtual const char16_t *
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &) const U_OVERRIDE {
+        return impl.composeQuickCheck(src, limit, onlyContiguous, nullptr);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
     virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const U_OVERRIDE {
@@ -350,20 +350,20 @@ public:
 
 private:
     virtual void
-    normalize(const UChar *src, const UChar *limit,
+    normalize(const char16_t *src, const char16_t *limit,
               ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.makeFCD(src, limit, &buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
-    normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+    normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.makeFCDAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
     }
-    virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const U_OVERRIDE {
-        return impl.makeFCD(src, limit, NULL, errorCode);
+    virtual const char16_t *
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const U_OVERRIDE {
+        return impl.makeFCD(src, limit, nullptr, errorCode);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
     virtual UBool hasBoundaryBefore(UChar32 c) const U_OVERRIDE {

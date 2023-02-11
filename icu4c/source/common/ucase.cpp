@@ -50,7 +50,7 @@ ucase_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     }
 
     /* add the start code point of each same-value range of the trie */
-    utrie2_enum(&ucase_props_singleton.trie, NULL, _enumPropertyStartsRange, sa);
+    utrie2_enum(&ucase_props_singleton.trie, nullptr, _enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 
@@ -195,12 +195,12 @@ ucase_totitle(UChar32 c) {
     return c;
 }
 
-static const UChar iDot[2] = { 0x69, 0x307 };
-static const UChar jDot[2] = { 0x6a, 0x307 };
-static const UChar iOgonekDot[3] = { 0x12f, 0x307 };
-static const UChar iDotGrave[3] = { 0x69, 0x307, 0x300 };
-static const UChar iDotAcute[3] = { 0x69, 0x307, 0x301 };
-static const UChar iDotTilde[3] = { 0x69, 0x307, 0x303 };
+static const char16_t iDot[2] = { 0x69, 0x307 };
+static const char16_t jDot[2] = { 0x6a, 0x307 };
+static const char16_t iOgonekDot[3] = { 0x12f, 0x307 };
+static const char16_t iDotGrave[3] = { 0x69, 0x307, 0x300 };
+static const char16_t iDotAcute[3] = { 0x69, 0x307, 0x301 };
+static const char16_t iDotTilde[3] = { 0x69, 0x307, 0x303 };
 
 
 U_CFUNC void U_EXPORT2
@@ -250,7 +250,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
          * full case mappings. Add them all.
          */
         const uint16_t *pe0, *pe=GET_EXCEPTIONS(&ucase_props_singleton, props);
-        const UChar *closure;
+        const char16_t *closure;
         uint16_t excWord=*pe++;
         int32_t idx, closureLength, fullLength, length;
 
@@ -276,10 +276,10 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
             pe=pe0;
             GET_SLOT_VALUE(excWord, UCASE_EXC_CLOSURE, pe, closureLength);
             closureLength&=UCASE_CLOSURE_MAX_LENGTH; /* higher bits are reserved */
-            closure=(const UChar *)pe+1; /* behind this slot, unless there are full case mappings */
+            closure=(const char16_t *)pe+1; /* behind this slot, unless there are full case mappings */
         } else {
             closureLength=0;
-            closure=NULL;
+            closure=nullptr;
         }
 
         /* add the full case folding */
@@ -299,7 +299,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
             /* add the full case folding string */
             length=fullLength&0xf;
             if(length!=0) {
-                sa->addString(sa->set, (const UChar *)pe, length);
+                sa->addString(sa->set, (const char16_t *)pe, length);
                 pe+=length;
             }
 
@@ -309,7 +309,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
             fullLength>>=4;
             pe+=fullLength;
 
-            closure=(const UChar *)pe; /* behind full case mappings */
+            closure=(const char16_t *)pe; /* behind full case mappings */
         }
 
         /* add each code point in the closure string */
@@ -325,7 +325,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
  * must be length>0 and max>0 and length<=max
  */
 static inline int32_t
-strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
+strcmpMax(const char16_t *s, int32_t length, const char16_t *t, int32_t max) {
     int32_t c1, c2;
 
     max-=length; /* we require length<=max, so no need to decrement max in the loop */
@@ -350,10 +350,10 @@ strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
 }
 
 U_CFUNC UBool U_EXPORT2
-ucase_addStringCaseClosure(const UChar *s, int32_t length, const USetAdder *sa) {
+ucase_addStringCaseClosure(const char16_t *s, int32_t length, const USetAdder *sa) {
     int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth;
 
-    if(ucase_props_singleton.unfold==NULL || s==NULL) {
+    if(ucase_props_singleton.unfold==nullptr || s==nullptr) {
         return false; /* no reverse case folding data, or no string */
     }
     if(length<=1) {
@@ -383,7 +383,7 @@ ucase_addStringCaseClosure(const UChar *s, int32_t length, const USetAdder *sa) 
     limit=unfoldRows;
     while(start<limit) {
         i=(start+limit)/2;
-        const UChar *p=reinterpret_cast<const UChar *>(unfold+(i*unfoldRowWidth));
+        const char16_t *p=reinterpret_cast<const char16_t *>(unfold+(i*unfoldRowWidth));
         result=strcmpMax(s, length, p, unfoldStringWidth);
 
         if(result==0) {
@@ -409,7 +409,7 @@ ucase_addStringCaseClosure(const UChar *s, int32_t length, const USetAdder *sa) 
 U_NAMESPACE_BEGIN
 
 FullCaseFoldingIterator::FullCaseFoldingIterator()
-        : unfold(reinterpret_cast<const UChar *>(ucase_props_singleton.unfold)),
+        : unfold(reinterpret_cast<const char16_t *>(ucase_props_singleton.unfold)),
           unfoldRows(unfold[UCASE_UNFOLD_ROWS]),
           unfoldRowWidth(unfold[UCASE_UNFOLD_ROW_WIDTH]),
           unfoldStringWidth(unfold[UCASE_UNFOLD_STRING_WIDTH]),
@@ -421,7 +421,7 @@ FullCaseFoldingIterator::FullCaseFoldingIterator()
 UChar32
 FullCaseFoldingIterator::next(UnicodeString &full) {
     // Advance past the last-delivered code point.
-    const UChar *p=unfold+(currentRow*unfoldRowWidth);
+    const char16_t *p=unfold+(currentRow*unfoldRowWidth);
     if(rowCpIndex>=unfoldRowWidth || p[rowCpIndex]==0) {
         ++currentRow;
         p+=unfoldRowWidth;
@@ -708,7 +708,7 @@ ucase_isCaseSensitive(UChar32 c) {
 #define is_sep(c) ((c)=='_' || (c)=='-' || (c)==0)
 
 /**
- * Requires non-NULL locale ID but otherwise does the equivalent of
+ * Requires non-nullptr locale ID but otherwise does the equivalent of
  * checking for language codes as if uloc_getLanguage() were called:
  * Accepts both 2- and 3-letter codes and accepts case variants.
  */
@@ -721,7 +721,7 @@ ucase_getCaseLocale(const char *locale) {
      * examined and copied/transformed.
      *
      * Because this code does not want to depend on uloc, the caller must
-     * pass in a non-NULL locale, i.e., may need to call uloc_getDefault().
+     * pass in a non-nullptr locale, i.e., may need to call uloc_getDefault().
      */
     char c=*locale++;
     // Fastpath for English "en" which is often used for default (=root locale) case mappings,
@@ -904,7 +904,7 @@ static UBool
 isFollowedByCasedLetter(UCaseContextIterator *iter, void *context, int8_t dir) {
     UChar32 c;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -929,7 +929,7 @@ isPrecededBySoftDotted(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -986,7 +986,7 @@ isPrecededBy_I(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -1010,7 +1010,7 @@ isFollowedByMoreAbove(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -1033,7 +1033,7 @@ isFollowedByDotAbove(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -1053,7 +1053,7 @@ isFollowedByDotAbove(UCaseContextIterator *iter, void *context) {
 U_CAPI int32_t U_EXPORT2
 ucase_toFullLower(UChar32 c,
                   UCaseContextIterator *iter, void *context,
-                  const UChar **pString,
+                  const char16_t **pString,
                   int32_t loc) {
     // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
     U_ASSERT(c >= 0);
@@ -1180,7 +1180,7 @@ ucase_toFullLower(UChar32 c,
             full&=UCASE_FULL_LOWER;
             if(full!=0) {
                 /* set the output pointer to the lowercase mapping */
-                *pString=reinterpret_cast<const UChar *>(pe+1);
+                *pString=reinterpret_cast<const char16_t *>(pe+1);
 
                 /* return the string length */
                 return full;
@@ -1204,7 +1204,7 @@ ucase_toFullLower(UChar32 c,
 static int32_t
 toUpperOrTitle(UChar32 c,
                UCaseContextIterator *iter, void *context,
-               const UChar **pString,
+               const char16_t **pString,
                int32_t loc,
                UBool upperNotTitle) {
     // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
@@ -1286,7 +1286,7 @@ toUpperOrTitle(UChar32 c,
 
             if(full!=0) {
                 /* set the output pointer to the result string */
-                *pString=reinterpret_cast<const UChar *>(pe);
+                *pString=reinterpret_cast<const char16_t *>(pe);
 
                 /* return the string length */
                 return full;
@@ -1315,7 +1315,7 @@ toUpperOrTitle(UChar32 c,
 U_CAPI int32_t U_EXPORT2
 ucase_toFullUpper(UChar32 c,
                   UCaseContextIterator *iter, void *context,
-                  const UChar **pString,
+                  const char16_t **pString,
                   int32_t caseLocale) {
     return toUpperOrTitle(c, iter, context, pString, caseLocale, true);
 }
@@ -1323,7 +1323,7 @@ ucase_toFullUpper(UChar32 c,
 U_CAPI int32_t U_EXPORT2
 ucase_toFullTitle(UChar32 c,
                   UCaseContextIterator *iter, void *context,
-                  const UChar **pString,
+                  const char16_t **pString,
                   int32_t caseLocale) {
     return toUpperOrTitle(c, iter, context, pString, caseLocale, false);
 }
@@ -1440,7 +1440,7 @@ ucase_fold(UChar32 c, uint32_t options) {
 
 U_CAPI int32_t U_EXPORT2
 ucase_toFullFolding(UChar32 c,
-                    const UChar **pString,
+                    const char16_t **pString,
                     uint32_t options) {
     // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
     U_ASSERT(c >= 0);
@@ -1493,7 +1493,7 @@ ucase_toFullFolding(UChar32 c,
 
             if(full!=0) {
                 /* set the output pointer to the result string */
-                *pString=reinterpret_cast<const UChar *>(pe);
+                *pString=reinterpret_cast<const char16_t *>(pe);
 
                 /* return the string length */
                 return full;
@@ -1562,7 +1562,7 @@ u_foldCase(UChar32 c, uint32_t options) {
 U_CFUNC int32_t U_EXPORT2
 ucase_hasBinaryProperty(UChar32 c, UProperty which) {
     /* case mapping properties */
-    const UChar *resultString;
+    const char16_t *resultString;
     switch(which) {
     case UCHAR_LOWERCASE:
         return (UBool)(UCASE_LOWER==ucase_getType(c));
@@ -1589,17 +1589,17 @@ ucase_hasBinaryProperty(UChar32 c, UProperty which) {
      * start sets for normalization and case mappings.
      */
     case UCHAR_CHANGES_WHEN_LOWERCASED:
-        return (UBool)(ucase_toFullLower(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+        return (UBool)(ucase_toFullLower(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     case UCHAR_CHANGES_WHEN_UPPERCASED:
-        return (UBool)(ucase_toFullUpper(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+        return (UBool)(ucase_toFullUpper(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     case UCHAR_CHANGES_WHEN_TITLECASED:
-        return (UBool)(ucase_toFullTitle(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+        return (UBool)(ucase_toFullTitle(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     /* case UCHAR_CHANGES_WHEN_CASEFOLDED: -- in uprops.c */
     case UCHAR_CHANGES_WHEN_CASEMAPPED:
         return (UBool)(
-            ucase_toFullLower(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0 ||
-            ucase_toFullUpper(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0 ||
-            ucase_toFullTitle(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+            ucase_toFullLower(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0 ||
+            ucase_toFullUpper(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0 ||
+            ucase_toFullTitle(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     default:
         return false;
     }
