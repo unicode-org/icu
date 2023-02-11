@@ -66,6 +66,40 @@ public:
   virtual const char * getType() const override;
 
 
+  /**
+   * Gets The Temporal monthCode value corresponding to the month for the date.
+   * The value is a string identifier that starts with the literal grapheme
+   * "M" followed by two graphemes representing the zero-padded month number
+   * of the current month in a normal (non-leap) year and suffixed by an
+   * optional literal grapheme "L" if this is a leap month in a lunisolar
+   * calendar. For Chinese calendars (including Dangi), the values are
+   * "M01" .. "M12" for non-leap year, and "M01" .. "M12" with one of
+   * "M01L" .. "M12L" for leap year.
+   *
+   * @param status        ICU Error Code
+   * @return       One of 24 possible strings in
+   *               {"M01" .. "M12", "M01L" .. "M12L"}.
+   * @draft ICU 73
+   */
+  virtual const char* getTemporalMonthCode(UErrorCode &status) const override;
+
+  /**
+   * Sets The Temporal monthCode which is a string identifier that starts
+   * with the literal grapheme "M" followed by two graphemes representing
+   * the zero-padded month number of the current month in a normal
+   * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+   * is a leap month in a lunisolar calendar. For Chinese calendars, the values
+   * are "M01" .. "M12" for non-leap years, and "M01" .. "M12" plus one in
+   * "M01L" .. "M12L" for leap year.
+   *
+   * @param temporalMonth  The value to be set for temporal monthCode. One of
+   *                    24 possible strings in {"M01" .. "M12", "M01L" .. "M12L"}.
+   * @param status        ICU Error Code
+   *
+   * @draft ICU 73
+   */
+  virtual void setTemporalMonthCode(const char* code, UErrorCode& status) override;
+
 private:
 
 

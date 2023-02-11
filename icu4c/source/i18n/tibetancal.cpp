@@ -18,6 +18,7 @@
 #include "gregoimp.h" // Math
 #include "uhash.h"
 #include <cmath>
+#include "cstring.h"
 
 // Debugging
 #ifdef U_DEBUG_TIBETANCAL
@@ -415,6 +416,41 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode& ) {
     internalSet(UCAL_DAY_OF_MONTH, tday);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
     internalSet(UCAL_JULIAN_DAY, julianDay);
+}
+
+static const char * const gTemporalLeapMonthCodes[] = {
+    "M01L", "M02L", "M03L", "M04L", "M05L", "M06L",
+    "M07L", "M08L", "M09L", "M10L", "M11L", "M12L", nullptr
+};
+
+const char* TibetanCalendar::getTemporalMonthCode(UErrorCode &status) const {
+    int32_t is_leap = get(UCAL_IS_LEAP_MONTH, status);
+    if (U_FAILURE(status)) return nullptr;
+    if (is_leap != 0) {
+        int32_t month = get(UCAL_MONTH, status);
+        if (U_FAILURE(status)) return nullptr;
+        return gTemporalLeapMonthCodes[month];
+    }
+    return Calendar::getTemporalMonthCode(status);
+}
+
+void
+TibetanCalendar::setTemporalMonthCode(const char* code, UErrorCode& status )
+{
+    if (U_FAILURE(status)) return;
+    int32_t len = static_cast<int32_t>(uprv_strlen(code));
+    if (len != 4 || code[0] != 'M' || code[3] != 'L') {
+        set(UCAL_IS_LEAP_MONTH, 0);
+        return Calendar::setTemporalMonthCode(code, status);
+    }
+    for (int m = 0; gTemporalLeapMonthCodes[m] != nullptr; m++) {
+        if (uprv_strcmp(code, gTemporalLeapMonthCodes[m]) == 0) {
+            set(UCAL_MONTH, m);
+            set(UCAL_IS_LEAP_MONTH, 1);
+            return;
+        }
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
 }
 
 void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &) {
