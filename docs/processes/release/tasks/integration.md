@@ -249,9 +249,10 @@ examples.
 
 *Only available since ICU 54.*
 
-### With ICU 73 and later:
+### With ICU 70 and later:
 
-This test is now performed automatically, based on the following instructions for ICU 64+.
+This test is performed automatically via a post-merge GHA check,
+based on the following instructions for ICU 64+.
 
 ### With ICU 64 and later:
 
