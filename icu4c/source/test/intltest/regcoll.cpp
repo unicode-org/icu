@@ -1249,6 +1249,26 @@ void CollationRegressionTest::TestBeforeWithTooStrongAfter() {
     }
 }
 
+void CollationRegressionTest::TestICU22277() {
+    IcuTestErrorCode errorCode(*this, "TestICU22277");
+    UErrorCode status = U_ZERO_ERROR;
+
+    Collator* c = Collator::createInstance("JA-u-Co-priVatE-KANa", status);
+    if(c != nullptr || U_SUCCESS(status)) {
+      errcheckln(status, "Collator should have failed with MemorySanitizer: use-of-uninitialized-value error - %s",
+                 u_errorName(status));
+      delete c;
+      return;
+    }
+    c = Collator::createInstance("hE-U-cO-pRIVate-UNihan", status);
+    if(c != nullptr || U_SUCCESS(status)) {
+      errcheckln(status, "Collator should have failed with MemorySanitizer: use-of-uninitialized-value error - %s",
+                 u_errorName(status));
+      delete c;
+      return;
+    }
+}
+
 void CollationRegressionTest::compareArray(Collator &c,
                                            const char16_t tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                                            int32_t testCount)
@@ -1387,6 +1407,7 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestCaseFirstCompression);
     TESTCASE_AUTO(TestTrailingComment);
     TESTCASE_AUTO(TestBeforeWithTooStrongAfter);
+    TESTCASE_AUTO(TestICU22277);
     TESTCASE_AUTO_END;
 }
 
