@@ -7219,6 +7219,10 @@ static void TestCDefaultLocale() {
       log_verbose("Skipping TestCDefaultLocale test, as the LANG variable is not set.");
       return;
     }
+    if (getenv("LC_ALL") != NULL) {
+      log_verbose("Skipping TestCDefaultLocale test, as the LC_ALL variable is set.");
+      return;
+    }
     if ((strcmp(env_var, "C") == 0 || strcmp(env_var, "C.UTF-8") == 0) && strcmp(defaultLocale, "en_US_POSIX") != 0) {
       log_err("The default locale for LANG=%s should be en_US_POSIX, not %s\n", env_var, defaultLocale);
     }

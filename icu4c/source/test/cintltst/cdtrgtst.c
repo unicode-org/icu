@@ -26,8 +26,10 @@
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
+#include "unicode/uchar.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cintltst.h"
 #include "cdtrgtst.h"
 #include "cmemory.h"
@@ -190,8 +192,12 @@ void Test4056591()
             log_err("myFormatit failed!\n");
         }
         else if(u_strcmp(gotdate, expdate) !=0){
-            log_err("set2DigitYearStart broken for %s \n  got: %s, expected: %s\n", austrdup(s),
-                austrdup(gotdate), austrdup(expdate) );
+            if (strcmp("gregorian", ucal_getType(udat_getCalendar(def), &status)) == 0) {
+                // Only report error if the calendar is gregorian because the
+                // expectation is only for gregorian.
+                log_err("set2DigitYearStart broken for %s \n  got: %s, expected: %s\n", austrdup(s),
+                    austrdup(gotdate), austrdup(expdate) );
+            }
         }
     }
     
@@ -241,6 +247,30 @@ void Test4059917()
     free(myDate);
 }
 
+UBool EqualIgnoreNumberingSystem(UChar* a, UChar* b);
+// This function return true if the sting contains the same value or the
+// numerical values are the same if we ignore the numbering system.
+UBool EqualIgnoreNumberingSystem(UChar* a, UChar* b) {
+    // len1 and len2 may not be the same if one of them are numeric outside BMP.
+    int32_t len1 = u_strlen(a);
+    int32_t len2 = u_strlen(b);
+    UChar32 ch1, ch2;
+    int32_t idx1, idx2;
+    idx1=idx2=0;
+    // U16_NEXT will increment idx1 and idx2 inside the loop.
+    while (idx1 < len1 && idx2 < len2) {
+        U16_NEXT(a, idx1, len1, ch1);
+        U16_NEXT(b, idx2, len2, ch2);
+        if (ch1 != ch2) {
+            int32_t digit1 = u_charDigitValue(ch1);
+            int32_t digit2 = u_charDigitValue(ch2);
+            if (digit1 < 0 || digit1 != digit2) { return false; }
+        }
+    }
+    // only return true if both reach end of the string.
+    return idx1 == len1 && idx2 == len2;
+}
+
 void aux917( UDateFormat *fmt, UChar* str) 
 {    
     int32_t resultlength, resultlengthneeded;
@@ -266,7 +296,14 @@ void aux917( UDateFormat *fmt, UChar* str)
     status = U_ZERO_ERROR;
     formatted = myFormatit(fmt, d1);
     if( u_strcmp(formatted,str)!=0) {
-        log_err("Fail: Want %s Got: %s\n", austrdup(str),  austrdup(formatted) );
+        // We may get non-ASCII result back for some locale such as ne_NP
+        // which use numbering systems other than latn
+        if (strcmp("gregorian", ucal_getType(udat_getCalendar(fmt), &status)) != 0) {
+          log_verbose("Skipping Test4059917 when the default date time format is not using gregorian calendar.");
+
+        } else if (!EqualIgnoreNumberingSystem(formatted,str)) {
+          log_err("Fail: Want %s Got: %s\n", austrdup(str),  austrdup(formatted) );
+        }
     }
     free(pat);
 }
