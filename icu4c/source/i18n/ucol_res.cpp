@@ -390,7 +390,7 @@ CollationLoader::loadFromData(UErrorCode &errorCode) {
     LocalUResourceBundlePointer binary(ures_getByKey(data, "%%CollationBin", nullptr, &errorCode));
     // Note: U_MISSING_RESOURCE_ERROR --> The old code built from rules if available
     // but that created undesirable dependencies.
-    int32_t length;
+    int32_t length = 0;
     const uint8_t *inBytes = ures_getBinary(binary.getAlias(), &length, &errorCode);
     CollationDataReader::read(rootEntry->tailoring, inBytes, length, *t, errorCode);
     // Note: U_COLLATOR_VERSION_MISMATCH --> The old code built from rules if available

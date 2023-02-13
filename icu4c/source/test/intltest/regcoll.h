@@ -237,6 +237,9 @@ public:
     void TestTrailingComment();
     void TestBeforeWithTooStrongAfter();
 
+    // Test use-of-uninitialized-value
+    void TestICU22277();
+
 private:
     //------------------------------------------------------------------------
     // Internal utilities
