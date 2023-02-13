@@ -1,0 +1,136 @@
+# Copyright (C) 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU environment test tasks.
+#
+
+name: GHA EnvTest
+
+on:
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+  schedule:
+    # This cron schedule is set to run 10:23 UTC every SAT
+    - cron: '23 10 * * SAT'
+
+jobs:
+  #=================================================================
+  # locale env tests.
+  env-test-locale:
+    runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" let other jobs keep running even if the test break in some locales.
+      fail-fast: false
+      matrix:
+        # Since we have total 500+ locales to run on three set of test, we create
+        # many jobs to test concurrently.
+        # shard is used to bucket the lines from the locale list into jobs.
+        # Currently we run testing of 30 locales per shard, and we have total 17 shards.
+        # 17x30 = 510 > 502 (the number of locales in 'locale -a').
+        tests_per_shard: [30]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    steps:
+      - name: Install all locales by apt-get
+        run: |
+          sudo apt-get update -y;
+          sudo apt-get install -y locales-all;
+      - name: Show installed locales post apt-get
+        run: |
+          locale -a;
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cd icu4c/source/;
+          ./runConfigureICU Linux;
+          make -j10 tests;
+      - name: Test different locales as LC_ALL
+        run: |
+          echo "This job run the environment test of the following Locales";
+          begin=$(( ${{matrix.shard}} * ${{matrix.tests_per_shard}} + 1));
+          end=$(( (${{matrix.shard}}+1) * ${{matrix.tests_per_shard}} ));
+          sedarg=${begin},${end}p;
+          locale -a |sed -n ${sedarg};
+
+          cd icu4c/source/test;
+          for loc in `locale -a |sed -n ${sedarg}`;
+          do
+              echo "============================================";
+              echo "Start Tests under LC_ALL=$loc locale";
+              for test_dir in iotest cintltst intltest
+              do
+                  cd $test_dir;
+                  LC_ALL=$loc make check;
+                  cd ..;
+              done
+
+              echo "Complete Tests under LC_ALL=$loc locale";
+              echo "============================================";
+          done
+
+          echo "This job completed the test of the following Locales";
+          locale -a |sed -n ${sedarg};
+
+  #=================================================================
+  # tz env tests.
+  env-test-tz:
+    runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" let other jobs keep running even if the test break in some timezones.
+      fail-fast: false
+      matrix:
+        # Since we have total 600+ timezones to run on three set of test, we create
+        # many jobs to test concurrently.
+        # shard is used to bucket the lines from the timezone list into jobs.
+        # Currently we run testing of 30 timezones per shard, and we have total 21 shards.
+        # 21x30 = 630 > 604 (the number of known timezones).
+        tests_per_shard: [30]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    steps:
+      - name: Install all locales by apt-get
+        run: |
+          sudo apt-get update -y;
+          sudo apt-get install -y tzdata;
+      - name: Show all the TimeZones
+        run: |
+          echo "Total number of TimeZone is "
+          find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|wc -l;
+          find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|cut -d '/' -f5-50;
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cd icu4c/source/;
+          ./runConfigureICU Linux;
+          make -j10 tests;
+      - name: Test different locales as TZ
+        run: |
+          echo "This job run the environment test of the following TimeZones";
+          begin=$(( ${{matrix.shard}} * ${{matrix.tests_per_shard}} + 1));
+          end=$(( (${{matrix.shard}}+1) * ${{matrix.tests_per_shard}} ));
+          sedarg=${begin},${end}p;
+          find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|sed -n ${sedarg}|cut -d '/' -f5-50;
+
+          cd icu4c/source/test;
+          for tz in `find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|sed -n ${sedarg}|cut -d '/' -f5-50`;
+
+          do
+              echo "============================================";
+              echo "Start Tests under TZ=$tz TimeZone";
+              for test_dir in iotest cintltst intltest
+              do
+                  cd $test_dir;
+                  TZ=$tz make check;
+                  cd ..;
+              done
+
+              echo "Complete Tests under TZ=$tz TimeZone";
+              echo "============================================";
+          done
+
+          echo "This job completed the test of the following TimeZones";
+          find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|sed -n ${sedarg}|cut -d '/' -f5-50;
+
+  #=================================================================

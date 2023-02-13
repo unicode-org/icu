@@ -488,22 +488,23 @@ void CollationIteratorTest::TestAssignment()
     CollationElementIterator *iter4 
                         = coll->createCollationElementIterator(source);
     CollationElementIterator iter5(*iter4);
+    int32_t order4, order5;
     if (*iter4 != iter5) {
         errln("collation iterator assignment does not produce the same elements");
     }
-    iter4->next(status);
+    order4 = iter4->next(status);
     if (U_FAILURE(status) || *iter4 == iter5) {
         errln("collation iterator not equal");
     }
-    iter5.next(status);
+    order5 = iter5.next(status);
     if (U_FAILURE(status) || *iter4 != iter5) {
         errln("collation iterator equal");
     }
-    iter4->next(status);
+    order4 = iter4->next(status);
     if (U_FAILURE(status) || *iter4 == iter5) {
         errln("collation iterator not equal");
     }
-    iter5.next(status);
+    order5 = iter5.next(status);
     if (U_FAILURE(status) || *iter4 != iter5) {
         errln("collation iterator equal");
     }
@@ -511,21 +512,24 @@ void CollationIteratorTest::TestAssignment()
     if (*iter4 != iter6) {
         errln("collation iterator equal");
     }
-    iter4->next(status);
+    order4 = iter4->next(status);
     if (U_FAILURE(status) || *iter4 == iter5) {
         errln("collation iterator not equal");
     }
-    iter5.next(status);
+    order5 = iter5.next(status);
     if (U_FAILURE(status) || *iter4 != iter5) {
         errln("collation iterator equal");
     }
-    iter4->next(status);
-    if (U_FAILURE(status) || *iter4 == iter5) {
-        errln("collation iterator not equal");
-    }
-    iter5.next(status);
-    if (U_FAILURE(status) || *iter4 != iter5) {
-        errln("collation iterator equal");
+    if (!(order4 == CollationElementIterator::NULLORDER &&
+          order5 == CollationElementIterator::NULLORDER)) {
+        order4 = iter4->next(status);
+        if (U_FAILURE(status) || *iter4 == iter5) {
+            errln("collation iterator not equal");
+        }
+        order5 = iter5.next(status);
+        if (U_FAILURE(status) || *iter4 != iter5) {
+            errln("collation iterator equal");
+        }
     }
     delete iter1;
     delete iter4;

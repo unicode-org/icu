@@ -147,7 +147,17 @@ TimeZoneTest::TestGenericAPI()
 
     /* Host time zone's offset should match the offset returned by uprv_timezone() */
     if (hostZoneRawOffset != tzoffset * (-1000)) {
-        errln("FAIL: detectHostTimeZone()'s raw offset != host timezone's offset");
+        UnicodeString id;
+        hostZone->getID(id);
+        // Known issues in ICU-22274 we have issues in time zone
+        // Africa/Casablanca Europe/Dublin America/Godthab America/Nuuk
+        if (id == u"Africa/Casablanca" || id == u"Europe/Dublin" ||
+            id == u"America/Godthab" || id == u"America/Nuuk" ||
+            id == u"Africa/El_Aaiun") {
+          logKnownIssue( "ICU-22274", "detectHostTimeZone()'s raw offset != host timezone's offset in TimeZone " + id);
+        } else {
+          errln("FAIL: detectHostTimeZone()'s raw offset != host timezone's offset");
+        }
     }
     delete hostZone;
 

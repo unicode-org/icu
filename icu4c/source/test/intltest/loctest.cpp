@@ -1407,13 +1407,15 @@ LocaleTest::Test4139940()
     // o double acute (\u0151) IS.
     char16_t ocf = 0x00f4;
     char16_t oda = 0x0151;
+
     if (str.indexOf(oda) < 0 || str.indexOf(ocf) >= 0) {
-      /* If the default locale is "th" this test will fail because of the buddhist calendar. */
-      if (strcmp(Locale::getDefault().getLanguage(), "th") != 0) {
+      /* If the default calendar of the default locale is not "gregorian" this test will fail. */
+      LocalPointer<Calendar> defaultCalendar(Calendar::createInstance(status));
+      if (strcmp(defaultCalendar->getType(), "gregorian") == 0) {
         errln("Fail: Monday in Hungarian is wrong - oda's index is %d and ocf's is %d",
               str.indexOf(oda), str.indexOf(ocf));
       } else {
-        logln(UnicodeString("An error is produce in buddhist calendar."));
+        logln(UnicodeString("An error is produce in non Gregorian calendar."));
       }
       logln(UnicodeString("String is: ") + str );
     }
