@@ -2086,7 +2086,9 @@ PREDEFINED             = U_EXPORT2= \
                          U_CHAR16_IS_TYPEDEF=0 \
                          U_CPLUSPLUS_VERSION=11 \
                          U_WCHAR_IS_UTF16 \
-                         U_FINAL=final
+                         U_FINAL=final \
+                         U_SHOW_DRAFT_API=1 \
+                         U_SHOW_INTERNAL_API =1
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The
