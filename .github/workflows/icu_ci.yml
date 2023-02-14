@@ -498,18 +498,100 @@ jobs:
       - run: mvn -f tools/release/java/pom.xml package dependency:analyze
 
   # Run unit tests with UCONFIG_NO_XXX variations.
-  uconfig_variation-check-unit-tests:
+  uconfig-unit-tests:
     runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
+      fail-fast: false
+      matrix:
+        uconfig_cppflags:
+         # Ignore the following two.
+         # - "-DUCONFIG_NO_FILE_IO=1"
+         # - "-DUCONFIG_NO_CONVERSION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1"
+         - "-DUCONFIG_NO_NORMALIZATION=1"
+         - "-DUCONFIG_NO_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_IDNA=1"
+         - "-DUCONFIG_NO_COLLATION=1"
+         - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_TRANSLITERATION=1"
+         - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
+         - "-DUCONFIG_NO_SERVICN=1"
+         - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         # Turn on all the options in one test.
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICN=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
-      - uses: actions/checkout@v2
-      - run: python3 tools/scripts/uconfig_vars_test.py -u
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Verify no additional new UCONFIG_NO_xxx added
+        run: |
+          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
+          expected_count="12";
+          count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
+          if [ $expected_count != $count ]; then
+              echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $expected_count;
+              echo "Currently UCONFIG_NO_* defined in uconfig.h:";
+              egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h;
+              exit -1
+          fi
+      - name: Build and Test
+        env:
+          CPPFLAGS: ${{ matrix.uconfig_cppflags }}
+        run: |
+          cd icu4c/source/;
+          ./runConfigureICU Linux;
+          make -j2 tests;
 
   # Run header tests with UCONFIG_NO_XXX variations.
-  uconfig_variation-check-all-header-tests:
+  uconfig-header-tests:
     runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
+      fail-fast: false
+      matrix:
+        uconfig_cppflags:
+         # Ignore the following two.
+         # - "-DUCONFIG_NO_FILE_IO=1"
+         # - "-DUCONFIG_NO_CONVERSION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1"
+         - "-DUCONFIG_NO_NORMALIZATION=1"
+         - "-DUCONFIG_NO_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_IDNA=1"
+         - "-DUCONFIG_NO_COLLATION=1"
+         - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_TRANSLITERATION=1"
+         - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
+         - "-DUCONFIG_NO_SERVICN=1"
+         - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         # Turn on all the options in one test.
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICN=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
-      - uses: actions/checkout@v2
-      - run: python3 tools/scripts/uconfig_vars_test.py -p
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Verify no additional new UCONFIG_NO_xxx added
+        run: |
+          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
+          count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
+          if [ "12" != $count ]; then
+              echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $count;
+              echo "Currently UCONFIG_NO_* defined in uconfig.h:";
+              egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h;
+              exit -1
+          fi
+      - name: Build and Install
+        run: |
+          cd icu4c/source/;
+          mkdir /tmp/icu_cnfg;
+          ./runConfigureICU Linux --prefix=/tmp/icu_cnfg;
+          make -j2 install;
+      - name: Test
+        env:
+          UCONFIG_NO: ${{ matrix.uconfig_cppflags }}
+        run: |
+          cd icu4c/source/;
+          PATH=/tmp/icu_cnfg/bin:$PATH make -C test/hdrtst check;
 
   # Build Unicode update tools
   unicode-update-tools:
