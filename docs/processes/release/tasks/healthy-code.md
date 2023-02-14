@@ -343,6 +343,7 @@ automated as part of Travis CI.**</span>
 ---
 
 ## Test uconfig.h variations
+This test is performed automatically by a GitHub Action for each pull request.
 
 Test ICU completely, and run the header test (above) with:
 
