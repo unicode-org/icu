@@ -19,10 +19,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UnicodeSetIterator;
-
 /**
  * Utilities that ought to be on collections, but aren't
  *
@@ -410,16 +406,6 @@ public final class CollectionUtilities {
         return result;
     }
 
-    public static String remove(String source, UnicodeSet removals) {
-        StringBuffer result = new StringBuffer();
-        int cp;
-        for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(source, i);
-            if (!removals.contains(cp)) UTF16.append(result, cp);
-        }
-        return result.toString();
-    }
-
     /**
      * Does one string contain another, starting at a specific offset?
      * @param text
@@ -437,57 +423,6 @@ public final class CollectionUtilities {
             if (pc != tc) return -1;
         }
         return i;
-    }
-
-    /**
-     * Returns the ending offset found by matching characters with testSet, until a position is found that doen't match
-     * @param string
-     * @param offset
-     * @param testSet
-     * @return
-     */
-    public int span(CharSequence string, int offset, UnicodeSet testSet) {
-        while (true) {
-            int newOffset = testSet.matchesAt(string, offset);
-            if (newOffset < 0) return offset;
-        }
-    }
-
-    /**
-     * Returns the ending offset found by matching characters with testSet, until a position is found that does match
-     * @param string
-     * @param offset
-     * @param testSet
-     * @return
-     */
-    public int spanNot(CharSequence string, int offset, UnicodeSet testSet) {
-        while (true) {
-            int newOffset = testSet.matchesAt(string, offset);
-            if (newOffset >= 0) return offset;
-            ++offset; // try next character position
-            // we don't have to worry about surrogates for this.
-        }
-    }
-
-    /**
-     * Modifies Unicode set to flatten the strings. Eg [abc{da}] => [abcd]
-     * Returns the set for chaining.
-     * @param exemplar1
-     * @return
-     */
-    public static UnicodeSet flatten(UnicodeSet exemplar1) {
-        UnicodeSet result = new UnicodeSet();
-        boolean gotString = false;
-        for (UnicodeSetIterator it = new UnicodeSetIterator(exemplar1); it.nextRange();) {
-            if (it.codepoint == UnicodeSetIterator.IS_STRING) {
-                result.addAll(it.string);
-                gotString = true;
-            } else {
-                result.add(it.codepoint, it.codepointEnd);
-            }
-        }
-        if (gotString) exemplar1.set(result);
-        return exemplar1;
     }
 
     /**

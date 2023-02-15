@@ -37,6 +37,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.dev.test.rbbi.RBBITstUtils;
 
 /***********************************************************************
 
@@ -3604,7 +3605,7 @@ the ::BEGIN/::END stuff)
     public void TestThai() {
         // The expectations in this test heavily depends on the Thai dictionary.
         // Therefore, we skip this test under the LSTM configuration.
-        org.junit.Assume.assumeTrue(!TestUtil.skipDictionaryTest());
+        org.junit.Assume.assumeTrue(!RBBITstUtils.skipDictionaryTest());
         Transliterator tr = Transliterator.getInstance("Any-Latin", Transliterator.FORWARD);
         String thaiText =
             "\u0e42\u0e14\u0e22\u0e1e\u0e37\u0e49\u0e19\u0e10\u0e32\u0e19\u0e41\u0e25\u0e49\u0e27, \u0e04\u0e2d" +

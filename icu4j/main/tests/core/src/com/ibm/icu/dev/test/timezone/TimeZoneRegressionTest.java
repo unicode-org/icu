@@ -312,7 +312,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
     TimeZone initialZone = TimeZone.getDefault();
         Calendar cal = Calendar.getInstance();
         TimeZone tz = TimeZone.getTimeZone("PST");
-    TimeZone.setDefault(tz);
+        TimeZone.setDefault(tz);
         cal.setTimeZone(tz);
 
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
