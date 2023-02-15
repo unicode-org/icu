@@ -77,7 +77,7 @@ class UnicodeString;
  *
  * @stable ICU 59
  */
-class U_COMMON_API Edits U_FINAL : public UMemory {
+class U_COMMON_API Edits final : public UMemory {
 public:
     /**
      * Constructs an empty object.
@@ -200,7 +200,7 @@ public:
      * @see getFineIterator
      * @stable ICU 59
      */
-    struct U_COMMON_API Iterator U_FINAL : public UMemory {
+    struct U_COMMON_API Iterator final : public UMemory {
         /**
          * Default constructor, empty iterator.
          * @stable ICU 60

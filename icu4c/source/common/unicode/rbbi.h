@@ -54,7 +54,7 @@ class  UStack;
  *
  * <p>This class is not intended to be subclassed.</p>
  */
-class U_COMMON_API RuleBasedBreakIterator /*U_FINAL*/ : public BreakIterator {
+class U_COMMON_API RuleBasedBreakIterator /*final*/ : public BreakIterator {
 
 private:
     /**
