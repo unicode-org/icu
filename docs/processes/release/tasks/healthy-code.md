@@ -393,6 +393,9 @@ The automated build system should have a machine that sets both
 
 ## Test UCONFIG_NO_CONVERSION
 
+Note: Since ICU 73, this test has been included in the Github Actions Continuous Integration jobs.
+These instructions explain how to run the test manually.
+
 Make sure that the ICU4C common and i18n libraries build with
 UCONFIG_NO_CONVERSION set to 1. We cannot do this as part of "Test uconfig.h
 variations" because the test suites cannot be built like this, but the library
