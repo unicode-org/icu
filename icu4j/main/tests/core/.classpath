@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="**/.svn/" kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-test-framework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-langdata"/>
@@ -18,6 +22,5 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/external-libraries/JUnitParams-1.0.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="/icu4j-tools"/>
 	<classpathentry kind="output" path="out/bin"/>
 </classpath>

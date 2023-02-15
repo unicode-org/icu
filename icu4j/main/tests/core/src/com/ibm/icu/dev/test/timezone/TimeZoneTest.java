@@ -1377,19 +1377,24 @@ public class TimeZoneTest extends TestFmwk
     @Test
     public void TestZoneMeta() {
         java.util.TimeZone save = java.util.TimeZone.getDefault();
-        java.util.TimeZone newZone = java.util.TimeZone.getTimeZone("GMT-08:00");
-        com.ibm.icu.util.TimeZone.setDefault(null);
-        java.util.TimeZone.setDefault(newZone);
-        SimpleTimeZone zone = new SimpleTimeZone(0, "GMT");
-        com.ibm.icu.util.TimeZone defaultZone = com.ibm.icu.util.TimeZone.getDefault();
-        if(defaultZone==null){
-            errln("TimeZone.getDefault() failed for GMT-08:00");
+        com.ibm.icu.util.TimeZone icuTzSave = com.ibm.icu.util.TimeZone.getDefault();
+        try {
+            java.util.TimeZone newZone = java.util.TimeZone.getTimeZone("GMT-08:00");
+            com.ibm.icu.util.TimeZone.setDefault(null);
+            java.util.TimeZone.setDefault(newZone);
+            SimpleTimeZone zone = new SimpleTimeZone(0, "GMT");
+            com.ibm.icu.util.TimeZone defaultZone = com.ibm.icu.util.TimeZone.getDefault();
+            if(defaultZone==null){
+                errln("TimeZone.getDefault() failed for GMT-08:00");
+            }
+            if(zone==null){
+                errln("SimpleTimeZone(0, GMT-08:00) failed for GMT-08:00");
+            }
+        } finally {
+            // reset timezones
+            java.util.TimeZone.setDefault(save);
+            com.ibm.icu.util.TimeZone.setDefault(icuTzSave);
         }
-        if(zone==null){
-            errln("SimpleTimeZone(0, GMT-08:00) failed for GMT-08:00");
-        }
-        //reset
-        java.util.TimeZone.setDefault(save);
     }
 
     // Copied from the protected constant in TimeZone.
@@ -1720,6 +1725,7 @@ public class TimeZoneTest extends TestFmwk
     @Test
     public void TestSetDefault() {
         java.util.TimeZone save = java.util.TimeZone.getDefault();
+        TimeZone icuSave = TimeZone.getDefault();
 
         /*
          * America/Caracs (Venezuela) changed the base offset from -4:00 to
@@ -1772,6 +1778,7 @@ public class TimeZoneTest extends TestFmwk
         }
 
         // Restore the original JDK time zone
+        TimeZone.setDefault(icuSave);
         java.util.TimeZone.setDefault(save);
     }
 

@@ -1215,35 +1215,41 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     @Test
     public void Test4162587() {
-        TimeZone tz = TimeZone.getTimeZone("PST");
-        TimeZone.setDefault(tz);
-        GregorianCalendar cal = new GregorianCalendar(tz);
-        Date d;
+        TimeZone saveZone = TimeZone.getDefault();
 
-        for (int i=0; i<5; ++i) {
-            if (i>0) logln("---");
+        try {
+            TimeZone tz = TimeZone.getTimeZone("PST");
+            TimeZone.setDefault(tz);
+            GregorianCalendar cal = new GregorianCalendar(tz);
+            Date d;
 
-            cal.clear();
-            cal.set(1998, Calendar.APRIL, 5, i, 0);
-            d = cal.getTime();
-            String s0 = d.toString();
-            logln("0 " + i + ": " + s0);
+            for (int i=0; i<5; ++i) {
+                if (i>0) logln("---");
 
-            cal.clear();
-            cal.set(1998, Calendar.APRIL, 4, i+24, 0);
-            d = cal.getTime();
-            String sPlus = d.toString();
-            logln("+ " + i + ": " + sPlus);
+                cal.clear();
+                cal.set(1998, Calendar.APRIL, 5, i, 0);
+                d = cal.getTime();
+                String s0 = d.toString();
+                logln("0 " + i + ": " + s0);
 
-            cal.clear();
-            cal.set(1998, Calendar.APRIL, 6, i-24, 0);
-            d = cal.getTime();
-            String sMinus = d.toString();
-            logln("- " + i + ": " + sMinus);
+                cal.clear();
+                cal.set(1998, Calendar.APRIL, 4, i+24, 0);
+                d = cal.getTime();
+                String sPlus = d.toString();
+                logln("+ " + i + ": " + sPlus);
 
-            if (!s0.equals(sPlus) || !s0.equals(sMinus)) {
-                errln("Fail: All three lines must match");
+                cal.clear();
+                cal.set(1998, Calendar.APRIL, 6, i-24, 0);
+                d = cal.getTime();
+                String sMinus = d.toString();
+                logln("- " + i + ": " + sMinus);
+
+                if (!s0.equals(sPlus) || !s0.equals(sMinus)) {
+                    errln("Fail: All three lines must match");
+                }
             }
+        } finally {
+            TimeZone.setDefault(saveZone);
         }
     }
 

@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -56,7 +55,7 @@ static class TestParams {
 public void TestExtended() {
     // The expectations in this test heavily depends on the Thai dictionary.
     // Therefore, we skip this test under the LSTM configuration.
-    org.junit.Assume.assumeTrue(!TestUtil.skipDictionaryTest());
+    org.junit.Assume.assumeTrue(!RBBITstUtils.skipDictionaryTest());
     TestParams     tp = new TestParams();
 
 

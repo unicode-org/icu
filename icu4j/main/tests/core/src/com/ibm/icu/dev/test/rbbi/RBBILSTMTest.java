@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.BreakIterator;
@@ -43,7 +42,7 @@ public class RBBILSTMTest extends TestFmwk {
     private void runTestFromFile(String filename, int script) {
         // The expectation in this test depends on LSTM, skip the test if the
         // configuration is not build with LSTM data.
-        org.junit.Assume.assumeTrue(!TestUtil.skipLSTMTest());
+        org.junit.Assume.assumeTrue(!RBBITstUtils.skipLSTMTest());
 
         BreakIterator bi = BreakIterator.getWordInstance();
         String testString;

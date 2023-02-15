@@ -7,7 +7,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-currdata"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-langdata"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-regiondata"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-core-tests"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-tools"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="output" path="out/bin"/>
 </classpath>

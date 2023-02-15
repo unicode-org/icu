@@ -16,14 +16,12 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
+import java.util.TimeZone;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
 
 /**
  * TestFmwk is a base class for tests that can be run conveniently from the
@@ -221,19 +219,6 @@ abstract public class TestFmwk extends AbstractTestLog {
     protected static int getIntProperty(String key, int defVal, int maxVal) {
         return getParams().getIntProperty(key, defVal, maxVal);
     }
-
-    protected static TimeZone safeGetTimeZone(String id) {
-        TimeZone tz = TimeZone.getTimeZone(id);
-        if (tz == null) {
-            // should never happen
-            errln("FAIL: TimeZone.getTimeZone(" + id + ") => null");
-        }
-        if (!tz.getID().equals(id)) {
-            warnln("FAIL: TimeZone.getTimeZone(" + id + ") => " + tz.getID());
-        }
-        return tz;
-    }
-
 
     // Utility Methods
 
@@ -482,6 +467,9 @@ abstract public class TestFmwk extends AbstractTestLog {
      * Check the given array to see that all the locales in the expected array
      * are present.
      *
+     * @param <T>
+     *            the type of the objects to check, must have a toString method,
+     *            so anything will do
      * @param msg
      *            string message, for log output
      * @param array
@@ -490,27 +478,7 @@ abstract public class TestFmwk extends AbstractTestLog {
      *            array of locales names we expect to see, or null
      * @return the length of 'array'
      */
-    protected static int checkArray(String msg, Locale array[], String expected[]) {
-        String strs[] = new String[array.length];
-        for (int i = 0; i < array.length; ++i) {
-            strs[i] = array[i].toString();
-        }
-        return checkArray(msg, strs, expected);
-    }
-
-    /**
-     * Check the given array to see that all the locales in the expected array
-     * are present.
-     *
-     * @param msg
-     *            string message, for log output
-     * @param array
-     *            array of locales to check
-     * @param expected
-     *            array of locales names we expect to see, or null
-     * @return the length of 'array'
-     */
-    protected static int checkArray(String msg, ULocale array[], String expected[]) {
+    protected static <T> int checkArray(String msg, T array[], String expected[]) {
         String strs[] = new String[array.length];
         for (int i = 0; i < array.length; ++i) {
             strs[i] = array[i].toString();
@@ -767,5 +735,4 @@ abstract public class TestFmwk extends AbstractTestLog {
 //            System.out.println();
 //        }
     }
-
 }
