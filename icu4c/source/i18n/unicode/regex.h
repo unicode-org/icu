@@ -84,7 +84,7 @@ class  UVector64;
   *
   * @stable ICU 2.4
   */
-class U_I18N_API RegexPattern U_FINAL : public UObject {
+class U_I18N_API RegexPattern final : public UObject {
 public:
 
     /**
@@ -656,7 +656,7 @@ private:
  *
  * @stable ICU 2.4
  */
-class U_I18N_API RegexMatcher U_FINAL : public UObject {
+class U_I18N_API RegexMatcher final : public UObject {
 public:
 
     /**

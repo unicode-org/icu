@@ -81,7 +81,7 @@ class Hashtable;
  * locale at least contains any resources that are to be particularized for the
  * calendar type.
  */
-class U_I18N_API DateFormatSymbols U_FINAL : public UObject  {
+class U_I18N_API DateFormatSymbols final : public UObject  {
 public:
     /**
      * Construct a DateFormatSymbols object by loading format data from

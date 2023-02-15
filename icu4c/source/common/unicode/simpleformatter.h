@@ -59,7 +59,7 @@ class SimpleModifier;
  * @see UMessagePatternApostropheMode
  * @stable ICU 57
  */
-class U_COMMON_API SimpleFormatter U_FINAL : public UMemory {
+class U_COMMON_API SimpleFormatter final : public UMemory {
 public:
     /**
      * Default constructor.
