@@ -78,12 +78,12 @@ static UDataInfo dataInfo = {
 class LayoutPropsBuilder : public PropsBuilder {
 public:
     LayoutPropsBuilder(UErrorCode &errorCode);
-    virtual ~LayoutPropsBuilder() U_OVERRIDE;
+    virtual ~LayoutPropsBuilder() override;
 
-    virtual void setUnicodeVersion(const UVersionInfo version) U_OVERRIDE;
-    virtual void setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) U_OVERRIDE;
-    virtual void build(UErrorCode &errorCode) U_OVERRIDE;
-    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) U_OVERRIDE;
+    virtual void setUnicodeVersion(const UVersionInfo version) override;
+    virtual void setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) override;
+    virtual void build(UErrorCode &errorCode) override;
+    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) override;
 
 private:
     void setIntProp(const UniProps &, const UnicodeSet &newValues,

@@ -217,7 +217,7 @@ class RBBIMonkeyImpl: public UObject {
         RBBIMonkeyImpl *fMonkeyImpl;
       public:
         RBBIMonkeyThread(RBBIMonkeyImpl *impl) : fMonkeyImpl(impl) {}
-        void run() U_OVERRIDE { fMonkeyImpl->runTest(); }
+        void run() override { fMonkeyImpl->runTest(); }
     };
   private:
     void openBreakRules(const char *fileName, UErrorCode &status);

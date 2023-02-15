@@ -410,7 +410,7 @@ class Norm16Writer : public Norms::Enumerator {
 public:
     Norm16Writer(UMutableCPTrie *trie, Norms &n, Normalizer2DataBuilder &b) :
             Norms::Enumerator(n), builder(b), norm16Trie(trie) {}
-    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE {
+    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) override {
         builder.writeNorm16(norm16Trie, start, end, norm);
     }
     Normalizer2DataBuilder &builder;

@@ -168,7 +168,7 @@ struct MicroProps : public MicroPropsGenerator {
      * not already `*this`, it will be overwritten with a copy of `*this`.
      */
     void processQuantity(DecimalQuantity &quantity, MicroProps &micros,
-                         UErrorCode &status) const U_OVERRIDE {
+                         UErrorCode &status) const override {
         (void) quantity;
         (void) status;
         if (this == &micros) {

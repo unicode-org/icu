@@ -299,16 +299,16 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     FixedDecimal(double n, int32_t);
     explicit FixedDecimal(double n);
     FixedDecimal();
-    ~FixedDecimal() U_OVERRIDE;
+    ~FixedDecimal() override;
     FixedDecimal(const UnicodeString &s, UErrorCode &ec);
     FixedDecimal(const FixedDecimal &other);
 
     static FixedDecimal createWithExponent(double n, int32_t v, int32_t e);
 
-    double getPluralOperand(PluralOperand operand) const U_OVERRIDE;
-    bool isNaN() const U_OVERRIDE;
-    bool isInfinite() const U_OVERRIDE;
-    bool hasIntegerValue() const U_OVERRIDE;
+    double getPluralOperand(PluralOperand operand) const override;
+    bool isNaN() const override;
+    bool isInfinite() const override;
+    bool hasIntegerValue() const override;
 
     bool isNanOrInfinity() const;  // used in decimfmtimpl.cpp
 

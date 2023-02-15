@@ -202,7 +202,7 @@ void ErrorCodeTest::TestSubclass() {
 
 class IcuTestErrorCodeTestHelper : public IntlTest {
   public:
-    void errln( const UnicodeString &message ) U_OVERRIDE {
+    void errln( const UnicodeString &message ) override {
         test->assertFalse("Already saw an error", seenError);
         seenError = true;
         test->assertEquals("Message for Error", expectedErrln, message);
@@ -211,7 +211,7 @@ class IcuTestErrorCodeTestHelper : public IntlTest {
         }
     }
 
-    void dataerrln( const UnicodeString &message ) U_OVERRIDE {
+    void dataerrln( const UnicodeString &message ) override {
         test->assertFalse("Already saw an error", seenError);
         seenError = true;
         test->assertEquals("Message for Error", expectedErrln, message);

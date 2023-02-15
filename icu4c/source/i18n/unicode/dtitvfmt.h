@@ -74,7 +74,7 @@ class U_I18N_API FormattedDateInterval : public UMemory, public FormattedValue {
      * Destruct an instance of FormattedDateInterval.
      * @stable ICU 64
      */
-    virtual ~FormattedDateInterval() U_OVERRIDE;
+    virtual ~FormattedDateInterval() override;
 
     /** Copying not supported; use move constructor instead. */
     FormattedDateInterval(const FormattedDateInterval&) = delete;
@@ -89,16 +89,16 @@ class U_I18N_API FormattedDateInterval : public UMemory, public FormattedValue {
     FormattedDateInterval& operator=(FormattedDateInterval&& src) U_NOEXCEPT;
 
     /** @copydoc FormattedValue::toString() */
-    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toString(UErrorCode& status) const override;
 
     /** @copydoc FormattedValue::toTempString() */
-    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toTempString(UErrorCode& status) const override;
 
     /** @copydoc FormattedValue::appendTo() */
-    Appendable &appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
+    Appendable &appendTo(Appendable& appendable, UErrorCode& status) const override;
 
     /** @copydoc FormattedValue::nextPosition() */
-    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const override;
 
   private:
     FormattedDateIntervalData *fData;

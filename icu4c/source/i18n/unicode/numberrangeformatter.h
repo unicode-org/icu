@@ -593,11 +593,11 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      *
      * @stable ICU 63
      */
-    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toString(UErrorCode& status) const override;
 
     // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::toTempString() */
-    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toTempString(UErrorCode& status) const override;
 
     // Copybrief: this method is older than the parent method
     /**
@@ -607,11 +607,11 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      *
      * @stable ICU 63
      */
-    Appendable &appendTo(Appendable &appendable, UErrorCode& status) const U_OVERRIDE;
+    Appendable &appendTo(Appendable &appendable, UErrorCode& status) const override;
 
     // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::nextPosition() */
-    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const override;
 
     /**
      * Extracts the formatted range as a pair of decimal numbers. This endpoint
