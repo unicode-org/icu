@@ -38,7 +38,7 @@ public:
     virtual UnicodeString &
     normalize(const UnicodeString &src,
               UnicodeString &dest,
-              UErrorCode &errorCode) const U_OVERRIDE {
+              UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             dest.setToBogus();
             return dest;
@@ -64,13 +64,13 @@ public:
     virtual UnicodeString &
     normalizeSecondAndAppend(UnicodeString &first,
                              const UnicodeString &second,
-                             UErrorCode &errorCode) const U_OVERRIDE {
+                             UErrorCode &errorCode) const override {
         return normalizeSecondAndAppend(first, second, true, errorCode);
     }
     virtual UnicodeString &
     append(UnicodeString &first,
            const UnicodeString &second,
-           UErrorCode &errorCode) const U_OVERRIDE {
+           UErrorCode &errorCode) const override {
         return normalizeSecondAndAppend(first, second, false, errorCode);
     }
     UnicodeString &
@@ -107,7 +107,7 @@ public:
                        UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const = 0;
     virtual UBool
-    getDecomposition(UChar32 c, UnicodeString &decomposition) const U_OVERRIDE {
+    getDecomposition(UChar32 c, UnicodeString &decomposition) const override {
         char16_t buffer[4];
         int32_t length;
         const char16_t *d=impl.getDecomposition(c, buffer, length);
@@ -122,7 +122,7 @@ public:
         return true;
     }
     virtual UBool
-    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const U_OVERRIDE {
+    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const override {
         char16_t buffer[30];
         int32_t length;
         const char16_t *d=impl.getRawDecomposition(c, buffer, length);
@@ -137,18 +137,18 @@ public:
         return true;
     }
     virtual UChar32
-    composePair(UChar32 a, UChar32 b) const U_OVERRIDE {
+    composePair(UChar32 a, UChar32 b) const override {
         return impl.composePair(a, b);
     }
 
     virtual uint8_t
-    getCombiningClass(UChar32 c) const U_OVERRIDE {
+    getCombiningClass(UChar32 c) const override {
         return impl.getCC(impl.getNorm16(c));
     }
 
     // quick checks
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
+    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return false;
         }
@@ -161,11 +161,11 @@ public:
         return sLimit==spanQuickCheckYes(sArray, sLimit, errorCode);
     }
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
+    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const override {
         return Normalizer2WithImpl::isNormalized(s, errorCode) ? UNORM_YES : UNORM_NO;
     }
     virtual int32_t
-    spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
+    spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return 0;
         }
@@ -194,20 +194,20 @@ public:
 private:
     virtual void
     normalize(const char16_t *src, const char16_t *limit,
-              ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
+              ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.decompose(src, limit, &buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
-                       ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
+                       ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.decomposeAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
     }
 
     void
     normalizeUTF8(uint32_t options, StringPiece src, ByteSink &sink,
-                  Edits *edits, UErrorCode &errorCode) const U_OVERRIDE {
+                  Edits *edits, UErrorCode &errorCode) const override {
         if (U_FAILURE(errorCode)) {
             return;
         }
@@ -219,7 +219,7 @@ private:
         sink.Flush();
     }
     virtual UBool
-    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const U_OVERRIDE {
+    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return false;
         }
@@ -229,20 +229,20 @@ private:
     }
 
     virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const U_OVERRIDE {
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const override {
         return impl.decompose(src, limit, nullptr, errorCode);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
-    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const U_OVERRIDE {
+    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const override {
         return impl.isDecompYes(impl.getNorm16(c)) ? UNORM_YES : UNORM_NO;
     }
-    virtual UBool hasBoundaryBefore(UChar32 c) const U_OVERRIDE {
+    virtual UBool hasBoundaryBefore(UChar32 c) const override {
         return impl.hasDecompBoundaryBefore(c);
     }
-    virtual UBool hasBoundaryAfter(UChar32 c) const U_OVERRIDE {
+    virtual UBool hasBoundaryAfter(UChar32 c) const override {
         return impl.hasDecompBoundaryAfter(c);
     }
-    virtual UBool isInert(UChar32 c) const U_OVERRIDE {
+    virtual UBool isInert(UChar32 c) const override {
         return impl.isDecompInert(c);
     }
 };
@@ -256,14 +256,14 @@ public:
 private:
     virtual void
     normalize(const char16_t *src, const char16_t *limit,
-              ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
+              ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.compose(src, limit, onlyContiguous, true, buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
 
     void
     normalizeUTF8(uint32_t options, StringPiece src, ByteSink &sink,
-                  Edits *edits, UErrorCode &errorCode) const U_OVERRIDE {
+                  Edits *edits, UErrorCode &errorCode) const override {
         if (U_FAILURE(errorCode)) {
             return;
         }
@@ -279,12 +279,12 @@ private:
     virtual void
     normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
-                       ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
+                       ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.composeAndAppend(src, limit, doNormalize, onlyContiguous, safeMiddle, buffer, errorCode);
     }
 
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
+    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return false;
         }
@@ -301,7 +301,7 @@ private:
         return impl.compose(sArray, sArray+s.length(), onlyContiguous, false, buffer, errorCode);
     }
     virtual UBool
-    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const U_OVERRIDE {
+    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return false;
         }
@@ -309,7 +309,7 @@ private:
         return impl.composeUTF8(0, onlyContiguous, s, s + sp.length(), nullptr, nullptr, errorCode);
     }
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
+    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return UNORM_MAYBE;
         }
@@ -323,20 +323,20 @@ private:
         return qcResult;
     }
     virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &) const U_OVERRIDE {
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &) const override {
         return impl.composeQuickCheck(src, limit, onlyContiguous, nullptr);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
-    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const U_OVERRIDE {
+    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const override {
         return impl.getCompQuickCheck(impl.getNorm16(c));
     }
-    virtual UBool hasBoundaryBefore(UChar32 c) const U_OVERRIDE {
+    virtual UBool hasBoundaryBefore(UChar32 c) const override {
         return impl.hasCompBoundaryBefore(c);
     }
-    virtual UBool hasBoundaryAfter(UChar32 c) const U_OVERRIDE {
+    virtual UBool hasBoundaryAfter(UChar32 c) const override {
         return impl.hasCompBoundaryAfter(c, onlyContiguous);
     }
-    virtual UBool isInert(UChar32 c) const U_OVERRIDE {
+    virtual UBool isInert(UChar32 c) const override {
         return impl.isCompInert(c, onlyContiguous);
     }
 
@@ -351,28 +351,28 @@ public:
 private:
     virtual void
     normalize(const char16_t *src, const char16_t *limit,
-              ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
+              ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.makeFCD(src, limit, &buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const char16_t *src, const char16_t *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
-                       ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
+                       ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.makeFCDAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
     }
     virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const U_OVERRIDE {
+    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const override {
         return impl.makeFCD(src, limit, nullptr, errorCode);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
-    virtual UBool hasBoundaryBefore(UChar32 c) const U_OVERRIDE {
+    virtual UBool hasBoundaryBefore(UChar32 c) const override {
         return impl.hasFCDBoundaryBefore(c);
     }
-    virtual UBool hasBoundaryAfter(UChar32 c) const U_OVERRIDE {
+    virtual UBool hasBoundaryAfter(UChar32 c) const override {
         return impl.hasFCDBoundaryAfter(c);
     }
-    virtual UBool isInert(UChar32 c) const U_OVERRIDE {
+    virtual UBool isInert(UChar32 c) const override {
         return impl.isFCDInert(c);
     }
 };

@@ -29,19 +29,19 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
             : fPrefix(prefix), fSuffix(suffix), fField(field), fStrong(strong) {}
 
     int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const U_OVERRIDE;
+                  UErrorCode &status) const override;
 
-    int32_t getPrefixLength() const U_OVERRIDE;
+    int32_t getPrefixLength() const override;
 
-    int32_t getCodePointCount() const U_OVERRIDE;
+    int32_t getCodePointCount() const override;
 
-    bool isStrong() const U_OVERRIDE;
+    bool isStrong() const override;
 
-    bool containsField(Field field) const U_OVERRIDE;
+    bool containsField(Field field) const override;
 
-    void getParameters(Parameters& output) const U_OVERRIDE;
+    void getParameters(Parameters& output) const override;
 
-    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
+    bool semanticallyEquivalent(const Modifier& other) const override;
 
   private:
     UnicodeString fPrefix;
@@ -65,19 +65,19 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
     SimpleModifier();
 
     int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const U_OVERRIDE;
+                  UErrorCode &status) const override;
 
-    int32_t getPrefixLength() const U_OVERRIDE;
+    int32_t getPrefixLength() const override;
 
-    int32_t getCodePointCount() const U_OVERRIDE;
+    int32_t getCodePointCount() const override;
 
-    bool isStrong() const U_OVERRIDE;
+    bool isStrong() const override;
 
-    bool containsField(Field field) const U_OVERRIDE;
+    bool containsField(Field field) const override;
 
-    void getParameters(Parameters& output) const U_OVERRIDE;
+    void getParameters(Parameters& output) const override;
 
-    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
+    bool semanticallyEquivalent(const Modifier& other) const override;
 
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
@@ -158,19 +158,19 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
         fStrong(strong) {}
 
     int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const U_OVERRIDE;
+                  UErrorCode &status) const override;
 
-    int32_t getPrefixLength() const U_OVERRIDE;
+    int32_t getPrefixLength() const override;
 
-    int32_t getCodePointCount() const U_OVERRIDE;
+    int32_t getCodePointCount() const override;
 
-    bool isStrong() const U_OVERRIDE;
+    bool isStrong() const override;
 
-    bool containsField(Field field) const U_OVERRIDE;
+    bool containsField(Field field) const override;
 
-    void getParameters(Parameters& output) const U_OVERRIDE;
+    void getParameters(Parameters& output) const override;
 
-    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
+    bool semanticallyEquivalent(const Modifier& other) const override;
 
   protected:
     // NOTE: In Java, these are stored as array pointers. In C++, the FormattedStringBuilder is stored by
@@ -195,7 +195,7 @@ class U_I18N_API CurrencySpacingEnabledModifier : public ConstantMultiFieldModif
             UErrorCode &status);
 
     int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const U_OVERRIDE;
+                  UErrorCode &status) const override;
 
     /** Unsafe code path */
     static int32_t
@@ -235,7 +235,7 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
     explicit EmptyModifier(bool isStrong) : fStrong(isStrong) {}
 
     int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const U_OVERRIDE {
+                  UErrorCode &status) const override {
         (void)output;
         (void)leftIndex;
         (void)rightIndex;
@@ -243,28 +243,28 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
         return 0;
     }
 
-    int32_t getPrefixLength() const U_OVERRIDE {
+    int32_t getPrefixLength() const override {
         return 0;
     }
 
-    int32_t getCodePointCount() const U_OVERRIDE {
+    int32_t getCodePointCount() const override {
         return 0;
     }
 
-    bool isStrong() const U_OVERRIDE {
+    bool isStrong() const override {
         return fStrong;
     }
 
-    bool containsField(Field field) const U_OVERRIDE {
+    bool containsField(Field field) const override {
         (void)field;
         return false;
     }
 
-    void getParameters(Parameters& output) const U_OVERRIDE {
+    void getParameters(Parameters& output) const override {
         output.obj = nullptr;
     }
 
-    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE {
+    bool semanticallyEquivalent(const Modifier& other) const override {
         return other.getCodePointCount() == 0;
     }
 
@@ -332,7 +332,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
     }
 
     /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifier(Signum signum, StandardPlural::Form plural) const U_OVERRIDE {
+    const Modifier *getModifier(Signum signum, StandardPlural::Form plural) const override {
         const Modifier* modifier = mods[plural][signum];
         if (modifier == nullptr && plural != DEFAULT_STANDARD_PLURAL) {
             modifier = mods[DEFAULT_STANDARD_PLURAL][signum];

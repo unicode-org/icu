@@ -120,17 +120,6 @@
 #define U_INTERNAL U_CAPI
 
 /**
- * \def U_OVERRIDE
- * Defined to the C++11 "override" keyword if available.
- * Denotes a class or member which is an override of the base class.
- * May result in an error if it applied to something not an override.
- * @internal
- */
-#ifndef U_OVERRIDE
-#define U_OVERRIDE override
-#endif
-
-/**
  * \def U_FINAL
  * Defined to the C++11 "final" keyword if available.
  * Denotes a class or member which may not be overridden in subclasses.

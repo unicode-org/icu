@@ -38,7 +38,7 @@ class NumberRangeDataSink : public ResourceSink {
   public:
     NumberRangeDataSink(NumberRangeData& data) : fData(data) {}
 
-    void put(const char* key, ResourceValue& value, UBool /*noFallback*/, UErrorCode& status) U_OVERRIDE {
+    void put(const char* key, ResourceValue& value, UBool /*noFallback*/, UErrorCode& status) override {
         ResourceTable miscTable = value.getTable(status);
         if (U_FAILURE(status)) { return; }
         for (int i = 0; miscTable.getKeyAndValue(i, key, value); i++) {

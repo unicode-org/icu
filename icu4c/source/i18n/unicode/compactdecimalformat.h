@@ -88,7 +88,7 @@ public:
      * Destructor.
      * @stable ICU 51
      */
-    ~CompactDecimalFormat() U_OVERRIDE;
+    ~CompactDecimalFormat() override;
 
     /**
      * Assignment operator.
@@ -105,7 +105,7 @@ public:
      * @return    a polymorphic copy of this CompactDecimalFormat.
      * @stable ICU 51
      */
-    CompactDecimalFormat* clone() const U_OVERRIDE;
+    CompactDecimalFormat* clone() const override;
 
     using DecimalFormat::format;
 
@@ -119,7 +119,7 @@ public:
      * @stable ICU 51
      */
     void parse(const UnicodeString& text, Formattable& result,
-               ParsePosition& parsePosition) const U_OVERRIDE;
+               ParsePosition& parsePosition) const override;
 
     /**
      * CompactDecimalFormat does not support parsing. This implementation
@@ -130,7 +130,7 @@ public:
      * @param status    Always set to U_UNSUPPORTED_ERROR.
      * @stable ICU 51
      */
-    void parse(const UnicodeString& text, Formattable& result, UErrorCode& status) const U_OVERRIDE;
+    void parse(const UnicodeString& text, Formattable& result, UErrorCode& status) const override;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -153,7 +153,7 @@ public:
      *             the parsed currency; if parse fails, this is nullptr.
      * @internal
      */
-    CurrencyAmount* parseCurrency(const UnicodeString& text, ParsePosition& pos) const U_OVERRIDE;
+    CurrencyAmount* parseCurrency(const UnicodeString& text, ParsePosition& pos) const override;
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**
@@ -180,7 +180,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 51
      */
-    UClassID getDynamicClassID() const U_OVERRIDE;
+    UClassID getDynamicClassID() const override;
 
   private:
     CompactDecimalFormat(const Locale& inLocale, UNumberCompactStyle style, UErrorCode& status);

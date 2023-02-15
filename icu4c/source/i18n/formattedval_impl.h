@@ -83,10 +83,10 @@ public:
 
     // Implementation of FormattedValue (const):
 
-    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
-    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
-    Appendable& appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
-    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toString(UErrorCode& status) const override;
+    UnicodeString toTempString(UErrorCode& status) const override;
+    Appendable& appendTo(Appendable& appendable, UErrorCode& status) const override;
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const override;
 
     // Additional methods used during construction phase only (non-const):
 
@@ -158,10 +158,10 @@ public:
 
     // Implementation of FormattedValue (const):
 
-    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
-    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
-    Appendable& appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
-    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toString(UErrorCode& status) const override;
+    UnicodeString toTempString(UErrorCode& status) const override;
+    Appendable& appendTo(Appendable& appendable, UErrorCode& status) const override;
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const override;
 
     // Additional helper functions:
     UBool nextFieldPosition(FieldPosition& fp, UErrorCode& status) const;

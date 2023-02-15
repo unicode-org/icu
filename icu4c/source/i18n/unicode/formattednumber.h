@@ -64,7 +64,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * Destruct an instance of FormattedNumber.
      * @stable ICU 60
      */
-    virtual ~FormattedNumber() U_OVERRIDE;
+    virtual ~FormattedNumber() override;
 
     /** Copying not supported; use move constructor instead. */
     FormattedNumber(const FormattedNumber&) = delete;
@@ -86,11 +86,11 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      *
      * @stable ICU 62
      */
-    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toString(UErrorCode& status) const override;
 
     // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::toTempString() */
-    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toTempString(UErrorCode& status) const override;
 
     // Copybrief: this method is older than the parent method
     /**
@@ -100,11 +100,11 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      *
      * @stable ICU 62
      */
-    Appendable &appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
+    Appendable &appendTo(Appendable& appendable, UErrorCode& status) const override;
 
     // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::nextPosition() */
-    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const override;
 
     /**
      * Export the formatted number as a "numeric string" conforming to the

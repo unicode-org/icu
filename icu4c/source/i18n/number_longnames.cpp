@@ -258,7 +258,7 @@ class InflectedPluralSink : public ResourceSink {
     }
 
     // See ResourceSink::put().
-    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE {
+    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
         int32_t pluralIndex = getIndex(key, status);
         if (U_FAILURE(status)) { return; }
         if (!outArray[pluralIndex].isBogus()) {
@@ -384,7 +384,7 @@ class PluralTableSink : public ResourceSink {
         }
     }
 
-    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE {
+    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
         if (uprv_strcmp(key, "case") == 0) {
             return;
         }

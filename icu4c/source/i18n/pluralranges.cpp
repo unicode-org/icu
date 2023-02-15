@@ -26,7 +26,7 @@ class PluralRangesDataSink : public ResourceSink {
   public:
     PluralRangesDataSink(StandardPluralRanges& output) : fOutput(output) {}
 
-    void put(const char* /*key*/, ResourceValue& value, UBool /*noFallback*/, UErrorCode& status) U_OVERRIDE {
+    void put(const char* /*key*/, ResourceValue& value, UBool /*noFallback*/, UErrorCode& status) override {
         ResourceArray entriesArray = value.getArray(status);
         if (U_FAILURE(status)) { return; }
         fOutput.setCapacity(entriesArray.getSize(), status);
