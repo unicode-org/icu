@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1676337576577,
+  "lastUpdate": 1676504210428,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5068,6 +5068,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2426.1362529090657,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "331172f0a34c5447541b115122251ea3fb1426d7",
+          "message": "ICU-22262 Automate environment test\n\nSee #2309",
+          "timestamp": "2023-02-15T15:24:19-08:00",
+          "tree_id": "b7b5e63e6193e6eaaa6858f36acf341829c51aed",
+          "url": "https://github.com/unicode-org/icu/commit/331172f0a34c5447541b115122251ea3fb1426d7"
+        },
+        "date": 1676504192508,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2322.9234765337933,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
