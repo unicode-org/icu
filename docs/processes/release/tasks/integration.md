@@ -176,6 +176,9 @@ now, this task is not required for ICU4J.
 
 ## Verify that ICU4C tests pass without collation rule strings
 
+Note: Since ICU 73, this test has been included in the Github Actions Continuous Integration jobs.
+These instructions explain how to run the test manually.
+
 ***ICU4C 53 and later***
 
 Background: [ICU-10636](https://unicode-org.atlassian.net/browse/ICU-10636)

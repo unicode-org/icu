@@ -573,4 +573,64 @@ jobs:
           # To run all tests serially
           echo "Run all samples"
           pwd
-          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make check-samples-recursive                  
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make check-samples-recursive
+
+  # https://unicode-org.github.io/icu/processes/release/tasks/integration.html#verify-that-icu4c-tests-pass-without-collation-rule-strings
+  icu4c-without-collation-rule-strings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install hjson dependency
+        run: |
+          sudo apt-get install python3-pip
+          pip3 install hjson
+      - name: Create data filter file to remove collation rule strings
+        run: |
+          cat > icu4c/coll-norules.hjson <<EOL
+          {
+            resourceFilters: [
+              {
+                categories: [
+                  coll_tree
+                ]
+                rules: [
+                  -/UCARules
+                  -/collations/*/Sequence
+                ]
+              }
+            ]
+          }
+          EOL
+      - name: Configure ICU4C with the data filter file
+        env:
+          ICU_DATA_FILTER_FILE: ../coll-norules.hjson
+        run: |
+          cd icu4c/source
+          ./runConfigureICU Linux
+      - name: Run tests with data-errors-as-warnings
+        env:
+          INTLTEST_OPTS: -w
+          CINTLTST_OPTS: -w
+        run: |
+          cd icu4c/source
+          make -j2 check
+  
+  # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
+  icu4c-uconfig-no-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set UCONFIG_NO_CONVERSION and configure ICU4C
+        env:
+          UCONFIG_NO_CONVERSION: 1
+        run: |
+          cd icu4c/source
+          ./runConfigureICU Linux
+      - name: Run make for stubdata, common, i18n
+        run: |
+          cd icu4c/source
+          pushd stubdata && make -j 2 && popd
+          # Ensure lib directory for output object file exists
+          mkdir -p lib
+          pushd common && make -j 2 && popd
+          pushd i18n && make -j 2 && popd
