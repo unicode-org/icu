@@ -397,6 +397,8 @@ option. When it's not available, you would do the following:
 ---
 
 ## Run the environment tests
+This test is performed automatically by a GitHub Action once per week. We can also run it manually by visiting 
+[GHA EnvTest Action page](https://github.com/unicode-org/icu/actions/workflows/icu_envtest.yml) then click on the "Run workflow v" drop down on the right side of the screen
 
 Run
 [environmentTest.sh](https://github.com/unicode-org/icu/blob/main/tools/release/c/environmentTest.sh)
