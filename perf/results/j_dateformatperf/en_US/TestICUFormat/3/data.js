@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1676509407580,
+  "lastUpdate": 1676510227494,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5038,6 +5038,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 341.58240766110197,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "a4c6b2a3595853dac07bb39c81a812bf1eb7d4f5",
+          "message": "ICU-22262 Document environment test automation",
+          "timestamp": "2023-02-15T16:53:02-08:00",
+          "tree_id": "c8e121ab5c02e5fd51a14fa5744e35c3689cb22b",
+          "url": "https://github.com/unicode-org/icu/commit/a4c6b2a3595853dac07bb39c81a812bf1eb7d4f5"
+        },
+        "date": 1676510209126,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 284.4419500301655,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
