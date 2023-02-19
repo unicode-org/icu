@@ -662,6 +662,48 @@ UnicodeString::doEquals(const UnicodeString &text, int32_t len) const {
   return uprv_memcmp(getArrayStart(), text.getArrayStart(), len * U_SIZEOF_UCHAR) == 0;
 }
 
+UBool
+UnicodeString::doEqualsSubstring( int32_t start,
+              int32_t length,
+              const char16_t *srcChars,
+              int32_t srcStart,
+              int32_t srcLength) const
+{
+  // compare illegal string values
+  if(isBogus()) {
+    return false;
+  }
+  
+  // pin indices to legal values
+  pinIndices(start, length);
+
+  if(srcChars == nullptr) {
+    // treat const char16_t *srcChars==nullptr as an empty string
+    return length == 0 ? true : false;
+  }
+
+  // get the correct pointer
+  const char16_t *chars = getArrayStart();
+
+  chars += start;
+  srcChars += srcStart;
+
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+  }
+
+  if (length != srcLength) {
+    return false;
+  }
+
+  if(length == 0 || chars == srcChars) {
+    return true;
+  }
+
+  return u_memcmp(chars, srcChars, srcLength) == 0;
+}
+
 int8_t
 UnicodeString::doCompare( int32_t start,
               int32_t length,
