@@ -3489,6 +3489,19 @@ private:
    */
   UBool doEquals(const UnicodeString &text, int32_t len) const;
 
+  inline UBool
+  doEqualsSubstring(int32_t start,
+           int32_t length,
+           const UnicodeString& srcText,
+           int32_t srcStart,
+           int32_t srcLength) const;
+
+  UBool doEqualsSubstring(int32_t start,
+           int32_t length,
+           const char16_t *srcChars,
+           int32_t srcStart,
+           int32_t srcLength) const;
+
   inline int8_t
   doCompare(int32_t start,
            int32_t length,
@@ -3946,6 +3959,21 @@ UnicodeString::doCompare(int32_t start,
   }
 }
 
+inline UBool
+UnicodeString::doEqualsSubstring(int32_t start,
+              int32_t thisLength,
+              const UnicodeString& srcText,
+              int32_t srcStart,
+              int32_t srcLength) const
+{
+  if(srcText.isBogus()) {
+    return isBogus();
+  } else {
+    srcText.pinIndices(srcStart, srcLength);
+    return !isBogus() && doEqualsSubstring(start, thisLength, srcText.getArrayStart(), srcStart, srcLength);
+  }
+}
+
 inline bool
 UnicodeString::operator== (const UnicodeString& text) const
 {
@@ -4326,20 +4354,20 @@ UnicodeString::lastIndexOf(UChar32 c,
 
 inline UBool
 UnicodeString::startsWith(const UnicodeString& text) const
-{ return compare(0, text.length(), text, 0, text.length()) == 0; }
+{ return doEqualsSubstring(0, text.length(), text, 0, text.length()); }
 
 inline UBool
 UnicodeString::startsWith(const UnicodeString& srcText,
               int32_t srcStart,
               int32_t srcLength) const
-{ return doCompare(0, srcLength, srcText, srcStart, srcLength) == 0; }
+{ return doEqualsSubstring(0, srcLength, srcText, srcStart, srcLength); }
 
 inline UBool
 UnicodeString::startsWith(ConstChar16Ptr srcChars, int32_t srcLength) const {
   if(srcLength < 0) {
     srcLength = u_strlen(toUCharPtr(srcChars));
   }
-  return doCompare(0, srcLength, srcChars, 0, srcLength) == 0;
+  return doEqualsSubstring(0, srcLength, srcChars, 0, srcLength);
 }
 
 inline UBool
@@ -4347,21 +4375,21 @@ UnicodeString::startsWith(const char16_t *srcChars, int32_t srcStart, int32_t sr
   if(srcLength < 0) {
     srcLength = u_strlen(toUCharPtr(srcChars));
   }
-  return doCompare(0, srcLength, srcChars, srcStart, srcLength) == 0;
+  return doEqualsSubstring(0, srcLength, srcChars, srcStart, srcLength);
 }
 
 inline UBool
 UnicodeString::endsWith(const UnicodeString& text) const
-{ return doCompare(length() - text.length(), text.length(),
-           text, 0, text.length()) == 0; }
+{ return doEqualsSubstring(length() - text.length(), text.length(),
+           text, 0, text.length()); }
 
 inline UBool
 UnicodeString::endsWith(const UnicodeString& srcText,
             int32_t srcStart,
             int32_t srcLength) const {
   srcText.pinIndices(srcStart, srcLength);
-  return doCompare(length() - srcLength, srcLength,
-                   srcText, srcStart, srcLength) == 0;
+  return doEqualsSubstring(length() - srcLength, srcLength,
+                   srcText, srcStart, srcLength);
 }
 
 inline UBool
@@ -4370,8 +4398,7 @@ UnicodeString::endsWith(ConstChar16Ptr srcChars,
   if(srcLength < 0) {
     srcLength = u_strlen(toUCharPtr(srcChars));
   }
-  return doCompare(length() - srcLength, srcLength,
-                   srcChars, 0, srcLength) == 0;
+  return doEqualsSubstring(length() - srcLength, srcLength, srcChars, 0, srcLength);
 }
 
 inline UBool
@@ -4381,8 +4408,8 @@ UnicodeString::endsWith(const char16_t *srcChars,
   if(srcLength < 0) {
     srcLength = u_strlen(toUCharPtr(srcChars + srcStart));
   }
-  return doCompare(length() - srcLength, srcLength,
-                   srcChars, srcStart, srcLength) == 0;
+  return doEqualsSubstring(length() - srcLength, srcLength,
+                   srcChars, srcStart, srcLength);
 }
 
 //========================================
