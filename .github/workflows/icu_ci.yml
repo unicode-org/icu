@@ -716,3 +716,31 @@ jobs:
           mkdir -p lib
           pushd common && make -j 2 && popd
           pushd i18n && make -j 2 && popd
+
+  # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#linux-unix-build-and-test
+  icu4c-build-test-linux-samples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure and Build ICU
+        run: |
+          mkdir /tmp/icu;
+          cd icu4c/source;
+          ./runConfigureICU Linux --prefix=/tmp/icu;
+          make -j2;
+      - name: Install ICU4C to /tmp/icu
+        run: |
+          cd icu4c/source;
+          make install;
+      - name: To clean all the test binaries
+        run: |
+          cd icu4c/source/samples;
+          PATH=/tmp/icu/bin:$PATH LD_LIBRARY_PATH=/tmp/icu/lib:$LD_LIBRARY_PATH make clean-samples-recursive;
+      - name: To rebuild them all
+        run: |
+          cd icu4c/source/samples;
+          PATH=/tmp/icu/bin:$PATH LD_LIBRARY_PATH=/tmp/icu/lib:$LD_LIBRARY_PATH make all-samples-recursive;
+      - name: To run all tests serially
+        run: |
+          cd icu4c/source/samples;
+          PATH=/tmp/icu/bin:$PATH LD_LIBRARY_PATH=/tmp/icu/lib:$LD_LIBRARY_PATH make check-samples-recursive;
