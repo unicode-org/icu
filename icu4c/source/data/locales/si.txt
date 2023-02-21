@@ -27,12 +27,213 @@ si{
     }
     MoreInformation{"?"}
     NumberElements{
+        adlm{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
         arab{
             symbols{
                 timeSeparator{":"}
             }
         }
+        bali{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
+        beng{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
+        brah{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
+        cakm{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
+        cham{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
         default{"latn"}
+        deva{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
+        fullwide{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        gong{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        gonm{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        gujr{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        guru{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        hanidec{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{"."}
+            }
+        }
+        hmnp{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        java{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        kali{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        khmr{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        knda{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        lana{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        lanatham{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        laoo{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
         latn{
             miscPatterns{
                 approximately{"~{0}"}
@@ -269,6 +470,16 @@ si{
                 timeSeparator{"."}
             }
         }
+        lepc{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        limb{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
         minimalPairs{
             ordinal{
                 other{"{0} වන හැරවුම දකුණට"}
@@ -279,7 +490,112 @@ si{
             }
         }
         minimumGroupingDigits{"1"}
+        mlym{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        mong{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        mtei{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        mymr{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        mymrshan{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
         native{"latn"}
+        nkoo{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        olck{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        orya{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        osma{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        rohg{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        saur{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        shrd{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        sora{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        sund{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        takr{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        talu{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        tamldec{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        telu{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        thai{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        tibt{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
+        vaii{
+            symbols{
+                timeSeparator{"."}
+            }
+        }
     }
     calendar{
         generic{
@@ -1164,6 +1480,11 @@ si{
         }
         day-narrow{
             dn{"දිනය"}
+            relative{
+                "-1"{"ඊයේ"}
+                "0"{"අද"}
+                "1"{"හෙට"}
+            }
             relativeTime{
                 future{
                     one{"දින {0}න්"}
@@ -1177,6 +1498,11 @@ si{
         }
         day-short{
             dn{"දිනය"}
+            relative{
+                "-1"{"ඊයේ"}
+                "0"{"අද"}
+                "1"{"හෙට"}
+            }
             relativeTime{
                 future{
                     one{"දින {0}න්"}
@@ -1961,7 +2287,25 @@ si{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} හෝ {1}"}
+            end{"{0}, හෝ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} හෝ {1}"}
+            end{"{0}, හෝ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} සහ {1}"}
+            end{"{0}, සහ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} සහ {1}"}
             end{"{0}, සහ {1}"}
             middle{"{0}, {1}"}

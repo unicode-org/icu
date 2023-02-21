@@ -137,19 +137,6 @@ es_US{
                 yMMMEd{"EEE, d 'de' MMM 'de' y"}
                 yQQQ{"QQQ y"}
             }
-            dayNames{
-                format{
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
-                }
-            }
             intervalFormats{
                 H{
                     H{"HH–HH"}

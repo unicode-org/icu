@@ -279,16 +279,19 @@ zh{
                 scientificFormat{"#E0"}
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
                 infinity{"∞"}
+                list{";"}
                 minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
         java{
@@ -770,6 +773,7 @@ zh{
                 "GyMd",
             }
             availableFormats{
+                E{"ccc"}
                 Ed{"d日E"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年MM月"}
@@ -778,6 +782,7 @@ zh{
                 GyMd{"Gy-M-d"}
                 M{"M月"}
                 MEd{"M-dE"}
+                MMM{"LL"}
                 MMMEd{"M月d日E"}
                 MMMMd{"M月d日"}
                 MMMd{"M月d日"}
@@ -816,9 +821,57 @@ zh{
                     h{"Bh:mm至h:mm"}
                     m{"Bh:mm至h:mm"}
                 }
+                Gy{
+                    G{"Gy年 – Gy年"}
+                    y{"Gy年–y年"}
+                }
+                GyM{
+                    G{"GGGGGy-MM – GGGGGy-MM"}
+                    M{"GGGGGy-MM – y-MM"}
+                    y{"GGGGGy-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"GGGGGy-MM-ddE – GGGGGy-MM-ddE"}
+                    M{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    d{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    y{"GGGGGy-MM-ddE – y-MM-ddE"}
+                }
+                GyMMM{
+                    G{"Gy年MMM – Gy年MMM"}
+                    M{"Gy年MMM–MMM"}
+                    y{"Gy年MMM – y年MMM"}
+                }
+                GyMMMEd{
+                    G{"Gy年MMMd日E – Gy年MMMd日E"}
+                    M{"Gy年MMMd日E – MMMd日E"}
+                    d{"Gy年MMMd日E – MMMd日E"}
+                    y{"Gy年MMMd日E – y年MMMd日E"}
+                }
+                GyMMMd{
+                    G{"Gy年MMMd日 – Gy年MMMd日"}
+                    M{"Gy年MMMd日 – MMMd日"}
+                    d{"Gy年MMMd日–d日"}
+                    y{"Gy年MMMd日 – y年MMMd日"}
+                }
+                GyMd{
+                    G{"GGGGGy-MM-dd – GGGGGy-MM-dd"}
+                    M{"GGGGGy-MM-dd – y-MM-dd"}
+                    d{"GGGGGy-MM-dd – y-MM-dd"}
+                    y{"GGGGGy-MM-dd – y-MM-dd"}
+                }
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
                 Hmv{
                     H{"v HH:mm – HH:mm"}
                     m{"v HH:mm – HH:mm"}
+                }
+                Hv{
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M–M月"}
@@ -845,6 +898,7 @@ zh{
                 d{
                     d{"d至d日"}
                 }
+                fallback{"{0} – {1}"}
                 h{
                     a{"ah时至ah时"}
                     h{"ah时至h时"}
@@ -1009,6 +1063,162 @@ zh{
                             "酉",
                             "戌",
                             "亥",
+                        }
+                        narrow{
+                            "子",
+                            "丑",
+                            "寅",
+                            "卯",
+                            "辰",
+                            "巳",
+                            "午",
+                            "未",
+                            "申",
+                            "酉",
+                            "戌",
+                            "亥",
+                        }
+                        wide{
+                            "子",
+                            "丑",
+                            "寅",
+                            "卯",
+                            "辰",
+                            "巳",
+                            "午",
+                            "未",
+                            "申",
+                            "酉",
+                            "戌",
+                            "亥",
+                        }
+                    }
+                }
+                days{
+                    format{
+                        abbreviated{
+                            "甲子",
+                            "乙丑",
+                            "丙寅",
+                            "丁卯",
+                            "戊辰",
+                            "己巳",
+                            "庚午",
+                            "辛未",
+                            "壬申",
+                            "癸酉",
+                            "甲戌",
+                            "乙亥",
+                            "丙子",
+                            "丁丑",
+                            "戊寅",
+                            "己卯",
+                            "庚辰",
+                            "辛巳",
+                            "壬午",
+                            "癸未",
+                            "甲申",
+                            "乙酉",
+                            "丙戌",
+                            "丁亥",
+                            "戊子",
+                            "己丑",
+                            "庚寅",
+                            "辛卯",
+                            "壬辰",
+                            "癸巳",
+                            "甲午",
+                            "乙未",
+                            "丙申",
+                            "丁酉",
+                            "戊戌",
+                            "己亥",
+                            "庚子",
+                            "辛丑",
+                            "壬寅",
+                            "癸卯",
+                            "甲辰",
+                            "乙巳",
+                            "丙午",
+                            "丁未",
+                            "戊申",
+                            "己酉",
+                            "庚戌",
+                            "辛亥",
+                            "壬子",
+                            "癸丑",
+                            "甲寅",
+                            "乙卯",
+                            "丙辰",
+                            "丁巳",
+                            "戊午",
+                            "己未",
+                            "庚申",
+                            "辛酉",
+                            "壬戌",
+                            "癸亥",
+                        }
+                        narrow{
+                            "甲子",
+                            "乙丑",
+                            "丙寅",
+                            "丁卯",
+                            "戊辰",
+                            "己巳",
+                            "庚午",
+                            "辛未",
+                            "壬申",
+                            "癸酉",
+                            "甲戌",
+                            "乙亥",
+                            "丙子",
+                            "丁丑",
+                            "戊寅",
+                            "己卯",
+                            "庚辰",
+                            "辛巳",
+                            "壬午",
+                            "癸未",
+                            "甲申",
+                            "乙酉",
+                            "丙戌",
+                            "丁亥",
+                            "戊子",
+                            "己丑",
+                            "庚寅",
+                            "辛卯",
+                            "壬辰",
+                            "癸巳",
+                            "甲午",
+                            "乙未",
+                            "丙申",
+                            "丁酉",
+                            "戊戌",
+                            "己亥",
+                            "庚子",
+                            "辛丑",
+                            "壬寅",
+                            "癸卯",
+                            "甲辰",
+                            "乙巳",
+                            "丙午",
+                            "丁未",
+                            "戊申",
+                            "己酉",
+                            "庚戌",
+                            "辛亥",
+                            "壬子",
+                            "癸丑",
+                            "甲寅",
+                            "乙卯",
+                            "丙辰",
+                            "丁巳",
+                            "戊午",
+                            "己未",
+                            "庚申",
+                            "辛酉",
+                            "壬戌",
+                            "癸亥",
                         }
                     }
                 }
@@ -1379,6 +1589,55 @@ zh{
                     "科普特历",
                 }
             }
+            intervalFormats{
+                Bh{
+                    B{"Bh时至Bh时"}
+                    h{"Bh时至h时"}
+                }
+                Bhm{
+                    B{"Bh:mm至Bh:mm"}
+                    h{"Bh:mm至h:mm"}
+                    m{"Bh:mm至h:mm"}
+                }
+                Gy{
+                    G{"Gy年 – Gy年"}
+                    y{"Gy年–y年"}
+                }
+                GyM{
+                    G{"GGGGGy-MM – GGGGGy-MM"}
+                    M{"GGGGGy-MM – y-MM"}
+                    y{"GGGGGy-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"GGGGGy-MM-ddE – GGGGGy-MM-ddE"}
+                    M{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    d{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    y{"GGGGGy-MM-ddE – y-MM-ddE"}
+                }
+                GyMMM{
+                    G{"Gy年MMM – Gy年MMM"}
+                    M{"Gy年MMM–MMM"}
+                    y{"Gy年MMM – y年MMM"}
+                }
+                GyMMMEd{
+                    G{"Gy年MMMd日E – Gy年MMMd日E"}
+                    M{"Gy年MMMd日E – MMMd日E"}
+                    d{"Gy年MMMd日E – MMMd日E"}
+                    y{"Gy年MMMd日E – y年MMMd日E"}
+                }
+                GyMMMd{
+                    G{"Gy年MMMd日 – Gy年MMMd日"}
+                    M{"Gy年MMMd日 – MMMd日"}
+                    d{"Gy年MMMd日–d日"}
+                    y{"Gy年MMMd日 – y年MMMd日"}
+                }
+                GyMd{
+                    G{"GGGGGy-MM-dd – GGGGGy-MM-dd"}
+                    M{"GGGGGy-MM-dd – y-MM-dd"}
+                    d{"GGGGGy-MM-dd – y-MM-dd"}
+                    y{"GGGGGy-MM-dd – y-MM-dd"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1477,6 +1736,30 @@ zh{
             }
         }
         dangi{
+            DateTimePatterns{
+                "zzzz HH:mm:ss",
+                "z HH:mm:ss",
+                "HH:mm:ss",
+                "HH:mm",
+                {
+                    "rU年MMMdEEEE",
+                    "d=hanidays",
+                }
+                {
+                    "rU年MMMd",
+                    "d=hanidays",
+                }
+                {
+                    "r年MMMd",
+                    "d=hanidays",
+                }
+                "r/M/d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             cyclicNameSets{
                 dayParts{
                     format{
@@ -1715,6 +1998,17 @@ zh{
                     }
                 }
             }
+            intervalFormats{
+                Bh{
+                    B{"Bh至Bh时"}
+                    h{"Bh至h时"}
+                }
+                Bhm{
+                    B{"Bh:mm至Bh:mm"}
+                    h{"Bh:mm至h:mm"}
+                    m{"Bh:mm至h:mm"}
+                }
+            }
         }
         ethiopic{
             DateTimePatterns{
@@ -1871,6 +2165,12 @@ zh{
                 "Gy年M月d日",
                 "Gy/M/d",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -2087,6 +2387,12 @@ zh{
                 "y年M月d日",
                 "y/M/d",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -2313,7 +2619,15 @@ zh{
                     "公元前",
                     "公元",
                 }
+                narrow%variant{
+                    "公元前",
+                    "公元",
+                }
                 wide{
+                    "公元前",
+                    "公元",
+                }
+                wide%variant{
                     "公元前",
                     "公元",
                 }
@@ -3095,6 +3409,9 @@ zh{
                 abbreviated{
                     "伊斯兰历",
                 }
+                wide{
+                    "伊斯兰历",
+                }
             }
             monthNames{
                 format{
@@ -3203,6 +3520,12 @@ zh{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -3214,8 +3537,10 @@ zh{
                 "GyMMdd",
             }
             availableFormats{
+                E{"ccc"}
                 Ed{"d日E"}
                 Gy{"Gy年"}
+                GyMEEEEd{"Gy年M月d日EEEE"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
@@ -3966,6 +4291,55 @@ zh{
                     "令和",
                 }
             }
+            intervalFormats{
+                Bh{
+                    B{"Bh时至Bh时"}
+                    h{"Bh时至h时"}
+                }
+                Bhm{
+                    B{"Bh:mm至Bh:mm"}
+                    h{"Bh:mm至h:mm"}
+                    m{"Bh:mm至h:mm"}
+                }
+                Gy{
+                    G{"Gy年 – Gy年"}
+                    y{"Gy年–y年"}
+                }
+                GyM{
+                    G{"GGGGGy-MM – GGGGGy-MM"}
+                    M{"GGGGGy-MM – y-MM"}
+                    y{"GGGGGy-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"GGGGGy-MM-ddE – GGGGGy-MM-ddE"}
+                    M{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    d{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    y{"GGGGGy-MM-ddE – y-MM-ddE"}
+                }
+                GyMMM{
+                    G{"Gy年MMM – Gy年MMM"}
+                    M{"Gy年MMM–MMM"}
+                    y{"Gy年MMM – y年MMM"}
+                }
+                GyMMMEd{
+                    G{"Gy年MMMd日E – Gy年MMMd日E"}
+                    M{"Gy年MMMd日E – MMMd日E"}
+                    d{"Gy年MMMd日E – MMMd日E"}
+                    y{"Gy年MMMd日E – y年MMMd日E"}
+                }
+                GyMMMd{
+                    G{"Gy年MMMd日 – Gy年MMMd日"}
+                    M{"Gy年MMMd日 – MMMd日"}
+                    d{"Gy年MMMd日–d日"}
+                    y{"Gy年MMMd日 – y年MMMd日"}
+                }
+                GyMd{
+                    G{"GGGGGy-MM-dd – GGGGGy-MM-dd"}
+                    M{"GGGGGy-MM-dd – y-MM-dd"}
+                    d{"GGGGGy-MM-dd – y-MM-dd"}
+                    y{"GGGGGy-MM-dd – y-MM-dd"}
+                }
+            }
         }
         persian{
             eras{
@@ -3977,6 +4351,48 @@ zh{
                 }
                 wide{
                     "波斯历",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"Bh时至Bh时"}
+                    h{"Bh时至h时"}
+                }
+                Bhm{
+                    B{"Bh:mm至Bh:mm"}
+                    h{"Bh:mm至h:mm"}
+                    m{"Bh:mm至h:mm"}
+                }
+                Gy{
+                    G{"Gy年 – Gy年"}
+                    y{"Gy年–y年"}
+                }
+                GyM{
+                    G{"GGGGGy-MM – GGGGGy-MM"}
+                    M{"GGGGGy-MM – y-MM"}
+                    y{"GGGGGy-MM – y-MM"}
+                }
+                GyMEd{
+                    G{"GGGGGy-MM-ddE – GGGGGy-MM-ddE"}
+                    M{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    d{"GGGGGy-MM-ddE – y-MM-ddE"}
+                    y{"GGGGGy-MM-ddE – y-MM-ddE"}
+                }
+                GyMMM{
+                    G{"Gy年MMM – Gy年MMM"}
+                    M{"Gy年MMM–MMM"}
+                    y{"Gy年MMM – y年MMM"}
+                }
+                GyMMMd{
+                    G{"Gy年MMMd日 – Gy年MMMd日"}
+                    M{"Gy年MMMd日 – MMMd日"}
+                    d{"Gy年MMMd日–d日"}
+                }
+                GyMd{
+                    G{"GGGGGy-MM-dd – GGGGGy-MM-dd"}
+                    M{"GGGGGy-MM-dd – y-MM-dd"}
+                    d{"GGGGGy-MM-dd – y-MM-dd"}
+                    y{"GGGGGy-MM-dd – y-MM-dd"}
                 }
             }
             monthNames{
@@ -4100,6 +4516,7 @@ zh{
                 E{"ccc"}
                 Ed{"d日E"}
                 Gy{"Gy年"}
+                GyMEEEEd{"Gy年M月d日EEEE"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
@@ -5089,6 +5506,18 @@ zh{
             middle{"{0}、{1}"}
             start{"{0}、{1}"}
         }
+        or-narrow{
+            2{"{0}或{1}"}
+            end{"{0}或{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
+        or-short{
+            2{"{0}或{1}"}
+            end{"{0}或{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
         standard{
             2{"{0}和{1}"}
             end{"{0}和{1}"}
@@ -5098,6 +5527,8 @@ zh{
         standard-narrow{
             2{"{0}、{1}"}
             end{"{0}、{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
         }
         standard-short{
             2{"{0}和{1}"}
@@ -5209,6 +5640,7 @@ zh{
             surnameFirst-medium-addressing-informal{"{given-informal}"}
             surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2} {credentials}{title}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
             surnameFirst-short-addressing-formal{"{surname}{title}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}

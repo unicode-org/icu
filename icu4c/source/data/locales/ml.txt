@@ -297,6 +297,7 @@ ml{
                 scientificFormat{"#E0"}
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -567,6 +568,12 @@ ml{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -745,6 +752,12 @@ ml{
                 "y, MMM d",
                 "d/M/yy",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -2611,6 +2624,18 @@ ml{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} അല്ലെങ്കിൽ {1}"}
+            end{"{0}, അല്ലെങ്കിൽ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} അല്ലെങ്കിൽ {1}"}
+            end{"{0}, അല്ലെങ്കിൽ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} കൂടാതെ {1}"}
             end{"{0}, {1} എന്നിവ"}
@@ -2619,6 +2644,9 @@ ml{
         }
         standard-narrow{
             2{"{0}, {1} എന്നിവ"}
+            end{"{0}, {1} എന്നിവ"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} കൂടാതെ {1}"}

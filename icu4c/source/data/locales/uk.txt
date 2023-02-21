@@ -973,6 +973,7 @@ uk{
                         afternoon1{"день"}
                         am{"дп"}
                         evening1{"вечір"}
+                        midnight{"північ"}
                         morning1{"ранок"}
                         night1{"ніч"}
                         noon{"полудень"}
@@ -1991,6 +1992,12 @@ uk{
                     one{"за {0} д."}
                     other{"за {0} д."}
                 }
+                past{
+                    few{"{0} дн. тому"}
+                    many{"{0} дн. тому"}
+                    one{"{0} дн. тому"}
+                    other{"{0} дн. тому"}
+                }
             }
         }
         day-short{
@@ -2976,6 +2983,18 @@ uk{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} або {1}"}
+            end{"{0} або {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} або {1}"}
+            end{"{0} або {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} і {1}"}
             end{"{0} і {1}"}
@@ -2985,6 +3004,8 @@ uk{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} і {1}"}
@@ -2999,10 +3020,14 @@ uk{
             start{"{0}, {1}"}
         }
         unit-narrow{
+            2{"{0} і {1}"}
+            end{"{0} і {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
         unit-short{
+            2{"{0} і {1}"}
+            end{"{0} і {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -3059,6 +3084,7 @@ uk{
             }
         }
         namePattern{
+            givenFirst-long-addressing-formal{"{title} {given} {given2} {surname} {surname2}, {credentials}"}
             givenFirst-long-addressing-informal{"{given-informal} {surname} {surname2}"}
             givenFirst-long-monogram-formal{
                 "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
@@ -3069,6 +3095,10 @@ uk{
             givenFirst-long-referring-informal{"{given-informal} {surname} {surname2}"}
             givenFirst-medium-addressing-formal{"{title} {given} {given2-initial} {surname} {surname2} {credentials}"}
             givenFirst-medium-addressing-informal{"{given-informal} {surname} {surname2}"}
+            givenFirst-medium-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
+                "llCaps}{surname2-monogram-allCaps}"
+            }
             givenFirst-medium-monogram-informal{
                 "{given-informal-monogram-allCaps}{surname-monogram-allCaps}{surname2"
                 "-monogram-allCaps}"

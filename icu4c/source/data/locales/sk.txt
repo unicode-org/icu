@@ -2053,6 +2053,11 @@ sk{
         }
         month-narrow{
             dn{"mes."}
+            relative{
+                "-1"{"minulý mes."}
+                "0"{"tento mes."}
+                "1"{"budúci mes."}
+            }
             relativeTime{
                 future{
                     few{"o {0} mes."}
@@ -2550,6 +2555,11 @@ sk{
         }
         week-narrow{
             dn{"týž."}
+            relative{
+                "-1"{"minulý týž."}
+                "0"{"tento týž."}
+                "1"{"budúci týž."}
+            }
             relativePeriod{"týž. dňa {0}"}
             relativeTime{
                 future{
@@ -2699,7 +2709,25 @@ sk{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} alebo {1}"}
+            end{"{0} alebo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} alebo {1}"}
+            end{"{0} alebo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} a {1}"}
+            end{"{0} a {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} a {1}"}
             end{"{0} a {1}"}
             middle{"{0}, {1}"}

@@ -197,19 +197,6 @@ es_MX{
                 yMMMEd{"EEE, d 'de' MMM 'de' y"}
                 yQQQ{"QQQ y"}
             }
-            dayNames{
-                format{
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
-                }
-            }
             dayPeriod{
                 format{
                     narrow{

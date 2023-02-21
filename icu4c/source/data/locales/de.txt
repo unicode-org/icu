@@ -33,6 +33,7 @@ de{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
@@ -677,6 +678,10 @@ de{
                 "AM",
                 "PM",
             }
+            AmPmMarkersNarrow{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -894,11 +899,13 @@ de{
                     narrow{
                         afternoon1{"Mittag"}
                         afternoon2{"Nachm."}
+                        am{"AM"}
                         evening1{"Abend"}
                         midnight{"Mitternacht"}
                         morning1{"Morgen"}
                         morning2{"Vorm."}
                         night1{"Nacht"}
+                        pm{"PM"}
                     }
                     wide{
                         afternoon1{"Mittag"}
@@ -2731,7 +2738,25 @@ de{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} oder {1}"}
+            end{"{0} oder {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} oder {1}"}
+            end{"{0} oder {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} und {1}"}
+            end{"{0} und {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} und {1}"}
             end{"{0} und {1}"}
             middle{"{0}, {1}"}

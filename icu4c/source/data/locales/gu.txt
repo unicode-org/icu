@@ -43,6 +43,7 @@ gu{
                 scientificFormat{"#E0"}
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1403,6 +1404,9 @@ gu{
                 abbreviated{
                     "શક",
                 }
+                narrow{
+                    "શક",
+                }
                 wide{
                     "સાકા",
                 }
@@ -2639,8 +2643,17 @@ gu{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
-        or-short{
+        or-narrow{
+            2{"{0} અથવા {1}"}
             end{"{0} અથવા {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} અથવા {1}"}
+            end{"{0} અથવા {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
             2{"{0} અને {1}"}
@@ -2651,6 +2664,8 @@ gu{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} અને {1}"}
@@ -2733,7 +2748,13 @@ gu{
             givenFirst-short-addressing-informal{"{given-informal}"}
             givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given} {given2} {surname} {credentials}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
+            sorting-long-referring-informal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
+            sorting-medium-referring-formal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
+            sorting-medium-referring-informal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
+            sorting-short-referring-formal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
+            sorting-short-referring-informal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}

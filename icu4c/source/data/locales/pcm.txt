@@ -463,6 +463,10 @@ pcm{
                 "FM",
                 "FI",
             }
+            AmPmMarkersNarrow{
+                "FM",
+                "FI",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "H:mm:ss z",
@@ -1963,9 +1967,11 @@ pcm{
             givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
             givenFirst-long-referring-formal{"{given} {given2} {surname} {credentials}"}
             givenFirst-long-referring-informal{"{given-informal} {surname}"}
+            givenFirst-medium-addressing-formal{"{given} {given2} {surname} {credentials}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{given} {given2} {surname} {credentials}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
@@ -1975,6 +1981,7 @@ pcm{
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
             sorting-long-referring-formal{"{surname}, {given} {given2} {credentials}"}
             sorting-long-referring-informal{"{surname}, {given-informal}"}
+            sorting-medium-referring-formal{"{surname}, {given} {given2} {credentials}"}
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
             sorting-short-referring-formal{"{surname}, {given-initial} {given2-initial}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
@@ -1987,10 +1994,13 @@ pcm{
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
             surnameFirst-long-referring-formal{"{surname} {given} {given2} {credentials}"}
             surnameFirst-long-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-medium-addressing-formal{"{surname} {given} {given2} {credentials}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
             surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2} {credentials}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{surname} {given} {given2} {credentials}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}

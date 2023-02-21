@@ -1136,7 +1136,16 @@ dsb{
         dayperiod-narrow{
             dn{"poł. dnja"}
         }
+        dayperiod-short{
+            dn{"połojca dnja"}
+        }
         era{
+            dn{"epocha"}
+        }
+        era-narrow{
+            dn{"epocha"}
+        }
+        era-short{
             dn{"epocha"}
         }
         fri{
@@ -1945,6 +1954,12 @@ dsb{
         weekday{
             dn{"źeń tyźenja"}
         }
+        weekday-narrow{
+            dn{"źeń tyźenja"}
+        }
+        weekday-short{
+            dn{"źeń tyźenja"}
+        }
         weekdayOfMonth{
             dn{"źeń tyźenja w mjasecu"}
         }
@@ -2026,6 +2041,9 @@ dsb{
         zone-narrow{
             dn{"cas. pasmo"}
         }
+        zone-short{
+            dn{"casowe pasmo"}
+        }
     }
     layout{
         characters{"left-to-right"}
@@ -2036,11 +2054,31 @@ dsb{
             2{"{0} abo {1}"}
             end{"{0} abo {1}"}
         }
+        or-narrow{
+            2{"{0} abo {1}"}
+            end{"{0} abo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         or-short{
             2{"{0} abo {1}"}
             end{"{0} abo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
+            2{"{0} a {1}"}
+            end{"{0} a {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
+            2{"{0} a {1}"}
+            end{"{0} a {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-short{
             2{"{0} a {1}"}
             end{"{0} a {1}"}
             middle{"{0}, {1}"}

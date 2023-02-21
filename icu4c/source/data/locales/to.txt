@@ -199,6 +199,12 @@ to{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -407,6 +413,12 @@ to{
                 "d MMM y",
                 "d/M/yy",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -1687,7 +1699,25 @@ to{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} pē {1}"}
+            end{"{0}, pē {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} pē {1}"}
+            end{"{0}, pē {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} mo {1}"}
+            end{"{0} mo {1}"}
+            middle{"{0} mo {1}"}
+            start{"{0} mo {1}"}
+        }
+        standard-narrow{
             2{"{0} mo {1}"}
             end{"{0} mo {1}"}
             middle{"{0} mo {1}"}

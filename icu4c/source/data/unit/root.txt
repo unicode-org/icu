@@ -669,10 +669,6 @@ root{
             }
         }
         speed{
-            beaufort{
-                dnam{"Bft"}
-                other{"B {0}"}
-            }
             kilometer-per-hour{
                 dnam{"km/h"}
                 other{"{0} km/h"}

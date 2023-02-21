@@ -1151,7 +1151,20 @@ public final class UScript {
      */
     public static final int[] getCode(String nameOrAbbrOrLocale) {
         boolean triedCode = false;
-        if (nameOrAbbrOrLocale.indexOf('_') < 0 && nameOrAbbrOrLocale.indexOf('-') < 0) {
+        int lastSepPos = nameOrAbbrOrLocale.indexOf('_');
+        if (lastSepPos < 0) {
+            lastSepPos = nameOrAbbrOrLocale.indexOf('-');
+        }
+        // Favor interpretation of nameOrAbbrOrLocale as a script alias if either
+        // 1. nameOrAbbrOrLocale does not contain -/_. Handles Han, Mro, Nko, etc.
+        // 2. The last instance of -/_ is at offset 3, and the portion after that is
+        //    longer than 4 characters (i.e. not a script or region code). This handles
+        //    Old_Hungarian, Old_Italic, etc. ("old" is a valid language code)
+        // 3. The last instance of -/_ is at offset 7, and the portion after that is
+        //    3 characters. This handles New_Tai_Lue ("new" is a valid language code).
+        if ( lastSepPos < 0
+                || (lastSepPos == 3 && nameOrAbbrOrLocale.length() > 8)
+                || (lastSepPos == 7 && nameOrAbbrOrLocale.length() == 11) ) {
             int propNum = UCharacter.getPropertyValueEnumNoThrow(UProperty.SCRIPT, nameOrAbbrOrLocale);
             if (propNum != UProperty.UNDEFINED) {
                 return new int[] {propNum};

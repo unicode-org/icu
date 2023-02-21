@@ -22,6 +22,13 @@ pa{
     ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] / \\& ′ ″]"}
     MoreInformation{"?"}
     NumberElements{
+        adlm{
+            symbols{
+                decimal{"."}
+                plusSign{"+"}
+                timeSeparator{":"}
+            }
+        }
         arabext{
             patterns{
                 currencyFormat{"¤#,##,##0.00"}
@@ -45,6 +52,31 @@ pa{
                 timeSeparator{"٫"}
             }
         }
+        bali{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        beng{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        brah{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        cakm{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        cham{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
         default{"latn"}
         guru{
             patterns{
@@ -55,10 +87,60 @@ pa{
                 scientificFormat{"[#E0]"}
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
                 infinity{"∞"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{":"}
+            }
+        }
+        java{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+            }
+        }
+        kali{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+            }
+        }
+        knda{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
                 minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
@@ -270,6 +352,22 @@ pa{
         }
         minimumGroupingDigits{"1"}
         native{"guru"}
+        rohg{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+            }
+        }
     }
     calendar{
         buddhist{
@@ -562,6 +660,12 @@ pa{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -737,6 +841,12 @@ pa{
                 "d MMM y",
                 "d/M/yy",
                 "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0}",
                 "{1} {0}",
                 "{1}, {0}",
@@ -1416,8 +1526,50 @@ pa{
             }
         }
         islamic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, dd MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd/MM/y GGGGG",
+                "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             availableFormats{
+                E{"ccc"}
+                Ed{"E, d"}
+                Gy{"G y"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM, y G"}
+                GyMd{"d/M/GGGGG y"}
+                M{"L"}
+                MEd{"E, d/M"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMMd{"MMMM d"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                d{"d"}
+                y{"y G"}
+                yMMM{"MMM y G"}
+                yQQQ{"QQQ y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y GGGGG"}
+                yyyyMEd{"E, d/M/y GGGGG"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"d/M/y GGGGG"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{
@@ -2585,10 +2737,16 @@ pa{
             start{"{0}, {1}"}
         }
         or-narrow{
+            2{"{0} ਜਾਂ {1}"}
             end{"{0}, ਜਾਂ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         or-short{
+            2{"{0} ਜਾਂ {1}"}
             end{"{0}, ਜਾਂ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
             2{"{0} ਅਤੇ {1}"}

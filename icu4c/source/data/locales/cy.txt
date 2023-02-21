@@ -903,10 +903,12 @@ cy{
                     }
                     wide{
                         afternoon1{"y prynhawn"}
+                        am{"AM"}
                         evening1{"yr hwyr"}
                         midnight{"canol nos"}
                         morning1{"y bore"}
                         noon{"canol dydd"}
+                        pm{"PM"}
                     }
                 }
             }
@@ -1289,6 +1291,11 @@ cy{
         }
         day-narrow{
             dn{"diwrnod"}
+            relative{
+                "-1"{"ddoe"}
+                "0"{"heddiw"}
+                "1"{"yfory"}
+            }
             relativeTime{
                 future{
                     few{"ymhen {0} diwrnod"}
@@ -1309,6 +1316,7 @@ cy{
             }
         }
         day-short{
+            dn{"diwrnod"}
             relative{
                 "-1"{"ddoe"}
                 "-2"{"echdoe"}
@@ -1672,6 +1680,11 @@ cy{
         }
         month-narrow{
             dn{"mis"}
+            relative{
+                "-1"{"mis diwethaf"}
+                "0"{"y mis hwn"}
+                "1"{"mis nesaf"}
+            }
             relativeTime{
                 future{
                     few{"ymhen {0} mis"}
@@ -1693,6 +1706,11 @@ cy{
         }
         month-short{
             dn{"mis"}
+            relative{
+                "-1"{"mis diwethaf"}
+                "0"{"y mis hwn"}
+                "1"{"mis nesaf"}
+            }
             relativeTime{
                 future{
                     few{"ymhen {0} mis"}
@@ -1806,6 +1824,11 @@ cy{
             }
         }
         sat-narrow{
+            relative{
+                "-1"{"Sad. diwethaf"}
+                "0"{"Sad. yma"}
+                "1"{"Sad. nesaf"}
+            }
             relativeTime{
                 future{
                     few{"ymhen {0} dydd Sadwrn"}
@@ -2017,6 +2040,11 @@ cy{
             }
         }
         thu-narrow{
+            relative{
+                "-1"{"Iau diwethaf"}
+                "0"{"Iau yma"}
+                "1"{"Iau nesaf"}
+            }
             relativeTime{
                 future{
                     few{"ymhen {0} dydd Iau"}
@@ -2373,6 +2401,11 @@ cy{
         }
         year-short{
             dn{"bl."}
+            relative{
+                "-1"{"llynedd"}
+                "0"{"eleni"}
+                "1"{"blwyddyn nesaf"}
+            }
             relativeTime{
                 future{
                     few{"ymhen {0} blynedd"}
@@ -2404,6 +2437,18 @@ cy{
     }
     listPattern{
         or{
+            2{"{0} neu {1}"}
+            end{"{0} neu {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-narrow{
+            2{"{0} neu {1}"}
+            end{"{0} neu {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
             2{"{0} neu {1}"}
             end{"{0} neu {1}"}
             middle{"{0}, {1}"}

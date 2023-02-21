@@ -830,6 +830,11 @@ qu{
         }
         day-narrow{
             dn{"Day"}
+            relative{
+                "-1"{"qayna punchaw"}
+                "0"{"kunan punchaw"}
+                "1"{"paqarin"}
+            }
             relativeTime{
                 future{
                     other{"+{0} d"}
@@ -841,6 +846,11 @@ qu{
         }
         day-short{
             dn{"Day"}
+            relative{
+                "-1"{"qayna punchaw"}
+                "0"{"kunan punchaw"}
+                "1"{"paqarin"}
+            }
             relativeTime{
                 future{
                     other{"+{0} d"}
@@ -1057,6 +1067,11 @@ qu{
         }
         month-narrow{
             dn{"Month"}
+            relative{
+                "-1"{"qayna killa"}
+                "0"{"kunan killa"}
+                "1"{"hamuq killa"}
+            }
             relativeTime{
                 future{
                     other{"+{0} m"}
@@ -1068,6 +1083,11 @@ qu{
         }
         month-short{
             dn{"Month"}
+            relative{
+                "-1"{"qayna killa"}
+                "0"{"kunan killa"}
+                "1"{"hamuq killa"}
+            }
             relativeTime{
                 future{
                     other{"+{0} m"}
@@ -1395,6 +1415,11 @@ qu{
         }
         week-narrow{
             dn{"Week"}
+            relative{
+                "-1"{"qayna semana"}
+                "0"{"kunan semana"}
+                "1"{"hamuq semana"}
+            }
             relativePeriod{"{0} semanapi"}
             relativeTime{
                 future{
@@ -1407,6 +1432,11 @@ qu{
         }
         week-short{
             dn{"Week"}
+            relative{
+                "-1"{"qayna semana"}
+                "0"{"kunan semana"}
+                "1"{"hamuq semana"}
+            }
             relativePeriod{"{0} semanapi"}
             relativeTime{
                 future{
@@ -1462,6 +1492,11 @@ qu{
         }
         year-narrow{
             dn{"Year"}
+            relative{
+                "-1"{"qayna wata"}
+                "0"{"kunan wata"}
+                "1"{"hamuq wata"}
+            }
             relativeTime{
                 future{
                     other{"+{0} y"}
@@ -1473,6 +1508,11 @@ qu{
         }
         year-short{
             dn{"Year"}
+            relative{
+                "-1"{"qayna wata"}
+                "0"{"kunan wata"}
+                "1"{"hamuq wata"}
+            }
             relativeTime{
                 future{
                     other{"+{0} y"}
@@ -1505,10 +1545,44 @@ qu{
         or-narrow{
             2{"{0} utaq {1}"}
             end{"{0}, utaq {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         or-short{
             2{"{0} utaq {1}"}
             end{"{0}, utaq {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-narrow{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     personNames{

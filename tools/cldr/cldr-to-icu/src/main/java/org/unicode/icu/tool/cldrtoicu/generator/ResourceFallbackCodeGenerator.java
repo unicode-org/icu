@@ -71,6 +71,11 @@ public class ResourceFallbackCodeGenerator implements CodeGenerator {
     }
 
     private void handleParentLocale(CldrValue value) {
+        String component = value.get(AttributeKey.keyOf("parentLocales", "component"));
+        if (component != null) {
+            // CLDR-16253 added component-specific parents, which we ignore for now.
+            return;
+        }
         String parent = value.get(AttributeKey.keyOf("parentLocale", "parent"));
         String childrenStr = value.get(AttributeKey.keyOf("parentLocale", "locales"));
 

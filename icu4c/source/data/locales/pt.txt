@@ -702,6 +702,15 @@ pt{
                         "S",
                         "S",
                     }
+                    short{
+                        "dom.",
+                        "seg.",
+                        "ter.",
+                        "qua.",
+                        "qui.",
+                        "sex.",
+                        "sáb.",
+                    }
                     wide{
                         "domingo",
                         "segunda-feira",
@@ -713,6 +722,15 @@ pt{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "dom.",
+                        "seg.",
+                        "ter.",
+                        "qua.",
+                        "qui.",
+                        "sex.",
+                        "sáb.",
+                    }
                     narrow{
                         "D",
                         "S",
@@ -721,6 +739,15 @@ pt{
                         "Q",
                         "S",
                         "S",
+                    }
+                    short{
+                        "dom.",
+                        "seg.",
+                        "ter.",
+                        "qua.",
+                        "qui.",
+                        "sex.",
+                        "sáb.",
                     }
                     wide{
                         "domingo",
@@ -999,6 +1026,20 @@ pt{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "jan.",
+                        "fev.",
+                        "mar.",
+                        "abr.",
+                        "mai.",
+                        "jun.",
+                        "jul.",
+                        "ago.",
+                        "set.",
+                        "out.",
+                        "nov.",
+                        "dez.",
+                    }
                     narrow{
                         "J",
                         "F",
@@ -1250,7 +1291,10 @@ pt{
         day-narrow{
             dn{"dia"}
             relative{
+                "-1"{"ontem"}
                 "-2"{"anteontem"}
+                "0"{"hoje"}
+                "1"{"amanhã"}
                 "2"{"depois de amanhã"}
             }
             relativeTime{
@@ -1267,7 +1311,10 @@ pt{
         day-short{
             dn{"dia"}
             relative{
+                "-1"{"ontem"}
                 "-2"{"anteontem"}
+                "0"{"hoje"}
+                "1"{"amanhã"}
                 "2"{"depois de amanhã"}
             }
             relativeTime{
@@ -2052,6 +2099,18 @@ pt{
             2{"{0} ou {1}"}
             end{"{0} ou {1}"}
         }
+        or-narrow{
+            2{"{0} ou {1}"}
+            end{"{0} ou {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} ou {1}"}
+            end{"{0} ou {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} e {1}"}
             end{"{0} e {1}"}
@@ -2059,6 +2118,8 @@ pt{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} e {1}"}
@@ -2069,6 +2130,8 @@ pt{
         unit{
             2{"{0} e {1}"}
             end{"{0} e {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}
@@ -2079,6 +2142,8 @@ pt{
         unit-short{
             2{"{0} e {1}"}
             end{"{0} e {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{

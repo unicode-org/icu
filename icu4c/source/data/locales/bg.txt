@@ -1628,6 +1628,7 @@ bg{
             }
         }
         second-narrow{
+            dn{"сек"}
             relativeTime{
                 future{
                     one{"сл. {0} сек"}
@@ -2011,6 +2012,18 @@ bg{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} или {1}"}
+            end{"{0} или {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} или {1}"}
+            end{"{0} или {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} и {1}"}
             end{"{0} и {1}"}
@@ -2019,8 +2032,12 @@ bg{
         }
         standard-narrow{
             2{"{0}, {1}"}
+            end{"{0} и {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
+            2{"{0} и {1}"}
             end{"{0} и {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
@@ -2067,14 +2084,27 @@ bg{
                 "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-core-monog"
                 "ram-allCaps}"
             }
+            givenFirst-long-monogram-informal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-core-monog"
+                "ram-allCaps}"
+            }
             givenFirst-long-referring-formal{"{title} {given} {given2} {surname-core}, {credentials}"}
             givenFirst-long-referring-informal{"{given} {surname-core}"}
             givenFirst-medium-addressing-formal{"{title} {surname-core}"}
             givenFirst-medium-addressing-informal{"{given}"}
+            givenFirst-medium-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-core-monog"
+                "ram-allCaps}"
+            }
             givenFirst-medium-monogram-informal{"{given-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{title} {given} {given2} {surname-core}, {credentials}"}
             givenFirst-medium-referring-informal{"{given} {surname-core}"}
             givenFirst-short-addressing-formal{"{title} {surname-core}"}
             givenFirst-short-addressing-informal{"{given}"}
+            givenFirst-short-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-core-monog"
+                "ram-allCaps}"
+            }
             givenFirst-short-monogram-informal{"{given-monogram-allCaps}"}
             givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname-core}"}
             givenFirst-short-referring-informal{"{given} {surname-core-initial}"}

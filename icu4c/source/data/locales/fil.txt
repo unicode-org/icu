@@ -264,6 +264,11 @@ fil{
         }
         minimumGroupingDigits{"1"}
         native{"latn"}
+        sora{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
     }
     calendar{
         buddhist{
@@ -3869,6 +3874,18 @@ fil{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} o {1}"}
+            end{"{0}, o {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} o {1}"}
+            end{"{0}, o {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} at {1}"}
             end{"{0}, at {1}"}
@@ -3878,10 +3895,14 @@ fil{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} at {1}"}
             end{"{0}, at {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit{
             2{"{0}, {1}"}

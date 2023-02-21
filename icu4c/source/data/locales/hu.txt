@@ -27,7 +27,47 @@ hu{
     }
     MoreInformation{"?"}
     NumberElements{
+        adlm{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        bali{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        beng{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        brah{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        cakm{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        cham{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
         default{"latn"}
+        deva{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        hanidec{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
         latn{
             miscPatterns{
                 approximately{"~{0}"}
@@ -231,6 +271,21 @@ hu{
         }
         minimumGroupingDigits{"1"}
         native{"latn"}
+        olck{
+            symbols{
+                decimal{","}
+            }
+        }
+        rohg{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
+        sora{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
     }
     calendar{
         buddhist{
@@ -537,6 +592,12 @@ hu{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "Hmmsszzzz",
                 "Hmmssz",
@@ -713,6 +774,12 @@ hu{
                 "y. MMM d.",
                 "y. MM. dd.",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1788,6 +1855,9 @@ hu{
         }
         hour-narrow{
             dn{"ó"}
+            relative{
+                "0"{"ebben az órában"}
+            }
             relativeTime{
                 future{
                     one{"{0} óra múlva"}
@@ -1801,6 +1871,9 @@ hu{
         }
         hour-short{
             dn{"óra"}
+            relative{
+                "0"{"ebben az órában"}
+            }
             relativeTime{
                 future{
                     one{"{0} óra múlva"}
@@ -1830,6 +1903,9 @@ hu{
         }
         minute-narrow{
             dn{"p"}
+            relative{
+                "0"{"ebben a percben"}
+            }
             relativeTime{
                 future{
                     one{"{0} perc múlva"}
@@ -1843,6 +1919,9 @@ hu{
         }
         minute-short{
             dn{"perc"}
+            relative{
+                "0"{"ebben a percben"}
+            }
             relativeTime{
                 future{
                     one{"{0} perc múlva"}
@@ -2082,6 +2161,9 @@ hu{
         }
         second-narrow{
             dn{"mp"}
+            relative{
+                "0"{"most"}
+            }
             relativeTime{
                 future{
                     one{"{0} másodperc múlva"}
@@ -2095,6 +2177,9 @@ hu{
         }
         second-short{
             dn{"másodperc"}
+            relative{
+                "0"{"most"}
+            }
             relativeTime{
                 future{
                     one{"{0} másodperc múlva"}
@@ -2465,7 +2550,25 @@ hu{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} vagy {1}"}
+            end{"{0} vagy {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} vagy {1}"}
+            end{"{0} vagy {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} és {1}"}
+            end{"{0} és {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} és {1}"}
             end{"{0} és {1}"}
             middle{"{0}, {1}"}
@@ -2474,6 +2577,8 @@ hu{
         standard-short{
             2{"{0} és {1}"}
             end{"{0} és {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit{
             2{"{0} és {1}"}

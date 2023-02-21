@@ -235,6 +235,10 @@ void TransliteratorTest::TestInstantiation() {
                   i + ") != getAvailableIDs().snext()");
             continue;
         }
+        if ((id.indexOf((UnicodeString)"Geminate") >= 0 || id.indexOf((UnicodeString)"geminate") >= 0) &&
+                logKnownIssue("CLDR-16408", "Transliterator::createInstance fails for Ethiopic-Latin /Geminate[d] transforms")) {
+            continue;
+        }
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
         Transliterator* t = Transliterator::createInstance(id,
@@ -2044,6 +2048,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TestTrans)
  */
 void TransliteratorTest::TestSTV(void) {
     int32_t ns = Transliterator::countAvailableSources();
+    logln((UnicodeString)"countAvailableSources at start: " + ns);
     if (ns < 0 || ns > 255) {
         errln((UnicodeString)"FAIL: Bad source count: " + ns);
         return;
@@ -2124,6 +2129,7 @@ void TransliteratorTest::TestSTV(void) {
 
     // Make sure getAvailable API reflects removal
     int32_t n = Transliterator::countAvailableIDs();
+    logln((UnicodeString)"countAvailableIDs at end: " + n);
     for (i=0; i<n; ++i) {
         UnicodeString id = Transliterator::getAvailableID(i);
         for (j=0; j<3; ++j) {
@@ -2133,6 +2139,7 @@ void TransliteratorTest::TestSTV(void) {
         }
     }
     n = Transliterator::countAvailableTargets("Any");
+    logln((UnicodeString)"countAvailableTargets(\"Any\") at end: " + n);
     for (i=0; i<n; ++i) {
         UnicodeString t;
         Transliterator::getAvailableTarget(i, "Any", t);
@@ -2141,13 +2148,16 @@ void TransliteratorTest::TestSTV(void) {
         }
     }
     n = Transliterator::countAvailableSources();
+    logln((UnicodeString)"countAvailableSources at end: " + n);
     for (i=0; i<n; ++i) {
         UnicodeString s;
         Transliterator::getAvailableSource(i, s);
         for (j=0; j<3; ++j) {
             if (SOURCES[j] == nullptr) continue;
             if (s.caseCompare(SOURCES[j],0)==0) {
-                errln((UnicodeString)"FAIL: unregister(" + s + "-*) failed");
+                if (j!=2 || !logKnownIssue("21911", "ICU4C cannot create inverse of (or unregister) Any-Xxxx/Variant transform created from both-direction transform")) {
+                    errln((UnicodeString)"FAIL: unregister(" + s + "-*) failed");
+                }
             }
         }
     }
@@ -3655,6 +3665,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                     // 2. Any-*/BGN
                     // 2a. Any-*/BGN_1981
                     // 3. Any-*/MNS
+                    // 3a. Any-*/Geminate[d]
                     //
                     // 4. If UCONFIG_NO_BREAK_ITERATION is on, Latin-Thai is also not expected to work.
                     //
@@ -3672,7 +3683,8 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                     //
                     if (    id.compare((UnicodeString)"Devanagari-Arabic/") != 0
                          && !(id.startsWith((UnicodeString)"Any-") &&
-                                (id.endsWith((UnicodeString)"/BGN") || id.endsWith((UnicodeString)"/BGN_1981") || id.endsWith((UnicodeString)"/MNS"))
+                                (id.endsWith((UnicodeString)"/BGN") || id.endsWith((UnicodeString)"/BGN_1981") || id.endsWith((UnicodeString)"/MNS") ||
+                                 id.endsWith((UnicodeString)"/Geminate") || id.endsWith((UnicodeString)"/Geminated"))
                              )
 #if UCONFIG_NO_BREAK_ITERATION
                          && id.compare((UnicodeString)"Latin-Thai/") != 0

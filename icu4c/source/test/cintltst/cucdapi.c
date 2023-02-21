@@ -73,7 +73,9 @@ void TestUScriptCodeAPI(){
         "asfdasd", "5464", "12235",
         /* test the last index */
         "zyyy", "YI",
-        NULL  
+         /* test other cases that are ambiguous (script alias vs language tag) */
+         "han", "mro", "nko", "old-hungarian", "new-tai-lue",
+       NULL  
         };
         UScriptCode expected[] ={
             /* locales should return */
@@ -95,7 +97,10 @@ void TestUScriptCodeAPI(){
             USCRIPT_TAGBANWA, USCRIPT_ARABIC,
             /* bogus names should return invalid code */
             USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE,
+            /* test the last index */
             USCRIPT_COMMON, USCRIPT_YI,
+            /* test other cases that are ambiguous (script alias vs language tag) */
+            USCRIPT_HAN, USCRIPT_MRO, USCRIPT_NKO, USCRIPT_OLD_HUNGARIAN, USCRIPT_NEW_TAI_LUE,
         };
 
         UErrorCode err = U_ZERO_ERROR;

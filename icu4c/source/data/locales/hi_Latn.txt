@@ -187,6 +187,15 @@ hi_Latn{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Ravi",
+                        "Som",
+                        "Mangal",
+                        "Budh",
+                        "Guru",
+                        "Shukra",
+                        "Shani",
+                    }
                     narrow{
                         "Ra",
                         "So",
@@ -338,6 +347,9 @@ hi_Latn{
                 abbreviated{
                     "Hijri",
                 }
+                narrow{
+                    "Hijri",
+                }
                 wide{
                     "Hijri",
                 }
@@ -407,6 +419,11 @@ hi_Latn{
         }
         day-narrow{
             dn{"din"}
+            relative{
+                "-1"{"kal"}
+                "0"{"aaj"}
+                "1"{"aane wala kal"}
+            }
             relativeTime{
                 future{
                     one{"{0} din mein"}
@@ -420,6 +437,11 @@ hi_Latn{
         }
         day-short{
             dn{"din"}
+            relative{
+                "-1"{"kal"}
+                "0"{"aaj"}
+                "1"{"aane wala kal"}
+            }
             relativeTime{
                 future{
                     one{"{0} din mein"}

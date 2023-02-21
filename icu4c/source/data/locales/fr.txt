@@ -1740,6 +1740,7 @@ fr{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"dd/MM/y GGGGG"}
                 M{"L"}
                 MEd{"E dd/MM"}
                 MMM{"LLL"}
@@ -2971,6 +2972,18 @@ fr{
     }
     listPattern{
         or{
+            2{"{0} ou {1}"}
+            end{"{0} ou {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-narrow{
+            2{"{0} ou {1}"}
+            end{"{0} ou {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
             2{"{0} ou {1}"}
             end{"{0} ou {1}"}
             middle{"{0}, {1}"}

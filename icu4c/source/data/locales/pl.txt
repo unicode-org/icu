@@ -459,6 +459,12 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -651,6 +657,12 @@ pl{
                 "d MMM y",
                 "d.MM.y",
                 "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0}",
                 "{1} {0}",
                 "{1}, {0}",
@@ -1709,7 +1721,10 @@ pl{
         day-short{
             dn{"dz."}
             relative{
+                "-1"{"wczoraj"}
                 "-2"{"przedwczoraj"}
+                "0"{"dzisiaj"}
+                "1"{"jutro"}
                 "2"{"pojutrze"}
             }
             relativeTime{
@@ -2666,6 +2681,18 @@ pl{
             2{"{0} lub {1}"}
             end{"{0} lub {1}"}
         }
+        or-narrow{
+            2{"{0} lub {1}"}
+            end{"{0} lub {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} lub {1}"}
+            end{"{0} lub {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
@@ -2685,14 +2712,20 @@ pl{
         unit{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit-short{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{

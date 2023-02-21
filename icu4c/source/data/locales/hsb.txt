@@ -1135,7 +1135,16 @@ hsb{
         dayperiod-narrow{
             dn{"poł. dnja"}
         }
+        dayperiod-short{
+            dn{"połojca dnja"}
+        }
         era{
+            dn{"doba"}
+        }
+        era-narrow{
+            dn{"doba"}
+        }
+        era-short{
             dn{"doba"}
         }
         fri{
@@ -1947,6 +1956,9 @@ hsb{
         weekday-narrow{
             dn{"dź. tydźenja"}
         }
+        weekday-short{
+            dn{"dźeń tydźenja"}
+        }
         weekdayOfMonth{
             dn{"dźeń tydźenja w měsacu"}
         }
@@ -2028,13 +2040,40 @@ hsb{
         zone-narrow{
             dn{"čas. pasmo"}
         }
+        zone-short{
+            dn{"časowe pasmo"}
+        }
     }
     listPattern{
         or{
             2{"{0} abo {1}"}
             end{"{0} abo {1}"}
         }
+        or-narrow{
+            2{"{0} abo {1}"}
+            end{"{0} abo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} abo {1}"}
+            end{"{0} abo {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} a {1}"}
+            end{"{0} a {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
+            2{"{0} a {1}"}
+            end{"{0} a {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-short{
             2{"{0} a {1}"}
             end{"{0} a {1}"}
             middle{"{0}, {1}"}
