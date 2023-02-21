@@ -114,7 +114,20 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     }
 
     triedCode = false;
-    if(uprv_strchr(nameOrAbbrOrLocale, '-')==nullptr && uprv_strchr(nameOrAbbrOrLocale, '_')==nullptr ){
+    const char* lastSepPtr = uprv_strrchr(nameOrAbbrOrLocale, '-');
+    if (lastSepPtr==nullptr) {
+        lastSepPtr = uprv_strrchr(nameOrAbbrOrLocale, '_');
+    }
+    // Favor interpretation of nameOrAbbrOrLocale as a script alias if either
+    // 1. nameOrAbbrOrLocale does not contain -/_. Handles Han, Mro, Nko, etc.
+    // 2. The last instance of -/_ is at offset 3, and the portion after that is
+    //    longer than 4 characters (i.e. not a script or region code). This handles
+    //    Old_Hungarian, Old_Italic, etc. ("old" is a valid language code)
+    // 3. The last instance of -/_ is at offset 7, and the portion after that is
+    //    3 characters. This handles New_Tai_Lue ("new" is a valid language code).
+    if (lastSepPtr==nullptr
+            || (lastSepPtr-nameOrAbbrOrLocale == 3 && uprv_strlen(nameOrAbbrOrLocale) > 8)
+            || (lastSepPtr-nameOrAbbrOrLocale == 7 && uprv_strlen(nameOrAbbrOrLocale) == 11) ) {
         /* try long and abbreviated script names first */
         UScriptCode code = (UScriptCode) u_getPropertyValueEnum(UCHAR_SCRIPT, nameOrAbbrOrLocale);
         if(code!=USCRIPT_INVALID_CODE) {

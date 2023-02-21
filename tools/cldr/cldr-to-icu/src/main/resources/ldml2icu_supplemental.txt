@@ -134,10 +134,14 @@
     ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
 
 //supplementalData/calendarData/calendar[@type="(%W)"]/calendarSystem[@type="(%W)"] ; /calendarData/$1/system ; values=$2
-//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"][@named="(%W)"]
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@named="(%W)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
     ; /calendarData/$1/eras/$2/named ; values=$5
-//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"]
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@code="%A"][@aliases="%A"]
+    ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@code="%A"]
+    ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
 
 # units.xml
@@ -228,6 +232,7 @@
 //supplementalData/languageMatching/languageMatches[@type="(%B)"]/languageMatch[@desired="(%A)"][@supported="(%A)"][@percent="(%N)"] ; /languageMatching/$1/<FIFO> ; values=$2 $3 $4 0
 
 # likelySubtags.xml
+//supplementalData/likelySubtags/likelySubtag[@from="(%A)"][@to="(%A)"][@origin="%A"] ; /$1 ; values=$2
 //supplementalData/likelySubtags/likelySubtag[@from="(%A)"][@to="(%A)"] ; /$1 ; values=$2
 
 # metaZones.xml - metaZones.txt
@@ -258,6 +263,7 @@
 //supplementalData/gender/personList[@type="(%W)"][@locales="(%W)"] ; /genderList/$2 ; values=$1
 
 # locale info
+//supplementalData/parentLocales[@component="(%A)"]/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales%$1/$2 ; values=$3
 //supplementalData/parentLocales/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales/$1 ; values=$2
 
 # personName formats

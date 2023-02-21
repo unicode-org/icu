@@ -765,6 +765,10 @@ ga{
                 "r.n.",
                 "i.n.",
             }
+            AmPmMarkersNarrow{
+                "r.n.",
+                "i.n.",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -940,6 +944,10 @@ ga{
             }
             dayPeriod{
                 stand-alone{
+                    abbreviated{
+                        am{"r.n."}
+                        pm{"i.n."}
+                    }
                     narrow{
                         am{"r.n."}
                         pm{"i.n."}
@@ -1330,6 +1338,7 @@ ga{
             }
         }
         day-narrow{
+            dn{"lá"}
             relative{
                 "-1"{"inné"}
                 "-2"{"arú inné"}
@@ -1355,6 +1364,7 @@ ga{
             }
         }
         day-short{
+            dn{"lá"}
             relative{
                 "-1"{"inné"}
                 "-2"{"arú inné"}
@@ -2318,6 +2328,9 @@ ga{
         weekday{
             dn{"lá den tseachtain"}
         }
+        weekday-narrow{
+            dn{"lá den tscht."}
+        }
         weekday-short{
             dn{"lá den tscht."}
         }
@@ -2420,10 +2433,16 @@ ga{
             start{"{0}, {1}"}
         }
         or-narrow{
+            2{"{0} nó {1}"}
             end{"{0} nó {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         or-short{
+            2{"{0} nó {1}"}
             end{"{0} nó {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
             2{"{0} agus {1}"}
@@ -2502,6 +2521,10 @@ ga{
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
+                "llCaps}"
+            }
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
             givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}

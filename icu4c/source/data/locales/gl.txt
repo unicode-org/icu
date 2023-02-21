@@ -274,6 +274,12 @@ gl{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -1137,6 +1143,11 @@ gl{
         }
         day-narrow{
             dn{"día"}
+            relative{
+                "-1"{"onte"}
+                "0"{"hoxe"}
+                "1"{"mañá"}
+            }
             relativeTime{
                 future{
                     one{"en {0} día"}
@@ -1150,6 +1161,11 @@ gl{
         }
         day-short{
             dn{"día"}
+            relative{
+                "-1"{"onte"}
+                "0"{"hoxe"}
+                "1"{"mañá"}
+            }
             relativeTime{
                 future{
                     one{"en {0} día"}
@@ -1412,6 +1428,11 @@ gl{
         }
         month-short{
             dn{"mes"}
+            relative{
+                "-1"{"o mes pasado"}
+                "0"{"este mes"}
+                "1"{"o próximo mes"}
+            }
             relativeTime{
                 future{
                     one{"en {0} mes"}
@@ -1929,6 +1950,18 @@ gl{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} ou {1}"}
+            end{"{0} ou {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} ou {1}"}
+            end{"{0} ou {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} e {1}"}
             end{"{0} e {1}"}
@@ -1936,6 +1969,8 @@ gl{
             start{"{0}, {1}"}
         }
         standard-narrow{
+            2{"{0} e {1}"}
+            end{"{0} e {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }

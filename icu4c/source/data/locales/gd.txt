@@ -4357,6 +4357,18 @@ gd{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} no {1}"}
+            end{"{0} no {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} no {1}"}
+            end{"{0} no {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} agus {1}"}
             end{"{0} agus {1}"}
@@ -4468,10 +4480,22 @@ gd{
             givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {given2-initial}"}
             sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
-            sorting-long-referring-informal{"{surname}, {given-informal} {given2}"}
-            sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
-            sorting-medium-referring-informal{"{surname}, {given-informal} {given2}"}
-            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
+            sorting-long-referring-informal{
+                "{surname}, {given-informal} {given2}",
+                "{surname-core}, {given} {given2} {surname-prefix}",
+            }
+            sorting-medium-referring-formal{
+                "{surname-core}, {given} {given2-initial} {surname-prefix}",
+                "{surname-core}, {given} {given2} {surname-prefix}",
+            }
+            sorting-medium-referring-informal{
+                "{surname}, {given-informal} {given2}",
+                "{surname-core}, {given} {given2} {surname-prefix}",
+            }
+            sorting-short-referring-formal{
+                "{surname-core}, {given-initial} {given2-initial} {surname-prefix}",
+                "{surname-core}, {given} {given2} {surname-prefix}",
+            }
             sorting-short-referring-informal{
                 "{surname}, {given-informal} {given2}",
                 "{surname-core}, {given-informal} {given2} {surname-prefix}",

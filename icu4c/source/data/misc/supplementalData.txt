@@ -20328,6 +20328,7 @@ supplementalData:table(nofallback){
         no{
             "nb",
             "nn",
+            "no_NO",
         }
         pt_PT{
             "pt_AO",

@@ -20,6 +20,12 @@ ca{
     }
     MoreInformation{"?"}
     NumberElements{
+        adlm{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
+            }
+        }
         default{"latn"}
         latn{
             miscPatterns{
@@ -2131,6 +2137,18 @@ ca{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} o {1}"}
+            end{"{0} o {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} o {1}"}
+            end{"{0} o {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
@@ -2138,6 +2156,8 @@ ca{
             start{"{0}, {1}"}
         }
         standard-narrow{
+            2{"{0} i {1}"}
+            end{"{0} i {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }

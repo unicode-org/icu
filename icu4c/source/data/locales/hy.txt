@@ -246,6 +246,12 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -428,6 +434,12 @@ hy{
                 "dd MMM, y թ.",
                 "dd.MM.yy",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -1716,6 +1728,11 @@ hy{
         }
         week-narrow{
             dn{"շաբ"}
+            relative{
+                "-1"{"նախորդ շաբաթ"}
+                "0"{"այս շաբաթ"}
+                "1"{"հաջորդ շաբաթ"}
+            }
             relativePeriod{"{0} շաբ-ում"}
             relativeTime{
                 future{
@@ -1730,6 +1747,11 @@ hy{
         }
         week-short{
             dn{"շաբ"}
+            relative{
+                "-1"{"նախորդ շաբաթ"}
+                "0"{"այս շաբաթ"}
+                "1"{"հաջորդ շաբաթ"}
+            }
             relativePeriod{"{0} շաբ-ում"}
             relativeTime{
                 future{
@@ -1789,6 +1811,11 @@ hy{
         }
         year-narrow{
             dn{"տ"}
+            relative{
+                "-1"{"նախորդ տարի"}
+                "0"{"այս տարի"}
+                "1"{"հաջորդ տարի"}
+            }
             relativeTime{
                 future{
                     one{"{0} տարուց"}
@@ -1802,6 +1829,11 @@ hy{
         }
         year-short{
             dn{"տ"}
+            relative{
+                "-1"{"նախորդ տարի"}
+                "0"{"այս տարի"}
+                "1"{"հաջորդ տարի"}
+            }
             relativeTime{
                 future{
                     one{"{0} տարուց"}
@@ -1830,6 +1862,18 @@ hy{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} կամ {1}"}
+            end{"{0} կամ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} կամ {1}"}
+            end{"{0} կամ {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} և {1}"}
             end{"{0} և {1}"}
@@ -1839,6 +1883,8 @@ hy{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} և {1}"}
@@ -1907,6 +1953,8 @@ hy{
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
             sorting-long-referring-formal{"{surname-core} {given}"}
             sorting-long-referring-informal{"{surname} {given-informal}"}
+            sorting-medium-referring-formal{"{surname-core} {given}"}
+            sorting-medium-referring-informal{"{surname-core} {given}"}
             sorting-short-referring-formal{"{surname-core} {given-initial}"}
             sorting-short-referring-informal{"{surname} {given-informal}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}

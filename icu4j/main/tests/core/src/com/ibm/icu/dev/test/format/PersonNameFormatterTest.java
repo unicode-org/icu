@@ -113,7 +113,8 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "MEDIUM", "REFERRING",  "INFORMAL", "",              "Rich Gillam" },
                 { "en_US", "MEDIUM", "ADDRESSING", "FORMAL",   "",              "Mr. Gillam" },
                 { "en_US", "MEDIUM", "ADDRESSING", "INFORMAL", "",              "Rich" },
-                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "",              "R. T. Gillam" },
+                //{ "en_US", "SHORT",  "REFERRING",  "FORMAL",   "",              "R. T. Gillam" },
+                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "",              "R.T. Gillam" }, // result changed with CLDR 43-alpha1
                 { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "",              "Rich G." },
                 { "en_US", "SHORT",  "ADDRESSING", "FORMAL",   "",              "Mr. Gillam" },
                 { "en_US", "SHORT",  "ADDRESSING", "INFORMAL", "",              "Rich" },
@@ -123,7 +124,8 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "REFERRING",  "INFORMAL", "SORTING",       "Gillam, Rich" },
                 { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "SORTING",       "Gillam, Richard T." },
                 { "en_US", "MEDIUM", "REFERRING",  "INFORMAL", "SORTING",       "Gillam, Rich" },
-                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "SORTING",       "Gillam, R. T." },
+                //{ "en_US", "SHORT",  "REFERRING",  "FORMAL",   "SORTING",       "Gillam, R. T." },
+                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "SORTING",       "Gillam, R.T." }, // result changed with CLDR 43-alpha1
                 { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "SORTING",       "Gillam, Rich" },
 
                 // we don't really support ADDRESSING in conjunction with SORTING-- it should always
@@ -132,7 +134,8 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "ADDRESSING", "INFORMAL", "SORTING",       "Gillam, Rich" },
                 { "en_US", "MEDIUM", "ADDRESSING", "FORMAL",   "SORTING",       "Gillam, Richard T." },
                 { "en_US", "MEDIUM", "ADDRESSING", "INFORMAL", "SORTING",       "Gillam, Rich" },
-                { "en_US", "SHORT",  "ADDRESSING", "FORMAL",   "SORTING",       "Gillam, R. T." },
+                //{ "en_US", "SHORT",  "ADDRESSING", "FORMAL",   "SORTING",       "Gillam, R. T." },
+                { "en_US", "SHORT",  "ADDRESSING", "FORMAL",   "SORTING",       "Gillam, R.T." }, // result changed with CLDR 43-alpha1
                 { "en_US", "SHORT",  "ADDRESSING", "INFORMAL", "SORTING",       "Gillam, Rich" },
 
                 // finally, try the different variations of MONOGRAM
@@ -178,7 +181,8 @@ public class PersonNameFormatterTest extends TestFmwk{
 
                 // the default (English) logic for initials doesn't do anything special with the surname-prefix--
                 // it gets initials too, which is probably wrong
-                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "",              "Willem v. d. P." },
+                //{ "en_US", "SHORT",  "REFERRING",  "INFORMAL", "",              "Willem v. d. P." },
+                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "",              "Willem v.d.P." }, // result changed with CLDR 43-alpha1
 
                 // and (English) monogram generation doesn't do anything special with the prefix either
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "",              "WV" },

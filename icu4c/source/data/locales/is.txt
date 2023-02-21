@@ -307,6 +307,53 @@ is{
                 }
             }
             intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                    h{"h–h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                    h{"h:mm–h:mm B"}
+                    m{"h:mm–h:mm B"}
+                }
+                Gy{
+                    G{"y G – y G"}
+                    y{"y–y G"}
+                }
+                GyM{
+                    G{"MM.y GGGGG – MM.y GGGGG"}
+                    M{"MM.y – MM.y GGGGG"}
+                    y{"MM.y – MM.y GGGGG"}
+                }
+                GyMEd{
+                    G{"E, dd.MM.y GGGGG – E, dd.MM.y GGGGG"}
+                    M{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                    d{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                    y{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                }
+                GyMMM{
+                    G{"MMM y G – MMM y G"}
+                    M{"MMM–MMM y G"}
+                    y{"MMM y – MMM y G"}
+                }
+                GyMMMEd{
+                    G{"E, d. MMM y G – E, d. MMM y G"}
+                    M{"E, d. MMM – E, d. MMM y G"}
+                    d{"E, d. MMM – E, d. MMM y G"}
+                    y{"E, d. MMM y – E, d. MMM y G"}
+                }
+                GyMMMd{
+                    G{"d. MMM y G – d. MMM y G"}
+                    M{"d. MMM – d MMM y G"}
+                    d{"d.–d. MMM y G"}
+                    y{"d. MMM y – d. MMM y G"}
+                }
+                GyMd{
+                    G{"dd.MM.y GGGGG – dd.MM.y GGGGG"}
+                    M{"dd.MM.y – dd.MM.y GGGGG"}
+                    d{"dd.MM.y – dd.MM.y GGGGG"}
+                    y{"dd.MM.y – dd.MM.y GGGGG"}
+                }
                 H{
                     H{"HH–HH"}
                 }
@@ -3215,6 +3262,16 @@ is{
                 "1"{"á morgun"}
                 "2"{"eftir tvo daga"}
             }
+            relativeTime{
+                future{
+                    one{"eftir {0} dag"}
+                    other{"eftir {0} daga"}
+                }
+                past{
+                    one{"fyrir {0} degi"}
+                    other{"fyrir {0} dögum"}
+                }
+            }
         }
         day-short{
             dn{"dagur"}
@@ -3898,6 +3955,17 @@ is{
                 "0"{"í þessari viku"}
                 "1"{"í næstu viku"}
             }
+            relativePeriod{"vika {0}"}
+            relativeTime{
+                future{
+                    one{"eftir {0} viku"}
+                    other{"eftir {0} vikur"}
+                }
+                past{
+                    one{"fyrir {0} viku"}
+                    other{"fyrir {0} vikum"}
+                }
+            }
         }
         week-short{
             dn{"vika"}
@@ -4016,6 +4084,18 @@ is{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} eða {1}"}
+            end{"{0} eða {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} eða {1}"}
+            end{"{0} eða {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} og {1}"}
             end{"{0} og {1}"}
@@ -4025,6 +4105,7 @@ is{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
         standard-short{

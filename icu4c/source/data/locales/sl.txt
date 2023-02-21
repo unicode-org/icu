@@ -2203,7 +2203,25 @@ sl{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} ali {1}"}
+            end{"{0} ali {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} ali {1}"}
+            end{"{0} ali {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} in {1}"}
+            end{"{0} in {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} in {1}"}
             end{"{0} in {1}"}
             middle{"{0}, {1}"}
@@ -2212,6 +2230,8 @@ sl{
         standard-short{
             2{"{0} in {1}"}
             end{"{0} in {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit{
             2{"{0} in {1}"}

@@ -2225,6 +2225,10 @@ nl{
             one{"Slowaakse koruna"}
             other{"Slowaakse koruna"}
         }
+        SLE{
+            one{"Sierra Leoonse leone"}
+            other{"Sierra Leoonse leone"}
+        }
         SLL{
             one{"Sierraleoonse leone (1964—2022)"}
             other{"Sierraleoonse leone (1964—2022)"}

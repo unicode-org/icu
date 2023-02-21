@@ -322,6 +322,12 @@ da{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -2184,12 +2190,22 @@ da{
         or-narrow{
             2{"{0} el. {1}"}
             end{"{0} el. {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         or-short{
             2{"{0} el. {1}"}
             end{"{0} el. {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
+            2{"{0} og {1}"}
+            end{"{0} og {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} og {1}"}
             end{"{0} og {1}"}
             middle{"{0}, {1}"}
@@ -2293,6 +2309,10 @@ da{
             sorting-short-referring-informal{"{surname}, {given}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given}"}
+            surnameFirst-long-monogram-informal{
+                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
+                "llCaps}"
+            }
             surnameFirst-long-referring-formal{"{surname}, {title} {given} {given2}, {credentials}"}
             surnameFirst-long-referring-informal{"{surname}, {given-informal}"}
             surnameFirst-medium-addressing-formal{"{title} {surname}"}

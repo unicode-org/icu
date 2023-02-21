@@ -235,12 +235,6 @@ es_419{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimePatterns%atTime{
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -307,12 +301,6 @@ es_419{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%atTime{
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
                 "{1}, {0}",
             }
             DateTimeSkeletons{

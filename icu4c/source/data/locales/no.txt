@@ -4597,11 +4597,11 @@ no{
                     abbreviated{
                         "jan.",
                         "feb.",
-                        "mar.",
+                        "mars",
                         "apr.",
                         "mai",
-                        "jun.",
-                        "jul.",
+                        "juni",
+                        "juli",
                         "aug.",
                         "sep.",
                         "okt.",
@@ -7617,7 +7617,25 @@ no{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} eller {1}"}
+            end{"{0} eller {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} eller {1}"}
+            end{"{0} eller {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
+            2{"{0} og {1}"}
+            end{"{0} og {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        standard-narrow{
             2{"{0} og {1}"}
             end{"{0} og {1}"}
             middle{"{0}, {1}"}
@@ -7626,6 +7644,8 @@ no{
         standard-short{
             2{"{0} og {1}"}
             end{"{0} og {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit{
             2{"{0} og {1}"}
@@ -7674,6 +7694,7 @@ no{
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{credentials} {given} {given2} {surname} {generation}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
@@ -7685,6 +7706,7 @@ no{
             sorting-long-referring-informal{"{surname}, {given-informal}"}
             sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}

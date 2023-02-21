@@ -3794,7 +3794,7 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         }, {
             "aae_Latn_IT",
             "aae_Latn_IT",
-            "aae_Latn_IT"
+            "aae"
         }, {
             "aae_Thai_CO",
             "aae_Thai_CO",

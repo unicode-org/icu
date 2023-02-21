@@ -1833,5 +1833,18 @@ brx{
                 "zh",
             }
         }
+        namePattern{
+            givenFirst-long-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
+            givenFirst-long-addressing-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
+            givenFirst-long-referring-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
+            givenFirst-medium-monogram-informal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
+                "llCaps}"
+            }
+            givenFirst-medium-referring-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
+            givenFirst-medium-referring-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
+            surnameFirst-short-addressing-informal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
+            surnameFirst-short-referring-informal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
+        }
     }
 }

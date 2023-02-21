@@ -1007,6 +1007,15 @@ ru{
                         "пт",
                         "сб",
                     }
+                    narrow{
+                        "В",
+                        "П",
+                        "В",
+                        "С",
+                        "Ч",
+                        "П",
+                        "С",
+                    }
                     short{
                         "вс",
                         "пн",
@@ -3269,6 +3278,18 @@ ru{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        or-narrow{
+            2{"{0} или {1}"}
+            end{"{0} или {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        or-short{
+            2{"{0} или {1}"}
+            end{"{0} или {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard{
             2{"{0} и {1}"}
             end{"{0} и {1}"}
@@ -3278,6 +3299,8 @@ ru{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} и {1}"}
@@ -3369,6 +3392,7 @@ ru{
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{title} {given} {given2} {surname} — {generation}, {credentials}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}

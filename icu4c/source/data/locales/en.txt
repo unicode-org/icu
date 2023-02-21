@@ -2289,7 +2289,7 @@ en{
     personNames{
         initialPattern{
             initial{"{0}."}
-            initialSequence{"{0} {1}"}
+            initialSequence{"{0}{1}"}
         }
         nameOrderLocales{
             givenFirst{
@@ -2324,13 +2324,13 @@ en{
             givenFirst-short-addressing-informal{"{given-informal}"}
             givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
+            givenFirst-short-referring-formal{"{given-initial}{given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
             sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
             sorting-long-referring-informal{"{surname}, {given-informal}"}
             sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
-            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial}{given2-initial} {surname-prefix}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
@@ -2351,7 +2351,7 @@ en{
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial}{given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
         }
     }
