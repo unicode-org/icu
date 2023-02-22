@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677087355729,
+  "lastUpdate": 1677091432300,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5458,6 +5458,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 4.607554031713923,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "f924741bf2d7a2810a47ec44dd24e66f4979f03e",
+          "message": "ICU-22220 BRS 73rc update urename.h pass 1",
+          "timestamp": "2023-02-22T10:30:25-08:00",
+          "tree_id": "063ed2669cbe165196f736e33b56fe82c0a90fc0",
+          "url": "https://github.com/unicode-org/icu/commit/f924741bf2d7a2810a47ec44dd24e66f4979f03e"
+        },
+        "date": 1677091413919,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 4.218310702684633,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
