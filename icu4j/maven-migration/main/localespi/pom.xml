@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>main</artifactId>
+    <version>74.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>icu4j-localespi</artifactId>
+
+  <properties>
+    <proj.displayname>JDK locale service provider</proj.displayname>
+    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
+    <mf.Automatic-Module-Name>com.ibm.icu.localespi</mf.Automatic-Module-Name>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>framework</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>currdata</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>langdata</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>regiondata</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!--
+            Do not run localespi tests as unit tests because they depend on loading the main code via a .jar file
+            via the Java extensions mechanism.
+          -->
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+
+      <!-- 
+        Mainly for running localespi tests in Java 8:
+        The easiest way to get the integration tests to pass (in particular, to get the JVM that is
+        spawned with the `-Djava.ext.dirs` system property value to be interpreted properly in order 
+        for the extensions jars therein to be loaded correctly) was to copy the jars needed to a
+        separate directory. (The alternative of pointing to the build directories of the respective
+        submodules didn't seem to work.)
+
+        This isn't of much use for Java 9+, in which extensions are deprecated and the regular
+        classpath is to be used instead.
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>it-test-copy-localespi-extension-jars</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>icu4j</artifactId>
+                  <version>${project.version}</version>
+                  <type>${project.packaging}</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>icu4j-localespi</artifactId>
+                  <version>${project.version}</version>
+                  <type>${project.packaging}</type>
+                </artifactItem>
+              </artifactItems>
+              <!-- https://stackoverflow.com/questions/36181371/how-can-i-get-the-temp-folder-of-a-machine-running-maven -->
+              <outputDirectory>${java.io.tmpdir}/ext-test-jars</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <!-- treat localespi tests as integration tests because they depend on .jar files from package phase -->
+            <include>**/*.java</include>
+            <!-- default integration test wildcard patterns -->
+            <include>**/IT*.java</include>
+            <include>**/*IT.java</include>
+            <include>**/*ITCase.java</include>
+          </includes>
+
+          <!-- 
+            For Java 8:
+            Set up the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase
+
+            Leave empty for Java 9+.
+            Using the `java.ext.dirs` special Java system property on Java 9+ runtimes triggers an
+             error that tells the user to place those jars on the classpath instead.
+          -->
+          <!-- 
+              Notes:
+
+              https://stackoverflow.com/a/5039973/2077918
+              The `java.ext.dirs` is a special Java system property that activates the Java extension mechanism.
+              The Java extension mechanism was deprecated in Java 8 (users are recommended to use `-classpath` instead),
+              and the extension mechanism was removed in Java 9 altogether.
+              For backwards compatibility testing for users of the Java extension mechansim,
+              this configuration achieves the effect of having the localespi code in a .jar file that gets loaded
+              by running this test in a phase following the `package` phase in which the .jar file is created.
+
+              https://stackoverflow.com/questions/45223908/why-does-the-java-extension-mechanism-not-check-the-classpath-for-an-optional-pa
+
+              For some reason, the plugin was effectively not honoring the values as expected that were set in
+              <systemPropertyVariables>, so instead, the <argLine> value was used to set the JVM options. This
+              approach was inspired by: https://stackoverflow.com/a/48213614/2077918
+          -->
+          <argLine>${localespi-tests.jvm.args}</argLine>
+
+          <!-- 
+              For Java 9+:
+              Configure to use the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase
+
+              Leave empty for Java 8 to take defaults ("SPI,JRE").
+              See: https://stackoverflow.com/questions/45223908/why-does-the-java-extension-mechanism-not-check-the-classpath-for-an-optional-pa
+            -->
+          <systemPropertyVariables>
+            <java.locale.providers>${localespi-tests.locale-providers}</java.locale.providers>
+          </systemPropertyVariables>
+
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- 
+      For testing localespi using the Java extensions feature, which last existed in Java 8.
+      ICU4J currently has a minimum supported version of 8.
+    -->
+    <profile>
+      <id>localespi-tests-java8</id>
+      <activation>
+        <jdk>(,8]</jdk>
+      </activation>
+      <properties>
+        <localespi-tests.jvm.args>-Djava.ext.dirs="${java.io.tmpdir}/ext-test-jars"</localespi-tests.jvm.args>
+        <localespi-tests.locale-providers></localespi-tests.locale-providers>
+      </properties>
+    </profile>
+    <!--
+      For testing localespi using the classpath for Java 9+, since Java extensions were
+      deprecated after Java 8.
+    -->
+    <profile>
+      <id>localespi-tests-java9</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <localespi-tests.jvm.args></localespi-tests.jvm.args>
+        <localespi-tests.locale-providers>CLDR,COMPAT,SPI</localespi-tests.locale-providers>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

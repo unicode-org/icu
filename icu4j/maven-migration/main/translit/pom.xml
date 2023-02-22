@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>main</artifactId>
+    <version>74.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>translit</artifactId>
+
+  <properties>
+    <proj.displayname>transliteration</proj.displayname>
+    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>framework</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>langdata</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>pl.pragmatists</groupId>
+      <artifactId>JUnitParams</artifactId>
+      <version>${junitparams.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
