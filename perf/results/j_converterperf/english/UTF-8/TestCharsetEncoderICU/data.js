@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677017996977,
+  "lastUpdate": 1677087162783,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5338,6 +5338,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.4452080216317328,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a3cbe809091807b406cf526635cb866270a20da2",
+          "message": "ICU-21833 Replace U_OVERRIDE with override everywhere.",
+          "timestamp": "2023-02-22T18:28:07+01:00",
+          "tree_id": "e908dabb0e71b134ca3d429594088298ca114087",
+          "url": "https://github.com/unicode-org/icu/commit/a3cbe809091807b406cf526635cb866270a20da2"
+        },
+        "date": 1677087143270,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.4752453797487251,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
