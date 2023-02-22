@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677095129840,
+  "lastUpdate": 1677102565143,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5398,6 +5398,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.877745356884188,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ea2cb8549efa2d60d17ca59517606626cc1626e8",
+          "message": "ICU-21833 Replace U_FINAL with final everywhere.",
+          "timestamp": "2023-02-22T22:39:41+01:00",
+          "tree_id": "fd419258901e8fcb56d02745a36fa887f1adeb89",
+          "url": "https://github.com/unicode-org/icu/commit/ea2cb8549efa2d60d17ca59517606626cc1626e8"
+        },
+        "date": 1677102543016,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.370317562310742,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
