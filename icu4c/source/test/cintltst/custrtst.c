@@ -972,8 +972,8 @@ TestSurrogateSearching() {
      * surrogate and the last char is the leading surragte.
      */
     {
-        static const UChar s[]={ 0x0020, 0xD9C1 };
-        if (u_strFindFirst(s, 2, s, 2) != s) {
+        static const UChar s2[]={ 0x0020, 0xD9C1 };
+        if (u_strFindFirst(s2, 2, s2, 2) != s2) {
             log_err("error: ending with a partial supplementary code point should match\n");
         }
     }

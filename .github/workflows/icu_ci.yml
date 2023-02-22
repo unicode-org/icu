@@ -283,6 +283,30 @@ jobs:
           ( cd .. && source/test/hdrtst/testtagsguards.sh );
           make dist
 
+  # Build gcc with -Werror
+  gcc-werror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc and -Werror.
+        env:
+          CC: gcc-10
+          CXX: g++-10
+          CPPFLAGS: -Werror
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux/gcc;
+          make -j2;  # Without building tests with -Werror
+      - name: ICU4C test with gcc without -Werror.
+        env:
+          CC: gcc-10
+          CXX: g++-10
+          # NO CPPFLAGS: -Werror
+        run: |
+          cd icu4c/source;
+          make -j2 check; # Build and test without -Werror
+
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
   gcc-10-stdlib14:
     runs-on: ubuntu-latest

@@ -983,43 +983,61 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
                     version_major);
 #else
         if (noVersion && !reverseExt) {
-            snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s",
+            if (snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
-                    pkgDataFlags[SOBJ_EXT]);
+                    pkgDataFlags[SOBJ_EXT]) < 0) {
+                 fprintf(stderr, "Buffer overflow");
+                 exit(-1);
+            }
         } else {
-            snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s%s%s",
+            if (snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     reverseExt ? version : pkgDataFlags[SOBJ_EXT],
                     FILE_EXTENSION_SEP,
-                    reverseExt ? pkgDataFlags[SOBJ_EXT] : version);
+                    reverseExt ? pkgDataFlags[SOBJ_EXT] : version) < 0) {
+                 fprintf(stderr, "Buffer overflow");
+                 exit(-1);
+            }
         }
 #endif
         if (noVersion && !reverseExt) {
-            snprintf(libFileNames[LIB_FILE_VERSION_MAJOR], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s",
+            if (snprintf(libFileNames[LIB_FILE_VERSION_MAJOR], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
-                    pkgDataFlags[SO_EXT]);
+                    pkgDataFlags[SO_EXT]) < 0) {
+                fprintf(stderr, "Buffer overflow\n");
+                exit(-1);
+            }
 
-            snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s",
+            if (snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
-                    pkgDataFlags[SO_EXT]);
+                    pkgDataFlags[SO_EXT]) < 0) {
+                fprintf(stderr, "Buffer overflow\n");
+                exit(-1);
+            }
         } else {
-            snprintf(libFileNames[LIB_FILE_VERSION_MAJOR], sizeof(libFileNames[LIB_FILE_VERSION_MAJOR]), "%s%s%s%s%s",
+            if (snprintf(libFileNames[LIB_FILE_VERSION_MAJOR], sizeof(libFileNames[LIB_FILE_VERSION_MAJOR]), "%s%s%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     reverseExt ? version_major : pkgDataFlags[SO_EXT],
                     FILE_EXTENSION_SEP,
-                    reverseExt ? pkgDataFlags[SO_EXT] : version_major);
+                    reverseExt ? pkgDataFlags[SO_EXT] : version_major) < 0) {
+                fprintf(stderr, "Buffer overflow\n");
+                exit(-1);
+            }
 
-            snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s%s%s",
+            if (snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     reverseExt ? version : pkgDataFlags[SO_EXT],
                     FILE_EXTENSION_SEP,
-                    reverseExt ? pkgDataFlags[SO_EXT] : version);
+                    reverseExt ? pkgDataFlags[SO_EXT] : version) < 0) {
+                fprintf(stderr, "Buffer overflow\n");
+                exit(-1);
+            }
         }
 
         if(o->verbose) {
@@ -1032,7 +1050,11 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 #endif
 
         if(IN_STATIC_MODE(mode)) {
-            snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]);
+            if (snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]) < 0) {
+                fprintf(stderr, "Buffer overflow\n");
+                exit(-1);
+
+            }
             libFileNames[LIB_FILE_VERSION_MAJOR][0]=0;
             if(o->verbose) {
               fprintf(stdout, "# libFileName[LIB_FILE_VERSION] = %s  (static)\n", libFileNames[LIB_FILE_VERSION]);
@@ -1311,11 +1333,14 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
      * archive file suffix is the same, then the final library needs to be archived.
      */
     if (uprv_strcmp(pkgDataFlags[SOBJ_EXT], pkgDataFlags[SO_EXT]) != 0 && uprv_strcmp(pkgDataFlags[A_EXT], pkgDataFlags[SO_EXT]) == 0) {
-        snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s.%s",
+        if (snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s.%s",
                 libFileNames[LIB_FILE],
                 pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
                 reverseExt ? version : pkgDataFlags[SO_EXT],
-                reverseExt ? pkgDataFlags[SO_EXT] : version);
+                reverseExt ? pkgDataFlags[SO_EXT] : version) < 0) {
+            fprintf(stderr, "Buffer overflow");
+            exit(-1);
+        }
 
         snprintf(cmd, sizeof(cmd), "%s %s %s%s %s%s",
                 pkgDataFlags[AR],

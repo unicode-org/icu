@@ -219,9 +219,10 @@ void TransliteratorTest::TestInstantiation() {
     assertSuccess("count()", ec);
     UnicodeString name;
     for (int32_t i=0; i<n; ++i) {
-        const UnicodeString& id = *avail->snext(ec);
+        const UnicodeString* snext = avail->snext(ec);
+        const UnicodeString& id = *snext;
         if (!assertSuccess("snext()", ec) ||
-            !assertTrue("snext()!=nullptr", (&id)!=nullptr, true)) {
+            !assertTrue("snext()!=nullptr", snext!=nullptr, true)) {
             break;
         }
         UnicodeString id2 = Transliterator::getAvailableID(i);

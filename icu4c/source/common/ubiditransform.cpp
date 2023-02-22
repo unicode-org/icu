@@ -499,7 +499,8 @@ ubiditransform_transform(UBiDiTransform *pBiDiTransform,
     /* Checking for U_SUCCESS() within the loop to bail out on first failure. */
     for (action = pBiDiTransform->pActiveScheme->actions; *action && U_SUCCESS(*pErrorCode); action++) {
         if ((*action)(pBiDiTransform, pErrorCode)) {
-            if (action + 1) {
+            const UBiDiAction * next = action+1;
+            if (next != nullptr) {
                 updateSrc(pBiDiTransform, pBiDiTransform->dest, *pBiDiTransform->pDestLength,
                         *pBiDiTransform->pDestLength, pErrorCode);
             }
