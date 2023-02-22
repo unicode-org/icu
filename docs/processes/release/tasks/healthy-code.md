@@ -497,6 +497,7 @@ script for each configuration, and ensure that they are successful.
 ### Linux /Unix build and test
 To build and test ICU4C samples:
 
+This test is performed automatically by a GitHub Action for each pull request. 
 * In icu4c/source, run the configuration "./runConfigure Linux" (or appropriate system)
 * Build and install ICU4C.
 * Set PATH to include the bin directory of the installed ICU4c.
