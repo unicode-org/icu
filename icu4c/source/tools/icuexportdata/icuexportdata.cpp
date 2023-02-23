@@ -168,6 +168,39 @@ void dumpBinaryProperty(UProperty uproperty, FILE* f) {
     usrc_writeUnicodeSet(f, uset, UPRV_TARGET_SYNTAX_TOML);
 }
 
+// If the value exists, dump an indented entry of the format
+// `"  {discr = <discriminant>, long = <longname>, short = <shortname>, aliases = [<aliases>]},"`
+void dumpValueEntry(UProperty uproperty, int v, FILE* f) {
+    const char* fullValueName = u_getPropertyValueName(uproperty, v, U_LONG_PROPERTY_NAME);
+    const char* shortValueName = u_getPropertyValueName(uproperty, v, U_SHORT_PROPERTY_NAME);
+    if (!fullValueName) {
+        return;
+    }
+    fprintf(f, "  {discr = %i, long = \"%s\"", v, fullValueName);
+    if (shortValueName) {
+        fprintf(f, ", short = \"%s\"", shortValueName);
+    }
+    int i = U_LONG_PROPERTY_NAME + 1;
+    while(true) {
+        // The API works by having extra names after U_LONG_PROPERTY_NAME, sequentially,
+        // and returning null after that
+        const char* alias = u_getPropertyValueName(uproperty, v, (UPropertyNameChoice) i);
+        if (!alias) {
+            break;
+        }
+        if (i == U_LONG_PROPERTY_NAME + 1) {
+            fprintf(f, ", aliases = [\"%s\"", alias);
+        } else {
+            fprintf(f, ", \"%s\"", alias);
+        }
+        i++;
+    }
+    if (i != U_LONG_PROPERTY_NAME + 1) {
+        fprintf(f, "]");
+    }
+    fprintf(f, "},\n");
+}
+
 void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
     IcuToolErrorCode status("icuexportdata: dumpEnumeratedProperty");
     const char* fullPropName = u_getPropertyName(uproperty, U_LONG_PROPERTY_NAME);
@@ -187,34 +220,7 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
 
     fprintf(f, "values = [\n");
     for (int v = minValue; v <= maxValue; v++) {
-        const char* fullValueName = u_getPropertyValueName(uproperty, v, U_LONG_PROPERTY_NAME);
-        const char* shortValueName = u_getPropertyValueName(uproperty, v, U_SHORT_PROPERTY_NAME);
-        if (!fullValueName) {
-            continue;
-        }
-        fprintf(f, "  {discr = %i, long = \"%s\"", v, fullValueName);
-        if (shortValueName) {
-            fprintf(f, ", short = \"%s\"", shortValueName);
-        }
-        int i = U_LONG_PROPERTY_NAME + 1;
-        while(true) {
-            // The API works by having extra names after U_LONG_PROPERTY_NAME, sequentially,
-            // and returning null after that
-            const char* alias = u_getPropertyValueName(uproperty, v, (UPropertyNameChoice) i);
-            if (!alias) {
-                break;
-            }
-            if (i == U_LONG_PROPERTY_NAME + 1) {
-                fprintf(f, ", aliases = [\"%s\"", alias);
-            } else {
-                fprintf(f, ", \"%s\"", alias);
-            }
-            i++;
-        }
-        if (i != U_LONG_PROPERTY_NAME + 1) {
-            fprintf(f, "]");
-        }
-        fprintf(f, "},\n");
+        dumpValueEntry(uproperty, v, f);
     }
     fprintf(f, "]\n");
 
@@ -239,6 +245,49 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
 
     fputs("[enum_property.code_point_trie]\n", f);
     usrc_writeUCPTrie(f, shortPropName, utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+}
+
+// After printing property value `v`, print `mask` if and only if `mask` comes immediately
+// after the property in the listing
+void maybeDumpMaskValue(UProperty uproperty, uint32_t v, uint32_t mask, FILE* f) {
+    if (U_MASK(v) < mask && U_MASK(v + 1) > mask)
+        dumpValueEntry(uproperty, mask, f);
+}
+
+void dumpGeneralCategoryMask(FILE* f) {
+    IcuToolErrorCode status("icuexportdata: dumpGeneralCategoryMask");
+    UProperty uproperty = UCHAR_GENERAL_CATEGORY_MASK;
+
+    fputs("[[mask_property]]\n", f);
+    const char* fullPropName = u_getPropertyName(uproperty, U_LONG_PROPERTY_NAME);
+    const char* shortPropName = u_getPropertyName(uproperty, U_SHORT_PROPERTY_NAME);
+    fprintf(f, "long_name = \"%s\"\n", fullPropName);
+    if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    dumpPropertyAliases(uproperty, f);
+
+
+    fprintf(f, "mask_for = \"General_Category\"\n");
+    uint32_t minValue = u_getIntPropertyMinValue(UCHAR_GENERAL_CATEGORY);
+    U_ASSERT(minValue >= 0);
+    uint32_t maxValue = u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY);
+    U_ASSERT(maxValue >= 0);
+
+    fprintf(f, "values = [\n");
+    for (uint32_t v = minValue; v <= maxValue; v++) {
+        dumpValueEntry(uproperty, U_MASK(v), f);
+
+        // We want to dump these masks "in order", which means they
+        // should come immediately after every property they contain
+        maybeDumpMaskValue(uproperty, v, U_GC_L_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_LC_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_M_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_N_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_Z_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_C_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_P_MASK, f);
+        maybeDumpMaskValue(uproperty, v, U_GC_S_MASK, f);
+    }
+    fprintf(f, "]\n");
 }
 
 void dumpScriptExtensions(FILE* f) {
@@ -1075,6 +1124,9 @@ int exportUprops(int argc, char* argv[]) {
                 i = UCHAR_INT_START;
             }
             if (i == UCHAR_INT_LIMIT) {
+                i = UCHAR_GENERAL_CATEGORY_MASK;
+            }
+            if (i == UCHAR_GENERAL_CATEGORY_MASK + 1) {
                 i = UCHAR_SCRIPT_EXTENSIONS;
             }
             if (i == UCHAR_SCRIPT_EXTENSIONS + 1) {
@@ -1158,6 +1210,8 @@ int exportUprops(int argc, char* argv[]) {
             dumpBinaryProperty(propEnum, f);
         } else if (UCHAR_INT_START <= propEnum && propEnum <= UCHAR_INT_LIMIT) {
             dumpEnumeratedProperty(propEnum, f);
+        } else if (propEnum == UCHAR_GENERAL_CATEGORY_MASK) {
+            dumpGeneralCategoryMask(f);
         } else if (propEnum == UCHAR_SCRIPT_EXTENSIONS) {
             dumpScriptExtensions(f);
         } else {
