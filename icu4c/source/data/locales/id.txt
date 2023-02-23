@@ -298,7 +298,7 @@ id{
             }
             intervalFormats{
                 Bh{
-                    B{"h B – h B"}
+                    B{"h B – h B"}
                     h{"h – h B"}
                 }
                 Bhm{
@@ -385,7 +385,7 @@ id{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"h a – h a"}
+                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{
@@ -399,7 +399,7 @@ id{
                     m{"h.mm – h.mm a v"}
                 }
                 hv{
-                    a{"h a – h a v"}
+                    a{"h a – h a v"}
                     h{"h – h a v"}
                 }
                 y{

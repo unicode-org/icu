@@ -235,10 +235,6 @@ void TransliteratorTest::TestInstantiation() {
                   i + ") != getAvailableIDs().snext()");
             continue;
         }
-        if ((id.indexOf((UnicodeString)"Geminate") >= 0 || id.indexOf((UnicodeString)"geminate") >= 0) &&
-                logKnownIssue("CLDR-16408", "Transliterator::createInstance fails for Ethiopic-Latin /Geminate[d] transforms")) {
-            continue;
-        }
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
         Transliterator* t = Transliterator::createInstance(id,

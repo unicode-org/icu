@@ -588,6 +588,8 @@ bs{
     }
     Languages%short{
         az{"azerski"}
+        en_GB{"engleski (UK)"}
+        en_US{"engleski (SAD)"}
     }
     Languages%variant{
         ps{"pušto"}

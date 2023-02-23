@@ -90,10 +90,6 @@ void TransliteratorAPITest::TestgetID() {
         if(ID.indexOf("Thai")>-1){
             continue;
         }   
-        if ((ID.indexOf((UnicodeString)"Geminate") >= 0 || ID.indexOf((UnicodeString)"geminate") >= 0) &&
-                logKnownIssue("CLDR-16408", "Transliterator::createInstance fails for Ethiopic-Latin /Geminate[d] transforms")) {
-            continue;
-        }
         t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
         if(t == 0){
             errln("FAIL: " + ID);

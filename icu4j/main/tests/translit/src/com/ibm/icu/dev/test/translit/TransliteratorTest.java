@@ -141,10 +141,6 @@ public class TransliteratorTest extends TestFmwk {
         checkRegistry("foo1", "[:letter:] a > b;");
         for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
             String id = (String) e.nextElement();
-            if ((id.contains("Geminate") || id.contains("geminate")) &&
-                    logKnownIssue("CLDR-16408", "Transliterator instantiation fails for Ethiopic-Latin /Geminate[d] transforms")) {
-                continue;
-            }
             checkRegistry(id);
         }
         // Need to remove these test-specific transliterators in order not to interfere with other tests.
