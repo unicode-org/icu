@@ -39,7 +39,10 @@ static Numberformattesttuple_EnumConversion gRoundingEnum[] = {
     {"halfEven", DecimalFormat::kRoundHalfEven},
     {"halfDown", DecimalFormat::kRoundHalfDown},
     {"halfUp", DecimalFormat::kRoundHalfUp},
-    {"unnecessary", DecimalFormat::kRoundUnnecessary}};
+    {"unnecessary", DecimalFormat::kRoundUnnecessary},
+    {"halfOdd", DecimalFormat::kRoundHalfOdd},
+    {"halfCeiling", DecimalFormat::kRoundHalfCeiling},
+    {"halfFloor", DecimalFormat::kRoundHalfFloor}};
 
 static Numberformattesttuple_EnumConversion gCurrencyUsageEnum[] = {
     {"standard", UCURR_USAGE_STANDARD},

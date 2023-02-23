@@ -143,6 +143,11 @@ public class DataDrivenNumberFormatTestData {
         roundingModeMap.put("halfDown", BigDecimal.ROUND_HALF_DOWN);
         roundingModeMap.put("halfUp", BigDecimal.ROUND_HALF_UP);
         roundingModeMap.put("unnecessary", BigDecimal.ROUND_UNNECESSARY);
+
+        // NOTE: Java BigDecimal does not support these three rounding modes.
+        roundingModeMap.put("halfOdd", BigDecimal.ROUND_UNNECESSARY);
+        roundingModeMap.put("halfCeiling", BigDecimal.ROUND_UNNECESSARY);
+        roundingModeMap.put("halfFloor", BigDecimal.ROUND_UNNECESSARY);
     }
 
     private static Map<String, Currency.CurrencyUsage> currencyUsageMap =
