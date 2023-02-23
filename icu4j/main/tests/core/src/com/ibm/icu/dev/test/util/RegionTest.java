@@ -13,8 +13,10 @@
 
 package com.ibm.icu.dev.test.util;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -580,7 +582,12 @@ public class RegionTest extends TestFmwk {
         // territories are one and the same.
         Set<Region> availableTerritories = Region.getAvailable(RegionType.TERRITORY);
         Region world = Region.getInstance("001");
-        Set<Region> containedInWorld = world.getContainedRegions(RegionType.TERRITORY);
+        Set<Region> containedInWorld = world.getContainedRegions(RegionType.TERRITORY); // unmodifiable
+        if (logKnownIssue("CLDR-16423", "territoryContainment for 001 is missing CQ")) {
+            Set<Region> inWorldModifiable = new TreeSet<Region>(containedInWorld);
+            inWorldModifiable.add(Region.getInstance("CQ"));
+            containedInWorld = Collections.unmodifiableSet(inWorldModifiable);
+        }
         if ( !availableTerritories.equals(containedInWorld) ) {
             errln("Available territories and all territories contained in world should be the same set.\n" +
                     "Available          = " + availableTerritories.toString() + "\n" +

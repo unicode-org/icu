@@ -33,12 +33,6 @@ xh{
                 plusSign{"+"}
             }
         }
-        minimalPairs{
-            plural{
-                one{"{0}?"}
-                other{"{0}?"}
-            }
-        }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }

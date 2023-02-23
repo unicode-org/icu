@@ -333,7 +333,7 @@ static const char * const COUNTRIES[] = {
     "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
     "BJ",  "BL",  "BM",  "BN",  "BO",  "BQ",  "BR",  "BS",  "BT",  "BV",
     "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
-    "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
+    "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CQ",  "CR",
     "CU",  "CV",  "CW",  "CX",  "CY",  "CZ",  "DE",  "DG",  "DJ",  "DK",
     "DM",  "DO",  "DZ",  "EA",  "EC",  "EE",  "EG",  "EH",  "ER",
     "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
@@ -395,8 +395,8 @@ static const char * const COUNTRIES_3[] = {
     "BEN", "BLM", "BMU", "BRN", "BOL", "BES", "BRA", "BHS", "BTN", "BVT",
 /*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
     "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
-/*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
-    "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
+/*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CQ",  "CR",     */
+    "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRQ", "CRI",
 /*  "CU",  "CV",  "CW",  "CX",  "CY",  "CZ",  "DE",  "DG",  "DJ",  "DK",     */
     "CUB", "CPV", "CUW", "CXR", "CYP", "CZE", "DEU", "DGA", "DJI", "DNK",
 /*  "DM",  "DO",  "DZ",  "EA",  "EC",  "EE",  "EG",  "EH",  "ER",     */

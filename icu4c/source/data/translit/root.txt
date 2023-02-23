@@ -432,16 +432,16 @@ root:table(nofallback){
         Ethiopic-Latin/ALALOC{
             alias{"Ethi-Latn/ALALOC"}
         }
-        Ethiopic-Latin/ALALOC-Geminate{
+        Ethiopic-Latin/ALALOC_Geminate{
             alias{"Ethi-Latn/ALALOC_Geminate"}
         }
         Ethiopic-Latin/Aethiopica{
             alias{"Ethi-Latn/Aethiopi"}
         }
-        Ethiopic-Latin/Aethiopica-Geminate{
+        Ethiopic-Latin/Aethiopica_Geminate{
             alias{"Ethi-Latn/Aethiopi_Geminate"}
         }
-        Ethiopic-Latin/BetaMetsehaf-Geminate{
+        Ethiopic-Latin/BetaMetsehaf_Geminate{
             alias{"Ethi-Latn/Beta_Metsehaf_Geminate"}
         }
         Ethiopic-Latin/Beta_Metsehaf{
@@ -453,7 +453,7 @@ root:table(nofallback){
         Ethiopic-Latin/IES_JES_1964{
             alias{"Ethi-Latn/IES_JES_1964"}
         }
-        Ethiopic-Latin/IES_JES_1964-Geminated{
+        Ethiopic-Latin/IES_JES_1964_Geminate{
             alias{"Ethi-Latn/IES_JES_1964_Geminate"}
         }
         Ethiopic-Latin/Lambdin{
