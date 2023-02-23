@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677102596186,
+  "lastUpdate": 1677115436632,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5368,6 +5368,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.9899808693696013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "d86b1cebe192004759b6c875b0f831b97ccdae34",
+          "message": "ICU-22220 update root collation from CLDR 43",
+          "timestamp": "2023-02-22T17:13:13-08:00",
+          "tree_id": "a8524f42361f61a8d752effc0f6ac4b89edecd2c",
+          "url": "https://github.com/unicode-org/icu/commit/d86b1cebe192004759b6c875b0f831b97ccdae34"
+        },
+        "date": 1677115416397,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.3502488334560594,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
