@@ -170,13 +170,18 @@ void dumpBinaryProperty(UProperty uproperty, FILE* f) {
 
 // If the value exists, dump an indented entry of the format
 // `"  {discr = <discriminant>, long = <longname>, short = <shortname>, aliases = [<aliases>]},"`
-void dumpValueEntry(UProperty uproperty, int v, FILE* f) {
+void dumpValueEntry(UProperty uproperty, int v, bool is_mask, FILE* f) {
     const char* fullValueName = u_getPropertyValueName(uproperty, v, U_LONG_PROPERTY_NAME);
     const char* shortValueName = u_getPropertyValueName(uproperty, v, U_SHORT_PROPERTY_NAME);
     if (!fullValueName) {
         return;
     }
-    fprintf(f, "  {discr = %i, long = \"%s\"", v, fullValueName);
+    if (is_mask) {
+        fprintf(f, "  {discr = 0x%X", v);
+    } else {
+        fprintf(f, "  {discr = %i", v);
+    }
+    fprintf(f, ", long = \"%s\"", fullValueName);
     if (shortValueName) {
         fprintf(f, ", short = \"%s\"", shortValueName);
     }
@@ -220,7 +225,7 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
 
     fprintf(f, "values = [\n");
     for (int v = minValue; v <= maxValue; v++) {
-        dumpValueEntry(uproperty, v, f);
+        dumpValueEntry(uproperty, v, false, f);
     }
     fprintf(f, "]\n");
 
@@ -251,7 +256,7 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
 // after the property in the listing
 void maybeDumpMaskValue(UProperty uproperty, uint32_t v, uint32_t mask, FILE* f) {
     if (U_MASK(v) < mask && U_MASK(v + 1) > mask)
-        dumpValueEntry(uproperty, mask, f);
+        dumpValueEntry(uproperty, mask, true, f);
 }
 
 void dumpGeneralCategoryMask(FILE* f) {
@@ -274,7 +279,7 @@ void dumpGeneralCategoryMask(FILE* f) {
 
     fprintf(f, "values = [\n");
     for (uint32_t v = minValue; v <= maxValue; v++) {
-        dumpValueEntry(uproperty, U_MASK(v), f);
+        dumpValueEntry(uproperty, U_MASK(v), true, f);
 
         // We want to dump these masks "in order", which means they
         // should come immediately after every property they contain
