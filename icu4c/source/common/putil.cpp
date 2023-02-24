@@ -722,7 +722,7 @@ extern U_IMPORT char *U_TZNAME[];
 #include <dirent.h>  /* Needed to search through system timezone files */
 #endif
 static char gTimeZoneBuffer[PATH_MAX];
-static char *gTimeZoneBufferPtr = nullptr;
+static const char *gTimeZoneBufferPtr = nullptr;
 #endif
 
 #if !U_PLATFORM_USES_ONLY_WIN32_API
@@ -1171,16 +1171,16 @@ uprv_tzname(int n)
         because the tzfile contents is underspecified.
         This isn't guaranteed to work because it may not be a symlink.
         */
-        int32_t ret = (int32_t)readlink(TZDEFAULT, gTimeZoneBuffer, sizeof(gTimeZoneBuffer)-1);
-        if (0 < ret) {
+        char *ret = realpath(TZDEFAULT, gTimeZoneBuffer);
+        if (ret != nullptr && uprv_strcmp(TZDEFAULT, gTimeZoneBuffer) != 0) {
             int32_t tzZoneInfoTailLen = uprv_strlen(TZZONEINFOTAIL);
-            gTimeZoneBuffer[ret] = 0;
-            char *  tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
-
-            if (tzZoneInfoTailPtr != nullptr
-                && isValidOlsonID(tzZoneInfoTailPtr + tzZoneInfoTailLen))
-            {
-                return (gTimeZoneBufferPtr = tzZoneInfoTailPtr + tzZoneInfoTailLen);
+            const char *tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
+            if (tzZoneInfoTailPtr != nullptr) {
+                tzZoneInfoTailPtr += tzZoneInfoTailLen;
+                skipZoneIDPrefix(&tzZoneInfoTailPtr);
+                if (isValidOlsonID(tzZoneInfoTailPtr)) {
+                    return (gTimeZoneBufferPtr = tzZoneInfoTailPtr);
+                }
             }
         } else {
 #if defined(SEARCH_TZFILE)
