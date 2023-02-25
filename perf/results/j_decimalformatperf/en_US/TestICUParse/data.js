@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677277483201,
+  "lastUpdate": 1677362018847,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5698,6 +5698,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 416.3295961288414,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "rob_dereycke@hotmail.com",
+            "name": "Rob De Reycke",
+            "username": "Robbos"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "e8bc04d5dfd4a463608ccbb47efca7de222d66a5",
+          "message": "ICU-21386 uprv_tzname() should find the correct Olson ID when /etc/localtime is a \"double\" link\n\nSee #2323",
+          "timestamp": "2023-02-25T16:48:43-05:00",
+          "tree_id": "cf677fdd3ad52417f47b3117537a40b9cfca574c",
+          "url": "https://github.com/unicode-org/icu/commit/e8bc04d5dfd4a463608ccbb47efca7de222d66a5"
+        },
+        "date": 1677362000151,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 465.41132274157195,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
