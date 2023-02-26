@@ -36,30 +36,26 @@ public class PersonNameFormatterImpl {
     private final PersonNameFormatter.Length length;
     private final PersonNameFormatter.Usage usage;
     private final PersonNameFormatter.Formality formality;
-    private final Set<PersonNameFormatter.Options> options;
+    private final PersonNameFormatter.DisplayOrder displayOrder;
 
     public PersonNameFormatterImpl(Locale locale,
                                    PersonNameFormatter.Length length,
                                    PersonNameFormatter.Usage usage,
                                    PersonNameFormatter.Formality formality,
-                                   Set<PersonNameFormatter.Options> options) {
-        // null for `options` is the same as the empty set
-        if (options == null) {
-            options = new HashSet<>();
-        }
-
+                                   PersonNameFormatter.DisplayOrder displayOrder,
+                                   boolean surnameAllCaps) {
         // save off our creation parameters (these are only used if we have to create a second formatter)
         this.length = length;
         this.usage = usage;
         this.formality = formality;
-        this.options = options;
+        this.displayOrder = displayOrder;
+        this.capitalizeSurname = surnameAllCaps;
 
         // load simple property values from the resource bundle (or the options set)
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         this.locale = locale;
         this.initialPattern = rb.getStringWithFallback("personNames/initialPattern/initial");
         this.initialSequencePattern = rb.getStringWithFallback("personNames/initialPattern/initialSequence");
-        this.capitalizeSurname = options.contains(PersonNameFormatter.Options.SURNAME_ALLCAPS);
         this.foreignSpaceReplacement = rb.getStringWithFallback("personNames/foreignSpaceReplacement");
         this.formatterLocaleUsesSpaces = !LOCALES_THAT_DONT_USE_SPACES.contains(locale.getLanguage());
 
@@ -67,8 +63,8 @@ public class PersonNameFormatterImpl {
         if (usage == PersonNameFormatter.Usage.MONOGRAM) {
             // we don't support SORTING in conjunction with MONOGRAM; if the caller passes in SORTING, remove it from
             // the options list
-            options.remove(PersonNameFormatter.Options.SORTING);
-        } else if (options.contains(PersonNameFormatter.Options.SORTING)) {
+            displayOrder = PersonNameFormatter.DisplayOrder.DEFAULT;
+        } else if (displayOrder == PersonNameFormatter.DisplayOrder.SORTING) {
             // we only support SORTING in conjunction with REFERRING; if the caller passes in ADDRESSING, treat it
             // the same as REFERRING
             usage = PersonNameFormatter.Usage.REFERRING;
@@ -80,7 +76,7 @@ public class PersonNameFormatterImpl {
         final String RESOURCE_PATH_PREFIX = "personNames/namePattern/";
         String resourceNameBody = length.toString().toLowerCase() + "-" + usage.toString().toLowerCase() + "-"
                 + formality.toString().toLowerCase();
-        if (!options.contains(PersonNameFormatter.Options.SORTING)) {
+        if (displayOrder == PersonNameFormatter.DisplayOrder.DEFAULT) {
             ICUResourceBundle gnFirstResource = rb.getWithFallback(RESOURCE_PATH_PREFIX + "givenFirst-" + resourceNameBody);
             ICUResourceBundle snFirstResource = rb.getWithFallback(RESOURCE_PATH_PREFIX + "surnameFirst-" + resourceNameBody);
 
@@ -112,7 +108,7 @@ public class PersonNameFormatterImpl {
         length = PersonNameFormatter.Length.MEDIUM;
         usage = PersonNameFormatter.Usage.REFERRING;
         formality = PersonNameFormatter.Formality.FORMAL;
-        options = Collections.emptySet();
+        displayOrder = PersonNameFormatter.DisplayOrder.DEFAULT;
         initialPattern = "{0}.";
         initialSequencePattern = "{0} {1}";
         capitalizeSurname = false;
@@ -134,7 +130,7 @@ public class PersonNameFormatterImpl {
         boolean nameLocaleUsesSpaces = !LOCALES_THAT_DONT_USE_SPACES.contains(nameLocale.getLanguage());
         if (!formatterLocaleUsesSpaces && nameLocaleUsesSpaces) {
             PersonNameFormatterImpl nativeFormatter = new PersonNameFormatterImpl(nameLocale, this.length,
-                    this.usage, this.formality, this.options);
+                    this.usage, this.formality, this.displayOrder, this.capitalizeSurname);
             String result = nativeFormatter.formatToString(name);
 
             // BUT, if the name is actually written in the formatter locale's script, replace any spaces in the name
@@ -164,7 +160,8 @@ public class PersonNameFormatterImpl {
 
     public PersonNameFormatter.Formality getFormality() { return formality; }
 
-    public Set<PersonNameFormatter.Options> getOptions() { return options; }
+    public PersonNameFormatter.DisplayOrder getDisplayOrder() { return displayOrder; }
+    public boolean getSurnameAllCaps() { return capitalizeSurname; }
 
     public String getInitialPattern() {
         return initialPattern;
@@ -204,16 +201,10 @@ public class PersonNameFormatterImpl {
      */
     private boolean nameIsGnFirst(PersonName name) {
         // the name can declare its order-- check that first (it overrides any locale-based calculation)
-        Set<PersonName.FieldModifier> modifiers = new HashSet<>();
-        String preferredOrder = name.getFieldValue(PersonName.NameField.PREFERRED_ORDER, modifiers);
-        if (preferredOrder != null) {
-            if (preferredOrder.equals("givenFirst")) {
-                return true;
-            } else if (preferredOrder.equals("surnameFirst")) {
-                return false;
-            } else {
-                throw new IllegalArgumentException("Illegal preferredOrder value " + preferredOrder);
-            }
+        if (name.getPreferredOrder() == PersonName.PreferredOrder.GIVEN_FIRST) {
+            return true;
+        } else if (name.getPreferredOrder() == PersonName.PreferredOrder.SURNAME_FIRST) {
+            return false;
         }
 
         String localeStr = getNameLocale(name).toString();
