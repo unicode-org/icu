@@ -13,95 +13,65 @@ import java.util.Set;
  * above.  A concrete SimplePersonName object that does store the field values directly
  * is provided.
  *
- * @internal ICU 72 technology preview
+ * @draft ICU 73
  * @see SimplePersonName
- * @deprecated This API is for technology preview only.
  */
-@Deprecated
 public interface PersonName {
     //==============================================================================
     // Identifiers used to request field values from the PersonName object
 
     /**
      * Identifiers for the name fields supported by the PersonName object.
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
+     * @draft ICU 73
      */
-    @Deprecated
     enum NameField {
         /**
          * Contains titles such as "Mr.", "Dr." (in English these typically
          * precede the name)
-         * @internal ICU 73 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         TITLE("title"),
 
         /**
          * The given name.  May contain more than one token.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         GIVEN("given"),
 
         /**
          * Additional given names.  (In English, this is usually the "middle name" and
          * may contain more than one word.)
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         GIVEN2("given2"),
 
         /**
          * The surname.  In Spanish, this is the patronymic surname.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         SURNAME("surname"),
 
         /**
          * Additional surnames.  This is only used in a few languages, such as Spanish,
          * where it is the matronymic surname.  (In most languages, multiple surnames all
          * just go in the SURNAME field.)
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         SURNAME2("surname2"),
 
         /**
          * Generational qualifiers that in English generally follow the actual name,
          * such as "Jr." or "III".
-         * @internal ICU 73 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         GENERATION("generation"),
 
         /**
          * Professional qualifiers that in English generally follow the actual name,
          * such as "M.D." or "J.D.".
-         * @internal ICU 73 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
-        CREDENTIALS("credentials"),
-
-        /**
-         * The preferred field order for the name.  PersonName objects generally shouldn't provide
-         * this field, allowing the PersonNameFormatter to deduce the proper field order based on
-         * the locales of the name of the formatter.  But this can be used to force a particular
-         * field order, generally in cases where the deduction logic in PersonNameFormatter would
-         * guess wrong.  When used, the only valid values are "givenFirst" and "surnameFirst".
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        @Deprecated
-        PREFERRED_ORDER("preferredOrder");
+        CREDENTIALS("credentials");
 
         private final String name;
 
@@ -111,10 +81,8 @@ public interface PersonName {
 
         /**
          * Returns the NameField's display name.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         @Override
         public String toString() {
             return name;
@@ -138,20 +106,16 @@ public interface PersonName {
 
     /**
      * Identifiers for the name field modifiers supported by the PersonName and PersonNameFormatter objects.
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
+     * @draft ICU 73
      */
-    @Deprecated
     enum FieldModifier {
         /**
          * Requests an "informal" variant of the field, generally a nickname of some type:
          * if "given" is "James", "given-informal" might be "Jimmy".  Only applied to the "given"
          * field.  If the PersonName object doesn't apply this modifier, PersonNameFormatter just
          * uses the unmodified version of "given".
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         INFORMAL("informal"),
 
         /**
@@ -159,10 +123,8 @@ public interface PersonName {
          * "van den Hul", this requests just the prefixes ("van den").  Only applied to the "surname"
          * field.  If the PersonName object doesn't apply this modifier, PersonNameFormatter
          * assumes there are no prefixes.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         PREFIX("prefix"),
 
         /**
@@ -170,20 +132,16 @@ public interface PersonName {
          * "van den Hul", this requests just the main word ("Hul").  Only applied to the "surname"
          * field.  If the implementing class doesn't apply this modifier, PersonNameFormatter
          * assumes the entire "surname" field is the "core".
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         CORE("core"),
 
         /**
          * Requests an initial for the specified field.  PersonNameFormatter will do
          * this algorithmically, but a PersonName object can apply this modifier itself if it wants
          * different initial-generation logic (or stores the initial separately).
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         INITIAL("initial"),
 
         /**
@@ -191,29 +149,23 @@ public interface PersonName {
          * (this usually differs from "initial" in that "initial" often adds a period and "monogram"
          * never does).  PersonNameFormatter will do this algorithmically, but a PersonName object can
          * apply this modifier itself if it wants different monogram-generation logic.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         MONOGRAM("monogram"),
 
         /**
          * Requests the field value converted to ALL CAPS.  PersonName objects
          * generally won't need to handle this modifier themselves.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         ALL_CAPS("allCaps"),
 
         /**
          * Requests the field value with the first grapheme of each word converted to titlecase.
          * A PersonName object might handle this modifier itself to capitalize words more
          * selectively.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         INITIAL_CAP("initialCap");
 
         private final String name;
@@ -224,10 +176,8 @@ public interface PersonName {
 
         /**
          * Returns the FieldModifier's display name.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         @Override
         public String toString() {
             return name;
@@ -235,10 +185,8 @@ public interface PersonName {
 
         /**
          * Returns the appropriate fieldModifier for its display name.
-         * @internal ICU 72 technology preview
-         * @deprecated This API is for technology preview only.
+         * @draft ICU 73
          */
-        @Deprecated
         public static FieldModifier forString(String name) {
             for (FieldModifier modifier : values()) {
                 if (modifier.name.equals(name)) {
@@ -249,6 +197,31 @@ public interface PersonName {
         }
     }
 
+    /**
+     * An enum to specify the preferred field order for the name.
+     * @defat ICU 73
+     */
+    enum PreferredOrder {
+        /**
+         * Indicates the name has no preferred field order, and that the formatter should deduce the
+         * proper field order based on the locales of the name and the formatter.
+         */
+        DEFAULT,
+
+        /**
+         * Indicates that the name should be formatted in given-first order, even when the formatter
+         * would normally guess that it should be formatted in surname-first order.
+         * @draft ICU 73
+         */
+        GIVEN_FIRST,
+
+        /**
+         * Indicates that the name should be formatted in surname-first order, even when the formatter
+         * would normally guess that it should be formatted in given-first order.
+         */
+        SURNAME_FIRST
+    }
+
     //==============================================================================
     // Public API on PersonName
     /**
@@ -256,11 +229,19 @@ public interface PersonName {
      * An implementing class is allowed to return null here to indicate the name's locale is unknown.
      *
      * @return The name's locale, or null if it's not known.
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
+     * @draft ICU 73
      */
-    @Deprecated
     public Locale getNameLocale();
+
+    /**
+     * Returns the preferred field order for the name.  PersonName objects should generally return DEFAULT,
+     * allowing the PersonNameFormatter to deduce the peoper field order based on the locales of the name
+     * and the formatter.  But this can be used to force a particular field order, generally in cases
+     * where the deduction logic in PersonNameFormatter would guess wrong.
+     * @return The name's preferred field order.
+     * @draft ICU 73
+     */
+    public PreferredOrder getPreferredOrder();
 
     /**
      * Returns one field of the name, possibly in a modified form.
@@ -272,9 +253,7 @@ public interface PersonName {
      *                   DIDN'T handle.  This parameter may not be null, and must either be mutable or empty.
      * @return The value of the requested field, optionally modified by some or all of the requested modifiers, or
      * null if the requested field isn't present in the name.
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for technology preview only.
+     * @draft ICU 73
      */
-    @Deprecated
     public String getFieldValue(NameField identifier, Set<FieldModifier> modifiers);
 }
