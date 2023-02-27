@@ -90,7 +90,7 @@ static UCalendarDateFields gDateFieldMapping[] = {
 };
 
 U_CAPI UCalendarDateFields U_EXPORT2
-udat_toCalendarDateField(UDateFormatField field) {
+udat_toCalendarDateField(UDateFormatField field) UPRV_NO_SANITIZE_UNDEFINED {
   static_assert(UDAT_FIELD_COUNT == UPRV_LENGTHOF(gDateFieldMapping),
     "UDateFormatField and gDateFieldMapping should have the same number of entries and be kept in sync.");
   return (field >= UDAT_ERA_FIELD && field < UPRV_LENGTHOF(gDateFieldMapping))? gDateFieldMapping[field]: UCAL_FIELD_COUNT;
@@ -198,6 +198,7 @@ udat_open(UDateFormatStyle  timeStyle,
 U_CAPI void U_EXPORT2
 udat_close(UDateFormat* format)
 {
+    if (format == nullptr) return;
     delete (DateFormat*)format;
 }
 

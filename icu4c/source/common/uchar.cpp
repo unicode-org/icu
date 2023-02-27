@@ -553,7 +553,7 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
 }
 
 U_CAPI UBool U_EXPORT2
-uscript_hasScript(UChar32 c, UScriptCode sc) {
+uscript_hasScript(UChar32 c, UScriptCode sc) UPRV_NO_SANITIZE_UNDEFINED {
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
     uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {

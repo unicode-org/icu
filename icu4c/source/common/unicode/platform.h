@@ -460,6 +460,13 @@
 #   define UPRV_HAS_WARNING(x) 0
 #endif
 
+
+#if defined(__clang__)
+#define UPRV_NO_SANITIZE_UNDEFINED __attribute__((no_sanitize("undefined")))
+#else
+#define UPRV_NO_SANITIZE_UNDEFINED
+#endif
+
 /**
  * \def U_MALLOC_ATTR
  * Attribute to mark functions as malloc-like

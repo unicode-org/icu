@@ -946,7 +946,7 @@ const char *SingleUnitImpl::getSimpleUnitID() const {
     return gSimpleUnits[index];
 }
 
-void SingleUnitImpl::appendNeutralIdentifier(CharString &result, UErrorCode &status) const {
+void SingleUnitImpl::appendNeutralIdentifier(CharString &result, UErrorCode &status) const UPRV_NO_SANITIZE_UNDEFINED {
     int32_t absPower = std::abs(this->dimensionality);
 
     U_ASSERT(absPower > 0); // "this function does not support the dimensionless single units";
@@ -1195,7 +1195,7 @@ UMeasurePrefix MeasureUnit::getPrefix(UErrorCode& status) const {
     return SingleUnitImpl::forMeasureUnit(*this, status).unitPrefix;
 }
 
-MeasureUnit MeasureUnit::withPrefix(UMeasurePrefix prefix, UErrorCode& status) const {
+MeasureUnit MeasureUnit::withPrefix(UMeasurePrefix prefix, UErrorCode& status) const UPRV_NO_SANITIZE_UNDEFINED {
     SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
     singleUnit.unitPrefix = prefix;
     return singleUnit.build(status);

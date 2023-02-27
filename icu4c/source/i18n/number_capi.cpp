@@ -131,7 +131,8 @@ unumf_openForSkeletonAndLocaleWithError(const char16_t* skeleton, int32_t skelet
     }
     // Readonly-alias constructor (first argument is whether we are NUL-terminated)
     UnicodeString skeletonString(skeletonLen == -1, skeleton, skeletonLen);
-    impl->fFormatter = NumberFormatter::forSkeleton(skeletonString, *perror, *ec).locale(locale);
+    UParseError tempParseError;
+    impl->fFormatter = NumberFormatter::forSkeleton(skeletonString, (perror == nullptr) ? tempParseError : *perror, *ec).locale(locale);
     return impl->exportForC();
 }
 

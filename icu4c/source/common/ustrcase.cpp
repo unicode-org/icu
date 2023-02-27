@@ -592,7 +592,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                         destIndex+=
                             toLower(
                                 caseLocale, options,
-                                dest+destIndex, destCapacity-destIndex,
+                                (dest==nullptr) ? nullptr: dest+destIndex, destCapacity-destIndex,
                                 src, &csc, titleLimit, index,
                                 edits, errorCode);
                         if(errorCode==U_BUFFER_OVERFLOW_ERROR) {

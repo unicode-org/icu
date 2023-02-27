@@ -2596,7 +2596,12 @@ ucnv_fromAlgorithmic(UConverter *cnv,
                      UConverterType algorithmicType,
                      char *target, int32_t targetCapacity,
                      const char *source, int32_t sourceLength,
-                     UErrorCode *pErrorCode) {
+                     UErrorCode *pErrorCode) UPRV_NO_SANITIZE_UNDEFINED {
+
+    if(algorithmicType<0 || UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES<=algorithmicType) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     return ucnv_convertAlgorithmic(false, algorithmicType, cnv,
                                    target, targetCapacity,
                                    source, sourceLength,

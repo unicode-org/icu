@@ -1923,7 +1923,7 @@ outputBytes:
         cnv->charErrorBufferLength=(int8_t)length;
 
         /* now output what fits into the regular target */
-        c>>=8*length; /* length was reduced by targetCapacity */
+        c = (length == 4) ? 0 : c >> 8*length; /* length was reduced by targetCapacity */
         switch(targetCapacity) {
             /* each branch falls through to the next one */
         case 3:

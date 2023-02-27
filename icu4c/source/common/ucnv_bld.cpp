@@ -1376,7 +1376,7 @@ ucnv_swap(const UDataSwapper *ds,
     }
 
     inBytes=(const uint8_t *)inData+headerSize;
-    outBytes=(uint8_t *)outData+headerSize;
+    outBytes=(outData == nullptr) ? nullptr : (uint8_t *)outData+headerSize;
 
     /* read the initial UConverterStaticData structure after the UDataInfo header */
     inStaticData=(const UConverterStaticData *)inBytes;
@@ -1416,7 +1416,7 @@ ucnv_swap(const UDataSwapper *ds,
     }
 
     inBytes+=staticDataSize;
-    outBytes+=staticDataSize;
+    if (outBytes != nullptr) outBytes+=staticDataSize;
     if(length>=0) {
         length-=(int32_t)staticDataSize;
     }

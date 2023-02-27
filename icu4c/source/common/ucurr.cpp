@@ -2128,7 +2128,7 @@ ucurr_createCurrencyList(UHashtable *isoCodes, UErrorCode* status){
                     if (U_SUCCESS(localStatus)) {
                         int32_t fromLength = 0;
                         const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
-                        int64_t currDate64 = (int64_t)fromArray[0] << 32;
+                        int64_t currDate64 = ((uint64_t)fromArray[0]) << 32;
                         currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
                         fromDate = (UDate)currDate64;
                     }
@@ -2142,7 +2142,7 @@ ucurr_createCurrencyList(UHashtable *isoCodes, UErrorCode* status){
                     if (U_SUCCESS(localStatus)) {
                         int32_t toLength = 0;
                         const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
-                        int64_t currDate64 = (int64_t)toArray[0] << 32;
+                        int64_t currDate64 = (uint64_t)toArray[0] << 32;
                         currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
                         toDate = (UDate)currDate64;
                     }
@@ -2336,7 +2336,7 @@ ucurr_countCurrencies(const char* locale,
                 UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", nullptr, &localStatus);
                 const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
 
-                int64_t currDate64 = (int64_t)fromArray[0] << 32;
+                int64_t currDate64 = (int64_t)((uint64_t)(fromArray[0]) << 32);
                 currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
                 UDate fromDate = (UDate)currDate64;
 
@@ -2459,7 +2459,7 @@ ucurr_forLocaleAndDate(const char* locale,
                     UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", nullptr, &localStatus);
                     const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
 
-                    int64_t currDate64 = (int64_t)fromArray[0] << 32;
+                    int64_t currDate64 = (int64_t)((uint64_t)fromArray[0] << 32);
                     currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
                     UDate fromDate = (UDate)currDate64;
 

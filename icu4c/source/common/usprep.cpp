@@ -809,7 +809,7 @@ usprep_swap(const UDataSwapper *ds,
     }
 
     inBytes=(const uint8_t *)inData+headerSize;
-    outBytes=(uint8_t *)outData+headerSize;
+    outBytes= (outData == nullptr ) ? nullptr : (uint8_t *)outData+headerSize;
 
     inIndexes=(const int32_t *)inBytes;
 
