@@ -102,7 +102,9 @@ void StringProp::set(StringPiece value) {
         fError = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    uprv_strncpy(fValue, value.data(), fLength);
+    if (fLength > 0) {
+        uprv_strncpy(fValue, value.data(), fLength);
+    }
     fValue[fLength] = 0;
 }
 

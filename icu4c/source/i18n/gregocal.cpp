@@ -823,8 +823,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
 }
 
 void
-GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status)
-{
+GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) UPRV_NO_SANITIZE_UNDEFINED {
     if((amount == 0) || U_FAILURE(status)) {
         return;
     }

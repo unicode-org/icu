@@ -1872,7 +1872,7 @@ uchar_swapNames(const UDataSwapper *ds,
     }
 
     inBytes=(const uint8_t *)inData+headerSize;
-    outBytes=(uint8_t *)outData+headerSize;
+    outBytes=(outData == nullptr) ? nullptr : (uint8_t *)outData+headerSize;
     if(length<0) {
         algNamesOffset=ds->readUInt32(((const uint32_t *)inBytes)[3]);
     } else {

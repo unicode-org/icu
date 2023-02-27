@@ -338,9 +338,10 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_NORMALIZATION
     UnicodeString emptyString;
     TESTCLASSID_CTOR(Normalizer, (emptyString, UNORM_NONE));
-    const Normalizer2 *noNormalizer2 = nullptr;
+    const Normalizer2* nfc_singleton = Normalizer2::getNFCInstance(status);
     UnicodeSet emptySet;
-    TESTCLASSID_NONE_CTOR(FilteredNormalizer2, (*noNormalizer2, emptySet));
+    TESTCLASSID_NONE_CTOR(FilteredNormalizer2, (*nfc_singleton, emptySet));
+
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
 #endif
 #if !UCONFIG_NO_IDNA

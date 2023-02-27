@@ -1717,8 +1717,7 @@ void Calendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     roll((UCalendarDateFields)field, amount, status);
 }
 
-void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status)
-{
+void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) UPRV_NO_SANITIZE_UNDEFINED {
     if (amount == 0) {
         return; // Nothing to do
     }
@@ -2320,7 +2319,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
                 break;
             } else {
                 min = max;
-                max <<= 1;
+                max = (int32_t)((uint32_t)(max) << 1);
                 if (max == 0) {
                     // Field difference too large to fit into int32_t
 #if defined (U_DEBUG_CAL)
@@ -2458,8 +2457,7 @@ Calendar::getSkippedWallTimeOption(void) const
 // -------------------------------------
 
 void
-Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value)
-{
+Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value) UPRV_NO_SANITIZE_UNDEFINED {
     if (fFirstDayOfWeek != value &&
         value >= UCAL_SUNDAY && value <= UCAL_SATURDAY) {
             fFirstDayOfWeek = value;

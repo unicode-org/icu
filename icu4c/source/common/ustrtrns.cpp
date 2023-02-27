@@ -1319,8 +1319,6 @@ u_strToJavaModifiedUTF8(
         UErrorCode *pErrorCode) {
     int32_t reqLength=0;
     uint32_t ch=0;
-    uint8_t *pDest = (uint8_t *)dest;
-    uint8_t *pDestLimit = pDest + destCapacity;
     const char16_t *pSrcLimit;
     int32_t count;
 
@@ -1334,6 +1332,8 @@ u_strToJavaModifiedUTF8(
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
+    uint8_t *pDest = (uint8_t *)dest;
+    uint8_t *pDestLimit = pDest + destCapacity;
 
     if(srcLength==-1) {
         /* Convert NUL-terminated ASCII, then find the string length. */

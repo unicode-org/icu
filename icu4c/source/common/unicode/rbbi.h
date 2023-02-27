@@ -200,7 +200,7 @@ private:
      * Internally, handles common initialization for other constructors.
      * @internal (private)
      */
-    RuleBasedBreakIterator(UErrorCode &status);
+    RuleBasedBreakIterator(UErrorCode *status);
 
 public:
 
