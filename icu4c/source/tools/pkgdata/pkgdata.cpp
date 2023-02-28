@@ -987,8 +987,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     pkgDataFlags[SOBJ_EXT]) < 0) {
-                 fprintf(stderr, "Buffer overflow");
-                 exit(-1);
+                fprintf(stderr, "Buffer overflow");
+                exit(-1);
             }
         } else {
             if (snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s%s%s",
