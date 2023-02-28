@@ -17,11 +17,13 @@ Requirements:
   - Maven
 
 To use the utility:
- 1. Put both old and new ICU source trees on your system
+1. Put both old and new ICU source trees on your system
 
 2. Run "configure" in both old and new (you can use any mixture of in-source and out-of-source builds). Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
 
-3. create a Makefile.local in this readme's directory (tools/trunk/release/java/) 
+   ** Then in each directory, run `make doc` to create the doc/ directory.
+   
+3. Create a Makefile.local in this readme's directory (tools/release/java/) 
             with just these two lines, for example:
 			OLD_ICU=/xsrl/E/icu-6.7
 			NEW_ICU=/xsrl/E/icu-6.8
@@ -34,8 +36,8 @@ To use the utility:
            indicating the build location:
                         OLD_ICU_BUILD=/xsrl/E/icu-build-m48
                         NEW_ICU_BUILD=/xsrl/E/icu-build
-
-4. from this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
+			
+4. From this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
             make APIChangeReport.html
             make APIChangeReport.md
 
