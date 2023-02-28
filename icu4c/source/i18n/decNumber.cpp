@@ -1525,7 +1525,8 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *res, const decNumber
       }
     uprv_decNumberZero(w);                   /* set up 10...  */
     #if DECDPUN==1
-    w->lsu[1]=1; w->lsu[0]=0;           /* ..  */
+    decNumberUnit *lsup = w->lsu;
+    lsup[1]=1; lsup[0]=0;           /* ..  */
     #else
     w->lsu[0]=10;                       /* ..  */
     #endif
@@ -2971,8 +2972,10 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decN
         t->lsu[0]=59; t->lsu[1]=2;
         a->lsu[0]=19; a->lsu[1]=8;
       #else
-        t->lsu[0]=9; t->lsu[1]=5; t->lsu[2]=2;
-        a->lsu[0]=9; a->lsu[1]=1; a->lsu[2]=8;
+        decNumberUnit *lsup = t->lsu;
+        lsup[0]=9; lsup[1]=5; lsup[2]=2;
+        lsup = a->lsu;
+        lsup[0]=9; lsup[1]=1; lsup[2]=8;
       #endif
       }
      else {                                  /* odd exponent  */
@@ -2988,8 +2991,10 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decN
         t->lsu[0]=19; t->lsu[1]=8;
         a->lsu[0]=59; a->lsu[1]=2;
       #else
-        t->lsu[0]=9; t->lsu[1]=1; t->lsu[2]=8;
-        a->lsu[0]=9; a->lsu[1]=5; a->lsu[2]=2;
+        decNumberUnit *lsup = t->lsu;
+        lsup[0]=9; lsup[1]=1; lsup[2]=8;
+        lsup = a->lsu;
+        lsup[0]=9; lsup[1]=5; lsup[2]=2;
       #endif
       }
 
@@ -5680,7 +5685,8 @@ decNumber * decLnOp(decNumber *res, const decNumber *rhs,
     /* lookaside fastpath code for ln(2) and ln(10) at common lengths  */
     if (rhs->exponent==0 && set->digits<=40) {
       #if DECDPUN==1
-      if (rhs->lsu[0]==0 && rhs->lsu[1]==1 && rhs->digits==2) { /* ln(10)  */
+      const decNumberUnit *lsup = rhs->lsu;
+      if (lsup[0]==0 && lsup[1]==1 && rhs->digits==2) { /* ln(10)  */
       #else
       if (rhs->lsu[0]==10 && rhs->digits==2) {                  /* ln(10)  */
       #endif
