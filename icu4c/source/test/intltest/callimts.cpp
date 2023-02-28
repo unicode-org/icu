@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation
+ * Copyright (c) 1997-2023, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -170,7 +170,9 @@ TestCase TestCases[] = {
         {"indian",          false,      DEFAULT_START, DEFAULT_END},
         {"coptic",          false,      DEFAULT_START, DEFAULT_END},
         {"ethiopic",        false,      DEFAULT_START, DEFAULT_END},
-        {"ethiopic-amete-alem", false,  DEFAULT_START, DEFAULT_END}
+        {"ethiopic-amete-alem", false,  DEFAULT_START, DEFAULT_END},
+        {"tibetan",         true,      DEFAULT_START, DEFAULT_END},
+        {"tibetan-tsurphu", true,      DEFAULT_START, DEFAULT_END}
 };
     
 struct {
@@ -382,6 +384,12 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             return;
         }
         for (j = 0; fieldsToTest[j] >= 0; ++j) {
+            if ((j == 3 || j == 4 || j == 6 || j == 7 || j == 8) &&
+                (uprv_strcmp(cal.getType(), "tibetan") == 0 || uprv_strcmp(cal.getType(), "tibetan-tsurphu") == 0)) {
+                // 
+                continue;
+            }
+
             UCalendarDateFields f = (UCalendarDateFields)fieldsToTest[j];
             int32_t v = cal.get(f, status);
             int32_t minActual = cal.getActualMinimum(f, status);
@@ -424,6 +432,12 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                           " Range for max of " + FIELD_NAME[f] + "(" + f +
                           ")=" + maxLow + ".." + maxHigh +
                           ", actual_max=" + maxActual);
+                } else if ( (uprv_strcmp(cal.getType(), "tibetan") == 0 || uprv_strcmp(cal.getType(), "tibetan-tsurphu") == 0) &&
+                        j == 5) { 
+                    // The test is predicated on the idea that the maximum value for the day of month is also the final
+                    // one in the month, but this is not the case for Tibetan.
+                    // In the Tibetan calendar, leap days can happy at any place in the month, and are encoded
+                    // as day + 64 because there is no IS_LEAP_DAY field.
                 } else {
                     errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
                           ymdToString(cal, ymd) +
@@ -452,6 +466,12 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                           ", actual=" + minActual + ".." + maxActual +
                           ", allowed=(" + minLow + ".." + minHigh + ")..(" +
                           maxLow + ".." + maxHigh + ")");
+                } else if ( (uprv_strcmp(cal.getType(), "tibetan") == 0 || uprv_strcmp(cal.getType(), "tibetan-tsurphu") == 0) &&
+                        j == 5) { 
+                    // The test is predicated on the idea that the maximum value for the day of month is also the final
+                    // one in the month, but this is not the case for Tibetan.
+                    // In the Tibetan calendar, leap days can happy at any place in the month, and are encoded
+                    // as day + 64 because there is no IS_LEAP_DAY field.
                 } else {
                     errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
                           ymdToString(cal, ymd) +

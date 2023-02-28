@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2021, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -60,6 +60,8 @@ public:
     void TestConsistencyIslamicUmalqura(void);
     void TestConsistencyPersian(void);
     void TestConsistencyJapanese(void);
+    void TestConsistencyTibetan(void);
+    void TestConsistencyTibetanTsurphu(void);
 
  protected:
     // Test a Gregorian-Like calendar

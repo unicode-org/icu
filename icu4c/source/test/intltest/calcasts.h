@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2008, International Business Machines Corporation 
+ * Copyright (c) 2003-2023, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -61,6 +61,8 @@ class CalendarCaseTest: public CalendarTest {
   void Indian();
   void Coptic();
   void Ethiopic();
+  void Tibetan();
+  void TibetanTsurphu();
 };
 
 #endif

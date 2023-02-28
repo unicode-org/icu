@@ -181,6 +181,7 @@ strmatch.cpp
 strrepl.cpp
 stsearch.cpp
 taiwncal.cpp
+tibetancal.cpp
 timezone.cpp
 titletrn.cpp
 tmunit.cpp

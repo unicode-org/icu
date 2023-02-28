@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
-* Copyright (C) 1997-2016, International Business Machines Corporation and    *
+* Copyright (C) 1997-2021, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -40,6 +40,7 @@
 #include "gregoimp.h"
 #include "buddhcal.h"
 #include "taiwncal.h"
+#include "tibetancal.h"
 #include "japancal.h"
 #include "islamcal.h"
 #include "hebrwcal.h"
@@ -176,6 +177,8 @@ static const char * const gCalTypes[] = {
     "islamic-umalqura",
     "islamic-tbla",
     "islamic-rgsa",
+    "tibetan",
+    "tibetan-tsurphu",
     nullptr
 };
 
@@ -199,7 +202,9 @@ typedef enum ECalType {
     CALTYPE_DANGI,
     CALTYPE_ISLAMIC_UMALQURA,
     CALTYPE_ISLAMIC_TBLA,
-    CALTYPE_ISLAMIC_RGSA
+    CALTYPE_ISLAMIC_RGSA,
+    CALTYPE_TIBETAN,
+    CALTYPE_TIBETAN_TSURPHU
 } ECalType;
 
 U_NAMESPACE_BEGIN
@@ -392,6 +397,12 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             break;
         case CALTYPE_DANGI:
             cal.adoptInsteadAndCheckErrorCode(new DangiCalendar(loc, status), status);
+            break;
+        case CALTYPE_TIBETAN:
+            cal.adoptInsteadAndCheckErrorCode(new TibetanCalendar(loc, status), status);
+            break;
+        case CALTYPE_TIBETAN_TSURPHU:
+            cal.adoptInsteadAndCheckErrorCode(new TibetanTsurphuCalendar(loc, status), status);
             break;
         default:
             status = U_UNSUPPORTED_ERROR;

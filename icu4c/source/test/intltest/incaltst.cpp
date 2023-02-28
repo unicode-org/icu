@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2014, International Business Machines Corporation
+ * Copyright (c) 1997-2023, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -105,6 +105,8 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestConsistencyIslamicUmalqura);
     TESTCASE_AUTO(TestConsistencyPersian);
     TESTCASE_AUTO(TestConsistencyJapanese);
+    TESTCASE_AUTO(TestConsistencyTibetan);
+    TESTCASE_AUTO(TestConsistencyTibetanTsurphu);
     TESTCASE_AUTO_END;
 }
 
@@ -985,6 +987,12 @@ void IntlCalendarTest::TestConsistencyJapanese() {
 }
 void IntlCalendarTest::TestConsistencyEthiopicAmeteAlem() {
     checkConsistency("en@calendar=ethiopic-amete-alem");
+}
+void IntlCalendarTest::TestConsistencyTibetan() {
+    checkConsistency("en@calendar=tibetan");
+}
+void IntlCalendarTest::TestConsistencyTibetanTsurphu() {
+    checkConsistency("en@calendar=tibetan-tsurphu");
 }
 void IntlCalendarTest::checkConsistency(const char* locale) {
     // Check 2.5 years in quick mode and 6000 years in exhaustive mode.

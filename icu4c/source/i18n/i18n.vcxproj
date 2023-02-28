@@ -242,6 +242,7 @@
     <ClCompile Include="smpdtfst.cpp" />
     <ClCompile Include="standardplural.cpp" />
     <ClCompile Include="taiwncal.cpp" />
+    <ClCompile Include="tibetancal.cpp" />
     <ClCompile Include="timezone.cpp" />
     <ClCompile Include="tmunit.cpp" />
     <ClCompile Include="tmutamt.cpp" />
@@ -408,6 +409,7 @@
     <ClInclude Include="smpdtfst.h" />
     <ClInclude Include="standardplural.h" />
     <ClInclude Include="taiwncal.h" />
+    <ClInclude Include="tibetancal.h" />
     <ClInclude Include="umsg_imp.h" />
     <ClInclude Include="utf16collationiterator.h" />
     <ClInclude Include="utf8collationiterator.h" />
