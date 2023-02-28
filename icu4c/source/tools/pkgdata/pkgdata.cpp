@@ -997,8 +997,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
                     reverseExt ? version : pkgDataFlags[SOBJ_EXT],
                     FILE_EXTENSION_SEP,
                     reverseExt ? pkgDataFlags[SOBJ_EXT] : version) < 0) {
-                 fprintf(stderr, "Buffer overflow");
-                 exit(-1);
+                fprintf(stderr, "Buffer overflow");
+                exit(-1);
             }
         }
 #endif
