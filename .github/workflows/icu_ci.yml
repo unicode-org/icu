@@ -289,7 +289,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: ICU4C with gcc and -Werror.
+      - name: Build ICU4C with gcc and -Werror.
         env:
           CC: gcc-10
           CXX: g++-10
