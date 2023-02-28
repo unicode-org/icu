@@ -293,7 +293,7 @@ jobs:
         env:
           CC: gcc-10
           CXX: g++-10
-          CPPFLAGS: -Werror
+          CPPFLAGS: -Werror -Wno-stringop-truncation
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux/gcc;
