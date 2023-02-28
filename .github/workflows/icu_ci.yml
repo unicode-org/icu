@@ -283,7 +283,7 @@ jobs:
           ( cd .. && source/test/hdrtst/testtagsguards.sh );
           make dist
 
-  # Build gcc with -Werror
+  # Build with gcc and with -Werror
   gcc-werror:
     runs-on: ubuntu-latest
     steps:
