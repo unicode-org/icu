@@ -58,7 +58,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * Move constructor: Leaves the source FormattedNumber in an undefined state.
      * @stable ICU 62
      */
-    FormattedNumber(FormattedNumber&& src) U_NOEXCEPT;
+    FormattedNumber(FormattedNumber&& src) noexcept;
 
     /**
      * Destruct an instance of FormattedNumber.
@@ -76,7 +76,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * Move assignment: Leaves the source FormattedNumber in an undefined state.
      * @stable ICU 62
      */
-    FormattedNumber& operator=(FormattedNumber&& src) U_NOEXCEPT;
+    FormattedNumber& operator=(FormattedNumber&& src) noexcept;
 
     // Copybrief: this method is older than the parent method
     /**

@@ -197,7 +197,7 @@ public:
      * Move constructor, leaves src with isNull().
      * @param src source smart pointer
      */
-    LocalMemory(LocalMemory<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
+    LocalMemory(LocalMemory<T> &&src) noexcept : LocalPointerBase<T>(src.ptr) {
         src.ptr=nullptr;
     }
     /**
@@ -212,7 +212,7 @@ public:
      * @param src source smart pointer
      * @return *this
      */
-    LocalMemory<T> &operator=(LocalMemory<T> &&src) U_NOEXCEPT {
+    LocalMemory<T> &operator=(LocalMemory<T> &&src) noexcept {
         uprv_free(LocalPointerBase<T>::ptr);
         LocalPointerBase<T>::ptr=src.ptr;
         src.ptr=nullptr;
@@ -222,7 +222,7 @@ public:
      * Swap pointers.
      * @param other other smart pointer
      */
-    void swap(LocalMemory<T> &other) U_NOEXCEPT {
+    void swap(LocalMemory<T> &other) noexcept {
         T *temp=LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
@@ -232,7 +232,7 @@ public:
      * @param p1 will get p2's pointer
      * @param p2 will get p1's pointer
      */
-    friend inline void swap(LocalMemory<T> &p1, LocalMemory<T> &p2) U_NOEXCEPT {
+    friend inline void swap(LocalMemory<T> &p1, LocalMemory<T> &p2) noexcept {
         p1.swap(p2);
     }
     /**
@@ -332,10 +332,10 @@ template<typename T, int32_t stackCapacity>
 class MaybeStackArray {
 public:
     // No heap allocation. Use only on the stack.
-    static void* U_EXPORT2 operator new(size_t) U_NOEXCEPT = delete;
-    static void* U_EXPORT2 operator new[](size_t) U_NOEXCEPT = delete;
+    static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+    static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
 #if U_HAVE_PLACEMENT_NEW
-    static void* U_EXPORT2 operator new(size_t, void*) U_NOEXCEPT = delete;
+    static void* U_EXPORT2 operator new(size_t, void*) noexcept = delete;
 #endif
 
     /**
@@ -364,11 +364,11 @@ public:
     /**
      * Move constructor: transfers ownership or copies the stack array.
      */
-    MaybeStackArray(MaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT;
+    MaybeStackArray(MaybeStackArray<T, stackCapacity> &&src) noexcept;
     /**
      * Move assignment: transfers ownership or copies the stack array.
      */
-    MaybeStackArray<T, stackCapacity> &operator=(MaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT;
+    MaybeStackArray<T, stackCapacity> &operator=(MaybeStackArray<T, stackCapacity> &&src) noexcept;
     /**
      * Returns the array capacity (number of T items).
      * @return array capacity
@@ -475,7 +475,7 @@ private:
 
 template<typename T, int32_t stackCapacity>
 icu::MaybeStackArray<T, stackCapacity>::MaybeStackArray(
-        MaybeStackArray <T, stackCapacity>&& src) U_NOEXCEPT
+        MaybeStackArray <T, stackCapacity>&& src) noexcept
         : ptr(src.ptr), capacity(src.capacity), needToRelease(src.needToRelease) {
     if (src.ptr == src.stackArray) {
         ptr = stackArray;
@@ -487,7 +487,7 @@ icu::MaybeStackArray<T, stackCapacity>::MaybeStackArray(
 
 template<typename T, int32_t stackCapacity>
 inline MaybeStackArray <T, stackCapacity>&
-MaybeStackArray<T, stackCapacity>::operator=(MaybeStackArray <T, stackCapacity>&& src) U_NOEXCEPT {
+MaybeStackArray<T, stackCapacity>::operator=(MaybeStackArray <T, stackCapacity>&& src) noexcept {
     releaseArray();  // in case this instance had its own memory allocated
     capacity = src.capacity;
     needToRelease = src.needToRelease;
@@ -568,10 +568,10 @@ template<typename H, typename T, int32_t stackCapacity>
 class MaybeStackHeaderAndArray {
 public:
     // No heap allocation. Use only on the stack.
-    static void* U_EXPORT2 operator new(size_t) U_NOEXCEPT = delete;
-    static void* U_EXPORT2 operator new[](size_t) U_NOEXCEPT = delete;
+    static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+    static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
 #if U_HAVE_PLACEMENT_NEW
-    static void* U_EXPORT2 operator new(size_t, void*) U_NOEXCEPT = delete;
+    static void* U_EXPORT2 operator new(size_t, void*) noexcept = delete;
 #endif
 
     /**
@@ -768,12 +768,12 @@ public:
     MemoryPool(const MemoryPool&) = delete;
     MemoryPool& operator=(const MemoryPool&) = delete;
 
-    MemoryPool(MemoryPool&& other) U_NOEXCEPT : fCount(other.fCount),
+    MemoryPool(MemoryPool&& other) noexcept : fCount(other.fCount),
                                                 fPool(std::move(other.fPool)) {
         other.fCount = 0;
     }
 
-    MemoryPool& operator=(MemoryPool&& other) U_NOEXCEPT {
+    MemoryPool& operator=(MemoryPool&& other) noexcept {
         // Since `this` may contain instances that need to be deleted, we can't
         // just throw them away and replace them with `other`. The normal way of
         // dealing with this in C++ is to swap `this` and `other`, rather than

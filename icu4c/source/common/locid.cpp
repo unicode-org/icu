@@ -407,7 +407,7 @@ Locale::Locale(const Locale &other)
     *this = other;
 }
 
-Locale::Locale(Locale&& other) U_NOEXCEPT
+Locale::Locale(Locale&& other) noexcept
     : UObject(other), fullName(fullNameBuffer), baseName(fullName) {
   *this = std::move(other);
 }
@@ -445,7 +445,7 @@ Locale& Locale::operator=(const Locale& other) {
     return *this;
 }
 
-Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
+Locale& Locale::operator=(Locale&& other) noexcept {
     if ((baseName != fullName) && (baseName != fullNameBuffer)) uprv_free(baseName);
     if (fullName != fullNameBuffer) uprv_free(fullName);
 

@@ -308,7 +308,7 @@ UnicodeString::UnicodeString(const UnicodeString& that) {
   copyFrom(that);
 }
 
-UnicodeString::UnicodeString(UnicodeString &&src) U_NOEXCEPT {
+UnicodeString::UnicodeString(UnicodeString &&src) noexcept {
   copyFieldsFrom(src, true);
 }
 
@@ -572,7 +572,7 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
   return *this;
 }
 
-UnicodeString &UnicodeString::operator=(UnicodeString &&src) U_NOEXCEPT {
+UnicodeString &UnicodeString::operator=(UnicodeString &&src) noexcept {
   // No explicit check for self move assignment, consistent with standard library.
   // Self move assignment causes no crash nor leak but might make the object bogus.
   releaseArray();
@@ -581,7 +581,7 @@ UnicodeString &UnicodeString::operator=(UnicodeString &&src) U_NOEXCEPT {
 }
 
 // Same as move assignment except without memory management.
-void UnicodeString::copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) U_NOEXCEPT {
+void UnicodeString::copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) noexcept {
   int16_t lengthAndFlags = fUnion.fFields.fLengthAndFlags = src.fUnion.fFields.fLengthAndFlags;
   if(lengthAndFlags & kUsingStackBuffer) {
     // Short string using the stack buffer, copy the contents.
@@ -607,7 +607,7 @@ void UnicodeString::copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) U_NO
   }
 }
 
-void UnicodeString::swap(UnicodeString &other) U_NOEXCEPT {
+void UnicodeString::swap(UnicodeString &other) noexcept {
   UnicodeString temp;  // Empty short string: Known not to need releaseArray().
   // Copy fields without resetting source values in between.
   temp.copyFieldsFrom(*this, false);

@@ -517,19 +517,6 @@
 #endif
 
 /**
- * \def U_NOEXCEPT
- * "noexcept" if supported, otherwise empty.
- * Some code, especially STL containers, uses move semantics of objects only
- * if the move constructor and the move operator are declared as not throwing exceptions.
- * @internal
- */
-#ifdef U_NOEXCEPT
-    /* Use the predefined value. */
-#else
-#   define U_NOEXCEPT noexcept
-#endif
-
-/**
  * \def U_FALLTHROUGH
  * Annotate intentional fall-through between switch labels.
  * http://clang.llvm.org/docs/AttributeReference.html#fallthrough-clang-fallthrough

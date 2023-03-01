@@ -74,10 +74,10 @@ class U_I18N_API FieldPositionIteratorHandler : public FieldPositionHandler {
   // to be destroyed before status goes out of scope.  Easiest thing is to
   // allocate us on the stack in the same (or narrower) scope as status has.
   // This attempts to encourage that by blocking heap allocation.
-  static void* U_EXPORT2 operator new(size_t) U_NOEXCEPT = delete;
-  static void* U_EXPORT2 operator new[](size_t) U_NOEXCEPT = delete;
+  static void* U_EXPORT2 operator new(size_t) noexcept = delete;
+  static void* U_EXPORT2 operator new[](size_t) noexcept = delete;
 #if U_HAVE_PLACEMENT_NEW
-  static void* U_EXPORT2 operator new(size_t, void*) U_NOEXCEPT = delete;
+  static void* U_EXPORT2 operator new(size_t, void*) noexcept = delete;
 #endif
 
  public:

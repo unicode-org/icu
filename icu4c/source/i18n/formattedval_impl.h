@@ -222,7 +222,7 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
 
 /** Implementation of the methods from U_FORMATTED_VALUE_SUBCLASS_AUTO. */
 #define UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(Name) \
-    Name::Name(Name&& src) U_NOEXCEPT \
+    Name::Name(Name&& src) noexcept \
             : fData(src.fData), fErrorCode(src.fErrorCode) { \
         src.fData = nullptr; \
         src.fErrorCode = U_INVALID_STATE_ERROR; \
@@ -231,7 +231,7 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
         delete fData; \
         fData = nullptr; \
     } \
-    Name& Name::operator=(Name&& src) U_NOEXCEPT { \
+    Name& Name::operator=(Name&& src) noexcept { \
         delete fData; \
         fData = src.fData; \
         src.fData = nullptr; \

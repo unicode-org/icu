@@ -59,13 +59,13 @@ public:
      * Move constructor; might leave src in an undefined state.
      * This string will have the same contents and state that the source string had.
      */
-    CharString(CharString &&src) U_NOEXCEPT;
+    CharString(CharString &&src) noexcept;
     /**
      * Move assignment operator; might leave src in an undefined state.
      * This string will have the same contents and state that the source string had.
      * The behavior is undefined if *this and src are the same object.
      */
-    CharString &operator=(CharString &&src) U_NOEXCEPT;
+    CharString &operator=(CharString &&src) noexcept;
 
     /**
      * Replaces this string's contents with the other string's contents.

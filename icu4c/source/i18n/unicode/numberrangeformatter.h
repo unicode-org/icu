@@ -440,7 +440,7 @@ class U_I18N_API UnlocalizedNumberRangeFormatter
      * The source UnlocalizedNumberRangeFormatter will be left in a valid but undefined state.
      * @stable ICU 63
      */
-    UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
+    UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&& src) noexcept;
 
     /**
      * Copy assignment operator.
@@ -453,14 +453,14 @@ class U_I18N_API UnlocalizedNumberRangeFormatter
      * The source UnlocalizedNumberRangeFormatter will be left in a valid but undefined state.
      * @stable ICU 63
      */
-    UnlocalizedNumberRangeFormatter& operator=(UnlocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
+    UnlocalizedNumberRangeFormatter& operator=(UnlocalizedNumberRangeFormatter&& src) noexcept;
 
   private:
     explicit UnlocalizedNumberRangeFormatter(
             const NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>& other);
 
     explicit UnlocalizedNumberRangeFormatter(
-            NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>&& src) U_NOEXCEPT;
+            NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>&& src) noexcept;
 
     // To give the fluent setters access to this class's constructor:
     friend class NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>;
@@ -514,7 +514,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      * The source LocalizedNumberRangeFormatter will be left in a valid but undefined state.
      * @stable ICU 63
      */
-    LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
+    LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&& src) noexcept;
 
     /**
      * Copy assignment operator.
@@ -527,7 +527,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      * The source LocalizedNumberRangeFormatter will be left in a valid but undefined state.
      * @stable ICU 63
      */
-    LocalizedNumberRangeFormatter& operator=(LocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
+    LocalizedNumberRangeFormatter& operator=(LocalizedNumberRangeFormatter&& src) noexcept;
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -561,7 +561,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
         const NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>& other);
 
     explicit LocalizedNumberRangeFormatter(
-        NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>&& src) U_NOEXCEPT;
+        NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>&& src) noexcept;
 
     LocalizedNumberRangeFormatter(const impl::RangeMacroProps &macros, const Locale &locale);
 
@@ -668,14 +668,14 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      * Leaves the source FormattedNumberRange in an undefined state.
      * @stable ICU 63
      */
-    FormattedNumberRange(FormattedNumberRange&& src) U_NOEXCEPT;
+    FormattedNumberRange(FormattedNumberRange&& src) noexcept;
 
     /**
      * Move assignment:
      * Leaves the source FormattedNumberRange in an undefined state.
      * @stable ICU 63
      */
-    FormattedNumberRange& operator=(FormattedNumberRange&& src) U_NOEXCEPT;
+    FormattedNumberRange& operator=(FormattedNumberRange&& src) noexcept;
 
     /**
      * Destruct an instance of FormattedNumberRange, cleaning up any memory it might own.
