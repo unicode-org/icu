@@ -69,7 +69,7 @@ AdoptingSignumModifierStore::~AdoptingSignumModifierStore()  {
 }
 
 AdoptingSignumModifierStore&
-AdoptingSignumModifierStore::operator=(AdoptingSignumModifierStore&& other) U_NOEXCEPT {
+AdoptingSignumModifierStore::operator=(AdoptingSignumModifierStore&& other) noexcept {
     for (size_t i=0; i<SIGNUM_COUNT; i++) {
         this->mods[i] = other.mods[i];
         other.mods[i] = nullptr;

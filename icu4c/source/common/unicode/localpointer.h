@@ -221,7 +221,7 @@ public:
      * @param src source smart pointer
      * @stable ICU 56
      */
-    LocalPointer(LocalPointer<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
+    LocalPointer(LocalPointer<T> &&src) noexcept : LocalPointerBase<T>(src.ptr) {
         src.ptr=nullptr;
     }
 
@@ -252,7 +252,7 @@ public:
      * @return *this
      * @stable ICU 56
      */
-    LocalPointer<T> &operator=(LocalPointer<T> &&src) U_NOEXCEPT {
+    LocalPointer<T> &operator=(LocalPointer<T> &&src) noexcept {
         delete LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=src.ptr;
         src.ptr=nullptr;
@@ -267,7 +267,7 @@ public:
      * @return *this
      * @stable ICU 64
      */
-    LocalPointer<T> &operator=(std::unique_ptr<T> &&p) U_NOEXCEPT {
+    LocalPointer<T> &operator=(std::unique_ptr<T> &&p) noexcept {
         adoptInstead(p.release());
         return *this;
     }
@@ -277,7 +277,7 @@ public:
      * @param other other smart pointer
      * @stable ICU 56
      */
-    void swap(LocalPointer<T> &other) U_NOEXCEPT {
+    void swap(LocalPointer<T> &other) noexcept {
         T *temp=LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
@@ -288,7 +288,7 @@ public:
      * @param p2 will get p1's pointer
      * @stable ICU 56
      */
-    friend inline void swap(LocalPointer<T> &p1, LocalPointer<T> &p2) U_NOEXCEPT {
+    friend inline void swap(LocalPointer<T> &p1, LocalPointer<T> &p2) noexcept {
         p1.swap(p2);
     }
     /**
@@ -396,7 +396,7 @@ public:
      * @param src source smart pointer
      * @stable ICU 56
      */
-    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
+    LocalArray(LocalArray<T> &&src) noexcept : LocalPointerBase<T>(src.ptr) {
         src.ptr=nullptr;
     }
 
@@ -427,7 +427,7 @@ public:
      * @return *this
      * @stable ICU 56
      */
-    LocalArray<T> &operator=(LocalArray<T> &&src) U_NOEXCEPT {
+    LocalArray<T> &operator=(LocalArray<T> &&src) noexcept {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=src.ptr;
         src.ptr=nullptr;
@@ -442,7 +442,7 @@ public:
      * @return *this
      * @stable ICU 64
      */
-    LocalArray<T> &operator=(std::unique_ptr<T[]> &&p) U_NOEXCEPT {
+    LocalArray<T> &operator=(std::unique_ptr<T[]> &&p) noexcept {
         adoptInstead(p.release());
         return *this;
     }
@@ -452,7 +452,7 @@ public:
      * @param other other smart pointer
      * @stable ICU 56
      */
-    void swap(LocalArray<T> &other) U_NOEXCEPT {
+    void swap(LocalArray<T> &other) noexcept {
         T *temp=LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
@@ -463,7 +463,7 @@ public:
      * @param p2 will get p1's pointer
      * @stable ICU 56
      */
-    friend inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
+    friend inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) noexcept {
         p1.swap(p2);
     }
     /**
@@ -553,7 +553,7 @@ public:
         using LocalPointerBase<Type>::operator*; \
         using LocalPointerBase<Type>::operator->; \
         explicit LocalPointerClassName(Type *p=nullptr) : LocalPointerBase<Type>(p) {} \
-        LocalPointerClassName(LocalPointerClassName &&src) U_NOEXCEPT \
+        LocalPointerClassName(LocalPointerClassName &&src) noexcept \
                 : LocalPointerBase<Type>(src.ptr) { \
             src.ptr=nullptr; \
         } \
@@ -561,7 +561,7 @@ public:
         explicit LocalPointerClassName(std::unique_ptr<Type, decltype(&closeFunction)> &&p) \
                 : LocalPointerBase<Type>(p.release()) {} \
         ~LocalPointerClassName() { if (ptr != nullptr) { closeFunction(ptr); } } \
-        LocalPointerClassName &operator=(LocalPointerClassName &&src) U_NOEXCEPT { \
+        LocalPointerClassName &operator=(LocalPointerClassName &&src) noexcept { \
             if (ptr != nullptr) { closeFunction(ptr); } \
             LocalPointerBase<Type>::ptr=src.ptr; \
             src.ptr=nullptr; \
@@ -572,12 +572,12 @@ public:
             adoptInstead(p.release()); \
             return *this; \
         } \
-        void swap(LocalPointerClassName &other) U_NOEXCEPT { \
+        void swap(LocalPointerClassName &other) noexcept { \
             Type *temp=LocalPointerBase<Type>::ptr; \
             LocalPointerBase<Type>::ptr=other.ptr; \
             other.ptr=temp; \
         } \
-        friend inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) U_NOEXCEPT { \
+        friend inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) noexcept { \
             p1.swap(p2); \
         } \
         void adoptInstead(Type *p) { \

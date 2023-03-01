@@ -1906,14 +1906,14 @@ public:
    * @return *this
    * @stable ICU 56
    */
-  UnicodeString &operator=(UnicodeString &&src) U_NOEXCEPT;
+  UnicodeString &operator=(UnicodeString &&src) noexcept;
 
   /**
    * Swap strings.
    * @param other other string
    * @stable ICU 56
    */
-  void swap(UnicodeString &other) U_NOEXCEPT;
+  void swap(UnicodeString &other) noexcept;
 
   /**
    * Non-member UnicodeString swap function.
@@ -1922,7 +1922,7 @@ public:
    * @stable ICU 56
    */
   friend inline void U_EXPORT2
-  swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
+  swap(UnicodeString &s1, UnicodeString &s2) noexcept {
     s1.swap(s2);
   }
 
@@ -3306,7 +3306,7 @@ public:
    * @param src source string
    * @stable ICU 56
    */
-  UnicodeString(UnicodeString &&src) U_NOEXCEPT;
+  UnicodeString(UnicodeString &&src) noexcept;
 
   /**
    * 'Substring' constructor from tail of source string.
@@ -3618,7 +3618,7 @@ private:
   UnicodeString &copyFrom(const UnicodeString &src, UBool fastCopy=false);
 
   // Copies just the fields without memory management.
-  void copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) U_NOEXCEPT;
+  void copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) noexcept;
 
   // Pin start and limit to acceptable values.
   inline void pinIndex(int32_t& start) const;

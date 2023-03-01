@@ -552,6 +552,7 @@ public class StableAPI {
                                       //  TODO: notify about this difference, separately
                 "[ ]*U_NOEXCEPT", "", // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is
                                       //  retroactive)
+                "[ ]*noexcept", "",
                 "[ ]*override", "",   // remove override
                 // Simplify possibly-covariant functions to void*
                 "^([^\\* ]+)\\*(.*)::(clone|safeClone|cloneAsThawed|freeze|createBufferClone)\\((.*)", "void*$2::$3($4",

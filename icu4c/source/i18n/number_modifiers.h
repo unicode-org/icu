@@ -284,10 +284,10 @@ class U_I18N_API AdoptingSignumModifierStore : public UMemory {
     AdoptingSignumModifierStore& operator=(const AdoptingSignumModifierStore& other) = delete;
 
     // Moving is OK
-    AdoptingSignumModifierStore(AdoptingSignumModifierStore &&other) U_NOEXCEPT {
+    AdoptingSignumModifierStore(AdoptingSignumModifierStore &&other) noexcept {
         *this = std::move(other);
     }
-    AdoptingSignumModifierStore& operator=(AdoptingSignumModifierStore&& other) U_NOEXCEPT;
+    AdoptingSignumModifierStore& operator=(AdoptingSignumModifierStore&& other) noexcept;
 
     /** Take ownership of the Modifier and slot it in at the given Signum. */
     void adoptModifier(Signum signum, const Modifier* mod) {

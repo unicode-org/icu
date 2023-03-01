@@ -60,7 +60,7 @@ StringProp &StringProp::operator=(const StringProp &other) {
 }
 
 // Move constructor
-StringProp::StringProp(StringProp &&src) U_NOEXCEPT : fValue(src.fValue),
+StringProp::StringProp(StringProp &&src) noexcept : fValue(src.fValue),
                                                       fLength(src.fLength),
                                                       fError(src.fError) {
     // Take ownership away from src if necessary
@@ -68,7 +68,7 @@ StringProp::StringProp(StringProp &&src) U_NOEXCEPT : fValue(src.fValue),
 }
 
 // Move assignment operator
-StringProp &StringProp::operator=(StringProp &&src) U_NOEXCEPT {
+StringProp &StringProp::operator=(StringProp &&src) noexcept {
     if (this == &src) {
         return *this;
     }
