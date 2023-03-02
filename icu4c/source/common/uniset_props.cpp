@@ -631,11 +631,8 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
      * to close over case BEFORE COMPLEMENTING.  This makes
      * patterns like /[^abc]/i work.
      */
-    if ((options & USET_CASE_INSENSITIVE) != 0) {
-        (this->*caseClosure)(USET_CASE_INSENSITIVE);
-    }
-    else if ((options & USET_ADD_CASE_MAPPINGS) != 0) {
-        (this->*caseClosure)(USET_ADD_CASE_MAPPINGS);
+    if ((options & USET_CASE_MASK) != 0) {
+        (this->*caseClosure)(options);
     }
     if (invert) {
         complement().removeAllStrings();  // code point complement
