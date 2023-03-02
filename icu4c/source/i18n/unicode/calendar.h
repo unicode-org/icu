@@ -1349,7 +1349,7 @@ public:
      */
     virtual UBool isWeekend(void) const;
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_FORCE_HIDE_DRAFT_API
     /**
      * Returns true if the date is in a leap year. Recalculate the current time
      * field values if the time value has been changed by a call to * setTime().
@@ -1407,7 +1407,7 @@ public:
      */
     virtual void setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
 
-#endif /* U_HIDE_DRAFT_API */
+#endif  // U_FORCE_HIDE_DRAFT_API
 
 protected:
 
@@ -1549,6 +1549,7 @@ protected:
      * @internal
      */
     inline int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Use this function instead of internalGet(UCAL_MONTH). The implementation
@@ -1573,8 +1574,6 @@ protected:
      * @internal
      */
     virtual int32_t internalGetMonth(int32_t defaultValue) const;
-
-#endif  /* U_HIDE_INTERNAL_API */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
