@@ -1,0 +1,151 @@
+# Azure Pipelines (VSTS) configuration for CI builds for ICU.
+
+jobs:
+
+#-------------------------------------------------------------------------
+# VS 2022 Builds for testing C Samples on Windows
+#-------------------------------------------------------------------------
+- job: ICU4C_Samples_MSVC_x64_Debug
+  displayName: 'C: Test Samples MSVC 64-bit Debug (VS 2022)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2022'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Debug'
+    - task: VSBuild@1
+      displayName: 'Build Sample Solution'
+      inputs:
+        solution: icu4c/source/samples/all/all.sln
+        platform: x64
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Test Samples (samplecheck.bat)'
+      inputs:
+        filename: icu4c/source/samples/all/samplecheck.bat
+        arguments: 'x64 Debug'
+#-------------------------------------------------------------------------
+- job: ICU4C_Samples_MSVC_x64_Release
+  displayName: 'C: Test Samples MSVC 64-bit Release (VS 2022)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2022'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
+    - task: VSBuild@1
+      displayName: 'Build Sample Solution'
+      inputs:
+        solution: icu4c/source/samples/all/all.sln
+        platform: x64
+        configuration: Release
+    - task: BatchScript@1
+      displayName: 'Test Samples (samplecheck.bat)'
+      inputs:
+        filename: icu4c/source/samples/all/samplecheck.bat
+        arguments: 'x64 Release'
+#-------------------------------------------------------------------------
+- job: ICU4C_Samples_MSVC_x86_Debug
+  displayName: 'C: Test Samples MSVC 32-bit Debug (VS 2022)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2022'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: Win32
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x86 Debug'
+    - task: VSBuild@1
+      displayName: 'Build Sample Solution'
+      inputs:
+        solution: icu4c/source/samples/all/all.sln
+        platform: x86
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Test Samples (samplecheck.bat)'
+      inputs:
+        filename: icu4c/source/samples/all/samplecheck.bat
+        arguments: 'x86 Debug'
+#-------------------------------------------------------------------------
+- job: ICU4C_Samples_MSVC_x86_Release
+  displayName: 'C: Test Samples MSVC 32-bit Release (VS 2022)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2022'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: Win32
+        configuration: Release
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x86 Release'
+    - task: VSBuild@1
+      displayName: 'Build Sample Solution'
+      inputs:
+        solution: icu4c/source/samples/all/all.sln
+        platform: x86
+        configuration: Release
+    - task: BatchScript@1
+      displayName: 'Test Samples (samplecheck.bat)'
+      inputs:
+        filename: icu4c/source/samples/all/samplecheck.bat
+        arguments: 'x86 Release'
+#-------------------------------------------------------------------------
