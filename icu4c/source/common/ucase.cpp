@@ -205,37 +205,7 @@ static const char16_t iDotTilde[3] = { 0x69, 0x307, 0x303 };
 
 U_CFUNC void U_EXPORT2
 ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
-    uint16_t props;
-
-    /*
-     * Hardcode the case closure of i and its relatives and ignore the
-     * data file data for these characters.
-     * The Turkic dotless i and dotted I with their case mapping conditions
-     * and case folding option make the related characters behave specially.
-     * This code matches their closure behavior to their case folding behavior.
-     */
-
-    switch(c) {
-    case 0x49:
-        /* regular i and I are in one equivalence class */
-        sa->add(sa->set, 0x69);
-        return;
-    case 0x69:
-        sa->add(sa->set, 0x49);
-        return;
-    case 0x130:
-        /* dotted I is in a class with <0069 0307> (for canonical equivalence with <0049 0307>) */
-        sa->addString(sa->set, iDot, 2);
-        return;
-    case 0x131:
-        /* dotless i is in a class by itself */
-        return;
-    default:
-        /* otherwise use the data file data */
-        break;
-    }
-
-    props=UTRIE2_GET16(&ucase_props_singleton.trie, c);
+    uint16_t props=UTRIE2_GET16(&ucase_props_singleton.trie, c);
     if(!UCASE_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
             /* add the one simple case mapping, no matter what type it is */
@@ -249,19 +219,42 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
          * c has exceptions, so there may be multiple simple and/or
          * full case mappings. Add them all.
          */
-        const uint16_t *pe0, *pe=GET_EXCEPTIONS(&ucase_props_singleton, props);
-        const char16_t *closure;
+        const uint16_t *pe=GET_EXCEPTIONS(&ucase_props_singleton, props);
         uint16_t excWord=*pe++;
-        int32_t idx, closureLength, fullLength, length;
+        const uint16_t *pe0=pe;
 
-        pe0=pe;
+        // Hardcode the case closure of i and its relatives and ignore the
+        // data file data for these characters.
+        // The Turkic dotless i and dotted I with their case mapping conditions
+        // and case folding option make the related characters behave specially.
+        // This code matches their closure behavior to their case folding behavior.
+        if (excWord&UCASE_EXC_CONDITIONAL_FOLD) {
+            // These characters have Turkic case foldings. Hardcode their closure.
+            if (c == 0x49) {
+                // Regular i and I are in one equivalence class.
+                sa->add(sa->set, 0x69);
+                return;
+            } else if (c == 0x130) {
+                // Dotted I is in a class with <0069 0307>
+                // (for canonical equivalence with <0049 0307>).
+                sa->addString(sa->set, iDot, 2);
+                return;
+            }
+        } else if (c == 0x69) {
+            sa->add(sa->set, 0x49);
+            return;
+        } else if (c == 0x131) {
+            // Dotless i is in a class by itself.
+            return;
+        }
 
         /* add all simple case mappings */
-        for(idx=UCASE_EXC_LOWER; idx<=UCASE_EXC_TITLE; ++idx) {
+        for(int32_t idx=UCASE_EXC_LOWER; idx<=UCASE_EXC_TITLE; ++idx) {
             if(HAS_SLOT(excWord, idx)) {
                 pe=pe0;
-                GET_SLOT_VALUE(excWord, idx, pe, c);
-                sa->add(sa->set, c);
+                UChar32 mapping;
+                GET_SLOT_VALUE(excWord, idx, pe, mapping);
+                sa->add(sa->set, mapping);
             }
         }
         if(HAS_SLOT(excWord, UCASE_EXC_DELTA)) {
@@ -272,6 +265,8 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
         }
 
         /* get the closure string pointer & length */
+        const char16_t *closure;
+        int32_t closureLength;
         if(HAS_SLOT(excWord, UCASE_EXC_CLOSURE)) {
             pe=pe0;
             GET_SLOT_VALUE(excWord, UCASE_EXC_CLOSURE, pe, closureLength);
@@ -285,6 +280,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
         /* add the full case folding */
         if(HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
             pe=pe0;
+            int32_t fullLength;
             GET_SLOT_VALUE(excWord, UCASE_EXC_FULL_MAPPINGS, pe, fullLength);
 
             /* start of full case mapping strings */
@@ -297,7 +293,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
             fullLength>>=4;
 
             /* add the full case folding string */
-            length=fullLength&0xf;
+            int32_t length=fullLength&0xf;
             if(length!=0) {
                 sa->addString(sa->set, (const char16_t *)pe, length);
                 pe+=length;
@@ -313,9 +309,146 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
         }
 
         /* add each code point in the closure string */
-        for(idx=0; idx<closureLength;) {
-            U16_NEXT_UNSAFE(closure, idx, c);
-            sa->add(sa->set, c);
+        for(int32_t idx=0; idx<closureLength;) {
+            UChar32 mapping;
+            U16_NEXT_UNSAFE(closure, idx, mapping);
+            sa->add(sa->set, mapping);
+        }
+    }
+}
+
+namespace {
+
+/**
+ * Add the simple case closure mapping,
+ * except if there is not actually an scf relationship between the two characters.
+ * TODO: Unicode should probably add the corresponding scf mappings.
+ * See https://crbug.com/v8/13377 and Unicode-internal PAG issue #23.
+ * If & when those scf mappings are added, we should be able to remove all of these exceptions.
+ */
+void addOneSimpleCaseClosure(UChar32 c, UChar32 t, const USetAdder *sa) {
+    switch (c) {
+    case 0x0390:
+        if (t == 0x1FD3) { return; }
+        break;
+    case 0x03B0:
+        if (t == 0x1FE3) { return; }
+        break;
+    case 0x1FD3:
+        if (t == 0x0390) { return; }
+        break;
+    case 0x1FE3:
+        if (t == 0x03B0) { return; }
+        break;
+    case 0xFB05:
+        if (t == 0xFB06) { return; }
+        break;
+    case 0xFB06:
+        if (t == 0xFB05) { return; }
+        break;
+    default:
+        break;
+    }
+    sa->add(sa->set, t);
+}
+
+}  // namespace
+
+U_CFUNC void U_EXPORT2
+ucase_addSimpleCaseClosure(UChar32 c, const USetAdder *sa) {
+    uint16_t props=UTRIE2_GET16(&ucase_props_singleton.trie, c);
+    if(!UCASE_HAS_EXCEPTION(props)) {
+        if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
+            /* add the one simple case mapping, no matter what type it is */
+            int32_t delta=UCASE_GET_DELTA(props);
+            if(delta!=0) {
+                sa->add(sa->set, c+delta);
+            }
+        }
+    } else {
+        // c has exceptions. Add the mappings relevant for scf=Simple_Case_Folding.
+        const uint16_t *pe=GET_EXCEPTIONS(&ucase_props_singleton, props);
+        uint16_t excWord=*pe++;
+        const uint16_t *pe0=pe;
+
+        // Hardcode the case closure of i and its relatives and ignore the
+        // data file data for these characters, like in ucase_addCaseClosure().
+        if (excWord&UCASE_EXC_CONDITIONAL_FOLD) {
+            // These characters have Turkic case foldings. Hardcode their closure.
+            if (c == 0x49) {
+                // Regular i and I are in one equivalence class.
+                sa->add(sa->set, 0x69);
+                return;
+            } else if (c == 0x130) {
+                // For scf=Simple_Case_Folding, dotted I is in a class by itself.
+                return;
+            }
+        } else if (c == 0x69) {
+            sa->add(sa->set, 0x49);
+            return;
+        } else if (c == 0x131) {
+            // Dotless i is in a class by itself.
+            return;
+        }
+
+        // Add all simple case mappings.
+        for(int32_t idx=UCASE_EXC_LOWER; idx<=UCASE_EXC_TITLE; ++idx) {
+            if(HAS_SLOT(excWord, idx)) {
+                pe=pe0;
+                UChar32 mapping;
+                GET_SLOT_VALUE(excWord, idx, pe, mapping);
+                addOneSimpleCaseClosure(c, mapping, sa);
+            }
+        }
+        if(HAS_SLOT(excWord, UCASE_EXC_DELTA)) {
+            pe=pe0;
+            int32_t delta;
+            GET_SLOT_VALUE(excWord, UCASE_EXC_DELTA, pe, delta);
+            UChar32 mapping = (excWord&UCASE_EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            addOneSimpleCaseClosure(c, mapping, sa);
+        }
+
+        /* get the closure string pointer & length */
+        const char16_t *closure;
+        int32_t closureLength;
+        if(HAS_SLOT(excWord, UCASE_EXC_CLOSURE)) {
+            pe=pe0;
+            GET_SLOT_VALUE(excWord, UCASE_EXC_CLOSURE, pe, closureLength);
+            closureLength&=UCASE_CLOSURE_MAX_LENGTH; /* higher bits are reserved */
+            closure=(const char16_t *)pe+1; /* behind this slot, unless there are full case mappings */
+        } else {
+            closureLength=0;
+            closure=nullptr;
+        }
+
+        // Skip the full case mappings.
+        if(closureLength > 0 && HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
+            pe=pe0;
+            int32_t fullLength;
+            GET_SLOT_VALUE(excWord, UCASE_EXC_FULL_MAPPINGS, pe, fullLength);
+
+            /* start of full case mapping strings */
+            ++pe;
+
+            fullLength&=0xffff; /* bits 16 and higher are reserved */
+
+            // Skip all 4 full case mappings.
+            pe+=fullLength&UCASE_FULL_LOWER;
+            fullLength>>=4;
+            pe+=fullLength&0xf;
+            fullLength>>=4;
+            pe+=fullLength&0xf;
+            fullLength>>=4;
+            pe+=fullLength;
+
+            closure=(const char16_t *)pe; /* behind full case mappings */
+        }
+
+        // Add each code point in the closure string whose scf maps back to c.
+        for(int32_t idx=0; idx<closureLength;) {
+            UChar32 mapping;
+            U16_NEXT_UNSAFE(closure, idx, mapping);
+            addOneSimpleCaseClosure(c, mapping, sa);
         }
     }
 }

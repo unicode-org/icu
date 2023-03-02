@@ -74,6 +74,8 @@ private:
     void TestExhaustive(void);
 
     void TestCloseOver(void);
+    void TestCloseOverSimpleCaseFolding();
+    void TestCloseOverLargeSets();
 
     void TestEscapePattern(void);
 
