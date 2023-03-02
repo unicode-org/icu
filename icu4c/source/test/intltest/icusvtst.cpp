@@ -828,7 +828,7 @@ class CalifornioLanguageFactory : public ICUResourceBundleFactory
     static const char* geek; // = californio ## "_GEEK";
     static Hashtable* supportedIDs; // = nullptr;
 
-    static void cleanup(void) {
+    static void cleanup() {
       delete supportedIDs;
       supportedIDs = nullptr;
     }

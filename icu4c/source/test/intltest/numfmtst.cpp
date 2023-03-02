@@ -260,7 +260,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
 // Test API (increase code coverage)
 void
-NumberFormatTest::TestAPI(void)
+NumberFormatTest::TestAPI()
 {
   logln("Test API");
   UErrorCode status = U_ZERO_ERROR;
@@ -329,7 +329,7 @@ public:
     virtual void parse( const UnicodeString& ,
                         Formattable& ,
                         UErrorCode& ) const override {}
-    virtual UClassID getDynamicClassID(void) const override {
+    virtual UClassID getDynamicClassID() const override {
         static char classID = 0;
         return (UClassID)&classID;
     }
@@ -337,7 +337,7 @@ public:
 };
 
 void
-NumberFormatTest::TestCoverage(void){
+NumberFormatTest::TestCoverage(){
     StubNumberFormat stub;
     UnicodeString agent("agent");
     FieldPosition pos;
@@ -401,7 +401,7 @@ void NumberFormatTest::TestLocalizedPatternSymbolCoverage() {
 
 // Test various patterns
 void
-NumberFormatTest::TestPatterns(void)
+NumberFormatTest::TestPatterns()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::getUS(), status);
@@ -457,7 +457,7 @@ icu_2_4::DigitList::operator!= 0 0 1 icuuc24d.dll digitlst.h Doug
 */
 /*
 void
-NumberFormatTest::TestDigitList(void)
+NumberFormatTest::TestDigitList()
 {
   // API coverage for DigitList
   DigitList list1;
@@ -478,7 +478,7 @@ NumberFormatTest::TestDigitList(void)
 
 // Test exponential pattern
 void
-NumberFormatTest::TestExponential(void)
+NumberFormatTest::TestExponential()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::getUS(), status);
@@ -796,7 +796,7 @@ NumberFormatTest::TestInt64() {
 
 // Test the handling of quotes
 void
-NumberFormatTest::TestQuotes(void)
+NumberFormatTest::TestQuotes()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString *pat;
@@ -835,7 +835,7 @@ NumberFormatTest::TestQuotes(void)
  * Test the handling of the currency symbol in patterns.
  */
 void
-NumberFormatTest::TestCurrencySign(void)
+NumberFormatTest::TestCurrencySign()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale::getUS(), status);
@@ -925,7 +925,7 @@ static const char* testCases[][2]= {
  * Test localized currency patterns.
  */
 void
-NumberFormatTest::TestCurrency(void)
+NumberFormatTest::TestCurrency()
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(Locale::getCanadaFrench(), status);
@@ -1050,7 +1050,7 @@ void NumberFormatTest::TestCurrencyObject() {
  * Do rudimentary testing of parsing.
  */
 void
-NumberFormatTest::TestParse(void)
+NumberFormatTest::TestParse()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString arg("0");
@@ -1138,7 +1138,7 @@ static const char *strictFailureTestCases[] = {
  * Test lenient parsing.
  */
 void
-NumberFormatTest::TestLenientParse(void)
+NumberFormatTest::TestLenientParse()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *format = new DecimalFormat("(#,##0)", status);
@@ -1333,7 +1333,7 @@ NumberFormatTest::TestLenientParse(void)
  * Test proper rounding by the format method.
  */
 void
-NumberFormatTest::TestRounding487(void)
+NumberFormatTest::TestRounding487()
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
@@ -1356,7 +1356,7 @@ NumberFormatTest::TestRounding487(void)
 /**
  * Test the functioning of the secondary grouping value.
  */
-void NumberFormatTest::TestSecondaryGrouping(void) {
+void NumberFormatTest::TestSecondaryGrouping() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols ct");
@@ -1415,7 +1415,7 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
     }
 }
 
-void NumberFormatTest::TestWhiteSpaceParsing(void) {
+void NumberFormatTest::TestWhiteSpaceParsing() {
     UErrorCode ec = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), ec);
     DecimalFormat fmt("a  b#0c  ", US, ec);
@@ -1467,7 +1467,7 @@ NumberFormatTest::roundingTest(NumberFormat& nf, double x, int32_t maxFractionDi
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestExponent(void) {
+void NumberFormatTest::TestExponent() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -1484,7 +1484,7 @@ void NumberFormatTest::TestExponent(void) {
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestScientific(void) {
+void NumberFormatTest::TestScientific() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -1664,7 +1664,7 @@ void NumberFormatTest::TestScientific(void) {
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestPad(void) {
+void NumberFormatTest::TestPad() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -1780,7 +1780,7 @@ void NumberFormatTest::TestPad(void) {
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestPatterns2(void) {
+void NumberFormatTest::TestPatterns2() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -1841,7 +1841,7 @@ void NumberFormatTest::TestPatterns2(void) {
     expectPat(fmt, "AA*^#####,##0.00ZZ");
 }
 
-void NumberFormatTest::TestSurrogateSupport(void) {
+void NumberFormatTest::TestSurrogateSupport() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols custom(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -1910,7 +1910,7 @@ void NumberFormatTest::TestSurrogateSupport(void) {
            int32_t(-20), expStr, status);
 }
 
-void NumberFormatTest::TestCurrencyPatterns(void) {
+void NumberFormatTest::TestCurrencyPatterns() {
     int32_t i, locCount;
     const Locale* locs = NumberFormat::getAvailableLocales(locCount);
     for (i=0; i<locCount; ++i) {
@@ -1952,7 +1952,7 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
     }
 }
 
-void NumberFormatTest::TestRegCurrency(void) {
+void NumberFormatTest::TestRegCurrency() {
 #if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
     char16_t USD[4];
@@ -1997,7 +1997,7 @@ void NumberFormatTest::TestRegCurrency(void) {
 #endif
 }
 
-void NumberFormatTest::TestCurrencyNames(void) {
+void NumberFormatTest::TestCurrencyNames() {
     // Do a basic check of getName()
     // USD { "US$", "US Dollar"            } // 04/04/1792-
     UErrorCode ec = U_ZERO_ERROR;
@@ -2188,7 +2188,7 @@ void NumberFormatTest::TestCurrencyVariants(){
     }
 }
 
-void NumberFormatTest::TestCurrencyUnit(void){
+void NumberFormatTest::TestCurrencyUnit(){
     UErrorCode ec = U_ZERO_ERROR;
     static const char16_t USD[]  = u"USD";
     static const char USD8[]  =  "USD";
@@ -2348,7 +2348,7 @@ void NumberFormatTest::TestCurrencyUnit(void){
     free(EUR8);
 }
 
-void NumberFormatTest::TestCurrencyAmount(void){
+void NumberFormatTest::TestCurrencyAmount(){
     UErrorCode ec = U_ZERO_ERROR;
     static const char16_t USD[] = {85, 83, 68, 0}; /*USD*/
     CurrencyAmount ca(9, USD, ec);
@@ -2371,7 +2371,7 @@ void NumberFormatTest::TestCurrencyAmount(void){
     delete ca3;
 }
 
-void NumberFormatTest::TestSymbolsWithBadLocale(void) {
+void NumberFormatTest::TestSymbolsWithBadLocale() {
     Locale locDefault;
     static const char *badLocales[] = {
         // length < ULOC_FULLNAME_CAPACITY
@@ -2424,7 +2424,7 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
  * behave the same, except for memory ownership semantics. (No
  * version of this test on Java, since Java has only one method.)
  */
-void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
+void NumberFormatTest::TestAdoptDecimalFormatSymbols() {
     UErrorCode ec = U_ZERO_ERROR;
     DecimalFormatSymbols *sym = new DecimalFormatSymbols(Locale::getUS(), ec);
     if (U_FAILURE(ec)) {
@@ -7129,7 +7129,7 @@ void NumberFormatTest::TestAvailableNumberingSystems() {
 }
 
 void
-NumberFormatTest::Test9087(void)
+NumberFormatTest::Test9087()
 {
     U_STRING_DECL(pattern,"#",1);
     U_STRING_INIT(pattern,"#",1);
@@ -7284,7 +7284,7 @@ void NumberFormatTest::TestFormatFastpaths() {
 }
 
 
-void NumberFormatTest::TestFormattableSize(void) {
+void NumberFormatTest::TestFormattableSize() {
   if(sizeof(Formattable) > 112) {
     errln("Error: sizeof(Formattable)=%d, 112=%d\n",
           sizeof(Formattable), 112);
@@ -7451,7 +7451,7 @@ UBool NumberFormatTest::testFormattableAsUFormattable(const char *file, int line
   return exactMatch || !triedExact;
 }
 
-void NumberFormatTest::TestUFormattable(void) {
+void NumberFormatTest::TestUFormattable() {
   {
     // test that a default formattable is equal to Formattable()
     UErrorCode status = U_ZERO_ERROR;
@@ -7521,7 +7521,7 @@ void NumberFormatTest::TestUFormattable(void) {
   }
 }
 
-void NumberFormatTest::TestSignificantDigits(void) {
+void NumberFormatTest::TestSignificantDigits() {
   double input[] = {
         0, 0,
         0.1, -0.1,

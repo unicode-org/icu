@@ -335,7 +335,7 @@ accessed using indexes and by iteration.
 In order to be able to distinguish between resources, one needs to know the type
 of the resource at hand. To find this out, use the
 `UResType ures_getType(UResourceBundle* resourceBundle)` API, or the C++ analog
-`UResType getType(void)`. The `UResType` is an enumeration defined in the
+`UResType getType()`. The `UResType` is an enumeration defined in the
 [unicode/ures.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/ures.h)
 header file.
 
@@ -443,8 +443,8 @@ ures_close(currentZone);
 ...
 ```
 
-C++ provides analogous APIs: `ResourceBundle getNext(UErrorCode& status)`, `void resetIterator(void)`
- and `UBool hasNext(void)`.
+C++ provides analogous APIs: `ResourceBundle getNext(UErrorCode& status)`, `void resetIterator()`
+ and `UBool hasNext()`.
 
 #### Accessing Data in the Simple Resources
 
@@ -540,14 +540,14 @@ following tables.
 | Language | API                                                     |
 | -------- | ------------------------------------------------------- |
 | C        | `int32_t ures_getSize(UResourceBundle* resourceBundle)` |
-| C++      | `int32_t getSize(void) const`                           |
+| C++      | `int32_t getSize() const`                               |
 
 Gets the number of items in a resource. Simple resources always return size 1.
 
 | Language | API                                                      |
 | -------- | -------------------------------------------------------- |
 | C        | `UResType ures_getType(UResourceBundle* resourceBundle)` |
-| C++      | `UResType getType(void)`                                 |
+| C++      | `UResType getType()`                                     |
 
 Gets the type of the resource. For a list of resource types, see:
 [unicode/ures.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/ures.h)
@@ -555,7 +555,7 @@ Gets the type of the resource. For a list of resource types, see:
 | Language | API                                              |
 | -------- | ------------------------------------------------ |
 | C        | `const char* ures_getKey(UResourceBundle* resB)` |
-| C++      | `const char* getKey(void)`                       |
+| C++      | `const char* getKey()`                           |
 
 Gets the key of a named resource or `NULL` if this resource is a member of an
 array.
@@ -570,7 +570,7 @@ Fills out the version structure for this resource.
 | Language | API                                                                                     |
 | -------- | --------------------------------------------------------------------------------------- |
 | C        | `const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)` |
-| C++      | `const Locale& getLocale(void) const`                                                   |
+| C++      | `const Locale& getLocale() const`                                                       |
 
 Returns the locale this resource is from. This API is going to change, so stay
 tuned.

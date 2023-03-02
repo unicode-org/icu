@@ -580,7 +580,7 @@ uprv_trunc(double d)
  * type of arbitrary bit length.
  */
 U_CAPI double U_EXPORT2
-uprv_maxMantissa(void)
+uprv_maxMantissa()
 {
     return pow(2.0, DBL_MANT_DIG + 1.0) - 1.0;
 }
@@ -964,7 +964,7 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
 /* dirent also lists two entries: "." and ".." that we can safely ignore. */
 #define SKIP1 "."
 #define SKIP2 ".."
-static UBool U_CALLCONV putil_cleanup(void);
+static UBool U_CALLCONV putil_cleanup();
 static CharString *gSearchTZFileResult = nullptr;
 
 /*
@@ -1074,7 +1074,7 @@ static void u_property_read(void* cookie, const char* name, const char* value,
 #endif
 
 U_CAPI void U_EXPORT2
-uprv_tzname_clear_cache(void)
+uprv_tzname_clear_cache()
 {
 #if U_PLATFORM == U_PF_ANDROID
     /* Android's timezone is stored in system property. */
@@ -1271,7 +1271,7 @@ static CharString *gTimeZoneFilesDirectory = nullptr;
  static bool gCorrectedPOSIXLocaleHeapAllocated = false;
 #endif
 
-static UBool U_CALLCONV putil_cleanup(void)
+static UBool U_CALLCONV putil_cleanup()
 {
     if (gDataDirectory && *gDataDirectory) {
         uprv_free(gDataDirectory);
@@ -1487,7 +1487,7 @@ static void U_CALLCONV dataDirectoryInitFn() {
 }
 
 U_CAPI const char * U_EXPORT2
-u_getDataDirectory(void) {
+u_getDataDirectory() {
     umtx_initOnce(gDataDirInitOnce, &dataDirectoryInitFn);
     return gDataDirectory;
 }
@@ -1647,7 +1647,7 @@ static const char *uprv_getPOSIXIDForCategory(int category)
 /* Return just the POSIX id for the default locale, whatever happens to be in
  * it. It gets the value from LC_MESSAGES and indirectly from LC_ALL and LANG.
  */
-static const char *uprv_getPOSIXIDForDefaultLocale(void)
+static const char *uprv_getPOSIXIDForDefaultLocale()
 {
     static const char* posixID = nullptr;
     if (posixID == 0) {
@@ -1660,7 +1660,7 @@ static const char *uprv_getPOSIXIDForDefaultLocale(void)
 /* Return just the POSIX id for the default codepage, whatever happens to be in
  * it. It gets the value from LC_CTYPE and indirectly from LC_ALL and LANG.
  */
-static const char *uprv_getPOSIXIDForDefaultCodepage(void)
+static const char *uprv_getPOSIXIDForDefaultCodepage()
 {
     static const char* posixID = nullptr;
     if (posixID == 0) {

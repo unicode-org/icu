@@ -241,7 +241,7 @@ ucnv_flushAvailableConverterCache() {
 /*                in use by open converters.                                  */
 /*                Not thread safe.                                            */
 /*                Not supported API.                                          */
-static UBool U_CALLCONV ucnv_cleanup(void) {
+static UBool U_CALLCONV ucnv_cleanup() {
     ucnv_flushCache();
     if (SHARED_DATA_HASHTABLE != nullptr && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
         uhash_close(SHARED_DATA_HASHTABLE);
@@ -262,7 +262,7 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
 }
 
 U_CAPI void U_EXPORT2
-ucnv_enableCleanup(void) {
+ucnv_enableCleanup() {
     ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
 }
 

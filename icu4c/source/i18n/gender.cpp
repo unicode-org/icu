@@ -48,7 +48,7 @@ enum GenderStyle {
 
 U_CDECL_BEGIN
 
-static UBool U_CALLCONV gender_cleanup(void) {
+static UBool U_CALLCONV gender_cleanup() {
   if (gGenderInfoCache != nullptr) {
     uhash_close(gGenderInfoCache);
     gGenderInfoCache = nullptr;

@@ -70,7 +70,7 @@ static icu::UInitOnce gServiceInitOnce {};
 
 // INTERNAL - for cleanup
 U_CDECL_BEGIN
-static UBool calendar_cleanup(void) {
+static UBool calendar_cleanup() {
 #if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
@@ -2433,7 +2433,7 @@ Calendar::setRepeatedWallTimeOption(UCalendarWallTimeOption option)
 // -------------------------------------
 
 UCalendarWallTimeOption
-Calendar::getRepeatedWallTimeOption(void) const
+Calendar::getRepeatedWallTimeOption() const
 {
     return fRepeatedWallTime;
 }
@@ -2449,7 +2449,7 @@ Calendar::setSkippedWallTimeOption(UCalendarWallTimeOption option)
 // -------------------------------------
 
 UCalendarWallTimeOption
-Calendar::getSkippedWallTimeOption(void) const
+Calendar::getSkippedWallTimeOption() const
 {
     return fSkippedWallTime;
 }
@@ -2578,7 +2578,7 @@ Calendar::isWeekend(UDate date, UErrorCode &status) const
 }
 
 UBool
-Calendar::isWeekend(void) const
+Calendar::isWeekend() const
 {
     UErrorCode status = U_ZERO_ERROR;
     UCalendarDaysOfWeek dayOfWeek = (UCalendarDaysOfWeek)get(UCAL_DAY_OF_WEEK, status);
@@ -4059,7 +4059,7 @@ int32_t Calendar::internalGetMonth(int32_t defaultValue) const {
 }
 
 BasicTimeZone*
-Calendar::getBasicTimeZone(void) const {
+Calendar::getBasicTimeZone() const {
     if (dynamic_cast<const OlsonTimeZone *>(fZone) != nullptr
         || dynamic_cast<const SimpleTimeZone *>(fZone) != nullptr
         || dynamic_cast<const RuleBasedTimeZone *>(fZone) != nullptr

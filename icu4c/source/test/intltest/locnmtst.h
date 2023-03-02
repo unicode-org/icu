@@ -23,22 +23,22 @@ public:
     /**
      * Test methods to set and get data fields
      **/
-    void TestCreate(void);
-    void TestCreateDialect(void);
-    void TestWithKeywordsAndEverything(void);
-    void TestUldnOpen(void);
-    void TestUldnOpenDialect(void);
-    void TestUldnWithKeywordsAndEverything(void);
-    void TestUldnComponents(void);
-    void TestRootEtc(void);
-    void TestCurrencyKeyword(void);
-    void TestUnknownCurrencyKeyword(void);
-    void TestUntranslatedKeywords(void);
-    void TestPrivateUse(void);
-    void TestUldnDisplayContext(void);
-    void TestUldnWithGarbage(void);
-    void TestSubstituteHandling(void);
-    void TestNumericRegionID(void);
+    void TestCreate();
+    void TestCreateDialect();
+    void TestWithKeywordsAndEverything();
+    void TestUldnOpen();
+    void TestUldnOpenDialect();
+    void TestUldnWithKeywordsAndEverything();
+    void TestUldnComponents();
+    void TestRootEtc();
+    void TestCurrencyKeyword();
+    void TestUnknownCurrencyKeyword();
+    void TestUntranslatedKeywords();
+    void TestPrivateUse();
+    void TestUldnDisplayContext();
+    void TestUldnWithGarbage();
+    void TestSubstituteHandling();
+    void TestNumericRegionID();
 
     void VerifySubstitute(LocaleDisplayNames* ldn);
     void VerifyNoSubstitute(LocaleDisplayNames* ldn);

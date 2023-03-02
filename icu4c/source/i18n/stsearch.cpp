@@ -227,7 +227,7 @@ void StringSearch::setOffset(int32_t position, UErrorCode &status)
     usearch_setOffset(m_strsrch_, position, &status);
 }
 
-int32_t StringSearch::getOffset(void) const
+int32_t StringSearch::getOffset() const
 {
     return usearch_getOffset(m_strsrch_);
 }

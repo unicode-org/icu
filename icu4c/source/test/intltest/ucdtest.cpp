@@ -776,7 +776,7 @@ void UnicodeTest::TestDefaultScriptExtensions() {
     assertEquals("U+3012 num scx[0]", USCRIPT_COMMON, scx[0]);
 }
 
-void UnicodeTest::TestInvalidCodePointFolding(void) {
+void UnicodeTest::TestInvalidCodePointFolding() {
     // Test behavior when an invalid code point is passed to u_foldCase
     static const UChar32 invalidCodePoints[] = {
             0xD800, // lead surrogate

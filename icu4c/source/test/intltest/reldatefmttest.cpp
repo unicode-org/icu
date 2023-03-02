@@ -917,7 +917,7 @@ private:
             const RelativeDateTimeFormatter& fmt,
             UDateDirection direction,
             UDateAbsoluteUnit unit);
-    void TestSidewaysDataLoading(void);
+    void TestSidewaysDataLoading();
 };
 
 void RelativeDateTimeFormatterTest::runIndexedTest(
@@ -1348,7 +1348,7 @@ void RelativeDateTimeFormatterTest::VerifyIllegalArgument(
 }
 
 /* Add tests to check "sideways" data loading. */
-void RelativeDateTimeFormatterTest::TestSidewaysDataLoading(void) {
+void RelativeDateTimeFormatterTest::TestSidewaysDataLoading() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString actual;
     UnicodeString expected;

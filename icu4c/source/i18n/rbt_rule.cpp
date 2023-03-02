@@ -208,7 +208,7 @@ TransliterationRule::~TransliterationRule() {
  * needed to make repeated incremental transliteration with
  * anchors work.
  */
-int32_t TransliterationRule::getContextLength(void) const {
+int32_t TransliterationRule::getContextLength() const {
     return anteContextLength + ((flags & ANCHOR_START) ? 1 : 0);
 }
 

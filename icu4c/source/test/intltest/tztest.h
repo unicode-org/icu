@@ -29,26 +29,26 @@ public:
     /**
      * Test the offset of the PRT timezone.
      */
-    virtual void TestPRTOffset(void);
+    virtual void TestPRTOffset();
     /**
      * Regress a specific bug with a sequence of API calls.
      */
-    virtual void TestVariousAPI518(void);
+    virtual void TestVariousAPI518();
     /**
      * Test the call which retrieves the available IDs.
      */
-    virtual void TestGetAvailableIDs913(void);
+    virtual void TestGetAvailableIDs913();
 
-    virtual void TestGetAvailableIDsNew(void);
+    virtual void TestGetAvailableIDsNew();
 
     /**
      * Generic API testing for API coverage.
      */
-    virtual void TestGenericAPI(void);
+    virtual void TestGenericAPI();
     /**
      * Test the setStartRule/setEndRule API calls.
      */
-    virtual void TestRuleAPI(void);
+    virtual void TestRuleAPI();
  
     void findTransition(const TimeZone& tz,
                         UDate min, UDate max);
@@ -64,47 +64,47 @@ public:
     /**
      *  Test short zone IDs for compliance
      */ 
-    virtual void TestShortZoneIDs(void);
+    virtual void TestShortZoneIDs();
 
 
     /**
      *  Test parsing custom zones
      */ 
-    virtual void TestCustomParse(void);
+    virtual void TestCustomParse();
     
     /**
      *  Test new getDisplayName() API
      */ 
-    virtual void TestDisplayName(void);
+    virtual void TestDisplayName();
 
-    void TestDSTSavings(void);
-    void TestAlternateRules(void);
+    void TestDSTSavings();
+    void TestAlternateRules();
 
-    void TestCountries(void);
+    void TestCountries();
 
-    void TestHistorical(void);
+    void TestHistorical();
 
-    void TestEquivalentIDs(void);
+    void TestEquivalentIDs();
 
-    void TestAliasedNames(void);
+    void TestAliasedNames();
     
-    void TestFractionalDST(void);
+    void TestFractionalDST();
 
-    void TestFebruary(void);
+    void TestFebruary();
 
     void TestCanonicalIDAPI();
-    void TestCanonicalID(void);
+    void TestCanonicalID();
 
     virtual void TestDisplayNamesMeta();
 
-    void TestGetRegion(void);
+    void TestGetRegion();
     void TestGetUnknown();
     void TestGetGMT();
 
-    void TestGetWindowsID(void);
-    void TestGetIDForWindowsID(void);
-    void TestCasablancaNameAndOffset22041(void);
-    void TestRawOffsetAndOffsetConsistency22041(void);
+    void TestGetWindowsID();
+    void TestGetIDForWindowsID();
+    void TestCasablancaNameAndOffset22041();
+    void TestRawOffsetAndOffsetConsistency22041();
 
     static const UDate INTERVAL;
 

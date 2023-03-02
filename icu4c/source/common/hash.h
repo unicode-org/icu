@@ -97,7 +97,7 @@ public:
 
     inline int32_t removei(const UnicodeString& key);
 
-    inline void removeAll(void);
+    inline void removeAll();
 
     inline UBool containsKey(const UnicodeString& key) const;
 
@@ -246,7 +246,7 @@ inline const UHashElement* Hashtable::nextElement(int32_t& pos) const {
     return uhash_nextElement(hash, &pos);
 }
 
-inline void Hashtable::removeAll(void) {
+inline void Hashtable::removeAll() {
     uhash_removeAll(hash);
 }
 

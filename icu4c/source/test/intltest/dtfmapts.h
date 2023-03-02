@@ -32,17 +32,17 @@ private:
     /**
      * Test that the equals method works correctly.
      */
-    void TestEquals(void);
+    void TestEquals();
 
     /**
      * Test that no parse or format methods are hidden.
      */
-    void TestNameHiding(void);
+    void TestNameHiding();
 
     /**
      * Add better code coverage.
      */
-    void TestCoverage(void);
+    void TestCoverage();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

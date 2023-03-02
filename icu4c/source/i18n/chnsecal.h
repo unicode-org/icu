@@ -257,7 +257,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
                  int32_t gmonth, UBool setAllFields);
   virtual int32_t newYear(int32_t gyear) const;
   virtual void offsetMonth(int32_t newMoon, int32_t dom, int32_t delta);
-  const TimeZone* getChineseCalZoneAstroCalc(void) const;
+  const TimeZone* getChineseCalZoneAstroCalc() const;
 
   // UObject stuff
  public: 
@@ -266,7 +266,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -279,7 +279,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * return the calendar type, "chinese".
@@ -320,13 +320,13 @@ class U_I18N_API ChineseCalendar : public Calendar {
    * Returns the beginning date of the 100-year window that dates 
    * with 2-digit years are considered to fall within.
    */
-  UDate         internalGetDefaultCenturyStart(void) const;
+  UDate         internalGetDefaultCenturyStart() const;
 
   /**
    * Returns the first year of the 100-year window that dates with 
    * 2-digit years are considered to fall within.
    */
-  int32_t          internalGetDefaultCenturyStartYear(void) const;
+  int32_t          internalGetDefaultCenturyStartYear() const;
 
   ChineseCalendar() = delete; // default constructor not implemented
 };

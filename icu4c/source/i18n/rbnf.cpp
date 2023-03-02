@@ -87,12 +87,12 @@ protected:
 public:
     LocalizationInfo() : refcount(0) {}
     
-    LocalizationInfo* ref(void) {
+    LocalizationInfo* ref() {
         ++refcount;
         return this;
     }
     
-    LocalizationInfo* unref(void) {
+    LocalizationInfo* unref() {
         if (refcount && --refcount == 0) {
             delete this;
         }
@@ -102,9 +102,9 @@ public:
     virtual bool operator==(const LocalizationInfo* rhs) const;
     inline  bool operator!=(const LocalizationInfo* rhs) const { return !operator==(rhs); }
     
-    virtual int32_t getNumberOfRuleSets(void) const = 0;
+    virtual int32_t getNumberOfRuleSets() const = 0;
     virtual const char16_t* getRuleSetName(int32_t index) const = 0;
-    virtual int32_t getNumberOfDisplayLocales(void) const = 0;
+    virtual int32_t getNumberOfDisplayLocales() const = 0;
     virtual const char16_t* getLocaleName(int32_t index) const = 0;
     virtual const char16_t* getDisplayName(int32_t localeIndex, int32_t ruleIndex) const = 0;
     
@@ -112,7 +112,7 @@ public:
     virtual int32_t indexForRuleSet(const char16_t* ruleset) const;
     
 //    virtual UClassID getDynamicClassID() const = 0;
-//    static UClassID getStaticClassID(void);
+//    static UClassID getStaticClassID();
 };
 
 LocalizationInfo::~LocalizationInfo() {}
@@ -243,7 +243,7 @@ public:
         }
     }
     
-    void** release(void) {
+    void** release() {
         void** result = buf;
         buf = nullptr;
         cap = 0;
@@ -271,14 +271,14 @@ public:
     static StringLocalizationInfo* create(const UnicodeString& info, UParseError& perror, UErrorCode& status);
     
     virtual ~StringLocalizationInfo();
-    virtual int32_t getNumberOfRuleSets(void) const override { return numRuleSets; }
+    virtual int32_t getNumberOfRuleSets() const override { return numRuleSets; }
     virtual const char16_t* getRuleSetName(int32_t index) const override;
-    virtual int32_t getNumberOfDisplayLocales(void) const override { return numLocales; }
+    virtual int32_t getNumberOfDisplayLocales() const override { return numLocales; }
     virtual const char16_t* getLocaleName(int32_t index) const override;
     virtual const char16_t* getDisplayName(int32_t localeIndex, int32_t ruleIndex) const override;
     
 //    virtual UClassID getDynamicClassID() const;
-//    static UClassID getStaticClassID(void);
+//    static UClassID getStaticClassID();
     
 private:
     void init(UErrorCode& status) const;
@@ -318,7 +318,7 @@ public:
     
 private:
     
-    inline void inc(void) {
+    inline void inc() {
         ++p;
         ch = 0xffff;
     }
@@ -332,7 +332,7 @@ private:
     inline UBool check(char16_t c) {
         return p < e && (ch == c || *p == c);
     }
-    inline void skipWhitespace(void) {
+    inline void skipWhitespace() {
         while (p < e && PatternProps::isWhiteSpace(ch != 0xffff ? ch : *p)) {
             inc();
         }
@@ -348,10 +348,10 @@ private:
     }
     void parseError(const char* msg);
     
-    StringLocalizationInfo* doParse(void);
+    StringLocalizationInfo* doParse();
         
     char16_t** nextArray(int32_t& requiredLength);
-    char16_t*  nextString(void);
+    char16_t*  nextString();
 };
 
 #ifdef RBNF_DEBUG
@@ -419,7 +419,7 @@ LocDataParser::parse(char16_t* _data, int32_t len) {
 
 
 StringLocalizationInfo*
-LocDataParser::doParse(void) {
+LocDataParser::doParse() {
     skipWhitespace();
     if (!checkInc(OPEN_ANGLE)) {
         ERROR("Missing open angle");
@@ -1027,7 +1027,7 @@ RuleBasedNumberFormat::getNumberOfRuleSetNames() const
 }
 
 int32_t 
-RuleBasedNumberFormat::getNumberOfRuleSetDisplayNameLocales(void) const {
+RuleBasedNumberFormat::getNumberOfRuleSetDisplayNameLocales() const {
     if (localizations) {
         return localizations->getNumberOfDisplayLocales();
     }

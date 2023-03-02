@@ -46,14 +46,14 @@ U_NAMESPACE_USE
 
 U_CDECL_BEGIN
 
-static void U_CALLCONV ScriptTest(void)
+static void U_CALLCONV ScriptTest()
 {
     if ((int)scriptCodeCount != (int)USCRIPT_CODE_LIMIT) {
         log_err("ScriptCodes::scriptCodeCount = %d, but UScriptCode::USCRIPT_CODE_LIMIT = %d\n", scriptCodeCount, USCRIPT_CODE_LIMIT);
     }
 }
 
-static void U_CALLCONV ParamTest(void)
+static void U_CALLCONV ParamTest()
 {
     LEErrorCode status = LE_NO_ERROR;
     SimpleFontInstance *font = new SimpleFontInstance(12, status);
@@ -216,7 +216,7 @@ bail:
 U_CDECL_END
 
 U_CDECL_BEGIN
-static void U_CALLCONV FactoryTest(void)
+static void U_CALLCONV FactoryTest()
 {
     LEErrorCode status = LE_NO_ERROR;
     SimpleFontInstance *font = new SimpleFontInstance(12, status);
@@ -238,7 +238,7 @@ static void U_CALLCONV FactoryTest(void)
 U_CDECL_END
 
 U_CDECL_BEGIN
-static void U_CALLCONV AccessTest(void)
+static void U_CALLCONV AccessTest()
 {
     LEErrorCode status = LE_NO_ERROR;
     SimpleFontInstance *font = new SimpleFontInstance(12, status);
@@ -563,7 +563,7 @@ LEFontInstance *openFont(const char *fontName, const char *checksum, const char 
 }
 
 U_CDECL_BEGIN
-static void U_CALLCONV DataDrivenTest(void)
+static void U_CALLCONV DataDrivenTest()
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UErrorCode status = U_ZERO_ERROR;
@@ -749,7 +749,7 @@ U_CDECL_BEGIN
  * we expect them to be. Really, it would be a good idea to make a whole test suite
  * for ParagraphLayout.
  */
-static void U_CALLCONV GlyphToCharTest(void)
+static void U_CALLCONV GlyphToCharTest()
 {
 #if !UCONFIG_NO_BREAK_ITERATION
     LEErrorCode status = LE_NO_ERROR;

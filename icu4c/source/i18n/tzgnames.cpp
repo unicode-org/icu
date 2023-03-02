@@ -1136,7 +1136,7 @@ U_CDECL_BEGIN
 /**
  * Cleanup callback func
  */
-static UBool U_CALLCONV tzgnCore_cleanup(void)
+static UBool U_CALLCONV tzgnCore_cleanup()
 {
     if (gTZGNCoreCache != nullptr) {
         uhash_close(gTZGNCoreCache);

@@ -245,8 +245,8 @@ public:
     }
 
 public:
-    static UClassID U_EXPORT2 getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID U_EXPORT2 getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 ServiceEnumeration::~ServiceEnumeration() {}
@@ -254,7 +254,7 @@ ServiceEnumeration::~ServiceEnumeration() {}
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ServiceEnumeration)
 
 StringEnumeration*
-ICULocaleService::getAvailableLocales(void) const
+ICULocaleService::getAvailableLocales() const
 {
     return ServiceEnumeration::create(this);
 }

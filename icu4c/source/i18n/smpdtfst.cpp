@@ -76,7 +76,7 @@ SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
 //
 //------------------------------------------------------------------------------
 UBool
-SimpleDateFormatStaticSets::cleanup(void)
+SimpleDateFormatStaticSets::cleanup()
 {
     delete gStaticSets;
     gStaticSets = nullptr;
@@ -86,7 +86,7 @@ SimpleDateFormatStaticSets::cleanup(void)
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-smpdtfmt_cleanup(void)
+smpdtfmt_cleanup()
 {
     return SimpleDateFormatStaticSets::cleanup();
 }

@@ -63,7 +63,7 @@ public:
         log_data_err(buffer);
     }
 
-    static const char * pathToDataDirectory(void)
+    static const char * pathToDataDirectory()
     {
 
         if(fgDataDir != nullptr) {
@@ -194,7 +194,7 @@ uto64(const char16_t  *buffer)
 #endif
 
 U_CDECL_BEGIN
-static void U_CALLCONV DataDrivenPrintf(void)
+static void U_CALLCONV DataDrivenPrintf()
 {
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UErrorCode errorCode;
@@ -360,7 +360,7 @@ static void U_CALLCONV DataDrivenPrintf(void)
 U_CDECL_END
 
 U_CDECL_BEGIN
-static void U_CALLCONV ScanfMultipleIntegers(void)
+static void U_CALLCONV ScanfMultipleIntegers()
 {
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UnicodeString input = UNICODE_STRING("[1.2.3]", 7);
@@ -397,7 +397,7 @@ static void U_CALLCONV ScanfMultipleIntegers(void)
 U_CDECL_END
 
 U_CDECL_BEGIN
-static void U_CALLCONV DataDrivenScanf(void)
+static void U_CALLCONV DataDrivenScanf()
 {
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UErrorCode errorCode;
@@ -599,7 +599,7 @@ static void U_CALLCONV DataDrivenScanf(void)
 U_CDECL_END
 
 U_CDECL_BEGIN
-static void U_CALLCONV DataDrivenPrintfPrecision(void)
+static void U_CALLCONV DataDrivenPrintfPrecision()
 {
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
     UErrorCode errorCode;

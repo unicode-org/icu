@@ -700,7 +700,7 @@ void Transliterator::setMaximumContextLength(int32_t maxContextLength) {
  * @see #registerInstance
  * @see #getAvailableIDs
  */
-const UnicodeString& Transliterator::getID(void) const {
+const UnicodeString& Transliterator::getID() const {
     return ID;
 }
 
@@ -834,7 +834,7 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
  * if this transliterator uses no filter.  Caller musn't delete
  * the result!
  */
-const UnicodeFilter* Transliterator::getFilter(void) const {
+const UnicodeFilter* Transliterator::getFilter() const {
     return filter;
 }
 
@@ -844,7 +844,7 @@ const UnicodeFilter* Transliterator::getFilter(void) const {
  * caller must eventually delete the result.  After this call,
  * this transliterator's filter is set to <tt>nullptr</tt>.
  */
-UnicodeFilter* Transliterator::orphanFilter(void) {
+UnicodeFilter* Transliterator::orphanFilter() {
     UnicodeFilter *result = filter;
     filter = nullptr;
     return result;
@@ -1323,7 +1323,7 @@ void U_EXPORT2 Transliterator::unregister(const UnicodeString& ID) {
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
  */
-int32_t U_EXPORT2 Transliterator::countAvailableIDs(void) {
+int32_t U_EXPORT2 Transliterator::countAvailableIDs() {
     int32_t retVal = 0;
     Mutex lock(&registryMutex);
     UErrorCode ec = U_ZERO_ERROR;
@@ -1365,7 +1365,7 @@ StringEnumeration* U_EXPORT2 Transliterator::getAvailableIDs(UErrorCode& ec) {
     return result;
 }
 
-int32_t U_EXPORT2 Transliterator::countAvailableSources(void) {
+int32_t U_EXPORT2 Transliterator::countAvailableSources() {
     Mutex lock(&registryMutex);
     UErrorCode ec = U_ZERO_ERROR;
     return HAVE_REGISTRY(ec) ? _countAvailableSources() : 0;
@@ -1417,7 +1417,7 @@ UnicodeString& U_EXPORT2 Transliterator::getAvailableVariant(int32_t index,
     return result;
 }
 
-int32_t Transliterator::_countAvailableSources(void) {
+int32_t Transliterator::_countAvailableSources() {
     return registry->countAvailableSources();
 }
 
@@ -1663,7 +1663,7 @@ U_NAMESPACE_END
  * necessarily invalidate any rule-based transliterators held by the
  * user, because RBTs hold pointers to common data objects.
  */
-U_CFUNC UBool utrans_transliterator_cleanup(void) {
+U_CFUNC UBool utrans_transliterator_cleanup() {
     U_NAMESPACE_USE
     TransliteratorIDParser::cleanup();
     if (registry) {

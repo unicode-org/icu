@@ -2298,7 +2298,7 @@ void CalendarRegressionTest::TestJ81() {
 /**
  * Test fieldDifference().
  */
-void CalendarRegressionTest::TestJ438(void) {
+void CalendarRegressionTest::TestJ438() {
     UErrorCode ec = U_ZERO_ERROR;
     int32_t DATA[] = {
         2000, UCAL_JANUARY, 20,   2010, UCAL_JUNE, 15,
@@ -2772,7 +2772,7 @@ CalendarRegressionTest::makeDate(int32_t y, int32_t m, int32_t d,
     return result;
 }
 
-void CalendarRegressionTest::TestDeprecates(void)
+void CalendarRegressionTest::TestDeprecates()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c1 = Calendar::createInstance("ja_JP@calendar=japanese",status);
@@ -2868,7 +2868,7 @@ void CalendarRegressionTest::TestDeprecates(void)
 
 }
 
-void CalendarRegressionTest::TestT8057(void) {
+void CalendarRegressionTest::TestT8057() {
     // Set the calendar to the last day in a leap year
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *cal = dynamic_cast<GregorianCalendar*>(Calendar::createInstance(status));
@@ -2907,7 +2907,7 @@ void CalendarRegressionTest::TestT8057(void) {
 // Test case for ticket#8596.
 // Setting an year followed by getActualMaximum(Calendar.WEEK_OF_YEAR)
 // may result wrong maximum week.
-void CalendarRegressionTest::TestT8596(void) {
+void CalendarRegressionTest::TestT8596() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *gc = new GregorianCalendar(*TimeZone::getGMT(), status);
 
@@ -2949,7 +2949,7 @@ void CalendarRegressionTest::TestT8596(void) {
 
 // Test case for ticket 9452
 // Calendar addition fall onto the missing date - 2011-12-30 in Samoa
-void CalendarRegressionTest::TestT9452(void) {
+void CalendarRegressionTest::TestT9452() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar cal(TimeZone::createTimeZone("Pacific/Apia"), status);
     failure(status, "initializing GregorianCalendar");
@@ -2994,7 +2994,7 @@ void CalendarRegressionTest::TestT9452(void) {
 /**
  * @bug ticket 11632
  */
-void CalendarRegressionTest::TestT11632(void) {
+void CalendarRegressionTest::TestT11632() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar cal(TimeZone::createTimeZone("Pacific/Apia"), status);
     if(U_FAILURE(status)) {
@@ -3034,7 +3034,7 @@ void CalendarRegressionTest::TestT11632(void) {
 /**
  * @bug ticket 13454
  */
-void CalendarRegressionTest::TestPersianCalOverflow(void) {
+void CalendarRegressionTest::TestPersianCalOverflow() {
     const char* localeID = "bs_Cyrl@calendar=persian";
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(Locale(localeID), status);
@@ -3064,7 +3064,7 @@ void CalendarRegressionTest::TestPersianCalOverflow(void) {
 /**
  * @bug tickets 12661, 13538
  */
-void CalendarRegressionTest::TestIslamicCalOverflow(void) {
+void CalendarRegressionTest::TestIslamicCalOverflow() {
     const char* localeID = "ar@calendar=islamic-civil";
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(Locale(localeID), status);
@@ -3183,7 +3183,7 @@ void CalendarRegressionTest::VerifyGetStayInBound(double time) {
     }
 }
 
-void CalendarRegressionTest::TestUTCWrongAMPM22023(void) {
+void CalendarRegressionTest::TestUTCWrongAMPM22023() {
     VerifyGetStayInBound(-1);
     VerifyGetStayInBound(0);
     VerifyGetStayInBound(-1e-8);
@@ -3211,7 +3211,7 @@ void CalendarRegressionTest::VerifyNoAssertWithSetGregorianChange(const char* ti
     cal->get(UCAL_YEAR, status);
 }
 
-void CalendarRegressionTest::TestAsiaManilaAfterSetGregorianChange22043(void) {
+void CalendarRegressionTest::TestAsiaManilaAfterSetGregorianChange22043() {
     VerifyNoAssertWithSetGregorianChange("Asia/Malina");
     UErrorCode status = U_ZERO_ERROR;
     std::unique_ptr<StringEnumeration> ids(TimeZone::createEnumeration(status));
@@ -3225,7 +3225,7 @@ void CalendarRegressionTest::TestAsiaManilaAfterSetGregorianChange22043(void) {
     }
 }
 
-void CalendarRegressionTest::TestWeekOfYear13548(void) {
+void CalendarRegressionTest::TestWeekOfYear13548() {
     int32_t year = 2000;
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(Calendar::createInstance(status));
@@ -3241,7 +3241,7 @@ void CalendarRegressionTest::TestWeekOfYear13548(void) {
     }
 }
 
-void CalendarRegressionTest::TestRespectUExtensionFw(void) { // ICU-22226
+void CalendarRegressionTest::TestRespectUExtensionFw() { // ICU-22226
     static const char* LOCALE_IDS[] = {
         "en-US",
         "en-US-u-fw-xyz",

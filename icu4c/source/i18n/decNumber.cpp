@@ -3605,7 +3605,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberTrim(decNumber *dn) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-const char * uprv_decNumberVersion(void) {
+const char * uprv_decNumberVersion() {
   return DECVERSION;
   } /* decNumberVersion  */
 

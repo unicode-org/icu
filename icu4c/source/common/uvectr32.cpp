@@ -165,7 +165,7 @@ void UVector32::removeElementAt(int32_t index) {
     }
 }
 
-void UVector32::removeAllElements(void) {
+void UVector32::removeAllElements() {
     count = 0;
 }
 

@@ -143,7 +143,7 @@ void SearchIterator::setBreakIterator(BreakIterator *breakiter,
     }
 }
     
-const BreakIterator * SearchIterator::getBreakIterator(void) const
+const BreakIterator * SearchIterator::getBreakIterator() const
 {
     return m_breakiterator_;
 }
@@ -170,7 +170,7 @@ void SearchIterator::setText(CharacterIterator &text, UErrorCode &status)
     }
 }
     
-const UnicodeString & SearchIterator::getText(void) const
+const UnicodeString & SearchIterator::getText() const
 {
     return m_text_;
 }

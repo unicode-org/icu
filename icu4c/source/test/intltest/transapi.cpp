@@ -976,8 +976,8 @@ static const int MyUnicodeFunctorTestClassID = 0;
 class MyUnicodeFunctorTestClass : public UnicodeFunctor {
 public:
     virtual UnicodeFunctor* clone() const override {return nullptr;}
-    static UClassID getStaticClassID(void) {return (UClassID)&MyUnicodeFunctorTestClassID;}
-    virtual UClassID getDynamicClassID(void) const override {return getStaticClassID();}
+    static UClassID getStaticClassID() {return (UClassID)&MyUnicodeFunctorTestClassID;}
+    virtual UClassID getDynamicClassID() const override {return getStaticClassID();}
     virtual void setData(const TransliterationRuleData*) override {}
 };
 

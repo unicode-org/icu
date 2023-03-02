@@ -1234,7 +1234,7 @@ UnicodeString::getTerminatedBuffer() {
     } else if(((fUnion.fFields.fLengthAndFlags & kRefCounted) == 0 || refCount() == 1)) {
       // kRefCounted: Do not write the NUL if the buffer is shared.
       // That is mostly safe, except when the length of one copy was modified
-      // without copy-on-write, e.g., via truncate(newLength) or remove(void).
+      // without copy-on-write, e.g., via truncate(newLength) or remove().
       // Then the NUL would be written into the middle of another copy's string.
 
       // Otherwise, the buffer is fully writable and it is anyway safe to write the NUL.
@@ -1980,7 +1980,7 @@ This makes sure that static library dependencies are kept to a minimum.
 #if defined(__clang__) || U_GCC_MAJOR_MINOR >= 1100
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
-static void uprv_UnicodeStringDummy(void) {
+static void uprv_UnicodeStringDummy() {
     delete [] (new UnicodeString[2]);
 }
 #pragma GCC diagnostic pop

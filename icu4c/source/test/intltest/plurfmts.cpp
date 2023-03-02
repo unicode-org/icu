@@ -535,7 +535,7 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
 }
 
 void
-PluralFormatTest::pluralFormatExtendedTest(void) {
+PluralFormatTest::pluralFormatExtendedTest() {
   const char *targets[] = {
     "There are no widgets.",
     "There is one widget.",
@@ -599,7 +599,7 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
 }
 
 void
-PluralFormatTest::pluralFormatExtendedParseTest(void) {
+PluralFormatTest::pluralFormatExtendedParseTest() {
   const char *failures[] = {
     "offset:1..0 =0 {Foo}",
     "offset:1.0 {Foo}",
@@ -620,7 +620,7 @@ PluralFormatTest::pluralFormatExtendedParseTest(void) {
 }
 
 void
-PluralFormatTest::ordinalFormatTest(void) {
+PluralFormatTest::ordinalFormatTest() {
     IcuTestErrorCode errorCode(*this, "ordinalFormatTest");
     UnicodeString pattern("one{#st file}two{#nd file}few{#rd file}other{#th file}");
     PluralFormat pf(Locale::getEnglish(), UPLURAL_TYPE_ORDINAL, pattern, errorCode);

@@ -36,7 +36,7 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 
 static cleanupFunc *gCleanupFunctions[UCLN_IO_COUNT];
 
-static UBool U_CALLCONV io_cleanup(void)
+static UBool U_CALLCONV io_cleanup()
 {
     int32_t libType = UCLN_IO_START;
 

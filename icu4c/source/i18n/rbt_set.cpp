@@ -225,7 +225,7 @@ void TransliterationRuleSet::setData(const TransliterationRuleData* d) {
  * Return the maximum context length.
  * @return the length of the longest preceding context.
  */
-int32_t TransliterationRuleSet::getMaximumContextLength(void) const {
+int32_t TransliterationRuleSet::getMaximumContextLength() const {
     return maxContextLength;
 }
 

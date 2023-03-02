@@ -24,16 +24,16 @@ public:
     /** 
      * Perform several extensive tests using the subtest routine testTag
      **/
-    void TestResourceBundles(void);
+    void TestResourceBundles();
     /** 
      * Test construction of ResourceBundle accessing a custom test resource-file
      **/
-    void TestConstruction(void);
+    void TestConstruction();
 
-    void TestExemplar(void);
+    void TestExemplar();
 
-    void TestGetSize(void);
-    void TestGetLocaleByType(void);
+    void TestGetSize();
+    void TestGetLocaleByType();
 
 private:
     /**

@@ -261,7 +261,7 @@ checkAssemblyHeaderName(const char* optAssembly) {
 
 
 U_CAPI void U_EXPORT2
-printAssemblyHeadersToStdErr(void) {
+printAssemblyHeadersToStdErr() {
     int32_t idx;
     fprintf(stderr, "%s", assemblyHeader[0].name);
     for (idx = 1; idx < UPRV_LENGTHOF(assemblyHeader); idx++) {

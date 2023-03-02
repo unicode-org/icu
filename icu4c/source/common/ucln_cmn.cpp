@@ -37,7 +37,7 @@ static cleanupFunc *gLibCleanupFunctions[UCLN_COMMON];
  Please be sure that you have read ucln.h
  ************************************************/
 U_CAPI void U_EXPORT2
-u_cleanup(void)
+u_cleanup()
 {
     UTRACE_ENTRY_OC(UTRACE_U_CLEANUP);
     icu::umtx_lock(nullptr);     /* Force a memory barrier, so that we are sure to see   */
@@ -102,7 +102,7 @@ ucln_registerCleanup(ECleanupLibraryType type,
     }
 }
 
-U_CFUNC UBool ucln_lib_cleanup(void) {
+U_CFUNC UBool ucln_lib_cleanup() {
     int32_t libType = UCLN_START;
     int32_t commonFunc = UCLN_COMMON_START;
 

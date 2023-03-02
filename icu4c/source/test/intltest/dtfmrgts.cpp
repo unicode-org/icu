@@ -73,7 +73,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
 /**
  * @bug 4029195
  */
-void DateFormatRegressionTest::Test4029195(void) 
+void DateFormatRegressionTest::Test4029195() 
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -129,7 +129,7 @@ void DateFormatRegressionTest::Test4029195(void)
 /**
  * @bug 4052408
  */
-void DateFormatRegressionTest::Test4052408(void) 
+void DateFormatRegressionTest::Test4052408() 
 {
 
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::SHORT,
@@ -230,7 +230,7 @@ void DateFormatRegressionTest::Test4052408(void)
  * @bug 4056591
  * Verify the function of the [s|g]et2DigitYearStart() API.
  */
-void DateFormatRegressionTest::Test4056591(void) 
+void DateFormatRegressionTest::Test4056591() 
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -287,7 +287,7 @@ void DateFormatRegressionTest::Test4056591(void)
 /**
  * @bug 4059917
  */
-void DateFormatRegressionTest::Test4059917(void) 
+void DateFormatRegressionTest::Test4059917() 
 {
     UErrorCode status = U_ZERO_ERROR;
     
@@ -337,7 +337,7 @@ void DateFormatRegressionTest::aux917( SimpleDateFormat *fmt, UnicodeString& str
 /**
  * @bug 4060212
  */
-void DateFormatRegressionTest::Test4060212(void) 
+void DateFormatRegressionTest::Test4060212() 
 {
     UnicodeString dateString = "1995-040.05:01:29";
 
@@ -386,7 +386,7 @@ void DateFormatRegressionTest::Test4060212(void)
 /**
  * @bug 4061287
  */
-void DateFormatRegressionTest::Test4061287(void) 
+void DateFormatRegressionTest::Test4061287() 
 {
     UErrorCode status = U_ZERO_ERROR;
     
@@ -422,7 +422,7 @@ void DateFormatRegressionTest::Test4061287(void)
 /**
  * @bug 4065240
  */
-void DateFormatRegressionTest::Test4065240(void) 
+void DateFormatRegressionTest::Test4065240() 
 {
     UDate curDate;
     DateFormat *shortdate, *fulldate;
@@ -505,7 +505,7 @@ void DateFormatRegressionTest::Test4065240(void)
 /**
  * @bug 4071441
  */
-void DateFormatRegressionTest::Test4071441(void) 
+void DateFormatRegressionTest::Test4071441() 
 {
     DateFormat *fmtA = DateFormat::createInstance();
     DateFormat *fmtB = DateFormat::createInstance();
@@ -564,7 +564,7 @@ void DateFormatRegressionTest::Test4071441(void)
 /**
  * @bug 4073003
  */
-void DateFormatRegressionTest::Test4073003(void) 
+void DateFormatRegressionTest::Test4073003() 
 {
     //try {
     UErrorCode ec = U_ZERO_ERROR;
@@ -600,7 +600,7 @@ void DateFormatRegressionTest::Test4073003(void)
 /**
  * @bug 4089106
  */
-void DateFormatRegressionTest::Test4089106(void) 
+void DateFormatRegressionTest::Test4089106() 
 {
     TimeZone *def = TimeZone::createDefault();
     //try {
@@ -635,7 +635,7 @@ void DateFormatRegressionTest::Test4089106(void)
 
 // {sfb} not applicable in C++??
 
-void DateFormatRegressionTest::Test4100302(void) 
+void DateFormatRegressionTest::Test4100302() 
 {
 /*    Locale locales [] =  {
         Locale::CANADA,
@@ -704,7 +704,7 @@ void DateFormatRegressionTest::Test4100302(void)
 /**
  * @bug 4101483
  */
-void DateFormatRegressionTest::Test4101483(void) 
+void DateFormatRegressionTest::Test4101483() 
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat sdf(UnicodeString("z"), Locale::getUS(), status);
@@ -731,7 +731,7 @@ void DateFormatRegressionTest::Test4101483(void)
  * NT; it would actually have failed on any non-US locale.  Now it should
  * work on all locales.
  */
-void DateFormatRegressionTest::Test4103340(void) 
+void DateFormatRegressionTest::Test4103340() 
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -757,7 +757,7 @@ void DateFormatRegressionTest::Test4103340(void)
 /**
  * @bug 4103341
  */
-void DateFormatRegressionTest::Test4103341(void) 
+void DateFormatRegressionTest::Test4103341() 
 {
     LocalPointer<TimeZone> saveZone(TimeZone::createDefault());
     if (!saveZone.isValid()) {
@@ -781,7 +781,7 @@ void DateFormatRegressionTest::Test4103341(void)
 /**
  * @bug 4104136
  */
-void DateFormatRegressionTest::Test4104136(void) 
+void DateFormatRegressionTest::Test4104136() 
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdf = new SimpleDateFormat(status); 
@@ -845,7 +845,7 @@ void DateFormatRegressionTest::Test4104136(void)
  * StringIndexOutOfBoundsException during the second parse.  However,
  * this is not seen.
  */
-void DateFormatRegressionTest::Test4104522(void) 
+void DateFormatRegressionTest::Test4104522() 
 {
     UErrorCode status = U_ZERO_ERROR;
     
@@ -880,7 +880,7 @@ void DateFormatRegressionTest::Test4104522(void)
 /**
  * @bug 4106807
  */
-void DateFormatRegressionTest::Test4106807(void) 
+void DateFormatRegressionTest::Test4106807() 
 {
     UDate dt; 
     DateFormat *df = DateFormat::createDateTimeInstance(); 
@@ -973,7 +973,7 @@ void DateFormatRegressionTest::Test4106807(void)
  */
 
 // {sfb} what to do with this one ?? 
-void DateFormatRegressionTest::Test4108407(void) 
+void DateFormatRegressionTest::Test4108407() 
 { 
     /*long l = System.currentTimeMillis(); 
     logln("user.timezone = " + System.getProperty("user.timezone", "?"));
@@ -992,7 +992,7 @@ void DateFormatRegressionTest::Test4108407(void)
  * @bug 4134203
  * SimpleDateFormat won't parse "GMT"
  */
-void DateFormatRegressionTest::Test4134203(void) 
+void DateFormatRegressionTest::Test4134203() 
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString dateFormat = "MM/dd/yy HH:mm:ss zzz";
@@ -1011,7 +1011,7 @@ void DateFormatRegressionTest::Test4134203(void)
  * @bug 4151631
  * SimpleDateFormat incorrect handling of 2 single quotes in format()
  */
-void DateFormatRegressionTest::Test4151631(void) 
+void DateFormatRegressionTest::Test4151631() 
 {
     UnicodeString pattern = "'TO_DATE('''dd'-'MM'-'yyyy HH:mm:ss''' , ''DD-MM-YYYY HH:MI:SS'')'";
     logln("pattern=" + pattern);
@@ -1034,7 +1034,7 @@ void DateFormatRegressionTest::Test4151631(void)
  * 'z' at end of date format throws index exception in SimpleDateFormat
  * CANNOT REPRODUCE THIS BUG ON 1.2FCS
  */
-void DateFormatRegressionTest::Test4151706(void) 
+void DateFormatRegressionTest::Test4151706() 
 {
     UnicodeString dateString("Thursday, 31-Dec-98 23:00:00 GMT");
     UErrorCode status = U_ZERO_ERROR;
@@ -1060,7 +1060,7 @@ void DateFormatRegressionTest::Test4151706(void)
  * of some other bug that has been fixed.
  */
 void 
-DateFormatRegressionTest::Test4162071(void) 
+DateFormatRegressionTest::Test4162071() 
 {
     UnicodeString dateString("Thu, 30-Jul-1999 11:51:14 GMT");
     UnicodeString format("EEE', 'dd-MMM-yyyy HH:mm:ss z"); // RFC 822/1123
@@ -1088,7 +1088,7 @@ DateFormatRegressionTest::Test4162071(void)
 /**
  * DateFormat shouldn't parse year "-1" as a two-digit year (e.g., "-1" -> 1999).
  */
-void DateFormatRegressionTest::Test4182066(void) {
+void DateFormatRegressionTest::Test4182066() {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat fmt("MM/dd/yy", Locale::getUS(), status);
     SimpleDateFormat dispFmt("MMM dd yyyy GG", Locale::getUS(), status);
@@ -1170,7 +1170,7 @@ void DateFormatRegressionTest::Test4182066(void) {
  * DateFormat cannot parse Feb 29 2000 when setLenient(false)
  */
 void
-DateFormatRegressionTest::Test4210209(void) {
+DateFormatRegressionTest::Test4210209() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("MMM d, yyyy");
     SimpleDateFormat sfmt(pattern, Locale::getUS(), status);
@@ -1216,7 +1216,7 @@ DateFormatRegressionTest::Test4210209(void) {
     }
 }
 
-void DateFormatRegressionTest::Test714(void)
+void DateFormatRegressionTest::Test714()
 {
     //try {
      UDate d(978103543000.);
@@ -1278,7 +1278,7 @@ public:
   { }
 };
 
-void DateFormatRegressionTest::Test1684(void)
+void DateFormatRegressionTest::Test1684()
 {
   //      July 2001            August 2001           January 2002    
   // Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
@@ -1416,7 +1416,7 @@ void DateFormatRegressionTest::Test1684(void)
   delete sdf;
 }
 
-void DateFormatRegressionTest::Test5554(void)
+void DateFormatRegressionTest::Test5554()
 {
   UErrorCode status = U_ZERO_ERROR;
   UnicodeString pattern("Z","");
@@ -1446,7 +1446,7 @@ void DateFormatRegressionTest::Test5554(void)
   delete sdf;
 }
 
-void DateFormatRegressionTest::Test9237(void)
+void DateFormatRegressionTest::Test9237()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("VVVV");
@@ -1480,7 +1480,7 @@ void DateFormatRegressionTest::Test9237(void)
     }
 }
 
-void DateFormatRegressionTest::TestParsing(void) {
+void DateFormatRegressionTest::TestParsing() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("EEE-WW-MMMM-yyyy");
     UnicodeString text("mon-02-march-2011");
@@ -1508,7 +1508,7 @@ void DateFormatRegressionTest::TestParsing(void) {
     delete cal;
 }
 
-void DateFormatRegressionTest::Test12902_yWithGregoCalInThaiLoc(void) {
+void DateFormatRegressionTest::Test12902_yWithGregoCalInThaiLoc() {
     UErrorCode status = U_ZERO_ERROR;
     UDate testDate = 43200000.0; // 1970-Jan-01 12:00 GMT
     const char* skeleton = "y";
@@ -1557,7 +1557,7 @@ void DateFormatRegressionTest::Test12902_yWithGregoCalInThaiLoc(void) {
     }
 }
 
-void DateFormatRegressionTest::TestT10334(void) {
+void DateFormatRegressionTest::TestT10334() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("'--: 'EEE-WW-MMMM-yyyy");
     UnicodeString text("--mon-02-march-2011");
@@ -1628,7 +1628,7 @@ typedef struct {
 } TestDateFormatLeniencyItem;
 
 
-void DateFormatRegressionTest::TestT10619(void) {
+void DateFormatRegressionTest::TestT10619() {
     const UDate july022008 = 1215000001979.0;
     const TestDateFormatLeniencyItem items[] = {
         //locale    leniency    parse String                    pattern                             expected result
@@ -1690,7 +1690,7 @@ typedef struct {
     int initialParsePos;
 } T10855Data;
     
-void DateFormatRegressionTest::TestT10855(void) {
+void DateFormatRegressionTest::TestT10855() {
     // NOTE: these should NOT parse
     const T10855Data items[] = {
         //parse String                          pattern                         initial parse pos
@@ -1734,7 +1734,7 @@ void DateFormatRegressionTest::TestT10855(void) {
     }
 }
 
-void DateFormatRegressionTest::TestT10906(void) {
+void DateFormatRegressionTest::TestT10906() {
 
       UErrorCode status = U_ZERO_ERROR;
       UnicodeString pattern = "MM-dd-yyyy";
@@ -1749,7 +1749,7 @@ void DateFormatRegressionTest::TestT10906(void) {
       }
 }
 
-void DateFormatRegressionTest::TestT13380(void) {
+void DateFormatRegressionTest::TestT13380() {
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalPointer<DateFormat> enFmt(DateFormat::createDateInstance(DateFormat::kShort, Locale("en")), errorCode);
     if (U_FAILURE(errorCode)) {
@@ -1763,7 +1763,7 @@ void DateFormatRegressionTest::TestT13380(void) {
     }
 }
 
-void DateFormatRegressionTest::TestT10858(void) {
+void DateFormatRegressionTest::TestT10858() {
     // test for assignment operator on instances with the same locale but different TimeZoneFormat
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("VVVV");

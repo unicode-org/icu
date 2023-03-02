@@ -430,7 +430,7 @@ static int32_t ures_flushCache()
 #ifdef URES_DEBUG
 #include <stdio.h>
 
-U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
+U_CAPI UBool U_EXPORT2 ures_dumpCacheContents() {
   UBool cacheNotEmpty = false;
   int32_t pos = UHASH_FIRST;
   const UHashElement *e;
@@ -461,7 +461,7 @@ U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
 
 #endif
 
-static UBool U_CALLCONV ures_cleanup(void)
+static UBool U_CALLCONV ures_cleanup()
 {
     if (cache != nullptr) {
         ures_flushCache();

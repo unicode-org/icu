@@ -166,7 +166,7 @@ private:
 };
 
 
-void TestArabicShapeThreads::doTailTest(void) {
+void TestArabicShapeThreads::doTailTest() {
     static const char16_t src[] = { 0x0020, 0x0633, 0 };
     static const char16_t dst_old[] = { 0xFEB1, 0x200B,0 };
     static const char16_t dst_new[] = { 0xFEB1, 0xFE73,0 };

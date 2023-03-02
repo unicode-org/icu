@@ -273,27 +273,27 @@ int32_t ResourceBundle::getInt(UErrorCode& status) const {
     return ures_getInt(fResource, &status);
 }
 
-const char *ResourceBundle::getName(void) const {
+const char *ResourceBundle::getName() const {
     return ures_getName(fResource);
 }
 
-const char *ResourceBundle::getKey(void) const {
+const char *ResourceBundle::getKey() const {
     return ures_getKey(fResource);
 }
 
-UResType ResourceBundle::getType(void) const {
+UResType ResourceBundle::getType() const {
     return ures_getType(fResource);
 }
 
-int32_t ResourceBundle::getSize(void) const {
+int32_t ResourceBundle::getSize() const {
     return ures_getSize(fResource);
 }
 
-UBool ResourceBundle::hasNext(void) const {
+UBool ResourceBundle::hasNext() const {
     return ures_hasNext(fResource);
 }
 
-void ResourceBundle::resetIterator(void) {
+void ResourceBundle::resetIterator() {
     ures_resetIterator(fResource);
 }
 
@@ -377,7 +377,7 @@ void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
     ures_getVersion(fResource, versionInfo);
 }
 
-const Locale &ResourceBundle::getLocale(void) const {
+const Locale &ResourceBundle::getLocale() const {
     static UMutex gLocaleLock;
     Mutex lock(&gLocaleLock);
     if (fLocale != nullptr) {

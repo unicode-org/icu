@@ -34,7 +34,7 @@ static const UnicodeString&  _fieldString(UDebugEnumType type, int32_t field, Un
 }
 
 U_CDECL_BEGIN
-static void udbg_cleanup(void) {
+static void udbg_cleanup() {
     if(strs != nullptr) {
         for(int t=0;t<=UDBG_ENUM_COUNT;t++) {
             delete [] strs[t];
@@ -44,18 +44,18 @@ static void udbg_cleanup(void) {
     }
 }
 
-static UBool tu_cleanup(void)
+static UBool tu_cleanup()
 {
     udbg_cleanup();
     return true;
 }
 
-static void udbg_register_cleanup(void) {
+static void udbg_register_cleanup() {
    ucln_registerCleanup(UCLN_TOOLUTIL, tu_cleanup);
 }
 U_CDECL_END
 
-static void udbg_setup(void) {
+static void udbg_setup() {
     if(strs == nullptr) {
         udbg_register_cleanup();
         //fprintf(stderr,"Initializing string cache..\n");

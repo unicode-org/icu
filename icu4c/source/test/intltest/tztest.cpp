@@ -2527,7 +2527,7 @@ void TimeZoneTest::TestGetGMT() {
     assertFalse("getGMT() uses DST", gmt->useDaylightTime());
 }
 
-void TimeZoneTest::TestGetWindowsID(void) {
+void TimeZoneTest::TestGetWindowsID() {
     static const struct {
         const char *id;
         const char *winid;
@@ -2556,7 +2556,7 @@ void TimeZoneTest::TestGetWindowsID(void) {
     }
 }
 
-void TimeZoneTest::TestGetIDForWindowsID(void) {
+void TimeZoneTest::TestGetIDForWindowsID() {
     static const struct {
         const char *winid;
         const char *region;
@@ -2585,7 +2585,7 @@ void TimeZoneTest::TestGetIDForWindowsID(void) {
     }
 }
 
-void TimeZoneTest::TestCasablancaNameAndOffset22041(void) {
+void TimeZoneTest::TestCasablancaNameAndOffset22041() {
     std::unique_ptr<TimeZone> zone(TimeZone::createTimeZone("Africa/Casablanca"));
     UnicodeString standardName, summerName;
     zone->getDisplayName(false, TimeZone::LONG, Locale::getEnglish(), standardName);
@@ -2601,7 +2601,7 @@ void TimeZoneTest::TestCasablancaNameAndOffset22041(void) {
                  zone->getRawOffset(), raw);
 }
 
-void TimeZoneTest::TestRawOffsetAndOffsetConsistency22041(void) {
+void TimeZoneTest::TestRawOffsetAndOffsetConsistency22041() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<StringEnumeration> s(TimeZone::createEnumeration(status));
     if (U_FAILURE(status)) {

@@ -40,7 +40,7 @@ static UBool chkstatus( UErrorCode &status, const char* msg = nullptr )
 }
 
 void
-TestChoiceFormat::TestSimpleExample( void )
+TestChoiceFormat::TestSimpleExample()
 {
     double limits[] = {1,2,3,4,5,6,7};
     UnicodeString monthNames[] = {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"};
@@ -123,7 +123,7 @@ TestChoiceFormat::TestSimpleExample( void )
 }
 
 void
-TestChoiceFormat::TestComplexExample( void )
+TestChoiceFormat::TestComplexExample()
 {
     UErrorCode status = U_ZERO_ERROR;
     const double filelimits[] = {-1, 0,1,2};
@@ -456,7 +456,7 @@ TestChoiceFormat::TestComplexExample( void )
 /**
  * Test new closure API
  */
-void TestChoiceFormat::TestClosures(void) {
+void TestChoiceFormat::TestClosures() {
     // Construct open, half-open, half-open (the other way), and closed
     // intervals.  Do this both using arrays and using a pattern.
 
@@ -603,7 +603,7 @@ void TestChoiceFormat::_testPattern(const char* pattern,
 /**
  * Test applyPattern
  */
-void TestChoiceFormat::TestPatterns(void) {
+void TestChoiceFormat::TestPatterns() {
     // Try a pattern that isolates a single value.  Create
     // three ranges: [-Inf,1.0) [1.0,1.0] (1.0,+Inf]
     _testPattern("0.0#a|1.0#b|1.0<c", true,

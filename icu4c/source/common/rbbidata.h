@@ -205,7 +205,7 @@ private:
 
 U_NAMESPACE_END
 
-U_CFUNC UBool rbbi_cleanup(void);
+U_CFUNC UBool rbbi_cleanup();
 
 #endif /* C++ */
 

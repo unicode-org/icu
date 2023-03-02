@@ -3867,7 +3867,7 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
 
 
 void
-LocaleTest::TestKeywordVariants(void) {
+LocaleTest::TestKeywordVariants() {
     static const struct {
         const char *localeID;
         const char *expectedLocaleID;
@@ -3975,7 +3975,7 @@ LocaleTest::TestKeywordVariants(void) {
 
 
 void
-LocaleTest::TestCreateUnicodeKeywords(void) {
+LocaleTest::TestCreateUnicodeKeywords() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywords()");
 
     static const Locale l("de@calendar=buddhist;collation=phonebook");
@@ -4031,7 +4031,7 @@ LocaleTest::TestCreateUnicodeKeywords(void) {
 
 
 void
-LocaleTest::TestKeywordVariantParsing(void) {
+LocaleTest::TestKeywordVariantParsing() {
     static const struct {
         const char *localeID;
         const char *keyword;
@@ -4062,7 +4062,7 @@ LocaleTest::TestKeywordVariantParsing(void) {
 }
 
 void
-LocaleTest::TestCreateKeywordSet(void) {
+LocaleTest::TestCreateKeywordSet() {
     IcuTestErrorCode status(*this, "TestCreateKeywordSet()");
 
     static const Locale l("de@calendar=buddhist;collation=phonebook");
@@ -4081,7 +4081,7 @@ LocaleTest::TestCreateKeywordSet(void) {
 }
 
 void
-LocaleTest::TestCreateKeywordSetEmpty(void) {
+LocaleTest::TestCreateKeywordSetEmpty() {
     IcuTestErrorCode status(*this, "TestCreateKeywordSetEmpty()");
 
     static const Locale l("de");
@@ -4096,7 +4096,7 @@ LocaleTest::TestCreateKeywordSetEmpty(void) {
 }
 
 void
-LocaleTest::TestCreateKeywordSetWithPrivateUse(void) {
+LocaleTest::TestCreateKeywordSetWithPrivateUse() {
     IcuTestErrorCode status(*this, "TestCreateKeywordSetWithPrivateUse()");
 
     static const char tag[] = "en-US-u-ca-gregory-x-foo";
@@ -4117,7 +4117,7 @@ LocaleTest::TestCreateKeywordSetWithPrivateUse(void) {
 }
 
 void
-LocaleTest::TestCreateUnicodeKeywordSet(void) {
+LocaleTest::TestCreateUnicodeKeywordSet() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSet()");
 
     static const Locale l("de@calendar=buddhist;collation=phonebook");
@@ -4136,7 +4136,7 @@ LocaleTest::TestCreateUnicodeKeywordSet(void) {
 }
 
 void
-LocaleTest::TestCreateUnicodeKeywordSetEmpty(void) {
+LocaleTest::TestCreateUnicodeKeywordSetEmpty() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSetEmpty()");
 
     static const Locale l("de");
@@ -4151,7 +4151,7 @@ LocaleTest::TestCreateUnicodeKeywordSetEmpty(void) {
 }
 
 void
-LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse(void) {
+LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse() {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSetWithPrivateUse()");
 
     static const char tag[] = "en-US-u-ca-gregory-x-foo";
@@ -4171,7 +4171,7 @@ LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse(void) {
 }
 
 void
-LocaleTest::TestGetKeywordValueStdString(void) {
+LocaleTest::TestGetKeywordValueStdString() {
     IcuTestErrorCode status(*this, "TestGetKeywordValueStdString()");
 
     static const char tag[] = "fa-u-nu-latn";
@@ -4187,7 +4187,7 @@ LocaleTest::TestGetKeywordValueStdString(void) {
 }
 
 void
-LocaleTest::TestGetUnicodeKeywordValueStdString(void) {
+LocaleTest::TestGetUnicodeKeywordValueStdString() {
     IcuTestErrorCode status(*this, "TestGetUnicodeKeywordValueStdString()");
 
     static const char keyword[] = "co";
@@ -4201,7 +4201,7 @@ LocaleTest::TestGetUnicodeKeywordValueStdString(void) {
 }
 
 void
-LocaleTest::TestSetKeywordValue(void) {
+LocaleTest::TestSetKeywordValue() {
     static const struct {
         const char *keyword;
         const char *value;
@@ -4254,7 +4254,7 @@ LocaleTest::TestSetKeywordValue(void) {
 }
 
 void
-LocaleTest::TestSetKeywordValueStringPiece(void) {
+LocaleTest::TestSetKeywordValueStringPiece() {
     IcuTestErrorCode status(*this, "TestSetKeywordValueStringPiece()");
     Locale l(Locale::getGerman());
 
@@ -4266,7 +4266,7 @@ LocaleTest::TestSetKeywordValueStringPiece(void) {
 }
 
 void
-LocaleTest::TestSetUnicodeKeywordValueStringPiece(void) {
+LocaleTest::TestSetUnicodeKeywordValueStringPiece() {
     IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueStringPiece()");
     Locale l(Locale::getGerman());
 
@@ -4301,7 +4301,7 @@ LocaleTest::TestSetUnicodeKeywordValueStringPiece(void) {
 }
 
 void
-LocaleTest::TestGetBaseName(void) {
+LocaleTest::TestGetBaseName() {
     static const struct {
         const char *localeID;
         const char *baseName;
@@ -4391,7 +4391,7 @@ void LocaleTest::_checklocs(const char* label,
     }
 }
 
-void LocaleTest::TestGetLocale(void) {
+void LocaleTest::TestGetLocale() {
 #if !UCONFIG_NO_SERVICE
     const char *req;
     Locale valid, actual, reqLoc;
@@ -4736,7 +4736,7 @@ void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
 
 
 
-void LocaleTest::TestVariantWithOutCountry(void) {
+void LocaleTest::TestVariantWithOutCountry() {
     Locale loc("en","","POSIX");
     if (0 != strcmp(loc.getVariant(), "POSIX")) {
         errln("FAIL: en__POSIX didn't get parsed correctly - name is %s - expected %s got %s", loc.getName(), "POSIX", loc.getVariant());
@@ -4777,7 +4777,7 @@ static Locale _canonicalize(int32_t selector, /* 0==createFromName, 1==createCan
     }
 }
 
-void LocaleTest::TestCanonicalization(void)
+void LocaleTest::TestCanonicalization()
 {
     static const struct {
         const char *localeID;    /* input */
@@ -4898,7 +4898,7 @@ void LocaleTest::TestCanonicalization(void)
     }
 }
 
-void LocaleTest::TestCanonicalize(void)
+void LocaleTest::TestCanonicalize()
 {
     static const struct {
         const char *localeID;    /* input */
@@ -5055,7 +5055,7 @@ void LocaleTest::TestCanonicalize(void)
     }
 }
 
-void LocaleTest::TestCurrencyByDate(void)
+void LocaleTest::TestCurrencyByDate()
 {
 #if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
@@ -5369,7 +5369,7 @@ void LocaleTest::TestCurrencyByDate(void)
 #endif
 }
 
-void LocaleTest::TestGetVariantWithKeywords(void)
+void LocaleTest::TestGetVariantWithKeywords()
 {
   Locale l("en_US_VALLEY@foo=value");
   const char *variant = l.getVariant();
