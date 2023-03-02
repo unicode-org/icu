@@ -54,7 +54,7 @@ FieldPositionOnlyHandler::shiftLast(int32_t delta) {
 }
 
 UBool
-FieldPositionOnlyHandler::isRecording(void) const {
+FieldPositionOnlyHandler::isRecording() const {
   return pos.getField() != FieldPosition::DONT_CARE;
 }
 
@@ -116,7 +116,7 @@ FieldPositionIteratorHandler::shiftLast(int32_t delta) {
 }
 
 UBool
-FieldPositionIteratorHandler::isRecording(void) const {
+FieldPositionIteratorHandler::isRecording() const {
   return U_SUCCESS(status);
 }
 

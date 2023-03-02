@@ -74,7 +74,7 @@ inline uint32_t getMask(UCollationStrength strength)
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-usearch_cleanup(void) {
+usearch_cleanup() {
     g_nfcImpl = nullptr;
     return true;
 }

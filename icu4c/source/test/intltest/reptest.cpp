@@ -75,7 +75,7 @@ public:
         return new TestReplaceable(chars, styles);
     }
 
-    ~TestReplaceable(void) {}
+    ~TestReplaceable() {}
 
     UnicodeString getStyles() {
         return styles;
@@ -212,7 +212,7 @@ private:
 
 const char NoopReplaceable::fgClassID=0;
 
-void ReplaceableTest::TestReplaceableClass(void) {
+void ReplaceableTest::TestReplaceableClass() {
     char16_t rawTestArray[][6] = {
         {0x0041, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // ABCD
         {0x0061, 0x0062, 0x0063, 0x0064, 0x00DF, 0x0000}, // abcd\u00DF

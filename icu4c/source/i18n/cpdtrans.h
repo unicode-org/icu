@@ -104,7 +104,7 @@ public:
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
      */
-    virtual int32_t getCount(void) const;
+    virtual int32_t getCount() const;
 
     /**
      * Returns the transliterator at the given index in this chain.
@@ -220,9 +220,9 @@ private:
     UnicodeString joinIDs(Transliterator* const transliterators[],
                           int32_t transCount);
 
-    void freeTransliterators(void);
+    void freeTransliterators();
 
-    void computeMaximumContextLength(void);
+    void computeMaximumContextLength();
 };
 
 U_NAMESPACE_END

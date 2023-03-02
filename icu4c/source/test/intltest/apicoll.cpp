@@ -1781,7 +1781,7 @@ compare_teststruct(const void *string1, const void *string2) {
 U_CDECL_END
 
 
-void CollationAPITest::TestBounds(void) {
+void CollationAPITest::TestBounds() {
     UErrorCode status = U_ZERO_ERROR;
 
     Collator *coll = Collator::createInstance(Locale("sh"), status);
@@ -2023,11 +2023,11 @@ public:
                                           int32_t sourceLength,
                                           CollationKey& key,
                                           UErrorCode& status) const override;
-    virtual int32_t hashCode(void) const override;
+    virtual int32_t hashCode() const override;
     virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const override;
-    virtual ECollationStrength getStrength(void) const override;
+    virtual ECollationStrength getStrength() const override;
     virtual void setStrength(ECollationStrength newStrength) override;
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
     virtual void getVersion(UVersionInfo info) const override;
     virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
                               UErrorCode &status) override;
@@ -2169,7 +2169,7 @@ void TestCollator::setStrength(Collator::ECollationStrength newStrength)
     (void)newStrength;
 }
 
-UClassID TestCollator::getDynamicClassID(void) const
+UClassID TestCollator::getDynamicClassID() const
 {
     return 0;
 }

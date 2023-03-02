@@ -27,18 +27,18 @@ public:
     RegionTest();
     virtual ~RegionTest();
     
-    void TestKnownRegions(void);
-    void TestGetInstanceString(void);
-    void TestGetInstanceInt(void);
-    void TestGetContainedRegions(void);
-    void TestGetContainedRegionsWithType(void);
-    void TestGetContainingRegion(void);
-    void TestGetContainingRegionWithType(void);
-    void TestGetPreferredValues(void);
-    void TestContains(void);
-    void TestAvailableTerritories(void);
-    void TestNoContainedRegions(void);
-    void TestGroupingChildren(void);
+    void TestKnownRegions();
+    void TestGetInstanceString();
+    void TestGetInstanceInt();
+    void TestGetContainedRegions();
+    void TestGetContainedRegionsWithType();
+    void TestGetContainingRegion();
+    void TestGetContainingRegionWithType();
+    void TestGetPreferredValues();
+    void TestContains();
+    void TestAvailableTerritories();
+    void TestNoContainedRegions();
+    void TestGroupingChildren();
 
 private:
 

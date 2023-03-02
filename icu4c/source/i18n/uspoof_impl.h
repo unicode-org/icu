@@ -93,8 +93,8 @@ public:
     /** parse a hex number.  Untility used by the builders.   */
     static UChar32 ScanHex(const char16_t *s, int32_t start, int32_t limit, UErrorCode &status);
 
-    static UClassID U_EXPORT2 getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID U_EXPORT2 getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 
     //
     // Data Members

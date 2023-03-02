@@ -139,7 +139,7 @@ static const int16_t  LEAP_MONTH_START[][3] = {
 static icu::CalendarCache *gCache =  nullptr;
 
 U_CDECL_BEGIN
-static UBool calendar_hebrew_cleanup(void) {
+static UBool calendar_hebrew_cleanup() {
     delete gCache;
     gCache = nullptr;
     return true;

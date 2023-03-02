@@ -31,7 +31,7 @@ class U_I18N_API FieldPositionHandler: public UMemory {
   virtual ~FieldPositionHandler();
   virtual void addAttribute(int32_t id, int32_t start, int32_t limit) = 0;
   virtual void shiftLast(int32_t delta) = 0;
-  virtual UBool isRecording(void) const = 0;
+  virtual UBool isRecording() const = 0;
 
   void setShift(int32_t delta);
 };
@@ -50,7 +50,7 @@ class FieldPositionOnlyHandler : public FieldPositionHandler {
 
   void addAttribute(int32_t id, int32_t start, int32_t limit) override;
   void shiftLast(int32_t delta) override;
-  UBool isRecording(void) const override;
+  UBool isRecording() const override;
 
   /**
    * Enable this option to lock in the FieldPosition value after seeing the
@@ -88,7 +88,7 @@ class U_I18N_API FieldPositionIteratorHandler : public FieldPositionHandler {
 
   void addAttribute(int32_t id, int32_t start, int32_t limit) override;
   void shiftLast(int32_t delta) override;
-  UBool isRecording(void) const override;
+  UBool isRecording() const override;
 
   /** Copies a failed error code into _status. */
   inline void getError(UErrorCode& _status) {

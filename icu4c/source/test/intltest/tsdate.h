@@ -49,11 +49,11 @@ private:
     /**
      *  return a random number
      **/
-    double randDouble(void);
+    double randDouble();
     /**
      * generate description for verbose test output
      **/
-    void describeTest(void);
+    void describeTest();
 
     DateFormat *fFormat;
     UnicodeString fTestName;

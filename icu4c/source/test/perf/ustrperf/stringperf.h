@@ -241,7 +241,7 @@ public:
     }
 
 private:
-    void prepareLinesForStd(void)
+    void prepareLinesForStd()
     {
         UErrorCode err=U_ZERO_ERROR;
 
@@ -272,7 +272,7 @@ private:
 
     }
 
-    void prepareBulkForStd(void)
+    void prepareBulkForStd()
     {
         UErrorCode err=U_ZERO_ERROR;
 

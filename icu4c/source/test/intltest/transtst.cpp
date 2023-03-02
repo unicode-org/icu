@@ -301,7 +301,7 @@ void TransliteratorTest::TestInstantiation() {
     }
 }
 
-void TransliteratorTest::TestSimpleRules(void) {
+void TransliteratorTest::TestSimpleRules() {
     /* Example: rules 1. ab>x|y
      *                2. yc>z
      *
@@ -361,7 +361,7 @@ void TransliteratorTest::TestSimpleRules(void) {
 /**
  * Test inline set syntax and set variable syntax.
  */
-void TransliteratorTest::TestInlineSet(void) {
+void TransliteratorTest::TestInlineSet() {
     expect("{ [:Ll:] } x > y; [:Ll:] > z;", "aAbxq", "zAyzz");
     expect("a[0-9]b > qrs", "1a7b9", "1qrs9");
     
@@ -384,7 +384,7 @@ void TransliteratorTest::TestInlineSet(void) {
  * F' != I.  However, if we are careful about the input, we will
  * get the expected results.
  */
-void TransliteratorTest::TestRuleBasedInverse(void) {
+void TransliteratorTest::TestRuleBasedInverse() {
     UnicodeString RULES =
         UnicodeString("abc>zyx;") +
         "ab>yz;" +
@@ -436,7 +436,7 @@ void TransliteratorTest::TestRuleBasedInverse(void) {
 /**
  * Basic test of keyboard.
  */
-void TransliteratorTest::TestKeyboard(void) {
+void TransliteratorTest::TestKeyboard() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createFromRules("<ID>",
@@ -468,7 +468,7 @@ void TransliteratorTest::TestKeyboard(void) {
 /**
  * Basic test of keyboard with cursor.
  */
-void TransliteratorTest::TestKeyboard2(void) {
+void TransliteratorTest::TestKeyboard2() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createFromRules("<ID>",
@@ -503,7 +503,7 @@ void TransliteratorTest::TestKeyboard2(void) {
 /**
  * Test keyboard transliteration with back-replacement.
  */
-void TransliteratorTest::TestKeyboard3(void) {
+void TransliteratorTest::TestKeyboard3() {
     // We want th>z but t>y.  Furthermore, during keyboard
     // transliteration we want t>y then yh>z if t, then h are
     // typed.
@@ -568,7 +568,7 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
     }
 }
 
-void TransliteratorTest::TestArabic(void) {
+void TransliteratorTest::TestArabic() {
 // Test disabled for 2.0 until new Arabic transliterator can be written.
 //    /*
 //    const char* DATA[] = {
@@ -605,7 +605,7 @@ void TransliteratorTest::TestArabic(void) {
  * Compose the Kana transliterator forward and reverse and try
  * some strings that should come out unchanged.
  */
-void TransliteratorTest::TestCompoundKana(void) {
+void TransliteratorTest::TestCompoundKana() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* t = Transliterator::createInstance("Latin-Hiragana;Hiragana-Latin", UTRANS_FORWARD, parseError, status);
@@ -620,7 +620,7 @@ void TransliteratorTest::TestCompoundKana(void) {
 /**
  * Compose the hex transliterators forward and reverse.
  */
-void TransliteratorTest::TestCompoundHex(void) {
+void TransliteratorTest::TestCompoundHex() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* a = Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
@@ -680,7 +680,7 @@ public:
 /**
  * Do some basic tests of filtering.
  */
-void TransliteratorTest::TestFiltering(void) {
+void TransliteratorTest::TestFiltering() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* hex = Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
@@ -711,7 +711,7 @@ void TransliteratorTest::TestFiltering(void) {
 /**
  * Test anchors
  */
-void TransliteratorTest::TestAnchors(void) {
+void TransliteratorTest::TestAnchors() {
     expect(UnicodeString("^a  > 0; a$ > 2 ; a > 1;", ""),
            "aaa",
            "012");
@@ -740,7 +740,7 @@ void TransliteratorTest::TestAnchors(void) {
 /**
  * Test pattern quoting and escape mechanisms.
  */
-void TransliteratorTest::TestPatternQuoting(void) {
+void TransliteratorTest::TestPatternQuoting() {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     const UnicodeString DATA[] = {
@@ -766,7 +766,7 @@ void TransliteratorTest::TestPatternQuoting(void) {
 /**
  * Regression test for bugs found in Greek transliteration.
  */
-void TransliteratorTest::TestJ277(void) {
+void TransliteratorTest::TestJ277() {
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     Transliterator *gl = Transliterator::createInstance("Greek-Latin; NFD; [:M:]Remove; NFC", UTRANS_FORWARD, parseError, status);
@@ -848,7 +848,7 @@ void TransliteratorTest::TestJ277(void) {
 /**
  * Prefix, suffix support in hex transliterators
  */
-void TransliteratorTest::TestJ243(void) {
+void TransliteratorTest::TestJ243() {
     UErrorCode ec = U_ZERO_ERROR;
 
     // Test default Hex-Any, which should handle
@@ -875,7 +875,7 @@ void TransliteratorTest::TestJ243(void) {
 /**
  * Parsers need better syntax error messages.
  */
-void TransliteratorTest::TestJ329(void) {
+void TransliteratorTest::TestJ329() {
     
     struct { UBool containsErrors; const char* rule; } DATA[] = {
         { false, "a > b; c > d" },
@@ -912,7 +912,7 @@ void TransliteratorTest::TestJ329(void) {
 /**
  * Test segments and segment references.
  */
-void TransliteratorTest::TestSegments(void) {
+void TransliteratorTest::TestSegments() {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     UnicodeString DATA[] = {
@@ -944,7 +944,7 @@ void TransliteratorTest::TestSegments(void) {
 /**
  * Test cursor positioning outside of the key
  */
-void TransliteratorTest::TestCursorOffset(void) {
+void TransliteratorTest::TestCursorOffset() {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     UnicodeString DATA[] = {
@@ -977,7 +977,7 @@ void TransliteratorTest::TestCursorOffset(void) {
  * Test zero length and > 1 char length variable values.  Test
  * use of variable refs in UnicodeSets.
  */
-void TransliteratorTest::TestArbitraryVariableValues(void) {
+void TransliteratorTest::TestArbitraryVariableValues() {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     UnicodeString DATA[] = {
@@ -1018,7 +1018,7 @@ void TransliteratorTest::TestArbitraryVariableValues(void) {
  * Confirm that the contextStart, contextLimit, start, and limit
  * behave correctly. J474.
  */
-void TransliteratorTest::TestPositionHandling(void) {
+void TransliteratorTest::TestPositionHandling() {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     const char* DATA[] = {
@@ -1078,7 +1078,7 @@ void TransliteratorTest::TestPositionHandling(void) {
 /**
  * Test the Hiragana-Katakana transliterator.
  */
-void TransliteratorTest::TestHiraganaKatakana(void) {
+void TransliteratorTest::TestHiraganaKatakana() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* hk = Transliterator::createInstance("Hiragana-Katakana", UTRANS_FORWARD, parseError, status);
@@ -1126,7 +1126,7 @@ void TransliteratorTest::TestHiraganaKatakana(void) {
 /**
  * Test cloning / copy constructor of RBT.
  */
-void TransliteratorTest::TestCopyJ476(void) {
+void TransliteratorTest::TestCopyJ476() {
     // The real test here is what happens when the destructors are
     // called.  So we let one object get destructed, and check to
     // see that its copy still works.
@@ -1152,7 +1152,7 @@ void TransliteratorTest::TestCopyJ476(void) {
  * Test inter-Indic transliterators.  These are composed.
  * ICU4C Jitterbug 483.
  */
-void TransliteratorTest::TestInterIndic(void) {
+void TransliteratorTest::TestInterIndic() {
     UnicodeString ID("Devanagari-Gujarati", "");
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
@@ -1174,7 +1174,7 @@ void TransliteratorTest::TestInterIndic(void) {
 /**
  * Test filter syntax in IDs. (J918)
  */
-void TransliteratorTest::TestFilterIDs(void) {
+void TransliteratorTest::TestFilterIDs() {
     // Array of 3n strings:
     // <id>, <inverse id>, <input>, <expected output>
     const char* DATA[] = {
@@ -1232,7 +1232,7 @@ void TransliteratorTest::TestFilterIDs(void) {
 /**
  * Test the case mapping transliterators.
  */
-void TransliteratorTest::TestCaseMap(void) {
+void TransliteratorTest::TestCaseMap() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* toUpper =
@@ -1264,7 +1264,7 @@ void TransliteratorTest::TestCaseMap(void) {
 /**
  * Test the name mapping transliterators.
  */
-void TransliteratorTest::TestNameMap(void) {
+void TransliteratorTest::TestNameMap() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* uni2name =
@@ -1305,7 +1305,7 @@ void TransliteratorTest::TestNameMap(void) {
 /**
  * Test liberalized ID syntax.  1006c
  */
-void TransliteratorTest::TestLiberalizedID(void) {
+void TransliteratorTest::TestLiberalizedID() {
     // Some test cases have an expected getID() value of nullptr.  This
     // means I have disabled the test case for now.  This stuff is
     // still under development, and I haven't decided whether to make
@@ -1590,7 +1590,7 @@ void TransliteratorTest::TestBasicTransliteratorEvenWithoutData() {
 /**
  * Test compound RBT rules.
  */
-void TransliteratorTest::TestCompoundRBT(void) {
+void TransliteratorTest::TestCompoundRBT() {
     // Careful with spacing and ';' here:  Phrase this exactly
     // as toRules() is going to return it.  If toRules() changes
     // with regard to spacing or ';', then adjust this string.
@@ -1703,7 +1703,7 @@ void TransliteratorTest::TestCompoundRBT(void) {
  * touch 'A' in the original". But because an intermediate result
  * happens to go through "A", the Greek Alpha gets hung up.
  */
-void TransliteratorTest::TestCompoundFilter(void) {
+void TransliteratorTest::TestCompoundFilter() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance
@@ -1726,7 +1726,7 @@ void TransliteratorTest::TestCompoundFilter(void) {
     delete t;
 }
 
-void TransliteratorTest::TestRemove(void) {
+void TransliteratorTest::TestRemove() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance("Remove[abc]", UTRANS_FORWARD, parseError, status);
@@ -1746,7 +1746,7 @@ void TransliteratorTest::TestRemove(void) {
     delete t2;
 }
 
-void TransliteratorTest::TestToRules(void) {
+void TransliteratorTest::TestToRules() {
     const char* RBT = "rbt";
     const char* SET = "set";
     static const char* DATA[] = {
@@ -2026,7 +2026,7 @@ class TestTrans : public Transliterator {
 public:
     TestTrans(const UnicodeString& id) : Transliterator(id, 0) {
     }
-    virtual TestTrans* clone(void) const override {
+    virtual TestTrans* clone() const override {
         return new TestTrans(getID());
     }
     virtual void handleTransliterate(Replaceable& /*text*/, UTransPosition& offsets,
@@ -2042,7 +2042,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TestTrans)
 /**
  * Test Source-Target/Variant.
  */
-void TransliteratorTest::TestSTV(void) {
+void TransliteratorTest::TestSTV() {
     int32_t ns = Transliterator::countAvailableSources();
     logln((UnicodeString)"countAvailableSources at start: " + ns);
     if (ns < 0 || ns > 255) {
@@ -2162,7 +2162,7 @@ void TransliteratorTest::TestSTV(void) {
 /**
  * Test inverse of Greek-Latin; Title()
  */
-void TransliteratorTest::TestCompoundInverse(void) {
+void TransliteratorTest::TestCompoundInverse() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance
@@ -2395,7 +2395,7 @@ void TransliteratorTest::TestEmptyContext() {
 /**
 * Test compound filter ID syntax
 */
-void TransliteratorTest::TestCompoundFilterID(void) {
+void TransliteratorTest::TestCompoundFilterID() {
     static const char* DATA[] = {
         // Col. 1 = ID or rule set (latter must start with #)
 
@@ -2549,7 +2549,7 @@ void TransliteratorTest::TestNewEngine() {
  * Test quantified segment behavior.  We want:
  * ([abc])+ > x $1 x; applied to "cba" produces "xax"
  */
-void TransliteratorTest::TestQuantifiedSegment(void) {
+void TransliteratorTest::TestQuantifiedSegment() {
     // The normal case
     expect("([abc]+) > x $1 x;", "cba", "xcbax");
 
@@ -2968,7 +2968,7 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
 /**
  * Test instantiation from a locale.
  */
-void TransliteratorTest::TestLocaleInstantiation(void) {
+void TransliteratorTest::TestLocaleInstantiation() {
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance("ru_RU-Latin", UTRANS_FORWARD, pe, ec);
@@ -2993,7 +2993,7 @@ void TransliteratorTest::TestLocaleInstantiation(void) {
 /**
  * Test title case handling of accent (should ignore accents)
  */
-void TransliteratorTest::TestTitleAccents(void) {
+void TransliteratorTest::TestTitleAccents() {
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance("Title", UTRANS_FORWARD, pe, ec);
@@ -3405,7 +3405,7 @@ void TransliteratorTest::TestDisplayName() {
 #endif
 }
 
-void TransliteratorTest::TestSpecialCases(void) {
+void TransliteratorTest::TestSpecialCases() {
     const UnicodeString registerRules[] = {
         "Any-Dev1", "x > X; y > Y;",
         "Any-Dev2", "XY > Z",
@@ -3538,7 +3538,7 @@ char* Char32ToEscapedChars(UChar32 ch, char* buffer, size_t n) {
     return buffer;
 }
 
-void TransliteratorTest::TestSurrogateCasing (void) {
+void TransliteratorTest::TestSurrogateCasing() {
     // check that casing handles surrogates
     // titlecase is currently defective
     char buffer[20];
@@ -3599,7 +3599,7 @@ static UnicodeString _findMatch(const UnicodeString& source,
 
 // Check to see that incremental gets at least part way through a reasonable string.
 
-void TransliteratorTest::TestIncrementalProgress(void) {
+void TransliteratorTest::TestIncrementalProgress() {
     UErrorCode ec = U_ZERO_ERROR;
     UnicodeString latinTest = "The Quick Brown Fox.";
     UnicodeString devaTest;
@@ -3774,7 +3774,7 @@ void TransliteratorTest::TestFunction() {
     delete t;
 }
 
-void TransliteratorTest::TestInvalidBackRef(void) {
+void TransliteratorTest::TestInvalidBackRef() {
     UnicodeString rule =  ". > $1;";
     UnicodeString rule2 =CharsToUnicodeString("(.) <> &hex/unicode($1) &name($1); . > $1; [{}] >\\u0020;");
     UParseError pe;
@@ -3963,7 +3963,7 @@ void TransliteratorTest::TestUserFunction() {
 /**
  * Test the Any-X transliterators.
  */
-void TransliteratorTest::TestAnyX(void) {
+void TransliteratorTest::TestAnyX() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* anyLatin =
@@ -3984,7 +3984,7 @@ void TransliteratorTest::TestAnyX(void) {
 /**
  * Test Any-X transliterators with sample letters from all scripts.
  */
-void TransliteratorTest::TestAny(void) {
+void TransliteratorTest::TestAny() {
     UErrorCode status = U_ZERO_ERROR;
     // Note: there is a lot of implicit construction of UnicodeStrings from (char *) in
     //       function call parameters going on in this test.
@@ -4653,7 +4653,7 @@ void TransliteratorTest::TestRuleStripping() {
 /**
  * Test the Halfwidth-Fullwidth transliterator (ticket 6281).
  */
-void TransliteratorTest::TestHalfwidthFullwidth(void) {
+void TransliteratorTest::TestHalfwidthFullwidth() {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* hf = Transliterator::createInstance("Halfwidth-Fullwidth", UTRANS_FORWARD, parseError, status);
@@ -4703,7 +4703,7 @@ void TransliteratorTest::TestHalfwidthFullwidth(void) {
      *              TODO: confirm that the expected results are correct.
      *              For now, test just confirms that C++ and Java give identical results.
      */
-void TransliteratorTest::TestThai(void) {
+void TransliteratorTest::TestThai() {
 #if !UCONFIG_NO_BREAK_ITERATION
     // The expectations in this test heavily depends on the Thai dictionary.
     // Therefore, we skip this test under the LSTM configuration.

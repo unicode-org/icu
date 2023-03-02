@@ -73,7 +73,7 @@ static icu::UInitOnce gAvailableLocaleListInitOnce {};
  * Release all static memory held by collator.
  */
 U_CDECL_BEGIN
-static UBool U_CALLCONV collator_cleanup(void) {
+static UBool U_CALLCONV collator_cleanup() {
 #if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
@@ -108,7 +108,7 @@ CollatorFactory::~CollatorFactory() {}
 //-------------------------------------------
 
 UBool
-CollatorFactory::visible(void) const {
+CollatorFactory::visible() const {
     return true;
 }
 
@@ -204,7 +204,7 @@ static void U_CALLCONV initService() {
 
 
 static ICULocaleService* 
-getService(void)
+getService()
 {
     umtx_initOnce(gServiceInitOnce, &initService);
     return gService;
@@ -213,7 +213,7 @@ getService(void)
 // -------------------------------------
 
 static inline UBool
-hasService(void) 
+hasService() 
 {
     UBool retVal = !gServiceInitOnce.isReset() && (getService() != nullptr);
     return retVal;
@@ -804,8 +804,8 @@ class CollationLocaleListEnumeration : public StringEnumeration {
 private:
     int32_t index;
 public:
-    static UClassID U_EXPORT2 getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID U_EXPORT2 getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 public:
     CollationLocaleListEnumeration()
         : index(0)
@@ -864,7 +864,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationLocaleListEnumeration)
 // -------------------------------------
 
 StringEnumeration* U_EXPORT2
-Collator::getAvailableLocales(void)
+Collator::getAvailableLocales()
 {
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
@@ -913,7 +913,7 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
 }
 
 Collator::ECollationStrength
-Collator::getStrength(void) const {
+Collator::getStrength() const {
     UErrorCode intStatus = U_ZERO_ERROR;
     return (ECollationStrength)getAttribute(UCOL_STRENGTH, intStatus);
 }

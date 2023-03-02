@@ -270,7 +270,7 @@ UBool UnicodeSetTest::checkPat(const UnicodeString& source,
 }
 
 void
-UnicodeSetTest::TestPatterns(void) {
+UnicodeSetTest::TestPatterns() {
     UnicodeSet set;
     expectPattern(set, UnicodeString("[[a-m]&[d-z]&[k-y]]", ""),  "km");
     expectPattern(set, UnicodeString("[[a-z]-[m-y]-[d-r]]", ""),  "aczz");
@@ -287,7 +287,7 @@ UnicodeSetTest::TestPatterns(void) {
 }
 
 void
-UnicodeSetTest::TestCategories(void) {
+UnicodeSetTest::TestCategories() {
     UErrorCode status = U_ZERO_ERROR;
     const char* pat = " [:Lu:] "; // Whitespace ok outside [:..:]
     UnicodeSet set(pat, status);
@@ -325,7 +325,7 @@ UnicodeSetTest::TestCategories(void) {
     }
 }
 void
-UnicodeSetTest::TestCloneEqualHash(void) {
+UnicodeSetTest::TestCloneEqualHash() {
     UErrorCode status = U_ZERO_ERROR;
     // set1 and set2 used to be built with the obsolete constructor taking
     // UCharCategory values; replaced with pattern constructors
@@ -396,7 +396,7 @@ UnicodeSetTest::TestCloneEqualHash(void) {
 
 }
 void
-UnicodeSetTest::TestAddRemove(void) {
+UnicodeSetTest::TestAddRemove() {
     UnicodeSet set; // Construct empty set
     doAssert(set.isEmpty() == true, "set should be empty");
     doAssert(set.size() == 0, "size should be 0");
@@ -644,7 +644,7 @@ void UnicodeSetTest::TestAPI() {
     //UnicodeSet::retain(long)
     //UnicodeSet::retainAll(class UnicodeString const &)
     //UnicodeSet::serialize(unsigned short *,long,enum UErrorCode &)
-    //UnicodeSetIterator::getString(void)
+    //UnicodeSetIterator::getString()
     set.clear();
     set.complement("ab");
     exp.applyPattern("[{ab}]", status);

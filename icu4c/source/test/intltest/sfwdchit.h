@@ -28,14 +28,14 @@ public:
   /**
    * Generates a hash code for this iterator.  
    */
-  virtual int32_t hashCode(void) const override;
+  virtual int32_t hashCode() const override;
         
   /**
    * Returns a UClassID for this ForwardCharacterIterator ("poor man's
    * RTTI").<P> Despite the fact that this function is public,
    * DO NOT CONSIDER IT PART OF CHARACTERITERATOR'S API!  
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Gets the current code unit for returning and advances to the next code unit
@@ -43,7 +43,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
    */
-  virtual char16_t      nextPostInc(void) override;
+  virtual char16_t      nextPostInc() override;
         
   /**
    * Gets the current code point for returning and advances to the next code point
@@ -51,7 +51,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code points to return, returns DONE.
    */
-  virtual UChar32       next32PostInc(void) override;
+  virtual UChar32       next32PostInc() override;
         
   /**
    * Returns false if there are no more code units or code points

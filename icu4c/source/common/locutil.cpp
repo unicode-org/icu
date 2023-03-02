@@ -36,7 +36,7 @@ static icu::Hashtable * LocaleUtility_cache = nullptr;
  * Release all static memory held by Locale Utility.  
  */
 U_CDECL_BEGIN
-static UBool U_CALLCONV service_cleanup(void) {
+static UBool U_CALLCONV service_cleanup() {
     if (LocaleUtility_cache) {
         delete LocaleUtility_cache;
         LocaleUtility_cache = nullptr;

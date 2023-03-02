@@ -124,7 +124,7 @@ static const Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 /* UBiDi object management -------------------------------------------------- */
 
 U_CAPI UBiDi * U_EXPORT2
-ubidi_open(void)
+ubidi_open()
 {
     UErrorCode errorCode=U_ZERO_ERROR;
     return ubidi_openSized(0, 0, &errorCode);

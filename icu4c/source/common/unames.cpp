@@ -162,7 +162,7 @@ static const char * const charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT] = {
 
 /* implementation ----------------------------------------------------------- */
 
-static UBool U_CALLCONV unames_cleanup(void)
+static UBool U_CALLCONV unames_cleanup()
 {
     if(uCharNamesData) {
         udata_close(uCharNamesData);

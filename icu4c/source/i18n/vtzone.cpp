@@ -926,7 +926,7 @@ public:
     VTZReader(const UnicodeString& input);
     ~VTZReader();
 
-    char16_t read(void);
+    char16_t read();
 private:
     const UnicodeString* in;
     int32_t index;
@@ -941,7 +941,7 @@ VTZReader::~VTZReader() {
 }
 
 char16_t
-VTZReader::read(void) {
+VTZReader::read() {
     char16_t ch = 0xFFFF;
     if (index < in->length()) {
         ch = in->charAt(index);
@@ -1220,12 +1220,12 @@ VTimeZone::setRawOffset(int32_t offsetMillis) {
 }
 
 int32_t
-VTimeZone::getRawOffset(void) const {
+VTimeZone::getRawOffset() const {
     return tz->getRawOffset();
 }
 
 UBool
-VTimeZone::useDaylightTime(void) const {
+VTimeZone::useDaylightTime() const {
     return tz->useDaylightTime();
 }
 

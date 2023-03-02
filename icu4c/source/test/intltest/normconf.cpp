@@ -649,7 +649,7 @@ UBool NormalizerConformanceTest::hexsplit(const char *s, char delimiter,
 // Specific tests for debugging.  These are generally failures taken from
 // the conformance file, but culled out to make debugging easier.
 
-void NormalizerConformanceTest::TestCase6(void) {
+void NormalizerConformanceTest::TestCase6() {
     _testOneLine("0385;0385;00A8 0301;0020 0308 0301;0020 0308 0301;");
 }
 

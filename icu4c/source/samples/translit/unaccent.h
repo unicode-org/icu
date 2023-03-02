@@ -58,7 +58,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static inline UClassID getStaticClassID(void) { return (UClassID)&fgClassID; };
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; };
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
@@ -83,7 +83,7 @@ public:
      * different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
+    virtual UClassID getDynamicClassID() const { return getStaticClassID(); };
 
 private:
 

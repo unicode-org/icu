@@ -1602,7 +1602,7 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
     } \
 } UPRV_BLOCK_MACRO_END
 
-void CalendarTest::TestWOY(void) {
+void CalendarTest::TestWOY() {
     /*
       FDW = Mon, MDFW = 4:
          Sun Dec 26 1999, WOY 51
@@ -2244,7 +2244,7 @@ void CalendarTest::TestISO8601() {
 }
 
 void
-CalendarTest::TestAmbiguousWallTimeAPIs(void) {
+CalendarTest::TestAmbiguousWallTimeAPIs() {
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(status);
     if (U_FAILURE(status)) {
@@ -2405,7 +2405,7 @@ static const RepeatedWallTimeTestData RPDATA[] =
     {nullptr,                  CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),          CalFields(0,0,0,0,0,0)}
 };
 
-void CalendarTest::TestRepeatedWallTime(void) {
+void CalendarTest::TestRepeatedWallTime() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar calGMT((const TimeZone&)*TimeZone::getGMT(), status);
     GregorianCalendar calDefault(status);
@@ -2504,7 +2504,7 @@ static SkippedWallTimeTestData SKDATA[] =
 };
 
 
-void CalendarTest::TestSkippedWallTime(void) {
+void CalendarTest::TestSkippedWallTime() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar calGMT((const TimeZone&)*TimeZone::getGMT(), status);
     GregorianCalendar calDefault(status);
@@ -2630,7 +2630,7 @@ void CalendarTest::TestSkippedWallTime(void) {
     }
 }
 
-void CalendarTest::TestCloneLocale(void) {
+void CalendarTest::TestCloneLocale() {
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<Calendar>  cal(Calendar::createInstance(TimeZone::getGMT()->clone(),
                                                        Locale::createFromName("en"), status));
@@ -2645,7 +2645,7 @@ void CalendarTest::TestCloneLocale(void) {
   TEST_CHECK_STATUS;
 }
 
-void CalendarTest::TestTimeZoneInLocale(void) {
+void CalendarTest::TestTimeZoneInLocale() {
     const char *tests[][3]  = {
         { "en-u-tz-usden",                     "America/Denver",             "gregorian" },
         { "es-u-tz-usden",                     "America/Denver",             "gregorian" },
@@ -2730,7 +2730,7 @@ void CalendarTest::AsssertCalendarFieldValue(
 
 static constexpr double test_time = 1667277891323; // Nov 1, 2022 4:44:51 GMT
 
-void CalendarTest::TestBasicConversionGregorian(void) {
+void CalendarTest::TestBasicConversionGregorian() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=gregorian"), status));
@@ -2743,7 +2743,7 @@ void CalendarTest::TestBasicConversionGregorian(void) {
         1, 2022, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionISO8601(void) {
+void CalendarTest::TestBasicConversionISO8601() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=iso8601"), status));
@@ -2756,7 +2756,7 @@ void CalendarTest::TestBasicConversionISO8601(void) {
         1, 2022, 10, 44, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 2022, 2, 2022, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionJapanese(void) {
+void CalendarTest::TestBasicConversionJapanese() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=japanese"), status));
@@ -2769,7 +2769,7 @@ void CalendarTest::TestBasicConversionJapanese(void) {
         236, 4, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionBuddhist(void) {
+void CalendarTest::TestBasicConversionBuddhist() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=buddhist"), status));
@@ -2782,7 +2782,7 @@ void CalendarTest::TestBasicConversionBuddhist(void) {
         0, 2565, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionTaiwan(void) {
+void CalendarTest::TestBasicConversionTaiwan() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=roc"), status));
@@ -2796,7 +2796,7 @@ void CalendarTest::TestBasicConversionTaiwan(void) {
         323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 
 }
-void CalendarTest::TestBasicConversionPersian(void) {
+void CalendarTest::TestBasicConversionPersian() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=persian"), status));
@@ -2809,7 +2809,7 @@ void CalendarTest::TestBasicConversionPersian(void) {
         0, 1401, 7, 33, 2, 10, 226, 3, 2, 0, 4, 4, 44, 51,
         323, 0, 0, 1401, 3, 1401, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionIslamic(void) {
+void CalendarTest::TestBasicConversionIslamic() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=islamic"), status));
@@ -2822,7 +2822,7 @@ void CalendarTest::TestBasicConversionIslamic(void) {
         0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionIslamicTBLA(void) {
+void CalendarTest::TestBasicConversionIslamicTBLA() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=islamic-tbla"), status));
@@ -2836,7 +2836,7 @@ void CalendarTest::TestBasicConversionIslamicTBLA(void) {
         323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
 
 }
-void CalendarTest::TestBasicConversionIslamicCivil(void) {
+void CalendarTest::TestBasicConversionIslamicCivil() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=islamic-civil"), status));
@@ -2850,7 +2850,7 @@ void CalendarTest::TestBasicConversionIslamicCivil(void) {
         323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
 
 }
-void CalendarTest::TestBasicConversionIslamicRGSA(void) {
+void CalendarTest::TestBasicConversionIslamicRGSA() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=islamic-rgsa"), status));
@@ -2864,7 +2864,7 @@ void CalendarTest::TestBasicConversionIslamicRGSA(void) {
         323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
 
 }
-void CalendarTest::TestBasicConversionIslamicUmalqura(void) {
+void CalendarTest::TestBasicConversionIslamicUmalqura() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=islamic-umalqura"), status));
@@ -2877,7 +2877,7 @@ void CalendarTest::TestBasicConversionIslamicUmalqura(void) {
         0, 1444, 3, 15, 2, 7, 95, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionHebrew(void) {
+void CalendarTest::TestBasicConversionHebrew() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=hebrew"), status));
@@ -2890,7 +2890,7 @@ void CalendarTest::TestBasicConversionHebrew(void) {
         0, 5783, 1, 6, 2, 7, 37, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 5783, 3, 5783, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionChinese(void) {
+void CalendarTest::TestBasicConversionChinese() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=chinese"), status));
@@ -2903,7 +2903,7 @@ void CalendarTest::TestBasicConversionChinese(void) {
         78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
         323, 0, 0, 4659, 3, 4659, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionDangi(void) {
+void CalendarTest::TestBasicConversionDangi() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=dangi"), status));
@@ -2916,7 +2916,7 @@ void CalendarTest::TestBasicConversionDangi(void) {
         78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
         323, 0, 0, 4355, 3, 4355, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionIndian(void) {
+void CalendarTest::TestBasicConversionIndian() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=indian"), status));
@@ -2929,7 +2929,7 @@ void CalendarTest::TestBasicConversionIndian(void) {
         0, 1944, 7, 33, 2, 10, 225, 3, 2, 0, 4, 4, 44, 51,
         323, 0, 0, 1944, 3, 1944, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionCoptic(void) {
+void CalendarTest::TestBasicConversionCoptic() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=coptic"), status));
@@ -2942,7 +2942,7 @@ void CalendarTest::TestBasicConversionCoptic(void) {
         1, 1739, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
         323, 0, 0, 1739, 3, 1739, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionEthiopic(void) {
+void CalendarTest::TestBasicConversionEthiopic() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=ethiopic"), status));
@@ -2955,7 +2955,7 @@ void CalendarTest::TestBasicConversionEthiopic(void) {
         1, 2015, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
         323, 0, 0, 2015, 3, 2015, 2459885, 17091323, 0);
 }
-void CalendarTest::TestBasicConversionEthiopicAmeteAlem(void) {
+void CalendarTest::TestBasicConversionEthiopicAmeteAlem() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(icu::Calendar::createInstance(
         *TimeZone::getGMT(), Locale("en@calendar=ethiopic-amete-alem"), status));
@@ -3887,7 +3887,7 @@ void CalendarTest::TestChineseCalendarMapping() {
     }
 }
 
-void CalendarTest::TestGregorianCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestGregorianCalendarInTemporalLeapYear() {
     // test from year 1800 to 2500
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
@@ -3957,7 +3957,7 @@ void CalendarTest::RunChineseCalendarInTemporalLeapYearTest(Calendar* cal) {
     }
 }
 
-void CalendarTest::TestChineseCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestChineseCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "chinese", status);
@@ -3966,7 +3966,7 @@ void CalendarTest::TestChineseCalendarInTemporalLeapYear(void) {
     RunChineseCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestDangiCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestDangiCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "dangi", status);
@@ -3975,7 +3975,7 @@ void CalendarTest::TestDangiCalendarInTemporalLeapYear(void) {
     RunChineseCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestHebrewCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestHebrewCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
     Locale l(Locale::getRoot());
@@ -4071,7 +4071,7 @@ void CalendarTest::RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal) {
     }
 }
 
-void CalendarTest::TestIslamicCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestIslamicCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "islamic", status);
@@ -4080,7 +4080,7 @@ void CalendarTest::TestIslamicCalendarInTemporalLeapYear(void) {
     RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestIslamicCivilCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestIslamicCivilCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "islamic-civil", status);
@@ -4089,7 +4089,7 @@ void CalendarTest::TestIslamicCivilCalendarInTemporalLeapYear(void) {
     RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestIslamicUmalquraCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestIslamicUmalquraCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "islamic-umalqura", status);
@@ -4098,7 +4098,7 @@ void CalendarTest::TestIslamicUmalquraCalendarInTemporalLeapYear(void) {
     RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestIslamicRGSACalendarInTemporalLeapYear(void) {
+void CalendarTest::TestIslamicRGSACalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "islamic-rgsa", status);
@@ -4107,7 +4107,7 @@ void CalendarTest::TestIslamicRGSACalendarInTemporalLeapYear(void) {
     RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestIslamicTBLACalendarInTemporalLeapYear(void) {
+void CalendarTest::TestIslamicTBLACalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "islamic-tbla", status);
@@ -4162,7 +4162,7 @@ void CalendarTest::Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* 
     }
 }
 
-void CalendarTest::TestTaiwanCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestTaiwanCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "roc", status);
@@ -4171,7 +4171,7 @@ void CalendarTest::TestTaiwanCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestJapaneseCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestJapaneseCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "japanese", status);
@@ -4180,7 +4180,7 @@ void CalendarTest::TestJapaneseCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestBuddhistCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestBuddhistCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "buddhist", status);
@@ -4189,7 +4189,7 @@ void CalendarTest::TestBuddhistCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestPersianCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestPersianCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "persian", status);
@@ -4198,7 +4198,7 @@ void CalendarTest::TestPersianCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestIndianCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestIndianCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "indian", status);
@@ -4207,7 +4207,7 @@ void CalendarTest::TestIndianCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestCopticCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestCopticCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "coptic", status);
@@ -4216,7 +4216,7 @@ void CalendarTest::TestCopticCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestEthiopicCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestEthiopicCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "ethiopic", status);
@@ -4225,7 +4225,7 @@ void CalendarTest::TestEthiopicCalendarInTemporalLeapYear(void) {
     Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
 }
 
-void CalendarTest::TestEthiopicAmeteAlemCalendarInTemporalLeapYear(void) {
+void CalendarTest::TestEthiopicAmeteAlemCalendarInTemporalLeapYear() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "ethiopic-amete-alem", status);
@@ -4283,7 +4283,7 @@ void CalendarTest::RunChineseCalendarGetTemporalMonthCode(Calendar* cal) {
     }
 }
 
-void CalendarTest::TestChineseCalendarGetTemporalMonthCode(void) {
+void CalendarTest::TestChineseCalendarGetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "chinese", status);
@@ -4292,7 +4292,7 @@ void CalendarTest::TestChineseCalendarGetTemporalMonthCode(void) {
     RunChineseCalendarGetTemporalMonthCode(cal.getAlias());
 }
 
-void CalendarTest::TestDangiCalendarGetTemporalMonthCode(void) {
+void CalendarTest::TestDangiCalendarGetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "dangi", status);
@@ -4301,7 +4301,7 @@ void CalendarTest::TestDangiCalendarGetTemporalMonthCode(void) {
     RunChineseCalendarGetTemporalMonthCode(cal.getAlias());
 }
 
-void CalendarTest::TestHebrewCalendarGetTemporalMonthCode(void) {
+void CalendarTest::TestHebrewCalendarGetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "hebrew", status);
@@ -4349,7 +4349,7 @@ void CalendarTest::RunCECalendarGetTemporalMonthCode(Calendar* cal) {
 
 }
 
-void CalendarTest::TestCopticCalendarGetTemporalMonthCode(void) {
+void CalendarTest::TestCopticCalendarGetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "coptic", status);
@@ -4358,7 +4358,7 @@ void CalendarTest::TestCopticCalendarGetTemporalMonthCode(void) {
     RunCECalendarGetTemporalMonthCode(cal.getAlias());
 }
 
-void CalendarTest::TestEthiopicCalendarGetTemporalMonthCode(void) {
+void CalendarTest::TestEthiopicCalendarGetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "ethiopic", status);
@@ -4367,7 +4367,7 @@ void CalendarTest::TestEthiopicCalendarGetTemporalMonthCode(void) {
     RunCECalendarGetTemporalMonthCode(cal.getAlias());
 }
 
-void CalendarTest::TestEthiopicAmeteAlemCalendarGetTemporalMonthCode(void) {
+void CalendarTest::TestEthiopicAmeteAlemCalendarGetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "ethiopic-amete-alem", status);
@@ -4376,7 +4376,7 @@ void CalendarTest::TestEthiopicAmeteAlemCalendarGetTemporalMonthCode(void) {
     RunCECalendarGetTemporalMonthCode(cal.getAlias());
 }
 
-void CalendarTest::TestGregorianCalendarSetTemporalMonthCode(void) {
+void CalendarTest::TestGregorianCalendarSetTemporalMonthCode() {
 
     struct TestCase {
       int32_t gYear;
@@ -4426,7 +4426,7 @@ void CalendarTest::TestGregorianCalendarSetTemporalMonthCode(void) {
     }
 }
 
-void CalendarTest::TestChineseCalendarSetTemporalMonthCode(void) {
+void CalendarTest::TestChineseCalendarSetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "chinese", status);
@@ -4543,7 +4543,7 @@ void CalendarTest::TestChineseCalendarSetTemporalMonthCode(void) {
     }
 }
 
-void CalendarTest::TestHebrewCalendarSetTemporalMonthCode(void) {
+void CalendarTest::TestHebrewCalendarSetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "hebrew", status);
@@ -4611,7 +4611,7 @@ void CalendarTest::TestHebrewCalendarSetTemporalMonthCode(void) {
     }
 }
 
-void CalendarTest::TestCopticCalendarSetTemporalMonthCode(void) {
+void CalendarTest::TestCopticCalendarSetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "coptic", status);
@@ -4696,7 +4696,7 @@ void CalendarTest::TestCopticCalendarSetTemporalMonthCode(void) {
     }
 }
 
-void CalendarTest::TestEthiopicCalendarSetTemporalMonthCode(void) {
+void CalendarTest::TestEthiopicCalendarSetTemporalMonthCode() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "ethiopic", status);
@@ -4799,7 +4799,7 @@ void VerifyMonth(CalendarTest* test, const char* message, Calendar* cc, int32_t 
     test->assertTrue(buf.c_str(), uprv_strcmp(cc->getTemporalMonthCode(status), expectedMonthCode) == 0);
 }
 
-void CalendarTest::TestMostCalendarsOrdinalMonthSet(void) {
+void CalendarTest::TestMostCalendarsOrdinalMonthSet() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     std::unique_ptr<icu::StringEnumeration> enumeration(
@@ -4892,7 +4892,7 @@ void CalendarTest::TestMostCalendarsOrdinalMonthSet(void) {
     }
 }
 
-void CalendarTest::TestChineseCalendarOrdinalMonthSet(void) {
+void CalendarTest::TestChineseCalendarOrdinalMonthSet() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "chinese", status);
@@ -4978,7 +4978,7 @@ void CalendarTest::TestChineseCalendarOrdinalMonthSet(void) {
     }
 }
 
-void CalendarTest::TestDangiCalendarOrdinalMonthSet(void) {
+void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     const char* name = "dangi";
@@ -5064,7 +5064,7 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet(void) {
     }
 }
 
-void CalendarTest::TestHebrewCalendarOrdinalMonthSet(void) {
+void CalendarTest::TestHebrewCalendarOrdinalMonthSet() {
     UErrorCode status = U_ZERO_ERROR;
     Locale l(Locale::getRoot());
     l.setKeywordValue("calendar", "hebrew", status);
@@ -5156,7 +5156,7 @@ void CalendarTest::TestHebrewCalendarOrdinalMonthSet(void) {
     }
 }
 
-void CalendarTest::TestCalendarAddOrdinalMonth(void) {
+void CalendarTest::TestCalendarAddOrdinalMonth() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
     gc.set(2022, UCAL_DECEMBER, 16);
@@ -5191,7 +5191,7 @@ void CalendarTest::TestCalendarAddOrdinalMonth(void) {
     }
 }
 
-void CalendarTest::TestCalendarRollOrdinalMonth(void) {
+void CalendarTest::TestCalendarRollOrdinalMonth() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
     gc.set(2022, UCAL_DECEMBER, 16);
@@ -5238,7 +5238,7 @@ void CalendarTest::TestCalendarRollOrdinalMonth(void) {
     }
 }
 
-void CalendarTest::TestLimitsOrdinalMonth(void) {
+void CalendarTest::TestLimitsOrdinalMonth() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
     gc.set(2022, UCAL_DECEMBER, 16);
@@ -5300,7 +5300,7 @@ void CalendarTest::TestLimitsOrdinalMonth(void) {
     }
 }
 
-void CalendarTest::TestActualLimitsOrdinalMonth(void) {
+void CalendarTest::TestActualLimitsOrdinalMonth() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
     gc.set(2022, UCAL_DECEMBER, 16);
@@ -5397,7 +5397,7 @@ void CalendarTest::TestActualLimitsOrdinalMonth(void) {
 // There should be a Leap month after the 2nd month of the Chinese Calendar year
 // mostly overlapping with 1890 and should have no leap month in the Chinese
 // Calendar year mostly overlapping with 1889.
-void CalendarTest::TestChineseCalendarMonthInSpecialYear(void) {
+void CalendarTest::TestChineseCalendarMonthInSpecialYear() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar gc(status);
     ChineseCalendar cal(Locale::getRoot(), status);

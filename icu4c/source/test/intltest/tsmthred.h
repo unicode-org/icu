@@ -29,20 +29,20 @@ public:
     /**
      * test that threads even work
      **/
-    void TestThreads(void);
+    void TestThreads();
 
 	/**
      * test that arabic shaping can work in threads
      **/
-    void TestArabicShapingThreads(void);
+    void TestArabicShapingThreads();
 	
 #if !UCONFIG_NO_FORMATTING
     /**
      * test that intl functions work in a multithreaded context
      **/
-    void TestThreadedIntl(void);
+    void TestThreadedIntl();
 #endif
-    void TestCollators(void);
+    void TestCollators();
     void TestString();
     void TestAnyTranslit();
     void TestUnifiedCache();

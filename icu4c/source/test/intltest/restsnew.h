@@ -24,26 +24,26 @@ public:
     /** 
      * Perform several extensive tests using the subtest routine testTag
      **/
-    void TestResourceBundles(void);
+    void TestResourceBundles();
     /** 
      * Test construction of ResourceBundle accessing a custom test resource-file
      **/
-    void TestConstruction(void);
+    void TestConstruction();
 
-    void TestIteration(void);
+    void TestIteration();
 
-    void TestOtherAPI(void);
+    void TestOtherAPI();
 
-    void TestNewTypes(void);
+    void TestNewTypes();
 
-    void TestGetByFallback(void);
+    void TestGetByFallback();
 
-    void TestFilter(void);
+    void TestFilter();
 
-    void TestIntervalAliasFallbacks(void);
+    void TestIntervalAliasFallbacks();
 
 #if U_ENABLE_TRACING
-    void TestTrace(void);
+    void TestTrace();
 #endif
 
     void TestOpenDirectFillIn();
@@ -61,8 +61,8 @@ private:
      **/
     UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
 
-    void record_pass(void);
-    void record_fail(void);
+    void record_pass();
+    void record_fail();
 
     int32_t pass;
     int32_t fail;

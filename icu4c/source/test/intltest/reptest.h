@@ -33,7 +33,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     /*Tests the Replaceable class according to the API documentation. */
-    void TestReplaceableClass(void);
+    void TestReplaceableClass();
 private:
     void check( const UnicodeString& transliteratorName, 
                 const UnicodeString& test, 

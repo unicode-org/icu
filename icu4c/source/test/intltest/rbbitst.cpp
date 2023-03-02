@@ -3517,7 +3517,7 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
 }
 #endif
 
-void RBBITest::TestWordBreaks(void)
+void RBBITest::TestWordBreaks()
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
@@ -3595,7 +3595,7 @@ void RBBITest::TestWordBreaks(void)
 #endif
 }
 
-void RBBITest::TestWordBoundary(void)
+void RBBITest::TestWordBoundary()
 {
     // <data><>\u1d4a\u206e<?>\u0603\U0001d7ff<>\u2019<></data>
     Locale        locale("en");
@@ -3681,7 +3681,7 @@ void RBBITest::TestWordBoundary(void)
     }
 }
 
-void RBBITest::TestLineBreaks(void)
+void RBBITest::TestLineBreaks()
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     Locale        locale("en");
@@ -3773,7 +3773,7 @@ void RBBITest::TestLineBreaks(void)
 #endif
 }
 
-void RBBITest::TestSentBreaks(void)
+void RBBITest::TestSentBreaks()
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     Locale        locale("en");
@@ -4266,7 +4266,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 //             which is to just keep it from crashing.  Correct word boundaries
 //             await a proper fix to the dictionary code.
 //
-void RBBITest::TestBug5532(void)  {
+void RBBITest::TestBug5532()  {
    // Text includes a mixture of Thai and Latin.
    const unsigned char utf8Data[] = {
            0xE0u, 0xB8u, 0x82u, 0xE0u, 0xB8u, 0xB2u, 0xE0u, 0xB8u, 0xA2u, 0xE0u,
@@ -4306,7 +4306,7 @@ void RBBITest::TestBug5532(void)  {
 }
 
 
-void RBBITest::TestBug9983(void)  {
+void RBBITest::TestBug9983()  {
     UnicodeString text = UnicodeString("\\u002A"  // * Other
                                        "\\uFF65"  //   Other
                                        "\\u309C"  //   Katakana
@@ -4776,7 +4776,7 @@ void RBBITest::TestProperties() {
 //                  For putting in fragments of other tests that can be invoked
 //                  for tracing  without a lot of unwanted extra stuff happening.
 //
-void RBBITest::TestDebug(void) {
+void RBBITest::TestDebug() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> bi (dynamic_cast<RuleBasedBreakIterator*>(
             BreakIterator::createCharacterInstance(Locale::getEnglish(), status)), status);
@@ -5132,7 +5132,7 @@ void SetupTestTrace() {
     utrace_setLevel(UTRACE_INFO);
 }
 
-void RBBITest::TestTraceCreateCharacter(void) {
+void RBBITest::TestTraceCreateCharacter() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateCharacter");
     LocalPointer<BreakIterator> brkitr(
@@ -5141,7 +5141,7 @@ void RBBITest::TestTraceCreateCharacter(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_CHARACTER, nullptr);
 }
 
-void RBBITest::TestTraceCreateTitle(void) {
+void RBBITest::TestTraceCreateTitle() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateTitle");
     LocalPointer<BreakIterator> brkitr(
@@ -5150,7 +5150,7 @@ void RBBITest::TestTraceCreateTitle(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_TITLE, nullptr);
 }
 
-void RBBITest::TestTraceCreateSentence(void) {
+void RBBITest::TestTraceCreateSentence() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateSentence");
     LocalPointer<BreakIterator> brkitr(
@@ -5159,7 +5159,7 @@ void RBBITest::TestTraceCreateSentence(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_SENTENCE, nullptr);
 }
 
-void RBBITest::TestTraceCreateWord(void) {
+void RBBITest::TestTraceCreateWord() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateWord");
     LocalPointer<BreakIterator> brkitr(
@@ -5168,7 +5168,7 @@ void RBBITest::TestTraceCreateWord(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_WORD, nullptr);
 }
 
-void RBBITest::TestTraceCreateLine(void) {
+void RBBITest::TestTraceCreateLine() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLine");
     LocalPointer<BreakIterator> brkitr(
@@ -5177,7 +5177,7 @@ void RBBITest::TestTraceCreateLine(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line");
 }
 
-void RBBITest::TestTraceCreateLineStrict(void) {
+void RBBITest::TestTraceCreateLineStrict() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLineStrict");
     LocalPointer<BreakIterator> brkitr(
@@ -5186,7 +5186,7 @@ void RBBITest::TestTraceCreateLineStrict(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_strict");
 }
 
-void RBBITest::TestTraceCreateLineNormal(void) {
+void RBBITest::TestTraceCreateLineNormal() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLineNormal");
     LocalPointer<BreakIterator> brkitr(
@@ -5195,7 +5195,7 @@ void RBBITest::TestTraceCreateLineNormal(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_normal");
 }
 
-void RBBITest::TestTraceCreateLineLoose(void) {
+void RBBITest::TestTraceCreateLineLoose() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLineLoose");
     LocalPointer<BreakIterator> brkitr(
@@ -5204,7 +5204,7 @@ void RBBITest::TestTraceCreateLineLoose(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_loose");
 }
 
-void RBBITest::TestTraceCreateLineLoosePhrase(void) {
+void RBBITest::TestTraceCreateLineLoosePhrase() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLineLoosePhrase");
     LocalPointer<BreakIterator> brkitr(
@@ -5213,7 +5213,7 @@ void RBBITest::TestTraceCreateLineLoosePhrase(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_loose_phrase");
 }
 
-void RBBITest::TestTraceCreateLineNormalPhrase(void) {
+void RBBITest::TestTraceCreateLineNormalPhrase() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLineNormalPhrase");
     LocalPointer<BreakIterator> brkitr(
@@ -5222,7 +5222,7 @@ void RBBITest::TestTraceCreateLineNormalPhrase(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_normal_phrase");
 }
 
-void RBBITest::TestTraceCreateLineStrictPhrase(void) {
+void RBBITest::TestTraceCreateLineStrictPhrase() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLineStrictPhrase");
     LocalPointer<BreakIterator> brkitr(
@@ -5231,7 +5231,7 @@ void RBBITest::TestTraceCreateLineStrictPhrase(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_strict_phrase");
 }
 
-void RBBITest::TestTraceCreateLinePhrase(void) {
+void RBBITest::TestTraceCreateLinePhrase() {
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateLinePhrase");
     LocalPointer<BreakIterator> brkitr(
@@ -5240,7 +5240,7 @@ void RBBITest::TestTraceCreateLinePhrase(void) {
     assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_phrase");
 }
 
-void RBBITest::TestTraceCreateBreakEngine(void) {
+void RBBITest::TestTraceCreateBreakEngine() {
     rbbi_cleanup();
     SetupTestTrace();
     IcuTestErrorCode status(*this, "TestTraceCreateBreakEngine");

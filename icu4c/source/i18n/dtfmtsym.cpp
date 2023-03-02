@@ -1274,7 +1274,7 @@ DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
 
 // This code must be called within a synchronized block
 void
-DateFormatSymbols::initZoneStringsArray(void) {
+DateFormatSymbols::initZoneStringsArray() {
     if (fZoneStrings != nullptr || fLocaleZoneStrings != nullptr) {
         return;
     }
@@ -1376,7 +1376,7 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 //------------------------------------------------------
 
 const char16_t * U_EXPORT2
-DateFormatSymbols::getPatternUChars(void)
+DateFormatSymbols::getPatternUChars()
 {
     return gPatternChars;
 }

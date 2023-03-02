@@ -54,10 +54,10 @@ protected:
 
     // the 'get()' functions are not static because they can call errln().
     // they are effectively static otherwise.
-     DateFormat*               getDateFormat(void);
+     DateFormat*               getDateFormat();
     static void                releaseDateFormat(DateFormat *f);
 
-     Calendar*                 getCalendar(void);
+     Calendar*                 getCalendar();
     static void                releaseCalendar(Calendar *c);
 };
 

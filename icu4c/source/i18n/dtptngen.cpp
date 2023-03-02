@@ -2287,7 +2287,7 @@ PatternMap::getDuplicateElem(
 
 }  // PatternMap::getDuplicateElem
 
-DateTimeMatcher::DateTimeMatcher(void) {
+DateTimeMatcher::DateTimeMatcher() {
 }
 
 DateTimeMatcher::~DateTimeMatcher() {}

@@ -830,7 +830,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      *
      * <p>This issues a serviceChanged notification to registered listeners.</p>
      */
-    virtual void reset(void);
+    virtual void reset();
 
     /**
      * <p>Return true if the service is in its default state.</p>
@@ -838,7 +838,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * <p>The default implementation returns true if there are no 
      * factories registered.</p>
      */
-    virtual UBool isDefault(void) const;
+    virtual UBool isDefault() const;
 
     /**
      * <p>Create a key from an ID.  If ID is nullptr, returns nullptr.</p>
@@ -895,7 +895,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * directly, since it must only be called while holding write
      * access to the factory list.</p>
      */
-    virtual void reInitializeFactories(void);
+    virtual void reInitializeFactories();
 
     /**
      * <p>Default handler for this service if no factory in the factory list
@@ -918,7 +918,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * should generally not call this method directly, as it must only
      * be called while synchronized on the factory lock.</p>
      */
-    virtual void clearCaches(void);
+    virtual void clearCaches();
 
     /**
      * <p>Return true if the listener is accepted.</p>
@@ -955,7 +955,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * the resolution of IDs also changes, requiring the cache to be
      * flushed, but not the visible IDs themselves.</p>
      */
-    void clearServiceCache(void);
+    void clearServiceCache();
 
     /**
      * <p>Return a map from visible IDs to factories.
@@ -972,14 +972,14 @@ class U_COMMON_API ICUService : public ICUNotifier {
      *
      * @return the timestamp.
      */
-    int32_t getTimestamp(void) const;
+    int32_t getTimestamp() const;
 
     /**
      * <p>Return the number of registered factories.</p>
      *
      * @return the number of factories registered at the time of the call.
      */
-    int32_t countFactories(void) const;
+    int32_t countFactories() const;
 
 private:
 

@@ -67,7 +67,7 @@ static icu::UInitOnce uni32InitOnce {};
 /**
  * Cleanup function for UnicodeSet
  */
-static UBool U_CALLCONV uset_cleanup(void) {
+static UBool U_CALLCONV uset_cleanup() {
     delete uni32Singleton;
     uni32Singleton = nullptr;
     uni32InitOnce.reset();

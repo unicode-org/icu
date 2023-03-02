@@ -216,7 +216,7 @@ isAcceptable(void * /*context*/,
         pInfo->formatVersion[0]==3);
 }
 
-static UBool U_CALLCONV ucnv_io_cleanup(void)
+static UBool U_CALLCONV ucnv_io_cleanup()
 {
     if (gAliasData) {
         udata_close(gAliasData);
@@ -997,7 +997,7 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
 }
 
 U_CAPI uint16_t U_EXPORT2
-ucnv_countStandards(void)
+ucnv_countStandards()
 {
     UErrorCode err = U_ZERO_ERROR;
     return ucnv_io_countStandards(&err);

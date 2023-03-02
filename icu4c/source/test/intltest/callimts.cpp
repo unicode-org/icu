@@ -191,7 +191,7 @@ struct {
 }  // anonymous name space
 
 void
-CalendarLimitTest::TestLimits(void) {
+CalendarLimitTest::TestLimits() {
     gTestCaseIterator.reset();
 
     ThreadPool<CalendarLimitTest> threads(this, threadCount, &CalendarLimitTest::TestLimitsThread);

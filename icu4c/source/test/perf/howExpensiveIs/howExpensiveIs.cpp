@@ -28,7 +28,7 @@ static void usage(const char *prog) {
 }
 #endif
 
-void runTests(void);
+void runTests();
 
 #ifndef ITERATIONS
 #define ITERATIONS 5

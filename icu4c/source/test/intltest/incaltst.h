@@ -22,44 +22,44 @@ public:
     // IntlTest override
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
-    void TestTypes(void);
+    void TestTypes();
 
-    void TestGregorian(void);
+    void TestGregorian();
 
-    void TestBuddhist(void);
-    void TestBuddhistFormat(void);
-    void TestBug21043Indian(void);
-    void TestBug21044Hebrew(void);
-    void TestBug21045Islamic(void);
-    void TestBug21046IslamicUmalqura(void);
+    void TestBuddhist();
+    void TestBuddhistFormat();
+    void TestBug21043Indian();
+    void TestBug21044Hebrew();
+    void TestBug21045Islamic();
+    void TestBug21046IslamicUmalqura();
 
-    void TestTaiwan(void);
+    void TestTaiwan();
 
-    void TestJapanese(void);
-    void TestJapaneseFormat(void);
-    void TestJapanese3860(void);
-    void TestForceGannenNumbering(void);
+    void TestJapanese();
+    void TestJapaneseFormat();
+    void TestJapanese3860();
+    void TestForceGannenNumbering();
     
-    void TestPersian(void);
-    void TestPersianFormat(void);
+    void TestPersian();
+    void TestPersianFormat();
 
-    void TestConsistencyGregorian(void);
-    void TestConsistencyCoptic(void);
-    void TestConsistencyEthiopic(void);
-    void TestConsistencyROC(void);
-    void TestConsistencyChinese(void);
-    void TestConsistencyDangi(void);
-    void TestConsistencyBuddhist(void);
-    void TestConsistencyEthiopicAmeteAlem(void);
-    void TestConsistencyHebrew(void);
-    void TestConsistencyIndian(void);
-    void TestConsistencyIslamic(void);
-    void TestConsistencyIslamicCivil(void);
-    void TestConsistencyIslamicRGSA(void);
-    void TestConsistencyIslamicTBLA(void);
-    void TestConsistencyIslamicUmalqura(void);
-    void TestConsistencyPersian(void);
-    void TestConsistencyJapanese(void);
+    void TestConsistencyGregorian();
+    void TestConsistencyCoptic();
+    void TestConsistencyEthiopic();
+    void TestConsistencyROC();
+    void TestConsistencyChinese();
+    void TestConsistencyDangi();
+    void TestConsistencyBuddhist();
+    void TestConsistencyEthiopicAmeteAlem();
+    void TestConsistencyHebrew();
+    void TestConsistencyIndian();
+    void TestConsistencyIslamic();
+    void TestConsistencyIslamicCivil();
+    void TestConsistencyIslamicRGSA();
+    void TestConsistencyIslamicTBLA();
+    void TestConsistencyIslamicUmalqura();
+    void TestConsistencyPersian();
+    void TestConsistencyJapanese();
 
  protected:
     // Test a Gregorian-Like calendar

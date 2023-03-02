@@ -74,12 +74,12 @@ TimeZoneRule::getName(UnicodeString& name) const {
 }
 
 int32_t
-TimeZoneRule::getRawOffset(void) const {
+TimeZoneRule::getRawOffset() const {
     return fRawOffset;
 }
 
 int32_t
-TimeZoneRule::getDSTSavings(void) const {
+TimeZoneRule::getDSTSavings() const {
     return fDSTSavings;
 }
 
@@ -210,7 +210,7 @@ AnnualTimeZoneRule::~AnnualTimeZoneRule() {
 }
 
 AnnualTimeZoneRule*
-AnnualTimeZoneRule::clone(void) const {
+AnnualTimeZoneRule::clone() const {
     return new AnnualTimeZoneRule(*this);
 }
 
@@ -428,7 +428,7 @@ TimeArrayTimeZoneRule::~TimeArrayTimeZoneRule() {
 }
 
 TimeArrayTimeZoneRule*
-TimeArrayTimeZoneRule::clone(void) const {
+TimeArrayTimeZoneRule::clone() const {
     return new TimeArrayTimeZoneRule(*this);
 }
 
@@ -475,7 +475,7 @@ TimeArrayTimeZoneRule::operator!=(const TimeZoneRule& that) const {
 }
 
 DateTimeRule::TimeRuleType
-TimeArrayTimeZoneRule::getTimeType(void) const {
+TimeArrayTimeZoneRule::getTimeType() const {
     return fTimeRuleType;
 }
 
@@ -489,7 +489,7 @@ TimeArrayTimeZoneRule::getStartTimeAt(int32_t index, UDate& result) const {
 }
 
 int32_t
-TimeArrayTimeZoneRule::countStartTimes(void) const {
+TimeArrayTimeZoneRule::countStartTimes() const {
     return fNumStartTimes;
 }
 

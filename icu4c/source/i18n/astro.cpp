@@ -68,7 +68,7 @@ static inline UBool isINVALID(double d) {
 static icu::UMutex ccLock;
 
 U_CDECL_BEGIN
-static UBool calendar_astro_cleanup(void) {
+static UBool calendar_astro_cleanup() {
   return true;
 }
 U_CDECL_END

@@ -126,7 +126,7 @@ void setIncludeCopyright(UBool val){
     gIncludeCopyright=val;
 }
 
-UBool getIncludeCopyright(void){
+UBool getIncludeCopyright(){
     return gIncludeCopyright;
 }
 

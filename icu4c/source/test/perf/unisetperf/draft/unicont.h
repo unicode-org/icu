@@ -34,5 +34,5 @@ public:
 
     virtual int32_t spanNotUTF8(const char16_t *s, int32_t length);
 
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID() const;
 };

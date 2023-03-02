@@ -68,7 +68,7 @@ public:
     virtual void call(UErrorCode* pErrorCode){
         (this->*op)();
     }
-    void add (void){
+    void add(){
         us.clear();
         for (UChar32 cp=0; cp<0x110000; ++cp) {
             if (bs.get((int32_t) cp)) {
@@ -77,7 +77,7 @@ public:
         }
     }
 
-    void contains(void){
+    void contains(){
         int32_t temp = 0;
         us.clear();
         for (UChar32 cp=0; cp<0x110000; ++cp) {
@@ -87,7 +87,7 @@ public:
         }
     }
 
-    void iterator(void){
+    void iterator(){
         int32_t temp = 0;
         UnicodeSetIterator uit(us);
         while (uit.next()) {

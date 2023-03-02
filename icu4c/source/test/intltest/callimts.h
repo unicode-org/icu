@@ -35,9 +35,9 @@ public: // package
 
 public:
     // test behaviour and error reporting at boundaries of defined range
-    virtual void TestCalendarExtremeLimit(void);
+    virtual void TestCalendarExtremeLimit();
 
-    void TestLimits(void);
+    void TestLimits();
     void TestLimitsThread(int32_t threadNumber);
 
 private:

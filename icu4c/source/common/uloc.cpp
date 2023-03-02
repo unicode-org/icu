@@ -56,7 +56,7 @@ U_NAMESPACE_USE
 
 /* Locale stuff from locid.cpp */
 U_CFUNC void locale_set_default(const char *id);
-U_CFUNC const char *locale_get_default(void);
+U_CFUNC const char *locale_get_default();
 
 /* ### Data tables **************************************************/
 
