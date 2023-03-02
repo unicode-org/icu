@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677773995798,
+  "lastUpdate": 1677778709846,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5908,6 +5908,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 603.4412873719966,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "b6dcc95d3c7c370ed993f7e2b7972adc48364293",
+          "message": "ICU-21833 remove redundant void parameter lists\n\nSee #2351",
+          "timestamp": "2023-03-02T09:31:57-08:00",
+          "tree_id": "7ee8d0e0daf0d493fb83f78e9ae7c7212991c124",
+          "url": "https://github.com/unicode-org/icu/commit/b6dcc95d3c7c370ed993f7e2b7972adc48364293"
+        },
+        "date": 1677778690012,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 508.93485481071014,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
