@@ -3871,8 +3871,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Alias for {@link #CASE_INSENSITIVE}.
      *
-     * @stable ICU 3.8
+     * @deprecated ICU 73 Use {@link #CASE_INSENSITIVE} instead.
      */
+    @Deprecated
     public static final int CASE = 2;
 
     /**
