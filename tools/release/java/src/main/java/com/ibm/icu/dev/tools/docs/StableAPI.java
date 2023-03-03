@@ -553,7 +553,8 @@ public class StableAPI {
                 "[ ]*U_NOEXCEPT", "", // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is
                                       //  retroactive)
                 "[ ]*noexcept", "",
-                "[ ]*override", "",   // remove override
+                "[ ]*(override|U_OVERRIDE)", "", // remove U_OVERRIDE and override
+
                 // Simplify possibly-covariant functions to void*
                 "^([^\\* ]+)\\*(.*)::(clone|safeClone|cloneAsThawed|freeze|createBufferClone)\\((.*)", "void*$2::$3($4",
                 "\\s+$", "", // remove trailing spaces.
