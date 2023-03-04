@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677873450744,
+  "lastUpdate": 1677896840151,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5908,6 +5908,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 261.6212730232038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "5c07ee700b0e5a122e70d948a05edc6a0f1360fe",
+          "message": "ICU-22220 ICU4C APIChangeReport for ICU73\n\nSee #2347",
+          "timestamp": "2023-03-04T02:17:48Z",
+          "tree_id": "ddb8d5686dfff87ca047e1b546b8df5a3c6fb1f9",
+          "url": "https://github.com/unicode-org/icu/commit/5c07ee700b0e5a122e70d948a05edc6a0f1360fe"
+        },
+        "date": 1677896818792,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 261.1533155185911,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
