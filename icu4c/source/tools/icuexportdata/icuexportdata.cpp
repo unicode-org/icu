@@ -164,6 +164,7 @@ void dumpBinaryProperty(UProperty uproperty, FILE* f) {
     fputs("[[binary_property]]\n", f);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    fprintf(f, "uproperty_discr = %X\n", uproperty);
     dumpPropertyAliases(uproperty, f);
     usrc_writeUnicodeSet(f, uset, UPRV_TARGET_SYNTAX_TOML);
 }
@@ -216,6 +217,7 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
     fputs("[[enum_property]]\n", f);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    fprintf(f, "uproperty_discr = 0x%X\n", uproperty);
     dumpPropertyAliases(uproperty, f);
 
     int32_t minValue = u_getIntPropertyMinValue(uproperty);
@@ -268,6 +270,7 @@ void dumpGeneralCategoryMask(FILE* f) {
     const char* shortPropName = u_getPropertyName(uproperty, U_SHORT_PROPERTY_NAME);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    fprintf(f, "uproperty_discr = 0x%X\n", uproperty);
     dumpPropertyAliases(uproperty, f);
 
 
@@ -303,6 +306,7 @@ void dumpScriptExtensions(FILE* f) {
     const char* scxShortPropName = u_getPropertyName(UCHAR_SCRIPT_EXTENSIONS, U_SHORT_PROPERTY_NAME);
     fprintf(f, "long_name = \"%s\"\n", scxFullPropName);
     if (scxShortPropName) fprintf(f, "short_name = \"%s\"\n", scxShortPropName);
+    fprintf(f, "uproperty_discr = 0x%X\n", UCHAR_SCRIPT_EXTENSIONS);
     dumpPropertyAliases(UCHAR_SCRIPT_EXTENSIONS, f);
 
     // We want to use 16 bits for our exported trie of sc/scx data because we
