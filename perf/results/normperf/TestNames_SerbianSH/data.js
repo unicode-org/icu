@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677897996380,
+  "lastUpdate": 1677898283865,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17038,6 +17038,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 8.6366,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "bca85d4641978596cbefb0269ebd7f9834345d67",
+          "message": "ICU-22220 Update ICU4J API status",
+          "timestamp": "2023-03-04T02:18:24Z",
+          "tree_id": "9cce2afd94c02304e7f988156cd28466dbfec93e",
+          "url": "https://github.com/unicode-org/icu/commit/bca85d4641978596cbefb0269ebd7f9834345d67"
+        },
+        "date": 1677898263230,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 11.6816,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.5233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 6.4956,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 8.1107,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 8.9234,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 8.8639,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
