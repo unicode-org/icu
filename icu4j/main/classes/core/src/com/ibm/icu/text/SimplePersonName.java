@@ -94,9 +94,16 @@ public class SimplePersonName implements PersonName {
             if (fieldValues.get("surname") == null) {
                 String surnamePrefix = fieldValues.get("surname-prefix");
                 String surnameCore = fieldValues.get("surname-core");
+
+                StringBuilder sb = new StringBuilder();
                 if (surnamePrefix != null && surnameCore != null) {
                     fieldValues.put("surname", surnamePrefix + " " + surnameCore);
+                } else if (surnamePrefix != null) {
+                    fieldValues.put("surname", surnamePrefix);
+                } else if (surnameCore != null) {
+                    fieldValues.put("surname", surnameCore);
                 }
+                // if both "surname-prefix" and "surname-core" are empty, don't fill in "surname" either
             }
 
             return new SimplePersonName(locale, preferredOrder, fieldValues);
@@ -200,6 +207,23 @@ public class SimplePersonName implements PersonName {
         result = fieldValues.get(winningKey);
         modifiers.removeAll(makeModifiersFromName(winningKey));
         return result;
+    }
+
+    /**
+     * @internal Debugging only!
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (String key : fieldValues.keySet()) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(key + "=" + fieldValues.get(key));
+        }
+        sb.append(",locale=" + nameLocale);
+        return sb.toString();
     }
 
     private static String makeModifiedFieldName(NameField fieldName,

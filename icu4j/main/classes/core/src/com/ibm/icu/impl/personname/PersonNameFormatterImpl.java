@@ -5,11 +5,7 @@ package com.ibm.icu.impl.personname;
 import static com.ibm.icu.util.UResourceBundle.ARRAY;
 import static com.ibm.icu.util.UResourceBundle.STRING;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -32,6 +28,7 @@ public class PersonNameFormatterImpl {
     private final String initialSequencePattern;
     private final boolean capitalizeSurname;
     private final String foreignSpaceReplacement;
+    private final String nativeSpaceReplacement;
     private final boolean formatterLocaleUsesSpaces;
     private final PersonNameFormatter.Length length;
     private final PersonNameFormatter.Usage usage;
@@ -58,6 +55,7 @@ public class PersonNameFormatterImpl {
         this.initialSequencePattern = rb.getStringWithFallback("personNames/initialPattern/initialSequence");
         this.foreignSpaceReplacement = rb.getStringWithFallback("personNames/foreignSpaceReplacement");
         this.formatterLocaleUsesSpaces = !LOCALES_THAT_DONT_USE_SPACES.contains(locale.getLanguage());
+        this.nativeSpaceReplacement = formatterLocaleUsesSpaces ? " " : "";
 
         // asjust for combinations of parameters that don't make sense in practice
         if (usage == PersonNameFormatter.Usage.MONOGRAM) {
@@ -113,6 +111,7 @@ public class PersonNameFormatterImpl {
         initialSequencePattern = "{0} {1}";
         capitalizeSurname = false;
         foreignSpaceReplacement = " ";
+        nativeSpaceReplacement = " ";
         formatterLocaleUsesSpaces = true;
 
         // then, set values for the fields we actually care about
@@ -121,33 +120,43 @@ public class PersonNameFormatterImpl {
 
     }
 
+    @Override
+    public String toString() {
+        return "PersonNameFormatter: " + displayOrder + "-" + length + "-" + usage + "-" + formality + ", " + locale;
+    }
+
     public String formatToString(PersonName name) {
         // TODO: Should probably return a FormattedPersonName object
 
-        // if the formatter is for a language that doesn't use spaces between words and the name is from a language
-        // that does, create a formatter for the NAME'S locale and use THAT to format the name
-        Locale nameLocale = getNameLocale(name);
-        boolean nameLocaleUsesSpaces = !LOCALES_THAT_DONT_USE_SPACES.contains(nameLocale.getLanguage());
-        if (!formatterLocaleUsesSpaces && nameLocaleUsesSpaces) {
-            PersonNameFormatterImpl nativeFormatter = new PersonNameFormatterImpl(nameLocale, this.length,
+        if (!nameScriptMatchesLocale(name, this.locale)) {
+            Locale nameLocale = getNameLocale(name);
+            PersonNameFormatterImpl nameLocaleFormatter = new PersonNameFormatterImpl(nameLocale, this.length,
                     this.usage, this.formality, this.displayOrder, this.capitalizeSurname);
-            String result = nativeFormatter.formatToString(name);
-
-            // BUT, if the name is actually written in the formatter locale's script, replace any spaces in the name
-            // with the foreignSpaceReplacement character
-            if (!foreignSpaceReplacement.equals(" ") && scriptMatchesLocale(result, this.locale)) {
-                result = result.replace(" ", this.foreignSpaceReplacement);
-            }
-            return result;
+            return nameLocaleFormatter.formatToString(name);
         }
 
-        // if we get down to here, we're just doing normal formatting-- if we have both given-first and surname-first
-        // rules, choose which one to use based on the name's locale and preferred field order
+        String result = null;
+        Locale nameLocale = getNameLocale(name);
+
+        // choose the GN-first or SN-first pattern based on the name itself and use that to format it
         if (snFirstPatterns == null || nameIsGnFirst(name)) {
-            return getBestPattern(gnFirstPatterns, name).format(name);
+            result = getBestPattern(gnFirstPatterns, name).format(name);
         } else {
-            return getBestPattern(snFirstPatterns, name).format(name);
+            result = getBestPattern(snFirstPatterns, name).format(name);
         }
+
+        // if either of the space-replacement characters is something other than a space,
+        // check to see if the name locale's language matches the formatter locale's language.
+        // If they match, replace all spaces with the native space-replacement character,
+        // and if they don't, replace all spaces with the foreign space-replacement character
+        if (!nativeSpaceReplacement.equals(" ") || !foreignSpaceReplacement.equals(" ")) {
+            if (localesMatch(nameLocale, this.locale)) {
+                result = result.replace(" ", nativeSpaceReplacement);
+            } else {
+                result = result.replace(" ", foreignSpaceReplacement);
+            }
+        }
+        return result;
     }
 
     public Locale getLocale() {
@@ -175,7 +184,7 @@ public class PersonNameFormatterImpl {
         return capitalizeSurname;
     }
 
-    private final Set<String> LOCALES_THAT_DONT_USE_SPACES = new HashSet<>(Arrays.asList("ja", "zh", "th", "yue", "km", "lo"));
+    private final Set<String> LOCALES_THAT_DONT_USE_SPACES = new HashSet<>(Arrays.asList("ja", "zh", "yue", "km", "lo", "my"));
 
     /**
      * Returns the value of the resource, as a string array.
@@ -297,15 +306,20 @@ public class PersonNameFormatterImpl {
     }
 
     /**
-     * Returns true if the script of `s` is one of the default scripts for `locale`.
-     * This function only checks the script of the first character whose script isn't "common,"
-     * so it probably won't work right on mixed-script strings.
+     * Returns true if the characters in the name match one of the scripts for the specified locale.
      */
-    private boolean scriptMatchesLocale(String s, Locale locale) {
-        int[] localeScripts = UScript.getCode(locale);
+    private boolean nameScriptMatchesLocale(PersonName name, Locale formatterLocale) {
+        // Rather than exhaustively checking all the fields in the name, we just check the given-name
+        // and surname fields, giving preference to the script of the surname if they're different
+        // (we concatenate them into one string for simplicity).  The "name script" is the script
+        // of the first character we find whose script isn't "common".  If that script is one
+        // of the scripts used by the specified locale, we have a match.
+        String nameText = name.getFieldValue(PersonName.NameField.GIVEN, Collections.emptySet())
+                + name.getFieldValue(PersonName.NameField.SURNAME, Collections.emptySet());
+        int[] localeScripts = UScript.getCode(formatterLocale);
         int stringScript = UScript.COMMON;
-        for (int i = 0; stringScript == UScript.COMMON && i < s.length(); i++) {
-            char c = s.charAt(i);
+        for (int i = 0; stringScript == UScript.COMMON && i < nameText.length(); i++) {
+            char c = nameText.charAt(i);
             stringScript = UScript.getScript(c);
         }
 
@@ -314,6 +328,26 @@ public class PersonNameFormatterImpl {
                 return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * Returns true if the two locales should be considered equivalent for space-replacement purposes.
+     */
+    private boolean localesMatch(Locale nameLocale, Locale formatterLocale) {
+        String nameLanguage = nameLocale.getLanguage();
+        String formatterLanguage = formatterLocale.getLanguage();
+
+        if (nameLanguage.equals(formatterLanguage)) {
+            return true;
+        }
+
+        // HACK to make Japanese and Chinese names use the native format and native space replacement
+        // (do we want to do something more general here?)
+        if ((nameLanguage.equals("ja") || nameLanguage.equals("zh")) && (formatterLanguage.equals("ja") || formatterLanguage.equals("zh"))) {
+            return true;
+        }
+
         return false;
     }
 }
