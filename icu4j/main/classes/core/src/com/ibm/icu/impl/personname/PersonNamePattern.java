@@ -2,13 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.personname;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import com.ibm.icu.text.PersonName;
 
@@ -25,6 +19,11 @@ class PersonNamePattern {
             result[i] = new PersonNamePattern(patternText[i], formatterImpl);
         }
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return patternText;
     }
 
     private PersonNamePattern(String patternText, PersonNameFormatterImpl formatterImpl) {
@@ -88,6 +87,11 @@ class PersonNamePattern {
         StringBuilder textBefore = new StringBuilder();
         StringBuilder textAfter = new StringBuilder();
 
+        // if the name doesn't have a surname field and the pattern doesn't have a given-name field,
+        // we actually format a modified version of the name object where the contents of the
+        // given-name field has been copied into the surname field
+        name = hackNameForEmptyFields(name);
+
         // the logic below attempts to implement the following algorithm:
         // - If one or more fields at the beginning of the name are empty, also skip all literal text
         //   from the beginning of the name up to the first populated field.
@@ -148,7 +152,7 @@ class PersonNamePattern {
     public int numEmptyFields(PersonName name) {
         int result = 0;
         for (Element element : patternElements) {
-            result += element.isPopulated(name) ? 0 : 1;
+            result += (!element.isLiteral() && !element.isPopulated(name)) ? 1 : 0;
         }
         return result;
     }
@@ -161,6 +165,11 @@ class PersonNamePattern {
      * @param s2 The literal text after the omitted field.
      */
     private String coalesce(StringBuilder s1, StringBuilder s2) {
+        // if the contents of s2 occur at the end of s1, we just use s1
+        if (endsWith(s1, s2)) {
+            s2.setLength(0);
+        }
+
         // get the range of non-whitespace characters at the beginning of s1
         int p1 = 0;
         while (p1 < s1.length() && !Character.isWhitespace(s1.charAt(p1))) {
@@ -192,6 +201,45 @@ class PersonNamePattern {
     }
 
     /**
+     * Returns true if s1 ends with s2.
+     */
+    private boolean endsWith(StringBuilder s1, StringBuilder s2) {
+        int p1 = s1.length() - 1;
+        int p2 = s2.length() - 1;
+
+        while (p1 >= 0 && p2 >= 0 && s1.charAt(p1) == s2.charAt(p2)) {
+            --p1;
+            --p2;
+        }
+        return p2 < 0;
+    }
+
+    private PersonName hackNameForEmptyFields(PersonName originalName) {
+        // this is a hack to deal with mononyms (name objects that don't have both a given name and a surname)--
+        // if the name object has a given-name field but not a surname field and the pattern either doesn't
+        // have a given-name field or only has "{given-initial}", we return a PersonName object that will
+        // return the value of the given-name field when asked for the value of the surname field and that
+        // will return null when asked for the value of the given-name field (all other field values and
+        // properties of the underlying object are returned unchanged)
+        PersonName result = originalName;
+        if (originalName.getFieldValue(PersonName.NameField.SURNAME, Collections.emptySet()) == null) {
+            boolean patternHasNonInitialGivenName = false;
+            for (PersonNamePattern.Element element : patternElements) {
+                if (!element.isLiteral()
+                        && ((NameFieldImpl)element).fieldID == PersonName.NameField.GIVEN
+                        && !((NameFieldImpl)element).modifiers.containsKey(PersonName.FieldModifier.INITIAL)) {
+                    patternHasNonInitialGivenName = true;
+                    break;
+                }
+            }
+            if (!patternHasNonInitialGivenName) {
+                return new GivenToSurnamePersonName(originalName);
+            }
+        }
+        return result;
+    }
+
+    /**
      * A single element in a NamePattern.  This is either a name field or a range of literal text.
      */
     private interface Element {
@@ -208,6 +256,11 @@ class PersonNamePattern {
 
         public LiteralText(String text) {
             this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
         }
 
         public boolean isLiteral() {
@@ -250,6 +303,19 @@ class PersonNamePattern {
             }
         }
 
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("{");
+            sb.append(fieldID);
+            for (PersonName.FieldModifier modifier : modifiers.keySet()) {
+                sb.append("-");
+                sb.append(modifier.toString());
+            }
+            sb.append("}");
+            return sb.toString();
+        }
+
         public boolean isLiteral() {
             return false;
         }
@@ -266,10 +332,48 @@ class PersonNamePattern {
         }
 
         public boolean isPopulated(PersonName name) {
-            // just check whether the unmodified field contains a value
-            Set<PersonName.FieldModifier> modifierIDs = new HashSet<>();
-            String fieldValue = name.getFieldValue(fieldID, modifierIDs);
-            return fieldValue != null && !fieldValue.isEmpty();
+            String result = this.format(name);
+            return result != null && ! result.isEmpty();
+        }
+    }
+
+    /**
+     * Internal class used when formatting a mononym (a PersonName object that only has
+     * a given-name field).  If the name doesn't have a surname field and the pattern
+     * doesn't have a given-name field (or only has one that produces an initial), we
+     * use this class to behave as though the value supplied in the given-name field
+     * had instead been supplied in the surname field.
+     */
+    private static class GivenToSurnamePersonName implements PersonName {
+        private PersonName underlyingPersonName;
+
+        public GivenToSurnamePersonName(PersonName underlyingPersonName) {
+            this.underlyingPersonName = underlyingPersonName;
+        }
+
+        @Override
+        public String toString() {
+            return "Inverted version os " + underlyingPersonName.toString();
+        }
+        @Override
+        public Locale getNameLocale() {
+            return underlyingPersonName.getNameLocale();
+        }
+
+        @Override
+        public PreferredOrder getPreferredOrder() {
+            return underlyingPersonName.getPreferredOrder();
+        }
+
+        @Override
+        public String getFieldValue(NameField identifier, Set<FieldModifier> modifiers) {
+            if (identifier == NameField.SURNAME) {
+                return underlyingPersonName.getFieldValue(NameField.GIVEN, modifiers);
+            } else if (identifier == NameField.GIVEN) {
+                return null;
+            } else {
+                return underlyingPersonName.getFieldValue(identifier, modifiers);
+            }
         }
     }
 }

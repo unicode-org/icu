@@ -218,6 +218,15 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "WVDP" },
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "WVDP" },
             }),
+            new NameAndTestCases("locale=en_US,given=John,surname-core=Smith", new String[][] {
+                // if the PersonName object just fills in the "surname-core" field, treat it as the "surname" field
+                { "en_US", "LONG",   "REFERRING",  "FORMAL", "DEFAULT", "", "John Smith" },
+                { "en_US", "LONG",   "REFERRING",  "INFORMAL", "DEFAULT", "", "John Smith" },
+                { "en_US", "MEDIUM", "REFERRING",  "FORMAL", "DEFAULT", "", "John Smith" },
+                { "en_US", "MEDIUM", "REFERRING",  "INFORMAL", "DEFAULT", "", "John Smith" },
+                { "en_US", "SHORT",  "REFERRING",  "FORMAL", "DEFAULT", "", "J. Smith" },
+                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "John S." },
+            }),
         }, false);
     }
 
@@ -226,8 +235,8 @@ public class PersonNameFormatterTest extends TestFmwk{
         executeTestCases(new NameAndTestCases[]{
             new NameAndTestCases("locale=en_US,given=George,given2=Herbert Walker,surname=Bush", new String[][] {
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "George Herbert Walker Bush" },
-                { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "George H. W. Bush" },
-                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "G. H. W. Bush" },
+                { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "George H.W. Bush" },
+                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "G.H.W. Bush" },
                 { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "George B." },
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "GHB" },
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "GB" },
@@ -236,19 +245,19 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Ralph Vaughan Williams" },
                 { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "Ralph Vaughan Williams" },
                 { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "R. Vaughan Williams" },
-                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "Ralph V. W." },
+                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "Ralph V.W." },
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "RV" },
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "RV" },
             }),
             new NameAndTestCases("locale=en_US,given=John Paul,given2=Stephen David George,surname=Smith", new String[][] {
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "John Paul Stephen David George Smith" },
-                { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "John Paul S. D. G. Smith" },
-                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "J. P. S. D. G. Smith" },
+                { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "John Paul S.D.G. Smith" },
+                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "J.P.S.D.G. Smith" },
                 { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "John Paul S." },
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "JSS" },
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "JS" },
             }),
-        }, true);
+        }, false);
     }
 
     @Test
@@ -299,8 +308,8 @@ public class PersonNameFormatterTest extends TestFmwk{
     public void TestNameOrder() {
         executeTestCases(new NameAndTestCases[]{
             // the name's locale is used to determine the field order.  For the English name formatter, if the
-            // name is English, the order is GN first.  If it's Japanese, it's SN first.  This is true whether the
-            // Japanese name is written in Latin letters or Han characters
+            // name is English, the order is GN first.  If it's Japanese, it's SN first.  And if the name is written
+            // in Japanese characters, we just use the Japanese formatter.
             new NameAndTestCases("locale=en_US,given=Shinzo,surname=Abe", new String[][] {
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Shinzo Abe" },
             }),
@@ -308,7 +317,7 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Abe Shinzo" },
             }),
             new NameAndTestCases("locale=ja_JP,given=晋三,surname=安倍", new String[][] {
-                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "安倍 晋三" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "安倍晋三" },
             }),
 
             // the name can also declare its order directly, with the optional "preferredOrder" field.  If it does this,
@@ -342,34 +351,47 @@ public class PersonNameFormatterTest extends TestFmwk{
     @Test
     public void TestNameSpacing() {
         executeTestCases(new NameAndTestCases[]{
-            // if the formatter locale uses spaces, the result will use its formats (complete with spaces),
-            // regardless of locale
+            // if the name uses the same characters as the formatter locale, even if the name locale doesn't
+            // match (i.e., the name is transliterated), we use the formatter's format and the name's
+            // field order
             new NameAndTestCases("locale=ja_JP,given=Hayao,surname=Miyazaki", new String[][] {
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Miyazaki Hayao" },
             }),
-            new NameAndTestCases("locale=ja_JP,given=駿,surname=宮崎", new String[][] {
-                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎 駿" },
-            }),
 
-            // if the formatter locale doesn't use spaces and the name's locale doesn't either, just use
-            // the native formatter
+            // if the name is in a script the formatter's locale doesn't use, we just use a formatter for
+            // whatever the name locale is
             new NameAndTestCases("locale=ja_JP,given=駿,surname=宮崎", new String[][] {
-                { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎駿" },
-                { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎 駿" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎駿" },
             }),
-
-            // if the formatter locale doesn't use spaces and the name's locale does, use the name locale's formatter,
-            // but if the name is still using the formatter locale's script, use the native formatter's
-            // "foreign space replacement" character instead of spaces
             new NameAndTestCases("locale=en_US,given=Albert,surname=Einstein", new String[][] {
                 { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Albert Einstein" },
                 { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Albert Einstein" },
             }),
+
+            // if the name is in a script the formatter's locale does use, we use it, but if the name locale's
+            // language doesn't match the formatter locale's language, we replace any spaces in the result
+            // with the foreignSpaceReplacement character
             new NameAndTestCases("locale=en_US,given=アルベルト,surname=アインシュタイン", new String[][] {
                 { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "アルベルト・アインシュタイン" },
             }),
             new NameAndTestCases("locale=en_US,given=阿尔伯特,surname=爱因斯坦", new String[][] {
                 { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "阿尔伯特·爱因斯坦" },
+            }),
+
+            // if the name's script and locale both match the formatter, we format as normal, but replace
+            // any spaces in the result with the nativeSpaceReplacement character (which, for Japanese,
+            // is the empty string, giving us the name without spaces)
+            new NameAndTestCases("locale=ja_JP,given=駿,surname=宮崎", new String[][] {
+                { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎駿" },
+                { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎駿" },
+            }),
+            // (Thai, despite not using spaces between words, DOES use spaces between the given name and surname_
+            new NameAndTestCases("locale=th_TH,given=ไอริณ,surname=กล้าหาญ", new String[][] {
+                { "th_TH", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "ไอริณ กล้าหาญ" },
+            }),
+            // (Lao, on the other hand, does NOT put a space between the given name and surname)
+            new NameAndTestCases("locale=lo_LA,given=ໄອຣີນ,surname=ແອດເລີ", new String[][] {
+                { "lo_LA", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "ໄອຣີນແອດເລີ" },
             }),
         }, false);
     }
@@ -379,13 +401,35 @@ public class PersonNameFormatterTest extends TestFmwk{
         executeTestCases(new NameAndTestCases[]{
             // here, we're leaving out the locale on the name object.  In the first case, we
             // see the Latin letters and assume English, giving us GN-first ordering.  In the
-            // second, we see the Han characters and guess Japanese, giving us SN-first ordering.
+            // second, we see the Han characters and guess Japanese, giving us SN-first ordering
+            // (and the Japanese format with no space between the fields).
             new NameAndTestCases("given=Hayao,surname=Miyazaki", new String[][]{
                     {"en_US", "LONG", "REFERRING", "FORMAL", "DEFAULT", "", "Hayao Miyazaki"},
             }),
             new NameAndTestCases("given=駿,surname=宮崎", new String[][]{
-                    {"en_US", "LONG", "REFERRING", "FORMAL", "DEFAULT", "", "宮崎 駿"},
+                    {"en_US", "LONG", "REFERRING", "FORMAL", "DEFAULT", "", "宮崎駿"},
             }),
+        }, false);
+    }
+
+    @Test
+    public void TestMissingSurname() {
+        executeTestCases(new NameAndTestCases[]{
+                // test handling of monomyns: names that only have a given name.  Formatting patterns that only
+                // use the surname field will display as empty (or, in some of the examples below, with just
+                // the title) unless we do something special.  The special thing we do is that when the pattern
+                // has no given-name field and the name object has no surname field, we behave as though the
+                // contents of the given-name field are in the surname field.  (Note that this only happens
+                // for the "given" and "surname" fields; "given2" and "surname2" don't have this logic.)
+                new NameAndTestCases("title=Ms.,given=Zendaya", new String[][]{
+                        {"en_US", "MEDIUM", "ADDRESSING", "FORMAL",   "DEFAULT", "", "Ms. Zendaya"},
+                        {"en_US", "SHORT",  "ADDRESSING", "FORMAL",   "DEFAULT", "", "Ms. Zendaya"},
+                        {"en_US", "MEDIUM", "ADDRESSING", "INFORMAL", "DEFAULT", "", "Zendaya"},
+                        {"en_US", "SHORT",  "ADDRESSING", "INFORMAL", "DEFAULT", "", "Zendaya"},
+                        {"en_US", "SHORT",  "MONOGRAM",   "FORMAL",   "DEFAULT", "", "Z"},
+                        {"en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "Zendaya"},
+                        {"en_US", "SHORT",  "REFERRING",  "FORMAL",   "SORTING", "", "Zendaya"},
+                }),
         }, false);
     }
 

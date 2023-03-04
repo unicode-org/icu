@@ -324,4 +324,13 @@ public class PersonNameFormatter {
     public PersonNameFormatter(Locale locale, String[] patterns) {
         this.impl = new PersonNameFormatterImpl(locale, patterns);
     }
+
+    /**
+     * @internal For debugging only!
+     * @deprecated This API is for debugging only.
+     */
+    @Override
+    public String toString() {
+        return impl.toString();
+    }
 }

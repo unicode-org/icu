@@ -621,6 +621,7 @@
             <junit-fileset>
                 <fileset dir="${icu4j.core-tests.dir}/${bin.dir}">
                     <patternset refid="test-classes-patternset"/>
+                    <exclude name="**/ExhaustivePersonNameFormatterTest*" />
                 </fileset>
             </junit-fileset>
         </icu-junit>
