@@ -105,6 +105,9 @@ int main( void )
     printf("Examining: ");
     printUnicodeString(stringToExamine);
     puts("");
+#if defined(__i386__)
+    exit(1);
+#endif
 
     //print each sentence in forward and reverse order
     UErrorCode status = U_ZERO_ERROR;
