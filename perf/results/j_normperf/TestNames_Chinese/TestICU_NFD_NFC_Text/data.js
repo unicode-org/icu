@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678131461455,
+  "lastUpdate": 1678131493059,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11968,6 +11968,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 3.6889596359589616,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "2b714406eb5f163620a76b0f298b74b00c6be458",
+          "message": "ICU-22220 Add a step to instructions and fix an obsolete path.\n\nSee #2348",
+          "timestamp": "2023-03-06T19:29:02Z",
+          "tree_id": "ee6bd428c9c3bde8260557987e0fd0382a21a7af",
+          "url": "https://github.com/unicode-org/icu/commit/2b714406eb5f163620a76b0f298b74b00c6be458"
+        },
+        "date": 1678131468751,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.839200373021485,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
