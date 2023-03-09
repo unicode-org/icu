@@ -2465,13 +2465,13 @@ public class DateFormatTest extends TestFmwk {
         sym.equals(null);
 
         sym = new ChineseDateFormatSymbols();
-        sym = new ChineseDateFormatSymbols(new Locale("en_US"));
+        sym = new ChineseDateFormatSymbols(new Locale("en", "US"));
         try{
-            sym = new ChineseDateFormatSymbols(null, new Locale("en_US"));
+            sym = new ChineseDateFormatSymbols(null, new Locale("en", "US"));
             errln("ChineseDateFormatSymbols(Calender, Locale) was suppose to return a null " +
                     "pointer exception for a null paramater.");
         } catch(Exception e){}
-        sym = new ChineseDateFormatSymbols(new ChineseCalendar(), new Locale("en_US"));
+        sym = new ChineseDateFormatSymbols(new ChineseCalendar(), new Locale("en", "US"));
         try{
             sym = new ChineseDateFormatSymbols(null, new ULocale("en_US"));
             errln("ChineseDateFormatSymbols(Calender, ULocale) was suppose to return a null " +
@@ -4011,8 +4011,8 @@ public class DateFormatTest extends TestFmwk {
         try{
             @SuppressWarnings("unused")
             DateFormat df = DateFormat.getPatternInstance("");
-            df = DateFormat.getPatternInstance("", new Locale("en_US"));
-            df = DateFormat.getPatternInstance(null, "", new Locale("en_US"));
+            df = DateFormat.getPatternInstance("", new Locale("en", "US"));
+            df = DateFormat.getPatternInstance(null, "", new Locale("en", "US"));
         } catch(Exception e) {
             errln("DateFormat.getPatternInstance is not suppose to return an exception, got: " + e.toString());
             //e.printStackTrace();
