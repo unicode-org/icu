@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678313397884,
+  "lastUpdate": 1678380934179,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12214,6 +12214,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUnicode",
             "value": 4.0208,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 2.3035,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "57e4b0cd17f2fd29dcb8e98628c8d4f7395c9c77",
+          "message": "ICU-22299 deprecate redundant UnicodeSet.CASE",
+          "timestamp": "2023-03-09T08:40:08-08:00",
+          "tree_id": "87751c12e28dd20e1772e736e4f28db8ba2bd105",
+          "url": "https://github.com/unicode-org/icu/commit/57e4b0cd17f2fd29dcb8e98628c8d4f7395c9c77"
+        },
+        "date": 1678380910496,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 10.1502,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 4.0272,
             "unit": "ns/iter",
             "biggerIsBetter": false
           },
