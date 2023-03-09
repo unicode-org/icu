@@ -399,7 +399,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     @Test
     public void TestArabicLongStyle() {
         NumberFormat cdf =
-                CompactDecimalFormat.getInstance(new Locale("ar-EG"), CompactStyle.LONG);
+                CompactDecimalFormat.getInstance(new Locale("ar", "EG"), CompactStyle.LONG);
         assertEquals("Arabic Long", "\u061C-\u0665\u066B\u0663 \u0623\u0644\u0641", cdf.format(-5300));
     }
 
