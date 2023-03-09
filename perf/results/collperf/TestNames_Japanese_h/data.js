@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678313559962,
+  "lastUpdate": 1678381074566,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15766,6 +15766,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 8685985.7193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "57e4b0cd17f2fd29dcb8e98628c8d4f7395c9c77",
+          "message": "ICU-22299 deprecate redundant UnicodeSet.CASE",
+          "timestamp": "2023-03-09T08:40:08-08:00",
+          "tree_id": "87751c12e28dd20e1772e736e4f28db8ba2bd105",
+          "url": "https://github.com/unicode-org/icu/commit/57e4b0cd17f2fd29dcb8e98628c8d4f7395c9c77"
+        },
+        "date": 1678381051293,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 294.9822,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 25880974.1915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6909586.437,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 25063550.4085,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7646544.6728,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
