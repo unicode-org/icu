@@ -254,6 +254,62 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
     usrc_writeUCPTrie(f, shortPropName, utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
 }
 
+/*
+* Export Bidi_Mirroring_Glyph values (code points) in a similar way to how enumerated
+* properties are dumped to file.
+* Note: the data will store 0 for code points without a value defined for
+* Bidi_Mirroring_Glyph.
+*/
+void dumpBidiMirroringGlyph(FILE* f) {
+    UProperty uproperty = UCHAR_BIDI_MIRRORING_GLYPH;
+    IcuToolErrorCode status("icuexportdata: dumpBidiMirroringGlyph");
+    const char* fullPropName = u_getPropertyName(uproperty, U_LONG_PROPERTY_NAME);
+    const char* shortPropName = u_getPropertyName(uproperty, U_SHORT_PROPERTY_NAME);
+    handleError(status, fullPropName);
+
+    // Store 21-bit code point as is
+    UCPTrieValueWidth width = UCPTRIE_VALUE_BITS_32;
+
+    // note: unlike dumpEnumeratedProperty, which can get inversion map data using
+    // u_getIntPropertyMap(uproperty), the only reliable way to get Bidi_Mirroring_Glyph
+    // is to use u_charMirror(cp) over the code point space.
+    LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
+    for(UChar32 c = UCHAR_MIN_VALUE; c <= UCHAR_MAX_VALUE; c++) {
+        UChar32 mirroringGlyph = u_charMirror(c);
+        // The trie builder code throws an error when it cannot compress the data sufficiently.
+        // Therefore, when the value is undefined for a code point, keep a 0 in the trie
+        // instead of the ICU API behavior of returning the code point value. Using 0
+        // results in a relatively significant space savings by not including redundant data.
+        if (c != mirroringGlyph) {
+            umutablecptrie_set(builder.getAlias(), c, mirroringGlyph, status);
+        }
+    }
+
+    LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
+        builder.getAlias(),
+        trieType,
+        width,
+        status));
+    handleError(status, fullPropName);
+
+    // currently a trie and inversion map are the same (as relied upon in characterproperties.cpp)
+    const UCPMap* umap = reinterpret_cast<UCPMap *>(utrie.getAlias());
+
+    fputs("[[enum_property]]\n", f);
+    fprintf(f, "long_name = \"%s\"\n", fullPropName);
+    if (shortPropName) {
+        fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    }
+    fprintf(f, "uproperty_discr = 0x%X\n", uproperty);
+    dumpPropertyAliases(uproperty, f);
+
+    usrc_writeUCPMap(f, umap, nullptr, UPRV_TARGET_SYNTAX_TOML);
+    fputs("\n", f);
+
+    fputs("[enum_property.code_point_trie]\n", f);
+    usrc_writeUCPTrie(f, shortPropName, utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+}
+
 // After printing property value `v`, print `mask` if and only if `mask` comes immediately
 // after the property in the listing
 void maybeDumpMaskValue(UProperty uproperty, uint32_t v, uint32_t mask, FILE* f) {
@@ -1136,6 +1192,9 @@ int exportUprops(int argc, char* argv[]) {
                 i = UCHAR_GENERAL_CATEGORY_MASK;
             }
             if (i == UCHAR_GENERAL_CATEGORY_MASK + 1) {
+                i = UCHAR_BIDI_MIRRORING_GLYPH;
+            }
+            if (i == UCHAR_BIDI_MIRRORING_GLYPH + 1) {
                 i = UCHAR_SCRIPT_EXTENSIONS;
             }
             if (i == UCHAR_SCRIPT_EXTENSIONS + 1) {
@@ -1221,6 +1280,8 @@ int exportUprops(int argc, char* argv[]) {
             dumpEnumeratedProperty(propEnum, f);
         } else if (propEnum == UCHAR_GENERAL_CATEGORY_MASK) {
             dumpGeneralCategoryMask(f);
+        } else if (propEnum == UCHAR_BIDI_MIRRORING_GLYPH) {
+            dumpBidiMirroringGlyph(f);
         } else if (propEnum == UCHAR_SCRIPT_EXTENSIONS) {
             dumpScriptExtensions(f);
         } else {
