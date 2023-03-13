@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678429471604,
+  "lastUpdate": 1678742166667,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6298,6 +6298,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 340.3033785784046,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shenlebantongying@gmail.com",
+            "name": "shenleban tongying",
+            "username": "shenlebantongying"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ed011f2e3158c1205ec4517ead92a880fdc80f45",
+          "message": "ICU-22247 remove historical mention of old versions",
+          "timestamp": "2023-03-13T14:05:21-07:00",
+          "tree_id": "32c116556e9c368e31eb75cb804ebc9c74642a1c",
+          "url": "https://github.com/unicode-org/icu/commit/ed011f2e3158c1205ec4517ead92a880fdc80f45"
+        },
+        "date": 1678742140422,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 397.32419943885066,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
