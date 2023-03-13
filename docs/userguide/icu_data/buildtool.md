@@ -78,6 +78,32 @@ To build ICU4J with custom data, you must first build ICU4C with custom data
 and then generate the JAR file.  For more information on building ICU4J, read the
 [ICU4J Readme](../icu4j/).
 
+### Default Configuration
+
+By default (without a configuration file and without option flags),
+the ICU data file includes all of the data in the ICU source tree.
+
+Since ICU 73 (2023q2), there is an exception:
+By default, the "big5han" and "gb2312han" collation tailorings are omitted.
+These mimic the order of their respective charsets, are relatively large, and rarely used.
+(See [ICU-22285](https://unicode-org.atlassian.net/browse/ICU-22285).)
+
+The default configuration is equivalent to a filter file like this:
+
+    {
+      "resourceFilters": [
+        {
+          "categories": [
+            "coll_tree"
+          ],
+          "rules": [
+            "-/collations/big5han",
+            "-/collations/gb2312han"
+          ]
+        }
+      ]
+    }
+
 ### Locale Slicing
 
 The simplest way to slice ICU data is by locale.  The ICU Data Build Tool
