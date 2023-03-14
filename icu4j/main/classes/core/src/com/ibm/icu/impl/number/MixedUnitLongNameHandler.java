@@ -103,9 +103,9 @@ public class MixedUnitLongNameHandler
     }
 
     /**
-     * Produces a plural-appropriate Modifier for a mixed unit: `quantity` is
+     * Produces a plural-appropriate Modifier for a mixed unit: {@code quantity} is
      * taken as the final smallest unit, while the larger unit values must be
-     * provided by `micros.mixedMeasures`, micros being the MicroProps instance
+     * provided by {@code micros.mixedMeasures}, micros being the MicroProps instance
      * returned by the parent.
      *
      * This function must not be called if this instance has no parent: call
@@ -121,9 +121,9 @@ public class MixedUnitLongNameHandler
     }
 
     /**
-     * Produces a plural-appropriate Modifier for a mixed unit: `quantity` is
+     * Produces a plural-appropriate Modifier for a mixed unit: {@code quantity} is
      * taken as the final smallest unit, while the larger unit values must be
-     * provided via `micros.mixedMeasures`.
+     * provided via {@code micros.mixedMeasures}.
      *
      * Does not call parent.processQuantity, so cannot get a MicroProps instance
      * that way. Instead, the instance is passed in as a parameter.

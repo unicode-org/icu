@@ -1238,7 +1238,7 @@ public class PluralRulesTest extends TestFmwk {
     // for the scientific exponent operand `e` and compact notation.
     /**
      * Test the proper plural rule keyword selection given an input number that is
-     * already formatted into scientific notation. This exercises the `e` plural operand
+     * already formatted into scientific notation. This exercises the {@code e} plural operand
      * for the formatted number.
      */
     @Test
@@ -1292,7 +1292,7 @@ public class PluralRulesTest extends TestFmwk {
 
     /**
      * Test the proper plural rule keyword selection given an input number that is
-     * already formatted into compact notation. This exercises the `c` plural operand
+     * already formatted into compact notation. This exercises the {@code c} plural operand
      * for the formatted number.
      */
     @Test

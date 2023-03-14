@@ -221,10 +221,10 @@ public class UnitsData {
     }
 
     /**
-     * A Resource Sink that collects information from `unitQuantities` in the
-     * `units` resource to provide key->value lookups from base unit to
+     * A Resource Sink that collects information from {@code unitQuantities} in the
+     * {@code units} resource to provide key->value lookups from base unit to
      * category, as well as preserving ordering information for these
-     * categories. See `units.txt`.
+     * categories. See {@code units.txt}.
      *
      * For example: "kilogram" -> "mass", "meter-per-second" -> "speed".
      *

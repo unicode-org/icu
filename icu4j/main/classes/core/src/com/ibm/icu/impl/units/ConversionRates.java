@@ -32,7 +32,7 @@ public class ConversionRates {
     }
 
     /**
-     * Extracts the factor from a `SingleUnitImpl` to its Basic Unit.
+     * Extracts the factor from a {@code SingleUnitImpl} to its Basic Unit.
      *
      * @param singleUnit
      * @return
@@ -102,7 +102,7 @@ public class ConversionRates {
 
     /**
      * @param singleUnit An instance of SingleUnitImpl.
-     * @return The base units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
+     * @return The base units in the {@code SingleUnitImpl} with applying the dimensionality only and not the SI prefix.
      * <p>
      * NOTE:
      * This method is helpful when checking the convertibility because no need to check convertibility.
@@ -120,10 +120,10 @@ public class ConversionRates {
     }
 
     /**
-     * Checks if the `MeasureUnitImpl` is simple or not.
+     * Checks if the {@code MeasureUnitImpl} is simple or not.
      *
      * @param measureUnitImpl
-     * @return true if the `MeasureUnitImpl` is simple, false otherwise.
+     * @return true if the {@code MeasureUnitImpl} is simple, false otherwise.
      */
     private boolean checkSimpleUnit(MeasureUnitImpl measureUnitImpl) {
         if (measureUnitImpl.getComplexity() != MeasureUnit.Complexity.SINGLE) return false;

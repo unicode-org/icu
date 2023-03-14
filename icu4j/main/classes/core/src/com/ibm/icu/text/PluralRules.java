@@ -87,7 +87,7 @@ import com.ibm.icu.util.ULocale;
  * This illustrates conjunction and negation. The condition for 'few' has two parts, both of which must be met:
  * "n mod 10 in 2..4" and "n mod 100 not in 12..14". The first part applies a modulus to n before the test as in the
  * previous example. The second part applies a different modulus and also uses negation, thus it matches all numbers
- * _not_ in 12, 13, 14, 112, 113, 114, 212, 213, 214...
+ * <i>not</i> in 12, 13, 14, 112, 113, 114, 212, 213, 214...
  * </p>
  * <p>
  * Syntax:
@@ -503,7 +503,7 @@ public class PluralRules implements Serializable {
         e,
 
         /**
-         * This operand is currently treated as an alias for `PLURAL_OPERAND_E`.
+         * This operand is currently treated as an alias for {@code PLURAL_OPERAND_E}.
          * In the future, it will represent:
          *
          * Suppressed exponent for compact notation (exponent needed in
@@ -692,7 +692,7 @@ public class PluralRules implements Serializable {
          * @param f Corresponds to f in the plural rules grammar.
          *   The digits to the right of the decimal place as an integer. e.g 1.10 = 10
          * @param e Suppressed exponent for scientific notation
-         * @param c Currently: an alias for param `e`
+         * @param c Currently: an alias for param {@code e}
          */
         @Deprecated
         public FixedDecimal(double n, int v, long f, int e, int c) {

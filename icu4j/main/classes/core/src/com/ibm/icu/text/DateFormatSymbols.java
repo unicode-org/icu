@@ -2351,7 +2351,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * <i>valid</i> locale).
      *
      * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
+     * contains a partial preview implementation.  The <i>actual</i>
      * locale is returned correctly, but the <i>valid</i> locale is
      * not, in most cases.
      * @param type type of information requested, either {@link

@@ -1299,8 +1299,8 @@ public class LongNameHandler
     }
 
     /**
-     * Sets modifiers to a combination of `leadFormats` (one per plural form)
-     * and `trailFormat` appended to each.
+     * Sets modifiers to a combination of {@code leadFormats} (one per plural form)
+     * and {@code trailFormat} appended to each.
      *
      * With a leadFormat of "{0}m" and a trailFormat of "{0}/s", it produces a
      * pattern of "{0}m/s" by inserting each leadFormat pattern into
@@ -1340,9 +1340,9 @@ public class LongNameHandler
     }
 
     /**
-     * Produces a plural-appropriate Modifier for a unit: `quantity` is taken as
+     * Produces a plural-appropriate Modifier for a unit: {@code quantity} is taken as
      * the final smallest unit, while the larger unit values must be provided
-     * via `micros.mixedMeasures`.
+     * via {@code micros.mixedMeasures}.
      *
      * Does not call parent.processQuantity, so cannot get a MicroProps instance
      * that way. Instead, the instance is passed in as a parameter.

@@ -163,7 +163,7 @@ public class SimplePersonName implements PersonName {
      * provided at construction time, and this function will return them.  Otherwise, it ignores modifiers and
      * relies on PersonNameFormat's default modifier handling.
      * @param nameField The identifier of the requested field.
-     * @param modifiers An **IN/OUT** parameter that specifies modifiers to apply to the basic field value.
+     * @param modifiers An <b>IN/OUT</b> parameter that specifies modifiers to apply to the basic field value.
      *                  On return, this list will contain any modifiers that this object didn't handle.  This class
      *                  will always return this set unmodified, unless a modified version of the requested field
      *                  was provided at construction time.

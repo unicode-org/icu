@@ -469,12 +469,12 @@ public class MeasureUnit implements Serializable {
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified prefix.
      * For example, MeasurePrefix.KILO for "kilo", or MeasurePrefix.KIBI for "kibi".
-     * May return `this` if this unit already has that prefix.
+     * May return {@code this} if this unit already has that prefix.
      * <p>
      * There is sufficient locale data to format all standard prefixes.
      * <p>
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
-     * occur. For more information, see `Complexity`.
+     * occur. For more information, {@link Complexity}.
      *
      * @param prefix The prefix, from MeasurePrefix.
      * @return A new SINGLE unit.
@@ -492,7 +492,7 @@ public class MeasureUnit implements Serializable {
      * if the unit has the prefix "kilo", then MeasurePrefix.KILO is returned.
      * <p>
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an
-     * error will occur. For more information, see `Complexity`.
+     * error will occur. For more information, {@link Complexity}.
      *
      * @return The prefix of this SINGLE unit, from MeasurePrefix.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
@@ -507,7 +507,7 @@ public class MeasureUnit implements Serializable {
      * then 2 is returned.
      * <p>
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an exception will be thrown.
-     * For more information, see `Complexity`.
+     * For more information, {@link Complexity}.
      *
      * @return The dimensionality (power) of this simple unit.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
@@ -522,7 +522,7 @@ public class MeasureUnit implements Serializable {
      * (power). For example, if dimensionality is 2, the unit will be squared.
      * <p>
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an exception is thrown.
-     * For more information, see `Complexity`.
+     * For more information, {@link Complexity}.
      *
      * @param dimensionality The dimensionality (power).
      * @return A new SINGLE unit.
@@ -541,7 +541,7 @@ public class MeasureUnit implements Serializable {
      * For example, if the receiver is "meter-per-second", the unit "second-per-meter" is returned.
      * <p>
      * NOTE: Only works on SINGLE and COMPOUND units. If this is a MIXED unit, an error will
-     * occur. For more information, see `Complexity`.
+     * occur. For more information, {@link Complexity}.
      *
      * @return The reciprocal of the target unit.
      * @throws UnsupportedOperationException if the unit is MIXED.
@@ -563,7 +563,7 @@ public class MeasureUnit implements Serializable {
      * unit "kilowatt-hour-per-day" is returned.
      * <p>
      * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
-     * MIXED unit, an error will occur. For more information, see `Complexity`.
+     * MIXED unit, an error will occur. For more information, {@link Complexity}.
      *
      * @param other The MeasureUnit to multiply with the target.
      * @return The product of the target unit with the provided unit.

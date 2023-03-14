@@ -63,7 +63,7 @@ import java.util.regex.Pattern;
  * ja;q=0.3</pre>
  * If it is off (the default), then all weights are reset to 1.0 after reordering.
  * This is to match the effect of the Accept-Language semantics as used in browsers, and results in the following:
- *  * <pre> en;q=1.0
+ * <pre> en;q=1.0
  * de;q=1.0
  * fr;q=1.0
  * ja;q=1.0</pre>
