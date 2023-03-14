@@ -283,6 +283,8 @@ FractionPrecision Precision::constructFraction(int32_t minFrac, int32_t maxFrac)
     settings.fMaxFrac = static_cast<digits_t>(maxFrac);
     settings.fMinSig = -1;
     settings.fMaxSig = -1;
+    settings.fPriority = UNUM_ROUNDING_PRIORITY_RELAXED;
+    settings.fRetain = false;
     PrecisionUnion union_;
     union_.fracSig = settings;
     return {RND_FRACTION, union_};
@@ -294,6 +296,8 @@ Precision Precision::constructSignificant(int32_t minSig, int32_t maxSig) {
     settings.fMaxFrac = -1;
     settings.fMinSig = static_cast<digits_t>(minSig);
     settings.fMaxSig = static_cast<digits_t>(maxSig);
+    settings.fPriority = UNUM_ROUNDING_PRIORITY_RELAXED;
+    settings.fRetain = false;
     PrecisionUnion union_;
     union_.fracSig = settings;
     return {RND_SIGNIFICANT, union_};

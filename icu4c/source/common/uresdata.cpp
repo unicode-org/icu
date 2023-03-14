@@ -1250,7 +1250,8 @@ ures_swapResource(const UDataSwapper *ds,
                     ds->swapArray16(ds, pKey16+oldIndex, 2, rKey16+i, pErrorCode);
                 }
                 if(qKey16!=rKey16) {
-                    uprv_memcpy(qKey16, rKey16, 2*count);
+                    uprv_memcpy(qKey16, rKey16, count);
+                    uprv_memcpy(qKey16+count, rKey16+count, count);
                 }
             } else {
                 int32_t *rKey32;
@@ -1265,7 +1266,10 @@ ures_swapResource(const UDataSwapper *ds,
                     ds->swapArray32(ds, pKey32+oldIndex, 4, rKey32+i, pErrorCode);
                 }
                 if(qKey32!=rKey32) {
-                    uprv_memcpy(qKey32, rKey32, 4*count);
+                    uprv_memcpy(qKey32, rKey32, count);
+                    uprv_memcpy(qKey32+count, rKey32+count, count);
+                    uprv_memcpy(qKey32+count+count, rKey32+count+count, count);
+                    uprv_memcpy(qKey32+count+count+count, rKey32+count+count+count, count);
                 }
             }
 
