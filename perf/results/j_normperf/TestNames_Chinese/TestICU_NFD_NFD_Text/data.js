@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678823551191,
+  "lastUpdate": 1678824293531,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6568,6 +6568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.714735890199418,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "97510de5d428edc7f866fac9bb11d73d91ec714d",
+          "message": "ICU-22280 Replace markdown in javadoc with proper tags",
+          "timestamp": "2023-03-14T12:48:58-07:00",
+          "tree_id": "137506b34a093e7f6d85cfe618c9dd76e0d6f49f",
+          "url": "https://github.com/unicode-org/icu/commit/97510de5d428edc7f866fac9bb11d73d91ec714d"
+        },
+        "date": 1678824271299,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.212871272667302,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
