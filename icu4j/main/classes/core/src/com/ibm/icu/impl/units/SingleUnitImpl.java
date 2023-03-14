@@ -28,7 +28,7 @@ public class SingleUnitImpl {
      */
     private String simpleUnitID = "";
     /**
-     * Determine the power of the `SingleUnit`. For example, for "square-meter", the dimensionality will be `2`.
+     * Determine the power of the {@code SingleUnit}. For example, for "square-meter", the dimensionality will be {@code 2}.
      * <p>
      * NOTE:
      * Default dimensionality is 1.

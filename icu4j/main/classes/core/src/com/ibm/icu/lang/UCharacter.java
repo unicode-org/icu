@@ -4944,9 +4944,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * {@icu} Returns the most current Unicode name of the argument code point, or
      * null if the character is unassigned or outside the range
-     * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
+     * {@code UCharacter.MIN_VALUE} and {@code UCharacter.MAX_VALUE} or does not
+     * have a name.
      * <br>
-     * Note calling any methods related to code point names, e.g. get*Name*()
+     * Note calling any methods related to code point names, e.g. {@code getName()}
      * incurs a one-time initialization cost to construct the name tables.
      * @param ch the code point for which to get the name
      * @return most current Unicode name
@@ -5003,7 +5004,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * <li> Extended name in the form of
      *      "&lt;codepoint_type-codepoint_hex_digits&gt;". E.g., &lt;noncharacter-fffe&gt;
      * </ul>
-     * Note calling any methods related to code point names, e.g. get*Name*()
+     * Note calling any methods related to code point names, e.g. {@code getName()}
      * incurs a one-time initialization cost to construct the name tables.
      * @param ch the code point for which to get the name
      * @return a name for the argument codepoint
@@ -5018,7 +5019,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Returns null if the character is unassigned or outside the range
      * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
      * <br>
-     * Note calling any methods related to code point names, e.g. get*Name*()
+     * Note calling any methods related to code point names, e.g. {@code getName()}
      * incurs a one-time initialization cost to construct the name tables.
      * @param ch the code point for which to get the name alias
      * @return Unicode name alias, or null
@@ -5048,7 +5049,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * {@icu} <p>Finds a Unicode code point by its most current Unicode name and
      * return its code point value. All Unicode names are in uppercase.
-     * Note calling any methods related to code point names, e.g. get*Name*()
+     * Note calling any methods related to code point names, e.g. {@code getName()}
      * incurs a one-time initialization cost to construct the name tables.
      * @param name most current Unicode character name whose code point is to
      *        be returned
@@ -5087,7 +5088,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * <li> Extended name in the form of
      *      "&lt;codepoint_type-codepoint_hex_digits&gt;". E.g. &lt;noncharacter-FFFE&gt;
      * </ul>
-     * Note calling any methods related to code point names, e.g. get*Name*()
+     * Note calling any methods related to code point names, e.g. {@code getName()}
      * incurs a one-time initialization cost to construct the name tables.
      * @param name codepoint name
      * @return code point associated with the name or -1 if the name is not
@@ -5102,7 +5103,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * {@icu} <p>Find a Unicode character by its corrected name alias and return
      * its code point value. All Unicode names are in uppercase.
-     * Note calling any methods related to code point names, e.g. get*Name*()
+     * Note calling any methods related to code point names, e.g. {@code getName()}
      * incurs a one-time initialization cost to construct the name tables.
      * @param name Unicode name alias whose code point is to be returned
      * @return code point or -1 if name is not found

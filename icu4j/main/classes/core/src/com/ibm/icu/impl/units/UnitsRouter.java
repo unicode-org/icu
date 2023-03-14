@@ -13,32 +13,32 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
 /**
- * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
- * one of the complex units based on the limits.
+ * {@code UnitsRouter} responsible for converting from a single unit (such as {@code meter} or
+ * {@code meter-per-second}) to one of the complex units based on the limits.
  * For example:
- * if the input is `meter` and the output as following
- * {`foot+inch`, limit: 3.0}
- * {`inch`     , limit: no value (-inf)}
- * Thus means if the input in `meter` is greater than or equal to `3.0 feet`, the output will be in
- * `foot+inch`, otherwise, the output will be in `inch`.
+ * if the input is {@code meter} and the output as following
+ * {{@code foot+inch}, limit: 3.0}
+ * {{@code inch}     , limit: no value (-inf)}
+ * Thus means if the input in {@code meter} is greater than or equal to {@code 3.0 feet},
+ * the output will be in {@code foot+inch}, otherwise, the output will be in {@code inch}.
  * <p>
  * NOTE:
  * the output units and their limits MUST BE in order, for example, if the output units, from the
  * previous example, are the following:
- * {`inch`     , limit: no value (-inf)}
- * {`foot+inch`, limit: 3.0}
- * IN THIS CASE THE OUTPUT WILL BE ALWAYS IN `inch`.
+ * {{@code inch}     , limit: no value (-inf)}
+ * {{@code foot+inch}, limit: 3.0}
+ * IN THIS CASE THE OUTPUT WILL BE ALWAYS IN {@code inch}.
  * <p>
  * NOTE:
- * the output units  and their limits will be extracted from the units preferences database by knowing
+ * the output units and their limits will be extracted from the units preferences database by knowing
  * the followings:
  * - input unit
  * - locale
  * - usage
  * <p>
  * DESIGN:
- * `UnitRouter` uses internally `ComplexUnitConverter` in order to convert the input units to the
- * desired complex units and to check the limit too.
+ * {@code UnitRouter} uses internally {@code ComplexUnitConverter} in order to convert the input
+ * units to the desired complex units and to check the limit too.
  */
 public class UnitsRouter {
     // List of possible output units. TODO: converterPreferences_ now also has
@@ -146,12 +146,12 @@ public class UnitsRouter {
 
     /**
      * Contains the complex unit converter and the limit which representing the smallest value that the
-     * converter should accept. For example, if the converter is converting to `foot+inch` and the limit
-     * equals 3.0, thus means the converter should not convert to a value less than `3.0 feet`.
+     * converter should accept. For example, if the converter is converting to {@code foot+inch} and the
+     * limit equals 3.0, thus means the converter should not convert to a value less than {@code 3.0 feet}.
      * <p>
      * NOTE:
-     * if the limit doest not has a value `i.e. (std::numeric_limits<double>::lowest())`, this mean there
-     * is no limit for the converter.
+     * if the limit doest not has a value (i.e. {@code std::numeric_limits<double>::lowest()}),
+     * this mean there is no limit for the converter.
      */
     public static class ConverterPreference {
         // The output unit for this ConverterPreference. This may be a MIXED unit -

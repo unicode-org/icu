@@ -80,8 +80,8 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
 
     /**
      * As MicroProps is the "base instance", this implementation of
-     * MircoPropsGenerator.processQuantity() just ensures that the output
-     * `micros` is correctly initialized.
+     * {@code MircoPropsGenerator.processQuantity()} just ensures that the output
+     * {@code micros} is correctly initialized.
      * <p>
      * For the "safe" invocation of this function, micros must not be *this,
      * such that a copy of the base instance is made. For the "unsafe" path,

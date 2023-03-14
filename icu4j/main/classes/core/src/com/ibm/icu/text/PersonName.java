@@ -247,7 +247,7 @@ public interface PersonName {
      * Returns one field of the name, possibly in a modified form.
      *
      * @param identifier The identifier of the requested field.
-     * @param modifiers  An **IN/OUT** parameter that specifies modifiers to apply to the basic field value.
+     * @param modifiers  An <b>IN/OUT</b> parameter that specifies modifiers to apply to the basic field value.
      *                   An implementing class can choose to handle or ignore any modifiers; it should modify
      *                   the passed-in Set so that on exit, it contains only the requested modifiers that it
      *                   DIDN'T handle.  This parameter may not be null, and must either be mutable or empty.

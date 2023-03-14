@@ -254,7 +254,7 @@ public class UnitsConverter {
         }
 
         /**
-         * Returns a single `BigDecimal` that represent the conversion rate after substituting all the constants.
+         * Returns a single {@code BigDecimal} that represent the conversion rate after substituting all the constants.
          *
          * In ICU4C, see Factor::substituteConstants().
          */
@@ -388,7 +388,7 @@ public class UnitsConverter {
         }
 
         /**
-         * Adds Entity with power or not. For example, `12 ^ 3` or `12`.
+         * Adds Entity with power or not. For example, {@code 12 ^ 3} or {@code 12}.
          *
          * @param poweredEntity
          */

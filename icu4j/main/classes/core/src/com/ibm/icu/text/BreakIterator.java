@@ -66,7 +66,7 @@ import com.ibm.icu.util.ULocale;
  * <ul><li>The beginning and end of the text are always treated as boundary positions.
  * <li>The current position of the iterator is always a boundary position (random-
  * access methods move the iterator to the nearest boundary position before or
- * after the specified position, not _to_ the specified position).
+ * after the specified position, not <i>to</i> the specified position).
  * <li>DONE is used as a flag to indicate when iteration has stopped.  DONE is only
  * returned when the current position is the end of the text and the user calls next(),
  * or when the current position is the beginning of the text and the user calls

@@ -45,21 +45,21 @@ import java.util.Map;
  * import java.util.HashMap;
  * import java.util.Locale;
  * import java.util.Map;
- * 
+ *
  * import com.ibm.icu.message2.MessageFormatter;
- * 
- * @Test
+ *
+ * &#064;Test
  * public void testMf2() {
  *     final Locale enGb = Locale.forLanguageTag("en-GB");
  *     Map<String, Object> arguments = new HashMap<>();
  *     arguments.put("name", "John");
  *     arguments.put("exp", new Date(1679971371000L));  // March 27, 2023, 7:42:51 PM
- * 
+ *
  *     MessageFormatter mf2 = MessageFormatter.builder()
  *         .setPattern("{Hello {$name}, your card expires on {$exp :datetime skeleton=yMMMdE}!}")
  *         .setLocale(enGb)
  *         .build();
- * 
+ *
  *     assertEquals(
  *         "Hello John, your card expires on Mon, 27 Mar 2023!",
  *         mf2.formatToString(arguments));
@@ -94,27 +94,24 @@ import java.util.Map;
  * <h4>Plural selection message</h4>
  * 
  * <blockquote><pre>
- * @Test
+ * &#064;Test
  * public void testMf2Selection() {
  *    final String message = "match {$count :plural}\n"
  *            + " when one {You have one notification.}\n"
  *            + " when * {You have {$count} notifications.}\n";
  *    final Locale enGb = Locale.forLanguageTag("en-GB");
  *    Map<String, Object> arguments = new HashMap<>();
- * 
- * 
+ *
  *    MessageFormatter mf2 = MessageFormatter.builder()
  *        .setPattern(message)
  *        .setLocale(enGb)
  *        .build();
- * 
- * 
+ *
  *    arguments.put("count", 1);
  *    assertEquals(
  *        "You have one notification.",
  *        mf2.formatToString(arguments));
- * 
- * 
+ *
  *    arguments.put("count", 42);
  *    assertEquals(
  *        "You have 42 notifications.",
