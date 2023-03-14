@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678824382163,
+  "lastUpdate": 1678833049079,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6478,6 +6478,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.016195577872236838,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "2d9fa3fa9971c095b92f375dd0fe0a398d1dc6a8",
+          "message": "ICU-22285 omit the gb2312 & big5han collation tailorings by default",
+          "timestamp": "2023-03-14T15:20:03-07:00",
+          "tree_id": "557e489f98737e764ca5acf98fca003cb63d88a0",
+          "url": "https://github.com/unicode-org/icu/commit/2d9fa3fa9971c095b92f375dd0fe0a398d1dc6a8"
+        },
+        "date": 1678833025091,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.015798129767195565,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
