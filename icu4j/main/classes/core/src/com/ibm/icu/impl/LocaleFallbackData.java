@@ -347,6 +347,16 @@ class LocaleFallbackData {
         t.put("hnd", "Arab");
         t.put("hne", "Deva");
         t.put("hnj", "Hmnp");
+        t.put("hnj_AU", "Laoo");
+        t.put("hnj_CN", "Laoo");
+        t.put("hnj_FR", "Laoo");
+        t.put("hnj_GF", "Laoo");
+        t.put("hnj_LA", "Laoo");
+        t.put("hnj_MM", "Laoo");
+        t.put("hnj_SR", "Laoo");
+        t.put("hnj_TH", "Laoo");
+        t.put("hnj_US", "Hmnp");
+        t.put("hnj_VN", "Laoo");
         t.put("hno", "Arab");
         t.put("hoc", "Deva");
         t.put("hoh", "Arab");
