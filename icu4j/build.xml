@@ -672,7 +672,7 @@
         </icu-junit>
     </target>
 
-    <target name="translitCheck" depends="info, core, translit, langdata, translit-tests" description="Run the ICU4J Translit test suite">
+    <target name="translitCheck" depends="info, core, translit, langdata, core-tests, translit-tests" description="Run the ICU4J Translit test suite">
         <antcall target="_translitCheck"/>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
@@ -1263,7 +1263,7 @@
         </ant>
     </target>
 
-    <target name="charset-tests" depends="charset, test-framework" description="Build charset tests">
+    <target name="charset-tests" depends="charset, core-tests, test-framework" description="Build charset tests">
         <ant dir="${icu4j.charset-tests.dir}" inheritAll="false">
             <reference refid="junit.jars"/>
         </ant>
@@ -1281,7 +1281,7 @@
         </ant>
     </target>
 
-    <target name="translit-tests" depends="translit, test-framework" description="Build translit tests">
+    <target name="translit-tests" depends="translit, core-tests, test-framework" description="Build translit tests">
         <ant dir="${icu4j.translit-tests.dir}" inheritAll="false">
             <reference refid="junit.jars"/>
         </ant>
@@ -1874,6 +1874,7 @@
 
             <src path="${icu4j.tools.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
+            <src path="${icu4j.translit-tests.dir}/src"/>
 
             <include name="com/ibm/icu/dev/util/CollectionUtilities.java" />
             <include name="com/ibm/icu/dev/util/ElapsedTimer.java" />
