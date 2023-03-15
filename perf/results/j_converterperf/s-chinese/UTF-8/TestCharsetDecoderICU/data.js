@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678839684265,
+  "lastUpdate": 1678904072930,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6358,6 +6358,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.5964713344698724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bugagashenkj@gmail.com",
+            "name": "Ivan Tymoshenko",
+            "username": "ivan-tymoshenko"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "2c46fb7f610fef5e4d0a32881d8dc46d08265123",
+          "message": "ICU-22286 Speed up substring equality comparison",
+          "timestamp": "2023-03-15T11:10:48-07:00",
+          "tree_id": "71649bae687245b52542f0a90999bb2fd9aaf461",
+          "url": "https://github.com/unicode-org/icu/commit/2c46fb7f610fef5e4d0a32881d8dc46d08265123"
+        },
+        "date": 1678904047678,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.313707957293516,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
