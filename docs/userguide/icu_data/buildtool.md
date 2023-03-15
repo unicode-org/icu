@@ -104,6 +104,27 @@ The default configuration is equivalent to a filter file like this:
       ]
     }
 
+If you do want to include these collation tailorings,
+you can configure ICU with a filter file which has the opposite effect:
+
+    {
+      "resourceFilters": [
+        {
+          "categories": [
+            "coll_tree"
+          ],
+          "rules": [
+            "+/collations/big5han",
+            "+/collations/gb2312han"
+          ]
+        }
+      ]
+    }
+
+Alternatively, if you want to make sure to include *all* collation tailorings,
+you can use a single filter rule like `+/collations` or `+/collations/*`
+rather than listing each tailoring by its full, explicit path.
+
 ### Locale Slicing
 
 The simplest way to slice ICU data is by locale.  The ICU Data Build Tool
