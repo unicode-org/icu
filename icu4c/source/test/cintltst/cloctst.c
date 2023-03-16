@@ -7043,13 +7043,50 @@ static const UldnItem yi_StdMidLong[] = { // https://unicode-org.atlassian.net/b
 	{ "ji",                     TEST_ULOC_LANGUAGE, u"ייִדיש" },
 };
 
+static const UldnItem zh_DiaMidLong[] = {
+    // zh and zh_Hant both have dialect names for the following in ICU 73
+    { "ar_001",                 TEST_ULDN_LOCALE, u"现代标准阿拉伯语" },
+    { "nl_BE",                  TEST_ULDN_LOCALE, u"弗拉芒语" },
+    { "ro_MD",                  TEST_ULDN_LOCALE, u"摩尔多瓦语" },
+    // zh has dialect names for the following in ICU 73
+    { "en_AU",                  TEST_ULDN_LOCALE, u"澳大利亚英语" },
+    { "en_CA",                  TEST_ULDN_LOCALE, u"加拿大英语" },
+    { "en_GB",                  TEST_ULDN_LOCALE, u"英国英语" },
+    { "en_US",                  TEST_ULDN_LOCALE, u"美国英语" },
+    { "es_419",                 TEST_ULDN_LOCALE, u"拉丁美洲西班牙语" },
+    { "es_ES",                  TEST_ULDN_LOCALE, u"欧洲西班牙语" },
+    { "es_MX",                  TEST_ULDN_LOCALE, u"墨西哥西班牙语" },
+    { "fr_CA",                  TEST_ULDN_LOCALE, u"加拿大法语" },
+    { "fr_CH",                  TEST_ULDN_LOCALE, u"瑞士法语" },
+};
+
+static const UldnItem zh_Hant_DiaMidLong[] = {
+    // zh and zh_Hant both have dialect names for the following in ICU 73
+    { "ar_001",                 TEST_ULDN_LOCALE, u"現代標準阿拉伯文" },
+    { "nl_BE",                  TEST_ULDN_LOCALE, u"佛蘭芒文" },
+    { "ro_MD",                  TEST_ULDN_LOCALE, u"摩爾多瓦文" },
+    // zh_Hant no dialect names for the following in ICU-73,
+    // use standard name
+    { "en_AU",                  TEST_ULDN_LOCALE, u"英文（澳洲）" },
+    { "en_CA",                  TEST_ULDN_LOCALE, u"英文（加拿大）" },
+    { "en_GB",                  TEST_ULDN_LOCALE, u"英文（英國）" },
+    { "en_US",                  TEST_ULDN_LOCALE, u"英文（美國）" },
+    { "es_419",                 TEST_ULDN_LOCALE, u"西班牙文（拉丁美洲）" },
+    { "es_ES",                  TEST_ULDN_LOCALE, u"西班牙文（西班牙）" },
+    { "es_MX",                  TEST_ULDN_LOCALE, u"西班牙文（墨西哥）" },
+    { "fr_CA",                  TEST_ULDN_LOCALE, u"法文（加拿大）" },
+    { "fr_CH",                  TEST_ULDN_LOCALE, u"法文（瑞士）" },
+};
+
 static const UldnLocAndOpts uldnLocAndOpts[] = {
-    { "en", optStdMidLong, en_StdMidLong, UPRV_LENGTHOF(en_StdMidLong) },
-    { "en", optStdMidShrt, en_StdMidShrt, UPRV_LENGTHOF(en_StdMidShrt) },
-    { "en", optDiaMidLong, en_DiaMidLong, UPRV_LENGTHOF(en_DiaMidLong) },
-    { "en", optDiaMidShrt, en_DiaMidShrt, UPRV_LENGTHOF(en_DiaMidShrt) },
-    { "ro", optStdMidLong, ro_StdMidLong, UPRV_LENGTHOF(ro_StdMidLong) },
-    { "yi", optStdMidLong, yi_StdMidLong, UPRV_LENGTHOF(yi_StdMidLong) },
+    { "en", optStdMidLong,      en_StdMidLong,      UPRV_LENGTHOF(en_StdMidLong) },
+    { "en", optStdMidShrt,      en_StdMidShrt,      UPRV_LENGTHOF(en_StdMidShrt) },
+    { "en", optDiaMidLong,      en_DiaMidLong,      UPRV_LENGTHOF(en_DiaMidLong) },
+    { "en", optDiaMidShrt,      en_DiaMidShrt,      UPRV_LENGTHOF(en_DiaMidShrt) },
+    { "ro", optStdMidLong,      ro_StdMidLong,      UPRV_LENGTHOF(ro_StdMidLong) },
+    { "yi", optStdMidLong,      yi_StdMidLong,      UPRV_LENGTHOF(yi_StdMidLong) },
+    { "zh", optDiaMidLong,      zh_DiaMidLong,      UPRV_LENGTHOF(zh_DiaMidLong) },
+    { "zh_Hant", optDiaMidLong, zh_Hant_DiaMidLong, UPRV_LENGTHOF(zh_Hant_DiaMidLong) },
     { NULL, NULL, NULL, 0 }
 };
 
