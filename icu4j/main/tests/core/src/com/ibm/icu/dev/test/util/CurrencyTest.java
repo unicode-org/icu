@@ -691,6 +691,9 @@ public class CurrencyTest extends TestFmwk {
             { "eo-DE-u-cu-dem", "2000-12-23", "EUR", "DEM" },
             { "en_US", null, "USD" }, // no longer include currencies with tender=false
             { "en_US_Q", null, "USD" }, // no longer include currencies with tender=false
+            { "hr_HR", "2022-12-31", "HRK" },
+            { "hr_HR", "2023-01-01", "EUR", "HRK" },
+            { "hr_HR", "2023-01-16", "EUR" },
         };
 
         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
