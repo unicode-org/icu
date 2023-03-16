@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678982143974,
+  "lastUpdate": 1679001969395,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6388,6 +6388,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 277.33564583584894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0684f8644ca37153e8dbb25940d82bc14078e712",
+          "message": "ICU-22285 how to include gb2312 & big5han collation tailorings",
+          "timestamp": "2023-03-16T14:14:38-07:00",
+          "tree_id": "4ae2a89f2eeb1a36b8a41a34f22fba0f6a79668f",
+          "url": "https://github.com/unicode-org/icu/commit/0684f8644ca37153e8dbb25940d82bc14078e712"
+        },
+        "date": 1679001944364,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 282.24481285401424,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
