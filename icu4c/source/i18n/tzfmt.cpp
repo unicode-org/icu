@@ -2642,6 +2642,9 @@ TimeZoneFormat::initGMTOffsetPatterns(UErrorCode& status) {
             break;
         }
     }
+    if (U_FAILURE(status)) {
+        return;
+    }
     checkAbuttingHoursAndMinutes();
 }
 
