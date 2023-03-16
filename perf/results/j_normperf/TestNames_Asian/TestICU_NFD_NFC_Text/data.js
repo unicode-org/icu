@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678939432640,
+  "lastUpdate": 1678939554281,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13198,6 +13198,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 15.630137823845116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "3db74e8ae7375bb48361ea625bb0f82c465d35d3",
+          "message": "ICU-22220 CLDR release-43-beta2 to ICU main",
+          "timestamp": "2023-03-15T20:52:34-07:00",
+          "tree_id": "79487b3791c8b00b19164aaded6453b464d6bfdd",
+          "url": "https://github.com/unicode-org/icu/commit/3db74e8ae7375bb48361ea625bb0f82c465d35d3"
+        },
+        "date": 1678939527964,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 19.327241365314027,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
