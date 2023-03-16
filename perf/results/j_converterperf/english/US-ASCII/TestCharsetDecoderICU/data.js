@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678939321562,
+  "lastUpdate": 1678982069816,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6628,6 +6628,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.7715392435894693,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "3b030512ff836522d0a294b6206dcf8b50eab725",
+          "message": "ICU-22220 Update ICU4J samples instructions\n\nSee #2360",
+          "timestamp": "2023-03-16T08:39:14-07:00",
+          "tree_id": "a6d70cb26d691722b57927afbd13c81dcabc3c6f",
+          "url": "https://github.com/unicode-org/icu/commit/3b030512ff836522d0a294b6206dcf8b50eab725"
+        },
+        "date": 1678982043140,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.7684754808161113,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
