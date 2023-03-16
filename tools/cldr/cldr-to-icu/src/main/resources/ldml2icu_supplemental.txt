@@ -134,6 +134,7 @@
     ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
 
 //supplementalData/calendarData/calendar[@type="(%W)"]/calendarSystem[@type="(%W)"] ; /calendarData/$1/system ; values=$2
+//supplementalData/calendarData/calendar[@type="(%W)"]/inheritEras[@calendar="(%W)"] ; /calendarData/$1/inheritEras ; values=$2
 //supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@named="(%W)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
     ; /calendarData/$1/eras/$2/named ; values=$5
