@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679001934747,
+  "lastUpdate": 1679004019269,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13168,6 +13168,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 12.187543400408911,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "d73b4417e196825f87e7440a1f74e318a8ca19c2",
+          "message": "ICU-22186 Add unit tests for Croatia currency change from HRK to EUR",
+          "timestamp": "2023-03-16T14:49:42-07:00",
+          "tree_id": "ada4dccda4089860f4438a90bd5b89441cfd17d9",
+          "url": "https://github.com/unicode-org/icu/commit/d73b4417e196825f87e7440a1f74e318a8ca19c2"
+        },
+        "date": 1679003990820,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 13.98725769183193,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
