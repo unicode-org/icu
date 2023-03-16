@@ -1852,6 +1852,7 @@ supplementalData:table(nofallback){
                     }
                 }
             }
+            inheritEras{"gregorian"}
             system{"solar"}
         }
         persian{
