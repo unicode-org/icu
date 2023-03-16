@@ -4522,30 +4522,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Determines if the specified code point may be any part of a Unicode
-     * identifier other than the starting character.
-     * A code point may be part of a Unicode identifier if and only if it is
-     * one of the following:
-     * <ul>
-     * <li> Lu Uppercase letter
-     * <li> Ll Lowercase letter
-     * <li> Lt Titlecase letter
-     * <li> Lm Modifier letter
-     * <li> Lo Other letter
-     * <li> Nl Letter number
-     * <li> Pc Connecting punctuation character
-     * <li> Nd decimal number
-     * <li> Mc Spacing combining mark
-     * <li> Mn Non-spacing mark
-     * <li> Cf formatting code
-     * </ul>
-     * Up-to-date Unicode implementation of
-     * java.lang.Character.isUnicodeIdentifierPart().<br>
-     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
-     * @param ch code point to determine if is can be part of a Unicode
-     *        identifier
-     * @return true if code point is any character belonging a unicode
-     *         identifier suffix after the first character
+     * Determines if the specified character is permissible as a
+     * non-initial character of an identifier
+     * according to UAX #31 Unicode Identifier and Pattern Syntax.
+     *
+     * <p>Same as Unicode ID_Continue ({@link UProperty#ID_CONTINUE}).
+     *
+     * <p>Note that this differs from {@link java.lang.Character#isUnicodeIdentifierPart(char)}
+     * which implements a different identifier profile.
+     *
+     * @param ch the code point to be tested
+     * @return true if the code point may occur as a non-initial character of an identifier
      * @stable ICU 2.1
      */
     public static boolean isUnicodeIdentifierPart(int ch)
@@ -4554,23 +4541,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Determines if the specified code point is permissible as the first
-     * character in a Unicode identifier.
-     * A code point may start a Unicode identifier if it is of type either
-     * <ul>
-     * <li> Lu Uppercase letter
-     * <li> Ll Lowercase letter
-     * <li> Lt Titlecase letter
-     * <li> Lm Modifier letter
-     * <li> Lo Other letter
-     * <li> Nl Letter number
-     * </ul>
-     * Up-to-date Unicode implementation of
-     * java.lang.Character.isUnicodeIdentifierStart().<br>
-     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
-     * @param ch code point to determine if it can start a Unicode identifier
-     * @return true if code point is the first character belonging a unicode
-     *              identifier
+     * Determines if the specified character is permissible as the first character in an identifier
+     * according to UAX #31 Unicode Identifier and Pattern Syntax.
+     *
+     * <p>Same as Unicode ID_Start ({@link UProperty#ID_START}).
+     *
+     * <p>Note that this differs from {@link java.lang.Character#isUnicodeIdentifierStart(char)}
+     * which implements a different identifier profile.
+     *
+     * @param ch the code point to be tested
+     * @return true if the code point may start an identifier
      * @stable ICU 2.1
      */
     public static boolean isUnicodeIdentifierStart(int ch)
