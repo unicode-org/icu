@@ -31,7 +31,7 @@
 #include "unicode/udata.h"
 #include "unicode/uversion.h"
 
-typedef struct {
+typedef struct alignas(16) {
     uint16_t headerSize;
     uint8_t magic1, magic2;
     UDataInfo info;
@@ -43,7 +43,7 @@ typedef struct {
     const void *const data;
     } toc[1];
     */
-   int   fakeNameAndData[4];       /* TODO:  Change this header type from */
+   uint64_t fakeNameAndData[2];    /* TODO:  Change this header type from */
                                    /*        pointerTOC to OffsetTOC.     */
 } ICU_Data_Header;
 
