@@ -314,6 +314,14 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
     // only from a locale bundle or set via the cloning API,
     // *and* for as long as all the strings are in *private* fields, preventing
     // a subclass from creating these strings in an "unsafe" way (with respect to fastCopyFrom()).
+    if(srcArray == nullptr) {
+        // Do not attempt to copy bogus input (which will crash).
+        // Note that this assignArray method already had the potential to return a null dstArray;
+        // see handling below for "if(dstArray != nullptr)".
+        dstCount = 0;
+        dstArray = nullptr;
+        return;
+    }
     dstCount = srcCount;
     dstArray = newUnicodeStringArray(srcCount);
     if(dstArray != nullptr) {
