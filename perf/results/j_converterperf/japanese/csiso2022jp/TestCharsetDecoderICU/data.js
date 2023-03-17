@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679071867371,
+  "lastUpdate": 1679079631087,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6928,6 +6928,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.016940973429091982,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "21581f4ec59b52338065866960dc2b155a428700",
+          "message": "ICU-22220 ICU 73 API Changes 4J & 4C",
+          "timestamp": "2023-03-17T11:56:41-07:00",
+          "tree_id": "a12cd998a82a75cd53d97a64ec7421c595ff05d8",
+          "url": "https://github.com/unicode-org/icu/commit/21581f4ec59b52338065866960dc2b155a428700"
+        },
+        "date": 1679079599926,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.014910756754876915,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
