@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679072448751,
+  "lastUpdate": 1679072664068,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17062,6 +17062,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2833586.1622,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pandeyrah@microsoft.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "3076874c3231047f55c561e1dd797137e764efea",
+          "message": "ICU-22301 Add azure CI tests to be run post merge\n\nSee #2363",
+          "timestamp": "2023-03-17T08:57:01-07:00",
+          "tree_id": "e08301f68d681be212cb45ee1fdc186741b2cdcc",
+          "url": "https://github.com/unicode-org/icu/commit/3076874c3231047f55c561e1dd797137e764efea"
+        },
+        "date": 1679072639253,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 302.3231,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 11387629.6945,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2398410.2324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11220751.582,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2536039.833,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
