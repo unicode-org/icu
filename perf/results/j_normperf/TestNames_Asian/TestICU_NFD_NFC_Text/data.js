@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679006307196,
+  "lastUpdate": 1679012247947,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13468,6 +13468,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 15.565773149795573,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3d31e7263322588a9d004042305577c8171d9629",
+          "message": "ICU-22307 Fix crash inside TimeZone\n\nReturn while the status fail without checking and cause crash",
+          "timestamp": "2023-03-16T17:05:02-07:00",
+          "tree_id": "95d6f04c31f8ef34a527bfade5adc575f082df94",
+          "url": "https://github.com/unicode-org/icu/commit/3d31e7263322588a9d004042305577c8171d9629"
+        },
+        "date": 1679012223676,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 15.91781326258077,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
