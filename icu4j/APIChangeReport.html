@@ -15,7 +15,15 @@
 
 <hr/>
 <h2>Deprecated or Obsoleted in ICU4J 73</h2>
-<p>(no API obsoleted)</p>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+UnicodeSet
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int CASE</li>
+</ul>
+</ul>
+
 
 <hr/>
 <h2>Changed in ICU4J 73 (old, new)</h2>
@@ -41,6 +49,77 @@ NumberFormat.Field
 <hr/>
 <h2>Added in ICU4J 73</h2>
 
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public interface <i>PersonName</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>PersonNameFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public static class <i>PersonNameFormatter.Builder</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>SimplePersonName</i></li>
+<li><span style='color:orange'>(draft)</span> public static class <i>SimplePersonName.Builder</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonName.FieldModifier</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonName.NameField</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonName.PreferredOrder</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.DisplayOrder</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.Formality</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.Length</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.Usage</i></li>
+PersonName.FieldModifier
+<ul>
+<li><span style='color:orange'>(draft)</span> public static PersonName.FieldModifier <i>forString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier ALL_CAPS</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier CORE</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier INFORMAL</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier INITIAL</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier INITIAL_CAP</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier MONOGRAM</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier PREFIX</li>
+</ul>
+PersonName.NameField
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField CREDENTIALS</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField GENERATION</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField GIVEN</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField GIVEN2</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField SURNAME</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField SURNAME2</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField TITLE</li>
+</ul>
+PersonName.PreferredOrder
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.PreferredOrder DEFAULT</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.PreferredOrder GIVEN_FIRST</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.PreferredOrder SURNAME_FIRST</li>
+</ul>
+PersonNameFormatter.DisplayOrder
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.DisplayOrder DEFAULT</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.DisplayOrder SORTING</li>
+</ul>
+PersonNameFormatter.Formality
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Formality FORMAL</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Formality INFORMAL</li>
+</ul>
+PersonNameFormatter.Length
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length LONG</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length MEDIUM</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length SHORT</li>
+</ul>
+PersonNameFormatter.Usage
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Usage ADDRESSING</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Usage MONOGRAM</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Usage REFERRING</li>
+</ul>
+UnicodeSet
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int SIMPLE_CASE_INSENSITIVE</li>
+</ul>
+</ul>
+
 <h3>Package com.ibm.icu.util</h3>
 <ul>
 MeasureUnit
@@ -50,6 +129,6 @@ MeasureUnit
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Feb 27 13:50:23 PST 2023<br/>© 2023 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Fri Mar 17 10:40:39 PDT 2023<br/>© 2023 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
 </body>
 </html>
