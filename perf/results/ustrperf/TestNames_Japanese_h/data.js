@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679073262936,
+  "lastUpdate": 1679073690733,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30430,6 +30430,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 45.3307,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "kirill@korins.ky",
+            "name": "Kirill A. Korinsky",
+            "username": "catap"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f2459c16dccd26e0cc07580e43e06e852dfc3104",
+          "message": "ICU-22211 macOS PPC should use `.p2align 4` instead `.balign 16`\n\nAn attempt to build ICU on old macOS with PowerPC leads to an issue:\n```\n./out/tmp/icudt72b_dat.S:7:Unknown pseudo-op: .balign\n./out/tmp/icudt72b_dat.S:7:Rest of line ignored. 1st junk character valued 49 (1).\n```\n\nWhy? Because `as` is too old.\n\nAnyway, switch back to `.p2align` fix a build and allows to pass all tests.\n\nSee: https://trac.macports.org/ticket/66258\n\nSigned-off-by: Kirill A. Korinsky <kirill@korins.ky>",
+          "timestamp": "2023-03-17T09:10:21-07:00",
+          "tree_id": "f494b28370b81547138598de04ce1cf627d5f5a1",
+          "url": "https://github.com/unicode-org/icu/commit/f2459c16dccd26e0cc07580e43e06e852dfc3104"
+        },
+        "date": 1679073666315,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 17.4663,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 19.3066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 22.611,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.5985,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.7489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 40.7007,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.1374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.9329,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 141.3277,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.4878,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 51.7235,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.7099,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
