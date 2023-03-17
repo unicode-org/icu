@@ -1,0 +1,67 @@
+# Azure Pipelines (VSTS) configuration for testing things post merging
+trigger:
+  branches:
+    include:
+    - main
+    - maint/*
+
+
+jobs:
+#-------------------------------------------------------------------------
+# VS 2022 Builds for testing C Samples on Windows
+#-------------------------------------------------------------------------
+- job: ICU4C_Samples_MSVC
+  displayName: 'C: Test Samples MSVC (VS 2022)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2022'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  strategy:
+    maxParallel: 0
+    matrix:
+      x64_Debug:
+        arch: x64
+        config: Debug
+        platform: x64
+      x64_Release:
+        arch: x64
+        config: Release
+        platform: x64
+      x86_Debug:
+        arch: x86
+        config: Debug
+        platform: Win32
+      x86_Release:
+        arch: x86
+        config: Release
+        platform: Win32
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: $(platform)
+        configuration: $(config)
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: '$(arch) $(config)'
+    - task: VSBuild@1
+      displayName: 'Build Sample Solution'
+      inputs:
+        solution: icu4c/source/samples/all/all.sln
+        platform: $(arch)
+        configuration: $(config)
+    - task: BatchScript@1
+      displayName: 'Test Samples (samplecheck.bat)'
+      inputs:
+        filename: icu4c/source/samples/all/samplecheck.bat
+        arguments: '$(arch) $(config)'
+#-------------------------------------------------------------------------
