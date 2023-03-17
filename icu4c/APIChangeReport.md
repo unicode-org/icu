@@ -24,6 +24,7 @@ Removed from ICU 72
 | File | API | ICU 72 | ICU 73 |
 |---|---|---|---|
 | gregocal.h | bool icu::GregorianCalendar::inDaylightTime(UErrorCode&amp;) const |  StableICU 2.0 | (missing)
+| platform.h | <tt>#define</tt> U_NOEXCEPT |  Internal | (missing)
 | umachine.h | <tt>#define</tt> U_FINAL |  Internal | (missing)
 | umachine.h | <tt>#define</tt> U_OVERRIDE |  Internal | (missing)
 
@@ -74,6 +75,10 @@ Added in ICU 73
 | dcfmtsym.h | const char* icu::DecimalFormatSymbols::getNumberingSystemName() const |  (missing) | Internal
 | measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBeaufort() |  (missing) | DraftICU 73
 | measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBeaufort(UErrorCode&amp;) |  (missing) | DraftICU 73
+| numfmt.h | <tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfCeiling |  (missing) | DraftICU 73
+| numfmt.h | <tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfFloor |  (missing) | DraftICU 73
+| numfmt.h | <tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfOdd |  (missing) | DraftICU 73
+| platform.h | <tt>#define</tt> UPRV_NO_SANITIZE_UNDEFINED |  (missing) | Internal
 | simplenumberformatter.h | FormattedNumber icu::number::SimpleNumberFormatter::format(SimpleNumber, UErrorCode&amp;) const |  (missing) | DraftICU 73
 | simplenumberformatter.h | FormattedNumber icu::number::SimpleNumberFormatter::formatInt64(int64_t, UErrorCode&amp;) const |  (missing) | DraftICU 73
 | simplenumberformatter.h | SimpleNumber&amp; icu::number::SimpleNumber::operator=(SimpleNumber&amp;&amp;) |  (missing) | DraftICU 73
@@ -97,6 +102,7 @@ Added in ICU 73
 | simplenumberformatter.h | void icu::number::SimpleNumberFormatter::formatImpl(impl::UFormattedNumberData*, USimpleNumberSign, UErrorCode&amp;) const |  (missing) | Internal
 | ucal.h | <tt>enum</tt> UCalendarDateFields::UCAL_ORDINAL_MONTH |  (missing) | DraftICU 73
 | uconfig.h | <tt>#define</tt> UCONFIG_USE_ML_PHRASE_BREAKING |  (missing) | Internal
+| uset.h | <tt>enum</tt> (anonymous)::USET_SIMPLE_CASE_INSENSITIVE |  (missing) | DraftICU 73
 | usimplenumberformatter.h | USimpleNumber* usnum_openForInt64(int64_t, UErrorCode*) |  (missing) | DraftICU 73
 | usimplenumberformatter.h | USimpleNumberFormatter* usnumf_openForLocale(const char*, UErrorCode*) |  (missing) | DraftICU 73
 | usimplenumberformatter.h | USimpleNumberFormatter* usnumf_openForLocaleAndGroupingStrategy(const char*, UNumberGroupingStrategy, UErrorCode*) |  (missing) | DraftICU 73
@@ -130,7 +136,7 @@ Other existing drafts in ICU 73
 | displayoptions.h |  Builder&amp; icu::DisplayOptions::Builder::setPluralCategory(UDisplayOptionsPluralCategory) | DraftICU 72 | 
 | displayoptions.h |  Builder&amp; icu::DisplayOptions::Builder::setSubstituteHandling(UDisplayOptionsSubstituteHandling) | DraftICU 72 | 
 | displayoptions.h |  DisplayOptions icu::DisplayOptions::Builder::build() | DraftICU 72 | 
-| displayoptions.h |  DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;) noexcept=default | DraftICU 72 | 
+| displayoptions.h |  DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;)=default | DraftICU 72 | 
 | displayoptions.h |  DisplayOptions&amp; icu::DisplayOptions::operator=(const DisplayOptions&amp;)=default | DraftICU 72 | 
 | displayoptions.h |  UDisplayOptionsCapitalization icu::DisplayOptions::getCapitalization() const | DraftICU 72 | 
 | displayoptions.h |  UDisplayOptionsDisplayLength icu::DisplayOptions::getDisplayLength() const | DraftICU 72 | 
@@ -223,6 +229,9 @@ This section shows cases where the signature was "simplified" for the sake of co
 - **`Appendable& icu::number::FormattedNumberRange::appendTo(Appendable&, UErrorCode&) const`**
   - `Appendable& icu::number::FormattedNumberRange::appendTo(Appendable&, UErrorCode&) const U_OVERRIDE`
   - `Appendable& icu::number::FormattedNumberRange::appendTo(Appendable&, UErrorCode&) const override`
+- **`Builder& icu::LocaleMatcher::Builder::operator=(Builder&&)`**
+  - `Builder& icu::LocaleMatcher::Builder::operator=(Builder&&) U_NOEXCEPT`
+  - `Builder& icu::LocaleMatcher::Builder::operator=(Builder&&) noexcept`
 - **`CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&, ParsePosition&) const`**
   - `CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&, ParsePosition&) const U_OVERRIDE`
   - `CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&, ParsePosition&) const override`
@@ -232,6 +241,60 @@ This section shows cases where the signature was "simplified" for the sake of co
 - **`ERoundingMode icu::DecimalFormat::getRoundingMode() const`**
   - `ERoundingMode icu::DecimalFormat::getRoundingMode() const U_OVERRIDE`
   - `ERoundingMode icu::DecimalFormat::getRoundingMode() const override`
+- **`Edits& icu::Edits::operator=(Edits&&)`**
+  - `Edits& icu::Edits::operator=(Edits&&) U_NOEXCEPT`
+  - `Edits& icu::Edits::operator=(Edits&&) noexcept`
+- **`FormattedDateInterval& icu::FormattedDateInterval::operator=(FormattedDateInterval&&)`**
+  - `FormattedDateInterval& icu::FormattedDateInterval::operator=(FormattedDateInterval&&) U_NOEXCEPT`
+  - `FormattedDateInterval& icu::FormattedDateInterval::operator=(FormattedDateInterval&&) noexcept`
+- **`FormattedList& icu::FormattedList::operator=(FormattedList&&)`**
+  - `FormattedList& icu::FormattedList::operator=(FormattedList&&) U_NOEXCEPT`
+  - `FormattedList& icu::FormattedList::operator=(FormattedList&&) noexcept`
+- **`FormattedNumber& icu::number::FormattedNumber::operator=(FormattedNumber&&)`**
+  - `FormattedNumber& icu::number::FormattedNumber::operator=(FormattedNumber&&) U_NOEXCEPT`
+  - `FormattedNumber& icu::number::FormattedNumber::operator=(FormattedNumber&&) noexcept`
+- **`FormattedNumberRange& icu::number::FormattedNumberRange::operator=(FormattedNumberRange&&)`**
+  - `FormattedNumberRange& icu::number::FormattedNumberRange::operator=(FormattedNumberRange&&) U_NOEXCEPT`
+  - `FormattedNumberRange& icu::number::FormattedNumberRange::operator=(FormattedNumberRange&&) noexcept`
+- **`FormattedRelativeDateTime& icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&&)`**
+  - `FormattedRelativeDateTime& icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&&) U_NOEXCEPT`
+  - `FormattedRelativeDateTime& icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&&) noexcept`
+- **`LocalArray< T >& icu::LocalArray< T >::operator=(LocalArray< T >&&)`**
+  - `LocalArray< T >& icu::LocalArray< T >::operator=(LocalArray< T >&&) U_NOEXCEPT`
+  - `LocalArray< T >& icu::LocalArray< T >::operator=(LocalArray< T >&&) noexcept`
+- **`LocalArray< T >& icu::LocalArray< T >::operator=(std::unique_ptr< T[]>&&)`**
+  - `LocalArray< T >& icu::LocalArray< T >::operator=(std::unique_ptr< T[]>&&) U_NOEXCEPT`
+  - `LocalArray< T >& icu::LocalArray< T >::operator=(std::unique_ptr< T[]>&&) noexcept`
+- **`LocalPointer< T >& icu::LocalPointer< T >::operator=(LocalPointer< T >&&)`**
+  - `LocalPointer< T >& icu::LocalPointer< T >::operator=(LocalPointer< T >&&) U_NOEXCEPT`
+  - `LocalPointer< T >& icu::LocalPointer< T >::operator=(LocalPointer< T >&&) noexcept`
+- **`LocalPointer< T >& icu::LocalPointer< T >::operator=(std::unique_ptr< T >&&)`**
+  - `LocalPointer< T >& icu::LocalPointer< T >::operator=(std::unique_ptr< T >&&) U_NOEXCEPT`
+  - `LocalPointer< T >& icu::LocalPointer< T >::operator=(std::unique_ptr< T >&&) noexcept`
+- **`Locale& icu::Locale::operator=(Locale&&)`**
+  - `Locale& icu::Locale::operator=(Locale&&) U_NOEXCEPT`
+  - `Locale& icu::Locale::operator=(Locale&&) noexcept`
+- **`LocaleMatcher& icu::LocaleMatcher::operator=(LocaleMatcher&&)`**
+  - `LocaleMatcher& icu::LocaleMatcher::operator=(LocaleMatcher&&) U_NOEXCEPT`
+  - `LocaleMatcher& icu::LocaleMatcher::operator=(LocaleMatcher&&) noexcept`
+- **`LocalizedNumberFormatter& icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&&)`**
+  - `LocalizedNumberFormatter& icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&&) U_NOEXCEPT`
+  - `LocalizedNumberFormatter& icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&&) noexcept`
+- **`LocalizedNumberRangeFormatter& icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&&)`**
+  - `LocalizedNumberRangeFormatter& icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&&) U_NOEXCEPT`
+  - `LocalizedNumberRangeFormatter& icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&&) noexcept`
+- **`Result& icu::LocaleMatcher::Result::operator=(Result&&)`**
+  - `Result& icu::LocaleMatcher::Result::operator=(Result&&) U_NOEXCEPT`
+  - `Result& icu::LocaleMatcher::Result::operator=(Result&&) noexcept`
+- **`Scale& icu::number::Scale::operator=(Scale&&)`**
+  - `Scale& icu::number::Scale::operator=(Scale&&) U_NOEXCEPT`
+  - `Scale& icu::number::Scale::operator=(Scale&&) noexcept`
+- **`StringProp& icu::number::impl::StringProp::operator=(StringProp&&)`**
+  - `StringProp& icu::number::impl::StringProp::operator=(StringProp&&) U_NOEXCEPT`
+  - `StringProp& icu::number::impl::StringProp::operator=(StringProp&&) noexcept`
+- **`SymbolsWrapper& icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&&)`**
+  - `SymbolsWrapper& icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&&) U_NOEXCEPT`
+  - `SymbolsWrapper& icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&&) noexcept`
 - **`UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const`**
   - `UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const U_OVERRIDE`
   - `UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const override`
@@ -319,6 +382,15 @@ This section shows cases where the signature was "simplified" for the sake of co
 - **`UnicodeString& icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&, const UnicodeString&, UErrorCode&) const`**
   - `UnicodeString& icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&, const UnicodeString&, UErrorCode&) const U_OVERRIDE`
   - `UnicodeString& icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&, const UnicodeString&, UErrorCode&) const override`
+- **`UnicodeString& icu::UnicodeString::operator=(UnicodeString&&)`**
+  - `UnicodeString& icu::UnicodeString::operator=(UnicodeString&&) U_NOEXCEPT`
+  - `UnicodeString& icu::UnicodeString::operator=(UnicodeString&&) noexcept`
+- **`UnlocalizedNumberFormatter& icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&&)`**
+  - `UnlocalizedNumberFormatter& icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&&) U_NOEXCEPT`
+  - `UnlocalizedNumberFormatter& icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&&) noexcept`
+- **`UnlocalizedNumberRangeFormatter& icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&&)`**
+  - `UnlocalizedNumberRangeFormatter& icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&&) U_NOEXCEPT`
+  - `UnlocalizedNumberRangeFormatter& icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&&) noexcept`
 - **`bool icu::Calendar::inDaylightTime(UErrorCode&) const`**
   - `UBool icu::Calendar::inDaylightTime(UErrorCode&) const`
   - `UBool icu::Calendar::inDaylightTime(UErrorCode&) const=0`
@@ -367,18 +439,78 @@ This section shows cases where the signature was "simplified" for the sake of co
 - **`icu::DecimalFormat::~DecimalFormat()`**
   - `icu::DecimalFormat::~DecimalFormat() U_OVERRIDE`
   - `icu::DecimalFormat::~DecimalFormat() override`
+- **`icu::Edits::Edits(Edits&&)`**
+  - `icu::Edits::Edits(Edits&&) U_NOEXCEPT`
+  - `icu::Edits::Edits(Edits&&) noexcept`
+- **`icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&&)`**
+  - `icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&&) U_NOEXCEPT`
+  - `icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&&) noexcept`
 - **`icu::FormattedDateInterval::~FormattedDateInterval()`**
   - `icu::FormattedDateInterval::~FormattedDateInterval() U_OVERRIDE`
   - `icu::FormattedDateInterval::~FormattedDateInterval() override`
+- **`icu::FormattedList::FormattedList(FormattedList&&)`**
+  - `icu::FormattedList::FormattedList(FormattedList&&) U_NOEXCEPT`
+  - `icu::FormattedList::FormattedList(FormattedList&&) noexcept`
 - **`icu::FormattedList::~FormattedList()`**
   - `icu::FormattedList::~FormattedList() U_OVERRIDE`
   - `icu::FormattedList::~FormattedList() override`
+- **`icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&&)`**
+  - `icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&&) U_NOEXCEPT`
+  - `icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&&) noexcept`
 - **`icu::FormattedRelativeDateTime::~FormattedRelativeDateTime()`**
   - `icu::FormattedRelativeDateTime::~FormattedRelativeDateTime() U_OVERRIDE`
   - `icu::FormattedRelativeDateTime::~FormattedRelativeDateTime() override`
+- **`icu::LocalArray< T >::LocalArray(LocalArray< T >&&)`**
+  - `icu::LocalArray< T >::LocalArray(LocalArray< T >&&) U_NOEXCEPT`
+  - `icu::LocalArray< T >::LocalArray(LocalArray< T >&&) noexcept`
+- **`icu::LocalPointer< T >::LocalPointer(LocalPointer< T >&&)`**
+  - `icu::LocalPointer< T >::LocalPointer(LocalPointer< T >&&) U_NOEXCEPT`
+  - `icu::LocalPointer< T >::LocalPointer(LocalPointer< T >&&) noexcept`
+- **`icu::Locale::Locale(Locale&&)`**
+  - `icu::Locale::Locale(Locale&&) U_NOEXCEPT`
+  - `icu::Locale::Locale(Locale&&) noexcept`
+- **`icu::LocaleMatcher::Builder::Builder(Builder&&)`**
+  - `icu::LocaleMatcher::Builder::Builder(Builder&&) U_NOEXCEPT`
+  - `icu::LocaleMatcher::Builder::Builder(Builder&&) noexcept`
+- **`icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&&)`**
+  - `icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&&) U_NOEXCEPT`
+  - `icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&&) noexcept`
+- **`icu::LocaleMatcher::Result::Result(Result&&)`**
+  - `icu::LocaleMatcher::Result::Result(Result&&) U_NOEXCEPT`
+  - `icu::LocaleMatcher::Result::Result(Result&&) noexcept`
+- **`icu::UnicodeString::UnicodeString(UnicodeString&&)`**
+  - `icu::UnicodeString::UnicodeString(UnicodeString&&) U_NOEXCEPT`
+  - `icu::UnicodeString::UnicodeString(UnicodeString&&) noexcept`
+- **`icu::number::FormattedNumber::FormattedNumber(FormattedNumber&&)`**
+  - `icu::number::FormattedNumber::FormattedNumber(FormattedNumber&&) U_NOEXCEPT`
+  - `icu::number::FormattedNumber::FormattedNumber(FormattedNumber&&) noexcept`
 - **`icu::number::FormattedNumber::~FormattedNumber()`**
   - `icu::number::FormattedNumber::~FormattedNumber() U_OVERRIDE`
   - `icu::number::FormattedNumber::~FormattedNumber() override`
+- **`icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&&)`**
+  - `icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&&) U_NOEXCEPT`
+  - `icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&&) noexcept`
+- **`icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&&)`**
+  - `icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&&) U_NOEXCEPT`
+  - `icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&&) noexcept`
+- **`icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&&)`**
+  - `icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&&) U_NOEXCEPT`
+  - `icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&&) noexcept`
+- **`icu::number::Scale::Scale(Scale&&)`**
+  - `icu::number::Scale::Scale(Scale&&) U_NOEXCEPT`
+  - `icu::number::Scale::Scale(Scale&&) noexcept`
+- **`icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&&)`**
+  - `icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&&) U_NOEXCEPT`
+  - `icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&&) noexcept`
+- **`icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&&)`**
+  - `icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&&) U_NOEXCEPT`
+  - `icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&&) noexcept`
+- **`icu::number::impl::StringProp::StringProp(StringProp&&)`**
+  - `icu::number::impl::StringProp::StringProp(StringProp&&) U_NOEXCEPT`
+  - `icu::number::impl::StringProp::StringProp(StringProp&&) noexcept`
+- **`icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&&)`**
+  - `icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&&) U_NOEXCEPT`
+  - `icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&&) noexcept`
 - **`int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&, UErrorCode&) const`**
   - `int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&, UErrorCode&) const U_OVERRIDE`
   - `int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&, UErrorCode&) const override`
@@ -421,9 +553,21 @@ This section shows cases where the signature was "simplified" for the sake of co
 - **`void icu::DecimalFormat::setRoundingMode(ERoundingMode)`**
   - `void icu::DecimalFormat::setRoundingMode(ERoundingMode) U_OVERRIDE`
   - `void icu::DecimalFormat::setRoundingMode(ERoundingMode) override`
+- **`void icu::Edits::reset()`**
+  - `void icu::Edits::reset() U_NOEXCEPT`
+  - `void icu::Edits::reset() noexcept`
 - **`void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&, Edits*, UErrorCode&) const`**
   - `void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&, Edits*, UErrorCode&) const U_OVERRIDE`
   - `void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&, Edits*, UErrorCode&) const override`
+- **`void icu::LocalArray< T >::swap(LocalArray< T >&)`**
+  - `void icu::LocalArray< T >::swap(LocalArray< T >&) U_NOEXCEPT`
+  - `void icu::LocalArray< T >::swap(LocalArray< T >&) noexcept`
+- **`void icu::LocalPointer< T >::swap(LocalPointer< T >&)`**
+  - `void icu::LocalPointer< T >::swap(LocalPointer< T >&) U_NOEXCEPT`
+  - `void icu::LocalPointer< T >::swap(LocalPointer< T >&) noexcept`
+- **`void icu::UnicodeString::swap(UnicodeString&)`**
+  - `void icu::UnicodeString::swap(UnicodeString&) U_NOEXCEPT`
+  - `void icu::UnicodeString::swap(UnicodeString&) noexcept`
 - **`void* icu::CompactDecimalFormat::clone() const`**
   - `CompactDecimalFormat* icu::CompactDecimalFormat::clone() const U_OVERRIDE`
   - `CompactDecimalFormat* icu::CompactDecimalFormat::clone() const override`
@@ -433,7 +577,7 @@ This section shows cases where the signature was "simplified" for the sake of co
 
 ## Colophon
 
-Contents generated by StableAPI tool on Fri Mar 03 11:16:50 PST 2023
+Contents generated by StableAPI tool on Fri Mar 17 10:37:04 PDT 2023
 
 Copyright © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

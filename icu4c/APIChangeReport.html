@@ -50,10 +50,14 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_FINAL</td><td class="">Internal</td><td>(missing)<br>
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_NOEXCEPT</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_FINAL</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_OVERRIDE</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
@@ -166,6 +170,22 @@
 <span class=""><span>ICU 73</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfCeiling</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 73</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfFloor</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 73</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfOdd</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 73</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> UPRV_NO_SANITIZE_UNDEFINED</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::format(SimpleNumber, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
@@ -258,70 +278,74 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">uset.h</td><td class="proto"><tt>enum</tt> (anonymous)::USET_SIMPLE_CASE_INSENSITIVE</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 73</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumber* usnum_openForInt64(int64_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocale(const char*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocaleAndGroupingStrategy(const char*, UNumberGroupingStrategy, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_MINUS_SIGN</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_NO_SIGN</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_PLUS_SIGN</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_close(USimpleNumber*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_multiplyByPowerOfTen(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_roundTo(USimpleNumber*, int32_t, UNumberFormatRoundingMode, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumFractionDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumIntegerDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setSign(USimpleNumber*, USimpleNumberSign, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setToInt64(USimpleNumber*, int64_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_truncateStart(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_close(USimpleNumberFormatter*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_format(const USimpleNumberFormatter*, USimpleNumber*, UFormattedNumber*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_formatInt64(const USimpleNumberFormatter*, int64_t, UFormattedNumber*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 73</span></span></td>
 </tr>
@@ -366,7 +390,7 @@
 <td class="file">displayoptions.h</td><td class="proto">DisplayOptions icu::DisplayOptions::Builder::build()</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;) noexcept=default</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;)=default</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
 </tr>
 <tr class="row1">
 <td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
@@ -613,6 +637,10 @@
 <br>Appendable&amp; icu::number::FormattedNumberRange::appendTo(Appendable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>Appendable&amp; icu::number::FormattedNumberRange::appendTo(Appendable&amp;, UErrorCode&amp;) const override<br>
 </li>
 <li>
+<b>Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;)</b>
+<br>Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;) U_NOEXCEPT<br>Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;) noexcept<br>
+</li>
+<li>
 <b>CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const</b>
 <br>CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const U_OVERRIDE<br>CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const override<br>
 </li>
@@ -623,6 +651,78 @@
 <li>
 <b>ERoundingMode icu::DecimalFormat::getRoundingMode() const</b>
 <br>ERoundingMode icu::DecimalFormat::getRoundingMode() const U_OVERRIDE<br>ERoundingMode icu::DecimalFormat::getRoundingMode() const override<br>
+</li>
+<li>
+<b>Edits&amp; icu::Edits::operator=(Edits&amp;&amp;)</b>
+<br>Edits&amp; icu::Edits::operator=(Edits&amp;&amp;) U_NOEXCEPT<br>Edits&amp; icu::Edits::operator=(Edits&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>FormattedDateInterval&amp; icu::FormattedDateInterval::operator=(FormattedDateInterval&amp;&amp;)</b>
+<br>FormattedDateInterval&amp; icu::FormattedDateInterval::operator=(FormattedDateInterval&amp;&amp;) U_NOEXCEPT<br>FormattedDateInterval&amp; icu::FormattedDateInterval::operator=(FormattedDateInterval&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>FormattedList&amp; icu::FormattedList::operator=(FormattedList&amp;&amp;)</b>
+<br>FormattedList&amp; icu::FormattedList::operator=(FormattedList&amp;&amp;) U_NOEXCEPT<br>FormattedList&amp; icu::FormattedList::operator=(FormattedList&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;)</b>
+<br>FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;) U_NOEXCEPT<br>FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>FormattedNumberRange&amp; icu::number::FormattedNumberRange::operator=(FormattedNumberRange&amp;&amp;)</b>
+<br>FormattedNumberRange&amp; icu::number::FormattedNumberRange::operator=(FormattedNumberRange&amp;&amp;) U_NOEXCEPT<br>FormattedNumberRange&amp; icu::number::FormattedNumberRange::operator=(FormattedNumberRange&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>FormattedRelativeDateTime&amp; icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&amp;&amp;)</b>
+<br>FormattedRelativeDateTime&amp; icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&amp;&amp;) U_NOEXCEPT<br>FormattedRelativeDateTime&amp; icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(LocalArray&lt; T &gt;&amp;&amp;)</b>
+<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(LocalArray&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(LocalArray&lt; T &gt;&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(std::unique_ptr&lt; T[]&gt;&amp;&amp;)</b>
+<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(std::unique_ptr&lt; T[]&gt;&amp;&amp;) U_NOEXCEPT<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(std::unique_ptr&lt; T[]&gt;&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(LocalPointer&lt; T &gt;&amp;&amp;)</b>
+<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(LocalPointer&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(LocalPointer&lt; T &gt;&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(std::unique_ptr&lt; T &gt;&amp;&amp;)</b>
+<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(std::unique_ptr&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(std::unique_ptr&lt; T &gt;&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>Locale&amp; icu::Locale::operator=(Locale&amp;&amp;)</b>
+<br>Locale&amp; icu::Locale::operator=(Locale&amp;&amp;) U_NOEXCEPT<br>Locale&amp; icu::Locale::operator=(Locale&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;)</b>
+<br>LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;) U_NOEXCEPT<br>LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;)</b>
+<br>LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>LocalizedNumberRangeFormatter&amp; icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&amp;&amp;)</b>
+<br>LocalizedNumberRangeFormatter&amp; icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>LocalizedNumberRangeFormatter&amp; icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;)</b>
+<br>Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;) U_NOEXCEPT<br>Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;)</b>
+<br>Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;) U_NOEXCEPT<br>Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;)</b>
+<br>StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;) U_NOEXCEPT<br>StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;)</b>
+<br>SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;) U_NOEXCEPT<br>SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;) noexcept<br>
 </li>
 <li>
 <b>UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const</b>
@@ -741,6 +841,18 @@
 <br>UnicodeString&amp; icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const override<br>
 </li>
 <li>
+<b>UnicodeString&amp; icu::UnicodeString::operator=(UnicodeString&amp;&amp;)</b>
+<br>UnicodeString&amp; icu::UnicodeString::operator=(UnicodeString&amp;&amp;) U_NOEXCEPT<br>UnicodeString&amp; icu::UnicodeString::operator=(UnicodeString&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;)</b>
+<br>UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>UnlocalizedNumberRangeFormatter&amp; icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&amp;&amp;)</b>
+<br>UnlocalizedNumberRangeFormatter&amp; icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>UnlocalizedNumberRangeFormatter&amp; icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
 <b>bool icu::Calendar::inDaylightTime(UErrorCode&amp;) const</b>
 <br>UBool icu::Calendar::inDaylightTime(UErrorCode&amp;) const<br>UBool icu::Calendar::inDaylightTime(UErrorCode&amp;) const=0<br>
 </li>
@@ -805,20 +917,100 @@
 <br>icu::DecimalFormat::~DecimalFormat() U_OVERRIDE<br>icu::DecimalFormat::~DecimalFormat() override<br>
 </li>
 <li>
+<b>icu::Edits::Edits(Edits&amp;&amp;)</b>
+<br>icu::Edits::Edits(Edits&amp;&amp;) U_NOEXCEPT<br>icu::Edits::Edits(Edits&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&amp;&amp;)</b>
+<br>icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&amp;&amp;) U_NOEXCEPT<br>icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&amp;&amp;) noexcept<br>
+</li>
+<li>
 <b>icu::FormattedDateInterval::~FormattedDateInterval()</b>
 <br>icu::FormattedDateInterval::~FormattedDateInterval() U_OVERRIDE<br>icu::FormattedDateInterval::~FormattedDateInterval() override<br>
+</li>
+<li>
+<b>icu::FormattedList::FormattedList(FormattedList&amp;&amp;)</b>
+<br>icu::FormattedList::FormattedList(FormattedList&amp;&amp;) U_NOEXCEPT<br>icu::FormattedList::FormattedList(FormattedList&amp;&amp;) noexcept<br>
 </li>
 <li>
 <b>icu::FormattedList::~FormattedList()</b>
 <br>icu::FormattedList::~FormattedList() U_OVERRIDE<br>icu::FormattedList::~FormattedList() override<br>
 </li>
 <li>
+<b>icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&amp;&amp;)</b>
+<br>icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&amp;&amp;) U_NOEXCEPT<br>icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&amp;&amp;) noexcept<br>
+</li>
+<li>
 <b>icu::FormattedRelativeDateTime::~FormattedRelativeDateTime()</b>
 <br>icu::FormattedRelativeDateTime::~FormattedRelativeDateTime() U_OVERRIDE<br>icu::FormattedRelativeDateTime::~FormattedRelativeDateTime() override<br>
 </li>
 <li>
+<b>icu::LocalArray&lt; T &gt;::LocalArray(LocalArray&lt; T &gt;&amp;&amp;)</b>
+<br>icu::LocalArray&lt; T &gt;::LocalArray(LocalArray&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>icu::LocalArray&lt; T &gt;::LocalArray(LocalArray&lt; T &gt;&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::LocalPointer&lt; T &gt;::LocalPointer(LocalPointer&lt; T &gt;&amp;&amp;)</b>
+<br>icu::LocalPointer&lt; T &gt;::LocalPointer(LocalPointer&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>icu::LocalPointer&lt; T &gt;::LocalPointer(LocalPointer&lt; T &gt;&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::Locale::Locale(Locale&amp;&amp;)</b>
+<br>icu::Locale::Locale(Locale&amp;&amp;) U_NOEXCEPT<br>icu::Locale::Locale(Locale&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;)</b>
+<br>icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;) U_NOEXCEPT<br>icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;)</b>
+<br>icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;) U_NOEXCEPT<br>icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::LocaleMatcher::Result::Result(Result&amp;&amp;)</b>
+<br>icu::LocaleMatcher::Result::Result(Result&amp;&amp;) U_NOEXCEPT<br>icu::LocaleMatcher::Result::Result(Result&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::UnicodeString::UnicodeString(UnicodeString&amp;&amp;)</b>
+<br>icu::UnicodeString::UnicodeString(UnicodeString&amp;&amp;) U_NOEXCEPT<br>icu::UnicodeString::UnicodeString(UnicodeString&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;)</b>
+<br>icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;) U_NOEXCEPT<br>icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;) noexcept<br>
+</li>
+<li>
 <b>icu::number::FormattedNumber::~FormattedNumber()</b>
 <br>icu::number::FormattedNumber::~FormattedNumber() U_OVERRIDE<br>icu::number::FormattedNumber::~FormattedNumber() override<br>
+</li>
+<li>
+<b>icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&amp;&amp;)</b>
+<br>icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&amp;&amp;) U_NOEXCEPT<br>icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;)</b>
+<br>icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&amp;&amp;)</b>
+<br>icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::Scale::Scale(Scale&amp;&amp;)</b>
+<br>icu::number::Scale::Scale(Scale&amp;&amp;) U_NOEXCEPT<br>icu::number::Scale::Scale(Scale&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;)</b>
+<br>icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&amp;&amp;)</b>
+<br>icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;)</b>
+<br>icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;) U_NOEXCEPT<br>icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;) noexcept<br>
+</li>
+<li>
+<b>icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;)</b>
+<br>icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;) U_NOEXCEPT<br>icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;) noexcept<br>
 </li>
 <li>
 <b>int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&amp;, UErrorCode&amp;) const</b>
@@ -877,8 +1069,24 @@
 <br>void icu::DecimalFormat::setRoundingMode(ERoundingMode) U_OVERRIDE<br>void icu::DecimalFormat::setRoundingMode(ERoundingMode) override<br>
 </li>
 <li>
+<b>void icu::Edits::reset()</b>
+<br>void icu::Edits::reset() U_NOEXCEPT<br>void icu::Edits::reset() noexcept<br>
+</li>
+<li>
 <b>void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const</b>
 <br>void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const U_OVERRIDE<br>void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const override<br>
+</li>
+<li>
+<b>void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;)</b>
+<br>void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;) U_NOEXCEPT<br>void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;) noexcept<br>
+</li>
+<li>
+<b>void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;)</b>
+<br>void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;) U_NOEXCEPT<br>void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;) noexcept<br>
+</li>
+<li>
+<b>void icu::UnicodeString::swap(UnicodeString&amp;)</b>
+<br>void icu::UnicodeString::swap(UnicodeString&amp;) U_NOEXCEPT<br>void icu::UnicodeString::swap(UnicodeString&amp;) noexcept<br>
 </li>
 <li>
 <b>void* icu::CompactDecimalFormat::clone() const</b>
@@ -894,7 +1102,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Fri Mar 03 11:13:19 PST 2023<br>
+<i><font size="-1">Contents generated by StableAPI tool on Fri Mar 17 10:36:07 PDT 2023<br>
         Copyright &copy; 2017 and later: Unicode, Inc. and others.<br>
         License &amp; terms of use: http://www.unicode.org/copyright.html
     </font></i>
