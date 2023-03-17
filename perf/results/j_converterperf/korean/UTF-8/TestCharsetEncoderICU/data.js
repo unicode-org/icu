@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679026949033,
+  "lastUpdate": 1679066600515,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6988,6 +6988,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.412224412898699,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "34eaffc66899da1ff5c4773c898bc4e27a8f8007",
+          "message": "ICU-22308 stubdata empty pointerTOC alignas(16)",
+          "timestamp": "2023-03-17T08:11:26-07:00",
+          "tree_id": "92bf62de979f4b370217ee22e0e777ea7d18f29a",
+          "url": "https://github.com/unicode-org/icu/commit/34eaffc66899da1ff5c4773c898bc4e27a8f8007"
+        },
+        "date": 1679066563981,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.8234562957266207,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
