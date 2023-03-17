@@ -218,13 +218,16 @@ utext_current32(UText *ut) {
         //        leading surrogate.  The attempt to access the trail will fail, but
         //        the original position before the unpaired lead still needs to be restored.
         int64_t  nativePosition = ut->chunkNativeLimit;
-        int32_t  originalOffset = ut->chunkOffset;
         if (ut->pFuncs->access(ut, nativePosition, true)) {
             trail = ut->chunkContents[ut->chunkOffset];
         }
         UBool r = ut->pFuncs->access(ut, nativePosition, false);  // reverse iteration flag loads preceding chunk
         U_ASSERT(r);
-        ut->chunkOffset = originalOffset;
+        // Here we need to restore chunkOffset since the access functions were called with
+        // chunkNativeLimit but that is not where we were (we were 1 code unit before the
+        // limit). Restoring was originally added in ICU-4669 but did not support access
+        // functions that changed the chunk size, the following does.
+        ut->chunkOffset = ut->chunkLength - 1;
         if(!r) {
             return U_SENTINEL;
         }
