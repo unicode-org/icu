@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1011,6 +1012,27 @@ public class NumberRangeFormatterTest extends TestFmwk {
         // Note: The error is not thrown until `formatRange` because this is where the
         // formatter object gets built.
         lnrf.formatRange(1, 234);
+    }
+
+    @Test
+    public void test22288_DifferentStartEndSettings() {
+        LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter
+            .withLocale(ULocale.ENGLISH)
+            .collapse(NumberRangeFormatter.RangeCollapse.UNIT)
+            .numberFormatterFirst(
+                NumberFormatter.with()
+                    .unit(Currency.getInstance("USD"))
+                    .unitWidth(UnitWidth.FULL_NAME)
+                    .precision(Precision.integer())
+                    .roundingMode(RoundingMode.FLOOR))
+            .numberFormatterSecond(
+                NumberFormatter.with()
+                    .unit(Currency.getInstance("USD"))
+                    .unitWidth(UnitWidth.FULL_NAME)
+                    .precision(Precision.integer())
+                    .roundingMode(RoundingMode.CEILING));
+        FormattedNumberRange result = lnrf.formatRange(2.5, 2.5);
+        assertEquals("Should format successfully", "2–3 US dollars", result.toString());
     }
 
     static void assertFormatRange(
