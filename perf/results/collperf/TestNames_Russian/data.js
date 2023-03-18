@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679080373519,
+  "lastUpdate": 1679113359741,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17278,6 +17278,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 201131.4466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "a518312ce2b6bf9e96451b73d6e890cf07409872",
+          "message": "ICU-22220 Add usimplenumberformatter and SimpleNumberFormatter to docmain.h",
+          "timestamp": "2023-03-17T21:03:29-07:00",
+          "tree_id": "e53af4b72ac1a4c23d81729cd4ae6a44d5bf5fa8",
+          "url": "https://github.com/unicode-org/icu/commit/a518312ce2b6bf9e96451b73d6e890cf07409872"
+        },
+        "date": 1679113333984,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 818.3855,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 823317.7238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 229734.6194,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 773965.5564,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 221397.6723,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
