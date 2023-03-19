@@ -564,6 +564,7 @@
 #define ucal_setTimeZone U_ICU_ENTRY_POINT_RENAME(ucal_setTimeZone)
 #define ucase_addCaseClosure U_ICU_ENTRY_POINT_RENAME(ucase_addCaseClosure)
 #define ucase_addPropertyStarts U_ICU_ENTRY_POINT_RENAME(ucase_addPropertyStarts)
+#define ucase_addSimpleCaseClosure U_ICU_ENTRY_POINT_RENAME(ucase_addSimpleCaseClosure)
 #define ucase_addStringCaseClosure U_ICU_ENTRY_POINT_RENAME(ucase_addStringCaseClosure)
 #define ucase_fold U_ICU_ENTRY_POINT_RENAME(ucase_fold)
 #define ucase_getCaseLocale U_ICU_ENTRY_POINT_RENAME(ucase_getCaseLocale)
