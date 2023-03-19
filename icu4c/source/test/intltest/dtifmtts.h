@@ -90,6 +90,8 @@ public:
     void testTicket21222JapaneseEraDiff();
     
     void testTicket21939();
+    void testTicket20710_FieldIdentity();
+    void testTicket20710_IntervalIdentity();
 
 private:
     /**

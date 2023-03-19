@@ -30,12 +30,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalFormat.FormattedDateInterval;
 import com.ibm.icu.text.DateIntervalInfo;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -2481,7 +2483,7 @@ public class DateIntervalFormatTest extends TestFmwk {
                      formatted.toString());
         verifyFields(formatted, expectedFields);
     }
-    
+
     @Test
     public void testTicket21939() {
         // the test here is just to check that this particular skeleton doesn't
@@ -2490,5 +2492,83 @@ public class DateIntervalFormatTest extends TestFmwk {
         DateFormat df = dif.getDateFormat();
         SimpleDateFormat sdf = (SimpleDateFormat)df;
         assertEquals("Wrong date format", "M/d/r, h:mm\u202Fa", sdf.toPattern());
+    }
+
+    @Test
+    public void testTicket20710_FieldIdentity() {
+        DateIntervalFormat dtifmt = DateIntervalFormat.getInstance("eeeeMMMddyyhhmma", new ULocale("de-CH"));
+        Calendar calendar1 = Calendar.getInstance(TimeZone.getTimeZone("CET"));
+        calendar1.setTimeInMillis(1563235200000l);
+        Calendar calendar2 = Calendar.getInstance(TimeZone.getTimeZone("CET"));
+        calendar2.setTimeInMillis(1564235200000l);
+
+        {
+            FormattedDateInterval fv = dtifmt.formatToValue(calendar1, calendar2);
+            ConstrainedFieldPosition cfp = new ConstrainedFieldPosition();
+            cfp.constrainClass(DateIntervalFormat.SpanField.class);
+            assertTrue("Span field should be in non-identity formats", fv.nextPosition(cfp));
+        }
+        {
+            FormattedDateInterval fv = dtifmt.formatToValue(calendar1, calendar1);
+            ConstrainedFieldPosition cfp = new ConstrainedFieldPosition();
+            cfp.constrainClass(DateIntervalFormat.SpanField.class);
+            assertFalse("Span field should not be in identity formats", fv.nextPosition(cfp));
+        }
+    }
+
+    @Test
+    public void testTicket20710_IntervalIdentity() {
+        boolean quick = getExhaustiveness() <= 5;
+
+        String timeZone = "PST";
+        ULocale[] locales = ULocale.getAvailableLocales();
+        String[] skeletons = {
+            "EEEEMMMMdyhmmssazzzz",
+            "EEEEMMMMdyhhmmssazzzz",
+            "EEEEMMMMddyyyyhhmmssvvvva",
+            "EEEEMMMMddhmszza",
+            "EEMMMMddyyhhzza",
+            "eeeeMMMddyyhhmma",
+            "MMddyyyyhhmmazzzz",
+            "hhmmazzzz",
+            "hmmssazzzz",
+            "hhmmsszzzz",
+            "MMddyyyyhhmmzzzz"
+        };
+
+        ULocale[] quickLocales = {
+            new ULocale("en"),
+            new ULocale("es"),
+            new ULocale("sr"),
+            new ULocale("zh"),
+        };
+        if (quick) {
+            locales = quickLocales;
+        }
+
+        for (int i = 0; i < locales.length; i++) {
+            ULocale locale = locales[i];
+            DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+            calendar.setTimeInMillis(1563235200000l);
+            for (String skeleton : skeletons) {
+                DateIntervalFormat dtifmt = DateIntervalFormat.getInstance(skeleton, locale);
+
+                FieldPosition pos = DontCareFieldPosition.INSTANCE;
+                StringBuffer resultIntervalFormat = new StringBuffer();
+                dtifmt.format(calendar, calendar, resultIntervalFormat, pos);
+
+                String pattern = gen.getBestPattern(skeleton);
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
+
+                StringBuffer resultDateFormat = new StringBuffer();
+                dateFormat.format(calendar, resultDateFormat, pos);
+                assertEquals(
+                    "DateIntervalFormat should fall back to DateFormat in the identity format",
+                    resultDateFormat.toString(),
+                    resultIntervalFormat.toString()
+                );
+            }
+        }
     }
 }

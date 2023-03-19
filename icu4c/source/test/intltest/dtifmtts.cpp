@@ -66,6 +66,8 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
     TESTCASE_AUTO(testTicket21222ROCEraDiff);
     TESTCASE_AUTO(testTicket21222JapaneseEraDiff);
     TESTCASE_AUTO(testTicket21939);
+    TESTCASE_AUTO(testTicket20710_FieldIdentity);
+    TESTCASE_AUTO(testTicket20710_IntervalIdentity);
     TESTCASE_AUTO_END;
 }
 
@@ -2383,6 +2385,81 @@ void DateIntervalFormatTest::testTicket21939() {
         UnicodeString pattern;
         assertEquals("Wrong pattern", u"M/d/r, h:mm\u202Fa", sdf->toPattern(pattern));
     }
+}
+
+void DateIntervalFormatTest::testTicket20710_FieldIdentity() {
+    IcuTestErrorCode status(*this, "testTicket20710_FieldIdentity");
+    LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance("eeeeMMMddyyhhmma", "de-CH", status));
+    LocalPointer<Calendar> calendar1(Calendar::createInstance(TimeZone::createTimeZone(u"CET"), status));
+    calendar1->setTime(UDate(1563235200000), status);
+    LocalPointer<Calendar> calendar2(Calendar::createInstance(TimeZone::createTimeZone(u"CET"), status));
+    calendar2->setTime(UDate(1564235200000), status);
+
+    {
+        auto fv = dtifmt->formatToValue(*calendar1, *calendar2, status);
+        ConstrainedFieldPosition cfp;
+        cfp.constrainCategory(UFIELD_CATEGORY_DATE_INTERVAL_SPAN);
+        assertTrue("Span field should be in non-identity formats", fv.nextPosition(cfp, status));
+    }
+    {
+        auto fv = dtifmt->formatToValue(*calendar1, *calendar1, status);
+        ConstrainedFieldPosition cfp;
+        cfp.constrainCategory(UFIELD_CATEGORY_DATE_INTERVAL_SPAN);
+        assertFalse("Span field should not be in identity formats", fv.nextPosition(cfp, status));
+    }
+}
+
+void DateIntervalFormatTest::testTicket20710_IntervalIdentity() {
+    IcuTestErrorCode status(*this, "testTicket20710_IntervalIdentity");
+
+    const char16_t timeZone[] = u"PST";
+    int32_t count = 0;
+    const Locale* locales = Locale::getAvailableLocales(count);
+    const UnicodeString skeletons[] = {
+        u"EEEEMMMMdyhmmssazzzz",
+        u"EEEEMMMMdyhhmmssazzzz",
+        u"EEEEMMMMddyyyyhhmmssvvvva",
+        u"EEEEMMMMddhmszza",
+        u"EEMMMMddyyhhzza",
+        u"eeeeMMMddyyhhmma",
+        u"MMddyyyyhhmmazzzz",
+        u"hhmmazzzz",
+        u"hmmssazzzz",
+        u"hhmmsszzzz",
+        u"MMddyyyyhhmmzzzz"
+    };
+
+    Locale quickLocales[] = {
+        {"en"}, {"es"}, {"sr"}, {"zh"}
+    };
+    if (quick) {
+        locales = quickLocales;
+        count = UPRV_LENGTHOF(quickLocales);
+    }
+
+    for (int32_t i = 0; i < count; i++) {
+        const Locale locale = locales[i];
+        LocalPointer<DateTimePatternGenerator> gen(DateTimePatternGenerator::createInstance(locale, status));
+        LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
+        calendar->setTime(UDate(1563235200000), status);
+        for (auto skeleton : skeletons) {
+            LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance(skeleton, locale, status));
+
+            FieldPosition fposition;
+            UnicodeString resultIntervalFormat;
+            dtifmt->format(*calendar, *calendar, resultIntervalFormat, fposition, status);
+
+            UnicodeString pattern = gen->getBestPattern(skeleton, status);
+            SimpleDateFormat dateFormat(pattern, locale, status);
+
+            FieldPositionIterator fpositer;
+            UnicodeString resultDateFormat;
+
+            dateFormat.format(*calendar, resultDateFormat, &fpositer, status);
+            assertEquals("DateIntervalFormat should fall back to DateFormat in the identity format", resultDateFormat, resultIntervalFormat);
+        }
+    }
+    
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
