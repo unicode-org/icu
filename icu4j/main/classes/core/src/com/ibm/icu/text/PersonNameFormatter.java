@@ -2,9 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.text;
 
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import com.ibm.icu.impl.personname.PersonNameFormatterImpl;
 

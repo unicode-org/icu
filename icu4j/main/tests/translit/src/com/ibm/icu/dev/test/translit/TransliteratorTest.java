@@ -22,6 +22,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.rbbi.RBBITstUtils;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.lang.CharSequences;
@@ -37,7 +38,6 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.dev.test.rbbi.RBBITstUtils;
 
 /***********************************************************************
 

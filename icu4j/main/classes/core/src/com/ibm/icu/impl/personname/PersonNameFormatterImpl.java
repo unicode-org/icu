@@ -5,7 +5,11 @@ package com.ibm.icu.impl.personname;
 import static com.ibm.icu.util.UResourceBundle.ARRAY;
 import static com.ibm.icu.util.UResourceBundle.STRING;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
