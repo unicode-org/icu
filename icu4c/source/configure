@@ -1489,7 +1489,7 @@ Optional Packages:
         library  shared library (.dll/.so/etc.)
         static   static library (.a/.lib/etc.)
         auto     build shared if possible (default)
-           See https://unicode-org.github.io/icu/userguide/icudata for more info.
+           See https://unicode-org.github.io/icu/userguide/icu_data for more info.
   --with-library-suffix=suffix    tag a suffix to the library names default=
 
 Some influential environment variables:
@@ -5334,6 +5334,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 *-*ibm-openedition*|*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
+powerpc*-apple-darwin*)	icu_cv_host_frag=mh-darwin-ppc ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
 *-*-beos)       icu_cv_host_frag=mh-beos ;;
 *-*-haiku)      icu_cv_host_frag=mh-haiku ;;
