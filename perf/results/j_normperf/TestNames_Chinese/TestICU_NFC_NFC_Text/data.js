@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679420459104,
+  "lastUpdate": 1679428077280,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7018,6 +7018,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 4.954517675151808,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "49e8b992962c048a31bc542d915a9daa6f4b3dc5",
+          "message": "ICU-22220 BRS73 Clean up Java import statements",
+          "timestamp": "2023-03-21T15:35:52-04:00",
+          "tree_id": "af2d0660599b43060cbd604b64fa84e6e65323bf",
+          "url": "https://github.com/unicode-org/icu/commit/49e8b992962c048a31bc542d915a9daa6f4b3dc5"
+        },
+        "date": 1679428047334,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 7.6331191402010505,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
