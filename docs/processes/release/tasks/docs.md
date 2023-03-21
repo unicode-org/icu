@@ -166,10 +166,10 @@ This work is done in the root of icu4j:
 1.  Make sure JAVA_HOME is set to JDK 8. This report creation fails with JDK 11.
     For example, in Linux:
     *   `export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64`
-2.  Then run ant task "clean" and "apireport" at <icu4j_root>:
+2.  Then run ant task "clean" and "apireport" at `<icu4j_root>`:
     *   `ant clean apireport`
 3.  Above will produce API change report file
-    <code><icu4j_root>/<b>out</b>/icu4j_compare_xxx_yyy.html</code>
+    `<icu4j_root>/<b>out</b>/icu4j_compare_xxx_yyy.html`
 4.  Make sure there are any new doc tag errors are reported. (As of ICU 4.4,
     ArabicShaping constants do not have proper tags - otherwise, clean)
 5.  Copy generated report file to `<icu4j_root>/APIChangeReport.html` and check
@@ -179,11 +179,6 @@ Once official release version is shipped, we need to keep API signature
 information file for next iteration. This is not done for milestone releases,
 only after the final official release.
 
-1.  Run ant task "gatherapi" at <icu4j_root>
-2.  Above will produce API signature information file
-    <icu4j_root>/out/icu4jxx.api2.gz
-3.  Copy icu4jxxapi2.gz to <icu4j_root>/tools/build and add it to the repository
-
 ---
 
 ## Check in API signature data file (ICU4J)
@@ -192,11 +187,12 @@ Once APIs are frozen for a reference release, we should check in the API
 signature data file into the repository. The data file will be used for future
 API change report.
 
-1.  Run ant task "gatherapi" at <icu4j_root>
-2.  The output file icu4j<ver>.api3.gz is created in <icu4j_root>/out directory.
-3.  Copy the output .gz file to <icu4j_root>/tools directory and check in the
+1.  Run ant task "gatherapi" at `<icu4j_root>`
+2.  Resolve any warnings before proceeding.
+3.  The output file `icu4j<ver>.api3.gz` is created in `<icu4j_root>/out` directory.
+4.  Copy the output .gz file to `<icu4j_root>/tools/build` directory and check in the
     file to the repository.
-4.  You may delete very old versions of the API signature files. Keeping 10
+5.  You may delete very old versions of the API signature files. Keeping 10
     versions to the latest should be good enough.
 
 Note: This task is only necessary for reference releases, because we won't
