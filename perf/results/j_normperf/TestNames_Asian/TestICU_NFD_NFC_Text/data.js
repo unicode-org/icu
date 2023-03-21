@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679344897827,
+  "lastUpdate": 1679420432926,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14128,6 +14128,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 19.976420193190688,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "fa5a6c15191dea895837ccfb2d658d315e23e6e4",
+          "message": "ICU-22288 Remove unnecessary assertion in ICU4J NumberRangeFormatter\n\nSee #2377",
+          "timestamp": "2023-03-21T12:34:34-05:00",
+          "tree_id": "f19c73a6aeacf6481bd6415f005559bcc89e4e08",
+          "url": "https://github.com/unicode-org/icu/commit/fa5a6c15191dea895837ccfb2d658d315e23e6e4"
+        },
+        "date": 1679420405067,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 15.783874764276822,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
