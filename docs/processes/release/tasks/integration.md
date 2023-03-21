@@ -473,6 +473,6 @@ usually done just before publishing release candidate.
 4.  Copy a folder with ICU version (e.g. ICU_61.1) generated under <icu4j
     root>/out/serialTestData to <icu4j
     root>/main/tests/core/src/com/ibm/icu/dev/test/serializable/data.
-5.  You may delete older serialization test data from the directory (but keep
+5.  Delete the oldest serialization test data after ICU 3.6 (do not delete ICU_3.6) from the directory.
     the oldest one - ICU_3.6).
 6.  Run `ant check` again before committing the changes.
