@@ -164,7 +164,7 @@ void dumpBinaryProperty(UProperty uproperty, FILE* f) {
     fputs("[[binary_property]]\n", f);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
-    fprintf(f, "uproperty_discr = %X\n", uproperty);
+    fprintf(f, "uproperty_discr = 0x%X\n", uproperty);
     dumpPropertyAliases(uproperty, f);
     usrc_writeUnicodeSet(f, uset, UPRV_TARGET_SYNTAX_TOML);
 }
