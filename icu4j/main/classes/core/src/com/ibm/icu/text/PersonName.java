@@ -199,12 +199,13 @@ public interface PersonName {
 
     /**
      * An enum to specify the preferred field order for the name.
-     * @defat ICU 73
+     * @draft ICU 73
      */
     enum PreferredOrder {
         /**
          * Indicates the name has no preferred field order, and that the formatter should deduce the
          * proper field order based on the locales of the name and the formatter.
+         * @draft ICU 73
          */
         DEFAULT,
 
@@ -218,6 +219,7 @@ public interface PersonName {
         /**
          * Indicates that the name should be formatted in surname-first order, even when the formatter
          * would normally guess that it should be formatted in given-first order.
+         * @draft ICU 73
          */
         SURNAME_FIRST
     }

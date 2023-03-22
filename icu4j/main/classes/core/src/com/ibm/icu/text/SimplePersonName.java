@@ -153,7 +153,6 @@ public class SimplePersonName implements PersonName {
      * else using the builder.
      * @return The name's preferred field order.
      * @draft ICU 73
-     * @return
      */
     @Override
     public PreferredOrder getPreferredOrder() { return preferredOrder; }
@@ -211,8 +210,9 @@ public class SimplePersonName implements PersonName {
 
     /**
      * @internal Debugging only!
-     * @return
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
