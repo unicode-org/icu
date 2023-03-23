@@ -2128,6 +2128,7 @@ void TimeZoneTest::TestCanonicalID() {
         {"America/Thunder_Bay", "America/Toronto"},
         {"America/Tortola", "America/Puerto_Rico"},
         {"America/Virgin", "America/Puerto_Rico"},
+        {"America/Yellowknife", "America/Edmonton"},
         {"Antarctica/DumontDUrville", "Pacific/Port_Moresby"},
         {"Antarctica/South_Pole", "Antarctica/McMurdo"},
         {"Antarctica/Syowa", "Asia/Riyadh"},
