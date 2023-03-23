@@ -53,9 +53,6 @@ class RBBIRuleBuilder {
     boolean fChainRules;                  // True for chained Unicode TR style rules.
                                           // False for traditional regexp rules.
 
-    boolean fLBCMNoChain;                 // True:  suppress chaining of rules on
-                                          //   chars with LineBreak property == CM.
-
     boolean fLookAheadHardBreak;          // True:  Look ahead matches cause an
                                           // immediate break, no continuing for the
                                           // longest match.

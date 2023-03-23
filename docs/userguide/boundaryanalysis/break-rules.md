@@ -206,15 +206,6 @@ Chaining into a rule can be dis-allowed by beginning that rule with a '`^`'. Rul
 so marked can begin a match after a preceding boundary or at the start of text,
 but cannot extend a match via chaining from another rule.
 
-~~The !!LBCMNoChain; statement modifies chaining behavior by preventing chaining
-from one rule to another from occurring on any character whose Line Break
-property is Combining Mark. This option is subject to change or removal, and
-should not be used in general. Within ICU, it is used only with the line break
-rules. We hope to replace it with something more general.~~
-
-> :point_right: **Note**: `!!LBCMNoChain` is deprecated, and will be removed
-> completely from a future version of ICU.
-
 ## Rule Status Values
 
 Break rules can be tagged with a number, which is called the *rule status*.
@@ -293,7 +284,6 @@ See, for example, this snippet from the [line break rules](https://github.com/un
 | ~~`!!reverse`~~     | ~~*[deprecated]* The rules that follow are for reverse iteration. No longer needed; any rules in a Reverse rule section are ignored.~~ |
 | ~~`!!safe_forward`~~ | ~~*[deprecated]* The rules that follow are for safe forward iteration. No longer needed; any rules in such a section are ignored.~~ |
 | ~~`!!safe_reverse`~~ | ~~*[deprecated]* The rules that follow are for safe reverse iteration. No longer needed; any rules in such a section are ignored.~~ |
-| ~~`!!LBCMNoChain`~~ | ~~*[deprecated]* Disable chaining when the overlap character matches `\p{Line_Break=Combining_Mark}`~~ |
 
 ## Rule Syntax
 
@@ -377,22 +367,17 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
    exclamation `!`. This syntax is deprecated, and will be removed from a
    future version of ICU.
 
-2. `!!LBCMNoChain` was a global option that specified that characters with the
-   line break property of "Combining Character" would not participate in rule
-   chaining. This option was always considered internal, is deprecated and will
-   be removed from a future version of ICU.
-
-3. Naked rule characters. Plain text, in the context of a rule, is treated as
+2. Naked rule characters. Plain text, in the context of a rule, is treated as
    literal text to be matched, much like normal regular expressions. This turns
    out to be very error prone, has been the source of bugs in released versions
    of ICU, and is not useful in implementing normal text boundary rules. A
    future version will reject literal text that is not escaped.
 
-4. Exact reverse rules and safe forward rules: planned changes to the break
+3. Exact reverse rules and safe forward rules: planned changes to the break
    engine implementation will remove the need for exact reverse rules and safe
    forward rules.
 
-5. `{bof}` and `{eof}`, appearing within `[`sets`]`, match the beginning or ending of
+4. `{bof}` and `{eof}`, appearing within `[`sets`]`, match the beginning or ending of
    the input text, respectively. This is an internal (not documented) feature
    that will probably be removed in a future version of ICU. They are currently
    used by the standard rules for word, line and sentence breaking. An
