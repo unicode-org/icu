@@ -436,8 +436,6 @@ class RBBIRuleScanner {
             String opt = fRB.fRules.substring(fOptionStart, fScanIndex);
             if (opt.equals("chain")) {
                 fRB.fChainRules = true;
-            } else if (opt.equals("LBCMNoChain")) {
-                fRB.fLBCMNoChain = true;
             } else if (opt.equals("forward")) {
                 fRB.fDefaultTree = RBBIRuleBuilder.fForwardTree;
             } else if (opt.equals("reverse")) {
