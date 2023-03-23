@@ -916,7 +916,7 @@ decodeBocu1LeadByte(int32_t b) {
     }
 
     /* return the state for decoding the trail byte(s) */
-    return (diff<<2)|count;
+    return ((uint32_t)diff<<2)|count;
 }
 
 /**
@@ -1157,7 +1157,7 @@ endloop:
     } else {
         /* set the converter state back into UConverter */
         cnv->toUnicodeStatus=(uint32_t)prev;
-        cnv->mode=(diff<<2)|count;
+        cnv->mode=(int32_t)((uint32_t)diff<<2)|count;
     }
     cnv->toULength=byteIndex;
 
@@ -1356,7 +1356,7 @@ endloop:
     } else {
         /* set the converter state back into UConverter */
         cnv->toUnicodeStatus=(uint32_t)prev;
-        cnv->mode=(diff<<2)|count;
+        cnv->mode=((uint32_t)diff<<2)|count;
     }
     cnv->toULength=byteIndex;
 

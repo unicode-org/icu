@@ -49,19 +49,19 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
            "f",     "zh_MO",                            "zh@collation=stroke", /* alias of zh_Hant_MO */
            "t",     "zh_Hant_MO",                       "zh@collation=stroke",
            "f",     "zh_TW_STROKE",                     "zh@collation=stroke",
-           "f",     "zh_TW_STROKE@collation=big5han",   "zh@collation=big5han",
+           "f",     "zh_TW_STROKE@collation=zhuyin",    "zh@collation=zhuyin",
            "f",     "sv_CN@calendar=japanese",          "sv",
            "t",     "sv@calendar=japanese",             "sv",
-           "f",     "zh_TW@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hant_TW */
-           "t",     "zh_Hant_TW@collation=big5han",     "zh@collation=big5han",
-           "f",     "zh_TW@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hant_TW */
-           "t",     "zh_Hant_TW@collation=gb2312han",   "zh@collation=gb2312han",
-           "f",     "zh_CN@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hans_CN */
-           "t",     "zh_Hans_CN@collation=big5han",     "zh@collation=big5han",
-           "f",     "zh_CN@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hans_CN */
-           "t",     "zh_Hans_CN@collation=gb2312han",   "zh@collation=gb2312han",
-           "t",     "zh@collation=big5han",             "zh@collation=big5han",
-           "t",     "zh@collation=gb2312han",           "zh@collation=gb2312han",
+           "f",     "zh_TW@collation=zhuyin",           "zh@collation=zhuyin", /* alias of zh_Hant_TW */
+           "t",     "zh_Hant_TW@collation=zhuyin",      "zh@collation=zhuyin",
+           "f",     "zh_TW@collation=unihan",           "zh@collation=unihan", /* alias of zh_Hant_TW */
+           "t",     "zh_Hant_TW@collation=unihan",      "zh@collation=unihan",
+           "f",     "zh_CN@collation=zhuyin",           "zh@collation=zhuyin", /* alias of zh_Hans_CN */
+           "t",     "zh_Hans_CN@collation=zhuyin",      "zh@collation=zhuyin",
+           "f",     "zh_CN@collation=unihan",           "zh@collation=unihan", /* alias of zh_Hans_CN */
+           "t",     "zh_Hans_CN@collation=unihan",      "zh@collation=unihan",
+           "t",     "zh@collation=zhuyin",              "zh@collation=zhuyin",
+           "t",     "zh@collation=unihan",              "zh@collation=unihan",
            "t",     "hi@collation=standard",            "hi",
            "f",     "hi_AU@collation=standard;currency=CHF;calendar=buddhist",  "hi",
            "f",     "sv_SE@collation=pinyin",           "sv", /* bug 4582 tests */

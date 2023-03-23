@@ -438,7 +438,7 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
 
 // Check whether upper case comes before lower case or vice-versa
 int32_t 
-checkCaseOrdering(void) {
+checkCaseOrdering() {
   char16_t stuff[][3] = {
     { 0x0061, separatorChar, 0x0061}, //"aa",
     { 0x0061, separatorChar, 0x0041 }, //"a\\u00E0",

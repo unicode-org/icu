@@ -143,7 +143,7 @@ void SearchIterator::setBreakIterator(BreakIterator *breakiter,
     }
 }
     
-const BreakIterator * SearchIterator::getBreakIterator(void) const
+const BreakIterator * SearchIterator::getBreakIterator() const
 {
     return m_breakiterator_;
 }
@@ -170,7 +170,7 @@ void SearchIterator::setText(CharacterIterator &text, UErrorCode &status)
     }
 }
     
-const UnicodeString & SearchIterator::getText(void) const
+const UnicodeString & SearchIterator::getText() const
 {
     return m_text_;
 }
@@ -190,8 +190,9 @@ bool SearchIterator::operator==(const SearchIterator &that) const
             m_search_->matchedLength    == that.m_search_->matchedLength &&
             m_search_->textLength       == that.m_search_->textLength &&
             getOffset() == that.getOffset() &&
+            (m_search_->textLength == 0 ||
             (uprv_memcmp(m_search_->text, that.m_search_->text, 
-                              m_search_->textLength * sizeof(char16_t)) == 0));
+                              m_search_->textLength * sizeof(char16_t)) == 0)));
 }
 
 // public methods ----------------------------------------------------

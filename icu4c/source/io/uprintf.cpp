@@ -43,7 +43,7 @@ U_NAMESPACE_USE
 static UFILE *gStdOut = nullptr;
 static UInitOnce gStdOutInitOnce {};
 
-static UBool U_CALLCONV uprintf_cleanup(void)
+static UBool U_CALLCONV uprintf_cleanup()
 {
     if (gStdOut != nullptr) {
         u_fclose(gStdOut);

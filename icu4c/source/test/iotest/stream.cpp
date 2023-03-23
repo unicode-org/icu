@@ -49,7 +49,7 @@ const char C_NEW_LINE[] = {'\n',0};
 U_CDECL_END
 
 U_CDECL_BEGIN
-static void U_CALLCONV TestStream(void)
+static void U_CALLCONV TestStream()
 {
     const char16_t thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC, 0};
     const char16_t mu[] = { 0x6D, 0x75, 0};
@@ -248,7 +248,7 @@ testString(
 }
 
 
-static void U_CALLCONV TestStreamEOF(void)
+static void U_CALLCONV TestStreamEOF()
 {
     UnicodeString dest;
     fstream fs(STANDARD_TEST_FILE, fstream::in | fstream::out | fstream::trunc);

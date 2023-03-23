@@ -1323,7 +1323,7 @@ UnicodeStringTest::TestStackAllocation()
 /**
  * Test the unescape() function.
  */
-void UnicodeStringTest::TestUnescape(void) {
+void UnicodeStringTest::TestUnescape() {
     UnicodeString IN("abc\\u4567 \\n\\r \\U00101234xyz\\x1\\x{5289}\\x1b", -1, US_INV);
     UnicodeString OUT("abc");
     OUT.append((char16_t)0x4567);
@@ -1372,7 +1372,7 @@ UnicodeStringTest::_testUnicodeStringHasMoreChar32Than(const UnicodeString &s, i
 }
 
 void
-UnicodeStringTest::TestCountChar32(void) {
+UnicodeStringTest::TestCountChar32() {
     {
         UnicodeString s=UNICODE_STRING("\\U0002f999\\U0001d15f\\u00c4\\u1ed0", 32).unescape();
 

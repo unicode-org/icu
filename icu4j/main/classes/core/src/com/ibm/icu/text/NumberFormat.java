@@ -1971,7 +1971,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * Approximately sign. In ICU 70, this was categorized under the generic SIGN field.
-         * @draft ICU 71
+         * @stable ICU 71
          */
         public static final Field APPROXIMATELY_SIGN = new Field("approximately sign");
 

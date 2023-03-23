@@ -15,7 +15,8 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.Measure;
 
 /**
- * Converts from single or compound unit to single, compound or mixed units. For example, from `meter` to `foot+inch`.
+ * Converts from single or compound unit to single, compound or mixed units. For example, from {@code meter}
+ * to {@code foot+inch}.
  * <p>
  * DESIGN: This class uses <code>UnitsConverter</code> in order to perform the single converter (i.e. converters from
  * a single unit to another single unit). Therefore, <code>ComplexUnitsConverter</code> class contains multiple
@@ -135,11 +136,12 @@ public class ComplexUnitsConverter {
     }
 
     /**
-     * Returns true if the specified `quantity` of the `inputUnit`, expressed in terms of the biggest unit in the
-     * MeasureUnit `outputUnit`, is greater than or equal to `limit`.
+     * Returns true if the specified {@code quantity} of the {@code inputUnit}, expressed in terms of the biggest
+     * unit in the MeasureUnit {@code outputUnit}, is greater than or equal to {@code limit}.
      * <p>
-     * For example, if the input unit is `meter` and the target unit is `foot+inch`. Therefore, this function will
-     * convert the `quantity` from `meter` to `foot`, then, it will compare the value in `foot` with the `limit`.
+     * For example, if the input unit is {@code meter} and the target unit is {@code foot+inch}. Therefore,
+     * this function will convert the {@code quantity} from {@code meter} to {@code foot}, then, it will
+     * compare the value in {@code foot} with the {@code limit}.
      */
     public boolean greaterThanOrEqual(BigDecimal quantity, BigDecimal limit) {
         assert !units_.isEmpty();

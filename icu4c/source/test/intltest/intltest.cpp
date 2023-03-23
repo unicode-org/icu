@@ -514,7 +514,7 @@ void it_logln( UnicodeString message )
         IntlTest::gTest->logln( message );
 }
 
-void it_logln( void )
+void it_logln()
 {
     if (IntlTest::gTest)
         IntlTest::gTest->logln();
@@ -532,7 +532,7 @@ void it_infoln( UnicodeString message )
         IntlTest::gTest->infoln( message );
 }
 
-void it_infoln( void )
+void it_infoln()
 {
     if (IntlTest::gTest)
         IntlTest::gTest->infoln();
@@ -679,12 +679,12 @@ int32_t IntlTest::setThreadCount( int32_t count )
     return rval;
 }
 
-int32_t IntlTest::getErrors( void )
+int32_t IntlTest::getErrors()
 {
     return errorCount;
 }
 
-int32_t IntlTest::getDataErrors( void )
+int32_t IntlTest::getDataErrors()
 {
     return dataErrorCount;
 }
@@ -868,7 +868,7 @@ void IntlTest::logln( const UnicodeString &message )
     }
 }
 
-void IntlTest::logln( void )
+void IntlTest::logln()
 {
     if( verbose ) {
         LL_message( "", true );
@@ -892,19 +892,19 @@ void IntlTest::infoln( const UnicodeString &message )
   LL_message( message, true );
 }
 
-void IntlTest::infoln( void )
+void IntlTest::infoln()
 {
   LL_message( "", true );
 }
 
-int32_t IntlTest::IncErrorCount( void )
+int32_t IntlTest::IncErrorCount()
 {
     errorCount++;
     if (caller) caller->IncErrorCount();
     return errorCount;
 }
 
-int32_t IntlTest::IncDataErrorCount( void )
+int32_t IntlTest::IncDataErrorCount()
 {
     dataErrorCount++;
     if (caller) caller->IncDataErrorCount();
@@ -1183,7 +1183,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
 /**
 * Print a usage message for this test class.
 */
-void IntlTest::usage( void )
+void IntlTest::usage()
 {
     UBool save_verbose = setVerbose( true );
     logln("Test names:");

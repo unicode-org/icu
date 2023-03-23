@@ -1493,7 +1493,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * <i>valid</i> locale).
      *
      * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
+     * contains a partial preview implementation.  The <i>actual</i>
      * locale is returned correctly, but the <i>valid</i> locale is
      * not, in most cases.
      *

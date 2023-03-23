@@ -669,6 +669,8 @@ nl{
     }
     Languages%short{
         az{"Azeri"}
+        en_GB{"Engels (VK)"}
+        en_US{"Engels (VS)"}
     }
     Languages%variant{
         ckb{"Koerdisch, Soranî"}

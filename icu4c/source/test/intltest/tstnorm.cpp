@@ -271,7 +271,7 @@ void BasicNormalizerTest::TestHangulDecomp()
 /**
  * The Tibetan vowel sign AA, 0f71, was messed up prior to Unicode version 2.1.9.
  */
-void BasicNormalizerTest::TestTibetan(void) {
+void BasicNormalizerTest::TestTibetan() {
     UnicodeString decomp[1][3];
     decomp[0][0] = str("\\u0f77");
     decomp[0][1] = str("\\u0f77");
@@ -292,7 +292,7 @@ void BasicNormalizerTest::TestTibetan(void) {
  * Make sure characters in the CompositionExclusion.txt list do not get
  * composed to.
  */
-void BasicNormalizerTest::TestCompositionExclusion(void) {
+void BasicNormalizerTest::TestCompositionExclusion() {
     // This list is generated from CompositionExclusion.txt.
     // Update whenever the normalizer tables are updated.  Note
     // that we test all characters listed, even those that can be
@@ -344,7 +344,7 @@ void BasicNormalizerTest::TestCompositionExclusion(void) {
  * map to the same canonical class, which is not the case, in
  * reality.
  */
-void BasicNormalizerTest::TestZeroIndex(void) {
+void BasicNormalizerTest::TestZeroIndex() {
     const char* DATA[] = {
         // Expect col1 x COMPOSE_COMPAT => col2
         // Expect col2 x DECOMP => col3
@@ -392,7 +392,7 @@ void BasicNormalizerTest::TestZeroIndex(void) {
 /**
  * Run a few specific cases that are failing for Verisign.
  */
-void BasicNormalizerTest::TestVerisign(void) {
+void BasicNormalizerTest::TestVerisign() {
     /*
       > Their input:
       > 05B8 05B9 05B1 0591 05C3 05B0 05AC 059F

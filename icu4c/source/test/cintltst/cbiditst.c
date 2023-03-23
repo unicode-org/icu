@@ -1041,7 +1041,7 @@ testReorderArabicMathSymbols(void) {
 
 static void
 doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart, UBool countRunsFirst) {
-    const uint8_t *dirProps=test->text+lineStart;
+    const uint8_t *dirProps= (test->text == NULL) ? NULL : test->text+lineStart;
     const UBiDiLevel *levels=test->levels;
     const uint8_t *visualMap=test->visualMap;
     int32_t i, len=ubidi_getLength(pBiDi), logicalIndex, runCount = 0;

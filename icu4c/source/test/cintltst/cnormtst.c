@@ -1048,7 +1048,7 @@ _testIter(const UChar *src, int32_t srcLength,
     UBool neededToNormalize, expectNeeded;
 
     errorCode=U_ZERO_ERROR;
-    outLimit=out+outLength;
+    outLimit= (out == NULL) ? NULL : out+outLength;
     if(forward) {
         expect=out;
         i=index=0;

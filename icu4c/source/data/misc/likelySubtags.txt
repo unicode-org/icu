@@ -2371,6 +2371,17 @@ likelySubtags:table(nofallback){
     hnh{"hnh_Latn_BW"}
     hni{"hni_Latn_CN"}
     hnj{"hnj_Hmnp_US"}
+    hnj_AU{"hnj_Laoo_AU"}
+    hnj_CN{"hnj_Laoo_CN"}
+    hnj_FR{"hnj_Laoo_FR"}
+    hnj_GF{"hnj_Laoo_GF"}
+    hnj_LA{"hnj_Laoo_LA"}
+    hnj_Laoo{"hnj_Laoo_LA"}
+    hnj_MM{"hnj_Laoo_MM"}
+    hnj_SR{"hnj_Laoo_SR"}
+    hnj_TH{"hnj_Laoo_TH"}
+    hnj_US{"hnj_Hmnp_US"}
+    hnj_VN{"hnj_Laoo_VN"}
     hnn{"hnn_Latn_PH"}
     hno{"hno_Arab_PK"}
     hns{"hns_Latn_SR"}
@@ -4859,7 +4870,6 @@ likelySubtags:table(nofallback){
     obt{"obt_Latn_FR"}
     obu{"obu_Latn_NG"}
     oc{"oc_Latn_FR"}
-    oc_ES{"oc_Latn_ES"}
     oca{"oca_Latn_PE"}
     oco{"oco_Latn_GB"}
     ocu{"ocu_Latn_MX"}
@@ -5428,8 +5438,6 @@ likelySubtags:table(nofallback){
     rhp{"rhp_Latn_PG"}
     ria{"ria_Latn_IN"}
     rif{"rif_Latn_MA"}
-    rif_NL{"rif_Latn_NL"}
-    rif_Tfng{"rif_Tfng_MA"}
     ril{"ril_Latn_MM"}
     rim{"rim_Latn_TZ"}
     rin{"rin_Latn_NG"}
@@ -6654,7 +6662,7 @@ likelySubtags:table(nofallback){
     und_Arab_TG{"apd_Arab_TG"}
     und_Arab_TH{"mfa_Arab_TH"}
     und_Arab_TJ{"fa_Arab_TJ"}
-    und_Arab_TR{"az_Arab_TR"}
+    und_Arab_TR{"apc_Arab_TR"}
     und_Arab_YT{"swb_Arab_YT"}
     und_Armi{"arc_Armi_IR"}
     und_Armn{"hy_Armn_AM"}
@@ -6839,6 +6847,15 @@ likelySubtags:table(nofallback){
     und_LY{"ar_Arab_LY"}
     und_Lana{"nod_Lana_TH"}
     und_Laoo{"lo_Laoo_LA"}
+    und_Laoo_AU{"hnj_Laoo_AU"}
+    und_Laoo_CN{"hnj_Laoo_CN"}
+    und_Laoo_FR{"hnj_Laoo_FR"}
+    und_Laoo_GF{"hnj_Laoo_GF"}
+    und_Laoo_MM{"hnj_Laoo_MM"}
+    und_Laoo_SR{"hnj_Laoo_SR"}
+    und_Laoo_TH{"hnj_Laoo_TH"}
+    und_Laoo_US{"hnj_Laoo_US"}
+    und_Laoo_VN{"hnj_Laoo_VN"}
     und_Latn_AF{"tk_Latn_AF"}
     und_Latn_AM{"ku_Latn_AM"}
     und_Latn_CN{"za_Latn_CN"}

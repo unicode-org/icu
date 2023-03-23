@@ -1852,6 +1852,7 @@ supplementalData:table(nofallback){
                     }
                 }
             }
+            inheritEras{"gregorian"}
             system{"solar"}
         }
         persian{
@@ -4485,6 +4486,7 @@ supplementalData:table(nofallback){
                 "GWE",
                 "GWP",
                 "HRD",
+                "HRK",
                 "IEP",
                 "ILP",
                 "ILR",
@@ -4526,6 +4528,7 @@ supplementalData:table(nofallback){
                 "SDP",
                 "SIT",
                 "SKK",
+                "SLL",
                 "SRG",
                 "STD",
                 "SUR",
@@ -4627,7 +4630,6 @@ supplementalData:table(nofallback){
                 "GYD",
                 "HKD",
                 "HNL",
-                "HRK",
                 "HTG",
                 "HUF",
                 "IDR",
@@ -4695,7 +4697,6 @@ supplementalData:table(nofallback){
                 "SGD",
                 "SHP",
                 "SLE",
-                "SLL",
                 "SOS",
                 "SRD",
                 "SSP",
@@ -7704,8 +7705,7 @@ supplementalData:table(nofallback){
                 "CA",
                 "CC~D",
                 "CF~I",
-                "CK~P",
-                "CR",
+                "CK~R",
                 "CU~Z",
                 "DE",
                 "DG",
@@ -11893,6 +11893,8 @@ supplementalData:table(nofallback){
                 "lemosin",
                 "lengadoc",
                 "lipaw",
+                "ltg1929",
+                "ltg2007",
                 "luna1918",
                 "metelko",
                 "monoton",
@@ -12122,9 +12124,15 @@ supplementalData:table(nofallback){
             }
         }
         apc{
-            primary{
-                scripts{"Arab"}
-                territories{"SY"}
+            secondary{
+                territories{
+                    "IL",
+                    "JO",
+                    "LB",
+                    "PS",
+                    "SY",
+                    "TR",
+                }
             }
         }
         ar{
@@ -13245,6 +13253,7 @@ supplementalData:table(nofallback){
                     "CC",
                     "CK",
                     "CM",
+                    "CQ",
                     "CX",
                     "DG",
                     "DM",
@@ -14988,6 +14997,8 @@ supplementalData:table(nofallback){
         lmo{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
                 territories{"IT"}
             }
         }
@@ -15921,13 +15932,13 @@ supplementalData:table(nofallback){
         pap{
             primary{
                 scripts{"Latn"}
-                territories{"CW"}
-            }
-            secondary{
                 territories{
                     "AW",
-                    "BQ",
+                    "CW",
                 }
+            }
+            secondary{
+                territories{"BQ"}
             }
         }
         pau{
@@ -26600,6 +26611,7 @@ supplementalData:table(nofallback){
             "NO",
             "SE",
             "SJ",
+            "CQ",
         }
         155{
             "AT",
@@ -28283,6 +28295,17 @@ supplementalData:table(nofallback){
                 populationShareF:int{50100000}
             }
         }
+        CQ{
+            en{
+                officialStatus{"official"}
+                populationShareF:int{49980000}
+            }
+            territoryF:intvector{
+                57219400,
+                49990000,
+                52492000,
+            }
+        }
         CR{
             es{
                 officialStatus{"official"}
@@ -29660,7 +29683,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47590000}
             }
             apc{
-                populationShareF:int{49165000}
+                populationShareF:int{49170000}
             }
             ar{
                 officialStatus{"official"}
@@ -30155,7 +30178,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47860000}
             }
             lmo{
-                populationShareF:int{46300000}
+                populationShareF:int{48570000}
             }
             nap{
                 populationShareF:int{47970000}
@@ -30217,7 +30240,7 @@ supplementalData:table(nofallback){
         }
         JO{
             apc{
-                populationShareF:int{49514000}
+                populationShareF:int{49660000}
             }
             ar{
                 officialStatus{"official"}
@@ -30494,6 +30517,9 @@ supplementalData:table(nofallback){
             }
         }
         LB{
+            apc{
+                populationShareF:int{50100000}
+            }
             ar{
                 officialStatus{"official"}
                 populationShareF:int{49860000}
@@ -31964,7 +31990,7 @@ supplementalData:table(nofallback){
         }
         PS{
             apc{
-                populationShareF:int{49830000}
+                populationShareF:int{49870000}
             }
             ar{
                 officialStatus{"official"}
@@ -32754,7 +32780,7 @@ supplementalData:table(nofallback){
         }
         SY{
             apc{
-                populationShareF:int{49750000}
+                populationShareF:int{49850000}
             }
             ar{
                 officialStatus{"official"}
@@ -33033,6 +33059,9 @@ supplementalData:table(nofallback){
             }
             ady{
                 populationShareF:int{47390000}
+            }
+            apc{
+                populationShareF:int{48520000}
             }
             ar{
                 populationShareF:int{47560000}

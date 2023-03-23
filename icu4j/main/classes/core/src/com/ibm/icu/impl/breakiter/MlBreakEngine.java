@@ -8,16 +8,16 @@ import static com.ibm.icu.impl.CharacterIteration.current32;
 import static com.ibm.icu.impl.CharacterIteration.next32;
 import static com.ibm.icu.impl.CharacterIteration.previous32;
 
+import java.text.CharacterIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
-
-import java.text.CharacterIterator;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
 
 enum ModelIndex {
     kUWStart(0), kBWStart(6), kTWStart(9);

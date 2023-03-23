@@ -715,10 +715,10 @@ public class NumberFormatDataDrivenTest {
 
     @Test
     public void TestDataDrivenJDK() {
-        // #13373: Since not all JDK implementations are the same, test only whitelisted JDKs
+        // #13373: Since not all JDK implementations are the same, test only on a JDK
         // with known behavior. The JDK version should be occasionally updated.
         org.junit.Assume.assumeTrue(TestUtil.getJavaRuntimeName() == TestUtil.JavaRuntimeName.OpenJDK
-                && TestUtil.getJavaVersion() == 8);
+                && TestUtil.getJavaVersion() == 11);
 
         DataDrivenNumberFormatTestUtility
                 .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", JDK);

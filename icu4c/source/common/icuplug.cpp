@@ -632,7 +632,7 @@ U_CAPI UPlugLevel U_EXPORT2 uplug_getCurrentLevel() {
   return gCurrentLevel;
 }
 
-static UBool U_CALLCONV uplug_cleanup(void)
+static UBool U_CALLCONV uplug_cleanup()
 {
   int32_t i;
     

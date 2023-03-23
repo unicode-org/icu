@@ -713,7 +713,7 @@ void RegionTest::TestAvailableTerritories() {
     delete containedInWorld;
 }
 
-void RegionTest::TestNoContainedRegions(void) {
+void RegionTest::TestNoContainedRegions() {
   UErrorCode status = U_ZERO_ERROR;
   const Region *region = Region::getInstance("BM",status);
   if (U_FAILURE(status) || region == nullptr) {
@@ -734,7 +734,7 @@ void RegionTest::TestNoContainedRegions(void) {
   delete containedRegions;
 }
 
-void RegionTest::TestGroupingChildren(void) {
+void RegionTest::TestGroupingChildren() {
     const char* testGroupings[] = {
         "003", "021,013,029",
         "419", "013,029,005",

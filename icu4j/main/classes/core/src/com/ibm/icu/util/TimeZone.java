@@ -286,7 +286,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * Gets the time zone offset, for current date, modified in case of
-     * daylight savings. This is the offset to add *to* UTC to get local time.
+     * daylight savings. This is the offset to add <i>to</i> UTC to get local time.
      * @param era the era of the given date.
      * @param year the year in the given date.
      * @param month the month in the given date.
@@ -294,7 +294,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @param day the day-in-month of the given date.
      * @param dayOfWeek the day-of-week of the given date.
      * @param milliseconds the millis in day in <em>standard</em> local time.
-     * @return the offset to add *to* GMT to get local time.
+     * @return the offset to add <i>to</i> GMT to get local time.
      * @stable ICU 2.0
      */
     abstract public int getOffset(int era, int year, int month, int day,
@@ -330,13 +330,13 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      *
      * @param date moment in time for which to return offsets, in
      * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
-     * time or local wall time, depending on `local'.
-     * @param local if true, `date' is local wall time; otherwise it
+     * time or local wall time, depending on {@code local}.
+     * @param local if true, {@code date} is local wall time; otherwise it
      * is in GMT time.
      * @param offsets output parameter to receive the raw offset, that
      * is, the offset not including DST adjustments, in offsets[0],
      * and the DST offset, that is, the offset to be added to
-     * `rawOffset' to obtain the total offset between local and GMT
+     * {@code rawOffset} to obtain the total offset between local and GMT
      * time, in offsets[1]. If DST is not in effect, the DST offset is
      * zero; otherwise it is a positive value, typically one hour.
      *
@@ -377,7 +377,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * Sets the base time zone offset to GMT.
-     * This is the offset to add *to* UTC to get local time.
+     * This is the offset to add <i>to</i> UTC to get local time.
      * @param offsetMillis the given base time zone offset to GMT.
      * @stable ICU 2.0
      */
@@ -385,8 +385,8 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * Gets unmodified offset, NOT modified in case of daylight savings.
-     * This is the offset to add *to* UTC to get local time.
-     * @return the unmodified offset to add *to* UTC to get local time.
+     * This is the offset to add <i>to</i> UTC to get local time.
+     * @return the unmodified offset to add <i>to</i> UTC to get local time.
      * @stable ICU 2.0
      */
     abstract public int getRawOffset();

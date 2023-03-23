@@ -135,7 +135,7 @@ public:
     UBool run();
     UBool runTest( char* name = nullptr, char* par = nullptr ); // not to be overridden
         
-    virtual void usage( void ) ;
+    virtual void usage() ;
     
     virtual ~UPerfTest();
 

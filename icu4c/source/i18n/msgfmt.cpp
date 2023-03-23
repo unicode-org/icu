@@ -515,7 +515,8 @@ MessageFormat::applyPattern(const UnicodeString& pattern,
     if (aposMode != msgPattern.getApostropheMode()) {
         msgPattern.clearPatternAndSetApostropheMode(aposMode);
     }
-    applyPattern(pattern, *parseError, status);
+    UParseError tempParseError;
+    applyPattern(pattern, (parseError == nullptr) ? tempParseError : *parseError, status);
 }
 
 // -------------------------------------

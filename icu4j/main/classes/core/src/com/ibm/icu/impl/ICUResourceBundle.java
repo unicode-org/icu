@@ -397,11 +397,11 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     /**
-     * Locates the resource specified by `path` in this resource bundle (performing any necessary fallback and
-     * following any aliases) and calls the specified `sink`'s `put()` method with that resource.  Then walks the
-     * bundle's parent chain, calling `put()` on the sink for each item in the parent chain.
+     * Locates the resource specified by {@code path} in this resource bundle (performing any necessary fallback
+     * and following any aliases) and calls the specified {@code sink}'s {@code put()} method with that resource.
+     * Then walks the bundle's parent chain, calling {@code put()} on the sink for each item in the parent chain.
      * @param path The path of the desired resource
-     * @param sink A `UResource.Sink` that gets called for each resource in the parent chain
+     * @param sink A {@code UResource.Sink} that gets called for each resource in the parent chain
      */
     public void getAllItemsWithFallback(String path, UResource.Sink sink)
             throws MissingResourceException {
@@ -430,16 +430,16 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     /**
-     * Locates the resource specified by `path` in this resource bundle (performing any necessary fallback and
+     * Locates the resource specified by {@code path} in this resource bundle (performing any necessary fallback and
      * following any aliases) and, if the resource is a table resource, iterates over its immediate child resources (again,
-     * following any aliases to get the individual resource values), and calls the specified `sink`'s `put()` method
-     * for each child resource (passing it that resource's key and either its actual value or, if that value is an
+     * following any aliases to get the individual resource values), and calls the specified {@code sink}'s {@code put()}
+     * method for each child resource (passing it that resource's key and either its actual value or, if that value is an
      * alias, the value you get by following the alias).  Then walks back over the bundle's parent chain,
      * similarly iterating over each parent table resource's child resources.
      * Does not descend beyond one level of table children.
      * @param path The path of the desired resource
-     * @param sink A `UResource.Sink` that gets called for each child resource of the specified resource (and each child
-     * of the resources in its parent chain).
+     * @param sink A {@code UResource.Sink} that gets called for each child resource of the specified resource (and each
+     * child of the resources in its parent chain).
      */
     public void getAllChildrenWithFallback(final String path, final UResource.Sink sink)
             throws MissingResourceException {

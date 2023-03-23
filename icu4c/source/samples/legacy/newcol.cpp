@@ -65,7 +65,7 @@ void initCollator_current(const char *locale) {
   compareCollator = ucol_open(locale, &status);
 }
 
-void closeCollator_current(void) {
+void closeCollator_current() {
   ucol_close(compareCollator);
   compareCollator = nullptr;
 }

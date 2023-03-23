@@ -203,20 +203,20 @@ T_FileStream_setError(FileStream* fileStream)
 */
 
 U_CAPI FileStream* U_EXPORT2
-T_FileStream_stdin(void)
+T_FileStream_stdin()
 {
     return (FileStream*)stdin;
 }
 
 U_CAPI FileStream* U_EXPORT2
-T_FileStream_stdout(void)
+T_FileStream_stdout()
 {
     return (FileStream*)stdout;
 }
 
 
 U_CAPI FileStream* U_EXPORT2
-T_FileStream_stderr(void)
+T_FileStream_stderr()
 {
     return (FileStream*)stderr;
 }

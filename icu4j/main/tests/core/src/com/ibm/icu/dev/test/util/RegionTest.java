@@ -580,7 +580,7 @@ public class RegionTest extends TestFmwk {
         // territories are one and the same.
         Set<Region> availableTerritories = Region.getAvailable(RegionType.TERRITORY);
         Region world = Region.getInstance("001");
-        Set<Region> containedInWorld = world.getContainedRegions(RegionType.TERRITORY);
+        Set<Region> containedInWorld = world.getContainedRegions(RegionType.TERRITORY); // unmodifiable
         if ( !availableTerritories.equals(containedInWorld) ) {
             errln("Available territories and all territories contained in world should be the same set.\n" +
                     "Available          = " + availableTerritories.toString() + "\n" +

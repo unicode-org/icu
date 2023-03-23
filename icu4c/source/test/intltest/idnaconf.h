@@ -25,7 +25,7 @@ public:
     IdnaConfTest();
     virtual ~IdnaConfTest();
 private:
-    void Test(void);
+    void Test();
 
     // for test file handling
     char16_t* base;

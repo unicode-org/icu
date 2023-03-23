@@ -35,7 +35,7 @@
 static UNumberFormat *gPosixNumberFormat[ULOCALEBUNDLE_NUMBERFORMAT_COUNT];
 
 U_CDECL_BEGIN
-static UBool U_CALLCONV locbund_cleanup(void) {
+static UBool U_CALLCONV locbund_cleanup() {
     int32_t style;
     for (style = 0; style < ULOCALEBUNDLE_NUMBERFORMAT_COUNT; style++) {
         unum_close(gPosixNumberFormat[style]);

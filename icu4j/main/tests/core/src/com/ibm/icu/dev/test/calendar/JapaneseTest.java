@@ -285,7 +285,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         SimpleDateFormat fmt = (SimpleDateFormat)c.getDateTimeFormat(1,1,new ULocale("en_US@calendar=japanese"));
         fmt.applyPattern("G y");
         logln("fmt's locale = " + fmt.getLocale(ULocale.ACTUAL_LOCALE));
-        //SimpleDateFormat fmt = new SimpleDateFormat("G y", new Locale("en_US@calendar=japanese"));
+        //SimpleDateFormat fmt = new SimpleDateFormat("G y", new ULocale("en_US@calendar=japanese"));
         long aDateLong = -3197117222000L; // 1868-09-08 00:00 Pacific Time (GMT-07:52:58)
         if (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
             // Java time zone implementation does not support LMTs

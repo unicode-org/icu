@@ -1243,7 +1243,7 @@ constructAndAnalyze(Line **gLines, Line *lines, int32_t size, CompareFn comparer
 
 // Check whether upper case comes before lower case or vice-versa
 int32_t 
-checkCaseOrdering(void) {
+checkCaseOrdering() {
   char16_t stuff[][3] = {
     { 0x0061, separatorChar, 0x0061}, //"aa",
     { 0x0061, separatorChar, 0x0041 }, //"a\\u00E0",
@@ -1287,7 +1287,7 @@ checkCaseOrdering(void) {
 
 // Check whether the secondaries are in the straight or reversed order
 int32_t 
-checkSecondaryOrdering(void) {
+checkSecondaryOrdering() {
   char16_t stuff[][5] = {
     { 0x0061, separatorChar, 0x0061, separatorChar, 0x00E0 }, //"aa",
     { 0x0061, separatorChar, 0x00E0, separatorChar, 0x0061 }, //"a\\u00E0",

@@ -33,15 +33,15 @@ public:
      *  "Test written by Wally Wedel and emailed to me."
      *  Test handling of timezone offsets
      **/
-    virtual void TestWallyWedel(void);
+    virtual void TestWallyWedel();
     /**
      * Test operator==
      */
-    virtual void TestEquals(void);
+    virtual void TestEquals();
     /**
      * Test the parsing of 2-digit years.
      */
-    virtual void TestTwoDigitYearDSTParse(void);
+    virtual void TestTwoDigitYearDSTParse();
 
 public: // package
     // internal utility routine (generates escape sequences for characters)
@@ -51,7 +51,7 @@ public:
     /**
      * Verify that returned field position indices are correct.
      */
-    void TestFieldPosition(void);
+    void TestFieldPosition();
 
     void TestGeneral();
 
@@ -65,7 +65,7 @@ public:
      * correctly.  In some instances, this means not being parsed at all, and
      * returning an appropriate error.
      */
-    virtual void TestPartialParse994(void);
+    virtual void TestPartialParse994();
 
 public: // package
     // internal test subroutine, used by TestPartialParse994
@@ -76,12 +76,12 @@ public:
      * Verify the behavior of patterns in which digits for different fields run together
      * without intervening separators.
      */
-    virtual void TestRunTogetherPattern985(void);
+    virtual void TestRunTogetherPattern985();
     /**
      * Verify the behavior of patterns in which digits for different fields run together
      * without intervening separators.
      */
-    virtual void TestRunTogetherPattern917(void);
+    virtual void TestRunTogetherPattern917();
 
 public: // package
     // internal test subroutine, used by TestRunTogetherPattern917
@@ -92,15 +92,15 @@ public:
      * Verify the handling of Czech June and July, which have the unique attribute that
      * one is a proper prefix substring of the other.
      */
-    virtual void TestCzechMonths459(void);
+    virtual void TestCzechMonths459();
     /**
      * Test the handling of 'D' in patterns.
      */
-    virtual void TestLetterDPattern212(void);
+    virtual void TestLetterDPattern212();
     /**
      * Test the day of year pattern.
      */
-    virtual void TestDayOfYearPattern195(void);
+    virtual void TestDayOfYearPattern195();
 
 public: // package
     // interl test subroutine, used by TestDayOfYearPattern195
@@ -110,11 +110,11 @@ public:
     /**
      * Test the handling of single quotes in patterns.
      */
-    virtual void TestQuotePattern161(void);
+    virtual void TestQuotePattern161();
     /**
      * Verify the correct behavior when handling invalid input strings.
      */
-    virtual void TestBadInput135(void);
+    virtual void TestBadInput135();
 
 public:
     /**
@@ -122,11 +122,11 @@ public:
      * array of patterns, with known results.  The results are encoded after
      * the input strings in each row.
      */
-    virtual void TestBadInput135a(void);
+    virtual void TestBadInput135a();
     /**
      * Test the parsing of two-digit years.
      */
-    virtual void TestTwoDigitYear(void);
+    virtual void TestTwoDigitYear();
 
 public: // package
     // internal test subroutine, used by TestTwoDigitYear
@@ -136,107 +136,107 @@ public:
     /**
      * Test the formatting of time zones.
      */
-    virtual void TestDateFormatZone061(void);
+    virtual void TestDateFormatZone061();
     /**
      * Further test the formatting of time zones.
      */
-    virtual void TestDateFormatZone146(void);
+    virtual void TestDateFormatZone146();
 
-    void TestTimeZoneStringsAPI(void);
+    void TestTimeZoneStringsAPI();
 
-    void TestGMTParsing(void);
+    void TestGMTParsing();
 
 public: // package
     /**
      * Test the formatting of dates in different locales.
      */
-    virtual void TestLocaleDateFormat(void);
+    virtual void TestLocaleDateFormat();
 
-    virtual void TestFormattingLocaleTimeSeparator(void);
+    virtual void TestFormattingLocaleTimeSeparator();
 
-    virtual void TestDateFormatCalendar(void);
+    virtual void TestDateFormatCalendar();
 
-    virtual void TestSpaceParsing(void);
+    virtual void TestSpaceParsing();
 
-    void TestExactCountFormat(void);
+    void TestExactCountFormat();
 
-    void TestWhiteSpaceParsing(void);
+    void TestWhiteSpaceParsing();
 
-    void TestInvalidPattern(void);
+    void TestInvalidPattern();
 
-    void TestGreekMay(void);
+    void TestGreekMay();
 
-    void TestGenericTime(void);
+    void TestGenericTime();
 
-    void TestGenericTimeZoneOrder(void);
+    void TestGenericTimeZoneOrder();
 
-    void Test6338(void);
+    void Test6338();
 
-    void Test6726(void);
+    void Test6726();
 
-    void Test6880(void);
+    void Test6880();
 
-    void TestISOEra(void);
+    void TestISOEra();
 
-    void TestFormalChineseDate(void);
+    void TestFormalChineseDate();
 
-    void TestStandAloneGMTParse(void);
+    void TestStandAloneGMTParse();
 
-    void TestParsePosition(void);
+    void TestParsePosition();
 
-    void TestMonthPatterns(void);
+    void TestMonthPatterns();
 
-    void TestContext(void);
+    void TestContext();
 
-    void TestNonGregoFmtParse(void);
+    void TestNonGregoFmtParse();
 
-    void TestFormatsWithNumberSystems(void);
+    void TestFormatsWithNumberSystems();
 
 public:
     /**
      * Test host-specific formatting.
      */
-    void TestHost(void);
+    void TestHost();
 
 public:
     /**
      * Test patterns added in CLDR 1.4, CLDR 23
      */
-    void TestEras(void);
+    void TestEras();
 
-    void TestNarrowNames(void);
+    void TestNarrowNames();
 
-    void TestShortDays(void);
+    void TestShortDays();
 
-    void TestStandAloneDays(void);
+    void TestStandAloneDays();
 
-    void TestStandAloneMonths(void);
+    void TestStandAloneMonths();
 
-    void TestQuarters(void);
+    void TestQuarters();
 
-    void TestZTimeZoneParsing(void);
+    void TestZTimeZoneParsing();
 
-    void TestRelativeClone(void);
+    void TestRelativeClone();
 
-    void TestHostClone(void);
+    void TestHostClone();
 
-    void TestHebrewClone(void);
+    void TestHebrewClone();
 
-    void TestDateFormatSymbolsClone(void);
+    void TestDateFormatSymbolsClone();
 
-    void TestTimeZoneDisplayName(void);
+    void TestTimeZoneDisplayName();
 
-    void TestTimeZoneInLocale(void);
+    void TestTimeZoneInLocale();
 
-    void TestRoundtripWithCalendar(void);
+    void TestRoundtripWithCalendar();
 
 public:
     /***
      * Test Relative Dates
      */
-     void TestRelative(void);
-/*   void TestRelativeError(void);
-     void TestRelativeOther(void);
+     void TestRelative();
+/*   void TestRelativeError();
+     void TestRelativeOther();
 */
 
     void TestDotAndAtLeniency();
@@ -275,7 +275,7 @@ public:
     /**
      * Test parsing a number as a string
      */
-    void TestNumberAsStringParsing(void);
+    void TestNumberAsStringParsing();
 
  private:
       void TestRelative(int daysdelta,

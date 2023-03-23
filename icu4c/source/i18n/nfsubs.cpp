@@ -65,8 +65,8 @@ public:
     virtual char16_t tokenChar() const override { return (char16_t)0x003d; } // '='
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 SameValueSubstitution::~SameValueSubstitution() {}
@@ -119,8 +119,8 @@ public:
     virtual char16_t tokenChar() const override { return (char16_t)0x003c; } // '<'
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 MultiplierSubstitution::~MultiplierSubstitution() {}
@@ -174,8 +174,8 @@ public:
     virtual void toString(UnicodeString& result) const override;
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 ModulusSubstitution::~ModulusSubstitution() {}
@@ -196,8 +196,8 @@ public:
     virtual char16_t tokenChar() const override { return (char16_t)0x003c; } // '<'
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 IntegralPartSubstitution::~IntegralPartSubstitution() {}
@@ -233,8 +233,8 @@ public:
     virtual char16_t tokenChar() const override { return (char16_t)0x003e; } // '>'
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 FractionalPartSubstitution::~FractionalPartSubstitution() {}
@@ -255,8 +255,8 @@ public:
     virtual char16_t tokenChar() const override { return (char16_t)0x003e; } // '>'
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 AbsoluteValueSubstitution::~AbsoluteValueSubstitution() {}
@@ -307,8 +307,8 @@ private:
     static const char16_t LTLT[2];
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 NumeratorSubstitution::~NumeratorSubstitution() {}

@@ -56,7 +56,7 @@ U_CDECL_BEGIN
 /**
  * Cleanup callback func
  */
-static UBool U_CALLCONV timeZoneNames_cleanup(void)
+static UBool U_CALLCONV timeZoneNames_cleanup()
 {
     if (gTimeZoneNamesCache != nullptr) {
         uhash_close(gTimeZoneNamesCache);

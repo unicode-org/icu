@@ -29,12 +29,12 @@ private:
     /**
      * Test getMonths.
      */
-    void TestGetMonths(void);
-    void TestGetMonths2(void);
+    void TestGetMonths();
+    void TestGetMonths2();
 
-    void TestGetWeekdays2(void);
-    void TestGetEraNames(void);
-    void TestGetSetSpecificItems(void);
+    void TestGetWeekdays2();
+    void TestGetEraNames();
+    void TestGetSetSpecificItems();
 
     UBool UnicodeStringsArePrefixes(int32_t count, int32_t prefixLen, const UnicodeString *prefixArray, const UnicodeString *baseArray);
 };

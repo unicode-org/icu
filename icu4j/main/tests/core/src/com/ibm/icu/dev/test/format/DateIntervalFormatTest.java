@@ -2241,13 +2241,13 @@ public class DateIntervalFormatTest extends TestFmwk {
     public void testTicket20707() {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         Locale locales[] = {
-            new Locale("en-u-hc-h24"),
-            new Locale("en-u-hc-h23"),
-            new Locale("en-u-hc-h12"),
-            new Locale("en-u-hc-h11"),
-            new Locale("en"),
-            new Locale("en-u-hc-h25"),
-            new Locale("hi-IN-u-hc-h11")
+            Locale.forLanguageTag("en-u-hc-h24"),
+            Locale.forLanguageTag("en-u-hc-h23"),
+            Locale.forLanguageTag("en-u-hc-h12"),
+            Locale.forLanguageTag("en-u-hc-h11"),
+            Locale.forLanguageTag("en"),
+            Locale.forLanguageTag("en-u-hc-h25"),
+            Locale.forLanguageTag("hi-IN-u-hc-h11")
         };
 
         // Clomuns: hh, HH, kk, KK, jj, JJs, CC

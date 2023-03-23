@@ -1768,7 +1768,7 @@ IntlTestRBNF::TestSmallValues()
 }
 
 void 
-IntlTestRBNF::TestLocalizations(void)
+IntlTestRBNF::TestLocalizations()
 {
     int i;
     UnicodeString rules("%main:0:no;1:some;100:a lot;1000:tons;\n"
@@ -2003,7 +2003,7 @@ IntlTestRBNF::TestAllLocales()
 }
 
 void 
-IntlTestRBNF::TestMultiplierSubstitution(void) {
+IntlTestRBNF::TestMultiplierSubstitution() {
     UnicodeString rules("=#,##0=;1,000,000: <##0.###< million;");
     UErrorCode status = U_ZERO_ERROR;
     UParseError parse_error;

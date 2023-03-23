@@ -343,7 +343,7 @@ private:
 char TestFactory::gClassID = 0;
 #endif
 
-void CollationServiceTest::TestRegisterFactory(void)
+void CollationServiceTest::TestRegisterFactory()
 {
 #if !UCONFIG_NO_SERVICE
     int32_t n1, n2, n3;

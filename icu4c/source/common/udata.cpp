@@ -120,7 +120,7 @@ static UDataFileAccess  gDataFileAccess = UDATA_NO_FILES;
 #endif
 
 static UBool U_CALLCONV
-udata_cleanup(void)
+udata_cleanup()
 {
     int32_t i;
 
@@ -652,8 +652,8 @@ extern "C" const DataHeader U_DATA_API U_ICUDATA_ENTRY_POINT;
  * to its data package, if it is linked in.
  */
 /*
-extern const void *uprv_getICUData_collation(void) ATTRIBUTE_WEAK;
-extern const void *uprv_getICUData_conversion(void) ATTRIBUTE_WEAK;
+extern const void *uprv_getICUData_collation() ATTRIBUTE_WEAK;
+extern const void *uprv_getICUData_conversion() ATTRIBUTE_WEAK;
 */
 
 /*----------------------------------------------------------------------*

@@ -139,7 +139,7 @@ class U_I18N_API SimpleNumber : public UMemory {
      *
      * @draft ICU 73
      */
-    SimpleNumber(SimpleNumber&& other) U_NOEXCEPT {
+    SimpleNumber(SimpleNumber&& other) noexcept {
         fData = other.fData;
         fSign = other.fSign;
         other.fData = nullptr;
@@ -150,7 +150,7 @@ class U_I18N_API SimpleNumber : public UMemory {
      *
      * @draft ICU 73
      */
-    SimpleNumber& operator=(SimpleNumber&& other) U_NOEXCEPT {
+    SimpleNumber& operator=(SimpleNumber&& other) noexcept {
         cleanup();
         fData = other.fData;
         fSign = other.fSign;
@@ -267,7 +267,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
      *
      * @draft ICU 73
      */
-    SimpleNumberFormatter(SimpleNumberFormatter&& other) U_NOEXCEPT {
+    SimpleNumberFormatter(SimpleNumberFormatter&& other) noexcept {
         fGroupingStrategy = other.fGroupingStrategy;
         fOwnedSymbols = other.fOwnedSymbols;
         fMicros = other.fMicros;
@@ -282,7 +282,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
      *
      * @draft ICU 73
      */
-    SimpleNumberFormatter& operator=(SimpleNumberFormatter&& other) U_NOEXCEPT {
+    SimpleNumberFormatter& operator=(SimpleNumberFormatter&& other) noexcept {
         cleanup();
         fGroupingStrategy = other.fGroupingStrategy;
         fOwnedSymbols = other.fOwnedSymbols;

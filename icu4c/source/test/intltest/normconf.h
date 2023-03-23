@@ -40,7 +40,7 @@ class NormalizerConformanceTest : public IntlTest {
 
     // Specific tests for debugging.  These are generally failures taken from
     // the conformance file, but culled out to make debugging easier.
-    void TestCase6(void);
+    void TestCase6();
 
  private:
     FileStream *openNormalizationTestFile(const char *filename);

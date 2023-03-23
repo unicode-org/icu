@@ -22,7 +22,7 @@ system_symbols:
     exp_and_tanhf
     stdlib_qsort
     system_locale
-    stdio_input stdio_output file_io readlink_function dir_io mmap_functions dlfcn
+    stdio_input stdio_output file_io realpath_function dir_io mmap_functions dlfcn
     # C++
     cplusplus iostream
     std_mutex
@@ -110,8 +110,8 @@ group: file_io
     # Additional symbols in an optimized build.
     __xstat
 
-group: readlink_function
-    readlink  # putil.cpp uprv_tzname() calls this in a hack to get the time zone name
+group: realpath_function
+    realpath  # putil.cpp uprv_tzname() calls this in a hack to get the time zone name
 
 group: dir_io
     opendir closedir readdir  # for a hack to get the time zone name
@@ -869,7 +869,7 @@ group: platform
     PIC system_misc system_debug malloc_functions ubsan
     c_strings c_string_formatting
     floating_point system_locale
-    stdio_input readlink_function dir_io
+    stdio_input realpath_function dir_io
     dlfcn  # Move related code into icuplug.c?
     cplusplus
     std_mutex

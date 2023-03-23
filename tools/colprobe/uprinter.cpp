@@ -108,11 +108,11 @@ void UPrinter::log(const char *fmt, ...)
 }
 
 void
-UPrinter::on(void) {
+UPrinter::on() {
   _on = true;
 }
 
 void
-UPrinter::off(void) {
+UPrinter::off() {
   _on = false;
 }

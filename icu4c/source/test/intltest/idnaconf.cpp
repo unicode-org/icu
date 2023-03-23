@@ -204,7 +204,7 @@ void IdnaConfTest::Call(){
     return;
 }
 
-void IdnaConfTest::Test(void){
+void IdnaConfTest::Test(){
     UErrorCode  status  = U_ZERO_ERROR;
     //
     //  Open and read the test data file.
@@ -275,7 +275,7 @@ void IdnaConfTest::Test(void){
     Call(); // for last record
 }
 #else
-void IdnaConfTest::Test(void)
+void IdnaConfTest::Test()
 {
   // test nothing...
 }

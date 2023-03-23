@@ -180,7 +180,7 @@ void Test::TestStringiter() {
 }
 
 /* Creating and using text boundaries */
-int main( void )
+int main()
 {
     UErrorCode status = U_ZERO_ERROR;
 

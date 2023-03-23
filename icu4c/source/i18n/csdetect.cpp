@@ -51,7 +51,7 @@ static icu::UInitOnce gCSRecognizersInitOnce {};
 static int32_t fCSRecognizers_size = 0;
 
 U_CDECL_BEGIN
-static UBool U_CALLCONV csdet_cleanup(void)
+static UBool U_CALLCONV csdet_cleanup()
 {
     U_NAMESPACE_USE
     if (fCSRecognizers != nullptr) {

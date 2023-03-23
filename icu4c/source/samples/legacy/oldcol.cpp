@@ -74,7 +74,7 @@ void initCollator_legacy(const char *locale) {
   }
 }
 
-void closeCollator_legacy(void) {
+void closeCollator_legacy() {
   if(compareCollator != nullptr)
   {
     ucol_close(compareCollator);

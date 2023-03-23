@@ -385,8 +385,8 @@ private:
     const char16_t *canonicalID;
 
     /* BasicTimeZone support */
-    void clearTransitionRules(void);
-    void deleteTransitionRules(void);
+    void clearTransitionRules();
+    void deleteTransitionRules();
     void checkTransitionRules(UErrorCode& status) const;
 
   public:    // Internal, for access from plain C code

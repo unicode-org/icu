@@ -217,7 +217,7 @@ public:
      * anchors work.
      * @return    the preceding context length.
      */
-    virtual int32_t getContextLength(void) const;
+    virtual int32_t getContextLength() const;
 
     /**
      * Internal method.  Returns 8-bit index value for this rule.

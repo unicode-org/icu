@@ -303,7 +303,10 @@ u_getPropertyEnum(const char* alias) {
 U_CAPI const char* U_EXPORT2
 u_getPropertyValueName(UProperty property,
                        int32_t value,
-                       UPropertyNameChoice nameChoice) {
+                       UPropertyNameChoice nameChoice) UPRV_NO_SANITIZE_UNDEFINED {
+    if (nameChoice < 0 || U_PROPERTY_NAME_CHOICE_COUNT <= nameChoice) {
+       return nullptr;
+    }
     U_NAMESPACE_USE
     return PropNameData::getPropertyValueName(property, value, nameChoice);
 }

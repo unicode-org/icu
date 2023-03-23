@@ -44,42 +44,44 @@ private:
      */
     void TestToPattern();
     
-    void TestPatterns(void);
-    void TestCategories(void);
-    void TestAddRemove(void);
-    void TestCloneEqualHash(void);
+    void TestPatterns();
+    void TestCategories();
+    void TestAddRemove();
+    void TestCloneEqualHash();
 
     /**
      * Make sure minimal representation is maintained.
      */
-    void TestMinimalRep(void);
+    void TestMinimalRep();
 
-    void TestAPI(void);
+    void TestAPI();
 
-    void TestIteration(void);
+    void TestIteration();
 
-    void TestStrings(void);
+    void TestStrings();
 
-    void TestScriptSet(void);
+    void TestScriptSet();
 
     /**
      * Test the [:Latin:] syntax.
      */
-    void TestPropertySet(void);
+    void TestPropertySet();
 
-    void TestClone(void);
+    void TestClone();
 
-    void TestIndexOf(void);
+    void TestIndexOf();
 
-    void TestExhaustive(void);
+    void TestExhaustive();
 
-    void TestCloseOver(void);
+    void TestCloseOver();
+    void TestCloseOverSimpleCaseFolding();
+    void TestCloseOverLargeSets();
 
-    void TestEscapePattern(void);
+    void TestEscapePattern();
 
-    void TestInvalidCodePoint(void);
+    void TestInvalidCodePoint();
 
-    void TestSymbolTable(void);
+    void TestSymbolTable();
 
     void TestSurrogate();
 

@@ -184,7 +184,7 @@ udict_swap(const UDataSwapper *ds, const void *inData, int32_t length,
     }
 
     inBytes = (const uint8_t *)inData + headerSize;
-    outBytes = (uint8_t *)outData + headerSize;
+    outBytes = (outData == nullptr) ? nullptr : (uint8_t *)outData + headerSize;
 
     inIndexes = (const int32_t *)inBytes;
     if (length >= 0) {

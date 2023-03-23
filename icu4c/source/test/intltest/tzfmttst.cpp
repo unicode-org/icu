@@ -92,7 +92,7 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
 }
 
 void
-TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
+TimeZoneFormatTest::TestTimeZoneRoundTrip() {
     UErrorCode status = U_ZERO_ERROR;
 
     SimpleTimeZone unknownZone(-31415, ETC_UNKNOWN);
@@ -449,7 +449,7 @@ struct LocaleData {
 static LocaleData *gLocaleData = nullptr;
 
 void
-TimeZoneFormatTest::TestTimeRoundTrip(void) {
+TimeZoneFormatTest::TestTimeRoundTrip() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer <Calendar> cal(Calendar::createInstance(TimeZone::createTimeZone((UnicodeString) "UTC"), status));
     if (U_FAILURE(status)) {
@@ -718,7 +718,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
 }
 
 void
-TimeZoneFormatTest::TestAdoptDefaultThreadSafe(void) {
+TimeZoneFormatTest::TestAdoptDefaultThreadSafe() {
     ThreadPool<TimeZoneFormatTest> threads(this, threadCount, &TimeZoneFormatTest::RunAdoptDefaultThreadSafeTests);
     threads.start();   // Start all threads.
     threads.join();    // Wait for all threads to finish.
@@ -771,7 +771,7 @@ typedef struct {
 } ParseTestData;
 
 void
-TimeZoneFormatTest::TestParse(void) {
+TimeZoneFormatTest::TestParse() {
     const ParseTestData DATA[] = {
         //   text               inPos   locale      style
         //      parseOptions                        expected            outPos  timeType
@@ -898,7 +898,7 @@ TimeZoneFormatTest::TestParse(void) {
 }
 
 void
-TimeZoneFormatTest::TestISOFormat(void) {
+TimeZoneFormatTest::TestISOFormat() {
     const int32_t OFFSET[] = {
         0,          // 0
         999,        // 0.999s
@@ -1073,7 +1073,7 @@ typedef struct {
 } FormatTestData;
 
 void
-TimeZoneFormatTest::TestFormat(void) {
+TimeZoneFormatTest::TestFormat() {
     UDate dateJan = 1358208000000.0;    // 2013-01-15T00:00:00Z
     UDate dateJul = 1373846400000.0;    // 2013-07-15T00:00:00Z
 
@@ -1172,7 +1172,7 @@ TimeZoneFormatTest::TestFormat(void) {
 }
 
 void
-TimeZoneFormatTest::TestFormatTZDBNames(void) {
+TimeZoneFormatTest::TestFormatTZDBNames() {
     UDate dateJan = 1358208000000.0;    // 2013-01-15T00:00:00Z
     UDate dateJul = 1373846400000.0;    // 2013-07-15T00:00:00Z
 
@@ -1269,7 +1269,7 @@ TimeZoneFormatTest::TestFormatTZDBNames(void) {
 }
 
 void
-TimeZoneFormatTest::TestFormatCustomZone(void) {
+TimeZoneFormatTest::TestFormatCustomZone() {
     struct {
         const char* id;
         int32_t offset;
@@ -1306,7 +1306,7 @@ TimeZoneFormatTest::TestFormatCustomZone(void) {
 }
 
 void
-TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage(void) {
+TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<StringEnumeration> tzids(TimeZone::createEnumeration(status));
     if (U_FAILURE(status)) {
@@ -1353,7 +1353,7 @@ TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage(void) {
 // using SimpleDateFormat initialized with different regional locales - US and Belize.
 // Belize did not observe DST from 1968 to 1973, 1975 to 1982, and 1985 and later.
 void
-TimeZoneFormatTest::TestCentralTime(void) {
+TimeZoneFormatTest::TestCentralTime() {
     UnicodeString pattern(u"y-MM-dd HH:mm:ss zzzz");
     UnicodeString testInputs[] = {
         // 1970-01-01 - Chicago:STD/Belize:STD

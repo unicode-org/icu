@@ -34,10 +34,6 @@ public class TransliteratorInstantiateAllTest extends TestFmwk {
 
         for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
             String id = (String) e.nextElement();
-            if ((id.contains("Geminate") || id.contains("geminate")) &&
-                    logKnownIssue("CLDR-16408", "Transliterator instantiation fails for Ethiopic-Latin /Geminate[d] transforms")) {
-                continue;
-            }
             allTranslitIDs.add(id);
         }
 

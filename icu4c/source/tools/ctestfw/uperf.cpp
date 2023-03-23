@@ -475,7 +475,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
 /**
 * Print a usage message for this test class.
 */
-void UPerfTest::usage( void )
+void UPerfTest::usage()
 {
     puts(gUsageString);
     if (_addUsage != nullptr) {

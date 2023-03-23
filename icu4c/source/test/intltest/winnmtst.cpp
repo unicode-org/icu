@@ -62,7 +62,7 @@ static UBool initialized = false;
 /**
  * Return a random int64_t where U_INT64_MIN <= ran <= U_INT64_MAX.
  */
-static uint64_t randomInt64(void)
+static uint64_t randomInt64()
 {
     int64_t ran = 0;
     int32_t i;
@@ -83,7 +83,7 @@ static uint64_t randomInt64(void)
 /**
  * Return a random double where U_DOUBLE_MIN <= ran <= U_DOUBLE_MAX.
  */
-static double randomDouble(void)
+static double randomDouble()
 {
     double ran = 0;
 
@@ -116,7 +116,7 @@ static double randomDouble(void)
 /**
  * Return a random int32_t where U_INT32_MIN <= ran <= U_INT32_MAX.
  */
-static uint32_t randomInt32(void)
+static uint32_t randomInt32()
 {
     int32_t ran = 0;
     int32_t i;

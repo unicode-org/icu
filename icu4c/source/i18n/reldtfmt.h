@@ -233,7 +233,7 @@ public:
      * with this date-time formatter.
      * @internal ICU 4.8
      */
-    virtual const DateFormatSymbols* getDateFormatSymbols(void) const;
+    virtual const DateFormatSymbols* getDateFormatSymbols() const;
 
     /**
      * Set a particular UDisplayContext value in the formatter, such as
@@ -314,7 +314,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @internal ICU 3.8
      */
-    U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -327,7 +327,7 @@ public:
      *                  other classes have different class IDs.
      * @internal ICU 3.8
      */
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
 };
 
 

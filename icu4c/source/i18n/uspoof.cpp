@@ -46,7 +46,7 @@ static UInitOnce gSpoofInitStaticsOnce {};
 namespace {
 
 UBool U_CALLCONV
-uspoof_cleanup(void) {
+uspoof_cleanup() {
     delete gInclusionSet;
     gInclusionSet = nullptr;
     delete gRecommendedSet;

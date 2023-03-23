@@ -1582,7 +1582,7 @@ public class CollationAPITest extends TestFmwk {
          */
         try {
             TestCreateCollator tcc = new TestCreateCollator();
-            tcc.createCollator(new Locale("en_US"));
+            tcc.createCollator(new Locale("en", "US"));
         } catch (Exception e) {
             errln("Collator.createCollator(Locale) was not suppose to " + "return an exception.");
         }
@@ -1602,7 +1602,7 @@ public class CollationAPITest extends TestFmwk {
          */
         try {
             TestCreateCollator tcc = new TestCreateCollator();
-            tcc.getDisplayName(new Locale("en_US"), new Locale("jp_JP"));
+            tcc.getDisplayName(new Locale("en", "US"), new Locale("jp", "JP"));
         } catch (Exception e) {
             errln("Collator.getDisplayName(Locale,Locale) was not suppose to return an exception.");
         }

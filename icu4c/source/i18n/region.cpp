@@ -42,7 +42,7 @@ U_CDECL_BEGIN
 /**
  * Cleanup callback func
  */
-static UBool U_CALLCONV region_cleanup(void)
+static UBool U_CALLCONV region_cleanup()
 {
     icu::Region::cleanupRegionData();
 

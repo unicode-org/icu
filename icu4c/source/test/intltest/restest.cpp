@@ -538,7 +538,7 @@ ResourceBundleTest::TestExemplar(){
 }
 
 void 
-ResourceBundleTest::TestGetSize(void) 
+ResourceBundleTest::TestGetSize() 
 {
     const struct {
         const char* key;
@@ -595,7 +595,7 @@ ResourceBundleTest::TestGetSize(void)
 }
 
 void 
-ResourceBundleTest::TestGetLocaleByType(void) 
+ResourceBundleTest::TestGetLocaleByType() 
 {
     const struct {
         const char *requestedLocale;

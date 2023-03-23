@@ -283,7 +283,7 @@ class U_I18N_API FormattedRelativeDateTime : public UMemory, public FormattedVal
      * Move constructor: Leaves the source FormattedRelativeDateTime in an undefined state.
      * @stable ICU 64
      */
-    FormattedRelativeDateTime(FormattedRelativeDateTime&& src) U_NOEXCEPT;
+    FormattedRelativeDateTime(FormattedRelativeDateTime&& src) noexcept;
 
     /**
      * Destruct an instance of FormattedRelativeDateTime.
@@ -301,7 +301,7 @@ class U_I18N_API FormattedRelativeDateTime : public UMemory, public FormattedVal
      * Move assignment: Leaves the source FormattedRelativeDateTime in an undefined state.
      * @stable ICU 64
      */
-    FormattedRelativeDateTime& operator=(FormattedRelativeDateTime&& src) U_NOEXCEPT;
+    FormattedRelativeDateTime& operator=(FormattedRelativeDateTime&& src) noexcept;
 
     /** @copydoc FormattedValue::toString() */
     UnicodeString toString(UErrorCode& status) const override;

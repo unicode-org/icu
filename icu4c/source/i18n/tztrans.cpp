@@ -49,7 +49,7 @@ TimeZoneTransition::~TimeZoneTransition() {
 }
 
 TimeZoneTransition*
-TimeZoneTransition::clone(void) const {
+TimeZoneTransition::clone() const {
     return new TimeZoneTransition(*this);
 }
 
@@ -127,17 +127,17 @@ TimeZoneTransition::adoptTo(TimeZoneRule* to) {
 }
 
 UDate
-TimeZoneTransition::getTime(void) const {
+TimeZoneTransition::getTime() const {
     return fTime;
 }
 
 const TimeZoneRule*
-TimeZoneTransition::getTo(void) const {
+TimeZoneTransition::getTo() const {
     return fTo;
 }
 
 const TimeZoneRule*
-TimeZoneTransition::getFrom(void) const {
+TimeZoneTransition::getFrom() const {
     return fFrom;
 }
 

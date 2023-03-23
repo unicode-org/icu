@@ -320,6 +320,22 @@ jobs:
         env:
           CPPFLAGS: -fsanitize=address
           LDFLAGS: -fsanitize=address
+  # Clang Linux with undefined-behavior sanitizer.
+  clang-ubsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and ubsan +alignment
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming;
+          make -j2;
+          make -j2 check
+        env:
+          CPPFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
+          CFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
+          LDFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
   # Control Flow Integrity.
   clang-cfi:
     runs-on: ubuntu-latest

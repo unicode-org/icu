@@ -73,10 +73,6 @@ public class IncrementalProgressTest extends TestFmwk {
             while(variants.hasMoreElements()) {
                 String variant = (String) variants.nextElement();
                 String id = this.lang + "-" + target + "/" + variant;
-                if ((id.contains("Geminate") || id.contains("geminate")) &&
-                        logKnownIssue("CLDR-16408", "Transliterator instantiation fails for Ethiopic-Latin /Geminate[d] transforms")) {
-                    continue;
-                }
                 logln("id: " + id);
 
                 Transliterator t = Transliterator.getInstance(id);

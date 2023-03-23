@@ -6,7 +6,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  stubdata.c
+*   file name:  stubdata.cpp
 *
 *   Define initialized data that will build into a valid, but empty
 *   ICU data library.  Used to bootstrap the ICU build, which has these
@@ -49,10 +49,8 @@ extern "C" U_EXPORT const ICU_Data_Header U_ICUDATA_ENTRY_POINT = {
     0,                  /* Reserved     */
     {                   /*  TOC structure */
 /*        {    */
-          0 , 0 , 0, 0  /* name and data entries.  Count says there are none,  */
+          0 , 0         /* name and data entries.  Count says there are none,  */
                         /*  but put one in just in case.                       */
 /*        }  */
     }
 };
-
-

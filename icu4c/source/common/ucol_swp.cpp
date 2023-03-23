@@ -506,7 +506,7 @@ ucol_swap(const UDataSwapper *ds,
 
     inData=(const char *)inData+headerSize;
     if(length>=0) { length-=headerSize; }
-    outData=(char *)outData+headerSize;
+    outData=(outData == nullptr) ? nullptr : (char *)outData+headerSize;
     int32_t collationSize;
     if(info.formatVersion[0]>=4) {
         collationSize=swapFormatVersion4(ds, inData, length, outData, *pErrorCode);

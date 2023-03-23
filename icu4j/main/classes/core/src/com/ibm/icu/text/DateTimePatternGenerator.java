@@ -1077,7 +1077,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *              be thrown if out of range.
      * @param dateTimeFormat
      *              the new dateTimeFormat to set for the specified style
-     * @draft ICU 71
+     * @stable ICU 71
      */
     public void setDateTimeFormat(int style, String dateTimeFormat) {
         if (style < DateFormat.FULL || style > DateFormat.SHORT) {
@@ -1095,7 +1095,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *              be thrown if out of range.
      * @return
      *              the current dateTimeFormat for the specified style.
-     * @draft ICU 71
+     * @stable ICU 71
      */
     public String getDateTimeFormat(int style) {
         if (style < DateFormat.FULL || style > DateFormat.SHORT) {

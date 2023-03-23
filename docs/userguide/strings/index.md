@@ -37,11 +37,9 @@ italic styles.
 ICU provides multiple text access interfaces which were added over time. If
 simple strings cannot be used, then consider the following:
 
-1.  [UText](utext.md): Added in ICU4C 3.4 as a technology preview. Intended to
-    be the strategic text access API for use with ICU. C API, high performance,
-    writable, supports native indexes for efficient non-UTF-16 text storage. So
-    far (3.4) only supported in BreakIterator. Some API changes are anticipated
-    for ICU 3.6.
+1.  [UText](utext.md): Intended to be the strategic text access API for use
+    with ICU. C API, high performance, writable, supports native indexes for
+    efficient non-UTF-16 text storage.
 
 2.  Replaceable (Java & C++) and UReplaceable (C): Writable, designed for use
     with Transliterator.

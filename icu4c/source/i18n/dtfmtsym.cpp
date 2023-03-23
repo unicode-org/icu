@@ -314,6 +314,14 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
     // only from a locale bundle or set via the cloning API,
     // *and* for as long as all the strings are in *private* fields, preventing
     // a subclass from creating these strings in an "unsafe" way (with respect to fastCopyFrom()).
+    if(srcArray == nullptr) {
+        // Do not attempt to copy bogus input (which will crash).
+        // Note that this assignArray method already had the potential to return a null dstArray;
+        // see handling below for "if(dstArray != nullptr)".
+        dstCount = 0;
+        dstArray = nullptr;
+        return;
+    }
     dstCount = srcCount;
     dstArray = newUnicodeStringArray(srcCount);
     if(dstArray != nullptr) {
@@ -1274,7 +1282,7 @@ DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
 
 // This code must be called within a synchronized block
 void
-DateFormatSymbols::initZoneStringsArray(void) {
+DateFormatSymbols::initZoneStringsArray() {
     if (fZoneStrings != nullptr || fLocaleZoneStrings != nullptr) {
         return;
     }
@@ -1376,7 +1384,7 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 //------------------------------------------------------
 
 const char16_t * U_EXPORT2
-DateFormatSymbols::getPatternUChars(void)
+DateFormatSymbols::getPatternUChars()
 {
     return gPatternChars;
 }

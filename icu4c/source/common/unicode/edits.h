@@ -103,7 +103,7 @@ public:
      * @param src source edits
      * @stable ICU 60
      */
-    Edits(Edits &&src) U_NOEXCEPT :
+    Edits(Edits &&src) noexcept :
             array(stackArray), capacity(STACK_CAPACITY), length(src.length),
             delta(src.delta), numChanges(src.numChanges),
             errorCode_(src.errorCode_) {
@@ -132,13 +132,13 @@ public:
      * @return *this
      * @stable ICU 60
      */
-    Edits &operator=(Edits &&src) U_NOEXCEPT;
+    Edits &operator=(Edits &&src) noexcept;
 
     /**
      * Resets the data but may not release memory.
      * @stable ICU 59
      */
-    void reset() U_NOEXCEPT;
+    void reset() noexcept;
 
     /**
      * Adds a no-change edit: a record for an unchanged segment of text.
@@ -504,9 +504,9 @@ public:
     Edits &mergeAndAppend(const Edits &ab, const Edits &bc, UErrorCode &errorCode);
 
 private:
-    void releaseArray() U_NOEXCEPT;
+    void releaseArray() noexcept;
     Edits &copyArray(const Edits &other);
-    Edits &moveArray(Edits &src) U_NOEXCEPT;
+    Edits &moveArray(Edits &src) noexcept;
 
     void setLastUnit(int32_t last) { array[length - 1] = (uint16_t)last; }
     int32_t lastUnit() const { return length > 0 ? array[length - 1] : 0xffff; }

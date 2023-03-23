@@ -268,7 +268,7 @@ class TransliteratorRegistry : public UMemory {
      * @return the number of IDs currently registered with the system.
      * @internal
      */
-    int32_t countAvailableIDs(void) const;
+    int32_t countAvailableIDs() const;
 
     /**
      * == OBSOLETE - remove in ICU 3.4 ==
@@ -287,7 +287,7 @@ class TransliteratorRegistry : public UMemory {
      * Return the number of registered source specifiers.
      * @return the number of registered source specifiers.
      */
-    int32_t countAvailableSources(void) const;
+    int32_t countAvailableSources() const;
 
     /**
      * Return a registered source specifier.
@@ -460,7 +460,7 @@ class TransliteratorRegistry : public UMemory {
 
 U_NAMESPACE_END
 
-U_CFUNC UBool utrans_transliterator_cleanup(void);
+U_CFUNC UBool utrans_transliterator_cleanup();
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
 

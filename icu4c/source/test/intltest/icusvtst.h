@@ -28,13 +28,13 @@ class ICUServiceTest : public IntlTest
 
   void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr) override;
 
-  void testAPI_One(void);
-  void testAPI_Two(void);
-  void testRBF(void);
-  void testNotification(void);
-  void testLocale(void);
-  void testWrapFactory(void);
-  void testCoverage(void);
+  void testAPI_One();
+  void testAPI_Two();
+  void testRBF();
+  void testNotification();
+  void testLocale();
+  void testWrapFactory();
+  void testCoverage();
 
  private:
   UnicodeString& lrmsg(UnicodeString& result, const UnicodeString& message, const UObject* lhs, const UObject* rhs) const;

@@ -308,7 +308,7 @@ UnicodeString::UnicodeString(const UnicodeString& that) {
   copyFrom(that);
 }
 
-UnicodeString::UnicodeString(UnicodeString &&src) U_NOEXCEPT {
+UnicodeString::UnicodeString(UnicodeString &&src) noexcept {
   copyFieldsFrom(src, true);
 }
 
@@ -572,7 +572,7 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
   return *this;
 }
 
-UnicodeString &UnicodeString::operator=(UnicodeString &&src) U_NOEXCEPT {
+UnicodeString &UnicodeString::operator=(UnicodeString &&src) noexcept {
   // No explicit check for self move assignment, consistent with standard library.
   // Self move assignment causes no crash nor leak but might make the object bogus.
   releaseArray();
@@ -581,7 +581,7 @@ UnicodeString &UnicodeString::operator=(UnicodeString &&src) U_NOEXCEPT {
 }
 
 // Same as move assignment except without memory management.
-void UnicodeString::copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) U_NOEXCEPT {
+void UnicodeString::copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) noexcept {
   int16_t lengthAndFlags = fUnion.fFields.fLengthAndFlags = src.fUnion.fFields.fLengthAndFlags;
   if(lengthAndFlags & kUsingStackBuffer) {
     // Short string using the stack buffer, copy the contents.
@@ -607,7 +607,7 @@ void UnicodeString::copyFieldsFrom(UnicodeString &src, UBool setSrcToBogus) U_NO
   }
 }
 
-void UnicodeString::swap(UnicodeString &other) U_NOEXCEPT {
+void UnicodeString::swap(UnicodeString &other) noexcept {
   UnicodeString temp;  // Empty short string: Known not to need releaseArray().
   // Copy fields without resetting source values in between.
   temp.copyFieldsFrom(*this, false);
@@ -660,6 +660,48 @@ UnicodeString::doEquals(const UnicodeString &text, int32_t len) const {
   // Requires: this & text not bogus and have same lengths.
   // Byte-wise comparison works for equality regardless of endianness.
   return uprv_memcmp(getArrayStart(), text.getArrayStart(), len * U_SIZEOF_UCHAR) == 0;
+}
+
+UBool
+UnicodeString::doEqualsSubstring( int32_t start,
+              int32_t length,
+              const char16_t *srcChars,
+              int32_t srcStart,
+              int32_t srcLength) const
+{
+  // compare illegal string values
+  if(isBogus()) {
+    return false;
+  }
+  
+  // pin indices to legal values
+  pinIndices(start, length);
+
+  if(srcChars == nullptr) {
+    // treat const char16_t *srcChars==nullptr as an empty string
+    return length == 0 ? true : false;
+  }
+
+  // get the correct pointer
+  const char16_t *chars = getArrayStart();
+
+  chars += start;
+  srcChars += srcStart;
+
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+  }
+
+  if (length != srcLength) {
+    return false;
+  }
+
+  if(length == 0 || chars == srcChars) {
+    return true;
+  }
+
+  return u_memcmp(chars, srcChars, srcLength) == 0;
 }
 
 int8_t
@@ -1234,7 +1276,7 @@ UnicodeString::getTerminatedBuffer() {
     } else if(((fUnion.fFields.fLengthAndFlags & kRefCounted) == 0 || refCount() == 1)) {
       // kRefCounted: Do not write the NUL if the buffer is shared.
       // That is mostly safe, except when the length of one copy was modified
-      // without copy-on-write, e.g., via truncate(newLength) or remove(void).
+      // without copy-on-write, e.g., via truncate(newLength) or remove().
       // Then the NUL would be written into the middle of another copy's string.
 
       // Otherwise, the buffer is fully writable and it is anyway safe to write the NUL.
@@ -1980,7 +2022,7 @@ This makes sure that static library dependencies are kept to a minimum.
 #if defined(__clang__) || U_GCC_MAJOR_MINOR >= 1100
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
-static void uprv_UnicodeStringDummy(void) {
+static void uprv_UnicodeStringDummy() {
     delete [] (new UnicodeString[2]);
 }
 #pragma GCC diagnostic pop

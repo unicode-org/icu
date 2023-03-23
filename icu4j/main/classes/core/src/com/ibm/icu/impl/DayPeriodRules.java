@@ -239,7 +239,7 @@ public final class DayPeriodRules {
      * Get a DayPeriodRules object given a locale.
      * If data hasn't been loaded, it will be loaded for all locales at once.
      * @param locale locale for which the DayPeriodRules object is requested.
-     * @return a DayPeriodRules object for `locale`.
+     * @return a DayPeriodRules object for {@code locale}.
      */
     public static DayPeriodRules getInstance(ULocale locale) {
         String localeCode = locale.getBaseName();

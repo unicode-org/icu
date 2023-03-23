@@ -127,7 +127,7 @@ void CollationKanaTest::TestBase()
 }
 
 /* Testing plain, Daku-ten, Handaku-ten letters */
-void CollationKanaTest::TestPlainDakutenHandakuten(void)
+void CollationKanaTest::TestPlainDakutenHandakuten()
 {
     int32_t i;
     myCollation->setStrength(Collator::SECONDARY);
@@ -139,7 +139,7 @@ void CollationKanaTest::TestPlainDakutenHandakuten(void)
 /* 
 * Test Small, Large letters
 */
-void CollationKanaTest::TestSmallLarge(void)
+void CollationKanaTest::TestSmallLarge()
 {
   int32_t i;
   UErrorCode status = U_ZERO_ERROR;
@@ -152,7 +152,7 @@ void CollationKanaTest::TestSmallLarge(void)
 /*
 * Test Katakana, Hiragana letters
 */
-void CollationKanaTest::TestKatakanaHiragana(void)
+void CollationKanaTest::TestKatakanaHiragana()
 {
   int32_t i;
   UErrorCode status = U_ZERO_ERROR;
@@ -167,7 +167,7 @@ void CollationKanaTest::TestKatakanaHiragana(void)
 /*
 * Test Choo-on kigoo
 */
-void CollationKanaTest::TestChooonKigoo(void)
+void CollationKanaTest::TestChooonKigoo()
 {
   int32_t i;
   UErrorCode status = U_ZERO_ERROR;

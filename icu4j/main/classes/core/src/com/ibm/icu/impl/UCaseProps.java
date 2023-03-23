@@ -260,34 +260,6 @@ public final class UCaseProps {
      * - for k include the Kelvin sign
      */
     public final void addCaseClosure(int c, UnicodeSet set) {
-        /*
-         * Hardcode the case closure of i and its relatives and ignore the
-         * data file data for these characters.
-         * The Turkic dotless i and dotted I with their case mapping conditions
-         * and case folding option make the related characters behave specially.
-         * This code matches their closure behavior to their case folding behavior.
-         */
-
-        switch(c) {
-        case 0x49:
-            /* regular i and I are in one equivalence class */
-            set.add(0x69);
-            return;
-        case 0x69:
-            set.add(0x49);
-            return;
-        case 0x130:
-            /* dotted I is in a class with <0069 0307> (for canonical equivalence with <0049 0307>) */
-            set.add(iDot);
-            return;
-        case 0x131:
-            /* dotless i is in a class by itself */
-            return;
-        default:
-            /* otherwise use the data file data */
-            break;
-        }
-
         int props=trie.get(c);
         if(!propsHasException(props)) {
             if(getTypeFromProps(props)!=NONE) {
@@ -302,19 +274,41 @@ public final class UCaseProps {
              * c has exceptions, so there may be multiple simple and/or
              * full case mappings. Add them all.
              */
-            int excOffset0, excOffset=getExceptionsOffset(props);
-            int closureOffset;
+            int excOffset=getExceptionsOffset(props);
             int excWord=exceptions.charAt(excOffset++);
-            int index, closureLength, fullLength, length;
+            int excOffset0=excOffset;
 
-            excOffset0=excOffset;
+            // Hardcode the case closure of i and its relatives and ignore the
+            // data file data for these characters.
+            // The Turkic dotless i and dotted I with their case mapping conditions
+            // and case folding option make the related characters behave specially.
+            // This code matches their closure behavior to their case folding behavior.
+            if ((excWord&EXC_CONDITIONAL_FOLD) != 0) {
+                // These characters have Turkic case foldings. Hardcode their closure.
+                if (c == 0x49) {
+                    // Regular i and I are in one equivalence class.
+                    set.add(0x69);
+                    return;
+                } else if (c == 0x130) {
+                    // Dotted I is in a class with <0069 0307>
+                    // (for canonical equivalence with <0049 0307>).
+                    set.add(iDot);
+                    return;
+                }
+            } else if (c == 0x69) {
+                set.add(0x49);
+                return;
+            } else if (c == 0x131) {
+                // Dotless i is in a class by itself.
+                return;
+            }
 
             /* add all simple case mappings */
-            for(index=EXC_LOWER; index<=EXC_TITLE; ++index) {
+            for(int index=EXC_LOWER; index<=EXC_TITLE; ++index) {
                 if(hasSlot(excWord, index)) {
                     excOffset=excOffset0;
-                    c=getSlotValue(excWord, index, excOffset);
-                    set.add(c);
+                    int mapping=getSlotValue(excWord, index, excOffset);
+                    set.add(mapping);
                 }
             }
             if(hasSlot(excWord, EXC_DELTA)) {
@@ -324,6 +318,7 @@ public final class UCaseProps {
             }
 
             /* get the closure string pointer & length */
+            int closureOffset, closureLength;
             if(hasSlot(excWord, EXC_CLOSURE)) {
                 excOffset=excOffset0;
                 long value=getSlotValueAndOffset(excWord, EXC_CLOSURE, excOffset);
@@ -338,7 +333,7 @@ public final class UCaseProps {
             if(hasSlot(excWord, EXC_FULL_MAPPINGS)) {
                 excOffset=excOffset0;
                 long value=getSlotValueAndOffset(excWord, EXC_FULL_MAPPINGS, excOffset);
-                fullLength=(int)value;
+                int fullLength=(int)value;
 
                 /* start of full case mapping strings */
                 excOffset=(int)(value>>32)+1;
@@ -350,7 +345,7 @@ public final class UCaseProps {
                 fullLength>>=4;
 
                 /* add the full case folding string */
-                length=fullLength&0xf;
+                int length=fullLength&0xf;
                 if(length!=0) {
                     set.add(exceptions.substring(excOffset, excOffset+length));
                     excOffset+=length;
@@ -367,9 +362,137 @@ public final class UCaseProps {
 
             /* add each code point in the closure string */
             int limit=closureOffset+closureLength;
-            for(index=closureOffset; index<limit; index+=UTF16.getCharCount(c)) {
-                c=exceptions.codePointAt(index);
-                set.add(c);
+            for(int index=closureOffset; index<limit; index+=UTF16.getCharCount(c)) {
+                int mapping=exceptions.codePointAt(index);
+                set.add(mapping);
+            }
+        }
+    }
+
+    /**
+     * Add the simple case closure mapping,
+     * except if there is not actually an scf relationship between the two characters.
+     * TODO: Unicode should probably add the corresponding scf mappings.
+     * See https://crbug.com/v8/13377 and Unicode-internal PAG issue #23.
+     * If & when those scf mappings are added, we should be able to remove all of these exceptions.
+     */
+    private static void addOneSimpleCaseClosure(int c, int t, UnicodeSet set) {
+        switch (c) {
+        case 0x0390:
+            if (t == 0x1FD3) { return; }
+            break;
+        case 0x03B0:
+            if (t == 0x1FE3) { return; }
+            break;
+        case 0x1FD3:
+            if (t == 0x0390) { return; }
+            break;
+        case 0x1FE3:
+            if (t == 0x03B0) { return; }
+            break;
+        case 0xFB05:
+            if (t == 0xFB06) { return; }
+            break;
+        case 0xFB06:
+            if (t == 0xFB05) { return; }
+            break;
+        default:
+            break;
+        }
+        set.add(t);
+    }
+
+    public final void addSimpleCaseClosure(int c, UnicodeSet set) {
+        int props=trie.get(c);
+        if(!propsHasException(props)) {
+            if(getTypeFromProps(props)!=NONE) {
+                /* add the one simple case mapping, no matter what type it is */
+                int delta=getDelta(props);
+                if(delta!=0) {
+                    set.add(c+delta);
+                }
+            }
+        } else {
+            // c has exceptions. Add the mappings relevant for scf=Simple_Case_Folding.
+            int excOffset=getExceptionsOffset(props);
+            int excWord=exceptions.charAt(excOffset++);
+            int excOffset0=excOffset;
+
+            // Hardcode the case closure of i and its relatives and ignore the
+            // data file data for these characters, like in ucase_addCaseClosure().
+            if ((excWord&EXC_CONDITIONAL_FOLD) != 0) {
+                // These characters have Turkic case foldings. Hardcode their closure.
+                if (c == 0x49) {
+                    // Regular i and I are in one equivalence class.
+                    set.add(0x69);
+                    return;
+                } else if (c == 0x130) {
+                    // For scf=Simple_Case_Folding, dotted I is in a class by itself.
+                    return;
+                }
+            } else if (c == 0x69) {
+                set.add(0x49);
+                return;
+            } else if (c == 0x131) {
+                // Dotless i is in a class by itself.
+                return;
+            }
+
+            // Add all simple case mappings.
+            for(int index=EXC_LOWER; index<=EXC_TITLE; ++index) {
+                if(hasSlot(excWord, index)) {
+                    excOffset=excOffset0;
+                    int mapping=getSlotValue(excWord, index, excOffset);
+                    addOneSimpleCaseClosure(c, mapping, set);
+                }
+            }
+            if(hasSlot(excWord, EXC_DELTA)) {
+                excOffset=excOffset0;
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                int mapping = (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+                addOneSimpleCaseClosure(c, mapping, set);
+            }
+
+            /* get the closure string pointer & length */
+            int closureOffset, closureLength;
+            if(hasSlot(excWord, EXC_CLOSURE)) {
+                excOffset=excOffset0;
+                long value=getSlotValueAndOffset(excWord, EXC_CLOSURE, excOffset);
+                closureLength=(int)value&CLOSURE_MAX_LENGTH; /* higher bits are reserved */
+                closureOffset=(int)(value>>32)+1; /* behind this slot, unless there are full case mappings */
+            } else {
+                closureLength=0;
+                closureOffset=0;
+            }
+
+            // Skip the full case mappings.
+            if(closureLength > 0 && hasSlot(excWord, EXC_FULL_MAPPINGS)) {
+                excOffset=excOffset0;
+                long value=getSlotValueAndOffset(excWord, EXC_FULL_MAPPINGS, excOffset);
+                int fullLength=(int)value;
+
+                /* start of full case mapping strings */
+                excOffset=(int)(value>>32)+1;
+
+                fullLength&=0xffff; /* bits 16 and higher are reserved */
+
+                // Skip all 4 full case mappings.
+                excOffset+=fullLength&FULL_LOWER;
+                fullLength>>=4;
+                excOffset+=fullLength&0xf;
+                fullLength>>=4;
+                excOffset+=fullLength&0xf;
+                fullLength>>=4;
+                excOffset+=fullLength;
+
+                closureOffset=excOffset; /* behind full case mappings */
+            }
+
+            // Add each code point in the closure string whose scf maps back to c.
+            int limit=closureOffset+closureLength;
+            for(int index=closureOffset; index<limit; index+=UTF16.getCharCount(c)) {
+                int mapping=exceptions.codePointAt(index);
+                addOneSimpleCaseClosure(c, mapping, set);
             }
         }
     }

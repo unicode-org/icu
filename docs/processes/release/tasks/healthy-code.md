@@ -474,6 +474,9 @@ make check
 ## Test ICU4C Samples and Demos
 
 ### Windows build and test
+Note: Since ICU 73, this task has been included in the Azure DevOps Pipeline which is triggered automatically upon merging with main/maint* branches.
+These instructions explain how to run the tests manually.
+
 To build the ICU4C samples on Windows with Visual Studio, use the following
 steps:
 
@@ -549,9 +552,36 @@ which it is executed instead of in a ssh shell.
 The demos include calendar, charset detection, holidays, RBNF and
 transliterator. Check if each application is working OK.
 
-To check ICU4J samples, open Eclipse workspace and import icu4j-samples project
-from directory <icu4j_root>/samples. Make sure these sample code has no build
-issues. Also run sample code with main and see if each sample code runs.
+### ICU4J Samples
+
+ICU4J samples are located in directory <icu4j_root>/samples. Check that:
+
+* The build succeeds.
+* Each sample runs, giving results appropriate for the sample.
+    
+To check ICU4J samples, you may use the command line to build and then run each:
+```sh
+    $ cd icu4j/samples
+    $ ant build
+    
+    # Get the list of main samples to test.
+    $ grep -r main src/
+      src/com/ibm/icu/samples/text/dateintervalformat/DateIntervalFormatSample.java
+      ...
+    
+    # For each sample, execute as follows:
+    $ java -cp ../icu4j.jar:out/lib/icu4j-samples.jar com.ibm.icu.samples.text.dateintervalformat.DateIntervalFormatSample
+```
+    
+To use Eclipse, do the following:
+    
+* Open Eclipse workspace
+* import icu4j-samples project
+* Build the project
+* In package explorer, right-click on "Run as"
+    * Pick "Java application"
+    * Choose a sample
+    * Verify that the sample runs and that output appears in the console window.
 
 ---
 

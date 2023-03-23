@@ -345,13 +345,13 @@ public:
     OrderList(UCollator *coll, const UnicodeString &string, int32_t stringOffset = 0);
     ~OrderList();
 
-    int32_t size(void) const;
+    int32_t size() const;
     void add(int32_t order, int32_t low, int32_t high);
     const Order *get(int32_t index) const;
     int32_t getLowOffset(int32_t index) const;
     int32_t getHighOffset(int32_t index) const;
     int32_t getOrder(int32_t index) const;
-    void reverse(void);
+    void reverse();
     UBool compare(const OrderList &other) const;
     UBool matchesAt(int32_t offset, const OrderList &other) const;
 

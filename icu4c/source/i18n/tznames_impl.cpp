@@ -75,7 +75,7 @@ enum UTimeZoneNameTypeIndex {
 static const char16_t* const EMPTY_NAMES[UTZNM_INDEX_COUNT] = {0,0,0,0,0,0,0};
 
 U_CDECL_BEGIN
-static UBool U_CALLCONV tzdbTimeZoneNames_cleanup(void) {
+static UBool U_CALLCONV tzdbTimeZoneNames_cleanup() {
     if (gTZDBNamesMap != nullptr) {
         uhash_close(gTZDBNamesMap);
         gTZDBNamesMap = nullptr;
@@ -864,8 +864,8 @@ public:
     MetaZoneIDsEnumeration(const UVector& mzIDs);
     MetaZoneIDsEnumeration(LocalPointer<UVector> mzIDs);
     virtual ~MetaZoneIDsEnumeration();
-    static UClassID U_EXPORT2 getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID U_EXPORT2 getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
     virtual const UnicodeString* snext(UErrorCode& status) override;
     virtual void reset(UErrorCode& status) override;
     virtual int32_t count(UErrorCode& status) const override;

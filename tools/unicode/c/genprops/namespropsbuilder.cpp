@@ -249,7 +249,7 @@ static void
 compress(UErrorCode &errorCode);
 
 static void
-compressLines(void);
+compressLines();
 
 static int16_t
 compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop);

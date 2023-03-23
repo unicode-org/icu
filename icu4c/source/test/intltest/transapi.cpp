@@ -90,10 +90,6 @@ void TransliteratorAPITest::TestgetID() {
         if(ID.indexOf("Thai")>-1){
             continue;
         }   
-        if ((ID.indexOf((UnicodeString)"Geminate") >= 0 || ID.indexOf((UnicodeString)"geminate") >= 0) &&
-                logKnownIssue("CLDR-16408", "Transliterator::createInstance fails for Ethiopic-Latin /Geminate[d] transforms")) {
-            continue;
-        }
         t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
         if(t == 0){
             errln("FAIL: " + ID);
@@ -980,8 +976,8 @@ static const int MyUnicodeFunctorTestClassID = 0;
 class MyUnicodeFunctorTestClass : public UnicodeFunctor {
 public:
     virtual UnicodeFunctor* clone() const override {return nullptr;}
-    static UClassID getStaticClassID(void) {return (UClassID)&MyUnicodeFunctorTestClassID;}
-    virtual UClassID getDynamicClassID(void) const override {return getStaticClassID();}
+    static UClassID getStaticClassID() {return (UClassID)&MyUnicodeFunctorTestClassID;}
+    virtual UClassID getDynamicClassID() const override {return getStaticClassID();}
     virtual void setData(const TransliterationRuleData*) override {}
 };
 

@@ -108,6 +108,10 @@ ucase_fold(UChar32 c, uint32_t options);
 U_CFUNC void U_EXPORT2
 ucase_addCaseClosure(UChar32 c, const USetAdder *sa);
 
+/** Case closure with only scf=Simple_Case_Folding. */
+U_CFUNC void U_EXPORT2
+ucase_addSimpleCaseClosure(UChar32 c, const USetAdder *sa);
+
 /**
  * Maps the string to single code points and adds the associated case closure
  * mappings.

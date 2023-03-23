@@ -316,7 +316,7 @@ public interface UProperty
     /**
      * <p>Binary property Case_Sensitive.
      * <p>Either the source of a case
-     * mapping or _in_ the target of a case mapping. Not the same as
+     * mapping or <i>in</i> the target of a case mapping. Not the same as
      * the general category Cased_Letter.
      * @stable ICU 2.6
      */

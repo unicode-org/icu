@@ -83,7 +83,7 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
     ~ParsedPatternInfo() override = default;
 
     // Need to declare this explicitly because of the destructor
-    ParsedPatternInfo& operator=(ParsedPatternInfo&& src) U_NOEXCEPT = default;
+    ParsedPatternInfo& operator=(ParsedPatternInfo&& src) noexcept = default;
 
     static int32_t getLengthFromEndpoints(const Endpoints& endpoints);
 
@@ -115,7 +115,7 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
         explicit ParserState(const UnicodeString& _pattern)
                 : pattern(_pattern) {}
 
-        ParserState& operator=(ParserState&& src) U_NOEXCEPT {
+        ParserState& operator=(ParserState&& src) noexcept {
             // Leave pattern reference alone; it will continue to point to the same place in memory,
             // which gets overwritten by ParsedPatternInfo's implicit move assignment.
             offset = src.offset;

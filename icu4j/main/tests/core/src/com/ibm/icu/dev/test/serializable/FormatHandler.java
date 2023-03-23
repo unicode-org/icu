@@ -1743,7 +1743,7 @@ public class FormatHandler
         {
             CurrencyPluralInfo currencyPluralInfo[] = {
                 new CurrencyPluralInfo(), new CurrencyPluralInfo(new ULocale("en_US")),
-                CurrencyPluralInfo.getInstance(), CurrencyPluralInfo.getInstance(new Locale("en_US")),
+                CurrencyPluralInfo.getInstance(), CurrencyPluralInfo.getInstance(new Locale("en", "US")),
                 CurrencyPluralInfo.getInstance(new ULocale("en_US"))
             };
             for(int i=0; i<currencyPluralInfo.length; i++){

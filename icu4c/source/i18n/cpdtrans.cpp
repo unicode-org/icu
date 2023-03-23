@@ -265,7 +265,7 @@ CompoundTransliterator::~CompoundTransliterator() {
     freeTransliterators();
 }
 
-void CompoundTransliterator::freeTransliterators(void) {
+void CompoundTransliterator::freeTransliterators() {
     if (trans != 0) {
         for (int32_t i=0; i<count; ++i) {
             delete trans[i];
@@ -332,7 +332,7 @@ CompoundTransliterator* CompoundTransliterator::clone() const {
  * Returns the number of transliterators in this chain.
  * @return number of transliterators in this chain.
  */
-int32_t CompoundTransliterator::getCount(void) const {
+int32_t CompoundTransliterator::getCount() const {
     return count;
 }
 
@@ -599,7 +599,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
  * Sets the length of the longest context required by this transliterator.
  * This is <em>preceding</em> context.
  */
-void CompoundTransliterator::computeMaximumContextLength(void) {
+void CompoundTransliterator::computeMaximumContextLength() {
     int32_t max = 0;
     for (int32_t i=0; i<count; ++i) {
         int32_t len = trans[i]->getMaximumContextLength();

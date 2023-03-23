@@ -313,7 +313,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -326,7 +326,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  /*U_I18N_API*/ static UClassID U_EXPORT2 getStaticClassID(void);
+  /*U_I18N_API*/ static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * return the calendar type, "islamic".
@@ -389,7 +389,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * are considered to fall within so that its start date is 80 years
    * before the current time.
    */
-  static void U_CALLCONV initializeSystemDefaultCentury(void);
+  static void U_CALLCONV initializeSystemDefaultCentury();
 };
 
 /*
@@ -434,7 +434,7 @@ class U_I18N_API IslamicCivilCalendar : public IslamicCalendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -447,7 +447,7 @@ class U_I18N_API IslamicCivilCalendar : public IslamicCalendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * return the calendar type, "islamic-civil".
@@ -546,7 +546,7 @@ class U_I18N_API IslamicTBLACalendar : public IslamicCivilCalendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -559,7 +559,7 @@ class U_I18N_API IslamicTBLACalendar : public IslamicCivilCalendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * return the calendar type, "islamic-tbla".
@@ -614,7 +614,7 @@ class U_I18N_API IslamicUmalquraCalendar : public IslamicCalendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -627,7 +627,7 @@ class U_I18N_API IslamicUmalquraCalendar : public IslamicCalendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * return the calendar type, "islamic-umalqura".
@@ -730,7 +730,7 @@ class U_I18N_API IslamicRGSACalendar : public IslamicCalendar {
    *           same class ID. Objects of other classes have different class IDs.
    * @internal
    */
-  virtual UClassID getDynamicClassID(void) const override;
+  virtual UClassID getDynamicClassID() const override;
 
   /**
    * Return the class ID for this class. This is useful only for comparing to a return
@@ -743,7 +743,7 @@ class U_I18N_API IslamicRGSACalendar : public IslamicCalendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * return the calendar type, "islamic-rgsa".

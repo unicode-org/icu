@@ -347,7 +347,7 @@ private:
     UnicodeString& keyDisplayName(const char* key, UnicodeString& result, UBool skipAdjust) const;
     UnicodeString& keyValueDisplayName(const char* key, const char* value,
                                         UnicodeString& result, UBool skipAdjust) const;
-    void initialize(void);
+    void initialize();
 
     struct CapitalizationContextSink;
 };
@@ -447,7 +447,7 @@ struct LocaleDisplayNamesImpl::CapitalizationContextSink : public ResourceSink {
 LocaleDisplayNamesImpl::CapitalizationContextSink::~CapitalizationContextSink() {}
 
 void
-LocaleDisplayNamesImpl::initialize(void) {
+LocaleDisplayNamesImpl::initialize() {
     LocaleDisplayNamesImpl *nonConstThis = (LocaleDisplayNamesImpl *)this;
     nonConstThis->locale = langData.getLocale() == Locale::getRoot()
         ? regionData.getLocale()

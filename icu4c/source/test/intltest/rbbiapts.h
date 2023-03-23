@@ -33,7 +33,7 @@ public:
     /**
      * Tests Constructor behaviour of RuleBasedBreakIterator
      **/
-   // void TestConstruction(void);   
+   // void TestConstruction();   
     /**
      * Tests clone() and equals() methods of RuleBasedBreakIterator         
      **/
@@ -53,23 +53,23 @@ public:
      /**
       * Testing the iteration methods of RuleBasedBreakIterator
       **/
-    void TestIteration(void);
+    void TestIteration();
 
-    void TestFilteredBreakIteratorBuilder(void);
+    void TestFilteredBreakIteratorBuilder();
 
     /**
      * Tests creating RuleBasedBreakIterator from rules strings.
      **/
-    void TestBuilder(void);
+    void TestBuilder();
 
-    void TestRoundtripRules(void);
+    void TestRoundtripRules();
 
     void RoundtripRule(const char *dataFile);
 
     /**
      * Test getting and using binary (compiled) rules.
      **/
-    void TestGetBinaryRules(void);
+    void TestGetBinaryRules();
 
     /**
      * Tests grouping effect of 'single quotes' in rules.

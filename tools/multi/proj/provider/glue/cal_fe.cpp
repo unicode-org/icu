@@ -55,7 +55,7 @@ virtual UBool inDaylightTime(UErrorCode& status) const ; \
     virtual int32_t defaultCenturyStartYear() const ;  \
     virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const ; \
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const ; \
-    virtual Calendar* clone(void) const; \
+    virtual Calendar* clone() const; \
   public: static int32_t countAvailable();                              \
 public: static int32_t appendAvailable(UnicodeString* strs, int32_t i, int32_t count); \
   };
@@ -116,7 +116,7 @@ int32_t GLUE_SYM ( Calendar ) :: handleComputeMonthStart(int32_t eyear, int32_t 
 int32_t GLUE_SYM ( Calendar ) :: handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
   return 1;
 }
-Calendar* GLUE_SYM ( Calendar ) :: clone(void) const {
+Calendar* GLUE_SYM ( Calendar ) :: clone() const {
   return nullptr;
 }
 

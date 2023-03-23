@@ -139,7 +139,7 @@ void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* 
  * for use in non-error cases when no resource is to be added to the bundle.
  * (nullptr is used in error cases.)
  */
-struct SResource* res_none(void);
+struct SResource* res_none();
 
 class ArrayResource;
 class TableResource;
@@ -431,7 +431,7 @@ public:
 void res_close(struct SResource *res);
 
 void setIncludeCopyright(UBool val);
-UBool getIncludeCopyright(void);
+UBool getIncludeCopyright();
 
 void setFormatVersion(int32_t formatVersion);
 

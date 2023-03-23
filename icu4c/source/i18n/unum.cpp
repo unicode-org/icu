@@ -798,8 +798,7 @@ unum_getSymbol(const UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
                char16_t *buffer,
                int32_t size,
-               UErrorCode *status)
-{
+               UErrorCode *status) UPRV_NO_SANITIZE_UNDEFINED {
     if(status==nullptr || U_FAILURE(*status)) {
         return 0;
     }
@@ -825,8 +824,7 @@ unum_setSymbol(UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
                const char16_t *value,
                int32_t length,
-               UErrorCode *status)
-{
+               UErrorCode *status) UPRV_NO_SANITIZE_UNDEFINED {
     if(status==nullptr || U_FAILURE(*status)) {
         return;
     }

@@ -4096,7 +4096,7 @@ SimpleDateFormat::setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols
 
 //----------------------------------------------------------------------
 const TimeZoneFormat*
-SimpleDateFormat::getTimeZoneFormat(void) const {
+SimpleDateFormat::getTimeZoneFormat() const {
     // TimeZoneFormat initialization might fail when out of memory.
     // If we always initialize TimeZoneFormat instance, we can return
     // such status there. For now, this implementation lazily instantiates
@@ -4222,7 +4222,7 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
 //----------------------------------------------------------------------
 
 const Locale&
-SimpleDateFormat::getSmpFmtLocale(void) const {
+SimpleDateFormat::getSmpFmtLocale() const {
     return fLocale;
 }
 

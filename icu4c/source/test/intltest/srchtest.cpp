@@ -2453,8 +2453,8 @@ class StubSearchIterator:public SearchIterator{
 public:
     StubSearchIterator(){}
     virtual void setOffset(int32_t , UErrorCode &) override {}
-    virtual int32_t getOffset(void) const override {return 0;}
-    virtual SearchIterator* safeClone(void) const override {return nullptr;}
+    virtual int32_t getOffset() const override {return 0;}
+    virtual SearchIterator* safeClone() const override {return nullptr;}
     virtual int32_t handleNext(int32_t , UErrorCode &) override {return 0;}
     virtual int32_t handlePrev(int32_t , UErrorCode &) override {return 0;}
     virtual UClassID getDynamicClassID() const override {

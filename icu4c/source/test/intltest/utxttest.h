@@ -39,6 +39,7 @@ public:
     void Ticket10983();
     void Ticket12130();
     void Ticket13344();
+    void AccessChangesChunkSize();
 
 private:
     struct m {                              // Map between native indices & code points.

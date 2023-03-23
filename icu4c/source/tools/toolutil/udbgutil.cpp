@@ -352,7 +352,7 @@ int32_t udbg_enumByName(UDebugEnumType type, const char *value) {
 /**
  * Print the current platform
  */
-U_CAPI const char *udbg_getPlatform(void)
+U_CAPI const char *udbg_getPlatform()
 {
 #if U_PLATFORM_USES_ONLY_WIN32_API
     return "Windows";

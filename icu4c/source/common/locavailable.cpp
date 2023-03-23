@@ -43,7 +43,7 @@ U_NAMESPACE_END
 
 U_CDECL_BEGIN
 
-static UBool U_CALLCONV locale_available_cleanup(void)
+static UBool U_CALLCONV locale_available_cleanup()
 {
     U_NAMESPACE_USE
 
@@ -196,7 +196,7 @@ class AvailableLocalesStringEnumeration : public StringEnumeration {
 
 /* ### Get available **************************************************/
 
-static UBool U_CALLCONV uloc_cleanup(void) {
+static UBool U_CALLCONV uloc_cleanup() {
     for (int32_t i = 0; i < UPRV_LENGTHOF(gAvailableLocaleNames); i++) {
         uprv_free(gAvailableLocaleNames[i]);
         gAvailableLocaleNames[i] = nullptr;

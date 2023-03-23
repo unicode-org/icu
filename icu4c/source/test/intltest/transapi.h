@@ -29,39 +29,39 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     /*Tests the function getDisplayName() */
-    void TestGetDisplayName(void);
+    void TestGetDisplayName();
 
-    void TestgetID(void);
+    void TestgetID();
 
-    void TestgetInverse(void);
+    void TestgetInverse();
 
-    void TestClone(void);
+    void TestClone();
 
-    void TestTransliterate1(void);
+    void TestTransliterate1();
 
-    void TestTransliterate2(void);
+    void TestTransliterate2();
 
-    void TestTransliterate3(void);
+    void TestTransliterate3();
 
-    void TestSimpleKeyboardTransliterator(void);
+    void TestSimpleKeyboardTransliterator();
 
-    void TestKeyboardTransliterator1(void);
+    void TestKeyboardTransliterator1();
 
-    void TestKeyboardTransliterator2(void);
+    void TestKeyboardTransliterator2();
 
-    void TestKeyboardTransliterator3(void);
+    void TestKeyboardTransliterator3();
 
-    void TestGetAdoptFilter(void);
+    void TestGetAdoptFilter();
 
-    void TestNullTransliterator(void);
+    void TestNullTransliterator();
 
-    void TestRegisterUnregister(void);
+    void TestRegisterUnregister();
 
-    void TestLatinDevanagari(void);
+    void TestLatinDevanagari();
     
-    void TestDevanagariLatinRT(void);
+    void TestDevanagariLatinRT();
 
-    void TestUnicodeFunctor(void);
+    void TestUnicodeFunctor();
 
     /*Internal functions used*/
     void doTest(const UnicodeString& , const UnicodeString& , const UnicodeString& );

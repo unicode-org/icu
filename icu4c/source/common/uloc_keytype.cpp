@@ -53,7 +53,7 @@ static icu::MemoryPool<LocExtType>* gLocExtTypeEntries = nullptr;
 U_CDECL_BEGIN
 
 static UBool U_CALLCONV
-uloc_key_type_cleanup(void) {
+uloc_key_type_cleanup() {
     if (gLocExtKeyMap != nullptr) {
         uhash_close(gLocExtKeyMap);
         gLocExtKeyMap = nullptr;

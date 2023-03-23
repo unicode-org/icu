@@ -362,11 +362,7 @@ typedef enum UNumberFormatFields {
      * One more than the highest normal UNumberFormatFields value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-#ifndef U_HIDE_DRAFT_API
-    UNUM_FIELD_COUNT = UNUM_COMPACT_FIELD + 2
-#else  // U_HIDE_DRAFT_API (for UNUM_APPROXIMATELY_SIGN_FIELD)
-    UNUM_FIELD_COUNT = UNUM_COMPACT_FIELD + 1
-#endif  // U_HIDE_DRAFT_API (for UNUM_APPROXIMATELY_SIGN_FIELD)
+    UNUM_FIELD_COUNT
 #endif  /* U_HIDE_DEPRECATED_API */
 } UNumberFormatFields;
 

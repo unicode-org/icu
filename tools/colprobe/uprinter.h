@@ -41,9 +41,9 @@ public:
   //void log(const char *string, UBool nl = false);
   void log(const Line *line, UBool nl = false);
   void log(const char *fmt, ...);
-  void off(void);
-  void on(void);
-  UBool isOn(void) {
+  void off();
+  void on();
+  UBool isOn() {
     return _on;
   };
 };

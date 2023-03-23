@@ -70,7 +70,7 @@ static icu::UInitOnce gServiceInitOnce {};
 
 // INTERNAL - for cleanup
 U_CDECL_BEGIN
-static UBool calendar_cleanup(void) {
+static UBool calendar_cleanup() {
 #if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
@@ -1717,8 +1717,7 @@ void Calendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     roll((UCalendarDateFields)field, amount, status);
 }
 
-void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status)
-{
+void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) UPRV_NO_SANITIZE_UNDEFINED {
     if (amount == 0) {
         return; // Nothing to do
     }
@@ -2320,7 +2319,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
                 break;
             } else {
                 min = max;
-                max <<= 1;
+                max = (int32_t)((uint32_t)(max) << 1);
                 if (max == 0) {
                     // Field difference too large to fit into int32_t
 #if defined (U_DEBUG_CAL)
@@ -2434,7 +2433,7 @@ Calendar::setRepeatedWallTimeOption(UCalendarWallTimeOption option)
 // -------------------------------------
 
 UCalendarWallTimeOption
-Calendar::getRepeatedWallTimeOption(void) const
+Calendar::getRepeatedWallTimeOption() const
 {
     return fRepeatedWallTime;
 }
@@ -2450,7 +2449,7 @@ Calendar::setSkippedWallTimeOption(UCalendarWallTimeOption option)
 // -------------------------------------
 
 UCalendarWallTimeOption
-Calendar::getSkippedWallTimeOption(void) const
+Calendar::getSkippedWallTimeOption() const
 {
     return fSkippedWallTime;
 }
@@ -2458,8 +2457,7 @@ Calendar::getSkippedWallTimeOption(void) const
 // -------------------------------------
 
 void
-Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value)
-{
+Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value) UPRV_NO_SANITIZE_UNDEFINED {
     if (fFirstDayOfWeek != value &&
         value >= UCAL_SUNDAY && value <= UCAL_SATURDAY) {
             fFirstDayOfWeek = value;
@@ -2580,7 +2578,7 @@ Calendar::isWeekend(UDate date, UErrorCode &status) const
 }
 
 UBool
-Calendar::isWeekend(void) const
+Calendar::isWeekend() const
 {
     UErrorCode status = U_ZERO_ERROR;
     UCalendarDaysOfWeek dayOfWeek = (UCalendarDaysOfWeek)get(UCAL_DAY_OF_WEEK, status);
@@ -4061,7 +4059,7 @@ int32_t Calendar::internalGetMonth(int32_t defaultValue) const {
 }
 
 BasicTimeZone*
-Calendar::getBasicTimeZone(void) const {
+Calendar::getBasicTimeZone() const {
     if (dynamic_cast<const OlsonTimeZone *>(fZone) != nullptr
         || dynamic_cast<const SimpleTimeZone *>(fZone) != nullptr
         || dynamic_cast<const RuleBasedTimeZone *>(fZone) != nullptr

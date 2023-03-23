@@ -461,7 +461,9 @@ def main():
         global commits
         count = 0
         if section == CLOSED_NO_COMMIT:
-            print("Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.", file=out)
+            print("ICU Tip: If commits aren't expected, change the ticket type to 'Task' or 'User Guide' or set the resolution to one such as 'Fixed by other ticket' or 'Fix Non-repo'.", file=out)
+            print("CLDR Tip: Change the ticket type or set the resolution to one such as 'Fixed by other ticket' or 'Fix Non-repo' if commits aren't expected.", file=out)
+            
             print(file=out)
             found = False
             for issue in issues:

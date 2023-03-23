@@ -89,7 +89,7 @@ static const UCharIterator noopIterator={
  */
 
 static int32_t U_CALLCONV
-stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) UPRV_NO_SANITIZE_UNDEFINED {
     switch(origin) {
     case UITER_ZERO:
         return 0;
@@ -109,7 +109,7 @@ stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
 }
 
 static int32_t U_CALLCONV
-stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
+stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) UPRV_NO_SANITIZE_UNDEFINED {
     int32_t pos;
 
     switch(origin) {
@@ -359,7 +359,7 @@ uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length) {
  */
 
 static int32_t U_CALLCONV
-characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) UPRV_NO_SANITIZE_UNDEFINED {
     switch(origin) {
     case UITER_ZERO:
         return 0;
@@ -379,7 +379,7 @@ characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
 }
 
 static int32_t U_CALLCONV
-characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
+characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) UPRV_NO_SANITIZE_UNDEFINED {
     switch(origin) {
     case UITER_ZERO:
         ((CharacterIterator *)(iter->context))->setIndex(delta);
@@ -586,7 +586,7 @@ uiter_setReplaceable(UCharIterator *iter, const Replaceable *rep) {
  */
 
 static int32_t U_CALLCONV
-utf8IteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+utf8IteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) UPRV_NO_SANITIZE_UNDEFINED {
     switch(origin) {
     case UITER_ZERO:
     case UITER_START:
@@ -666,7 +666,7 @@ utf8IteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
 }
 
 static int32_t U_CALLCONV
-utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
+utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) UPRV_NO_SANITIZE_UNDEFINED {
     const uint8_t *s;
     UChar32 c;
     int32_t pos; /* requested UTF-16 index */

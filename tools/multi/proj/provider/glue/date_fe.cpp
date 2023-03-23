@@ -48,7 +48,7 @@
     static void* getStaticClassID() ;                                   \
     virtual UnicodeString& format(  Calendar& cal, UnicodeString& appendTo, FieldPosition& pos) const; \
     virtual void parse( const UnicodeString& text, Calendar& cal, ParsePosition& pos) const; \
-    virtual Format* clone(void) const; \
+    virtual Format* clone() const; \
   public: static int32_t countAvailable();                              \
 public: static int32_t appendAvailable(UnicodeString* strs, int32_t i, int32_t count); \
   }; \
@@ -142,7 +142,7 @@ void  GLUE_SYM (DateFormat ) :: parse( const UnicodeString& text, Calendar& cal,
   return;
 }
 
-Format*  GLUE_SYM (DateFormat ) :: clone(void) const
+Format*  GLUE_SYM (DateFormat ) :: clone() const
 {
   return nullptr;
 }

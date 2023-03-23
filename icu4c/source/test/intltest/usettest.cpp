@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #include <string.h>
+#include <unordered_map>
 #include "unicode/utypes.h"
 #include "usettest.h"
 #include "unicode/ucnv.h"
@@ -85,6 +86,8 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestStrings);
     TESTCASE_AUTO(Testj2268);
     TESTCASE_AUTO(TestCloseOver);
+    TESTCASE_AUTO(TestCloseOverSimpleCaseFolding);
+    TESTCASE_AUTO(TestCloseOverLargeSets);
     TESTCASE_AUTO(TestEscapePattern);
     TESTCASE_AUTO(TestInvalidCodePoint);
     TESTCASE_AUTO(TestSymbolTable);
@@ -267,7 +270,7 @@ UBool UnicodeSetTest::checkPat(const UnicodeString& source,
 }
 
 void
-UnicodeSetTest::TestPatterns(void) {
+UnicodeSetTest::TestPatterns() {
     UnicodeSet set;
     expectPattern(set, UnicodeString("[[a-m]&[d-z]&[k-y]]", ""),  "km");
     expectPattern(set, UnicodeString("[[a-z]-[m-y]-[d-r]]", ""),  "aczz");
@@ -284,7 +287,7 @@ UnicodeSetTest::TestPatterns(void) {
 }
 
 void
-UnicodeSetTest::TestCategories(void) {
+UnicodeSetTest::TestCategories() {
     UErrorCode status = U_ZERO_ERROR;
     const char* pat = " [:Lu:] "; // Whitespace ok outside [:..:]
     UnicodeSet set(pat, status);
@@ -322,7 +325,7 @@ UnicodeSetTest::TestCategories(void) {
     }
 }
 void
-UnicodeSetTest::TestCloneEqualHash(void) {
+UnicodeSetTest::TestCloneEqualHash() {
     UErrorCode status = U_ZERO_ERROR;
     // set1 and set2 used to be built with the obsolete constructor taking
     // UCharCategory values; replaced with pattern constructors
@@ -393,7 +396,7 @@ UnicodeSetTest::TestCloneEqualHash(void) {
 
 }
 void
-UnicodeSetTest::TestAddRemove(void) {
+UnicodeSetTest::TestAddRemove() {
     UnicodeSet set; // Construct empty set
     doAssert(set.isEmpty() == true, "set should be empty");
     doAssert(set.size() == 0, "size should be 0");
@@ -641,7 +644,7 @@ void UnicodeSetTest::TestAPI() {
     //UnicodeSet::retain(long)
     //UnicodeSet::retainAll(class UnicodeString const &)
     //UnicodeSet::serialize(unsigned short *,long,enum UErrorCode &)
-    //UnicodeSetIterator::getString(void)
+    //UnicodeSetIterator::getString()
     set.clear();
     set.complement("ab");
     exp.applyPattern("[{ab}]", status);
@@ -1243,17 +1246,24 @@ void UnicodeSetTest::TestIndexOf() {
  * Test closure API.
  */
 void UnicodeSetTest::TestCloseOver() {
-    UErrorCode ec = U_ZERO_ERROR;
-
-    char CASE[] = {(char)USET_CASE_INSENSITIVE};
-    char CASE_MAPPINGS[] = {(char)USET_ADD_CASE_MAPPINGS};
-    const char* DATA[] = {
+    static constexpr char CASE[] = {(char)USET_CASE_INSENSITIVE};
+    static constexpr char CASE_MAPPINGS[] = {(char)USET_ADD_CASE_MAPPINGS};
+    static constexpr char SIMPLE_CASE_INSENSITIVE[] = {(char)USET_SIMPLE_CASE_INSENSITIVE};
+    static const char* DATA[] = {
         // selector, input, output
         CASE,
         "[aq\\u00DF{Bc}{bC}{Fi}]",
         "[aAqQ\\u00DF\\u1E9E\\uFB01{ss}{bc}{fi}]",  // U+1E9E LATIN CAPITAL LETTER SHARP S is new in Unicode 5.1
 
+        SIMPLE_CASE_INSENSITIVE,
+        "[aq\\u00DF{Bc}{bC}{Fi}]",
+        "[aAqQ\\u00DF\\u1E9E{bc}{fi}]",
+
         CASE,
+        "[\\u01F1]", // 'DZ'
+        "[\\u01F1\\u01F2\\u01F3]",
+
+        SIMPLE_CASE_INSENSITIVE,
         "[\\u01F1]", // 'DZ'
         "[\\u01F1\\u01F2\\u01F3]",
 
@@ -1261,9 +1271,13 @@ void UnicodeSetTest::TestCloseOver() {
         "[\\u1FB4]",
         "[\\u1FB4{\\u03AC\\u03B9}]",
 
+        SIMPLE_CASE_INSENSITIVE,
+        "[\\u1FB4]",
+        "[\\u1FB4]",
+
         CASE,
         "[{F\\uFB01}]",
-        "[\\uFB03{ffi}]",            
+        "[\\uFB03{ffi}]",
 
         CASE, // make sure binary search finds limits
         "[a\\uFF3A]",
@@ -1271,6 +1285,10 @@ void UnicodeSetTest::TestCloseOver() {
 
         CASE,
         "[a-z]","[A-Za-z\\u017F\\u212A]",
+
+        SIMPLE_CASE_INSENSITIVE,
+        "[a-z]","[A-Za-z\\u017F\\u212A]",
+
         CASE,
         "[abc]","[A-Ca-c]",
         CASE,
@@ -1311,7 +1329,7 @@ void UnicodeSetTest::TestCloseOver() {
         CASE_MAPPINGS,
         "[\\u01F1]", // 'DZ'
         "[\\u01F1\\u01F2\\u01F3]",
-        
+
         CASE_MAPPINGS,
         "[a-z]",
         "[A-Za-z]",
@@ -1326,6 +1344,8 @@ void UnicodeSetTest::TestCloseOver() {
         int32_t selector = DATA[i][0];
         UnicodeString pat(DATA[i+1], -1, US_INV);
         UnicodeString exp(DATA[i+2], -1, US_INV);
+
+        UErrorCode ec = U_ZERO_ERROR;
         s.applyPattern(pat, ec);
         s.closeOver(selector);
         t.applyPattern(exp, ec);
@@ -1341,68 +1361,8 @@ void UnicodeSetTest::TestCloseOver() {
         }
     }
 
-#if 0
-    /*
-     * Unused test code.
-     * This was used to compare the old implementation (using USET_CASE)
-     * with the new one (using 0x100 temporarily)
-     * while transitioning from hardcoded case closure tables in uniset.cpp
-     * (moved to uniset_props.cpp) to building the data by gencase into ucase.icu.
-     * and using ucase.c functions for closure.
-     * See Jitterbug 3432 RFE: Move uniset.cpp data to a data file
-     *
-     * Note: The old and new implementation never fully matched because
-     * the old implementation turned out to not map U+0130 and U+0131 correctly
-     * (dotted I and dotless i) and because the old implementation's data tables
-     * were outdated compared to Unicode 4.0.1 at the time of the change to the
-     * new implementation. (So sigmas and some other characters were not handled
-     * according to the newer Unicode version.)
-     */
-    UnicodeSet sens("[:case_sensitive:]", ec), sens2, s2;
-    UnicodeSetIterator si(sens);
-    UnicodeString str, buf2;
-    const UnicodeString *pStr;
-    UChar32 c;
-    while(si.next()) {
-        if(!si.isString()) {
-            c=si.getCodepoint();
-            s.clear();
-            s.add(c);
-
-            str.setTo(c);
-            str.foldCase();
-            sens2.add(str);
-
-            t=s;
-            s.closeOver(USET_CASE);
-            t.closeOver(0x100);
-            if(s!=t) {
-                errln("FAIL: closeOver(U+%04x) differs: ", c);
-                errln((UnicodeString)"old "+s.toPattern(buf, true)+" new: "+t.toPattern(buf2, true));
-            }
-        }
-    }
-    // remove all code points
-    // should contain all full case folding mapping strings
-    sens2.remove(0, 0x10ffff);
-    si.reset(sens2);
-    while(si.next()) {
-        if(si.isString()) {
-            pStr=&si.getString();
-            s.clear();
-            s.add(*pStr);
-            t=s2=s;
-            s.closeOver(USET_CASE);
-            t.closeOver(0x100);
-            if(s!=t) {
-                errln((UnicodeString)"FAIL: closeOver("+s2.toPattern(buf, true)+") differs: ");
-                errln((UnicodeString)"old "+s.toPattern(buf, true)+" new: "+t.toPattern(buf2, true));
-            }
-        }
-    }
-#endif
-
     // Test the pattern API
+    UErrorCode ec = U_ZERO_ERROR;
     s.applyPattern("[abc]", USET_CASE_INSENSITIVE, nullptr, ec);
     if (U_FAILURE(ec)) {
         errln("FAIL: applyPattern failed");
@@ -1420,6 +1380,123 @@ void UnicodeSetTest::TestCloseOver() {
         errln("FAIL: construct w/case mappings failed");
     } else {
         expectContainment(cm, "abckABCK", CharsToUnicodeString("defDEF\\u212A"));
+    }
+}
+
+namespace {
+
+void addIfAbsent(const std::unordered_multimap<UChar32, UChar32> &closure, UChar32 c, UChar32 t,
+                 std::unordered_multimap<UChar32, UChar32> &additions) {
+    for (auto it = closure.find(c);; ++it) {
+        if (it == closure.end() || it->first != c) {
+            // absent
+            additions.insert({c, t});
+            break;
+        } else if (it->second == t) {
+            // present
+            break;
+        }
+    }
+}
+
+}  // namespace
+
+void UnicodeSetTest::TestCloseOverSimpleCaseFolding() {
+    IcuTestErrorCode errorCode(*this, "TestCloseOverSimpleCaseFolding");
+    const UnicodeSet *sensitive =
+        UnicodeSet::fromUSet(u_getBinaryPropertySet(UCHAR_CASE_SENSITIVE, errorCode));
+    if (errorCode.errIfFailureAndReset("u_getBinaryPropertySet(UCHAR_CASE_SENSITIVE) failed")) {
+        return;
+    }
+    // Compute the scf=Simple_Case_Folding closure:
+    // For each scf(c)=t, start with mappings c->t and t->c.
+    std::unordered_multimap<UChar32, UChar32> closure;
+    UnicodeSetIterator iter(*sensitive);
+    while (iter.next()) {
+        UChar32 c = iter.getCodepoint();
+        UChar32 scfChar = u_foldCase(c, U_FOLD_CASE_DEFAULT);
+        if (scfChar != c) {
+            closure.insert({c, scfChar});
+            closure.insert({scfChar, c});
+        }
+    }
+    // Complete the closure: Add mappings of mappings.
+    for (;;) {
+        std::unordered_multimap<UChar32, UChar32> additions;
+        // for each mapping c->t
+        for (auto mapping : closure) {
+            UChar32 c = mapping.first;
+            UChar32 t = mapping.second;
+            // enumerate each t->u
+            for (auto it = closure.find(t); it != closure.end() && it->first == t; ++it) {
+                UChar32 u = it->second;
+                if (u != c) {
+                    addIfAbsent(closure, c, u, additions);
+                    addIfAbsent(closure, u, c, additions);
+                }
+            }
+        }
+        if (additions.empty()) {
+            break;  // The closure is complete.
+        }
+        closure.insert(additions.begin(), additions.end());
+    }
+    // Compare closeOver(USET_SIMPLE_CASE_INSENSITIVE) with an unoptimized implementation.
+    // Here we focus on single code points as input.
+    // Other examples, including strings, are tested in TestCloseOver().
+    int32_t errors = 0;
+    iter.reset();
+    UnicodeSet set, expected;
+    while (iter.next()) {
+        UChar32 c = iter.getCodepoint();
+        // closeOver()
+        set.clear().add(c);
+        set.closeOver(USET_SIMPLE_CASE_INSENSITIVE);
+        // From-first-principles implementation.
+        expected.clear().add(c);
+        for (auto it = closure.find(c); it != closure.end() && it->first == c; ++it) {
+            expected.add(it->second);
+        }
+        // compare
+        if (!checkEqual(expected, set, "closeOver() vs. test impl")) {
+            errln("    c=U+%04X", c);
+            if (++errors == 10) {
+                break;
+            }
+        }
+    }
+}
+
+void UnicodeSetTest::TestCloseOverLargeSets() {
+    IcuTestErrorCode errorCode(*this, "TestCloseOverLargeSets");
+    // Check that an optimization for large sets does not change the result.
+
+    // Most code points except ones that are boring for case mappings.
+    UnicodeSet manyCp(u"[^[:C:][:Ideographic:][:Hang:]]", errorCode);
+    // Main Unihan block.
+    constexpr UChar32 LARGE_START = 0x4E00;
+    constexpr UChar32 LARGE_END = 0x9FFF;
+
+    static constexpr int32_t OPTIONS[] = {
+        USET_CASE_INSENSITIVE, USET_ADD_CASE_MAPPINGS, USET_SIMPLE_CASE_INSENSITIVE
+    };
+    UnicodeSet input, small, large;
+    for (int32_t option : OPTIONS) {
+        UnicodeSetIterator iter(manyCp);
+        while (iter.next()) {
+            UChar32 c = iter.getCodepoint();
+            input.clear().add(c);
+            small = input;
+            small.closeOver(option);
+            large = input;
+            large.add(LARGE_START, LARGE_END);
+            large.closeOver(option);
+            large.remove(LARGE_START, LARGE_END);
+            if (!checkEqual(small, large, "small != large")) {
+                errln("    option=%d c=U+%04X", option, c);
+                break;
+            }
+        }
     }
 }
 

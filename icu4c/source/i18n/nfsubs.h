@@ -249,8 +249,8 @@ private:
     NFSubstitution &operator=(const NFSubstitution &other) = delete; // forbid copying of this class
 
 public:
-    static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const override;
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const override;
 };
 
 U_NAMESPACE_END

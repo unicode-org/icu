@@ -31,7 +31,7 @@ class MyNumberFormatTest : public NumberFormat
 {
 public:
 
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
   
     virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
@@ -247,7 +247,7 @@ inline UnicodeString str(const char *input)
  * NumberFormat.equals comparing with null should always return false.
  */
 // {sfb} kind of silly in C++, just checking for new success
-void NumberFormatRegressionTest::Test4075713(void)
+void NumberFormatRegressionTest::Test4075713()
 {
     //try {
         MyNumberFormatTest *tmp = new MyNumberFormatTest();
@@ -264,7 +264,7 @@ void NumberFormatRegressionTest::Test4075713(void)
  * NumberFormat.equals comparing two obj equal even the setGroupingUsed
  * flag is different.
  */
-void NumberFormatRegressionTest::Test4074620(void) 
+void NumberFormatRegressionTest::Test4074620() 
 {
 
     MyNumberFormatTest *nf1 = new MyNumberFormatTest();
@@ -287,7 +287,7 @@ void NumberFormatRegressionTest::Test4074620(void)
  * DecimalFormat.format() incorrectly uses maxFractionDigits setting.
  */
 
-void NumberFormatRegressionTest::Test4088161 (void)
+void NumberFormatRegressionTest::Test4088161()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -317,7 +317,7 @@ void NumberFormatRegressionTest::Test4088161 (void)
  * DecimalFormatSymbols should be cloned in the ctor DecimalFormat.
  * DecimalFormat(String, DecimalFormatSymbols).
  */
-void NumberFormatRegressionTest::Test4087245 (void)
+void NumberFormatRegressionTest::Test4087245()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *symbols = new DecimalFormatSymbols(status);
@@ -347,7 +347,7 @@ void NumberFormatRegressionTest::Test4087245 (void)
 /* @bug 4087535
  * DecimalFormat.format() incorrectly formats 0.0
  */
-void NumberFormatRegressionTest::Test4087535 (void)
+void NumberFormatRegressionTest::Test4087535()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -375,7 +375,7 @@ void NumberFormatRegressionTest::Test4087535 (void)
  * DecimalFormat.format fails when groupingSize is set to 0.
  */
 // {sfb} how do I tell if this worked? --> FieldPosition doesn't change ??
-void NumberFormatRegressionTest::Test4088503 (void)
+void NumberFormatRegressionTest::Test4088503()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -399,7 +399,7 @@ void NumberFormatRegressionTest::Test4088503 (void)
 /* @bug 4066646
  * NumberFormat.getCurrencyInstance is wrong.
  */
-void NumberFormatRegressionTest::Test4066646 (void) 
+void NumberFormatRegressionTest::Test4066646() 
 {
     assignFloatValue(2.04f);
     assignFloatValue(2.03f);
@@ -439,7 +439,7 @@ NumberFormatRegressionTest::assignFloatValue(float returnfloat)
 /* @bug 4059870
  * DecimalFormat throws exception when parsing "0"
  */
-void NumberFormatRegressionTest::Test4059870(void) 
+void NumberFormatRegressionTest::Test4059870() 
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *format = new DecimalFormat("00", status);
@@ -462,7 +462,7 @@ void NumberFormatRegressionTest::Test4059870(void)
  * comparing with null.
  */
 // {sfb} this is silly in C++
-void NumberFormatRegressionTest::Test4083018 (void)
+void NumberFormatRegressionTest::Test4083018()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *dfs = new DecimalFormatSymbols(status);
@@ -482,7 +482,7 @@ void NumberFormatRegressionTest::Test4083018 (void)
 /* @bug 4071492
  * DecimalFormat does not round up correctly.
  */
-void NumberFormatRegressionTest::Test4071492 (void)
+void NumberFormatRegressionTest::Test4071492()
 {
     double x = 0.00159999;
     UErrorCode status = U_ZERO_ERROR;
@@ -507,7 +507,7 @@ void NumberFormatRegressionTest::Test4071492 (void)
  * A space as a group separator for localized pattern causes
  * wrong format.  WorkAround : use non-breaking space.
  */
-void NumberFormatRegressionTest::Test4086575(void) 
+void NumberFormatRegressionTest::Test4086575() 
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf1 = NumberFormat::createInstance(Locale::getFrance(), status);
@@ -587,7 +587,7 @@ void NumberFormatRegressionTest::Test4086575(void)
  */
 // {sfb} slightly converted into a round-trip test, since in C++
 // there is no Double.toString()
-void NumberFormatRegressionTest::Test4068693(void)
+void NumberFormatRegressionTest::Test4068693()
 {
     logln("----- Test Application -----");
     ParsePosition pos(0);
@@ -620,7 +620,7 @@ void NumberFormatRegressionTest::Test4068693(void)
  * object.
  */
 // {sfb} doesn't apply in C++
-void NumberFormatRegressionTest::Test4069754(void)
+void NumberFormatRegressionTest::Test4069754()
 {
 /*    try {
         myformat it = new myformat();
@@ -645,7 +645,7 @@ void NumberFormatRegressionTest::Test4069754(void)
 /* @bug 4087251
  * DecimalFormat.applyPattern(String) allows illegal patterns
  */
-void NumberFormatRegressionTest::Test4087251 (void)
+void NumberFormatRegressionTest::Test4087251()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -682,7 +682,7 @@ void NumberFormatRegressionTest::Test4087251 (void)
 /* @bug 4090489
  * DecimalFormat.format() loses precision
  */
-void NumberFormatRegressionTest::Test4090489 (void)
+void NumberFormatRegressionTest::Test4090489()
 {
 // {sfb} snprintf doesn't correctly handle the double, so there is nothing
 // that NumberFormat can do.  For some reason, it does not format the last 1.
@@ -709,7 +709,7 @@ void NumberFormatRegressionTest::Test4090489 (void)
 /* @bug 4090504
  * DecimalFormat.format() loses precision
  */
-void NumberFormatRegressionTest::Test4090504 (void)
+void NumberFormatRegressionTest::Test4090504()
 {
     double d = 1;
     logln(UnicodeString("d = ") + d);
@@ -740,7 +740,7 @@ void NumberFormatRegressionTest::Test4090504 (void)
 /* @bug 4095713
  * DecimalFormat.parse(String str, ParsePosition pp) loses precision
  */
-void NumberFormatRegressionTest::Test4095713 (void)
+void NumberFormatRegressionTest::Test4095713()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -767,7 +767,7 @@ void NumberFormatRegressionTest::Test4095713 (void)
  * DecimalFormat.parse() fails when multiplier is not set to 1
  */
 // {sfb} not sure what to do with this one
-void NumberFormatRegressionTest::Test4092561 (void)
+void NumberFormatRegressionTest::Test4092561()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -793,7 +793,7 @@ void NumberFormatRegressionTest::Test4092561 (void)
 /* @bug 4092480
  * DecimalFormat: Negative format ignored.
  */
-void NumberFormatRegressionTest::Test4092480 (void)
+void NumberFormatRegressionTest::Test4092480()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *dfFoo = new DecimalFormat(UnicodeString("000"), status);
@@ -847,7 +847,7 @@ void NumberFormatRegressionTest::Test4092480 (void)
  * never contain the monetary separator!  Decimal separator in pattern is
  * interpreted as monetary separator if currency symbol is seen!
  */
-void NumberFormatRegressionTest::Test4087244 (void) {
+void NumberFormatRegressionTest::Test4087244() {
     UErrorCode status = U_ZERO_ERROR;
     char loc[256] = {0};
 
@@ -891,7 +891,7 @@ void NumberFormatRegressionTest::Test4087244 (void) {
 /* @bug 4070798
  * Number format data rounding errors for locale FR
  */
-void NumberFormatRegressionTest::Test4070798 (void) 
+void NumberFormatRegressionTest::Test4070798() 
 {
     NumberFormat *formatter;
     UnicodeString tempString;
@@ -969,7 +969,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
 /* @bug 4071005
  * Data rounding errors for French (Canada) locale
  */
-void NumberFormatRegressionTest::Test4071005 (void) 
+void NumberFormatRegressionTest::Test4071005() 
 {
     NumberFormat *formatter;
     UnicodeString tempString;
@@ -1041,7 +1041,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
 /* @bug 4071014
  * Data rounding errors for German (Germany) locale
  */
-void NumberFormatRegressionTest::Test4071014 (void) 
+void NumberFormatRegressionTest::Test4071014() 
 {
     NumberFormat *formatter;
     UnicodeString tempString;
@@ -1109,7 +1109,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
 /* @bug 4071859
  * Data rounding errors for Italian locale number formats
  */
-void NumberFormatRegressionTest::Test4071859 (void) 
+void NumberFormatRegressionTest::Test4071859() 
 {
     NumberFormat *formatter;
     UnicodeString tempString;
@@ -1174,7 +1174,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
 /* @bug 4071859
  * Test rounding for nearest even.
  */
-void NumberFormatRegressionTest::Test4093610(void)
+void NumberFormatRegressionTest::Test4093610()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat df("#0.#", status);
@@ -1214,7 +1214,7 @@ void NumberFormatRegressionTest::roundingTest(DecimalFormat *df, double x, Unico
 /* @bug 4098741
  * Tests the setMaximumFractionDigits limit.
  */
-void NumberFormatRegressionTest::Test4098741(void)
+void NumberFormatRegressionTest::Test4098741()
 {
     //try {
     UErrorCode status = U_ZERO_ERROR;
@@ -1238,7 +1238,7 @@ void NumberFormatRegressionTest::Test4098741(void)
  * Fix comment : HShih A31 Part1 will not be fixed and javadoc needs to be updated.
  * Part2 has been fixed.
  */
-void NumberFormatRegressionTest::Test4074454(void)
+void NumberFormatRegressionTest::Test4074454()
 {
     //try {
     UErrorCode status = U_ZERO_ERROR;  
@@ -1283,7 +1283,7 @@ void NumberFormatRegressionTest::Test4074454(void)
  * Otherwise, an IllegalArgumentException will be thrown when formatting
  * "January 35".  See GregorianCalendar class javadoc for more details.
  */
-void NumberFormatRegressionTest::Test4099404(void)
+void NumberFormatRegressionTest::Test4099404()
 {
     //try {
         UErrorCode status = U_ZERO_ERROR;
@@ -1308,7 +1308,7 @@ void NumberFormatRegressionTest::Test4099404(void)
 /* @bug 4101481
  * DecimalFormat.applyPattern doesn't set minimum integer digits
  */
-void NumberFormatRegressionTest::Test4101481(void)
+void NumberFormatRegressionTest::Test4101481()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *sdf = new DecimalFormat(UnicodeString("#,##0"), status);
@@ -1325,7 +1325,7 @@ void NumberFormatRegressionTest::Test4101481(void)
 /* @bug 4052223 (API addition request A27)
  * Tests ParsePosition.setErrorPosition() and ParsePosition.getErrorPosition().
  */
-void NumberFormatRegressionTest::Test4052223(void)
+void NumberFormatRegressionTest::Test4052223()
 {
     //try {
     UErrorCode status = U_ZERO_ERROR;
@@ -1348,7 +1348,7 @@ void NumberFormatRegressionTest::Test4052223(void)
 /* @bug 4061302
  * API tests for API addition request A9.
  */
-void NumberFormatRegressionTest::Test4061302(void)
+void NumberFormatRegressionTest::Test4061302()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *fmt = new DecimalFormatSymbols(status);
@@ -1389,7 +1389,7 @@ void NumberFormatRegressionTest::Test4061302(void)
  * API tests for API addition request A23. FieldPosition.getBeginIndex and
  * FieldPosition.getEndIndex.
  */
-void NumberFormatRegressionTest::Test4062486(void)
+void NumberFormatRegressionTest::Test4062486()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = new DecimalFormat(UnicodeString("#,##0.00"), status);
@@ -1414,7 +1414,7 @@ void NumberFormatRegressionTest::Test4062486(void)
 /* @bug 4108738
  * DecimalFormat.parse incorrectly works with a group separator.
  */
-void NumberFormatRegressionTest::Test4108738(void)
+void NumberFormatRegressionTest::Test4108738()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale::getUS(), status);
@@ -1455,7 +1455,7 @@ void NumberFormatRegressionTest::Test4108738(void)
 /* @bug 4106658
  * DecimalFormat.format() incorrectly formats negative doubles.
  */
-void NumberFormatRegressionTest::Test4106658(void)
+void NumberFormatRegressionTest::Test4106658()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status); // Corrected; see 4147706
@@ -1491,7 +1491,7 @@ void NumberFormatRegressionTest::Test4106658(void)
 /* @bug 4106662
  * DecimalFormat.parse returns 0 if string parameter is incorrect.
  */
-void NumberFormatRegressionTest::Test4106662(void)
+void NumberFormatRegressionTest::Test4106662()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -1525,7 +1525,7 @@ void NumberFormatRegressionTest::Test4106662(void)
 /* @bug 4114639 (duplicate of 4106662)
  * NumberFormat.parse doesn't return null
  */
-void NumberFormatRegressionTest::Test4114639(void)
+void NumberFormatRegressionTest::Test4114639()
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *format = NumberFormat::createInstance(status);
@@ -1550,7 +1550,7 @@ void NumberFormatRegressionTest::Test4114639(void)
  * a double only MAY only have 52 bits of precision.
  * DecimalFormat.format(long n) fails if n * multiplier > MAX_LONG.
  */
-void NumberFormatRegressionTest::Test4106664(void)
+void NumberFormatRegressionTest::Test4106664()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -1584,7 +1584,7 @@ void NumberFormatRegressionTest::Test4106664(void)
 /* @bug 4106667 (duplicate of 4106658)
  * DecimalFormat.format incorrectly formats -0.0.
  */
-void NumberFormatRegressionTest::Test4106667(void)
+void NumberFormatRegressionTest::Test4106667()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
@@ -1624,7 +1624,7 @@ void NumberFormatRegressionTest::Test4106667(void)
 #   define MAX_INT_DIGITS 128
 #endif
 
-void NumberFormatRegressionTest::Test4110936(void)
+void NumberFormatRegressionTest::Test4110936()
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
@@ -1650,7 +1650,7 @@ void NumberFormatRegressionTest::Test4110936(void)
  * 2) Make sure we get the same results using the generic symbol or a
  *    hard-coded one.
  */
-void NumberFormatRegressionTest::Test4122840(void)
+void NumberFormatRegressionTest::Test4122840()
 {
     int32_t count = 0;
     const Locale *locales = Locale::getAvailableLocales(count);
@@ -1770,7 +1770,7 @@ void NumberFormatRegressionTest::Test4122840(void)
 /* @bug 4125885
  * DecimalFormat.format() delivers wrong string.
  */
-void NumberFormatRegressionTest::Test4125885(void)
+void NumberFormatRegressionTest::Test4125885()
 {
     UErrorCode status = U_ZERO_ERROR;
     double rate = 12.34;
@@ -1805,7 +1805,7 @@ void NumberFormatRegressionTest::Test4125885(void)
  * @bug 4134034
  * DecimalFormat produces extra zeros when formatting numbers.
  */
-void NumberFormatRegressionTest::Test4134034(void) 
+void NumberFormatRegressionTest::Test4134034() 
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *nf = new DecimalFormat("##,###,###.00", status);
@@ -1854,7 +1854,7 @@ void NumberFormatRegressionTest::Test4134034(void)
  * Value 1.2 Format #0.0# Result '1.2'
  * Value 1.2 Format #0.00 Result '1.20'
  */
-void NumberFormatRegressionTest::Test4134300(void) {
+void NumberFormatRegressionTest::Test4134300() {
     UnicodeString DATA [] = {
      // Pattern      Expected string
         UnicodeString("#.00"),      UnicodeString("1.20"),
@@ -1888,7 +1888,7 @@ void NumberFormatRegressionTest::Test4134300(void) {
  * @bug 4140009
  * Empty pattern produces double negative prefix.
  */
-void NumberFormatRegressionTest::Test4140009(void) 
+void NumberFormatRegressionTest::Test4140009() 
 {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormatSymbols> syms(new DecimalFormatSymbols(Locale::getEnglish(), status), status);
@@ -1915,7 +1915,7 @@ void NumberFormatRegressionTest::Test4140009(void)
  * BigDecimal numbers get their fractions truncated by NumberFormat.
  */
 // {sfb} not pertinent in C++ ??
-void NumberFormatRegressionTest::Test4141750(void) {
+void NumberFormatRegressionTest::Test4141750() {
     /*try {
         UnicodeString str("12345.67");
         BigDecimal bd = new BigDecimal(str);
@@ -2013,7 +2013,7 @@ void NumberFormatRegressionTest::Test4145457() {
  *
  * ICU 62: minInt is always at least one, and the getter should reflect that!
  */
-void NumberFormatRegressionTest::Test4147295(void) 
+void NumberFormatRegressionTest::Test4147295() 
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *sdf = new DecimalFormat(status);
@@ -2040,7 +2040,7 @@ void NumberFormatRegressionTest::Test4147295(void)
  * DecimalFormat formats -0.0 as +0.0
  * See also older related bug 4106658, 4106667
  */
-void NumberFormatRegressionTest::Test4147706(void) 
+void NumberFormatRegressionTest::Test4147706() 
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat("#,##0.0##", status);
@@ -2093,7 +2093,7 @@ public String Now()
  */
 // TODO: make this test actually test something
 void 
-NumberFormatRegressionTest::Test4162198(void) 
+NumberFormatRegressionTest::Test4162198() 
 {
     // for some reason, DBL_MAX will not round trip. (bug in snprintf/atof)
     double dbl = INT32_MAX * 1000.0;
@@ -2137,7 +2137,7 @@ NumberFormatRegressionTest::Test4162198(void)
  * NumberFormat does not parse negative zero.
  */
 void 
-NumberFormatRegressionTest::Test4162852(void) 
+NumberFormatRegressionTest::Test4162852() 
 {
     UErrorCode status = U_ZERO_ERROR;
     for(int32_t i=0; i < 2; ++i) {
@@ -2177,7 +2177,7 @@ static double _u_abs(double a) { return a<0?-a:a; }
  * @bug 4167494
  * NumberFormat truncates data
  */
-void NumberFormatRegressionTest::Test4167494(void) {
+void NumberFormatRegressionTest::Test4167494() {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::getUS(), status);
     if (failure(status, "NumberFormat::createInstance", true)){
@@ -2213,7 +2213,7 @@ void NumberFormatRegressionTest::Test4167494(void) {
  * @bug 4170798
  * DecimalFormat.parse() fails when ParseIntegerOnly set to true
  */
-void NumberFormatRegressionTest::Test4170798(void) {
+void NumberFormatRegressionTest::Test4170798() {
     IcuTestErrorCode status(*this, "Test4170798");
     LocalPointer<DecimalFormat> df(dynamic_cast<DecimalFormat*>(
             NumberFormat::createInstance(Locale::getUS(), status)), status);
@@ -2245,7 +2245,7 @@ void NumberFormatRegressionTest::Test4170798(void) {
  * May 17 1999 sync up - liu
  * toPattern only puts the first grouping separator in.
  */
-void NumberFormatRegressionTest::Test4176114(void) {
+void NumberFormatRegressionTest::Test4176114() {
     const char* DATA[] = {
         "00", "00",
         "000", "000", // No grouping
@@ -2278,7 +2278,7 @@ void NumberFormatRegressionTest::Test4176114(void) {
  * @bug 4179818
  * DecimalFormat is incorrectly rounding numbers like 1.2501 to 1.2
  */
-void NumberFormatRegressionTest::Test4179818(void) {
+void NumberFormatRegressionTest::Test4179818() {
     const char* DATA[] = {
         // Input  Pattern  Expected output
         "1.2511", "#.#",   "1.3",
@@ -2322,7 +2322,7 @@ void NumberFormatRegressionTest::Test4179818(void) {
  * symbol, percent, and permille.  This is filed as bugs 4212072 and
  * 4212073.
  */
-void NumberFormatRegressionTest::Test4212072(void) {
+void NumberFormatRegressionTest::Test4212072() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::getUS(), status);
 
@@ -2507,7 +2507,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
  * May 17 1999 sync up - liu
  * DecimalFormat.parse() fails for mulipliers 2^n.
  */
-void NumberFormatRegressionTest::Test4216742(void) {
+void NumberFormatRegressionTest::Test4216742() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(Locale::getUS(), status));
     if (failure(status, "createInstance", Locale::getUS(), true)){
@@ -2546,7 +2546,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
  * DecimalFormat formats 1.001 to "1.00" instead of "1" with 2 fraction
  * digits.
  */
-void NumberFormatRegressionTest::Test4217661(void) {
+void NumberFormatRegressionTest::Test4217661() {
     const double D[] = {  0.001, 1.001, 0.006,  1.006 };
     const char*  S[] = { "0",   "1",   "0.01", "1.01" };
     int D_length = UPRV_LENGTHOF(D);
@@ -2570,7 +2570,7 @@ void NumberFormatRegressionTest::Test4217661(void) {
 /**
  * alphaWorks upgrade
  */
-void NumberFormatRegressionTest::Test4161100(void) {
+void NumberFormatRegressionTest::Test4161100() {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getUS(), status);
     if (failure(status, "createInstance", Locale::getUS(), true)){
@@ -2595,7 +2595,7 @@ void NumberFormatRegressionTest::Test4161100(void) {
  * June 16 1999 sync up - liu
  * Formatting .5 rounds to "1" instead of "0". (Regression in 1.2.2 RC1)
  */
-void NumberFormatRegressionTest::Test4243011(void) {
+void NumberFormatRegressionTest::Test4243011() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::getUS(), status);
     failure(status, "DecimalFormatSymbols ct", Locale::getUS());
@@ -2626,7 +2626,7 @@ void NumberFormatRegressionTest::Test4243011(void) {
  * format(0.0) gives "0.1" if preceded by parse("99.99").
  * (Regression in 1.2.2 RC1)
  */
-void NumberFormatRegressionTest::Test4243108(void) {
+void NumberFormatRegressionTest::Test4243108() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::getUS(), status);
     failure(status, "DecimalFormatSymbols ct", Locale::getUS());
@@ -2674,7 +2674,7 @@ void NumberFormatRegressionTest::Test4243108(void) {
  * DateFormat should call setIntegerParseOnly(true) on adopted
  * NumberFormat objects.
  */
-void NumberFormatRegressionTest::TestJ691(void) {
+void NumberFormatRegressionTest::TestJ691() {
     UErrorCode status = U_ZERO_ERROR;
     Locale loc("fr", "CH");
 
@@ -2756,7 +2756,7 @@ void NumberFormatRegressionTest::TestJ691(void) {
 
 // Ticket 8199:  Parse failure for numbers in the range of 1E10 - 1E18
 
-void NumberFormatRegressionTest::Test8199(void) {
+void NumberFormatRegressionTest::Test8199() {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getEnglish(), status);
     if (nf == nullptr) {
@@ -2876,7 +2876,7 @@ void NumberFormatRegressionTest::Test8199(void) {
     delete nf;
 }
 
-void NumberFormatRegressionTest::Test9109(void) {
+void NumberFormatRegressionTest::Test9109() {
     UErrorCode status = U_ZERO_ERROR;
     Formattable val;
     ParsePosition pos;
@@ -2902,7 +2902,7 @@ void NumberFormatRegressionTest::Test9109(void) {
 }
 
 
-void NumberFormatRegressionTest::Test9780(void) {
+void NumberFormatRegressionTest::Test9780() {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getUS(), status);
     if (failure(status, "NumberFormat::createInstance", true)){
@@ -2942,7 +2942,7 @@ void NumberFormatRegressionTest::Test9780(void) {
 }
 
 
-void NumberFormatRegressionTest::Test9677(void) {
+void NumberFormatRegressionTest::Test9677() {
   static const char16_t pattern[] = { 0x23,0x23,0x23,0x23,0x2E,0x23,0x23,0x23,0x23,0 }; // "####.####"
   static const char16_t positivePrefix[] = { 0x40,0 }; // "@"
   static const char16_t negativePrefix[] = { 0x6E,0 }; // "n"
@@ -3031,7 +3031,7 @@ void NumberFormatRegressionTest::Test9677(void) {
   }
 }
 
-void NumberFormatRegressionTest::Test10361(void) {
+void NumberFormatRegressionTest::Test10361() {
     // DecimalFormat/NumberFormat were artificially limiting the number of digits,
     //    preventing formatting of big decimals.
     UErrorCode status = U_ZERO_ERROR;

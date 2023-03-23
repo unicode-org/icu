@@ -54,8 +54,7 @@ utmscale_getTimeScaleValue(UDateTimeScale timeScale, UTimeScaleValue value, UErr
 }
 
 U_CAPI int64_t U_EXPORT2
-utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *status)
-{
+utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *status) UPRV_NO_SANITIZE_UNDEFINED {
     const int64_t *data;
     
     if (status == nullptr || U_FAILURE(*status)) {
@@ -78,8 +77,7 @@ utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *stat
 }
 
 U_CAPI int64_t U_EXPORT2
-utmscale_toInt64(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *status)
-{
+utmscale_toInt64(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *status) UPRV_NO_SANITIZE_UNDEFINED {
     const int64_t *data;
     
     if (status == nullptr || U_FAILURE(*status)) {

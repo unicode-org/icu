@@ -85,8 +85,8 @@ public class ULocaleCollationTest extends TestFmwk {
 
 
     /**
-     * Compare two locale IDs.  If they are equal, return 0.  If `string'
-     * starts with `prefix' plus an additional element, that is, string ==
+     * Compare two locale IDs.  If they are equal, return 0.  If {@code string}
+     * starts with {@code prefix} plus an additional element, that is, string ==
      * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
      */
     static int loccmp(String string, String prefix) {

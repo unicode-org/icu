@@ -33,7 +33,7 @@ static icu::UInitOnce gDangiCalendarInitOnce {};
 static const int32_t DANGI_EPOCH_YEAR = -2332; // Gregorian year
 
 U_CDECL_BEGIN
-static UBool calendar_dangi_cleanup(void) {
+static UBool calendar_dangi_cleanup() {
     if (gDangiCalendarZoneAstroCalc) {
         delete gDangiCalendarZoneAstroCalc;
         gDangiCalendarZoneAstroCalc = nullptr;

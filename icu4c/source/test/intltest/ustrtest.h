@@ -32,52 +32,52 @@ public:
     /**
      * Test some basic methods (insert, remove, replace, ...)
      **/
-    void TestBasicManipulation(void);
+    void TestBasicManipulation();
     /**
      * Test the methods for comparison
      **/
-    void TestCompare(void);
+    void TestCompare();
     /**
      * Test the methods for extracting
      **/
-    void TestExtract(void);
+    void TestExtract();
     /**
      * More extensively test methods for removing and replacing
      **/
-    void TestRemoveReplace(void);
+    void TestRemoveReplace();
     /**
      * Test language specific case conversions
      **/
-    void TestSearching(void);
+    void TestSearching();
     /**
      * Test methods for padding, trimmimg and truncating
      **/
-    void TestSpacePadding(void);
+    void TestSpacePadding();
     /**
      * Test methods startsWith and endsWith
      **/
-    void TestPrefixAndSuffix(void);
+    void TestPrefixAndSuffix();
     void TestStartsWithAndEndsWithNulTerminated();
     /**
      * Test method findAndReplace
      **/
-    void TestFindAndReplace(void);
+    void TestFindAndReplace();
     /**
      * Test method reverse
      **/
-    void TestReverse(void);
+    void TestReverse();
     /**
      * Test a few miscellaneous methods (isBogus, hashCode,...)
      **/
-    void TestMiscellaneous(void);
+    void TestMiscellaneous();
     /**
      * Test the functionality of allocating UnicodeStrings on the stack
      **/
-    void TestStackAllocation(void);
+    void TestStackAllocation();
     /**
      * Test the unescape() function.
      */
-    void TestUnescape(void);
+    void TestUnescape();
 
     void _testUnicodeStringHasMoreChar32Than(const UnicodeString &s, int32_t start, int32_t length, int32_t number);
     void TestCountChar32();

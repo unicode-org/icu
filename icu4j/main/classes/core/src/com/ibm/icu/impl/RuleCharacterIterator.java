@@ -217,11 +217,11 @@ public class RuleCharacterIterator {
      * }
      * iterator.setPos(pos);
      *
-     * @param p a position object previously returned by getPos(),
+     * @param p a position object previously returned by {@code getPos()},
      * or null.  If not null, it will be updated and returned.  If
      * null, a new position object will be allocated and returned.
-     * @return a position object which may be passed to setPos(),
-     * either `p,' or if `p' == null, a newly-allocated object
+     * @return a position object which may be passed to setPos(), either
+     * {@code p}, or if {@code p} == null, a newly-allocated object
      */
     public Position getPos(Position p) {
         if (p == null) {

@@ -636,7 +636,7 @@ void BytesTrieTest::TestDelta() {
         const uint8_t *start = (const uint8_t *)intBytes0;
         const uint8_t *pos = BytesTrie::jumpByDelta(start);
         assertEquals(UnicodeString(u"roundtrip for delta ") + delta,
-                     delta, (int32_t)(pos - start) - length0);
+                     delta, (size_t)(pos - start) - length0);
     }
 }
 

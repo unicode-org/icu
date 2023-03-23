@@ -46,10 +46,10 @@ public:
     virtual void getText(UnicodeString& result) override {
         text.extract(0,text.length(),result);
     }
-    static UClassID getStaticClassID(void){ 
+    static UClassID getStaticClassID(){ 
         return (UClassID)(&fgClassID); 
     }
-    virtual UClassID getDynamicClassID(void) const override {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID(); 
     }
 
@@ -57,14 +57,14 @@ public:
         return true;
     }
 
-    virtual SCharacterIterator* clone(void) const override {
+    virtual SCharacterIterator* clone() const override {
         return nullptr;
     }
-    virtual int32_t hashCode(void) const override {
+    virtual int32_t hashCode() const override {
         return DONE;
     }
-    virtual char16_t nextPostInc(void) override { return text.charAt(pos++);}
-    virtual UChar32 next32PostInc(void) override {return text.char32At(pos++);}
+    virtual char16_t nextPostInc() override { return text.charAt(pos++);}
+    virtual UChar32 next32PostInc() override {return text.char32At(pos++);}
     virtual UBool hasNext() override { return true;}
     virtual char16_t first() override {return DONE;}
     virtual UChar32 first32() override {return DONE;}

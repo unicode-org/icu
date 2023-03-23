@@ -727,7 +727,7 @@ void TransliteratorRegistry::remove(const UnicodeString& ID) {
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
  */
-int32_t TransliteratorRegistry::countAvailableIDs(void) const {
+int32_t TransliteratorRegistry::countAvailableIDs() const {
     return availableIDs.size();
 }
 
@@ -748,7 +748,7 @@ StringEnumeration* TransliteratorRegistry::getAvailableIDs() const {
     return new Enumeration(*this);
 }
 
-int32_t TransliteratorRegistry::countAvailableSources(void) const {
+int32_t TransliteratorRegistry::countAvailableSources() const {
     return specDAG.count();
 }
 

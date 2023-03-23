@@ -55,7 +55,7 @@ U_CDECL_BEGIN
 /**
  * Cleanup callback func
  */
-static UBool U_CALLCONV zoneMeta_cleanup(void)
+static UBool U_CALLCONV zoneMeta_cleanup()
 {
     if (gCanonicalIDCache != nullptr) {
         uhash_close(gCanonicalIDCache);

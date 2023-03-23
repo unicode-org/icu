@@ -338,9 +338,7 @@ ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode) {
 
 U_CAPI int32_t U_EXPORT2
 ucal_getAttribute(    const    UCalendar*              cal,
-                  UCalendarAttribute      attr)
-{
-
+                  UCalendarAttribute      attr) UPRV_NO_SANITIZE_UNDEFINED {
     switch(attr) {
   case UCAL_LENIENT:
       return ((Calendar*)cal)->isLenient();
@@ -468,10 +466,12 @@ U_CAPI void  U_EXPORT2
 ucal_add(    UCalendar*                cal,
          UCalendarDateFields        field,
          int32_t                    amount,
-         UErrorCode*                status)
-{
-
+         UErrorCode*                status) UPRV_NO_SANITIZE_UNDEFINED {
     if(U_FAILURE(*status)) return;
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
     ((Calendar*)cal)->add(field, amount, *status);
 }
@@ -480,10 +480,12 @@ U_CAPI void  U_EXPORT2
 ucal_roll(        UCalendar*            cal,
           UCalendarDateFields field,
           int32_t                amount,
-          UErrorCode*            status)
-{
-
+          UErrorCode*            status) UPRV_NO_SANITIZE_UNDEFINED {
     if(U_FAILURE(*status)) return;
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
     ((Calendar*)cal)->roll(field, amount, *status);
 }
@@ -491,10 +493,12 @@ ucal_roll(        UCalendar*            cal,
 U_CAPI int32_t  U_EXPORT2
 ucal_get(    const    UCalendar*                cal,
          UCalendarDateFields        field,
-         UErrorCode*                status )
-{
-
+         UErrorCode*                status ) UPRV_NO_SANITIZE_UNDEFINED {
     if(U_FAILURE(*status)) return -1;
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     return ((Calendar*)cal)->get(field, *status);
 }
@@ -502,24 +506,30 @@ ucal_get(    const    UCalendar*                cal,
 U_CAPI void  U_EXPORT2
 ucal_set(    UCalendar*                cal,
          UCalendarDateFields        field,
-         int32_t                    value)
-{
+         int32_t                    value) UPRV_NO_SANITIZE_UNDEFINED {
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        return;
+    }
 
     ((Calendar*)cal)->set(field, value);
 }
 
 U_CAPI UBool  U_EXPORT2
 ucal_isSet(    const    UCalendar*                cal,
-           UCalendarDateFields        field)
-{
+           UCalendarDateFields        field) UPRV_NO_SANITIZE_UNDEFINED {
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        return false;
+    }
 
     return ((Calendar*)cal)->isSet(field);
 }
 
 U_CAPI void  U_EXPORT2
 ucal_clearField(    UCalendar*            cal,
-                UCalendarDateFields field)
-{
+                UCalendarDateFields field) UPRV_NO_SANITIZE_UNDEFINED {
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        return;
+    }
 
     ((Calendar*)cal)->clear(field);
 }
@@ -535,10 +545,12 @@ U_CAPI int32_t  U_EXPORT2
 ucal_getLimit(    const    UCalendar*              cal,
               UCalendarDateFields     field,
               UCalendarLimitType      type,
-              UErrorCode        *status)
-{
-
+              UErrorCode        *status) UPRV_NO_SANITIZE_UNDEFINED {
     if(status==0 || U_FAILURE(*status)) {
+        return -1;
+    }
+    if (field < 0 || UCAL_FIELD_COUNT <= field) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 

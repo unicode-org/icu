@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -32,6 +33,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.CharacterProperties;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UProperty;
@@ -1323,13 +1325,23 @@ public class UnicodeSetTest extends TestFmwk {
     @Test
     public void TestCloseOver() {
         String CASE = String.valueOf(UnicodeSet.CASE);
+        String CASE_MAPPINGS = String.valueOf(UnicodeSet.ADD_CASE_MAPPINGS);
+        String SIMPLE_CASE_INSENSITIVE = String.valueOf(UnicodeSet.SIMPLE_CASE_INSENSITIVE);
         String[] DATA = {
                 // selector, input, output
                 CASE,
                 "[aq\u00DF{Bc}{bC}{Fi}]",
                 "[aAqQ\u00DF\u1E9E\uFB01{ss}{bc}{fi}]", // U+1E9E LATIN CAPITAL LETTER SHARP S is new in Unicode 5.1
 
+                SIMPLE_CASE_INSENSITIVE,
+                "[aq\u00DF{Bc}{bC}{Fi}]",
+                "[aAqQ\u00DF\u1E9E{bc}{fi}]",
+
                 CASE,
+                "[\u01F1]", // 'DZ'
+                "[\u01F1\u01F2\u01F3]",
+
+                SIMPLE_CASE_INSENSITIVE,
                 "[\u01F1]", // 'DZ'
                 "[\u01F1\u01F2\u01F3]",
 
@@ -1337,24 +1349,74 @@ public class UnicodeSetTest extends TestFmwk {
                 "[\u1FB4]",
                 "[\u1FB4{\u03AC\u03B9}]",
 
+                SIMPLE_CASE_INSENSITIVE,
+                "[\u1FB4]",
+                "[\u1FB4]",
+
                 CASE,
                 "[{F\uFB01}]",
                 "[\uFB03{ffi}]",
 
+                CASE, // make sure binary search finds limits
+                "[a\uFF3A]",
+                "[aA\uFF3A\uFF5A]",
+
                 CASE,
                 "[a-z]","[A-Za-z\u017F\u212A]",
+
+                SIMPLE_CASE_INSENSITIVE,
+                "[a-z]","[A-Za-z\u017F\u212A]",
+
                 CASE,
                 "[abc]","[A-Ca-c]",
                 CASE,
                 "[ABC]","[A-Ca-c]",
+
+                CASE, "[i]", "[iI]",
+
+                CASE, "[\u0130]",          "[\u0130{i\u0307}]", // dotted I
+                CASE, "[{i\u0307}]",       "[\u0130{i\u0307}]", // i with dot
+
+                CASE, "[\u0131]",          "[\u0131]", // dotless i
+
+                CASE, "[\u0390]",          "[\u0390\u1FD3{\u03B9\u0308\u0301}]",
+
+                CASE, "[\u03c2]",          "[\u03a3\u03c2\u03c3]", // sigmas
+
+                CASE, "[\u03f2]",          "[\u03f2\u03f9]", // lunate sigmas
+
+                CASE, "[\u03f7]",          "[\u03f7\u03f8]",
+
+                CASE, "[\u1fe3]",          "[\u03b0\u1fe3{\u03c5\u0308\u0301}]",
+
+                CASE, "[\ufb05]",          "[\ufb05\ufb06{st}]",
+                CASE, "[{st}]",             "[\ufb05\ufb06{st}]",
+
+                CASE, "[\\U0001044F]",      "[\\U00010427\\U0001044F]",
+
+                CASE, "[{a\u02BE}]",       "[\u1E9A{a\u02BE}]", // first in sorted table
+
+                CASE, "[{\u1f7c\u03b9}]", "[\u1ff2{\u1f7c\u03b9}]", // last in sorted table
+
+                CASE_MAPPINGS,
+                "[aq\u00DF{Bc}{bC}{Fi}]",
+                "[aAqQ\u00DF{ss}{Ss}{SS}{Bc}{BC}{bC}{bc}{FI}{Fi}{fi}]",
+
+                CASE_MAPPINGS,
+                "[\u01F1]", // 'DZ'
+                "[\u01F1\u01F2\u01F3]",
+
+                CASE_MAPPINGS,
+                "[a-z]",
+                "[A-Za-z]",
         };
 
         UnicodeSet s = new UnicodeSet();
         UnicodeSet t = new UnicodeSet();
         for (int i=0; i<DATA.length; i+=3) {
             int selector = Integer.parseInt(DATA[i]);
-            String pat = DATA[i+1];
-            String exp = DATA[i+2];
+            String pat = Utility.unescape(DATA[i+1]);
+            String exp = Utility.unescape(DATA[i+2]);
             s.applyPattern(pat);
             s.closeOver(selector);
             t.applyPattern(exp);
@@ -1371,6 +1433,149 @@ public class UnicodeSetTest extends TestFmwk {
         expectContainment(s, "abcABC", "defDEF");
         s = new UnicodeSet("[^abc]", UnicodeSet.CASE);
         expectContainment(s, "defDEF", "abcABC");
+        s = new UnicodeSet("[abck]", UnicodeSet.ADD_CASE_MAPPINGS);
+        expectContainment(s, "abckABCK", "defDEF\u212A");
+    }
+
+    private void add(Map<Integer, Collection<Integer>> closure, Integer c, Integer t) {
+        Collection<Integer> values = closure.get(c);
+        if (values == null) {
+            values = new TreeSet<>();
+            closure.put(c, values);
+        }
+        values.add(t);
+    }
+
+    private void addIfAbsent(Map<Integer, Collection<Integer>> closure, Integer c, Integer t,
+            Map<Integer, Collection<Integer>> additions) {
+        Collection<Integer> values = closure.get(c);
+        if (values == null || !values.contains(t)) {
+            if (additions != closure) {
+                values = additions.get(c);
+            }
+            if (values == null) {
+                values = new TreeSet<>();
+                additions.put(c, values);
+            }
+            values.add(t);
+        }
+    }
+
+    @Test
+    public void TestCloseOverSimpleCaseFolding() {
+        UnicodeSet sensitive = CharacterProperties.getBinaryPropertySet(UProperty.CASE_SENSITIVE);
+        // Compute the scf=Simple_Case_Folding closure:
+        // For each scf(c)=t, start with mappings c->t and t->c.
+
+        // Poor man's multimap from code points to code points.
+        Map<Integer, Collection<Integer>> closure = new HashMap<>();
+        UnicodeSetIterator iter = new UnicodeSetIterator(sensitive);
+        while (iter.next()) {
+            int c = iter.codepoint;
+            int scfChar = UCharacter.foldCase(c, UCharacter.FOLD_CASE_DEFAULT);
+            if (scfChar != c) {
+                add(closure, c, scfChar);
+                add(closure, scfChar, c);
+            }
+        }
+        // Complete the closure: Add mappings of mappings.
+        Map<Integer, Collection<Integer>> additions = new HashMap<>();
+        for (;;) {
+            // for each mapping c->t
+            for (Map.Entry<Integer, Collection<Integer>> entry : closure.entrySet()) {
+                Integer c = entry.getKey();
+                Collection<Integer> cValues = entry.getValue();
+                for (Integer t : cValues) {
+                    // enumerate each t->u
+                    Collection<Integer> tValues = closure.get(t);
+                    if (tValues != null) {
+                        for (Integer u : tValues) {
+                            if (!u.equals(c)) {
+                                addIfAbsent(closure, c, u, additions);
+                                addIfAbsent(closure, u, c, additions);
+                            }
+                        }
+                    }
+                }
+
+            }
+            if (additions.isEmpty()) {
+                break;  // The closure is complete.
+            }
+            // Add all of the additions back into the closure.
+            for (Map.Entry<Integer, Collection<Integer>> entry : additions.entrySet()) {
+                Integer c = entry.getKey();
+                Collection<Integer> cValues = entry.getValue();
+                Collection<Integer> closureValues = closure.get(c);
+                if (closureValues == null) {
+                    closureValues = new TreeSet<>();
+                    closure.put(c, closureValues);
+                }
+                closureValues.addAll(cValues);
+            }
+            additions.clear();
+        }
+        // Compare closeOver(USET_SIMPLE_CASE_INSENSITIVE) with an unoptimized implementation.
+        // Here we focus on single code points as input.
+        // Other examples, including strings, are tested in TestCloseOver().
+        int errors = 0;
+        iter.reset();
+        UnicodeSet set = new UnicodeSet(), expected = new UnicodeSet();
+        while (iter.next()) {
+            int c = iter.codepoint;
+            // closeOver()
+            set.clear().add(c);
+            set.closeOver(UnicodeSet.SIMPLE_CASE_INSENSITIVE);
+            // From-first-principles implementation.
+            expected.clear().add(c);
+            Collection<Integer> values = closure.get(c);
+            if (values != null) {
+                for (Integer t : values) {
+                    expected.add(t);
+                }
+            }
+            // compare
+            if (!checkEqual(expected, set, "closeOver() vs. test impl")) {
+                errln("    c=U+" + Utility.hex(c));
+                if (++errors == 10) {
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    public void TestCloseOverLargeSets() {
+        // Check that an optimization for large sets does not change the result.
+
+        // Most code points except ones that are boring for case mappings.
+        UnicodeSet manyCp = new UnicodeSet("[^[:C:][:Ideographic:][:Hang:]]");
+        // Main Unihan block.
+        int LARGE_START = 0x4E00;
+        int LARGE_END = 0x9FFF;
+
+        int OPTIONS[] = {
+            UnicodeSet.CASE_INSENSITIVE, UnicodeSet.ADD_CASE_MAPPINGS,
+            UnicodeSet.SIMPLE_CASE_INSENSITIVE
+        };
+        UnicodeSet input = new UnicodeSet(), small, large;
+        for (int option : OPTIONS) {
+            UnicodeSetIterator iter = new UnicodeSetIterator(manyCp);
+            while (iter.next()) {
+                int c = iter.codepoint;
+                input.clear().add(c);
+                small = (UnicodeSet) input.clone();
+                small.closeOver(option);
+                large = (UnicodeSet) input.clone();
+                large.add(LARGE_START, LARGE_END);
+                large.closeOver(option);
+                large.remove(LARGE_START, LARGE_END);
+                if (!checkEqual(small, large, "small != large")) {
+                    errln("    option=" + option + " c=U+" + Utility.hex(c));
+                    break;
+                }
+            }
+        }
     }
 
     @Test
@@ -1709,8 +1914,8 @@ public class UnicodeSetTest extends TestFmwk {
             test2.add("a" + (max - i)); // add in reverse order
         }
         assertNotEquals("compare iterable test", test1, test2);
-        TreeSet<CharSequence> sortedTest1 = new TreeSet<CharSequence>(test1);
-        TreeSet<CharSequence> sortedTest2 = new TreeSet<CharSequence>(test2);
+        TreeSet<CharSequence> sortedTest1 = new TreeSet<>(test1);
+        TreeSet<CharSequence> sortedTest2 = new TreeSet<>(test2);
         assertEquals("compare iterable test", sortedTest1, sortedTest2);
     }
 

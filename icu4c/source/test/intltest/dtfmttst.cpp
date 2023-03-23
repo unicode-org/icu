@@ -383,7 +383,7 @@ DateFormatTest::TestEquals()
  * Test the parsing of 2-digit years.
  */
 void
-DateFormatTest::TestTwoDigitYearDSTParse(void)
+DateFormatTest::TestTwoDigitYearDSTParse()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat fullFmt((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
@@ -2344,7 +2344,7 @@ void DateFormatTest::TestGenericTimeZoneOrder() {
   expect(XDATA, XDATA_length, en);
 }
 
-void DateFormatTest::TestZTimeZoneParsing(void) {
+void DateFormatTest::TestZTimeZoneParsing() {
     UErrorCode status = U_ZERO_ERROR;
     const Locale en("en");
     UnicodeString test;
@@ -2389,7 +2389,7 @@ void DateFormatTest::TestZTimeZoneParsing(void) {
     }
 }
 
-void DateFormatTest::TestHost(void)
+void DateFormatTest::TestHost()
 {
 #if U_PLATFORM_USES_ONLY_WIN32_API
     Win32DateTimeTest::testLocales(this);
@@ -2493,7 +2493,7 @@ void DateFormatTest::TestRelative(int daysdelta,
 }
 
 
-void DateFormatTest::TestRelative(void)
+void DateFormatTest::TestRelative()
 {
     Locale en("en");
     TestRelative( 0, en, "today");
@@ -2507,7 +2507,7 @@ void DateFormatTest::TestRelative(void)
     TestRelative( -300, en, nullptr);
 }
 
-void DateFormatTest::TestRelativeClone(void)
+void DateFormatTest::TestRelativeClone()
 {
     /*
     Verify that a cloned formatter gives the same results
@@ -2536,7 +2536,7 @@ void DateFormatTest::TestRelativeClone(void)
     delete fullClone;
 }
 
-void DateFormatTest::TestHostClone(void)
+void DateFormatTest::TestHostClone()
 {
     /*
     Verify that a cloned formatter gives the same results
@@ -2566,7 +2566,7 @@ void DateFormatTest::TestHostClone(void)
     delete fullClone;
 }
 
-void DateFormatTest::TestHebrewClone(void)
+void DateFormatTest::TestHebrewClone()
 {
     /*
     Verify that a cloned formatter gives the same results
@@ -2612,7 +2612,7 @@ static UBool getActualAndValidLocales(
     return U_SUCCESS(status);
 }
 
-void DateFormatTest::TestDateFormatSymbolsClone(void)
+void DateFormatTest::TestDateFormatSymbolsClone()
 {
     /*
     Verify that a cloned formatter gives the same results
@@ -3534,7 +3534,7 @@ void DateFormatTest::TestTimeZoneInLocale()
     }
 }
 
-void DateFormatTest::TestRoundtripWithCalendar(void) {
+void DateFormatTest::TestRoundtripWithCalendar() {
     UErrorCode status = U_ZERO_ERROR;
 
     TimeZone *tz = TimeZone::createTimeZone("Europe/Paris");
@@ -3657,7 +3657,7 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
 }
 
 /*
-void DateFormatTest::TestRelativeError(void)
+void DateFormatTest::TestRelativeError()
 {
     UErrorCode status;
     Locale en("en");
@@ -3671,13 +3671,13 @@ void DateFormatTest::TestRelativeError(void)
     }
 }
 
-void DateFormatTest::TestRelativeOther(void)
+void DateFormatTest::TestRelativeOther()
 {
     logln("Nothing in this test. When we get more data from CLDR, put in some tests of -2, +2, etc. ");
 }
 */
 
-void DateFormatTest::Test6338(void)
+void DateFormatTest::Test6338()
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -3772,7 +3772,7 @@ void DateFormatTest::Test6338(void)
 
 }
 
-void DateFormatTest::Test6726(void)
+void DateFormatTest::Test6726()
 {
     // status
 //    UErrorCode status = U_ZERO_ERROR;

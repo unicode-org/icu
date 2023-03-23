@@ -111,7 +111,7 @@ void UVector64::insertElementAt(int64_t elem, int32_t index, UErrorCode &status)
     /* else index out of range */
 }
 
-void UVector64::removeAllElements(void) {
+void UVector64::removeAllElements() {
     count = 0;
 }
 

@@ -36,7 +36,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     DecimalQuantity(const DecimalQuantity &other);
 
     /** Move constructor. */
-    DecimalQuantity(DecimalQuantity &&src) U_NOEXCEPT;
+    DecimalQuantity(DecimalQuantity &&src) noexcept;
 
     DecimalQuantity();
 
@@ -50,7 +50,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     DecimalQuantity &operator=(const DecimalQuantity &other);
 
     /** Move assignment */
-    DecimalQuantity &operator=(DecimalQuantity&& src) U_NOEXCEPT;
+    DecimalQuantity &operator=(DecimalQuantity&& src) noexcept;
 
     /**
      * Sets the minimum integer digits that this {@link DecimalQuantity} should generate.

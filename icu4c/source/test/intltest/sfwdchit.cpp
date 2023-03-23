@@ -91,7 +91,7 @@ bool SimpleFwdCharIterator::operator==(const ForwardCharacterIterator& that) con
 }
 #endif
 
-int32_t SimpleFwdCharIterator::hashCode(void) const {
+int32_t SimpleFwdCharIterator::hashCode() const {
     if (fHashCode == kInvalidHashCode)
     {
         UHashTok key;
@@ -101,11 +101,11 @@ int32_t SimpleFwdCharIterator::hashCode(void) const {
     return fHashCode;
 }
         
-UClassID SimpleFwdCharIterator::getDynamicClassID(void) const {
+UClassID SimpleFwdCharIterator::getDynamicClassID() const {
     return nullptr;
 }
 
-char16_t SimpleFwdCharIterator::nextPostInc(void) {
+char16_t SimpleFwdCharIterator::nextPostInc() {
     if(fCurrent == fEnd) {
         return ForwardCharacterIterator::DONE;
     } else {
@@ -113,7 +113,7 @@ char16_t SimpleFwdCharIterator::nextPostInc(void) {
     }
 }
         
-UChar32 SimpleFwdCharIterator::next32PostInc(void) {
+UChar32 SimpleFwdCharIterator::next32PostInc() {
     return ForwardCharacterIterator::DONE;
 }
         

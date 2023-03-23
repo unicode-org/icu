@@ -69,7 +69,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const cha
 /**
  * Add better code coverage.
  */
-void IntlTestDateFormatAPI::TestCoverage(void)
+void IntlTestDateFormatAPI::TestCoverage()
 {
     const char *LOCALES[] = {
             "zh_CN@calendar=chinese",
@@ -91,7 +91,7 @@ void IntlTestDateFormatAPI::TestCoverage(void)
 /**
  * Test that the equals method works correctly.
  */
-void IntlTestDateFormatAPI::TestEquals(void)
+void IntlTestDateFormatAPI::TestEquals()
 {
     UErrorCode status = U_ZERO_ERROR;
     // Create two objects at different system times
@@ -277,7 +277,7 @@ if (fr != nullptr && it != nullptr && de != nullptr)
  * the DateFormat API test.
  */
 void
-IntlTestDateFormatAPI::TestNameHiding(void) {
+IntlTestDateFormatAPI::TestNameHiding() {
 
     // N.B.: This test passes if it COMPILES, since it's a test of
     // compile-time name hiding.

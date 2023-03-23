@@ -62,7 +62,7 @@ public:
         char16_t* myTarget = target;
         ucnv_toUnicode(conv, &myTarget, targetLimit, &mySrc, sourceLimit, nullptr, true, status);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
     ~ICUToUnicodePerfFunction(){
@@ -108,7 +108,7 @@ public:
         char* myTarget = target;
         ucnv_fromUnicode(conv,&myTarget, targetLimit, &mySrc, sourceLimit, nullptr, true, status);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
     ~ICUFromUnicodePerfFunction(){
@@ -141,7 +141,7 @@ public:
             ucnv_close(ucnv_open(convNames[idx], status));
         }
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return availableConverters;
     }
     ~ICUOpenAllConvertersFunction(){
@@ -196,7 +196,7 @@ public:
     virtual void call(UErrorCode* status){
         int winSize =MultiByteToWideChar(uiCodePage,CONVERSION_FLAGS,src,srcLen,dest,dstLen);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
 };
@@ -251,7 +251,7 @@ public:
         BOOL* pUsedDefaultChar =(uiCodePage==CP_UTF8)?nullptr:&lpUsedDefaultChar;
         int winSize = WideCharToMultiByte(uiCodePage,CONVERSION_FLAGS,src,srcLen,dest,dstLen,nullptr, pUsedDefaultChar);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
 };
@@ -320,7 +320,7 @@ public:
         HRESULT err= pConvToUni->DoConversionToUnicode(src,&srcLen,dst, &dstLen);
         getErr(err,*status);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
 };
@@ -377,7 +377,7 @@ public:
         HRESULT err= pConvFromUni->DoConversionFromUnicode(src,&srcLen,dst, &dstLen);
         getErr(err,*status);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
 };
@@ -429,7 +429,7 @@ public:
         HRESULT err=  pMulti->ConvertStringToUnicode(&dwMode,dwEnc,(char*)src,&srcLen,dst, &dstLen);
         getErr(err,*status);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
 };
@@ -485,7 +485,7 @@ public:
         HRESULT err= pMulti->ConvertStringFromUnicode(&dwMode,dwEnc,src,&srcLen,dst, &dstLen);
         getErr(err,*status);
     }
-    virtual long getOperationsPerIteration(void){
+    virtual long getOperationsPerIteration(){
         return srcLen;
     }
 };

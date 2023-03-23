@@ -153,8 +153,8 @@ public:
     virtual UBool setWriteGoldenData( UBool write_golden_data = true );
     virtual int32_t setThreadCount( int32_t count = 1);
 
-    virtual int32_t getErrors( void );
-    virtual int32_t getDataErrors (void );
+    virtual int32_t getErrors();
+    virtual int32_t getDataErrors();
 
     virtual void setCaller( IntlTest* callingTest ); // for internal use only
     virtual void setPath( char* path ); // for internal use only
@@ -163,7 +163,7 @@ public:
 
     virtual void logln( const UnicodeString &message ) override;
 
-    virtual void logln( void );
+    virtual void logln();
 
     /**
      * Logs that an issue is known. Can be called multiple times.
@@ -201,9 +201,9 @@ public:
 
     virtual void infoln( const UnicodeString &message );
 
-    virtual void infoln( void );
+    virtual void infoln();
 
-    virtual void err(void);
+    virtual void err();
 
     virtual void err( const UnicodeString &message );
 
@@ -239,7 +239,7 @@ public:
     // print known issues. return true if there were any.
     UBool printKnownIssues();
 
-    virtual void usage( void ) ;
+    virtual void usage() ;
 
     /**
      * Returns a uniform random value x, with 0.0 <= x < 1.0.  Use
@@ -361,9 +361,9 @@ public:
 
     virtual UBool runTestLoop( char* testname, char* par, char *baseName );
 
-    virtual int32_t IncErrorCount( void );
+    virtual int32_t IncErrorCount();
 
-    virtual int32_t IncDataErrorCount( void );
+    virtual int32_t IncDataErrorCount();
 
     virtual UBool callTest( IntlTest& testToBeCalled, char* par );
 
@@ -433,11 +433,11 @@ public:
 
 void it_log( UnicodeString message );
 void it_logln( UnicodeString message );
-void it_logln( void );
+void it_logln();
 void it_info( UnicodeString message );
 void it_infoln( UnicodeString message );
-void it_infoln( void );
-void it_err(void);
+void it_infoln();
+void it_err();
 void it_err( UnicodeString message );
 void it_errln( UnicodeString message );
 void it_dataerr( UnicodeString message );

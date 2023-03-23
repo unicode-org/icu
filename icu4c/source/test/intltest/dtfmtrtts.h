@@ -31,13 +31,13 @@ public:
     DateFormatRoundTripTest();
     virtual ~DateFormatRoundTripTest();
     
-    void TestDateFormatRoundTrip(void);
-    void TestCentury(void);
+    void TestDateFormatRoundTrip();
+    void TestCentury();
     void test(const Locale& loc);
     void test(DateFormat *fmt, const Locale &origLocale, UBool timeOnly = false );
     int32_t getField(UDate d, int32_t f);
     UnicodeString& escape(const UnicodeString& src, UnicodeString& dst);
-    UDate generateDate(void); 
+    UDate generateDate(); 
     UDate generateDate(UDate minDate); 
 
 

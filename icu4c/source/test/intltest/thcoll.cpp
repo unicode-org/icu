@@ -77,7 +77,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
  * gets the same results when comparing lines one to another
  * using regular and iterative comparison.
  */
-void CollationThaiTest::TestNamesList(void) {
+void CollationThaiTest::TestNamesList() {
     if (coll == 0) {
         errln("Error: could not construct Thai collator");
         return;
@@ -124,7 +124,7 @@ void CollationThaiTest::TestNamesList(void) {
  * sorted order, and confirm that the collator compares each line as
  * preceding the following line.
  */
-void CollationThaiTest::TestDictionary(void) {
+void CollationThaiTest::TestDictionary() {
     if (coll == 0) {
         errln("Error: could not construct Thai collator");
         return;
@@ -203,7 +203,7 @@ void CollationThaiTest::TestDictionary(void) {
  * Odd corner conditions taken from "How to Sort Thai Without Rewriting Sort",
  * by Doug Cooper, http://seasrc.th.net/paper/thaisort.zip
  */
-void CollationThaiTest::TestCornerCases(void) {
+void CollationThaiTest::TestCornerCases() {
     const char* TESTS[] = {
         // Shorter words precede longer
         "\\u0e01",                               "<",    "\\u0e01\\u0e01",
@@ -352,7 +352,7 @@ U_CDECL_END
 
 #define LINES 6
 
-void CollationThaiTest::TestInvalidThai(void) {
+void CollationThaiTest::TestInvalidThai() {
   const char *tests[LINES] = {
     "\\u0E44\\u0E01\\u0E44\\u0E01",
     "\\u0E44\\u0E01\\u0E01\\u0E44",
@@ -407,7 +407,7 @@ void CollationThaiTest::TestInvalidThai(void) {
   delete c;
 }
 
-void CollationThaiTest::TestReordering(void) {
+void CollationThaiTest::TestReordering() {
   // Until UCA 4.1, the collation code swapped Thai/Lao prevowels with the following consonants,
   // resulting in consonant+prevowel == prevowel+consonant.
   // From UCA 5.0 on, there are order-reversing contractions for prevowel+consonant.

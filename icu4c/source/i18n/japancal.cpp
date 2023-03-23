@@ -43,7 +43,7 @@ static icu::UInitOnce gJapaneseEraRulesInitOnce {};
 static int32_t gCurrentEra = 0;
 
 U_CDECL_BEGIN
-static UBool japanese_calendar_cleanup(void) {
+static UBool japanese_calendar_cleanup() {
     if (gJapaneseEraRules) {
         delete gJapaneseEraRules;
         gJapaneseEraRules = nullptr;

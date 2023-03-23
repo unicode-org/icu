@@ -291,7 +291,7 @@ utrans_setFilter(UTransliterator* trans,
 }
 
 U_CAPI int32_t U_EXPORT2
-utrans_countAvailableIDs(void) {
+utrans_countAvailableIDs() {
     return Transliterator::countAvailableIDs();
 }
 

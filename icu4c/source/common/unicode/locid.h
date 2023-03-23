@@ -294,7 +294,7 @@ public:
      * @param other The Locale object being moved in.
      * @stable ICU 63
      */
-    Locale(Locale&& other) U_NOEXCEPT;
+    Locale(Locale&& other) noexcept;
 
     /**
      * Destructor
@@ -320,7 +320,7 @@ public:
      * @return      *this
      * @stable ICU 63
      */
-    Locale& operator=(Locale&& other) U_NOEXCEPT;
+    Locale& operator=(Locale&& other) noexcept;
 
     /**
      * Checks if two locale keys are the same.

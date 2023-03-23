@@ -611,6 +611,7 @@ uk{
     Languages%short{
         az{"азері"}
         en_GB{"англійська (Брит.)"}
+        en_US{"англійська (США)"}
     }
     Languages%variant{
         ckb{"сорані"}

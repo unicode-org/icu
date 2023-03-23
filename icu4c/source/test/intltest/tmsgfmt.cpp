@@ -1518,7 +1518,7 @@ void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
 }
 
 // test RBNF extensions to message format
-void TestMessageFormat::TestRBNF(void) {
+void TestMessageFormat::TestRBNF() {
     // WARNING: this depends on the RBNF formats for en_US
     Locale locale("en", "US", "");
 
@@ -1693,7 +1693,7 @@ void TestMessageFormat::TestCompatibleApostrophe() {
     */
 }
 
-void TestMessageFormat::testAutoQuoteApostrophe(void) {
+void TestMessageFormat::testAutoQuoteApostrophe() {
     const char* patterns[] = { // pattern, expected pattern
         "'", "''",
         "''", "''",
@@ -1730,7 +1730,7 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
     }
 }
 
-void TestMessageFormat::testCoverage(void) {
+void TestMessageFormat::testCoverage() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString testformat("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
     MessageFormat *msgfmt = new MessageFormat(testformat, Locale("fr"), status);

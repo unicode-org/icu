@@ -22,6 +22,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.rbbi.RBBITstUtils;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.lang.CharSequences;
@@ -37,7 +38,6 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.dev.test.rbbi.RBBITstUtils;
 
 /***********************************************************************
 
@@ -141,10 +141,6 @@ public class TransliteratorTest extends TestFmwk {
         checkRegistry("foo1", "[:letter:] a > b;");
         for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
             String id = (String) e.nextElement();
-            if ((id.contains("Geminate") || id.contains("geminate")) &&
-                    logKnownIssue("CLDR-16408", "Transliterator instantiation fails for Ethiopic-Latin /Geminate[d] transforms")) {
-                continue;
-            }
             checkRegistry(id);
         }
         // Need to remove these test-specific transliterators in order not to interfere with other tests.

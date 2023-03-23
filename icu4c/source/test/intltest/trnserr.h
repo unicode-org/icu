@@ -35,19 +35,19 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     /*Tests the returned error codes on all the APIs according to the API documentation. */
-    void TestTransliteratorErrors(void);
+    void TestTransliteratorErrors();
     
-    void TestUnicodeSetErrors(void);
+    void TestUnicodeSetErrors();
 
-    //void TestUniToHexErrors(void);
+    //void TestUniToHexErrors();
 
-    void TestRBTErrors(void);
+    void TestRBTErrors();
 
-    //void TestHexToUniErrors(void);
+    //void TestHexToUniErrors();
 
     // JitterBug 4452, for coverage.  The reason to put this method here is 
     //  this class is comparable smaller than other Transliterator*Test classes
-    void TestCoverage(void);
+    void TestCoverage();
 
 };
 
