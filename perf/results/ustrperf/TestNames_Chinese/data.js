@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679589065018,
+  "lastUpdate": 1679590344594,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31678,6 +31678,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.1607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "4b5a6edc9514543436d0c5b39cbac37fc802957c",
+          "message": "ICU-21755 commit-checker: update Tip\n\n- improve recommendation on no-commit-found case for ICU and CLDR\n- for CLDR-15423",
+          "timestamp": "2023-03-23T11:16:25-05:00",
+          "tree_id": "7933e0290d78ef64241338ffa547f60ffb83c55c",
+          "url": "https://github.com/unicode-org/icu/commit/4b5a6edc9514543436d0c5b39cbac37fc802957c"
+        },
+        "date": 1679590318161,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 16.9413,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 19.1567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 22.101,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.3314,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.7809,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.9316,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 21.599,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.3574,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 123.8252,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.0099,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 50.8414,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.1336,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
