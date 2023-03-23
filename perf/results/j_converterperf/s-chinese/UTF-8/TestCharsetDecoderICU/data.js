@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679586871484,
+  "lastUpdate": 1679587762499,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7198,6 +7198,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.596654745165448,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "cb65f7573978edecd8a598ab4137327ed7000844",
+          "message": "ICU-22220 BRS 73rc ICU4J Serialization test data for ICU 73.1",
+          "timestamp": "2023-03-23T08:45:38-07:00",
+          "tree_id": "a44935926111d32d475f7b1f25e0f34eef09aa7c",
+          "url": "https://github.com/unicode-org/icu/commit/cb65f7573978edecd8a598ab4137327ed7000844"
+        },
+        "date": 1679587732487,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.6022750538344672,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
