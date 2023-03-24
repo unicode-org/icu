@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679597720681,
+  "lastUpdate": 1679688260795,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7318,6 +7318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.211962365091517,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "uioptt24@gmail.com",
+            "name": "Ho Cheung",
+            "username": "gz83"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "84e47620692be90950d090f2f4722494b020ad96",
+          "message": "ICU-22295 Remove deprecated RBBI LBCMNoChain option\n\nICU-22295 Remove deprecated RBBI LBCMNoChain option\n\nICU-22295 Remove deprecated RBBI LBCMNoChain option",
+          "timestamp": "2023-03-24T12:59:44-07:00",
+          "tree_id": "0f7695aef1a4eea2d432cb5fb46151e81b51d3e4",
+          "url": "https://github.com/unicode-org/icu/commit/84e47620692be90950d090f2f4722494b020ad96"
+        },
+        "date": 1679688233910,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.7057047713569244,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
