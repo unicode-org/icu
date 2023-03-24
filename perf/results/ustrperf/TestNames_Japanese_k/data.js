@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679598981187,
+  "lastUpdate": 1679689599779,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31966,6 +31966,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 45.4454,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "uioptt24@gmail.com",
+            "name": "Ho Cheung",
+            "username": "gz83"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "84e47620692be90950d090f2f4722494b020ad96",
+          "message": "ICU-22295 Remove deprecated RBBI LBCMNoChain option\n\nICU-22295 Remove deprecated RBBI LBCMNoChain option\n\nICU-22295 Remove deprecated RBBI LBCMNoChain option",
+          "timestamp": "2023-03-24T12:59:44-07:00",
+          "tree_id": "0f7695aef1a4eea2d432cb5fb46151e81b51d3e4",
+          "url": "https://github.com/unicode-org/icu/commit/84e47620692be90950d090f2f4722494b020ad96"
+        },
+        "date": 1679689564875,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 21.3941,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 23.7977,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.9136,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 39.7792,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 46.8891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 49.0154,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.6475,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 18.001,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 161.8158,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 27.5142,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 63.2746,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 49.0946,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
