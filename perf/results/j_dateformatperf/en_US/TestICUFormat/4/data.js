@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679688432439,
+  "lastUpdate": 1679690114545,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7258,6 +7258,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 278.98917288054366,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "a6e9f518590f97dd77ab51e794c7ba9955c679a0",
+          "message": "ICU-22334 Update ICU tzdata to 2023b for ICU 73.1 release",
+          "timestamp": "2023-03-24T16:23:50-04:00",
+          "tree_id": "471e078e91f90ea52ff0487049742a6d014a6468",
+          "url": "https://github.com/unicode-org/icu/commit/a6e9f518590f97dd77ab51e794c7ba9955c679a0"
+        },
+        "date": 1679690087570,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 272.7960582939368,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
