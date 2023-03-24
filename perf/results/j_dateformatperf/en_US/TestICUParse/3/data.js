@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1679597786810,
+  "lastUpdate": 1679688562462,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7378,6 +7378,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 1067.1954796272214,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "uioptt24@gmail.com",
+            "name": "Ho Cheung",
+            "username": "gz83"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "84e47620692be90950d090f2f4722494b020ad96",
+          "message": "ICU-22295 Remove deprecated RBBI LBCMNoChain option\n\nICU-22295 Remove deprecated RBBI LBCMNoChain option\n\nICU-22295 Remove deprecated RBBI LBCMNoChain option",
+          "timestamp": "2023-03-24T12:59:44-07:00",
+          "tree_id": "0f7695aef1a4eea2d432cb5fb46151e81b51d3e4",
+          "url": "https://github.com/unicode-org/icu/commit/84e47620692be90950d090f2f4722494b020ad96"
+        },
+        "date": 1679688535678,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 1047.9230364508405,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
