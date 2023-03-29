@@ -362,6 +362,15 @@ This step publishes pre-processed Unicode property data, which may be ingested b
 
 ### Signing archives and creating checksums:
 
+#### Step 0. PGP keys:
+
+Use your own personal PGP key. Make sure that at least one other member of the
+ICU-TC has signed your key (so that there's an established chain-of-trust
+through which your key can be verified). Make sure that your signed public key
+is included in the `KEYS` file in the root of the ICU repository, so that users
+of ICU can easily find it there (and won't have to search random keyservers for
+it), see instructions in that file on how to update it.
+
 #### Step 1. PGP files:
 
 Sign all archives created above with your own personal PGP key. This creates a
