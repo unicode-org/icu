@@ -326,6 +326,9 @@ javadoc files. Create icu4c-X_X_X-docs.zip
     `cd <path>/icu4c/source/doc/html/`
 4.  Create a zip file, e.g.,<br>
     `tar cvfz /tmp/icu4c72rc.tar.gz * # Note: label the file apropriately for the release.
+5.  Edit [README.md in icu-docs](https://github.com/unicode-org/icu-docs/blob/main/README.md).
+6.  Update the table under "API docs" at the top of README.md with the new version in column "C" in row "Dev" for the release candidate or "Released" for the final release.
+7.  Add the updated README.md to the pull request with the new API documentation.
 
 
 #### Create a PR for ICU4C docs using the docs zip file
@@ -396,6 +399,11 @@ See [Upload API documentations](docs.md#upload-api-documentations) below for how
 See <https://unicode-org.github.io/icu-docs/HOWTO-Update.html> for instructions
 to upload to <https://unicode-org.github.io/icu-docs/>
 
+#### Update table of API docs:
+1. Edit [README.md in icu-docs](https://github.com/unicode-org/icu-docs/blob/main/README.md).
+2. Update the table under "API docs" at the top of README.md with the new version in column "J" in row "Dev" for the release candidate or "Released" for the final release.
+3. Add the updated README.md to the pull request with the new API documentation.
+    
 ### Update the Readme.html for GA
 
 If there are any last second changes:
