@@ -78,6 +78,7 @@ static void TestSciNotationMaxFracCap(void);
 static void TestMinIntMinFracZero(void);
 static void Test21479_ExactCurrency(void);
 static void Test22088_Ethiopic(void);
+static void TestChangingRuleset(void);
 static void TestParseWithEmptyCurr(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
@@ -122,6 +123,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestMinIntMinFracZero);
     TESTCASE(Test21479_ExactCurrency);
     TESTCASE(Test22088_Ethiopic);
+    TESTCASE(TestChangingRuleset);
     TESTCASE(TestParseWithEmptyCurr);
 }
 
@@ -3611,29 +3613,83 @@ static void Test21479_ExactCurrency(void) {
 }
 
 static void Test22088_Ethiopic(void) {
-    UErrorCode err = U_ZERO_ERROR;
-    UNumberFormat* nf1 = unum_open(UNUM_DEFAULT, NULL, 0, "am_ET@numbers=ethi", NULL, &err);
-    UNumberFormat* nf2 = unum_open(UNUM_NUMBERING_SYSTEM, NULL, 0, "am_ET@numbers=ethi", NULL, &err);
-    UNumberFormat* nf3 = unum_open(UNUM_NUMBERING_SYSTEM, NULL, 0, "en_US", NULL, &err);
+    const struct TestCase {
+        const char* localeID;
+        UNumberFormatStyle style;
+        const UChar* expectedResult;
+    } testCases[] = {
+        { "am_ET@numbers=ethi",        UNUM_DEFAULT,          u"፻፳፫" },
+        { "am_ET@numbers=ethi",        UNUM_NUMBERING_SYSTEM, u"፻፳፫" },
+        { "am_ET@numbers=traditional", UNUM_DEFAULT,          u"፻፳፫" },
+        { "am_ET@numbers=traditional", UNUM_NUMBERING_SYSTEM, u"፻፳፫" },
+        { "am_ET",                     UNUM_NUMBERING_SYSTEM, u"123" },    // make sure default for Ethiopic still works
+        { "en_US",                     UNUM_NUMBERING_SYSTEM, u"123" },    // make sure non-algorithmic default still works
+        { "ar_SA",                     UNUM_NUMBERING_SYSTEM, u"١٢٣" },    // make sure non-algorithmic default still works
+        // NOTE: There are NO locales in ICU 72 whose default numbering system is algorithmic!
+    };
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        char errorMessage[200];
+        UErrorCode err = U_ZERO_ERROR;
+        UNumberFormat* nf = unum_open(testCases[i].style, NULL, 0, testCases[i].localeID, NULL, &err);
+
+        snprintf(errorMessage, 200, "Creation of number formatter for %s failed", testCases[i].localeID);
+        if (assertSuccess(errorMessage, &err)) {
+            UChar result[200];
+            
+            unum_formatDouble(nf, 123, result, 200, NULL, &err);
+            snprintf(errorMessage, 200, "Formatting of number for %s failed", testCases[i].localeID);
+            if (assertSuccess(errorMessage, &err)) {
+                snprintf(errorMessage, 200, "Wrong result for %s", testCases[i].localeID);
+                assertUEquals(errorMessage, testCases[i].expectedResult, result);
+            }
+        }
+        unum_close(nf);
+   }
+}
+
+static void TestChangingRuleset(void) {
+    const struct TestCase {
+        const char* localeID;
+        const UChar* rulesetName;
+        const UChar* expectedResult;
+    } testCases[] = {
+        { "en_US",               NULL,            u"123" },
+        { "en_US",               u"%roman-upper", u"CXXIII" },
+        { "en_US",               u"%ethiopic",    u"፻፳፫" },
+        { "en_US@numbers=roman", NULL,            u"CXXIII" },
+        { "en_US@numbers=ethi",  NULL,            u"፻፳፫" },
+        { "am_ET",               NULL,            u"123" },
+        { "am_ET",               u"%ethiopic",    u"፻፳፫" },
+        { "am_ET@numbers=ethi",  NULL,            u"፻፳፫" },
+    };
     
-    if (assertSuccess("Creation of number formatters failed", &err)) {
-        UChar result[200];
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        char errorMessage[200];
+        const char* rulesetNameString = (testCases[i].rulesetName != NULL) ? austrdup(testCases[i].rulesetName) : "NULL";
+        UErrorCode err = U_ZERO_ERROR;
+        UNumberFormat* nf = unum_open(UNUM_NUMBERING_SYSTEM, NULL, 0, testCases[i].localeID, NULL, &err);
         
-        unum_formatDouble(nf1, 123, result, 200, NULL, &err);
-        assertSuccess("Formatting of number failed", &err);
-        assertUEquals("Wrong result with UNUM_DEFAULT", u"፻፳፫", result);
-        
-        unum_formatDouble(nf2, 123, result, 200, NULL, &err);
-        assertSuccess("Formatting of number failed", &err);
-        assertUEquals("Wrong result with UNUM_NUMBERING_SYSTEM", u"፻፳፫", result);
-        
-        unum_formatDouble(nf3, 123, result, 200, NULL, &err);
-        assertSuccess("Formatting of number failed", &err);
-        assertUEquals("Wrong result with UNUM_NUMBERING_SYSTEM and English", u"123", result);
+        snprintf(errorMessage, 200, "Creating of number formatter for %s failed", testCases[i].localeID);
+        if (assertSuccess(errorMessage, &err)) {
+            if (testCases[i].rulesetName != NULL) {
+                unum_setTextAttribute(nf, UNUM_DEFAULT_RULESET, testCases[i].rulesetName, -1, &err);
+                snprintf(errorMessage, 200, "Changing formatter for %s's default ruleset to %s failed", testCases[i].localeID, rulesetNameString);
+                assertSuccess(errorMessage, &err);
+            }
+            
+            if (U_SUCCESS(err)) {
+                UChar result[200];
+                
+                unum_formatDouble(nf, 123, result, 200, NULL, &err);
+                snprintf(errorMessage, 200, "Formatting of number with %s/%s failed", testCases[i].localeID, rulesetNameString);
+                if (assertSuccess(errorMessage, &err)) {
+                    snprintf(errorMessage, 200, "Wrong result for %s/%s", testCases[i].localeID, rulesetNameString);
+                    assertUEquals(errorMessage, testCases[i].expectedResult, result);
+                }
+            }
+        }
+        unum_close(nf);
     }
-    unum_close(nf1);
-    unum_close(nf2);
-    unum_close(nf3);
 }
 
 static void TestParseWithEmptyCurr(void) {
