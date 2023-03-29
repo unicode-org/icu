@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680126155640,
+  "lastUpdate": 1680133304223,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7558,6 +7558,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.424373335664073,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "c7029502947779b27562ff50a0b9af41fb30efa1",
+          "message": "ICU-22340 Fix it so that UNUM_NUMBERING_SYSTEM again always returns a RuleBasedNumberFormat.",
+          "timestamp": "2023-03-29T16:31:55-07:00",
+          "tree_id": "13d2084dc5d365ca263203d30b7ada8c1ed77c42",
+          "url": "https://github.com/unicode-org/icu/commit/c7029502947779b27562ff50a0b9af41fb30efa1"
+        },
+        "date": 1680133275150,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.5488252778242657,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
