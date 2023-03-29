@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680039886587,
+  "lastUpdate": 1680115806382,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32350,6 +32350,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "dfdf9141e577d61e340442a3ffbfdb80cd935587",
+          "message": "ICU-22220 Add step for updating API Doc table\n\nSee #2400",
+          "timestamp": "2023-03-29T11:25:39-07:00",
+          "tree_id": "ae2677a51d30b6a763421ed7508d7970a25ee93b",
+          "url": "https://github.com/unicode-org/icu/commit/dfdf9141e577d61e340442a3ffbfdb80cd935587"
+        },
+        "date": 1680115776327,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 15.9324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 17.9636,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 20.4994,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 29.5396,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 36.4069,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.177,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 20.0935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 12.857,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 106.5094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.5939,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 46.8841,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 44.0212,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
