@@ -24,10 +24,24 @@ from commit_metadata import CommitMetadata
 ICUCommit = namedtuple("ICUCommit", ["issue_id", "commit"])
 
 class CommitWanted(Enum):
+    """Defines the commit policy given a ticket"""
     REQUIRED = 1
     OPTIONAL = 2
     FORBIDDEN = 3
     ERROR = 4
+
+class CommitReason(Enum):
+    """Defines why the commit policy was chosen"""
+    DEFAULT = 0
+    """Default policy"""
+    RESOLUTION = 1
+    """Due to ticket's resolution"""
+    TYPE = 2
+    """Due to ticket's type"""
+    STATUS = 3
+    """Due to ticket's status (including lack of resolution)"""
+
+CommitPolicy = namedtuple("CommitPolicy", ["wanted", "reason"])
 
 ICUIssue = namedtuple("ICUIssue", ["issue_id", "is_closed", "commit_wanted", "issue"])
 
@@ -60,6 +74,7 @@ all_resolutions = [ R_NEEDS_MOREINFO, R_FIXED, R_NO_TIME_TO_DO_THIS, R_DUPLICATE
 # <https://unicode-org.atlassian.net/rest/api/2/issuetype>
 I_ICU_USERGUIDE         = "10010"
 I_TASK                  = "10003"
+I_UMBRELLA              = "10020"
 
 # constants for jira_issue.fields.status.id
 # <https://unicode-org.atlassian.net/rest/api/2/status>
@@ -77,26 +92,72 @@ def jira_issue_under_review(jira_issue):
     else:
         return False
 
-def make_commit_wanted(jira_issue):
+def make_commit_wanted(jira_issue) -> CommitPolicy:
     """Yields a CommitWanted enum with the policy decision for this particular issue"""
     # TODO: should be data driven from a config file.
-    if not jira_issue.fields.resolution:
-        commit_wanted = CommitWanted["OPTIONAL"]
+
+    # issuetype that can't have commits
+    if jira_issue.fields.issuetype.id in [ I_UMBRELLA ]:
+        commit_wanted = CommitPolicy(CommitWanted["FORBIDDEN"], reason=CommitReason["TYPE"])
+
+    # if no resolution (i.e. open), then don't comment on absence or presence of tickets
+    elif not jira_issue.fields.resolution:
+        commit_wanted = CommitPolicy(CommitWanted["OPTIONAL"], reason=CommitReason["RESOLUTION"])
+    # -- all lines below pertain to CLOSED tickets --
+
+    # these resolutions don't allow commits
     elif jira_issue.fields.resolution.id in [ R_DUPLICATE, R_ASDESIGNED, R_OUTOFSCOPE, R_NOTREPRO, R_INVALID, R_NEEDS_MOREINFO, R_OBSOLETE, R_NO_TIME_TO_DO_THIS ]:
-        commit_wanted = CommitWanted["FORBIDDEN"]
+        commit_wanted = CommitPolicy(CommitWanted["FORBIDDEN"], reason=CommitReason["RESOLUTION"])
+    # these resolutions don't allow commits
     elif jira_issue.fields.resolution.id in [ R_FIXED_NON_REPO, R_FIX_SURVEY_TOOL, R_FIXED_BY_OTHER_TICKET ]:
-        commit_wanted = CommitWanted["FORBIDDEN"]
+        commit_wanted = CommitPolicy(CommitWanted["FORBIDDEN"], reason=CommitReason["RESOLUTION"])
+    # these types allow commits, but don't require them
     elif jira_issue.fields.issuetype.id in [ I_ICU_USERGUIDE, I_TASK ]:
-        commit_wanted = CommitWanted["OPTIONAL"]
+        commit_wanted = CommitPolicy(CommitWanted["OPTIONAL"], reason=CommitReason["TYPE"])
+    # these resolutions require commits
     elif jira_issue.fields.resolution.id in [ R_FIXED ]:
-        commit_wanted = CommitWanted["REQUIRED"]
+        commit_wanted = CommitPolicy(CommitWanted["REQUIRED"], reason=CommitReason["RESOLUTION"])
+    # these resolutions forbid commits
     elif jira_issue.fields.resolution.id == R_FIXED_BY_OTHER_TICKET:
-        commit_wanted = CommitWanted["FORBIDDEN"]
+        commit_wanted = CommitPolicy(CommitWanted["FORBIDDEN"], reason=CommitReason["RESOLUTION"])
     elif jira_issue.fields.resolution.id != R_FIXED:
-        commit_wanted = CommitWanted["ERROR"]
+        commit_wanted = CommitPolicy(CommitWanted["ERROR"], reason=CommitReason["RESOLUTION"])
     else:
-        commit_wanted = CommitWanted["REQUIRED"]
+    # DEFAULT: requires commit
+        commit_wanted = CommitPolicy(CommitWanted["REQUIRED"], reason=CommitReason["DEFAULT"])
+
     return commit_wanted
+
+def explain_wanted(wanted: CommitWanted, issue: ICUIssue) -> str:
+    """explain the CommitWanted enum"""
+    if wanted == CommitWanted.REQUIRED:
+        return "commits are required"
+    elif wanted == CommitWanted.OPTIONAL:
+        return "commits are optional" # not an error status
+    elif wanted == CommitWanted.ERROR:
+        return "there was a problem with the ticket"
+    elif wanted == CommitWanted.FORBIDDEN:
+        return "commits are forbidden"
+
+def explain_reason(reason: CommitReason, issue: ICUIssue) -> str:
+    """explain the CommitReason enum"""
+    if reason == CommitReason.DEFAULT:
+        return "that is the default policy"
+    elif reason == CommitReason.RESOLUTION:
+        if not issue.issue.fields.resolution:
+            return "no resolution set"
+        else:
+            return "ticket resolution is %s" % issue.issue.fields.resolution
+    elif reason == CommitReason.STATUS:
+        return "ticket status is %s" % issue.issue.fields.status.name
+    elif reason == CommitReason.TYPE:
+        return "ticket type is %s" % issue.issue.fields.issuetype.name
+
+def explain_commit_policy(issue: ICUIssue) -> str:
+    """Explain the commit policy for an issue"""
+    policy = explain_wanted(issue.commit_wanted.wanted, issue)
+    reason = explain_reason(issue.commit_wanted.reason, issue)
+    return "%s, because %s" % (policy, reason)
 
 
 flag_parser = argparse.ArgumentParser(
@@ -280,7 +341,7 @@ def get_jira_issues(jira_query, **kwargs):
     while True:
         issues = jira.search_issues(jira_query, startAt=start, maxResults=batch_size)
         if len(issues) > 0:
-            print("Loaded issues %d-%d" % (start + 1, start + len(issues)), file=sys.stderr)
+            print("Loaded issues %d-%d\t of %d" % (start + 1, start + len(issues), issues.total), file=sys.stderr)
         else:
             print(":warning: No issues matched the query.") # leave this as a warning
         for jira_issue in issues:
@@ -413,7 +474,7 @@ def main():
 
     # constants for the section names.
     CLOSED_NO_COMMIT = "Closed Issues with No Commit"
-    CLOSED_ILLEGAL_RESOLUTION = "Closed Issues with Illegal Resolution or Commit"
+    CLOSED_ILLEGAL_RESOLUTION = "Closed Issues with Commit Policy Problems"
     COMMIT_NO_JIRA = "Commits without Jira Issue Tag"
     COMMIT_OPEN_JIRA = "Commits with Open Jira Issue"
     COMMIT_JIRA_NOT_IN_QUERY = "Commits with Jira Issue Not Found"
@@ -463,7 +524,7 @@ def main():
         if section == CLOSED_NO_COMMIT:
             print("ICU Tip: If commits aren't expected, change the ticket type to 'Task' or 'User Guide' or set the resolution to one such as 'Fixed by other ticket' or 'Fix Non-repo'.", file=out)
             print("CLDR Tip: Change the ticket type or set the resolution to one such as 'Fixed by other ticket' or 'Fix Non-repo' if commits aren't expected.", file=out)
-            
+
             print(file=out)
             found = False
             for issue in issues:
@@ -471,7 +532,7 @@ def main():
                     continue
                 if issue.issue_id in commit_issue_ids:
                     continue
-                if issue.commit_wanted == CommitWanted["OPTIONAL"] or issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                if issue.commit_wanted.wanted == CommitWanted["OPTIONAL"] or issue.commit_wanted.wanted == CommitWanted["FORBIDDEN"]:
                     continue
                 found = True
                 total_problems += 1
@@ -486,7 +547,6 @@ def main():
         elif section == CLOSED_ILLEGAL_RESOLUTION:
             print("Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.", file=out)
             print("Duplicate tickets should have their fixVersion tag removed.", file=out)
-            print("Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.", file=out)
             print(file=out)
             found = False
             for issue in issues:
@@ -501,20 +561,20 @@ def main():
                     count += 1
                     found = True
                     continue
-                if issue.commit_wanted == CommitWanted["OPTIONAL"]:
+                if issue.commit_wanted.wanted == CommitWanted["OPTIONAL"]:
                     continue
-                if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
+                if issue.issue_id in commit_issue_ids and issue.commit_wanted.wanted == CommitWanted["REQUIRED"]:
                     continue
-                if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                if issue.issue_id not in commit_issue_ids and issue.commit_wanted.wanted == CommitWanted["FORBIDDEN"]:
                     continue
                 found = True
                 total_problems += 1
                 count += 1
                 pretty_print_issue(issue, type=CLOSED_ILLEGAL_RESOLUTION, file=out, **vars(args))
-                if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
-                    print("\t- No commits, and they are REQUIRED.", file=out)
-                if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
-                    print("\t- Has commits, and they are FORBIDDEN.", file=out)
+                if issue.issue_id not in commit_issue_ids and issue.commit_wanted.wanted == CommitWanted["REQUIRED"]:
+                    print("\t- No commits, but %s" % explain_commit_policy(issue), file=out)
+                if issue.issue_id in commit_issue_ids and issue.commit_wanted.wanted == CommitWanted["FORBIDDEN"]:
+                    print("\t- Has commits, but %s" % explain_commit_policy(issue), file=out)
                 print(file=out)
         elif section == COMMIT_NO_JIRA:
             # TODO: This section should usually be empty due to the PR checker.
