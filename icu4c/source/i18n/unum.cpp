@@ -60,7 +60,6 @@ unum_open(  UNumberFormatStyle    style,
     case UNUM_CURRENCY_ACCOUNTING:
     case UNUM_CASH_CURRENCY:
     case UNUM_CURRENCY_STANDARD:
-    case UNUM_NUMBERING_SYSTEM:
         retVal = NumberFormat::createInstance(Locale(locale), style, *status);
         break;
 
@@ -113,6 +112,21 @@ unum_open(  UNumberFormatStyle    style,
     case UNUM_DURATION:
         retVal = new RuleBasedNumberFormat(URBNF_DURATION, Locale(locale), *status);
         break;
+
+    case UNUM_NUMBERING_SYSTEM: {
+        // if the locale ID specifies a numbering system, go through NumberFormat::createInstance()
+        // to handle it properly (we have to specify UNUM_DEFAULT to get it to handle the numbering
+        // system, but we'll always get a RuleBasedNumberFormat back); otherwise, just go ahead and
+        // create a RuleBasedNumberFormat ourselves
+        UErrorCode localErr = U_ZERO_ERROR;
+        Locale localeObj(locale);
+        int32_t keywordLength = localeObj.getKeywordValue("numbers", nullptr, 0, localErr);
+        if (keywordLength > 0) {
+            retVal = NumberFormat::createInstance(localeObj, UNUM_DEFAULT, *status);
+        } else {
+            retVal = new RuleBasedNumberFormat(URBNF_NUMBERING_SYSTEM, localeObj, *status);
+        }
+    } break;
 #endif
 
     case UNUM_DECIMAL_COMPACT_SHORT:
