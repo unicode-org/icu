@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680133753629,
+  "lastUpdate": 1680179063593,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18412,6 +18412,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7679405.2433,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "95d905a9e9236dc5b9f44b2e1ba30aafa7c0db62",
+          "message": "ICU-22190 Add information about the KEYS file to the Publish document.",
+          "timestamp": "2023-03-30T14:06:15+02:00",
+          "tree_id": "b4b1f0e81dc5de77468d7d1542fdfb80e8711dec",
+          "url": "https://github.com/unicode-org/icu/commit/95d905a9e9236dc5b9f44b2e1ba30aafa7c0db62"
+        },
+        "date": 1680179029599,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 345.3019,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 31726123.4608,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7335792.2879,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 32325151.0489,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7972992.8883,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
