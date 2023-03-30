@@ -47,6 +47,7 @@ static void TestForceGannenNumbering(void);
 static void TestMapDateToCalFields(void);
 static void TestNarrowQuarters(void);
 static void TestExtraneousCharacters(void);
+static void TestParseTooStrict(void);
 
 void addDateForTest(TestNode** root);
 
@@ -70,6 +71,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestMapDateToCalFields);
     TESTCASE(TestNarrowQuarters);
     TESTCASE(TestExtraneousCharacters);
+    TESTCASE(TestParseTooStrict);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -2038,6 +2040,41 @@ static void TestExtraneousCharacters(void) {
     }
     udat_close(df);
     ucal_close(cal);
+}
+
+static void TestParseTooStrict(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    const char* locale = "en_US";
+    UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, locale, u"UTC", -1, u"MM/dd/yyyy", -1, &status);
+    if (U_FAILURE(status)) {
+        log_data_err("udat_open locale %s pattern MM/dd/yyyy: %s\n", locale, u_errorName(status));
+        return;
+    }
+    UCalendar* cal = ucal_open(u"UTC", -1, locale, UCAL_GREGORIAN, &status);
+    if (U_FAILURE(status)) {
+        log_data_err("ucal_open locale %s: %s\n", locale, u_errorName(status));
+        udat_close(df);
+        return;
+    }
+    ucal_clear(cal);
+    int32_t ppos = 0;
+    udat_setLenient(df, false);
+    udat_parseCalendar(df, cal, u"1/1/2023", -1, &ppos, &status);
+    if (U_FAILURE(status)) {
+        log_err("udat_parseCalendar locale %s, 1/1/2023: %s\n", locale, u_errorName(status));
+    } else if (ppos != 8) {
+        log_err("udat_parseCalendar locale %s, 1/1/2023: ppos expect 8, get %d\n", locale, ppos);
+    } else {
+        UDate parsedDate = ucal_getMillis(cal, &status);
+        if (U_FAILURE(status)) {
+            log_err("ucal_getMillis: %s\n", u_errorName(status));
+        } else if (parsedDate < 1672531200000.0 || parsedDate >= 1672617600000.0) { // check for day stating at UTC 2023-01-01 00:00
+            log_err("udat_parseCalendar locale %s, 1/1/2023: parsed UDate %.0f out of range\n", locale, parsedDate);
+        }
+    }
+
+    ucal_close(cal);
+    udat_close(df);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

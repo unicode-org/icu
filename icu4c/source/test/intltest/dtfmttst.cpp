@@ -20,6 +20,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/strenum.h"
 #include "unicode/dtfmtsym.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "caltest.h"  // for fieldName
@@ -131,6 +132,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestAdoptCalendarLeak);
     TESTCASE_AUTO(Test20741_ABFields);
     TESTCASE_AUTO(Test22023_UTCWithMinusZero);
+    TESTCASE_AUTO(TestNumericFieldStrictParse);
 
     TESTCASE_AUTO_END;
 }
@@ -5749,6 +5751,79 @@ void DateFormatTest::Test22023_UTCWithMinusZero() {
     // internally and trigger the assertion and bug.
     fmt.format(-1e-9, formatted, &fp_iter, status);
     ASSERT_OK(status);
+}
+
+void DateFormatTest::TestNumericFieldStrictParse() {
+    static const struct {
+        const char*           localeID;
+        const char16_t* const pattern;
+        const char16_t* const text;
+        int32_t               pos; // final parsed position
+        UCalendarDateFields   field1;
+        int32_t               value1;
+        UCalendarDateFields   field2;
+        int32_t               value2;
+    } TESTDATA[] = {
+        // Ticket #22337
+        {"en_US", u"MM/dd/yyyy", u"1/1/2023", 8, UCAL_MONTH, UCAL_JANUARY, UCAL_DAY_OF_MONTH, 1},
+        // Ticket #22259
+        {"en_US", u"dd-MM-uuuu", u"1-01-2023", 9, UCAL_MONTH, UCAL_JANUARY, UCAL_DAY_OF_MONTH, 1},
+        {"en_US", u"dd-MM-uuuu", u"01-01-223", 9, UCAL_DAY_OF_MONTH, 1, UCAL_EXTENDED_YEAR, 223},
+    };
+    for (size_t i = 0; i < UPRV_LENGTHOF(TESTDATA); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        char pbuf[64];
+        char tbuf[64];
+
+        Locale locale = Locale::createFromName(TESTDATA[i].localeID);
+        LocalPointer<SimpleDateFormat> sdfmt(new SimpleDateFormat(UnicodeString(TESTDATA[i].pattern), locale, status));
+        if (U_FAILURE(status)) {
+            u_austrncpy(pbuf, TESTDATA[i].pattern, sizeof(pbuf));
+            dataerrln("Fail in new SimpleDateFormat locale %s pattern %s: %s",
+                        TESTDATA[i].localeID, pbuf, u_errorName(status));
+            continue;
+        }
+        LocalPointer<Calendar> cal(Calendar::createInstance(*TimeZone::getGMT(), locale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("Fail in Calendar::createInstance locale %s: %s",
+                        TESTDATA[i].localeID, u_errorName(status));
+            continue;
+        }
+        cal->clear();
+        //cal->set(2023, 0, 1);
+        ParsePosition ppos(0);
+        sdfmt->setLenient(false);
+        sdfmt->parse(UnicodeString(TESTDATA[i].text), *cal, ppos);
+
+        u_austrncpy(pbuf, TESTDATA[i].pattern, sizeof(pbuf));
+        u_austrncpy(tbuf, TESTDATA[i].text, sizeof(tbuf));
+        if (ppos.getIndex() != TESTDATA[i].pos) {
+            errln("SimpleDateFormat::parse locale %s pattern %s: expected pos %d, got %d, errIndex %d",
+                        TESTDATA[i].localeID, pbuf, TESTDATA[i].pos, ppos.getIndex(), ppos.getErrorIndex());
+            continue;
+        }
+        if (TESTDATA[i].field1 < UCAL_FIELD_COUNT) {
+            int32_t value = cal->get(TESTDATA[i].field1, status);
+            if (U_FAILURE(status)) {
+                errln("Calendar::get locale %s pattern %s field %d: %s",
+                        TESTDATA[i].localeID, pbuf, TESTDATA[i].field1, u_errorName(status));
+            } else if (value != TESTDATA[i].value1) {
+                errln("Calendar::get locale %s pattern %s field %d: expected value %d, got %d",
+                        TESTDATA[i].localeID, pbuf, TESTDATA[i].field1, TESTDATA[i].value1, value);
+           }
+        }
+        status = U_ZERO_ERROR;
+        if (TESTDATA[i].field2 < UCAL_FIELD_COUNT) {
+            int32_t value = cal->get(TESTDATA[i].field2, status);
+            if (U_FAILURE(status)) {
+                errln("Calendar::get locale %s pattern %s field %d: %s",
+                        TESTDATA[i].localeID, pbuf, TESTDATA[i].field2, u_errorName(status));
+            } else if (value != TESTDATA[i].value2) {
+                errln("Calendar::get locale %s pattern %s field %d: expected value %d, got %d",
+                        TESTDATA[i].localeID, pbuf, TESTDATA[i].field2, TESTDATA[i].value2, value);
+           }
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
