@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680133409812,
+  "lastUpdate": 1680178721540,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7678,6 +7678,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2079.861871331903,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "95d905a9e9236dc5b9f44b2e1ba30aafa7c0db62",
+          "message": "ICU-22190 Add information about the KEYS file to the Publish document.",
+          "timestamp": "2023-03-30T14:06:15+02:00",
+          "tree_id": "b4b1f0e81dc5de77468d7d1542fdfb80e8711dec",
+          "url": "https://github.com/unicode-org/icu/commit/95d905a9e9236dc5b9f44b2e1ba30aafa7c0db62"
+        },
+        "date": 1680178690312,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2462.9332674866073,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
