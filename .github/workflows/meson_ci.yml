@@ -7,9 +7,9 @@ name: Meson CI
 
 on:
   push:
-    branches:
-      - main
-      - 'maint/maint*'
+    # branches:
+    #   - main
+    #   - 'maint/maint*'
   pull_request:
     branches: '**'
 
