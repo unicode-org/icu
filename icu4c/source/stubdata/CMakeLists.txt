@@ -1,4 +1,5 @@
-add_library(icudt stubdata.cpp)
+add_library(icudt)
+icu_add_sources(icudt)
 target_link_libraries(icudt PRIVATE icu_lib_defaults icuuc)
 target_compile_definitions(icudt PRIVATE U_COMMON_IMPLEMENTATION)
 

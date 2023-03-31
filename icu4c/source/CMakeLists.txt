@@ -36,6 +36,11 @@ if(WIN32)
     target_compile_definitions(icu_lib_defaults INTERFACE _HAS_EXCEPTIONS=0)
 endif()
 
+macro(icu_add_sources target_name)
+    file(STRINGS sources.txt sources)
+    target_sources("${target_name}" PRIVATE "${sources}")
+endmacro()
+
 add_subdirectory(common)
 add_subdirectory(i18n)
 add_subdirectory(io)

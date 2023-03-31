@@ -1,4 +1,5 @@
-add_executable(pkgdata pkgdata.cpp pkgtypes.c)
+add_executable(pkgdata)
+icu_add_sources(pkgdata)
 target_link_libraries(pkgdata PRIVATE icu_defaults icuuc toolutil)
 
 add_dependencies(pkgdata gencnval)

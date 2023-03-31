@@ -93,6 +93,7 @@ target_sources(intltest PRIVATE
     numbertest_patternstring.cpp
     numbertest_permutation.cpp
     numbertest_range.cpp
+    numbertest_simple.cpp
     numbertest_skeletons.cpp
     numfmtdatadriventest.cpp
     numfmtspectest.cpp
