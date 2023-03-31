@@ -14,35 +14,35 @@ on:
     branches: '**'
 
 jobs:
-  meson-msvc:
-    runs-on: ubuntu-latest
-    # HT: https://dvdhrm.github.io/2021/04/21/meson-msvc-github-actions/
-    name: Meson MSVC
-    strategy:
-      matrix:
-        os:
-        # - windows-2016
-        - windows-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          lfs: false
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install Python Dependencies
-        run: pip install meson ninja
-      - name: Prepare MSVC
-        uses: bus1/cabuild/action/msdevshell@v1
-        with:
-          architecture: x64
-      - name: Prepare Build
-        run: meson setup build icu4c
-      - name: Run Build
-        run: meson compile -v -C build
-      - name: Run Test Suite
-        run: meson test -v -C build
+  # meson-msvc: (not working yet - https://github.com/bus1/cabuild/issues/3 )
+  #   runs-on: ubuntu-latest
+  #   # HT: https://dvdhrm.github.io/2021/04/21/meson-msvc-github-actions/
+  #   name: Meson MSVC
+  #   strategy:
+  #     matrix:
+  #       os:
+  #       # - windows-2016
+  #       - windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         lfs: false
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: '3.x'
+  #     - name: Install Python Dependencies
+  #       run: pip install meson ninja
+  #     - name: Prepare MSVC
+  #       uses: bus1/cabuild/action/msdevshell@v1
+  #       with:
+  #         architecture: x64
+  #     - name: Prepare Build
+  #       run: meson setup build icu4c
+  #     - name: Run Build
+  #       run: meson compile -v -C build
+  #     - name: Run Test Suite
+  #       run: meson test -v -C build
   meson-others:
     runs-on: ubuntu-latest
     # HT: https://dvdhrm.github.io/2021/04/21/meson-msvc-github-actions/
