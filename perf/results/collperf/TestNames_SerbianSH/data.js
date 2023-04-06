@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680217209368,
+  "lastUpdate": 1680739390293,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18574,6 +18574,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 20577444.2009,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "981c182a7f3583fe262552d5bdea2c9f83f0d5b2",
+          "message": "ICU-22297 Speed up valgrind tests\n\nRemove the valgrind build in azure pipeline which is slow (about 50-75\nmins to run) and replace with a set in github action that run 17\ntesting jobs in parallel to speed it up to about 25 mins the longest.",
+          "timestamp": "2023-04-05T16:42:32-07:00",
+          "tree_id": "935fe91a68cfb34b2f718107e9251a426c260231",
+          "url": "https://github.com/unicode-org/icu/commit/981c182a7f3583fe262552d5bdea2c9f83f0d5b2"
+        },
+        "date": 1680739356444,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 423.3657,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 48674009.8141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 19785694.8395,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 51257135.9936,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 22814167.7437,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
