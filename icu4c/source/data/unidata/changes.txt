@@ -46,6 +46,8 @@ See
   Treat quote marks as equivalent when strength=UCOL_PRIMARY
 - https://github.com/unicode-org/cldr/pull/2691
   CLDR-15946 make fancy quotes primary-equal to ASCII fallbacks
+- https://github.com/unicode-org/cldr/pull/2833
+  CLDR-15946 make fancy quotes secondary-different from each other
 
 The related changes to tailorings were already integrated in an earlier PR for
 https://unicode-org.atlassian.net/browse/ICU-22220 ICU 73rc BRS.
@@ -153,7 +155,7 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
     cp -v com/ibm/icu/impl/data/$ICUDT/coll/* /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
     jar uvf $ICU_SRC/icu4j/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/$ICUDT
 - new for ICU 73: also copy the binary data files directly into the ICU4J tree
-    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/icudt73b/coll
+    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/$ICUDT/coll
 
 * When refreshing all of ICU4J data from ICU4C
 - $ICU_ROOT/dbg/icu4c$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
