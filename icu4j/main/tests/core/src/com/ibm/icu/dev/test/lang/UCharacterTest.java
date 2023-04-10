@@ -3894,4 +3894,93 @@ public final class UCharacterTest extends TestFmwk
                     UCharacter.getIntPropertyValue(end, prop), range.getValue());
         }
     }
+
+    private static final String getPropName(int property, int nameChoice) {
+        try {
+            return UCharacter.getPropertyName(property, nameChoice);
+        } catch(IllegalArgumentException e) {
+            return "null";
+        }
+    }
+
+    private static final String getValueName(int property, int value, int nameChoice) {
+        try {
+            return UCharacter.getPropertyValueName(property, value, nameChoice);
+        } catch(IllegalArgumentException e) {
+            return "null";
+        }
+    }
+
+    @Test
+    public void TestPropertyNames() {
+        // Test names of certain properties & values.
+        // The UProperty.NameChoice is really an integer with only a couple of named constants.
+        int prop = UProperty.WHITE_SPACE;
+        final int SHORT = UProperty.NameChoice.SHORT;
+        final int LONG = UProperty.NameChoice.LONG;
+        assertEquals("White_Space: index -1", "null", getPropName(prop, -1));
+        assertEquals("White_Space: short", "WSpace", getPropName(prop, SHORT));
+        assertEquals("White_Space: long", "White_Space", getPropName(prop, LONG));
+        assertEquals("White_Space: index 2", "space", getPropName(prop, 2));
+        assertEquals("White_Space: index 3", "null", getPropName(prop, 3));
+
+        prop = UProperty.SIMPLE_CASE_FOLDING;
+        assertEquals("Simple_Case_Folding: index -1", "null", getPropName(prop, -1));
+        assertEquals("Simple_Case_Folding: short", "scf", getPropName(prop, SHORT));
+        assertEquals("Simple_Case_Folding: long", "Simple_Case_Folding", getPropName(prop, LONG));
+        assertEquals("Simple_Case_Folding: index 2", "sfc", getPropName(prop, 2));
+        assertEquals("Simple_Case_Folding: index 3", "null", getPropName(prop, 3));
+
+        prop = UProperty.CASED;
+        assertEquals("Cased=Y: index -1", "null", getValueName(prop, 1, -1));
+        assertEquals("Cased=Y: short", "Y", getValueName(prop, 1, SHORT));
+        assertEquals("Cased=Y: long", "Yes", getValueName(prop, 1, LONG));
+        assertEquals("Cased=Y: index 2", "T", getValueName(prop, 1, 2));
+        assertEquals("Cased=Y: index 3", "True", getValueName(prop, 1, 3));
+        assertEquals("Cased=Y: index 4", "null", getValueName(prop, 1, 4));
+
+        prop = UProperty.DECOMPOSITION_TYPE;
+        int value = UCharacter.DecompositionType.NOBREAK;
+        assertEquals("dt=Nb: index -1", "null", getValueName(prop, value, -1));
+        assertEquals("dt=Nb: short", "Nb", getValueName(prop, value, SHORT));
+        assertEquals("dt=Nb: long", "Nobreak", getValueName(prop, value, LONG));
+        assertEquals("dt=Nb: index 2", "nb", getValueName(prop, value, 2));
+        assertEquals("dt=Nb: index 3", "null", getValueName(prop, value, 3));
+
+        // Canonical_Combining_Class:
+        // The UCD inserts the numeric values in the second filed of its
+        // PropertyValueAliases.txt lines.
+        // In ICU, we don't treat these as names,
+        // they are just the numeric values returned by u_getCombiningClass().
+        // We return the real short and long names for the usual choice constants.
+        prop = UProperty.CANONICAL_COMBINING_CLASS;
+        assertEquals("ccc=230: index -1", "null", getValueName(prop, 230, -1));
+        assertEquals("ccc=230: short", "A", getValueName(prop, 230, SHORT));
+        assertEquals("ccc=230: long", "Above", getValueName(prop, 230, LONG));
+        assertEquals("ccc=230: index 2", "null", getValueName(prop, 230, 2));
+
+        prop = UProperty.GENERAL_CATEGORY;
+        value = UCharacterCategory.DECIMAL_DIGIT_NUMBER;
+        assertEquals("gc=Nd: index -1", "null", getValueName(prop, value, -1));
+        assertEquals("gc=Nd: short", "Nd", getValueName(prop, value, SHORT));
+        assertEquals("gc=Nd: long", "Decimal_Number", getValueName(prop, value, LONG));
+        assertEquals("gc=Nd: index 2", "digit", getValueName(prop, value, 2));
+        assertEquals("gc=Nd: index 3", "null", getValueName(prop, value, 3));
+
+        prop = UProperty.GENERAL_CATEGORY_MASK;
+        final int U_GC_P_MASK =
+                (1 << UCharacterCategory.DASH_PUNCTUATION) |
+                (1 << UCharacterCategory.START_PUNCTUATION) |
+                (1 << UCharacterCategory.END_PUNCTUATION) |
+                (1 << UCharacterCategory.CONNECTOR_PUNCTUATION) |
+                (1 << UCharacterCategory.OTHER_PUNCTUATION) |
+                (1 << UCharacterCategory.INITIAL_PUNCTUATION) |
+                (1 << UCharacterCategory.FINAL_PUNCTUATION);
+        value = U_GC_P_MASK;
+        assertEquals("gc=P mask: index -1", "null", getValueName(prop, value, -1));
+        assertEquals("gc=P mask: short", "P", getValueName(prop, value, SHORT));
+        assertEquals("gc=P mask: long", "Punctuation", getValueName(prop, value, LONG));
+        assertEquals("gc=P mask: index 2", "punct", getValueName(prop, value, 2));
+        assertEquals("gc=P mask: index 3", "null", getValueName(prop, value, 3));
+    }
 }
