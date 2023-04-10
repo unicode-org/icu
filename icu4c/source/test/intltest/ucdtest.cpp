@@ -75,6 +75,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestBinaryCharacterProperties);
     TESTCASE_AUTO(TestIntCharacterProperties);
 #endif
+    TESTCASE_AUTO(TestPropertyNames);
     TESTCASE_AUTO_END;
 }
 
@@ -867,4 +868,83 @@ void UnicodeTest::TestIntCharacterProperties() {
             u_getIntPropertyValue(0x61, (UProperty)prop), ucpmap_get(map, 0x61));
     }
 #endif
+}
+
+namespace {
+
+const char *getPropName(UProperty property, int32_t nameChoice) UPRV_NO_SANITIZE_UNDEFINED {
+    const char *name = u_getPropertyName(property, (UPropertyNameChoice)nameChoice);
+    return name != nullptr ? name : "null";
+}
+
+const char *getValueName(UProperty property, int32_t value, int32_t nameChoice)
+        UPRV_NO_SANITIZE_UNDEFINED {
+    const char *name = u_getPropertyValueName(property, value, (UPropertyNameChoice)nameChoice);
+    return name != nullptr ? name : "null";
+}
+
+}  // namespace
+
+void UnicodeTest::TestPropertyNames() {
+    IcuTestErrorCode errorCode(*this, "TestPropertyNames()");
+    // Test names of certain properties & values.
+    // The UPropertyNameChoice is really an integer with only a couple of named constants.
+    UProperty prop = UCHAR_WHITE_SPACE;
+    constexpr int32_t SHORT = U_SHORT_PROPERTY_NAME;
+    constexpr int32_t LONG = U_LONG_PROPERTY_NAME;
+    assertEquals("White_Space: index -1", "null", getPropName(prop, -1));
+    assertEquals("White_Space: short", "WSpace", getPropName(prop, SHORT));
+    assertEquals("White_Space: long", "White_Space", getPropName(prop, LONG));
+    assertEquals("White_Space: index 2", "space", getPropName(prop, 2));
+    assertEquals("White_Space: index 3", "null", getPropName(prop, 3));
+
+    prop = UCHAR_SIMPLE_CASE_FOLDING;
+    assertEquals("Simple_Case_Folding: index -1", "null", getPropName(prop, -1));
+    assertEquals("Simple_Case_Folding: short", "scf", getPropName(prop, SHORT));
+    assertEquals("Simple_Case_Folding: long", "Simple_Case_Folding", getPropName(prop, LONG));
+    assertEquals("Simple_Case_Folding: index 2", "sfc", getPropName(prop, 2));
+    assertEquals("Simple_Case_Folding: index 3", "null", getPropName(prop, 3));
+
+    prop = UCHAR_CASED;
+    assertEquals("Cased=Y: index -1", "null", getValueName(prop, 1, -1));
+    assertEquals("Cased=Y: short", "Y", getValueName(prop, 1, SHORT));
+    assertEquals("Cased=Y: long", "Yes", getValueName(prop, 1, LONG));
+    assertEquals("Cased=Y: index 2", "T", getValueName(prop, 1, 2));
+    assertEquals("Cased=Y: index 3", "True", getValueName(prop, 1, 3));
+    assertEquals("Cased=Y: index 4", "null", getValueName(prop, 1, 4));
+
+    prop = UCHAR_DECOMPOSITION_TYPE;
+    int32_t value = U_DT_NOBREAK;
+    assertEquals("dt=Nb: index -1", "null", getValueName(prop, value, -1));
+    assertEquals("dt=Nb: short", "Nb", getValueName(prop, value, SHORT));
+    assertEquals("dt=Nb: long", "Nobreak", getValueName(prop, value, LONG));
+    assertEquals("dt=Nb: index 2", "nb", getValueName(prop, value, 2));
+    assertEquals("dt=Nb: index 3", "null", getValueName(prop, value, 3));
+
+    // Canonical_Combining_Class:
+    // The UCD inserts the numeric values in the second filed of its PropertyValueAliases.txt lines.
+    // In ICU, we don't treat these as names,
+    // they are just the numeric values returned by u_getCombiningClass().
+    // We return the real short and long names for the usual choice constants.
+    prop = UCHAR_CANONICAL_COMBINING_CLASS;
+    assertEquals("ccc=230: index -1", "null", getValueName(prop, 230, -1));
+    assertEquals("ccc=230: short", "A", getValueName(prop, 230, SHORT));
+    assertEquals("ccc=230: long", "Above", getValueName(prop, 230, LONG));
+    assertEquals("ccc=230: index 2", "null", getValueName(prop, 230, 2));
+
+    prop = UCHAR_GENERAL_CATEGORY;
+    value = U_DECIMAL_DIGIT_NUMBER;
+    assertEquals("gc=Nd: index -1", "null", getValueName(prop, value, -1));
+    assertEquals("gc=Nd: short", "Nd", getValueName(prop, value, SHORT));
+    assertEquals("gc=Nd: long", "Decimal_Number", getValueName(prop, value, LONG));
+    assertEquals("gc=Nd: index 2", "digit", getValueName(prop, value, 2));
+    assertEquals("gc=Nd: index 3", "null", getValueName(prop, value, 3));
+
+    prop = UCHAR_GENERAL_CATEGORY_MASK;
+    value = U_GC_P_MASK;
+    assertEquals("gc=P mask: index -1", "null", getValueName(prop, value, -1));
+    assertEquals("gc=P mask: short", "P", getValueName(prop, value, SHORT));
+    assertEquals("gc=P mask: long", "Punctuation", getValueName(prop, value, LONG));
+    assertEquals("gc=P mask: index 2", "punct", getValueName(prop, value, 2));
+    assertEquals("gc=P mask: index 3", "null", getValueName(prop, value, 3));
 }
