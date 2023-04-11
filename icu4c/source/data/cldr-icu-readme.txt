@@ -131,6 +131,7 @@ export ANT_OPTS="-Xmx4096m"
 # CLDR_DIR=`cygpath -wp /build/cldr`
 
 export CLDR_DIR=$HOME/cldr-myfork
+export CLDR_TMP_DIR=$HOME/cldr-staging
 
 # 1c. ICU variables
 
@@ -203,6 +204,12 @@ cd $ICU4C_DIR/source/data
 ant cleanprod
 ant setup
 ant proddata 2>&1 | tee $NOTES/cldr-newData-proddataLog.txt
+
+#---
+# Note, for CLDR development, at this point tests are sometimes run on the production
+# data, see:
+# https://cldr.unicode.org/development/cldr-big-red-switch/brs-run-tests-on-production-data
+#---
 
 # 5b. Build the new ICU4C data files; these include .txt files and .py files.
 # These new files will replace whatever was already present in the ICU4C sources.
@@ -363,8 +370,8 @@ git status
 # commit
 
 # 16. For an official CLDR data integration into ICU, now tag the CLDR and
-# ICU sources with an appropriate CLDR milestone (you can check previous
-# tags for format), e.g.:
+# possibly the ICU sources with an appropriate CLDR milestone (you can check
+# previous tags for format), e.g.:
 
 cd $CLDR_DIR
 git tag ...
@@ -382,6 +389,14 @@ cd $CLDR_TMP_DIR
 # commit
 git tag ...
 git push --tags
+
+# 18. You should publish the cldr and cldr-staging tags in github. For cldr, go to
+# https://github.com/unicode-org/cldr/tags and click on the tag you just created.
+# Click on the "Create release from tag" button at the upper right. Set release
+# title to be the same as the tag. Click the checkbox for "Set as a pre-release" for
+# all but the final release. For the description, see what was done for earlier tags.
+# When you are all ready, click the "Publish release" button.
+
 
 
 
