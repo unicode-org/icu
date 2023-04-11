@@ -9,14 +9,14 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
   <parent>
     <groupId>com.ibm.icu</groupId>
     <artifactId>icu4j-root</artifactId>
     <version>73.1-SNAPSHOT</version>
     <!-- default relativePath for parent -->
   </parent>
-  
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ibm.icu</groupId>
@@ -56,7 +56,7 @@
               </sources>
             </configuration>
           </execution>
-          
+
           <!-- add directories with test code -->
           <execution>
             <id>add-test-source</id>
@@ -223,14 +223,14 @@
         </executions>
       </plugin>
 
-      <!-- 
+      <!--
         Process and transform the resource files before they get packaged up in the .jar file.
       -->
       <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <executions>
-              <!-- 
+              <!--
                 Replicate the creation of fullLocaleNames.lst files in every subdirectory of the dir of copied data
                 that the Ant build.xml file encodes.
               -->
@@ -254,7 +254,8 @@
                   <configuration>
                       <executable>cp</executable>
                       <arguments>
-                        <argument>../../../icu4c/LICENSE</argument>
+                        <!-- Note! we use the license in the icu4j subtree, because we might be running out of an unpacked icu4j source .jar -->
+                        <argument>../../main/shared/licenses/LICENSE</argument>
                         <argument>${project.build.directory}/classes</argument>
                       </arguments>
                   </configuration>

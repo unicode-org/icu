@@ -33,9 +33,9 @@ Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/
 
 ### License
 
-Please see [./icu4c/LICENSE](./icu4c/LICENSE) (C and J are under an identical license file.)
+Please see [./LICENSE](./LICENSE)
 
 > Copyright © 2016 and later Unicode, Inc. and others. All Rights Reserved.
-Unicode and the Unicode Logo are registered trademarks 
+Unicode and the Unicode Logo are registered trademarks
 of Unicode, Inc. in the U.S. and other countries.
 [Terms of Use and License](http://www.unicode.org/copyright.html)
