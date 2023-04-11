@@ -97,7 +97,7 @@ _… and thanks for contributing!_
 
 ### License
 
-Please see [./icu4c/LICENSE](./icu4c/LICENSE) (C and J are under an identical license file.)
+Please see [./LICENSE](./LICENSE)
 
 > Copyright © 2021 and later Unicode, Inc. and others. All Rights Reserved.
 Unicode and the Unicode Logo are registered trademarks

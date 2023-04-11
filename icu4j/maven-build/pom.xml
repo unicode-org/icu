@@ -20,7 +20,7 @@
   <name>ICU4J Root</name>
   <description>
     International Component for Unicode for Java (ICU4J) is a mature, widely used Java library
-    providing Unicode and Globalization support 
+    providing Unicode and Globalization support
   </description>
   <url>https://icu.unicode.org/</url>
   <inceptionYear>2001</inceptionYear>
@@ -28,7 +28,7 @@
   <licenses>
     <license>
       <name>Unicode/ICU License</name>
-      <url>https://raw.githubusercontent.com/unicode-org/icu/main/icu4c/LICENSE</url>
+      <url>https://raw.githubusercontent.com/unicode-org/icu/main/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -149,7 +149,7 @@
   </distributionManagement>
 
   <profiles>
-    <!-- 
+    <!--
       For testing localespi using the Java extensions feature, which last existed in Java 8.
       ICU4J currently has a minimum supported version of 8.
     -->
@@ -180,7 +180,7 @@
   </profiles>
 
   <properties>
-    <!-- 
+    <!--
       Main ICU4J version number.
       Note: This version string must also be repeated in <version> of this root pom.xml above.
       Note: Keep the `jar.spec.version` number in sync with this value, too.

@@ -21,7 +21,7 @@
   <licenses>
     <license>
       <name>Unicode/ICU License</name>
-      <url>https://raw.githubusercontent.com/unicode-org/icu/main/icu4c/LICENSE</url>
+      <url>https://raw.githubusercontent.com/unicode-org/icu/main/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
