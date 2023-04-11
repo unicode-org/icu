@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681208712822,
+  "lastUpdate": 1681239092569,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7768,6 +7768,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.3495511052787004,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "5861e1fd52f1d7673eee38bc3c965aa18b336062",
+          "message": "ICU-22221 update cldr-icu instructions, and ICU tag for integration",
+          "timestamp": "2023-04-11T11:38:40-07:00",
+          "tree_id": "132de1bb16b7d3f8fb2631203f0d909ae439be64",
+          "url": "https://github.com/unicode-org/icu/commit/5861e1fd52f1d7673eee38bc3c965aa18b336062"
+        },
+        "date": 1681239051488,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.95489819628458,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
