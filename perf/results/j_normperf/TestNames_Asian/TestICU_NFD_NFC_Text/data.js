@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681147835334,
+  "lastUpdate": 1681174968861,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15748,6 +15748,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 18.488491876689988,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0d2a03dbba2f867c1cce2291a4832e1791cd8b5e",
+          "message": "ICU-22338 getProperty(Value)Name accepts nameChoice above 1",
+          "timestamp": "2023-04-10T17:50:12-07:00",
+          "tree_id": "e991e34fa892919dc36ef45f47385ac60504a482",
+          "url": "https://github.com/unicode-org/icu/commit/0d2a03dbba2f867c1cce2291a4832e1791cd8b5e"
+        },
+        "date": 1681174936441,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 15.160920432703902,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
