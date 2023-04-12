@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681329295221,
+  "lastUpdate": 1681340908530,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19060,6 +19060,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 266137.022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cbb25bb186595641bc2ce9dc3f35f23d33fbcf87",
+          "message": "ICU-22349 Change to use just -j value in make to \"not limit the number of jobs that can run simultaneously\"\n\nSee #2422",
+          "timestamp": "2023-04-12T15:47:06-07:00",
+          "tree_id": "68632a76a8468e0e26e808b1cea7ee70b4910407",
+          "url": "https://github.com/unicode-org/icu/commit/cbb25bb186595641bc2ce9dc3f35f23d33fbcf87"
+        },
+        "date": 1681340870428,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 871.9792,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 938923.2005,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 253298.7178,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 914709.9149,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 241842.6017,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
