@@ -11,6 +11,9 @@ on:
       - main	
       - 'maint/maint*'
 
+permissions:
+  contents: read
+
 jobs:
 
   # Test ICU4J with little-endian ICU4C data only

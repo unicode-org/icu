@@ -13,6 +13,9 @@ on:
   pull_request:
     branches: '**'
 
+permissions:
+  contents: read
+
 jobs:
 
   # ICU4C docs build using doxygen..

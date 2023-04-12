@@ -2,6 +2,10 @@ name: Publish icu4j.jar/utilities.jar to GH Maven
 on:
   release:
     types: [created]
+
+permissions:
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
