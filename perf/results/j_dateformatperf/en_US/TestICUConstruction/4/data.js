@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681239097338,
+  "lastUpdate": 1681328895847,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7858,6 +7858,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2357.9546251539473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "312bae866003461bcd4022855ac7ec60546b81f7",
+          "message": "ICU-21964 use a single LICENSE file\n\n- make the icu4c and icu4j LICENSE files symlinks\n- fix paths",
+          "timestamp": "2023-04-12T14:36:09-05:00",
+          "tree_id": "082e0a6a51ed4e15aa2c631bfe0c0510d565ec59",
+          "url": "https://github.com/unicode-org/icu/commit/312bae866003461bcd4022855ac7ec60546b81f7"
+        },
+        "date": 1681328861524,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2388.522948033026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
