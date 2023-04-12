@@ -30,7 +30,7 @@ jobs:
         run: |
           cd icu4c/source;
           ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux;
-          make -j2 check;
+          make -j check;
           mkdir /tmp/icu4j_data_test;
           cp -P data/out/tmp/icudt*l* /tmp/icu4j_data_test/
           cd ../../icu4j;
@@ -47,7 +47,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          make -j 2 all;
+          make -j all;
           cd lib;
           cp -Ps ../tools/ctestfw/libicutest* .
       - name: Upload ICU libraries
@@ -89,7 +89,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }})
+          (cd test/perf && make -j everything && mkdir -p results && mkdir -p results/${{ matrix.perf }})
           LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 ${{ matrix.file }} ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -159,7 +159,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }} && mkdir -p results/${{ matrix.perf }}/${{ matrix.data }})
+          (cd test/perf && make -j everything && mkdir -p results && mkdir -p results/${{ matrix.perf }} && mkdir -p results/${{ matrix.perf }}/${{ matrix.data }})
           LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 -f $DATA_FILE_PATH/${{ matrix.data }}.txt ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/${{ matrix.data }}/output.txt
 
       - name: Store performance test results
@@ -218,7 +218,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/strsrchperf && mkdir -p results/strsrchperf/${{ matrix.locale }})
+          (cd test/perf && make -j everything && mkdir -p results && mkdir -p results/strsrchperf && mkdir -p results/strsrchperf/${{ matrix.locale }})
           LD_LIBRARY_PATH=lib ./test/perf/strsrchperf/strsrchperf -b Test_ICU_Forward_Search Test_ICU_Backward_Search -t 5 -p 10 -L ${{ matrix.locale }} -f $DATA_FILE_PATH/${{ matrix.data }}.txt | tee test/perf/results/strsrchperf/${{ matrix.locale }}/output.txt
 
       - name: Store performance test results
