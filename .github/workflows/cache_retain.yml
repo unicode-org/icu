@@ -26,6 +26,9 @@ on:
     # this cron schedule is set to run every 6 days to ensure retention
     - cron: '0 12 */6 * *'
 
+permissions:
+  contents: read
+
 jobs:
   retain-maven-cache:
     name: Run all tests with Maven

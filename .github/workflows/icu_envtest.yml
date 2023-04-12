@@ -15,6 +15,9 @@ on:
     # This cron schedule is set to run 10:23 UTC every SAT
     - cron: '23 10 * * SAT'
 
+permissions:
+  contents: read
+
 jobs:
   #=================================================================
   # locale env tests.
