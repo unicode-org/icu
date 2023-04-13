@@ -62,7 +62,6 @@ distclean : distclean-recursive distclean-local
 
 dist: dist-recursive dist-local
 check: everything check-recursive check-local
-check-recursive: all-recursive
 # the xcheck targets create a ../test-*.xml file in JUnit format.
 xcheck: everything xcheck-recursive xcheck-local
 xcheck-recursive: all-recursive
@@ -85,6 +84,11 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	if test "$$dot_seen" = "no"; then \
 	  $(MAKE) "$$target-local" || exit; \
 	fi
+
+check-recursive: $(SUBDIRS) check-local
+
+$(SUBDIRS): testdata
+	cd $@ && $(MAKE) -j -O check) || exit;
 
 xcheck-recursive check-recursive check-exhaustive-recursive:
 	@$(MKINSTALLDIRS) $(STATUS_TMP)
