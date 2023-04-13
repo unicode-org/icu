@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681341390782,
+  "lastUpdate": 1681355782180,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33982,6 +33982,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 45.4894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "rp9-next",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "12c5fe04c06961676abc35b4e9ca5d0bdddd45f7",
+          "message": "ICU-22351 Update PGP key information for release signing",
+          "timestamp": "2023-04-13T08:17:47+05:30",
+          "tree_id": "03d5a685a37890828ed2b9d9e53798abaf3334bd",
+          "url": "https://github.com/unicode-org/icu/commit/12c5fe04c06961676abc35b4e9ca5d0bdddd45f7"
+        },
+        "date": 1681355750818,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 17.1178,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 19.3774,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 21.9792,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 33.0584,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.7292,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.9088,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 21.5754,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.5231,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 119.5777,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.1613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 52.2328,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.9295,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
