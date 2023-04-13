@@ -85,7 +85,8 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit; \
 	fi
 
-check-recursive: $(SUBDIRS) check-local
+check-recursive: $(SUBDIRS)
+	$(MAKE) check-local || exit;
 
 $(SUBDIRS): testdata
 	cd $@ && $(MAKE) -j -O check) || exit;
