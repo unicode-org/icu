@@ -85,11 +85,12 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit; \
 	fi
 
-check-recursive: $(SUBDIRS)
+check-recursive: intltest $(IOTEST) cintltst $(LETEST) $(FUZZER)
 	$(MAKE) check-local || exit;
 
-$(SUBDIRS): testdata
-	cd $@ && $(MAKE) -j -O check) || exit;
+intltest $(IOTEST) cintltst $(LETEST) $(FUZZER):
+	(cd testdata; $(MAKE) -j all) || exit;
+	(cd $@ && $(MAKE) -j -O check) || exit;
 
 xcheck-recursive check-recursive check-exhaustive-recursive:
 	@$(MKINSTALLDIRS) $(STATUS_TMP)
