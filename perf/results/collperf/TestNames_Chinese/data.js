@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681367786166,
+  "lastUpdate": 1681407919836,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19168,6 +19168,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2708012.4196,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "1e60df0f8206f136fd614a97b1ec901de94117c4",
+          "message": "ICU-22341 commit checker: umbrella, explanations\n\n- support Umbrella ticket type (no commits)\n- explain why commit policy was applied",
+          "timestamp": "2023-04-13T12:20:12-05:00",
+          "tree_id": "1367d59a75c844a1250fd629b0865c7e4dce8df9",
+          "url": "https://github.com/unicode-org/icu/commit/1e60df0f8206f136fd614a97b1ec901de94117c4"
+        },
+        "date": 1681407888058,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.6903,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 11807061.8199,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2551103.7981,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11031246.4157,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2701647.5671,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
