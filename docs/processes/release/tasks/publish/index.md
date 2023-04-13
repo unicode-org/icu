@@ -258,6 +258,7 @@ $ git clone https://github.com/unicode-org/icu-docker.git
 $ cd icu-docker/src
 $ git clone --branch release-64-rc --depth 1 https://github.com/unicode-org/icu.git
 $ cd icu
+$ git lfs install --local
 $ git lfs fetch
 $ git lfs checkout
 $ cd ../..
