@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681355014702,
+  "lastUpdate": 1681367532047,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8158,6 +8158,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 3.6224519695756543,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "4b515504fdee138bbcb5fcabb6ed7ed18f544135",
+          "message": "ICU-22349 Build cygwin with -j  to run multiple cores\n\nSee #2421",
+          "timestamp": "2023-04-13T11:48:01+05:30",
+          "tree_id": "9249dab7ae36363e3cfaa7b79d6a1dbd91de7986",
+          "url": "https://github.com/unicode-org/icu/commit/4b515504fdee138bbcb5fcabb6ed7ed18f544135"
+        },
+        "date": 1681367494576,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 4.067433575897987,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
