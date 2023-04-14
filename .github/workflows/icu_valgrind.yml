@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   clang-valgrind-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Install valgrind
         run: |
@@ -27,11 +27,13 @@ jobs:
           sudo apt-get -y update;
           sudo apt-get install -y valgrind;
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build with debug enable
         env:
           CC: clang
+          CFLAGS: -gdwarf-4
           CXX: clang++
+          CXXFLAGS: -gdwarf-4
         run: |
           cd icu4c/source;
           ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l2.5 tests;
@@ -55,7 +57,7 @@ jobs:
               --show-reachable=yes ./icuinfo;
 
   clang-valgrind-intltest:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other test.
       fail-fast: false
@@ -70,11 +72,13 @@ jobs:
           sudo apt-get -y update;
           sudo apt-get install -y valgrind;
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build with debug enable
         env:
           CC: clang
+          CFLAGS: -gdwarf-4
           CXX: clang++
+          CXXFLAGS: -gdwarf-4
         run: |
           cd icu4c/source;
           ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l2.5 tests;
