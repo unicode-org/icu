@@ -568,6 +568,9 @@
     <ClCompile Include="units_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="uchar_type_build_test.cpp">
+      <Filter>configuration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
