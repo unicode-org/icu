@@ -291,6 +291,7 @@
     <ClCompile Include="units_data_test.cpp" />
     <ClCompile Include="units_router_test.cpp" />
     <ClCompile Include="units_test.cpp" />
+    <ClCompile Include="uchar_type_build_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />
