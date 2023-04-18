@@ -36,7 +36,11 @@ BUILDDIR := $(BUILDDIR:TEST\\INTLTEST/../../=)
 
 CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
 CPPFLAGS += -DUNISTR_FROM_CHAR_EXPLICIT= -DUNISTR_FROM_STRING_EXPLICIT= -DUCHAR_TYPE=char16_t
+ifdef QNX_TARGET
+DEFS += -D'U_TOPSRCDIR="/var/icu_tests"' -D'U_TOPBUILDDIR="/var/icu_tests/"'
+else
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
+endif
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M) $(LIB_THREAD)
 
 OBJECTS = aliastst.o allcoll.o apicoll.o astrotst.o callimts.o calregts.o caltest.o \

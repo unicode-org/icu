@@ -5867,6 +5867,10 @@ else
   AR="$ac_cv_prog_AR"
 fi
 
+if [ -n "$QNX_TARGET" ]; then
+  AR="x86_64-linux-gnu-ar"
+  RANLIB=""x86_64-linux-gnu-ranlib
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable renaming of symbols" >&5
 $as_echo_n "checking whether to enable renaming of symbols... " >&6; }
