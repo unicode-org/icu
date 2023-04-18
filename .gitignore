@@ -279,3 +279,15 @@ tools/unicode/c/genprops/genprops.[0-9]
 tools/unicode/c/genuca/genuca
 tools/unicode/c/genuca/genuca.8
 tools/unicode/c/icudefs.txt
+
+# QNX files
+icu4c/build_qnx/linux-x86_64-o/*
+icu4c/build_qnx/nto-aarch64-le/*
+icu4c/build_qnx/nto-x86_64-o/*
+!icu4c/build_qnx/linux-x86_64-o/GNUmakefile
+!icu4c/build_qnx/nto-aarch64-le/GNUmakefile
+!icu4c/build_qnx/nto-x86_64-o/GNUmakefile
+!icu4c/build_qnx/**/Makefile
+icu4c/build_qnx/linux-x86_64-o/Makefile
+icu4c/build_qnx/nto-aarch64-le/Makefile
+icu4c/build_qnx/nto-x86_64-o/Makefile
