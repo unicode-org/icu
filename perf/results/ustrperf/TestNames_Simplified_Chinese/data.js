@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1681770331095,
+  "lastUpdate": 1681873500930,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34270,6 +34270,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 44.5161,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "85fd7389e0fdd89b5a0aafe07429dd2452f1d310",
+          "message": "ICU-22349 Speed up pre-merge CI\n\nSee #2420",
+          "timestamp": "2023-04-19T08:06:59+05:30",
+          "tree_id": "d4d1708e8d9e0574d02ea37967030c10232cea0e",
+          "url": "https://github.com/unicode-org/icu/commit/85fd7389e0fdd89b5a0aafe07429dd2452f1d310"
+        },
+        "date": 1681873465711,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.3074,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 19.9348,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.3411,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.4462,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.6126,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.9115,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.9148,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.7401,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 116.4527,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 23.7803,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 50.1753,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 44.4794,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
