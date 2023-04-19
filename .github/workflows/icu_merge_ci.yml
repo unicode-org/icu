@@ -85,12 +85,25 @@ jobs:
           name: icu-perf-libs
           path: icu4c/source/lib
 
-      - name: Build and run ICU4C perf tests
+      # https://github.com/google/benchmark/blob/main/docs/reducing_variance.md
+      - name: Install linux-cpupower
+        run: |
+          set -ex;
+          sudo apt-get -y update;
+          sudo apt-get install -y linux-cpupower
+
+      - name: Build ICU4C perf tests
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
           (cd test/perf && make -j everything && mkdir -p results && mkdir -p results/${{ matrix.perf }})
+
+      - name: Run ICU4C perf tests
+        run: |
+          cd icu4c/source;
+          sudo cpupower frequency-set --governor performance
           LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 ${{ matrix.file }} ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/output.txt
+          sudo cpupower frequency-set --governor powersave
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -152,15 +165,28 @@ jobs:
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
+      # https://github.com/google/benchmark/blob/main/docs/reducing_variance.md
+      - name: Install linux-cpupower
+        run: |
+          set -ex;
+          sudo apt-get -y update;
+          sudo apt-get install -y linux-cpupower
 
-      - name: Build and run ICU4C perf tests
+      - name: Build ICU4C perf tests
         env:
           DATA_FILE_PATH: ../../icu4j/perf-tests/data/collation
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
           (cd test/perf && make -j everything && mkdir -p results && mkdir -p results/${{ matrix.perf }} && mkdir -p results/${{ matrix.perf }}/${{ matrix.data }})
+      - name: Run ICU4C perf tests
+        env:
+          DATA_FILE_PATH: ../../icu4j/perf-tests/data/collation
+        run: |
+          cd icu4c/source;
+          sudo cpupower frequency-set --governor performance
           LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 -f $DATA_FILE_PATH/${{ matrix.data }}.txt ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/${{ matrix.data }}/output.txt
+          sudo cpupower frequency-set --governor powersave
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -206,20 +232,33 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
+      - name: Install linux-cpupower
+        run: |
+          set -ex;
+          sudo apt-get -y update;
+          sudo apt-get install -y linux-cpupower
       - name: Get ICU libs
         uses: actions/download-artifact@v2
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
 
-      - name: Build and run strschrperf test
+      - name: Build strschrperf test
         env:
           DATA_FILE_PATH: ../../icu4j/perf-tests/data/udhr
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
           (cd test/perf && make -j everything && mkdir -p results && mkdir -p results/strsrchperf && mkdir -p results/strsrchperf/${{ matrix.locale }})
+
+      - name: Run strschrperf test
+        env:
+          DATA_FILE_PATH: ../../icu4j/perf-tests/data/udhr
+        run: |
+          cd icu4c/source;
+          sudo cpupower frequency-set --governor performance
           LD_LIBRARY_PATH=lib ./test/perf/strsrchperf/strsrchperf -b Test_ICU_Forward_Search Test_ICU_Backward_Search -t 5 -p 10 -L ${{ matrix.locale }} -f $DATA_FILE_PATH/${{ matrix.data }}.txt | tee test/perf/results/strsrchperf/${{ matrix.locale }}/output.txt
+          sudo cpupower frequency-set --governor powersave
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
