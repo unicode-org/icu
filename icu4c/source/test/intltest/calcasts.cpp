@@ -520,6 +520,7 @@ void CalendarCaseTest::Tibetan() {
        {2361499.5,  13,     7,         5,       19,  TUE,   0,  0,  0}, // Gregorian: 19/06/1753 - not a leap month - not a leap day
        {2361500.5,  13,     7,         5,       20,  WED,   0,  0,  0}, // Gregorian: 20/06/1753 - not a leap month - first of duplicated day
        {2361501.5,  13,     7,         5,       84,  THU,   0,  0,  0}, // Gregorian: 21/06/1753 - not a leap month - second of duplicated day
+       {2361502.5,  13,     7,         5,       21,  FRI,   0,  0,  0}, // Gregorian: 22/06/1753 - not a leap month - not a leap day
        {1740675.5, -16,    47,         9,       16,  MON,   0,  0,  0}, // Gregorian: 15/09/0053 - not a leap month - not a leap day
        {1807768.5, -13,    51,         5,       15,  SAT,   0,  0,  0}, // Gregorian: 27/05/0237 - not a leap month - not a leap day
        {1849957.5, -11,    46,        12,        5,  SAT,   0,  0,  0}, // Gregorian: 29/11/0352 - not a leap month - not a leap day
