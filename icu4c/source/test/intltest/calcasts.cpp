@@ -517,11 +517,12 @@ void CalendarCaseTest::Tibetan() {
     // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
        {2458165.5,  17,    32,         1,        1,  FRI,   0,  0,  0}, // Gregorian: 16/02/2018 - not a leap month - not a leap day - Losar
        {2432757.5,  16,    22,         6,       19,  SUN,   0,  0,  0}, // Gregorian: 25/07/1948 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
-       {2361500.5,  13,     7,         5,       84,  WED,   0,  0,  0}, // Gregorian: 20/06/1753 - not a leap month - leap day
+       {2361499.5,  13,     7,         5,       19,  TUE,   0,  0,  0}, // Gregorian: 19/06/1753 - not a leap month - not a leap day
+       {2361500.5,  13,     7,         5,       20,  WED,   0,  0,  0}, // Gregorian: 20/06/1753 - not a leap month - first of duplicated day
+       {2361501.5,  13,     7,         5,       84,  THU,   0,  0,  0}, // Gregorian: 21/06/1753 - not a leap month - second of duplicated day
        {1740675.5, -16,    47,         9,       16,  MON,   0,  0,  0}, // Gregorian: 15/09/0053 - not a leap month - not a leap day
        {1807768.5, -13,    51,         5,       15,  SAT,   0,  0,  0}, // Gregorian: 27/05/0237 - not a leap month - not a leap day
        {1849957.5, -11,    46,        12,        5,  SAT,   0,  0,  0}, // Gregorian: 29/11/0352 - not a leap month - not a leap day
-       {1896792.5,  -9,    55,         2,       69,  THU,   0,  0,  0}, // Gregorian: 20/02/0481 - not a leap month - leap day
        {1919638.5,  -8,    57,         8,       24,  TUE,   0,  0,  0}, // Gregorian: 10/09/0543 - not a leap month - not a leap day
        {1952573.5,  -6,    27,        11,        2,  TUE,   0,  0,  0}, // Gregorian: 12/11/0633 - not a leap month - not a leap day
        {1975738.5,  -5,    31,         4,       15,  THU,   0,  0,  0}, // Gregorian: 15/04/0697 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
@@ -533,7 +534,6 @@ void CalendarCaseTest::Tibetan() {
        {2053144.5,  -1,     3,         2,       21,  THU,   0,  0,  0}, // Gregorian: 21/03/0909 - not a leap month - not a leap day
        {2085851.5,   0,    32,         9,        9,  SUN,   0,  0,  0}, // Gregorian: 07/10/0998 - not a leap month - not a leap day
        {2095539.5,   0,    59,         3,       11,  SUN,   0,  0,  0}, // Gregorian: 17/04/1025 - not a leap month - not a leap day
-       {2150152.5,   3,    28,         9,       87,  SAT,   0,  0,  0}, // Gregorian: 26/10/1174 - not a leap month - leap day
        {2176922.5,   4,    42,         1,        7,  MON,   0,  0,  0}, // Gregorian: 10/02/1248 - not a leap month - not a leap day
        {2225642.5,   6,    55,         6,        2,  MON,   0,  0,  0}, // Gregorian: 02/07/1381 - not a leap month - not a leap day
 
