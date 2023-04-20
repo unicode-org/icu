@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1682006949133,
+  "lastUpdate": 1682009267702,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19438,6 +19438,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 8294502.0208,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "09f4459a77a8dbc12f15e02f6820a994636773b5",
+          "message": "ICU-22221 Add the -R flag to less to display ANSI colors.\n\nWithout this flag, any ANSI color escape sequences in the Maven error\nlog will be displayed in their escaped form, which isn't very readable.",
+          "timestamp": "2023-04-20T17:57:22+02:00",
+          "tree_id": "cd5967983aa370d57e06368ae3ae19d5d4537067",
+          "url": "https://github.com/unicode-org/icu/commit/09f4459a77a8dbc12f15e02f6820a994636773b5"
+        },
+        "date": 1682009233358,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 313.4916,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 27064225.7128,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6355262.3311,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 26953408.172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7084157.4042,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
