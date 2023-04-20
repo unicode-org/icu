@@ -586,7 +586,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_Cygwin_GCC_x86_64_Release
   displayName: 'C: Cygwin GCC x86_64 Release'
-  timeoutInMinutes: 40
+  timeoutInMinutes: 50
   pool:
     vmImage: 'windows-2019'
   variables:
