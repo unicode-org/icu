@@ -93,7 +93,7 @@ jobs:
         run: |
           set -ex;
           sudo apt-get -y update;
-          sudo apt-get install -y linux-cpupower
+          sudo apt-get install -y linux-tools-common
 
       - name: Build ICU4C perf tests
         run: |
@@ -173,7 +173,7 @@ jobs:
         run: |
           set -ex;
           sudo apt-get -y update;
-          sudo apt-get install -y linux-cpupower
+          sudo apt-get install -y linux-tools-common
 
       - name: Build ICU4C perf tests
         env:
@@ -239,7 +239,7 @@ jobs:
         run: |
           set -ex;
           sudo apt-get -y update;
-          sudo apt-get install -y linux-cpupower
+          sudo apt-get install -y linux-tools-common
       - name: Get ICU libs
         uses: actions/download-artifact@v2
         with:
