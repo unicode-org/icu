@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1682008266001,
+  "lastUpdate": 1682045328030,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7978,6 +7978,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2544.1630328406472,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5be2ea84e59e63e4d68ebcd4082996d6db3af9f0",
+          "message": "ICU-22349 Bump the cygwin timeout to 50 minutes",
+          "timestamp": "2023-04-20T19:32:34-07:00",
+          "tree_id": "a4299e363ed4dfa61dd3e105076e6b7566daaae7",
+          "url": "https://github.com/unicode-org/icu/commit/5be2ea84e59e63e4d68ebcd4082996d6db3af9f0"
+        },
+        "date": 1682045287473,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2596.2969338620464,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
