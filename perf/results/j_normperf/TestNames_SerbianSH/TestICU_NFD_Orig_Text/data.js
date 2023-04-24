@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1682045341514,
+  "lastUpdate": 1682363510036,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8188,6 +8188,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 12.049499443760233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "ec3aef8feca208fa9c9c624dd591cfc982f826d2",
+          "message": "ICU-22309 update CONTRIBUTING.md for new process\n\n- see https://github.com/unicode-org/.github/blob/main/.github/CONTRIBUTING.md",
+          "timestamp": "2023-04-24T13:55:48-05:00",
+          "tree_id": "cc589453ba99873a3421d14a22767492711e1249",
+          "url": "https://github.com/unicode-org/icu/commit/ec3aef8feca208fa9c9c624dd591cfc982f826d2"
+        },
+        "date": 1682363475021,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 12.13327504161854,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
