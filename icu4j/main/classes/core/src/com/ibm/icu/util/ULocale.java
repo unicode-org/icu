@@ -877,8 +877,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Returns a list of all 2-letter language codes defined in ISO 639.
-     * Can be used to create Locales.
+     * Returns a list of all unique language codes defined in ISO 639.
+     * They can be 2 or 3 letter codes, as defined by
+     * <a href="https://www.ietf.org/rfc/bcp/bcp47.html#section-2.2.1">
+     * BCP 47, section 2.2.1</a>. Can be used to create Locales.
      * [NOTE:  ISO 639 is not a stable standard-- some languages' codes have changed.
      * The list this function returns includes both the new and the old codes for the
      * languages whose codes have changed.]
