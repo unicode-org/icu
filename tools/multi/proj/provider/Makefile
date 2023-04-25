@@ -334,7 +334,7 @@ $(BUILD)/%/ok: $(BUILD)/%/config.status
 
 info help:
 	@echo $(SUBHEAD) Provider Build
-	@echo "Targetting Provider against ICU $(PROVIDER_TARGET) ($(PLUGLIB), major $(PLUGLIB_MAJ))"
+	@echo "Targeting Provider against ICU $(PROVIDER_TARGET) ($(PLUGLIB), major $(PLUGLIB_MAJ))"
 	@echo "Available plugins: $(PROVIDER_AVAILABLE) ($(PLUGLIB_AVAILABLE))"
 	@echo "Available keywords:"
 	@for ver in $(PROVIDER_AVAILABLE); do \

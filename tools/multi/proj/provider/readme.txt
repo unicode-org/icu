@@ -37,7 +37,7 @@ PROVIDER_AVAILABLE settings.
 3. Check the makefile settings by running 'make info', you should see output similar to the following:
 
    ICU Provider Build
- Targetting Provider against ICU 49 (49, major 49)
+ Targeting Provider against ICU 49 (49, major 49)
   Available plugins: 3.8.1 4.2.0.1  (3_8_1 4_2_0_1)
    Available keywords:
       ...@provider=icu38
