@@ -673,7 +673,7 @@ jobs:
         ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/fast --trie-type fast --all
         mkdir -p icuexportdata/uprops/small
         ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/small --trie-type small --all
-      displayName: 'Build property data export files'
+      displayName: 'Build property data files'
       env:
         LD_LIBRARY_PATH: lib
     - script: |
@@ -682,7 +682,7 @@ jobs:
         ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
         mkdir -p icuexportdata/norm/small
         ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
-      displayName: 'Build normalization data export files'
+      displayName: 'Build normalization data files'
       env:
         LD_LIBRARY_PATH: lib
     - script: |
@@ -691,7 +691,7 @@ jobs:
         ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/fast --trie-type fast --all
         mkdir -p icuexportdata/ucase/small
         ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/small --trie-type small --all
-      displayName: 'Build case data export files'
+      displayName: 'Build case data files'
       env:
         LD_LIBRARY_PATH: lib
     - script: |
@@ -703,7 +703,19 @@ jobs:
         mkdir -p icuexportdata/collation/implicithan
         ./bin/genrb -X -s data/coll/ --ucadata data/in/coll/ucadata-implicithan-icu4x.icu -d icuexportdata/collation/implicithan $FILES
         rm icuexportdata/collation/implicithan/*.res
-      displayName: 'Build collation data export files'
+      displayName: 'Build collation data files'
+      env:
+        LD_LIBRARY_PATH: lib
+    - script: |
+        cd icu4c/source
+        mkdir -p icuexportdata/segmenter/dictionary
+        for FILE in `ls data/brkitr/dictionaries`
+        do
+          ./bin/gendict --uchars data/brkitr/dictionaries/$FILE /dev/stdout | \
+          python3 -c 'import sys; data = sys.stdin.buffer.read(); print(f"trie_data = {[data[i + 1] << 8 | data[i] for i in range(64, len(data) - 1, 2)]}")' \
+          > icuexportdata/segmenter/dictionary/`basename $FILE .txt`.toml
+        done
+      displayName: 'Build segmenter dictionary files'
       env:
         LD_LIBRARY_PATH: lib
     - task: ArchiveFiles@2
