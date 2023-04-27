@@ -30,8 +30,12 @@ jobs:
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
           set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
-  # Java8 ICU4J build and unit test
-  java8-icu4j-build-and-test:
+  # ICU4J build and unit test using Ant
+  icu4j-ant-build-and-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [ '8', '11', '17' ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -43,7 +47,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: ${{ matrix.java-version }}
       - name: ICU4J
         run: |
           cd icu4j;
@@ -55,7 +59,7 @@ jobs:
           [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
         if: ${{ failure() }}
 
-  # Java8 ICU4J build and unit tests using Maven
+  # ICU4J build and unit tests using Maven
   # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
 
   # Run `test` to execute unit tests and ensure it is possible for tests to run even without packaging submodule
@@ -70,7 +74,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java-version: [ '8', '11' ]
+        java-version: [ '8', '11', '17' ]
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
@@ -95,7 +99,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java-version: [ '8', '11' ]
+        java-version: [ '8', '11', '17' ]
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
@@ -115,56 +119,6 @@ jobs:
         run: |
           cd icu4j/maven-build;
           mvn --batch-mode verify
-
-  # ICU4J build and unit test under Java11
-  java11-icu4j-build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout and setup
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-      - name: Checkout lfs objects
-        run: git lfs pull
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-      - name: ICU4J
-        run: |
-          cd icu4j;
-          ant init;
-          ant check;
-          ant localespiCheck
-      - name: List failures (if any)
-        run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
-        if: ${{ failure() }}
-
-  # ICU4J build and unit test under Java16
-  java16-icu4j-build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout and setup
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-      - name: Checkout lfs objects
-        run: git lfs pull
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '16'
-      - name: ICU4J
-        run: |
-          cd icu4j;
-          ant init;
-          ant check;
-          ant localespiCheck
-      - name: List failures (if any)
-        run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
-        if: ${{ failure() }}
 
   # ICU4J build and unit test under lstm
   lstm-icu4j-build-and-test:

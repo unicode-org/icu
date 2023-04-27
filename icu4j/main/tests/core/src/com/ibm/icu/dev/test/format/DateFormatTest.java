@@ -5627,4 +5627,67 @@ public class DateFormatTest extends TestFmwk {
         df.parse("2021-", cal, pos);
         assertTrue("Success parsing '2021-'", pos.getIndex() == 0);
     }
+
+    @Test
+    public void TestNumericFieldStrictParse() {
+        // regression test for ICU-22337, ICU-22259
+        class NumericFieldStrictParseItem {
+            public String localeID;
+            public String pattern;
+            public String text;
+            public int    pos;
+            public int    field1;
+            public int    value1;
+            public int    field2; // -1 to skip
+            public int    value2;
+            public NumericFieldStrictParseItem(String locID, String pat, String txt, int p, int f1, int v1, int f2, int v2) {
+                localeID = locID;
+                pattern  = pat;
+                text     = txt;
+                pos    = p;
+                field1 = f1;
+                value1 = v1;
+                field2 = f2;
+                value2 = v2;
+            }
+        };
+
+        final NumericFieldStrictParseItem[] items = {
+            //                              locale   pattern       text        pos field1          value1            field2       value2
+            // Ticket #22337
+            new NumericFieldStrictParseItem("en_US", "MM/dd/yyyy", "1/1/2023",  8, Calendar.MONTH, Calendar.JANUARY, Calendar.DATE, 1),
+            // Ticket #22259
+            new NumericFieldStrictParseItem("en_US", "dd-MM-uuuu", "1-01-2023", 9, Calendar.MONTH, Calendar.JANUARY, Calendar.DATE, 1),
+            new NumericFieldStrictParseItem("en_US", "dd-MM-uuuu", "01-01-223", 9, Calendar.DATE,  1,     Calendar.EXTENDED_YEAR, 223),
+        };
+
+        for (NumericFieldStrictParseItem item : items) {
+            ULocale locale = new ULocale(item.localeID);
+            SimpleDateFormat sdfmt = new SimpleDateFormat(item.pattern, locale);
+            Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE, locale);
+            cal.clear();
+            ParsePosition ppos = new ParsePosition(0);
+            sdfmt.setLenient(false);
+            sdfmt.parse(item.text, cal, ppos);
+            if (ppos.getIndex() != item.pos) {
+                errln("error: SimpleDateFormat.parse locale " + item.localeID + " pattern " + item.pattern + ": expected pos " +
+                        item.pos + ", got " + ppos.getIndex() + ", errIndex " + ppos.getErrorIndex());
+                continue;
+            }
+            if (item.field1 >= 0) {
+                int value = cal.get(item.field1);
+                if (value != item.value1) {
+                    errln("error: Calendar.get locale " + item.localeID + " pattern " + item.pattern + " field "
+                            + item.field1 + ": expected value " + item.value1 + ", got " + value );
+                }
+            }
+            if (item.field2 >= 0) {
+                int value = cal.get(item.field2);
+                if (value != item.value2) {
+                    errln("error: Calendar.get locale " + item.localeID + " pattern " + item.pattern + " field "
+                            + item.field2 + ": expected value " + item.value2 + ", got " + value );
+                }
+            }
+        }
+    }
 }

@@ -8,7 +8,7 @@
 *******************************************************************************
 *   file name:  stubdata.h
 *
-*   This header file is intended to be internal and only included in the 
+*   This header file is intended to be internal and only included in the
 *   accompanying implementation file. This file declares a single entry
 *   point for visibility of tools like TAPI.
 *
@@ -21,7 +21,6 @@
 *
 *   The stub data library (for which this file is the source) is sufficient
 *   for running the data building tools.
-*
 */
 
 #ifndef __STUBDATA_H__

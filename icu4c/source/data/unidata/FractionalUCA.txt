@@ -1,5 +1,5 @@
 # Fractional UCA Table, generated from the UCA DUCET
-# 2023-02-01 [MS]
+# 2023-04-03 [MS]
 # VERSION: UCA=15.0.0, UCD=15.0.0
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
@@ -2785,11 +2785,11 @@ A95F; [09 41 79, 05, 05]
 
 0027; [09 6E, 05, 05]
 FF07; [09 6E, 05, 20]
-05F3; [09 6E, 70, 05]
 2018; [09 6E, 70, 05]
-2019; [09 6E, 70, 05]
-201A; [09 6E, 70, 05]
-201B; [09 6E, 70, 05]
+2019; [09 6E, 73, 05]
+201A; [09 6E, 76, 05]
+201B; [09 6E, 79, 05]
+05F3; [09 6E, 7C, 05]
 
 2039; [09 70, 05, 05]
 
@@ -2797,15 +2797,15 @@ FF07; [09 6E, 05, 20]
 
 0022; [09 74, 05, 05]
 FF02; [09 74, 05, 20]
-05F4; [09 74, 70, 05]
 201C; [09 74, 70, 05]
-201D; [09 74, 70, 05]
-201E; [09 74, 70, 05]
-201F; [09 74, 70, 05]
-2E42; [09 74, 70, 05]
-301D; [09 74, 70, 05]
-301E; [09 74, 70, 05]
-301F; [09 74, 70, 05]
+201D; [09 74, 72, 05]
+201E; [09 74, 74, 05]
+201F; [09 74, 76, 05]
+2E42; [09 74, 78, 05]
+301D; [09 74, 7A, 05]
+301E; [09 74, 7C, 05]
+301F; [09 74, 7E 02, 05]
+05F4; [09 74, 7F 02, 05]
 
 00AB; [09 76, 05, 05]
 
@@ -65902,7 +65902,7 @@ FDD0 0052;	[, , 3D 02]	# CONSTRUCTED FAKE SECONDARY-IGNORABLE
 [first secondary ignorable [,, 3D 02]] # CONSTRUCTED
 [last secondary ignorable [,, 3D 02]] # CONSTRUCTED
 [first secondary in primary non-ignorable [X, 05, X]] # U+0009 <CHARACTER TABULATION>
-[last secondary in primary non-ignorable [X, 7C, X]] # U+A7D9 LATIN SMALL LETTER SIGMOID S
+[last secondary in primary non-ignorable [X, 7F 02, X]] # U+05F4 HEBREW PUNCTUATION GERSHAYIM
 [first primary ignorable [, 82, 05]] # U+0332 COMBINING LOW LINE
 [last primary ignorable [, FB 94, 05]] # U+00B7 MIDDLE DOT
 [first variable [03 04, 05, 05]] # U+0009 <CHARACTER TABULATION>
