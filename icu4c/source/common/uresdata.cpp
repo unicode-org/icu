@@ -1040,6 +1040,7 @@ enum {
 /* The table item key string is not locally available. */
 static const char *const gUnknownKey="";
 
+#if !UCONFIG_NO_COLLATION
 /* resource table key for collation binaries: "%%CollationBin" */
 static const char16_t gCollationBinKey[]={
     0x25, 0x25,
@@ -1047,6 +1048,7 @@ static const char16_t gCollationBinKey[]={
     0x42, 0x69, 0x6e,
     0
 };
+#endif
 
 /*
  * swap one resource item
