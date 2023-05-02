@@ -133,6 +133,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(toDecimalNumber);
         TESTCASE_AUTO(microPropsInternals);
         TESTCASE_AUTO(formatUnitsAliases);
+        TESTCASE_AUTO(testIssue22378);
     TESTCASE_AUTO_END;
 }
 
@@ -6049,6 +6050,63 @@ void NumberFormatterApiTest::formatUnitsAliases() {
 
         assertEquals("test unit aliases", testCase.expectedFormat, actualFormat);
     }
+}
+
+void NumberFormatterApiTest::testIssue22378() {
+    IcuTestErrorCode status(*this, "testIssue22378");
+
+    // I checked the results before the fix and everything works the same except
+    // "fr-FR-u-mu-fahrenhe" and "fr_FR@mu=fahrenhe"
+    struct TestCase {
+        const std::string localeId;
+        const UnicodeString expectedFormat;
+    } testCases[]{
+        {"en-US", u"73\u00B0F"},
+        {"en-US-u-mu-fahrenhe", u"73\u00B0F"},
+        // Unlike ULocale, forLanguageTag fails wih U_ILLEGAL_ARGUMENT_ERROR
+        // because fahrenheit is not valid value for -u-mu-
+        // {"en-US-u-mu-fahrenheit", u"73\u00B0F"},
+        {"en-US-u-mu-celsius", u"23\u00B0C"},
+        {"en-US-u-mu-badvalue", u"73\u00B0F"},
+        {"en_US@mu=fahrenhe", u"73\u00B0F"},
+        {"en_US@mu=fahrenheit", u"73\u00B0F"},
+        {"en_US@mu=celsius", u"23\u00B0C"},
+        {"en_US@mu=badvalue", u"73\u00B0F"},
+
+        {"fr-FR", u"23\u202F\u00B0C"},
+        {"fr-FR-u-mu-fahrenhe", u"73\u202F\u00B0F"},
+        // Unlike ULocale, forLanguageTag fails wih U_ILLEGAL_ARGUMENT_ERROR
+        // because fahrenheit is not valid value for -u-mu-
+        // {"fr-FR-u-mu-fahrenheit", u"23\u202F\u00B0C"},
+        {"fr-FR-u-mu-celsius", u"23\u202F\u00B0C"},
+        {"fr-FR-u-mu-badvalue", u"23\u202F\u00B0C"},
+        {"fr_FR@mu=fahrenhe", u"73\u202F\u00B0F"},
+        {"fr_FR@mu=fahrenheit", u"73\u202F\u00B0F"},
+        {"fr_FR@mu=celsius", u"23\u202F\u00B0C"},
+        {"fr_FR@mu=badvalue", u"23\u202F\u00B0C"},
+    };
+
+    UnlocalizedNumberFormatter formatter = NumberFormatter::with()
+            .usage("weather")
+            .unit(MeasureUnit::getCelsius());
+    double value = 23.0;
+
+    for (const auto &testCase : testCases) {
+        std::string localeId = testCase.localeId;
+        const Locale locale = (localeId.find("@") != std::string::npos)
+                ? Locale(localeId.c_str())
+                : Locale::forLanguageTag(localeId, status);
+        UnicodeString actualFormat = formatter.locale(locale)
+                .formatDouble(value, status)
+                .toString(status);
+        assertEquals(u"-u-mu- honored (" + UnicodeString(localeId.c_str()) + u")",
+                testCase.expectedFormat, actualFormat);
+    }
+
+    UnicodeString result = formatter.locale("en-US").formatDouble(value, status).getOutputUnit(status).getIdentifier();
+    assertEquals("Testing default -u-mu- for en-US", MeasureUnit::getFahrenheit().getIdentifier(), result);
+    result = formatter.locale("fr-FR").formatDouble(value, status).getOutputUnit(status).getIdentifier();
+    assertEquals("Testing default -u-mu- for fr-FR", MeasureUnit::getCelsius().getIdentifier(), result);
 }
 
 /* For skeleton comparisons: this checks the toSkeleton output for `f` and for
