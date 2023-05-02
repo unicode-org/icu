@@ -5995,6 +5995,64 @@ public class NumberFormatterApiTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void testIssue22378() {
+        class TestCase {
+            final String localeId;
+            final String expectedFormat;
+
+            TestCase(String localeId, String expectedFormat) {
+                this.localeId = localeId;
+                this.expectedFormat = expectedFormat;
+            }
+        }
+
+        // I checked the results before the fix and everything works the same except
+        // "fr-FR-u-mu-fahrenhe" and "fr_FR@mu=fahrenhe"
+        final TestCase [] testCases = {
+                new TestCase("en-US", "73\u00B0F"),
+                new TestCase("en-US-u-mu-fahrenhe", "73\u00B0F"),
+                // WAI. "fahrenheit" is an invalid -u-mu- value, we get the default for en-US
+                new TestCase("en-US-u-mu-fahrenheit", "73\u00B0F"),
+                new TestCase("en-US-u-mu-celsius", "23\u00B0C"),
+                new TestCase("en-US-u-mu-badvalue", "73\u00B0F"),
+                new TestCase("en_US@mu=fahrenhe", "73\u00B0F"),
+                new TestCase("en_US@mu=fahrenheit", "73\u00B0F"),
+                new TestCase("en_US@mu=celsius", "23\u00B0C"),
+                new TestCase("en_US@mu=badvalue", "73\u00B0F"),
+
+                new TestCase("fr-FR", "23\u202F\u00B0C"),
+                new TestCase("fr-FR-u-mu-fahrenhe", "73\u202F\u00B0F"),
+                // WAI. Celsius because "fahrenheit" is an invalid -u-mu- value, we get the default for fr-FR
+                new TestCase("fr-FR-u-mu-fahrenheit", "23\u202F\u00B0C"),
+                new TestCase("fr-FR-u-mu-celsius", "23\u202F\u00B0C"),
+                new TestCase("fr-FR-u-mu-badvalue", "23\u202F\u00B0C"),
+                new TestCase("fr_FR@mu=fahrenhe", "73\u202F\u00B0F"),
+                new TestCase("fr_FR@mu=fahrenheit", "73\u202F\u00B0F"),
+                new TestCase("fr_FR@mu=celsius", "23\u202F\u00B0C"),
+                new TestCase("fr_FR@mu=badvalue", "23\u202F\u00B0C"),
+        };
+
+        final UnlocalizedNumberFormatter formatter = NumberFormatter.with()
+                .usage("weather")
+                .unit(MeasureUnit.CELSIUS);
+        final double value = 23.0;
+
+        for (TestCase testCase : testCases) {
+            String localeId = testCase.localeId;
+            ULocale locale = localeId.contains("@")
+                    ? new ULocale(localeId)
+                    : ULocale.forLanguageTag(localeId);
+            String actualFormat = formatter.locale(locale).format(value).toString();
+            assertEquals("-u-mu- honored (" + localeId + ")", testCase.expectedFormat, actualFormat);
+        }
+
+        String result = formatter.locale(Locale.US).format(value).getOutputUnit().getIdentifier();
+        assertEquals("Testing default -u-mu- for en-US", MeasureUnit.FAHRENHEIT.getIdentifier(), result);
+        result = formatter.locale(Locale.FRANCE).format(value).getOutputUnit().getIdentifier();
+        assertEquals("Testing default -u-mu- for fr-FR", MeasureUnit.CELSIUS.getIdentifier(), result);
+    }
+
     static void assertFormatDescending(
             String message,
             String skeleton,
