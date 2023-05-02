@@ -72,8 +72,13 @@ public class UnitPreferences {
 
     public UnitPreference[] getPreferencesFor(String category, String usage, ULocale locale, UnitsData data) {
         // TODO: remove this condition when all the categories are allowed.
-        if (category.equals("temperature")) {
+        // WARNING: when this is removed please make sure to keep the "fahrenhe" => "fahrenheit" mapping
+        if ("temperature".equals(category)) {
             String localeUnit = locale.getKeywordValue("mu");
+            // The value for -u-mu- is `fahrenhe`, but CLDR and everything else uses `fahrenheit`
+            if ("fahrenhe".equals(localeUnit)) {
+                localeUnit = "fahrenheit";
+            }
             String localeUnitCategory;
             try {
                 localeUnitCategory = localeUnit == null ? null : data.getCategory(MeasureUnitImpl.forIdentifier(localeUnit));
