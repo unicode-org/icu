@@ -62,10 +62,6 @@ import com.ibm.icu.util.ULocale.Category;
  * <li>Dershowitz and Reingold, <i>Calendrical Calculations</i>,
  * Cambridge University Press, 1997</li>
  * 
- * <li>Helmer Aslaksen's
- * <a href="http://www.math.nus.edu.sg/aslaksen/calendar/chinese.shtml">
- * Chinese Calendar page</a></li>
- *
  * <li>The <a href="http://www.tondering.dk/claus/calendar.html">
  * Calendar FAQ</a></li>
  *
