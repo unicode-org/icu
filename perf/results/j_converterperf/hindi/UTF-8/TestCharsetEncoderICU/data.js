@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683050023412,
+  "lastUpdate": 1683131794752,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8548,6 +8548,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.05661103947662,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "0e4b10b1121a26fe4d1653d740f5a15bad9c48f0",
+          "message": "ICU-22378 Fix temperature format ignoring -u-mu-fahrenhe",
+          "timestamp": "2023-05-03T09:24:53-07:00",
+          "tree_id": "062c1b22153ce55dbe44c2e7876c84761b658492",
+          "url": "https://github.com/unicode-org/icu/commit/0e4b10b1121a26fe4d1653d740f5a15bad9c48f0"
+        },
+        "date": 1683131758542,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.1842027520517524,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
