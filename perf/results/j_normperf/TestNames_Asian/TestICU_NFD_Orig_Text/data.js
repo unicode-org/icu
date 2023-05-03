@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683137319618,
+  "lastUpdate": 1683139225063,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8458,6 +8458,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 19.48394267039572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "530ca9817641c6a90c9c8c5028996de1d559e4a8",
+          "message": "ICU-22371 Fix ULocale.getISOLanguages() API docs",
+          "timestamp": "2023-05-03T11:13:32-07:00",
+          "tree_id": "4c0c892bf64dfe4a34ef1a0a7b2b2404e1bc60d7",
+          "url": "https://github.com/unicode-org/icu/commit/530ca9817641c6a90c9c8c5028996de1d559e4a8"
+        },
+        "date": 1683139190067,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 16.754903354820406,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
