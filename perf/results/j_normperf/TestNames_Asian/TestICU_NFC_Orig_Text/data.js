@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683131959134,
+  "lastUpdate": 1683137286041,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8458,6 +8458,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 6.48144934693015,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "00bb6789b3895e4ed13701ab1cfaf6954a2d54fe",
+          "message": "ICU-22323 Remove broken link from the Chinese Calendar documentation",
+          "timestamp": "2023-05-03T10:51:22-07:00",
+          "tree_id": "d5a3943d80732201af43afd611f74e2f6474fdec",
+          "url": "https://github.com/unicode-org/icu/commit/00bb6789b3895e4ed13701ab1cfaf6954a2d54fe"
+        },
+        "date": 1683137248816,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.5497691267538976,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
