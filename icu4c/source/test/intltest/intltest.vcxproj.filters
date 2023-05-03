@@ -421,6 +421,9 @@
     <ClCompile Include="loctest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="loclikelysubtagstest.cpp">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
     <ClCompile Include="restest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
@@ -846,6 +849,9 @@
     <ClInclude Include="loctest.h">
       <Filter>locales &amp; resources</Filter>
     </ClInclude>
+    <ClCompile Include="loclikelysubtagstest.h">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
     <ClInclude Include="restest.h">
       <Filter>locales &amp; resources</Filter>
     </ClInclude>

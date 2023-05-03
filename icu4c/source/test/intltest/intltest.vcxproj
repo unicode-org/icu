@@ -233,6 +233,7 @@
     <ClCompile Include="uts46test.cpp" />
     <ClCompile Include="aliastst.cpp" />
     <ClCompile Include="loctest.cpp" />
+    <ClCompile Include="loclikelysubtagstest.cpp" />
     <ClCompile Include="restest.cpp" />
     <ClCompile Include="restsnew.cpp" />
     <ClCompile Include="intltest.cpp">
@@ -390,6 +391,7 @@
     <ClInclude Include="testidna.h" />
     <ClInclude Include="aliastst.h" />
     <ClInclude Include="loctest.h" />
+    <ClCompile Include="loclikelysubtagstest.h" />
     <ClInclude Include="restest.h" />
     <ClInclude Include="restsnew.h" />
     <ClInclude Include="intltest.h" />

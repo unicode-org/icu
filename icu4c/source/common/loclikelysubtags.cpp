@@ -330,6 +330,12 @@ LSR XLikelySubtags::makeMaximizedLsrFrom(const Locale &locale, UErrorCode &error
 
 namespace {
 
+const char *getCanonicalScript(const char* script) {
+    static const char* kZinh = "Zinh";
+    static const char* kQaai = "Qaai";
+    return (uprv_strcmp(script, kQaai) == 0) ? kZinh : script;
+}
+
 const char *getCanonical(const CharStringMap &aliases, const char *alias) {
     const char *canonical = aliases.get(alias);
     return canonical == nullptr ? alias : canonical;
@@ -376,7 +382,7 @@ LSR XLikelySubtags::makeMaximizedLsr(const char *language, const char *script, c
     }
 
     language = getCanonical(languageAliases, language);
-    // (We have no script mappings.)
+    script = getCanonicalScript(script);
     region = getCanonical(regionAliases, region);
     return maximize(language, script, region);
 }

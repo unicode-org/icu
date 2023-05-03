@@ -45,7 +45,12 @@ struct LSR final : public UMemory {
      */
     LSR(char prefix, const char *lang, const char *scr, const char *r, int32_t f,
         UErrorCode &errorCode);
-    LSR(LSR &&other) noexcept;
+    /**
+     * Constructor which copies those into owned memory, and aliases the region.
+     */
+    LSR(const char *lang, const char *scr, const char *r, int32_t f,
+        UErrorCode &errorCode);
+    LSR(LSR &&othe) noexcept;
     LSR(const LSR &other) = delete;
     inline ~LSR() {
         // Pure inline code for almost all instances.
