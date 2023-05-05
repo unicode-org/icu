@@ -400,7 +400,7 @@ public class RBBITestMonkey extends TestFmwk {
             fRegionalIndicatorSet = new UnicodeSet("[\\p{Word_Break = Regional_Indicator}]");
             fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]");
             fHebrew_LetterSet = new UnicodeSet("[\\p{Word_Break = Hebrew_Letter}]");
-            fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter} @]");
+            fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]");
             fSingle_QuoteSet = new UnicodeSet("[\\p{Word_Break = Single_Quote}]");
             fDouble_QuoteSet = new UnicodeSet("[\\p{Word_Break = Double_Quote}]");
             fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]");
