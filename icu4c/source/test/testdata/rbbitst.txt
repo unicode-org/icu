@@ -1586,7 +1586,7 @@ Bangkok)•</data>
 <data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct.field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\uFF92\uFF76\uFF9E<400> •</data>
-<data>•xx@yy<200>.•</data>
+<data>•xx<200>@•yy<200>.•</data>
 
 <locale en_US_POSIX>
 <word>
@@ -1594,21 +1594,21 @@ Bangkok)•</data>
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\u06c9<200>\uc799\ufffa•</data>
 <data>•\uFF92\uFF76\uFF9E<400> •</data>
-<data>•xx@yy<200>.•</data>
+<data>•xx<200>@•yy<200>.•</data>
 
 <locale fi>
 <word>
 <data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\uFF92\uFF76\uFF9E<400> •</data>
-<data>•xx@yy<200>.•</data>
+<data>•xx<200>@•yy<200>.•</data>
 
 <locale sv>
 <word>
 <data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\uFF92\uFF76\uFF9E<400> •</data>
-<data>•xx@yy<200>.•</data>
+<data>•xx<200>@•yy<200>.•</data>
 
 
 # UBreakIteratorType UBRK_CHARACTER, Locale "th"
