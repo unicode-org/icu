@@ -155,10 +155,10 @@ public final class LSR {
         encoded &= 0x00ffffff;
         encoded %= 27*27*27;
         StringBuilder res = new StringBuilder(3);
-        res.append('a' + ((encoded % 27) - 1));
-        res.append('a' + (((encoded / 27 ) % 27) - 1));
+        res.append((char)('a' + ((encoded % 27) - 1)));
+        res.append((char)('a' + (((encoded / 27 ) % 27) - 1)));
         if (encoded / (27 * 27) != 0) {
-            res.append('a' + ((encoded / (27 * 27)) - 1));
+            res.append((char)('a' + ((encoded / (27 * 27)) - 1)));
         }
         return res.toString();
     }
@@ -182,16 +182,16 @@ public final class LSR {
             return "";
         }
         StringBuilder res = new StringBuilder(3);
-        res.append('A' + ((encoded % 27) - 1));
-        res.append('A' + (((encoded / 27) % 27) - 1));
+        res.append((char)('A' + ((encoded % 27) - 1)));
+        res.append((char)('A' + (((encoded / 27) % 27) - 1)));
         return res.toString();
     }
 
     public static LSR[] decodeInts(int[] nums) {
         LSR[] lsrs = new LSR[nums.length];
-        for (int i = 0, j = 0; i < nums.length; i += 3, ++j) {
-            lsrs[j] = new LSR(toLanguage(nums[j]), toScript(nums[j]), toRegion(nums[j]),
-                    LSR.IMPLICIT_LSR);
+        for (int i = 0; i < nums.length; ++i) {
+            int n = nums[i];
+            lsrs[i] = new LSR(toLanguage(n), toScript(n), toRegion(n), LSR.IMPLICIT_LSR);
         }
         return lsrs;
     }
