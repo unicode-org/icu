@@ -11,6 +11,7 @@
 #include "unicode/locid.h"
 #include "unicode/uobject.h"
 #include "unicode/ures.h"
+#include "unicode/uscript.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "loclikelysubtags.h"
@@ -85,7 +86,7 @@ struct XLikelySubtagsData {
                          languageIndexes, languagesLength, errorCode) ||
                 !readStrings(likelyTable, "regionAliases", value,
                              regionIndexes, regionsLength, errorCode) ||
-                !readStrings(likelyTable, "lsrs", value,
+                !readLSREncodedStrings(likelyTable, "lsrnum", value,
                              lsrSubtagIndexes,lsrSubtagsLength, errorCode)) {
             return;
         }
@@ -136,7 +137,7 @@ struct XLikelySubtagsData {
 
             if (!readStrings(matchTable, "partitions", value,
                              partitionIndexes, partitionsLength, errorCode) ||
-                    !readStrings(matchTable, "paradigms", value,
+                    !readLSREncodedStrings(matchTable, "paradigmnum", value,
                                  paradigmSubtagIndexes, paradigmSubtagsLength, errorCode)) {
                 return;
             }
@@ -237,6 +238,82 @@ private:
                 rawIndexes[i] = strings.add(value.getUnicodeString(errorCode), errorCode);
                 if (U_FAILURE(errorCode)) { return false; }
             }
+        }
+        return true;
+    }
+    UnicodeString toLanguage(int encoded) {
+        if (encoded == 0) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        if (encoded == 1) {
+            return UNICODE_STRING_SIMPLE("skip");
+        }
+        encoded &= 0x00ffffff;
+        encoded %= 27*27*27;
+        char lang[3];
+        lang[0] = 'a' + ((encoded % 27) - 1);
+        lang[1] = 'a' + (((encoded / 27 ) % 27) - 1);
+        if (encoded / (27 * 27) == 0) {
+            return UnicodeString(lang, 2);
+        }
+        lang[2] = 'a' + ((encoded / (27 * 27)) - 1);
+        return UnicodeString(lang, 3);
+    }
+    UnicodeString toScript(int encoded) {
+        if (encoded == 0) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        if (encoded == 1) {
+            return UNICODE_STRING_SIMPLE("script");
+        }
+        encoded = (encoded >> 24) & 0x000000ff;
+        const char* script = uscript_getShortName(static_cast<UScriptCode>(encoded));
+        if (script == nullptr) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        return UnicodeString(script, -1, US_INV);
+    }
+    UnicodeString toRegion(int encoded) {
+        if (encoded == 0 || encoded == 1) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        encoded &= 0x00ffffff;
+        encoded /= 27 * 27 * 27;
+        encoded %= 27 * 27;
+        if (encoded < 27) {
+            switch (encoded) {
+                case 1:
+                    return UNICODE_STRING_SIMPLE("001");
+                case 2:
+                     return UNICODE_STRING_SIMPLE("143");
+                case 3:
+                     return UNICODE_STRING_SIMPLE("419");
+            }
+        }
+        char region[2];
+        region[0] = 'A' + ((encoded % 27) - 1);
+        region[1] = 'A' + (((encoded / 27) % 27) - 1);
+        return UnicodeString(region, 2);
+    }
+
+    bool readLSREncodedStrings(const ResourceTable &table, const char *key, ResourceValue &value,
+                     LocalMemory<int32_t> &indexes, int32_t &length, UErrorCode &errorCode) {
+        if (table.findValue(key, value)) {
+            const int32_t* vectors = value.getIntVector(length, errorCode);
+            if (U_FAILURE(errorCode)) { return false; }
+            if (length == 0) { return true; }
+            int32_t *rawIndexes = indexes.allocateInsteadAndCopy(length * 3);
+            if (rawIndexes == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return false;
+            }
+            for (int i = 0; i < length; ++i) {
+                rawIndexes[i*3] = strings.add(toLanguage(vectors[i]), errorCode);
+                rawIndexes[i*3+1] = strings.add(toScript(vectors[i]), errorCode);
+                rawIndexes[i*3+2] = strings.add(toRegion(vectors[i]), errorCode);
+                if (U_FAILURE(errorCode)) { return false; }
+            }
+            length *= 3;
         }
         return true;
     }

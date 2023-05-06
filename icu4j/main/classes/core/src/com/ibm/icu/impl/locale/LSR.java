@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.Objects;
+import com.ibm.icu.lang.UScript;
 
 public final class LSR {
     public static final int REGION_INDEX_LIMIT = 1001 + 26 * 26;
@@ -88,5 +89,110 @@ public final class LSR {
     @Override
     public int hashCode() {
         return Objects.hash(language, script, region, flags);
+    }
+
+    // This method is added only to support encodeToIntForResource()
+    // It only support [a-z]{2,3} and will not work for other cases.
+    private int encodeLanguageToInt() {
+        assert language.length() >= 2;
+        assert language.length() <= 3;
+        assert language.charAt(0) >= 'a';
+        assert language.charAt(0) <= 'z';
+        assert language.charAt(1) >= 'a';
+        assert language.charAt(1) <= 'z';
+        assert language.length() == 2 || language.charAt(2) >= 'a';
+        assert language.length() == 2 || language.charAt(2) <= 'z';
+        return language.charAt(0) - 'a' + 1 +
+               27 * (language.charAt(1) - 'a' + 1) +
+               ((language.length() == 2) ? 0 : 27 * 27 * (language.charAt(2) - 'a' + 1));
+    }
+    // This method is added only to support encodeToIntForResource()
+    // It only support [A-Z][a-z]{3} which defined in UScript and does not work for other cases.
+    private int encodeScriptToInt() {
+        int ret = UScript.getCodeFromName(script);
+        assert ret != UScript.INVALID_CODE;
+        return ret;
+    }
+    // This method is added only to support encodeToIntForResource()
+    // It only support [A-Z]{2}|001|143|419 and does not work for other cases.
+    private int encodeRegionToInt() {
+        assert region.length() >= 2;
+        assert region.length() <= 3;
+        // Do not have enough bits to store the all 1000 possible combination of \d{3}
+        // Only support what is needed in resource- "001", "143" and "419".
+        if (region.length() == 3) {
+            assert region.equals("001") || region.equals("143") || region.equals("419");
+            if (region.equals("001")) {
+                return 1;
+            } else if (region.equals("143")) {
+                return 2;
+            } else {
+                assert region.equals("419");
+                return 3;
+            }
+        }
+        assert region.charAt(0) >= 'A';
+        assert region.charAt(0) <= 'Z';
+        assert region.charAt(1) >= 'A';
+        assert region.charAt(1) <= 'Z';
+        // 'AA' => 1+27*1  = 28
+        // ...
+        // 'AZ' => 1+27*26 = 703
+        // 'BA' => 2+27*1  = 29
+        // ...
+        // 'IN' => 9+27*14 = 387
+        // 'ZZ' => 26+27*26 = 728
+        return (region.charAt(0) - 'A' + 1) + 27 * (region.charAt(1) - 'A' + 1);
+    }
+    // This is designed to only support encoding some LSR into resources but not for other cases.
+    public int encodeToIntForResource() {
+        return (encodeLanguageToInt() + (27*27*27) * encodeRegionToInt()) |
+            (encodeScriptToInt() << 24);
+    }
+    private static String toLanguage(int encoded) {
+        if (encoded == 0) return "";
+        if (encoded == 1) return "skip";
+        encoded &= 0x00ffffff;
+        encoded %= 27*27*27;
+        StringBuilder res = new StringBuilder(3);
+        res.append('a' + ((encoded % 27) - 1));
+        res.append('a' + (((encoded / 27 ) % 27) - 1));
+        if (encoded / (27 * 27) != 0) {
+            res.append('a' + ((encoded / (27 * 27)) - 1));
+        }
+        return res.toString();
+    }
+    private static String toScript(int encoded) {
+        if (encoded == 0) return "";
+        if (encoded == 1) return "script";
+        encoded = (encoded >> 24) & 0x000000ff;
+        return UScript.getShortName(encoded);
+    }
+    private static String toRegion(int encoded) {
+        if (encoded == 0 || encoded == 1) return "";
+        encoded &= 0x00ffffff;
+        encoded /= 27 * 27 * 27;
+        encoded %= 27 * 27;
+        if (encoded < 27) {
+            switch (encoded) {
+                case 1: return "001";
+                case 2: return "143";
+                case 3: return "419";
+            }
+            return "";
+        }
+        StringBuilder res = new StringBuilder(3);
+        res.append('A' + ((encoded % 27) - 1));
+        res.append('A' + (((encoded / 27) % 27) - 1));
+        return res.toString();
+    }
+
+    public static LSR[] decodeInts(int[] nums) {
+        LSR[] lsrs = new LSR[nums.length];
+        for (int i = 0, j = 0; i < nums.length; i += 3, ++j) {
+            lsrs[j] = new LSR(toLanguage(nums[j]), toScript(nums[j]), toRegion(nums[j]),
+                    LSR.IMPLICIT_LSR);
+        }
+        return lsrs;
     }
 }
