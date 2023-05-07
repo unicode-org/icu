@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683138656465,
+  "lastUpdate": 1683435177998,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8398,6 +8398,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 11.948418261393087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "5618203821839cad2286a67682fb1940c8ce586f",
+          "message": "ICU-22360 revert portions of #2159 which included @ in ALetter for wordbreak, update tests",
+          "timestamp": "2023-05-06T21:36:46-07:00",
+          "tree_id": "d8b965506e7bbeb71df2856099dabe5527aafa02",
+          "url": "https://github.com/unicode-org/icu/commit/5618203821839cad2286a67682fb1940c8ce586f"
+        },
+        "date": 1683435142167,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 11.456574909779215,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
