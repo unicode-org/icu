@@ -39,6 +39,8 @@ jobs:
 
   # Compile libraries used by all ICU4C performance tests.
   icu4c-store-perf-libs:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -59,6 +61,8 @@ jobs:
 
   # Assorted ICU4C performance tests
   icu4c-performance-tests:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     needs: icu4c-store-perf-libs
     strategy:
       fail-fast: false
@@ -109,6 +113,8 @@ jobs:
 
   # Assorted ICU4C performance tests using data files
   icu4c-performance-tests-with-files:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     needs: icu4c-store-perf-libs
     strategy:
       fail-fast: false
@@ -179,6 +185,8 @@ jobs:
 
   # String search performance test
   icu4c-strsrchperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     needs: icu4c-store-perf-libs
     strategy:
       fail-fast: false
@@ -238,6 +246,8 @@ jobs:
 
   # ICU4J performance test for Unicode sets
   icu4j-unicodesetperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
@@ -287,6 +297,8 @@ jobs:
 
   # ICU4J performance test for character APIs
   icu4j-ucharacterperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
 
@@ -333,6 +345,8 @@ jobs:
 
   # ICU4J performance test for decimal formatting
   icu4j-decimalformatperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
@@ -386,6 +400,8 @@ jobs:
 
   # ICU4J performance test for normalization
   icu4j-normperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
@@ -443,6 +459,8 @@ jobs:
 
   # ICU4J performance test for encoding conversion
   icu4j-converterperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
@@ -566,6 +584,8 @@ jobs:
 
   # ICU4J performance test for date formatting
   icu4j-dateformatperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
@@ -637,6 +657,8 @@ jobs:
 
   # Retrieve performance test results and upload results to remote repository
   perf-test-data-move:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     name: Copy perf data to remote repo for visualization
     needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf, icu4j-unicodesetperf, icu4j-ucharacterperf, icu4j-decimalformatperf, icu4j-normperf, icu4j-converterperf, icu4j-dateformatperf]
     runs-on: ubuntu-latest
