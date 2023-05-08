@@ -140,6 +140,7 @@
 # CLDR path to emit values in different places in an array.
 
 # Time patterns (4 x values)
+# (Entries with alt="*" on pattern are ignored)
 //ldml/dates/calendars/calendar[@type="(%A)"]/(timeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns
 
@@ -207,6 +208,7 @@
 
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/appendItems/appendItem[@request="(%A)"] ; /calendar/$1/appendItems/$2
 
+# (Entries with alt="*" on dateFormatItem are ignored)
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/availableFormats/dateFormatItem[@id="(%A)"]                ; /calendar/$1/availableFormats/$2
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/availableFormats/dateFormatItem[@id="(%A)"][@count="(%A)"] ; /calendar/$1/availableFormats/$2/$3
 
