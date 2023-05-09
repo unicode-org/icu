@@ -83,7 +83,7 @@ private:
                          const char *variant, UErrorCode &errorCode) const;
 
     /**
-     * Raw access to addLikelySubtags.
+     * Raw access to addLikelySubtags. Input must be in canonical format, eg "en", not "eng" or "EN".
      */
     LSR maximize(const char *language, const char *script, const char *region) const;
 
