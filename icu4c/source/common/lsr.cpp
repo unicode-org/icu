@@ -14,26 +14,6 @@
 
 U_NAMESPACE_BEGIN
 
-LSR::LSR(const char *lang, const char *scr, const char *r, int32_t f,
-         UErrorCode &errorCode) :
-        language(nullptr), script(nullptr), region(r),
-        regionIndex(indexForRegion(region)), flags(f) {
-    if (U_SUCCESS(errorCode)) {
-        CharString langScript;
-        langScript.append(lang, errorCode).append('\0', errorCode);
-        int32_t scriptOffset = langScript.length();
-        langScript.append(scr, errorCode).append('\0', errorCode);
-        int32_t regionOffset = langScript.length();
-        langScript.append(r, errorCode);
-        owned = langScript.cloneData(errorCode);
-        if (U_SUCCESS(errorCode)) {
-            language = owned;
-            script = owned + scriptOffset;
-            region = owned + regionOffset;
-        }
-    }
-}
-
 LSR::LSR(char prefix, const char *lang, const char *scr, const char *r, int32_t f,
          UErrorCode &errorCode) :
         language(nullptr), script(nullptr), region(r),

@@ -45,11 +45,6 @@ struct LSR final : public UMemory {
      */
     LSR(char prefix, const char *lang, const char *scr, const char *r, int32_t f,
         UErrorCode &errorCode);
-    /**
-     * Constructor which copies those into owned memory, and aliases the region.
-     */
-    LSR(const char *lang, const char *scr, const char *r, int32_t f,
-        UErrorCode &errorCode);
     LSR(LSR &&other) noexcept;
     LSR(const LSR &other) = delete;
     inline ~LSR() {
