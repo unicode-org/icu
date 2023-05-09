@@ -402,7 +402,7 @@ variations" because the test suites cannot be built like this, but the library
 code must support it.
 
 The simplest is to take an ICU4C workspace, modify uconfig.h *==temporarily==*
-by changing the value of UCONFIG_NO_CONVERSION to 1, and do "make -j 6" (not
+by changing the value of UCONFIG_NO_CONVERSION to 1, and do "make -j -l2.5" (not
 "make check" or "make tests"). Verify that the stubdata, common & i18n libraries
 build fine; layout should build too but toolutil will fail, that's expected.
 
@@ -421,7 +421,7 @@ Linux,
 
 ```sh
 ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1"
-make -j6 check
+make -j -l2.5 check
 ```
 
 Any problems will show up as compilation or test errors.
@@ -447,7 +447,7 @@ show as build failures.
 ```sh
 CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0" ./runConfigureICU Linux
 make clean
-make -j12 check
+make -j -l2.5 check
 ```
 
 ## ~~Test ICU_USE_THREADS=0 \[Obsolete\]~~
@@ -597,7 +597,7 @@ For ICU4C, testing with an optimized build will help reduce the elapsed time
 required for the tests to complete.
 
 ```sh
-$ make -j6 check-exhaustive
+$ make -j -l2.5 check-exhaustive
 ```
 
 ---
@@ -611,5 +611,5 @@ compiler is required.
 ```sh
 $ CPPFLAGS=-fsanitize=thread LDFLAGS=-fsanitize=thread ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
 $ make clean
-$ make -j6 check
+$ make -j -l2.5 check
 ```

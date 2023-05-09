@@ -62,7 +62,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5
       displayName: 'Build'
     - script: |
         cd icu4c/source && make check-exhaustive
