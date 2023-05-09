@@ -8,6 +8,7 @@
 
 #include "intltest.h"
 #include "unicode/locid.h"
+#include "lsr.h"
 
 /**
  * Tests for the Locale class
@@ -163,6 +164,8 @@ public:
     void TestSierraLeoneCurrency21997();
 
 private:
+    void assertLSR(UnicodeString msg, const Locale& expected, const LSR& actual);
+
     void _checklocs(const char* label,
                     const char* req,
                     const Locale& validLoc,

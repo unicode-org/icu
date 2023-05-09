@@ -34,6 +34,8 @@
 #include "locmap.h"
 #include "uparse.h"
 #include "ulocimp.h"
+#include "loclikelysubtags.h"
+#include "lsr.h"
 
 static const char* const rawData[33][8] = {
 
@@ -3838,17 +3840,27 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         }
     };
 
+    const XLikelySubtags* xlikely = XLikelySubtags::XLikelySubtags::getSingleton(status);
+    U_ASSERT(U_SUCCESS(status));
+
     for (const auto& item : full_data) {
         const char* const org = item.from;
         const char* const exp = item.add;
         Locale res(org);
+        Locale input(res);
         res.addLikelySubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
+
         if (exp[0]) {
             assertEquals("addLikelySubtags", exp, res.getName());
         } else {
             assertEquals("addLikelySubtags", org, res.getName());
         }
+
+        // Also test XLikelySubtags
+        LSR actual = xlikely->makeMaximizedLsrFrom(input, status);
+        Locale expected(exp[0] != '\0' ? exp : org);
+        assertLSR(UnicodeString(u"makeMaximizedLsrFrom(") + org + ")", expected, actual);
     }
 
     for (const auto& item : full_data) {
@@ -3865,6 +3877,15 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
     }
 }
 
+void LocaleTest::assertLSR(UnicodeString msg, const Locale& expected, const LSR& actual) {
+    if (*expected.getLanguage() == '\0') {
+        assertEquals(msg + u".language", "und", actual.language);
+    } else {
+        assertEquals(msg + u".language", expected.getLanguage(), actual.language);
+    }
+    assertEquals(msg + u".script", expected.getScript(), actual.script);
+    assertEquals(msg + u".region", expected.getCountry(), actual.region);
+}
 
 void
 LocaleTest::TestKeywordVariants() {
