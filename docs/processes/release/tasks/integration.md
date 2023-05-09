@@ -148,7 +148,7 @@ Using an in-source build on Linux:
 ```sh
 cd icu4c/source
 ./runConfigureICU Linux
-make -j2 check
+make -j -l2.5 check
 rm lib/libicudata.so*
 cp -P stubdata/libicudata.so* lib/
 cd test/intltest
@@ -241,7 +241,7 @@ see ticket [ICU-10636](https://unicode-org.atlassian.net/browse/ICU-10636).
 
 ### Run the tests with data-errors-as-warnings
 
-`INTLTEST_OPTS=-w CINTLTST_OPTS=-w make -j5 check`
+`INTLTEST_OPTS=-w CINTLTST_OPTS=-w make -j -l2.5 check`
 
 See that they pass, or fix them to pass. See ticket #10636 test code changes for
 examples.
@@ -263,7 +263,7 @@ based on the following instructions for ICU 64+.
     <code><b>ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data</b>
     ./runConfigureICU Linux</code> or similar
     *   Should be little-endian for coverage
-*   Clean and build ICU4C: `make -j6 check`
+*   Clean and build ICU4C: `make -j -l2.5 check`
 *   Make a clean directory for testing
     *   Find the .data file in the build output area, e.g.,
         `icu4c/source/data/out/tmp/icudt64l.dat`
@@ -433,7 +433,7 @@ To run manually, on a Linux system with clang,
 cd icu4c/source
 CPPFLAGS=-fsanitize=thread LDFLAGS=-fsanitize=thread ./runConfigureICU --enable-debug --disable-release Linux
 make clean
-make -j6 check
+make -j -l2.5 check
 ```
 
 Errors are displayed at the point they occur, and stop further testing.
@@ -451,7 +451,7 @@ To run manually, on a Linux system with clang,
 cd icu4c/source
 CPPFLAGS=-fsanitize=address LDFLAGS=-fsanitize=address ./runConfigureICU --enable-debug --disable-release Linux
 make clean
-make -j6 check
+make -j -l2.5 check
 ```
 
 Memory leaks are summarized at the end. Other errors are displayed at the point

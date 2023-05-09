@@ -316,7 +316,7 @@ ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU <platform>
 cd $ICU4C_DIR/source/data
 # The following 2 lines are required to include the unicore data:
 make clean
-make -j6
+make -j -l2.5
 make icu4j-data-install
 cd $ICU4C_DIR/source/test/testdata
 make icu4j-data-install
