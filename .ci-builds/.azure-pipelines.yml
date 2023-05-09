@@ -33,7 +33,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 check
       displayName: 'Build and Test'
       env:
         CC: clang
@@ -57,7 +57,7 @@ jobs:
     - script: |
         cd icu4c/source && \
         ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && \
-        make -j2 tests && \
+        make -j -l2.5 tests && \
         \[ ! -d data/out/build/icudt66l/translit \] && \
         (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData)
       displayName: 'Build with Data Filter'
@@ -75,7 +75,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        export CXXFLAGS="-std=c++17 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
+        export CXXFLAGS="-std=c++17 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j -l2.5 check
       displayName: 'Build and Test C++17'
       env:
         CC: clang
@@ -91,7 +91,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 check
       displayName: 'Build and Test'
       env:
         CC: gcc
@@ -112,7 +112,7 @@ jobs:
         sudo apt install gcc-11 g++-11
       displayName: 'Install GCC-11'
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 check
       displayName: 'Build and Test'
       env:
         CC: gcc-11
@@ -129,7 +129,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 check
       displayName: 'Build and Test'
       env:
         CC: clang
@@ -153,7 +153,7 @@ jobs:
         sudo apt install -qy clang-14 lld-14 libc++-14-dev libc++abi-14-dev
       displayName: 'Install Clang-14'
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 tests
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang-14
@@ -177,7 +177,7 @@ jobs:
         sudo apt install -qy clang-14 lld-14 libc++-14-dev libc++abi-14-dev
       displayName: 'Install Clang-14'
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 check
       displayName: 'Build and Test'
       env:
         CC: clang-14
@@ -202,7 +202,7 @@ jobs:
         sudo apt install -qy clang-14 lld-14 libc++-14-dev libc++abi-14-dev
       displayName: 'Install Clang-14'
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5 check
       displayName: 'Build and Test'
       env:
         CC: clang-14
@@ -556,7 +556,7 @@ jobs:
       displayName: 'Install mingw-w64-x86_64-toolchain'
     - script: |
        set MSYSTEM=MINGW64
-       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW --prefix='/tmp/build-icu' && make -j2 check"
+       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW --prefix='/tmp/build-icu' && make -j -l2.5 check"
       displayName: 'Build and Test'
     - script: |
        set MSYSTEM=MINGW64
@@ -578,7 +578,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 check
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j -l2.5 check
       displayName: 'Build and Test (WarningsAsErrors)'
       env:
         CC: clang
@@ -640,13 +640,13 @@ jobs:
         %CYG_ROOT%\\bin\\sh -lc 'echo Hello' && %CYG_ROOT%\\bin\\sh -lc 'uname -a'
       displayName: 'Check Cygwin environment'
     - script: |
-        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && ./runConfigureICU Cygwin && make tests -j "
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && ./runConfigureICU Cygwin && make tests -j -l2.5"
       displayName: 'Build ICU (source and test)'
       env:
         CC: gcc
         CXX: g++
     - script: |
-        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && make -j check"
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && make -j -l2.5 check"
       displayName: 'Run Tests'
       env:
         CC: gcc
@@ -662,7 +662,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        cd icu4c/source && ./runConfigureICU Linux && make -j2
+        cd icu4c/source && ./runConfigureICU Linux && make -j -l2.5
       displayName: 'Build'
       env:
         CC: clang

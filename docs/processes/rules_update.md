@@ -84,7 +84,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
     (We haven't updated the rules yet)
 
             cd icu/icu4c/source
-            make -j6 check
+            make -j -l2.5 check
 
     To run just the RBBI Tests (you will be doing this a lot)
 
