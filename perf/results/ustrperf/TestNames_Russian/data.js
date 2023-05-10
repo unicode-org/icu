@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683436072848,
+  "lastUpdate": 1683761412476,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35710,6 +35710,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 59.5952,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e1e1c5feaf67652d9f124b23749a430d3278fe7b",
+          "message": "ICU-22349 Use -l with make -j to limit jobs based on load average.\n\nIt has been proposed that make running too many parallel jobs recently\nhas led to resource exhaustion in our CI, so that some kind of limit\nwould be helpful to set.\n\nThe load average 2.5 limit choosen here is simply the limit used as an\nexample in the make documentation, as we don't really have any way of\npicking an initial value that's certain to be better.\n\nhttps://www.gnu.org/software/make/manual/html_node/Parallel.html\n\nSee #2421\nSee #2422",
+          "timestamp": "2023-05-11T00:50:59+02:00",
+          "tree_id": "70da6711d369c3bf0ac406c287b6bf192d4757a5",
+          "url": "https://github.com/unicode-org/icu/commit/e1e1c5feaf67652d9f124b23749a430d3278fe7b"
+        },
+        "date": 1683761376418,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 24.5713,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 25.636,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 30.2677,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 58.0209,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 60.4105,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 44.2625,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 34.1186,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 22.1358,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 227.7186,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 29.4014,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 54.3473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 46.4969,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
