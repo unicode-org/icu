@@ -3837,6 +3837,54 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "und_US",
             "en_Latn_US",
             "en"
+        }, {
+            // <likelySubtag from="id" to="id_Latn_ID"/>
+            "in",
+            "id_Latn_ID",
+            "id"
+        }, {
+            // <territoryAlias type="BU" replacement="MM" reason="deprecated"/> <!-- Burma -->
+            // ...
+            // <likelySubtag from="und_MM" to="my_Mymr_MM"/>
+            "und_BU",
+            "my_Mymr_MM",
+            "my"
+        }, {
+            // <languageAlias type="in" replacement="id" reason="deprecated"/> <!-- Indonesian -->
+            // <territoryAlias type="BU" replacement="MM" reason="deprecated"/> <!-- Burma -->
+            // ...
+            // <likelySubtag from="id" to="id_Latn_ID"/>
+            "in_BU",
+            "id_Latn_MM",
+            "id_MM"
+        }, {
+            // <scriptAlias type="Qaai" replacement="Zinh" reason="deprecated"/>
+            "in_Qaai",
+            "id_Zinh_ID",
+            "id_Zinh_ID",
+        }, {
+            // <likelySubtag from="und_002" to="en_Latn_NG"/>
+            "und_002",
+            "en_Latn_002",
+            "en_002"
+        }, {
+            // <territoryAlias type="ESH" replacement="EH" reason="overlong"/> <!-- Western Sahara -->
+            // <likelySubtag from="und_EH" to="ar_Arab_EH"/>
+            "und_ESH",
+            "ar_Arab_EH",
+            "ar_EH"
+        }, {
+            // <territoryAlias type="ESH" replacement="EH" reason="overlong"/> <!-- Western Sahara -->
+            // <likelySubtag from="und_EH" to="ar_Arab_EH"/>
+            "und_Zzzz_ESH",
+            "ar_Arab_EH",
+            "ar_EH"
+        }, {
+            // <territoryAlias type="ESH" replacement="EH" reason="overlong"/> <!-- Western Sahara -->
+            // <likelySubtag from="und_EH" to="ar_Arab_EH"/>
+            "und_Thai_ESH",
+            "ar_Thai_EH",
+            "ar_Thai_EH"
         }
     };
 
