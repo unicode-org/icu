@@ -31,6 +31,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "loclikelysubtags.h"
 #include "ulocimp.h"
 #include "ustr_imp.h"
 
@@ -836,7 +837,6 @@ _uloc_addLikelySubtags(const char* localeID,
     const char* trailing = "";
     int32_t trailingLength = 0;
     int32_t trailingIndex = 0;
-    UBool success = false;
 
     if(U_FAILURE(*err)) {
         goto error;
@@ -862,6 +862,9 @@ _uloc_addLikelySubtags(const char* localeID,
 
         goto error;
     }
+    if (langLength > 3) {
+        goto error;
+    }
 
     /* Find the length of the trailing portion. */
     while (_isIDSeparator(localeID[trailingIndex])) {
@@ -871,30 +874,29 @@ _uloc_addLikelySubtags(const char* localeID,
     trailingLength = (int32_t)uprv_strlen(trailing);
 
     CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
-
-    success =
-        createLikelySubtagsString(
-            lang,
-            langLength,
-            script,
-            scriptLength,
-            region,
-            regionLength,
+    {
+        const icu::XLikelySubtags* likelySubtags = icu::XLikelySubtags::getSingleton(*err);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+        icu::LSR lsr = likelySubtags->makeMaximizedLsrFrom(icu::Locale::createFromName(localeID), *err);
+        createTagStringWithAlternates(
+            lsr.language,
+            uprv_strlen(lsr.language),
+            lsr.script,
+            uprv_strlen(lsr.script),
+            lsr.region,
+            uprv_strlen(lsr.region),
             trailing,
             trailingLength,
+            nullptr,
             sink,
             err);
-
-    if (!success) {
-        const int32_t localIDLength = (int32_t)uprv_strlen(localeID);
-
-        /*
-         * If we get here, we need to return localeID.
-         */
-        sink.Append(localeID, localIDLength);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
     }
-
-    return success;
+    return true;
 
 error:
 
@@ -964,213 +966,33 @@ _uloc_minimizeSubtags(const char* localeID,
     CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
 
     {
-        icu::CharString base;
-        {
-            icu::CharStringByteSink baseSink(&base);
-            createTagString(
-                lang,
-                langLength,
-                script,
-                scriptLength,
-                region,
-                regionLength,
-                nullptr,
-                0,
-                baseSink,
-                err);
-        }
-
-        /**
-         * First, we need to first get the maximization
-         * from AddLikelySubtags.
-         **/
-        {
-            icu::CharStringByteSink maxSink(&maximizedTagBuffer);
-            successGetMax = _ulocimp_addLikelySubtags(base.data(), maxSink, err);
-        }
-    }
-
-    if(U_FAILURE(*err)) {
-        goto error;
-    }
-
-    if (!successGetMax) {
-        /**
-         * If we got here, return the locale ID parameter unchanged.
-         **/
-        const int32_t localeIDLength = (int32_t)uprv_strlen(localeID);
-        sink.Append(localeID, localeIDLength);
-        return;
-    }
-
-    // In the following, the lang, script, region are referring to those in
-    // the maximizedTagBuffer, not the one in the localeID.
-    langLength = sizeof(lang);
-    scriptLength = sizeof(script);
-    regionLength = sizeof(region);
-    parseTagString(
-        maximizedTagBuffer.data(),
-        lang,
-        &langLength,
-        script,
-        &scriptLength,
-        region,
-        &regionLength,
-        err);
-    if(U_FAILURE(*err)) {
-        goto error;
-    }
-
-    /**
-     * Start first with just the language.
-     **/
-    {
-        icu::CharString tagBuffer;
-        {
-            icu::CharStringByteSink tagSink(&tagBuffer);
-            createLikelySubtagsString(
-                lang,
-                langLength,
-                nullptr,
-                0,
-                nullptr,
-                0,
-                nullptr,
-                0,
-                tagSink,
-                err);
-        }
-
+        const icu::XLikelySubtags* likelySubtags = icu::XLikelySubtags::getSingleton(*err);
         if(U_FAILURE(*err)) {
             goto error;
         }
-        else if (!tagBuffer.isEmpty() &&
-                 uprv_strnicmp(
-                    maximizedTagBuffer.data(),
-                    tagBuffer.data(),
-                    tagBuffer.length()) == 0) {
-
-            createTagString(
-                        lang,
-                        langLength,
-                        nullptr,
-                        0,
-                        nullptr,
-                        0,
-                        trailing,
-                        trailingLength,
-                        sink,
-                        err);
-            return;
-        }
-    }
-
-    /**
-     * Next, try the language and region.
-     **/
-    if (regionLength > 0) {
-
-        icu::CharString tagBuffer;
-        {
-            icu::CharStringByteSink tagSink(&tagBuffer);
-            createLikelySubtagsString(
-                lang,
-                langLength,
-                nullptr,
-                0,
-                region,
-                regionLength,
-                nullptr,
-                0,
-                tagSink,
-                err);
-        }
-
+        icu::LSR lsr = likelySubtags->minimizeSubtags(
+            {lang, langLength},
+            {script, scriptLength},
+            {region, regionLength},
+            *err);
         if(U_FAILURE(*err)) {
             goto error;
         }
-        else if (!tagBuffer.isEmpty() &&
-                 uprv_strnicmp(
-                    maximizedTagBuffer.data(),
-                    tagBuffer.data(),
-                    tagBuffer.length()) == 0) {
-
-            createTagString(
-                        lang,
-                        langLength,
-                        nullptr,
-                        0,
-                        region,
-                        regionLength,
-                        trailing,
-                        trailingLength,
-                        sink,
-                        err);
-            return;
-        }
-    }
-
-    /**
-     * Finally, try the language and script.  This is our last chance,
-     * since trying with all three subtags would only yield the
-     * maximal version that we already have.
-     **/
-    if (scriptLength > 0) {
-        icu::CharString tagBuffer;
-        {
-            icu::CharStringByteSink tagSink(&tagBuffer);
-            createLikelySubtagsString(
-                lang,
-                langLength,
-                script,
-                scriptLength,
-                nullptr,
-                0,
-                nullptr,
-                0,
-                tagSink,
-                err);
-        }
-
+        createTagStringWithAlternates(
+            lsr.language,
+            uprv_strlen(lsr.language),
+            lsr.script,
+            uprv_strlen(lsr.script),
+            lsr.region,
+            uprv_strlen(lsr.region),
+            trailing,
+            trailingLength,
+            nullptr,
+            sink,
+            err);
         if(U_FAILURE(*err)) {
             goto error;
         }
-        else if (!tagBuffer.isEmpty() &&
-                 uprv_strnicmp(
-                    maximizedTagBuffer.data(),
-                    tagBuffer.data(),
-                    tagBuffer.length()) == 0) {
-
-            createTagString(
-                        lang,
-                        langLength,
-                        script,
-                        scriptLength,
-                        nullptr,
-                        0,
-                        trailing,
-                        trailingLength,
-                        sink,
-                        err);
-            return;
-        }
-    }
-
-    {
-        /**
-         * If we got here, return the max + trail.
-         **/
-        createTagString(
-                    lang,
-                    langLength,
-                    script,
-                    scriptLength,
-                    region,
-                    regionLength,
-                    trailing,
-                    trailingLength,
-                    sink,
-                    err);
         return;
     }
 

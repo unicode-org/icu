@@ -378,21 +378,33 @@ LSR XLikelySubtags::makeMaximizedLsr(const char *language, const char *script, c
     language = getCanonical(languageAliases, language);
     // (We have no script mappings.)
     region = getCanonical(regionAliases, region);
-    return maximize(language, script, region);
+    return maximize(language, script, region, errorCode);
 }
 
-LSR XLikelySubtags::maximize(const char *language, const char *script, const char *region) const {
-    if (uprv_strcmp(language, "und") == 0) {
+LSR XLikelySubtags::maximize(const char *language, const char *script, const char *region,
+                             UErrorCode &errorCode) const {
+    return maximize({language, (int32_t)uprv_strlen(language)},
+                    {script, (int32_t)uprv_strlen(script)},
+                    {region, (int32_t)uprv_strlen(region)},
+                    errorCode);
+}
+
+LSR XLikelySubtags::maximize(StringPiece language, StringPiece script, StringPiece region,
+                             UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return LSR(language, script, region, LSR::EXPLICIT_LSR, errorCode);
+    }
+    if (language.compare("und") == 0) {
         language = "";
     }
-    if (uprv_strcmp(script, "Zzzz") == 0) {
+    if (script.compare("Zzzz") == 0) {
         script = "";
     }
-    if (uprv_strcmp(region, "ZZ") == 0) {
+    if (region.compare("ZZ") == 0) {
         region = "";
     }
-    if (*script != 0 && *region != 0 && *language != 0) {
-        return LSR(language, script, region, LSR::EXPLICIT_LSR);  // already maximized
+    if (script.length() != 0 && region.length() != 0 && language.length() != 0) {
+        return LSR(language, script, region, LSR::EXPLICIT_LSR, errorCode);  // already maximized
     }
 
     uint32_t retainOldMask = 0;
@@ -401,15 +413,15 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
     int32_t value;
     // Small optimization: Array lookup for first language letter.
     int32_t c0;
-    if (0 <= (c0 = uprv_lowerOrdinal(language[0])) && c0 <= 25 &&
-            language[1] != 0 &&  // language.length() >= 2
+    if (0 <= (c0 = uprv_lowerOrdinal(language.data()[0])) && c0 <= 25 &&
+            language.length() >= 2 &&
             (state = trieFirstLetterStates[c0]) != 0) {
         value = trieNext(iter.resetToState64(state), language, 1);
     } else {
         value = trieNext(iter, language, 0);
     }
     if (value >= 0) {
-        if (*language != 0) {
+        if (language.length() != 0) {
             retainOldMask |= 4;
         }
         state = iter.getState64();
@@ -424,13 +436,13 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
         if (value == SKIP_SCRIPT) {
             value = 0;
         }
-        if (*script != 0) {
+        if (script.length() != 0) {
             retainOldMask |= 2;
         }
     } else {
         value = trieNext(iter, script, 0);
         if (value >= 0) {
-            if (*script != 0) {
+            if (script.length() != 0) {
                 retainOldMask |= 2;
             }
             state = iter.getState64();
@@ -449,13 +461,13 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
 
     if (value > 0) {
         // Final value from just language or language+script.
-        if (*region != 0) {
+        if (region.length() != 0) {
             retainOldMask |= 1;
         }
     } else {
         value = trieNext(iter, region, 0);
         if (value >= 0) {
-            if (*region != 0) {
+            if (region.length() != 0) {
                 retainOldMask |= 1;
             }
         } else {
@@ -472,8 +484,8 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
     U_ASSERT(value < lsrsLength);
     const LSR &result = lsrs[value];
 
-    if (*language == 0) {
-        language = "und";
+    if (language.length() == 0) {
+        language = StringPiece("und");
     }
 
     if (retainOldMask == 0) {
@@ -491,7 +503,7 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
         region = result.region;
     }
     // retainOldMask flags = LSR explicit-subtag flags
-    return LSR(language, script, region, retainOldMask);
+    return LSR(language, script, region, retainOldMask, errorCode);
 }
 
 int32_t XLikelySubtags::compareLikely(const LSR &lsr, const LSR &other, int32_t likelyInfo) const {
@@ -627,57 +639,72 @@ int32_t XLikelySubtags::trieNext(BytesTrie &iter, const char *s, int32_t i) {
     default: return -1;
     }
 }
-
-// TODO(ICU-20777): Switch Locale/uloc_ likely-subtags API from the old code
-// in loclikely.cpp to this new code, including activating this
-// minimizeSubtags() function. The LocaleMatcher does not minimize.
-#if 0
-LSR XLikelySubtags::minimizeSubtags(const char *languageIn, const char *scriptIn,
-                                    const char *regionIn, ULocale.Minimize fieldToFavor,
-                                    UErrorCode &errorCode) const {
-    LSR result = maximize(languageIn, scriptIn, regionIn);
-
-    // We could try just a series of checks, like:
-    // LSR result2 = addLikelySubtags(languageIn, "", "");
-    // if result.equals(result2) return result2;
-    // However, we can optimize 2 of the cases:
-    //   (languageIn, "", "")
-    //   (languageIn, "", regionIn)
-
-    // value00 = lookup(result.language, "", "")
-    BytesTrie iter = new BytesTrie(trie);
-    int value = trieNext(iter, result.language, 0);
-    U_ASSERT(value >= 0);
-    if (value == 0) {
-        value = trieNext(iter, "", 0);
-        U_ASSERT(value >= 0);
-        if (value == 0) {
-            value = trieNext(iter, "", 0);
+int32_t XLikelySubtags::trieNext(BytesTrie &iter, StringPiece s, int32_t i) {
+    UStringTrieResult result;
+    uint8_t c;
+    if (s.length() == i) {
+        result = iter.next(u'*');
+    } else {
+        c = s.data()[i];
+        for (;;) {
+            c = uprv_invCharToAscii(c);
+            // EBCDIC: If s[i] is not an invariant character,
+            // then c is now 0 and will simply not match anything, which is harmless.
+            if (i+1 != s.length()) {
+                if (!USTRINGTRIE_HAS_NEXT(iter.next(c))) {
+                    return -1;
+                }
+                c = s.data()[++i];
+            } else {
+                // last character of this subtag
+                result = iter.next(c | 0x80);
+                break;
+            }
         }
     }
-    U_ASSERT(value > 0);
-    LSR value00 = lsrs[value];
-    boolean favorRegionOk = false;
-    if (result.script.equals(value00.script)) { //script is default
-        if (result.region.equals(value00.region)) {
-            return new LSR(result.language, "", "", LSR.DONT_CARE_FLAGS);
-        } else if (fieldToFavor == ULocale.Minimize.FAVOR_REGION) {
-            return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
-        } else {
-            favorRegionOk = true;
-        }
+    switch (result) {
+    case USTRINGTRIE_NO_MATCH: return -1;
+    case USTRINGTRIE_NO_VALUE: return 0;
+    case USTRINGTRIE_INTERMEDIATE_VALUE:
+        U_ASSERT(iter.getValue() == SKIP_SCRIPT);
+        return SKIP_SCRIPT;
+    case USTRINGTRIE_FINAL_VALUE: return iter.getValue();
+    default: return -1;
     }
-
-    // The last case is not as easy to optimize.
-    // Maybe do later, but for now use the straightforward code.
-    LSR result2 = maximize(languageIn, scriptIn, "");
-    if (result2.equals(result)) {
-        return new LSR(result.language, result.script, "", LSR.DONT_CARE_FLAGS);
-    } else if (favorRegionOk) {
-        return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
-    }
-    return result;
 }
-#endif
+
+LSR XLikelySubtags::minimizeSubtags(StringPiece language, StringPiece script,
+                                    StringPiece region,
+                                    UErrorCode &errorCode) const {
+    LSR max = maximize(language, script, region, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return max;
+    }
+    // try language
+    LSR test = maximize(max.language, "", "", errorCode);
+    if (U_FAILURE(errorCode)) {
+        return max;
+    }
+    if (test.isEquivalentTo(max)) {
+        return LSR(max.language, "", "", LSR::DONT_CARE_FLAGS, errorCode);
+    }
+    // try language and region
+    test = maximize(max.language, "", max.region, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return max;
+    }
+    if (test.isEquivalentTo(max)) {
+        return LSR(max.language, "", max.region, LSR::DONT_CARE_FLAGS, errorCode);
+    }
+    // try language and script
+    test = maximize(max.language, max.script, "", errorCode);
+    if (U_FAILURE(errorCode)) {
+        return max;
+    }
+    if (test.isEquivalentTo(max)) {
+        return LSR(max.language, max.script, "", LSR::DONT_CARE_FLAGS, errorCode);
+    }
+    return LSR(max.language, max.script, max.region, LSR::DONT_CARE_FLAGS, errorCode);
+}
 
 U_NAMESPACE_END

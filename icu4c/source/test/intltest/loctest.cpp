@@ -3844,10 +3844,11 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         Locale res(org);
         res.addLikelySubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
+        UnicodeString msg;
         if (exp[0]) {
-            assertEquals("addLikelySubtags", exp, res.getName());
+            assertEquals(msg + "addLikelySubtags(" + item.from + ")", exp, res.getName());
         } else {
-            assertEquals("addLikelySubtags", org, res.getName());
+            assertEquals(msg + "addLikelySubtags(" + item.from + ")", org, res.getName());
         }
     }
 
@@ -3857,10 +3858,11 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         Locale res(org);
         res.minimizeSubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
+        UnicodeString msg;
         if (exp[0]) {
-            assertEquals("minimizeSubtags", exp, res.getName());
+            assertEquals(msg + "minimizeSubtags(" + item.from + ")", exp, res.getName());
         } else {
-            assertEquals("minimizeSubtags", org, res.getName());
+            assertEquals(msg + "minimizeSubtags(" + item.from + ")", org, res.getName());
         }
     }
 }
