@@ -2284,8 +2284,7 @@ u_versionFromUString(UVersionInfo versionArray, const char16_t *versionString) {
 
 U_CAPI void U_EXPORT2
 u_versionToString(const UVersionInfo versionArray, char *versionString) {
-    uint16_t count, part;
-    uint8_t field;
+    uint16_t count;
 
     if(versionString==nullptr) {
         return;
@@ -2304,39 +2303,31 @@ u_versionToString(const UVersionInfo versionArray, char *versionString) {
         count = 2;
     }
 
-    /* write the first part */
-    /* write the decimal field value */
-    field=versionArray[0];
-    if(field>=100) {
-        *versionString++=(char)('0'+field/100);
-        field%=100;
-    }
-    if(field>=10) {
-        *versionString++=(char)('0'+field/10);
-        field%=10;
-    }
-    *versionString++=(char)('0'+field);
+    size_t written = 0; /* doesn't count NUL terminator */
+    versionString[written] = 0;
+    for (int i = 0; i < count; i++) {
+      int n;
 
-    /* write the following parts */
-    for(part=1; part<count; ++part) {
-        /* write a dot first */
-        *versionString++=U_VERSION_DELIMITER;
+      U_ASSERT(written < U_MAX_VERSION_STRING_LENGTH);
+      U_ASSERT(strlen(versionString) == written);
 
-        /* write the decimal field value */
-        field=versionArray[part];
-        if(field>=100) {
-            *versionString++=(char)('0'+field/100);
-            field%=100;
-        }
-        if(field>=10) {
-            *versionString++=(char)('0'+field/10);
-            field%=10;
-        }
-        *versionString++=(char)('0'+field);
+      if (i > 0) {
+        versionString[written++] = U_VERSION_DELIMITER;
+        versionString[written] = 0;
+      }
+
+      n = snprintf(versionString + written,
+                   U_MAX_VERSION_STRING_LENGTH - written,
+                   "%u", versionArray[i]);
+      /* check for error or truncated result */
+      U_ASSERT(n > 0);
+      U_ASSERT((size_t) n < U_MAX_VERSION_STRING_LENGTH - written);
+
+      written += n;
     }
 
-    /* NUL-terminate */
-    *versionString=0;
+    U_ASSERT(written < U_MAX_VERSION_STRING_LENGTH);
+    U_ASSERT(strlen(versionString) == written);
 }
 
 U_CAPI void U_EXPORT2
