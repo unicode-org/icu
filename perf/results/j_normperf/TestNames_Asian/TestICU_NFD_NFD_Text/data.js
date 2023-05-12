@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683872081049,
+  "lastUpdate": 1683922718459,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8638,6 +8638,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 7.11181674975593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "6e72d908665fa9bc69e0853b1851d3eb8acbf843",
+          "message": "ICU-22360 revert portions of #2159 which included @ in ALetter for wordbreak, update tests\n\n(cherry picked from commit 5618203821839cad2286a67682fb1940c8ce586f)",
+          "timestamp": "2023-05-12T13:04:33-07:00",
+          "tree_id": "4fbe12156aa08d96c28abd1200afd0595a9ddec3",
+          "url": "https://github.com/unicode-org/icu/commit/6e72d908665fa9bc69e0853b1851d3eb8acbf843"
+        },
+        "date": 1683922680313,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 5.609580097103922,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
