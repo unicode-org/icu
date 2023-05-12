@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683768476842,
+  "lastUpdate": 1683872727003,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20140,6 +20140,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2968740.2221,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41129501+gnrunge@users.noreply.github.com",
+            "name": "Norbert Runge",
+            "username": "gnrunge"
+          },
+          "committer": {
+            "email": "41129501+gnrunge@users.noreply.github.com",
+            "name": "Norbert Runge",
+            "username": "gnrunge"
+          },
+          "distinct": true,
+          "id": "ba1c7006b7b5acd734538b9997102d7f46203576",
+          "message": "ICU-22384 Limit execution of performance tests\n\nRun the tests only on the main branch of the unicode-org/icu repository. This avoids diluting the performance charts with performance results from the maintenance branches. Also, the performance tests won't execute on forked directories anymore, on which they fail after execution anyway, thus using GitHub resources without purpose.",
+          "timestamp": "2023-05-11T23:02:31-07:00",
+          "tree_id": "c052171b524a44e1631c9a523bdbcb2de64532a5",
+          "url": "https://github.com/unicode-org/icu/commit/ba1c7006b7b5acd734538b9997102d7f46203576"
+        },
+        "date": 1683872683599,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 363.2037,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 14745902.8657,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2958686.7847,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 14220726.2182,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 3239240.2986,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
