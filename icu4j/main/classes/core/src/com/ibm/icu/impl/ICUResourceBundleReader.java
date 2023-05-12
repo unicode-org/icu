@@ -14,6 +14,7 @@ import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import com.ibm.icu.util.ICUException;
@@ -444,13 +445,12 @@ public final class ICUResourceBundleReader {
     }
 
     private static String makeKeyStringFromBytes(byte[] keyBytes, int keyOffset) {
-        StringBuilder sb = new StringBuilder();
-        byte b;
-        while((b = keyBytes[keyOffset]) != 0) {
-            ++keyOffset;
-            sb.append((char)b);
+        int end = keyOffset;
+        while(keyBytes[end] != 0) {
+            ++end;
         }
-        return sb.toString();
+        int len = end - keyOffset;
+        return new String(keyBytes, keyOffset, len, StandardCharsets.ISO_8859_1);
     }
     private String getKey16String(int keyOffset) {
         if(keyOffset < localKeyLimit) {
