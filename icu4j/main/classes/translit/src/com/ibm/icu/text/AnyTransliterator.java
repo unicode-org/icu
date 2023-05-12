@@ -53,6 +53,12 @@ class AnyTransliterator extends Transliterator {
     static final String LATIN_PIVOT = "-Latin;Latin-";
 
     /**
+     * Special code for handling width characters
+     */
+    private static final Transliterator WIDTH_FIX =
+            Transliterator.getInstance("[[:dt=Nar:][:dt=Wide:]] nfkd");
+
+    /**
      * Cache mapping UScriptCode values to Transliterator*.
      */
     private ConcurrentHashMap<Integer, Transliterator> cache;
@@ -66,11 +72,6 @@ class AnyTransliterator extends Transliterator {
      * The target script code.  Never USCRIPT_INVALID_CODE.
      */
     private int targetScript;
-
-    /**
-     * Special code for handling width characters
-     */
-    private Transliterator widthFix = Transliterator.getInstance("[[:dt=Nar:][:dt=Wide:]] nfkd");
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
@@ -176,7 +177,7 @@ class AnyTransliterator extends Transliterator {
             if (isWide(targetScript)) {
                 return null;
             } else {
-                return widthFix;
+                return WIDTH_FIX;
             }
         }
 
@@ -201,7 +202,7 @@ class AnyTransliterator extends Transliterator {
             if (t != null) {
                 if (!isWide(targetScript)) {
                     List<Transliterator> v = new ArrayList<Transliterator>();
-                    v.add(widthFix);
+                    v.add(WIDTH_FIX);
                     v.add(t);
                     t = new CompoundTransliterator(v);
                 }
@@ -210,7 +211,7 @@ class AnyTransliterator extends Transliterator {
                     t = prevCachedT;
                 }
             } else if (!isWide(targetScript)) {
-                return widthFix;
+                return WIDTH_FIX;
             }
         }
 
@@ -408,7 +409,7 @@ class AnyTransliterator extends Transliterator {
         if (filter != null && filter instanceof UnicodeSet) {
             filter = new UnicodeSet((UnicodeSet)filter);
         }
-        return new AnyTransliterator(getID(), filter, target, targetScript, widthFix, cache);
+        return new AnyTransliterator(getID(), filter, target, targetScript, WIDTH_FIX, cache);
     }
 
     /* (non-Javadoc)
