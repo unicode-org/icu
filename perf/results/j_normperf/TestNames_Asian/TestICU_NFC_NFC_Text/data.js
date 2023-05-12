@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1683768084947,
+  "lastUpdate": 1683872158553,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8548,6 +8548,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 5.945433037700768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41129501+gnrunge@users.noreply.github.com",
+            "name": "Norbert Runge",
+            "username": "gnrunge"
+          },
+          "committer": {
+            "email": "41129501+gnrunge@users.noreply.github.com",
+            "name": "Norbert Runge",
+            "username": "gnrunge"
+          },
+          "distinct": true,
+          "id": "ba1c7006b7b5acd734538b9997102d7f46203576",
+          "message": "ICU-22384 Limit execution of performance tests\n\nRun the tests only on the main branch of the unicode-org/icu repository. This avoids diluting the performance charts with performance results from the maintenance branches. Also, the performance tests won't execute on forked directories anymore, on which they fail after execution anyway, thus using GitHub resources without purpose.",
+          "timestamp": "2023-05-11T23:02:31-07:00",
+          "tree_id": "c052171b524a44e1631c9a523bdbcb2de64532a5",
+          "url": "https://github.com/unicode-org/icu/commit/ba1c7006b7b5acd734538b9997102d7f46203576"
+        },
+        "date": 1683872121855,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.487656504179723,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
