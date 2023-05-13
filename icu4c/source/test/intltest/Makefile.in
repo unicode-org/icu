@@ -49,6 +49,7 @@ fldset.o dadrfmt.o dadrcal.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts
 dtptngts.o encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\
 itercoll.o itformat.o itmajor.o itutil.o jacoll.o lcukocol.o	\
 loctest.o localebuildertest.o localematchertest.o \
+messageformat2test.o messageformat2test_builtin.o messageformat2test_custom.o messageformat2test_features.o messageformat2test_fromjson.o messageformat2test_icu.o \
 miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
 numfmtst.o numrgts.o  plurults.o plurfmts.o pptest.o regcoll.o restest.o restsnew.o \
 sdtfmtts.o svccoll.o tchcfmt.o	selfmts.o \
