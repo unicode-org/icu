@@ -1095,6 +1095,11 @@ group: formatting
     tmunit.o tmutamt.o tmutfmt.o
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
+    # MessageFormat 2
+    messageformat2.o messageformat2_arguments.o messageformat2_checker.o
+    messageformat2_data_model.o messageformat2_errors.o messageformat2_evaluation.o
+    messageformat2_formattable.o messageformat2_formatter.o
+    messageformat2_function_registry.o messageformat2_parser.o messageformat2_serializer.o
   deps
     decnumber formattable format units numberformatter number_skeletons numberparser
     formatted_value_sbimpl
