@@ -33,6 +33,7 @@
 #include "dtfmapts.h"       // DateFormatAPI
 #include "dtfmttst.h"       // DateFormatTest
 #include "tmsgfmt.h"        // TestMessageFormat
+#include "messageformat2test.h" // TestMessageFormat2
 #include "dtfmrgts.h"       // DateFormatRegressionTest
 #include "msfmrgts.h"       // MessageFormatRegressionTest
 #include "miscdtfm.h"       // DateFormatMiscTests
@@ -287,6 +288,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             callTest(*test, par);
           }
           break;
+        TESTCLASS(60,TestMessageFormat2);
         default: name = ""; break; //needed to end loop
     }
     if (exec) {
