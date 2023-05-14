@@ -313,7 +313,7 @@ if test "$ENABLE_STATIC" = "YES"; then
             OLD_LDFLAGS="${LDFLAGS}"
 
             case "${host}" in
-            *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
+            *-linux*|i*86-*-*bsd*|i*86-pc-gnu|*-haiku*)
                 if test "$GCC" = yes; then
                     CPPFLAGS="${CPPFLAGS} -ffunction-sections -fdata-sections"
                     LDFLAGS="${LDFLAGS} -Wl,--gc-sections"
@@ -1295,6 +1295,7 @@ case "${host}" in
 	*-*-nto*)	platform=U_QNX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-beos)		platform=U_BEOS ;;
+	*-*-haiku)	platform=U_HAIKU ;;
 	*-*-irix*)		platform=U_IRIX ;;
 	*-ncr-*)		platform=U_MPRAS ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;

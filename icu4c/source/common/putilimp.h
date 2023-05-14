@@ -90,6 +90,8 @@ typedef size_t uintptr_t;
 #   define U_NL_LANGINFO_CODESET -1
 #elif U_PLATFORM == U_PF_OS400
    /* not defined */
+#elif U_PLATFORM == U_HAIKU
+   /* not defined */
 #else
 #   define U_NL_LANGINFO_CODESET CODESET
 #endif
@@ -102,6 +104,8 @@ typedef size_t uintptr_t;
 #   define U_TZSET _tzset
 #endif
 #elif U_PLATFORM == U_PF_OS400
+   /* not defined */
+#elif U_PLATFORM == U_HAIKU
    /* not defined */
 #else
 #   define U_TZSET tzset
