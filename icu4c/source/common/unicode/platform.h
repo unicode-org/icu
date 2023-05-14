@@ -132,6 +132,8 @@
 #define U_PF_BROWSER_NATIVE_CLIENT 4020
 /** Android is based on Linux. @internal */
 #define U_PF_ANDROID 4050
+/** Haiku is a POSIX-ish platform. @internal */
+#define U_PF_HAIKU 4080
 /** Fuchsia is a POSIX-ish platform. @internal */
 #define U_PF_FUCHSIA 4100
 /* Maximum value for Linux-based platform is 4499 */
@@ -200,6 +202,8 @@
 #   define U_PLATFORM U_PF_OS390
 #elif defined(__OS400__) || defined(__TOS_OS400__)
 #   define U_PLATFORM U_PF_OS400
+#elif defined(__HAIKU__)
+#   define U_PLATFORM U_PF_HAIKU
 #elif defined(__EMSCRIPTEN__)
 #   define U_PLATFORM U_PF_EMSCRIPTEN
 #else
