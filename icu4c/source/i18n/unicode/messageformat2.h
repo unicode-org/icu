@@ -16,6 +16,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"
+#include "unicode/messageformat2_data_model.h"
 #include "unicode/parseerr.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
@@ -124,6 +125,9 @@ class U_I18N_API MessageFormat2 : public Format {
 
     // The parser currently just validates the message
     void parse(const UnicodeString &, UParseError &, UErrorCode &) const;
+
+    // Data model, representing the parsed message
+    MessageFormatDataModel dataModel;
 }; // class MessageFormat2
 
 } // namespace message2
