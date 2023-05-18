@@ -5,7 +5,7 @@
 
 # ICU codepage data for GB 18030-2022
 
-<code_set_name>               "gb18030"
+<code_set_name>               "gb18030-2022"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  4
 <mb_cur_min>                  1

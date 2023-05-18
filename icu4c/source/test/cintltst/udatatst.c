@@ -1333,7 +1333,7 @@ static const struct {
     /* EUC-TW (3-byte) conversion table file without extension */
     {"ibm-964_P110-1999",        "cnv", ucnv_swap},
     /* GB 18030 (4-byte) conversion table file without extension */
-    {"gb18030",                  "cnv", ucnv_swap},
+    {"gb18030-2022",             "cnv", ucnv_swap},
     /* MBCS conversion table file with extension */
     {"*test4x",                  "cnv", ucnv_swap},
     /*
