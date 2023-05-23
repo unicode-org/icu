@@ -134,6 +134,10 @@
         <matches string="${java.version}" pattern="^19((-.|\.\d).*)?"/>
     </condition>
 
+    <condition property="is.java20">
+        <matches string="${java.version}" pattern="^20((-.|\.\d).*)?"/>
+    </condition>
+
   <condition property="is.java9.plus">
         <or>
             <isset property="is.java9"/>
@@ -147,6 +151,7 @@
             <isset property="is.java17"/>
             <isset property="is.java18"/>
             <isset property="is.java19"/>
+            <isset property="is.java20"/>
         </or>
   </condition>
 
