@@ -123,8 +123,9 @@ class U_I18N_API MessageFormat2 : public Format {
     // Do not define default assignment operator
     const MessageFormat2 &operator=(const MessageFormat2 &) = delete;
 
-    // The parser currently just validates the message
-    void parse(const UnicodeString &, UParseError &, UErrorCode &) const;
+    // The parser validates the message and builds the data model
+    // from it.
+    void parse(const UnicodeString &, UParseError &, UErrorCode &);
 
     // Data model, representing the parsed message
     MessageFormatDataModel dataModel;

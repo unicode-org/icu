@@ -27,37 +27,93 @@ using String         = UnicodeString;
 // -----------------------------------------------------------------------
 // Utilities (not public)
 
-class Operator;
+template <typename T>
+class List;
+// Mutable list: used for building up results in the parser
+template <typename T>
+class ListBuilder : public UMemory {
+    // Provides a wrapper around a vector
+  public:
+    ListBuilder(); // Creates an empty list
+    // adding adopts the thing being added
+    void add(T*, UErrorCode errorCode);
+    // used when we want to copy
+    void add(T, UErrorCode errorCode);
+  private:
+    friend class List<T>;
+    UVector* contents;
+};
+
+// Immutable list 
 template <typename T>
 class List : public UMemory {
     // Provides a wrapper around a vector
   public:
-    List(); // Creates an empty list
-    bool isEmpty();
-    size_t length();
+    // Adopts the contents of `builder`
+    List(ListBuilder<T> *builder) {
+        // Precondition: builder's contents is non-null
+        U_ASSERT(builder->contents != nullptr); 
+        // Copy the pointer to `contents`
+        contents = builder->contents;
+        // Null out builder's pointer to its content
+        // and delete it
+        builder->contents = nullptr;
+        delete builder;
+    }
+    // Initializes to an immutable singleton list
+    // (Adopts its argument)
+    List(T *item, UErrorCode errorCode) {
+        LocalPointer<T> adoptedItem(item);
+        if (U_FAILURE(errorCode)) {
+            // The adoptedItem destructor deletes `item`
+        } else {
+            contents = new UVector(errorCode);
+            if (U_FAILURE(errorCode)) {
+                // The adoptedItem destructor deletes `item`
+            } else {
+                contents->adoptElement(adoptedItem.orphan());
+            }
+        }
+    }
+    // Initializes to an immutable empty list
+    List() : contents(nullptr) {}
+    bool isEmpty() { return (contents == nullptr); }
+    size_t length() { return (contents == nullptr ? 0 : contents->size()); }
     // Out-of-bounds is an internal error
-    void get(size_t, T &);
-    // adding *copies* the thing being added
-    void add(T, UErrorCode errorCode);
+    void get(size_t i, T & result) {
+        U_ASSERT(!(isEmpty() || i >= length()));
+        result = contents[i];
+    }
   private:
-    friend class Operator;
-    // Only used by move assignment operator for Operator
-    void clear() { contents = nullptr; }
-    UVector* contents;
+    const UVector* contents;
 };
 
+
+/*
+// T must derive from UMemory. See the constructor 
 template <typename T>
 class Optional : public UMemory {
   public:
-    Optional(); // "None" constructor
-    Optional(T &); // "Some constructor
+    Optional() : contents(nullptr) {} // "None" constructor
+    // "Some" constructor; adopts `contained`
+    Optional(T* contained) {
+        // Ensure a compile-time error if T doesn't
+        // inherit from `UMemory`
+        const UMemory *m = static_cast<const UMemory*>(contained);
+        contents = m;
+    }
     bool isNone() { return contents == nullptr; }
     bool isSome() { return !isNone(); }
-    void get(T &); // internal error if None
+    // Returns a reference to `contents`
+    // internal error if None
+    void get(T &result) {
+        U_ASSERT(isSome());
+        result = contents;
+    }
   private:
-    T* contents;
+    const UMemory* contents;
 };
-
+*/
 
 // -----------------------------------------------------------------------
 // Helpers (not public)
@@ -81,10 +137,10 @@ class Environment : public UMemory {
     // Precondition: variable name is not already defined
     // The environment takes ownership of the expression.
     // The error code is used to signal a memory allocation error.
-    void define(const VariableName &, const Expression &, UErrorCode &);
+    void define(const VariableName &, const Expression*, UErrorCode &);
 
     // Precondition: variable name is already defined
-    void redefine(const VariableName &, const Expression &, UErrorCode &);
+    void redefine(const VariableName &, const Expression*, UErrorCode &);
 
     // Creates an empty environment
     Environment(UErrorCode &errorCode) {
@@ -134,19 +190,19 @@ class Operator : public UMemory {
     // An operator represents a function name together with
     // a list of options, which may be empty.
   public:
-    Operator(FunctionName f, OptionList l) : functionName(f), options(l) {}
-    // TODO: leaving this in for convenience for now, but it would be
-    // better for all types to be immutable
-    Operator() : functionName(""), options(OptionList()) {}
-
+    // Adopts `l`
+    Operator(FunctionName f, OptionList* l) : functionName(f), options(l) {}
+ 
   private:
-    // TODO
-    /* const */ FunctionName functionName;
-    // TODO: should probably be a hash
-    /* const */ OptionList options;
+    const FunctionName functionName;
+    const OptionList* options;
 };
 
-class Expression : public UMemory {
+class PatternPart : public UMemory {
+    // Either Expression or TextPart can show up in a pattern
+};
+
+class Expression : public PatternPart {
     /*
       An expression is the application of an optional operator to an optional operand.
       For example (using a made-up quasi-s-expression notation):
@@ -160,21 +216,31 @@ class Expression : public UMemory {
       An expression where both operand and operator are None can't be constructed.
     */
   public:
-    Expression(Operator rAtor, Operand rAnd)
-        : rator(Optional<Operator>(rAtor)), rand(Optional<Operand>(rAnd)) {}
-    Expression(Operator rAtor)
-        : rator(Optional<Operator>(rAtor)), rand(Optional<Operand>()) {}
-    Expression(Operand rAnd)
-        : rator(Optional<Operator>()), rand(Optional<Operand>(rAnd)) {}
+    // All constructors adopt their arguments
+    // Both operator and operands must be non-null
+    Expression(Operator *rAtor, Operand *rAnd)
+        : rator(rAtor), rand(rAnd) {  U_ASSERT(rAtor != nullptr && rAnd != nullptr); }
+    // Operator must be non-null
+    Expression(Operator *rAtor) : rator(rAtor) { U_ASSERT(rAtor != nullptr); }
+    // Operand must be non-null
+    Expression(Operand *rAnd) : rand(rAnd) { U_ASSERT(rAnd != nullptr); }
     
     // TODO: leaving this in for convenience for now, but it would be
     // better for all types to be immutable
-    Expression() : rator(Optional<Operator>()), rand(Optional<Operand>()) {}
+    Expression() : rator(nullptr), rand(nullptr) {}
 
+
+    bool isStandaloneAnnotation() const { return (rand == nullptr); }
+    bool isFunctionCall() const         { return (rator != nullptr && rand != nullptr); }
+    /*
+      TODO: I thought about using an Optional class here instead of nullable
+      pointers. But that doesn't really work since we can't use the STL and therefore
+      can't use `std::move` and therefore can't use move constructors/move assignment
+      operators.
+     */
   private:
-    // TODO
-    /* const */ Optional<Operator> rator;
-    /* const */ Optional<Operand> rand;
+    const Operator* rator;
+    const Operand* rand;
 };
 
 class Key : public UMemory {
@@ -191,6 +257,29 @@ class Key : public UMemory {
     /* const */ String contents;
 };
 
+class Text : public PatternPart {
+  public:
+    Text(String &s) : text(s) {}
+  private:
+    const String text;
+};
+
+// using PatternPartList = List<PatternPart>;
+using ExpressionList = List<Expression>;
+ 
+class Pattern : public UMemory {
+ public:
+    // Takes ownership of `ps`
+      Pattern(ExpressionList *ps) : parts(ps) {
+        U_ASSERT(ps != nullptr);
+     }
+ private:
+    // Possibly-empty list of parts
+    // Note: a "text" thing is represented like a literal, so that's an expression too.
+    // TODO: compare and see how other implementations distinguish text / literal / nmtoken
+    const ExpressionList* parts;
+};
+
 using KeyList = List<Key>;
 
 class Variant : public UMemory {
@@ -200,34 +289,70 @@ class Variant : public UMemory {
       desugar `pattern`s into a `selectors`.
      */
   public:
-    // Special case used to represent patterns: creates a `when` with
-    // no keys
-    Variant(Expression &expr) : keys(KeyList()), expression(expr) {}
-    // Usual case; takes ownership of `keys`
-    Variant(KeyList ks, Expression &expr) : keys(ks), expression(expr) {}
+    // Special case used to represent top-level `pattern` bodies:
+    // creates a `when` with no keys
+    // Adopts `p`
+    Variant(Pattern *p, UErrorCode &errorCode) {
+        LocalPointer<Pattern> adoptedPattern(p);
+        if (U_FAILURE(errorCode)) {
+            // the adoptedPattern destructor deletes the pattern
+        } else {
+            keys = new KeyList();
+            if (keys == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                // the adoptedPattern destructor deletes the pattern
+            } else {
+                pattern = adoptedPattern.orphan();
+            }
+        }
+    }
+    // Usual case; takes ownership of `keys` and `p`
+    Variant(KeyList* ks, Pattern* p) : keys(ks), pattern(p) {}
   private:
     
-    const KeyList keys;
-    // TODO: this subsumes `text` under `expression`, which the grammar doesn't do,
-    // by using `expression` to represent a pattern; I think that's okay to do, though
-    const Expression expression;
+    const KeyList* keys;
+    const Pattern* pattern;
 };
 
-using ExpressionList = List<Expression>;
 using VariantList    = List<Variant>;
 
 class MessageBody : public UMemory {
   public:
-    // Constructs a body out of a single Expression, which represents
+    // Constructs a body out of a single Pattern
+    // (body -> pattern alternative in the grammar)
     // a `pattern` in the grammar
-    MessageBody(Expression &expr, UErrorCode &errorCode)
-        : scrutinees(ExpressionList()), variants(VariantList()) {
-        variants.add(Variant(expr), errorCode);
+    MessageBody(Pattern *pattern, UErrorCode &errorCode) {
+        LocalPointer<Pattern> adoptedPattern(pattern);
+        if (U_FAILURE(errorCode)) {
+            // The adoptedPattern destructor deletes the pattern
+        } else {
+            LocalPointer<Variant> patternVariant(new Variant(pattern, errorCode));
+            if (!patternVariant.isValid()) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                // The adoptedPattern destructor deletes the pattern
+            } else {
+                variants = new VariantList(patternVariant.orphan(), errorCode);
+                if (variants == nullptr) {
+                    errorCode = U_MEMORY_ALLOCATION_ERROR;
+                    // The adoptedPattern destructor deletes the pattern
+                } else if (U_SUCCESS(errorCode)) {
+                    // `variants` adopted the pattern
+                    LocalPointer<ExpressionList> adoptedScrutinees(new ExpressionList());
+                    if (!adoptedScrutinees.isValid()) {
+                        errorCode = U_MEMORY_ALLOCATION_ERROR;
+                    } else {
+                        adoptedPattern.orphan();
+                        scrutinees = adoptedScrutinees.orphan();
+                    }
+                }
+            }
+        }
     }
     // Constructs a body out of a list of scrutinees (expressions) and
     // a list of variants, which represents the `(selectors 1*([s] variant))`
     // alternative in the grammar
-    MessageBody(ExpressionList es, VariantList vs) : scrutinees(es), variants(vs) {}
+    // Adopts its arguments
+    MessageBody(ExpressionList *es, VariantList *vs) : scrutinees(es), variants(vs) {}
 
 
     // TODO: leave this in for convenience; would be better for this to be
@@ -246,10 +371,10 @@ class MessageBody : public UMemory {
     // The expressions that are being matched on. May be empty.
     // (If it's empty, there must be exactly one `when`-clause with empty
     // keys.)
-    ExpressionList scrutinees;
+    ExpressionList* scrutinees;
 
     // The list of `when` clauses (case arms).
-    VariantList variants;
+    VariantList* variants;
 };
 
 // -----------------------------------------------------------------------
