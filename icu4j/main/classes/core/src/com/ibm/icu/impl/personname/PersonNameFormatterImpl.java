@@ -5,11 +5,7 @@ package com.ibm.icu.impl.personname;
 import static com.ibm.icu.util.UResourceBundle.ARRAY;
 import static com.ibm.icu.util.UResourceBundle.STRING;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -132,15 +128,22 @@ public class PersonNameFormatterImpl {
     public String formatToString(PersonName name) {
         // TODO: Should probably return a FormattedPersonName object
 
-        if (!nameScriptMatchesLocale(name, this.locale)) {
-            Locale nameLocale = getNameLocale(name);
-            PersonNameFormatterImpl nameLocaleFormatter = new PersonNameFormatterImpl(nameLocale, this.length,
+        Locale nameLocale = getNameLocale(name);
+        String nameScript = getNameScript(name);
+
+        if (!nameScriptMatchesLocale(nameScript, this.locale)) {
+            Locale newFormattingLocale;
+            if (formattingLocaleExists(nameLocale)) {
+                newFormattingLocale = nameLocale;
+            } else {
+                newFormattingLocale = newLocaleWithScript(null, nameScript, nameLocale.getCountry());
+            }
+            PersonNameFormatterImpl nameLocaleFormatter = new PersonNameFormatterImpl(newFormattingLocale, this.length,
                     this.usage, this.formality, this.displayOrder, this.capitalizeSurname);
             return nameLocaleFormatter.formatToString(name);
         }
 
         String result = null;
-        Locale nameLocale = getNameLocale(name);
 
         // choose the GN-first or SN-first pattern based on the name itself and use that to format it
         if (snFirstPatterns == null || nameIsGnFirst(name)) {
@@ -269,6 +272,67 @@ public class PersonNameFormatterImpl {
     }
 
     /**
+     * Internal function to figure out the name's script by examining its characters.
+     * @param name The name for which we need the script
+     * @return The four-letter script code for the name.
+     */
+    private String getNameScript(PersonName name) {
+        // Rather than exhaustively checking all the fields in the name, we just check the given-name
+        // and surname fields, giving preference to the script of the surname if they're different
+        // (we concatenate them into one string for simplicity).  The "name script" is the script
+        // of the first character we find whose script isn't "common".  If that script is one
+        // of the scripts used by the specified locale, we have a match.
+        String givenName = name.getFieldValue(PersonName.NameField.SURNAME, Collections.emptySet());
+        String surname = name.getFieldValue(PersonName.NameField.GIVEN, Collections.emptySet());
+        String nameText = ((surname != null) ? surname : "") + ((givenName != null) ? givenName : "");
+        int stringScript = UScript.UNKNOWN;
+        for (int i = 0; stringScript == UScript.UNKNOWN && i < nameText.length(); i++) {
+            int c = nameText.codePointAt(i);
+            int charScript = UScript.getScript(c);
+            if (charScript != UScript.COMMON && charScript != UScript.INHERITED && charScript != UScript.UNKNOWN) {
+                stringScript = charScript;
+            }
+        }
+        return UScript.getShortName(stringScript);
+    }
+
+    private Locale newLocaleWithScript(Locale oldLocale, String scriptCode, String regionCode) {
+        Locale workingLocale;
+        String localeScript;
+
+        // if we got the "unknown" script code, don't do anything with it-- just return the original locale
+        if (scriptCode.equals("Zzzz")) {
+            return oldLocale;
+        }
+
+        Locale.Builder builder = new Locale.Builder();
+        if (oldLocale != null) {
+            workingLocale = oldLocale;
+            builder.setLocale(oldLocale);
+            localeScript = ULocale.addLikelySubtags(ULocale.forLocale(oldLocale)).getScript();
+        } else {
+            ULocale tmpLocale = ULocale.addLikelySubtags(new ULocale("und_" + scriptCode));
+            builder.setLanguage(tmpLocale.getLanguage());
+            workingLocale = ULocale.addLikelySubtags(new ULocale(tmpLocale.getLanguage())).toLocale();
+            localeScript = workingLocale.getScript();
+
+            if (regionCode != null) {
+                builder.setRegion(regionCode);
+            }
+        }
+
+        // if the detected character script matches one of the default scripts for the name's locale,
+        // use the name locale's default script code in the locale ID we return (this converts a detected
+        // script of "Hani" to "Hans" for "zh", "Hant" for "zh_Hant", and "Jpan" for "ja")
+        if (!scriptCode.equals(localeScript) && nameScriptMatchesLocale(scriptCode, workingLocale)) {
+            scriptCode = localeScript;
+        }
+
+        builder.setScript(scriptCode);
+        return builder.build();
+    }
+
+    /**
      * Internal function to figure out the name's locale when the name doesn't specify it.
      * (Note that this code assumes that if the locale is specified, it includes a language
      * code.)
@@ -276,63 +340,50 @@ public class PersonNameFormatterImpl {
      * @return The name's (real or guessed) locale.
      */
     private Locale getNameLocale(PersonName name) {
-        // if the name specifies its locale, we can just return it
-        Locale nameLocale = name.getNameLocale();
-        if (nameLocale == null) {
-            // if not, we look at the characters in the name.  If their script matches the default script for the formatter's
-            // locale, we use the formatter's locale as the name's locale
-            int formatterScript = UScript.getCodeFromName(ULocale.addLikelySubtags(ULocale.forLocale(locale)).getScript());
-            String givenName = name.getFieldValue(PersonName.NameField.GIVEN, new HashSet<PersonName.FieldModifier>());
-            int nameScript = UScript.INVALID_CODE;
-            for (int i = 0; nameScript == UScript.INVALID_CODE && i < givenName.length(); i++) {
-                // the script of the name is the script of the first character in the name whose script isn't
-                // COMMON or INHERITED
-                int script = UScript.getScript(givenName.charAt(i));
-                if (script != UScript.COMMON && script != UScript.INHERITED) {
-                    nameScript = script;
-                }
-            }
-            if (formatterScript == nameScript) {
-                nameLocale = this.locale;
-            } else {
-                // if the name's script is different from the formatter's script, we use addLikelySubtags() to find the
-                // default language for the name's script and use THAT as the name's locale
-                nameLocale = new Locale(ULocale.addLikelySubtags(new ULocale("und_" + UScript.getShortName(nameScript))).getLanguage());
-            }
-            // TODO: This algorithm has a few deficiencies: First, it assumes the script of the string is the script of the first
-            // character in the string that's not COMMON or INHERITED.  This won't work well for some languages, such as Japanese,
-            // that use multiple scripts.  Doing better would require adding a new getScript(String) method on UScript, which
-            // might be something we want.  Second, we only look at the given-name field.  This field should always be populated,
-            // but if it isn't, we're stuck.  Looking at all the fields requires API on PersonName that we don't need anywhere
-            // else.
-        }
-        return nameLocale;
+        return newLocaleWithScript(name.getNameLocale(), getNameScript(name), null);
     }
 
     /**
      * Returns true if the characters in the name match one of the scripts for the specified locale.
      */
-    private boolean nameScriptMatchesLocale(PersonName name, Locale formatterLocale) {
-        // Rather than exhaustively checking all the fields in the name, we just check the given-name
-        // and surname fields, giving preference to the script of the surname if they're different
-        // (we concatenate them into one string for simplicity).  The "name script" is the script
-        // of the first character we find whose script isn't "common".  If that script is one
-        // of the scripts used by the specified locale, we have a match.
-        String nameText = name.getFieldValue(PersonName.NameField.GIVEN, Collections.emptySet())
-                + name.getFieldValue(PersonName.NameField.SURNAME, Collections.emptySet());
-        int[] localeScripts = UScript.getCode(formatterLocale);
-        int stringScript = UScript.COMMON;
-        for (int i = 0; stringScript == UScript.COMMON && i < nameText.length(); i++) {
-            char c = nameText.charAt(i);
-            stringScript = UScript.getScript(c);
+    private boolean nameScriptMatchesLocale(String nameScriptID, Locale formatterLocale) {
+        // if the script code is the "unknown" script, pretend it matches everything
+        if (nameScriptID.equals("Zzzz")) {
+            return true;
         }
 
+        int[] localeScripts = UScript.getCode(formatterLocale);
+        int nameScript = UScript.getCodeFromName(nameScriptID);
+
         for (int localeScript : localeScripts) {
-            if (localeScript == stringScript) {
+            if (localeScript == nameScript || (localeScript == UScript.SIMPLIFIED_HAN && nameScript == UScript.HAN) || (localeScript == UScript.TRADITIONAL_HAN && nameScript == UScript.HAN)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Returns true if there's actual name formatting data for the specified locale (i.e., when
+     * we fetch the resource data, we don't fall back to root).
+     */
+    private boolean formattingLocaleExists(Locale formattingLocale) {
+        // NOTE: What we really want to test for here is whether we're falling back to root for either the resource bundle itself
+        // or for the personNames/nameOrderLocales/givenFirst and personNames/nameOrderLocales/surnameFirst resources.
+        // The problem is that getBundleInstance() doesn't return root when it can't find what it's looking for; it returns
+        // ULocale.getDefault().  We could theoretically get around this by passing OpenType.LOCALE_ROOT, but this
+        // bypasses the parent-locale table, so fallback across script can happen (ja_Latn falls back to ja instead of root).
+        // So I'm checking to see if the language code got changed and using that as a surrogate for falling back to root.
+        String formattingLanguage = formattingLocale.getLanguage();
+        ICUResourceBundle mainRB = ICUResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, ULocale.forLocale(formattingLocale), ICUResourceBundle.OpenType.LOCALE_DEFAULT_ROOT);
+        if (!mainRB.getULocale().getLanguage().equals(formattingLanguage)) {
+            return false;
+        }
+
+        ICUResourceBundle gnFirstResource = mainRB.getWithFallback("personNames/nameOrderLocales/givenFirst");
+        ICUResourceBundle snFirstResource = mainRB.getWithFallback("personNames/nameOrderLocales/surnameFirst");
+
+        return gnFirstResource.getULocale().getLanguage().equals(formattingLanguage) || snFirstResource.getULocale().getLanguage().equals(formattingLanguage);
     }
 
     /**
