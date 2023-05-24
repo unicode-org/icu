@@ -89,7 +89,8 @@ class U_I18N_API MessageFormat2 : public Format {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    MessageFormat2(const MessageFormat2 &);
+    // TODO: I'm not sure if this is needed; see comment in implementation in messageformat2.cpp
+    //    MessageFormat2(const MessageFormat2 &);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.

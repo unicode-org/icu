@@ -810,7 +810,11 @@ static void parseOption(const UnicodeString &source,
     }
 
     // Finally, add the lhs=rhs mapping to the list
-    Option opt(lhs, Operand(isVariable, rhs));
+    Option* opt = new Option(lhs, Operand(isVariable, rhs));
+    if (opt == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     opts.add(opt, errorCode);
 }
 
@@ -1329,52 +1333,57 @@ static void parseText(const UnicodeString &source,
   Consume an `nmtoken`, `literal`, or the string "*", matching
   the `key` nonterminal in the grammar
 */
-static void parseKey(const UnicodeString &source,
+static Key* parseKey(const UnicodeString &source,
                      uint32_t &index,
                      MessageParseError &parseError,
-                     UErrorCode &errorCode,
-                     Key &key) {
-    CHECK_ERROR(errorCode);
+                     UErrorCode &errorCode) {
+    NULL_ON_ERROR(errorCode);
     U_ASSERT(inBounds(source, index));
 
+    Key* key;
     // Literal | nmtoken | '*'
     switch (source[index]) {
     case PIPE: {
         String s;
         parseLiteral(source, index, parseError, errorCode, s);
-        key = Key(s);
+        key = new Key(s);
         break;
     }
     case ASTERISK: {
         index++;
         // Guarantee postcondition
-        CHECK_BOUNDS(source, index, parseError, errorCode);
-        key = Key();
+        CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
+        key = new Key();
         break;
     }
     default: {
         // nmtoken
         String s;
         parseNmtoken(source, index, parseError, errorCode, s);
-        key = Key(s);
+        key = new Key(s);
         break;
     }
     }
+    // Make sure not to overwrite the error code
+    NULL_ON_ERROR(errorCode);
+    if (key == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return key;
 }
 
 /*
   Consume a non-empty sequence of `key`s separated by whitespace
+
+  Takes ownership of `keys`
 */
-
-xx TODO
-Keep fixing compile errors here
-
 static KeyList* parseNonEmptyKeys(const UnicodeString &source,
                               uint32_t &index,
                               MessageParseError &parseError,
                               UErrorCode &errorCode,
-                              ListBuilder<Key> &keys) {
-    CHECK_ERROR(errorCode);
+                              ListBuilder<Key> *keys) {
+    NULL_ON_ERROR(errorCode);
     U_ASSERT(inBounds(source, index));
 
 /*
@@ -1402,17 +1411,18 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
     // whitespace and then the first key separately.
     parseRequiredWhitespace(source, index, parseError, errorCode);
     // Restore precondition
-    CHECK_BOUNDS(source, index, parseError, errorCode);
-    Key k;
-    parseKey(source, index, parseError, errorCode, k);
-    keys.add(k, errorCode);
+    CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
+    LocalPointer<Key> k(parseKey(source, index, parseError, errorCode));
+    if (U_SUCCESS(errorCode)) {
+        keys->add(k.orphan(), errorCode);
+    }
 
     // We've seen at least one whitespace-key pair, so now we can parse
     // *(s key) [s]
     while (isWhitespace(source[index])) {
         parseRequiredWhitespace(source, index, parseError, errorCode);
         // Restore precondition
-        CHECK_BOUNDS(source, index, parseError, errorCode);
+        CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
 
         // At this point, it's ambiguous whether we are inside (s key) or [s].
         // This check resolves that ambiguity.
@@ -1421,9 +1431,24 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
             // trailing whitespace. All the keys have been parsed.
             break;
         }
-        parseKey(source, index, parseError, errorCode, k);
-        keys.add(k, errorCode);
+        k.adoptInstead(parseKey(source, index, parseError, errorCode));
+        if (U_SUCCESS(errorCode)) {
+            keys->add(k.orphan(), errorCode);
+        }
     }
+
+    // Check error code so we won't overwrite the error
+    if (U_FAILURE(errorCode)) {
+        delete keys;
+        return nullptr;
+    }
+
+    LocalPointer<KeyList> result(new KeyList(keys));
+    if (!result.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
 }
 
 /*
@@ -1500,12 +1525,11 @@ static Pattern* parsePattern(const UnicodeString &source,
   No postcondition (on return, `index` might equal `source.length()` with U_SUCCESS(errorCode)),
   because a message can end with a variant
 */
-static void parseSelectors(const UnicodeString &source,
+static MessageBody* parseSelectors(const UnicodeString &source,
                            uint32_t &index,
                            MessageParseError &parseError,
-                           UErrorCode &errorCode,
-                           MessageBody &body) {
-    CHECK_ERROR(errorCode);
+                           UErrorCode &errorCode) {
+    NULL_ON_ERROR(errorCode);
     U_ASSERT(inBounds(source, index));
 
     parseToken(ID_MATCH, source, index, parseError, errorCode);
@@ -1514,7 +1538,7 @@ static void parseSelectors(const UnicodeString &source,
     LocalPointer<ListBuilder<Expression>> scrutinees(new ListBuilder<Expression>());
     if (!scrutinees.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
+        return nullptr;
     }
 
     LocalPointer<Expression> expression;
@@ -1523,7 +1547,7 @@ static void parseSelectors(const UnicodeString &source,
     while (isWhitespace(source[index]) || source[index] == LEFT_CURLY_BRACE) {
         parseOptionalWhitespace(source, index, parseError, errorCode);
         // Restore precondition
-        CHECK_BOUNDS(source, index, parseError, errorCode);
+        CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
 
         if (source[index] != LEFT_CURLY_BRACE) {
             // This is not necessarily an error, but rather,
@@ -1544,7 +1568,7 @@ static void parseSelectors(const UnicodeString &source,
     // At least one selector is required
     if (selectorsEmpty) {
         ERROR(parseError, errorCode, index);
-        return;
+        return nullptr;
     }
 
     #define CHECK_END_OF_INPUT                     \
@@ -1553,8 +1577,11 @@ static void parseSelectors(const UnicodeString &source,
         }                                          \
 
     // Parse variants
-    bool empty = true;
-    VariantList variants;
+    LocalPointer<ListBuilder<Variant>> variants(new ListBuilder<Variant>());
+    if (!variants.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     while (isWhitespace(source[index]) || source[index] == ID_WHEN[0]) {
         parseOptionalWhitespace(source, index, parseError, errorCode);
         // Restore the precondition, *without* erroring out if we've
@@ -1569,10 +1596,10 @@ static void parseSelectors(const UnicodeString &source,
         LocalPointer<ListBuilder<Key>> keys(new ListBuilder<Key>());
         if (!keys.isValid()) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
+            break;
         }
-        parseNonEmptyKeys(source, index, parseError, errorCode, keys);
-        CHECK_ERROR(errorCode);
+        LocalPointer<KeyList> keyList(parseNonEmptyKeys(source, index, parseError, errorCode, keys.orphan()));
+        NULL_ON_ERROR(errorCode);
 
         // parseNonEmptyKeys() consumes any trailing whitespace,
         // so the pattern can be consumed next.
@@ -1581,10 +1608,16 @@ static void parseSelectors(const UnicodeString &source,
             break;
         }
 
-        LocalPointer<Variant> var(new Variant(keys, rhs));
+        LocalPointer<Variant> var(new Variant(keyList.orphan(), rhs.orphan()));
+        if (!var.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            break;
+        }
 
-        variants.add(Variant(keys, rhs), errorCode);
-        empty = false;
+        variants->add(var.orphan(), errorCode);
+        if (U_FAILURE(errorCode)) {
+            break;
+        }
 
         // Restore the precondition, *without* erroring out if we've
         // reached the end of input. That's because it's valid for the
@@ -1595,12 +1628,29 @@ static void parseSelectors(const UnicodeString &source,
         CHECK_END_OF_INPUT
     }
 
+    LocalPointer<VariantList> variantList(new VariantList(variants.orphan()));
+    if (!variantList.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     // At least one variant is required
-    if (empty) {
+    if (variantList->isEmpty()) {
         ERROR(parseError, errorCode, index);
+        return nullptr;
     }
 
-    body = MessageBody(scrutinees, variants);
+    LocalPointer<ExpressionList> scrutineeList(new ExpressionList(scrutinees.orphan()));
+    if (!scrutineeList.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+ 
+    MessageBody* body = new MessageBody(scrutineeList.orphan(), variantList.orphan());
+    if (body == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return body;
 }
 
 /*
@@ -1608,22 +1658,27 @@ static void parseSelectors(const UnicodeString &source,
   No postcondition (on return, `index` might equal `source.length()` with U_SUCCESS(errorCode)),
   because a message can end with a body (trailing whitespace is optional)
 */
-static void parseBody(const UnicodeString &source, uint32_t &index, MessageParseError &parseError,
-                      UErrorCode &errorCode, MessageBody &body) {
-    CHECK_ERROR(errorCode);
+static MessageBody* parseBody(const UnicodeString &source,
+                              uint32_t &index,
+                              MessageParseError &parseError,
+                              UErrorCode &errorCode) {
+    NULL_ON_ERROR(errorCode);
     U_ASSERT(inBounds(source, index));
 
+    LocalPointer<MessageBody> body;
     // Body must be either a pattern or selectors
     switch (source[index]) {
     case LEFT_CURLY_BRACE: {
         // Pattern
-        Pattern pattern;
-        parsePattern(source, index, parseError, errorCode, pattern);
-        body = MessageBody(pattern, errorCode);
+        LocalPointer<Pattern> pattern(parsePattern(source, index, parseError, errorCode));
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+        body.adoptInstead(new MessageBody(pattern.orphan(), errorCode));
         break;
     }
     case ID_MATCH[0]: {
-        parseSelectors(source, index, parseError, errorCode, body);
+        body.adoptInstead(parseSelectors(source, index, parseError, errorCode));
         // Selectors
         break;
     }
@@ -1632,6 +1687,11 @@ static void parseBody(const UnicodeString &source, uint32_t &index, MessageParse
         break;
     }
     }
+    if (!body.isValid() && U_SUCCESS(errorCode)) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return body.orphan();
 }
 
 // -------------------------------------
@@ -1639,6 +1699,9 @@ static void parseBody(const UnicodeString &source, uint32_t &index, MessageParse
 
 /*
 MessageFormat2::MessageFormat2(const MessageFormat2 & that) {
+    // TODO: This would share the "message body" part of the data model,
+    // which is immutable, while copying the environment. But I'm not sure
+    // if that's needed
     dataModel = that.dataModel;
 }
 */
@@ -1690,9 +1753,8 @@ void MessageFormat2::parse(const UnicodeString &source,
         ERROR(messageParseError, errorCode, index);
     }
 
-    parseDeclarations(source, index, messageParseError, errorCode, dataModel.env);
-    MessageBody body;
-    parseBody(source, index, messageParseError, errorCode, dataModel.body);
+    parseDeclarations(source, index, messageParseError, errorCode, *dataModel.env);
+    LocalPointer<MessageBody> messageBody(parseBody(source, index, messageParseError, errorCode));
     parseOptionalWhitespace(source, index, messageParseError, errorCode);
 
     // There are no errors; finally, check that the entire input was consumed
@@ -1701,6 +1763,9 @@ void MessageFormat2::parse(const UnicodeString &source,
     if (U_SUCCESS(errorCode) && ((int32_t)index) != source.length()) {
         ERROR(messageParseError, errorCode, index);
     }
+
+    // Initialize the body
+    dataModel.body = messageBody.orphan();
 
     // Finally, copy the relevant fields of the `MessageParseError` into the `UParseError`
     translateParseError(messageParseError, parseError);

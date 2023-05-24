@@ -12,7 +12,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
-#include "uhash.h"
+#include "hash.h"
 #include "uvector.h"
 
 U_NAMESPACE_BEGIN  namespace message2 {
@@ -34,11 +34,28 @@ template <typename T>
 class ListBuilder : public UMemory {
     // Provides a wrapper around a vector
   public:
-    ListBuilder(); // Creates an empty list
+    // Creates an empty list
+    ListBuilder() {
+        // Initially set to null (so the empty list constructor
+        // doesn't need to take an error code)
+        contents = nullptr;
+    }
     // adding adopts the thing being added
-    void add(T*, UErrorCode errorCode);
-    // used when we want to copy
-    void add(T, UErrorCode errorCode);
+    void add(T* element, UErrorCode errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return;
+        }
+        // If this is the first element being added,
+        // initialize `contents`
+        if (contents == nullptr) {
+            contents = new UVector(errorCode);
+        }
+        // If creating the new vector succeeded, add the
+        // element
+        if (U_SUCCESS(errorCode)) {
+            contents->adoptElement(element, errorCode);
+        }
+    }
   private:
     friend class List<T>;
     UVector* contents;
@@ -71,21 +88,23 @@ class List : public UMemory {
             if (U_FAILURE(errorCode)) {
                 // The adoptedItem destructor deletes `item`
             } else {
-                contents->adoptElement(adoptedItem.orphan());
+                contents->adoptElement(adoptedItem.orphan(), errorCode);
             }
         }
     }
     // Initializes to an immutable empty list
     List() : contents(nullptr) {}
-    bool isEmpty() { return (contents == nullptr); }
-    size_t length() { return (contents == nullptr ? 0 : contents->size()); }
+    bool isEmpty() const { return (contents == nullptr); }
+    size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
     // Out-of-bounds is an internal error
-    void get(size_t i, T & result) {
+    void get(size_t i, T & result) const {
         U_ASSERT(!(isEmpty() || i >= length()));
-        result = contents[i];
+        result = *(static_cast<T*>(contents->elementAt(i)));
     }
   private:
-    const UVector* contents;
+    // Not marked const, so that the singleton constructor works.
+    // But there are no mutator methods.
+    /* const */ UVector* contents;
 };
 
 
@@ -120,45 +139,6 @@ class Optional : public UMemory {
 
 class Expression;
 
-// For now, represent variable names as strings
-#define hashVariableName    uhash_hashUnicodeString
-#define compareVariableName uhash_compareUnicodeString
-
-class Environment : public UMemory {
-  // Provides a wrapper around a hash table
-  public:
-    // Looks up a variable, returning true iff it's found in the environment.
-    // The UErrorCode is used for signaling other errors, e.g. `bindings` being
-    // null.
-    // TODO ^ That should probably be an assert. would we want to use the error
-    // code here at all?
-    bool lookup(const VariableName &, UErrorCode &, Expression &result);
-
-    // Precondition: variable name is not already defined
-    // The environment takes ownership of the expression.
-    // The error code is used to signal a memory allocation error.
-    void define(const VariableName &, const Expression*, UErrorCode &);
-
-    // Precondition: variable name is already defined
-    void redefine(const VariableName &, const Expression*, UErrorCode &);
-
-    // Creates an empty environment
-    Environment(UErrorCode &errorCode) {
-        if (U_FAILURE(errorCode)) {
-            // Won't be valid if there already was an error.
-            bindings = nullptr;
-            return;
-        }
-        // No value comparator needed
-        bindings = uhash_open(hashVariableName, compareVariableName, nullptr, &errorCode);
-    }
-    // Delete default constructor - need an error code
-    Environment() = delete;
-    ~Environment() { uhash_close(bindings); }
-  private:
-    UHashtable* bindings;
-};
-
 class Operand : public UMemory {
     // An operand can either be an uninterpreted string,
     // or a variable reference.
@@ -170,13 +150,22 @@ class Operand : public UMemory {
     // better for all types to be immutable
     Operand() : isVariableReference(false), string("") {}
 
+    bool isVariable() const { return isVariableReference; }
+    VariableName asVariable() const {
+        U_ASSERT(isVariable());
+        return string;
+    }
+    bool isLiteral() const { return !isVariable(); }
+    String asLiteral() const {
+        U_ASSERT(isLiteral());
+        return string;
+    }
   private:
-    // TODO
-    /* const */ bool isVariableReference;
-    /* const */ String string;
+    const bool isVariableReference;
+    const String string;
 };
 
-class Option : public UMemory {
+ class Option : public UMemory {
     // Represents a single name-value pair
   public:
     Option(String s, Operand v) : name(s), value(v) {}
@@ -192,7 +181,10 @@ class Operator : public UMemory {
   public:
     // Adopts `l`
     Operator(FunctionName f, OptionList* l) : functionName(f), options(l) {}
- 
+
+    FunctionName getFunctionName() const { return functionName; }
+    const OptionList& getOptions() const { return *options; }
+
   private:
     const FunctionName functionName;
     const OptionList* options;
@@ -247,14 +239,19 @@ class Key : public UMemory {
     // A key is either a string or the "wildcard" symbol.
     // TODO: same question, distinguish literals from strings?
   public:
-    Key();           // wildcard constructor
-    Key(String &s);  // concrete key constructor
-    bool isWildcard();
-    void getString(String&); // internal error if this is a wildcard
+    // wildcard constructor
+    Key() : wildcard(true) {}
+    // concrete key constructor
+    Key(String &s) : wildcard(false), contents(s) {}
+    bool isWildcard() const { return wildcard; }
+    // internal error if this is a wildcard
+    String getString() const {
+        U_ASSERT(!isWildcard());
+        return contents;
+    }
   private:
-    // TODO
-    /* const */ bool wildcard; // True if this represents the wildcard "*"
-    /* const */ String contents;
+    const bool wildcard; // True if this represents the wildcard "*"
+    const String contents;
 };
 
 class Text : public PatternPart {
@@ -270,9 +267,15 @@ using ExpressionList = List<Expression>;
 class Pattern : public UMemory {
  public:
     // Takes ownership of `ps`
-      Pattern(ExpressionList *ps) : parts(ps) {
+    Pattern(ExpressionList *ps) : parts(ps) {
         U_ASSERT(ps != nullptr);
-     }
+    }
+    size_t numParts() const { return parts->length(); }
+    // Precondition: i < numParts()
+    void getPart(size_t i, Expression& result) const {
+        U_ASSERT(i < numParts());
+        parts->get(i, result);
+    }
  private:
     // Possibly-empty list of parts
     // Note: a "text" thing is represented like a literal, so that's an expression too.
@@ -354,11 +357,8 @@ class MessageBody : public UMemory {
     // Adopts its arguments
     MessageBody(ExpressionList *es, VariantList *vs) : scrutinees(es), variants(vs) {}
 
-
-    // TODO: leave this in for convenience; would be better for this to be
-    // immutable
+    // TODO: see comment on MessageFormatDataModel constructor
     MessageBody() {}
-
   private:
     friend class MessageFormatDataModel;
     
@@ -375,6 +375,72 @@ class MessageBody : public UMemory {
 
     // The list of `when` clauses (case arms).
     VariantList* variants;
+};
+
+ 
+// For now, represent variable names as strings
+#define hashVariableName    uhash_hashUnicodeString
+#define compareVariableName uhash_compareUnicodeString
+
+class Environment : public UMemory {
+  // Provides a wrapper around a hash table
+  public:
+    // Returns true iff the variable is defined
+    bool defined(const VariableName &v) {
+        U_ASSERT(bindings != nullptr);
+        return bindings->containsKey(v);
+    }
+    // Looks up a variable, returning true iff it's found in the environment.
+    bool lookup(const VariableName &v, Expression &result) {
+        void* maybeExpr = bindings->get(v);
+        if (maybeExpr == nullptr) {
+            return false;
+        }
+        result = *(static_cast<Expression*>(maybeExpr));
+        return true;
+    }
+
+    // Precondition: variable name is not already defined
+    // The environment takes ownership of the expression.
+    // The error code is used to signal a memory allocation error.
+    void define(const VariableName &v, Expression* e, UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return;
+        }
+        // The assert ensures that the variable name was not already defined
+        U_ASSERT(bindings->put(v, e, errorCode) == nullptr);
+    }
+
+    // Precondition: variable name is already defined
+    void redefine(const VariableName &v, Expression* e, UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return;
+        }
+        // The assert ensures that the variable name was already defined
+        U_ASSERT(bindings->put(v, e, errorCode) != nullptr);
+    }
+
+    // Creates an empty environment
+    Environment(UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) {
+            // Won't be valid if there already was an error.
+            bindings = nullptr;
+            return;
+        }
+        // No value comparator needed
+        LocalPointer<Hashtable> e(new Hashtable(hashVariableName, compareVariableName, errorCode));
+        if (U_FAILURE(errorCode)) {
+            bindings = nullptr;
+            return;
+        }
+        bindings = e.orphan();
+        // The environment owns the values
+        bindings->setValueDeleter(bindings, uprv_deleteUObject);
+    }
+    // Delete default constructor - need an error code
+    Environment() = delete;
+  private:
+    Hashtable* bindings;
 };
 
 // -----------------------------------------------------------------------
@@ -400,6 +466,7 @@ variables.
  */
 class MessageFormat2;
 
+ 
 class U_I18N_API MessageFormatDataModel : public UMemory {
   friend MessageFormat2;
 
@@ -411,12 +478,19 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     // which initializes the data model, and that doesn't work unless there's a default
     // constructor. Is there a better way?
     // Needs a UErrorCode because it initializes its environment
-    MessageFormatDataModel(UErrorCode &status) : env(status) {}
-
+    MessageFormatDataModel(UErrorCode &status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        LocalPointer<Environment> envLocal(new Environment(status));
+        if (U_FAILURE(status)) {
+            return;
+        }
+        env = envLocal.orphan();
+    }
     virtual ~MessageFormatDataModel();
 
   private:
-
     /*
       A parsed message consists of an environment and a body.
       Initially, the environment contains bindings for local variables
@@ -426,13 +500,12 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
       Once the data model is constructed, only the environment can be mutated.
       (It's constructed bottom-up.)
     */
-    Environment env;
+    Environment* env;
 
     /*
       See the `MessageBody` class.
      */
-    // TODO
- /*   const */ MessageBody body;
+    const MessageBody* body;
 
     // TODO: Maybe not needed
     // Takes ownership of the environment and body
