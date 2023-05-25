@@ -61,7 +61,7 @@ class ListBuilder : public UMemory {
     UVector* contents;
 };
 
-// Immutable list 
+// Immutable list
 template <typename T>
 class List : public UMemory {
     // Provides a wrapper around a vector
@@ -69,7 +69,7 @@ class List : public UMemory {
     // Adopts the contents of `builder`
     List(ListBuilder<T> *builder) {
         // Precondition: builder's contents is non-null
-        U_ASSERT(builder->contents != nullptr); 
+        U_ASSERT(builder->contents != nullptr);
         // Copy the pointer to `contents`
         contents = builder->contents;
         // Null out builder's pointer to its content
@@ -106,33 +106,6 @@ class List : public UMemory {
     // But there are no mutator methods.
     /* const */ UVector* contents;
 };
-
-
-/*
-// T must derive from UMemory. See the constructor 
-template <typename T>
-class Optional : public UMemory {
-  public:
-    Optional() : contents(nullptr) {} // "None" constructor
-    // "Some" constructor; adopts `contained`
-    Optional(T* contained) {
-        // Ensure a compile-time error if T doesn't
-        // inherit from `UMemory`
-        const UMemory *m = static_cast<const UMemory*>(contained);
-        contents = m;
-    }
-    bool isNone() { return contents == nullptr; }
-    bool isSome() { return !isNone(); }
-    // Returns a reference to `contents`
-    // internal error if None
-    void get(T &result) {
-        U_ASSERT(isSome());
-        result = contents;
-    }
-  private:
-    const UMemory* contents;
-};
-*/
 
 // -----------------------------------------------------------------------
 // Helpers (not public)
@@ -263,7 +236,7 @@ class Text : public PatternPart {
 
 // using PatternPartList = List<PatternPart>;
 using ExpressionList = List<Expression>;
- 
+
 class Pattern : public UMemory {
  public:
     // Takes ownership of `ps`
@@ -377,9 +350,7 @@ class MessageBody : public UMemory {
     VariantList* variants;
 };
 
- 
 // For now, represent variable names as strings
-#define hashVariableName    uhash_hashUnicodeString
 #define compareVariableName uhash_compareUnicodeString
 
 class Environment : public UMemory {
@@ -428,14 +399,14 @@ class Environment : public UMemory {
             return;
         }
         // No value comparator needed
-        LocalPointer<Hashtable> e(new Hashtable(hashVariableName, compareVariableName, errorCode));
+        LocalPointer<Hashtable> e(new Hashtable(compareVariableName, nullptr, errorCode));
         if (U_FAILURE(errorCode)) {
             bindings = nullptr;
             return;
         }
         bindings = e.orphan();
         // The environment owns the values
-        bindings->setValueDeleter(bindings, uprv_deleteUObject);
+        bindings->setValueDeleter(uprv_deleteUObject);
     }
     // Delete default constructor - need an error code
     Environment() = delete;
@@ -466,7 +437,6 @@ variables.
  */
 class MessageFormat2;
 
- 
 class U_I18N_API MessageFormatDataModel : public UMemory {
   friend MessageFormat2;
 

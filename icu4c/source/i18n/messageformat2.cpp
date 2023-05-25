@@ -1644,7 +1644,7 @@ static MessageBody* parseSelectors(const UnicodeString &source,
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
- 
+
     MessageBody* body = new MessageBody(scrutineeList.orphan(), variantList.orphan());
     if (body == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
