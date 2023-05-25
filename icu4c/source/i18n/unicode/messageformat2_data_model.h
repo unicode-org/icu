@@ -53,9 +53,11 @@ class ListBuilder : public UMemory {
         // If creating the new vector succeeded, add the
         // element
         if (U_SUCCESS(errorCode)) {
+            contents->setDeleter(uprv_deleteUObject);
             contents->adoptElement(element, errorCode);
         }
     }
+    bool isEmpty() const { return (contents == nullptr); }
   private:
     friend class List<T>;
     UVector* contents;
@@ -68,13 +70,16 @@ class List : public UMemory {
   public:
     // Adopts the contents of `builder`
     List(ListBuilder<T> *builder) {
-        // Precondition: builder's contents is non-null
-        U_ASSERT(builder->contents != nullptr);
-        // Copy the pointer to `contents`
-        contents = builder->contents;
-        // Null out builder's pointer to its content
-        // and delete it
-        builder->contents = nullptr;
+        // builder->contents == null means the empty list
+        if (builder->contents == nullptr) {
+            contents = nullptr;
+        } else {
+            // Copy the pointer to `contents`
+            contents = builder->contents;
+            // Null out builder's pointer to its content
+            // and delete it
+            builder->contents = nullptr;
+        }
         delete builder;
     }
     // Initializes to an immutable singleton list
@@ -88,6 +93,7 @@ class List : public UMemory {
             if (U_FAILURE(errorCode)) {
                 // The adoptedItem destructor deletes `item`
             } else {
+                contents->setDeleter(uprv_deleteUObject);
                 contents->adoptElement(adoptedItem.orphan(), errorCode);
             }
         }
@@ -138,7 +144,7 @@ class Operand : public UMemory {
     const String string;
 };
 
- class Option : public UMemory {
+class Option : public UMemory {
     // Represents a single name-value pair
   public:
     Option(String s, Operand v) : name(s), value(v) {}
@@ -149,16 +155,32 @@ class Operand : public UMemory {
 
 using OptionList = List<Option>;
 class Operator : public UMemory {
-    // An operator represents a function name together with
-    // a list of options, which may be empty.
+    // An operator represents either a function name together with
+    // a list of options, which may be empty;
+    // or a reserved sequence (which has no meaning and may result
+    // in a formatting error).
   public:
-    // Adopts `l`
-    Operator(FunctionName f, OptionList* l) : functionName(f), options(l) {}
+    // Function call constructor; adopts `l`
+    Operator(FunctionName f, OptionList* l) : isReservedSequence(false), functionName(f), options(l) {}
+    // Reserved sequence constructor
+    Operator(UnicodeString &r) : isReservedSequence(true), functionName(r), options(nullptr) {}
 
-    FunctionName getFunctionName() const { return functionName; }
-    const OptionList& getOptions() const { return *options; }
+    FunctionName getFunctionName() const {
+        U_ASSERT(!isReserved());
+        return functionName;
+    }
+    String asReserved() const {
+        U_ASSERT(isReserved());
+        return functionName;
+    }
+    const OptionList& getOptions() const {
+        U_ASSERT(!isReserved());
+        return *options;
+    }
+    bool isReserved() const { return isReservedSequence; }
 
   private:
+    const bool isReservedSequence;
     const FunctionName functionName;
     const OptionList* options;
 };

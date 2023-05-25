@@ -924,31 +924,33 @@ static void parseReservedEscape(const UnicodeString &source,
 /*
   Consumes a non-empty sequence of reserved-chars, reserved-escapes, and
   literals (as in 1*(reserved-char / reserved-escape / literal) in the `reserved-body` rule)
+
+  Appends it to `str`
 */
 static void parseReservedChunk(const UnicodeString &source,
-                               uint32_t &index,
-                               MessageParseError &parseError,
-                               UErrorCode &errorCode) {
+                                 uint32_t &index,
+                                 MessageParseError &parseError,
+                                 UErrorCode &errorCode,
+                                 UnicodeString& result) {
     CHECK_ERROR(errorCode);
 
     bool empty = true;
     while(reservedChunkFollows(source[index])) {
-        String str;
-
         empty = false;
         // reserved-char
         if (isReservedChar(source[index])) {
+            result += source[index];
             // consume the char
             index++;
             // Restore precondition
             CHECK_BOUNDS(source, index, parseError, errorCode);
         } else if (source[index] == BACKSLASH) {
             // reserved-escape
-            // Result `str` is ignored since reserved strings get dropped
-            parseReservedEscape(source, index, parseError, errorCode, str);
+            parseReservedEscape(source, index, parseError, errorCode, result);
         } else if (source[index] == PIPE) {
-            // Result `str` is ignored since reserved strings get dropped
-            parseLiteral(source, index, parseError, errorCode, str);
+            String literalStr;
+            parseLiteral(source, index, parseError, errorCode, literalStr);
+            result += literalStr;
         } else {
             // The reserved chunk ends here
             break;
@@ -965,26 +967,28 @@ static void parseReservedChunk(const UnicodeString &source,
   of non-empty sequences of reserved characters, separated by whitespace.
   Matches the `reserved` nonterminal in the grammar
 
-  Ignores the result, since a reserved string results in a parse error.
-  TODO: test for that error
 */
-static void parseReserved(const UnicodeString &source,
+static Operator* parseReserved(const UnicodeString &source,
                           uint32_t &index,
                           MessageParseError &parseError,
                           UErrorCode &errorCode) {
-    CHECK_ERROR(errorCode);
+    NULL_ON_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
+
+    String result;
 
     // Require a `reservedStart` character
     if (!isReservedStart(source[index])) {
         ERROR(parseError, errorCode, index);
-        return;
+        return nullptr;
     }
+
+    result += source[index];
     // Consume reservedStart
     index++;
     // Restore precondition
-    CHECK_BOUNDS(source, index, parseError, errorCode);
+    CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
 
 /*
   Arbitrary lookahead is required to parse a `reserved`, for similar reasons
@@ -1026,14 +1030,14 @@ static void parseReserved(const UnicodeString &source,
             sawWhitespace = true;
             parseOptionalWhitespace(source, index, parseError, errorCode);
             // Restore precondition
-            CHECK_BOUNDS(source, index, parseError, errorCode);
+            CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
         }
 
         if (reservedChunkFollows(source[index])) {
-            parseReservedChunk(source, index, parseError, errorCode);
+            parseReservedChunk(source, index, parseError, errorCode, result);
 
             // Avoid looping infinitely
-            CHECK_BOUNDS(source, index, parseError, errorCode);
+            CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
         } else {
             if (sawWhitespace) {
                 if (source[index] == RIGHT_CURLY_BRACE) {
@@ -1044,13 +1048,19 @@ static void parseReserved(const UnicodeString &source,
                 // Error: if there's whitespace, it must either be followed
                 // by a non-empty sequence or by '}'
                 ERROR(parseError, errorCode, index);
-                return;
+                return nullptr;
             }
             // If there was no whitespace, it's not an error,
             // just the end of the reserved string
             break;
         }
     }
+    LocalPointer<Operator> reservedOperator(new Operator(result));
+    if (!reservedOperator.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return reservedOperator.orphan();
 }
 
 
@@ -1087,9 +1097,12 @@ static Operator* parseAnnotation(const UnicodeString &source,
         return rator;
     }
     // Must be reserved
-    parseReserved(source, index, parseError, errorCode);
-    U_ASSERT(U_FAILURE(errorCode)); // reserved is an error
-    return nullptr;
+    // A reserved sequence is not a parse error, but might be a formatting error
+    LocalPointer<Operator> rator(parseReserved(source, index, parseError, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    return rator.orphan();
 }
 
 /*
@@ -1174,6 +1187,7 @@ the comment in `parseOptions()` for details.
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
+        return adoptedExpr.orphan();
     }
     // The previously consumed whitespace is the optional trailing whitespace;
     // either the next character is '}' or the error will be handled by parseExpression.
@@ -1226,12 +1240,13 @@ static Expression* parseExpression(const UnicodeString &source,
                 if (!adoptedExpression.isValid()) {
                     errorCode = U_MEMORY_ALLOCATION_ERROR;
                 }
-                break;
             }
+        } else {
+            // Not a literal, variable or annotation -- error out
+            ERROR(parseError, errorCode, index);
+            return nullptr;
         }
-        // Not a literal, variable or annotation -- error out
-        ERROR(parseError, errorCode, index);
-        return nullptr;
+        break;
     }
     }
     // For why we don't parse optional whitespace here, even though the grammar
@@ -1534,7 +1549,6 @@ static MessageBody* parseSelectors(const UnicodeString &source,
 
     parseToken(ID_MATCH, source, index, parseError, errorCode);
 
-    bool selectorsEmpty = true;
     LocalPointer<ListBuilder<Expression>> scrutinees(new ListBuilder<Expression>());
     if (!scrutinees.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -1558,16 +1572,17 @@ static MessageBody* parseSelectors(const UnicodeString &source,
         }
 
         expression.adoptInstead(parseExpression(source, index, parseError, errorCode));
-        if (!expression.isValid()) {
+        if (U_FAILURE(errorCode)) {
             break;
         }
         scrutinees->add(expression.orphan(), errorCode);
-        selectorsEmpty = false;
     }
 
     // At least one selector is required
-    if (selectorsEmpty) {
-        ERROR(parseError, errorCode, index);
+    if (scrutinees->isEmpty()) {
+        if (U_SUCCESS(errorCode)) {
+            ERROR(parseError, errorCode, index);
+        }
         return nullptr;
     }
 

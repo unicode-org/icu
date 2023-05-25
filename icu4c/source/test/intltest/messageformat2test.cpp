@@ -342,6 +342,11 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
         dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail, but it passed", testNum);
         logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
         return;
+    } else if (errorCode != U_MESSAGE_PARSE_ERROR) {
+        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with U_MESSAGE_PARSE_ERROR, but it failed with a different error", testNum);
+        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+
     } else {
         // Check the line and character numbers
         if (parseError.line != ((int32_t) expectedErrorLine) || parseError.offset != ((int32_t) expectedErrorOffset)) {
