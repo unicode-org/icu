@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1684432865392,
+  "lastUpdate": 1685032796363,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8698,6 +8698,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 1059.6710454665404,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "8d2c78d160dcb831a11efd2d4e5ec1ef081a19bf",
+          "message": "ICU-22357 Rename gb18030.ucm to add -2022, follow-on to PR #2430",
+          "timestamp": "2023-05-25T09:25:35-07:00",
+          "tree_id": "028575b3795ebd11bd5d40e9ef3d4b519b18a984",
+          "url": "https://github.com/unicode-org/icu/commit/8d2c78d160dcb831a11efd2d4e5ec1ef081a19bf"
+        },
+        "date": 1685032762517,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 1046.3750092114121,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
