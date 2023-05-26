@@ -80,6 +80,9 @@
  * This API is based on the <em>fluent</em> design pattern popularized by libraries such as Google's Guava. For
  * extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the design doc</a>.
  *
+ * <p>
+ * Note: To format monetary/currency values, specify the currency in the `.unit()` function.
+ *
  * @author Shane Carr
  */
 
