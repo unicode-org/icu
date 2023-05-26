@@ -225,7 +225,12 @@ public final class LocaleData {
     public static final LocaleData getInstance(ULocale locale) {
         LocaleData ld = new LocaleData();
         ld.bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
-        ld.langBundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_LANG_BASE_NAME, locale);
+        try {
+            ld.langBundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_LANG_BASE_NAME, locale);
+        } catch(Exception e) {
+            // Expected error case: ICU-22149
+            ld.langBundle = null;
+        }
         ld.noSubstitute = false;
         return ld;
     }
@@ -421,6 +426,9 @@ public final class LocaleData {
      * @stable ICU 4.2
      */
     public String getLocaleDisplayPattern() {
+        if (langBundle == null) {
+            throw new ICUException("Language data missing for getLocaleDisplayPattern");
+        }
         ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
         String localeDisplayPattern = locDispBundle.getStringWithFallback(PATTERN);
         return localeDisplayPattern;
@@ -432,6 +440,9 @@ public final class LocaleData {
      * @stable ICU 4.2
      */
     public String getLocaleSeparator() {
+        if (langBundle == null) {
+            throw new ICUException("Language data missing for getLocaleDisplayPattern");
+        }
         String sub0 = "{0}";
         String sub1 = "{1}";
         ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);

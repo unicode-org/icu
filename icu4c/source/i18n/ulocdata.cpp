@@ -68,12 +68,15 @@ ulocdata_open(const char *localeID, UErrorCode *status)
 
    uld->noSubstitute = false;
    uld->bundle = ures_open(nullptr, localeID, status);
-   uld->langBundle = ures_open(U_ICUDATA_LANG, localeID, status);
 
    if (U_FAILURE(*status)) {
       uprv_free(uld);
       return nullptr;
    }
+
+   // ICU-22149: not all functions require lang data, so fail gracefully if it is not present
+   UErrorCode localStatus = U_ZERO_ERROR;
+   uld->langBundle = ures_open(U_ICUDATA_LANG, localeID, &localStatus);
 
    return uld;
 }
@@ -288,6 +291,11 @@ ulocdata_getLocaleDisplayPattern(ULocaleData *uld,
     if (U_FAILURE(*status))
         return 0;
 
+    if (uld->langBundle == nullptr) {
+        *status = U_INVALID_STATE_ERROR;
+        return 0;
+    }
+
     patternBundle = ures_getByKey(uld->langBundle, "localeDisplayPattern", nullptr, &localStatus);
 
     if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
@@ -339,6 +347,11 @@ ulocdata_getLocaleSeparator(ULocaleData *uld,
 
     if (U_FAILURE(*status))
         return 0;
+
+    if (uld->langBundle == nullptr) {
+        *status = U_INVALID_STATE_ERROR;
+        return 0;
+    }
 
     separatorBundle = ures_getByKey(uld->langBundle, "localeDisplayPattern", nullptr, &localStatus);
 
