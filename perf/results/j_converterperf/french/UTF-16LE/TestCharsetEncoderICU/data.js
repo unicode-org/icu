@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685059225154,
+  "lastUpdate": 1685062272818,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8728,6 +8728,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.054341938122193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "b5f8aaf0103a98c76232639546a1e401aa354727",
+          "message": "ICU-22379 Update ICU PersonNameFormatter to match the spec change requested by CLDR-16623\n\n(cherry picked from commit 11f85eb4c219aa9138abd408077f00664e8496e5)",
+          "timestamp": "2023-05-25T17:44:10-07:00",
+          "tree_id": "d329bf5d1f069a63d6d4cd21c2b5e095d1c95228",
+          "url": "https://github.com/unicode-org/icu/commit/b5f8aaf0103a98c76232639546a1e401aa354727"
+        },
+        "date": 1685062236140,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 9.236006776727653,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
