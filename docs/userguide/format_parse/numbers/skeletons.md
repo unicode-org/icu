@@ -200,6 +200,13 @@ To round to the nearest nickel, for example, use the skeleton
 `precision-increment/0.05`.  For more information on the decimal number
 syntax, see [Scale](#scale).
 
+`precision-increment/dddd` implies minimum and maximum fraction digits equal to the
+precision of the decimal. There is not currently a way in skeleton syntax to specify
+an arbitrary min/max fraction digits when a rounding increment is used.
+
+All rounding occurs after the number is scaled, such as in scientific notation or
+the `scale` skeleton.
+
 #### Fraction Precision
 
 The following are examples of fraction-precision stems:
