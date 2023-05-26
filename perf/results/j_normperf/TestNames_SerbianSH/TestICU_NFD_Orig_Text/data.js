@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685062413196,
+  "lastUpdate": 1685110070338,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8788,6 +8788,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 15.026795797180466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nvinson234@gmail.com",
+            "name": "Nicholas Vinson",
+            "username": "nvinson"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "0fb1b5588e604cb013b605e38895d8fb3866bffb",
+          "message": "ICU-22377 Fix va_end errors found by gcc -fanalyzer\n\nFixes missing call to ‘va_end’ errors.\n\nSigned-off-by: Nicholas Vinson <nvinson234@gmail.com>",
+          "timestamp": "2023-05-26T15:50:21+02:00",
+          "tree_id": "0df58514c8318f3d781631e1536d2e8d005292f0",
+          "url": "https://github.com/unicode-org/icu/commit/0fb1b5588e604cb013b605e38895d8fb3866bffb"
+        },
+        "date": 1685110031932,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 12.00662290130937,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
