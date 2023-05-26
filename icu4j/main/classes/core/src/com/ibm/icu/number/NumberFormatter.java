@@ -61,6 +61,9 @@ import com.ibm.icu.util.ULocale;
  * Guava. For extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the
  * design doc</a>.
  *
+ * <p>
+ * Note: To format monetary/currency values, specify the currency in the `.unit()` function.
+ *
  * @author Shane Carr
  * @stable ICU 60
  */
