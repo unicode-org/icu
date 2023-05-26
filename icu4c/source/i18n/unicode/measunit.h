@@ -371,7 +371,8 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Default constructor.
-     * Populates the instance with the base dimensionless unit.
+     * Populates the instance with the base dimensionless unit, which means that there will be
+     * no unit on the formatted number.
      * @stable ICU 3.0
      */
     MeasureUnit();
