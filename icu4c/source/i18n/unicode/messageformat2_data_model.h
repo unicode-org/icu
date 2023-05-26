@@ -217,14 +217,30 @@ class Expression : public PatternPart {
     Expression() : rator(nullptr), rand(nullptr) {}
 
 
+    // TODO: include these or not?
     bool isStandaloneAnnotation() const { return (rand == nullptr); }
     bool isFunctionCall() const         { return (rator != nullptr && rand != nullptr); }
+
+    Expression getOperand() const;
+    UnicodeString getFunctionName() const;
+    Hashtable& getOptions();
+
     /*
       TODO: I thought about using an Optional class here instead of nullable
       pointers. But that doesn't really work since we can't use the STL and therefore
       can't use `std::move` and therefore can't use move constructors/move assignment
       operators.
      */
+
+    class Builder {
+      private:
+        Builder() {} // prevent direct construction
+      public:
+        Builder setOperand(Operand operand);
+        Builder setFunctionName(const UnicodeString& functionName);
+        Builder addOption(const UnicodeString& key, Expression* value);
+        Expression* build();
+    };
   private:
     const Operator* rator;
     const Operand* rand;
@@ -261,21 +277,35 @@ using ExpressionList = List<Expression>;
 
 class Pattern : public UMemory {
  public:
-    // Takes ownership of `ps`
-    Pattern(ExpressionList *ps) : parts(ps) {
-        U_ASSERT(ps != nullptr);
-    }
     size_t numParts() const { return parts->length(); }
     // Precondition: i < numParts()
     void getPart(size_t i, Expression& result) const {
         U_ASSERT(i < numParts());
         parts->get(i, result);
     }
+
+    class Builder {
+      private:
+        Builder() {} // prevent direct construction
+      public:
+        // Takes ownership of `part`
+        Builder add(Expression* part);
+        // TODO: is addAll() necessary?
+        Pattern build();
+    };
+    
  private:
     // Possibly-empty list of parts
     // Note: a "text" thing is represented like a literal, so that's an expression too.
     // TODO: compare and see how other implementations distinguish text / literal / nmtoken
     const ExpressionList* parts;
+
+    // Can only be called by Builder
+    // Takes ownership of `ps`
+    Pattern(ExpressionList *ps) : parts(ps) {
+        U_ASSERT(ps != nullptr);
+    }
+
 };
 
 using KeyList = List<Key>;
@@ -462,25 +492,58 @@ class MessageFormat2;
 class U_I18N_API MessageFormatDataModel : public UMemory {
   friend MessageFormat2;
 
+  // TODO: this is subject to change; it's not clear yet how much of the structure
+  // of the AST will be encoded into the API
   public:
-    // TODO: the public operations will be things like changing/adding bindings.
-    // Only a MessageFormat2 itself can call the constructor
+    // Represents the left-hand side of a `when` clause
+     class SelectorKeys {
+       public:
+         KeyList& getKeys() const;
+         class Builder {
+            private:
+                Builder() {} // prevent direct construction
+            public:
+                Builder add(const UnicodeString& key);
+                // TODO: is addAll() necessary?
+                SelectorKeys build();
+         };
+     };
 
-    // TODO: this is left here for convenience; the MessageFormat2 constructor calls parse(),
-    // which initializes the data model, and that doesn't work unless there's a default
-    // constructor. Is there a better way?
-    // Needs a UErrorCode because it initializes its environment
-    MessageFormatDataModel(UErrorCode &status) {
-        if (U_FAILURE(status)) {
-            return;
-        }
-        LocalPointer<Environment> envLocal(new Environment(status));
-        if (U_FAILURE(status)) {
-            return;
-        }
-        env = envLocal.orphan();
-    }
-    virtual ~MessageFormatDataModel();
+     // class Pattern: see above
+     // Corresponds to `pattern` in the grammar
+
+     // Note: we don't have the `Part` class; use Expression instead
+     // class Expression: see above
+     // Corresponds to `expression` in the grammar
+
+
+     // TODO: I'm calling the `Value` class "Operand"
+     // and I don't have a separate Variable class
+
+     // TODO: can Hashtable be used in the public API?
+
+     Environment& getLocalVariables() const;
+     ExpressionList& getSelectors() const;
+     Hashtable& getVariants() const;
+     Pattern& getPattern() const;
+
+     class Builder {
+       private:
+         Builder() {} // prevent direct construction
+       public:
+         // Takes ownership of `expression`
+         Builder addLocalVariable(const UnicodeString& variableName, Expression* expression);
+         // No addLocalVariables() yet
+         // Takes ownership
+         Builder addSelector(Expression* selector);
+         // No addSelectors() yet
+         // Takes ownership
+         Builder addVariant(SelectorKeys* keys, Pattern* pattern);
+         Builder setPattern(Pattern* pattern);
+         MessageFormatDataModel* build();
+     };
+
+     virtual ~MessageFormatDataModel();
 
   private:
     /*
@@ -505,7 +568,25 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     
     // Do not define default assignment operator
     const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
-    
+
+    // TODO: the public operations will be things like changing/adding bindings.
+    // Only a MessageFormatDataModel::Builder can call the constructor
+
+    // TODO: this is left here for convenience; the MessageFormat2 constructor calls parse(),
+    // which initializes the data model, and that doesn't work unless there's a default
+    // constructor. Is there a better way?
+    // Needs a UErrorCode because it initializes its environment
+    MessageFormatDataModel(UErrorCode &status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        LocalPointer<Environment> envLocal(new Environment(status));
+        if (U_FAILURE(status)) {
+            return;
+        }
+        env = envLocal.orphan();
+    }
+
 }; // class MessageFormatDataModel
 
 } // namespace message2

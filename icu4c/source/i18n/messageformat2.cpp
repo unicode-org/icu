@@ -57,7 +57,7 @@ static constexpr UChar32 ID_MATCH[] = {
     0x6D, 0x61, 0x74, 0x63, 0x68, 0 /* "match" */
 };
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormat2)
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormatter)
 
 // Used so `parseEscapeSequence()` can handle all types of escape sequences
 // (literal, text, and reserved)
@@ -158,15 +158,41 @@ static void maybeAdvanceLine(const UnicodeString& source,
 // -------------------------------------
 // Creates a MessageFormat instance based on the pattern.
 
-MessageFormat2::MessageFormat2(const UnicodeString &pattern, UParseError &parseError,
-                               UErrorCode &success) : dataModel(success) {
+MessageFormatter* MessageFormatter::Builder::build(UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+
+    // There is a default locale; so we don't have to worry about
+    // whether that was set
+    // TODO: Locale not passed yet
+
+    // There is a default function registry
+    // TODO: pass function registry
+
+    // TODO: compare how the Java code does parse errors
+    // how to construct / consume the ParseError?
+    LocalPointer<MessageFormatter> mf(new MessageFormatter(pattern, parseError, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    
+
+MessageFormatter::MessageFormatter(const UnicodeString &pattern, UParseError &parseError,
+                                   UErrorCode &success) {
     CHECK_ERROR(success);
 
     // Validate pattern and build data model
-    parse(pattern, parseError, success);
+    LocalPointer<MessageFormatDataModel::Builder> tree(parse(pattern, parseError, success));
+    if (U_SUCCESS(success)) {
+        LocalPointer<MessageFormatDataModel> dataModelPtr(tree->build(success));
+        if (U_SUCCESS(success)) {
+            dataModel = dataModelPtr.orphan();
+        }
+    }
 }
 
-MessageFormat2::~MessageFormat2() {}
+MessageFormatter::~MessageFormatter() {}
 
 // -------------------------------------
 // Helper functions
@@ -205,7 +231,7 @@ static bool inRange(UChar32 c, UChar32 first, UChar32 last) {
     return c >= first && c <= last;
 }
 
-// See `s` in the MessageFormat2 grammar
+// See `s` in the MessageFormat 2 grammar
 static bool isWhitespace(UChar32 c) {
     switch (c) {
     case SPACE:
@@ -219,7 +245,7 @@ static bool isWhitespace(UChar32 c) {
 }
 
 /*
-  The following helper predicates should exactly match nonterminals in the MessageFormat2 grammar:
+  The following helper predicates should exactly match nonterminals in the MessageFormat 2 grammar:
 
   `isTextChar()`      : `text-char`
   `isReservedStart()` : `reserved-start`
@@ -1713,7 +1739,7 @@ static MessageBody* parseBody(const UnicodeString &source,
 // The copy constructor copies the data model.
 
 /*
-MessageFormat2::MessageFormat2(const MessageFormat2 & that) {
+MessageFormatter::MessageFormatter(const MessageFormatter & that) {
     // TODO: This would share the "message body" part of the data model,
     // which is immutable, while copying the environment. But I'm not sure
     // if that's needed
@@ -1722,30 +1748,30 @@ MessageFormat2::MessageFormat2(const MessageFormat2 & that) {
 */
 
 // -------------------------------------
-// Creates a copy of this MessageFormat2; the caller owns the copy.
+// Creates a copy of this MessageFormatter; the caller owns the copy.
 
-MessageFormat2 *MessageFormat2::clone() const { return new MessageFormat2(*this); }
-
-// Not yet implemented
-bool MessageFormat2::operator==(const Format &other) const { return (this == &other); }
-// Not yet implemented
-bool MessageFormat2::operator!=(const Format &other) const { return (this != &other); }
+MessageFormatter *MessageFormatter::clone() const { return new MessageFormatter(*this); }
 
 // Not yet implemented
-UnicodeString &MessageFormat2::format(const Formattable &, UnicodeString &appendTo, FieldPosition &,
+bool MessageFormatter::operator==(const Format &other) const { return (this == &other); }
+// Not yet implemented
+bool MessageFormatter::operator!=(const Format &other) const { return (this != &other); }
+
+// Not yet implemented
+UnicodeString &MessageFormatter::format(const Formattable &, UnicodeString &appendTo, FieldPosition &,
                                       UErrorCode &status) const {
     status = U_UNSUPPORTED_ERROR;
     return appendTo;
 }
 
 // Not yet implemented
-void MessageFormat2::parseObject(const UnicodeString &, Formattable &, ParsePosition &status) const {
+void MessageFormatter::parseObject(const UnicodeString &, Formattable &, ParsePosition &status) const {
     status = U_UNSUPPORTED_ERROR;
 }
 
 // -------------------------------------
 // Parses (currently: validates) the source pattern.
-void MessageFormat2::parse(const UnicodeString &source,
+void MessageFormatter::parse(const UnicodeString &source,
                            UParseError &parseError,
                            UErrorCode &errorCode) {
     // Return immediately in the case of a previous error
