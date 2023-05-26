@@ -54,10 +54,13 @@ jobs:
     - checkout: self
       lfs: true
       fetchDepth: 10
+    # Note: This job uses `make -j2` instead of `make -j -l2.5` because with more parallelism (PR #2456)
+    # this check became flaky. The build apparently was not done copying one or another .ucm file before
+    # calling makeconv for it, although the Makefile has appropriate dependencies.
     - script: |
         cd icu4c/source && \
         ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && \
-        make -j -l2.5 tests && \
+        make -j2 tests && \
         \[ ! -d data/out/build/icudt66l/translit \] && \
         (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData)
       displayName: 'Build with Data Filter'
