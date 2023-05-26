@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685130720158,
+  "lastUpdate": 1685134078762,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20626,6 +20626,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 20890937.3198,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8bbb8f506ea0f4c2fe5ea5fd1cdadbd53d11ced6",
+          "message": "ICU-22403 Fix icuexportdata out-of-bounds during decomposition",
+          "timestamp": "2023-05-26T13:27:55-07:00",
+          "tree_id": "a6e5ee837a7db2fa3da2efd7831214d119e2784c",
+          "url": "https://github.com/unicode-org/icu/commit/8bbb8f506ea0f4c2fe5ea5fd1cdadbd53d11ced6"
+        },
+        "date": 1685134038764,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 502.9832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 69884507.5524,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 20351109.6444,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 68580227.8384,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 23076517.1599,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
