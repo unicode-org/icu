@@ -1,10 +1,25 @@
+---
+layout: default
+title: Updating ICU's built-in Break Iterator rules
+parent: Contributors
+---
+
+# Updating ICU's built-in Break Iterator rules
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+
 <!--
-Copyright (C) 2016 and later: Unicode, Inc. and others.
+© 2016 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
-
-Updating ICU's built-in Break Iterator rules
-============================================
 
 Here are instructions for updating ICU's built-in break iterator rules, for Grapheme, Word, Line and Sentence breaks.
 
@@ -12,7 +27,7 @@ The ICU rules implement the boundary behavior from Unicode [UAX-14](https://www.
 
 This is not a cook book process. Familiarity with ICU break iterator behavior and rules is needed. Sets of break rules often interact in subtle and difficult to understand ways. Expect some bumps.
 
-### Have clear specifications for the change.
+## Have clear specifications for the change.
 
 The changes will typically come from a proposed update to Unicode UAX 29 or UAX 14,
 or from CLDR based tailorings to these specifications.
@@ -21,7 +36,7 @@ As an example, see [CLDR proposal for Extended Indic Grapheme Clusters](https://
 
 Often ICU will implement draft versions of proposed specification updates, to check that they are complete and consistent, and to identify any issues before they are released.
 
-### Files that typically will need to be updated:
+## Files that typically will need to be updated:
 
 
 | File                                |  Contents |
@@ -40,7 +55,7 @@ Often ICU will implement draft versions of proposed specification updates, to ch
 | .../main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java | Monkey test w rules as code. Port from ICU4C.
 
 
-### ICU4C
+## ICU4C
 
 The rule updates are done first for ICU4C, and then ported (code changes) or moved (data changes) to ICU4J. This order is easiest because the the break rule source files are part of the ICU4C project, as is the rule builder.
 
@@ -225,7 +240,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
 
     As with the main rules, after everything appears to be working, run the rule based monkey test for an extended period of time (with loop=-1).
 
-### ICU4J
+## ICU4J
 
 1.  **Copy the Data Driven Test File to ICU4J**
 

@@ -1,10 +1,28 @@
+---
+layout: default
+title: Configuring VS Code for ICU4C
+grand_parent: Setup for Contributors
+parent: C++ Setup
+---
+
 <!--- © 2020 and later: Unicode, Inc. and others. ---> 
 <!--- License & terms of use: http://www.unicode.org/copyright.html --->
 
 # Configuring VS Code for ICU4C
 
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+
   - Create a `.vscode` folder in icu4c/source
-  - Copy the `tasks.json`, `launch.json` and `c_cpp_properties.json` files into
+  - Copy the [`tasks.json`](tasks.json), [`launch.json`](launch.json) and [`c_cpp_properties.json`](c_cpp_properties.json) files into
     the `.vscode` folder.
   - To test only specific test targets, specify them under `args` in
     `launch.json`.
