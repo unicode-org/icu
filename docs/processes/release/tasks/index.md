@@ -2,7 +2,6 @@
 layout: default
 title: Release & Milestone Tasks
 parent: Contributors
-nav_order: 10
 has_children: true
 ---
 

@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Coding Guidelines
-nav_order: 1
 parent: Contributors
 ---
 <!--

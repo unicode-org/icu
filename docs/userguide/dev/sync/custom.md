@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Custom ICU4C Synchronization
-nav_order: 3
 parent: Contributors
 ---
 <!--
