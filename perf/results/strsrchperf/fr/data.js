@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685135458187,
+  "lastUpdate": 1685489676079,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11338,6 +11338,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 74.1739,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "5435007e6a25bd8d365e8a3e560f40f14961d2b9",
+          "message": "ICU-21697 Convert ICU Site pages to markdown for Github Pages\n\nSee #1785",
+          "timestamp": "2023-05-30T16:18:32-07:00",
+          "tree_id": "363563a66f490b7b613093e83ffdcd4393faa1eb",
+          "url": "https://github.com/unicode-org/icu/commit/5435007e6a25bd8d365e8a3e560f40f14961d2b9"
+        },
+        "date": 1685489631490,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 32.8099,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 74.0281,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
