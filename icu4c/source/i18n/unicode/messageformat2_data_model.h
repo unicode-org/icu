@@ -10,12 +10,32 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/parseerr.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
 #include "hash.h"
 #include "uvector.h"
 
 U_NAMESPACE_BEGIN  namespace message2 {
+
+/*
+  Use an internal "parse error" structure to make it easier to translate
+  absolute offsets to line offsets.
+  This is translated back to a `UParseError` at the end of parsing.
+*/
+typedef struct MessageParseError {
+    // The line on which the error occurred
+    uint32_t line;
+    // The offset, relative to the erroneous line, on which the error occurred
+    uint32_t offset;
+    // The total number of characters seen before advancing to the current line. It has a value of 0 if line == 0.
+    // It includes newline characters, because the index does too.
+    uint32_t lengthBeforeCurrentLine;
+
+    // This parser doesn't yet use the last two fields.
+    UChar   preContext[U_PARSE_CONTEXT_LEN];
+    UChar   postContext[U_PARSE_CONTEXT_LEN];
+} MessageParseError;
 
 // TBD
 using FunctionName   = UnicodeString;
@@ -63,11 +83,36 @@ class ListBuilder : public UMemory {
     UVector* contents;
 };
 
+/*
+This exists because even though AST nodes are immutable, it's
+possible someone could use build() to create data models that have
+different lifetimes
+ */
+template<typename T>
+void copyElements(UElement *dst, UElement *src) {
+    dst->pointer = new T(*(static_cast<T*>(src->pointer)));
+}
+ 
 // Immutable list
 template <typename T>
 class List : public UMemory {
     // Provides a wrapper around a vector
   public:
+    // Copies the contents of `builder`
+    // This won't compile unless T is a type that has a copy assignment operator
+    List(const ListBuilder<T>& builder, UErrorCode& errorCode) {
+        // builder->contents == null means the empty list
+        if (builder.contents == nullptr) {
+            contents = nullptr;
+        } else {
+            contents = new UVector(builder.contents->size(), errorCode);
+            if (U_FAILURE(errorCode)) {
+                return;
+            }
+            contents->assign(*builder.contents, &copyElements<T>, errorCode);
+        }
+    }
+    
     // Adopts the contents of `builder`
     List(ListBuilder<T> *builder) {
         // builder->contents == null means the empty list
@@ -125,9 +170,8 @@ class Operand : public UMemory {
     // (Compare other implementations)
   public:
     Operand(bool b, String s) : isVariableReference(b), string(s) {}
-    // TODO: leaving this in for convenience for now, but it would be
-    // better for all types to be immutable
-    Operand() : isVariableReference(false), string("") {}
+    // copy constructor is used so that builders work properly -- see comment under copyElements()
+    Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
 
     bool isVariable() const { return isVariableReference; }
     VariableName asVariable() const {
@@ -165,6 +209,11 @@ class Operator : public UMemory {
     // Reserved sequence constructor
     Operator(UnicodeString &r) : isReservedSequence(true), functionName(r), options(nullptr) {}
 
+    // copy constructor is used so that builders work properly -- see comment under copyElements()
+    Operator(const Operator& other) : isReservedSequence(other.isReservedSequence),
+        functionName(other.functionName),
+        options(other.options == nullptr ? nullptr : new OptionList(*other.options)) {}
+    
     FunctionName getFunctionName() const {
         U_ASSERT(!isReserved());
         return functionName;
@@ -211,11 +260,25 @@ class Expression : public PatternPart {
     Expression(Operator *rAtor) : rator(rAtor) { U_ASSERT(rAtor != nullptr); }
     // Operand must be non-null
     Expression(Operand *rAnd) : rand(rAnd) { U_ASSERT(rAnd != nullptr); }
-    
-    // TODO: leaving this in for convenience for now, but it would be
-    // better for all types to be immutable
-    Expression() : rator(nullptr), rand(nullptr) {}
 
+    // copy constructor is used so that builders work properly -- see comment under copyElements()
+    Expression(const Expression& other) {
+        *this = other;
+    }
+
+    const Expression &operator=(const Expression &other) {
+        if (other.rator == nullptr) {
+            rator = nullptr;
+        } else {
+            rator = new Operator(*other.rator);
+        }
+        if (other.rand == nullptr) {
+            rand = nullptr;
+        } else {
+            rand = new Operand(*other.rand);
+        }
+        return *this;
+    }
 
     // TODO: include these or not?
     bool isStandaloneAnnotation() const { return (rand == nullptr); }
@@ -260,6 +323,7 @@ class Key : public UMemory {
         U_ASSERT(!isWildcard());
         return contents;
     }
+    Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
   private:
     const bool wildcard; // True if this represents the wildcard "*"
     const String contents;
@@ -283,18 +347,34 @@ class Pattern : public UMemory {
         U_ASSERT(i < numParts());
         parts->get(i, result);
     }
-
+    
     class Builder {
       private:
-        Builder() {} // prevent direct construction
+        friend class Pattern;
+
+        Builder(UErrorCode& errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return;
+            }
+            parts = new ListBuilder<Expression>();
+            if (parts == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+        }
+        ListBuilder<Expression>* parts;
       public:
         // Takes ownership of `part`
-        Builder add(Expression* part);
+        void add(Expression* part, UErrorCode& errorCode);
         // TODO: is addAll() necessary?
-        Pattern build();
+        Pattern* build(UErrorCode& errorCode);
     };
-    
+
+    static Builder* builder(UErrorCode& errorCode);
+
  private:
+    friend class Builder;
+    friend class MessageFormatDataModel;
+
     // Possibly-empty list of parts
     // Note: a "text" thing is represented like a literal, so that's an expression too.
     // TODO: compare and see how other implementations distinguish text / literal / nmtoken
@@ -304,6 +384,11 @@ class Pattern : public UMemory {
     // Takes ownership of `ps`
     Pattern(ExpressionList *ps) : parts(ps) {
         U_ASSERT(ps != nullptr);
+    }
+
+    // Copy constructor -- used so that builders work
+    Pattern(const Pattern& other) : parts(new ExpressionList(*other.parts)) {
+        U_ASSERT(other.parts != nullptr);
     }
 
 };
@@ -336,6 +421,18 @@ class Variant : public UMemory {
     }
     // Usual case; takes ownership of `keys` and `p`
     Variant(KeyList* ks, Pattern* p) : keys(ks), pattern(p) {}
+
+    /*
+    // copy constructor is used so that builders work properly
+    Variant(const Variant& other) {
+        U_ASSERT(other.keys != nullptr);
+        U_ASSERT(other.pattern != nullptr);
+
+        // List is immutable; copy not needed
+        keys = other.keys;
+        pattern = *other.pattern;
+    }
+    */
   private:
     
     const KeyList* keys;
@@ -382,8 +479,6 @@ class MessageBody : public UMemory {
     // Adopts its arguments
     MessageBody(ExpressionList *es, VariantList *vs) : scrutinees(es), variants(vs) {}
 
-    // TODO: see comment on MessageFormatDataModel constructor
-    MessageBody() {}
   private:
     friend class MessageFormatDataModel;
     
@@ -443,23 +538,44 @@ class Environment : public UMemory {
         U_ASSERT(bindings->put(v, e, errorCode) != nullptr);
     }
 
-    // Creates an empty environment
-    Environment(UErrorCode &errorCode) {
-        if (U_FAILURE(errorCode)) {
+    static Hashtable* initBindings(UErrorCode& errorCode) {
+       if (U_FAILURE(errorCode)) {
             // Won't be valid if there already was an error.
-            bindings = nullptr;
-            return;
+            return nullptr;
         }
         // No value comparator needed
         LocalPointer<Hashtable> e(new Hashtable(compareVariableName, nullptr, errorCode));
         if (U_FAILURE(errorCode)) {
-            bindings = nullptr;
-            return;
+            return nullptr;
         }
-        bindings = e.orphan();
         // The environment owns the values
-        bindings->setValueDeleter(uprv_deleteUObject);
+        e->setValueDeleter(uprv_deleteUObject);
+        return e.orphan();
     }
+    
+    // Creates an empty environment
+    Environment(UErrorCode &errorCode) : bindings(initBindings(errorCode)) {}
+
+    // Copy constructor -- this is used so that builders work
+     Environment(const Environment& other, UErrorCode& errorCode) : bindings(initBindings(errorCode)) {
+        const UHashElement* e;
+        int32_t pos = UHASH_FIRST;
+        Expression* expr;
+        while ((e = other.bindings->nextElement(pos)) != nullptr) {
+            expr = new Expression(*(static_cast<Expression*>(e->value.pointer)));
+            if (expr == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            UnicodeString* s = static_cast<UnicodeString*>(e->key.pointer);
+            bindings->put(*s, expr, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return;
+            }
+        }
+    }
+    // Delete assignment operator -- need an error code
+    const Environment& operator=(const Environment&) = delete;
     // Delete default constructor - need an error code
     Environment() = delete;
   private:
@@ -487,10 +603,10 @@ variables.
  * @internal ICU 74.0 technology preview
  * @deprecated This API is for technology preview only.
  */
-class MessageFormat2;
+class MessageFormatter;
 
 class U_I18N_API MessageFormatDataModel : public UMemory {
-  friend MessageFormat2;
+    friend class MessageFormatter;
 
   // TODO: this is subject to change; it's not clear yet how much of the structure
   // of the AST will be encoded into the API
@@ -498,15 +614,31 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     // Represents the left-hand side of a `when` clause
      class SelectorKeys {
        public:
-         KeyList& getKeys() const;
+         KeyList* getKeys() const;
          class Builder {
             private:
-                Builder() {} // prevent direct construction
+                friend class SelectorKeys;
+                // prevent direct construction
+                Builder(UErrorCode& errorCode) {
+                    if (U_FAILURE(errorCode)) {
+                        return;
+                    }
+                    keys = new ListBuilder<Key>();
+                    if (keys == nullptr) {
+                        errorCode = U_MEMORY_ALLOCATION_ERROR;
+                    }
+                }
+                ListBuilder<Key>* keys;
             public:
-                Builder add(const UnicodeString& key);
+                void add(Key* key, UErrorCode& errorCode);
                 // TODO: is addAll() necessary?
-                SelectorKeys build();
+                SelectorKeys* build(UErrorCode& errorCode);
          };
+         static Builder* builder(UErrorCode& errorCode);
+       private:
+         KeyList* keys;
+         // Adopts `keys`
+         SelectorKeys(KeyList* ks) : keys(ks) {}
      };
 
      // class Pattern: see above
@@ -529,23 +661,51 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
      class Builder {
        private:
-         Builder() {} // prevent direct construction
+         friend class MessageFormatDataModel;
+
+         // prevent direct construction
+         Builder(UErrorCode& errorCode) {
+             if (U_FAILURE(errorCode)) {
+                 return;
+             }
+             pattern = nullptr;
+             selectors = ListBuilder<Expression>();
+             variants = ListBuilder<Variant>();
+             locals = new Environment(errorCode);
+             if (locals == nullptr) {
+                 errorCode = U_MEMORY_ALLOCATION_ERROR;
+             }
+         }
+         // The parser validates the message and builds the data model
+         // from it.
+         MessageFormatDataModel* parse(const UnicodeString &, UParseError &, UErrorCode &);
+         void parseBody(const UnicodeString &, uint32_t&, MessageParseError &, UErrorCode &);
+         void parseDeclarations(const UnicodeString &, uint32_t&, MessageParseError &, UErrorCode &);
+         void parseSelectors(const UnicodeString &, uint32_t&, MessageParseError &, UErrorCode &);
+
+         Pattern* pattern;
+         ListBuilder<Expression> selectors;
+         ListBuilder<Variant> variants;
+         Environment* locals;
        public:
          // Takes ownership of `expression`
-         Builder addLocalVariable(const UnicodeString& variableName, Expression* expression);
+         void addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
          // No addLocalVariables() yet
          // Takes ownership
-         Builder addSelector(Expression* selector);
+         void addSelector(Expression* selector, UErrorCode& errorCode);
          // No addSelectors() yet
          // Takes ownership
-         Builder addVariant(SelectorKeys* keys, Pattern* pattern);
-         Builder setPattern(Pattern* pattern);
-         MessageFormatDataModel* build();
+         void addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
+         void setPattern(Pattern* pattern);
+         MessageFormatDataModel* build(const UnicodeString& source, UParseError &parseError, UErrorCode& errorCode);
      };
+
+     static Builder* builder(UErrorCode& errorCode);
 
      virtual ~MessageFormatDataModel();
 
   private:
+     friend class Builder;
     /*
       A parsed message consists of an environment and a body.
       Initially, the environment contains bindings for local variables
@@ -561,32 +721,14 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
       See the `MessageBody` class.
      */
     const MessageBody* body;
-
-    // TODO: Maybe not needed
-    // Takes ownership of the environment and body
-//    MessageFormatDataModel(Environment& env, const MessageBody& body, UErrorCode &status);
     
     // Do not define default assignment operator
     const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
 
-    // TODO: the public operations will be things like changing/adding bindings.
-    // Only a MessageFormatDataModel::Builder can call the constructor
-
-    // TODO: this is left here for convenience; the MessageFormat2 constructor calls parse(),
-    // which initializes the data model, and that doesn't work unless there's a default
-    // constructor. Is there a better way?
-    // Needs a UErrorCode because it initializes its environment
-    MessageFormatDataModel(UErrorCode &status) {
-        if (U_FAILURE(status)) {
-            return;
-        }
-        LocalPointer<Environment> envLocal(new Environment(status));
-        if (U_FAILURE(status)) {
-            return;
-        }
-        env = envLocal.orphan();
-    }
-
+    // This *copies* the contents of `builder`, so that it can be re-used / mutated
+    // while preserving the immutability of this data model
+    // TODO: add tests for this
+    MessageFormatDataModel(const Builder& builder, UErrorCode &status);
 }; // class MessageFormatDataModel
 
 } // namespace message2

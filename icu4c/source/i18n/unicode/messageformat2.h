@@ -17,7 +17,6 @@
 
 #include "unicode/format.h"
 #include "unicode/messageformat2_data_model.h"
-#include "unicode/parseerr.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
 
@@ -120,27 +119,32 @@ class U_I18N_API MessageFormatter : public Format {
 
     // Not yet implemented (class FormattedMessage is not yet defined)
     // FormattedMessage format(const Hashtable& arguments);
-    
+
     /**
      * The mutable Builder class allows each part of the MessageFormatter to be initialized
      * separately; calling its `build()` method yields an immutable MessageFormatter.
      */
     class Builder {
+        friend class MessageFormatter;
       private:
-        Builder() {} // prevent direct construction
+        // prevent direct construction
+        Builder() : pattern(nullptr), functionRegistry(nullptr) {
+            // TODO: initialize locale to default
+        }
+
         // The pattern to be parsed to generate the formatted message
-        UnicodeString pattern;
+        UnicodeString* pattern;
         // TODO: set default locale
         Locale locale;
         // TODO: set default function registry
         FunctionRegistry* functionRegistry;
       public:
-        Builder setLocale(Locale locale);
-        Builder setPattern(const UnicodeString& pattern);
+        void setLocale(Locale locale);
+        void setPattern(UnicodeString* pattern);
         // Takes ownership of the FunctionRegistry
-        Builder setFunctionRegistry(FunctionRegistry* functionRegistry);
+        void setFunctionRegistry(FunctionRegistry* functionRegistry);
         // Takes ownership of the data model
-        Builder setDataModel(MessageFormatDataModel* dataModel);
+        void setDataModel(MessageFormatDataModel* dataModel);
         // Returns an immutable MessageFormatter
         
         // TODO: fix this comment
@@ -159,24 +163,24 @@ class U_I18N_API MessageFormatter : public Format {
      * @deprecated This API is for technology preview only.
      */
 
-        MessageFormatter* build(UErrorCode& errorCode);
+        MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode);
     };
-    
+
+    static Builder* builder(UErrorCode& errorCode);
+
   private:
+    friend class Builder;
     // Only called by the builder
-    MessageFormatter(const UnicodeString &pattern, UParseError &parseError, UErrorCode &status);
+    MessageFormatter(const MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
     MessageFormatter() = delete; // default constructor not implemented
 
     // Do not define default assignment operator
     const MessageFormatter &operator=(const MessageFormatter &) = delete;
 
-    // The parser validates the message and builds the data model
-    // from it.
-    void parse(const UnicodeString &, UParseError &, UErrorCode &);
 
     // Data model, representing the parsed message
-    MessageFormatDataModel dataModel;
+    const MessageFormatDataModel* dataModel;
 }; // class MessageFormatter
 
 /**

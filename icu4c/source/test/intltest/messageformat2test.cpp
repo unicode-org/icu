@@ -250,11 +250,25 @@ void
 TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
     TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO(testInvalidPatterns);
     TESTCASE_AUTO(testValidJsonPatterns);
     TESTCASE_AUTO(testValidPatterns);
     TESTCASE_AUTO(testComplexMessage);
+    TESTCASE_AUTO(testInvalidPatterns);
     TESTCASE_AUTO_END;
+}
+
+void testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
+    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
+    if (U_SUCCESS(errorCode)) {
+        LocalPointer<UnicodeString> sPtr(new UnicodeString(s));
+        if (sPtr.isValid()) {
+            builder->setPattern(sPtr.orphan());
+            MessageFormatter* mf = builder->build(parseError, errorCode);
+            delete mf;
+        } else {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
 }
 
 /*
@@ -269,7 +283,7 @@ TestMessageFormat2::testPattern(const UnicodeString& s, uint32_t i, const char* 
     UParseError parseError;
     IcuTestErrorCode errorCode(*this, testName);
 
-    MessageFormat2(s, parseError, errorCode);
+    testMessageFormatter(s, parseError, errorCode);
 
     if (U_FAILURE(errorCode)) {
         dataerrln(s);
@@ -337,7 +351,8 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
     UParseError parseError;
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
 
-    MessageFormat2(s, parseError, errorCode);
+    testMessageFormatter(s, parseError, errorCode);
+
     if (!U_FAILURE(errorCode)) {
         dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail, but it passed", testNum);
         logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
