@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685635825910,
+  "lastUpdate": 1685637119033,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9148,6 +9148,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 469.97678639360066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fe042bdc0def305eeb77f587bc09c438fb699a19",
+          "message": "ICU-22403 Fix icuexportdata out-of-bounds during decomposition",
+          "timestamp": "2023-06-01T08:51:28-07:00",
+          "tree_id": "8f7d2c4f719d4de66be8cfa4cd3da29f9f581207",
+          "url": "https://github.com/unicode-org/icu/commit/fe042bdc0def305eeb77f587bc09c438fb699a19"
+        },
+        "date": 1685637078555,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 396.9103150696482,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
