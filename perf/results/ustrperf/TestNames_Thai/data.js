@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685612952992,
+  "lastUpdate": 1685624693275,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37150,6 +37150,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 46.1027,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "mark@unicode.org",
+            "name": "Mark Davis",
+            "username": "macchiati"
+          },
+          "distinct": true,
+          "id": "a18c8f83e3adbfd70b6b229c2afdb3f05e3586a6",
+          "message": "ICU-22390 Speed-up ICU4J Transliterator.<clinit>\n\nIt reduces the method runtime by approx. 60%.",
+          "timestamp": "2023-06-01T05:32:56-07:00",
+          "tree_id": "6926aedc2b59e9504ba3010360d64ec117d952e6",
+          "url": "https://github.com/unicode-org/icu/commit/a18c8f83e3adbfd70b6b229c2afdb3f05e3586a6"
+        },
+        "date": 1685624651754,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.492,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.0502,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.0386,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 33.8378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 39.958,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.3621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 24.9306,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.8884,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 151.1093,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 28.3836,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 51.1506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 50.1203,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
