@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685612358573,
+  "lastUpdate": 1685624023932,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20950,6 +20950,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7764999.6238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "mark@unicode.org",
+            "name": "Mark Davis",
+            "username": "macchiati"
+          },
+          "distinct": true,
+          "id": "a18c8f83e3adbfd70b6b229c2afdb3f05e3586a6",
+          "message": "ICU-22390 Speed-up ICU4J Transliterator.<clinit>\n\nIt reduces the method runtime by approx. 60%.",
+          "timestamp": "2023-06-01T05:32:56-07:00",
+          "tree_id": "6926aedc2b59e9504ba3010360d64ec117d952e6",
+          "url": "https://github.com/unicode-org/icu/commit/a18c8f83e3adbfd70b6b229c2afdb3f05e3586a6"
+        },
+        "date": 1685623986689,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 316.6606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 26912630.5606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6339844.0988,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 27110685.621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7047744.5549,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
