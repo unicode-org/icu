@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685635531892,
+  "lastUpdate": 1685637080085,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18148,6 +18148,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.213378368565025,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fe042bdc0def305eeb77f587bc09c438fb699a19",
+          "message": "ICU-22403 Fix icuexportdata out-of-bounds during decomposition",
+          "timestamp": "2023-06-01T08:51:28-07:00",
+          "tree_id": "8f7d2c4f719d4de66be8cfa4cd3da29f9f581207",
+          "url": "https://github.com/unicode-org/icu/commit/fe042bdc0def305eeb77f587bc09c438fb699a19"
+        },
+        "date": 1685637043089,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.132926787972144,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
