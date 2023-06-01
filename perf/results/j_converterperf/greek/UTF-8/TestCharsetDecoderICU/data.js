@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685634759630,
+  "lastUpdate": 1685635591291,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9238,6 +9238,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.144863984273651,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "7d0d24e7da64009429544c54a059fe158539df57",
+          "message": "ICU-22372 Fix headers in icuexportdata",
+          "timestamp": "2023-06-01T08:47:31-07:00",
+          "tree_id": "56ffd99c2d1b61176a51d0301eb741409dce352d",
+          "url": "https://github.com/unicode-org/icu/commit/7d0d24e7da64009429544c54a059fe158539df57"
+        },
+        "date": 1685635553068,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.4010448097226926,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
