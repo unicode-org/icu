@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685623235600,
+  "lastUpdate": 1685635006864,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9088,6 +9088,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.701640274582297,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "1119ae4885559e7665f7464d64b7f64e5f1b2344",
+          "message": "ICU-22333 Exclude EhaustivePersonNameFormatterTest also from releaseJarCheck target.",
+          "timestamp": "2023-06-01T11:39:40-04:00",
+          "tree_id": "b61e76e13ae9e26f74b88ff7434d7aef602a78a0",
+          "url": "https://github.com/unicode-org/icu/commit/1119ae4885559e7665f7464d64b7f64e5f1b2344"
+        },
+        "date": 1685634966679,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 3.037851961972702,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
