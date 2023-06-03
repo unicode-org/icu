@@ -118,3 +118,46 @@ where `<projectlist>` is a comma-separated list of names of the subfolders which
 If you want to run only a specific test(s), use the `-Dtest="<test>"` option, where `<test>` can be a test name, a class name / package prefix, or a comma-separate list of them.
 
 If you want to skip tests, use the `-DskipTests=true` option.
+
+#### Special Note about the Resources
+Currently, the Maven build reads the resources NOT from `icu4j/main/shared/data/icudata.jar` but from the individual files checked into [icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/icudt73b](https://github.com/unicode-org/icu/tree/main/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/icudt73b) directory (when the version of ICU is 73). Therefore, if your PR changed any resource data files (ex: the ones contained within`icudata.jar`), you also need to update the corresponding resources files in order for your test to pass in the Maven build.
+
+To update the resources file under `icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/icudt73b` :
+
+First build the `icu4j/main/shared/data/icudata.jar`, then
+```
+cd icu4j/maven-build
+git update-index --chmod=+x extract-data-files.sh
+./extract-data-files.sh
+```
+
+#### Run a single test
+```
+mvn test -Dtest="ULocaleTest" -DfailIfNoTests=false
+```
+or
+```
+mvn test -Dtest="com.ibm.icu.dev.test.util.ULocaleTest" -DfailIfNoTests=false
+```
+#### Run a single method in a single test
+
+```
+mvn test -Dtest="ULocaleTest#TestGetAvailableByType" -DfailIfNoTests=false
+```
+
+#### Run multiple tests
+Either
+```
+mvn test -Dtest="RBBI*" -DfailIfNoTests=false
+mvn test -Dtest="*Locale*" -DfailIfNoTests=false
+```
+or
+```
+mvn test -Dtest="*Locale*,RBBI*" -DfailIfNoTests=false
+```
+Notice the package name is not important in the regular expression expanasion so the following will NOT match any tests
+```
+mvn test -Dtest="com.ibm.icu.dev.test.util.*" -DfailIfNoTests=false
+```
+
+
