@@ -53,12 +53,6 @@ class AnyTransliterator extends Transliterator {
     static final String LATIN_PIVOT = "-Latin;Latin-";
 
     /**
-     * Special code for handling width characters
-     */
-    private static final Transliterator WIDTH_FIX =
-            Transliterator.getInstance("[[:dt=Nar:][:dt=Wide:]] nfkd");
-
-    /**
      * Cache mapping UScriptCode values to Transliterator*.
      */
     private ConcurrentHashMap<Integer, Transliterator> cache;
@@ -72,6 +66,15 @@ class AnyTransliterator extends Transliterator {
      * The target script code.  Never USCRIPT_INVALID_CODE.
      */
     private int targetScript;
+
+    /**
+     * Lazily initialize a special Transliterator for handling width characters.
+     */
+    private static class WidthFix {
+        private static final String ID = "[[:dt=Nar:][:dt=Wide:]] nfkd";
+
+        static final Transliterator INSTANCE = Transliterator.getInstance(ID);
+    }
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
@@ -153,7 +156,7 @@ class AnyTransliterator extends Transliterator {
      * @param filter The Unicode filter.
      * @param target2 the target name.
      * @param targetScript2 the script code corresponding to theTarget.
-     * @param widthFix2 The Transliterator width fix.
+     * @param widthFix2 Not used. This parameter is deprecated.
      * @param cache2 The Map object for cache.
      */
     public AnyTransliterator(String id, UnicodeFilter filter, String target2,
@@ -177,7 +180,7 @@ class AnyTransliterator extends Transliterator {
             if (isWide(targetScript)) {
                 return null;
             } else {
-                return WIDTH_FIX;
+                return WidthFix.INSTANCE;
             }
         }
 
@@ -202,7 +205,7 @@ class AnyTransliterator extends Transliterator {
             if (t != null) {
                 if (!isWide(targetScript)) {
                     List<Transliterator> v = new ArrayList<Transliterator>();
-                    v.add(WIDTH_FIX);
+                    v.add(WidthFix.INSTANCE);
                     v.add(t);
                     t = new CompoundTransliterator(v);
                 }
@@ -211,7 +214,7 @@ class AnyTransliterator extends Transliterator {
                     t = prevCachedT;
                 }
             } else if (!isWide(targetScript)) {
-                return WIDTH_FIX;
+                return WidthFix.INSTANCE;
             }
         }
 
@@ -409,7 +412,7 @@ class AnyTransliterator extends Transliterator {
         if (filter != null && filter instanceof UnicodeSet) {
             filter = new UnicodeSet((UnicodeSet)filter);
         }
-        return new AnyTransliterator(getID(), filter, target, targetScript, WIDTH_FIX, cache);
+        return new AnyTransliterator(getID(), filter, target, targetScript, null, cache);
     }
 
     /* (non-Javadoc)
