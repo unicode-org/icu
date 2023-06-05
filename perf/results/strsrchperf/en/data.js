@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1685935767565,
+  "lastUpdate": 1686005264849,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11482,6 +11482,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 61.2914,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e2fde33b4bea1ef865eadf48981b092273442fd7",
+          "message": "ICU-22396 Fix tool until ICU4J add Temporal Calendar API\n\nSee #2488",
+          "timestamp": "2023-06-05T15:26:53-07:00",
+          "tree_id": "af9b1e861010ebe168965a04492d760e194ddcac",
+          "url": "https://github.com/unicode-org/icu/commit/e2fde33b4bea1ef865eadf48981b092273442fd7"
+        },
+        "date": 1686005216302,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 33.2306,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 64.2508,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
