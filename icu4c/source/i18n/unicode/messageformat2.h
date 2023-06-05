@@ -217,7 +217,7 @@ class U_COMMON_API FormatterFunction : UMemory {
     // TODO: Same OptionList type as in data model?
     // TODO: for now representing the argument as a string. Not sure if that's right; Java
     // uses `Object`.
-    virtual UnicodeString format(const UnicodeString& toFormat, const OptionList& variableOptions) const = 0;
+    virtual UnicodeString format(const UnicodeString& toFormat, const MessageFormatDataModel::OptionList& variableOptions) const = 0;
     // Takes ownership of `fixedOptions`
     FormatterFunction(Locale locale, Hashtable* fixedOptions);
 };
@@ -227,7 +227,7 @@ class U_COMMON_API SelectorFunction : UMemory {
  public:
     // TODO: Same OptionList type as in data model?
     // TODO: Same question about the `value` argument as in FormatterFunction
-    virtual bool matches(const UnicodeString& value, const UnicodeString& key, const OptionList& options) const = 0;
+    virtual bool matches(const UnicodeString& value, const UnicodeString& key, const MessageFormatDataModel::OptionList& options) const = 0;
     // Takes ownership of `fixedOptions`
     SelectorFunction(Locale locale, Hashtable* fixedOptions);
 };

@@ -43,6 +43,13 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+using KeyList    = MessageFormatDataModel::KeyList;
+using OptionList = MessageFormatDataModel::OptionList;
+using Expression = MessageFormatDataModel::Expression;
+using Operator = MessageFormatDataModel::Operator;
+using Pattern    = MessageFormatDataModel::Pattern;
+using Variant    = MessageFormatDataModel::Variant;
+
 // MessageFormat2 uses three keywords: `let`, `when`, and `match`.
 
 static constexpr UChar32 ID_LET[] = {
@@ -145,10 +152,11 @@ MessageFormatter::Builder* MessageFormatter::builder(UErrorCode& errorCode) {
         return nullptr;
     }
     LocalPointer<MessageFormatter::Builder> tree(new Builder());
-    if (tree.isValid()) {
-        return tree.orphan();
+    if (!tree.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
     }
-    return nullptr;
+    return tree.orphan();
 }
 
 void MessageFormatter::Builder::setPattern(UnicodeString* pat) {
@@ -163,13 +171,15 @@ void MessageFormatter::Builder::setPattern(UnicodeString* pat) {
 
 MessageFormatDataModel::Builder* MessageFormatDataModel::builder(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    return new Builder(errorCode);
-}
-
-MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {
+    LocalPointer<Builder> result(new Builder(errorCode));
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
+    return result.orphan();
+}
+
+MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
 
     // There is a default locale; so we don't have to worry about
     // whether that was set
@@ -819,7 +829,7 @@ static void parseOption(const UnicodeString &source,
                         uint32_t &index,
                         MessageParseError &parseError,
                         UErrorCode &errorCode,
-                        ListBuilder<Option> &opts) {
+                        OptionList::Builder &opts) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -853,12 +863,11 @@ static void parseOption(const UnicodeString &source,
     }
 
     // Finally, add the lhs=rhs mapping to the list
-    Option* opt = new Option(lhs, Operand(isVariable, rhs));
-    if (opt == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    opts.add(opt, errorCode);
+    Operand rand(isVariable, rhs);
+    LocalPointer<Option> opt(Option::create(lhs, rand, errorCode));
+    CHECK_ERROR(errorCode);
+
+    opts.add(opt.orphan(), errorCode);
 }
 
 /*
@@ -913,11 +922,8 @@ is involved and there's no state to save.
 */
 
     // Start a mutable list to build up the options
-    ListBuilder<Option>* builder = new ListBuilder<Option>();
-    if (builder == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
+    LocalPointer<OptionList::Builder> builder(OptionList::builder(errorCode));
+
     while(true) {
         // If the next character is not whitespace, that means we've already
         // parsed the entire options list (which may have been empty) and there's
@@ -947,13 +953,9 @@ is involved and there's no state to save.
         parseOption(source, index, parseError, errorCode, *builder);
     }
     // Return an immutable options list
-    OptionList* opts = new OptionList(builder);
-    if (opts == nullptr) {
-        delete builder;
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return opts;
+    LocalPointer<OptionList> opts(builder->build(errorCode));
+    NULL_ON_ERROR(errorCode);
+    return opts.orphan();
 }
 
 static void parseReservedEscape(const UnicodeString &source,
@@ -1098,12 +1100,8 @@ static Operator* parseReserved(const UnicodeString &source,
             break;
         }
     }
-    LocalPointer<Operator> reservedOperator(new Operator(result));
-    if (!reservedOperator.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return reservedOperator.orphan();
+
+    return Operator::create(result, errorCode);
 }
 
 
@@ -1127,24 +1125,13 @@ static Operator* parseAnnotation(const UnicodeString &source,
 
         // Consume the options (which may be empty)
         LocalPointer<OptionList> options(parseOptions(source, index, parseError, errorCode));
-        if (U_FAILURE(errorCode)) {
-            // Destructor for `options` will delete it
-            return nullptr;
-        }
-        Operator* rator = new Operator(func, options.orphan());
-        if (rator == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            // Destructor for `options` will delete it
-            return nullptr;
-        }
-        return rator;
+        NULL_ON_ERROR(errorCode);
+        return Operator::create(func, options.orphan(), errorCode);
     }
     // Must be reserved
     // A reserved sequence is not a parse error, but might be a formatting error
     LocalPointer<Operator> rator(parseReserved(source, index, parseError, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     return rator.orphan();
 }
 
@@ -1166,19 +1153,15 @@ static Expression* parseLiteralOrVariableWithAnnotation(const UnicodeString &sou
     if (isVariable) {
         VariableName var;
         parseVariableName(source, index, parseError, errorCode, var);
-        adoptedRand.adoptInstead(new Operand(true, var));
+        adoptedRand.adoptInstead(Operand::create(true, var, errorCode));
     } else {
         String str;
         parseLiteral(source, index, parseError, errorCode, str);
-        adoptedRand.adoptInstead(new Operand(false, str));
+        adoptedRand.adoptInstead(Operand::create(false, str, errorCode));
     }
 
-    // Check for memory allocation failure
-    if (!adoptedRand.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        // Destructor for `adoptedRand` will free it
-        return nullptr;
-    }
+    // Ensure adoptedRand is valid; subsequent code can safely call adoptedRand.orphan()
+    NULL_ON_ERROR(errorCode);
 
 /*
 Parsing a literal or variable with an optional annotation requires arbitrary lookahead.
@@ -1206,11 +1189,9 @@ the comment in `parseOptions()` for details.
     // If the next character is not whitespace, return.
     if (!isWhitespace(source[index])) {
         // This means there's no annotation, since an annotation is preceded by
-        // required whitespace. We're done.
-        LocalPointer<Expression> result(new Expression(adoptedRand.orphan()));
-        if (!result.isValid()) {
-            return nullptr;
-        }
+        // required whitespace. We're done (as long as adoptedRand is valid).
+        LocalPointer<Expression> result(Expression::create(adoptedRand.orphan(), errorCode));
+        NULL_ON_ERROR(errorCode);
         return result.orphan();
     }
 
@@ -1226,26 +1207,17 @@ the comment in `parseOptions()` for details.
     if (isAnnotationStart(source[index])) {
         // The previously consumed whitespace precedes an annotation
         LocalPointer<Operator> adoptedRator(parseAnnotation(source, index, parseError, errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        LocalPointer<Expression> adoptedExpr(new Expression(adoptedRator.orphan(), adoptedRand.orphan()));
-        if (!adoptedExpr.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
+        NULL_ON_ERROR(errorCode);
+        LocalPointer<Expression> adoptedExpr(Expression::create(adoptedRator.orphan(), adoptedRand.orphan(), errorCode));
+        NULL_ON_ERROR(errorCode);
         return adoptedExpr.orphan();
     }
     // The previously consumed whitespace is the optional trailing whitespace;
     // either the next character is '}' or the error will be handled by parseExpression.
 
-    LocalPointer<Expression> expression(new Expression(adoptedRand.orphan()));
-    if (!expression.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    } else {
-        return expression.orphan();
-    }
+    LocalPointer<Expression> expression(Expression::create(adoptedRand.orphan(), errorCode));
+    NULL_ON_ERROR(errorCode);
+    return expression.orphan();
 }
 
 /*
@@ -1282,12 +1254,8 @@ static Expression* parseExpression(const UnicodeString &source,
     default: {
         if (isAnnotationStart(source[index])) {
             LocalPointer<Operator> rator(parseAnnotation(source, index, parseError, errorCode));
-            if (U_SUCCESS(errorCode)) {
-                adoptedExpression.adoptInstead(new Expression(rator.orphan()));
-                if (!adoptedExpression.isValid()) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                }
-            }
+            NULL_ON_ERROR(errorCode);
+            adoptedExpression.adoptInstead(Expression::create(rator.orphan(), errorCode));
         } else {
             // Not a literal, variable or annotation -- error out
             ERROR(parseError, errorCode, index);
@@ -1413,50 +1381,48 @@ static Key* parseKey(const UnicodeString &source,
     case PIPE: {
         String s;
         parseLiteral(source, index, parseError, errorCode, s);
-        k.adoptInstead(new Key(s));
+        k.adoptInstead(Key::create(s, errorCode));
         break;
     }
     case ASTERISK: {
         index++;
         // Guarantee postcondition
         CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
-        k.adoptInstead(new Key());
+        k.adoptInstead(Key::create(errorCode));
         break;
     }
     default: {
         // nmtoken
         String s;
         parseNmtoken(source, index, parseError, errorCode, s);
-        k.adoptInstead(new Key(s));
+        k.adoptInstead(Key::create(s, errorCode));
         break;
     }
     }
-    if (!k.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
+
+    NULL_ON_ERROR(errorCode);
     return k.orphan();
 }
 
 MessageFormatDataModel::SelectorKeys::Builder* MessageFormatDataModel::SelectorKeys::builder(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<MessageFormatDataModel::SelectorKeys::Builder> tree(new MessageFormatDataModel::SelectorKeys::Builder(errorCode));
-    if (!tree.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    LocalPointer<MessageFormatDataModel::SelectorKeys::Builder> result(new MessageFormatDataModel::SelectorKeys::Builder(errorCode));
+    if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    return tree.orphan();
+    return result.orphan();        
 }
 
 MessageFormatDataModel::SelectorKeys* MessageFormatDataModel::SelectorKeys::Builder::build(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<KeyList> ks(new KeyList(keys));
-    if (!ks.isValid()) {
+    LocalPointer<KeyList> ks(keys->build(errorCode));
+    NULL_ON_ERROR(errorCode);
+    SelectorKeys* result = new SelectorKeys(ks.orphan());
+    if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
     }
-    return new SelectorKeys(ks.orphan());
+    return result;
 }
 
 KeyList* MessageFormatDataModel::SelectorKeys::getKeys() const {
@@ -1540,21 +1506,19 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
 Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
     LocalPointer<Pattern::Builder> tree(new Builder(errorCode));
-    if (!tree.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     return tree.orphan();
 }
 
 Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<ExpressionList> patternParts(new ExpressionList(parts));
-    if (!patternParts.isValid()) {
+    LocalPointer<ExpressionList> patternParts(parts->build(errorCode));
+    NULL_ON_ERROR(errorCode);
+    Pattern* result = new Pattern(patternParts.orphan());
+    if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
     }
-    return new Pattern(patternParts.orphan());
+    return result;
 }
 
 void Pattern::Builder::add(Expression *expression, UErrorCode &errorCode) {
@@ -1597,18 +1561,12 @@ static Pattern* parsePattern(const UnicodeString &source,
             String s;
             parseText(source, index, parseError, errorCode, s);
             // Text => uninterpreted-string operand
-            LocalPointer<Operand> rand(new Operand(false, s));
-            if (rand.isValid()) {
-                expression.adoptInstead(new Expression(rand.orphan()));
-                if (expression.isValid()) {
-                    // Texts are represented as expression
-                    result->add(expression.orphan(), errorCode);
-                } else {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                }
-            } else {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
+            LocalPointer<Operand> rand(Operand::create(false, s, errorCode));
+            NULL_ON_ERROR(errorCode);
+            expression.adoptInstead(Expression::create(rand.orphan(), errorCode));
+            NULL_ON_ERROR(errorCode);
+            // Texts are represented as expression
+            result->add(expression.orphan(), errorCode);
             break;
         }
         }
@@ -1636,7 +1594,7 @@ void MessageFormatDataModel::Builder::addSelector(Expression* selector, UErrorCo
 
     U_ASSERT(selector != nullptr);
 
-    selectors.add(selector, errorCode);
+    selectors->add(selector, errorCode);
 }
 
 /*
@@ -1652,12 +1610,9 @@ void MessageFormatDataModel::Builder::addVariant(SelectorKeys* keys, Pattern* pa
     // Adopt `keys` in case of errors
     LocalPointer<SelectorKeys> keysPtr(keys);
 
-    LocalPointer<Variant> var(new Variant(keys->getKeys(), pattern));
-    if (!var.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    variants.add(var.orphan(), errorCode);
+    LocalPointer<Variant> var(Variant::create(keys->getKeys(), pattern, errorCode));
+    CHECK_ERROR(errorCode);
+    variants->add(var.orphan(), errorCode);
 }
 
 /*
@@ -1836,38 +1791,23 @@ void MessageFormatDataModel::Builder::setPattern(Pattern* pat) {
 MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
 
-    env = new Environment(*builder.locals, errorCode);
-    if (env == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+    LocalPointer<Environment> envt(Environment::create(*builder.locals, errorCode));
+    LocalPointer<MessageBody> adoptedBody;
+
     if (builder.pattern != nullptr) {
-        // Assume this is a Pattern message
-        LocalPointer<Pattern> pat(new Pattern(*builder.pattern));
-        if (!pat.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        body = new MessageBody(pat.orphan(), errorCode);
+        // If `pattern` has been set, then assume this is a Pattern message
+        adoptedBody.adoptInstead(new MessageBody(builder.pattern, errorCode));
     } else {
-        LocalPointer<ExpressionList> selectors(new ExpressionList(builder.selectors, errorCode));
-        if (!selectors.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        LocalPointer<VariantList> variants(new VariantList(builder.variants, errorCode));
-        if (!variants.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        body = new MessageBody(selectors.orphan(), variants.orphan());
+        // Otherwise, this is a Selectors message
+        LocalPointer<ExpressionList> selectors(builder.selectors->build(errorCode));
+        LocalPointer<VariantList> variants(builder.variants->build(errorCode));
+        adoptedBody.adoptInstead(new MessageBody(selectors.orphan(), variants.orphan(), errorCode));
     }
 
-    if (U_SUCCESS(errorCode) && body == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
+    if (U_SUCCESS(errorCode)) {
+        body = adoptedBody.orphan();
+        env  = envt.orphan();
     }
-
 }
 
 // TODO: does this do anything besides parsing?
