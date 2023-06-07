@@ -749,12 +749,75 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              variants = VariantList::builder(errorCode);
              locals = Environment::create(errorCode);
          }
-         // The parser validates the message and builds the data model
-         // from it.
-         MessageFormatDataModel* parse(const UnicodeString &, UParseError &, UErrorCode &);
-         void parseBody(const UnicodeString &, uint32_t&, MessageParseError &, UErrorCode &);
-         void parseDeclarations(const UnicodeString &, uint32_t&, MessageParseError &, UErrorCode &);
-         void parseSelectors(const UnicodeString &, uint32_t&, MessageParseError &, UErrorCode &);
+
+         // Parser class (private)
+         class Parser : UMemory {
+           public:
+             virtual ~Parser();
+           private:
+             friend class MessageFormatDataModel::Builder;
+
+             Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder)
+             : source(input), index(0), dataModel(dataModelBuilder) {
+                 parseError.line = 0;
+                 parseError.offset = 0;
+                 parseError.lengthBeforeCurrentLine = 0;
+                 parseError.preContext[0] = '\0';
+                 parseError.postContext[0] = '\0';
+             }
+
+             // Used so `parseEscapeSequence()` can handle all types of escape sequences
+             // (literal, text, and reserved)
+             typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
+
+             // The parser validates the message and builds the data model
+             // from it.
+             void parse(UParseError &, UErrorCode &);
+             void parseBody(UErrorCode &);
+             void parseDeclarations(UErrorCode &);
+             void parseSelectors(UErrorCode &);
+
+             void parseWhitespaceMaybeRequired(bool, UErrorCode &);
+             void parseRequiredWhitespace(UErrorCode &);
+             void parseOptionalWhitespace(UErrorCode &);
+             void parseToken(UChar32, UErrorCode &);
+             void parseTokenWithWhitespace(UChar32, UErrorCode &);
+             template <size_t N>
+             void parseToken(const UChar32 (&)[N], UErrorCode &);
+             template <size_t N>
+             void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
+             void parseNmtoken(UErrorCode&, VariableName&);
+             void parseName(UErrorCode&, VariableName&);
+             void parseVariableName(UErrorCode&, VariableName&);
+             void parseFunction(UErrorCode&, FunctionName&);
+             void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
+             void parseLiteralEscape(UErrorCode &, String&);
+             void parseLiteral(UErrorCode &, String&);
+             void parseOption(UErrorCode &, OptionList::Builder&);
+             OptionList* parseOptions(UErrorCode &);
+             void parseReservedEscape(UErrorCode &, String &);
+             void parseReservedChunk(UErrorCode &, String &);
+             Operator* parseReserved(UErrorCode &);
+             Operator* parseAnnotation(UErrorCode &);
+             Expression* parseLiteralOrVariableWithAnnotation(bool, UErrorCode &);
+             Expression* parseExpression(UErrorCode &);
+             void parseTextEscape(UErrorCode&, String&);
+             void parseText(UErrorCode&, String&);
+             Key* parseKey(UErrorCode&);
+             SelectorKeys* parseNonEmptyKeys(UErrorCode&);
+             Pattern* parsePattern(UErrorCode&);
+
+             // The input string
+             const UnicodeString &source;
+             // The current position within the input string
+             uint32_t index;
+             // Represents the current line (and when an error is indicated),
+             // character offset within the line of the parse error
+             MessageParseError parseError;
+
+             // The parent builder
+             MessageFormatDataModel::Builder &dataModel;
+         }; // class Parser
 
          Pattern* pattern;
          ExpressionList::Builder* selectors;
