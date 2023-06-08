@@ -31,6 +31,7 @@ public:
     void testInvalidPatterns(void);
 
 private:
+    void testMessageFormatter(const UnicodeString&, UParseError&, UErrorCode&);
     void testPattern(const UnicodeString&, uint32_t, const char*);
     template<size_t N>
     void testPatterns(const UnicodeString(&) [N], const char*);

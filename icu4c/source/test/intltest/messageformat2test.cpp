@@ -257,14 +257,25 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO_END;
 }
 
-void testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
+void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
     LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
     if (U_SUCCESS(errorCode)) {
         LocalPointer<UnicodeString> sPtr(new UnicodeString(s));
         if (sPtr.isValid()) {
             builder->setPattern(sPtr.orphan());
-            MessageFormatter* mf = builder->build(parseError, errorCode);
-            delete mf;
+            LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
+            if (mf.isValid()) {
+                // Roundtrip test
+                const MessageFormatDataModel& dataModel = mf->getDataModel();
+                UnicodeString serialized;
+                dataModel.serialize(serialized);
+                if (s != serialized) {
+                    logln("Expected output: " + s + "\nGot output: " + serialized);
+                    errorCode = U_MESSAGE_PARSE_ERROR;
+                }
+            } else {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
         } else {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }

@@ -48,24 +48,46 @@ using String         = UnicodeString;
 // -----------------------------------------------------------------------
 // Helpers (not public)
 
+typedef struct Literal {
+    const bool isQuoted;
+    const UnicodeString contents;
+} Literal;
+
 class Operand : public UMemory {
-    // An operand can either be an uninterpreted string,
-    // or a variable reference.
-    // TODO: do we want to distinguish literals from strings?
-    // (Compare other implementations)
-  public:
-    static Operand* create(bool b, String s, UErrorCode& errorCode) {
+    // An operand can either be a variable reference or a literal.
+    // There is a separate Literal class (which can be quoted or unquoted)
+    // to make it easier to distinguish |x| from x when serializing the data model.
+      public:
+    // Variable
+    static Operand* create(String s, UErrorCode& errorCode) {
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
-        Operand* result = new Operand(b, s);
+        Operand* result = new Operand(s);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
         return result;
     }
 
-    Operand(bool b, String s) : isVariableReference(b), string(s) {}
+    // Variable
+    static Operand* create(Literal l, UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+        Operand* result = new Operand(l);
+        if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+
+    // Variable-name constructor
+    // Represent variable names as unquoted literals
+    Operand(String s) : isVariableReference(true), string({ false, s }) {}
+
+    // Literal constructor
+    Operand(Literal l) : isVariableReference(false), string(l) {}
 
     // copy constructor is used so that builders work properly -- see comment under copyElements()
     Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
@@ -73,17 +95,21 @@ class Operand : public UMemory {
     bool isVariable() const { return isVariableReference; }
     VariableName asVariable() const {
         U_ASSERT(isVariable());
-        return string;
+        return string.contents;
     }
     bool isLiteral() const { return !isVariable(); }
-    String asLiteral() const {
+    const Literal& asLiteral() const {
         U_ASSERT(isLiteral());
         return string;
+    }
+    const UnicodeString& asUnquotedLiteral() const {
+        U_ASSERT(isLiteral() && !string.isQuoted);
+        return string.contents;
     }
   private:
 
     const bool isVariableReference;
-    const String string;
+    const Literal string;
 };
 
 class Option : public UMemory {
@@ -99,14 +125,11 @@ class Option : public UMemory {
         }
         return result;
     }
-  private:
+
+    // TODO: these should be private
     Option(String s, Operand v) : name(s), value(v) {}
     const String name;
     const Operand value;
-};
-
-class PatternPart : public UMemory {
-    // Either Expression or TextPart can show up in a pattern
 };
 
 class Key : public UMemory {
@@ -152,16 +175,6 @@ class Key : public UMemory {
     const bool wildcard; // True if this represents the wildcard "*"
     const String contents;
 };
-
-class Text : public PatternPart {
-  public:
-    Text(String &s) : text(s) {}
-  private:
-    const String text;
-};
-
-// using PatternPartList = List<PatternPart>;
-
 
 // For now, represent variable names as strings
 #define compareVariableName uhash_compareUnicodeString
@@ -218,11 +231,18 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
 
         // Out-of-bounds is an internal error
+        /*
         void get(size_t i, T &result) const {
             U_ASSERT(!(length() <= 0 || i >= length()));
             result = *(static_cast<T *>(contents->elementAt(i)));
         }
-
+        */
+        // Out-of-bounds is an internal error
+        const T* get(size_t i) const {
+            U_ASSERT(!(length() <= 0 || i >= length()));
+            return static_cast<const T *>(contents->elementAt(i));
+        }
+        
         class Builder : public UMemory {
            // Provides a wrapper around a vector
          public:
@@ -304,6 +324,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         List(UVector* things) : contents(things) {}
   };
 
+  // TODO: This should be Hashtable, but I haven't defined a wrapper class for it that has a builder
   using OptionList = List<Option>;
 
   // TODO: This class should really be private. left public for the convenience of the parser
@@ -320,7 +341,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              : isReservedSequence(other.isReservedSequence), functionName(other.functionName),
                options(other.options == nullptr ? nullptr : new OptionList(*other.options)) {}
 
-         FunctionName getFunctionName() const {
+         const FunctionName& getFunctionName() const {
              U_ASSERT(!isReserved());
              return functionName;
          }
@@ -374,7 +395,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
  public:
      using KeyList = List<Key>;
 
-    class Expression : public PatternPart {
+    class Expression {
         /*
           An expression is the application of an optional operator to an optional operand.
           For example (using a made-up quasi-s-expression notation):
@@ -446,9 +467,45 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         bool isStandaloneAnnotation() const { return (rand == nullptr); }
         bool isFunctionCall() const { return (rator != nullptr && rand != nullptr); }
 
-        Expression getOperand() const;
-        UnicodeString getFunctionName() const;
-        Hashtable &getOptions();
+        const Operand& getOperand() const {
+            U_ASSERT(rand != nullptr);
+            return *rand;
+        }
+ 
+        const UnicodeString& getFunctionName() const {
+            U_ASSERT(isFunctionCall());
+            return rator->getFunctionName();
+        }
+
+        // TODO
+        /*
+        const Hashtable* getOptions(UErrorCode& errorCode) const {
+            U_ASSERT(isFunctionCall());
+            // Convert to hashtable
+            // This shouldn't be necessary -- need to make OptionList a wrapper around a Hashtable
+            // This will also leak memory
+            // TODO
+            const OptionList& opts = rator->getOptions();
+            LocalPointer<Hashtable> result(new Hashtable(compareVariableName, nullptr, errorCode));
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            // The environment does not own the values
+            for (size_t i = 0; i < opts.length(); i++) {
+                const Option& opt = *opts.get(i);
+                result->put(opt.name, &opt.value, errorCode);
+                if (U_FAILURE(errorCode)) {
+                    return nullptr;
+                }
+            }
+            return result.orphan();
+        }
+        */
+        // TODO: should make it return a Hashtable
+        const OptionList& getOptions() const {
+            U_ASSERT(isFunctionCall());
+            return rator->getOptions();
+        }
 
         /*
           TODO: I thought about using an Optional class here instead of nullable
@@ -488,13 +545,49 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     class Variant;
     using VariantList    = List<Variant>;
 
+    class PatternPart : public UMemory {
+      public:
+        // Takes ownership of `e`
+        static PatternPart* create(bool isText, Expression* e, UErrorCode& errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            U_ASSERT(e != nullptr);
+            LocalPointer<Expression> adoptedExpr(e);
+            PatternPart* result = new PatternPart(isText, adoptedExpr.orphan());
+            if (result == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+
+        bool isText() const { return isRawText; }
+        const Expression& contents() const { return *expression; }
+        const UnicodeString& asText() const {
+            U_ASSERT(isText());
+            const Operand& contents = expression->getOperand();
+            U_ASSERT(contents.isLiteral());
+            return contents.asUnquotedLiteral();
+        }
+      private:
+
+        PatternPart(bool isText, Expression* e) : isRawText(isText), expression(e) {}
+
+        // Either Expression or TextPart can show up in a pattern
+        // This class exists so Text can be distinguished from Expression
+        // when serializing a Pattern
+        const bool isRawText;
+        // Text is represented as Expression
+        const Expression* expression;
+    };
+
     class Pattern : public UMemory {
       public:
         size_t numParts() const { return parts->length(); }
         // Precondition: i < numParts()
-        void getPart(size_t i, Expression &result) const {
+        const PatternPart* getPart(size_t i) const {
             U_ASSERT(i < numParts());
-            parts->get(i, result);
+            return parts->get(i);
         }
 
         class Builder {
@@ -505,13 +598,13 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                 if (U_FAILURE(errorCode)) {
                     return;
                 }
-                parts = ExpressionList::builder(errorCode);
+                parts = List<PatternPart>::builder(errorCode);
             }
-            typename ExpressionList::Builder* parts;
+            List<PatternPart>::Builder* parts;
 
           public:
             // Takes ownership of `part`
-            void add(Expression *part, UErrorCode &errorCode);
+            void add(PatternPart *part, UErrorCode &errorCode);
             // TODO: is addAll() necessary?
             Pattern *build(UErrorCode &errorCode);
         };
@@ -522,14 +615,14 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         // Possibly-empty list of parts
         // Note: a "text" thing is represented like a literal, so that's an expression too.
         // TODO: compare and see how other implementations distinguish text / literal
-        const ExpressionList *parts;
+        const List<PatternPart> *parts;
 
         // Can only be called by Builder
         // Takes ownership of `ps`
-        Pattern(ExpressionList *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+        Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
 
         // Copy constructor -- used so that builders work
-        Pattern(const Pattern &other) : parts(new ExpressionList(*other.parts)) {
+        Pattern(const Pattern &other) : parts(new List<PatternPart>(*other.parts)) {
             U_ASSERT(other.parts != nullptr);
         }
     };
@@ -580,7 +673,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             pattern = *other.pattern;
         }
         */
-      private:
+
+        // TODO: make these private
+
         // Usual case; takes ownership of `keys` and `p`
         Variant(KeyList * ks, Pattern * p) : keys(ks), pattern(p) {}
 
@@ -662,6 +757,14 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              U_ASSERT(bindings->put(v, e, errorCode) != nullptr);
          }
 
+         // TODO: decide whether to have a more abstract interface here instead of
+         // just a thin wrapper around nextElement()
+         const UHashElement* nextElement(int32_t& pos) const {
+             return bindings->nextElement(pos);
+         }
+
+         static const int32_t FIRST_ELEMENT = UHASH_FIRST;
+
          static Hashtable *initBindings(UErrorCode &errorCode) {
              if (U_FAILURE(errorCode)) {
                  // Won't be valid if there already was an error.
@@ -730,7 +833,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
      // TODO: can Hashtable be used in the public API?
 
-     Environment& getLocalVariables() const;
+     const Environment& getLocalVariables() const {
+         return *env;
+     }
      ExpressionList& getSelectors() const;
      Hashtable& getVariants() const;
      Pattern& getPattern() const;
@@ -838,9 +943,46 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
      static Builder* builder(UErrorCode& errorCode);
 
+     // TODO more comments
+     // Converts a data model back to a string
+     void serialize(UnicodeString& result) const {
+         Serializer serializer(*this, result);
+         serializer.serialize();
+     };
+     
      virtual ~MessageFormatDataModel();
 
   private:
+     
+     // Converts a data model back to a string
+     class Serializer : UMemory {
+       public:
+         Serializer(const MessageFormatDataModel& m, UnicodeString& s) : dataModel(m), result(s) {}
+         void serialize();
+
+         const MessageFormatDataModel& dataModel;
+         UnicodeString& result;
+
+       private:
+         void whitespace();
+         void emit(UChar32);
+         template <size_t N>
+         void emit(const UChar32 (&)[N]);
+         void emit(const UnicodeString&);
+         void emit(const Key&);
+         void emit(const Operator&);
+         void emit(const Operand&);
+         void emit(const Expression&);
+         void emit(const PatternPart&);
+         void emit(const Pattern&);
+         void emit(const Variant&);
+         void emit(const OptionList&);
+         void serializeDeclarations();
+         void serializeSelectors();
+         void serializeVariants();
+     };
+
+     friend class Serializer;
 
      class MessageBody : public UMemory {
        public:
@@ -883,7 +1025,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              }
          }
        private:
-
+         friend class Serializer;
          /*
            A message body is a `selectors` construct as in the grammar.
            A bare pattern is represented as a `selectors` with no scrutinees

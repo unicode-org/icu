@@ -9,62 +9,17 @@
 #include "unicode/messageformat2_data_model.h"
 #include "uvector.h" // U_ASSERT
 
-// Syntactically significant characters
-#define LEFT_CURLY_BRACE ((UChar32)0x007B)
-#define RIGHT_CURLY_BRACE ((UChar32)0x007D)
-#define SPACE ((UChar32)0x0020)
-#define HTAB ((UChar32)0x0009)
-#define CR ((UChar32)0x000D)
-#define LF ((UChar32)0x000A)
-#define BACKSLASH ((UChar32)0x005C)
-#define PIPE ((UChar32)0x007C)
-#define EQUALS ((UChar32)0x003D)
-#define DOLLAR ((UChar32)0x0024)
-#define COLON ((UChar32)0x003A)
-#define PLUS ((UChar32)0x002B)
-#define HYPHEN ((UChar32)0x002D)
-#define PERIOD ((UChar32)0x002E)
-#define UNDERSCORE ((UChar32)0x005F)
-
-// Both used (in a `key` context) and reserved (in an annotation context)
-#define ASTERISK ((UChar32)0x002A)
-
-// Reserved sigils
-#define BANG ((UChar32)0x0021)
-#define AT ((UChar32)0x0040)
-#define POUND ((UChar32)0x0023)
-#define PERCENT ((UChar32)0x0025)
-#define CARET ((UChar32)0x005E)
-#define AMPERSAND ((UChar32)0x0026)
-#define LESS_THAN ((UChar32)0x003C)
-#define GREATER_THAN ((UChar32)0x003E)
-#define QUESTION ((UChar32)0x003F)
-#define TILDE ((UChar32)0x007E)
-
 U_NAMESPACE_BEGIN namespace message2 {
 
-using KeyList    = MessageFormatDataModel::KeyList;
-using OptionList = MessageFormatDataModel::OptionList;
-using Expression = MessageFormatDataModel::Expression;
-using Operator = MessageFormatDataModel::Operator;
-using Pattern    = MessageFormatDataModel::Pattern;
-using Variant    = MessageFormatDataModel::Variant;
+using KeyList     = MessageFormatDataModel::KeyList;
+using OptionList  = MessageFormatDataModel::OptionList;
+using Expression  = MessageFormatDataModel::Expression;
+using Operator    = MessageFormatDataModel::Operator;
+using Pattern     = MessageFormatDataModel::Pattern;
+using PatternPart = MessageFormatDataModel::PatternPart;
+using Variant     = MessageFormatDataModel::Variant;
 
 #define PARSER MessageFormatDataModel::Builder::Parser
-
-// MessageFormat2 uses three keywords: `let`, `when`, and `match`.
-
-static constexpr UChar32 ID_LET[] = {
-    0x6C, 0x65, 0x74, 0 /* "let" */
-};
-
-static constexpr UChar32 ID_WHEN[] = {
-    0x77, 0x68, 0x65, 0x6E, 0 /* "when" */
-};
-
-static constexpr UChar32 ID_MATCH[] = {
-    0x6D, 0x61, 0x74, 0x63, 0x68, 0 /* "match" */
-};
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormatter)
 
@@ -735,8 +690,6 @@ void PARSER::parseLiteralEscape(UErrorCode &errorCode,
 /*
   Consume a literal, matching the `literal` nonterminal in the grammar.
 */
-// TODO: currently initializes `str` with the contents of the literal.
-// Not sure if literals should be represented differently from strings.
 void PARSER::parseLiteral(UErrorCode &errorCode,
                           String &str) {
     CHECK_ERROR(errorCode);
@@ -788,29 +741,28 @@ void PARSER::parseOption(UErrorCode &errorCode,
     parseTokenWithWhitespace(EQUALS, errorCode);
 
     String rhs;
-    bool isVariable = false;
-
+    LocalPointer<Option> opt;
     // Parse RHS, which is either a literal, nmtoken, or variable
     switch (source[index]) {
     case PIPE: {
         parseLiteral(errorCode, rhs);
+        opt.adoptInstead(Option::create(lhs, Operand({true, rhs}), errorCode));
         break;
     }
     case DOLLAR: {
         parseVariableName(errorCode, rhs);
-        isVariable = true;
+        opt.adoptInstead(Option::create(lhs, Operand(rhs), errorCode));
         break;
     }
     default: {
         // Not a literal or variable, so it must be an nmtoken
         parseNmtoken(errorCode, rhs);
+        opt.adoptInstead(Option::create(lhs, Operand({false, rhs}), errorCode));
         break;
     }
     }
 
     // Finally, add the lhs=rhs mapping to the list
-    Operand rand(isVariable, rhs);
-    LocalPointer<Option> opt(Option::create(lhs, rand, errorCode));
     CHECK_ERROR(errorCode);
 
     opts.add(opt.orphan(), errorCode);
@@ -1081,11 +1033,11 @@ Expression* PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
     if (isVariable) {
         VariableName var;
         parseVariableName(errorCode, var);
-        adoptedRand.adoptInstead(Operand::create(true, var, errorCode));
+        adoptedRand.adoptInstead(Operand::create(var, errorCode));
     } else {
         String str;
         parseLiteral(errorCode, str);
-        adoptedRand.adoptInstead(Operand::create(false, str, errorCode));
+        adoptedRand.adoptInstead(Operand::create({true, str}, errorCode));
     }
 
     // Ensure adoptedRand is valid; subsequent code can safely call adoptedRand.orphan()
@@ -1262,7 +1214,7 @@ void PARSER::parseText(UErrorCode &errorCode, String &str) {
         if (source[index] == BACKSLASH) {
             parseTextEscape(errorCode, str);
         } else if (isTextChar(source[index])) {
-            index++;
+            str += source[index++];
             maybeAdvanceLine(source, index, parseError);
         } else {
             break;
@@ -1420,7 +1372,7 @@ Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
 
 Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<ExpressionList> patternParts(parts->build(errorCode));
+    LocalPointer<List<PatternPart>> patternParts(parts->build(errorCode));
     NULL_ON_ERROR(errorCode);
     Pattern* result = new Pattern(patternParts.orphan());
     if (result == nullptr) {
@@ -1429,10 +1381,10 @@ Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
     return result;
 }
 
-void Pattern::Builder::add(Expression *expression, UErrorCode &errorCode) {
+void Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
 
-    parts->add(expression, errorCode);
+    parts->add(part, errorCode);
 }
 
 /*
@@ -1451,14 +1403,16 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
     parseToken(LEFT_CURLY_BRACE, errorCode);
 
     LocalPointer<Expression> expression;
+    LocalPointer<PatternPart> part;
     while (source[index] != RIGHT_CURLY_BRACE) {
         switch (source[index]) {
         case LEFT_CURLY_BRACE: {
             // Must be expression
             expression.adoptInstead(parseExpression(errorCode));
-            if (U_SUCCESS(errorCode)) {
-                result->add(expression.orphan(), errorCode);
-            }
+            NULL_ON_ERROR(errorCode);
+            part.adoptInstead(PatternPart::create(false, expression.orphan(), errorCode));
+            NULL_ON_ERROR(errorCode);
+            result->add(part.orphan(), errorCode);
             break;
         }
         default: {
@@ -1466,12 +1420,13 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
             String s;
             parseText(errorCode, s);
             // Text => uninterpreted-string operand
-            LocalPointer<Operand> rand(Operand::create(false, s, errorCode));
+            LocalPointer<Operand> rand(Operand::create({false, s}, errorCode));
             NULL_ON_ERROR(errorCode);
             expression.adoptInstead(Expression::create(rand.orphan(), errorCode));
             NULL_ON_ERROR(errorCode);
-            // Texts are represented as expression
-            result->add(expression.orphan(), errorCode);
+            part.adoptInstead(PatternPart::create(true, expression.orphan(), errorCode));
+            NULL_ON_ERROR(errorCode);
+            result->add(part.orphan(), errorCode);
             break;
         }
         }
@@ -1650,6 +1605,11 @@ void copyElements<Expression>(UElement *dst, UElement *src) {
 template<>
 void copyElements<Variant>(UElement *dst, UElement *src) {
     dst->pointer = new Variant(*(static_cast<Variant*>(src->pointer)));
+}
+
+template<>
+void copyElements<PatternPart>(UElement *dst, UElement *src) {
+    dst->pointer = new PatternPart(*(static_cast<PatternPart*>(src->pointer)));
 }
 
 
