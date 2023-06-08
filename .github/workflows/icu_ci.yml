@@ -253,6 +253,30 @@ jobs:
           cd icu4c/source;
           make dist
 
+  # clang build with some options
+  clang-options-build-and-test:
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other options.
+      fail-fast: false
+      matrix:
+        build_option:
+         - --enable-static
+         - --disable-shared
+         - --enable-static --disable-shared
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ICU4C with clang
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux ${{ matrix.build_option }};
+          make -j -l2.5 tests;
+      - name: Test
+        run: |
+          cd icu4c/source;
+          make check;
+
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
   gcc-10-stdlib14:
     runs-on: ubuntu-latest
