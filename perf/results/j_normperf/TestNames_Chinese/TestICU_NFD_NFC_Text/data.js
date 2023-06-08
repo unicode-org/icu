@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686004840987,
+  "lastUpdate": 1686191427145,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18358,6 +18358,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.2149777083036355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "680f521746a3bd6a86f25f25ee50a62d88b489cf",
+          "message": "ICU-22389 Cherry-pick CLDR 43.1 data from main to maint-73 (#2495)",
+          "timestamp": "2023-06-07T19:19:55-07:00",
+          "tree_id": "0b0e97b8941c68d18e1f5b98fda41ce081935ec1",
+          "url": "https://github.com/unicode-org/icu/commit/680f521746a3bd6a86f25f25ee50a62d88b489cf"
+        },
+        "date": 1686191389099,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.2101307291083545,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
