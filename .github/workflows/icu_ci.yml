@@ -32,10 +32,11 @@ jobs:
 
   # ICU4J build and unit test using Ant
   icu4j-ant-build-and-test:
+    name: Build and test with Ant for Java version
     strategy:
       fail-fast: false
       matrix:
-        java-version: [ '8', '11', '17' ]
+        java-version: [ '8', '11', '17', '19' ]  # All LTS versions plus latest version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -74,7 +75,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java-version: [ '8', '11', '17' ]
+        java-version: [ '8', '11', '17', '19' ]  # All LTS versions plus latest version
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
@@ -99,7 +100,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java-version: [ '8', '11', '17' ]
+        java-version: [ '8', '11', '17', '19' ]  # All LTS versions plus latest version
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
