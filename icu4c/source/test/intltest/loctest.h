@@ -132,6 +132,7 @@ public:
     void TestAddLikelySubtags();
     void TestMinimizeSubtags();
     void TestAddLikelyAndMinimizeSubtags();
+    void TestXLikelySubtags();
 
     void TestForLanguageTag();
     void TestForLanguageTagLegacyTagBug21676();

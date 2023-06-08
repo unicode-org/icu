@@ -236,6 +236,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestAddLikelySubtags);
     TESTCASE_AUTO(TestMinimizeSubtags);
     TESTCASE_AUTO(TestAddLikelyAndMinimizeSubtags);
+    TESTCASE_AUTO(TestXLikelySubtags);
     TESTCASE_AUTO(TestKeywordVariants);
     TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
@@ -1703,16 +1704,11 @@ LocaleTest::TestMinimizeSubtags() {
     assertEquals("minimizeSubtags", min.getName(), result.getName());
 }
 
-
-void
-LocaleTest::TestAddLikelyAndMinimizeSubtags() {
-    IcuTestErrorCode status(*this, "TestAddLikelyAndMinimizeSubtags()");
-
-    static const struct {
-        const char* const from;
-        const char* const add;
-        const char* const remove;
-    } full_data[] = {
+static const struct {
+    const char* const from;
+    const char* const add;
+    const char* const remove;
+} likely_subtags_data[] = {
         {
             "und_AQ",
             "_Latn_AQ",
@@ -3858,15 +3854,17 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "id_Latn_MM",
             "id_MM"
         }, {
+            // <languageAlias type="in" replacement="id" reason="deprecated"/> <!-- Indonesian -->
+
             // <scriptAlias type="Qaai" replacement="Zinh" reason="deprecated"/>
             "in_Qaai",
             "id_Zinh_ID",
-            "id_Zinh_ID",
+            "id_Zinh",
         }, {
             // <likelySubtag from="und_002" to="en_Latn_NG"/>
             "und_002",
-            "en_Latn_002",
-            "en_002"
+            "en_Latn_NG",
+            "en_NG"
         }, {
             // <territoryAlias type="ESH" replacement="EH" reason="overlong"/> <!-- Western Sahara -->
             // <likelySubtag from="und_EH" to="ar_Arab_EH"/>
@@ -3881,23 +3879,23 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "ar_EH"
         }, {
             // <territoryAlias type="ESH" replacement="EH" reason="overlong"/> <!-- Western Sahara -->
+            // <likelySubtag from="und_Thai" to="th_Thai_TH"/>
             // <likelySubtag from="und_EH" to="ar_Arab_EH"/>
             "und_Thai_ESH",
-            "ar_Thai_EH",
-            "ar_Thai_EH"
+            "th_Thai_EH",
+            "th_EH"
         }
-    };
+};
 
-    const XLikelySubtags* xlikely = XLikelySubtags::XLikelySubtags::getSingleton(status);
-    U_ASSERT(U_SUCCESS(status));
+void
+LocaleTest::TestAddLikelyAndMinimizeSubtags() {
+    IcuTestErrorCode status(*this, "TestAddLikelyAndMinimizeSubtags()");
 
-    Locale matchForUnd("und");
-    matchForUnd.addLikelySubtags(status);
-    U_ASSERT(U_SUCCESS(status));
-    for (const auto& item : full_data) {
+    for (const auto& item : likely_subtags_data) {
         const char* const org = item.from;
         const char* const exp = item.add;
         Locale res(org);
+        res.canonicalize(status);
         res.addLikelySubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
 
@@ -3907,25 +3905,13 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             assertEquals("addLikelySubtags", org, res.getName());
         }
 
-#if 0
-        // Also test XLikelySubtags
-        Locale input(res);
-        input.canonicalize(status);
-        status.errIfFailureAndReset("\"%s\"", org);
-        LSR actual = xlikely->makeMaximizedLsrFrom(input, status);
-        if (exp[0] == '\0') {
-            assertLSR(UnicodeString(u"makeMaximizedLsrFrom(") + org + ")", matchForUnd, actual);
-        } else {
-            Locale expected(exp);
-            assertLSR(UnicodeString(u"makeMaximizedLsrFrom(") + org + ")", expected, actual);
-        }
-#endif
     }
 
-    for (const auto& item : full_data) {
+    for (const auto& item : likely_subtags_data) {
         const char* const org = item.from;
         const char* const exp = item.remove;
         Locale res(org);
+        res.canonicalize(status);
         res.minimizeSubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
         if (exp[0]) {
@@ -3935,6 +3921,33 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         }
     }
 }
+
+void
+LocaleTest::TestXLikelySubtags() {
+    IcuTestErrorCode status(*this, "TestXLikelySubtags()");
+    const XLikelySubtags* xlikely = XLikelySubtags::XLikelySubtags::getSingleton(status);
+    U_ASSERT(U_SUCCESS(status));
+    Locale matchForUnd("und");
+    matchForUnd.addLikelySubtags(status);
+    U_ASSERT(U_SUCCESS(status));
+    for (const auto& item : likely_subtags_data) {
+        const char* const org = item.from;
+        const char* const exp = item.add;
+        Locale res(org);
+        // Also test XLikelySubtags
+        Locale input(org);
+        input.canonicalize(status);
+        status.errIfFailureAndReset("\"%s\"", org);
+        LSR actual = xlikely->makeMaximizedLsrFrom(input, status);
+        if (exp[0] == '\0') {
+            assertLSR(UnicodeString(u"makeMaximizedLsrFrom(") + org + ")", matchForUnd, actual);
+        } else {
+            Locale expected(exp);
+            assertLSR(UnicodeString(u"makeMaximizedLsrFrom(") + org + ")", expected, actual);
+        }
+    }
+}
+
 
 void LocaleTest::assertLSR(UnicodeString msg, const Locale& expected, const LSR& actual) {
     if (*expected.getLanguage() == '\0') {
