@@ -271,7 +271,7 @@ def main(argv):
             "IN_DIR": "$(srcdir)",
             "INDEX_NAME": "res_index"
         }
-        makefile_env = ["ICUDATA_CHAR", "OUT_DIR", "TMP_DIR"]
+        makefile_env = ["ICUDATA_CHAR", "OUT_DIR", "TMP_DIR", "LIBRARY_DATA_DIR"]
         common = {
             key: "$(%s)" % key
             for key in list(makefile_vars.keys()) + makefile_env
@@ -289,7 +289,8 @@ def main(argv):
             "CWD_DIR": os.getcwd(),
             "INDEX_NAME": "res_index",
             # TODO: Pull this from configure script:
-            "ICUDATA_CHAR": "l"
+            "ICUDATA_CHAR": "l",
+            "LIBRARY_DATA_DIR": os.path.join(args.out_dir, "build"),
         }
 
     # Automatically load BUILDRULES from the src_dir
