@@ -92,6 +92,7 @@ TESTSRCDATADIR=$(top_srcdir)/test/testdata
 TESTOUTDIR=$(top_builddir)/test/testdata/out
 BUILD_DIRS = $(TESTOUTDIR) $(TESTBUILDDIR) $(TESTOUTDIR)/$(TESTDT)
 GENTEST=$(TOOLDIR)/gentest/gentest$(TOOLEXEEXT)
+LIBRARY_DATA_DIR=$(OUTDIR)/build
 
 ifeq ($(PKGDATA_MODE),common)
 ICU_DATA_OPT = -i $(OUTDIR)
