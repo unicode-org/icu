@@ -81,6 +81,10 @@ jobs:
             file: "-f ../../icu4j/perf-tests/data/conversion/xuzhimo.txt"
             flag: "-e gb18030"
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -151,6 +155,10 @@ jobs:
           - perf: normperf
             data: TestNames_Simplified_Chinese
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -212,6 +220,10 @@ jobs:
           - locale: zh
             data: udhr_cmn_hans
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -255,6 +267,10 @@ jobs:
       fail-fast: false
       matrix:
         perf: [UnicodeSetAdd, UnicodeSetContains, UnicodeSetIterate]
+
+    permissions:
+      contents: write
+      deployments: write
 
     runs-on: ubuntu-latest
     steps:
@@ -304,6 +320,10 @@ jobs:
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
+
+    permissions:
+      contents: write
+      deployments: write
 
     runs-on: ubuntu-latest
     steps:
@@ -355,6 +375,10 @@ jobs:
       matrix:
         perf: [TestICUConstruction, TestICUParse, TestICUFormat]
         locale: [en_US, de_DE]
+
+    permissions:
+      contents: write
+      deployments: write
 
     runs-on: ubuntu-latest
     steps:
@@ -411,6 +435,10 @@ jobs:
         perf: [TestICU_NFD_NFC_Text, TestICU_NFC_NFC_Text, TestICU_NFC_Orig_Text, TestICU_NFD_NFC_Text, TestICU_NFD_NFD_Text, TestICU_NFD_Orig_Text]
         source_text: [TestNames_Asian, TestNames_Chinese, TestNames_SerbianSH]
         mode: [-l]
+
+    permissions:
+      contents: write
+      deployments: write
 
     runs-on: ubuntu-latest
     steps:
@@ -538,6 +566,10 @@ jobs:
             source_text: english
             perf: TestCharsetEncoderICU
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -607,6 +639,10 @@ jobs:
           - locale: sw_KE
             parms: '"dddd MMM yyyy" "15 Jan 2007" 1'
             perf: TestICUFormat
+
+    permissions:
+      contents: write
+      deployments: write
 
     runs-on: ubuntu-latest
     steps:
