@@ -207,19 +207,6 @@ static bool inRange(UChar32 c, UChar32 first, UChar32 last) {
     return c >= first && c <= last;
 }
 
-// See `s` in the MessageFormat 2 grammar
-static bool isWhitespace(UChar32 c) {
-    switch (c) {
-    case SPACE:
-    case HTAB:
-    case CR:
-    case LF:
-        return true;
-    default:
-        return false;
-    }
-}
-
 /*
   The following helper predicates should exactly match nonterminals in the MessageFormat 2 grammar:
 
@@ -601,6 +588,10 @@ void PARSER::parseFunction(UErrorCode &errorCode,
         return;
     }
 
+    // TODO: it should probably be encoded in the AST whether this is a
+    // regular ':' function or a markup '+'/'-' function. for now just
+    // treat the start character as part of the function name
+    func += source[index];
     index++; // Consume the function start character
     CHECK_BOUNDS(source, index, parseError, errorCode);
     parseName(errorCode, func);
@@ -1647,7 +1638,7 @@ void MessageFormatDataModel::Builder::setPattern(Pattern* pat) {
     pattern = pat;
 }
 
-MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) {
+MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) : normalizedInput(*builder.normalizedInput) {
     CHECK_ERROR(errorCode);
 
     LocalPointer<Environment> envt(Environment::create(*builder.locals, errorCode));
@@ -1666,6 +1657,8 @@ MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Bui
     if (U_SUCCESS(errorCode)) {
         body = adoptedBody.orphan();
         env  = envt.orphan();
+        //        const UnicodeString& str = *builder.normalizedInput;
+        // normalizedInput = UnicodeString(str);
     }
 }
 

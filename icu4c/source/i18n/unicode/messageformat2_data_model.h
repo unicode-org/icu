@@ -220,6 +220,10 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
   // TODO: this is subject to change; it's not clear yet how much of the structure
   // of the AST will be encoded into the API
   public:
+    // TODO: Shouldn't be public, only for testing
+    const UnicodeString& getNormalizedPattern() const { return normalizedInput; }
+
+
     // Immutable list
     template<typename T>
     class List : public UMemory {
@@ -345,7 +349,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              U_ASSERT(!isReserved());
              return functionName;
          }
-         String asReserved() const {
+         const String& asReserved() const {
              U_ASSERT(isReserved());
              return functionName;
          }
@@ -465,7 +469,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
         // TODO: include these or not?
         bool isStandaloneAnnotation() const { return (rand == nullptr); }
-        bool isFunctionCall() const { return (rator != nullptr && rand != nullptr); }
+        // Returns true for function calls with operands as well as
+        // standalone annotations.
+        // Reserved sequences are not function calls
+        bool isFunctionCall() const { return (rator != nullptr && !rator->isReserved()); }
+        bool isReserved() const { return (rator != nullptr && rator->isReserved()); }
 
         const Operand& getOperand() const {
             U_ASSERT(rand != nullptr);
@@ -477,7 +485,12 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             return rator->getFunctionName();
         }
 
-        // TODO
+        const UnicodeString& asReserved() const {
+          U_ASSERT(isReserved());
+          return rator->asReserved();
+        }
+
+      // TODO
         /*
         const Hashtable* getOptions(UErrorCode& errorCode) const {
             U_ASSERT(isFunctionCall());
@@ -853,6 +866,10 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              selectors = ExpressionList::builder(errorCode);
              variants = VariantList::builder(errorCode);
              locals = Environment::create(errorCode);
+             LocalPointer<UnicodeString> s(new UnicodeString());
+             if (!s.isValid()) {
+               errorCode = U_MEMORY_ALLOCATION_ERROR;
+             }
          }
 
          // Parser class (private)
@@ -928,6 +945,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          ExpressionList::Builder* selectors;
          VariantList::Builder* variants;
          Environment* locals;
+
+         // Normalized version of the input string (optional whitespace removed)
+         UnicodeString* normalizedInput;
        public:
          // Takes ownership of `expression`
          void addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
@@ -1041,7 +1061,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          VariantList *variants;
      };
 
-
     /*
       A parsed message consists of an environment and a body.
       Initially, the environment contains bindings for local variables
@@ -1057,7 +1076,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
       See the `MessageBody` class.
      */
     const MessageBody* body;
-    
+
+    // Normalized version of the input string (optional whitespace omitted)
+    // Used for testing purposes
+    const UnicodeString& normalizedInput;
+
     // Do not define default assignment operator
     const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
 

@@ -254,18 +254,18 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
-        RELEASE_CFLAGS='-O3'
-        RELEASE_CXXFLAGS='-O3'
-        DEBUG_CFLAGS='-g'
-        DEBUG_CXXFLAGS='-g'
+        RELEASE_CFLAGS='-O0'
+        RELEASE_CXXFLAGS='-O0'
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXXFLAGS='-g -O0'
         ;;
     Linux*)
         THE_OS="Linux"
         THE_COMP="the clang or else GNU C++"
-        RELEASE_CFLAGS='-O3'
-        RELEASE_CXXFLAGS='-O3'
-        DEBUG_CFLAGS='-g'
-        DEBUG_CXXFLAGS='-g'
+        RELEASE_CFLAGS='-O0'
+        RELEASE_CXXFLAGS='-O0'
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXXFLAGS='-g -O0'
         ;;
     Cygwin)
         THE_OS="Cygwin"

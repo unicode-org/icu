@@ -37,7 +37,8 @@ void SERIALIZER::emit(const UnicodeString& s) {
 
 template <size_t N>
 void SERIALIZER::emit(const UChar32 (&token)[N]) {
-    for (size_t i = 0; i < N; i++) {
+    // Don't emit the terminator
+    for (size_t i = 0; i < N - 1; i++) {
         emit(token[i]);
     }
 }
@@ -103,9 +104,7 @@ void SERIALIZER::emit(const Hashtable& options) {
 void SERIALIZER::emit(const OptionList& options) {
     for (size_t i = 0; i < options.length(); i++) {
         const Option& opt = *options.get(i);
-        if (i != 0) {
-            whitespace();
-        }
+        whitespace();
         emit(opt.name);
         emit(EQUALS);
         emit(opt.value);
@@ -118,17 +117,21 @@ void SERIALIZER::emit(const Expression& expr) {
     if (!expr.isFunctionCall()) {
         // Literal or variable, no annotation
         emit(expr.getOperand());
-    } else if (expr.isStandaloneAnnotation()) {
-        // Function call -- either standalone or with an operand
+    } else if (expr.isReserved()) {
+       // Reserved sequence - serializes to itself
+       emit(expr.asReserved());
+    }
+    else {
+        // Function call
+        if (!expr.isStandaloneAnnotation()) {
+          // Must be a function call that has an operand
+          emit(expr.getOperand());
+          whitespace();
+        }
         emit(expr.getFunctionName());
-        whitespace();
-        emit(expr.getOptions());
-    } else {
-        // Last case: must be a function call that has an operand
-        emit(expr.getOperand());
-        whitespace();
-        emit(expr.getFunctionName());
-        whitespace();
+        // No whitespace after function name, in case it has
+        // no options. (when there are options, emit(OptionList) will
+        // emit the leading whitespace)
         emit(expr.getOptions());
     }
     
@@ -167,32 +170,28 @@ void SERIALIZER::emit(const Variant& var) {
         }
         emit(*ks.get(i));
     }
-    whitespace();
+    // No whitespace needed here -- see `variant` in the grammar
     emit(*var.pattern);
 }
 
 void SERIALIZER::serializeDeclarations() {
     const Environment& locals = dataModel.getLocalVariables();
     int32_t pos = Environment::FIRST_ELEMENT;
-    bool first = true;
 
     while(true) {
         const UHashElement* element = locals.nextElement(pos);
         if (element == nullptr) {
             break;
         }
-        if (first) {
-            first = false;
-        } else {
-            whitespace();
-        }
+        // No whitespace needed here -- see `message` in the grammar
         emit(ID_LET);
         whitespace();
+        emit(DOLLAR);
         const UnicodeString& name = *(static_cast<UnicodeString*>(element->key.pointer));
         emit(name);
-        whitespace();
+        // No whitespace needed here -- see `declaration` in the grammar
         emit(EQUALS);
-        whitespace();
+        // No whitespace needed here -- see `declaration` in the grammar
         const Expression& e = *(static_cast<Expression*>(element->value.pointer));
         emit(e);
     }
@@ -210,7 +209,7 @@ void SERIALIZER::serializeSelectors() {
 
     emit(ID_MATCH);
     for (size_t i = 0; i < len; i++) {
-        whitespace();
+        // No whitespace needed here -- see `selectors` in the grammar
         emit(*selectors.get(i));
     }
 }
@@ -228,7 +227,7 @@ void SERIALIZER::serializeVariants() {
     
     // General case
     for (size_t i = 0; i < len; i++) {
-        whitespace();
+        // No whitespace needed here -- see `body` in the grammar
         emit(ID_WHEN);
         whitespace();
         const Variant& var = *variants.get(i);

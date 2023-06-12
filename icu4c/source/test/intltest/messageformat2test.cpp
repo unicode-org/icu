@@ -257,6 +257,80 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO_END;
 }
 
+// TODO: instead of these hacks, it might be better to have the parser
+// emit a normalized version of the pattern as it goes along, which will be a
+// field in the data model
+/*
+  Yes, that's what's needed, because for example:
+    "{hello {|world|}}"
+
+Here, the pattern has two parts:
+"hello " (the text includes the space)
+and {|world|} (an expression
+
+and without context, this code can't determine that the ' ' in "hello" is required
+(because it's part of the text part)
+
+ */
+/*
+static void normalizeWhitespace(const UnicodeString& source, UnicodeString& dest) {
+  // Replace any sequence of 1 or more consecutive whitespace characters
+  // with a single space character
+  // See isWhitespace() in messageformat2.cpp
+  size_t sourceIndex = 0;
+  size_t len = source.length();
+  U_ASSERT(dest.length() == 0);
+
+  // HACK: track the most recently seen character that isn't whitespace,
+  // so we can do things like omitting the optional space after '='
+  UChar32 lastNonWhitespaceChar = 0;
+  while (sourceIndex < len) {
+    if (!isWhitespace(source[sourceIndex])) {
+      lastNonWhitespaceChar = source[sourceIndex];
+      dest += source[sourceIndex++];
+    } else {
+      // Skip any subsequent whitespace
+      while (isWhitespace(source[sourceIndex])) { sourceIndex++; }
+      if ((sourceIndex < (len - 1))) {
+        switch (source[sourceIndex]) {
+             // HACK: whitespace is always optional immediately before a '}'
+             // (see the `expression` nonterminal in the grammar)
+             // HACK: also optional before a '{'
+           case LEFT_CURLY_BRACE:
+           case RIGHT_CURLY_BRACE:
+             // HACK: also optional before an '=' (see `declaration` and `option`
+             // in the grammar)
+           case EQUALS: {
+             continue;
+           }
+           default: {
+             break;
+           }
+        }
+      }
+
+      switch (lastNonWhitespaceChar) {
+        // HACK: whitespace is always optional immediately after an '='
+        // (see `declaration` and `option` in the grammar)
+        // and after a '}'
+        // (see `pattern` and `expression`, as well as the contexts in
+        // which `pattern` and `expression` can appear, in the grammar)
+      case RIGHT_CURLY_BRACE:
+      case EQUALS: {
+        continue;
+      }
+      default: {
+        break;
+      }
+      }
+      // Finally, if none of the special cases applied,
+      // append a single space onto dest
+      dest += SPACE;
+    }
+  }
+  U_ASSERT(dest.length() <= source.length());
+}
+*/
 void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
     LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
     if (U_SUCCESS(errorCode)) {
@@ -267,10 +341,14 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
             if (mf.isValid()) {
                 // Roundtrip test
                 const MessageFormatDataModel& dataModel = mf->getDataModel();
+                const UnicodeString& normalized = dataModel.getNormalizedPattern();
                 UnicodeString serialized;
                 dataModel.serialize(serialized);
-                if (s != serialized) {
-                    logln("Expected output: " + s + "\nGot output: " + serialized);
+                // Trim extra whitespace from s so it can be compared to the pretty-printed data model
+                // UnicodeString normalized;
+                // normalizeWhitespace(s, normalized);
+                if (normalized != serialized) {
+                    logln("Expected output: " + normalized + "\nGot output: " + serialized);
                     errorCode = U_MESSAGE_PARSE_ERROR;
                 }
             } else {

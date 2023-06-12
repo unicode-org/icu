@@ -74,6 +74,19 @@ static constexpr UChar32 ID_MATCH[] = {
     0x6D, 0x61, 0x74, 0x63, 0x68, 0 /* "match" */
 };
 
+// See `s` in the MessageFormat 2 grammar
+inline bool isWhitespace(UChar32 c) {
+    switch (c) {
+    case SPACE:
+    case HTAB:
+    case CR:
+    case LF:
+        return true;
+    default:
+        return false;
+    }
+}
+
 /**
  * <p>MessageFormatter is a Technical Preview API implementing MessageFormat 2.0.
  * Since it is not final, documentation has not yet been added everywhere.
