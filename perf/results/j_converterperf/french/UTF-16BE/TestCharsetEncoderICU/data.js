@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686191475019,
+  "lastUpdate": 1686700456005,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9148,6 +9148,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 11.50209264452945,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pnacht@google.com",
+            "name": "Pedro Kaj Kjellerup Nacht",
+            "username": "pnacht"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "7a101d68eab556c1b3bc0adf65998362ee941589",
+          "message": "ICU-22350 Fix broken performance CI\n\nSigned-off-by: Pedro Kaj Kjellerup Nacht <pnacht@google.com>",
+          "timestamp": "2023-06-13T16:41:39-07:00",
+          "tree_id": "52a670393d4cc28f78185c88be7644a582ea1007",
+          "url": "https://github.com/unicode-org/icu/commit/7a101d68eab556c1b3bc0adf65998362ee941589"
+        },
+        "date": 1686700403843,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 10.232812861657163,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
