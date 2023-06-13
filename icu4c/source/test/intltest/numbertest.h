@@ -325,6 +325,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testFieldPositions();
     void testCopyMove();
     void toObject();
+    void locale();
     void testGetDecimalNumbers();
     void test21684_Performance();
     void test21358_SignPosition();

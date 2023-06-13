@@ -430,6 +430,14 @@ UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(const NFS<UNF>& other)
     // No additional fields to assign
 }
 
+UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(const impl::MacroProps &macros) {
+    fMacros = macros;
+}
+
+UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(impl::MacroProps &&macros) {
+    fMacros = macros;
+}
+
 // Make default copy constructor call the NumberFormatterSettings copy constructor.
 UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UNF&& src) noexcept
         : UNF(static_cast<NFS<UNF>&&>(src)) {}
@@ -725,6 +733,18 @@ int32_t LocalizedNumberFormatter::getCallCount() const {
 }
 
 // Note: toFormat defined in number_asformat.cpp
+
+UnlocalizedNumberFormatter LocalizedNumberFormatter::withoutLocale() const & {
+    MacroProps macros(fMacros);
+    macros.locale = Locale();
+    return UnlocalizedNumberFormatter(macros);
+}
+
+UnlocalizedNumberFormatter LocalizedNumberFormatter::withoutLocale() && {
+    MacroProps macros(std::move(fMacros));
+    macros.locale = Locale();
+    return UnlocalizedNumberFormatter(std::move(macros));
+}
 
 const DecimalFormatSymbols* LocalizedNumberFormatter::getDecimalFormatSymbols() const {
     return fMacros.symbols.getDecimalFormatSymbols();

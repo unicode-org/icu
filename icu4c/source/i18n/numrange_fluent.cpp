@@ -212,6 +212,14 @@ UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(NFS<UNF>&& src)
     // No additional fields to assign
 }
 
+UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(const impl::RangeMacroProps &macros) {
+    fMacros = macros;
+}
+
+UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(impl::RangeMacroProps &&macros) {
+    fMacros = macros;
+}
+
 UnlocalizedNumberRangeFormatter& UnlocalizedNumberRangeFormatter::operator=(const UNF& other) {
     NFS<UNF>::operator=(static_cast<const NFS<UNF>&>(other));
     // No additional fields to assign
@@ -283,6 +291,19 @@ LocalizedNumberRangeFormatter UnlocalizedNumberRangeFormatter::locale(const Loca
 
 LocalizedNumberRangeFormatter UnlocalizedNumberRangeFormatter::locale(const Locale& locale)&& {
     return LocalizedNumberRangeFormatter(std::move(fMacros), locale);
+}
+
+
+UnlocalizedNumberRangeFormatter LocalizedNumberRangeFormatter::withoutLocale() const & {
+    RangeMacroProps macros(fMacros);
+    macros.locale = Locale();
+    return UnlocalizedNumberRangeFormatter(macros);
+}
+
+UnlocalizedNumberRangeFormatter LocalizedNumberRangeFormatter::withoutLocale() && {
+    RangeMacroProps macros(std::move(fMacros));
+    macros.locale = Locale();
+    return UnlocalizedNumberRangeFormatter(std::move(macros));
 }
 
 
