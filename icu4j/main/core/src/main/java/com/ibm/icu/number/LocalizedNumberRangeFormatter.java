@@ -82,6 +82,16 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
         return formatImpl(dq1, dq2, first.equals(second));
     }
 
+    /**
+     * Disassociate the locale from this formatter.
+     *
+     * @return The fluent chain.
+     * @draft ICU 74
+     */
+    public UnlocalizedNumberRangeFormatter withoutLocale() {
+        return new UnlocalizedNumberRangeFormatter(this, KEY_LOCALE, null);
+    }
+
     FormattedNumberRange formatImpl(DecimalQuantity first, DecimalQuantity second, boolean equalBeforeRounding) {
         if (fImpl == null) {
             fImpl = new NumberRangeFormatterImpl(resolve());

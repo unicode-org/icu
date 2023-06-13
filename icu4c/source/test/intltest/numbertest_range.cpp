@@ -53,6 +53,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testFieldPositions);
         TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(toObject);
+        TESTCASE_AUTO(locale);
         TESTCASE_AUTO(testGetDecimalNumbers);
         TESTCASE_AUTO(test21684_Performance);
         TESTCASE_AUTO(test21358_SignPosition);
@@ -915,6 +916,23 @@ void NumberRangeFormatterTest::toObject() {
     {
         NumberRangeFormatter::with().clone();
     }
+}
+
+void NumberRangeFormatterTest::locale() {
+    IcuTestErrorCode status(*this, "locale");
+
+    LocalizedNumberRangeFormatter lnf = NumberRangeFormatter::withLocale("en")
+        .identityFallback(UNUM_IDENTITY_FALLBACK_RANGE);
+    UnlocalizedNumberRangeFormatter unf1 = lnf.withoutLocale();
+    UnlocalizedNumberRangeFormatter unf2 = NumberRangeFormatter::with()
+        .identityFallback(UNUM_IDENTITY_FALLBACK_RANGE)
+        .locale("ar-EG")
+        .withoutLocale();
+
+    FormattedNumberRange res1 = unf1.locale("bn").formatFormattableRange(5, 5, status);
+    assertEquals(u"res1", u"\u09EB\u2013\u09EB", res1.toTempString(status));
+    FormattedNumberRange res2 = unf2.locale("ja-JP").formatFormattableRange(5, 5, status);
+    assertEquals(u"res2", u"5\uFF5E5", res2.toTempString(status));
 }
 
 void NumberRangeFormatterTest::testGetDecimalNumbers() {

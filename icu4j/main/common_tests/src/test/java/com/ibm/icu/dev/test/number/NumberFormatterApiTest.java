@@ -5395,10 +5395,39 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
     @Test
     public void locale() {
         // Coverage for the locale setters.
-        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.ENGLISH));
-        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(ULocale.ENGLISH));
-        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(Locale.ENGLISH));
-        Assert.assertNotEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.FRENCH));
+        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH),
+                NumberFormatter.with().locale(Locale.ENGLISH));
+        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH),
+                NumberFormatter.withLocale(ULocale.ENGLISH));
+        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH),
+                NumberFormatter.withLocale(Locale.ENGLISH));
+        Assert.assertNotEquals(NumberFormatter.with().locale(ULocale.ENGLISH),
+                NumberFormatter.with().locale(Locale.FRENCH));
+
+        LocalizedNumberFormatter lnf1 = NumberFormatter.withLocale(ULocale.ENGLISH).unitWidth(UnitWidth.FULL_NAME)
+                .scale(Scale.powerOfTen(2));
+        LocalizedNumberFormatter lnf2 = NumberFormatter.with()
+                .notation(Notation.compactLong()).locale(ULocale.FRENCH).unitWidth(UnitWidth.FULL_NAME);
+        UnlocalizedNumberFormatter unf1 = lnf1.withoutLocale();
+        UnlocalizedNumberFormatter unf2 = lnf2.withoutLocale();
+
+        assertFormatSingle(
+                "Formatter after withoutLocale A",
+                "unit/meter unit-width-full-name scale/100",
+                "unit/meter unit-width-full-name scale/100",
+                unf1.unit(MeasureUnit.METER),
+                ULocale.ITALY,
+                2,
+                "200 metri");
+
+        assertFormatSingle(
+                "Formatter after withoutLocale B",
+                "compact-long unit/meter unit-width-full-name",
+                "compact-long unit/meter unit-width-full-name",
+                unf2.unit(MeasureUnit.METER),
+                ULocale.JAPAN,
+                2,
+                "2 メートル");
     }
 
     @Test

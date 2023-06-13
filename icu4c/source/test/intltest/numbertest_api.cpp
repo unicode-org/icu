@@ -5186,6 +5186,31 @@ void NumberFormatterApiTest::locale() {
     UnicodeString actual = NumberFormatter::withLocale(Locale::getFrench()).formatInt(1234, status)
             .toString(status);
     assertEquals("Locale withLocale()", u"1\u202f234", actual);
+
+    LocalizedNumberFormatter lnf1 = NumberFormatter::withLocale("en").unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+            .scale(Scale::powerOfTen(2));
+    LocalizedNumberFormatter lnf2 = NumberFormatter::with()
+            .notation(Notation::compactLong()).locale("fr").unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+    UnlocalizedNumberFormatter unf1 = lnf1.withoutLocale();
+    UnlocalizedNumberFormatter unf2 = std::move(lnf2).withoutLocale();
+
+    assertFormatSingle(
+            u"Formatter after withoutLocale A",
+            u"unit/meter unit-width-full-name scale/100",
+            u"unit/meter unit-width-full-name scale/100",
+            unf1.unit(METER),
+            "it-IT",
+            2,
+            u"200 metri");
+
+    assertFormatSingle(
+            u"Formatter after withoutLocale B",
+            u"compact-long unit/meter unit-width-full-name",
+            u"compact-long unit/meter unit-width-full-name",
+            unf2.unit(METER),
+            "ja-JP",
+            2,
+            u"2 メートル");
 }
 
 void NumberFormatterApiTest::skeletonUserGuideExamples() {
