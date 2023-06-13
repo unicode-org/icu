@@ -43,12 +43,35 @@ void SERIALIZER::emit(const UChar32 (&token)[N]) {
     }
 }
 
+void SERIALIZER::emit(const Literal& l) {
+    if (l.isQuoted) {
+      emit(PIPE);
+      for (size_t i = 0; ((int32_t) i) < l.contents.length(); i++) {
+        // Re-escape any PIPE or BACKSLASH characters
+        switch(l.contents[i]) {
+        case BACKSLASH:
+        case PIPE: {
+          emit(BACKSLASH);
+          break;
+        }
+        default: {
+          break;
+        }
+        }
+        emit(l.contents[i]);
+      }
+      emit(PIPE);
+    } else {
+      emit(l.contents);
+    }
+}
+
 void SERIALIZER::emit(const Key& k) {
     if (k.isWildcard()) {
         emit(ASTERISK);
         return;
     }
-    emit(k.getString());
+    emit(k.asLiteral());
 }
 
 void SERIALIZER::emit(const Operand& rand) {
@@ -57,28 +80,10 @@ void SERIALIZER::emit(const Operand& rand) {
         emit(rand.asVariable());
     } else {
         // Literal: quoted or unquoted
-        const Literal& lit = rand.asLiteral();
-        if (lit.isQuoted) {
-            emit(PIPE);
-            emit(lit.contents);
-            emit(PIPE);
-        } else {
-            emit(lit.contents);
-        }
+        emit(rand.asLiteral());
     }
 }
-
-void SERIALIZER::emit(const Operator& rator) {
-    if (rator.isReserved()) {
-        emit(rator.asReserved());
-        return;
-    }
-    // Must be function name
-    // Emit the name only -- emit(Expression) emits options
-    // TODO: does this encode the :/+/- prefix? We'll find out!
-    emit(rator.getFunctionName());
-}
-
+                    
 // Option list
 // TODO
 /*
@@ -114,25 +119,48 @@ void SERIALIZER::emit(const OptionList& options) {
 void SERIALIZER::emit(const Expression& expr) {
     emit(LEFT_CURLY_BRACE);
 
-    if (!expr.isFunctionCall()) {
+    if (!expr.isReserved() && !expr.isFunctionCall()) {
         // Literal or variable, no annotation
         emit(expr.getOperand());
-    } else if (expr.isReserved()) {
-       // Reserved sequence - serializes to itself
-       emit(expr.asReserved());
-    }
-    else {
-        // Function call
+    } else {
+        // Function call or reserved
         if (!expr.isStandaloneAnnotation()) {
           // Must be a function call that has an operand
           emit(expr.getOperand());
           whitespace();
         }
-        emit(expr.getFunctionName());
-        // No whitespace after function name, in case it has
-        // no options. (when there are options, emit(OptionList) will
-        // emit the leading whitespace)
-        emit(expr.getOptions());
+        if (expr.isReserved()) {
+          const Reserved& reserved = expr.asReserved();
+          // Re-escape '\' / '{' / '|' / '}'
+          for (size_t i = 0; i < reserved.numParts(); i++) {
+            const Literal& l = *reserved.getPart(i);
+            if (l.isQuoted) {
+              emit(l);
+            } else {
+              const UnicodeString& s = l.contents;
+              for (size_t j = 0; ((int32_t) j) < s.length(); j++) {
+                switch(s[j]) {
+                case LEFT_CURLY_BRACE:
+                case PIPE:
+                case RIGHT_CURLY_BRACE:
+                case BACKSLASH: {
+                  emit(BACKSLASH);
+                  break;
+                }
+                default:
+                  break;
+                }
+                emit(s[j]);
+              }
+            }
+          }
+        } else {
+          emit(expr.getFunctionName());
+          // No whitespace after function name, in case it has
+          // no options. (when there are options, emit(OptionList) will
+          // emit the leading whitespace)
+          emit(expr.getOptions());
+        }
     }
     
     emit(RIGHT_CURLY_BRACE);
@@ -141,7 +169,21 @@ void SERIALIZER::emit(const Expression& expr) {
 void SERIALIZER::emit(const PatternPart& part) {
     if (part.isText()) {
         // Raw text
-        emit(part.asText());
+        const UnicodeString& text = part.asText();
+        // Re-escape '{'/'}'/'\'
+        for (size_t i = 0; ((int32_t) i) < text.length(); i++) {
+          switch(text[i]) {
+          case BACKSLASH:
+          case LEFT_CURLY_BRACE:
+          case RIGHT_CURLY_BRACE: {
+            emit(BACKSLASH);
+            break;
+          }
+          default:
+            break;
+          }
+          emit(text[i]);
+        }
         return;
     }
     // Expression
@@ -176,24 +218,23 @@ void SERIALIZER::emit(const Variant& var) {
 
 void SERIALIZER::serializeDeclarations() {
     const Environment& locals = dataModel.getLocalVariables();
-    int32_t pos = Environment::FIRST_ELEMENT;
+    
+    for (size_t i = 0; ((int32_t) i) < locals.vars->size(); i++) {
+        void* nextVar = (*locals.vars)[i];
+        const UnicodeString& name = *((UnicodeString*) nextVar);
 
-    while(true) {
-        const UHashElement* element = locals.nextElement(pos);
-        if (element == nullptr) {
-            break;
-        }
+        UErrorCode errorCode = U_ZERO_ERROR;
+        const Expression* e = locals.lookup(name, errorCode);
+        U_ASSERT(U_SUCCESS(errorCode));
         // No whitespace needed here -- see `message` in the grammar
         emit(ID_LET);
         whitespace();
         emit(DOLLAR);
-        const UnicodeString& name = *(static_cast<UnicodeString*>(element->key.pointer));
         emit(name);
         // No whitespace needed here -- see `declaration` in the grammar
         emit(EQUALS);
         // No whitespace needed here -- see `declaration` in the grammar
-        const Expression& e = *(static_cast<Expression*>(element->value.pointer));
-        emit(e);
+        emit(*e);
     }
 }
 
