@@ -685,15 +685,13 @@ void PARSER::parseLiteralEscape(UErrorCode &errorCode,
 /*
   Consume a literal, matching the `literal` nonterminal in the grammar.
 */
-Literal* PARSER::parseLiteral(UErrorCode &errorCode) {
-    NULL_ON_ERROR(errorCode);
+void PARSER::parseLiteral(UErrorCode &errorCode, String& str) {
+    CHECK_ERROR(errorCode);
     U_ASSERT(inBounds(source, index));
 
     // Parse the opening '|'
     parseToken(PIPE, errorCode);
-    CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
-
-    String str;
+    CHECK_BOUNDS(source, index, parseError, errorCode);
 
     // Parse the contents
     bool done = false;
@@ -709,18 +707,14 @@ Literal* PARSER::parseLiteral(UErrorCode &errorCode) {
           // Assume the sequence of literal characters ends here
           done = true;
         }
-        CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
+        CHECK_BOUNDS(source, index, parseError, errorCode);
     }
 
     // Parse the closing '|'
     parseToken(PIPE, errorCode);
 
     // Guarantee postcondition
-    CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
-
-    LocalPointer<Literal> lit(Literal::create(true, str, errorCode));
-    NULL_ON_ERROR(errorCode);
-    return lit.orphan();
+    CHECK_BOUNDS(source, index, parseError, errorCode);
 }
 
 /*
@@ -746,9 +740,10 @@ void PARSER::parseOption(UErrorCode &errorCode,
     // Parse RHS, which is either a literal, nmtoken, or variable
     switch (source[index]) {
     case PIPE: {
-        LocalPointer<Literal> rhs(parseLiteral(errorCode));
-        CHECK_ERROR(errorCode);
-        opt.adoptInstead(Option::create(lhs, Operand(rhs.orphan()), errorCode));
+        String s;
+        parseLiteral(errorCode, s);
+        Literal rhs(true, s);
+        opt.adoptInstead(Option::create(lhs, Operand(rhs), errorCode));
         break;
     }
     case DOLLAR: {
@@ -761,9 +756,8 @@ void PARSER::parseOption(UErrorCode &errorCode,
     default: {
         // Not a literal or variable, so it must be an nmtoken
         parseNmtoken(errorCode, rhs);
-        LocalPointer<Literal> rhsLit(Literal::create(false, rhs, errorCode));
-        CHECK_ERROR(errorCode);
-        LocalPointer<Operand> rand(Operand::create(rhsLit.orphan(), errorCode));
+        Literal lit(false, rhs);
+        LocalPointer<Operand> rand(Operand::create(lit, errorCode));
         CHECK_ERROR(errorCode);
         opt.adoptInstead(Option::create(lhs, *rand.orphan(), errorCode));
         break;
@@ -880,7 +874,6 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
 
     bool empty = true;
     String chunk;
-    LocalPointer<Literal> lit;
     while(reservedChunkFollows(source[index])) {
         empty = false;
         // reserved-char
@@ -895,9 +888,8 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
         }
 
         if (chunk.length() > 0) {
-          lit.adoptInstead(Literal::create(false, chunk, errorCode));
-          CHECK_ERROR(errorCode);
-          result.add(lit.orphan(), errorCode);
+          Literal lit(false, chunk);
+          result.add(lit, errorCode);
           CHECK_ERROR(errorCode);
           chunk.setTo(u"", 0);
         }
@@ -905,15 +897,15 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
         if (source[index] == BACKSLASH) {
             // reserved-escape
             parseReservedEscape(errorCode, chunk);
-            lit.adoptInstead(Literal::create(false, chunk, errorCode));
-            CHECK_ERROR(errorCode);
-            result.add(lit.orphan(), errorCode);
+            Literal lit(false, chunk);
+            result.add(lit, errorCode);
             CHECK_ERROR(errorCode);
             chunk.setTo(u"", 0);
         } else if (source[index] == PIPE) {
-            LocalPointer<Literal> lit(parseLiteral(errorCode));
-            CHECK_ERROR(errorCode);
-            result. add(lit.orphan(), errorCode);
+            String s;
+            parseLiteral(errorCode, s);
+            Literal lit(true, s);
+            result.add(lit, errorCode);
             CHECK_ERROR(errorCode);
         } else {
             // The reserved chunk ends here
@@ -923,9 +915,8 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
 
     // Add the last chunk if necessary
     if (chunk.length() > 0) {
-        lit.adoptInstead(Literal::create(false, chunk, errorCode));
-        CHECK_ERROR(errorCode);    
-        result.add(lit.orphan(), errorCode);
+        Literal lit(false, chunk);
+        result.add(lit, errorCode);
     }
 
     if (empty) {
@@ -955,9 +946,8 @@ Operator* PARSER::parseReserved(UErrorCode &errorCode) {
 
     // Add the start char as a separate text chunk
     String firstCharString(source[index]);
-    LocalPointer<Literal> firstChunk(Literal::create(false, firstCharString, errorCode));
-    NULL_ON_ERROR(errorCode);
-    builder->add(firstChunk.orphan(), errorCode);
+    Literal firstChunk(false, firstCharString);
+    builder->add(firstChunk, errorCode);
     NULL_ON_ERROR(errorCode);
     // Consume reservedStart
     normalizedInput += source[index];
@@ -1081,9 +1071,10 @@ Expression* PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
         parseVariableName(errorCode, var);
         adoptedRand.adoptInstead(Operand::create(var, errorCode));
     } else {
-        LocalPointer<Literal> lit(parseLiteral(errorCode));
-        NULL_ON_ERROR(errorCode);
-        adoptedRand.adoptInstead(Operand::create(lit.orphan(), errorCode));
+        String s;
+        parseLiteral(errorCode, s);
+        Literal lit(true, s);
+        adoptedRand.adoptInstead(Operand::create(lit, errorCode));
     }
 
     // Ensure adoptedRand is valid; subsequent code can safely call adoptedRand.orphan()
@@ -1291,9 +1282,10 @@ Key* PARSER::parseKey(UErrorCode &errorCode) {
     // Literal | nmtoken | '*'
     switch (source[index]) {
     case PIPE: {
-        LocalPointer<Literal> lit(parseLiteral(errorCode));
-        NULL_ON_ERROR(errorCode);
-        k.adoptInstead(Key::create(lit.orphan(), errorCode));
+        String s;
+        parseLiteral(errorCode, s);
+        Literal lit(true, s);
+        k.adoptInstead(Key::create(lit, errorCode));
         break;
     }
     case ASTERISK: {
@@ -1308,9 +1300,8 @@ Key* PARSER::parseKey(UErrorCode &errorCode) {
         // nmtoken
         String s;
         parseNmtoken(errorCode, s);
-        LocalPointer<Literal> lit(Literal::create(false, s, errorCode));
-        NULL_ON_ERROR(errorCode);
-        k.adoptInstead(Key::create(lit.orphan(), errorCode));
+        Literal lit(false, s);
+        k.adoptInstead(Key::create(lit, errorCode));
         break;
     }
     }
@@ -1460,10 +1451,12 @@ Reserved* Reserved::Builder::build(UErrorCode& errorCode) {
     return result;
 }
 
-void Reserved::Builder::add(Literal* part, UErrorCode &errorCode) {
+void Reserved::Builder::add(Literal part, UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
 
-    parts->add(part, errorCode);
+    LocalPointer<Literal> lit(Literal::copy(part, errorCode));
+    CHECK_ERROR(errorCode);
+    parts->add(lit.orphan(), errorCode);
 }
 
 /*
@@ -1489,7 +1482,7 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
             // Must be expression
             expression.adoptInstead(parseExpression(errorCode));
             NULL_ON_ERROR(errorCode);
-            part.adoptInstead(PatternPart::create(false, expression.orphan(), errorCode));
+            part.adoptInstead(PatternPart::create(expression.orphan(), errorCode));
             NULL_ON_ERROR(errorCode);
             result->add(part.orphan(), errorCode);
             break;
@@ -1498,14 +1491,7 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
             // Must be text
             String s;
             parseText(errorCode, s);
-            // Text => uninterpreted-string operand
-            LocalPointer<Literal> lit(Literal::create(false, s, errorCode));
-            NULL_ON_ERROR(errorCode);
-            LocalPointer<Operand> rand(Operand::create(lit.orphan(), errorCode));
-            NULL_ON_ERROR(errorCode);
-            expression.adoptInstead(Expression::create(rand.orphan(), errorCode));
-            NULL_ON_ERROR(errorCode);
-            part.adoptInstead(PatternPart::create(true, expression.orphan(), errorCode));
+            part.adoptInstead(PatternPart::create(s, errorCode));
             NULL_ON_ERROR(errorCode);
             result->add(part.orphan(), errorCode);
             break;

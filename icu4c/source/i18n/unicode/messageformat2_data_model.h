@@ -47,9 +47,23 @@ using String         = UnicodeString;
 
 // -----------------------------------------------------------------------
 // Helpers (not public)
-                     
+
+class Operand;
 class Literal : public UMemory {
   public:
+  // Used by Reserved, which has a vector of literals and needs a pointer to it
+  static Literal* copy(Literal l, UErrorCode& errorCode) {
+     if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    Literal* result = new Literal(l.isQuoted, l.contents);
+    if (result == nullptr) {
+      errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+  }
+
+    /*
   static Literal* create(bool quoted, const UnicodeString& s, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
@@ -60,11 +74,18 @@ class Literal : public UMemory {
     }
     return result;
   }
-  const bool isQuoted;
+    */
+  const bool isQuoted = false;
   const UnicodeString contents;
+  
+  Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
 
   private:
-    Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
+    friend class Key;
+    friend class Operand;
+  
+    // Makes it easier for new wildcard Keys to be initialized
+    Literal() {}
 };
 
 class Operand : public UMemory {
@@ -78,19 +99,16 @@ class Operand : public UMemory {
             return nullptr;
         }
         // Represent variable names as unquoted literals
-        LocalPointer<Literal> lit(Literal::create(false, s, errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        Operand* result = new Operand(true, lit.orphan());
+        Literal lit(false, s);
+        Operand* result = new Operand(lit);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
         return result;
     }
 
-    // Variable
-    static Operand* create(Literal* l, UErrorCode& errorCode) {
+    // Literal
+    static Operand* create(Literal l, UErrorCode& errorCode) {
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
@@ -102,10 +120,10 @@ class Operand : public UMemory {
     }
 
     // Variable-name constructor
-    Operand(bool isVariable, Literal* l) : isVariableReference(isVariable), string(l) {}
+    Operand(bool isVariable, const Literal& l) : isVariableReference(isVariable), string(l) {}
 
     // Literal constructor
-    Operand(Literal* l) : isVariableReference(false), string(l) {}
+    Operand(const Literal& l) : isVariableReference(false), string(l) {}
 
     // copy constructor is used so that builders work properly -- see comment under copyElements()
     Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
@@ -113,23 +131,27 @@ class Operand : public UMemory {
     bool isVariable() const { return isVariableReference; }
     VariableName asVariable() const {
         U_ASSERT(isVariable());
-        return string->contents;
+        return string.contents;
     }
     bool isLiteral() const { return !isVariable(); }
     const Literal& asLiteral() const {
         U_ASSERT(isLiteral());
-        return *string;
-    }
-    const UnicodeString& asUnquotedLiteral() const {
-        U_ASSERT(isLiteral() && !string->isQuoted);
-        return string->contents;
+        return string;
     }
   private:
 
     const bool isVariableReference;
-    const Literal* string;
+    const Literal string;
 };
 
+/*
+  TODO:
+- Eliminate Option and Variant classes
+- Define an OrderedMap<K, V> class that immutably wraps a hashtable
+  and also tracks the order in which keys were added
+- Make getOptions() and getVariants() return OrderedMaps
+- Replace Environment with OrderedMap<VariableName, Expression&>
+ */
 class Option : public UMemory {
     // Represents a single name-value pair
   public:
@@ -151,14 +173,13 @@ class Option : public UMemory {
 };
 
 class Key : public UMemory {
-    // A key is either a string or the "wildcard" symbol.
-    // TODO: same question, distinguish literals from strings?
+  // A key is either a literal or the "wildcard" symbol.
   public:
     bool isWildcard() const { return wildcard; }
-    // internal error if this is a wildcard
+    // Precondition: !isWildcard()
     const Literal& asLiteral() const {
         U_ASSERT(!isWildcard());
-        return *contents;
+        return contents;
     }
     Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
 
@@ -173,11 +194,11 @@ class Key : public UMemory {
         return k;
     }
 
-    static Key* create(const Literal* s, UErrorCode& errorCode) {
+    static Key* create(const Literal& lit, UErrorCode& errorCode) {
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
-        Key* k = new Key(s);
+        Key* k = new Key(lit);
         if (k == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
@@ -186,12 +207,12 @@ class Key : public UMemory {
 
   private:
     // wildcard constructor
-    Key() : wildcard(true), contents(nullptr) {}
+    Key() : wildcard(true) {}
     // concrete key constructor
-    Key(const Literal *s) : wildcard(false), contents(s) {}
+    Key(const Literal& lit) : wildcard(false), contents(lit) {}
 
     const bool wildcard; // True if this represents the wildcard "*"
-    const Literal* contents;
+    const Literal contents;
 };
 
 // For now, represent variable names as strings
@@ -355,6 +376,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     using VariantList    = List<Variant>;
 
     class Operator;
+    // TODO: maybe this should be private? actually having a reserved string would be an error;
+    // this is there for testing purposes
+
     // Corresponds to `reserved` in the grammar
     // Represent the structure implicitly to make it easier to serialize correctly
     class Reserved : public UMemory {
@@ -378,8 +402,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             List<Literal>::Builder* parts;
 
           public:
-            // Takes ownership of `part`
-            void add(Literal *part, UErrorCode &errorCode);
+            void add(Literal part, UErrorCode &errorCode);
             // TODO: is addAll() necessary?
             Reserved *build(UErrorCode &errorCode);
         };
@@ -630,37 +653,54 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     using ExpressionList = List<Expression>;
     class PatternPart : public UMemory {
       public:
+        static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode) {
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          PatternPart* result = new PatternPart(t);
+          if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+          }
+          return result;
+        }
         // Takes ownership of `e`
-        static PatternPart* create(bool isText, Expression* e, UErrorCode& errorCode) {
+        static PatternPart* create(Expression* e, UErrorCode& errorCode) {
             if (U_FAILURE(errorCode)) {
                 return nullptr;
             }
             U_ASSERT(e != nullptr);
             LocalPointer<Expression> adoptedExpr(e);
-            PatternPart* result = new PatternPart(isText, adoptedExpr.orphan());
+            PatternPart* result = new PatternPart(adoptedExpr.orphan());
             if (result == nullptr) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
             }
             return result;
         }
-
         bool isText() const { return isRawText; }
-        const Expression& contents() const { return *expression; }
+        // Precondition: !isText()
+        const Expression& contents() const {
+          U_ASSERT(!isText());
+          return *expression;
+        }
+        // Precondition: isText();
         const UnicodeString& asText() const {
             U_ASSERT(isText());
-            const Operand& contents = expression->getOperand();
-            U_ASSERT(contents.isLiteral());
-            return contents.asUnquotedLiteral();
+            return text;
         }
       private:
 
-        PatternPart(bool isText, Expression* e) : isRawText(isText), expression(e) {}
+      // Text
+      PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
+      // Expression
+      PatternPart(Expression* e) : isRawText(false), expression(e) {}
 
         // Either Expression or TextPart can show up in a pattern
         // This class exists so Text can be distinguished from Expression
         // when serializing a Pattern
         const bool isRawText;
-        // Text is represented as Expression
+        // Not used if !isRawText
+        const UnicodeString text;
+        // nullptr if isRawText
         const Expression* expression;
     };
 
@@ -710,6 +750,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         }
     };
 
+    // TODO: icu4j doesn't have a separate Variant class, just addVariant() that
+    // takes a SelectorKeys and a Pattern. Should probably make this consistent
+    // However, getVariants() in icu4j returns an OrderedMap from SelectorKeys
+    // to Pattern, which might be trickier to do for us.
+    // maybe not if there's a hash function on SelectorKeys
     class Variant : public UMemory {
         /*
           A variant represents a single `when`-clause in a selectors.
@@ -794,13 +839,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          SelectorKeys(KeyList* ks) : keys(ks) {}
      };
 
-     // class Pattern: see above
-     // Corresponds to `pattern` in the grammar
-
-     // Note: we don't have the `Part` class; use Expression instead
-     // class Expression: see above
-     // Corresponds to `expression` in the grammar
-
      // Immutable hash table
      class Environment : public UMemory {
          // Provides a wrapper around a hash table
@@ -848,14 +886,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              // The assert ensures that the variable name was already defined
              U_ASSERT(bindings->put(v, e, errorCode) != nullptr);
          }
-
-         // TODO: decide whether to have a more abstract interface here instead of
-         // just a thin wrapper around nextElement()
-       //         const UHashElement* nextElement(int32_t& pos) const {
-       //    return bindings->nextElement(pos);
-       //  }
-
-       //         static const int32_t FIRST_ELEMENT = UHASH_FIRST;
 
          static Hashtable *initBindings(UErrorCode &errorCode) {
              if (U_FAILURE(errorCode)) {
@@ -1011,7 +1041,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              void parseFunction(UErrorCode&, FunctionName&);
              void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
              void parseLiteralEscape(UErrorCode &, String&);
-             Literal* parseLiteral(UErrorCode &);
+             void parseLiteral(UErrorCode &, String&);
              void parseOption(UErrorCode &, OptionList::Builder&);
              OptionList* parseOptions(UErrorCode &);
              void parseReservedEscape(UErrorCode&, String&);
