@@ -94,13 +94,11 @@ class Operand : public UMemory {
     // to make it easier to distinguish |x| from x when serializing the data model.
       public:
     // Variable
-    static Operand* create(String s, UErrorCode& errorCode) {
+    static Operand* create(const VariableName& s, UErrorCode& errorCode) {
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
-        // Represent variable names as unquoted literals
-        Literal lit(false, s);
-        Operand* result = new Operand(lit);
+        Operand* result = new Operand(s);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
@@ -108,21 +106,18 @@ class Operand : public UMemory {
     }
 
     // Literal
-    static Operand* create(Literal l, UErrorCode& errorCode) {
+    static Operand* create(Literal lit, UErrorCode& errorCode) {
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
-        Operand* result = new Operand(l);
+        Operand* result = new Operand(lit);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
         return result;
     }
-
-    // Variable-name constructor
-    Operand(bool isVariable, const Literal& l) : isVariableReference(isVariable), string(l) {}
-
-    // Literal constructor
+    // Represent variable names as unquoted literals
+    Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
     Operand(const Literal& l) : isVariableReference(false), string(l) {}
 
     // copy constructor is used so that builders work properly -- see comment under copyElements()

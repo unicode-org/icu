@@ -748,18 +748,15 @@ void PARSER::parseOption(UErrorCode &errorCode,
     }
     case DOLLAR: {
         parseVariableName(errorCode, rhs);
-        LocalPointer<Operand> rand(Operand::create(rhs, errorCode));
-        CHECK_ERROR(errorCode);
-        opt.adoptInstead(Option::create(lhs, *rand.orphan(), errorCode));
+        opt.adoptInstead(Option::create(lhs, Operand(rhs), errorCode));
         break;
     }
     default: {
         // Not a literal or variable, so it must be an nmtoken
         parseNmtoken(errorCode, rhs);
         Literal lit(false, rhs);
-        LocalPointer<Operand> rand(Operand::create(lit, errorCode));
         CHECK_ERROR(errorCode);
-        opt.adoptInstead(Option::create(lhs, *rand.orphan(), errorCode));
+        opt.adoptInstead(Option::create(lhs, Operand(lit), errorCode));
         break;
     }
     }
