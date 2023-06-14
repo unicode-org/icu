@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686719797105,
+  "lastUpdate": 1686719914683,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18568,6 +18568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 16.704427098951108,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f00ff4f5e31d43f4813c219e980b0a8653574356",
+          "message": "ICU-22406 Add LIBRARY_DATA_DIR",
+          "timestamp": "2023-06-13T22:01:59-07:00",
+          "tree_id": "68e406d5283a2f5d7e253101873925d03b3b2886",
+          "url": "https://github.com/unicode-org/icu/commit/f00ff4f5e31d43f4813c219e980b0a8653574356"
+        },
+        "date": 1686719876497,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 16.257042470571154,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
