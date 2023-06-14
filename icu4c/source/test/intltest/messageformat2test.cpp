@@ -221,6 +221,8 @@ UnicodeString jsonTestCasesValid[] = {
     // Variable names can contain '-' or ':'
     "{{$bar:foo}}",
     "{{$bar-foo}}",
+    // Name shadowing is allowed
+    "let $foo = {|hello|} let $foo = {$foo} {{$foo}}",
     0
 };
 

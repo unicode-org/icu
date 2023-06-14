@@ -1191,7 +1191,9 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
 void MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
 
-    locals->define(variableName, expression, errorCode);
+    LocalPointer<Binding> b(Binding::create(variableName, expression, errorCode));
+    CHECK_ERROR(errorCode);
+    locals->add(b.orphan(), errorCode);
 }
 
 /*
@@ -1715,7 +1717,7 @@ void MessageFormatDataModel::Builder::setPattern(Pattern* pat) {
 MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) : normalizedInput(builder.normalizedInput) {
     CHECK_ERROR(errorCode);
 
-    LocalPointer<Environment> envt(Environment::create(*builder.locals, errorCode));
+    LocalPointer<Bindings> adoptedBindings(builder.locals->build(errorCode));
     LocalPointer<MessageBody> adoptedBody;
 
     if (builder.pattern != nullptr) {
@@ -1730,7 +1732,7 @@ MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Bui
 
     if (U_SUCCESS(errorCode)) {
         body = adoptedBody.orphan();
-        env  = envt.orphan();
+        bindings = adoptedBindings.orphan();
     }
 }
 

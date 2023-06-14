@@ -12,7 +12,7 @@
 U_NAMESPACE_BEGIN namespace message2 {
 
     MessageFormatDataModel::~MessageFormatDataModel() {
-        delete env;
+        delete bindings;
         delete body;
     }
 
@@ -217,24 +217,19 @@ void SERIALIZER::emit(const Variant& var) {
 }
 
 void SERIALIZER::serializeDeclarations() {
-    const Environment& locals = dataModel.getLocalVariables();
+    const Bindings& locals = dataModel.getLocalVariables();
     
-    for (size_t i = 0; ((int32_t) i) < locals.vars->size(); i++) {
-        void* nextVar = (*locals.vars)[i];
-        const UnicodeString& name = *((UnicodeString*) nextVar);
-
-        UErrorCode errorCode = U_ZERO_ERROR;
-        const Expression* e = locals.lookup(name, errorCode);
-        U_ASSERT(U_SUCCESS(errorCode));
+    for (size_t i = 0; i < locals.length(); i++) {
+        const Binding& b = *locals.get(i);
         // No whitespace needed here -- see `message` in the grammar
         emit(ID_LET);
         whitespace();
         emit(DOLLAR);
-        emit(name);
+        emit(b.var);
         // No whitespace needed here -- see `declaration` in the grammar
         emit(EQUALS);
         // No whitespace needed here -- see `declaration` in the grammar
-        emit(*e);
+        emit(*b.value);
     }
 }
 

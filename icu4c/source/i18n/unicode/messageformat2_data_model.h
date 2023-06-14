@@ -63,18 +63,6 @@ class Literal : public UMemory {
     return result;
   }
 
-    /*
-  static Literal* create(bool quoted, const UnicodeString& s, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    Literal* result = new Literal(quoted, s);
-    if (result == nullptr) {
-      errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-  }
-    */
   const bool isQuoted = false;
   const UnicodeString contents;
   
@@ -145,7 +133,8 @@ class Operand : public UMemory {
 - Define an OrderedMap<K, V> class that immutably wraps a hashtable
   and also tracks the order in which keys were added
 - Make getOptions() and getVariants() return OrderedMaps
-- Replace Environment with OrderedMap<VariableName, Expression&>
+   -- getVariants should stringify the key lists, so we can do lookups
+by value, not by reference
  */
 class Option : public UMemory {
     // Represents a single name-value pair
@@ -251,13 +240,45 @@ static void copyElements(UElement *dst, UElement *src) {
 class U_I18N_API MessageFormatDataModel : public UMemory {
     friend class MessageFormatter;
 
-  // TODO: this is subject to change; it's not clear yet how much of the structure
-  // of the AST will be encoded into the API
   public:
     // TODO: Shouldn't be public, only for testing
     const UnicodeString& getNormalizedPattern() const { return *normalizedInput; }
 
+    /*
+    // Immutable ordered map
+    template<typename V>
+    class OrderedMap : public UMemory {
+      // Provides an immutable wrapper around a hash table.
+      // Also stores the order in which keys were added.
 
+    public:
+      class Builder : public UMemory {
+      public:
+        void put(const UnicodeString& key, V* value) {
+          keys.addElement(key);
+        }
+        void put(const KeyList& keys, V* value) {
+          // HACK: Concatenate all the keys together to generate a string key
+          UnicodeString k;
+          concatenateKeys(keys, k);
+          put(k, value);
+        }
+        
+      }
+    private:
+      static void concatenateKeys(const KeyList& keys, UnicodeString& result) {
+        size_t len = keys->length();
+        for (size_t i = 0; i < len; i++) {
+          result += keys.get(i);
+          if (i != len - 1) {
+            result += SPACE;
+          }
+        }
+      }
+      const UVector *keys;
+      const Hashtable *contents;
+    }
+    */    
     // Immutable list
     template<typename T>
     class List : public UMemory {
@@ -731,8 +752,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
       private:
         // Possibly-empty list of parts
-        // Note: a "text" thing is represented like a literal, so that's an expression too.
-        // TODO: compare and see how other implementations distinguish text / literal
         const List<PatternPart> *parts;
 
         // Can only be called by Builder
@@ -833,6 +852,276 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          // Adopts `keys`
          SelectorKeys(KeyList* ks) : keys(ks) {}
      };
+
+     class Binding {
+     public:
+       static Binding* create(const UnicodeString& var, Expression* e, UErrorCode& errorCode) {
+         if (U_FAILURE(errorCode)) {
+           return nullptr;
+         }
+         Binding *b = new Binding(var, e);
+         if (b == nullptr) {
+           errorCode = U_MEMORY_ALLOCATION_ERROR;
+         }
+         return b;
+       }
+       Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
+       const UnicodeString var;
+       const Expression* value;
+     };
+     using Bindings = List<Binding>;
+     const Bindings& getLocalVariables() const {
+         return *bindings;
+     }
+     ExpressionList& getSelectors() const;
+     Hashtable& getVariants() const;
+     Pattern& getPattern() const;
+
+     class Builder {
+       private:
+         friend class MessageFormatDataModel;
+
+         // prevent direct construction
+         Builder(UErrorCode& errorCode) {
+             if (U_FAILURE(errorCode)) {
+                 return;
+             }
+             pattern = nullptr;
+             selectors = ExpressionList::builder(errorCode);
+             variants = VariantList::builder(errorCode);
+             locals = Bindings::builder(errorCode);
+             LocalPointer<UnicodeString> s(new UnicodeString());
+             if (!s.isValid()) {
+               errorCode = U_MEMORY_ALLOCATION_ERROR;
+             }
+             normalizedInput = s.orphan();
+         }
+
+         // Parser class (private)
+         class Parser : UMemory {
+           public:
+             virtual ~Parser();
+           private:
+             friend class MessageFormatDataModel::Builder;
+
+             Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder)
+               : source(input), index(0), normalizedInput(*dataModelBuilder.normalizedInput), dataModel(dataModelBuilder) {
+                 parseError.line = 0;
+                 parseError.offset = 0;
+                 parseError.lengthBeforeCurrentLine = 0;
+                 parseError.preContext[0] = '\0';
+                 parseError.postContext[0] = '\0';
+             }
+
+             // Used so `parseEscapeSequence()` can handle all types of escape sequences
+             // (literal, text, and reserved)
+             typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
+
+             // The parser validates the message and builds the data model
+             // from it.
+             void parse(UParseError &, UErrorCode &);
+             void parseBody(UErrorCode &);
+             void parseDeclarations(UErrorCode &);
+             void parseSelectors(UErrorCode &);
+
+             void parseWhitespaceMaybeRequired(bool, UErrorCode &);
+             void parseRequiredWhitespace(UErrorCode &);
+             void parseOptionalWhitespace(UErrorCode &);
+             void parseToken(UChar32, UErrorCode &);
+             void parseTokenWithWhitespace(UChar32, UErrorCode &);
+             template <size_t N>
+             void parseToken(const UChar32 (&)[N], UErrorCode &);
+             template <size_t N>
+             void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
+             void parseNmtoken(UErrorCode&, VariableName&);
+             void parseName(UErrorCode&, VariableName&);
+             void parseVariableName(UErrorCode&, VariableName&);
+             void parseFunction(UErrorCode&, FunctionName&);
+             void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
+             void parseLiteralEscape(UErrorCode &, String&);
+             void parseLiteral(UErrorCode &, String&);
+             void parseOption(UErrorCode &, OptionList::Builder&);
+             OptionList* parseOptions(UErrorCode &);
+             void parseReservedEscape(UErrorCode&, String&);
+             void parseReservedChunk(UErrorCode &, Reserved::Builder&);
+             Operator* parseReserved(UErrorCode &);
+             Operator* parseAnnotation(UErrorCode &);
+             Expression* parseLiteralOrVariableWithAnnotation(bool, UErrorCode &);
+             Expression* parseExpression(UErrorCode &);
+             void parseTextEscape(UErrorCode&, String&);
+             void parseText(UErrorCode&, String&);
+             Key* parseKey(UErrorCode&);
+             SelectorKeys* parseNonEmptyKeys(UErrorCode&);
+             Pattern* parsePattern(UErrorCode&);
+
+             // The input string
+             const UnicodeString &source;
+             // The current position within the input string
+             uint32_t index;
+             // Represents the current line (and when an error is indicated),
+             // character offset within the line of the parse error
+             MessageParseError parseError;
+
+             // Normalized version of the input string (optional whitespace removed)
+             UnicodeString& normalizedInput;
+
+             // The parent builder
+             MessageFormatDataModel::Builder &dataModel;
+         }; // class Parser
+
+         Pattern* pattern;
+         ExpressionList::Builder* selectors;
+         VariantList::Builder* variants;
+         Bindings::Builder* locals;
+
+         // Normalized version of the input string (optional whitespace removed)
+         UnicodeString* normalizedInput;
+
+       public:
+         // Takes ownership of `expression`
+         void addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
+         // No addLocalVariables() yet
+         // Takes ownership
+         void addSelector(Expression* selector, UErrorCode& errorCode);
+         // No addSelectors() yet
+         // Takes ownership
+         void addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
+         void setPattern(Pattern* pattern);
+         MessageFormatDataModel* build(const UnicodeString& source, UParseError &parseError, UErrorCode& errorCode);
+     };
+
+     static Builder* builder(UErrorCode& errorCode);
+
+     // TODO more comments
+     // Converts a data model back to a string
+     void serialize(UnicodeString& result) const {
+         Serializer serializer(*this, result);
+         serializer.serialize();
+     };
+     
+     virtual ~MessageFormatDataModel();
+
+  private:
+     
+     // Converts a data model back to a string
+     class Serializer : UMemory {
+       public:
+         Serializer(const MessageFormatDataModel& m, UnicodeString& s) : dataModel(m), result(s) {}
+         void serialize();
+
+         const MessageFormatDataModel& dataModel;
+         UnicodeString& result;
+
+       private:
+         void whitespace();
+         void emit(UChar32);
+         template <size_t N>
+         void emit(const UChar32 (&)[N]);
+         void emit(const UnicodeString&);
+         void emit(const Literal&);
+         void emit(const Key&);
+         void emit(const Operand&);
+         void emit(const Expression&);
+         void emit(const PatternPart&);
+         void emit(const Pattern&);
+         void emit(const Variant&);
+         void emit(const OptionList&);
+         void serializeDeclarations();
+         void serializeSelectors();
+         void serializeVariants();
+     };
+
+     friend class Serializer;
+
+     class MessageBody : public UMemory {
+       public:
+         // Constructs a body out of a list of scrutinees (expressions) and
+         // a list of variants, which represents the `(selectors 1*([s] variant))`
+         // alternative in the grammar
+         // Adopts its arguments; takes an error code for consistency
+         MessageBody(ExpressionList *es, VariantList *vs, UErrorCode& errorCode) {
+             if (U_FAILURE(errorCode)) {
+                 return;
+             }
+             U_ASSERT(es != nullptr && vs != nullptr);
+             scrutinees = es;
+             variants = vs;
+         }
+
+         // Constructs a body out of a single Pattern
+         // (body -> pattern alternative in the grammar)
+         // a `pattern` in the grammar
+         MessageBody(Pattern *pattern, UErrorCode &errorCode) {
+             LocalPointer<Pattern> adoptedPattern(pattern);
+             if (U_FAILURE(errorCode)) {
+                 // The adoptedPattern destructor deletes the pattern
+             } else {
+                 LocalPointer<Variant> patternVariant(new Variant(adoptedPattern.orphan(), errorCode));
+                 LocalPointer<VariantList::Builder> variantListBuilder(VariantList::builder(errorCode));
+                 variantListBuilder->add(patternVariant.orphan(), errorCode);
+                 // If success, then `variantListBuilder` adopted the pattern
+                 LocalPointer<VariantList> adoptedVariants(variantListBuilder->build(errorCode));
+                 LocalPointer<ExpressionList::Builder> expressionListBuilder(ExpressionList::builder(errorCode));
+                 LocalPointer<ExpressionList> adoptedScrutinees(expressionListBuilder->build(errorCode));
+
+                 if (U_FAILURE(errorCode)) {
+                     return;
+                 }
+
+                 // Everything succeeded - finally, initialize the members
+                 variants = adoptedVariants.orphan();
+                 scrutinees = adoptedScrutinees.orphan();
+             }
+         }
+       private:
+         friend class Serializer;
+         /*
+           A message body is a `selectors` construct as in the grammar.
+           A bare pattern is represented as a `selectors` with no scrutinees
+           and a single `when`-clause with empty keys.
+          */
+
+         // The expressions that are being matched on. May be empty.
+         // (If it's empty, there must be exactly one `when`-clause with empty
+         // keys.)
+         ExpressionList *scrutinees;
+
+         // The list of `when` clauses (case arms).
+         VariantList *variants;
+     };
+
+    /*
+      A parsed message consists of an environment and a body.
+      Initially, the environment contains bindings for local variables
+      (those declared with `let` in the message). API calls can extend
+      the environment with new bindings or change the values of existing ones.
+
+      Once the data model is constructed, only the environment can be mutated.
+      (It's constructed bottom-up.)
+    */
+    Bindings* bindings;
+
+    /*
+      See the `MessageBody` class.
+     */
+    const MessageBody* body;
+
+    // Normalized version of the input string (optional whitespace omitted)
+    // Used for testing purposes
+    const UnicodeString* normalizedInput;
+
+    // Do not define default assignment operator
+    const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
+
+    // This *copies* the contents of `builder`, so that it can be re-used / mutated
+    // while preserving the immutability of this data model
+    // TODO: add tests for this
+    MessageFormatDataModel(const Builder& builder, UErrorCode &status);
+}; // class MessageFormatDataModel
+
+/*
+TODO: this will be used in the formatter, but can't be used in the data model
+since it would have to represent name shadowing
 
      // Immutable hash table
      class Environment : public UMemory {
@@ -960,262 +1249,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
          Hashtable *bindings;
      };
-
-
-     // TODO: I'm calling the `Value` class "Operand"
-     // and I don't have a separate Variable class
-
-     // TODO: can Hashtable be used in the public API?
-
-     const Environment& getLocalVariables() const {
-         return *env;
-     }
-     ExpressionList& getSelectors() const;
-     Hashtable& getVariants() const;
-     Pattern& getPattern() const;
-
-     class Builder {
-       private:
-         friend class MessageFormatDataModel;
-
-         // prevent direct construction
-         Builder(UErrorCode& errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return;
-             }
-             pattern = nullptr;
-             selectors = ExpressionList::builder(errorCode);
-             variants = VariantList::builder(errorCode);
-             locals = Environment::create(errorCode);
-             LocalPointer<UnicodeString> s(new UnicodeString());
-             if (!s.isValid()) {
-               errorCode = U_MEMORY_ALLOCATION_ERROR;
-             }
-             normalizedInput = s.orphan();
-         }
-
-         // Parser class (private)
-         class Parser : UMemory {
-           public:
-             virtual ~Parser();
-           private:
-             friend class MessageFormatDataModel::Builder;
-
-             Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder)
-               : source(input), index(0), normalizedInput(*dataModelBuilder.normalizedInput), dataModel(dataModelBuilder) {
-                 parseError.line = 0;
-                 parseError.offset = 0;
-                 parseError.lengthBeforeCurrentLine = 0;
-                 parseError.preContext[0] = '\0';
-                 parseError.postContext[0] = '\0';
-             }
-
-             // Used so `parseEscapeSequence()` can handle all types of escape sequences
-             // (literal, text, and reserved)
-             typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
-
-             // The parser validates the message and builds the data model
-             // from it.
-             void parse(UParseError &, UErrorCode &);
-             void parseBody(UErrorCode &);
-             void parseDeclarations(UErrorCode &);
-             void parseSelectors(UErrorCode &);
-
-             void parseWhitespaceMaybeRequired(bool, UErrorCode &);
-             void parseRequiredWhitespace(UErrorCode &);
-             void parseOptionalWhitespace(UErrorCode &);
-             void parseToken(UChar32, UErrorCode &);
-             void parseTokenWithWhitespace(UChar32, UErrorCode &);
-             template <size_t N>
-             void parseToken(const UChar32 (&)[N], UErrorCode &);
-             template <size_t N>
-             void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
-             void parseNmtoken(UErrorCode&, VariableName&);
-             void parseName(UErrorCode&, VariableName&);
-             void parseVariableName(UErrorCode&, VariableName&);
-             void parseFunction(UErrorCode&, FunctionName&);
-             void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
-             void parseLiteralEscape(UErrorCode &, String&);
-             void parseLiteral(UErrorCode &, String&);
-             void parseOption(UErrorCode &, OptionList::Builder&);
-             OptionList* parseOptions(UErrorCode &);
-             void parseReservedEscape(UErrorCode&, String&);
-             void parseReservedChunk(UErrorCode &, Reserved::Builder&);
-             Operator* parseReserved(UErrorCode &);
-             Operator* parseAnnotation(UErrorCode &);
-             Expression* parseLiteralOrVariableWithAnnotation(bool, UErrorCode &);
-             Expression* parseExpression(UErrorCode &);
-             void parseTextEscape(UErrorCode&, String&);
-             void parseText(UErrorCode&, String&);
-             Key* parseKey(UErrorCode&);
-             SelectorKeys* parseNonEmptyKeys(UErrorCode&);
-             Pattern* parsePattern(UErrorCode&);
-
-             // The input string
-             const UnicodeString &source;
-             // The current position within the input string
-             uint32_t index;
-             // Represents the current line (and when an error is indicated),
-             // character offset within the line of the parse error
-             MessageParseError parseError;
-
-             // Normalized version of the input string (optional whitespace removed)
-             UnicodeString& normalizedInput;
-
-             // The parent builder
-             MessageFormatDataModel::Builder &dataModel;
-         }; // class Parser
-
-         Pattern* pattern;
-         ExpressionList::Builder* selectors;
-         VariantList::Builder* variants;
-         Environment* locals;
-
-         // Normalized version of the input string (optional whitespace removed)
-         UnicodeString* normalizedInput;
-
-       public:
-         // Takes ownership of `expression`
-         void addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
-         // No addLocalVariables() yet
-         // Takes ownership
-         void addSelector(Expression* selector, UErrorCode& errorCode);
-         // No addSelectors() yet
-         // Takes ownership
-         void addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
-         void setPattern(Pattern* pattern);
-         MessageFormatDataModel* build(const UnicodeString& source, UParseError &parseError, UErrorCode& errorCode);
-     };
-
-     static Builder* builder(UErrorCode& errorCode);
-
-     // TODO more comments
-     // Converts a data model back to a string
-     void serialize(UnicodeString& result) const {
-         Serializer serializer(*this, result);
-         serializer.serialize();
-     };
-     
-     virtual ~MessageFormatDataModel();
-
-  private:
-     
-     // Converts a data model back to a string
-     class Serializer : UMemory {
-       public:
-         Serializer(const MessageFormatDataModel& m, UnicodeString& s) : dataModel(m), result(s) {}
-         void serialize();
-
-         const MessageFormatDataModel& dataModel;
-         UnicodeString& result;
-
-       private:
-         void whitespace();
-         void emit(UChar32);
-         template <size_t N>
-         void emit(const UChar32 (&)[N]);
-         void emit(const UnicodeString&);
-         void emit(const Literal&);
-         void emit(const Key&);
-         void emit(const Operand&);
-         void emit(const Expression&);
-         void emit(const PatternPart&);
-         void emit(const Pattern&);
-         void emit(const Variant&);
-         void emit(const OptionList&);
-         void serializeDeclarations();
-         void serializeSelectors();
-         void serializeVariants();
-     };
-
-     friend class Serializer;
-
-     class MessageBody : public UMemory {
-       public:
-         // Constructs a body out of a list of scrutinees (expressions) and
-         // a list of variants, which represents the `(selectors 1*([s] variant))`
-         // alternative in the grammar
-         // Adopts its arguments; takes an error code for consistency
-         MessageBody(ExpressionList *es, VariantList *vs, UErrorCode& errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return;
-             }
-             U_ASSERT(es != nullptr && vs != nullptr);
-             scrutinees = es;
-             variants = vs;
-         }
-
-         // Constructs a body out of a single Pattern
-         // (body -> pattern alternative in the grammar)
-         // a `pattern` in the grammar
-         MessageBody(Pattern *pattern, UErrorCode &errorCode) {
-             LocalPointer<Pattern> adoptedPattern(pattern);
-             if (U_FAILURE(errorCode)) {
-                 // The adoptedPattern destructor deletes the pattern
-             } else {
-                 LocalPointer<Variant> patternVariant(new Variant(adoptedPattern.orphan(), errorCode));
-                 LocalPointer<VariantList::Builder> variantListBuilder(VariantList::builder(errorCode));
-                 variantListBuilder->add(patternVariant.orphan(), errorCode);
-                 // If success, then `variantListBuilder` adopted the pattern
-                 LocalPointer<VariantList> adoptedVariants(variantListBuilder->build(errorCode));
-                 LocalPointer<ExpressionList::Builder> expressionListBuilder(ExpressionList::builder(errorCode));
-                 LocalPointer<ExpressionList> adoptedScrutinees(expressionListBuilder->build(errorCode));
-
-                 if (U_FAILURE(errorCode)) {
-                     return;
-                 }
-
-                 // Everything succeeded - finally, initialize the members
-                 variants = adoptedVariants.orphan();
-                 scrutinees = adoptedScrutinees.orphan();
-             }
-         }
-       private:
-         friend class Serializer;
-         /*
-           A message body is a `selectors` construct as in the grammar.
-           A bare pattern is represented as a `selectors` with no scrutinees
-           and a single `when`-clause with empty keys.
-          */
-
-         // The expressions that are being matched on. May be empty.
-         // (If it's empty, there must be exactly one `when`-clause with empty
-         // keys.)
-         ExpressionList *scrutinees;
-
-         // The list of `when` clauses (case arms).
-         VariantList *variants;
-     };
-
-    /*
-      A parsed message consists of an environment and a body.
-      Initially, the environment contains bindings for local variables
-      (those declared with `let` in the message). API calls can extend
-      the environment with new bindings or change the values of existing ones.
-
-      Once the data model is constructed, only the environment can be mutated.
-      (It's constructed bottom-up.)
-    */
-    Environment* env;
-
-    /*
-      See the `MessageBody` class.
-     */
-    const MessageBody* body;
-
-    // Normalized version of the input string (optional whitespace omitted)
-    // Used for testing purposes
-    const UnicodeString* normalizedInput;
-
-    // Do not define default assignment operator
-    const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
-
-    // This *copies* the contents of `builder`, so that it can be re-used / mutated
-    // while preserving the immutability of this data model
-    // TODO: add tests for this
-    MessageFormatDataModel(const Builder& builder, UErrorCode &status);
-}; // class MessageFormatDataModel
-
+*/
 
 } // namespace message2
 U_NAMESPACE_END
