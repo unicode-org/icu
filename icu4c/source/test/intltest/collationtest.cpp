@@ -80,6 +80,7 @@ public:
     void TestDataDriven();
     void TestLongLocale();
     void TestBuilderContextsOverflow();
+    void TestHang22414();
 
 private:
     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
@@ -152,6 +153,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestDataDriven);
     TESTCASE_AUTO(TestLongLocale);
     TESTCASE_AUTO(TestBuilderContextsOverflow);
+    TESTCASE_AUTO(TestHang22414);
     TESTCASE_AUTO_END;
 }
 
@@ -1864,6 +1866,22 @@ void CollationTest::TestLongLocale() {
     LocalPointer<Collator> coll(Collator::createInstance(longLocale, errorCode));
 }
 
+void CollationTest::TestHang22414() {
+    IcuTestErrorCode errorCode(*this, "TestHang22414");
+    const char* cases[] = {
+        "en", // just make sure the code work.
+        // The following hang before fixing ICU-22414
+        "sr-Latn-TH-t-su-BM-u-co-private-unihan-x-lvariant-zxsuhc-vss-vjf-0-kn-"
+        "uaktmtca-uce66u-vtcb1ik-ubsuuuk8-u3iucls-ue38925l-vau30i-u6uccttg-"
+        "u1iuylik-u-ueein-zzzz",
+    };
+    for(int32_t i = 0; i < UPRV_LENGTHOF(cases); i ++) {
+        icu::Locale l = icu::Locale::forLanguageTag(cases[i], errorCode);
+        // Make sure the following won't hang.
+        LocalPointer<Collator> coll(Collator::createInstance(l, errorCode));
+        errorCode.reset();
+    }
+}
 void CollationTest::TestBuilderContextsOverflow() {
     IcuTestErrorCode errorCode(*this, "TestBuilderContextsOverflow");
     // ICU-20715: Bad memory access in what looks like a bogus CharsTrie after
