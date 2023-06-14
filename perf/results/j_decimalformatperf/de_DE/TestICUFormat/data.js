@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686700259999,
+  "lastUpdate": 1686719818029,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9238,6 +9238,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 733.6602692691448,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f00ff4f5e31d43f4813c219e980b0a8653574356",
+          "message": "ICU-22406 Add LIBRARY_DATA_DIR",
+          "timestamp": "2023-06-13T22:01:59-07:00",
+          "tree_id": "68e406d5283a2f5d7e253101873925d03b3b2886",
+          "url": "https://github.com/unicode-org/icu/commit/f00ff4f5e31d43f4813c219e980b0a8653574356"
+        },
+        "date": 1686719777671,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 767.6798611642804,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
