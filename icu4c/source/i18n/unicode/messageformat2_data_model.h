@@ -130,11 +130,11 @@ class Operand : public UMemory {
 /*
   TODO:
 - Eliminate Option and Variant classes
-- Define an OrderedMap<K, V> class that immutably wraps a hashtable
-  and also tracks the order in which keys were added
-- Make getOptions() and getVariants() return OrderedMaps
-   -- getVariants should stringify the key lists, so we can do lookups
-by value, not by reference
+- Add: OptionMap (immutable wrapper around a Hashtable; keys are
+strings, values are Operands)
+- Add: VariantMap (immutable wrapper around a Hashtable; operations
+convert a SelectorKeys to a string so that Hashtable can be used
+as the underlying representation; values are Patterns
  */
 class Option : public UMemory {
     // Represents a single name-value pair
