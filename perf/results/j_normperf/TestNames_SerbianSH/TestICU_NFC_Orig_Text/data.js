@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686749964718,
+  "lastUpdate": 1686768170049,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9298,6 +9298,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 2.4413497154907304,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9411a940ea878969d80da7ef4d74cae5b6d953bc",
+          "message": "ICU-22414 Fix bogus locale in collation res fallback",
+          "timestamp": "2023-06-14T11:30:00-07:00",
+          "tree_id": "1b645cbefa8a6ec47a76e4ba7f610900fe62fd03",
+          "url": "https://github.com/unicode-org/icu/commit/9411a940ea878969d80da7ef4d74cae5b6d953bc"
+        },
+        "date": 1686768128716,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 2.3322008547182147,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
