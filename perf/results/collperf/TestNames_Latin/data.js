@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686768644212,
+  "lastUpdate": 1686777203986,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21598,6 +21598,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1879301.383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pnacht@google.com",
+            "name": "Pedro Kaj Kjellerup Nacht",
+            "username": "pnacht"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "758099ab3b87a2404dcc297ff88260d7a09eccf7",
+          "message": "ICU-22410 Add security policy\n\nSigned-off-by: Pedro Kaj Kjellerup Nacht <pnacht@google.com>\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2023-06-14T13:54:42-07:00",
+          "tree_id": "f3a27970e172a59c0b79eec7686e648895d5012b",
+          "url": "https://github.com/unicode-org/icu/commit/758099ab3b87a2404dcc297ff88260d7a09eccf7"
+        },
+        "date": 1686777158520,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 453.1772,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 4588874.1667,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1858093.5757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 4228896.5798,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1941739.7276,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
