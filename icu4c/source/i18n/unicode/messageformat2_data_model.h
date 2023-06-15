@@ -155,7 +155,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
 
         // Out-of-bounds is an internal error
-        const T* get(size_t i) const {
+        const T& get(size_t i) const {
             U_ASSERT(!(length() <= 0 || i >= length()));
             return static_cast<const T *>(contents->elementAt(i));
         }
@@ -572,7 +572,6 @@ class Operand : public UObject {
          SelectorKeys(KeyList* ks) : keys(ks) {}
      };
 
-    class Pattern;
     class VariantMap : public UMemory {
       // Wraps an OrderedMap<Pattern>
       // Has a different put() function since we want to stringify the key
@@ -580,7 +579,7 @@ class Operand : public UObject {
 
     public:
       static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
-      bool next(size_t &pos, const SelectorKeys*& k, Pattern*& v) const {
+      bool next(size_t &pos, SelectorKeys& k, Pattern*& v) const {
         UnicodeString unused;
         if (!contents->next(pos, unused, v)) {
           return false;
