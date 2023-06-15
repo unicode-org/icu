@@ -11,10 +11,7 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-    MessageFormatDataModel::~MessageFormatDataModel() {
-        delete bindings;
-        delete body;
-    }
+MessageFormatDataModel::~MessageFormatDataModel() {}
 
 // Generates a string representation of a data model
 // ------------------------------------------------
@@ -98,28 +95,6 @@ void SERIALIZER::emit(const Operand& rand) {
         emit(rand.asLiteral());
     }
 }
-                    
-// Option list
-// TODO
-/*
-void SERIALIZER::emit(const Hashtable& options) {
-    int32_t pos = UHASH_FIRST;
-    while(true) {
-        const UHashElement* element = options.nextElement(pos);
-        if (element == nullptr) {
-            break;
-        }
-        if (pos != UHASH_FIRST) {
-            whitespace();
-        }
-        const UnicodeString& name = *(static_cast<UnicodeString*>(element->key.pointer)); 
-        emit(name);
-        emit(EQUALS);
-        const Expression& e = *(static_cast<Expression*>(element->value.pointer));
-        emit(e);
-    }
-}
-*/
 
 void SERIALIZER::emit(const OptionMap& options) {
     size_t pos = OptionMap::FIRST;
@@ -235,6 +210,7 @@ void SERIALIZER::serializeDeclarations() {
 }
 
 void SERIALIZER::serializeSelectors() {
+    U_ASSERT(dataModel.body->scrutinees != nullptr);
     const ExpressionList& selectors = *dataModel.body->scrutinees;
     size_t len = selectors.length();
 
@@ -252,25 +228,15 @@ void SERIALIZER::serializeSelectors() {
 }
 
 void SERIALIZER::serializeVariants() {
+    U_ASSERT(dataModel.body->variants != nullptr);
+
     const VariantMap& variants = *dataModel.body->variants;
     size_t pos = VariantMap::FIRST;
 
     const SelectorKeys* selectorKeys;
     Pattern* pattern;
 
-    // TODO: this is annoying -- suggests we shouldn't use this trick
-    size_t numVariantsSeen = 0;
     while (variants.next(pos, selectorKeys, pattern)) {
-      numVariantsSeen++;
-      // Special case: one variant with no keys. Just emit the pattern;
-      // no `when` keyword.
-      if (selectorKeys == nullptr) {
-        U_ASSERT(numVariantsSeen == 1);
-        U_ASSERT(!variants.next(pos, selectorKeys, pattern));
-        emit(*pattern);
-        return;
-      }
-      // General case
       emit(ID_WHEN);
       whitespace();
       emit(*selectorKeys);
@@ -283,11 +249,14 @@ void SERIALIZER::serializeVariants() {
 // Main (public) serializer method
 void SERIALIZER::serialize() {
     serializeDeclarations();
-    // We assume the data model is well-formed.
-    // Because of how pattern messages (with no selectors) are represented, the following
-    // two calls are sufficient to handle both selectors and pattern messages.
-    serializeSelectors();
-    serializeVariants();
+    // Pattern message
+    if (dataModel.body->pattern != nullptr) {
+      emit(*dataModel.body->pattern);
+    } else {
+      // Selectors message
+      serializeSelectors();
+      serializeVariants();
+    }
 }
 
 } // namespace message2

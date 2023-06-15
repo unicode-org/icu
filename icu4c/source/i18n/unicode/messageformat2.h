@@ -134,7 +134,10 @@ class U_I18N_API MessageFormatter : public Format {
         }
 
         // The pattern to be parsed to generate the formatted message
-        UnicodeString* pattern;
+        LocalPointer<UnicodeString> pattern;
+        // The data model to be used to generate the formatted message
+        // Invariant: !(pattern.isValid() && dataModel.isValid())
+        LocalPointer<MessageFormatDataModel> dataModel;
         // TODO: set default locale
         Locale locale;
         // TODO: set default function registry
@@ -164,24 +167,113 @@ class U_I18N_API MessageFormatter : public Format {
      * @deprecated This API is for technology preview only.
      */
 
+      // Note: this is a destructive build(); it invalidates the builder
         MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode);
     };
 
     static Builder* builder(UErrorCode& errorCode);
 
+    // TODO: Shouldn't be public, only for testing
+    const UnicodeString& getNormalizedPattern() const { return *normalizedInput; }
+
   private:
     friend class Builder;
     // Only called by the builder
-    MessageFormatter(const MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
+    MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
     MessageFormatter() = delete; // default constructor not implemented
 
     // Do not define default assignment operator
     const MessageFormatter &operator=(const MessageFormatter &) = delete;
 
+    // Parser class (private)
+    class Parser : UMemory {
+    public:
+      virtual ~Parser();
+      static Parser* create(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInput, UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+          return nullptr;
+        }
+        Parser* p = new Parser(input, dataModelBuilder, normalizedInput);
+        if (p == nullptr) {
+          errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return p;
+      }
+      // The parser validates the message and builds the data model
+      // from it.
+      void parse(UParseError &, UErrorCode &);
+    private:
+      friend class MessageFormatDataModel::Builder;
+
+      Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInputRef)
+               : source(input), index(0), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
+                 parseError.line = 0;
+                 parseError.offset = 0;
+                 parseError.lengthBeforeCurrentLine = 0;
+                 parseError.preContext[0] = '\0';
+                 parseError.postContext[0] = '\0';
+             }
+
+             // Used so `parseEscapeSequence()` can handle all types of escape sequences
+             // (literal, text, and reserved)
+             typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
+
+             void parseBody(UErrorCode &);
+             void parseDeclarations(UErrorCode &);
+             void parseSelectors(UErrorCode &);
+
+             void parseWhitespaceMaybeRequired(bool, UErrorCode &);
+             void parseRequiredWhitespace(UErrorCode &);
+             void parseOptionalWhitespace(UErrorCode &);
+             void parseToken(UChar32, UErrorCode &);
+             void parseTokenWithWhitespace(UChar32, UErrorCode &);
+             template <size_t N>
+             void parseToken(const UChar32 (&)[N], UErrorCode &);
+             template <size_t N>
+             void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
+             void parseNmtoken(UErrorCode&, VariableName&);
+             void parseName(UErrorCode&, VariableName&);
+             void parseVariableName(UErrorCode&, VariableName&);
+             void parseFunction(UErrorCode&, FunctionName&);
+             void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
+             void parseLiteralEscape(UErrorCode &, String&);
+             void parseLiteral(UErrorCode &, String&);
+             void parseOption(UErrorCode &, MessageFormatDataModel::OptionMap::Builder&);
+             MessageFormatDataModel::OptionMap* parseOptions(UErrorCode &);
+             void parseReservedEscape(UErrorCode&, String&);
+             void parseReservedChunk(UErrorCode &, MessageFormatDataModel::Reserved::Builder&);
+             MessageFormatDataModel::Operator* parseReserved(UErrorCode &);
+             MessageFormatDataModel::Operator* parseAnnotation(UErrorCode &);
+             MessageFormatDataModel::Expression* parseLiteralOrVariableWithAnnotation(bool, UErrorCode &);
+             MessageFormatDataModel::Expression* parseExpression(UErrorCode &);
+             void parseTextEscape(UErrorCode&, String&);
+             void parseText(UErrorCode&, String&);
+             MessageFormatDataModel::Key* parseKey(UErrorCode&);
+             MessageFormatDataModel::SelectorKeys* parseNonEmptyKeys(UErrorCode&);
+             MessageFormatDataModel::Pattern* parsePattern(UErrorCode&);
+
+             // The input string
+             const UnicodeString &source;
+             // The current position within the input string
+             uint32_t index;
+             // Represents the current line (and when an error is indicated),
+             // character offset within the line of the parse error
+             MessageParseError parseError;
+
+             // Normalized version of the input string (optional whitespace removed)
+             UnicodeString& normalizedInput;
+
+             // The parent builder
+             MessageFormatDataModel::Builder &dataModel;
+         }; // class Parser
+
 
     // Data model, representing the parsed message
-    const MessageFormatDataModel* dataModel;
+    LocalPointer<MessageFormatDataModel> dataModel;
+
+    // Normalized version of the input string (optional whitespace removed)
+    LocalPointer<UnicodeString> normalizedInput;
 }; // class MessageFormatter
 
 /**

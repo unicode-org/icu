@@ -49,167 +49,6 @@ using String         = UnicodeString;
 // -----------------------------------------------------------------------
 // Helpers (not public)
 
-class Operand;
-class Literal : public UMemory {
-  public:
-  // Used by Reserved, which has a vector of literals and needs a pointer to it
-  static Literal* copy(Literal l, UErrorCode& errorCode) {
-     if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    Literal* result = new Literal(l.isQuoted, l.contents);
-    if (result == nullptr) {
-      errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-  }
-
-  const bool isQuoted = false;
-  const UnicodeString contents;
-  
-  Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
-
-  private:
-    friend class Key;
-    friend class Operand;
-  
-    // Makes it easier for new wildcard Keys to be initialized
-    Literal() {}
-};
-
-class Operand : public UMemory {
-    // An operand can either be a variable reference or a literal.
-    // There is a separate Literal class (which can be quoted or unquoted)
-    // to make it easier to distinguish |x| from x when serializing the data model.
-      public:
-    // Variable
-    static Operand* create(const VariableName& s, UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        Operand* result = new Operand(s);
-        if (result == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-
-    // Literal
-    static Operand* create(Literal lit, UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        Operand* result = new Operand(lit);
-        if (result == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-    // Represent variable names as unquoted literals
-    Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
-    Operand(const Literal& l) : isVariableReference(false), string(l) {}
-
-    // copy constructor is used so that builders work properly -- see comment under copyElements()
-    Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
-
-    bool isVariable() const { return isVariableReference; }
-    VariableName asVariable() const {
-        U_ASSERT(isVariable());
-        return string.contents;
-    }
-    bool isLiteral() const { return !isVariable(); }
-    const Literal& asLiteral() const {
-        U_ASSERT(isLiteral());
-        return string;
-    }
-  private:
-
-    const bool isVariableReference;
-    const Literal string;
-};
-
-/*
-  TODO:
-- Eliminate Option and Variant classes
-- Add: OptionMap (immutable wrapper around a Hashtable; keys are
-strings, values are Operands)
-- Add: VariantMap (immutable wrapper around a Hashtable; operations
-convert a SelectorKeys to a string so that Hashtable can be used
-as the underlying representation; values are Patterns
-    -> hides a StringMap as the underlying representation
- */
-/*
-class Option : public UMemory {
-    // Represents a single name-value pair
-  public:
-    static Option* create(String s, Operand v, UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        Option* result = new Option(s, v);
-        if (result == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-
-    // TODO: these should be private
-    Option(String s, Operand v) : name(s), value(v) {}
-    const String name;
-    const Operand value;
-};
-*/
-                     
-class Key : public UMemory {
-  // A key is either a literal or the "wildcard" symbol.
-  public:
-    bool isWildcard() const { return wildcard; }
-    // Precondition: !isWildcard()
-    const Literal& asLiteral() const {
-        U_ASSERT(!isWildcard());
-        return contents;
-    }
-    Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
-
-    static Key* create(UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        Key* k = new Key();
-        if (k == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return k;
-    }
-
-    static Key* create(const Literal& lit, UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        Key* k = new Key(lit);
-        if (k == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return k;
-    }
-
-  // TODO: maybe shouldn't be public
-  void toString(UnicodeString& result) const {
-    if (isWildcard()) {
-      result += ASTERISK;
-    }
-    result += contents.contents;
-  }
-  private:
-    // wildcard constructor
-    Key() : wildcard(true) {}
-    // concrete key constructor
-    Key(const Literal& lit) : wildcard(false), contents(lit) {}
-
-    const bool wildcard; // True if this represents the wildcard "*"
-    const Literal contents;
-};
-
 // For now, represent variable names as strings
 #define compareVariableName uhash_compareUnicodeString
 
@@ -243,41 +82,78 @@ class MessageFormatter;
   possible someone could use build() to create data models that have
   different lifetimes
 */
+
 template <typename T1>
 static void copyElements(UElement *dst, UElement *src) {
-  // TODO: this check can be replaced if we get rid of the special-casing for selectorKeys
-  if (src->pointer == nullptr) {
-    dst->pointer = nullptr;
-    return;
+  dst->pointer = T1::copy(*(static_cast<T1 *>(src->pointer)));
+}
+
+static void copyStrings(UElement *dst, UElement *src) {
+  dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
+}
+
+// Helpers
+template <typename V>
+static Hashtable* copyHashtable(const Hashtable& other) {
+  UErrorCode errorCode = U_ZERO_ERROR;
+  // No value comparator needed
+  LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
+  if (U_FAILURE(errorCode)) {
+    return nullptr;
   }
-  dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
+  // The hashtable owns the values
+  adoptedContents->setValueDeleter(uprv_deleteUObject);
+
+  // Copy all the key/value bindings over
+  const UHashElement *e;
+  int32_t pos = UHASH_FIRST;
+  V *val;
+  while ((e = other.nextElement(pos)) != nullptr) {
+    val = V::copy(*(static_cast<V *>(e->value.pointer)));
+    if (val == nullptr) {
+      return nullptr;
+    }
+    UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
+    adoptedContents->put(*s, val, errorCode);
+    if (U_FAILURE(errorCode)) {
+      return nullptr;
+    }
+  }
+
+  return adoptedContents.orphan();
+}
+
+static UVector* copyStringVector(const UVector& other) {
+  UErrorCode errorCode = U_ZERO_ERROR;
+  LocalPointer<UVector> adoptedKeys(new UVector(other.size(), errorCode));
+  if (U_FAILURE(errorCode)) {
+    return nullptr;
+  }
+  adoptedKeys->assign(other, &copyStrings, errorCode);
+  if (U_FAILURE(errorCode)) {
+    return nullptr;
+  }
+  return adoptedKeys.orphan();
 }
 
 class U_I18N_API MessageFormatDataModel : public UMemory {
     friend class MessageFormatter;
 
   public:
-    // TODO: Shouldn't be public, only for testing
-    const UnicodeString& getNormalizedPattern() const { return *normalizedInput; }
 
-    
+    class Pattern;
+    class Reserved;
+    class SelectorKeys;
     // Immutable list
     template<typename T>
     class List : public UMemory {
         // Provides a wrapper around a vector
       private:
-         const UVector *contents;
+          const LocalPointer<UVector> contents;
 
       public:
         size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
 
-        // Out-of-bounds is an internal error
-        /*
-        void get(size_t i, T &result) const {
-            U_ASSERT(!(length() <= 0 || i >= length()));
-            result = *(static_cast<T *>(contents->elementAt(i)));
-        }
-        */
         // Out-of-bounds is an internal error
         const T* get(size_t i) const {
             U_ASSERT(!(length() <= 0 || i >= length()));
@@ -310,7 +186,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          private:
            friend class List;
 
-           UVector *contents;
+           LocalPointer<UVector> contents;
 
            // Creates an empty list
            Builder(UErrorCode& errorCode) {
@@ -318,12 +194,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                    return;
                }
                // initialize `contents`
-               LocalPointer<UVector> adoptedContents(new UVector(errorCode));
+               contents.adoptInstead(new UVector(errorCode));
                if (U_FAILURE(errorCode)) {
                    return;
                }
-               adoptedContents->setDeleter(uprv_deleteUObject);
-               contents = adoptedContents.orphan();
+               contents->setDeleter(uprv_deleteUObject);
            }
         };
         static Builder* builder(UErrorCode &errorCode) {
@@ -338,6 +213,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         }
      private:
         friend class Builder; // NOTE: Builder should only call buildList(); not the constructors
+        friend class Pattern;
+        friend class Reserved;
+        friend class SelectorKeys;
 
         // Copies the contents of `builder`
         // This won't compile unless T is a type that has a copy assignment operator
@@ -362,6 +240,15 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             return result;
         }
 
+        static List<T>* copy(const List<T>& other) {
+          UErrorCode errorCode = U_ZERO_ERROR;
+          LocalPointer<UVector> adoptedContents(new UVector(other.length(), errorCode));
+          adoptedContents->assign(*other.contents, &copyElements<T>, errorCode);
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          return new List<T>(adoptedContents.orphan());
+        }
         // Adopts `contents`
         List(UVector* things) : contents(things) {}
   };
@@ -372,6 +259,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     class OrderedMap : public UMemory {
       // Provides an immutable wrapper around a hash table.
       // Also stores the order in which keys were added.
+
+    private:
+      size_t size() const {
+        return keys->size();
+      }
 
     public:
       static constexpr size_t FIRST = 0;
@@ -387,13 +279,28 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         return true;
       }
 
-      size_t size() const {
-        return keys->size();
-      }
+      static OrderedMap<V>* copy(const OrderedMap<V>& other) {
+          UErrorCode errorCode = U_ZERO_ERROR;
+          LocalPointer<Hashtable> adoptedContents(copyHashtable<V>(*other.contents));
+          LocalPointer<UVector> adoptedKeys(copyStringVector(*other.keys));
 
+          if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
+            return nullptr;
+          }
+          LocalPointer<OrderedMap<V>> result(
+              OrderedMap<V>::create(adoptedContents.orphan(),
+                                    adoptedKeys.orphan(),
+                                    errorCode));
+          
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          return result.orphan();
+      }
+ 
       class Builder : public UMemory {
       public:
-        // Adopts and `value`
+        // Adopts `value`
         Builder& add(const UnicodeString& key, V* value, UErrorCode& errorCode) {
           if (U_FAILURE(errorCode)) {
             return *this;
@@ -415,40 +322,17 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             return nullptr;
           }
 
-          // Copy `keys`
-          LocalPointer<UVector> adoptedKeys(new UVector(keys->size(), errorCode));
-          adoptedKeys->assign(*keys, &copyElements<UnicodeString>, errorCode);
+          LocalPointer<Hashtable> adoptedContents(copyHashtable<V>(*contents));
+          LocalPointer<UVector> adoptedKeys(copyStringVector(*keys));
 
-          // Copy `contents`
-          // No value comparator needed
-          LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
-          if (U_FAILURE(errorCode)) {
+          if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
             return nullptr;
           }
-          // The hashtable owns the values
-          adoptedContents->setValueDeleter(uprv_deleteUObject);
-
-          // Copy all the key/value bindings over
-          const UHashElement *e;
-          int32_t pos = UHASH_FIRST;
-          V *val;
-          while ((e = contents->nextElement(pos)) != nullptr) {
-            val = new V(*(static_cast<V *>(e->value.pointer)));
-            if (val == nullptr) {
-              errorCode = U_MEMORY_ALLOCATION_ERROR;
-              return nullptr;
-            }
-            UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
-            adoptedContents->put(*s, val, errorCode);
-            if (U_FAILURE(errorCode)) {
-              return nullptr;
-            }
-          }
-
           LocalPointer<OrderedMap<V>> result(
               OrderedMap<V>::create(adoptedContents.orphan(),
                                     adoptedKeys.orphan(),
                                     errorCode));
+          
           if (U_FAILURE(errorCode)) {
             return nullptr;
           }
@@ -459,34 +343,33 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         // OrderedMap<V>* build(UErrorCode& errorCode);
     private:
         friend class OrderedMap;
+        
       // Only called by builder()
       Builder(UErrorCode& errorCode) {
         // initialize `keys`
-        LocalPointer<UVector> adoptedKeys(new UVector(errorCode));
+        keys.adoptInstead(new UVector(errorCode));
         if (U_FAILURE(errorCode)) {
           return;
         }
-        adoptedKeys->setDeleter(uprv_deleteUObject);
-        keys = adoptedKeys.orphan();
-
+        keys->setDeleter(uprv_deleteUObject);
+ 
         // initialize `contents`
         // No value comparator needed
-        LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
+        contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
         if (U_FAILURE(errorCode)) {
           return;
         }
         // The `contents` hashtable owns the values, but does not own the keys
-        adoptedContents->setValueDeleter(uprv_deleteUObject);
-        contents = adoptedContents.orphan();
+        contents->setValueDeleter(uprv_deleteUObject);
       }
         
       // Hashtable representing the underlying map
-      Hashtable *contents;
+      LocalPointer<Hashtable> contents;
       // Maintain a list of keys that encodes the order in which
       // keys are added. This wastes some space, but allows us to
       // re-use ICU4C's Hashtable abstraction without re-implementing
       // an ordered version of it.
-      UVector *keys;
+      LocalPointer<UVector> keys;
     }; // class OrderedMap<V>::Builder
 
       static Builder* builder(UErrorCode &errorCode) {
@@ -503,7 +386,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     private:
       friend class VariantMap;
 
-      static OrderedMap<V>* create(const Hashtable* c, const UVector* k, UErrorCode& errorCode) {
+      static OrderedMap<V>* create(Hashtable* c, UVector* k, UErrorCode& errorCode) {
           if (U_FAILURE(errorCode)) {
             return nullptr;
           }
@@ -513,20 +396,150 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           }
           return result;
       }
-      OrderedMap<V>(const Hashtable* c, const UVector* k) : contents(c), keys(k) {
+      OrderedMap<V>(Hashtable* c, UVector* k) : contents(c), keys(k) {
         // It would be an error if `c` and `k` had different sizes
         U_ASSERT(c->count() == k->size());
       }
       // Hashtable representing the underlying map
-      const Hashtable *contents;
+      const LocalPointer<Hashtable> contents;
       // List of keys
-      const UVector *keys;
+      const LocalPointer<UVector> keys;
     }; // class OrderedMap<V>
 
+    class Key;
+    class Operand;
+    class Literal : public UObject {
+  public:
+  static Literal* copy(Literal l) {
+    return new Literal(l.isQuoted, l.contents);
+  }
 
-    using KeyList = List<Key>;
+  const bool isQuoted = false;
+  const UnicodeString contents;
+
+  Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
+
+  private:
+    friend class Key;
+  
+    // Makes it easier for new wildcard Keys to be initialized
+    Literal() {}
+};
+    
+class Operand : public UObject {
+    // An operand can either be a variable reference or a literal.
+    // There is a separate Literal class (which can be quoted or unquoted)
+    // to make it easier to distinguish |x| from x when serializing the data model.
+      public:
+    // Variable
+    static Operand* create(const VariableName& s, UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+        Operand* result = new Operand(s);
+        if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+
+    // Literal
+    static Operand* create(Literal lit, UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+        Operand* result = new Operand(lit);
+        if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+
+  // TODO
+  // Should be private
+    static Operand* copy(const Operand& other) {
+         return new Operand(other);
+    }
+
+    // Represent variable names as unquoted literals
+    Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
+    Operand(const Literal& l) : isVariableReference(false), string(l) {}
+
+    // copy constructor is used so that builders work properly -- see comment under copyElements()
+    Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
+
+    bool isVariable() const { return isVariableReference; }
+    VariableName asVariable() const {
+        U_ASSERT(isVariable());
+        return string.contents;
+    }
+    bool isLiteral() const { return !isVariable(); }
+    const Literal& asLiteral() const {
+        U_ASSERT(isLiteral());
+        return string;
+    }
+  private:
+
+    const bool isVariableReference;
+    const Literal string;
+};
+
+  class Key : public UObject {
+  // A key is either a literal or the "wildcard" symbol.
+  public:
+    bool isWildcard() const { return wildcard; }
+    // Precondition: !isWildcard()
+    const Literal& asLiteral() const {
+        U_ASSERT(!isWildcard());
+        return contents;
+    }
+    Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
+
+    static Key* create(UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+        Key* k = new Key();
+        if (k == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return k;
+    }
+
+    static Key* create(const Literal& lit, UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+        Key* k = new Key(lit);
+        if (k == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return k;
+    }
+    static Key* copy(const Key& other) {
+      return new Key(other);
+    }
+
+  // TODO: maybe shouldn't be public
+  void toString(UnicodeString& result) const {
+    if (isWildcard()) {
+      result += ASTERISK;
+    }
+    result += contents.contents;
+  }
+  private:
+    // wildcard constructor
+    Key() : wildcard(true) {}
+    // concrete key constructor
+    Key(const Literal& lit) : wildcard(false), contents(lit) {}
+    const bool wildcard; // True if this represents the wildcard "*"
+    const Literal contents;
+};
+
+  using KeyList = List<Key>;
+
     // Represents the left-hand side of a `when` clause
-     class SelectorKeys {
+    class SelectorKeys : public UObject {
        public:
          const KeyList& getKeys() const;
          class Builder {
@@ -537,17 +550,24 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                     if (U_FAILURE(errorCode)) {
                         return;
                     }
-                    keys = KeyList::builder(errorCode);
+                    keys.adoptInstead(KeyList::builder(errorCode));
                 }
-                List<Key>::Builder* keys;
+                LocalPointer<List<Key>::Builder> keys;
             public:
                 Builder& add(Key* key, UErrorCode& errorCode);
                 // TODO: is addAll() necessary?
-                SelectorKeys* build(UErrorCode& errorCode);
+                SelectorKeys* build(UErrorCode& errorCode) const;
          };
          static Builder* builder(UErrorCode& errorCode);
+         static SelectorKeys* copy(const SelectorKeys& other) {
+           KeyList* otherK = List<Key>::copy(*other.keys);
+           if (otherK == nullptr) {
+             return nullptr;
+           }
+           return new SelectorKeys(otherK);
+         }
        private:
-         KeyList* keys;
+         const LocalPointer<KeyList> keys;
          // Adopts `keys`
          SelectorKeys(KeyList* ks) : keys(ks) {}
      };
@@ -565,34 +585,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         if (!contents->next(pos, unused, v)) {
           return false;
         }
-        // Have to look up the selector keys using keyLists
-        // Special case: pattern with no keys
-        if (keyLists->length() == 1 && keyLists->get(0) == nullptr) {
-          U_ASSERT(pos == FIRST + 1);
-          k = nullptr;
-        } else {
-          // General case
-          k = keyLists->get(pos - 1); 
-        }
+        k = keyLists->get(pos - 1);
         return true;
       }
       class Builder : public UMemory {
       public:
-        // Adopts `value`
-        // Adds a pattern with empty keys -- this is used to
-        // represent a `pattern` message body
-        // TODO: Maybe rethink this design
-        Builder& add(Pattern* value, UErrorCode& errorCode) {
-          if (U_FAILURE(errorCode)) {
-            return *this;
-          }
-          UnicodeString empty(u"");
-          contents->add(empty, value, errorCode);
-          // Add a nonsense entry to `keyLists` to maintain the invariants
-          // TODO: that's another reason to rethink this
-          keyLists->add(nullptr, errorCode);
-          return *this;
-        }
         Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode) {
           if (U_FAILURE(errorCode)) {
             return *this;
@@ -641,24 +638,16 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
         // Only called by builder()
         Builder(UErrorCode& errorCode) {
-        // initialize `contents`
-        // No value comparator needed
-        LocalPointer<OrderedMap<Pattern>::Builder> adoptedContents(OrderedMap<Pattern>::builder(errorCode));
-        if (U_FAILURE(errorCode)) {
-          return;
-        }
-        contents = adoptedContents.orphan();
-        // initialize `keyLists`
-        LocalPointer<List<SelectorKeys>::Builder> adoptedKeyLists(List<SelectorKeys>::builder(errorCode));
-        if (U_FAILURE(errorCode)) {
-          return;
-        }
-        // `keyLists` does not adopt its elements
-        keyLists = adoptedKeyLists.orphan();
+            // initialize `contents`
+            // No value comparator needed
+            contents.adoptInstead(OrderedMap<Pattern>::builder(errorCode));
+            // initialize `keyLists`
+            keyLists.adoptInstead(List<SelectorKeys>::builder(errorCode));
+            // `keyLists` does not adopt its elements
         }
 
-        OrderedMap<Pattern>::Builder* contents;
-        List<SelectorKeys>::Builder* keyLists;
+        LocalPointer<OrderedMap<Pattern>::Builder> contents;
+        LocalPointer<List<SelectorKeys>::Builder> keyLists;
     }; // class VariantMap::Builder
 
       static Builder* builder(UErrorCode& errorCode) {
@@ -677,15 +666,20 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         // it would be an error for `vs` and `ks` to have different sizes
         U_ASSERT(vs->contents->count() == ((int32_t) ks->length()));
       }
-      const OrderedMap<Pattern>* contents;
+      const LocalPointer<OrderedMap<Pattern>> contents;
       // TODO: this is really annoying
       // however, it will be in the same order as the contents of the OrderedMap
-      const List<SelectorKeys>* keyLists;
+      const LocalPointer<List<SelectorKeys>> keyLists;
 }; // class VariantMap
     
   using OptionMap = OrderedMap<Operand>;
 
+  /*
+Note: all the static copy() methods are because UVector and Hashtable don't have copy constructors
+TODO
+   */
  public:
+
     class Operator;
     // TODO: maybe this should be private? actually having a reserved string would be an error;
     // this is there for testing purposes
@@ -708,34 +702,36 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                 if (U_FAILURE(errorCode)) {
                     return;
                 }
-                parts = List<Literal>::builder(errorCode);
+                parts.adoptInstead(List<Literal>::builder(errorCode));
             }
-            List<Literal>::Builder* parts;
+            LocalPointer<List<Literal>::Builder> parts;
 
           public:
             Builder& add(Literal part, UErrorCode &errorCode);
             // TODO: is addAll() necessary?
-            Reserved *build(UErrorCode &errorCode);
+            Reserved *build(UErrorCode &errorCode) const;
         };
 
         static Builder *builder(UErrorCode &errorCode);
 
+      static Reserved* copy(const Reserved& other) {
+        List<Literal>* otherParts = List<Literal>::copy(*other.parts);
+        if (otherParts == nullptr) {
+          return nullptr;
+        }
+        return new Reserved(otherParts);
+      }
       private:
         friend class Operator;
 
         // Possibly-empty list of parts
         // `literal` reserved as a quoted literal; `reserved-char` / `reserved-escape`
         // strings represented as unquoted literals
-        const List<Literal> *parts;
+        const LocalPointer<List<Literal>> parts;
 
         // Can only be called by Builder
         // Takes ownership of `ps`
         Reserved(List<Literal> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
-
-        // Copy constructor -- used so that builders work
-        Reserved(const Reserved &other) : parts(new List<Literal>(*other.parts)) {
-            U_ASSERT(other.parts != nullptr);
-        }
     };
 
       // TODO: This class should really be private. left public for the convenience of the parser
@@ -746,13 +742,13 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          // in a formatting error).
        public:
 
-
+    /*
          // copy constructor is used so that builders work properly -- see comment under copyElements()
          Operator(const Operator &other)
              : isReservedSequence(other.isReservedSequence), functionName(other.functionName),
                options(other.options == nullptr ? nullptr : new OptionMap(*other.options)),
                reserved(other.reserved == nullptr ? nullptr : new Reserved(*other.reserved)) {}
-
+    */
          const FunctionName& getFunctionName() const {
              U_ASSERT(!isReserved());
              return functionName;
@@ -791,6 +787,20 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              return result;
          }
 
+         static Operator* copy(const Operator& other) {
+           if (other.isReservedSequence) {
+             Reserved* otherReserved = Reserved::copy(*other.reserved);
+             if (otherReserved == nullptr) {
+               return nullptr;
+             }
+             return new Operator(otherReserved);
+           }
+           OptionMap* otherOptions = OptionMap::copy(*other.options);
+           if (otherOptions == nullptr) {
+             return nullptr;
+           }
+           return new Operator(other.functionName, otherOptions);
+         }
        private:
          // Function call constructor; adopts `l`
          Operator(FunctionName f, OptionMap *l)
@@ -801,12 +811,12 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
          const bool isReservedSequence;
          const FunctionName functionName;
-         const OptionMap *options;
-         const Reserved* reserved;
+         const LocalPointer<OptionMap> options;
+         const LocalPointer<Reserved> reserved;
      };
 
   
-    class Expression {
+    class Expression : public UObject {
         /*
           An expression is the application of an optional operator to an optional operand.
           For example (using a made-up quasi-s-expression notation):
@@ -821,45 +831,37 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         */
       public:
 
+      static Expression* copy(const Expression& other) {
+        if (other.rator.isValid() && other.rand.isValid()) {
+          LocalPointer<Operator> otherRator(Operator::copy(*other.rator));
+          LocalPointer<Operand> otherRand(Operand::copy(*other.rand));
+          if (!otherRator.isValid() || !otherRand.isValid()) {
+            return nullptr;
+          }
+          return new Expression(otherRator.orphan(), otherRand.orphan());
+        }
+        if (other.rator.isValid()) {
+          LocalPointer<Operator> otherRator(Operator::copy(*other.rator));
+          if (!otherRator.isValid()) {
+            return nullptr;
+          }
+          return new Expression(otherRator.orphan());
+        }
+        U_ASSERT(other.rand.isValid());
+        LocalPointer<Operand> otherRand(Operand::copy(*other.rand));
+        if (!otherRand.isValid()) {
+          return nullptr;
+        }
+        return new Expression(otherRand.orphan());
+      }
         // copy constructor is used so that builders work properly -- see comment under copyElements()
-        Expression(const Expression &other) { *this = other; }
+      //        Expression(const Expression &other) { *this = other; }
 
         // The following three methods should be private and the parser should be a friend class,
         // once the parser becomes its own class
         // TODO
-        static Expression* create(Operand *rAnd, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            Expression* result = new Expression(rAnd);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
 
-        static Expression* create(Operator *rAtor, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            Expression* result = new Expression(rAtor);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-
-        static Expression* create(Operator *rAtor, Operand *rAnd, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            Expression* result = new Expression(rAtor, rAnd);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-
+      /*
         const Expression &operator=(const Expression &other) {
             if (other.rator == nullptr) {
                 rator = nullptr;
@@ -873,7 +875,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             }
             return *this;
         }
-
+      */
         // TODO: include these or not?
         bool isStandaloneAnnotation() const { return (rand == nullptr); }
         // Returns true for function calls with operands as well as
@@ -916,10 +918,45 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             Builder& setOperand(Operand operand);
             Builder& setFunctionName(const UnicodeString &functionName);
             Builder& addOption(const UnicodeString &key, Expression *value);
-            Expression *build(UErrorCode& errorCode);
+            Expression *build(UErrorCode& errorCode) const;
         };
 
-      private:
+    private:
+      friend class MessageFormatter;
+ 
+      static Expression* create(Operand *rAnd, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            Expression* result = new Expression(rAnd);
+            if (result == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+
+        static Expression* create(Operator *rAtor, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            Expression* result = new Expression(rAtor);
+            if (result == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+
+        static Expression* create(Operator *rAtor, Operand *rAnd, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            Expression* result = new Expression(rAtor, rAnd);
+            if (result == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+
         // All constructors adopt their arguments
         // Both operator and operands must be non-null
         Expression(Operator *rAtor, Operand *rAnd) : rator(rAtor), rand(rAnd) {
@@ -932,12 +969,13 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         // Operator must be non-null
         Expression(Operator *rAtor) : rator(rAtor), rand(nullptr) { U_ASSERT(rAtor != nullptr); }
 
-        const Operator *rator;
-        const Operand *rand;
+        const LocalPointer<Operator> rator;
+        const LocalPointer<Operand> rand;
     };
 
     using ExpressionList = List<Expression>;
-    class PatternPart : public UMemory {
+    // TODO: anything stored in a UVector or Hashtable should be a UObject?
+    class PatternPart : public UObject {
       public:
         static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode) {
           if (U_FAILURE(errorCode)) {
@@ -961,6 +999,17 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
             }
             return result;
+        }
+      // TODO: Should be private
+        static PatternPart* copy(const PatternPart& other) {
+          if (other.isText()) {
+            return new PatternPart(other.asText());
+          }
+          Expression* otherExpr = Expression::copy(other.contents());
+          if (otherExpr == nullptr) {
+            return nullptr;
+          }
+          return new PatternPart(otherExpr);
         }
         bool isText() const { return isRawText; }
         // Precondition: !isText()
@@ -986,11 +1035,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         const bool isRawText;
         // Not used if !isRawText
         const UnicodeString text;
-        // nullptr if isRawText
-        const Expression* expression;
+        // null if isRawText
+        const LocalPointer<Expression> expression;
     };
 
-    class Pattern : public UMemory {
+    class Pattern : public UObject {
       public:
         size_t numParts() const { return parts->length(); }
         // Precondition: i < numParts()
@@ -1007,9 +1056,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                 if (U_FAILURE(errorCode)) {
                     return;
                 }
-                parts = List<PatternPart>::builder(errorCode);
+                parts.adoptInstead(List<PatternPart>::builder(errorCode));
             }
-            List<PatternPart>::Builder* parts;
+            LocalPointer<List<PatternPart>::Builder> parts;
 
           public:
             // Takes ownership of `part`
@@ -1020,20 +1069,22 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
         static Builder *builder(UErrorCode &errorCode);
 
-      // Copy constructor -- used so that builders work
-      // TODO: not sure if this should be private, only callable by OrderedMap::Builder, etc.
-        Pattern(const Pattern &other) : parts(new List<PatternPart>(*other.parts)) {
-            U_ASSERT(other.parts != nullptr);
+      // TODO: Should be private    
+        static Pattern* copy(const Pattern& other) {
+          LocalPointer<List<PatternPart>> parts(List<PatternPart>::copy(*other.parts));
+          if (!parts.isValid()) {
+            return nullptr;
+          }
+          return new Pattern(parts.orphan());
         }
-
-      private:      
+  
+      private:
         // Possibly-empty list of parts
-        const List<PatternPart> *parts;
+        const LocalPointer<List<PatternPart>> parts;
 
         // Can only be called by Builder
         // Takes ownership of `ps`
         Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
-
     };
 
      class Binding {
@@ -1048,9 +1099,16 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          }
          return b;
        }
+       static Binding* copy(const Binding& b) {
+         Expression* otherValue = Expression::copy(*b.value);
+         if (otherValue == nullptr) {
+           return nullptr;
+         }
+         return new Binding(b.var, otherValue);
+       }
        Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
        const UnicodeString var;
-       const Expression* value;
+       const LocalPointer<Expression> value;
      };
      using Bindings = List<Binding>;
      const Bindings& getLocalVariables() const {
@@ -1069,96 +1127,32 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              if (U_FAILURE(errorCode)) {
                  return;
              }
-             pattern = nullptr;
-             selectors = ExpressionList::builder(errorCode);
-             variants = VariantMap::builder(errorCode);
-             locals = Bindings::builder(errorCode);
-             LocalPointer<UnicodeString> s(new UnicodeString());
-             if (!s.isValid()) {
-               errorCode = U_MEMORY_ALLOCATION_ERROR;
-             }
-             normalizedInput = s.orphan();
+             selectors.adoptInstead(ExpressionList::builder(errorCode));
+             variants.adoptInstead(VariantMap::builder(errorCode));
+             locals.adoptInstead(Bindings::builder(errorCode));
          }
 
-         // Parser class (private)
-         class Parser : UMemory {
-           public:
-             virtual ~Parser();
-           private:
-             friend class MessageFormatDataModel::Builder;
-
-             Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder)
-               : source(input), index(0), normalizedInput(*dataModelBuilder.normalizedInput), dataModel(dataModelBuilder) {
-                 parseError.line = 0;
-                 parseError.offset = 0;
-                 parseError.lengthBeforeCurrentLine = 0;
-                 parseError.preContext[0] = '\0';
-                 parseError.postContext[0] = '\0';
+         // Invalidate pattern and create selectors/variants if necessary
+         void buildSelectorsMessage(UErrorCode& errorCode) {
+             if (U_FAILURE(errorCode)) {
+                 return;
              }
-
-             // Used so `parseEscapeSequence()` can handle all types of escape sequences
-             // (literal, text, and reserved)
-             typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
-
-             // The parser validates the message and builds the data model
-             // from it.
-             void parse(UParseError &, UErrorCode &);
-             void parseBody(UErrorCode &);
-             void parseDeclarations(UErrorCode &);
-             void parseSelectors(UErrorCode &);
-
-             void parseWhitespaceMaybeRequired(bool, UErrorCode &);
-             void parseRequiredWhitespace(UErrorCode &);
-             void parseOptionalWhitespace(UErrorCode &);
-             void parseToken(UChar32, UErrorCode &);
-             void parseTokenWithWhitespace(UChar32, UErrorCode &);
-             template <size_t N>
-             void parseToken(const UChar32 (&)[N], UErrorCode &);
-             template <size_t N>
-             void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
-             void parseNmtoken(UErrorCode&, VariableName&);
-             void parseName(UErrorCode&, VariableName&);
-             void parseVariableName(UErrorCode&, VariableName&);
-             void parseFunction(UErrorCode&, FunctionName&);
-             void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
-             void parseLiteralEscape(UErrorCode &, String&);
-             void parseLiteral(UErrorCode &, String&);
-             void parseOption(UErrorCode &, OptionMap::Builder&);
-             OptionMap* parseOptions(UErrorCode &);
-             void parseReservedEscape(UErrorCode&, String&);
-             void parseReservedChunk(UErrorCode &, Reserved::Builder&);
-             Operator* parseReserved(UErrorCode &);
-             Operator* parseAnnotation(UErrorCode &);
-             Expression* parseLiteralOrVariableWithAnnotation(bool, UErrorCode &);
-             Expression* parseExpression(UErrorCode &);
-             void parseTextEscape(UErrorCode&, String&);
-             void parseText(UErrorCode&, String&);
-             Key* parseKey(UErrorCode&);
-             SelectorKeys* parseNonEmptyKeys(UErrorCode&);
-             Pattern* parsePattern(UErrorCode&);
-
-             // The input string
-             const UnicodeString &source;
-             // The current position within the input string
-             uint32_t index;
-             // Represents the current line (and when an error is indicated),
-             // character offset within the line of the parse error
-             MessageParseError parseError;
-
-             // Normalized version of the input string (optional whitespace removed)
-             UnicodeString& normalizedInput;
-
-             // The parent builder
-             MessageFormatDataModel::Builder &dataModel;
-         }; // class Parser
-
-         Pattern* pattern;
-         ExpressionList::Builder* selectors;
-         VariantMap::Builder* variants;
-         Bindings::Builder* locals;
-
-         // Normalized version of the input string (optional whitespace removed)
-         UnicodeString* normalizedInput;
+             if (pattern.isValid()) {
+                 pattern.adoptInstead(nullptr);
+             }
+             if (!selectors.isValid()) {
+                 U_ASSERT(!variants.isValid());
+                 selectors.adoptInstead(ExpressionList::builder(errorCode));
+                 variants.adoptInstead(VariantMap::builder(errorCode));
+             } else {
+                 U_ASSERT(variants.isValid());
+             }
+         }
+       
+         LocalPointer<Pattern> pattern;
+         LocalPointer<ExpressionList::Builder> selectors;
+         LocalPointer<VariantMap::Builder> variants;
+         LocalPointer<Bindings::Builder> locals;
 
        public:
          // Takes ownership of `expression`
@@ -1170,7 +1164,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          // Takes ownership
          Builder& addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
          Builder& setPattern(Pattern* pattern);
-         MessageFormatDataModel* build(const UnicodeString& source, UParseError &parseError, UErrorCode& errorCode);
+         MessageFormatDataModel* build(UErrorCode& errorCode);
      };
 
      static Builder* builder(UErrorCode& errorCode);
@@ -1228,32 +1222,25 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                  return;
              }
              U_ASSERT(es != nullptr && vs != nullptr);
-             scrutinees = es;
-             variants = vs;
+             scrutinees.adoptInstead(es);
+             variants.adoptInstead(vs);
+             pattern.adoptInstead(nullptr);
          }
 
          // Constructs a body out of a single Pattern
          // (body -> pattern alternative in the grammar)
          // a `pattern` in the grammar
-         MessageBody(Pattern *pattern, UErrorCode &errorCode) {
-             LocalPointer<Pattern> adoptedPattern(pattern);
+         // This copies the pattern, as it's called by the builder, which
+         // is non-destructive
+         MessageBody(const Pattern &pat, UErrorCode &errorCode) {
              if (U_FAILURE(errorCode)) {
-                 // The adoptedPattern destructor deletes the pattern
-             } else {
-                 LocalPointer<VariantMap::Builder> variantMapBuilder(VariantMap::builder(errorCode));
-                 variantMapBuilder->add(adoptedPattern.orphan(), errorCode);
-                 // If success, then `variantMapBuilder` adopted the pattern
-                 LocalPointer<VariantMap> adoptedVariants(variantMapBuilder->build(errorCode));
-                 LocalPointer<ExpressionList::Builder> expressionListBuilder(ExpressionList::builder(errorCode));
-                 LocalPointer<ExpressionList> adoptedScrutinees(expressionListBuilder->build(errorCode));
-
-                 if (U_FAILURE(errorCode)) {
-                     return;
-                 }
-
-                 // Everything succeeded - finally, initialize the members
-                 variants = adoptedVariants.orphan();
-                 scrutinees = adoptedScrutinees.orphan();
+               return;
+             }
+             scrutinees = nullptr;
+             variants = nullptr;
+             pattern.adoptInstead(Pattern::copy(pat));
+             if (!pattern.isValid()) {
+               errorCode = U_MEMORY_ALLOCATION_ERROR;
              }
          }
        private:
@@ -1264,13 +1251,17 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
            and a single `when`-clause with empty keys.
           */
 
-         // The expressions that are being matched on. May be empty.
-         // (If it's empty, there must be exactly one `when`-clause with empty
-         // keys.)
-         ExpressionList *scrutinees;
+         // The expressions that are being matched on.
+         // Null iff this is a `pattern` message.
+         LocalPointer<ExpressionList> scrutinees;
 
          // The list of `when` clauses (case arms).
-         VariantMap *variants;
+         // Null iff this is a `pattern` message.
+         LocalPointer<VariantMap> variants;
+
+         // The pattern forming the body of the message.
+         // If this is non-null, then `variants` and `scrutinees` must be null.
+         LocalPointer<Pattern> pattern;
      };
 
     /*
@@ -1282,16 +1273,16 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
       Once the data model is constructed, only the environment can be mutated.
       (It's constructed bottom-up.)
     */
-    Bindings* bindings;
+    LocalPointer<Bindings> bindings;
 
     /*
       See the `MessageBody` class.
      */
-    const MessageBody* body;
+    LocalPointer<MessageBody> body;
 
     // Normalized version of the input string (optional whitespace omitted)
     // Used for testing purposes
-    const UnicodeString* normalizedInput;
+    LocalPointer<UnicodeString> normalizedInput;
 
     // Do not define default assignment operator
     const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
@@ -1301,138 +1292,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     // TODO: add tests for this
     MessageFormatDataModel(const Builder& builder, UErrorCode &status);
 }; // class MessageFormatDataModel
-
-/*
-TODO: this will be used in the formatter, but can't be used in the data model
-since it would have to represent name shadowing
-
-     // Immutable hash table
-     class Environment : public UMemory {
-         // Provides a wrapper around a hash table
-       public:
-         // Returns true iff the variable is defined
-         bool defined(const VariableName &v) {
-             U_ASSERT(bindings != nullptr);
-             return bindings->containsKey(v);
-         }
-         // Looks up a variable
-         const Expression* lookup(const VariableName &v, UErrorCode& errorCode) const {
-             if (U_FAILURE(errorCode)) {
-                return nullptr;
-             }
-             void *maybeExpr = bindings->get(v);
-             if (maybeExpr == nullptr) {
-                 errorCode = U_INTERNAL_PROGRAM_ERROR;
-                 return nullptr;
-             }
-             return (static_cast<Expression *>(maybeExpr));
-         }
-
-         // Precondition: variable name is not already defined
-         // The environment takes ownership of the expression.
-         // The error code is used to signal a memory allocation error.
-         void define(const VariableName &v, Expression *e, UErrorCode &errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return;
-             }
-             // The assert ensures that the variable name was not already defined
-             U_ASSERT(bindings->put(v, e, errorCode) == nullptr);
-             LocalPointer<UnicodeString> varPtr(new UnicodeString(v));
-             if (U_SUCCESS(errorCode) && !varPtr.isValid()) {
-                 errorCode = U_MEMORY_ALLOCATION_ERROR;
-                 return;
-             }
-             vars->addElement(varPtr.orphan(), errorCode);
-         }
-
-         // Precondition: variable name is already defined
-         void redefine(const VariableName &v, Expression *e, UErrorCode &errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return;
-             }
-             // The assert ensures that the variable name was already defined
-             U_ASSERT(bindings->put(v, e, errorCode) != nullptr);
-         }
-
-         static Hashtable *initBindings(UErrorCode &errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 // Won't be valid if there already was an error.
-                 return nullptr;
-             }
-             // No value comparator needed
-             LocalPointer<Hashtable> e(new Hashtable(compareVariableName, nullptr, errorCode));
-             if (U_FAILURE(errorCode)) {
-                 return nullptr;
-             }
-             // The environment owns the values
-             e->setValueDeleter(uprv_deleteUObject);
-             return e.orphan();
-         }
-         // Delete assignment operator -- need an error code
-         const Environment &operator=(const Environment &) = delete;
-         // Delete default constructor - need an error code
-         Environment() = delete;
-
-         // Returns an environment; if U_SUCCESS(errorCode) on exit, then the result is non-null
-         static Environment* create(UErrorCode& errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return nullptr;
-             }
-             LocalPointer<Environment> result(new Environment(errorCode));
-             return result.orphan();
-         }
-         static Environment* create(const Environment& other, UErrorCode& errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return nullptr;
-             }
-             LocalPointer<Environment> result(new Environment(other, errorCode));
-             return result.orphan();
-         }
-
-         // TODO: this is messy
-         // TODO: at least should be private
-         UVector* vars; // Stores the variables in the order they were added
-
-       private:
-         // Creates an empty environment
-         Environment(UErrorCode &errorCode) : bindings(initBindings(errorCode)) {
-           LocalPointer<UVector> adoptedVars(new UVector(errorCode));
-           if (U_SUCCESS(errorCode)) {
-               vars = adoptedVars.orphan();
-           }
-         }
-
-         // Copy constructor -- this is used so that builders work
-         Environment(const Environment &other, UErrorCode &errorCode)
-             : bindings(initBindings(errorCode)) {
-             const UHashElement *e;
-             int32_t pos = UHASH_FIRST;
-             Expression *expr;
-             while ((e = other.bindings->nextElement(pos)) != nullptr) {
-                 expr = new Expression(*(static_cast<Expression *>(e->value.pointer)));
-                 if (expr == nullptr) {
-                     errorCode = U_MEMORY_ALLOCATION_ERROR;
-                     return;
-                 }
-                 UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
-                 bindings->put(*s, expr, errorCode);
-                 if (U_FAILURE(errorCode)) {
-                     return;
-                 }
-             }
-             LocalPointer<UVector> newElements(new UVector(other.vars->size(), errorCode));
-             if (U_FAILURE(errorCode)) {
-                 return;
-             }
-             for (size_t i = 0; ((int32_t) i) < other.vars->size(); i++) {
-                 newElements->addElement((*other.vars)[i], errorCode);
-             }
-             vars = newElements.orphan();
-         }
-
-         Hashtable *bindings;
-     };
-*/
 
 } // namespace message2
 U_NAMESPACE_END

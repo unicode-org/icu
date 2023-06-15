@@ -269,7 +269,7 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
             if (U_SUCCESS(errorCode)) {
                 // Roundtrip test
                 const MessageFormatDataModel& dataModel = mf->getDataModel();
-                const UnicodeString& normalized = dataModel.getNormalizedPattern();
+                const UnicodeString& normalized = mf->getNormalizedPattern();
                 UnicodeString serialized;
                 dataModel.serialize(serialized);
                 if (normalized != serialized) {
