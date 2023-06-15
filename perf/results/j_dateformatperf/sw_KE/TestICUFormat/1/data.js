@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1686776535241,
+  "lastUpdate": 1686854508295,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9148,6 +9148,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 380.9015201827597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "c94469b9a0fe2e717a8cb95edc4b2336e3082161",
+          "message": "ICU-22323 Correct alt='ascii' paths, point Readme.txt to .md",
+          "timestamp": "2023-06-15T11:25:32-07:00",
+          "tree_id": "b06dab4b3f15e138e58ebde191d673d672e6a1b3",
+          "url": "https://github.com/unicode-org/icu/commit/c94469b9a0fe2e717a8cb95edc4b2336e3082161"
+        },
+        "date": 1686854460171,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 308.4180273899104,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
