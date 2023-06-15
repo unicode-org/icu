@@ -106,13 +106,15 @@ void SERIALIZER::emit(const Hashtable& options) {
 }
 */
 
-void SERIALIZER::emit(const OptionList& options) {
-    for (size_t i = 0; i < options.length(); i++) {
-        const Option& opt = *options.get(i);
-        whitespace();
-        emit(opt.name);
-        emit(EQUALS);
-        emit(opt.value);
+void SERIALIZER::emit(const OptionMap& options) {
+    size_t pos = OptionMap::FIRST;
+    UnicodeString k;
+    Operand* v;
+    while (options.next(pos, k, v)) {
+      whitespace();
+      emit(k);
+      emit(EQUALS);
+      emit(*v);
     }
 }
 
@@ -157,7 +159,7 @@ void SERIALIZER::emit(const Expression& expr) {
         } else {
           emit(expr.getFunctionName());
           // No whitespace after function name, in case it has
-          // no options. (when there are options, emit(OptionList) will
+          // no options. (when there are options, emit(OptionMap) will
           // emit the leading whitespace)
           emit(expr.getOptions());
         }

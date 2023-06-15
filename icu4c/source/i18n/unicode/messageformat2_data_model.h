@@ -135,7 +135,9 @@ strings, values are Operands)
 - Add: VariantMap (immutable wrapper around a Hashtable; operations
 convert a SelectorKeys to a string so that Hashtable can be used
 as the underlying representation; values are Patterns
+    -> hides a StringMap as the underlying representation
  */
+/*
 class Option : public UMemory {
     // Represents a single name-value pair
   public:
@@ -155,7 +157,8 @@ class Option : public UMemory {
     const String name;
     const Operand value;
 };
-
+*/
+                     
 class Key : public UMemory {
   // A key is either a literal or the "wildcard" symbol.
   public:
@@ -244,28 +247,165 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     // TODO: Shouldn't be public, only for testing
     const UnicodeString& getNormalizedPattern() const { return *normalizedInput; }
 
-    /*
-    // Immutable ordered map
+    // Immutable ordered map from strings to pointers to arbitrary values
     template<typename V>
     class OrderedMap : public UMemory {
       // Provides an immutable wrapper around a hash table.
       // Also stores the order in which keys were added.
 
     public:
+      static constexpr size_t FIRST = 0;
+      // Returns true if there are elements remaining
+      bool next(size_t &pos, UnicodeString& k, V*& v) const {
+        U_ASSERT(pos >= FIRST);
+        if (pos >= size()) {
+          return false;
+        }
+        k = *((UnicodeString*)keys->elementAt(pos));
+        v = (V*) contents->get(k);
+        pos = pos + 1;
+        return true;
+      }
+
+      size_t size() const {
+        return keys->size();
+      }
+
       class Builder : public UMemory {
       public:
-        void put(const UnicodeString& key, V* value) {
-          keys.addElement(key);
+        // Adopts and `value`
+        Builder& add(const UnicodeString& key, V* value, UErrorCode& errorCode) {
+          if (U_FAILURE(errorCode)) {
+            return *this;
+          }
+          // Copy `key` so it can be stored in the vector
+          LocalPointer<UnicodeString> adoptedKey(new UnicodeString(key));
+          if (!adoptedKey.isValid()) {
+            return *this;
+          }
+          UnicodeString* k = adoptedKey.orphan();
+          keys->adoptElement(k, errorCode);
+          contents->put(key, value, errorCode);
+          return *this;
         }
-        void put(const KeyList& keys, V* value) {
+
+        // this should be a *copying* build() (leaves `this` valid)
+        OrderedMap<V>* build(UErrorCode& errorCode) const {
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+
+          // Copy `keys`
+          LocalPointer<UVector> adoptedKeys(new UVector(keys->size(), errorCode));
+          adoptedKeys->assign(*keys, &copyElements<UnicodeString>, errorCode);
+
+          // Copy `contents`
+          // No value comparator needed
+          LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          // The hashtable owns the values
+          adoptedContents->setValueDeleter(uprv_deleteUObject);
+
+          // Copy all the key/value bindings over
+          const UHashElement *e;
+          int32_t pos = UHASH_FIRST;
+          V *val;
+          while ((e = contents->nextElement(pos)) != nullptr) {
+            val = new V(*(static_cast<V *>(e->value.pointer)));
+            if (val == nullptr) {
+              errorCode = U_MEMORY_ALLOCATION_ERROR;
+              return nullptr;
+            }
+            UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
+            adoptedContents->put(*s, val, errorCode);
+            if (U_FAILURE(errorCode)) {
+              return nullptr;
+            }
+          }
+
+          LocalPointer<OrderedMap<V>> result(
+              OrderedMap<V>::create(adoptedContents.orphan(),
+                                    adoptedKeys.orphan(),
+                                    errorCode));
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          return result.orphan();
+        }
+        // TODO
+        // could add a non-copying / moving build() that invalidates `this`
+        // OrderedMap<V>* build(UErrorCode& errorCode);
+    private:
+        friend class OrderedMap;
+      // Only called by builder()
+      Builder(UErrorCode& errorCode) {
+        // initialize `keys`
+        LocalPointer<UVector> adoptedKeys(new UVector(errorCode));
+        if (U_FAILURE(errorCode)) {
+          return;
+        }
+        adoptedKeys->setDeleter(uprv_deleteUObject);
+        keys = adoptedKeys.orphan();
+
+        // initialize `contents`
+        // No value comparator needed
+        LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
+        if (U_FAILURE(errorCode)) {
+          return;
+        }
+        // The `contents` hashtable owns the values, but does not own the keys
+        adoptedContents->setValueDeleter(uprv_deleteUObject);
+        contents = adoptedContents.orphan();
+      }
+        
+      // Hashtable representing the underlying map
+      Hashtable *contents;
+      // Maintain a list of keys that encodes the order in which
+      // keys are added. This wastes some space, but allows us to
+      // re-use ICU4C's Hashtable abstraction without re-implementing
+      // an ordered version of it.
+      UVector *keys;
+    }; // class OrderedMap<V>::Builder
+
+      static Builder* builder(UErrorCode &errorCode) {
+         if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            LocalPointer<Builder> result(new Builder(errorCode));
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            return result.orphan();
+      }
+
+    private:
+      static OrderedMap<V>* create(const Hashtable* c, const UVector* k, UErrorCode& errorCode) {
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          OrderedMap<V>* result = new OrderedMap<V>(c, k);
+          if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+          }
+          return result;
+      }
+      OrderedMap<V>(const Hashtable* c, const UVector* k) : contents(c), keys(k) {}
+      // Hashtable representing the underlying map
+      const Hashtable *contents;
+      // List of keys
+      const UVector *keys;
+    }; // class OrderedMap<V>
+    /*
+    void put(const KeyList& keys, V* value) {
           // HACK: Concatenate all the keys together to generate a string key
           UnicodeString k;
           concatenateKeys(keys, k);
           put(k, value);
         }
-        
-      }
-    private:
+    
+private:
       static void concatenateKeys(const KeyList& keys, UnicodeString& result) {
         size_t len = keys->length();
         for (size_t i = 0; i < len; i++) {
@@ -275,10 +415,10 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           }
         }
       }
-      const UVector *keys;
-      const Hashtable *contents;
-    }
-    */    
+    
+     */
+
+    
     // Immutable list
     template<typename T>
     class List : public UMemory {
@@ -306,12 +446,13 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
            // Provides a wrapper around a vector
          public:
            // adding adopts the thing being added
-           void add(T *element, UErrorCode errorCode) {
+           Builder& add(T *element, UErrorCode errorCode) {
                if (U_FAILURE(errorCode)) {
-                   return;
+                   return *this;
                }
                U_ASSERT(contents != nullptr);
                contents->adoptElement(element, errorCode);
+               return *this;
            }
            List<T>* build(UErrorCode &errorCode) const {
                if (U_FAILURE(errorCode)) {
@@ -383,8 +524,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         List(UVector* things) : contents(things) {}
   };
 
-  // TODO: This should be Hashtable, but I haven't defined a wrapper class for it that has a builder
-  using OptionList = List<Option>;
+  using OptionMap = OrderedMap<Operand>;
 
  public:
      using KeyList = List<Key>;
@@ -418,7 +558,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             List<Literal>::Builder* parts;
 
           public:
-            void add(Literal part, UErrorCode &errorCode);
+            Builder& add(Literal part, UErrorCode &errorCode);
             // TODO: is addAll() necessary?
             Reserved *build(UErrorCode &errorCode);
         };
@@ -455,7 +595,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          // copy constructor is used so that builders work properly -- see comment under copyElements()
          Operator(const Operator &other)
              : isReservedSequence(other.isReservedSequence), functionName(other.functionName),
-               options(other.options == nullptr ? nullptr : new OptionList(*other.options)),
+               options(other.options == nullptr ? nullptr : new OptionMap(*other.options)),
                reserved(other.reserved == nullptr ? nullptr : new Reserved(*other.reserved)) {}
 
          const FunctionName& getFunctionName() const {
@@ -466,7 +606,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              U_ASSERT(isReserved());
              return *reserved;
          }
-         const OptionList &getOptions() const {
+         const OptionMap &getOptions() const {
              U_ASSERT(!isReserved());
              return *options;
          }
@@ -483,11 +623,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              return result;
          }
 
-         static Operator* create(FunctionName f, OptionList* l, UErrorCode& errorCode) {
+         static Operator* create(FunctionName f, OptionMap* l, UErrorCode& errorCode) {
              if (U_FAILURE(errorCode)) {
                  return nullptr;
              }
-             LocalPointer<OptionList> adoptedOptions(l);
+             LocalPointer<OptionMap> adoptedOptions(l);
              U_ASSERT(adoptedOptions.isValid());
              Operator* result = new Operator(f, adoptedOptions.orphan());
              if (result == nullptr) {
@@ -498,7 +638,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
        private:
          // Function call constructor; adopts `l`
-         Operator(FunctionName f, OptionList *l)
+         Operator(FunctionName f, OptionMap *l)
            : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {}
 
          // Reserved sequence constructor
@@ -506,7 +646,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
          const bool isReservedSequence;
          const FunctionName functionName;
-         const OptionList *options;
+         const OptionMap *options;
          const Reserved* reserved;
      };
 
@@ -602,32 +742,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           return rator->asReserved();
         }
 
-      // TODO
-        /*
-        const Hashtable* getOptions(UErrorCode& errorCode) const {
-            U_ASSERT(isFunctionCall());
-            // Convert to hashtable
-            // This shouldn't be necessary -- need to make OptionList a wrapper around a Hashtable
-            // This will also leak memory
-            // TODO
-            const OptionList& opts = rator->getOptions();
-            LocalPointer<Hashtable> result(new Hashtable(compareVariableName, nullptr, errorCode));
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            // The environment does not own the values
-            for (size_t i = 0; i < opts.length(); i++) {
-                const Option& opt = *opts.get(i);
-                result->put(opt.name, &opt.value, errorCode);
-                if (U_FAILURE(errorCode)) {
-                    return nullptr;
-                }
-            }
-            return result.orphan();
-        }
-        */
-        // TODO: should make it return a Hashtable
-        const OptionList& getOptions() const {
+        const OptionMap& getOptions() const {
             U_ASSERT(isFunctionCall());
             return rator->getOptions();
         }
@@ -643,9 +758,9 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           private:
             Builder() {} // prevent direct construction
           public:
-            Builder setOperand(Operand operand);
-            Builder setFunctionName(const UnicodeString &functionName);
-            Builder addOption(const UnicodeString &key, Expression *value);
+            Builder& setOperand(Operand operand);
+            Builder& setFunctionName(const UnicodeString &functionName);
+            Builder& addOption(const UnicodeString &key, Expression *value);
             Expression *build(UErrorCode& errorCode);
         };
 
@@ -743,7 +858,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
           public:
             // Takes ownership of `part`
-            void add(PatternPart *part, UErrorCode &errorCode);
+            Builder& add(PatternPart *part, UErrorCode &errorCode);
             // TODO: is addAll() necessary?
             Pattern *build(UErrorCode &errorCode);
         };
@@ -842,7 +957,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                 }
                 List<Key>::Builder* keys;
             public:
-                void add(Key* key, UErrorCode& errorCode);
+                Builder& add(Key* key, UErrorCode& errorCode);
                 // TODO: is addAll() necessary?
                 SelectorKeys* build(UErrorCode& errorCode);
          };
@@ -940,8 +1055,8 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
              void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
              void parseLiteralEscape(UErrorCode &, String&);
              void parseLiteral(UErrorCode &, String&);
-             void parseOption(UErrorCode &, OptionList::Builder&);
-             OptionList* parseOptions(UErrorCode &);
+             void parseOption(UErrorCode &, OptionMap::Builder&);
+             OptionMap* parseOptions(UErrorCode &);
              void parseReservedEscape(UErrorCode&, String&);
              void parseReservedChunk(UErrorCode &, Reserved::Builder&);
              Operator* parseReserved(UErrorCode &);
@@ -979,14 +1094,14 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
        public:
          // Takes ownership of `expression`
-         void addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
+         Builder& addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
          // No addLocalVariables() yet
          // Takes ownership
-         void addSelector(Expression* selector, UErrorCode& errorCode);
+         Builder& addSelector(Expression* selector, UErrorCode& errorCode);
          // No addSelectors() yet
          // Takes ownership
-         void addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
-         void setPattern(Pattern* pattern);
+         Builder& addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
+         Builder& setPattern(Pattern* pattern);
          MessageFormatDataModel* build(const UnicodeString& source, UParseError &parseError, UErrorCode& errorCode);
      };
 
@@ -1025,7 +1140,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
          void emit(const PatternPart&);
          void emit(const Pattern&);
          void emit(const Variant&);
-         void emit(const OptionList&);
+         void emit(const OptionMap&);
          void serializeDeclarations();
          void serializeSelectors();
          void serializeVariants();

@@ -12,7 +12,7 @@
 U_NAMESPACE_BEGIN namespace message2 {
 
 using KeyList     = MessageFormatDataModel::KeyList;
-using OptionList  = MessageFormatDataModel::OptionList;
+using OptionMap  = MessageFormatDataModel::OptionMap;
 using Expression  = MessageFormatDataModel::Expression;
 using Operator    = MessageFormatDataModel::Operator;
 using Pattern     = MessageFormatDataModel::Pattern;
@@ -48,6 +48,12 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormatter)
 #define NULL_ON_ERROR(errorCode)                                                                          \
     if (U_FAILURE(errorCode)) {                                                                         \
         return nullptr;                                                                                         \
+    }
+
+// Returns immediately if `errorCode` indicates failure
+#define THIS_ON_ERROR(errorCode)                                                                          \
+    if (U_FAILURE(errorCode)) {                                                                         \
+        return *this; \
     }
 
 // Returns true iff `index` is a valid index for the string `source`
@@ -723,7 +729,7 @@ void PARSER::parseLiteral(UErrorCode &errorCode, String& str) {
   Adds the option to `optionList`
 */
 void PARSER::parseOption(UErrorCode &errorCode,
-                         OptionList::Builder &opts) {
+                         OptionMap::Builder &opts) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -735,43 +741,42 @@ void PARSER::parseOption(UErrorCode &errorCode,
     // Parse '='
     parseTokenWithWhitespace(EQUALS, errorCode);
 
-    String rhs;
-    LocalPointer<Option> opt;
+    String rhsStr;
+    LocalPointer<Operand> rand;
     // Parse RHS, which is either a literal, nmtoken, or variable
     switch (source[index]) {
     case PIPE: {
-        String s;
-        parseLiteral(errorCode, s);
-        Literal rhs(true, s);
-        opt.adoptInstead(Option::create(lhs, Operand(rhs), errorCode));
+        parseLiteral(errorCode, rhsStr);
+        Literal rhs(true, rhsStr);
+        rand.adoptInstead(Operand::create(rhs, errorCode));
         break;
     }
     case DOLLAR: {
-        parseVariableName(errorCode, rhs);
-        opt.adoptInstead(Option::create(lhs, Operand(rhs), errorCode));
+        parseVariableName(errorCode, rhsStr);
+        rand.adoptInstead(Operand::create(rhsStr, errorCode));
         break;
     }
     default: {
         // Not a literal or variable, so it must be an nmtoken
-        parseNmtoken(errorCode, rhs);
-        Literal lit(false, rhs);
-        CHECK_ERROR(errorCode);
-        opt.adoptInstead(Option::create(lhs, Operand(lit), errorCode));
+        parseNmtoken(errorCode, rhsStr);
+        Literal lit(false, rhsStr);
+        rand.adoptInstead(Operand::create(lit, errorCode));
         break;
     }
     }
+    // Finally, add the key=value mapping
+    if (U_FAILURE(errorCode)) {
+      return;
+    }
+    opts.add(lhs, rand.orphan(), errorCode);
 
-    // Finally, add the lhs=rhs mapping to the list
-    CHECK_ERROR(errorCode);
-
-    opts.add(opt.orphan(), errorCode);
 }
 
 /*
   Consume optional whitespace followed by a sequence of options
   (possibly empty), separated by whitespace
 */
-OptionList* PARSER::parseOptions(UErrorCode &errorCode) {
+OptionMap* PARSER::parseOptions(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -816,7 +821,7 @@ is involved and there's no state to save.
 */
 
     // Start a mutable list to build up the options
-    LocalPointer<OptionList::Builder> builder(OptionList::builder(errorCode));
+    LocalPointer<OptionMap::Builder> builder(OptionMap::builder(errorCode));
 
     while(true) {
         // If the next character is not whitespace, that means we've already
@@ -849,7 +854,7 @@ is involved and there's no state to save.
         parseOption(errorCode, *builder);
     }
     // Return an immutable options list
-    LocalPointer<OptionList> opts(builder->build(errorCode));
+    LocalPointer<OptionMap> opts(builder->build(errorCode));
     NULL_ON_ERROR(errorCode);
     return opts.orphan();
 }
@@ -1040,7 +1045,7 @@ Operator* PARSER::parseAnnotation(UErrorCode &errorCode) {
         parseFunction(errorCode, func);
 
         // Consume the options (which may be empty)
-        LocalPointer<OptionList> options(parseOptions(errorCode));
+        LocalPointer<OptionMap> options(parseOptions(errorCode));
         NULL_ON_ERROR(errorCode);
         return Operator::create(func, options.orphan(), errorCode);
     }
@@ -1188,12 +1193,14 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
     return adoptedExpression.orphan();
 }
 
-void MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {
-    CHECK_ERROR(errorCode);
+MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {
+    THIS_ON_ERROR(errorCode);
 
     LocalPointer<Binding> b(Binding::create(variableName, expression, errorCode));
-    CHECK_ERROR(errorCode);
+    THIS_ON_ERROR(errorCode);
     locals->add(b.orphan(), errorCode);
+
+    return *this;
 }
 
 /*
@@ -1426,10 +1433,11 @@ Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
     return result;
 }
 
-void Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode) {
-    CHECK_ERROR(errorCode);
+Pattern::Builder& Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode) {
+    THIS_ON_ERROR(errorCode);
 
     parts->add(part, errorCode);
+    return *this;
 }
 
 Reserved::Builder* Reserved::builder(UErrorCode &errorCode) {
@@ -1450,12 +1458,14 @@ Reserved* Reserved::Builder::build(UErrorCode& errorCode) {
     return result;
 }
 
-void Reserved::Builder::add(Literal part, UErrorCode &errorCode) {
-    CHECK_ERROR(errorCode);
+Reserved::Builder& Reserved::Builder::add(Literal part, UErrorCode &errorCode) {
+    THIS_ON_ERROR(errorCode);
 
     LocalPointer<Literal> lit(Literal::copy(part, errorCode));
-    CHECK_ERROR(errorCode);
+    THIS_ON_ERROR(errorCode);
     parts->add(lit.orphan(), errorCode);
+
+    return *this;
 }
 
 /*
@@ -1507,29 +1517,33 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
 }
 
 
-void MessageFormatDataModel::SelectorKeys::Builder::add(Key* key, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+MessageFormatDataModel::SelectorKeys::Builder& MessageFormatDataModel::SelectorKeys::Builder::add(Key* key, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
 
     keys->add(key, errorCode);
+
+    return *this;
 }
 
 /*
   selector must be non-null
 */
-void MessageFormatDataModel::Builder::addSelector(Expression* selector, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addSelector(Expression* selector, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
 
     U_ASSERT(selector != nullptr);
 
     selectors->add(selector, errorCode);
+
+    return *this;
 }
 
 /*
   `keys` and `pattern` must be non-null
   Adopts `keys` and `pattern`
 */
-void MessageFormatDataModel::Builder::addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
 
     U_ASSERT(keys != nullptr);
     U_ASSERT(pattern != nullptr);
@@ -1538,8 +1552,10 @@ void MessageFormatDataModel::Builder::addVariant(SelectorKeys* keys, Pattern* pa
     LocalPointer<SelectorKeys> keysPtr(keys);
 
     LocalPointer<Variant> var(Variant::create(keys->getKeys(), pattern, errorCode));
-    CHECK_ERROR(errorCode);
+    THIS_ON_ERROR(errorCode);
     variants->add(var.orphan(), errorCode);
+
+    return *this;
 }
 
 /*
@@ -1705,13 +1721,14 @@ void MessageFormatter::parseObject(const UnicodeString &, Formattable &, ParsePo
 // -------------------------------------
 // Parses the source pattern.
 
-void MessageFormatDataModel::Builder::setPattern(Pattern* pat) {
+MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::setPattern(Pattern* pat) {
     // Can't set pattern to null
     U_ASSERT(pat != nullptr);
     if (pattern != nullptr) {
         delete pattern;
     }
     pattern = pat;
+    return *this;
 }
 
 MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) : normalizedInput(builder.normalizedInput) {
