@@ -103,11 +103,53 @@ $ ant -f build-icu-data.xml
              <!-- <altPath target="//path/to/value[@attr='foo']"
                            source="//path/to/value[@attr='bar']"
                            locales="xx,yy_ZZ"/> -->
-  +            <altPath target="//ldml/dates/calendars/calendar[@type='all']/dateTimeFormats/availableFormats/dateFormatItem"
-  +                     source="//ldml/dates/calendars/calendar[@type='all']/dateTimeFormats/availableFormats/dateFormatItem[@alt='ascii']"
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehm']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehm'][@alt='ascii']"
   +                     locales="en"/>
-  +            <altPath target="//ldml/dates/calendars/calendar[@type='all']/timeFormats/timeFormatLength[@type='all']/timeFormat/pattern"
-  +                     source="//ldml/dates/calendars/calendar[@type='all']/timeFormats/timeFormatLength[@type='all']/timeFormat/pattern[@alt='ascii']"
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehms']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehms'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='h']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='h'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hm']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hm'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hms']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hms'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hmsv']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hmsv'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hmv']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/dateTimeFormats/availableFormats/dateFormatItem[@id='hmv'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='full']/timeFormat[@type='standard']/pattern[@type='standard']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='full']/timeFormat[@type='standard']/pattern[@alt='ascii'][@type='standard']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='long']/timeFormat[@type='standard']/pattern[@type='standard']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='long']/timeFormat[@type='standard']/pattern[@alt='ascii'][@type='standard']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='medium']/timeFormat[@type='standard']/pattern[@type='standard']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='medium']/timeFormat[@type='standard']/pattern[@alt='ascii'][@type='standard']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='short']/timeFormat[@type='standard']/pattern[@type='standard']"
+  +                     source="//ldml/dates/calendars/calendar[@type='gregorian']/timeFormats/timeFormatLength[@type='short']/timeFormat[@type='standard']/pattern[@alt='ascii'][@type='standard']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehm']"
+  +                     source="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehm'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehms']"
+  +                     source="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='Ehms'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='h']"
+  +                     source="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='h'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='hm']"
+  +                     source="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='hm'][@alt='ascii']"
+  +                     locales="en"/>
+  +            <altPath target="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='hms']"
+  +                     source="//ldml/dates/calendars/calendar[@type='generic']/dateTimeFormats/availableFormats/dateFormatItem[@id='hms'][@alt='ascii']"
   +                     locales="en"/>
   ```
   Then run the generator:
