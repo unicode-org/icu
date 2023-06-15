@@ -96,6 +96,8 @@ public:
 
    /* Test getting the locale base name */
    void TestGetBaseName();
+   // ICU-22416
+   void TestForLanguageTagGetBaseName();
     
 #if !UCONFIG_NO_FORMATTING
     void Test4105828() ;

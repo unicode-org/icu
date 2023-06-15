@@ -249,6 +249,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestSetKeywordValueStringPiece);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueStringPiece);
     TESTCASE_AUTO(TestGetBaseName);
+    TESTCASE_AUTO(TestForLanguageTagGetBaseName);
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestGetLocale);
 #endif
@@ -4298,6 +4299,32 @@ LocaleTest::TestSetUnicodeKeywordValueStringPiece() {
     status.errIfFailureAndReset();
 
     assertEquals("", Locale::getGerman().getName(), l.getName());
+}
+
+void
+LocaleTest::TestForLanguageTagGetBaseName() {
+    static const struct {
+        const char *languageTag;
+        const char *baseName;
+    } testCases[] = {
+        // ICU-22416
+        { "en-u-ca-roc", "en"}, // to make sure the basic work
+        { "sH-tH-t-su-Bm-U-CO-privaTe-unIhan-x-Lvariant-ZxsUhc-Vss-vJf-0-"
+          "kn_uAkTmtca-ucE66u-vtcb1ik-ubsuuuk8-u3iucls-ue38925l-vau30i-"
+          "u6uccttg-U1iuYlik-u-uEEn-zIZzz", "sh-TH"},
+        { "en-u-ca-roc-x-lvariant-0-kn", "en"},
+    };
+
+    int32_t i = 0;
+
+    for(i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        Locale loc = Locale::forLanguageTag(testCases[i].languageTag, status);
+        if(loc.getBaseName() != nullptr && 0 != strcmp(testCases[i].baseName, loc.getBaseName())) {
+            errln("For languageTag \"%s\" expected baseName \"%s\", but got \"%s\"",
+                testCases[i].languageTag, testCases[i].baseName, loc.getBaseName());
+        }
+    }
 }
 
 void
