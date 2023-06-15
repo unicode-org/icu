@@ -99,7 +99,7 @@ void SERIALIZER::emit(const Operand& rand) {
 void SERIALIZER::emit(const OptionMap& options) {
     size_t pos = OptionMap::FIRST;
     UnicodeString k;
-    Operand* v;
+    const Operand* v;
     while (options.next(pos, k, v)) {
       whitespace();
       emit(k);
@@ -234,7 +234,7 @@ void SERIALIZER::serializeVariants() {
     size_t pos = VariantMap::FIRST;
 
     const SelectorKeys* selectorKeys;
-    Pattern* pattern;
+    const Pattern* pattern;
 
     while (variants.next(pos, selectorKeys, pattern)) {
       emit(ID_WHEN);

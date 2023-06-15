@@ -76,13 +76,7 @@ variables.
  */
 class MessageFormatter;
 
-// TODO: this is hurting my brain -- think about whether this is necessary
-/*
-  This exists because even though AST nodes are immutable, it's
-  possible someone could use build() to create data models that have
-  different lifetimes
-*/
-
+// Helper functions for vector copying
 template <typename T1>
 static void copyElements(UElement *dst, UElement *src) {
   dst->pointer = T1::copy(*(static_cast<T1 *>(src->pointer)));
@@ -155,7 +149,8 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
 
         // Out-of-bounds is an internal error
-        const T& get(size_t i) const {
+        // To avoid undue copying, get() returns a T* since UVector::get() returns a void*.
+        const T* get(size_t i) const {
             U_ASSERT(!(length() <= 0 || i >= length()));
             return static_cast<const T *>(contents->elementAt(i));
         }
@@ -268,7 +263,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     public:
       static constexpr size_t FIRST = 0;
       // Returns true if there are elements remaining
-      bool next(size_t &pos, UnicodeString& k, V*& v) const {
+      bool next(size_t &pos, UnicodeString& k, const V*& v) const {
         U_ASSERT(pos >= FIRST);
         if (pos >= size()) {
           return false;
@@ -456,7 +451,7 @@ class Operand : public UObject {
     }
 
   // TODO
-  // Should be private
+  // Should be private with only List having access
     static Operand* copy(const Operand& other) {
          return new Operand(other);
     }
@@ -579,7 +574,9 @@ class Operand : public UObject {
 
     public:
       static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
-      bool next(size_t &pos, SelectorKeys& k, Pattern*& v) const {
+      // Passing a SelectorKeys*& (same for Pattern*&) is to avoid
+      // copying, since List::get() returns a T*
+      bool next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
         UnicodeString unused;
         if (!contents->next(pos, unused, v)) {
           return false;
@@ -674,7 +671,8 @@ class Operand : public UObject {
   using OptionMap = OrderedMap<Operand>;
 
   /*
-Note: all the static copy() methods are because UVector and Hashtable don't have copy constructors
+Note: all the static copy() methods exist because UVector and Hashtable don't have copy constructors
+(e.g. UVector::assign() takes an error code argument)
 TODO
    */
  public:
@@ -741,13 +739,6 @@ TODO
          // in a formatting error).
        public:
 
-    /*
-         // copy constructor is used so that builders work properly -- see comment under copyElements()
-         Operator(const Operator &other)
-             : isReservedSequence(other.isReservedSequence), functionName(other.functionName),
-               options(other.options == nullptr ? nullptr : new OptionMap(*other.options)),
-               reserved(other.reserved == nullptr ? nullptr : new Reserved(*other.reserved)) {}
-    */
          const FunctionName& getFunctionName() const {
              U_ASSERT(!isReserved());
              return functionName;
@@ -853,28 +844,8 @@ TODO
         }
         return new Expression(otherRand.orphan());
       }
-        // copy constructor is used so that builders work properly -- see comment under copyElements()
-      //        Expression(const Expression &other) { *this = other; }
 
-        // The following three methods should be private and the parser should be a friend class,
-        // once the parser becomes its own class
         // TODO
-
-      /*
-        const Expression &operator=(const Expression &other) {
-            if (other.rator == nullptr) {
-                rator = nullptr;
-            } else {
-                rator = new Operator(*other.rator);
-            }
-            if (other.rand == nullptr) {
-                rand = nullptr;
-            } else {
-                rand = new Operand(*other.rand);
-            }
-            return *this;
-        }
-      */
         // TODO: include these or not?
         bool isStandaloneAnnotation() const { return (rand == nullptr); }
         // Returns true for function calls with operands as well as
@@ -973,7 +944,6 @@ TODO
     };
 
     using ExpressionList = List<Expression>;
-    // TODO: anything stored in a UVector or Hashtable should be a UObject?
     class PatternPart : public UObject {
       public:
         static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode) {
@@ -999,7 +969,7 @@ TODO
             }
             return result;
         }
-      // TODO: Should be private
+      // TODO: Should be private and only callable by List
         static PatternPart* copy(const PatternPart& other) {
           if (other.isText()) {
             return new PatternPart(other.asText());
