@@ -10,6 +10,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/messageformat2_macros.h"
 #include "unicode/parseerr.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
@@ -192,6 +193,13 @@ class Key : public UMemory {
         return k;
     }
 
+  // TODO: maybe shouldn't be public
+  void toString(UnicodeString& result) const {
+    if (isWildcard()) {
+      result += ASTERISK;
+    }
+    result += contents.contents;
+  }
   private:
     // wildcard constructor
     Key() : wildcard(true) {}
@@ -237,7 +245,12 @@ class MessageFormatter;
 */
 template <typename T1>
 static void copyElements(UElement *dst, UElement *src) {
-    dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
+  // TODO: this check can be replaced if we get rid of the special-casing for selectorKeys
+  if (src->pointer == nullptr) {
+    dst->pointer = nullptr;
+    return;
+  }
+  dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
 }
 
 class U_I18N_API MessageFormatDataModel : public UMemory {
@@ -247,6 +260,113 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     // TODO: Shouldn't be public, only for testing
     const UnicodeString& getNormalizedPattern() const { return *normalizedInput; }
 
+    
+    // Immutable list
+    template<typename T>
+    class List : public UMemory {
+        // Provides a wrapper around a vector
+      private:
+         const UVector *contents;
+
+      public:
+        size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
+
+        // Out-of-bounds is an internal error
+        /*
+        void get(size_t i, T &result) const {
+            U_ASSERT(!(length() <= 0 || i >= length()));
+            result = *(static_cast<T *>(contents->elementAt(i)));
+        }
+        */
+        // Out-of-bounds is an internal error
+        const T* get(size_t i) const {
+            U_ASSERT(!(length() <= 0 || i >= length()));
+            return static_cast<const T *>(contents->elementAt(i));
+        }
+        
+        class Builder : public UMemory {
+           // Provides a wrapper around a vector
+         public:
+           // adding adopts the thing being added
+           Builder& add(T *element, UErrorCode errorCode) {
+               if (U_FAILURE(errorCode)) {
+                   return *this;
+               }
+               U_ASSERT(contents != nullptr);
+               contents->adoptElement(element, errorCode);
+               return *this;
+           }
+           List<T>* build(UErrorCode &errorCode) const {
+               if (U_FAILURE(errorCode)) {
+                   return nullptr;
+               }
+               LocalPointer<List<T>> adopted(buildList(*this, errorCode));
+               if (U_FAILURE(errorCode)) {
+                   return nullptr;
+               }
+               return adopted.orphan();
+           }
+
+         private:
+           friend class List;
+
+           UVector *contents;
+
+           // Creates an empty list
+           Builder(UErrorCode& errorCode) {
+               if (U_FAILURE(errorCode)) {
+                   return;
+               }
+               // initialize `contents`
+               LocalPointer<UVector> adoptedContents(new UVector(errorCode));
+               if (U_FAILURE(errorCode)) {
+                   return;
+               }
+               adoptedContents->setDeleter(uprv_deleteUObject);
+               contents = adoptedContents.orphan();
+           }
+        };
+        static Builder* builder(UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            LocalPointer<Builder> result(new Builder(errorCode));
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            return result.orphan();
+        }
+     private:
+        friend class Builder; // NOTE: Builder should only call buildList(); not the constructors
+
+        // Copies the contents of `builder`
+        // This won't compile unless T is a type that has a copy assignment operator
+        static List<T>* buildList(const Builder &builder, UErrorCode &errorCode) {
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            List<T>* result;
+            U_ASSERT(builder.contents != nullptr);
+
+            LocalPointer<UVector> adoptedContents(new UVector(builder.contents->size(), errorCode));
+            adoptedContents->assign(*builder.contents, &copyElements<T>, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return nullptr;
+            }
+            result = new List<T>(adoptedContents.orphan());
+
+            // Finally, check for null
+            if (result == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+
+        // Adopts `contents`
+        List(UVector* things) : contents(things) {}
+  };
+
+    class VariantMap;
     // Immutable ordered map from strings to pointers to arbitrary values
     template<typename V>
     class OrderedMap : public UMemory {
@@ -381,6 +501,8 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
       }
 
     private:
+      friend class VariantMap;
+
       static OrderedMap<V>* create(const Hashtable* c, const UVector* k, UErrorCode& errorCode) {
           if (U_FAILURE(errorCode)) {
             return nullptr;
@@ -391,146 +513,179 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           }
           return result;
       }
-      OrderedMap<V>(const Hashtable* c, const UVector* k) : contents(c), keys(k) {}
+      OrderedMap<V>(const Hashtable* c, const UVector* k) : contents(c), keys(k) {
+        // It would be an error if `c` and `k` had different sizes
+        U_ASSERT(c->count() == k->size());
+      }
       // Hashtable representing the underlying map
       const Hashtable *contents;
       // List of keys
       const UVector *keys;
     }; // class OrderedMap<V>
-    /*
-    void put(const KeyList& keys, V* value) {
-          // HACK: Concatenate all the keys together to generate a string key
-          UnicodeString k;
-          concatenateKeys(keys, k);
-          put(k, value);
+
+
+    using KeyList = List<Key>;
+    // Represents the left-hand side of a `when` clause
+     class SelectorKeys {
+       public:
+         const KeyList& getKeys() const;
+         class Builder {
+            private:
+                friend class SelectorKeys;
+                // prevent direct construction
+                Builder(UErrorCode& errorCode) {
+                    if (U_FAILURE(errorCode)) {
+                        return;
+                    }
+                    keys = KeyList::builder(errorCode);
+                }
+                List<Key>::Builder* keys;
+            public:
+                Builder& add(Key* key, UErrorCode& errorCode);
+                // TODO: is addAll() necessary?
+                SelectorKeys* build(UErrorCode& errorCode);
+         };
+         static Builder* builder(UErrorCode& errorCode);
+       private:
+         KeyList* keys;
+         // Adopts `keys`
+         SelectorKeys(KeyList* ks) : keys(ks) {}
+     };
+
+    class Pattern;
+    class VariantMap : public UMemory {
+      // Wraps an OrderedMap<Pattern>
+      // Has a different put() function since we want to stringify the key
+      // list to hash it
+
+    public:
+      static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
+      bool next(size_t &pos, const SelectorKeys*& k, Pattern*& v) const {
+        UnicodeString unused;
+        if (!contents->next(pos, unused, v)) {
+          return false;
         }
-    
-private:
-      static void concatenateKeys(const KeyList& keys, UnicodeString& result) {
-        size_t len = keys->length();
-        for (size_t i = 0; i < len; i++) {
-          result += keys.get(i);
-          if (i != len - 1) {
-            result += SPACE;
+        // Have to look up the selector keys using keyLists
+        // Special case: pattern with no keys
+        if (keyLists->length() == 1 && keyLists->get(0) == nullptr) {
+          U_ASSERT(pos == FIRST + 1);
+          k = nullptr;
+        } else {
+          // General case
+          k = keyLists->get(pos - 1); 
+        }
+        return true;
+      }
+      class Builder : public UMemory {
+      public:
+        // Adopts `value`
+        // Adds a pattern with empty keys -- this is used to
+        // represent a `pattern` message body
+        // TODO: Maybe rethink this design
+        Builder& add(Pattern* value, UErrorCode& errorCode) {
+          if (U_FAILURE(errorCode)) {
+            return *this;
+          }
+          UnicodeString empty(u"");
+          contents->add(empty, value, errorCode);
+          // Add a nonsense entry to `keyLists` to maintain the invariants
+          // TODO: that's another reason to rethink this
+          keyLists->add(nullptr, errorCode);
+          return *this;
+        }
+        Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode) {
+          if (U_FAILURE(errorCode)) {
+            return *this;
+          }
+          // Stringify `key`
+          UnicodeString keyResult;
+          concatenateKeys(*key, keyResult);
+          contents->add(keyResult, value, errorCode);
+          keyLists->add(key, errorCode);
+          return *this;
+        }
+        // this should be a *copying* build() (leaves `this` valid)
+        VariantMap* build(UErrorCode& errorCode) const {
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+
+          LocalPointer<OrderedMap<Pattern>> adoptedContents(contents->build(errorCode));
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          LocalPointer<List<SelectorKeys>> adoptedKeyLists(keyLists->build(errorCode));
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+          VariantMap* result = new VariantMap(adoptedContents.orphan(), adoptedKeyLists.orphan());
+          if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+          }
+          return result;
+        }
+
+     private:
+        friend class VariantMap;
+
+        static void concatenateKeys(const SelectorKeys& keys, UnicodeString& result) {
+          const KeyList& ks = keys.getKeys();
+          size_t len = ks.length();
+          for (size_t i = 0; i < len; i++) {
+            ks.get(i)->toString(result);
+            if (i != len - 1) {
+              result += SPACE;
+            }
           }
         }
+
+        // Only called by builder()
+        Builder(UErrorCode& errorCode) {
+        // initialize `contents`
+        // No value comparator needed
+        LocalPointer<OrderedMap<Pattern>::Builder> adoptedContents(OrderedMap<Pattern>::builder(errorCode));
+        if (U_FAILURE(errorCode)) {
+          return;
+        }
+        contents = adoptedContents.orphan();
+        // initialize `keyLists`
+        LocalPointer<List<SelectorKeys>::Builder> adoptedKeyLists(List<SelectorKeys>::builder(errorCode));
+        if (U_FAILURE(errorCode)) {
+          return;
+        }
+        // `keyLists` does not adopt its elements
+        keyLists = adoptedKeyLists.orphan();
+        }
+
+        OrderedMap<Pattern>::Builder* contents;
+        List<SelectorKeys>::Builder* keyLists;
+    }; // class VariantMap::Builder
+
+      static Builder* builder(UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+          return nullptr;
+        }
+        LocalPointer<Builder> result(new Builder(errorCode));
+        if (U_FAILURE(errorCode)) {
+          return nullptr;
+        }
+        return result.orphan();
       }
+    private:
+      friend class Builder;
+      VariantMap(OrderedMap<Pattern>* vs, List<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
+        // it would be an error for `vs` and `ks` to have different sizes
+        U_ASSERT(vs->contents->count() == ((int32_t) ks->length()));
+      }
+      const OrderedMap<Pattern>* contents;
+      // TODO: this is really annoying
+      // however, it will be in the same order as the contents of the OrderedMap
+      const List<SelectorKeys>* keyLists;
+}; // class VariantMap
     
-     */
-
-    
-    // Immutable list
-    template<typename T>
-    class List : public UMemory {
-        // Provides a wrapper around a vector
-      private:
-         const UVector *contents;
-
-      public:
-        size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
-
-        // Out-of-bounds is an internal error
-        /*
-        void get(size_t i, T &result) const {
-            U_ASSERT(!(length() <= 0 || i >= length()));
-            result = *(static_cast<T *>(contents->elementAt(i)));
-        }
-        */
-        // Out-of-bounds is an internal error
-        const T* get(size_t i) const {
-            U_ASSERT(!(length() <= 0 || i >= length()));
-            return static_cast<const T *>(contents->elementAt(i));
-        }
-        
-        class Builder : public UMemory {
-           // Provides a wrapper around a vector
-         public:
-           // adding adopts the thing being added
-           Builder& add(T *element, UErrorCode errorCode) {
-               if (U_FAILURE(errorCode)) {
-                   return *this;
-               }
-               U_ASSERT(contents != nullptr);
-               contents->adoptElement(element, errorCode);
-               return *this;
-           }
-           List<T>* build(UErrorCode &errorCode) const {
-               if (U_FAILURE(errorCode)) {
-                   return nullptr;
-               }
-               LocalPointer<List<T>> adopted(buildList(*this, errorCode));
-               if (U_FAILURE(errorCode)) {
-                   return nullptr;
-               }
-               return adopted.orphan();
-           }
-
-         private:
-           friend class List;
-
-           UVector *contents;
-
-           // Creates an empty list
-           Builder(UErrorCode& errorCode) {
-               if (U_FAILURE(errorCode)) {
-                   return;
-               }
-               // initialize `contents`
-               LocalPointer<UVector> adoptedContents(new UVector(errorCode));
-               if (U_FAILURE(errorCode)) {
-                   return;
-               }
-               adoptedContents->setDeleter(uprv_deleteUObject);
-               contents = adoptedContents.orphan();
-           }
-        };
-        static Builder* builder(UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            LocalPointer<Builder> result(new Builder(errorCode));
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            return result.orphan();
-        }
-     private:
-        friend class Builder; // NOTE: Builder should only call buildList(); not the constructors
-
-        // Copies the contents of `builder`
-        // This won't compile unless T is a type that has a copy assignment operator
-        static List<T>* buildList(const Builder &builder, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            List<T>* result;
-            U_ASSERT(builder.contents != nullptr);
-
-            LocalPointer<UVector> adoptedContents(new UVector(builder.contents->size(), errorCode));
-            adoptedContents->assign(*builder.contents, &copyElements<T>, errorCode);
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            result = new List<T>(adoptedContents.orphan());
-
-            // Finally, check for null
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-
-        // Adopts `contents`
-        List(UVector* things) : contents(things) {}
-  };
-
   using OptionMap = OrderedMap<Operand>;
 
  public:
-     using KeyList = List<Key>;
-    class Variant;
-    using VariantList    = List<Variant>;
-
     class Operator;
     // TODO: maybe this should be private? actually having a reserved string would be an error;
     // this is there for testing purposes
@@ -865,7 +1020,13 @@ private:
 
         static Builder *builder(UErrorCode &errorCode);
 
-      private:
+      // Copy constructor -- used so that builders work
+      // TODO: not sure if this should be private, only callable by OrderedMap::Builder, etc.
+        Pattern(const Pattern &other) : parts(new List<PatternPart>(*other.parts)) {
+            U_ASSERT(other.parts != nullptr);
+        }
+
+      private:      
         // Possibly-empty list of parts
         const List<PatternPart> *parts;
 
@@ -873,100 +1034,7 @@ private:
         // Takes ownership of `ps`
         Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
 
-        // Copy constructor -- used so that builders work
-        Pattern(const Pattern &other) : parts(new List<PatternPart>(*other.parts)) {
-            U_ASSERT(other.parts != nullptr);
-        }
     };
-
-    // TODO: icu4j doesn't have a separate Variant class, just addVariant() that
-    // takes a SelectorKeys and a Pattern. Should probably make this consistent
-    // However, getVariants() in icu4j returns an OrderedMap from SelectorKeys
-    // to Pattern, which might be trickier to do for us.
-    // maybe not if there's a hash function on SelectorKeys
-    class Variant : public UMemory {
-        /*
-          A variant represents a single `when`-clause in a selectors.
-          Unlike in the grammar, the key list can be empty. This lets us
-          desugar `pattern`s into a `selectors`.
-         */
-      public:
-        // Special case used to represent top-level `pattern` bodies:
-        // creates a `when` with no keys
-        // Adopts `p`
-        Variant(Pattern * p, UErrorCode & errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return;
-            }
-            LocalPointer<Pattern> adoptedPattern(p);
-            KeyList::Builder* keysBuilder = KeyList::builder(errorCode);
-            keys = keysBuilder->build(errorCode);
-            if (U_SUCCESS(errorCode)) {
-                pattern = adoptedPattern.orphan();
-            }
-        }
-
-        static Variant* create(KeyList* ks, Pattern* p, UErrorCode& errorCode) {
-            if(U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            U_ASSERT(ks != nullptr && p != nullptr);
-            LocalPointer<Pattern> adoptedPattern(p);
-            LocalPointer<KeyList> adoptedKeys(ks);
-            Variant* result = new Variant(adoptedKeys.orphan(), adoptedPattern.orphan());
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-        /*
-        // copy constructor is used so that builders work properly
-        Variant(const Variant& other) {
-            U_ASSERT(other.keys != nullptr);
-            U_ASSERT(other.pattern != nullptr);
-
-            // List is immutable; copy not needed
-            keys = other.keys;
-            pattern = *other.pattern;
-        }
-        */
-
-        // TODO: make these private
-
-        // Usual case; takes ownership of `keys` and `p`
-        Variant(KeyList * ks, Pattern * p) : keys(ks), pattern(p) {}
-
-        const KeyList *keys;
-        const Pattern *pattern;
-    };
-
-
-    // Represents the left-hand side of a `when` clause
-     class SelectorKeys {
-       public:
-         KeyList* getKeys() const;
-         class Builder {
-            private:
-                friend class SelectorKeys;
-                // prevent direct construction
-                Builder(UErrorCode& errorCode) {
-                    if (U_FAILURE(errorCode)) {
-                        return;
-                    }
-                    keys = KeyList::builder(errorCode);
-                }
-                List<Key>::Builder* keys;
-            public:
-                Builder& add(Key* key, UErrorCode& errorCode);
-                // TODO: is addAll() necessary?
-                SelectorKeys* build(UErrorCode& errorCode);
-         };
-         static Builder* builder(UErrorCode& errorCode);
-       private:
-         KeyList* keys;
-         // Adopts `keys`
-         SelectorKeys(KeyList* ks) : keys(ks) {}
-     };
 
      class Binding {
      public:
@@ -989,7 +1057,7 @@ private:
          return *bindings;
      }
      ExpressionList& getSelectors() const;
-     Hashtable& getVariants() const;
+     VariantMap& getVariants() const;
      Pattern& getPattern() const;
 
      class Builder {
@@ -1003,7 +1071,7 @@ private:
              }
              pattern = nullptr;
              selectors = ExpressionList::builder(errorCode);
-             variants = VariantList::builder(errorCode);
+             variants = VariantMap::builder(errorCode);
              locals = Bindings::builder(errorCode);
              LocalPointer<UnicodeString> s(new UnicodeString());
              if (!s.isValid()) {
@@ -1086,7 +1154,7 @@ private:
 
          Pattern* pattern;
          ExpressionList::Builder* selectors;
-         VariantList::Builder* variants;
+         VariantMap::Builder* variants;
          Bindings::Builder* locals;
 
          // Normalized version of the input string (optional whitespace removed)
@@ -1135,11 +1203,12 @@ private:
          void emit(const UnicodeString&);
          void emit(const Literal&);
          void emit(const Key&);
+         void emit(const SelectorKeys&);
          void emit(const Operand&);
          void emit(const Expression&);
          void emit(const PatternPart&);
          void emit(const Pattern&);
-         void emit(const Variant&);
+         void emit(const VariantMap&);
          void emit(const OptionMap&);
          void serializeDeclarations();
          void serializeSelectors();
@@ -1154,7 +1223,7 @@ private:
          // a list of variants, which represents the `(selectors 1*([s] variant))`
          // alternative in the grammar
          // Adopts its arguments; takes an error code for consistency
-         MessageBody(ExpressionList *es, VariantList *vs, UErrorCode& errorCode) {
+         MessageBody(ExpressionList *es, VariantMap *vs, UErrorCode& errorCode) {
              if (U_FAILURE(errorCode)) {
                  return;
              }
@@ -1171,11 +1240,10 @@ private:
              if (U_FAILURE(errorCode)) {
                  // The adoptedPattern destructor deletes the pattern
              } else {
-                 LocalPointer<Variant> patternVariant(new Variant(adoptedPattern.orphan(), errorCode));
-                 LocalPointer<VariantList::Builder> variantListBuilder(VariantList::builder(errorCode));
-                 variantListBuilder->add(patternVariant.orphan(), errorCode);
-                 // If success, then `variantListBuilder` adopted the pattern
-                 LocalPointer<VariantList> adoptedVariants(variantListBuilder->build(errorCode));
+                 LocalPointer<VariantMap::Builder> variantMapBuilder(VariantMap::builder(errorCode));
+                 variantMapBuilder->add(adoptedPattern.orphan(), errorCode);
+                 // If success, then `variantMapBuilder` adopted the pattern
+                 LocalPointer<VariantMap> adoptedVariants(variantMapBuilder->build(errorCode));
                  LocalPointer<ExpressionList::Builder> expressionListBuilder(ExpressionList::builder(errorCode));
                  LocalPointer<ExpressionList> adoptedScrutinees(expressionListBuilder->build(errorCode));
 
@@ -1202,7 +1270,7 @@ private:
          ExpressionList *scrutinees;
 
          // The list of `when` clauses (case arms).
-         VariantList *variants;
+         VariantMap *variants;
      };
 
     /*

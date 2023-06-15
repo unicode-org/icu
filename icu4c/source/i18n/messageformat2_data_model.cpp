@@ -74,6 +74,21 @@ void SERIALIZER::emit(const Key& k) {
     emit(k.asLiteral());
 }
 
+void SERIALIZER::emit(const SelectorKeys& k) {
+  const KeyList& ks = k.getKeys();
+  size_t len = ks.length();
+  // It would be an error for `keys` to be empty;
+  // that would mean this is the single `pattern`
+  // variant, and in that case, this method shouldn't be called
+  U_ASSERT(len > 0);
+  for (size_t i = 0; i < len; i++) {
+    if (i != 0) {
+      whitespace();
+    }
+    emit(*ks.get(i));
+  }
+}
+
 void SERIALIZER::emit(const Operand& rand) {
     if (rand.isVariable()) {
         emit(DOLLAR);
@@ -201,23 +216,7 @@ void SERIALIZER::emit(const Pattern& pat) {
     }
     emit(RIGHT_CURLY_BRACE);
 }
-
-void SERIALIZER::emit(const Variant& var) {
-    const KeyList& ks = *var.keys;
-    // Keys should be non-empty (if it was, then this method
-    // shouldn't have been called)
-    U_ASSERT(ks.length() > 0);
-
-    for (size_t i = 0; i < ks.length(); i++) {
-        if (i != 0) {
-            whitespace();
-        }
-        emit(*ks.get(i));
-    }
-    // No whitespace needed here -- see `variant` in the grammar
-    emit(*var.pattern);
-}
-
+                    
 void SERIALIZER::serializeDeclarations() {
     const Bindings& locals = dataModel.getLocalVariables();
     
@@ -253,24 +252,31 @@ void SERIALIZER::serializeSelectors() {
 }
 
 void SERIALIZER::serializeVariants() {
-    const VariantList& variants = *dataModel.body->variants;
-    size_t len = variants.length();
+    const VariantMap& variants = *dataModel.body->variants;
+    size_t pos = VariantMap::FIRST;
 
-    // Special case: one variant with no keys. Just emit the pattern;
-    // no `when` keyword.
-    if (len == 1 && variants.get(0)->keys->length() == 0) {
-        emit(*variants.get(0)->pattern);
+    const SelectorKeys* selectorKeys;
+    Pattern* pattern;
+
+    // TODO: this is annoying -- suggests we shouldn't use this trick
+    size_t numVariantsSeen = 0;
+    while (variants.next(pos, selectorKeys, pattern)) {
+      numVariantsSeen++;
+      // Special case: one variant with no keys. Just emit the pattern;
+      // no `when` keyword.
+      if (selectorKeys == nullptr) {
+        U_ASSERT(numVariantsSeen == 1);
+        U_ASSERT(!variants.next(pos, selectorKeys, pattern));
+        emit(*pattern);
         return;
-    }
-    
-    // General case
-    for (size_t i = 0; i < len; i++) {
-        // No whitespace needed here -- see `body` in the grammar
-        emit(ID_WHEN);
-        whitespace();
-        const Variant& var = *variants.get(i);
-        emit(var);
-    }
+      }
+      // General case
+      emit(ID_WHEN);
+      whitespace();
+      emit(*selectorKeys);
+      // No whitespace needed here -- see `variant` in the grammar
+      emit(*pattern);
+    }    
 }
 
 

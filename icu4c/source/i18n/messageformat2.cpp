@@ -18,7 +18,6 @@ using Operator    = MessageFormatDataModel::Operator;
 using Pattern     = MessageFormatDataModel::Pattern;
 using PatternPart = MessageFormatDataModel::PatternPart;
 using Reserved    = MessageFormatDataModel::Reserved;
-using Variant     = MessageFormatDataModel::Variant;
 
 #define PARSER MessageFormatDataModel::Builder::Parser
 
@@ -1337,8 +1336,8 @@ MessageFormatDataModel::SelectorKeys* MessageFormatDataModel::SelectorKeys::Buil
     return result;
 }
 
-KeyList* MessageFormatDataModel::SelectorKeys::getKeys() const {
-    return keys;
+const KeyList& MessageFormatDataModel::SelectorKeys::getKeys() const {
+    return *keys;
 }
 
 /*
@@ -1547,13 +1546,7 @@ MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addVariant(Sel
 
     U_ASSERT(keys != nullptr);
     U_ASSERT(pattern != nullptr);
-
-    // Adopt `keys` in case of errors
-    LocalPointer<SelectorKeys> keysPtr(keys);
-
-    LocalPointer<Variant> var(Variant::create(keys->getKeys(), pattern, errorCode));
-    THIS_ON_ERROR(errorCode);
-    variants->add(var.orphan(), errorCode);
+    variants->add(keys, pattern, errorCode);
 
     return *this;
 }
@@ -1686,11 +1679,6 @@ void copyElements<Expression>(UElement *dst, UElement *src) {
 }
 
 template<>
-void copyElements<Variant>(UElement *dst, UElement *src) {
-    dst->pointer = new Variant(*(static_cast<Variant*>(src->pointer)));
-}
-
-template<>
 void copyElements<PatternPart>(UElement *dst, UElement *src) {
     dst->pointer = new PatternPart(*(static_cast<PatternPart*>(src->pointer)));
 }
@@ -1743,7 +1731,7 @@ MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Bui
     } else {
         // Otherwise, this is a Selectors message
         LocalPointer<ExpressionList> selectors(builder.selectors->build(errorCode));
-        LocalPointer<VariantList> variants(builder.variants->build(errorCode));
+        LocalPointer<VariantMap> variants(builder.variants->build(errorCode));
         adoptedBody.adoptInstead(new MessageBody(selectors.orphan(), variants.orphan(), errorCode));
     }
 
