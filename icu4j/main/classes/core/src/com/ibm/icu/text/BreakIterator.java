@@ -29,10 +29,8 @@ import com.ibm.icu.util.ULocale;
  * example, to break a piece of text into words, sentences, or logical characters
  * according to the conventions of some language or group of languages.
  *
- * We provide five built-in types of BreakIterator:
- * <ul><li>getTitleInstance() returns a BreakIterator that locates boundaries
- * between title breaks.
- * <li>getSentenceInstance() returns a BreakIterator that locates boundaries
+ * We provide four built-in types of BreakIterator:
+ * <ul><li>getSentenceInstance() returns a BreakIterator that locates boundaries
  * between sentences.  This is useful for triple-click selection, for example.
  * <li>getWordInstance() returns a BreakIterator that locates boundaries between
  * words.  This is useful for double-click selection or "find whole words" searches.
@@ -78,6 +76,29 @@ import com.ibm.icu.util.ULocale;
  * <li>The client can change the position of an iterator, or the text it analyzes,
  * at will, but cannot change the behavior.  If the user wants different behavior, he
  * must instantiate a new iterator.</ul>
+ *
+ * A span of text between two adjacent boundaries is called a "segment."
+ * The boundary analysis functions in this file behave correctly regardless of
+ * whether the current position is set to a boundary location or into the
+ * middle of a segment. When the current position points to a boundary, the two
+ * segments that straddle that boundary are called the "previous segment" and
+ * the "current segment."
+ *
+ * If the current position is set to the middle of a surrogate pair, the
+ * boundary analysis functions in this file will move the current position to
+ * the beginning of the surrogate pair before any other processing. If the
+ * current position then points into the middle of a segment, these routines
+ * will move to the beginning or end of that segment. Otherwise, the current
+ * position points to a segment boundary, and these routines will move to the
+ * beginning of the previous segment or the end of the current segment.
+ *
+ * The boundary analysis functions in this file may scan an unbounded number of
+ * characters around the current position or even the returned position. (One
+ * example is a long string of flag emoji. In order to know whether the current
+ * position is in the middle of a single flag or between adjacent flags, the
+ * implementation counts how many regional indicator symbols occur in the
+ * string before the current position, to determine if the count is odd or
+ * even.)
  *
  * BreakIterator accesses the text it analyzes through a CharacterIterator, which makes
  * it possible to use BreakIterator to analyze text in any text-storage vehicle that
