@@ -277,14 +277,6 @@ See, for example, this snippet from the [line break rules](https://github.com/un
 | `!!chain`       |  Enable rule chaining. Default is no chaining. |
 | `!!forward`     |  The rules that follow are for forward iteration. Forward rules are now the only type of rules needed or used.   |
 
-### Deprecated Rule Options
-
-| Deprecated Option          | Description |
-| --------------- | ----------- |
-| ~~`!!reverse`~~     | ~~*[deprecated]* The rules that follow are for reverse iteration. No longer needed; any rules in a Reverse rule section are ignored.~~ |
-| ~~`!!safe_forward`~~ | ~~*[deprecated]* The rules that follow are for safe forward iteration. No longer needed; any rules in such a section are ignored.~~ |
-| ~~`!!safe_reverse`~~ | ~~*[deprecated]* The rules that follow are for safe reverse iteration. No longer needed; any rules in such a section are ignored.~~ |
-
 ## Rule Syntax
 
 Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
@@ -293,7 +285,7 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 | ---------- | ----------- | ----- |
 | rules | statement+ | |
 | statement | assignment \| rule \| control |
-| control | (`!!forward` \| `!!reverse` \| `!!safe_forward` \| `!!safe_reverse` \| `!!chain`) `;`
+| control | (`!!forward` \| `!!chain`) `;`
 | assignment | variable `=` expr `;` | 5 |
 | rule | `^`? expr (`{`number`}`)? `;` | 8,9 |
 | number | [0-9]+ | 1 |

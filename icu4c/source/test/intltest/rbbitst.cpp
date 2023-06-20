@@ -1170,8 +1170,6 @@ end_test:
 void RBBITest::TestDictRules() {
     const char *rules =  "$dictionary = [a-z]; \n"
                          "!!forward; \n"
-                         "$dictionary $dictionary; \n"
-                         "!!reverse; \n"
                          "$dictionary $dictionary; \n";
     const char *text = "aa";
     UErrorCode status = U_ZERO_ERROR;
@@ -4371,7 +4369,7 @@ void RBBITest::TestBug7547() {
 
 
 void RBBITest::TestBug12797() {
-    UnicodeString rules = "!!chain; !!forward; $v=b c; a b; $v; !!reverse; .*;";
+    UnicodeString rules = "!!chain; !!forward; $v=b c; a b; $v; .*;";
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     RuleBasedBreakIterator bi(rules, parseError, status);

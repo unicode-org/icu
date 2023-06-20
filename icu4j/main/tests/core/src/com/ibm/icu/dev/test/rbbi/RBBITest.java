@@ -367,7 +367,7 @@ public class RBBITest extends TestFmwk {
 
     @Test
     public void TestBug12797() {
-        String rules = "!!chain; !!forward; $v=b c; a b; $v; !!reverse; .*;";
+        String rules = "!!chain; !!forward; $v=b c; a b; $v; .*;";
         RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rules);
 
         bi.setText("abc");
