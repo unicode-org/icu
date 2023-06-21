@@ -84,13 +84,8 @@ public final class XLikelySubtags {
             byte[] trie = new byte[buffer.remaining()];
             buffer.get(trie);
 
-            String[] lsrSubtags = getValue(likelyTable, "lsrs", value).getStringArray();
-            LSR[] lsrs = new LSR[lsrSubtags.length / 3];
-            for (int i = 0, j = 0; i < lsrSubtags.length; i += 3, ++j) {
-                lsrs[j] = new LSR(lsrSubtags[i], lsrSubtags[i + 1], lsrSubtags[i + 2],
-                        LSR.IMPLICIT_LSR);
-            }
-
+            String[] m49 = getValue(likelyTable, "m49", value).getStringArray();
+            LSR[] lsrs = LSR.decodeInts(getValue(likelyTable, "lsrnum", value).getIntVector(), m49);
             return new Data(languageAliases, regionAliases, trie, lsrs);
         }
 

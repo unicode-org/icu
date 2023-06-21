@@ -11,6 +11,7 @@
 #include "unicode/locid.h"
 #include "unicode/uobject.h"
 #include "unicode/ures.h"
+#include "unicode/uscript.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "loclikelysubtags.h"
@@ -81,11 +82,18 @@ struct XLikelySubtagsData {
         // Read all strings in the resource bundle and convert them to invariant char *.
         LocalMemory<int32_t> languageIndexes, regionIndexes, lsrSubtagIndexes;
         int32_t languagesLength = 0, regionsLength = 0, lsrSubtagsLength = 0;
+        ResourceArray m49Array;
+        if (likelyTable.findValue("m49", value)) {
+            m49Array = value.getArray(errorCode);
+        } else {
+            errorCode = U_MISSING_RESOURCE_ERROR;
+            return;
+        }
         if (!readStrings(likelyTable, "languageAliases", value,
                          languageIndexes, languagesLength, errorCode) ||
                 !readStrings(likelyTable, "regionAliases", value,
                              regionIndexes, regionsLength, errorCode) ||
-                !readStrings(likelyTable, "lsrs", value,
+                !readLSREncodedStrings(likelyTable, "lsrnum", value, m49Array,
                              lsrSubtagIndexes,lsrSubtagsLength, errorCode)) {
             return;
         }
@@ -136,7 +144,7 @@ struct XLikelySubtagsData {
 
             if (!readStrings(matchTable, "partitions", value,
                              partitionIndexes, partitionsLength, errorCode) ||
-                    !readStrings(matchTable, "paradigms", value,
+                    !readLSREncodedStrings(matchTable, "paradigmnum", value, m49Array,
                                  paradigmSubtagIndexes, paradigmSubtagsLength, errorCode)) {
                 return;
             }
@@ -237,6 +245,88 @@ private:
                 rawIndexes[i] = strings.add(value.getUnicodeString(errorCode), errorCode);
                 if (U_FAILURE(errorCode)) { return false; }
             }
+        }
+        return true;
+    }
+    UnicodeString toLanguage(int encoded) {
+        if (encoded == 0) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        if (encoded == 1) {
+            return UNICODE_STRING_SIMPLE("skip");
+        }
+        encoded &= 0x00ffffff;
+        encoded %= 27*27*27;
+        char lang[3];
+        lang[0] = 'a' + ((encoded % 27) - 1);
+        lang[1] = 'a' + (((encoded / 27 ) % 27) - 1);
+        if (encoded / (27 * 27) == 0) {
+            return UnicodeString(lang, 2);
+        }
+        lang[2] = 'a' + ((encoded / (27 * 27)) - 1);
+        return UnicodeString(lang, 3);
+    }
+    UnicodeString toScript(int encoded) {
+        if (encoded == 0) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        if (encoded == 1) {
+            return UNICODE_STRING_SIMPLE("script");
+        }
+        encoded = (encoded >> 24) & 0x000000ff;
+        const char* script = uscript_getShortName(static_cast<UScriptCode>(encoded));
+        if (script == nullptr) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        return UnicodeString(script, 4);
+    }
+    UnicodeString m49IndexToCode(const ResourceArray &m49Array, ResourceValue &value, int index, UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        if (m49Array.getValue(index, value)) {
+            return value.getUnicodeString(errorCode);
+        }
+        // "m49" does not include the index.
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return UNICODE_STRING_SIMPLE("");
+    }
+
+    UnicodeString toRegion(const ResourceArray& m49Array, ResourceValue &value, int encoded, UErrorCode &errorCode) {
+        if (encoded == 0 || encoded == 1) {
+            return UNICODE_STRING_SIMPLE("");
+        }
+        encoded &= 0x00ffffff;
+        encoded /= 27 * 27 * 27;
+        encoded %= 27 * 27;
+        if (encoded < 27) {
+            // Selected M49 code index, find the code from "m49" resource.
+            return  m49IndexToCode(m49Array, value, 2, errorCode);
+        }
+        char region[2];
+        region[0] = 'A' + ((encoded % 27) - 1);
+        region[1] = 'A' + (((encoded / 27) % 27) - 1);
+        return UnicodeString(region, 2);
+    }
+
+    bool readLSREncodedStrings(const ResourceTable &table, const char* key, ResourceValue &value, const ResourceArray& m49Array,
+                     LocalMemory<int32_t> &indexes, int32_t &length, UErrorCode &errorCode) {
+        if (table.findValue(key, value)) {
+            const int32_t* vectors = value.getIntVector(length, errorCode);
+            if (U_FAILURE(errorCode)) { return false; }
+            if (length == 0) { return true; }
+            int32_t *rawIndexes = indexes.allocateInsteadAndCopy(length * 3);
+            if (rawIndexes == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return false;
+            }
+            for (int i = 0; i < length; ++i) {
+                rawIndexes[i*3] = strings.add(toLanguage(vectors[i]), errorCode);
+                rawIndexes[i*3+1] = strings.add(toScript(vectors[i]), errorCode);
+                rawIndexes[i*3+2] = strings.add(toRegion(m49Array, value, vectors[i], errorCode), errorCode);
+                if (U_FAILURE(errorCode)) { return false; }
+            }
+            length *= 3;
         }
         return true;
     }

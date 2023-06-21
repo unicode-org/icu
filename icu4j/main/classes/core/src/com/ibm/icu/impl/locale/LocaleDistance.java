@@ -151,14 +151,12 @@ public class LocaleDistance {
             String[] partitions = getValue(matchTable, "partitions", value).getStringArray();
 
             Set<LSR> paradigmLSRs;
-            if (matchTable.findValue("paradigms", value)) {
-                String[] paradigms = value.getStringArray();
+            if (matchTable.findValue("paradigmnum", value)) {
+                String[] m49 = getValue(langInfo.getValueWithFallback("likely").getTable(),
+                    "m49", value).getStringArray();
+                LSR[] paradigms = LSR.decodeInts(getValue(matchTable, "paradigmnum", value).getIntVector(), m49);
                 // LinkedHashSet for stable order; otherwise a unit test is flaky.
-                paradigmLSRs = new LinkedHashSet<>(paradigms.length / 3);
-                for (int i = 0; i < paradigms.length; i += 3) {
-                    paradigmLSRs.add(new LSR(paradigms[i], paradigms[i + 1], paradigms[i + 2],
-                            LSR.DONT_CARE_FLAGS));
-                }
+                paradigmLSRs = new LinkedHashSet<LSR>(Arrays.asList(paradigms));
             } else {
                 paradigmLSRs = Collections.emptySet();
             }

@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.unicode.cldr.api.AttributeKey;
@@ -42,6 +43,8 @@ import com.google.common.primitives.Bytes;
 import com.ibm.icu.impl.locale.LSR;
 import com.ibm.icu.impl.locale.LocaleDistance;
 import com.ibm.icu.impl.locale.XLikelySubtags;
+import com.ibm.icu.lang.UScript;
+
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -102,18 +105,23 @@ public final class LocaleDistanceMapper {
     // Output resource bundle paths, split into two basic groups for likely locale mappings
     // and match data.
     private static final RbPath LIKELY_LANGUAGES = RbPath.of("likely", "languageAliases");
+    private static final RbPath LIKELY_M49 = RbPath.of("likely", "m49");
     private static final RbPath LIKELY_REGIONS = RbPath.of("likely", "regionAliases");
     private static final RbPath LIKELY_TRIE = RbPath.of("likely", "trie:bin");
-    private static final RbPath LIKELY_LSRS = RbPath.of("likely", "lsrs");
+    private static final RbPath LIKELY_LSRNUM = RbPath.of("likely", "lsrnum:intvector");
 
     private static final RbPath MATCH_TRIE = RbPath.of("match", "trie:bin");
     private static final RbPath MATCH_REGION_TO_PARTITIONS = RbPath.of("match", "regionToPartitions:bin");
     private static final RbPath MATCH_PARTITIONS = RbPath.of("match", "partitions");
-    private static final RbPath MATCH_PARADIGMS = RbPath.of("match", "paradigms");
+    private static final RbPath MATCH_PARADIGMNUM = RbPath.of("match", "paradigmnum:intvector");
     private static final RbPath MATCH_DISTANCES = RbPath.of("match", "distances:intvector");
 
     // To split locale specifications (e.g. "ja_Latn" or "en_*_$!enUS").
     private static final Splitter UNDERSCORE = Splitter.on('_');
+
+    // The encoding scheme allow us to only encode up to 27 M.49 code below.
+    // The size is later check while reading the M49 List.
+    private static final List<String> M49 = Arrays.asList("001", "143", "419");
 
     /**
      * Processes data from the given supplier to generate locale matcher ICU data.
@@ -129,17 +137,22 @@ public final class LocaleDistanceMapper {
     static IcuData process(CldrData data) {
         IcuData icuData = new IcuData("langInfo", false);
 
+        if (M49.size() > 27) {
+            throw new IllegalStateException(
+                "The M49 list is too long. We can only encode up to 27 M49 codes.");
+        }
         XLikelySubtags.Data likelyData = LikelySubtagsBuilder.build(data);
         icuData.add(LIKELY_LANGUAGES, ofMapEntries(likelyData.languageAliases));
+        icuData.add(LIKELY_M49, RbValue.of(M49));
         icuData.add(LIKELY_REGIONS, ofMapEntries(likelyData.regionAliases));
         icuData.add(LIKELY_TRIE, ofBytes(likelyData.trie));
-        icuData.add(LIKELY_LSRS, ofLsrs(asList(likelyData.lsrs)));
+        icuData.add(LIKELY_LSRNUM, ofLsrNum(asList(likelyData.lsrs)));
 
         LocaleDistance.Data distanceData = buildDistanceData(data);
         icuData.add(MATCH_TRIE, ofBytes(distanceData.trie));
         icuData.add(MATCH_REGION_TO_PARTITIONS, ofBytes(distanceData.regionToPartitionsIndex));
         icuData.add(MATCH_PARTITIONS, RbValue.of(distanceData.partitionArrays));
-        icuData.add(MATCH_PARADIGMS, ofLsrs(distanceData.paradigmLSRs));
+        icuData.add(MATCH_PARADIGMNUM, ofLsrNum(distanceData.paradigmLSRs));
         icuData.add(MATCH_DISTANCES, RbValue.of(Arrays.stream(distanceData.distances).mapToObj(Integer::toString)));
         return icuData;
     }
@@ -434,21 +447,88 @@ public final class LocaleDistanceMapper {
                 .elementsPerLine(2);
     }
 
-    // Returns an RbValue serialized from a sequence of LSR instance as a sequence of repeating
-    // (language, region, script) tuples (formatted as one tuple per line in the IcuData file).
-    //
-    // E.g.
-    // foo{
-    //     lang1, script1, region1,
-    //     ...
-    //     langN, scriptN, regionN,
-    // }
-    private static RbValue ofLsrs(Collection<LSR> lsrs) {
+    // Returns an RbValue serialized from a sequence of LSR instance as a sequence of number
+    // represent (language, region, script) tuples (formatted as one number per line in the IcuData file).
+    private static RbValue ofLsrNum(Collection<LSR> lsrs) {
         return RbValue.of(
                 lsrs.stream()
-                        .flatMap(lsr -> Stream.of(lsr.language, lsr.script, lsr.region))
-                        .collect(Collectors.toList()))
-                .elementsPerLine(3);
+                        .flatMapToInt(lsr -> IntStream.of(LSRToNum(lsr)))
+                        .mapToObj(Integer::toString));
+    }
+
+    // This method is added only to support encodeToIntForResource()
+    // It only support [a-z]{2,3} and will not work for other cases.
+    // TODO(ftang) Remove after LSR.encodeToIntForResource is available to the tool.
+    static private int encodeLanguageToInt(String language) {
+        assert language.length() >= 2;
+        assert language.length() <= 3;
+        assert language.charAt(0) >= 'a';
+        assert language.charAt(0) <= 'z';
+        assert language.charAt(1) >= 'a';
+        assert language.charAt(1) <= 'z';
+        assert language.length() == 2 || language.charAt(2) >= 'a';
+        assert language.length() == 2 || language.charAt(2) <= 'z';
+        return language.charAt(0) - 'a' + 1 +
+               27 * (language.charAt(1) - 'a' + 1) +
+               ((language.length() == 2) ? 0 : 27 * 27 * (language.charAt(2) - 'a' + 1));
+    }
+    // This method is added only to support encodeToIntForResource()
+    // It only support [A-Z][a-z]{3} which defined in UScript and does not work for other cases.
+    // TODO(ftang) Remove after LSR.encodeToIntForResource is available to the tool.
+    static private int encodeScriptToInt(String script) {
+        int ret = UScript.getCodeFromName(script);
+        assert ret != UScript.INVALID_CODE;
+        return ret;
+    }
+    // This method is added only to support encodeToIntForResource()
+    // It only support [A-Z]{2}|001|143|419 and does not work for other cases.
+    // TODO(ftang) Remove after LSR.encodeToIntForResource is available to the tool.
+    static private int encodeRegionToInt(String region, List<String> m49) {
+        assert region.length() >= 2;
+        assert region.length() <= 3;
+        // Do not have enough bits to store the all 1000 possible combination of \d{3}
+        // Only support what is in M49.
+        if (region.length() == 3) {
+            int index = m49.indexOf(region);
+            assert index >= 0;
+            if (index < 0) {
+                throw new IllegalStateException(
+                    "Please add '" + region + "' to M49 in LocaleDistanceMapper.java");
+            }
+            return index;
+        }
+        assert region.charAt(0) >= 'A';
+        assert region.charAt(0) <= 'Z';
+        assert region.charAt(1) >= 'A';
+        assert region.charAt(1) <= 'Z';
+        // 'AA' => 1+27*1  = 28
+        // ...
+        // 'AZ' => 1+27*26 = 703
+        // 'BA' => 2+27*1  = 29
+        // ...
+        // 'IN' => 9+27*14 = 387
+        // 'ZZ' => 26+27*26 = 728
+        return (region.charAt(0) - 'A' + 1) + 27 * (region.charAt(1) - 'A' + 1);
+    }
+    // This is designed to only support encoding some LSR into resources but not for other cases.
+    // TODO(ftang) Remove after LSR.encodeToIntForResource is available to the tool.
+    static int encodeToIntForResource(LSR lsr) {
+        return (encodeLanguageToInt(lsr.language) + (27*27*27) * encodeRegionToInt(lsr.region, M49)) |
+            (encodeScriptToInt(lsr.script) << 24);
+    }
+
+    private static int LSRToNum(LSR lsr) {
+        // Special number for "", "", "" return 0
+        if (lsr.language.isEmpty() && lsr.script.isEmpty() && lsr.region.isEmpty()) {
+            return 0;
+        }
+        // Special number for "skip", "script", "" return 1
+        if (lsr.language.equals("skip") && lsr.script.equals("script") && lsr.region.isEmpty()) {
+            return 1;
+        }
+        // TODO(ftang) Change to the following line after LSR.encodeToIntForResource is available to the tool.
+        // return lsr.encodeToIntForResource();
+        return encodeToIntForResource(lsr);
     }
 
     // Returns an RbValue serialized from a byte array, as a concatenated sequence of rows of
