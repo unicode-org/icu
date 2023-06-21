@@ -1779,7 +1779,7 @@ MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Bui
     }
 }
 
-MessageFormatDataModel* MessageFormatDataModel::Builder::build(UErrorCode &errorCode) {
+MessageFormatDataModel* MessageFormatDataModel::Builder::build(UErrorCode &errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     bool patternValid = pattern.isValid();

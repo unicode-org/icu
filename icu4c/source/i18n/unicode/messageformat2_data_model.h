@@ -76,24 +76,18 @@ variables.
  */
 class MessageFormatter;
 
-// Helper functions for vector copying
-// T1 must have a copy constructor
-// This may leave dst->pointer == nullptr, which is handled by the UVector assign() method
-template <typename T1>
-static void copyElements(UElement *dst, UElement *src) {
-  dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
-}
-
-static void copyStrings(UElement *dst, UElement *src) {
-  dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
-}
-
 /*
 TODO: comment explaining why we need all the copy constructors
 because isn't what we need to copy the *builders*, when it goes from mutable to
 immutable, and you might want to save intermediate builders?
 shouldn't immutable AST nodes *not* need to be copied? but I came to the conclusion, somehow,
 that they do
+*/
+
+/*
+TODO: Intermediate Builder->Builder& methods are currently not const,
+because that seems like a lot of copying.
+But maybe they should be?
 */
 class U_I18N_API MessageFormatDataModel : public UMemory {
     friend class MessageFormatter;
@@ -184,6 +178,14 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         friend class Pattern;
         friend class Reserved;
         friend class SelectorKeys;
+
+        // Helper functions for vector copying
+        // T1 must have a copy constructor
+        // This may leave dst->pointer == nullptr, which is handled by the UVector assign() method
+        template <typename T1>
+        static void copyElements(UElement *dst, UElement *src) {
+            dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
+        }
 
         // Copies the contents of `builder`
         // This won't compile unless T is a type that has a copy assignment operator
@@ -283,7 +285,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           return *this;
         }
 
-        // this should be a *copying* build() (leaves `this` valid)
+        // Copying `build()` (leaves `this` valid)
         OrderedMap<V>* build(UErrorCode& errorCode) const {
           if (U_FAILURE(errorCode)) {
             return nullptr;
@@ -353,6 +355,11 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
       friend class VariantMap;
       friend class Operator;
       // Helpers
+
+      static void copyStrings(UElement *dst, UElement *src) {
+          dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
+      }
+
       static Hashtable* copyHashtable(const Hashtable& other) {
         UErrorCode errorCode = U_ZERO_ERROR;
         // No value comparator needed
@@ -475,12 +482,6 @@ class Operand : public UObject {
         return result;
     }
 
-  // TODO
-  // Should be private with only List having access
-    static Operand* copy(const Operand& other) {
-         return new Operand(other);
-    }
-
     // Represent variable names as unquoted literals
     Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
     Operand(const Literal& l) : isVariableReference(false), string(l) {}
@@ -540,14 +541,16 @@ class Operand : public UObject {
       return new Key(other);
     }
 
-  // TODO: maybe shouldn't be public
-  void toString(UnicodeString& result) const {
-    if (isWildcard()) {
-      result += ASTERISK;
-    }
-    result += contents.contents;
-  }
   private:
+    friend class VariantMap;
+
+    void toString(UnicodeString& result) const {
+        if (isWildcard()) {
+            result += ASTERISK;
+        }
+        result += contents.contents;
+    }
+
     // wildcard constructor
     Key() : wildcard(true) {}
     // concrete key constructor
@@ -583,15 +586,16 @@ class Operand : public UObject {
          }; // class SelectorKeys::Builder
          static Builder* builder(UErrorCode& errorCode);
 
-      // TODO: comments explaining why the copy constructors on AST nodes themselves (not builders) are necessary
-      // TODO: make this private
-      // Because the copy of `keys` might fail, operations on SelectorKeys
-         // have to check for isBogus()
+       private:
+         friend class List<SelectorKeys>;
+         friend class VariantMap;
+      // SelectorKeys needs a copy constructor because VariantMap::Builder has a copying
+      // build() method, which in turn is because we want MessageFormatDataModel::Builder to have a copying
+      // build() method
          SelectorKeys(const SelectorKeys& other) : keys(new KeyList(*(other.keys))) {
              U_ASSERT(!other.isBogus());
          }
 
-       private:
          friend class List<SelectorKeys>;
          const LocalPointer<KeyList> keys;
          bool isBogus() const { return !keys.isValid(); }
@@ -630,6 +634,9 @@ class Operand : public UObject {
           return *this;
         }
         // this should be a *copying* build() (leaves `this` valid)
+        // Needs to be const to enforce that when MessageFormatDataModel
+        // constructor calls VariantMap::build(), it copies the variants
+        // rather than moving them
         VariantMap* build(UErrorCode& errorCode) const {
           if (U_FAILURE(errorCode)) {
             return nullptr;
@@ -704,11 +711,10 @@ class Operand : public UObject {
 
  public:
 
-    // TODO: maybe this should be private? actually having a reserved string would be an error;
-    // this is there for testing purposes
+// Matching the draft schema at https://github.com/unicode-org/message-format-wg/pull/393/ ,
+// `Reserved` is exposed
 
     // Corresponds to `reserved` in the grammar
-    // Represent the structure implicitly to make it easier to serialize correctly
     class Reserved : public UMemory {
     public:
         size_t numParts() const {
@@ -745,6 +751,8 @@ class Operand : public UObject {
 
         // See comments under SelectorKeys' copy constructor; this is analogous
         bool isBogus() const { return !parts.isValid(); }
+
+        // Reserved needs a copy constructor in order to make Expression deeply copyable
         Reserved(const Reserved& other) : parts(new List<Literal>(*other.parts)) {
             U_ASSERT(!other.isBogus());
         }
@@ -822,6 +830,7 @@ class Operand : public UObject {
          // Reserved sequence constructor
          Operator(Reserved* r) : isReservedSequence(true), functionName(""), options(nullptr), reserved(r) {}
 
+         // Operator needs a copy constructor in order to make Expression deeply copyable
          Operator(const Operator& other) : isReservedSequence(other.isReservedSequence), functionName(other.functionName) {
              U_ASSERT(!other.isBogus());
              if (isReservedSequence) {
@@ -866,6 +875,7 @@ class Operand : public UObject {
         */
       public:
 
+      // Expression needs a copy constructor in order to make Pattern deeply copyable
       Expression(const Expression& other) {
         U_ASSERT(!other.isBogus());
         if (other.rator.isValid() && other.rand.isValid()) {
@@ -1048,12 +1058,6 @@ class Operand : public UObject {
             U_ASSERT(isText());
             return text;
         }
-      // TODO: make this private
-      // If !isRawText and the copy of the other expression fails,
-      // then isBogus() will be true for this PatternPart
-      PatternPart(const PatternPart& other) : isRawText(other.isText()), text(other.text), expression(isRawText ? nullptr : new Expression(other.contents()))  {
-          U_ASSERT(!other.isBogus());
-      }
 
       private:
 
@@ -1063,6 +1067,13 @@ class Operand : public UObject {
       PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
       // Expression
       PatternPart(Expression* e) : isRawText(false), expression(e) {}
+
+      // If !isRawText and the copy of the other expression fails,
+      // then isBogus() will be true for this PatternPart
+      // PatternPart needs a copy constructor in order to make Pattern deeply copyable
+      PatternPart(const PatternPart& other) : isRawText(other.isText()), text(other.text), expression(isRawText ? nullptr : new Expression(other.contents()))  {
+          U_ASSERT(!other.isBogus());
+      }
 
 
         // Either Expression or TextPart can show up in a pattern
@@ -1079,6 +1090,9 @@ class Operand : public UObject {
         }
     };
 
+  private:
+    class MessageBody;
+  public:
     class Pattern : public UObject {
       public:
         size_t numParts() const { return parts->length(); }
@@ -1098,10 +1112,9 @@ class Operand : public UObject {
                 }
                 parts.adoptInstead(List<PatternPart>::builder(errorCode));
             }
-// TODO: I think this is why we want copy constructors for Pattern and therefore
-// for Expression, etc.
-// This builds up a mutable list of immutable `PatternPart`s, so we have to copy
-// them on calling `build()`
+            // Note this is why PatternPart and all its enclosed classes need
+            // copy constructors: when the build() method is called on `parts`,
+            // it should copy `parts` rather than moving it
             LocalPointer<List<PatternPart>::Builder> parts;
 
           public:
@@ -1113,17 +1126,13 @@ class Operand : public UObject {
 
         static Builder *builder(UErrorCode &errorCode);
 
-      // TODO: make this private
-      
-      // If the copy of the other list fails,
-      // then isBogus() will be true for this Pattern
-      Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) {
-          U_ASSERT(!other.isBogus());
-      }
 
       private:
+
         friend class MessageBody;
         friend class List<PatternPart>;
+        friend class OrderedMap<Pattern>;
+
         // Possibly-empty list of parts
         const LocalPointer<List<PatternPart>> parts;
 
@@ -1131,7 +1140,18 @@ class Operand : public UObject {
       // Can only be called by Builder
       // Takes ownership of `ps`
       Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+
+      // If the copy of the other list fails,
+      // then isBogus() will be true for this Pattern
+      // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
+      // moving build
+      Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) {
+          U_ASSERT(!other.isBogus());
+      }
+
     };
+
+      // TODO: comments explaining why the copy constructors on AST nodes themselves (not builders) are necessary
 
      class Binding {
      public:
@@ -1146,6 +1166,9 @@ class Operand : public UObject {
          return b;
        }
        Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
+       // This needs a copy constructor so that `Bindings` is deeply-copyable,
+       // which is in turn so that MessageFormatDataModel::build() can be copying
+       // (it has to copy the builder's locals)
        Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
          U_ASSERT(!other.isBogus());
        }
@@ -1164,8 +1187,8 @@ class Operand : public UObject {
 
      class Builder {
        private:
-         friend class MessageFormatDataModel;
 
+         friend class MessageFormatDataModel;
          // prevent direct construction
          Builder(UErrorCode& errorCode) {
              if (U_FAILURE(errorCode)) {
@@ -1199,6 +1222,9 @@ class Operand : public UObject {
          LocalPointer<Bindings::Builder> locals;
 
        public:
+         // Note that these methods are not const -- they mutate `this` and return a reference to `this`,
+         // rather than a const reference to a new builder
+
          // Takes ownership of `expression`
          Builder& addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
          // No addLocalVariables() yet
@@ -1208,7 +1234,7 @@ class Operand : public UObject {
          // Takes ownership
          Builder& addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
          Builder& setPattern(Pattern* pattern);
-         MessageFormatDataModel* build(UErrorCode& errorCode);
+         MessageFormatDataModel* build(UErrorCode& errorCode) const;
      };
 
      static Builder* builder(UErrorCode& errorCode);
