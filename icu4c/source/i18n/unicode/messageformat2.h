@@ -187,7 +187,7 @@ class U_I18N_API MessageFormatter : public Format {
     const MessageFormatter &operator=(const MessageFormatter &) = delete;
 
     // Parser class (private)
-    class Parser : UMemory {
+    class Parser : public UMemory {
     public:
       virtual ~Parser();
       static Parser* create(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInput, UErrorCode& errorCode) {

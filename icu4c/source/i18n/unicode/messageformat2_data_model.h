@@ -88,6 +88,13 @@ static void copyStrings(UElement *dst, UElement *src) {
   dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
 }
 
+/*
+TODO: comment explaining why we need all the copy constructors
+because isn't what we need to copy the *builders*, when it goes from mutable to
+immutable, and you might want to save intermediate builders?
+shouldn't immutable AST nodes *not* need to be copied? but I came to the conclusion, somehow,
+that they do
+*/
 class U_I18N_API MessageFormatDataModel : public UMemory {
     friend class MessageFormatter;
 
@@ -214,17 +221,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
               contents.adoptInstead(nullptr);
           }
       }
-           /*
-        static List<T>* copy(const List<T>& other) {
-          UErrorCode errorCode = U_ZERO_ERROR;
-          LocalPointer<UVector> adoptedContents(new UVector(other.length(), errorCode));
-          adoptedContents->assign(*other.contents, &copyElements<T>, errorCode);
-          if (U_FAILURE(errorCode)) {
-            return nullptr;
-          }
-          return new List<T>(adoptedContents.orphan());
-        }
-           */
         // Adopts `contents`
         List(UVector* things) : contents(things) {
           U_ASSERT(things != nullptr);
@@ -238,7 +234,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         // For classes that contain a List member, there is no guarantee that
         // the list will be non-bogus, but if it is, any operations on that list
         // will fail (assertion failure)
-        bool isBogus() const { return contents.isValid(); }
+        bool isBogus() const { return !contents.isValid(); }
   };
 
     class VariantMap;
@@ -269,26 +265,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         return true;
       }
 
-      /*
-      static OrderedMap<V>* copy(const OrderedMap<V>& other) {
-          UErrorCode errorCode = U_ZERO_ERROR;
-          LocalPointer<Hashtable> adoptedContents(copyHashtable(*other.contents));
-          LocalPointer<UVector> adoptedKeys(copyStringVector(*other.keys));
-
-          if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
-            return nullptr;
-          }
-          LocalPointer<OrderedMap<V>> result(
-              OrderedMap<V>::create(adoptedContents.orphan(),
-                                    adoptedKeys.orphan(),
-                                    errorCode));
-          
-          if (U_FAILURE(errorCode)) {
-            return nullptr;
-          }
-          return result.orphan();
-      }
-      */
       class Builder : public UMemory {
       public:
         // Adopts `value`
@@ -728,7 +704,6 @@ class Operand : public UObject {
 
  public:
 
-    class Operator;
     // TODO: maybe this should be private? actually having a reserved string would be an error;
     // this is there for testing purposes
 
@@ -798,7 +773,7 @@ class Operand : public UObject {
              return functionName;
          }
          const Reserved& asReserved() const {
-             U_ASSERT(!isBogus() && !isReserved());
+             U_ASSERT(!isBogus() && isReserved());
              return *reserved;
          }
          const OptionMap &getOptions() const {
@@ -864,9 +839,9 @@ class Operand : public UObject {
          //                              || (!isReservedSequence && !reserved.isValid() && options.isValid())
          bool isBogus() const {
              if (isReservedSequence) {
-                 return (reserved.isValid() && !options.isValid());
+                 return !((reserved.isValid() && !options.isValid()));
              }
-             return (!reserved.isValid() && options.isValid());
+             return (!(!reserved.isValid() && options.isValid()));
          }
          const bool isReservedSequence;
          const FunctionName functionName;
@@ -891,7 +866,6 @@ class Operand : public UObject {
         */
       public:
 
-      // TODO copy constructor for expression
       Expression(const Expression& other) {
         U_ASSERT(!other.isBogus());
         if (other.rator.isValid() && other.rand.isValid()) {
@@ -913,41 +887,25 @@ class Operand : public UObject {
         rand.adoptInstead(new Operand(*(other.rand)));
         bogus = !rand.isValid();
       }
-      /*
-      static Expression* copy(const Expression& other) {
-        if (other.rator.isValid() && other.rand.isValid()) {
-          LocalPointer<Operator> otherRator(Operator:*other.rator));
-          LocalPointer<Operand> otherRand(Operand::copy(*other.rand));
-          if (!otherRator.isValid() || !otherRand.isValid()) {
-            return nullptr;
-          }
-          return new Expression(otherRator.orphan(), otherRand.orphan());
-        }
-        if (other.rator.isValid()) {
-          LocalPointer<Operator> otherRator(Operator::copy(*other.rator));
-          if (!otherRator.isValid()) {
-            return nullptr;
-          }
-          return new Expression(otherRator.orphan());
-        }
-        U_ASSERT(other.rand.isValid());
-        LocalPointer<Operand> otherRand(Operand::copy(*other.rand));
-        if (!otherRand.isValid()) {
-          return nullptr;
-        }
-        return new Expression(otherRand.orphan());
-      }
-      */
         // TODO: include these or not?
-        bool isStandaloneAnnotation() const { return (rand == nullptr); }
+        bool isStandaloneAnnotation() const {
+            U_ASSERT(!isBogus());
+            return !rand.isValid();
+        }
         // Returns true for function calls with operands as well as
         // standalone annotations.
         // Reserved sequences are not function calls
-        bool isFunctionCall() const { return (rator != nullptr && !rator->isReserved()); }
-        bool isReserved() const { return (rator != nullptr && rator->isReserved()); }
+        bool isFunctionCall() const {
+            U_ASSERT(!isBogus());
+            return (rator.isValid() && !rator->isReserved());
+        }
+        bool isReserved() const {
+            U_ASSERT(!isBogus());
+            return (rator.isValid() && rator->isReserved());
+        }
 
         const Operand& getOperand() const {
-            U_ASSERT(rand != nullptr);
+            U_ASSERT(!isStandaloneAnnotation());
             return *rand;
         }
  
@@ -1022,17 +980,17 @@ class Operand : public UObject {
       // Here, a separate variable isBogus tracks if any copies failed.
       // This is because rator = nullptr and rand = nullptr are semantic here,
       // so this can't just be a predicate that checks if those are null
-      bool bogus;
+      bool bogus = false; // copy constructors explicitly set this to true on failure
 
       bool isBogus() const {
         if (bogus) {
-          return false;
+          return true;
         }
         // Invariant: if the expression is not bogus and it
-        // has a non-null operator, that operator is bogus.
+        // has a non-null operator, that operator is not bogus.
         // (Operands are never bogus.)
         U_ASSERT(!rator.isValid() || !rator->isBogus());
-        return true;
+        return false;
       }
         // All constructors adopt their arguments
         // Both operator and operands must be non-null
@@ -1077,10 +1035,12 @@ class Operand : public UObject {
             }
             return result;
         }
-        bool isText() const { return isRawText; }
+        bool isText() const {
+            return isRawText;
+        }
         // Precondition: !isText()
         const Expression& contents() const {
-          U_ASSERT(!isText());
+          U_ASSERT(!isText() && !isBogus());
           return *expression;
         }
         // Precondition: isText();
@@ -1091,7 +1051,9 @@ class Operand : public UObject {
       // TODO: make this private
       // If !isRawText and the copy of the other expression fails,
       // then isBogus() will be true for this PatternPart
-      PatternPart(const PatternPart& other) : isRawText(other.isText()), expression(isRawText ? nullptr : new Expression(other.contents()))  {}
+      PatternPart(const PatternPart& other) : isRawText(other.isText()), text(other.text), expression(isRawText ? nullptr : new Expression(other.contents()))  {
+          U_ASSERT(!other.isBogus());
+      }
 
       private:
 
@@ -1112,7 +1074,7 @@ class Operand : public UObject {
         // null if isRawText
         const LocalPointer<Expression> expression;
 
-        bool isBogus() {
+        bool isBogus() const {
           return (!isRawText && !expression.isValid());
         }
     };
@@ -1122,7 +1084,7 @@ class Operand : public UObject {
         size_t numParts() const { return parts->length(); }
         // Precondition: i < numParts()
         const PatternPart* getPart(size_t i) const {
-            U_ASSERT(i < numParts());
+            U_ASSERT(!isBogus() && i < numParts());
             return parts->get(i);
         }
 
@@ -1136,6 +1098,10 @@ class Operand : public UObject {
                 }
                 parts.adoptInstead(List<PatternPart>::builder(errorCode));
             }
+// TODO: I think this is why we want copy constructors for Pattern and therefore
+// for Expression, etc.
+// This builds up a mutable list of immutable `PatternPart`s, so we have to copy
+// them on calling `build()`
             LocalPointer<List<PatternPart>::Builder> parts;
 
           public:
@@ -1151,7 +1117,9 @@ class Operand : public UObject {
       
       // If the copy of the other list fails,
       // then isBogus() will be true for this Pattern
-      Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) {}
+      Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) {
+          U_ASSERT(!other.isBogus());
+      }
 
       private:
         friend class MessageBody;
@@ -1159,7 +1127,7 @@ class Operand : public UObject {
         // Possibly-empty list of parts
         const LocalPointer<List<PatternPart>> parts;
 
-      bool isBogus() { return !parts.isValid(); }
+      bool isBogus() const { return !parts.isValid(); }
       // Can only be called by Builder
       // Takes ownership of `ps`
       Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
@@ -1177,15 +1145,7 @@ class Operand : public UObject {
          }
          return b;
        }
-       static Binding* copy(const Binding& b) {
-         Expression* otherValue = new Expression(*b.value);
-         if (otherValue == nullptr) {
-           return nullptr;
-         }
-         return new Binding(b.var, otherValue);
-       }
        Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
-       // TODO: make sure bogus checks are everywhere they need to be
        Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
          U_ASSERT(!other.isBogus());
        }
