@@ -77,57 +77,15 @@ variables.
 class MessageFormatter;
 
 // Helper functions for vector copying
+// T1 must have a copy constructor
+// This may leave dst->pointer == nullptr, which is handled by the UVector assign() method
 template <typename T1>
 static void copyElements(UElement *dst, UElement *src) {
-  dst->pointer = T1::copy(*(static_cast<T1 *>(src->pointer)));
+  dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
 }
 
 static void copyStrings(UElement *dst, UElement *src) {
   dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
-}
-
-// Helpers
-template <typename V>
-static Hashtable* copyHashtable(const Hashtable& other) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  // No value comparator needed
-  LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
-  if (U_FAILURE(errorCode)) {
-    return nullptr;
-  }
-  // The hashtable owns the values
-  adoptedContents->setValueDeleter(uprv_deleteUObject);
-
-  // Copy all the key/value bindings over
-  const UHashElement *e;
-  int32_t pos = UHASH_FIRST;
-  V *val;
-  while ((e = other.nextElement(pos)) != nullptr) {
-    val = V::copy(*(static_cast<V *>(e->value.pointer)));
-    if (val == nullptr) {
-      return nullptr;
-    }
-    UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
-    adoptedContents->put(*s, val, errorCode);
-    if (U_FAILURE(errorCode)) {
-      return nullptr;
-    }
-  }
-
-  return adoptedContents.orphan();
-}
-
-static UVector* copyStringVector(const UVector& other) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  LocalPointer<UVector> adoptedKeys(new UVector(other.size(), errorCode));
-  if (U_FAILURE(errorCode)) {
-    return nullptr;
-  }
-  adoptedKeys->assign(other, &copyStrings, errorCode);
-  if (U_FAILURE(errorCode)) {
-    return nullptr;
-  }
-  return adoptedKeys.orphan();
 }
 
 class U_I18N_API MessageFormatDataModel : public UMemory {
@@ -135,6 +93,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
   public:
 
+    class Operator;
     class Pattern;
     class Reserved;
     class SelectorKeys;
@@ -143,14 +102,19 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
     class List : public UMemory {
         // Provides a wrapper around a vector
       private:
-          const LocalPointer<UVector> contents;
+      // This should be const, but is non-const to make the copy constructor easier
+      /* const */ LocalPointer<UVector> contents;
 
       public:
-        size_t length() const { return (contents == nullptr ? 0 : contents->size()); }
+        size_t length() const {
+          U_ASSERT(!isBogus());
+          return contents->size();
+        }
 
         // Out-of-bounds is an internal error
         // To avoid undue copying, get() returns a T* since UVector::get() returns a void*.
         const T* get(size_t i) const {
+            U_ASSERT(!isBogus());
             U_ASSERT(!(length() <= 0 || i >= length()));
             return static_cast<const T *>(contents->elementAt(i));
         }
@@ -167,12 +131,14 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                contents->adoptElement(element, errorCode);
                return *this;
            }
+           // Postcondition: returns a list such that isBogus() = false
            List<T>* build(UErrorCode &errorCode) const {
                if (U_FAILURE(errorCode)) {
                    return nullptr;
                }
                LocalPointer<List<T>> adopted(buildList(*this, errorCode));
-               if (U_FAILURE(errorCode)) {
+               if (!adopted.isValid() || adopted->isBogus()) {
+                   errorCode = U_MEMORY_ALLOCATION_ERROR;
                    return nullptr;
                }
                return adopted.orphan();
@@ -233,8 +199,22 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
             }
             return result;
-        }
+        } 
 
+      List(const List<T>& other) {
+          UErrorCode errorCode = U_ZERO_ERROR;
+          U_ASSERT(!other.isBogus());
+          contents.adoptInstead(new UVector(other.length(), errorCode));
+          if (U_FAILURE(errorCode)) {
+              contents.adoptInstead(nullptr);
+              return;
+          }
+          contents->assign(*other.contents, &copyElements<T>, errorCode);
+          if (U_FAILURE(errorCode)) {
+              contents.adoptInstead(nullptr);
+          }
+      }
+           /*
         static List<T>* copy(const List<T>& other) {
           UErrorCode errorCode = U_ZERO_ERROR;
           LocalPointer<UVector> adoptedContents(new UVector(other.length(), errorCode));
@@ -244,8 +224,21 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           }
           return new List<T>(adoptedContents.orphan());
         }
+           */
         // Adopts `contents`
-        List(UVector* things) : contents(things) {}
+        List(UVector* things) : contents(things) {
+          U_ASSERT(things != nullptr);
+        }
+        // If a copy constructor fails, the list is left in an inconsistent state,
+        // because copying has to allocate a new vector.
+        // Copy constructors can't take error codes as arguments. So we have to
+        // resort to this, and all methods must check the invariant and signal an
+        // error if it's false. The error should be U_MEMORY_ALLOCATION_ERROR,
+        // since isBogus iff an allocation failed.
+        // For classes that contain a List member, there is no guarantee that
+        // the list will be non-bogus, but if it is, any operations on that list
+        // will fail (assertion failure)
+        bool isBogus() const { return contents.isValid(); }
   };
 
     class VariantMap;
@@ -257,13 +250,15 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
     private:
       size_t size() const {
-        return keys->size();
+          U_ASSERT(!isBogus());
+          return keys->size();
       }
 
     public:
       static constexpr size_t FIRST = 0;
       // Returns true if there are elements remaining
       bool next(size_t &pos, UnicodeString& k, const V*& v) const {
+        U_ASSERT(!isBogus());
         U_ASSERT(pos >= FIRST);
         if (pos >= size()) {
           return false;
@@ -274,9 +269,10 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         return true;
       }
 
+      /*
       static OrderedMap<V>* copy(const OrderedMap<V>& other) {
           UErrorCode errorCode = U_ZERO_ERROR;
-          LocalPointer<Hashtable> adoptedContents(copyHashtable<V>(*other.contents));
+          LocalPointer<Hashtable> adoptedContents(copyHashtable(*other.contents));
           LocalPointer<UVector> adoptedKeys(copyStringVector(*other.keys));
 
           if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
@@ -292,7 +288,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
           }
           return result.orphan();
       }
- 
+      */
       class Builder : public UMemory {
       public:
         // Adopts `value`
@@ -317,7 +313,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
             return nullptr;
           }
 
-          LocalPointer<Hashtable> adoptedContents(copyHashtable<V>(*contents));
+          LocalPointer<Hashtable> adoptedContents(copyHashtable(*contents));
           LocalPointer<UVector> adoptedKeys(copyStringVector(*keys));
 
           if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
@@ -327,7 +323,6 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
               OrderedMap<V>::create(adoptedContents.orphan(),
                                     adoptedKeys.orphan(),
                                     errorCode));
-          
           if (U_FAILURE(errorCode)) {
             return nullptr;
           }
@@ -380,16 +375,70 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
     private:
       friend class VariantMap;
+      friend class Operator;
+      // Helpers
+      static Hashtable* copyHashtable(const Hashtable& other) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        // No value comparator needed
+        LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
+        if (U_FAILURE(errorCode)) {
+          return nullptr;
+        }
+        // The hashtable owns the values
+        adoptedContents->setValueDeleter(uprv_deleteUObject);
 
+        // Copy all the key/value bindings over
+        const UHashElement *e;
+        int32_t pos = UHASH_FIRST;
+        V *val;
+        while ((e = other.nextElement(pos)) != nullptr) {
+          val = new V(*(static_cast<V *>(e->value.pointer)));
+          if (val == nullptr) {
+            return nullptr;
+          }
+          UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
+          adoptedContents->put(*s, val, errorCode);
+          if (U_FAILURE(errorCode)) {
+            return nullptr;
+          }
+        }
+
+        return adoptedContents.orphan();
+      }
+
+      static UVector* copyStringVector(const UVector& other) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        LocalPointer<UVector> adoptedKeys(new UVector(other.size(), errorCode));
+        if (U_FAILURE(errorCode)) {
+          return nullptr;
+        }
+        adoptedKeys->assign(other, &copyStrings, errorCode);
+        if (U_FAILURE(errorCode)) {
+          return nullptr;
+        }
+        return adoptedKeys.orphan();
+
+      }
+      // See comments under `List`
+      bool isBogus() const { return (!contents.isValid() || !keys.isValid()); }
+
+      OrderedMap<V>(const OrderedMap<V>& other) : contents(copyHashtable(*other.contents)), keys(copyStringVector(*other.keys)) {
+          U_ASSERT(!other.isBogus());
+      }
+
+      // Postcondition: U_FAILURE(errorCode) || !((return value).isBogus())
       static OrderedMap<V>* create(Hashtable* c, UVector* k, UErrorCode& errorCode) {
           if (U_FAILURE(errorCode)) {
             return nullptr;
           }
-          OrderedMap<V>* result = new OrderedMap<V>(c, k);
+          LocalPointer<OrderedMap<V>> result(new OrderedMap<V>(c, k));
           if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
+          } else if (result->isBogus()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
           }
-          return result;
+          return result.orphan();
       }
       OrderedMap<V>(Hashtable* c, UVector* k) : contents(c), keys(k) {
         // It would be an error if `c` and `k` had different sizes
@@ -536,7 +585,10 @@ class Operand : public UObject {
     // Represents the left-hand side of a `when` clause
     class SelectorKeys : public UObject {
        public:
-         const KeyList& getKeys() const;
+         const KeyList& getKeys() const {
+             U_ASSERT(!isBogus());
+             return *keys;
+         }
          class Builder {
             private:
                 friend class SelectorKeys;
@@ -552,20 +604,24 @@ class Operand : public UObject {
                 Builder& add(Key* key, UErrorCode& errorCode);
                 // TODO: is addAll() necessary?
                 SelectorKeys* build(UErrorCode& errorCode) const;
-         };
+         }; // class SelectorKeys::Builder
          static Builder* builder(UErrorCode& errorCode);
-         static SelectorKeys* copy(const SelectorKeys& other) {
-           KeyList* otherK = List<Key>::copy(*other.keys);
-           if (otherK == nullptr) {
-             return nullptr;
-           }
-           return new SelectorKeys(otherK);
+
+      // TODO: comments explaining why the copy constructors on AST nodes themselves (not builders) are necessary
+      // TODO: make this private
+      // Because the copy of `keys` might fail, operations on SelectorKeys
+         // have to check for isBogus()
+         SelectorKeys(const SelectorKeys& other) : keys(new KeyList(*(other.keys))) {
+             U_ASSERT(!other.isBogus());
          }
+
        private:
+         friend class List<SelectorKeys>;
          const LocalPointer<KeyList> keys;
+         bool isBogus() const { return !keys.isValid(); }
          // Adopts `keys`
          SelectorKeys(KeyList* ks) : keys(ks) {}
-     };
+    }; // class SelectorKeys
 
     class VariantMap : public UMemory {
       // Wraps an OrderedMap<Pattern>
@@ -670,11 +726,6 @@ class Operand : public UObject {
     
   using OptionMap = OrderedMap<Operand>;
 
-  /*
-Note: all the static copy() methods exist because UVector and Hashtable don't have copy constructors
-(e.g. UVector::assign() takes an error code argument)
-TODO
-   */
  public:
 
     class Operator;
@@ -685,9 +736,13 @@ TODO
     // Represent the structure implicitly to make it easier to serialize correctly
     class Reserved : public UMemory {
     public:
-        size_t numParts() const { return parts->length(); }
+        size_t numParts() const {
+          U_ASSERT(!isBogus());
+          return parts->length();
+        }
         // Precondition: i < numParts()
         const Literal* getPart(size_t i) const {
+            U_ASSERT(!isBogus());
             U_ASSERT(i < numParts());
             return parts->get(i);
         }
@@ -710,16 +765,14 @@ TODO
         };
 
         static Builder *builder(UErrorCode &errorCode);
-
-      static Reserved* copy(const Reserved& other) {
-        List<Literal>* otherParts = List<Literal>::copy(*other.parts);
-        if (otherParts == nullptr) {
-          return nullptr;
-        }
-        return new Reserved(otherParts);
-      }
       private:
         friend class Operator;
+
+        // See comments under SelectorKeys' copy constructor; this is analogous
+        bool isBogus() const { return !parts.isValid(); }
+        Reserved(const Reserved& other) : parts(new List<Literal>(*other.parts)) {
+            U_ASSERT(!other.isBogus());
+        }
 
         // Possibly-empty list of parts
         // `literal` reserved as a quoted literal; `reserved-char` / `reserved-escape`
@@ -731,6 +784,7 @@ TODO
         Reserved(List<Literal> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
     };
 
+  class Expression;
       // TODO: This class should really be private. left public for the convenience of the parser
   class Operator : public UMemory {
          // An operator represents either a function name together with
@@ -740,28 +794,32 @@ TODO
        public:
 
          const FunctionName& getFunctionName() const {
-             U_ASSERT(!isReserved());
+             U_ASSERT(!isBogus() && !isReserved());
              return functionName;
          }
          const Reserved& asReserved() const {
-             U_ASSERT(isReserved());
+             U_ASSERT(!isBogus() && !isReserved());
              return *reserved;
          }
          const OptionMap &getOptions() const {
-             U_ASSERT(!isReserved());
+             U_ASSERT(!isBogus() && !isReserved());
              return *options;
          }
          bool isReserved() const { return isReservedSequence; }
 
+         // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
          static Operator* create(Reserved* r, UErrorCode& errorCode) {
              if (U_FAILURE(errorCode)) {
                  return nullptr;
              }
-             Operator* result = new Operator(r);
-             if (result == nullptr) {
+             LocalPointer<Operator> result(new Operator(r));
+             if (!result.isValid()) {
                  errorCode = U_MEMORY_ALLOCATION_ERROR;
+             } else if (result->isBogus()) {
+                 errorCode = U_MEMORY_ALLOCATION_ERROR;
+                 return nullptr;
              }
-             return result;
+             return result.orphan();
          }
 
          static Operator* create(FunctionName f, OptionMap* l, UErrorCode& errorCode) {
@@ -770,28 +828,18 @@ TODO
              }
              LocalPointer<OptionMap> adoptedOptions(l);
              U_ASSERT(adoptedOptions.isValid());
-             Operator* result = new Operator(f, adoptedOptions.orphan());
-             if (result == nullptr) {
+             LocalPointer<Operator> result(new Operator(f, adoptedOptions.orphan()));
+             if (!result.isValid()) {
                  errorCode = U_MEMORY_ALLOCATION_ERROR;
+             } else if (result->isBogus()) {
+                 errorCode = U_MEMORY_ALLOCATION_ERROR;
+                 return nullptr;
              }
-             return result;
-         }
-
-         static Operator* copy(const Operator& other) {
-           if (other.isReservedSequence) {
-             Reserved* otherReserved = Reserved::copy(*other.reserved);
-             if (otherReserved == nullptr) {
-               return nullptr;
-             }
-             return new Operator(otherReserved);
-           }
-           OptionMap* otherOptions = OptionMap::copy(*other.options);
-           if (otherOptions == nullptr) {
-             return nullptr;
-           }
-           return new Operator(other.functionName, otherOptions);
+             return result.orphan();
          }
        private:
+         friend class Expression;
+
          // Function call constructor; adopts `l`
          Operator(FunctionName f, OptionMap *l)
            : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {}
@@ -799,10 +847,32 @@ TODO
          // Reserved sequence constructor
          Operator(Reserved* r) : isReservedSequence(true), functionName(""), options(nullptr), reserved(r) {}
 
+         Operator(const Operator& other) : isReservedSequence(other.isReservedSequence), functionName(other.functionName) {
+             U_ASSERT(!other.isBogus());
+             if (isReservedSequence) {
+               reserved.adoptInstead(new Reserved(*(other.reserved)));
+                 options.adoptInstead(nullptr);
+                 return;
+             }
+             // Function call
+             reserved.adoptInstead(nullptr);
+             options.adoptInstead(new OptionMap(*other.options));
+         }
+
+         // See comments under `SelectorKeys` for why this is here.
+         // In this case, the invariant is (isReservedSequence && reserved.isValid() && !options.isValid())
+         //                              || (!isReservedSequence && !reserved.isValid() && options.isValid())
+         bool isBogus() const {
+             if (isReservedSequence) {
+                 return (reserved.isValid() && !options.isValid());
+             }
+             return (!reserved.isValid() && options.isValid());
+         }
          const bool isReservedSequence;
          const FunctionName functionName;
-         const LocalPointer<OptionMap> options;
-         const LocalPointer<Reserved> reserved;
+         // Non-const for copy constructors, effectively const
+         /* const */ LocalPointer<OptionMap> options;
+         /* const */ LocalPointer<Reserved> reserved;
      };
 
   
@@ -821,9 +891,32 @@ TODO
         */
       public:
 
+      // TODO copy constructor for expression
+      Expression(const Expression& other) {
+        U_ASSERT(!other.isBogus());
+        if (other.rator.isValid() && other.rand.isValid()) {
+          U_ASSERT(!(other.rator->isBogus()));
+          rator.adoptInstead(new Operator(*(other.rator)));
+          rand.adoptInstead(new Operand(*(other.rand)));
+          bogus = !(rator.isValid() && rand.isValid());
+          return;
+        }
+        if (other.rator.isValid()) {
+          U_ASSERT(!other.rator->isBogus());
+          rator.adoptInstead(new Operator(*(other.rator)));
+          rand.adoptInstead(nullptr);
+          bogus = !rator.isValid();
+          return;
+        }
+        U_ASSERT(other.rand.isValid());
+        rator.adoptInstead(nullptr);
+        rand.adoptInstead(new Operand(*(other.rand)));
+        bogus = !rand.isValid();
+      }
+      /*
       static Expression* copy(const Expression& other) {
         if (other.rator.isValid() && other.rand.isValid()) {
-          LocalPointer<Operator> otherRator(Operator::copy(*other.rator));
+          LocalPointer<Operator> otherRator(Operator:*other.rator));
           LocalPointer<Operand> otherRand(Operand::copy(*other.rand));
           if (!otherRator.isValid() || !otherRand.isValid()) {
             return nullptr;
@@ -844,8 +937,7 @@ TODO
         }
         return new Expression(otherRand.orphan());
       }
-
-        // TODO
+      */
         // TODO: include these or not?
         bool isStandaloneAnnotation() const { return (rand == nullptr); }
         // Returns true for function calls with operands as well as
@@ -927,6 +1019,21 @@ TODO
             return result;
         }
 
+      // Here, a separate variable isBogus tracks if any copies failed.
+      // This is because rator = nullptr and rand = nullptr are semantic here,
+      // so this can't just be a predicate that checks if those are null
+      bool bogus;
+
+      bool isBogus() const {
+        if (bogus) {
+          return false;
+        }
+        // Invariant: if the expression is not bogus and it
+        // has a non-null operator, that operator is bogus.
+        // (Operands are never bogus.)
+        U_ASSERT(!rator.isValid() || !rator->isBogus());
+        return true;
+      }
         // All constructors adopt their arguments
         // Both operator and operands must be non-null
         Expression(Operator *rAtor, Operand *rAnd) : rator(rAtor), rand(rAnd) {
@@ -939,8 +1046,9 @@ TODO
         // Operator must be non-null
         Expression(Operator *rAtor) : rator(rAtor), rand(nullptr) { U_ASSERT(rAtor != nullptr); }
 
-        const LocalPointer<Operator> rator;
-        const LocalPointer<Operand> rand;
+        // Non-const for copy constructors; effectively const
+        /* const */ LocalPointer<Operator> rator;
+        /* const */ LocalPointer<Operand> rand;
     };
 
     using ExpressionList = List<Expression>;
@@ -969,17 +1077,6 @@ TODO
             }
             return result;
         }
-      // TODO: Should be private and only callable by List
-        static PatternPart* copy(const PatternPart& other) {
-          if (other.isText()) {
-            return new PatternPart(other.asText());
-          }
-          Expression* otherExpr = Expression::copy(other.contents());
-          if (otherExpr == nullptr) {
-            return nullptr;
-          }
-          return new PatternPart(otherExpr);
-        }
         bool isText() const { return isRawText; }
         // Precondition: !isText()
         const Expression& contents() const {
@@ -991,12 +1088,20 @@ TODO
             U_ASSERT(isText());
             return text;
         }
+      // TODO: make this private
+      // If !isRawText and the copy of the other expression fails,
+      // then isBogus() will be true for this PatternPart
+      PatternPart(const PatternPart& other) : isRawText(other.isText()), expression(isRawText ? nullptr : new Expression(other.contents()))  {}
+
       private:
 
+      friend class List<PatternPart>;
+      friend class Pattern;
       // Text
       PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
       // Expression
       PatternPart(Expression* e) : isRawText(false), expression(e) {}
+
 
         // Either Expression or TextPart can show up in a pattern
         // This class exists so Text can be distinguished from Expression
@@ -1006,6 +1111,10 @@ TODO
         const UnicodeString text;
         // null if isRawText
         const LocalPointer<Expression> expression;
+
+        bool isBogus() {
+          return (!isRawText && !expression.isValid());
+        }
     };
 
     class Pattern : public UObject {
@@ -1038,22 +1147,22 @@ TODO
 
         static Builder *builder(UErrorCode &errorCode);
 
-      // TODO: Should be private    
-        static Pattern* copy(const Pattern& other) {
-          LocalPointer<List<PatternPart>> parts(List<PatternPart>::copy(*other.parts));
-          if (!parts.isValid()) {
-            return nullptr;
-          }
-          return new Pattern(parts.orphan());
-        }
-  
+      // TODO: make this private
+      
+      // If the copy of the other list fails,
+      // then isBogus() will be true for this Pattern
+      Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) {}
+
       private:
+        friend class MessageBody;
+        friend class List<PatternPart>;
         // Possibly-empty list of parts
         const LocalPointer<List<PatternPart>> parts;
 
-        // Can only be called by Builder
-        // Takes ownership of `ps`
-        Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+      bool isBogus() { return !parts.isValid(); }
+      // Can only be called by Builder
+      // Takes ownership of `ps`
+      Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
     };
 
      class Binding {
@@ -1069,15 +1178,21 @@ TODO
          return b;
        }
        static Binding* copy(const Binding& b) {
-         Expression* otherValue = Expression::copy(*b.value);
+         Expression* otherValue = new Expression(*b.value);
          if (otherValue == nullptr) {
            return nullptr;
          }
          return new Binding(b.var, otherValue);
        }
        Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
+       // TODO: make sure bogus checks are everywhere they need to be
+       Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
+         U_ASSERT(!other.isBogus());
+       }
+         
        const UnicodeString var;
        const LocalPointer<Expression> value;
+       bool isBogus() const { return !value.isValid(); }
      };
      using Bindings = List<Binding>;
      const Bindings& getLocalVariables() const {
@@ -1207,7 +1322,7 @@ TODO
              }
              scrutinees = nullptr;
              variants = nullptr;
-             pattern.adoptInstead(Pattern::copy(pat));
+             pattern.adoptInstead(new Pattern(pat));
              if (!pattern.isValid()) {
                errorCode = U_MEMORY_ALLOCATION_ERROR;
              }
@@ -1273,3 +1388,4 @@ U_NAMESPACE_END
 
 #endif // U_HIDE_DEPRECATED_API
 // eof
+

@@ -1374,10 +1374,6 @@ MessageFormatDataModel::SelectorKeys* MessageFormatDataModel::SelectorKeys::Buil
     return result;
 }
 
-const KeyList& MessageFormatDataModel::SelectorKeys::getKeys() const {
-    return *keys;
-}
-
 /*
   Consume a non-empty sequence of `key`s separated by whitespace
 
