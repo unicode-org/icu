@@ -212,6 +212,25 @@ class U_I18N_API MessageFormatter : public Format {
     private:
       friend class MessageFormatDataModel::Builder;
 
+      /*
+        Use an internal "parse error" structure to make it easier to translate
+        absolute offsets to line offsets.
+        This is translated back to a `UParseError` at the end of parsing.
+      */
+      typedef struct MessageParseError {
+        // The line on which the error occurred
+        uint32_t line;
+        // The offset, relative to the erroneous line, on which the error occurred
+        uint32_t offset;
+        // The total number of characters seen before advancing to the current line. It has a value of 0 if line == 0.
+        // It includes newline characters, because the index does too.
+        uint32_t lengthBeforeCurrentLine;
+
+        // This parser doesn't yet use the last two fields.
+        UChar   preContext[U_PARSE_CONTEXT_LEN];
+        UChar   postContext[U_PARSE_CONTEXT_LEN];
+      } MessageParseError;
+
       Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInputRef)
                : source(input), index(0), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
                  parseError.line = 0;
@@ -225,6 +244,9 @@ class U_I18N_API MessageFormatter : public Format {
              // (literal, text, and reserved)
              typedef enum { LITERAL, TEXT, RESERVED } EscapeKind;
 
+             static void translateParseError(const MessageParseError&, UParseError&);
+             static void setParseError(MessageParseError&, uint32_t);
+             void maybeAdvanceLine();
              void parseBody(UErrorCode &);
              void parseDeclarations(UErrorCode &);
              void parseSelectors(UErrorCode &);

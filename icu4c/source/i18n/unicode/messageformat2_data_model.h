@@ -19,25 +19,6 @@
 
 U_NAMESPACE_BEGIN  namespace message2 {
 
-/*
-  Use an internal "parse error" structure to make it easier to translate
-  absolute offsets to line offsets.
-  This is translated back to a `UParseError` at the end of parsing.
-*/
-typedef struct MessageParseError {
-    // The line on which the error occurred
-    uint32_t line;
-    // The offset, relative to the erroneous line, on which the error occurred
-    uint32_t offset;
-    // The total number of characters seen before advancing to the current line. It has a value of 0 if line == 0.
-    // It includes newline characters, because the index does too.
-    uint32_t lengthBeforeCurrentLine;
-
-    // This parser doesn't yet use the last two fields.
-    UChar   preContext[U_PARSE_CONTEXT_LEN];
-    UChar   postContext[U_PARSE_CONTEXT_LEN];
-} MessageParseError;
-
 // TBD
 using FunctionName   = UnicodeString;
 // TBD

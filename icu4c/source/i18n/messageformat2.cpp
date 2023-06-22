@@ -65,9 +65,7 @@ static bool inBounds(const UnicodeString &source, uint32_t index) {
 
 // Increments the line number and updates the "characters seen before
 // current line" count in `parseError`, iff `source[index]` is a newline
-static void maybeAdvanceLine(const UnicodeString& source,
-                             uint32_t index,
-                             MessageParseError &parseError) {
+void PARSER::maybeAdvanceLine() {
     if (source[index] == LF) {
         parseError.line++;
         // add 1 to index to get the number of characters seen so far
@@ -225,14 +223,14 @@ static void copyContext(const UChar in[U_PARSE_CONTEXT_LEN], UChar out[U_PARSE_C
     }
 }
 
-static void translateParseError(const MessageParseError &messageParseError, UParseError &parseError) {
+/* static */ void PARSER::translateParseError(const MessageParseError &messageParseError, UParseError &parseError) {
     parseError.line = messageParseError.line;
     parseError.offset = messageParseError.offset;
     copyContext(messageParseError.preContext, parseError.preContext);
     copyContext(messageParseError.postContext, parseError.postContext);
 }
 
-static void setParseError(MessageParseError &parseError, uint32_t index) {
+/* static */ void PARSER::setParseError(MessageParseError &parseError, uint32_t index) {
     // Translate absolute to relative offset
     parseError.offset = index                               // Start with total number of characters seen
                       - parseError.lengthBeforeCurrentLine; // Subtract all characters before the current line
@@ -447,7 +445,7 @@ void PARSER::parseWhitespaceMaybeRequired(bool required, UErrorCode &errorCode) 
         if (isWhitespace(source[index])) {
             sawWhitespace = true;
             // Increment line number in parse error if we consume a newline
-            maybeAdvanceLine(source, index, parseError);
+            maybeAdvanceLine();
             index++;
         } else {
             break;
@@ -744,7 +742,7 @@ void PARSER::parseLiteral(UErrorCode &errorCode, String& str) {
             str += source[index];
             normalizedInput += source[index];
             index++; // Consume this character
-            maybeAdvanceLine(source, index, parseError);
+            maybeAdvanceLine();
         } else {
           // Assume the sequence of literal characters ends here
           done = true;
@@ -1287,7 +1285,7 @@ void PARSER::parseText(UErrorCode &errorCode, String &str) {
             normalizedInput += source[index];
             str += source[index];
             index++;
-            maybeAdvanceLine(source, index, parseError);
+            maybeAdvanceLine();
         } else {
             break;
         }
