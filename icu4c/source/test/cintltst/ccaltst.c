@@ -1568,6 +1568,24 @@ void TestGregorianChange() {
         }
     }
     ucal_close(cal);
+    /* Test ucal_setGregorianChange() on a iso8601 calendar and it should work
+     * as Gregorian. */
+    errorCode = U_ZERO_ERROR;
+    cal = ucal_open(utc, -1, "en@calendar=iso8601", UCAL_TRADITIONAL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("ucal_open(UTC) failed: %s - (Are you missing data?)\n", u_errorName(errorCode));
+        return;
+    }
+    ucal_setGregorianChange(cal, -365 * (dayMillis * (UDate)1), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucal_setGregorianChange(1969) failed: %s\n", u_errorName(errorCode));
+    } else {
+        date = ucal_getGregorianChange(cal, &errorCode);
+        if(U_FAILURE(errorCode) || date != -365 * (dayMillis * (UDate)1)) {
+            log_err("ucal_getGregorianChange() failed: %s, date = %f\n", u_errorName(errorCode), date);
+        }
+    }
+    ucal_close(cal);
 
     /* Test ucal_setGregorianChange() on a non-Gregorian calendar where it should fail. */
     errorCode = U_ZERO_ERROR;
