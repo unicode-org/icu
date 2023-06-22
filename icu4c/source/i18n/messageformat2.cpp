@@ -1758,14 +1758,15 @@ MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Bui
         // If `pattern` has been set, then assume this is a Pattern message
         U_ASSERT(!builder.selectors.isValid());
         U_ASSERT(!builder.variants.isValid());
-        body.adoptInstead(new MessageBody(*builder.pattern, errorCode));
+        pattern.adoptInstead(new Pattern(*(builder.pattern)));
+        U_ASSERT(!hasSelectors());
     } else {
         // Otherwise, this is a Selectors message
         U_ASSERT(builder.selectors.isValid());
         U_ASSERT(builder.variants.isValid());
-        LocalPointer<ExpressionList> selectors(builder.selectors->build(errorCode));
-        LocalPointer<VariantMap> variants(builder.variants->build(errorCode));
-        body.adoptInstead(new MessageBody(selectors.orphan(), variants.orphan(), errorCode));
+        selectors.adoptInstead(builder.selectors->build(errorCode));
+        variants.adoptInstead(builder.variants->build(errorCode));
+        U_ASSERT(hasSelectors());
     }
 }
 

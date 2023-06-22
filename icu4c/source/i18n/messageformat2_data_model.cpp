@@ -211,15 +211,10 @@ void SERIALIZER::serializeDeclarations() {
 }
 
 void SERIALIZER::serializeSelectors() {
-    U_ASSERT(dataModel.body->scrutinees != nullptr);
-    const ExpressionList& selectors = *dataModel.body->scrutinees;
+    U_ASSERT(dataModel.hasSelectors());
+    const ExpressionList& selectors = dataModel.getSelectors();
     size_t len = selectors.length();
-
-    // Special case: selectors is empty. Emit nothing in this case;
-    // serializeVariants() will emit the pattern.
-    if (len == 0) {
-        return;
-    }
+    U_ASSERT(len > 0);
 
     emit(ID_MATCH);
     for (size_t i = 0; i < len; i++) {
@@ -229,9 +224,8 @@ void SERIALIZER::serializeSelectors() {
 }
 
 void SERIALIZER::serializeVariants() {
-    U_ASSERT(dataModel.body->variants != nullptr);
-
-    const VariantMap& variants = *dataModel.body->variants;
+    U_ASSERT(dataModel.hasSelectors());
+    const VariantMap& variants = dataModel.getVariants();
     size_t pos = VariantMap::FIRST;
 
     const SelectorKeys* selectorKeys;
@@ -251,8 +245,8 @@ void SERIALIZER::serializeVariants() {
 void SERIALIZER::serialize() {
     serializeDeclarations();
     // Pattern message
-    if (dataModel.body->pattern != nullptr) {
-      emit(*dataModel.body->pattern);
+    if (!dataModel.hasSelectors()) {
+      emit(dataModel.getPattern());
     } else {
       // Selectors message
       serializeSelectors();

@@ -1116,6 +1116,7 @@ class Operand : public UObject {
     };
 
     using ExpressionList = List<Expression>;
+    // TODO: No builder, for now, since this is just created in one step
     class PatternPart : public UObject {
       public:
         static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode) {
@@ -1222,10 +1223,9 @@ class Operand : public UObject {
 
         static Builder *builder(UErrorCode &errorCode);
 
-
       private:
 
-        friend class MessageBody;
+        friend class MessageFormatDataModel;
         friend class List<PatternPart>;
         friend class OrderedMap<Pattern>;
 
@@ -1272,14 +1272,37 @@ class Operand : public UObject {
        const UnicodeString var;
        const LocalPointer<Expression> value;
        bool isBogus() const { return !value.isValid(); }
-     };
+     }; // class Binding
+
      using Bindings = List<Binding>;
      const Bindings& getLocalVariables() const {
          return *bindings;
      }
-     ExpressionList& getSelectors() const;
-     VariantMap& getVariants() const;
-     Pattern& getPattern() const;
+     // This is so that we can avoid having getSelectors(), getVariants(),
+     // and getPattern() take error codes / signal an error if you call the wrong one
+     // TODO
+     bool hasSelectors() const {
+       if (pattern.isValid()) {
+         U_ASSERT(!selectors.isValid());
+         U_ASSERT(!variants.isValid());
+         return false;
+       }
+       U_ASSERT(selectors.isValid());
+       U_ASSERT(variants.isValid());
+       return true;
+     }
+     ExpressionList& getSelectors() const {
+       U_ASSERT(hasSelectors());
+       return *selectors;
+     }
+     VariantMap& getVariants() const {
+       U_ASSERT(hasSelectors());
+       return *variants;
+     }
+     Pattern& getPattern() const {
+       U_ASSERT(!hasSelectors());
+       return *pattern;
+     }
 
      class Builder {
        private:
@@ -1345,7 +1368,9 @@ class Operand : public UObject {
      virtual ~MessageFormatDataModel();
 
   private:
-     
+
+     // TODO: this should probably not be nested inside MessageFormatDataModel
+
      // Converts a data model back to a string
      class Serializer : UMemory {
        public:
@@ -1375,80 +1400,28 @@ class Operand : public UObject {
          void serializeVariants();
      };
 
-     friend class Serializer;
-
-     class MessageBody : public UMemory {
-       public:
-         // Constructs a body out of a list of scrutinees (expressions) and
-         // a list of variants, which represents the `(selectors 1*([s] variant))`
-         // alternative in the grammar
-         // Adopts its arguments; takes an error code for consistency
-         MessageBody(ExpressionList *es, VariantMap *vs, UErrorCode& errorCode) {
-             if (U_FAILURE(errorCode)) {
-                 return;
-             }
-             U_ASSERT(es != nullptr && vs != nullptr);
-             scrutinees.adoptInstead(es);
-             variants.adoptInstead(vs);
-             pattern.adoptInstead(nullptr);
-         }
-
-         // Constructs a body out of a single Pattern
-         // (body -> pattern alternative in the grammar)
-         // a `pattern` in the grammar
-         // This copies the pattern, as it's called by the builder, which
-         // is non-destructive
-         MessageBody(const Pattern &pat, UErrorCode &errorCode) {
-             if (U_FAILURE(errorCode)) {
-               return;
-             }
-             scrutinees = nullptr;
-             variants = nullptr;
-             pattern.adoptInstead(new Pattern(pat));
-             if (!pattern.isValid()) {
-               errorCode = U_MEMORY_ALLOCATION_ERROR;
-             }
-         }
-       private:
-         friend class Serializer;
-         /*
-           A message body is a `selectors` construct as in the grammar.
-           A bare pattern is represented as a `selectors` with no scrutinees
-           and a single `when`-clause with empty keys.
-          */
-
-         // The expressions that are being matched on.
-         // Null iff this is a `pattern` message.
-         LocalPointer<ExpressionList> scrutinees;
-
-         // The list of `when` clauses (case arms).
-         // Null iff this is a `pattern` message.
-         LocalPointer<VariantMap> variants;
-
-         // The pattern forming the body of the message.
-         // If this is non-null, then `variants` and `scrutinees` must be null.
-         LocalPointer<Pattern> pattern;
-     };
-
-    /*
-      A parsed message consists of an environment and a body.
-      Initially, the environment contains bindings for local variables
-      (those declared with `let` in the message). API calls can extend
-      the environment with new bindings or change the values of existing ones.
-
-      Once the data model is constructed, only the environment can be mutated.
-      (It's constructed bottom-up.)
-    */
-    LocalPointer<Bindings> bindings;
-
-    /*
-      See the `MessageBody` class.
+     /*
+       A message body is a `selectors` construct as in the grammar.
      */
-    LocalPointer<MessageBody> body;
 
-    // Normalized version of the input string (optional whitespace omitted)
-    // Used for testing purposes
-    LocalPointer<UnicodeString> normalizedInput;
+     // The expressions that are being matched on.
+     // Null iff this is a `pattern` message.
+     LocalPointer<ExpressionList> selectors;
+
+     // The list of `when` clauses (case arms).
+     // Null iff this is a `pattern` message.
+     LocalPointer<VariantMap> variants;
+
+     // The pattern forming the body of the message.
+     // If this is non-null, then `variants` and `selectors` must be null.
+     LocalPointer<Pattern> pattern;
+
+     // Bindings for local variables
+     LocalPointer<Bindings> bindings;
+
+     // Normalized version of the input string (optional whitespace omitted)
+     // Used for testing purposes
+     LocalPointer<UnicodeString> normalizedInput;
 
     // Do not define default assignment operator
     const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
