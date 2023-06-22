@@ -987,6 +987,33 @@ RuleBasedCollator::doCompare(const char16_t *left, int32_t leftLength,
             ++equalPrefixLength;
         }
     } else {
+        if ((uint32_t)leftLength >= sizeof(uint64_t)
+            && (uint32_t)rightLength >= sizeof(uint64_t)
+            && (uintptr_t)(const void*)left % sizeof(uint64_t) == (uintptr_t)(const void*)right % sizeof(uint64_t)) {
+            int32_t i = 0;
+            int32_t limit = leftLength < rightLength ? leftLength : rightLength;
+            
+            // Memory alignment step.
+            while(i < limit && left[i] == right[i]
+                && ((uintptr_t)(const void*)(left + i)) % sizeof(uint64_t) != 0) {
+                ++i;
+            }
+            equalPrefixLength += i;
+
+            // Double word baesd comparison.
+            if (i < limit && (uintptr_t)(const void*)(left + i) % sizeof(uint64_t) == 0) {
+                const uint64_t *dWordLeft = (const uint64_t *)(const void *)left;
+                const uint64_t *dWordRight = (const uint64_t *)(const void *)right;
+                int32_t dWordLength = (leftLength < rightLength ? leftLength : rightLength) / sizeof(uint64_t);
+                i = 0;
+                
+                while(i < dWordLength && dWordLeft[i] == dWordRight[i]) {
+                    ++i;
+                }
+                equalPrefixLength = i != 0 ? i * sizeof(uint64_t) / 2 - 1 : 0;
+            }
+        }
+
         leftLimit = left + leftLength;
         rightLimit = right + rightLength;
         for(;;) {
@@ -1102,6 +1129,33 @@ RuleBasedCollator::doCompare(const uint8_t *left, int32_t leftLength,
             ++equalPrefixLength;
         }
     } else {
+        if ((uint32_t)leftLength >= sizeof(uint64_t)
+            && (uint32_t)rightLength >= sizeof(uint64_t)
+            && (uintptr_t)left % sizeof(uint64_t) == (uintptr_t)right % sizeof(uint64_t)) {
+            int32_t i = 0;
+            int32_t limit = leftLength < rightLength ? leftLength : rightLength;
+
+            // Memory alignment step.
+            while(i < limit && left[i] == right[i]
+                && (uintptr_t)(left + i) % sizeof(uint64_t) != 0) {
+                ++i;
+            }
+            equalPrefixLength += i;
+
+            // Double word baesd comparison.
+            if (i < limit && (uintptr_t)(left + i) % sizeof(uint64_t) == 0) {
+                const uint64_t *dWordLeft = (const uint64_t *)left;
+                const uint64_t *dWordRight = (const uint64_t *)right;
+                int32_t dWordLength = (leftLength < rightLength ? leftLength : rightLength) / sizeof(uint64_t);
+                i = 0;
+                
+                while(i < dWordLength && dWordLeft[i] == dWordRight[i]) {
+                    ++i;
+                }
+                equalPrefixLength = i != 0 ? i * sizeof(uint64_t) - 1 : 0;
+            }
+        }
+
         for(;;) {
             if(equalPrefixLength == leftLength) {
                 if(equalPrefixLength == rightLength) { return UCOL_EQUAL; }
