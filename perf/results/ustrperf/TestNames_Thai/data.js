@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687424068140,
+  "lastUpdate": 1687476464521,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38590,6 +38590,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 50.2216,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "26bd70e301bceed47a05b0689f8a48248ec10baf",
+          "message": "ICU-22421 Remove two unused internal methods in gregorian cal\n\nRemove pinDayOfMonth() and yearLength(int32_t year)\nfrom GregorianCalendar.\n\nThese two methods are\n1. Unused by any code inside ICU, not in source/{common,i18n,test}.\n2. Marked as @internal in the header.\n3. Wrap inside #ifndef U_HIDE_INTERNAL_API block in the header\n4. In \"protected:\" section.\n5. No ICU4J counterpart.\n\nThe yearLength(int32_t year) dup the functionality as\nhandleGetYearLength of the same class and that one is the correct one to\nbe keep and used..\nThere is another yearLength() w/o the year as parameter should NOT be\nremoved and still needed internally.",
+          "timestamp": "2023-06-22T15:44:05-07:00",
+          "tree_id": "7d56078c3fff737c253268d856ca5c00ba7d261f",
+          "url": "https://github.com/unicode-org/icu/commit/26bd70e301bceed47a05b0689f8a48248ec10baf"
+        },
+        "date": 1687476423919,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 21.2578,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.3793,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.4801,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 35.466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 41.1271,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 42.0024,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 24.9768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 18.2942,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 175.8407,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 27.4991,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 55.8963,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 48.383,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
