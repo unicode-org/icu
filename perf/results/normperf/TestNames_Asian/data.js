@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687423604529,
+  "lastUpdate": 1687476087169,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24238,6 +24238,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 16.6295,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "26bd70e301bceed47a05b0689f8a48248ec10baf",
+          "message": "ICU-22421 Remove two unused internal methods in gregorian cal\n\nRemove pinDayOfMonth() and yearLength(int32_t year)\nfrom GregorianCalendar.\n\nThese two methods are\n1. Unused by any code inside ICU, not in source/{common,i18n,test}.\n2. Marked as @internal in the header.\n3. Wrap inside #ifndef U_HIDE_INTERNAL_API block in the header\n4. In \"protected:\" section.\n5. No ICU4J counterpart.\n\nThe yearLength(int32_t year) dup the functionality as\nhandleGetYearLength of the same class and that one is the correct one to\nbe keep and used..\nThere is another yearLength() w/o the year as parameter should NOT be\nremoved and still needed internally.",
+          "timestamp": "2023-06-22T15:44:05-07:00",
+          "tree_id": "7d56078c3fff737c253268d856ca5c00ba7d261f",
+          "url": "https://github.com/unicode-org/icu/commit/26bd70e301bceed47a05b0689f8a48248ec10baf"
+        },
+        "date": 1687476036069,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 23.0398,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 16.4155,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 16.4378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 18.7772,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 19.9591,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 19.94,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
