@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687475957125,
+  "lastUpdate": 1687476290322,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21868,6 +21868,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7432194.8275,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "a9f75708929a2bd14f941f36aa36a7189d76a389",
+          "message": "ICU-22412 Fix C API ucal_(g|s)etGregorianChange for iso8601 calendar\n\nSee #2510",
+          "timestamp": "2023-06-22T15:44:37-07:00",
+          "tree_id": "4fca3922a70bb6c49fcf1c00dc88cbbd7bc48b3c",
+          "url": "https://github.com/unicode-org/icu/commit/a9f75708929a2bd14f941f36aa36a7189d76a389"
+        },
+        "date": 1687476243059,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 397.6561,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 32419147.4915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7539448.9702,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 32321926.7098,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 8774046.2639,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
