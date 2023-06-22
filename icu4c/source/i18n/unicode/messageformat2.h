@@ -239,13 +239,13 @@ class U_I18N_API MessageFormatter : public Format {
              void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
              void parseLiteralEscape(UErrorCode &, String&);
              void parseLiteral(UErrorCode &, String&);
-             void parseOption(UErrorCode &, MessageFormatDataModel::OptionMap::Builder&);
-             MessageFormatDataModel::OptionMap* parseOptions(UErrorCode &);
+             void parseOption(UErrorCode&, MessageFormatDataModel::Operator::Builder&);
+             void parseOptions(UErrorCode &, MessageFormatDataModel::Operator::Builder&);
              void parseReservedEscape(UErrorCode&, String&);
              void parseReservedChunk(UErrorCode &, MessageFormatDataModel::Reserved::Builder&);
-             MessageFormatDataModel::Operator* parseReserved(UErrorCode &);
+             MessageFormatDataModel::Reserved* parseReserved(UErrorCode &);
              MessageFormatDataModel::Operator* parseAnnotation(UErrorCode &);
-             MessageFormatDataModel::Expression* parseLiteralOrVariableWithAnnotation(bool, UErrorCode &);
+             void parseLiteralOrVariableWithAnnotation(bool, UErrorCode &, MessageFormatDataModel::Expression::Builder&);
              MessageFormatDataModel::Expression* parseExpression(UErrorCode &);
              void parseTextEscape(UErrorCode&, String&);
              void parseText(UErrorCode&, String&);

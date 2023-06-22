@@ -764,7 +764,7 @@ void PARSER::parseLiteral(UErrorCode &errorCode, String& str) {
   Adds the option to `optionList`
 */
 void PARSER::parseOption(UErrorCode &errorCode,
-                         OptionMap::Builder &opts) {
+                         Operator::Builder &builder) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -800,19 +800,16 @@ void PARSER::parseOption(UErrorCode &errorCode,
     }
     }
     // Finally, add the key=value mapping
-    if (U_FAILURE(errorCode)) {
-      return;
-    }
-    opts.add(lhs, rand.orphan(), errorCode);
-
+    CHECK_ERROR(errorCode);
+    builder.addOption(lhs, rand.orphan(), errorCode);
 }
 
 /*
   Consume optional whitespace followed by a sequence of options
   (possibly empty), separated by whitespace
 */
-OptionMap* PARSER::parseOptions(UErrorCode &errorCode) {
-    NULL_ON_ERROR(errorCode);
+void PARSER::parseOptions(UErrorCode &errorCode, Operator::Builder& builder) {
+    CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
 
@@ -855,9 +852,6 @@ Note that when "backtracking" really just means early exit, since only whitespac
 is involved and there's no state to save.
 */
 
-    // Start a mutable list to build up the options
-    LocalPointer<OptionMap::Builder> builder(OptionMap::builder(errorCode));
-
     while(true) {
         // If the next character is not whitespace, that means we've already
         // parsed the entire options list (which may have been empty) and there's
@@ -870,7 +864,7 @@ is involved and there's no state to save.
         // one whitespace character.
         parseRequiredWhitespace(errorCode);
         // Restore precondition
-        CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
+        CHECK_BOUNDS(source, index, parseError, errorCode);
 
         // If a name character follows, then at least one more option remains
         // in the list.
@@ -886,12 +880,8 @@ is involved and there's no state to save.
             U_ASSERT(normalizedInput.truncate(normalizedInput.length() - 1));
             break;
         }
-        parseOption(errorCode, *builder);
+        parseOption(errorCode, builder);
     }
-    // Return an immutable options list
-    LocalPointer<OptionMap> opts(builder->build(errorCode));
-    NULL_ON_ERROR(errorCode);
-    return opts.orphan();
 }
 
 void PARSER::parseReservedEscape(UErrorCode &errorCode,
@@ -967,7 +957,7 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
   Matches the `reserved` nonterminal in the grammar
 
 */
-Operator* PARSER::parseReserved(UErrorCode &errorCode) {
+Reserved* PARSER::parseReserved(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -1060,7 +1050,7 @@ Operator* PARSER::parseReserved(UErrorCode &errorCode) {
 
     LocalPointer<Reserved> r(builder->build(errorCode));
     NULL_ON_ERROR(errorCode);
-    return Operator::create(r.orphan(), errorCode);
+    return r.orphan();
 }
 
 
@@ -1074,21 +1064,28 @@ Operator* PARSER::parseAnnotation(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
+    Operator::Builder* ratorBuilder(Operator::builder(errorCode));
+    NULL_ON_ERROR(errorCode);
     if (isFunctionStart(source[index])) {
         // Consume the function name
-        FunctionName func;
-        parseFunction(errorCode, func);
-
+        LocalPointer<FunctionName> func(new UnicodeString());
+        if (!func.isValid()) {
+          errorCode = U_MEMORY_ALLOCATION_ERROR;
+          return nullptr;
+        }
+        parseFunction(errorCode, *func);
+        ratorBuilder->setFunctionName(func.orphan());
+        
         // Consume the options (which may be empty)
-        LocalPointer<OptionMap> options(parseOptions(errorCode));
-        NULL_ON_ERROR(errorCode);
-        return Operator::create(func, options.orphan(), errorCode);
+        parseOptions(errorCode, *ratorBuilder);
+    } else {
+      // Must be reserved
+      // A reserved sequence is not a parse error, but might be a formatting error
+      LocalPointer<Reserved> rator(parseReserved(errorCode));
+      NULL_ON_ERROR(errorCode);
+      ratorBuilder->setReserved(rator.orphan());
     }
-    // Must be reserved
-    // A reserved sequence is not a parse error, but might be a formatting error
-    LocalPointer<Operator> rator(parseReserved(errorCode));
-    NULL_ON_ERROR(errorCode);
-    return rator.orphan();
+    return ratorBuilder->build(errorCode);
 }
 
 /*
@@ -1096,9 +1093,10 @@ Operator* PARSER::parseAnnotation(UErrorCode &errorCode) {
   followed by either required whitespace followed by an annotation,
   or optional whitespace.
 */
-Expression* PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
-                                                         UErrorCode &errorCode) {
-    NULL_ON_ERROR(errorCode);
+void PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
+                                                  UErrorCode &errorCode,
+                                                  Expression::Builder& builder) {
+    CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
 
@@ -1114,8 +1112,9 @@ Expression* PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
         adoptedRand.adoptInstead(Operand::create(lit, errorCode));
     }
 
-    // Ensure adoptedRand is valid; subsequent code can safely call adoptedRand.orphan()
-    NULL_ON_ERROR(errorCode);
+    // Set the operand (if allocation succeeded)
+    CHECK_ERROR(errorCode);
+    builder.setOperand(adoptedRand.orphan());
 
 /*
 Parsing a literal or variable with an optional annotation requires arbitrary lookahead.
@@ -1140,39 +1139,30 @@ refactoring for the `expression` nonterminal that `parseOptions()` relies on. Se
 the comment in `parseOptions()` for details.
 */
 
-    // If the next character is not whitespace, return.
-    if (!isWhitespace(source[index])) {
-        // This means there's no annotation, since an annotation is preceded by
-        // required whitespace. We're done (as long as adoptedRand is valid).
-        LocalPointer<Expression> result(Expression::create(adoptedRand.orphan(), errorCode));
-        NULL_ON_ERROR(errorCode);
-        return result.orphan();
-    }
+    LocalPointer<Expression> result;
+    if (isWhitespace(source[index])) {
+      // If the next character is whitespace, either [s annotation] or [s] applies
+      // (the character is either the required space before an annotation, or optional
+      // trailing space after the literal or variable). It's still ambiguous which
+      // one does apply.
+      parseOptionalWhitespace(errorCode);
+      // Restore precondition
+      CHECK_BOUNDS(source, index, parseError, errorCode);
 
-    // If the next character is whitespace, either [s annotation] or [s] applies
-    // (the character is either the required space before an annotation, or optional
-    // trailing space after the literal or variable). It's still ambiguous which
-    // one does apply.
-    parseOptionalWhitespace(errorCode);
-    // Restore precondition
-    CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
-
-    // This next check resolves the ambiguity between [s annotation] and [s]
-    if (isAnnotationStart(source[index])) {
+      // This next check resolves the ambiguity between [s annotation] and [s]
+      if (isAnnotationStart(source[index])) {
         normalizedInput += SPACE;
         // The previously consumed whitespace precedes an annotation
         LocalPointer<Operator> adoptedRator(parseAnnotation(errorCode));
-        NULL_ON_ERROR(errorCode);
-        LocalPointer<Expression> adoptedExpr(Expression::create(adoptedRator.orphan(), adoptedRand.orphan(), errorCode));
-        NULL_ON_ERROR(errorCode);
-        return adoptedExpr.orphan();
+        CHECK_ERROR(errorCode);
+        builder.setOperator(adoptedRator.orphan());
+      }
+    } else {
+      // Either there was never whitespace, or
+      // the previously consumed whitespace is the optional trailing whitespace;
+      // either the next character is '}' or the error will be handled by parseExpression.
+      // Do nothing, since the operand was already set      
     }
-    // The previously consumed whitespace is the optional trailing whitespace;
-    // either the next character is '}' or the error will be handled by parseExpression.
-
-    LocalPointer<Expression> expression(Expression::create(adoptedRand.orphan(), errorCode));
-    NULL_ON_ERROR(errorCode);
-    return expression.orphan();
 }
 
 /*
@@ -1189,25 +1179,25 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
     // Restore precondition
     CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
 
-    LocalPointer<Expression> adoptedExpression;
-
+    LocalPointer<Expression::Builder> exprBuilder(Expression::builder(errorCode));
+    NULL_ON_ERROR(errorCode);
     // literal '|', variable '$' or annotation
     switch (source[index]) {
     case PIPE: {
         // Literal
-        adoptedExpression.adoptInstead(parseLiteralOrVariableWithAnnotation(false, errorCode));
+        parseLiteralOrVariableWithAnnotation(false, errorCode, *exprBuilder);
         break;
     }
     case DOLLAR: {
         // Variable
-        adoptedExpression.adoptInstead(parseLiteralOrVariableWithAnnotation(true, errorCode));
+        parseLiteralOrVariableWithAnnotation(true, errorCode, *exprBuilder);
         break;
     }
     default: {
         if (isAnnotationStart(source[index])) {
             LocalPointer<Operator> rator(parseAnnotation(errorCode));
             NULL_ON_ERROR(errorCode);
-            adoptedExpression.adoptInstead(Expression::create(rator.orphan(), errorCode));
+            exprBuilder->setOperator(rator.orphan());
         } else {
             // Not a literal, variable or annotation -- error out
             ERROR(parseError, errorCode, index);
@@ -1225,7 +1215,7 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    return adoptedExpression.orphan();
+    return exprBuilder->build(errorCode);
 }
 
 MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {

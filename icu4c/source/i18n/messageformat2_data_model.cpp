@@ -121,8 +121,9 @@ void SERIALIZER::emit(const Expression& expr) {
           emit(expr.getOperand());
           whitespace();
         }
-        if (expr.isReserved()) {
-          const Reserved& reserved = expr.asReserved();
+        const Operator& rator = expr.getOperator();
+        if (rator.isReserved()) {
+          const Reserved& reserved = rator.asReserved();
           // Re-escape '\' / '{' / '|' / '}'
           for (size_t i = 0; i < reserved.numParts(); i++) {
             const Literal& l = *reserved.getPart(i);
@@ -147,11 +148,11 @@ void SERIALIZER::emit(const Expression& expr) {
             }
           }
         } else {
-          emit(expr.getFunctionName());
+          emit(rator.getFunctionName());
           // No whitespace after function name, in case it has
           // no options. (when there are options, emit(OptionMap) will
           // emit the leading whitespace)
-          emit(expr.getOptions());
+          emit(rator.getOptions());
         }
     }
     

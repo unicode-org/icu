@@ -77,11 +77,11 @@ variables.
 class MessageFormatter;
 
 /*
-TODO: comment explaining why we need all the copy constructors
-because isn't what we need to copy the *builders*, when it goes from mutable to
-immutable, and you might want to save intermediate builders?
-shouldn't immutable AST nodes *not* need to be copied? but I came to the conclusion, somehow,
-that they do
+TODO: explain in more detail why AST nodes need copy constructors:
+ -> because temporary (mutable) lists within builders can contain immutable nodes
+ -> though immutable, they must be copied when calling build() since the builder could go out of scope before the immutable result of the builder does, resulting in non-uniquely-owned pointers; or, further mutating operations could be called on the builder, resulting in unexpected mutation to the data model due to unexpected sharing 
+
+the copy constructors do *deep* copies, e.g. copying an entire vector
 */
 
 /*
@@ -94,8 +94,10 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
 
   public:
 
+    class Binding;
     class Operator;
     class Pattern;
+    class PatternPart;
     class Reserved;
     class SelectorKeys;
     // Immutable list
@@ -308,6 +310,7 @@ class U_I18N_API MessageFormatDataModel : public UMemory {
         }
         // TODO
         // could add a non-copying / moving build() that invalidates `this`
+        // The parser itself would be a good use case for this
         // OrderedMap<V>* build(UErrorCode& errorCode);
     private:
         friend class OrderedMap;
@@ -768,7 +771,7 @@ class Operand : public UObject {
     };
 
   class Expression;
-      // TODO: This class should really be private. left public for the convenience of the parser
+
   class Operator : public UMemory {
          // An operator represents either a function name together with
          // a list of options, which may be empty;
@@ -790,8 +793,90 @@ class Operand : public UObject {
          }
          bool isReserved() const { return isReservedSequence; }
 
+         class Builder {
+          private:
+            friend class Operator;
+            Builder() {}
+            LocalPointer<Reserved> asReserved;
+            LocalPointer<UnicodeString> functionName;
+            LocalPointer<OptionMap::Builder> options;
+          public:
+            Builder& setReserved(Reserved* reserved) {
+              U_ASSERT(reserved != nullptr);
+              asReserved.adoptInstead(reserved);
+              functionName.adoptInstead(nullptr);
+              options.adoptInstead(nullptr);
+              return *this;
+            }
+            Builder& setFunctionName(UnicodeString* func) {
+              U_ASSERT(func != nullptr);
+              asReserved.adoptInstead(nullptr);
+              functionName.adoptInstead(func);
+              return *this;
+            }
+            Builder& addOption(const UnicodeString &key, Operand* value, UErrorCode& errorCode) {
+              if (U_FAILURE(errorCode)) {
+                return *this;
+              }
+              U_ASSERT(value != nullptr);
+              asReserved.adoptInstead(nullptr);
+              if (!options.isValid()) {
+                options.adoptInstead(OptionMap::builder(errorCode));
+                if (U_FAILURE(errorCode)) {
+                  return *this;
+                }
+              }
+              options->add(key, value, errorCode);
+              return *this;
+            }
+            Operator* build(UErrorCode& errorCode) const {
+              if (U_FAILURE(errorCode)) {
+                return nullptr;
+              }
+              LocalPointer<Operator> result;
+              // Must be either reserved or function, not both; enforced by methods
+              if (asReserved.isValid()) {
+                U_ASSERT(!(functionName.isValid() || options.isValid()));
+                result.adoptInstead(Operator::create(*asReserved, errorCode));
+              } else {
+                if (!functionName.isValid()) {
+                  // Neither function name nor reserved was set
+                  errorCode = U_INVALID_STATE_ERROR;
+                  return nullptr;
+                }
+                if (options.isValid()) {
+                  LocalPointer<OptionMap> opts(options->build(errorCode));
+                  if (U_FAILURE(errorCode)) {
+                    return nullptr;
+                  }
+                  result.adoptInstead(Operator::create(*functionName, opts.orphan(), errorCode));
+                } else {
+                  result.adoptInstead(Operator::create(*functionName, nullptr, errorCode));
+                }
+              }
+              if (U_FAILURE(errorCode)) {
+                return nullptr;
+              }
+              return result.orphan();
+            }
+        };
+
+       static Builder* builder(UErrorCode& errorCode) {
+         if (U_FAILURE(errorCode)) {
+           return nullptr;
+         }
+         LocalPointer<Builder> result(new Builder());
+         if (!result.isValid()) {
+           errorCode = U_MEMORY_ALLOCATION_ERROR;
+           return nullptr;
+         }
+         return result.orphan();
+       }
+       private:
+         friend class Expression; // makes copy constructor easier
+
          // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
-         static Operator* create(Reserved* r, UErrorCode& errorCode) {
+         static Operator* create(const Reserved& r, UErrorCode& errorCode) {
              if (U_FAILURE(errorCode)) {
                  return nullptr;
              }
@@ -805,13 +890,14 @@ class Operand : public UObject {
              return result.orphan();
          }
 
-         static Operator* create(FunctionName f, OptionMap* l, UErrorCode& errorCode) {
+         // Takes ownership of `opts`
+         // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
+         static Operator* create(const FunctionName& f, OptionMap* opts, UErrorCode& errorCode) {
              if (U_FAILURE(errorCode)) {
                  return nullptr;
              }
-             LocalPointer<OptionMap> adoptedOptions(l);
-             U_ASSERT(adoptedOptions.isValid());
-             LocalPointer<Operator> result(new Operator(f, adoptedOptions.orphan()));
+             // opts may be null -- that gives a function name with no options
+             LocalPointer<Operator> result(new Operator(f, opts));
              if (!result.isValid()) {
                  errorCode = U_MEMORY_ALLOCATION_ERROR;
              } else if (result->isBogus()) {
@@ -820,15 +906,14 @@ class Operand : public UObject {
              }
              return result.orphan();
          }
-       private:
-         friend class Expression;
 
          // Function call constructor; adopts `l`
          Operator(FunctionName f, OptionMap *l)
            : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {}
 
          // Reserved sequence constructor
-         Operator(Reserved* r) : isReservedSequence(true), functionName(""), options(nullptr), reserved(r) {}
+         // Result is bogus if copy of `r` fails
+         Operator(const Reserved& r) : isReservedSequence(true), functionName(""), options(nullptr), reserved(new Reserved(r)) {}
 
          // Operator needs a copy constructor in order to make Expression deeply copyable
          Operator(const Operator& other) : isReservedSequence(other.isReservedSequence), functionName(other.functionName) {
@@ -875,28 +960,6 @@ class Operand : public UObject {
         */
       public:
 
-      // Expression needs a copy constructor in order to make Pattern deeply copyable
-      Expression(const Expression& other) {
-        U_ASSERT(!other.isBogus());
-        if (other.rator.isValid() && other.rand.isValid()) {
-          U_ASSERT(!(other.rator->isBogus()));
-          rator.adoptInstead(new Operator(*(other.rator)));
-          rand.adoptInstead(new Operand(*(other.rand)));
-          bogus = !(rator.isValid() && rand.isValid());
-          return;
-        }
-        if (other.rator.isValid()) {
-          U_ASSERT(!other.rator->isBogus());
-          rator.adoptInstead(new Operator(*(other.rator)));
-          rand.adoptInstead(nullptr);
-          bogus = !rator.isValid();
-          return;
-        }
-        U_ASSERT(other.rand.isValid());
-        rator.adoptInstead(nullptr);
-        rand.adoptInstead(new Operand(*(other.rand)));
-        bogus = !rand.isValid();
-      }
         // TODO: include these or not?
         bool isStandaloneAnnotation() const {
             U_ASSERT(!isBogus());
@@ -914,24 +977,13 @@ class Operand : public UObject {
             return (rator.isValid() && rator->isReserved());
         }
 
+        const Operator& getOperator() const {
+            U_ASSERT(isFunctionCall() || isReserved());
+            return *rator;
+        }
         const Operand& getOperand() const {
             U_ASSERT(!isStandaloneAnnotation());
             return *rand;
-        }
- 
-        const UnicodeString& getFunctionName() const {
-            U_ASSERT(isFunctionCall());
-            return rator->getFunctionName();
-        }
-
-        const Reserved& asReserved() const {
-          U_ASSERT(isReserved());
-          return rator->asReserved();
-        }
-
-        const OptionMap& getOptions() const {
-            U_ASSERT(isFunctionCall());
-            return rator->getOptions();
         }
 
         /*
@@ -943,49 +995,83 @@ class Operand : public UObject {
 
         class Builder {
           private:
+            friend class Expression;
             Builder() {} // prevent direct construction
+            LocalPointer<Operand> rand;
+            LocalPointer<Operator> rator;
           public:
-            Builder& setOperand(Operand operand);
-            Builder& setFunctionName(const UnicodeString &functionName);
-            Builder& addOption(const UnicodeString &key, Expression *value);
-            Expression *build(UErrorCode& errorCode) const;
+             Builder& setOperand(Operand* rAnd) {
+               U_ASSERT(rAnd != nullptr);
+               rand.adoptInstead(rAnd);
+               return *this;
+             }
+             Builder& setOperator(Operator* rAtor) {
+               U_ASSERT(rAtor != nullptr);
+               rator.adoptInstead(rAtor);
+               return *this;
+             }
+             // Postcondition: U_FAILURE(errorCode) || (result != nullptr && !isBogus(result))
+             Expression *build(UErrorCode& errorCode) const {
+               if (U_FAILURE(errorCode)) {
+                 return nullptr;
+               }
+               if (!rand.isValid() && !rator.isValid()) {
+                 errorCode = U_INVALID_STATE_ERROR;
+                 return nullptr;
+               }
+               LocalPointer<Expression> result;
+               if (rand.isValid()) {
+                 if (rator.isValid()) {
+                   result.adoptInstead(new Expression(*rator, *rand));
+                 }
+                 result.adoptInstead(new Expression(*rand));
+               } else {
+                 result.adoptInstead(new Expression(*rator));
+               }
+               if (!result.isValid() || result->isBogus()) {
+                 errorCode = U_MEMORY_ALLOCATION_ERROR;
+                 return nullptr;
+               }
+               return result.orphan();
+             }
         };
+      static Builder* builder(UErrorCode& errorCode) {
+        if (U_FAILURE(errorCode)) {
+           return nullptr;
+         }
+         LocalPointer<Builder> result(new Builder());
+         if (!result.isValid()) {
+           errorCode = U_MEMORY_ALLOCATION_ERROR;
+           return nullptr;
+         }
+         return result.orphan();
+      }
 
     private:
-      friend class MessageFormatter;
- 
-      static Expression* create(Operand *rAnd, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            Expression* result = new Expression(rAnd);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
+      friend class PatternPart;      // makes copy constructors easier
+      friend class Binding;          // makes copy constructors easier
+      friend class List<Expression>; // makes copy constructors easier
 
-        static Expression* create(Operator *rAtor, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            Expression* result = new Expression(rAtor);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
+      // Expression needs a copy constructor in order to make Pattern deeply copyable
+      Expression(const Expression& other) {
+        U_ASSERT(!other.isBogus());
+        if (other.rator.isValid() && other.rand.isValid()) {
+          rator.adoptInstead(new Operator(*(other.rator)));
+          rand.adoptInstead(new Operand(*(other.rand)));
+          bogus = !(rator.isValid() && rand.isValid());
+          return;
         }
-
-        static Expression* create(Operator *rAtor, Operand *rAnd, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            Expression* result = new Expression(rAtor, rAnd);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
+        if (other.rator.isValid()) {
+          rator.adoptInstead(new Operator(*(other.rator)));
+          rand.adoptInstead(nullptr);
+          bogus = !rator.isValid();
+          return;
         }
+        U_ASSERT(other.rand.isValid());
+        rator.adoptInstead(nullptr);
+        rand.adoptInstead(new Operand(*(other.rand)));
+        bogus = !rand.isValid();
+      }
 
       // Here, a separate variable isBogus tracks if any copies failed.
       // This is because rator = nullptr and rand = nullptr are semantic here,
@@ -1002,18 +1088,12 @@ class Operand : public UObject {
         U_ASSERT(!rator.isValid() || !rator->isBogus());
         return false;
       }
-        // All constructors adopt their arguments
-        // Both operator and operands must be non-null
-        Expression(Operator *rAtor, Operand *rAnd) : rator(rAtor), rand(rAnd) {
-            U_ASSERT(rAtor != nullptr && rAnd != nullptr);
-        }
 
-        // Operand must be non-null
-        Expression(Operand *rAnd) : rator(nullptr), rand(rAnd) { U_ASSERT(rAnd != nullptr); }
+        Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(new Operand(rAnd)) {}
 
-        // Operator must be non-null
-        Expression(Operator *rAtor) : rator(rAtor), rand(nullptr) { U_ASSERT(rAtor != nullptr); }
+        Expression(const Operand &rAnd) : rator(nullptr), rand(new Operand(rAnd)){}
 
+        Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(nullptr) {}
         // Non-const for copy constructors; effectively const
         /* const */ LocalPointer<Operator> rator;
         /* const */ LocalPointer<Operand> rand;
