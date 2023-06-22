@@ -344,7 +344,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
         int year = internalGet(EXTENDED_YEAR);
-        int eraIdx = ERA_RULES.getEraIndex(year, internalGet(MONTH) + 1 /* 1-base */, internalGet(DAY_OF_MONTH));
+        int eraIdx = ERA_RULES.getEraIndex(year, internalGetMonth() + 1 /* 1-base */, internalGet(DAY_OF_MONTH));
 
         internalSet(ERA, eraIdx);
         internalSet(YEAR, year - ERA_RULES.getStartYear(eraIdx) + 1);

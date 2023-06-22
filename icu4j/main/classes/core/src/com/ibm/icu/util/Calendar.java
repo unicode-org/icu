@@ -2101,8 +2101,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     protected int internalGetMonth()
     {
-        // To be changed
-        return internalGet(MONTH);
+        if (resolveFields(MONTH_PRECEDENCE) == MONTH) {
+            return internalGet(MONTH);
+        }
+        return internalGet(ORDINAL_MONTH);
     }
 
     /**
@@ -2117,8 +2119,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return the value for the MONTH.
      */
     protected int internalGetMonth(int defaultValue) {
-        // To be changed
-        return internalGet(MONTH, defaultValue);
+        if (resolveFields(MONTH_PRECEDENCE) == MONTH) {
+            return internalGet(MONTH, defaultValue);
+        }
+        return internalGet(ORDINAL_MONTH, defaultValue);
     }
 
     /**
@@ -4787,25 +4791,36 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @draft ICU 74
      */
     public boolean inTemporalLeapYear() {
-        // to be changed
-        return false;
+        // Default to Gregorian based leap year rule.
+        return getActualMaximum(DAY_OF_YEAR) == 366;
     }
 
+    private static String [] gTemporalMonthCodes = {
+        "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09", "M10", "M11", "M12"
+    };
+
     /**
-     * {@icu} Returns true if the date is in a leap year. Recalculate the current time
-     * field values if the time value has been changed by a call to setTime().
-     * This method is semantically const, but may alter the object in memory.
-     * A "leap year" is a year that contains more days than other years (for
-     * solar or lunar calendars) or more months than other years (for lunisolar
-     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
-     * proposal.
-     * @return true if the date in the fields is in a Temporal proposal
-     *               defined leap year. False otherwise.
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year and suffixed by an
+     * optional literal grapheme "L" if this is a leap month in a lunisolar
+     * calendar. The 25 possible values are "M01" .. "M13" and "M01L" .. "M12L".
+     * For the Hebrew calendar, the values are "M01" .. "M12" for non-leap year, and
+     * "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
      * @draft ICU 74
      */
     public String getTemporalMonthCode() {
-        // to be changed
-        return "M01";
+        int month = get(MONTH);
+        assert(month < 12);
+        assert(internalGet(IS_LEAP_MONTH) == 0);
+        return gTemporalMonthCodes[month];
     }
 
     /**
@@ -4821,9 +4836,21 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * in leap year with another monthCode in "M01L" .. "M12L".
      * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
      * years are "M01" to "M13".
+     * @param temporalMonth One of 25 possible strings in {"M01".. "M12", "M13", "M01L",
+     *  "M12L"}.
      * @draft ICU 74
      */
     public void setTemporalMonthCode( String temporalMonth ) {
+        if (temporalMonth.length() == 3 && temporalMonth.charAt(0) == 'M') {
+            for (int m = 0; m < gTemporalMonthCodes.length; m++) {
+                if (temporalMonth.equals(gTemporalMonthCodes[m])) {
+                    set(MONTH, m);
+                    set(IS_LEAP_MONTH, 0);
+                    return;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Incorrect temporal Month code: " + temporalMonth);
     }
 
     //-------------------------------------------------------------------------
@@ -5420,6 +5447,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         },
     };
 
+    static final int[][][] MONTH_PRECEDENCE = {
+        {
+            { MONTH },
+            { ORDINAL_MONTH },
+        },
+    };
+
     /**
      * Given a precedence table, return the newest field combination in
      * the table, or -1 if none is found.
@@ -5552,7 +5586,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         switch (field) {
         case DAY_OF_MONTH:
             y = handleGetExtendedYear();
-            validateField(field, 1, handleGetMonthLength(y, internalGet(MONTH)));
+            validateField(field, 1, handleGetMonthLength(y, internalGetMonth()));
             break;
         case DAY_OF_YEAR:
             y = handleGetExtendedYear();
@@ -6023,6 +6057,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         if (stamp[JULIAN_DAY] >= MINIMUM_USER_STAMP) {
             int bestStamp = newestStamp(ERA, DAY_OF_WEEK_IN_MONTH, UNSET);
             bestStamp = newestStamp(YEAR_WOY, EXTENDED_YEAR, bestStamp);
+            bestStamp = newestStamp(ORDINAL_MONTH, ORDINAL_MONTH, bestStamp);
             if (bestStamp <= stamp[JULIAN_DAY]) {
                 return internalGet(JULIAN_DAY);
             }
@@ -6168,7 +6203,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         internalSet(EXTENDED_YEAR, year);
 
-        int month = useMonth ? internalGet(MONTH, getDefaultMonthInYear(year)) : 0;
+        int month;
+        if (isSet(MONTH) || isSet(ORDINAL_MONTH)) {
+            month = internalGetMonth();
+        } else {
+            month = getDefaultMonthInYear(year);
+        }
 
         // Get the Julian day of the day BEFORE the start of this year.
         // If useMonth is true, get the day before the start of the month.
@@ -6246,7 +6286,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // past the first of the given day-of-week in this month.
                 // Note that we handle -2, -3, etc. correctly, even though
                 // values < -1 are technically disallowed.
-                int m = internalGet(MONTH, JANUARY);
+                int m = internalGetMonth(JANUARY);
                 int monthLength = handleGetMonthLength(year, m);
                 date += ((monthLength - date) / 7 + dim + 1) * 7;
             }
