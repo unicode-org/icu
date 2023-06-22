@@ -896,20 +896,35 @@ class Operand : public UObject {
              if (U_FAILURE(errorCode)) {
                  return nullptr;
              }
-             // opts may be null -- that gives a function name with no options
-             LocalPointer<Operator> result(new Operator(f, opts));
+             // opts may be null -- in that case, we create an empty OptionMap
+             // for simplicity
+             LocalPointer<OptionMap> adoptedOpts;
+             if (opts == nullptr) {
+               LocalPointer<OptionMap::Builder> builder(OptionMap::builder(errorCode));
+               adoptedOpts.adoptInstead(builder->build(errorCode));
+             } else {
+               adoptedOpts.adoptInstead(opts);
+             }
+             if (U_FAILURE(errorCode)) {
+                 return nullptr;
+             }
+             LocalPointer<Operator> result(new Operator(f, adoptedOpts.orphan()));
              if (!result.isValid()) {
                  errorCode = U_MEMORY_ALLOCATION_ERROR;
              } else if (result->isBogus()) {
                  errorCode = U_MEMORY_ALLOCATION_ERROR;
-                 return nullptr;
+             }
+             if (U_FAILURE(errorCode)) {
+               return nullptr;
              }
              return result.orphan();
          }
 
-         // Function call constructor; adopts `l`
+         // Function call constructor; adopts `l`, which must be non-null
          Operator(FunctionName f, OptionMap *l)
-           : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {}
+           : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {
+           U_ASSERT(l != nullptr);
+         }
 
          // Reserved sequence constructor
          // Result is bogus if copy of `r` fails
@@ -1023,8 +1038,9 @@ class Operand : public UObject {
                if (rand.isValid()) {
                  if (rator.isValid()) {
                    result.adoptInstead(new Expression(*rator, *rand));
+                 } else {
+                   result.adoptInstead(new Expression(*rand));
                  }
-                 result.adoptInstead(new Expression(*rand));
                } else {
                  result.adoptInstead(new Expression(*rator));
                }
