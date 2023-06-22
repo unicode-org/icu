@@ -1358,48 +1358,9 @@ class Operand : public UObject {
 
      static Builder* builder(UErrorCode& errorCode);
 
-     // TODO more comments
-     // Converts a data model back to a string
-     void serialize(UnicodeString& result) const {
-         Serializer serializer(*this, result);
-         serializer.serialize();
-     };
-     
      virtual ~MessageFormatDataModel();
 
   private:
-
-     // TODO: this should probably not be nested inside MessageFormatDataModel
-
-     // Converts a data model back to a string
-     class Serializer : UMemory {
-       public:
-         Serializer(const MessageFormatDataModel& m, UnicodeString& s) : dataModel(m), result(s) {}
-         void serialize();
-
-         const MessageFormatDataModel& dataModel;
-         UnicodeString& result;
-
-       private:
-         void whitespace();
-         void emit(UChar32);
-         template <size_t N>
-         void emit(const UChar32 (&)[N]);
-         void emit(const UnicodeString&);
-         void emit(const Literal&);
-         void emit(const Key&);
-         void emit(const SelectorKeys&);
-         void emit(const Operand&);
-         void emit(const Expression&);
-         void emit(const PatternPart&);
-         void emit(const Pattern&);
-         void emit(const VariantMap&);
-         void emit(const OptionMap&);
-         void serializeDeclarations();
-         void serializeSelectors();
-         void serializeVariants();
-     };
-
      /*
        A message body is a `selectors` construct as in the grammar.
      */

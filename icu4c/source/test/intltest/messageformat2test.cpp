@@ -268,10 +268,9 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
             LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
             if (U_SUCCESS(errorCode)) {
                 // Roundtrip test
-                const MessageFormatDataModel& dataModel = mf->getDataModel();
                 const UnicodeString& normalized = mf->getNormalizedPattern();
                 UnicodeString serialized;
-                dataModel.serialize(serialized);
+                mf->getPattern(serialized);
                 if (normalized != serialized) {
                     logln("Expected output: " + normalized + "\nGot output: " + serialized);
                     errorCode = U_MESSAGE_PARSE_ERROR;

@@ -11,12 +11,30 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+// TODO: Should make this file something else
+
 MessageFormatDataModel::~MessageFormatDataModel() {}
 
 // Generates a string representation of a data model
 // ------------------------------------------------
 
-#define SERIALIZER MessageFormatDataModel::Serializer
+using Binding    = MessageFormatDataModel::Binding;
+using Bindings    = MessageFormatDataModel::Bindings;
+using Key         = MessageFormatDataModel::Key;
+using SelectorKeys = MessageFormatDataModel::SelectorKeys;
+using KeyList     = MessageFormatDataModel::KeyList;
+using Literal     = MessageFormatDataModel::Literal;
+using OptionMap   = MessageFormatDataModel::OptionMap;
+using Expression  = MessageFormatDataModel::Expression;
+using ExpressionList  = MessageFormatDataModel::ExpressionList;
+using Operand     = MessageFormatDataModel::Operand;
+using Operator    = MessageFormatDataModel::Operator;
+using Pattern     = MessageFormatDataModel::Pattern;
+using PatternPart = MessageFormatDataModel::PatternPart;
+using Reserved    = MessageFormatDataModel::Reserved;
+using VariantMap    = MessageFormatDataModel::VariantMap;
+
+#define SERIALIZER MessageFormatter::Serializer
 
 // Private helper methods
 

@@ -108,7 +108,13 @@ class U_I18N_API MessageFormatter : public Format {
     static UClassID U_EXPORT2 getStaticClassID(void);
 
     Locale getLocale() const;
-    UnicodeString& getPattern() const;
+    void getPattern(UnicodeString& result) const {
+     // TODO more comments
+     // Converts the current data model back to a string
+         U_ASSERT(dataModel.isValid());
+         Serializer serializer(*dataModel, result);
+         serializer.serialize();
+    }
 
     // Give public access to the data model
     const MessageFormatDataModel& getDataModel() const { return *dataModel; }
@@ -268,6 +274,34 @@ class U_I18N_API MessageFormatter : public Format {
              MessageFormatDataModel::Builder &dataModel;
          }; // class Parser
 
+     // Converts a data model back to a string
+     class Serializer : UMemory {
+       public:
+         Serializer(const MessageFormatDataModel& m, UnicodeString& s) : dataModel(m), result(s) {}
+         void serialize();
+
+         const MessageFormatDataModel& dataModel;
+         UnicodeString& result;
+
+       private:
+         void whitespace();
+         void emit(UChar32);
+         template <size_t N>
+         void emit(const UChar32 (&)[N]);
+         void emit(const UnicodeString&);
+         void emit(const MessageFormatDataModel::Literal&);
+         void emit(const MessageFormatDataModel::Key&);
+         void emit(const MessageFormatDataModel::SelectorKeys&);
+         void emit(const MessageFormatDataModel::Operand&);
+         void emit(const MessageFormatDataModel::Expression&);
+         void emit(const MessageFormatDataModel::PatternPart&);
+         void emit(const MessageFormatDataModel::Pattern&);
+         void emit(const MessageFormatDataModel::VariantMap&);
+         void emit(const MessageFormatDataModel::OptionMap&);
+         void serializeDeclarations();
+         void serializeSelectors();
+         void serializeVariants();
+     }; // class Serializer
 
     // Data model, representing the parsed message
     LocalPointer<MessageFormatDataModel> dataModel;
