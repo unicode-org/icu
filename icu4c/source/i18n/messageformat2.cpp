@@ -210,6 +210,7 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     }
 }
 
+MessageFormatDataModel::~MessageFormatDataModel() {}
 MessageFormatter::~MessageFormatter() {}
 
 // -------------------------------------

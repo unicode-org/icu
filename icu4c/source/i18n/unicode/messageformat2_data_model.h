@@ -1247,8 +1247,6 @@ class Operand : public UObject {
 
     };
 
-      // TODO: comments explaining why the copy constructors on AST nodes themselves (not builders) are necessary
-
      class Binding {
      public:
        static Binding* create(const UnicodeString& var, Expression* e, UErrorCode& errorCode) {

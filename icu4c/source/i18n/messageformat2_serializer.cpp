@@ -11,10 +11,6 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-// TODO: Should make this file something else
-
-MessageFormatDataModel::~MessageFormatDataModel() {}
-
 // Generates a string representation of a data model
 // ------------------------------------------------
 
