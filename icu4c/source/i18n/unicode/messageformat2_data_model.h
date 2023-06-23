@@ -574,9 +574,8 @@ public:
       const LocalPointer<List<SelectorKeys>> keyLists;
   }; // class VariantMap
 
-// Matching the draft schema at https://github.com/unicode-org/message-format-wg/pull/393/ ,
-// `Reserved` is exposed
-
+  // Matching the draft schema at https://github.com/unicode-org/message-format-wg/pull/393/ ,
+  // `Reserved` is exposed
   // Corresponds to `reserved` in the grammar
   class Reserved : public UMemory {
   public:
@@ -852,9 +851,9 @@ public:
   // and getPattern() take error codes / signal an error if you call the wrong one
   // TODO
   bool hasSelectors() const;
-  ExpressionList& getSelectors() const;
-  VariantMap& getVariants() const;
-  Pattern& getPattern() const;
+  const ExpressionList& getSelectors() const;
+  const VariantMap& getVariants() const;
+  const Pattern& getPattern() const;
 
   class Builder {
   private:
@@ -887,10 +886,6 @@ public:
   virtual ~MessageFormatDataModel();
 
   private:
-     /*
-       A message body is a `selectors` construct as in the grammar.
-     */
-
      // The expressions that are being matched on.
      // Null iff this is a `pattern` message.
      LocalPointer<ExpressionList> selectors;

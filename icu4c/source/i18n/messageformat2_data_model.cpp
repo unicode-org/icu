@@ -613,17 +613,17 @@ bool MessageFormatDataModel::hasSelectors() const {
     return true;
 }
 
-ExpressionList& MessageFormatDataModel::getSelectors() const {
+const ExpressionList& MessageFormatDataModel::getSelectors() const {
     U_ASSERT(hasSelectors());
     return *selectors;
 }
 
-VariantMap& MessageFormatDataModel::getVariants() const {
+const VariantMap& MessageFormatDataModel::getVariants() const {
     U_ASSERT(hasSelectors());
     return *variants;
 }
 
-Pattern& MessageFormatDataModel::getPattern() const {
+const Pattern& MessageFormatDataModel::getPattern() const {
     U_ASSERT(!hasSelectors());
     return *pattern;
 }
