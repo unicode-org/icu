@@ -29,6 +29,9 @@ public:
     void testValidPatterns(void);
     void testValidJsonPatterns(void);
     void testInvalidPatterns(void);
+    // Test the data model API
+    void testAPI(void);
+    void testAPISimple(void);
 
 private:
     void testMessageFormatter(const UnicodeString&, UParseError&, UErrorCode&);

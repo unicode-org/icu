@@ -135,7 +135,7 @@ class U_I18N_API MessageFormatter : public Format {
         friend class MessageFormatter;
       private:
         // prevent direct construction
-        Builder() : pattern(nullptr), functionRegistry(nullptr) {
+        Builder() : functionRegistry(nullptr) {
             // TODO: initialize locale to default
         }
 
@@ -149,12 +149,12 @@ class U_I18N_API MessageFormatter : public Format {
         // TODO: set default function registry
         FunctionRegistry* functionRegistry;
       public:
-        void setLocale(Locale locale);
-        void setPattern(UnicodeString* pattern);
+        Builder& setLocale(Locale locale);
+        Builder& setPattern(const UnicodeString& pattern, UErrorCode& errorCode);
         // Takes ownership of the FunctionRegistry
-        void setFunctionRegistry(FunctionRegistry* functionRegistry);
+        Builder& setFunctionRegistry(FunctionRegistry* functionRegistry);
         // Takes ownership of the data model
-        void setDataModel(MessageFormatDataModel* dataModel);
+        Builder& setDataModel(MessageFormatDataModel* dataModel);
         // Returns an immutable MessageFormatter
         
         // TODO: fix this comment

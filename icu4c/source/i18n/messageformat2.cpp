@@ -96,22 +96,32 @@ MessageFormatter::Builder* MessageFormatter::builder(UErrorCode& errorCode) {
     return tree.orphan();
 }
 
-void MessageFormatter::Builder::setPattern(UnicodeString* pat) {
-    // Can't set pattern to null
-    U_ASSERT(pat != nullptr);
-    pattern.adoptInstead(pat);
+MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeString& pat, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
 
-    // Invalidate the data model
-    dataModel.adoptInstead(nullptr);
+    pattern.adoptInstead(new UnicodeString(pat));
+    if (!pattern.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        // Invalidate the data model
+        dataModel.adoptInstead(nullptr);
+    }
+    return *this;
+}
+
+MessageFormatter::Builder& MessageFormatter::Builder::setLocale(Locale loc) {
+    locale = loc;
+    return *this;
 }
 
 // Takes ownership of `dataModel`
-void MessageFormatter::Builder::setDataModel(MessageFormatDataModel* newDataModel) {
+MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MessageFormatDataModel* newDataModel) {
   U_ASSERT(newDataModel != nullptr);
   dataModel.adoptInstead(newDataModel);
 
   // Invalidate the pattern
   pattern.adoptInstead(nullptr);
+  return *this;
 }
 
 MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {

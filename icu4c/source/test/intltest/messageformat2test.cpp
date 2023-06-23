@@ -252,6 +252,8 @@ void
 TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testAPI);
+    TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testValidJsonPatterns);
     TESTCASE_AUTO(testValidPatterns);
     TESTCASE_AUTO(testComplexMessage);
@@ -259,26 +261,179 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO_END;
 }
 
+// Example for design doc
+void TestMessageFormat2::testAPISimple() {
+  IcuTestErrorCode errorCode1(*this, "testAPI");
+  UErrorCode errorCode = (UErrorCode) errorCode1;
+  UParseError parseError;
+  Locale locale = "en";
+// Null checks and error checks elided
+  MessageFormatter::Builder* builder = MessageFormatter::builder(errorCode);
+  /* MessageFormatter* mf = */ builder
+        ->setPattern(u"{Hello, {$userName}!}", errorCode)
+        .build(parseError, errorCode);
+
+// TODO formatting calls
+  delete builder;
+  builder = MessageFormatter::builder(errorCode);
+
+  /* mf = */ builder
+        ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
+        .setLocale(locale)
+        .build(parseError, errorCode);
+
+  delete builder;
+  builder = MessageFormatter::builder(errorCode);
+
+  /* mf = */ builder
+        ->setPattern("match {$photoCount :plural} {$userGender :select}\n\
+                     when 1 masculine {{$userName} added a new photo to his album.}\n \
+                     when 1 feminine {{$userName} added a new photo to her album.}\n \
+                     when 1 * {{$userName} added a new photo to their album.}\n \
+                     when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
+                     when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
+                     when * * {{$userName} added {$photoCount} photos to their album.}",
+                errorCode)
+        .setLocale(locale)
+        .build(parseError, errorCode);
+}
+
+
+void TestMessageFormat2::testAPI() {
+  IcuTestErrorCode errorCode1(*this, "testAPI");
+  UErrorCode errorCode = (UErrorCode) errorCode1;
+  UParseError parseError;
+  Locale locale = "en";
+  LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
+  if (U_FAILURE(errorCode)) {
+    return;
+  }
+  LocalPointer<MessageFormatter> mf(builder
+        ->setPattern(u"{Hello, {$userName}!}", errorCode)
+        .build(parseError, errorCode));
+  if (U_FAILURE(errorCode)) {
+    return;
+  }
+  /*
+String result = mf.formatToString(Map.of("userName", "John"));
+// => "Hello, John!"
+System.out.println(result);
+  */
+
+  builder.adoptInstead(MessageFormatter::builder(errorCode));
+
+  if (U_FAILURE(errorCode)) {
+    return;
+  }
+  mf.adoptInstead(builder
+        ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
+        .setLocale(locale)
+        .build(parseError, errorCode));
+  /*
+result = mf.formatToString(Map.of("today", new Date()));
+// "Today is Tue, Aug 16, 2022."
+System.out.println(result);
+  */
+
+  builder.adoptInstead(MessageFormatter::builder(errorCode));
+
+  mf.adoptInstead(builder
+        ->setPattern("match {$photoCount :plural} {$userGender :select}\n\
+                     when 1 masculine {{$userName} added a new photo to his album.}\n \
+                     when 1 feminine {{$userName} added a new photo to her album.}\n \
+                     when 1 * {{$userName} added a new photo to their album.}\n \
+                     when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
+                     when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
+                     when * * {{$userName} added {$photoCount} photos to their album.}",
+                errorCode)
+        .setLocale(locale)
+        .build(parseError, errorCode));
+                  /*
+result = mf.formatToString(Map.of("photoCount", 12, "userGender", "feminine", "userName", "Maria"));
+// => "Maria added 12 photos to her album."
+System.out.println(result);
+                  */
+
+                  /*
+​​Using custom functions:
+final Mf2FunctionRegistry functionRegistry = Mf2FunctionRegistry.builder()
+        .setFormatter("person", new PersonNameFormatterFactory())
+        .setDefaultFormatterNameForType(Person.class, "person")
+        .build();
+
+Person who = new Person("Mr.", "John", "Doe");
+
+MessageFormatter mf;
+String result;
+                  */
+
+   builder.adoptInstead(MessageFormatter::builder(errorCode));
+
+// This fails, because we did not provide a function registry:
+   mf.adoptInstead(builder
+        ->setPattern("{Hello {$name :person formality=informal}}", errorCode)
+        .setLocale(locale)
+        .build(parseError, errorCode));
+   if (U_SUCCESS(errorCode)) {
+     // Should have failed
+     errorCode = U_MESSAGE_PARSE_ERROR;
+   } else {
+     errorCode1.reset();
+   }
+                   //result = mf.formatToString(Map.of("name", who));
+
+                  /*
+// The setClassToFormatterMapping tells the formatter that the class Person is to be handled
+// by the :person function, so this works. Similar to MessageFormat.
+mf = MessageFormatter.builder()
+        .setFunctionRegistry(functionRegistry)
+        .setPattern("{Hello {$name}}")
+        .setLocale(locale)
+        .build();
+result = mf.formatToString(Map.of("name", who));
+// => "Hello John"
+
+mf = MessageFormatter.builder()
+        .setFunctionRegistry(functionRegistry)
+        .setPattern("{Hello {$name :person formality=informal}}")
+        .setLocale(locale)
+        .build();
+result = mf.formatToString(Map.of("name", who));
+// => "Hello John"
+
+mf = MessageFormatter.builder()
+        .setFunctionRegistry(functionRegistry)
+        .setPattern("{Hello {$name :person formality=formal}}")
+        .setLocale(locale)
+        .build();
+result = mf.formatToString(Map.of("name", who));
+// => "Hello Mr. Doe"
+
+mf = MessageFormatter.builder()
+        .setFunctionRegistry(functionRegistry)
+        .setPattern("{Hello {$name :person formality=formal length=long}}")
+        .setLocale(locale)
+        .build();
+result = mf.formatToString(Map.of("name", who));
+// => "Hello Mr. John Doe"
+*/
+}
+
 void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
     LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
     if (U_SUCCESS(errorCode)) {
-        LocalPointer<UnicodeString> sPtr(new UnicodeString(s));
-        if (sPtr.isValid()) {
-            builder->setPattern(sPtr.orphan());
-            LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
-            if (U_SUCCESS(errorCode)) {
-                // Roundtrip test
-                const UnicodeString& normalized = mf->getNormalizedPattern();
-                UnicodeString serialized;
-                mf->getPattern(serialized);
-                if (normalized != serialized) {
-                    logln("Expected output: " + normalized + "\nGot output: " + serialized);
-                    errorCode = U_MESSAGE_PARSE_ERROR;
-                }
-            }
-        } else {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
+      builder->setPattern(s, errorCode);
+      LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
+      if (U_SUCCESS(errorCode)) {
+        // Roundtrip test
+        const UnicodeString& normalized = mf->getNormalizedPattern();
+        UnicodeString serialized;
+        mf->getPattern(serialized);
+        if (normalized != serialized) {
+          logln("Expected output: " + normalized + "\nGot output: " + serialized);
+          errorCode = U_MESSAGE_PARSE_ERROR;
         }
+      }
     }
 }
 
