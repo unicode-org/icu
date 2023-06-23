@@ -11,6 +11,8 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+using Binding     = MessageFormatDataModel::Binding;
+using Bindings    = MessageFormatDataModel::Bindings;
 using Key         = MessageFormatDataModel::Key;
 using KeyList     = MessageFormatDataModel::KeyList;
 using Literal     = MessageFormatDataModel::Literal;
@@ -1650,6 +1652,94 @@ void PARSER::parse(UParseError &parseErrorResult,
 }
 
 PARSER::~Parser() {}
+
+// ------------------------------------------------------
+// Formatting
+
+// TODO
+const Expression& lookup(const Bindings& env, const VariableName& lhs, bool& found) {
+    size_t len = env.length();
+    for (int32_t i = len - 1; i >= 0; i--) {
+        const Binding& b = *env.get(i);
+        if (b.var == lhs) {
+            rhs = b.getValue();
+            *found = true;
+            return b.getValue();
+        }
+    }
+    return false;
+}
+ 
+void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& rand, UErrorCode &status, UnicodeString& result) const {
+    CHECK_ERROR(status);
+
+    if (rand.isVariable()) {
+        // Check if it's local or global
+        // TODO: name shadowing errors
+        VariableName var = rand.asVariable();
+        const Bindings& env = dataModel->getLocalVariables();
+        Expression rhs;
+        if (lookup(env, var, rhs)) {
+            formatExpression(arguments, rhs, status, result);
+            return;
+        }
+        // Not found in locals -- must be global
+        if (arguments.has(var)) {
+            result += arguments.get(var);
+            return;
+        }
+        // Unbound variable -- Should have been a data model error checked during that phase
+        status = U_UNDEFINED_KEYWORD;
+        return;
+    }
+    // Must be a literal
+    result += rand.asLiteral().contents();
+}
+
+void MessageFormatter::formatExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
+    CHECK_ERROR(status);
+
+    // Formatting error
+    if (expr.isReserved()) {
+        status = U_UNSUPPORTED_PROPERTY;
+        return;
+    }
+    // Function call - Not supported yet
+    // TODO
+    if (expr.isFunctionCall()) {
+        status = U_UNSUPPORTED_ATTRIBUTE;
+        return;
+    }
+    formatOperand(arguments, expr.getOperand(), status, result);
+}
+
+UnicodeString& MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& pat, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    UnicodeString result;
+    LocalPointer<PatternPart> part;
+    for (size_t i = 0; i < pat.numParts(); i++) {
+        part.adoptInstead(pat.getPart(i));
+        if (part->isText()) {
+            result += part->asText();
+        } else {
+            formatExpression(arguments, part->contents(), status, result);
+        }
+    }
+    return result;
+}
+
+UnicodeString& MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &status) const {
+    CHECK_ERROR(errorCode);
+
+    if (!dataModel->hasSelectors()) {
+        return formatPattern(arguments, *pattern, status);
+    }
+    // pattern matching not yet implemented
+    // TODO
+    status = U_INVALID_STATE_ERROR;
+    return;
+}
 
 } // namespace message2
 U_NAMESPACE_END

@@ -314,11 +314,20 @@ void TestMessageFormat2::testAPI() {
   if (U_FAILURE(errorCode)) {
     return;
   }
-  /*
-String result = mf.formatToString(Map.of("userName", "John"));
-// => "Hello, John!"
-System.out.println(result);
-  */
+
+  LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+  if (U_FAILURE(errorCode)) {
+    return;
+  }
+  UnicodeString value = "John";
+  arguments->put("userName", &value, errorCode);
+  UnicodeString expected = "Hello, John!";
+  UnicodeString result = mf->formatToString(*arguments, errorCode);
+  if (result != expected) {
+    logln("Expected output: " + expected + "\nGot output: " + result);
+    errorCode = U_MESSAGE_PARSE_ERROR;
+    return;
+  }
 
   builder.adoptInstead(MessageFormatter::builder(errorCode));
 

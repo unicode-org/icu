@@ -841,6 +841,8 @@ public:
        }
          
        const UnicodeString var;
+       Expression& getValue() { return *value; }
+  private:
        const LocalPointer<Expression> value;
        bool isBogus() const { return !value.isValid(); }
   }; // class Binding

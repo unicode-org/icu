@@ -52,9 +52,10 @@ class U_I18N_API MessageFormatter : public Format {
     virtual bool operator!=(const Format &other) const;
 
     // Not yet implemented
-    virtual UnicodeString &format(const Formattable &obj, UnicodeString &appendTo, FieldPosition &pos,
-                                  UErrorCode &status) const override;
+    virtual UnicodeString &format(const Formattable &obj, UnicodeString &appendTo, FieldPosition &pos, UErrorCode &status) const override;
 
+    virtual UnicodeString &formatToString(const Hashtable& arguments, UErrorCode &status) const;
+ 
     // Not yet implemented
     virtual void parseObject(const UnicodeString &source, Formattable &result,
                              ParsePosition &pos) const override;
@@ -321,6 +322,11 @@ class U_I18N_API MessageFormatter : public Format {
          void serializeSelectors();
          void serializeVariants();
      }; // class Serializer
+
+     // Formatting methods
+     UnicodeString& formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&) const;
+     void formatExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
+     void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
 
     // Data model, representing the parsed message
     LocalPointer<MessageFormatDataModel> dataModel;
