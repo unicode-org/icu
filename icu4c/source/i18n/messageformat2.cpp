@@ -39,25 +39,6 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormatter)
     setParseError(parseError, index);                                                                   \
     errorCode = U_MESSAGE_PARSE_ERROR;
 
-
-// Returns immediately if `errorCode` indicates failure
-#define CHECK_ERROR(errorCode)                                                                          \
-    if (U_FAILURE(errorCode)) {                                                                         \
-        return;                                                                                         \
-    }
-
-// Returns immediately if `errorCode` indicates failure
-#define NULL_ON_ERROR(errorCode)                                                                          \
-    if (U_FAILURE(errorCode)) {                                                                         \
-        return nullptr;                                                                                         \
-    }
-
-// Returns immediately if `errorCode` indicates failure
-#define THIS_ON_ERROR(errorCode)                                                                          \
-    if (U_FAILURE(errorCode)) {                                                                         \
-        return *this; \
-    }
-
 // Returns true iff `index` is a valid index for the string `source`
 static bool inBounds(const UnicodeString &source, uint32_t index) {
     return (((int32_t)index) < source.length());
@@ -131,15 +112,6 @@ void MessageFormatter::Builder::setDataModel(MessageFormatDataModel* newDataMode
 
   // Invalidate the pattern
   pattern.adoptInstead(nullptr);
-}
-
-MessageFormatDataModel::Builder* MessageFormatDataModel::builder(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    LocalPointer<Builder> result(new Builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    return result.orphan();
 }
 
 MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {
@@ -1217,16 +1189,6 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
     return exprBuilder->build(errorCode);
 }
 
-MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    LocalPointer<Binding> b(Binding::create(variableName, expression, errorCode));
-    THIS_ON_ERROR(errorCode);
-    locals->add(b.orphan(), errorCode);
-
-    return *this;
-}
-
 /*
   Consume a possibly-empty sequence of declarations separated by whitespace;
   each declaration matches the `declaration` nonterminal in the grammar
@@ -1437,62 +1399,6 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
     return keysBuilder->build(errorCode);
 }
 
-Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
-    NULL_ON_ERROR(errorCode);
-    LocalPointer<Pattern::Builder> tree(new Builder(errorCode));
-    NULL_ON_ERROR(errorCode);
-    return tree.orphan();
-}
-
-Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    LocalPointer<List<PatternPart>> patternParts(parts->build(errorCode));
-    NULL_ON_ERROR(errorCode);
-    Pattern* result = new Pattern(patternParts.orphan());
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-Pattern::Builder& Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    parts->add(part, errorCode);
-    return *this;
-}
-
-Reserved::Builder* Reserved::builder(UErrorCode &errorCode) {
-    NULL_ON_ERROR(errorCode);
-    LocalPointer<Reserved::Builder> tree(new Builder(errorCode));
-    NULL_ON_ERROR(errorCode);
-    return tree.orphan();
-}
-
-Reserved* Reserved::Builder::build(UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
-    LocalPointer<List<Literal>> reservedParts(parts->build(errorCode));
-    NULL_ON_ERROR(errorCode);
-    Reserved* result = new Reserved(reservedParts.orphan());
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-Reserved::Builder& Reserved::Builder::add(Literal part, UErrorCode &errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    LocalPointer<Literal> lit(Literal::copy(part));
-    if (!lit.isValid()) {
-      errorCode = U_MEMORY_ALLOCATION_ERROR;
-      return *this;
-    }
-    parts->add(lit.orphan(), errorCode);
-
-    return *this;
-}
-
 /*
   Consume a `pattern`, matching the nonterminal in the grammar
   No postcondition (on return, `index` might equal `source.length()` with U_SUCCESS(errorCode)),
@@ -1541,45 +1447,6 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
     return result->build(errorCode);
 }
 
-
-MessageFormatDataModel::SelectorKeys::Builder& MessageFormatDataModel::SelectorKeys::Builder::add(Key* key, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    keys->add(key, errorCode);
-
-    return *this;
-}
-
-/*
-  selector must be non-null
-*/
-MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addSelector(Expression* selector, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    U_ASSERT(selector != nullptr);
-    buildSelectorsMessage(errorCode);
-
-    selectors->add(selector, errorCode);
-
-    return *this;
-}
-
-/*
-  `keys` and `pattern` must be non-null
-  Adopts `keys` and `pattern`
-*/
-MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    U_ASSERT(keys != nullptr);
-    U_ASSERT(pattern != nullptr);
-
-    buildSelectorsMessage(errorCode);
-
-    variants->add(keys, pattern, errorCode);
-
-    return *this;
-}
 
 /*
   Consume a `selectors` (matching the nonterminal in the grammar),
@@ -1737,56 +1604,6 @@ void MessageFormatter::parseObject(const UnicodeString &, Formattable &, ParsePo
 
 // -------------------------------------
 // Parses the source pattern.
-
-MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::setPattern(Pattern* pat) {
-    // Can't set pattern to null
-    U_ASSERT(pat != nullptr);
-    pattern.adoptInstead(pat);
-    // Invalidate selectors and variants
-    selectors.adoptInstead(nullptr);
-    variants.adoptInstead(nullptr);
-    return *this;
-}
-
-MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) {
-    CHECK_ERROR(errorCode);
-
-    bindings.adoptInstead(builder.locals->build(errorCode));
-
-    if (builder.pattern.isValid()) {
-        // If `pattern` has been set, then assume this is a Pattern message
-        U_ASSERT(!builder.selectors.isValid());
-        U_ASSERT(!builder.variants.isValid());
-        pattern.adoptInstead(new Pattern(*(builder.pattern)));
-        U_ASSERT(!hasSelectors());
-    } else {
-        // Otherwise, this is a Selectors message
-        U_ASSERT(builder.selectors.isValid());
-        U_ASSERT(builder.variants.isValid());
-        selectors.adoptInstead(builder.selectors->build(errorCode));
-        variants.adoptInstead(builder.variants->build(errorCode));
-        U_ASSERT(hasSelectors());
-    }
-}
-
-MessageFormatDataModel* MessageFormatDataModel::Builder::build(UErrorCode &errorCode) const {
-    NULL_ON_ERROR(errorCode);
-
-    bool patternValid = pattern.isValid();
-    bool selectorsValid = selectors.isValid() && variants.isValid();
-
-    // Either pattern is valid, or both selectors and variants are valid; but not both
-    if ((patternValid && selectorsValid)
-        || (!patternValid && !selectorsValid)) {
-      errorCode = U_INVALID_STATE_ERROR;
-      return nullptr;
-    }
-
-    // Initialize the data model
-    LocalPointer<MessageFormatDataModel> dataModel(new MessageFormatDataModel(*this, errorCode));
-    NULL_ON_ERROR(errorCode);
-    return dataModel.orphan();
-}
 
 void PARSER::parse(UParseError &parseErrorResult,
                                      UErrorCode &errorCode) {

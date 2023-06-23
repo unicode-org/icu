@@ -95,6 +95,7 @@ measunit_extra.cpp
 measure.cpp
 msgfmt.cpp
 messageformat2.cpp
+messageformat2_data_model.cpp
 messageformat2_serializer.cpp
 name2uni.cpp
 nfrs.cpp

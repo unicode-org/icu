@@ -77,6 +77,24 @@ inline bool isWhitespace(UChar32 c) {
         return false;
     }
 }
+ 
+// Returns immediately if `errorCode` indicates failure
+#define CHECK_ERROR(errorCode)                                                                          \
+    if (U_FAILURE(errorCode)) {                                                                         \
+        return;                                                                                         \
+    }
+
+// Returns immediately if `errorCode` indicates failure
+#define NULL_ON_ERROR(errorCode)                                                                          \
+    if (U_FAILURE(errorCode)) {                                                                         \
+        return nullptr;                                                                                         \
+    }
+ 
+// Returns immediately if `errorCode` indicates failure
+#define THIS_ON_ERROR(errorCode)                                                                          \
+    if (U_FAILURE(errorCode)) {                                                                         \
+        return *this; \
+    }
 
 } // namespace message2
 U_NAMESPACE_END
