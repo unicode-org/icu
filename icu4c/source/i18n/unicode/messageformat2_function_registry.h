@@ -31,8 +31,7 @@ class U_COMMON_API FormatterFunction : UMemory {
     // TODO: for now representing the argument as a string. Not sure if that's right; Java
     // uses `Object`.
     virtual UnicodeString format(const UnicodeString& toFormat, const MessageFormatDataModel::OptionMap& variableOptions) const = 0;
-    // Takes ownership of `fixedOptions`
-    FormatterFunction(Locale locale, Hashtable* fixedOptions);
+    FormatterFunction(Locale locale, const Hashtable& fixedOptions);
 };
 
 // Interface/mixin class
@@ -41,7 +40,7 @@ class U_COMMON_API SelectorFunction : UMemory {
     // TODO: Same question about the `value` argument as in FormatterFunction
     virtual bool matches(const UnicodeString& value, const UnicodeString& key, const MessageFormatDataModel::OptionMap& options) const = 0;
     // Takes ownership of `fixedOptions`
-    SelectorFunction(Locale locale, Hashtable* fixedOptions);
+    SelectorFunction(Locale locale, const Hashtable& fixedOptions);
 };
 
 
