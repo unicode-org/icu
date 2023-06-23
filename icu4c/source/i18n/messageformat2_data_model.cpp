@@ -11,19 +11,20 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-using Binding      = MessageFormatDataModel::Binding;
-using Expression   = MessageFormatDataModel::Expression;
-using Key          = MessageFormatDataModel::Key;
-using KeyList      = MessageFormatDataModel::KeyList;
-using Literal      = MessageFormatDataModel::Literal;
-using OptionMap    = MessageFormatDataModel::OptionMap;
-using Operand      = MessageFormatDataModel::Operand;
-using Operator     = MessageFormatDataModel::Operator;
-using Pattern      = MessageFormatDataModel::Pattern;
-using PatternPart  = MessageFormatDataModel::PatternPart;
-using Reserved     = MessageFormatDataModel::Reserved;
-using SelectorKeys = MessageFormatDataModel::SelectorKeys;
-using VariantMap   = MessageFormatDataModel::VariantMap;
+using Binding          = MessageFormatDataModel::Binding;
+using Expression       = MessageFormatDataModel::Expression;
+using ExpressionList   = MessageFormatDataModel::ExpressionList;
+using Key              = MessageFormatDataModel::Key;
+using KeyList          = MessageFormatDataModel::KeyList;
+using Literal          = MessageFormatDataModel::Literal;
+using OptionMap        = MessageFormatDataModel::OptionMap;
+using Operand          = MessageFormatDataModel::Operand;
+using Operator         = MessageFormatDataModel::Operator;
+using Pattern          = MessageFormatDataModel::Pattern;
+using PatternPart      = MessageFormatDataModel::PatternPart;
+using Reserved         = MessageFormatDataModel::Reserved;
+using SelectorKeys     = MessageFormatDataModel::SelectorKeys;
+using VariantMap       = MessageFormatDataModel::VariantMap;
 
 // Implementation
 
@@ -31,10 +32,20 @@ using VariantMap   = MessageFormatDataModel::VariantMap;
 
 SelectorKeys::Builder& SelectorKeys::Builder::add(Key* key, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
-
     keys->add(key, errorCode);
-
     return *this;
+}
+
+const KeyList& SelectorKeys::getKeys() const {
+    U_ASSERT(!isBogus());
+    return *keys;
+}
+
+SelectorKeys::Builder::Builder(UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    keys.adoptInstead(KeyList::builder(errorCode));
 }
 
 //------------------ Operand
@@ -48,6 +59,16 @@ SelectorKeys::Builder& SelectorKeys::Builder::add(Key* key, UErrorCode& errorCod
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
+}
+
+VariableName Operand::asVariable() const {
+    U_ASSERT(isVariable());
+    return string.contents;
+}
+
+const Literal& Operand::asLiteral() const {
+    U_ASSERT(isLiteral());
+    return string;
 }
 
 // Literal
@@ -92,6 +113,11 @@ void Key::toString(UnicodeString& result) const {
         result += ASTERISK;
     }
     result += contents.contents;
+}
+
+const Literal& Key::asLiteral() const {
+    U_ASSERT(!isWildcard());
+    return contents;
 }
 
 //---------------- VariantMap
@@ -170,6 +196,23 @@ VariantMap::Builder::Builder(UErrorCode& errorCode) {
 
 // ------------ Reserved
 
+size_t Reserved::numParts() const {
+    U_ASSERT(!isBogus());
+    return parts->length();
+}
+
+const Literal* Reserved::getPart(size_t i) const {
+    U_ASSERT(!isBogus());
+    U_ASSERT(i < numParts());
+    return parts->get(i);
+}
+
+Reserved::Builder::Builder(UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    parts.adoptInstead(List<Literal>::builder(errorCode));
+}
 
 Reserved::Builder* Reserved::builder(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -203,6 +246,31 @@ Reserved::Builder& Reserved::Builder::add(Literal& part, UErrorCode &errorCode) 
 }
 
 //------------------------ Operator
+
+const FunctionName& Operator::getFunctionName() const {
+    U_ASSERT(!isBogus() && !isReserved());
+    return functionName;
+}
+
+const Reserved& Operator::asReserved() const {
+    U_ASSERT(!isBogus() && isReserved());
+    return *reserved;
+}
+
+const OptionMap& Operator::getOptions() const {
+    U_ASSERT(!isBogus() && !isReserved());
+    return *options;
+}
+
+// See comments under `SelectorKeys` for why this is here.
+// In this case, the invariant is (isReservedSequence && reserved.isValid() && !options.isValid())
+//                              || (!isReservedSequence && !reserved.isValid() && options.isValid())
+bool Operator::isBogus() const {
+    if (isReservedSequence) {
+        return !((reserved.isValid() && !options.isValid()));
+    }
+    return (!(!reserved.isValid() && options.isValid()));
+}
 
 Operator::Builder& Operator::Builder::setReserved(Reserved* reserved) {
     U_ASSERT(reserved != nullptr);
@@ -333,6 +401,35 @@ Operator::Operator(const Operator& other) : isReservedSequence(other.isReservedS
 }
 
 // ------------ Expression
+
+bool Expression::isStandaloneAnnotation() const {
+    U_ASSERT(!isBogus());
+    return !rand.isValid();
+}
+
+// Returns true for function calls with operands as well as
+// standalone annotations.
+// Reserved sequences are not function calls
+bool Expression::isFunctionCall() const {
+    U_ASSERT(!isBogus());
+    return (rator.isValid() && !rator->isReserved());
+}
+
+bool Expression::isReserved() const {
+    U_ASSERT(!isBogus());
+    return (rator.isValid() && rator->isReserved());
+}
+
+const Operator& Expression::getOperator() const {
+    U_ASSERT(isFunctionCall() || isReserved());
+    return *rator;
+}
+
+const Operand& Expression::getOperand() const {
+    U_ASSERT(!isStandaloneAnnotation());
+    return *rand;
+}
+
 Expression::Builder& Expression::Builder::setOperand(Operand* rAnd) {
     U_ASSERT(rAnd != nullptr);
     rand.adoptInstead(rAnd);
@@ -440,8 +537,30 @@ bool Expression::isBogus() const {
     return result;
 }
 
+const Expression& PatternPart::contents() const {
+    U_ASSERT(!isText() && !isBogus());
+    return *expression;
+}
+
+// Precondition: isText();
+const UnicodeString& PatternPart::asText() const {
+    U_ASSERT(isText());
+    return text;
+}
+
 // ---------------- Pattern
 
+const PatternPart* Pattern::getPart(size_t i) const {
+    U_ASSERT(!isBogus() && i < numParts());
+    return parts->get(i);
+}
+
+Pattern::Builder::Builder(UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    parts.adoptInstead(List<PatternPart>::builder(errorCode));
+}
 
 Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -492,6 +611,21 @@ bool MessageFormatDataModel::hasSelectors() const {
     U_ASSERT(selectors.isValid());
     U_ASSERT(variants.isValid());
     return true;
+}
+
+ExpressionList& MessageFormatDataModel::getSelectors() const {
+    U_ASSERT(hasSelectors());
+    return *selectors;
+}
+
+VariantMap& MessageFormatDataModel::getVariants() const {
+    U_ASSERT(hasSelectors());
+    return *variants;
+}
+
+Pattern& MessageFormatDataModel::getPattern() const {
+    U_ASSERT(!hasSelectors());
+    return *pattern;
 }
 
 MessageFormatDataModel::Builder::Builder(UErrorCode& errorCode) {

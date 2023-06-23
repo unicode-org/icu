@@ -146,9 +146,7 @@ public:
 
         private:
             friend class List;
-            
             LocalPointer<UVector> contents;
-
             Builder(UErrorCode& errorCode) {
                 if (U_FAILURE(errorCode)) {
                     return;
@@ -462,15 +460,9 @@ public:
         static Operand* create(Literal& lit, UErrorCode& errorCode);
 
         bool isVariable() const { return isVariableReference; }
-        VariableName asVariable() const {
-            U_ASSERT(isVariable());
-            return string.contents;
-        }
         bool isLiteral() const { return !isVariable(); }
-        const Literal& asLiteral() const {
-            U_ASSERT(isLiteral());
-            return string;
-        }
+        VariableName asVariable() const;
+        const Literal& asLiteral() const;
     private:
         friend class Expression;
         friend class OrderedMap<Operand>;
@@ -491,11 +483,7 @@ public:
   public:
       bool isWildcard() const { return wildcard; }
       // Precondition: !isWildcard()
-      const Literal& asLiteral() const {
-          U_ASSERT(!isWildcard());
-          return contents;
-      }
-
+      const Literal& asLiteral() const;
       static Key* create(UErrorCode& errorCode);
       static Key* create(const Literal& lit, UErrorCode& errorCode);
 
@@ -517,20 +505,11 @@ public:
   // Represents the left-hand side of a `when` clause
   class SelectorKeys : public UObject {
   public:
-      const KeyList& getKeys() const {
-          U_ASSERT(!isBogus());
-          return *keys;
-      }
+      const KeyList& getKeys() const;
       class Builder {
       private:
           friend class SelectorKeys;
-          // prevent direct construction
-          Builder(UErrorCode& errorCode) {
-              if (U_FAILURE(errorCode)) {
-                  return;
-              }
-              keys.adoptInstead(KeyList::builder(errorCode));
-          }
+          Builder(UErrorCode& errorCode);
           LocalPointer<List<Key>::Builder> keys;
       public:
           Builder& add(Key* key, UErrorCode& errorCode);
@@ -601,26 +580,14 @@ public:
   // Corresponds to `reserved` in the grammar
   class Reserved : public UMemory {
   public:
-      size_t numParts() const {
-          U_ASSERT(!isBogus());
-          return parts->length();
-      }
+      size_t numParts() const;
       // Precondition: i < numParts()
-      const Literal* getPart(size_t i) const {
-          U_ASSERT(!isBogus());
-          U_ASSERT(i < numParts());
-          return parts->get(i);
-      }
+      const Literal* getPart(size_t i) const;
       class Builder {
       private:
           friend class Reserved;
           
-          Builder(UErrorCode &errorCode) {
-              if (U_FAILURE(errorCode)) {
-                  return;
-              }
-              parts.adoptInstead(List<Literal>::builder(errorCode));
-          }
+          Builder(UErrorCode &errorCode);
           LocalPointer<List<Literal>::Builder> parts;
           
       public:
@@ -657,18 +624,9 @@ public:
       // or a reserved sequence (which has no meaning and may result
       // in a formatting error).
   public:
-      const FunctionName& getFunctionName() const {
-          U_ASSERT(!isBogus() && !isReserved());
-          return functionName;
-      }
-      const Reserved& asReserved() const {
-          U_ASSERT(!isBogus() && isReserved());
-          return *reserved;
-      }
-      const OptionMap &getOptions() const {
-          U_ASSERT(!isBogus() && !isReserved());
-          return *options;
-      }
+      const FunctionName& getFunctionName() const;
+      const Reserved& asReserved() const;
+      const OptionMap &getOptions() const;
       bool isReserved() const { return isReservedSequence; }
 
       class Builder {
@@ -709,15 +667,7 @@ public:
       // Operator needs a copy constructor in order to make Expression deeply copyable
       Operator(const Operator& other);
 
-      // See comments under `SelectorKeys` for why this is here.
-      // In this case, the invariant is (isReservedSequence && reserved.isValid() && !options.isValid())
-      //                              || (!isReservedSequence && !reserved.isValid() && options.isValid())
-      bool isBogus() const {
-          if (isReservedSequence) {
-              return !((reserved.isValid() && !options.isValid()));
-          }
-          return (!(!reserved.isValid() && options.isValid()));
-      }
+      bool isBogus() const;
       const bool isReservedSequence;
       const FunctionName functionName;
       // Non-const for copy constructors, effectively const
@@ -729,29 +679,14 @@ public:
   public:
 
       // TODO: include these or not?
-      bool isStandaloneAnnotation() const {
-          U_ASSERT(!isBogus());
-          return !rand.isValid();
-      }
+      bool isStandaloneAnnotation() const;
       // Returns true for function calls with operands as well as
       // standalone annotations.
       // Reserved sequences are not function calls
-      bool isFunctionCall() const {
-          U_ASSERT(!isBogus());
-          return (rator.isValid() && !rator->isReserved());
-      }
-      bool isReserved() const {
-          U_ASSERT(!isBogus());
-          return (rator.isValid() && rator->isReserved());
-      }
-      const Operator& getOperator() const {
-          U_ASSERT(isFunctionCall() || isReserved());
-          return *rator;
-      }
-      const Operand& getOperand() const {
-          U_ASSERT(!isStandaloneAnnotation());
-          return *rand;
-      }
+      bool isFunctionCall() const;
+      bool isReserved() const;
+      const Operator& getOperator() const;
+      const Operand& getOperand() const;
 
       class Builder {
       private:
@@ -819,15 +754,9 @@ public:
       static PatternPart* create(Expression* e, UErrorCode& errorCode);
       bool isText() const { return isRawText; }
       // Precondition: !isText()
-      const Expression& contents() const {
-          U_ASSERT(!isText() && !isBogus());
-          return *expression;
-      }
+      const Expression& contents() const;
       // Precondition: isText();
-      const UnicodeString& asText() const {
-          U_ASSERT(isText());
-          return text;
-      }
+      const UnicodeString& asText() const;
 
   private:
       friend class List<PatternPart>;
@@ -860,21 +789,13 @@ public:
   public:
       size_t numParts() const { return parts->length(); }
       // Precondition: i < numParts()
-      const PatternPart* getPart(size_t i) const {
-          U_ASSERT(!isBogus() && i < numParts());
-          return parts->get(i);
-      }
+      const PatternPart* getPart(size_t i) const;
 
       class Builder {
       private:
           friend class Pattern;
           
-          Builder(UErrorCode &errorCode) {
-              if (U_FAILURE(errorCode)) {
-                  return;
-              }
-              parts.adoptInstead(List<PatternPart>::builder(errorCode));
-          }
+          Builder(UErrorCode &errorCode);
           // Note this is why PatternPart and all its enclosed classes need
           // copy constructors: when the build() method is called on `parts`,
           // it should copy `parts` rather than moving it
@@ -931,18 +852,9 @@ public:
   // and getPattern() take error codes / signal an error if you call the wrong one
   // TODO
   bool hasSelectors() const;
-  ExpressionList& getSelectors() const {
-      U_ASSERT(hasSelectors());
-      return *selectors;
-  }
-  VariantMap& getVariants() const {
-      U_ASSERT(hasSelectors());
-      return *variants;
-  }
-  Pattern& getPattern() const {
-      U_ASSERT(!hasSelectors());
-      return *pattern;
-  }
+  ExpressionList& getSelectors() const;
+  VariantMap& getVariants() const;
+  Pattern& getPattern() const;
 
   class Builder {
   private:
