@@ -54,7 +54,7 @@ class U_I18N_API MessageFormatter : public Format {
     // Not yet implemented
     virtual UnicodeString &format(const Formattable &obj, UnicodeString &appendTo, FieldPosition &pos, UErrorCode &status) const override;
 
-    virtual UnicodeString &formatToString(const Hashtable& arguments, UErrorCode &status) const;
+    virtual void formatToString(const Hashtable& arguments, UErrorCode &status, UnicodeString &result) const;
  
     // Not yet implemented
     virtual void parseObject(const UnicodeString &source, Formattable &result,
@@ -258,13 +258,12 @@ class U_I18N_API MessageFormatter : public Format {
              void parseToken(const UChar32 (&)[N], UErrorCode &);
              template <size_t N>
              void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
-             void parseNmtoken(UErrorCode&, VariableName&);
              void parseName(UErrorCode&, VariableName&);
              void parseVariableName(UErrorCode&, VariableName&);
              void parseFunction(UErrorCode&, FunctionName&);
              void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
              void parseLiteralEscape(UErrorCode &, String&);
-             void parseLiteral(UErrorCode &, String&);
+             void parseLiteral(UErrorCode &, bool&, String&);
              void parseOption(UErrorCode&, MessageFormatDataModel::Operator::Builder&);
              void parseOptions(UErrorCode &, MessageFormatDataModel::Operator::Builder&);
              void parseReservedEscape(UErrorCode&, String&);
@@ -324,7 +323,7 @@ class U_I18N_API MessageFormatter : public Format {
      }; // class Serializer
 
      // Formatting methods
-     UnicodeString& formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&) const;
+     void formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      void formatExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
      void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
 

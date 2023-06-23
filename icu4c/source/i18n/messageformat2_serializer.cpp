@@ -220,7 +220,8 @@ void SERIALIZER::serializeDeclarations() {
         // No whitespace needed here -- see `declaration` in the grammar
         emit(EQUALS);
         // No whitespace needed here -- see `declaration` in the grammar
-        emit(*b.value);
+        // getValue() is guaranteed to return a non-null pointer
+        emit(*(b.getValue()));
     }
 }
 

@@ -242,7 +242,8 @@ static bool inRange(UChar32 c, UChar32 first, UChar32 last) {
   `isDigit()`         : `DIGIT`
   `isNameStart()`     : `name-start`
   `isNameChar()`      : `name-char`
-  `isLiteralChar()`   : `literal-char`
+  `isUnquotedStart()` : `unquoted-start`
+  `isQuotedChar()`    : `quoted-char`
 */
 static bool isTextChar(UChar32 c) {
     return inRange(c, 0x0000, 0x005B)    // Omit backslash
@@ -298,7 +299,12 @@ static bool isNameChar(UChar32 c) {
            inRange(c, 0x0300, 0x036F) || inRange(c, 0x203F, 0x2040);
 }
 
-static bool isLiteralChar(UChar32 c) {
+static bool isUnquotedStart(UChar32 c) {
+    return isNameStart(c) || isDigit(c) || c == PERIOD || c == 0x00B7 ||
+           inRange(c, 0x0300, 0x036F) || inRange(c, 0x203F, 0x2040);
+}
+
+static bool isQuotedChar(UChar32 c) {
     return inRange(c, 0x0000, 0x005B)    // Omit backslash
            || inRange(c, 0x005D, 0x007B) // Omit pipe
            || inRange(c, 0x007D, 0xD7FF) // Omit surrogates
@@ -535,29 +541,6 @@ void PARSER::parseTokenWithWhitespace(UChar32 c,
 }
 
 /*
-  Consumes a non-empty sequence of `name-char`s.
-
-  (Matches the `nmtoken` nonterminal in the grammar.)
-*/
-void PARSER::parseNmtoken(UErrorCode &errorCode,
-                          VariableName &name) {
-    CHECK_ERROR(errorCode);
-
-    U_ASSERT(inBounds(source, index));
-    if (!isNameChar(source[index])) {
-        ERROR(parseError, errorCode, index);
-        return;
-    }
-
-    while (isNameChar(source[index])) {
-        name += source[index];
-        normalizedInput += source[index];
-        index++;
-        CHECK_BOUNDS(source, index, parseError, errorCode);
-    }
-}
-
-/*
   Consumes a non-empty sequence of `name-char`s, the first of which is
   also a `name-start`.
   that begins with a character `start` such that `isNameStart(start)`.
@@ -577,7 +560,12 @@ void PARSER::parseName(UErrorCode &errorCode,
         return;
     }
 
-    parseNmtoken(errorCode, name);
+    while (isNameChar(source[index])) {
+        name += source[index];
+        normalizedInput += source[index];
+        index++;
+        CHECK_BOUNDS(source, index, parseError, errorCode);
+    }
 }
 
 /*
@@ -708,22 +696,33 @@ void PARSER::parseLiteralEscape(UErrorCode &errorCode,
 
 /*
   Consume a literal, matching the `literal` nonterminal in the grammar.
+  May be quoted or unquoted -- returns true iff quoted
 */
-void PARSER::parseLiteral(UErrorCode &errorCode, String& str) {
+void PARSER::parseLiteral(UErrorCode &errorCode, bool& quoted, String& contents) {
     CHECK_ERROR(errorCode);
     U_ASSERT(inBounds(source, index));
 
-    // Parse the opening '|'
-    parseToken(PIPE, errorCode);
-    CHECK_BOUNDS(source, index, parseError, errorCode);
+    // Parse the opening '|' if present
+    if (source[index] == PIPE) {
+        quoted = true;
+        parseToken(PIPE, errorCode);
+        CHECK_BOUNDS(source, index, parseError, errorCode);
+    } else {
+        if (!isUnquotedStart(source[index])) {
+            ERROR(parseError, errorCode, index);
+            return;
+        }
+        quoted = false;
+    }
 
     // Parse the contents
     bool done = false;
     while (!done) {
-        if (source[index] == BACKSLASH) {
-            parseLiteralEscape(errorCode, str);
-        } else if (isLiteralChar(source[index])) {
-            str += source[index];
+        if (quoted && source[index] == BACKSLASH) {
+            parseLiteralEscape(errorCode, contents);
+        } else if ((!quoted && isNameChar(source[index]))
+                   || (quoted && isQuotedChar(source[index]))) {
+            contents += source[index];
             normalizedInput += source[index];
             index++; // Consume this character
             maybeAdvanceLine();
@@ -734,8 +733,10 @@ void PARSER::parseLiteral(UErrorCode &errorCode, String& str) {
         CHECK_BOUNDS(source, index, parseError, errorCode);
     }
 
-    // Parse the closing '|'
-    parseToken(PIPE, errorCode);
+    // Parse the closing '|' if we saw an opening '|'
+    if (quoted) {
+        parseToken(PIPE, errorCode);
+    }
 
     // Guarantee postcondition
     CHECK_BOUNDS(source, index, parseError, errorCode);
@@ -761,23 +762,18 @@ void PARSER::parseOption(UErrorCode &errorCode,
 
     String rhsStr;
     LocalPointer<Operand> rand;
-    // Parse RHS, which is either a literal, nmtoken, or variable
+    // Parse RHS, which is either a literal or variable
     switch (source[index]) {
-    case PIPE: {
-        parseLiteral(errorCode, rhsStr);
-        Literal rhs(true, rhsStr);
-        rand.adoptInstead(Operand::create(rhs, errorCode));
-        break;
-    }
     case DOLLAR: {
         parseVariableName(errorCode, rhsStr);
         rand.adoptInstead(Operand::create(rhsStr, errorCode));
         break;
     }
     default: {
-        // Not a literal or variable, so it must be an nmtoken
-        parseNmtoken(errorCode, rhsStr);
-        Literal lit(false, rhsStr);
+        // Must be a literal
+        bool isQuoted;
+        parseLiteral(errorCode, isQuoted, rhsStr);
+        Literal lit(isQuoted, rhsStr);
         rand.adoptInstead(Operand::create(lit, errorCode));
         break;
     }
@@ -911,10 +907,11 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
             result.add(lit, errorCode);
             CHECK_ERROR(errorCode);
             chunk.setTo(u"", 0);
-        } else if (source[index] == PIPE) {
+        } else if (source[index] == PIPE || isUnquotedStart(source[index])) {
             String s;
-            parseLiteral(errorCode, s);
-            Literal lit(true, s);
+            bool isQuoted;
+            parseLiteral(errorCode, isQuoted, s);
+            Literal lit(isQuoted, s);
             result.add(lit, errorCode);
             CHECK_ERROR(errorCode);
         } else {
@@ -1090,8 +1087,9 @@ void PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
         adoptedRand.adoptInstead(Operand::create(var, errorCode));
     } else {
         String s;
-        parseLiteral(errorCode, s);
-        Literal lit(true, s);
+        bool isQuoted;
+        parseLiteral(errorCode, isQuoted, s);
+        Literal lit(isQuoted, s);
         adoptedRand.adoptInstead(Operand::create(lit, errorCode));
     }
 
@@ -1167,7 +1165,7 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
     // literal '|', variable '$' or annotation
     switch (source[index]) {
     case PIPE: {
-        // Literal
+        // Quoted literal
         parseLiteralOrVariableWithAnnotation(false, errorCode, *exprBuilder);
         break;
     }
@@ -1181,6 +1179,9 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
             LocalPointer<Operator> rator(parseAnnotation(errorCode));
             NULL_ON_ERROR(errorCode);
             exprBuilder->setOperator(rator.orphan());
+        } else if (isUnquotedStart(source[index])) {
+            // Unquoted literal
+            parseLiteralOrVariableWithAnnotation(false, errorCode, *exprBuilder);
         } else {
             // Not a literal, variable or annotation -- error out
             ERROR(parseError, errorCode, index);
@@ -1283,15 +1284,8 @@ Key* PARSER::parseKey(UErrorCode &errorCode) {
     U_ASSERT(inBounds(source, index));
 
     LocalPointer<Key> k;
-    // Literal | nmtoken | '*'
+    // Literal | '*'
     switch (source[index]) {
-    case PIPE: {
-        String s;
-        parseLiteral(errorCode, s);
-        Literal lit(true, s);
-        k.adoptInstead(Key::create(lit, errorCode));
-        break;
-    }
     case ASTERISK: {
         index++;
         // Guarantee postcondition
@@ -1301,10 +1295,11 @@ Key* PARSER::parseKey(UErrorCode &errorCode) {
         break;
     }
     default: {
-        // nmtoken
+        // Literal
         String s;
-        parseNmtoken(errorCode, s);
-        Literal lit(false, s);
+        bool isQuoted;
+        parseLiteral(errorCode, isQuoted, s);
+        Literal lit(isQuoted, s);
         k.adoptInstead(Key::create(lit, errorCode));
         break;
     }
@@ -1657,17 +1652,19 @@ PARSER::~Parser() {}
 // Formatting
 
 // TODO
-const Expression& lookup(const Bindings& env, const VariableName& lhs, bool& found) {
+// Postcondition: !found || result is non-null
+const Expression* lookup(const Bindings& env, const VariableName& lhs, bool& found) {
     size_t len = env.length();
     for (int32_t i = len - 1; i >= 0; i--) {
         const Binding& b = *env.get(i);
         if (b.var == lhs) {
-            rhs = b.getValue();
-            *found = true;
+            found = true;
+            // getValue() guarantees result is non-null
             return b.getValue();
         }
     }
-    return false;
+    found = false;
+    return nullptr;
 }
  
 void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& rand, UErrorCode &status, UnicodeString& result) const {
@@ -1678,14 +1675,18 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
         // TODO: name shadowing errors
         VariableName var = rand.asVariable();
         const Bindings& env = dataModel->getLocalVariables();
-        Expression rhs;
-        if (lookup(env, var, rhs)) {
-            formatExpression(arguments, rhs, status, result);
+        bool found = false;
+        const Expression* rhs = lookup(env, var, found);
+        if (found) {
+            U_ASSERT(rhs != nullptr);
+            formatExpression(arguments, *rhs, status, result);
             return;
         }
         // Not found in locals -- must be global
-        if (arguments.has(var)) {
-            result += arguments.get(var);
+        if (arguments.containsKey(var)) {
+            UnicodeString* val = (UnicodeString*) arguments.get(var);
+            U_ASSERT(val != nullptr);
+            result += *val;
             return;
         }
         // Unbound variable -- Should have been a data model error checked during that phase
@@ -1693,7 +1694,7 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
         return;
     }
     // Must be a literal
-    result += rand.asLiteral().contents();
+    result += rand.asLiteral().contents;
 }
 
 void MessageFormatter::formatExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
@@ -1713,27 +1714,25 @@ void MessageFormatter::formatExpression(const Hashtable& arguments, const Expres
     formatOperand(arguments, expr.getOperand(), status, result);
 }
 
-UnicodeString& MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& pat, UErrorCode &status) const {
+void MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
-    UnicodeString result;
-    LocalPointer<PatternPart> part;
     for (size_t i = 0; i < pat.numParts(); i++) {
-        part.adoptInstead(pat.getPart(i));
+        const PatternPart* part = pat.getPart(i);
+        U_ASSERT(part != nullptr);
         if (part->isText()) {
             result += part->asText();
         } else {
             formatExpression(arguments, part->contents(), status, result);
         }
     }
-    return result;
 }
 
-UnicodeString& MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &status) const {
-    CHECK_ERROR(errorCode);
+void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &status, UnicodeString& result) const {
+    CHECK_ERROR(status);
 
     if (!dataModel->hasSelectors()) {
-        return formatPattern(arguments, *pattern, status);
+        formatPattern(arguments, dataModel->getPattern(), status, result);
     }
     // pattern matching not yet implemented
     // TODO

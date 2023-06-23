@@ -34,11 +34,11 @@ UnicodeString validTestCases[] = {
      when female {{$userName} est all\u00E9e \u00E0 Paris.} \
      when  *     {{$userName} est all\u00E9 \u00E0 Paris.}",
     "{{$when :datetime skeleton=MMMMd}}",
-    // Edited this from testMessageFormatDateTimeSkeleton() -- nmtokens can't contain spaces
+    // Edited this from testMessageFormatDateTimeSkeleton() -- unquoted literals can't contain spaces
     "{{$when :datetime skeleton=|(   yMMMMd   )|}}",
     "{Expiration: {$when :datetime skeleton=yMMM}!}",
     "{Hello {$user}, today is {$today :datetime datestyle=long}.}",
-    // Edited this from testMessageFormatDateTimeSkeleton() -- nmtokens can't contain parentheses or single quotation marks
+    // Edited this from testMessageFormatDateTimeSkeleton() -- unquoted literals can't contain parentheses or single quotation marks
     "{{$when :datetime pattern=|('::'yMMMMd)|}}",
     // From CustomFormatterMessageRefTest.java
     "match {$gcase :select} when genitive {Firefoxin} when * {Firefox}",
@@ -167,13 +167,11 @@ UnicodeString jsonTestCasesValid[] = {
     "{hel\\\\lo}",
     "{hel\\{\\\\lo}",
     "{hel\\{\\}lo}",
-    // tests for ':' in nmtokens
+    // tests for ':' in unquoted literals
     "match {$foo} when o:ne {one} when * {other}",
     "match {$foo} when one: {one} when * {other}",
     "let $foo = {$bar :fun option=a:b} {bar {$foo}}",
     "let $foo = {$bar :fun option=a:b:c} {bar {$foo}}",
-    "let $foo = {$bar} match {$foo} when :one {one} when * {other}",
-    "let $foo = {$bar :fun option=:a} {bar {$foo}}",
     // tests for newlines in literals and text
     "{hello {|wo\nrld|}}",
     "{hello wo\nrld}",
@@ -223,6 +221,8 @@ UnicodeString jsonTestCasesValid[] = {
     "{{$bar-foo}}",
     // Name shadowing is allowed
     "let $foo = {|hello|} let $foo = {$foo} {{$foo}}",
+    // Unquoted literal -- should work
+    "{good {placeholder}}",
     0
 };
 
@@ -322,7 +322,8 @@ void TestMessageFormat2::testAPI() {
   UnicodeString value = "John";
   arguments->put("userName", &value, errorCode);
   UnicodeString expected = "Hello, John!";
-  UnicodeString result = mf->formatToString(*arguments, errorCode);
+  UnicodeString result;
+  mf->formatToString(*arguments, errorCode, result);
   if (result != expected) {
     logln("Expected output: " + expected + "\nGot output: " + result);
     errorCode = U_MESSAGE_PARSE_ERROR;
@@ -636,7 +637,7 @@ void TestMessageFormat2::testInvalidPatterns() {
 
     // Non-expression as scrutinee in pattern -- error should be at the first
     // non-expression, not the later non-expression
-    testInvalidPattern(++i, "match {|y|} {abc} {$} when * * * {a}", 13);
+    testInvalidPattern(++i, "match {|y|} {\\|} {@} when * * * {a}", 13);
 
     // Non-key in variant -- error should be there, not in the next erroneous
     // variant
@@ -679,9 +680,6 @@ void TestMessageFormat2::testInvalidPatterns() {
 
     // ':' not preceding a function name
     testInvalidPattern(++i, "{bad {:}}", 7);
-
-    // 'placeholder' is not a literal, variable or annotation
-    testInvalidPattern(++i, "{bad {placeholder}}", 6);
 
     // Missing '=' after option name
     testInvalidPattern(++i, "{no-equal {|42| :number m }}", 26);
@@ -746,6 +744,11 @@ void TestMessageFormat2::testInvalidPatterns() {
     testInvalidPattern(++i, "{{|3.14|:foo}}", 8);
     testInvalidPattern(++i, "{{|3.14|-foo}}", 8);
     testInvalidPattern(++i, "{{|3.14|+foo}}", 8);
+
+    // Unquoted literals can't begin with a ':'
+    testInvalidPattern(++i, "let $foo = {$bar} match {$foo} when :one {one} when * {other}", 36);
+    testInvalidPattern(++i, "let $foo = {$bar :fun option=:a} {bar {$foo}}", 29);
+
 }
 
 void TestMessageFormat2::testComplexMessage() {

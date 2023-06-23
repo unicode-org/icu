@@ -841,7 +841,11 @@ public:
        }
          
        const UnicodeString var;
-       Expression& getValue() { return *value; }
+       // Postcondition: result is non-null
+       const Expression* getValue() const {
+           U_ASSERT(!isBogus());
+           return value.getAlias();
+       }
   private:
        const LocalPointer<Expression> value;
        bool isBogus() const { return !value.isValid(); }
