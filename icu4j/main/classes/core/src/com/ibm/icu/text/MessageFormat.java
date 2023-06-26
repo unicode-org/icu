@@ -1694,7 +1694,9 @@ public class MessageFormat extends UFormat {
             int prevDestLength=dest.length;
             Format formatter = null;
             if (noArg) {
-                dest.append("{"+argName+"}");
+                dest.append("{");
+                dest.append(argName);
+                dest.append("}");
             } else if (arg == null) {
                 dest.append("null");
             } else if(pluralNumber!=null && pluralNumber.numberArgIndex==(i-2)) {
