@@ -1683,8 +1683,11 @@ public class MessageFormat extends UFormat {
                 }
             } else {
                 argId = argName;
-                if(argsMap!=null && argsMap.containsKey(argName)) {
+                if(argsMap!=null) {
                     arg=argsMap.get(argName);
+                    if (arg==null) {
+                        noArg=!argsMap.containsKey(argName);
+                    }
                 } else {
                     arg=null;
                     noArg=true;
