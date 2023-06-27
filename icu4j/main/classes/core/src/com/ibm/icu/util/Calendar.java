@@ -985,7 +985,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    protected static final int BASE_FIELD_COUNT = 23;
+    protected static final int BASE_FIELD_COUNT = 24;
 
     /**
      * The maximum number of fields possible.  Subclasses must not define
@@ -1728,7 +1728,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 (1 << DAY_OF_MONTH) |
                 (1 << DAY_OF_YEAR) |
                 (1 << EXTENDED_YEAR) |
-                (1 << IS_LEAP_MONTH);
+                (1 << IS_LEAP_MONTH) |
+                (1 << ORDINAL_MONTH) ;
         for (int i=BASE_FIELD_COUNT; i<fields.length; ++i) {
             mask |= (1 << i);
         }
@@ -3022,6 +3023,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         case MONTH:
+        case ORDINAL_MONTH:
             // Rolling the month involves both pinning the final value
             // and adjusting the DAY_OF_MONTH if necessary.  We only adjust the
             // DAY_OF_MONTH if, after updating the MONTH field, it is illegal.
@@ -3079,6 +3081,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             }
             set(field, newYear);
             pinField(MONTH);
+            pinField(ORDINAL_MONTH);
             pinField(DAY_OF_MONTH);
             return;
         }
@@ -3086,6 +3089,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             // Rolling the year can involve pinning the DAY_OF_MONTH.
             set(field, internalGet(field) + amount);
             pinField(MONTH);
+            pinField(ORDINAL_MONTH);
             pinField(DAY_OF_MONTH);
             return;
 
@@ -3225,6 +3229,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             // have to be updated as well.
             set(DAY_OF_YEAR, day_of_year);
             clear(MONTH);
+            clear(ORDINAL_MONTH);
             return;
         }
         case DAY_OF_YEAR:
@@ -3400,6 +3405,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // Fall through into standard handling
         case EXTENDED_YEAR:
         case MONTH:
+        case ORDINAL_MONTH:
         {
             boolean oldLenient = isLenient();
             setLenient(true);
@@ -4551,6 +4557,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
         {           0,            0, 24*ONE_HOUR-1, 24*ONE_HOUR-1  }, // MILLISECONDS_IN_DAY
         {           0,            0,             1,             1  }, // IS_LEAP_MONTH
+        {           0,            0,            12,            12  }, // ORDINAL_MONTH
     };
 
     /**

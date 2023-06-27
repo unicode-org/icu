@@ -420,6 +420,7 @@ public class ChineseCalendar extends Calendar {
         {/*                                  */}, // JULIAN_DAY
         {/*                                  */}, // MILLISECONDS_IN_DAY
         {        0,        0,       1,       1 }, // IS_LEAP_MONTH
+        {        0,        0,      11,      12 }, // ORDINAL_MONTH
     };
 
     /**
