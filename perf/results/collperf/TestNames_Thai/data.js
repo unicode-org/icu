@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687894933143,
+  "lastUpdate": 1687904229441,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22084,6 +22084,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2973266.3649,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f1b13a850a92557d6f6430ee0f867c3bcfbecbd5",
+          "message": "ICU-22354 Revert benchmark-action changes\n\nRevert the change of benchmark-action in\nhttps://github.com/unicode-org/icu/pull/2428 which cause\npost merge test brekage.\n\nSee https://github.com/unicode-org/icu/actions/runs/5393383252/jobs/9793048045\nfor the problem",
+          "timestamp": "2023-06-27T14:53:04-07:00",
+          "tree_id": "7ec46ee1a0240ad833328079d8aaf73b6c005a72",
+          "url": "https://github.com/unicode-org/icu/commit/f1b13a850a92557d6f6430ee0f867c3bcfbecbd5"
+        },
+        "date": 1687904183370,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 551.8468,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 17023288.9169,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2764723.3187,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 15741251.6525,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2972419.998,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
