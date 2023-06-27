@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687895398948,
+  "lastUpdate": 1687904711204,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39166,6 +39166,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 52.923,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f1b13a850a92557d6f6430ee0f867c3bcfbecbd5",
+          "message": "ICU-22354 Revert benchmark-action changes\n\nRevert the change of benchmark-action in\nhttps://github.com/unicode-org/icu/pull/2428 which cause\npost merge test brekage.\n\nSee https://github.com/unicode-org/icu/actions/runs/5393383252/jobs/9793048045\nfor the problem",
+          "timestamp": "2023-06-27T14:53:04-07:00",
+          "tree_id": "7ec46ee1a0240ad833328079d8aaf73b6c005a72",
+          "url": "https://github.com/unicode-org/icu/commit/f1b13a850a92557d6f6430ee0f867c3bcfbecbd5"
+        },
+        "date": 1687904670400,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 17.3972,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 18.9114,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 22.6658,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 32.0191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.2731,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 39.6863,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.3558,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.8999,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 131.7387,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 24.2709,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 51.2663,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 43.5772,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
