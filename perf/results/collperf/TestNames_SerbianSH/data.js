@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687476329251,
+  "lastUpdate": 1687893275704,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22030,6 +22030,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 26837464.3018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "83ee7e662f8b027e653f5e8b7afd73738782c088",
+          "message": "ICU-22390 Transliterator.<clinit> can be optimized - part 2\n\nWIDTH_FIX instance could be lazily initialized, because it's used\nonly if transliterate() is called on the AnyTransliterator instance,\nbut apparently not used by other Transliterator instance.",
+          "timestamp": "2023-06-27T11:25:43-07:00",
+          "tree_id": "027a15f4548f8c7c1ac95506a236d995de9870e5",
+          "url": "https://github.com/unicode-org/icu/commit/83ee7e662f8b027e653f5e8b7afd73738782c088"
+        },
+        "date": 1687893229057,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 539.8721,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 58619602.617,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 21788076.2896,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 62532478.9683,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 25871227.883,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
