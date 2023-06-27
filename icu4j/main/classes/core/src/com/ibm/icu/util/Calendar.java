@@ -3030,7 +3030,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             // E.g., <jan31>.roll(MONTH, 1) -> <feb28> or <feb29>.
         {
             int max = getActualMaximum(MONTH);
-            int mon = (internalGet(MONTH) + amount) % (max+1);
+            int mon = (internalGetMonth() + amount) % (max+1);
 
             if (mon < 0) {
                 mon += (max + 1);
@@ -5583,7 +5583,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         switch (field) {
         case DAY_OF_MONTH:
             y = handleGetExtendedYear();
-            validateField(field, 1, handleGetMonthLength(y, internalGet(MONTH)));
+            validateField(field, 1, handleGetMonthLength(y, internalGetMonth()));
             break;
         case DAY_OF_YEAR:
             y = handleGetExtendedYear();
@@ -6199,7 +6199,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         internalSet(EXTENDED_YEAR, year);
 
-        int month = useMonth ? internalGet(MONTH, getDefaultMonthInYear(year)) : 0;
+        int month = useMonth ? internalGetMonth(getDefaultMonthInYear(year)) : 0;
 
         // Get the Julian day of the day BEFORE the start of this year.
         // If useMonth is true, get the day before the start of the month.
@@ -6277,7 +6277,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // past the first of the given day-of-week in this month.
                 // Note that we handle -2, -3, etc. correctly, even though
                 // values < -1 are technically disallowed.
-                int m = internalGet(MONTH, JANUARY);
+                int m = internalGetMonth(JANUARY);
                 int monthLength = handleGetMonthLength(year, m);
                 date += ((monthLength - date) / 7 + dim + 1) * 7;
             }

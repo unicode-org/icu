@@ -573,7 +573,7 @@ public class GregorianCalendar extends Calendar {
                 // may be one year before or after the calendar year.
                 int isoYear = get(YEAR_WOY);
                 int isoDoy = internalGet(DAY_OF_YEAR);
-                if (internalGet(MONTH) == Calendar.JANUARY) {
+                if (internalGetMonth() == Calendar.JANUARY) {
                     if (woy >= 52) {
                         isoDoy += handleGetYearLength(isoYear);
                     }
