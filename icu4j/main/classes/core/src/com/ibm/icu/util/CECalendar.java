@@ -45,6 +45,8 @@ abstract class CECalendar extends Calendar {
         { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
         {/*                                  */}, // JULIAN_DAY
         {/*                                  */}, // MILLISECONDS_IN_DAY
+        {/*                                  */}, // IS_LEAP_YEAR
+        {        0,        0,      12,      12 }, // ORDINAL_MONTH
     };
 
     //-------------------------------------------------------------------------

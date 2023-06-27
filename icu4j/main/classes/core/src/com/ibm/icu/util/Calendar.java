@@ -956,6 +956,30 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int IS_LEAP_MONTH = 22;
 
     /**
+     * {@icu} Field indicating the month. This is a calendar-specific value.
+     * Differ from MONTH, this value is continuous and unique within a
+     * year and range from 0 to 11 or 0 to 12 depending on how many months in a
+     * year, the calendar system has leap month or not, and in leap year or not.
+     * It is the ordinal position of that month in the corresponding year of
+     * the calendar. For Chinese, Dangi, and Hebrew calendar, the range is
+     * 0 to 11 in non-leap years and 0 to 12 in leap years. For Coptic and Ethiopian
+     * calendar, the range is always 0 to 12. For other calendars supported by
+     * ICU now, the range is 0 to 11. When the number of months in a year of the
+     * identified calendar is variable, a different ORDINAL_MONTH value can
+     * be used for dates that are part of the same named month in different years.
+     * For example, in the Hebrew calendar, "1 Nisan 5781" is associated with
+     * ORDINAL_MONTH value 6 while "1 Nisan 5782" is associated with
+     * ORDINAL_MONTH value 7 because 5782 is a leap year and Nisan follows
+     * the insertion of Adar I. In Chinese calendar, "Year 4664 Month 6 Day 2"
+     * is associated with ORDINAL_MONTH value 5 while "Year 4665 Month 6 Day 2"
+     * is associated with ORDINAL_MONTH value 6 because 4665 is a leap year
+     * and there is an extra "Leap Month 5" which associated with ORDINAL_MONTH
+     * value 5 before "Month 6" of year 4664.
+     * @draft ICU 74
+     */
+    public static final int ORDINAL_MONTH = 23;
+
+    /**
      * The number of fields defined by this class.  Subclasses may define
      * addition fields starting with this number.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
@@ -2027,6 +2051,89 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     }
 
+
+    //-------------------------------------------------------------------------
+    // Temporal Calendar API.
+    //-------------------------------------------------------------------------
+    /**
+     * {@icu} Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to * setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     * @return true if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     * @draft ICU 74
+     */
+    public boolean inTemporalLeapYear() {
+        // Default to Gregorian based leap year rule.
+        return getActualMaximum(DAY_OF_YEAR) == 366;
+    }
+
+    private static String [] gTemporalMonthCodes = {
+        "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09", "M10", "M11", "M12"
+    };
+
+    /**
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year and suffixed by an
+     * optional literal grapheme "L" if this is a leap month in a lunisolar
+     * calendar. The 25 possible values are "M01" .. "M13" and "M01L" .. "M12L".
+     * For the Hebrew calendar, the values are "M01" .. "M12" for non-leap year, and
+     * "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
+     * @draft ICU 74
+     */
+    public String getTemporalMonthCode() {
+        int month = get(MONTH);
+        assert(month < 12);
+        assert(internalGet(IS_LEAP_MONTH) == 0);
+        return gTemporalMonthCodes[month];
+    }
+
+    /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+     * is a leap month in a lunisolar calendar. The 25 possible values are
+     * "M01" .. "M13" and "M01L" .. "M12L". For Hebrew calendar, the values are
+     * "M01" .. "M12" for non-leap years, and "M01" .. "M05", "M05L", "M06"
+     * .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     * @param temporalMonth One of 25 possible strings in {"M01".. "M12", "M13", "M01L",
+     *  "M12L"}.
+     * @draft ICU 74
+     */
+    public void setTemporalMonthCode( String temporalMonth ) {
+        if (temporalMonth.length() == 3 && temporalMonth.charAt(0) == 'M') {
+            for (int m = 0; m < gTemporalMonthCodes.length; m++) {
+                if (temporalMonth.equals(gTemporalMonthCodes[m])) {
+                    set(MONTH, m);
+                    set(IS_LEAP_MONTH, 0);
+                    return;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Incorrect temporal Month code: " + temporalMonth);
+    }
+
+    //-------------------------------------------------------------------------
+    // End of Temporal Calendar API
+    //-------------------------------------------------------------------------
+
     /**
      * Returns the value for a given time field.
      * @param field the given time field.
@@ -2065,7 +2172,42 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         return (stamp[field] > UNSET) ? fields[field] : defaultValue;
     }
 
+    /*
+     * @internal
+     * @deprecated This API is ICU internal only.
+     * Use this function instead of internalGet(MONTH). The implementation
+     * check the timestamp of MONTH and ORDINAL_MONTH and use the
+     * one set later. The subclass should override it to conver the value of ORDINAL_MONTH
+     * to MONTH correctly if ORDINAL_MONTH has higher priority.
+     * @return the value for the given time field.
+     */
+    protected int internalGetMonth()
+    {
+        if (resolveFields(MONTH_PRECEDENCE) == MONTH) {
+            return internalGet(MONTH);
+        }
+        return internalGet(ORDINAL_MONTH);
+    }
+
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     * Use this function instead of internalGet(MONTH, defaultValue). The implementation
+     * check the timestamp of MONTH and ORDINAL_MONTH and use the
+     * one set later. The subclass should override it to conver the value of ORDINAL_MONTH
+     * to MONTH correctly if ORDINAL_MONTH has higher priority.
+     * @param defaultValue a default value used if the MONTH and
+     *   ORDINAL_MONTH are both unset.
+     * @return the value for the MONTH.
+     */
+    protected int internalGetMonth(int defaultValue) {
+        if (resolveFields(MONTH_PRECEDENCE) == MONTH) {
+            return internalGet(MONTH, defaultValue);
+        }
+        return internalGet(ORDINAL_MONTH, defaultValue);
+    }
+
+   /**
      * Sets the time field with the given value.
      * @param field the given time field.
      * @param value the value to be set for the given time field.
@@ -5292,6 +5434,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         {
             { DAY_OF_WEEK },
             { DOW_LOCAL },
+        },
+    };
+
+    static final int[][][] MONTH_PRECEDENCE = {
+        {
+            { MONTH },
+            { ORDINAL_MONTH },
         },
     };
 
