@@ -275,4 +275,49 @@ abstract class CECalendar extends Calendar {
         // day
         fields[2] = (doy % 30) + 1; // 1-based days in a month
     }
+
+
+    //-------------------------------------------------------------------------
+    // Temporal Calendar API.
+    //-------------------------------------------------------------------------
+    private static String [] gTemporalMonthCodes = {
+        "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09", "M10", "M11", "M12"
+    };
+
+    /**
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year. For the short thirteen
+     * month in each year in the CECalendar, the value is "M13".
+     *
+     * @return       One of 13 possible strings in {"M01".. "M12", "M13"}.
+     * @draft ICU 74
+     */
+    public String getTemporalMonthCode() {
+        if (get(MONTH) == 12) return "M13";
+        return super.getTemporalMonthCode();
+    }
+
+    /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year. For CECalendar calendar, the values are "M01" .. "M13"
+     * while the "M13" is represent the short thirteen month in each year.
+     * @param temporalMonth One of 13 possible strings in {"M01".. "M12", "M13"}.
+     * @draft ICU 74
+     */
+    public void setTemporalMonthCode( String temporalMonth ) {
+        if (temporalMonth.equals("M13")) {
+            set(MONTH, 12);
+            set(IS_LEAP_MONTH, 0);
+            return;
+        }
+        super.setTemporalMonthCode(temporalMonth);
+    }
+
+    //-------------------------------------------------------------------------
+    // End of Temporal Calendar API
+    //-------------------------------------------------------------------------
 }

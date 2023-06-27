@@ -1043,7 +1043,84 @@ public class ChineseCalendar extends Calendar {
         winterSolsticeCache = new CalendarCache();
         newYearCache = new CalendarCache();
     }
-    
+
+    //-------------------------------------------------------------------------
+    // Temporal Calendar API.
+    //-------------------------------------------------------------------------
+    /**
+     * {@icu} Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     * @return true if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     * @draft ICU 74
+     */
+    public boolean inTemporalLeapYear() {
+        return getActualMaximum(DAY_OF_YEAR) > 360;
+    }
+
+    private static String [] gTemporalLeapMonthCodes = {
+        "M01L", "M02L", "M03L", "M04L", "M05L", "M06L", "M07L", "M08L", "M09L", "M10L", "M11L", "M12L"
+    };
+
+    /**
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year and suffixed by an
+     * optional literal grapheme "L" if this is a leap month in a lunisolar
+     * calendar. For the Chinese calendar, the values are "M01" .. "M12" for
+     * non-leap year and * in leap year with another monthCode in "M01L" .. "M12L".
+     *
+     * @return       One of 24 possible strings in {"M01".."M12", "M01L".."M12L"}.
+     * @draft ICU 74
+     */
+    public String getTemporalMonthCode() {
+        // We need to call get, not internalGet, to force the calculation
+        // from ORDINAL_MONTH.
+        int is_leap = get(IS_LEAP_MONTH);
+        if (is_leap != 0) {
+            return gTemporalLeapMonthCodes[get(MONTH)];
+        }
+        return super.getTemporalMonthCode();
+    }
+
+    /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+     * is a leap month in a lunisolar calendar.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * @param temporalMonth One of 25 possible strings in {"M01".. "M12", "M13", "M01L",
+     *  "M12L"}.
+     * @draft ICU 74
+     */
+    public void setTemporalMonthCode( String temporalMonth ) {
+        if (temporalMonth.length() != 4 || temporalMonth.charAt(0) != 'M' || temporalMonth.charAt(3) != 'L') {
+            set(IS_LEAP_MONTH, 0);
+            super.setTemporalMonthCode(temporalMonth);
+            return;
+        }
+        for (int m = 0; m < gTemporalLeapMonthCodes.length; m++) {
+            if (temporalMonth.equals(gTemporalLeapMonthCodes[m])) {
+                set(MONTH, m);
+                set(IS_LEAP_MONTH, 1);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Incorrect temporal Month code: " + temporalMonth);
+    }
+
+    //-------------------------------------------------------------------------
+    // End of Temporal Calendar API
+    //-------------------------------------------------------------------------
+
     /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
