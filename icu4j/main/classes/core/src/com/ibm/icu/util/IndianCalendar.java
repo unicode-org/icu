@@ -395,6 +395,7 @@ public class IndianCalendar extends Calendar {
         internalSet(EXTENDED_YEAR, IndianYear);
         internalSet(YEAR, IndianYear);
         internalSet(MONTH, IndianMonth);
+        internalSet(ORDINAL_MONTH, IndianMonth);
         internalSet(DAY_OF_MONTH, IndianDayOfMonth );
         internalSet(DAY_OF_YEAR, yday + 1); // yday is 0-based
      }

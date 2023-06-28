@@ -353,6 +353,7 @@ public final class EthiopicCalendar extends CECalendar
         internalSet(ERA, era);
         internalSet(YEAR, year);
         internalSet(MONTH, fields[1]);
+        internalSet(ORDINAL_MONTH, fields[1]);
         internalSet(DAY_OF_MONTH, fields[2]);
         internalSet(DAY_OF_YEAR, (30 * fields[1]) + fields[2]);
     }

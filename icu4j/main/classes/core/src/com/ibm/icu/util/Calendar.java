@@ -2463,6 +2463,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
         fields[field] = 0;
         stamp[field] = UNSET;
+        if (field == MONTH) {
+            fields[ORDINAL_MONTH] = 0;
+            stamp[ORDINAL_MONTH] = UNSET;
+        }
+        if (field == ORDINAL_MONTH) {
+            fields[MONTH] = 0;
+            stamp[MONTH] = UNSET;
+        }
         isTimeSet = areFieldsSet = areAllFieldsSet = areFieldsVirtuallySet = false;
     }
 
@@ -6368,7 +6376,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @stable ICU 2.0
      */
     protected void handleComputeFields(int julianDay) {
-        internalSet(MONTH, getGregorianMonth());
+        int gmonth = getGregorianMonth();
+        internalSet(MONTH, gmonth);
+        internalSet(ORDINAL_MONTH, gmonth);
         internalSet(DAY_OF_MONTH, getGregorianDayOfMonth());
         internalSet(DAY_OF_YEAR, getGregorianDayOfYear());
         int eyear = getGregorianYear();

@@ -793,6 +793,7 @@ public class GregorianCalendar extends Calendar {
             ++dayOfYear;
         }
         internalSet(MONTH, month);
+        internalSet(ORDINAL_MONTH, month);
         internalSet(DAY_OF_MONTH, dayOfMonth);
         internalSet(DAY_OF_YEAR, dayOfYear);
         internalSet(EXTENDED_YEAR, eyear);
