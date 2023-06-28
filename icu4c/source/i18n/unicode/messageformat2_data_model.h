@@ -117,6 +117,28 @@ public:
             U_ASSERT(!(length() <= 0 || i >= length()));
             return static_cast<const T *>(contents->elementAt(i));
         }
+
+        // Returns true iff this contains `element`
+        bool contains(const T& element) const {
+            U_ASSERT(!isBogus());
+
+            size_t index;
+            return find(element, index);
+        }
+
+        // Returns true iff this contains `element` and returns
+        // its first index in `index`. Returns false otherwise
+        bool find(const T& element, size_t& index) const {
+            U_ASSERT(!isBogus());
+
+            for (size_t i = 0; i < length(); i++) {
+                if (*(get(i)) == element) {
+                    index = i;
+                    return true;
+                }
+            }
+            return false;
+        }
         
         class Builder : public UMemory {
             // Provides a wrapper around a vector
@@ -128,6 +150,19 @@ public:
                 }
                 U_ASSERT(contents != nullptr);
                 contents->adoptElement(element, errorCode);
+                return *this;
+            }
+            // adding copies the thing being added
+            Builder& add(const T& element, UErrorCode errorCode) {
+                if (U_FAILURE(errorCode)) {
+                    return *this;
+                }
+                U_ASSERT(contents != nullptr);
+                T* elementPtr(new T(element));
+                if (elementPtr == nullptr) {
+                    errorCode = U_MEMORY_ALLOCATION_ERROR;
+                }
+                contents->adoptElement(elementPtr, errorCode);
                 return *this;
             }
 
@@ -547,6 +582,7 @@ public:
       class Builder : public UMemory {
       public:
           Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);
+          Builder& add(const SelectorKeys& key, const Pattern& value, UErrorCode& errorCode);
           // this should be a *copying* build() (leaves `this` valid)
           // Needs to be const to enforce that when MessageFormatDataModel
           // constructor calls VariantMap::build(), it copies the variants

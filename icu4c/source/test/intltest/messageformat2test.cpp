@@ -308,8 +308,10 @@ void TestMessageFormat2::testAPI() {
   if (U_FAILURE(errorCode)) {
     return;
   }
+
+  UnicodeString pattern = u"{Hello, {$userName}!}";
   LocalPointer<MessageFormatter> mf(builder
-        ->setPattern(u"{Hello, {$userName}!}", errorCode)
+        ->setPattern(pattern, errorCode)
         .build(parseError, errorCode));
   if (U_FAILURE(errorCode)) {
     return;
@@ -329,12 +331,14 @@ void TestMessageFormat2::testAPI() {
     errorCode = U_MESSAGE_PARSE_ERROR;
     return;
   }
+  if (U_FAILURE(errorCode)) {
+        dataerrln(result);
+        logln(UnicodeString("TestMessageFormat2::testAPI failed test with pattern: " + pattern));
+        return;
+  }
 
   builder.adoptInstead(MessageFormatter::builder(errorCode));
 
-  if (U_FAILURE(errorCode)) {
-    return;
-  }
   mf.adoptInstead(builder
         ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
         .setLocale(locale)
@@ -347,23 +351,53 @@ System.out.println(result);
 
   builder.adoptInstead(MessageFormatter::builder(errorCode));
 
-  mf.adoptInstead(builder
-        ->setPattern("match {$photoCount :plural} {$userGender :select}\n\
+/*
+  pattern = "match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
                      when 1 * {{$userName} added a new photo to their album.}\n \
                      when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
-                     when * * {{$userName} added {$photoCount} photos to their album.}",
-                errorCode)
+                     when * * {{$userName} added {$photoCount} photos to their album.}";
+*/
+  pattern = "match {$photoCount} {$userGender}\n\
+                     when 1 masculine {{$userName} added a new photo to his album.}\n \
+                     when 1 feminine {{$userName} added a new photo to her album.}\n \
+                     when 1 * {{$userName} added a new photo to their album.}\n \
+                     when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
+                     when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
+                     when * * {{$userName} added {$photoCount} photos to their album.}";
+
+  mf.adoptInstead(builder
+        ->setPattern(pattern, errorCode)
         .setLocale(locale)
         .build(parseError, errorCode));
-                  /*
-result = mf.formatToString(Map.of("photoCount", 12, "userGender", "feminine", "userName", "Maria"));
-// => "Maria added 12 photos to her album."
-System.out.println(result);
-                  */
 
+  arguments->removeAll();
+  UnicodeString value1 = "12";
+  arguments->put("photoCount", &value1, errorCode);
+  UnicodeString value2 = "feminine";
+  UnicodeString value3 = "Maria";
+  arguments->put("userGender", &value2, errorCode);
+  arguments->put("userName", &value3, errorCode);
+
+  result.remove();
+  mf->formatToString(*arguments, errorCode, result);
+
+  if (U_FAILURE(errorCode)) {
+      dataerrln(pattern);
+      logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
+      return;
+  }
+
+  expected = "Maria added 12 photos to her album.";
+
+  if (result != expected) {
+      dataerrln(pattern);
+      logln("Expected output: " + expected + "\nGot output: " + result);
+      errorCode = U_MESSAGE_PARSE_ERROR;
+      return;
+  }
                   /*
 ​​Using custom functions:
 final Mf2FunctionRegistry functionRegistry = Mf2FunctionRegistry.builder()

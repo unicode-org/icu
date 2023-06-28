@@ -322,10 +322,15 @@ class U_I18N_API MessageFormatter : public Format {
          void serializeVariants();
      }; // class Serializer
 
+     // Selection methods
+
+     void resolveSelectors(const Hashtable&, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
+     
      // Formatting methods
      void formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      void formatExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
      void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
+     void formatSelectors(const Hashtable& arguments, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
     // Data model, representing the parsed message
     LocalPointer<MessageFormatDataModel> dataModel;
@@ -333,6 +338,20 @@ class U_I18N_API MessageFormatter : public Format {
     // Normalized version of the input string (optional whitespace removed)
     LocalPointer<UnicodeString> normalizedInput;
 }; // class MessageFormatter
+
+// For how this is used, see the references to (integer, variant) tuples
+// in https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
+// Ideally this would have been a private class nested in MessageFormatter,
+// but sorting comparators need to reference it
+class PrioritizedVariant : public UMemory {
+public:
+    int32_t priority;
+    const MessageFormatDataModel::SelectorKeys& keys;
+    const MessageFormatDataModel::Pattern& pat;
+    PrioritizedVariant(uint32_t p,
+                       const MessageFormatDataModel::SelectorKeys& k,
+                       const MessageFormatDataModel::Pattern& pattern) : priority(p), keys(k), pat(pattern) {}
+}; // class PrioritizedVariant
 
 } // namespace message2
 U_NAMESPACE_END
