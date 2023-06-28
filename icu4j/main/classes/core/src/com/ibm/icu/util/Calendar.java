@@ -2669,6 +2669,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             result = getMaximum(field);
             break;
 
+        case ORDINAL_MONTH:
+            result = inTemporalLeapYear() ? getMaximum(ORDINAL_MONTH) : getLeastMaximum(ORDINAL_MONTH);
+            break;
+
         default:
             // For all other fields, do it the hard way....
             result = getActualHelper(field, getLeastMaximum(field), getMaximum(field));
@@ -6062,6 +6066,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         if (stamp[JULIAN_DAY] >= MINIMUM_USER_STAMP) {
             int bestStamp = newestStamp(ERA, DAY_OF_WEEK_IN_MONTH, UNSET);
             bestStamp = newestStamp(YEAR_WOY, EXTENDED_YEAR, bestStamp);
+            bestStamp = newestStamp(ORDINAL_MONTH, ORDINAL_MONTH, bestStamp);
             if (bestStamp <= stamp[JULIAN_DAY]) {
                 return internalGet(JULIAN_DAY);
             }

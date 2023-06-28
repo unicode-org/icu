@@ -1034,6 +1034,29 @@ public class IslamicCalendar extends Calendar {
         }
     }
 
+    //-------------------------------------------------------------------------
+    // Temporal Calendar API.
+    //-------------------------------------------------------------------------
+    /**
+     * {@icu} Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     * @return true if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     * @draft ICU 74
+     */
+    public boolean inTemporalLeapYear() {
+        return getActualMaximum(DAY_OF_YEAR) == 355;
+    }
+
+    //-------------------------------------------------------------------------
+    // End of Temporal Calendar API
+    //-------------------------------------------------------------------------
+
     /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
