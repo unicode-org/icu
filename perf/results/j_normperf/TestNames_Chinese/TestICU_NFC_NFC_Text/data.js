@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687903810459,
+  "lastUpdate": 1688076987399,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9628,6 +9628,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 6.5137348699855835,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jakewharton@gmail.com",
+            "name": "Jake Wharton",
+            "username": "JakeWharton"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "adbcfb1e077db0ac47676b861ce70b10176ec7a6",
+          "message": "ICU-22426 Do not create nested StringBuilder when appending",
+          "timestamp": "2023-06-29T15:01:24-07:00",
+          "tree_id": "d708b459c948ef01ce96f9f1246c44610b1f5f48",
+          "url": "https://github.com/unicode-org/icu/commit/adbcfb1e077db0ac47676b861ce70b10176ec7a6"
+        },
+        "date": 1688076942638,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 5.067767654486576,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
