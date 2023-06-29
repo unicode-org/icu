@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1687903783651,
+  "lastUpdate": 1688077447065,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9508,6 +9508,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 267.0601615156722,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jakewharton@gmail.com",
+            "name": "Jake Wharton",
+            "username": "JakeWharton"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "adbcfb1e077db0ac47676b861ce70b10176ec7a6",
+          "message": "ICU-22426 Do not create nested StringBuilder when appending",
+          "timestamp": "2023-06-29T15:01:24-07:00",
+          "tree_id": "d708b459c948ef01ce96f9f1246c44610b1f5f48",
+          "url": "https://github.com/unicode-org/icu/commit/adbcfb1e077db0ac47676b861ce70b10176ec7a6"
+        },
+        "date": 1688077405677,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 224.41232075752103,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
