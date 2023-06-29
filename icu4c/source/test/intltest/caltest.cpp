@@ -184,6 +184,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestLimitsOrdinalMonth);
     TESTCASE_AUTO(TestActualLimitsOrdinalMonth);
     TESTCASE_AUTO(TestChineseCalendarMonthInSpecialYear);
+    TESTCASE_AUTO(TestClearMonth);
   
     TESTCASE_AUTO_END;
 }
@@ -3885,6 +3886,33 @@ void CalendarTest::TestChineseCalendarMapping() {
             }
         }
     }
+}
+
+void CalendarTest::TestClearMonth() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(Calendar::createInstance(Locale::getRoot(), status));
+    if (failure(status, "construct Calendar")) return;
+    cal->set(2023, UCAL_JUNE, 29);
+    assertEquals("Calendar::get(UCAL_MONTH)", UCAL_JUNE, cal->get(UCAL_MONTH, status));
+    if (failure(status, "Calendar::get(UCAL_MONTH)")) return;
+    cal->clear(UCAL_MONTH);
+    assertEquals("Calendar::isSet(UCAL_MONTH) after clear(UCAL_MONTH)", false, !!cal->isSet(UCAL_MONTH));
+    assertEquals("Calendar::get(UCAL_MONTH after clear(UCAL_MONTH))", UCAL_JANUARY, !!cal->get(UCAL_MONTH, status));
+    if (failure(status, "Calendar::get(UCAL_MONTH)")) return;
+
+    cal->set(UCAL_ORDINAL_MONTH, 7);
+    assertEquals("Calendar::get(UCAL_MONTH) after set(UCAL_ORDINAL_MONTH, 7)", UCAL_AUGUST, cal->get(UCAL_MONTH, status));
+    if (failure(status, "Calendar::get(UCAL_MONTH) after set(UCAL_ORDINAL_MONTH, 7)")) return;
+    assertEquals("Calendar::get(UCAL_ORDINAL_MONTH) after set(UCAL_ORDINAL_MONTH, 7)", 7, cal->get(UCAL_ORDINAL_MONTH, status));
+    if (failure(status, "Calendar::get(UCAL_ORDINAL_MONTH) after set(UCAL_ORDINAL_MONTH, 7)")) return;
+
+    cal->clear(UCAL_ORDINAL_MONTH);
+    assertEquals("Calendar::isSet(UCAL_ORDINAL_MONTH) after clear(UCAL_ORDINAL_MONTH)", false, !!cal->isSet(UCAL_ORDINAL_MONTH));
+    assertEquals("Calendar::get(UCAL_MONTH) after clear(UCAL_ORDINAL_MONTH)", UCAL_JANUARY, cal->get(UCAL_MONTH, status));
+    if (failure(status, "Calendar::get(UCAL_MONTH) after clear(UCAL_ORDINAL_MONTH)")) return;
+    assertEquals("Calendar::get(UCAL_ORDINAL_MONTH) after clear(UCAL_ORDINAL_MONTH)", 0, cal->get(UCAL_ORDINAL_MONTH, status));
+    if (failure(status, "Calendar::get(UCAL_ORDINAL_MONTH) after clear(UCAL_ORDINAL_MONTH)")) return;
+
 }
 
 void CalendarTest::TestGregorianCalendarInTemporalLeapYear() {
