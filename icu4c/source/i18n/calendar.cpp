@@ -1305,7 +1305,16 @@ Calendar::clear(UCalendarDateFields field)
     }
     fFields[field]         = 0;
     fStamp[field]         = kUnset;
-    fIsSet[field]         = false; // Remove later
+    if (field == UCAL_MONTH) {
+        fFields[UCAL_ORDINAL_MONTH]         = 0;
+        fStamp[UCAL_ORDINAL_MONTH]         = kUnset;
+        fIsSet[UCAL_ORDINAL_MONTH]         = false; // Remove later
+    }
+    if (field == UCAL_ORDINAL_MONTH) {
+        fFields[UCAL_MONTH]         = 0;
+        fStamp[UCAL_MONTH]         = kUnset;
+        fIsSet[UCAL_MONTH]         = false; // Remove later
+    }
     fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = false;
 }
 

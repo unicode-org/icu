@@ -56,6 +56,8 @@ public:
 
     virtual void TestDebug();
 
+    virtual void TestClearMonth();
+
 public: // package
     /**
      * test subroutine used by TestDisambiguation765
