@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1688077881061,
+  "lastUpdate": 1688112654147,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24538,6 +24538,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 18.2593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "1b15a4e9db345b67ad284b92801f3fd99fe56e69",
+          "message": "ICU-22424 Fix Calendar::clear(UCAL_MONTH)\n\nMake the calling of clear(UCAL_MONTH or UCAL_ORDINAL_MONTH) clear both fields.",
+          "timestamp": "2023-06-30T00:48:34-07:00",
+          "tree_id": "7a890e6c298e85f65b9044e9b7c464700d7f3c3e",
+          "url": "https://github.com/unicode-org/icu/commit/1b15a4e9db345b67ad284b92801f3fd99fe56e69"
+        },
+        "date": 1688112603558,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 20.4065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 20.4054,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 20.324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 21.9927,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 21.9847,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 21.9048,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
