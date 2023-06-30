@@ -31,6 +31,8 @@ using VariantMap      = MessageFormatDataModel::VariantMap;
 
 using PrioritizedVariantList = List<PrioritizedVariant>;
 
+#define IDENTITY_SELECTOR UnicodeString("identity")
+
 #define PARSER MessageFormatter::Parser
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormatter)
@@ -152,6 +154,31 @@ MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErr
 
 MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError,
                                    UErrorCode &success) {
+    CHECK_ERROR(success);
+
+    // Set up the empty options map (this is for convenience
+    // when formatting selectors
+    LocalPointer<OptionMap::Builder> optsBuilder(OptionMap::builder(success));
+    emptyOptionsMap.adoptInstead(optsBuilder->build(success));
+    CHECK_ERROR(success);
+
+    // Set up the custom function registry, if given
+    if (builder.customFunctionRegistry.isValid()) {
+        customFunctionRegistry.adoptInstead(builder.customFunctionRegistry.orphan());
+    }
+
+    // Set up the standard function registry
+    LocalPointer<FunctionRegistry::Builder> standardFunctionsBuilder(FunctionRegistry::builder(success));
+    CHECK_ERROR(success);
+
+    standardFunctionsBuilder->setFormatter(UnicodeString("datetime"), new StandardFunctions::DateTimeFactory())
+        .setFormatter(UnicodeString("number"), new StandardFunctions::NumberFactory())
+        .setSelector(IDENTITY_SELECTOR, new StandardFunctions::IdentityFactory(), success)
+        .setSelector(UnicodeString("plural"), new StandardFunctions::PluralFactory(PluralType::CARDINAL), success)
+        .setSelector(UnicodeString("selectordinal"), new StandardFunctions::PluralFactory(PluralType::ORDINAL), success)
+        .setSelector(UnicodeString("select"), new StandardFunctions::TextFactory(), success)
+        .setSelector(UnicodeString("gender"), new StandardFunctions::TextFactory(), success);
+    standardFunctionRegistry.adoptInstead(standardFunctionsBuilder->build(success));
     CHECK_ERROR(success);
 
     // Validate pattern and build data model
@@ -1689,11 +1716,14 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
         // TODO: name shadowing errors
         VariableName var = rand.asVariable();
         const Bindings& env = dataModel->getLocalVariables();
+        // TODO: maybe env should actually bind names to some sort of resolved value
+        // TODO: is evaluation of locals eager or lazy? Treating it as lazy for now
         bool found = false;
         const Expression* rhs = lookup(env, var, found);
         if (found) {
             U_ASSERT(rhs != nullptr);
-            formatExpression(arguments, *rhs, status, result);
+            // Function calls can't occur on the rhs as an option => use formatPatternExpression
+            formatPatternExpression(arguments, *rhs, status, result);
             return;
         }
         // Not found in locals -- must be global
@@ -1711,7 +1741,109 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
     formatLiteral(rand.asLiteral(), result);
 }
 
-void MessageFormatter::formatExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
+bool MessageFormatter::isBuiltInFunction(const FunctionName& functionName) const {
+    return (standardFunctionRegistry->has(functionName));
+}
+
+// Precondition: `env` defines `functionName` as a selector. (This is determined when checking the data model)
+MessageFormatter::ResolvedExpression* MessageFormatter::formatSelector(const FunctionRegistry& env, const Hashtable& arguments, const FunctionName& functionName, const OptionMap& variableOptions, const Operand& rand, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    // Look up the selector
+    const SelectorFactory* selectorFactory = env.getSelector(functionName);
+    // This should have been checked earlier
+    U_ASSERT(selectorFactory != nullptr);
+    // Create a specific instance of the selector
+    const Selector& selector = selectorFactory->createSelector(getLocale(), arguments);
+    // Resolve the operand
+    UnicodeString resolvedOperand;
+    formatOperand(arguments, rand, status, resolvedOperand);
+    NULL_ON_ERROR(status);
+    LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
+    NULL_ON_ERROR(status);
+    LocalPointer<ResolvedExpression> result(new ResolvedExpression(selector, *resolvedOptions, resolvedOperand));
+    if (!result.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
+}
+
+const Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const OptionMap& options, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    size_t pos = OptionMap::FIRST;
+    LocalPointer<Hashtable> result(new Hashtable(compareVariableName, nullptr, status));
+    NULL_ON_ERROR(status);
+    LocalPointer<UnicodeString> rhs;
+    while (true) {
+        UnicodeString k;
+        const Operand* v;
+        if (!options.next(pos, k, v)) {
+            break;
+        }
+        U_ASSERT(v != nullptr);
+        UnicodeString rhsTemp;
+        formatOperand(arguments, *v, status, rhsTemp);
+        NULL_ON_ERROR(status);
+        rhs.adoptInstead(new UnicodeString(rhsTemp));
+        if (!rhs.isValid()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        result->put(k, rhs.orphan(), status);
+    }
+    return result.orphan();
+}
+
+// Precondition: `env` defines `functionName` as a formatter. (This is determined when checking the data model)
+void MessageFormatter::formatFunctionCall(const FunctionRegistry& env, const Hashtable& arguments, const FunctionName& functionName, const OptionMap& variableOptions, const Operand& rand, UnicodeString& result, UErrorCode& status) const {
+    CHECK_ERROR(status);
+
+    // Look up the formatter
+    const FormatterFactory* formatterFactory = env.getFormatter(functionName);
+    // This should have been checked earlier
+    U_ASSERT(formatterFactory != nullptr);
+    // Create a specific instance of the selector
+    const Formatter& formatter = formatterFactory->createFormatter(getLocale(), arguments);
+    // Resolve the operand
+    UnicodeString resolvedOperand;
+    formatOperand(arguments, rand, status, resolvedOperand);
+    LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
+    CHECK_ERROR(status);
+    formatter.format(resolvedOperand, *resolvedOptions, result, status);
+}
+
+MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status) const {
+    NULL_ON_ERROR(status);
+
+    // Formatting error
+    if (expr.isReserved()) {
+        status = U_UNSUPPORTED_PROPERTY;
+        return nullptr;
+    }
+    if (expr.isFunctionCall()) {
+        const Operator& rator = expr.getOperator();
+        const FunctionName& functionName = rator.getFunctionName();
+        // Look up the function name in either the standard function
+        // registry (if it's a standard function) or the custom registry
+        // This means standard functions take precedence over custom
+        // definitions of the same names
+        const FunctionRegistry& env = isBuiltInFunction(functionName) ?
+            *standardFunctionRegistry :
+            // It's safe to call this b/c an unbound function
+            // would have been flagged as an error earlier
+            getCustomFunctionRegistry();
+        // Evaluate the function call with the given options, applied to the operand
+        return formatSelector(env, arguments, functionName,
+                              rator.getOptions(), expr.getOperand(), status);
+    }
+    // Plug in the "identity" selector
+    return formatSelector(*standardFunctionRegistry, arguments, IDENTITY_SELECTOR,
+                          emptyOptions(), expr.getOperand(), status);
+}
+
+void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // Formatting error
@@ -1722,12 +1854,17 @@ void MessageFormatter::formatExpression(const Hashtable& arguments, const Expres
     // Function call - Not supported yet
     // TODO
     if (expr.isFunctionCall()) {
-        status = U_UNSUPPORTED_ATTRIBUTE;
+        const Operator& rator = expr.getOperator();
+        const FunctionName& functionName = rator.getFunctionName();
+        const FunctionRegistry& env = isBuiltInFunction(functionName) ? 
+                                      *standardFunctionRegistry : getCustomFunctionRegistry();
+        formatFunctionCall(env, arguments, functionName,
+                               rator.getOptions(), expr.getOperand(), result, status);
         return;
     }
     formatOperand(arguments, expr.getOperand(), status, result);
-}
 
+}
 void MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
@@ -1737,7 +1874,7 @@ void MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& 
         if (part->isText()) {
             result += part->asText();
         } else {
-            formatExpression(arguments, part->contents(), status, result);
+            formatPatternExpression(arguments, part->contents(), status, result);
         }
     }
 }
@@ -1749,17 +1886,12 @@ void MessageFormatter::resolveSelectors(const Hashtable& arguments, const Expres
     // 1. Let res be a new empty list of resolved values that support selection.
     // (Implicit, since `res` is an out-parameter)
     // 2. For each expression exp of the message's selectors
-    LocalPointer<UnicodeString> rv;
+    LocalPointer<ResolvedExpression> rv;
     for (size_t i = 0; i < selectors.length(); i++) {
         // 2i. Let rv be the resolved value of exp.
-        rv.adoptInstead(new UnicodeString(""));
-        if (!rv.isValid()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        formatExpression(arguments, *selectors.get(i), status, *rv);
+        rv.adoptInstead(formatSelectorExpression(arguments, *selectors.get(i), status));
         // 2ii. If selection is supported for rv:
-        // (Always true, since here, resolved values are strings)
+        // (Always true, since here, selector functions are strings)
         // 2ii(a). Append rv as the last element of the list res.
         res.addElement(rv.orphan(), status);
     }
@@ -1767,13 +1899,14 @@ void MessageFormatter::resolveSelectors(const Hashtable& arguments, const Expres
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `keys` and `matches` are both vectors of strings
-void matchSelectorKeys(const UnicodeString& rv, const UVector& keys, UErrorCode& status, UVector& matches) {
+void MessageFormatter::matchSelectorKeys(const ResolvedExpression& rv, const UVector& keys, UErrorCode& status, UVector& matches) const {
     CHECK_ERROR(status);
 
     // For now: match based on string equality
     for (size_t i = 0; ((int32_t) i) < keys.size(); i++) {
-        UnicodeString* k = ((UnicodeString*) keys[i]); 
-        if (*k == rv) {
+        UnicodeString* k = ((UnicodeString*) keys[i]);
+        const Selector& selectorImpl = rv.selectorFunction;
+        if (selectorImpl.matches(rv.resolvedOperand, *k, rv.resolvedOptions)) {
             // `matches` does not adopt its elements
             matches.addElement(k, status);
         }
@@ -1787,7 +1920,7 @@ UBool stringsEqual(const UElement e1, const UElement e2) {
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `res` is a vector of strings; `pref` is a vector of vectors of strings
-void resolvePreferences(const UVector& res, const VariantMap& variants, UErrorCode &status, UVector& pref) {
+void MessageFormatter::resolvePreferences(const UVector& res, const VariantMap& variants, UErrorCode &status, UVector& pref) const {
     CHECK_ERROR(status);
 
     // 1. Let pref be a new empty list of lists of strings.
@@ -1831,7 +1964,7 @@ void resolvePreferences(const UVector& res, const VariantMap& variants, UErrorCo
             }
         }
         // 2iii. Let `rv` be the resolved value at index `i` of `res`.
-        const UnicodeString& rv = *((UnicodeString*) res[i]);
+        const ResolvedExpression& rv = *((ResolvedExpression*) res[i]);
         // 2iv. Let matches be the result of calling the method MatchSelectorKeys(rv, keys)
         matches.adoptInstead(new UVector(status));
         CHECK_ERROR(status);
@@ -1988,7 +2121,7 @@ void MessageFormatter::formatSelectors(const Hashtable& arguments, const Express
     // TODO: check that each variant has a number of keys equal to the length of the selectors
 
     // Resolve Selectors
-    // res is a vector of strings
+    // res is a vector of ResolvedExpressions
     LocalPointer<UVector> res(new UVector(status));
     CHECK_ERROR(status);
 //    res->setDeleter(uprv_deleteUObject);

@@ -298,7 +298,10 @@ public:
             pos = pos + 1;
             return true;
         }
-
+        bool isEmpty() const {
+            U_ASSERT(!isBogus());
+            return (contents->count() == 0);
+        }
         class Builder : public UMemory {
         public:
             // Adopts `value`
@@ -315,6 +318,28 @@ public:
                 keys->adoptElement(k, errorCode);
                 contents->put(key, value, errorCode);
                 return *this;
+            }
+
+            Builder& addAll(const Hashtable& other, UErrorCode& errorCode) {
+                if (U_FAILURE(errorCode)) {
+                    return *this;
+                }
+                int32_t pos = UHASH_FIRST;
+                UHashElement* element;
+                while (true) {
+                    element = other.nextElement(pos);
+                    if (element == nullptr) {
+                        break;
+                    }
+                    UnicodeString *key = static_cast<UnicodeString *>(element->key.pointer);
+                    V* value = static_cast<V*>(element->value.pointer);
+                    U_ASSERT(key != nullptr && value != nullptr);
+                    add(*key, value, errorCode);
+                }
+            }
+
+            Builder& addAll(const OptionMap& other, UErrorCode& errorCode) {
+                addAll(other.contents, errorCode);
             }
 
             // Copying `build()` (leaves `this` valid)

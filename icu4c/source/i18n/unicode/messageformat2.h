@@ -132,10 +132,7 @@ class U_I18N_API MessageFormatter : public Format {
     class Builder {
         friend class MessageFormatter;
       private:
-        // prevent direct construction
-        Builder() : functionRegistry(nullptr) {
-            // TODO: initialize locale to default
-        }
+        Builder() : customFunctionRegistry(nullptr) {}
 
         // The pattern to be parsed to generate the formatted message
         LocalPointer<UnicodeString> pattern;
@@ -144,8 +141,8 @@ class U_I18N_API MessageFormatter : public Format {
         LocalPointer<MessageFormatDataModel> dataModel;
         // TODO: set default locale
         Locale locale;
-        // TODO: set default function registry
-        FunctionRegistry* functionRegistry;
+        LocalPointer<FunctionRegistry> standardFunctionRegistry;
+        LocalPointer<FunctionRegistry> customFunctionRegistry;
       public:
         Builder& setLocale(Locale locale);
         Builder& setPattern(const UnicodeString& pattern, UErrorCode& errorCode);
@@ -322,15 +319,64 @@ class U_I18N_API MessageFormatter : public Format {
          void serializeVariants();
      }; // class Serializer
 
-     // Selection methods
+     // Intermediate classes for formatting
 
+     // Represents the result of resolving an expression in a selector
+     // context.
+     // The selector function is `:identity` for a simple expression,
+     // and the looked-up selector function otherwise.
+     // The `Hashtable` (UnicodeString -> UnicodeString)
+     // is the result of resolving the options
+     // in the annotation (an empty option map
+     // is created if necessary).
+     // The `operand` is the result of resolving the operand.
+     class ResolvedExpression : public UMemory {
+         public:
+         const Selector& selectorFunction;
+         const Hashtable& resolvedOptions;
+         const UnicodeString& resolvedOperand;
+         ResolvedExpression(const Selector& s, const Hashtable& o, const UnicodeString& r) : selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+     };
+
+     // Selection methods
      void resolveSelectors(const Hashtable&, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
-     
+     void matchSelectorKeys(const ResolvedExpression&, const UVector&, UErrorCode&, UVector&) const;
+     void resolvePreferences(const UVector&, const MessageFormatDataModel::VariantMap&, UErrorCode&, UVector& pref) const;
+
      // Formatting methods
+     void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
-     void formatExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
+     // Formats the parts of a function call in a selector context
+     ResolvedExpression* formatSelector(const FunctionRegistry&, const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+    // Formats an expression in a selector context
+     ResolvedExpression* formatSelectorExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     // Formats an expression in a pattern context
+     void formatPatternExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
+     const Hashtable* resolveOptions(const Hashtable&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     void formatFunctionCall(const FunctionRegistry&, const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
      void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatSelectors(const Hashtable& arguments, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
+
+    // Function registry methods
+    bool isBuiltInFunction(const FunctionName&) const;
+    // Precondition: custom function registry exists
+    const FunctionRegistry& getCustomFunctionRegistry() const {
+        U_ASSERT(customFunctionRegistry.isValid());
+        return *customFunctionRegistry;
+    }
+
+    // Convenience method for formatting selectors
+    const MessageFormatDataModel::OptionMap& emptyOptions() const {
+        U_ASSERT(emptyOptionsMap.isValid());
+        return *emptyOptionsMap;
+    }
+
+    LocalPointer<MessageFormatDataModel::OptionMap> emptyOptionsMap;
+
+    // Registry for built-in functions
+    LocalPointer<FunctionRegistry> standardFunctionRegistry;
+    // Registry for custom functions; may be null if no custom registry supplied
+    LocalPointer<FunctionRegistry> customFunctionRegistry;
 
     // Data model, representing the parsed message
     LocalPointer<MessageFormatDataModel> dataModel;

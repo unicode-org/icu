@@ -351,15 +351,7 @@ System.out.println(result);
 
   builder.adoptInstead(MessageFormatter::builder(errorCode));
 
-/*
-  pattern = "match {$photoCount :plural} {$userGender :select}\n\
-                     when 1 masculine {{$userName} added a new photo to his album.}\n \
-                     when 1 feminine {{$userName} added a new photo to her album.}\n \
-                     when 1 * {{$userName} added a new photo to their album.}\n \
-                     when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
-                     when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
-                     when * * {{$userName} added {$photoCount} photos to their album.}";
-*/
+  // Pattern matching
   pattern = "match {$photoCount} {$userGender}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
@@ -398,6 +390,35 @@ System.out.println(result);
       errorCode = U_MESSAGE_PARSE_ERROR;
       return;
   }
+
+  // Built-in functions
+  pattern = "match {$photoCount :plural} {$userGender :select}\n\
+                     when 1 masculine {{$userName} added a new photo to his album.}\n \
+                     when 1 feminine {{$userName} added a new photo to her album.}\n \
+                     when 1 * {{$userName} added a new photo to their album.}\n \
+                     when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
+                     when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
+                     when * * {{$userName} added {$photoCount} photos to their album.}";
+
+  builder->setPattern(pattern, errorCode);
+  mf.adoptInstead(builder->build(parseError, errorCode));
+
+  result.remove();
+  mf->formatToString(*arguments, errorCode, result);
+
+  if (U_FAILURE(errorCode)) {
+      dataerrln(pattern);
+      logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
+      return;
+  }
+
+  if (result != expected) {
+      dataerrln(pattern);
+      logln("Expected output: " + expected + "\nGot output: " + result);
+      errorCode = U_MESSAGE_PARSE_ERROR;
+      return;
+  }
+
                   /*
 ​​Using custom functions:
 final Mf2FunctionRegistry functionRegistry = Mf2FunctionRegistry.builder()
