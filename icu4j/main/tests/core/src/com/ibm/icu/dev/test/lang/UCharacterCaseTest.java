@@ -31,6 +31,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.CaseMap;
 import com.ibm.icu.text.Edits;
+import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
@@ -837,7 +838,12 @@ public final class UCharacterCaseTest extends TestFmwk
     }
 
     private void assertGreekUpper(String s, String expected) {
-        assertEquals("toUpper/Greek(" + s + ')', expected, UCharacter.toUpperCase(GREEK_LOCALE_, s));
+        Normalizer2 nfc = Normalizer2.getNFCInstance();
+        Normalizer2 nfd = Normalizer2.getNFDInstance();
+        assertEquals("toUpper/Greek(" + nfc.normalize(s) + " [NFC])", nfc.normalize(expected),
+                UCharacter.toUpperCase(GREEK_LOCALE_, nfc.normalize(s)));
+        assertEquals("toUpper/Greek(" + nfd.normalize(s) + " [NFD])", nfd.normalize(expected),
+                UCharacter.toUpperCase(GREEK_LOCALE_, nfd.normalize(s)));
     }
 
     @Test
@@ -868,6 +874,11 @@ public final class UCharacterCaseTest extends TestFmwk
         // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
         assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
         assertGreekUpper("ή.", "Ή.");
+
+        // The ὑπογεγραμμέναι become Ι as in default case conversion, but they are
+        // specially handled by the implementation.
+        assertGreekUpper("ᾠδή, -ήν, -ῆς, -ῇ", "ΩΙΔΗ, -ΗΝ, -ΗΣ, -ΗΙ");
+        assertGreekUpper("ᾍδης", "ΑΙΔΗΣ");
     }
 
     @Test

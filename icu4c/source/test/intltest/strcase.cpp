@@ -26,6 +26,7 @@
 #include "unicode/ures.h"
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
+#include "unicode/normalizer2.h"
 #include "unicode/ubrk.h"
 #include "unicode/unistr.h"
 #include "unicode/ucasemap.h"
@@ -74,6 +75,8 @@ public:
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
+    void assertGreekUpperNormalized(const UnicodeString &s16, const UnicodeString &expected16,
+                                    const char *form);
 
     Locale GREEK_LOCALE_;
 };
@@ -806,16 +809,27 @@ StringCaseTest::TestFullCaseFoldingIterator() {
     }
 }
 
-void
-StringCaseTest::assertGreekUpper(const char16_t *s, const char16_t *expected) {
-    UnicodeString s16(s);
-    UnicodeString expected16(expected);
-    UnicodeString msg = UnicodeString("UnicodeString::toUpper/Greek(\"") + s16 + "\")";
+void StringCaseTest::assertGreekUpper(const char16_t *s, const char16_t *expected) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+#if UCONFIG_NO_NORMALIZATION
+    assertGreekUpperNormalized(s, expected, "No normalization");
+#else
+    const Normalizer2 &nfc = *Normalizer2::getNFCInstance(errorCode);
+    const Normalizer2 &nfd = *Normalizer2::getNFDInstance(errorCode);
+    assertGreekUpperNormalized(nfc.normalize(s, errorCode), nfc.normalize(expected, errorCode), "NFC");
+    assertGreekUpperNormalized(nfd.normalize(s, errorCode), nfd.normalize(expected, errorCode), "NFD");
+#endif
+}
+
+void StringCaseTest::assertGreekUpperNormalized(const UnicodeString &s16,
+                                                const UnicodeString &expected16,
+                                                const char *form) {
+    UnicodeString msg = UnicodeString("UnicodeString::toUpper/Greek(\"") + s16 + "\" [" + form + "])";
     UnicodeString result16(s16);
     result16.toUpper(GREEK_LOCALE_);
     assertEquals(msg, expected16, result16);
 
-    msg = UnicodeString("u_strToUpper/Greek(\"") + s16 + "\") cap=";
+    msg = UnicodeString("u_strToUpper/Greek(\"") + s16 + "\" [" + form + "]) cap=";
     int32_t length = expected16.length();
     int32_t capacities[] = {
         // Keep in sync with the UTF-8 capacities near the bottom of this function.
@@ -849,7 +863,7 @@ StringCaseTest::assertGreekUpper(const char16_t *s, const char16_t *expected) {
     assertSuccess("ucasemap_open", errorCode);
     std::string s8;
     s16.toUTF8String(s8);
-    msg = UnicodeString("ucasemap_utf8ToUpper/Greek(\"") + s16 + "\")";
+    msg = UnicodeString("ucasemap_utf8ToUpper/Greek(\"") + s16 + "\" [" + form + "])";
     char dest8[1000];
     length = ucasemap_utf8ToUpper(csm.getAlias(), dest8, UPRV_LENGTHOF(dest8),
                                   s8.data(), static_cast<int32_t>(s8.length()), &errorCode);
@@ -901,22 +915,27 @@ StringCaseTest::TestGreekUpper() {
     assertGreekUpper(u"ΰ, Τηρώ, Μάιος", u"Ϋ, ΤΗΡΩ, ΜΑΪΟΣ");
     assertGreekUpper(u"άυλος", u"ΑΫΛΟΣ");
     assertGreekUpper(u"ΑΫΛΟΣ", u"ΑΫΛΟΣ");
-    assertGreekUpper(u"Άκλιτα ρήματα ή άκλιτες μετοχές", u"ΑΚΛΙΤΑ ΡΗΜΑΤΑ Ή ΑΚΛΙΤΕΣ ΜΕΤΟΧΕΣ");
+    assertGreekUpper(u"Άκλιτα ρήματα ή άκλιτες μετοχές", u"ΑΚΛΙΤΑ ΡΗΜΑΤΑ Ή ΑΚΛΙΤΕΣ ΜΕΤΟΧΕΣ");
     // http://www.unicode.org/udhr/d/udhr_ell_monotonic.html
     assertGreekUpper(u"Επειδή η αναγνώριση της αξιοπρέπειας", u"ΕΠΕΙΔΗ Η ΑΝΑΓΝΩΡΙΣΗ ΤΗΣ ΑΞΙΟΠΡΕΠΕΙΑΣ");
-    assertGreekUpper(u"νομικού ή διεθνούς", u"ΝΟΜΙΚΟΥ Ή ΔΙΕΘΝΟΥΣ");
+    assertGreekUpper(u"νομικού ή διεθνούς", u"ΝΟΜΙΚΟΥ Ή ΔΙΕΘΝΟΥΣ");
     // http://unicode.org/udhr/d/udhr_ell_polytonic.html
     assertGreekUpper(u"Ἐπειδὴ ἡ ἀναγνώριση", u"ΕΠΕΙΔΗ Η ΑΝΑΓΝΩΡΙΣΗ");
-    assertGreekUpper(u"νομικοῦ ἢ διεθνοῦς", u"ΝΟΜΙΚΟΥ Ή ΔΙΕΘΝΟΥΣ");
+    assertGreekUpper(u"νομικοῦ ἢ διεθνοῦς", u"ΝΟΜΙΚΟΥ Ή ΔΙΕΘΝΟΥΣ");
     // From Google bug report
     assertGreekUpper(u"Νέο, Δημιουργία", u"ΝΕΟ, ΔΗΜΙΟΥΡΓΙΑ");
     // http://crbug.com/234797
     assertGreekUpper(u"Ελάτε να φάτε τα καλύτερα παϊδάκια!", u"ΕΛΑΤΕ ΝΑ ΦΑΤΕ ΤΑ ΚΑΛΥΤΕΡΑ ΠΑΪΔΑΚΙΑ!");
     assertGreekUpper(u"Μαΐου, τρόλεϊ", u"ΜΑΪΟΥ, ΤΡΟΛΕΪ");
-    assertGreekUpper(u"Το ένα ή το άλλο.", u"ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
+    assertGreekUpper(u"Το ένα ή το άλλο.", u"ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
     // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
     assertGreekUpper(u"ρωμέικα", u"ΡΩΜΕΪΚΑ");
-    assertGreekUpper(u"ή.", u"Ή.");
+    assertGreekUpper(u"ή.", u"Ή.");
+
+    // The ὑπογεγραμμέναι become Ι as in default case conversion, but they are
+    // specially handled by the implementation.
+    assertGreekUpper(u"ᾠδή, -ήν, -ῆς, -ῇ", u"ΩΙΔΗ, -ΗΝ, -ΗΣ, -ΗΙ");
+    assertGreekUpper(u"ᾍδης", u"ΑΙΔΗΣ");
 }
 
 void StringCaseTest::TestArmenian() {
