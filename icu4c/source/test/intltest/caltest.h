@@ -330,6 +330,8 @@ public: // package
     void TestLimitsOrdinalMonth();
     void TestActualLimitsOrdinalMonth();
 
+    void TestFWWithISO8601();
+
     void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
     void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);
     void Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* cal);

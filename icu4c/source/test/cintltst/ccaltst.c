@@ -44,6 +44,8 @@ void TestJpnCalAddSetNextEra(void);
 void TestUcalOpenBufferRead(void);
 void TestGetTimeZoneOffsetFromLocal(void);
 
+void TestFWWithISO8601(void);
+
 void addCalTest(TestNode** root);
 
 void addCalTest(TestNode** root)
@@ -68,6 +70,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestJpnCalAddSetNextEra, "tsformat/ccaltst/TestJpnCalAddSetNextEra");
     addTest(root, &TestUcalOpenBufferRead, "tsformat/ccaltst/TestUcalOpenBufferRead");
     addTest(root, &TestGetTimeZoneOffsetFromLocal, "tsformat/ccaltst/TestGetTimeZoneOffsetFromLocal");
+    addTest(root, &TestFWWithISO8601, "tsformat/ccaltst/TestFWWithISO8601");
 }
 
 /* "GMT" */
@@ -2792,6 +2795,35 @@ TestGetTimeZoneOffsetFromLocal() {
         }
     }
     ucal_close(cal);
+}
+
+void
+TestFWWithISO8601() {
+    /* UCAL_SUNDAY is 1, UCAL_MONDAY is 2, ..., UCAL_SATURDAY is 7 */
+    const char* LOCALES[] = {
+        "",
+        "en-u-ca-iso8601-fw-sun",
+        "en-u-ca-iso8601-fw-mon",
+        "en-u-ca-iso8601-fw-tue",
+        "en-u-ca-iso8601-fw-wed",
+        "en-u-ca-iso8601-fw-thu",
+        "en-u-ca-iso8601-fw-fri",
+        "en-u-ca-iso8601-fw-sat",
+    };
+    for (int32_t i = UCAL_SUNDAY; i <= UCAL_SATURDAY; i++) {
+        const char* locale = LOCALES[i];
+        UErrorCode status = U_ZERO_ERROR;
+        UCalendar* cal = ucal_open(0, 0, locale, UCAL_TRADITIONAL, &status);
+        if(U_FAILURE(status)){
+            log_data_err("FAIL: error in ucal_open caldef : %s\n - (Are you missing data?)", u_errorName(status));
+        }
+        int32_t actual = ucal_getAttribute(cal, UCAL_FIRST_DAY_OF_WEEK);
+        if (i != actual) {
+            log_err("ERROR: ucal_getAttribute(\"%s\", UCAL_FIRST_DAY_OF_WEEK) should be %d but get %d\n",
+                    locale, i, actual);
+        }
+        ucal_close(cal);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

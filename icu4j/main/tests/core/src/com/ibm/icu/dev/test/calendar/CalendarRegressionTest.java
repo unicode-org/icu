@@ -2654,7 +2654,15 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 "en-US-u-fw-sun",
                 "en-US-u-fw-mon",
                 "en-US-u-fw-thu",
-                "en-US-u-fw-sat"
+                "en-US-u-fw-sat",
+                // ICU-22434
+                "en-US-u-ca-iso8601-fw-sun",
+                "en-US-u-ca-iso8601-fw-mon",
+                "en-US-u-ca-iso8601-fw-tue",
+                "en-US-u-ca-iso8601-fw-wed",
+                "en-US-u-ca-iso8601-fw-thu",
+                "en-US-u-ca-iso8601-fw-fri",
+                "en-US-u-ca-iso8601-fw-sat",
         };
         int[] expectedValues = {
                 Calendar.SUNDAY,
@@ -2662,7 +2670,15 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 Calendar.SUNDAY,
                 Calendar.MONDAY,
                 Calendar.THURSDAY,
-                Calendar.SATURDAY
+                Calendar.SATURDAY,
+                // ICU-22434
+                Calendar.SUNDAY,
+                Calendar.MONDAY,
+                Calendar.TUESDAY,
+                Calendar.WEDNESDAY,
+                Calendar.THURSDAY,
+                Calendar.FRIDAY,
+                Calendar.SATURDAY,
         };
 
         assertEquals(
@@ -2672,7 +2688,8 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         for (int i = 0; i < localeIds.length; i++) {
             assertEquals(
-                    "Calendar.getFirstDayOfWeek() does not seem to respect fw extension u in locale id",
+                    "Calendar.getFirstDayOfWeek() does not seem to respect fw extension u in locale id " +
+                    localeIds[i],
                     expectedValues[i],
                     Calendar.getInstance(Locale.forLanguageTag(localeIds[i])).getFirstDayOfWeek());
         }
