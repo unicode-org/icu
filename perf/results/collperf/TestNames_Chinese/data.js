@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1688112489398,
+  "lastUpdate": 1688654377782,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22246,6 +22246,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2823323.367,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jw@squareup.com",
+            "name": "Jake Wharton",
+            "username": "JakeWharton"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "cd6ff4a64d2b6bca5c6ccc50d2d15a19fcdf2fa1",
+          "message": "ICU-22425 Eliminate double map lookup for common case of present argument\n\nIn the uncommon case where the map lookup returns null, only then perform a second map lookup to determine whether it was an absent value or explicit null.",
+          "timestamp": "2023-07-06T17:17:49+03:00",
+          "tree_id": "bf532455650c6ba8f13f505281198e6274b68bec",
+          "url": "https://github.com/unicode-org/icu/commit/cd6ff4a64d2b6bca5c6ccc50d2d15a19fcdf2fa1"
+        },
+        "date": 1688654330773,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 220.6748,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12000632.7468,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2557406.3877,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11198980.7967,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2807150.9087,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
