@@ -12,9 +12,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.StringCharacterIterator;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CalType;
@@ -1831,7 +1833,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case ISO8601:
             // Only differs week numbering rule from Gregorian
             cal = new GregorianCalendar(zone, locale);
-            cal.setFirstDayOfWeek(MONDAY);
+            String type = locale.getUnicodeLocaleType("fw");
+            // Only set fw to Monday for ISO8601 if there aer no fw keyword.
+            // If there is a fw keyword, the Calendar constructor already set it to the fw value.
+            if (locale.getKeywordValue("fw") == null) {
+                cal.setFirstDayOfWeek(MONDAY);
+            }
             cal.setMinimalDaysInFirstWeek(4);
             break;
 

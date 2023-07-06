@@ -185,7 +185,9 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestActualLimitsOrdinalMonth);
     TESTCASE_AUTO(TestChineseCalendarMonthInSpecialYear);
     TESTCASE_AUTO(TestClearMonth);
-  
+
+    TESTCASE_AUTO(TestFWWithISO8601);
+
     TESTCASE_AUTO_END;
 }
 
@@ -5492,6 +5494,31 @@ void CalendarTest::TestChineseCalendarMonthInSpecialYear() {
                   cas.cmonth+1, cas.cleapmonth ? "L" : "" , cas.cdate,
                   actual_month+1, ((actual_in_leap_month != 0) ? "L" : ""), actual_date );
         }
+    }
+}
+
+void CalendarTest::TestFWWithISO8601() {
+    // ICU UCAL_SUNDAY is 1, UCAL_MONDAY is 2, ... UCAL_SATURDAY is 7.
+    const char *locales[]  = {
+      "",
+      "en-u-ca-iso8601-fw-sun",
+      "en-u-ca-iso8601-fw-mon",
+      "en-u-ca-iso8601-fw-tue",
+      "en-u-ca-iso8601-fw-wed",
+      "en-u-ca-iso8601-fw-thu",
+      "en-u-ca-iso8601-fw-fri",
+      "en-u-ca-iso8601-fw-sat"
+    };
+    for (int i = UCAL_SUNDAY; i <= UCAL_SATURDAY; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        const char* locale = locales[i];
+        LocalPointer<Calendar> cal(
+            Calendar::createInstance(
+                Locale(locale), status), status);
+        if (failure(status, "Constructor failed")) continue;
+        std::string msg("Calendar::createInstance(\"");
+        msg = msg + locale + "\")->getFirstDayOfWeek()";
+        assertEquals(msg.c_str(), i, cal->getFirstDayOfWeek());
     }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

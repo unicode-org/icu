@@ -247,20 +247,6 @@ static UBool isStandardSupportedKeyword(const char *keyword, UErrorCode& status)
     return (calType != CALTYPE_UNKNOWN);
 }
 
-// only used with service registration.
-static void getCalendarKeyword(const UnicodeString &id, char *targetBuffer, int32_t targetBufferSize) {
-    UnicodeString calendarKeyword = UNICODE_STRING_SIMPLE("calendar=");
-    int32_t calKeyLen = calendarKeyword.length();
-    int32_t keyLen = 0;
-
-    int32_t keywordIdx = id.indexOf((char16_t)0x003D); /* '=' */
-    if (id[0] == 0x40/*'@'*/
-        && id.compareBetween(1, keywordIdx+1, calendarKeyword, 0, calKeyLen) == 0)
-    {
-        keyLen = id.extract(keywordIdx+1, id.length(), targetBuffer, targetBufferSize, US_INV);
-    }
-    targetBuffer[keyLen] = 0;
-}
 #endif
 
 static ECalType getCalendarTypeForLocale(const char *locid) {
@@ -458,10 +444,7 @@ protected:
         lkey->canonicalLocale(canLoc);
 
         char keyword[ULOC_FULLNAME_CAPACITY];
-        UnicodeString str;
-
-        key.currentID(str);
-        getCalendarKeyword(str, keyword, (int32_t) sizeof(keyword));
+        curLoc.getKeywordValue("calendar", keyword, (int32_t) sizeof(keyword), status);
 
 #ifdef U_DEBUG_CALSVC
         fprintf(stderr, "BasicCalendarFactory::create() - cur %s, can %s\n", (const char*)curLoc.getName(), (const char*)canLoc.getName());
