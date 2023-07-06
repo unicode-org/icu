@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1688112647916,
+  "lastUpdate": 1688654513588,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24658,6 +24658,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 2.3693,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jw@squareup.com",
+            "name": "Jake Wharton",
+            "username": "JakeWharton"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "cd6ff4a64d2b6bca5c6ccc50d2d15a19fcdf2fa1",
+          "message": "ICU-22425 Eliminate double map lookup for common case of present argument\n\nIn the uncommon case where the map lookup returns null, only then perform a second map lookup to determine whether it was an absent value or explicit null.",
+          "timestamp": "2023-07-06T17:17:49+03:00",
+          "tree_id": "bf532455650c6ba8f13f505281198e6274b68bec",
+          "url": "https://github.com/unicode-org/icu/commit/cd6ff4a64d2b6bca5c6ccc50d2d15a19fcdf2fa1"
+        },
+        "date": 1688654464556,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 2.9606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 2.9503,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 2.9473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.634,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 2.6244,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 2.6013,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
