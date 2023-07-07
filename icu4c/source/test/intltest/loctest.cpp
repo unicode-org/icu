@@ -1000,7 +1000,7 @@ LocaleTest::TestGetLangsAndCountries()
             loc.getDisplayName (enLoc, name);
             name.extract (0, 200, szName, sizeof(szName));
 
-            if (strlen(loc.getISO3Language()) == 0) {
+            if (isempty(loc.getISO3Language())) {
                 errln("getISO3Language() returned an empty string for: " + name);
             }
         }

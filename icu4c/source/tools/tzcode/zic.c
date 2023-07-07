@@ -27,6 +27,7 @@ static char const REPORT_BUGS_TO[]="N/A";
 #include "private.h"
 #include "locale.h"
 #include "tzfile.h"
+#include "cstring.h"
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -1079,7 +1080,7 @@ gethms(const char *string, const char *const errstring, const int signable)
 	zic_t	hh;
 	int	mm, ss, sign;
 
-	if (string == NULL || *string == '\0')
+	if (string == NULL || isempty(string))
 		return 0;
 	if (!signable)
 		sign = 1;
@@ -1124,7 +1125,7 @@ inrule(register char **const fields, const int nfields)
 		error(_("wrong number of fields on Rule line"));
 		return;
 	}
-	if (*fields[RF_NAME] == '\0') {
+	if (isempty(fields[RF_NAME])) {
 		error(_("nameless rule"));
 		return;
 	}
@@ -1374,11 +1375,11 @@ inlink(register char **const fields, const int nfields)
 		error(_("wrong number of fields on Link line"));
 		return;
 	}
-	if (*fields[LF_FROM] == '\0') {
+	if (isempty(fields[LF_FROM])) {
 		error(_("blank FROM field on Link line"));
 		return;
 	}
-	if (*fields[LF_TO] == '\0') {
+	if (isempty(fields[LF_TO])) {
 		error(_("blank TO field on Link line"));
 		return;
 	}
@@ -1484,7 +1485,7 @@ rulesub(register struct rule *const rp,
 		error(_("starting year greater than ending year"));
 		return;
 	}
-	if (*typep == '\0')
+	if (isempty(typep))
 		rp->r_yrtype = NULL;
 	else {
 		if (rp->r_loyear == rp->r_hiyear) {
@@ -1970,7 +1971,7 @@ doabbr(char *const abbr, const char *const format, const char *const letters,
 			strchr("abcdefghijklmnopqrstuvwxyz", *cp) == NULL)
 				break;
 	len = strlen(abbr);
-	if (len > 0 && *cp == '\0')
+	if (len > 0 && isempty(cp))
 		return;
 	abbr[len + 2] = '\0';
 	abbr[len + 1] = '>';
@@ -2547,7 +2548,7 @@ outzone(const struct zone * const zpfirst, const int zonecount)
 							false);
 						continue;
 					}
-					if (*startbuf == '\0' &&
+					if (isempty(startbuf) &&
 						startoff == oadd(zp->z_gmtoff,
 						stdoff)) {
 							doabbr(startbuf,
@@ -2596,13 +2597,13 @@ outzone(const struct zone * const zpfirst, const int zonecount)
 			}
 		}
 		if (usestart) {
-			if (*startbuf == '\0' &&
+			if (isempty(startbuf) &&
 				zp->z_format != NULL &&
 				strchr(zp->z_format, '%') == NULL &&
 				strchr(zp->z_format, '/') == NULL)
 					(void) strcpy(startbuf, zp->z_format);
 			eat(zp->z_filename, zp->z_linenum);
-			if (*startbuf == '\0')
+			if (isempty(startbuf))
 error(_("can't determine time zone abbreviation to use just after until time"));
 			else	addtt(starttime,
 #ifdef ICU
@@ -2832,7 +2833,7 @@ yearistype(const int year, const char *const type)
 	static char *	buf;
 	int		result;
 
-	if (type == NULL || *type == '\0')
+	if (type == NULL || isempty(type))
 		return true;
 	buf = erealloc(buf, 132 + strlen(yitcommand) + strlen(type));
 	(void) sprintf(buf, "%s %d %s", yitcommand, year, type);
@@ -2862,7 +2863,7 @@ static ATTRIBUTE_PURE int
 ciequal(register const char *ap, register const char *bp)
 {
 	while (lowerit(*ap) == lowerit(*bp++))
-		if (*ap++ == '\0')
+		if (isempty(ap++))
 			return true;
 	return false;
 }
@@ -2875,7 +2876,7 @@ itsabbr(register const char *abbr, register const char *word)
 	++word;
 	while (*++abbr != '\0')
 		do {
-			if (*word == '\0')
+			if (isempty(word))
 				return false;
 		} while (lowerit(*word++) != lowerit(*abbr));
 	return true;
@@ -2924,7 +2925,7 @@ getfields(register char *cp)
 		while (isascii((unsigned char) *cp) &&
 			isspace((unsigned char) *cp))
 				++cp;
-		if (*cp == '\0' || *cp == '#')
+		if (isempty(cp) || *cp == '#')
 			break;
 		array[nsubs++] = dp = cp;
 		do {
@@ -3111,7 +3112,7 @@ mkdirs(char *argname)
 	register char *	name;
 	register char *	cp;
 
-	if (argname == NULL || *argname == '\0')
+	if (argname == NULL || isempty(argname))
 		return 0;
 	cp = name = ecpyalloc(argname);
 	while ((cp = strchr(cp + 1, '/')) != 0) {

@@ -123,4 +123,10 @@ uprv_stricmp(const char *str1, const char *str2);
 U_CAPI int U_EXPORT2
 uprv_strnicmp(const char *str1, const char *str2, uint32_t n);
 
+/**
+ * Faster empty string comparison
+ */
+
+#define isempty(str) *str == '\0'
+
 #endif /* ! CSTRING_H */

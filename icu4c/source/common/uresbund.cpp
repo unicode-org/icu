@@ -700,7 +700,7 @@ findFirstExisting(const char* path, char* name, const char* defaultLocale, UResO
             // locale ID for inheritance, which should come from chopLocale(), not getParentLocaleID()
             *foundParent = chopLocale(name);
         }
-        if (*foundParent && *name == '\0') {
+        if (*foundParent && isempty(name)) {
             uprv_strcpy(name, "und");
         }
     }

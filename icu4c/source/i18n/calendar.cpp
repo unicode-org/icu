@@ -3872,8 +3872,8 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
     Locale min(desiredLocale);
     min.minimizeSubtags(myStatus);
     Locale useLocale;
-    if ( uprv_strlen(desiredLocale.getCountry()) == 0 ||
-         (uprv_strlen(desiredLocale.getScript()) > 0 && uprv_strlen(min.getScript()) == 0) ) {
+    if (isempty(desiredLocale.getCountry()) ||
+         (uprv_strlen(desiredLocale.getScript()) > 0 && isempty(min.getScript())) ) {
         myStatus = U_ZERO_ERROR;
         Locale max(desiredLocale);
         max.addLikelySubtags(myStatus);

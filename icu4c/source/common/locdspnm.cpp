@@ -575,7 +575,7 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
   UnicodeString resultName;
 
   const char* lang = loc.getLanguage();
-  if (uprv_strlen(lang) == 0) {
+  if (isempty(lang)) {
     lang = "root";
   }
   const char* script = loc.getScript();

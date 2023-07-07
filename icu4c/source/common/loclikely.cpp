@@ -64,7 +64,7 @@ findLikelySubtags(const char* localeID,
         if (U_SUCCESS(tmpErr)) {
             icu::CharString und;
             if (localeID != nullptr) {
-                if (*localeID == '\0') {
+                if (isempty(localeID)) {
                     localeID = unknownLanguage;
                 } else if (*localeID == '_') {
                     und.append(unknownLanguage, *err);

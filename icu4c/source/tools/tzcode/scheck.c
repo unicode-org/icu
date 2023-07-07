@@ -50,7 +50,7 @@ scheck(const char *const string, const char *const format)
 		*tp++ = '*';
 		if (*fp == '*')
 			++fp;
-		if ((*tp++ = *fp++) == '\0')
+		if (isempty(*tp++ = *fp++))
 			break;
 	}
 

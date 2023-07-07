@@ -1132,7 +1132,7 @@ setUpDataTable();
             expectedVar=dataTable[DVAR_EN][i];
 
         expectedName=dataTable[compareIndex + 4][i];
-        if(u_strlen(expectedName) == 0)
+        if(isempty(expectedName))
             expectedName=dataTable[DNAME_EN][i];
 
         if (0 !=u_strcmp(testLang,expectedLang))  {
@@ -6003,7 +6003,7 @@ static void TestLikelySubtags()
             log_err_status(status, "  unexpected failure of uloc_addLikelySubtags(), minimal \"%s\" status %s\n", minimal, u_errorName(status));
             status = U_ZERO_ERROR;
         }
-        else if (uprv_strlen(maximal) == 0) {
+        else if (isempty(maximal)) {
             if (uprv_stricmp(minimal, buffer) != 0) {
                 log_err("  unexpected maximal value \"%s\" in uloc_addLikelySubtags(), minimal \"%s\" = \"%s\"\n", maximal, minimal, buffer);
             }
@@ -6030,7 +6030,7 @@ static void TestLikelySubtags()
             log_err_status(status, "  unexpected failure of uloc_MinimizeSubtags(), maximal \"%s\" status %s\n", maximal, u_errorName(status));
             status = U_ZERO_ERROR;
         }
-        else if (uprv_strlen(minimal) == 0) {
+        else if (isempty(minimal)) {
             if (uprv_stricmp(maximal, buffer) != 0) {
                 log_err("  unexpected minimal value \"%s\" in uloc_minimizeSubtags(), maximal \"%s\" = \"%s\"\n", minimal, maximal, buffer);
             }
@@ -6056,7 +6056,7 @@ static void TestLikelySubtags()
             log_err_status(status, "  unexpected failure of uloc_addLikelySubtags(), minimal \"%s\" status \"%s\"\n", minimal, u_errorName(status));
             status = U_ZERO_ERROR;
         }
-        else if (uprv_strlen(maximal) == 0) {
+        else if (isempty(maximal)) {
             if (uprv_stricmp(minimal, buffer) != 0) {
                 log_err("  unexpected maximal value \"%s\" in uloc_addLikelySubtags(), minimal \"%s\" = \"%s\"\n", maximal, minimal, buffer);
             }
@@ -6085,7 +6085,7 @@ static void TestLikelySubtags()
                 log_err_status(status, "  unexpected failure of uloc_minimizeSubtags(), maximal \"%s\" status %s\n", maximal, u_errorName(status));
                 status = U_ZERO_ERROR;
             }
-            else if (uprv_strlen(minimal) == 0) {
+            else if (isempty(minimal)) {
                 if (uprv_stricmp(maximal, buffer) != 0) {
                     log_err("  unexpected minimal value \"%s\" in uloc_minimizeSubtags(), maximal \"%s\" = \"%s\"\n", minimal, maximal, buffer);
                 }

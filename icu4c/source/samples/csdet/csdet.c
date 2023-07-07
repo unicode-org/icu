@@ -9,6 +9,8 @@
  *******************************************************************************
  */
 
+#include "cstring.h"
+
 #include "unicode/utypes.h"
 #include "unicode/ucsdet.h"
 
@@ -62,7 +64,7 @@ int main(int argc, char *argv[])
             const char *lang = ucsdet_getLanguage(csm[match], &status);
             int32_t confidence = ucsdet_getConfidence(csm[match], &status);
 
-            if (lang == NULL || strlen(lang) == 0) {
+            if (lang == NULL || isempty(lang)) {
                 lang = "**";
             }
 

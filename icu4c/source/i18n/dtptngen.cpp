@@ -668,7 +668,7 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
     }
     
     Locale maxLocale;  // must be here for correct lifetime
-    if (*language == '\0' || *country == '\0') {
+    if (isempty(language) || isempty(country)) {
         maxLocale = locale;
         UErrorCode localStatus = U_ZERO_ERROR;
         maxLocale.addLikelySubtags(localStatus);
@@ -677,11 +677,11 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
             country = maxLocale.getCountry();
         }
     }
-    if (*language == '\0') {
+    if (isempty(language)) {
         // Unexpected, but fail gracefully
         language = "und";
     }
-    if (*country == '\0') {
+    if (isempty(country)) {
         country = "001";
     }
 

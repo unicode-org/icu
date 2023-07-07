@@ -18,6 +18,7 @@
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
 #include "cintltst.h"
+#include "cstring.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,7 +153,7 @@ static void U_CALLCONV testTraceExit(const void *context, int32_t fnNumber,
     /* Verify that the format can be used.  */
     buf[0] = 0;
     utrace_vformat(buf, sizeof(buf), 0, fmt, args);
-    if (strlen(buf) == 0) {
+    if (isempty(buf)) {
         gFnFormatError = true;
     }
 
@@ -181,7 +182,7 @@ static void U_CALLCONV testTraceData(const void *context, int32_t fnNumber, int3
     /* Verify that the format can be used.  */
     buf[0] = 0;
     utrace_vformat(buf, sizeof(buf), 0, fmt, args);
-    if (strlen(buf) == 0) {
+    if (isempty(buf == '\0')) {
         gFnFormatError = true;
     }
 

@@ -923,7 +923,7 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
  * Depending on the configuration, the library name may either end with version number or shared object suffix.
  */
 static void createFileNames(UPKGOptions *o, const char mode, const char *version_major, const char *version, const char *libName, UBool reverseExt, UBool noVersion) {
-    const char* FILE_EXTENSION_SEP = uprv_strlen(pkgDataFlags[SO_EXT]) == 0 ? "" : ".";
+    const char* FILE_EXTENSION_SEP = isempty(pkgDataFlags[SO_EXT]) ? "" : ".";
     const char* FILE_SUFFIX = pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "";
 
 #if U_PLATFORM == U_PF_MINGW
@@ -1046,11 +1046,11 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
     char cmd[LARGE_BUFFER_MAX_SIZE];
     char name1[SMALL_BUFFER_MAX_SIZE]; /* symlink file name */
     char name2[SMALL_BUFFER_MAX_SIZE]; /* file name to symlink */
-    const char* FILE_EXTENSION_SEP = uprv_strlen(pkgDataFlags[SO_EXT]) == 0 ? "" : ".";
+    const char* FILE_EXTENSION_SEP = isempty(pkgDataFlags[SO_EXT]) ? "" : ".";
 
 #if U_PLATFORM != U_PF_CYGWIN
     /* No symbolic link to make. */
-    if (uprv_strlen(libFileNames[LIB_FILE_VERSION]) == 0 || uprv_strlen(libFileNames[LIB_FILE_VERSION_MAJOR]) == 0 ||
+    if (isempty(libFileNames[LIB_FILE_VERSION]) || isempty(libFileNames[LIB_FILE_VERSION_MAJOR]) ||
         uprv_strcmp(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_MAJOR]) == 0) {
         return result;
     }

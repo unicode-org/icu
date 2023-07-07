@@ -348,7 +348,7 @@ const DayPeriodRules *DayPeriodRules::getInstance(const Locale &locale, UErrorCo
         uprv_strcpy(name, localeCode);
 
         // Treat empty string as root.
-        if (*name == '\0') {
+        if (isempty(name)) {
             uprv_strcpy(name, "root");
         }
     } else {
@@ -362,7 +362,7 @@ const DayPeriodRules *DayPeriodRules::getInstance(const Locale &locale, UErrorCo
         if (ruleSetNum == 0) {
             // name and parentName can't be the same pointer, so fill in parent then copy to child.
             uloc_getParent(name, parentName, ULOC_FULLNAME_CAPACITY, &errorCode);
-            if (*parentName == '\0') {
+            if (isempty(parentName)) {
                 // Saves a lookup in the hash table.
                 break;
             }
