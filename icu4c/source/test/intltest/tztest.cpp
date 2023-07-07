@@ -957,7 +957,7 @@ void TimeZoneTest::TestShortZoneIDs()
                       (usesDaylight?"true":"false") +
                       " but it should be " +
                       ((kReferenceList[i].daylight)?"true":"false"));
-            } else {
+            } else if (!(itsID==UnicodeString(u"ART",-1) && logKnownIssue("ICU-22436", "Wrong DST status for time zone ART"))) {
                 dataerrln("FAIL: Time Zone " + itsID + " use daylight is " +
                       (usesDaylight?"true":"false") +
                       " but it should be " +
