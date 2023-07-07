@@ -96,6 +96,12 @@ inline bool isWhitespace(UChar32 c) {
         return *this; \
     }
 
+// Returns immediately if `errorCode` indicates failure
+#define FALSE_ON_ERROR(errorCode)                                                                          \
+    if (U_FAILURE(errorCode)) {                                                                         \
+        return false; \
+    }
+
 } // namespace message2
 U_NAMESPACE_END
 

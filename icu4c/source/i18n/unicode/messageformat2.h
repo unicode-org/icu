@@ -105,7 +105,7 @@ class U_I18N_API MessageFormatter : public Format {
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
-    Locale getLocale() const;
+    Locale getLocale() const { return locale; }
     void getPattern(UnicodeString& result) const {
      // TODO more comments
      // Converts the current data model back to a string
@@ -132,14 +132,13 @@ class U_I18N_API MessageFormatter : public Format {
     class Builder {
         friend class MessageFormatter;
       private:
-        Builder() : customFunctionRegistry(nullptr) {}
+        Builder() : locale(Locale::getDefault()), customFunctionRegistry(nullptr) {}
 
         // The pattern to be parsed to generate the formatted message
         LocalPointer<UnicodeString> pattern;
         // The data model to be used to generate the formatted message
         // Invariant: !(pattern.isValid() && dataModel.isValid())
         LocalPointer<MessageFormatDataModel> dataModel;
-        // TODO: set default locale
         Locale locale;
         LocalPointer<FunctionRegistry> standardFunctionRegistry;
         LocalPointer<FunctionRegistry> customFunctionRegistry;
@@ -257,7 +256,7 @@ class U_I18N_API MessageFormatter : public Format {
              void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
              void parseName(UErrorCode&, VariableName&);
              void parseVariableName(UErrorCode&, VariableName&);
-             void parseFunction(UErrorCode&, FunctionName&);
+             FunctionName* parseFunction(UErrorCode&);
              void parseEscapeSequence(EscapeKind, UErrorCode &, String&);
              void parseLiteralEscape(UErrorCode &, String&);
              void parseLiteral(UErrorCode &, bool&, String&);
@@ -305,6 +304,7 @@ class U_I18N_API MessageFormatter : public Format {
          template <size_t N>
          void emit(const UChar32 (&)[N]);
          void emit(const UnicodeString&);
+         void emit(const MessageFormatDataModel::FunctionName&);
          void emit(const MessageFormatDataModel::Literal&);
          void emit(const MessageFormatDataModel::Key&);
          void emit(const MessageFormatDataModel::SelectorKeys&);
@@ -332,10 +332,12 @@ class U_I18N_API MessageFormatter : public Format {
      // The `operand` is the result of resolving the operand.
      class ResolvedExpression : public UMemory {
          public:
-         const Selector& selectorFunction;
-         const Hashtable& resolvedOptions;
-         const UnicodeString& resolvedOperand;
-         ResolvedExpression(const Selector& s, const Hashtable& o, const UnicodeString& r) : selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+         virtual ~ResolvedExpression();
+         const LocalPointer<Selector> selectorFunction;
+         const LocalPointer<Hashtable> resolvedOptions;
+         const LocalPointer<UnicodeString> resolvedOperand;
+         // Adopts all its arguments
+         ResolvedExpression(Selector* s, Hashtable* o, UnicodeString* r) : selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
      };
 
      // Selection methods
@@ -352,13 +354,14 @@ class U_I18N_API MessageFormatter : public Format {
      ResolvedExpression* formatSelectorExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression in a pattern context
      void formatPatternExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
-     const Hashtable* resolveOptions(const Hashtable&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     Hashtable* resolveOptions(const Hashtable&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
      void formatFunctionCall(const FunctionRegistry&, const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
      void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatSelectors(const Hashtable& arguments, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
     // Function registry methods
-    bool isBuiltInFunction(const FunctionName&) const;
+    bool isBuiltInSelector(const FunctionName&) const;
+    bool isBuiltInFormatter(const FunctionName&) const;
     // Precondition: custom function registry exists
     const FunctionRegistry& getCustomFunctionRegistry() const {
         U_ASSERT(customFunctionRegistry.isValid());
@@ -383,6 +386,9 @@ class U_I18N_API MessageFormatter : public Format {
 
     // Normalized version of the input string (optional whitespace removed)
     LocalPointer<UnicodeString> normalizedInput;
+
+    // The locale this MessageFormatter was created with
+    const Locale locale;
 }; // class MessageFormatter
 
 // For how this is used, see the references to (integer, variant) tuples

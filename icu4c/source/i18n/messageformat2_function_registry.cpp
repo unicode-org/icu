@@ -5,33 +5,21 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/dtptngen.h"
 #include "unicode/messageformat2.h"
 #include "unicode/numberformatter.h"
+#include "unicode/smpdtfmt.h"
 #include "uvector.h" // U_ASSERT
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-/*
-using Binding         = MessageFormatDataModel::Binding;
-using Bindings        = MessageFormatDataModel::Bindings;
-using Expression      = MessageFormatDataModel::Expression;
-using ExpressionList  = MessageFormatDataModel::ExpressionList;
-using Key             = MessageFormatDataModel::Key;
-using KeyList         = MessageFormatDataModel::KeyList;
-template<typename T>
-using List            = MessageFormatDataModel::List<T>;
-using Literal         = MessageFormatDataModel::Literal;
-using OptionMap       = MessageFormatDataModel::OptionMap;
-using Operand         = MessageFormatDataModel::Operand;
-using Operator        = MessageFormatDataModel::Operator;
-using Pattern         = MessageFormatDataModel::Pattern;
-using PatternPart     = MessageFormatDataModel::PatternPart;
-using Reserved        = MessageFormatDataModel::Reserved;
-using SelectorKeys    = MessageFormatDataModel::SelectorKeys;
-using VariantMap      = MessageFormatDataModel::VariantMap;
-*/
-
 // Function registry implementation
+
+Formatter::~Formatter() {}
+Selector::~Selector() {}
+FormatterFactory::~FormatterFactory() {}
+SelectorFactory::~SelectorFactory() {}
+StandardFunctions::PluralFactory::~PluralFactory() {}
 
 FunctionRegistry* FunctionRegistry::Builder::build(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
@@ -46,12 +34,26 @@ FunctionRegistry* FunctionRegistry::Builder::build(UErrorCode& errorCode) {
 
 /* static */ FunctionRegistry::Builder* FunctionRegistry::builder(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<FunctionRegistry::Builder> result(new FunctionRegistry::Builder());
-    if (!result.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    LocalPointer<FunctionRegistry::Builder> result(new FunctionRegistry::Builder(errorCode));
+    if (U_FAILURE(errorCode)) {
         return nullptr;
     }
     return result.orphan();
+}
+
+FunctionRegistry::Builder::Builder(UErrorCode& errorCode)  {
+    CHECK_ERROR(errorCode);
+
+    formatters.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    selectors.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    if (U_FAILURE(errorCode)) {
+        formatters.adoptInstead(nullptr);
+        selectors.adoptInstead(nullptr);
+        return;
+    }
+    // The hashtables own the values, but not the keys
+    formatters->setValueDeleter(uprv_deleteUObject);
+    selectors->setValueDeleter(uprv_deleteUObject);
 }
 
 FunctionRegistry::Builder& FunctionRegistry::Builder::setSelector(const UnicodeString& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode) {
@@ -65,14 +67,48 @@ FunctionRegistry::Builder& FunctionRegistry::Builder::setSelector(const UnicodeS
     return *this;
 }
 
-const FormatterFactory* FunctionRegistry::getFormatter(const UnicodeString& formatterName) const {
-    // Caller must check for null
-    return ((FormatterFactory*) formatters->get(formatterName));
+FunctionRegistry::Builder& FunctionRegistry::Builder::setFormatter(const UnicodeString& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+    if (formatterFactory == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return *this;
+    }
+
+    formatters->put(formatterName, formatterFactory, errorCode);
+    return *this;
 }
 
-// Specific formatter implementations
+const FormatterFactory* FunctionRegistry::getFormatter(const FunctionName& formatterName) const {
+    // Caller must check for null
+    return ((FormatterFactory*) formatters->get(formatterName.name));
+}
 
-// --------- Number
+const SelectorFactory* FunctionRegistry::getSelector(const FunctionName& selectorName) const {
+    // Caller must check for null
+    return ((SelectorFactory*) selectors->get(selectorName.name));
+}
+
+void FunctionRegistry::checkFormatter(const char* s) const {
+    U_ASSERT(hasFormatter(UnicodeString(s)));
+}
+
+void FunctionRegistry::checkSelector(const char* s) const {
+    U_ASSERT(hasSelector(UnicodeString(s)));
+}
+
+// Debugging
+void FunctionRegistry::checkStandard() const {
+    checkFormatter("datetime");
+    checkFormatter("number");
+    checkFormatter("identity");
+    checkSelector("plural");
+    checkSelector("selectordinal");
+    checkSelector("select");
+    checkSelector("gender");
+}
+
+// Formatter/selector helpers
+
 
 static void strToInt(const UnicodeString& s, int64_t& result, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -96,6 +132,31 @@ static void strToDouble(const UnicodeString& s, double& result, UErrorCode& erro
     CHECK_ERROR(errorCode);
     result = asNumber.getDouble(errorCode);
 }
+
+void getOffset(const Hashtable& fixedOptions, const Hashtable& variableOptions, int64_t& offset, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    // Offset is determined by the variable options if it's defined,
+    // then by the fixed options if they exist and define `offset`,
+    // and finally defaults to 0
+    UnicodeString* offsetStr = static_cast<UnicodeString*>(variableOptions.get(UnicodeString("offset")));
+    bool hasOffset = offsetStr != nullptr;
+    offset = 0;
+    if (!hasOffset) {
+        offsetStr = static_cast<UnicodeString*>(fixedOptions.get(UnicodeString("offset")));
+        if (offsetStr != nullptr) {
+            strToInt(*offsetStr, offset, errorCode);
+        }
+    } else if (!hasOffset) {
+        offset = 0;
+    } else {
+        strToInt(*offsetStr, offset, errorCode);
+    }
+}
+
+// Specific formatter implementations
+
+// --------- Number
 
 number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Hashtable& fixedOptions, UErrorCode& status) {
     NULL_ON_ERROR(status);
@@ -138,8 +199,19 @@ void addAll(const Hashtable& source, Hashtable& dest, UErrorCode& errorCode) {
     }
 }
 
+Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+
+    Formatter* result = new Number(locale, fixedOptions);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
+}
+
 // variableOptions = map of *resolved* options (strings)
-void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) {
+void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     LocalPointer<number::LocalizedNumberFormatter> realFormatter;
@@ -158,23 +230,9 @@ void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hash
         realFormatter.adoptInstead(formatterForOptions(locale, *mergedOptions, errorCode));
     }
     CHECK_ERROR(errorCode);
-
-    // Offset is determined by the variable options if it's defined,
-    // then by the fixed options if they exist and define `offset`,
-    // and finally defaults to 0
-    UnicodeString* offsetStr = static_cast<UnicodeString*>(variableOptions.get(UnicodeString("offset")));
-    bool hasOffset = offsetStr != nullptr;
-    int64_t offset = 0;
-    if (!hasOffset) {
-        offsetStr = static_cast<UnicodeString*>(fixedOptions.get(UnicodeString("offset")));
-        if (offsetStr != nullptr) {
-            strToInt(*offsetStr, offset, errorCode);
-        }
-    } else if (!hasOffset) {
-        offset = 0;
-    } else {
-        strToInt(*offsetStr, offset, errorCode);
-    }
+    
+    int64_t offset;
+    getOffset(fixedOptions, variableOptions, offset, errorCode);
     CHECK_ERROR(errorCode);
 
     // TODO: NumberFormatterFactory.java dispatches on the type of `toFormat`,
@@ -192,6 +250,197 @@ void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hash
 }
 
 // --------- PluralFactory
+
+Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+
+    // Look up plural rules by locale
+    LocalPointer<PluralRules> rules(PluralRules::forLocale(locale, type, errorCode));
+    NULL_ON_ERROR(errorCode);
+    Selector* result = new Plural(locale, fixedOptions, type, rules.orphan());
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
+}
+
+bool StandardFunctions::Plural::matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+    FALSE_ON_ERROR(errorCode);
+
+    // TODO: This does not handle the '*' key, which is represented as a non-string
+    // and thus shouldn't be passed to this
+    U_ASSERT(key != UnicodeString(ASTERISK));
+
+    int64_t offset;
+    getOffset(fixedOptions, variableOptions, offset, errorCode);
+    FALSE_ON_ERROR(errorCode);
+
+    // Try parsing the scrutinee as a double
+    double valToCheck;
+    strToDouble(value, valToCheck, errorCode);
+    FALSE_ON_ERROR(errorCode);
+
+    // TODO: does the Integer case need to be there?
+    // See PluralSelectoryFactory.java
+
+    if (!fixedOptions.containsKey(UnicodeString("skeleton")) && !variableOptions.containsKey(UnicodeString("skeleton"))) {
+        // Try parsing the key as a Double
+        double keyAsDouble;
+        strToDouble(key, keyAsDouble, errorCode);
+        if (U_SUCCESS(errorCode)) {
+            if (valToCheck == keyAsDouble) {
+                return true;
+            }
+        }
+        else {
+            // We're going to try a different matching strategy,
+            // so ignore the failure by resetting the error code
+            errorCode = U_ZERO_ERROR;
+        }
+    }
+
+    UnicodeString match = rules->select(valToCheck - offset);
+    return (match == key);
+}
+
+StandardFunctions::Plural::~Plural() {}
+
+// --------- DateTimeFactory
+
+
+static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorCode) {
+    if (U_SUCCESS(errorCode)) {
+        UnicodeString upper = option.toUpper();
+        if (upper == UnicodeString("FULL")) {
+            return DateFormat::EStyle::kFull;
+        }
+        if (upper == UnicodeString("LONG")) {
+            return DateFormat::EStyle::kLong;
+        }
+        if (upper == UnicodeString("MEDIUM")) {
+            return DateFormat::EStyle::kMedium;
+        }
+        if (upper == UnicodeString("SHORT")) {
+            return DateFormat::EStyle::kShort;
+        }
+        if (upper.isEmpty() || upper == UnicodeString("DEFAULT")) {
+            return DateFormat::EStyle::kDefault;
+        }
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    return DateFormat::EStyle::kNone;
+}
+
+Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+
+    LocalPointer<DateFormat> df;
+
+    UnicodeString* opt = (UnicodeString*) fixedOptions.get(UnicodeString("skeleton"));
+    if (opt != nullptr) {
+        // Same as getInstanceForSkeleton(), see ICU 9029
+        // Based on test/intltest/dtfmttst.cpp - TestPatterns()
+        LocalPointer<DateTimePatternGenerator> generator(DateTimePatternGenerator::createInstance(locale, errorCode));
+        NULL_ON_ERROR(errorCode);
+        UnicodeString pattern = generator->getBestPattern(*opt, errorCode);
+        df.adoptInstead(new SimpleDateFormat(pattern, locale, errorCode));
+    } else {
+        opt = (UnicodeString*) fixedOptions.get(UnicodeString("pattern"));
+        if (opt != nullptr) {
+            df.adoptInstead(new SimpleDateFormat(*opt, locale, errorCode));
+        } else {
+            opt = (UnicodeString*) fixedOptions.get(UnicodeString("datestyle"));
+            DateFormat::EStyle dateStyle = DateFormat::NONE;
+            if (opt != nullptr) {
+                dateStyle = stringToStyle(*opt, errorCode);
+            }
+            DateFormat::EStyle timeStyle = DateFormat::NONE;
+            opt = (UnicodeString*) fixedOptions.get(UnicodeString("timestyle"));
+            if (opt != nullptr) {
+                timeStyle = stringToStyle(*opt, errorCode);
+            }
+            if (dateStyle == DateFormat::NONE && timeStyle == DateFormat::NONE) {
+                // Match the MessageFormat behavior
+                dateStyle = DateFormat::SHORT;
+                timeStyle = DateFormat::SHORT;
+            }
+            df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
+        }
+    }
+
+    NULL_ON_ERROR(errorCode);
+    Formatter* result = new DateTime(df.orphan());
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
+}
+
+void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
+
+    // No variable options (?) TODO
+    (void) variableOptions;
+
+    // Parse the given string as a date
+    UDate date = icuFormatter->parse(toFormat, errorCode);
+    CHECK_ERROR(errorCode);
+    icuFormatter->format(date, result);
+}
+
+// --------- TextFactory
+
+Selector* StandardFunctions::TextFactory::createSelector(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+    // No state
+    (void) locale;
+    (void) fixedOptions;
+
+    Selector* result = new TextSelector();
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
+}
+
+bool StandardFunctions::TextSelector::matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+    // Just compares the key and value as strings
+    FALSE_ON_ERROR(errorCode);
+
+    (void) variableOptions; // Unused parameter
+
+    return (key == value);
+}
+
+StandardFunctions::TextSelector::~TextSelector() {}
+
+// --------- IdentityFactory
+
+Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+    // No state
+    (void) locale;
+    (void) fixedOptions;
+
+    Formatter* result = new Identity();
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
+
+}
+
+void StandardFunctions::Identity::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
+
+    (void) variableOptions; // unused parameter
+    // Just returns the string
+    result = toFormat;
+}
+
+StandardFunctions::Identity::~Identity() {}
 
 } // namespace message2
 U_NAMESPACE_END

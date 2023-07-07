@@ -31,7 +31,7 @@ using VariantMap      = MessageFormatDataModel::VariantMap;
 
 using PrioritizedVariantList = List<PrioritizedVariant>;
 
-#define IDENTITY_SELECTOR UnicodeString("identity")
+#define TEXT_SELECTOR UnicodeString("select")
 
 #define PARSER MessageFormatter::Parser
 
@@ -138,13 +138,6 @@ MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MessageFormat
 MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    // There is a default locale; so we don't have to worry about
-    // whether that was set
-    // TODO: Locale not passed yet
-
-    // There is a default function registry
-    // TODO: pass function registry
-
     LocalPointer<MessageFormatter> mf(new MessageFormatter(*this, parseError, errorCode));
     if (U_FAILURE(errorCode)) {
         return nullptr;
@@ -153,11 +146,11 @@ MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErr
 }
 
 MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError,
-                                   UErrorCode &success) {
+                                   UErrorCode &success) : locale(builder.locale) {
     CHECK_ERROR(success);
 
     // Set up the empty options map (this is for convenience
-    // when formatting selectors
+    // when formatting selectors)
     LocalPointer<OptionMap::Builder> optsBuilder(OptionMap::builder(success));
     emptyOptionsMap.adoptInstead(optsBuilder->build(success));
     CHECK_ERROR(success);
@@ -171,15 +164,16 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     LocalPointer<FunctionRegistry::Builder> standardFunctionsBuilder(FunctionRegistry::builder(success));
     CHECK_ERROR(success);
 
-    standardFunctionsBuilder->setFormatter(UnicodeString("datetime"), new StandardFunctions::DateTimeFactory())
-        .setFormatter(UnicodeString("number"), new StandardFunctions::NumberFactory())
-        .setSelector(IDENTITY_SELECTOR, new StandardFunctions::IdentityFactory(), success)
-        .setSelector(UnicodeString("plural"), new StandardFunctions::PluralFactory(PluralType::CARDINAL), success)
-        .setSelector(UnicodeString("selectordinal"), new StandardFunctions::PluralFactory(PluralType::ORDINAL), success)
+    standardFunctionsBuilder->setFormatter(UnicodeString("datetime"), new StandardFunctions::DateTimeFactory(), success)
+        .setFormatter(UnicodeString("number"), new StandardFunctions::NumberFactory(), success)
+        .setFormatter(UnicodeString("identity"), new StandardFunctions::IdentityFactory(), success)
+        .setSelector(UnicodeString("plural"), new StandardFunctions::PluralFactory(UPLURAL_TYPE_CARDINAL), success)
+        .setSelector(UnicodeString("selectordinal"), new StandardFunctions::PluralFactory(UPLURAL_TYPE_ORDINAL), success)
         .setSelector(UnicodeString("select"), new StandardFunctions::TextFactory(), success)
         .setSelector(UnicodeString("gender"), new StandardFunctions::TextFactory(), success);
     standardFunctionRegistry.adoptInstead(standardFunctionsBuilder->build(success));
     CHECK_ERROR(success);
+    standardFunctionRegistry->checkStandard();
 
     // Validate pattern and build data model
     // First, check that exactly one of the pattern and data model are set, but not both
@@ -226,6 +220,7 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     }
 }
 
+MessageFormatter::ResolvedExpression::~ResolvedExpression() {}
 MessageFormatDataModel::~MessageFormatDataModel() {}
 MessageFormatter::~MessageFormatter() {}
 
@@ -617,31 +612,42 @@ void PARSER::parseVariableName(UErrorCode &errorCode,
     parseName(errorCode, var);
 }
 
-
+static FunctionName::Sigil functionSigil(UChar32 c) {
+    switch (c) {
+        case PLUS:   { return FunctionName::Sigil::OPEN; }
+        case HYPHEN: { return FunctionName::Sigil::CLOSE; }
+        default: {
+            U_ASSERT(c == COLON);
+            return FunctionName::Sigil::DEFAULT;
+        }
+    }
+}
 /*
   Consumes a reference to a function, matching the `function` nonterminal in
   the grammar.
 
   Initializes `func` to this name.
 */
-void PARSER::parseFunction(UErrorCode &errorCode,
-                           FunctionName &func) {
-    CHECK_ERROR(errorCode);
+FunctionName* PARSER::parseFunction(UErrorCode &errorCode) {
+    NULL_ON_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
     if (!isFunctionStart(source[index])) {
         ERROR(parseError, errorCode, index);
-        return;
+        return nullptr;
     }
 
-    // TODO: it should probably be encoded in the AST whether this is a
-    // regular ':' function or a markup '+'/'-' function. for now just
-    // treat the start character as part of the function name
-    func += source[index];
+    FunctionName::Sigil sigil = functionSigil(source[index]);
     normalizedInput += source[index];
     index++; // Consume the function start character
-    CHECK_BOUNDS(source, index, parseError, errorCode);
-    parseName(errorCode, func);
+    CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
+    UnicodeString name;
+    parseName(errorCode, name);
+    FunctionName* result = new FunctionName(name, sigil);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 
@@ -1082,14 +1088,9 @@ Operator* PARSER::parseAnnotation(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
     if (isFunctionStart(source[index])) {
         // Consume the function name
-        LocalPointer<FunctionName> func(new UnicodeString());
-        if (!func.isValid()) {
-          errorCode = U_MEMORY_ALLOCATION_ERROR;
-          return nullptr;
-        }
-        parseFunction(errorCode, *func);
+        LocalPointer<FunctionName> func(parseFunction(errorCode));
+        NULL_ON_ERROR(errorCode);
         ratorBuilder->setFunctionName(func.orphan());
-        
         // Consume the options (which may be empty)
         parseOptions(errorCode, *ratorBuilder);
     } else {
@@ -1741,8 +1742,12 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
     formatLiteral(rand.asLiteral(), result);
 }
 
-bool MessageFormatter::isBuiltInFunction(const FunctionName& functionName) const {
-    return (standardFunctionRegistry->has(functionName));
+bool MessageFormatter::isBuiltInFormatter(const FunctionName& functionName) const {
+    return (standardFunctionRegistry->hasFormatter(functionName));
+}
+
+bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const {
+    return (standardFunctionRegistry->hasSelector(functionName));
 }
 
 // Precondition: `env` defines `functionName` as a selector. (This is determined when checking the data model)
@@ -1754,14 +1759,17 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelector(const Fun
     // This should have been checked earlier
     U_ASSERT(selectorFactory != nullptr);
     // Create a specific instance of the selector
-    const Selector& selector = selectorFactory->createSelector(getLocale(), arguments);
+    LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), arguments, status));
     // Resolve the operand
-    UnicodeString resolvedOperand;
-    formatOperand(arguments, rand, status, resolvedOperand);
+    LocalPointer<UnicodeString> resolvedOperand(new UnicodeString());
+    if (!resolvedOperand.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    formatOperand(arguments, rand, status, *resolvedOperand);
+    LocalPointer<Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
     NULL_ON_ERROR(status);
-    LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
-    NULL_ON_ERROR(status);
-    LocalPointer<ResolvedExpression> result(new ResolvedExpression(selector, *resolvedOptions, resolvedOperand));
+    LocalPointer<ResolvedExpression> result(new ResolvedExpression(selector.orphan(), resolvedOptions.orphan(), resolvedOperand.orphan()));
     if (!result.isValid()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
@@ -1769,7 +1777,7 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelector(const Fun
     return result.orphan();
 }
 
-const Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const OptionMap& options, UErrorCode& status) const {
+Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const OptionMap& options, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
     size_t pos = OptionMap::FIRST;
@@ -1805,13 +1813,13 @@ void MessageFormatter::formatFunctionCall(const FunctionRegistry& env, const Has
     // This should have been checked earlier
     U_ASSERT(formatterFactory != nullptr);
     // Create a specific instance of the selector
-    const Formatter& formatter = formatterFactory->createFormatter(getLocale(), arguments);
+    const LocalPointer<Formatter> formatter(formatterFactory->createFormatter(getLocale(), arguments, status));
     // Resolve the operand
     UnicodeString resolvedOperand;
     formatOperand(arguments, rand, status, resolvedOperand);
     LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
     CHECK_ERROR(status);
-    formatter.format(resolvedOperand, *resolvedOptions, result, status);
+    formatter->format(resolvedOperand, *resolvedOptions, result, status);
 }
 
 MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status) const {
@@ -1829,7 +1837,7 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
         // registry (if it's a standard function) or the custom registry
         // This means standard functions take precedence over custom
         // definitions of the same names
-        const FunctionRegistry& env = isBuiltInFunction(functionName) ?
+        const FunctionRegistry& env = isBuiltInSelector(functionName) ?
             *standardFunctionRegistry :
             // It's safe to call this b/c an unbound function
             // would have been flagged as an error earlier
@@ -1838,8 +1846,8 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
         return formatSelector(env, arguments, functionName,
                               rator.getOptions(), expr.getOperand(), status);
     }
-    // Plug in the "identity" selector
-    return formatSelector(*standardFunctionRegistry, arguments, IDENTITY_SELECTOR,
+    // Plug in the "text" selector
+    return formatSelector(*standardFunctionRegistry, arguments, TEXT_SELECTOR,
                           emptyOptions(), expr.getOperand(), status);
 }
 
@@ -1856,7 +1864,7 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
         const FunctionName& functionName = rator.getFunctionName();
-        const FunctionRegistry& env = isBuiltInFunction(functionName) ? 
+        const FunctionRegistry& env = isBuiltInFormatter(functionName) ? 
                                       *standardFunctionRegistry : getCustomFunctionRegistry();
         formatFunctionCall(env, arguments, functionName,
                                rator.getOptions(), expr.getOperand(), result, status);
@@ -1902,11 +1910,12 @@ void MessageFormatter::resolveSelectors(const Hashtable& arguments, const Expres
 void MessageFormatter::matchSelectorKeys(const ResolvedExpression& rv, const UVector& keys, UErrorCode& status, UVector& matches) const {
     CHECK_ERROR(status);
 
-    // For now: match based on string equality
     for (size_t i = 0; ((int32_t) i) < keys.size(); i++) {
         UnicodeString* k = ((UnicodeString*) keys[i]);
-        const Selector& selectorImpl = rv.selectorFunction;
-        if (selectorImpl.matches(rv.resolvedOperand, *k, rv.resolvedOptions)) {
+        U_ASSERT(rv.selectorFunction.isValid());
+        const Selector& selectorImpl = *rv.selectorFunction;
+        if (selectorImpl.matches(*(rv.resolvedOperand), *k, *(rv.resolvedOptions), status)) {
+            CHECK_ERROR(status);
             // `matches` does not adopt its elements
             matches.addElement(k, status);
         }

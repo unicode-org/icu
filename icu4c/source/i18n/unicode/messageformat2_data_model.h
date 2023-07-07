@@ -20,12 +20,9 @@
 U_NAMESPACE_BEGIN  namespace message2 {
 
 // TBD
-using FunctionName   = UnicodeString;
-// TBD
 using VariableName   = UnicodeString;
 // TBD
 using String         = UnicodeString;
-
 
 // -----------------------------------------------------------------------
 // Helpers (not public)
@@ -96,6 +93,21 @@ public:
     using ExpressionList = List<Expression>;
     using KeyList = List<Key>;
     using OptionMap = OrderedMap<Operand>;
+
+
+    struct FunctionName : UMemory {
+        enum Sigil {
+            OPEN,
+            CLOSE,
+            DEFAULT
+        };
+        const UnicodeString name;
+        const Sigil sigil;
+        
+        FunctionName(UnicodeString s) : name(s), sigil(Sigil::DEFAULT) {}
+        FunctionName(UnicodeString n, Sigil s) : name(n), sigil(s) {}
+        FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
+    };
 
     // Immutable list; wraps a vector
     template<typename T>
@@ -694,11 +706,11 @@ public:
           friend class Operator;
           Builder() {}
           LocalPointer<Reserved> asReserved;
-          LocalPointer<UnicodeString> functionName;
+          LocalPointer<FunctionName> functionName;
           LocalPointer<OptionMap::Builder> options;
       public:
             Builder& setReserved(Reserved* reserved);
-            Builder& setFunctionName(UnicodeString* func);
+            Builder& setFunctionName(FunctionName* func);
             Builder& addOption(const UnicodeString &key, Operand* value, UErrorCode& errorCode);
             Operator* build(UErrorCode& errorCode) const;
         };
@@ -722,7 +734,7 @@ public:
 
       // Reserved sequence constructor
       // Result is bogus if copy of `r` fails
-      Operator(const Reserved& r) : isReservedSequence(true), functionName(""), options(nullptr), reserved(new Reserved(r)) {}
+      Operator(const Reserved& r) : isReservedSequence(true), functionName(FunctionName(UnicodeString(""))), options(nullptr), reserved(new Reserved(r)) {}
 
       // Operator needs a copy constructor in order to make Expression deeply copyable
       Operator(const Operator& other);

@@ -46,6 +46,15 @@ void SERIALIZER::emit(const UnicodeString& s) {
     result += s;
 }
 
+void SERIALIZER::emit(const FunctionName& f) {
+    switch (f.sigil) {
+        case FunctionName::Sigil::OPEN: { emit(PLUS); break; }
+        case FunctionName::Sigil::CLOSE: { emit(HYPHEN); break; }
+        case FunctionName::Sigil::DEFAULT: { emit(COLON); break; }
+    }
+    emit(f.name);
+}
+
 template <size_t N>
 void SERIALIZER::emit(const UChar32 (&token)[N]) {
     // Don't emit the terminator
@@ -162,11 +171,11 @@ void SERIALIZER::emit(const Expression& expr) {
             }
           }
         } else {
-          emit(rator.getFunctionName());
-          // No whitespace after function name, in case it has
-          // no options. (when there are options, emit(OptionMap) will
-          // emit the leading whitespace)
-          emit(rator.getOptions());
+            emit(rator.getFunctionName());
+            // No whitespace after function name, in case it has
+            // no options. (when there are options, emit(OptionMap) will
+            // emit the leading whitespace)
+            emit(rator.getOptions());
         }
     }
     

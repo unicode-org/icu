@@ -280,7 +280,7 @@ Operator::Builder& Operator::Builder::setReserved(Reserved* reserved) {
     return *this;
 }
 
-Operator::Builder& Operator::Builder::setFunctionName(UnicodeString* func) {
+Operator::Builder& Operator::Builder::setFunctionName(FunctionName* func) {
     U_ASSERT(func != nullptr);
     asReserved.adoptInstead(nullptr);
     functionName.adoptInstead(func);

@@ -10,49 +10,59 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/datefmt.h"
 #include "unicode/format.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2_macros.h"
 #include "unicode/numberformatter.h"
 #include "unicode/unistr.h"
+#include "unicode/upluralrules.h"
 #include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN namespace message2 {
-
-typedef enum {
-    CARDINAL,
-    ORDINAL
-} PluralType;
 
 // TODO: can we use lambdas instead, as in icu4j?
 
 // Fixed options = arguments passed in to format()
 // Variable options = option list specified in a single expression
 
+using FunctionName = MessageFormatDataModel::FunctionName;
 
 class U_COMMON_API Formatter : public UMemory {
  public:
-    // TODO: for now representing the argument as a string. Not sure if that's right; Java
-    // uses `Object`.
-    virtual UnicodeString& format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const = 0;
+    // TODO: for now representing the argument as a string.
+    // Java uses `Object`; currently not supporting arguments as non-strings
+    // or formatters that return non-strings.
+    // Needs an error code because internal details may require calling functions that can fail
+    // (e.g. parsing a string as a number, for Number)
+    virtual void format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const = 0;
+    virtual ~Formatter();
 };
 
 // Interface/mixin class
 class U_COMMON_API Selector : public UMemory {
  public:
-    // TODO: Same question about the `value` argument as in Formatter
-    virtual bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& options) const = 0;
+    // TODO: Same comment about the `value` argument as in Formatter
+    // TODO: Needs an error code because parsing `value` as a number can error
+    virtual bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& options, UErrorCode& errorCode) const = 0;
+    virtual ~Selector();
 };
 
 // Interface/mixin classes
 class U_COMMON_API FormatterFactory : public UMemory {
   public:
-    virtual const Formatter& createFormatter(Locale locale, const Hashtable& fixedOptions) const = 0;
+    // Since this allocates a new Formatter and has to indicate failure,
+    // it returns a Formatter* (not a Formatter&)
+    // TODO
+    virtual Formatter* createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const = 0;
+    virtual ~FormatterFactory();
 };
 
 class U_COMMON_API SelectorFactory : public UMemory {
   public:
-    virtual const Selector& createSelector(Locale locale, const Hashtable& fixedOptions) const = 0;
+    // Same comment as FormatterFactory::createFormatter
+    virtual Selector* createSelector(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const = 0;
+    virtual ~SelectorFactory();
 };
 
 /**
@@ -66,20 +76,20 @@ class U_COMMON_API SelectorFactory : public UMemory {
 class U_I18N_API FunctionRegistry : UMemory {
  public:
     // Returns null on failure
-    const FormatterFactory* getFormatter(const UnicodeString& formatterName) const;
-    const SelectorFactory* getSelector(const UnicodeString& selectorName) const;
+    const FormatterFactory* getFormatter(const FunctionName& formatterName) const;
+    const SelectorFactory* getSelector(const FunctionName& selectorName) const;
     // Not sure yet about the others from icu4j
 
     class Builder {
       private:
         friend class FunctionRegistry;
 
-        Builder();
+        Builder(UErrorCode& errorCode);
         LocalPointer<Hashtable> formatters;
         LocalPointer<Hashtable> selectors;
       public:
         // Adopts `formatterFunction`
-        Builder& setFormatter(const UnicodeString& formatterName, FormatterFactory* formatterFactory);
+        Builder& setFormatter(const UnicodeString& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode);
         // Adopts `selectorFunction`
         Builder& setSelector(const UnicodeString& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode);
 
@@ -95,7 +105,26 @@ class U_I18N_API FunctionRegistry : UMemory {
     // Adopts `f` and `s`
     FunctionRegistry(Hashtable* f, Hashtable* s) : formatters(f), selectors(s) {}
 
-    bool has(const FunctionName&) const;
+    // Debugging; should only be called on a function registry with
+    // all the standard functions registered
+    void checkFormatter(const char*) const;
+    void checkSelector(const char*) const;
+    void checkStandard() const;
+
+    bool hasFormatter(const FunctionName& f) const {
+        if (!formatters->containsKey(f.name)) {
+            return false;
+        }
+        U_ASSERT(getFormatter(f) != nullptr);
+        return true;
+    }
+    bool hasSelector(const FunctionName& s) const {
+        if (!selectors->containsKey(s.name)) {
+            return false;
+        }
+        U_ASSERT(getSelector(s) != nullptr);
+        return true;
+    }
     const LocalPointer<Hashtable> formatters;
     const LocalPointer<Hashtable> selectors;
  };
@@ -110,34 +139,36 @@ class StandardFunctions {
     friend class MessageFormatter;
 
     class DateTimeFactory : public FormatterFactory {
-    private:
-        friend class MessageFormatter;
-
-        const Formatter& createFormatter(Locale locale, const Hashtable& arguments) const;
+    public:
+        Formatter* createFormatter(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
     };
 
-    class DateTime : Formatter {
-        private:
-        friend class MessageFormatter;
+    class DateTime : public Formatter {
+        public:
+        void format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const;
 
-        UnicodeString& format(const UnicodeString& toFormat, const Hashtable& variableOptions);
-        DateTime(Locale loc, const Hashtable& opts) : locale(loc), fixedOptions(opts) {}
-        const Locale locale;
-        const Hashtable& fixedOptions;
+        private:
+        friend class DateTimeFactory;
+
+        // Adopts `df`
+        DateTime(icu::DateFormat* df) : icuFormatter(df) {
+            U_ASSERT(df != nullptr);
+        }
+        const LocalPointer<icu::DateFormat> icuFormatter;
     };
 
     class NumberFactory : public FormatterFactory {
-        private:
-        friend class MessageFormatter;
-
-        const Formatter& createFormatter(Locale locale, const Hashtable& arguments) const;
+    public:
+        Formatter* createFormatter(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
     };
         
-    class Number : Formatter {
-        private:
-        friend class MessageFormatter;
+    class Number : public Formatter {
+        public:
+        void format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const;
 
-        void format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode);
+        private:
+        friend class NumberFactory;
+
         Number(Locale loc, const Hashtable& opts) : locale(loc), fixedOptions(opts), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
 
         const Locale locale;
@@ -145,53 +176,65 @@ class StandardFunctions {
         const number::LocalizedNumberFormatter icuFormatter;
     };
 
-    class IdentityFactory : public SelectorFactory {
-        private:
-        friend class MessageFormatter;
-
-        const Selector& createSelector(Locale locale, const Hashtable& arguments) const;
+    class IdentityFactory : public FormatterFactory {
+    public:
+        Formatter* createFormatter(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
     };
 
-    class Identity : Selector {
-        private:
-        friend class MessageFormatter;
+    class Identity : public Formatter {
+    public:
+        void format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const;
+        
+    private:
+        friend class IdentityFactory;
 
-        UnicodeString format(const UnicodeString& toFormat, const Hashtable& variableOptions);
+        Identity() {}
+        ~Identity();
     };
 
     class PluralFactory : public SelectorFactory {
-        private:
+    public:
+        virtual ~PluralFactory();
+        Selector* createSelector(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
+
+    private:
         friend class MessageFormatter;
 
-        PluralFactory(PluralType t) : type(t) {}
-        const Selector& createSelector(Locale locale, const Hashtable& arguments) const;
-
-        const PluralType type;
+        PluralFactory(UPluralType t) : type(t) {}
+        const UPluralType type;
     };
 
-    class Plural : Selector {
-        friend class MessageFormatter;
+    class Plural : public Selector {
+        public:
+        bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const;
 
-        UnicodeString format(const UnicodeString& toFormat, const Hashtable& variableOptions);
-        Plural(Locale loc, const Hashtable& opts, PluralType t) : type(t), locale(loc), fixedOptions(opts) {}
+        private:
+        friend class PluralFactory;
 
-        const PluralType type;
+        // Adopts `r`
+        Plural(Locale loc, const Hashtable& opts, UPluralType t, PluralRules* r) : locale(loc), fixedOptions(opts), type(t), rules(r) {}
+        ~Plural();
+
         const Locale locale;
         const Hashtable& fixedOptions;
+        const UPluralType type;
+        LocalPointer<PluralRules> rules;
     };
 
     class TextFactory : public SelectorFactory {
-        private:
-        friend class MessageFormatter;
-
-        TextFactory();
-        const Selector& createSelector(Locale locale, const Hashtable& arguments) const;
+        public:
+        Selector* createSelector(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
     };
 
-    class TextSelector : Selector {
-        friend class MessageFormatter;
-
-        UnicodeString format(const UnicodeString& toFormat, const Hashtable& variableOptions);
+    class TextSelector : public Selector {
+    public:
+        bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const;
+        
+    private:
+        friend class TextFactory;
+        
+        TextSelector() {}
+        ~TextSelector();
     };
 };
 

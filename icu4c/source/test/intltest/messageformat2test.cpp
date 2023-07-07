@@ -391,6 +391,14 @@ System.out.println(result);
       return;
   }
 
+  arguments->removeAll();
+  value1 = "1";
+  arguments->put("photoCount", &value1, errorCode);
+  value2 = "feminine";
+  value3 = "Maria";
+  arguments->put("userGender", &value2, errorCode);
+  arguments->put("userName", &value3, errorCode);
+
   // Built-in functions
   pattern = "match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
@@ -399,6 +407,8 @@ System.out.println(result);
                      when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}";
+
+  expected = "Maria added a new photo to her album.";
 
   builder->setPattern(pattern, errorCode);
   mf.adoptInstead(builder->build(parseError, errorCode));
