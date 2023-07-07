@@ -201,7 +201,7 @@ public class TimeZoneTest extends TestFmwk
                 if (!isDevelopmentBuild || isJDKTimeZone) {
                     logln("Warning: Expected " + referenceZone +
                             "; got " + currentZone);
-                } else {
+                } else if (!(referenceZone.getID().equals("ART") && logKnownIssue("ICU-22436", "Wrong DST status for time zone ART"))) {
                     errln("Fail: Expected " + referenceZone +
                             "; got " + currentZone);
                 }
