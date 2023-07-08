@@ -114,7 +114,6 @@ UnicodeString jsonTestCasesValid[] = {
     "{{+tag foo=|foo| bar=$bar}}",
     "{{-tag foo=bar}}",
     "{content {|foo| +markup}}",
-    "match {$foo} when * * {foo}", // Semantic error but syntactically correct
     "{}",
     // tests for reserved syntax
     "{hello {|4.2| @number}}",
@@ -190,12 +189,9 @@ UnicodeString jsonTestCasesValid[] = {
     "match {$foo} {$bar}when one * {one} when * * {other}",
     "match {$foo} {$bar}when one * {one}when * * {other}",
     // one or multiple keys, with or without whitespace before pattern
-    "match {$foo} {$bar} when one{one}",
-    "match {$foo} {$bar} when one {one}",
-    "match {$foo} {$bar} when one  {one}",
-    "match {$foo} {$bar} when one *{one}",
-    "match {$foo} {$bar} when one * {one}",
-    "match {$foo} {$bar} when one *  {one}",
+    "match {$foo} {$bar} when one *{one} when * * {foo}",
+    "match {$foo} {$bar} when one * {one} when * * {foo}",
+    "match {$foo} {$bar} when one *  {one} when * * {foo}",
     // zero, one or multiple options, with or without whitespace before '}'
     "{{:foo}}",
     "{{:foo }}",
@@ -252,6 +248,7 @@ void
 TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testDataModelErrors);
     TESTCASE_AUTO(testAPI);
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testValidJsonPatterns);
@@ -613,6 +610,84 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
             errorCode.reset();
         }
     }
+}
+
+/*
+ Tests a single pattern, which is expected to cause the formatter to
+ emit a data model error, resolution error, selection error, or
+ formatting error
+
+ `testNum`: Test number (only used for diagnostic output)
+ `s`: The pattern string.
+ `expectedErrorCode`: the error code expected to be returned by the formatter
+
+ TODO: For now, the line and character numbers are not checked
+*/
+void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
+    UParseError parseError;
+    IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+
+    testMessageFormatter(s, parseError, errorCode);
+
+    if (!U_FAILURE(errorCode)) {
+        dataerrln("TestMessageFormat2::testSemanticallyInvalidPattern #%d - expected test to fail, but it passed", testNum);
+        logln(UnicodeString("TestMessageFormat2::testSemanticallyInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+    } else if (errorCode != expectedErrorCode) {
+        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with U_MESSAGE_PARSE_ERROR, but it failed with a different error", testNum);
+        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+
+    } else {
+        errorCode.reset();
+    }
+}
+
+void TestMessageFormat2::testDataModelErrors() {
+    uint32_t i = 0;
+
+    // The following tests are syntactically valid but should trigger a data model error
+    
+    // Examples taken from https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
+
+    // Variant key mismatch
+    testSemanticallyInvalidPattern(++i, "match {$foo} {$bar} when one{one}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$foo} {$bar} when one {one}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$foo} {$bar} when one  {one}", U_VARIANT_KEY_MISMATCH);
+ 
+    testSemanticallyInvalidPattern(++i, "match {$foo} when * * {foo}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$one}\n\
+                             when 1 2 {Too many}\n\
+                             when * {Otherwise}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$one} {$two}\n\
+                             when 1 2 {Two keys}\n\
+                             when * {Missing a key}\n\
+                             when * * {Otherwise}", U_VARIANT_KEY_MISMATCH);
+
+    /*
+      TODO: add tests with
+      0 variants and 0 selectors
+      0 variants and 1 selector
+      1 variant and 0 selectors
+     */
+
+    // Non-exhaustive patterns
+    testSemanticallyInvalidPattern(++i, "match {$one}\n\
+                                         when 1 {Value is one}\n\
+                                         when 2 {Value is two}\n", U_NONEXHAUSTIVE_PATTERN);
+    testSemanticallyInvalidPattern(++i, "match {$one} {$two}\n\
+                                         when 1 * {First is one}\n\
+                                         when * 1 {Second is one}\n", U_NONEXHAUSTIVE_PATTERN);
+
+    /* TODO:
+       Duplicate option names
+       Unresolved variables
+       Unknown functions
+       Selector errors
+       Formatting errors
+          e.g. calls to custom functions with constraints on their arguments;
+          handling these errors properly
+     */
 }
 
 void TestMessageFormat2::testInvalidPatterns() {

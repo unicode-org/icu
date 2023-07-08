@@ -29,6 +29,7 @@ public:
     void testValidPatterns(void);
     void testValidJsonPatterns(void);
     void testInvalidPatterns(void);
+    void testDataModelErrors(void);
     // Test the data model API
     void testAPI(void);
     void testAPISimple(void);
@@ -38,6 +39,7 @@ private:
     void testPattern(const UnicodeString&, uint32_t, const char*);
     template<size_t N>
     void testPatterns(const UnicodeString(&) [N], const char*);
+    void testSemanticallyInvalidPattern(uint32_t, const UnicodeString&, UErrorCode);
     void testInvalidPattern(uint32_t, const UnicodeString&);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t, uint32_t);

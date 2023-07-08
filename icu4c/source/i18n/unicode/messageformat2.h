@@ -319,6 +319,19 @@ class U_I18N_API MessageFormatter : public Format {
          void serializeVariants();
      }; // class Serializer
 
+     // Checks a data model for semantic errors
+     class Checker {
+         public:
+         void check(UErrorCode& error);
+         Checker(const MessageFormatDataModel& m) : dataModel(m) {}
+         private:
+         void checkDeclarations(UErrorCode&);
+         void checkSelectors(UErrorCode&);
+         void checkVariants(UErrorCode&);
+         void check(const MessageFormatDataModel::Pattern&, UErrorCode&);
+         const MessageFormatDataModel& dataModel;
+     };
+
      // Intermediate classes for formatting
 
      // Represents the result of resolving an expression in a selector

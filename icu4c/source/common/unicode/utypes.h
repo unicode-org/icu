@@ -568,12 +568,22 @@ typedef enum UErrorCode {
     U_FORMAT_INEXACT_ERROR,           /**< Cannot format a number exactly and rounding mode is ROUND_UNNECESSARY @stable ICU 4.8 */
     U_NUMBER_ARG_OUTOFBOUNDS_ERROR,   /**< The argument to a NumberFormatter helper method was out of bounds; the bounds are usually 0 to 999. @stable ICU 61 */
     U_NUMBER_SKELETON_SYNTAX_ERROR,   /**< The number skeleton passed to C++ NumberFormatter or C UNumberFormatter was invalid or contained a syntax error. @stable ICU 62 */
+
+    /* MessageFormat 2.0 errors */
+    U_VARIANT_KEY_MISMATCH,          /** In a match-construct, one or more variants had a different number of keys from the number of selectors */
+    U_NONEXHAUSTIVE_PATTERN,         /** In a match-construct, the variants do not cover all possible values */
+    U_DUPLICATE_OPTION_NAME,         /** In an annotation, the same option name appears more than once */
+    U_UNRESOLVED_VARIABLE,           /** A variable is referred to but not bound by any definition */
+    U_UNKNOWN_FUNCTION,              /** An annotation refers to a function not defined by the standard or custom function registry */
+    U_SELECTOR_ERROR,                /** A selector function is applied to an operand of the wrong type */
+    U_FORMATTING_ERROR,              /** Covers all runtime errors: for example, an internally inconsistent set of options. */
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal formatting API error code.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    U_FMT_PARSE_ERROR_LIMIT = 0x10114,
+    U_FMT_PARSE_ERROR_LIMIT = 0x1011b,
 #endif  // U_HIDE_DEPRECATED_API
 
     /*

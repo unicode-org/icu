@@ -213,11 +213,14 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
       return;
     }
     
-    // Finally, build the data model based on what was parsed
+    // Build the data model based on what was parsed
     LocalPointer<MessageFormatDataModel> dataModelPtr(tree->build(success));
     if (U_SUCCESS(success)) {
       dataModel.adoptInstead(dataModelPtr.orphan());
     }
+
+    // Check for data model errors
+    Checker(*dataModel).check(success);
 }
 
 MessageFormatter::ResolvedExpression::~ResolvedExpression() {}
