@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1688653841908,
+  "lastUpdate": 1689033527482,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9568,6 +9568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.016302844845142408,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "70d308731ae01a4187fe49f7ae1c8e1ad1570be6",
+          "message": "ICU-22325 BRS 74 front-load update version to 74.0.1",
+          "timestamp": "2023-07-10T16:45:41-07:00",
+          "tree_id": "d8cc5bf0d7548806dcc1445da79c881e06d6c46a",
+          "url": "https://github.com/unicode-org/icu/commit/70d308731ae01a4187fe49f7ae1c8e1ad1570be6"
+        },
+        "date": 1689033476527,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.015382973895513298,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
