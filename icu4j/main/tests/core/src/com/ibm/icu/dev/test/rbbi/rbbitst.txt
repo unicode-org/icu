@@ -2195,3 +2195,24 @@ Bangkok)•</data>
 [y] [a] [b] [c] [d] {600};
 </rules>
 <data>•ab<100>c•d•ab<200>e•f•ab<300>e•g•abch<400>xab<500>c•d•yabcd<600></data>
+
+#
+# Examples for line breaking at orthographic syllable boundaries
+# From Unicode document L2/22-080R
+#
+
+<locale en>
+<line>
+<data>•\U00011F26•\U00011F02\U00011F2D•\U00011F26\U00011F42\U00011F26•\U00011F31\U00011F41•</data>
+<data>•\u1BD7\u1BEC•\u1BD2\u1BEA\u1BC9\u1BF3•\u1BC2\u1BE7\u1BC9\u1BF3•</data>
+<data>•\u1B18•\u1B27\u1B44\u200C\u1B2B\u1B38•\u1B31\u1B44\u1B1D\u1B36•</data>
+
+# Line breaking around quotation marks (LB 15a and LB 15b).
+<locale en>
+<line>
+<data>•Some •« basic » •quoting•</data>
+<data>•Some •»German« •quoting•</data>
+<data>•( « bracketed » ) •quoting•</data>
+<data>•« « Nesting » »•</data>
+<data>•« Complex »« chaining » •</data>
+<data>•« .618 »•</data>  # Interaction with the ICU tailoring to break before such numbers.

@@ -1,6 +1,6 @@
-# DerivedCoreProperties-15.0.0.txt
-# Date: 2022-08-05, 22:17:05 GMT
-# © 2022 Unicode®, Inc.
+# DerivedCoreProperties-15.1.0.txt
+# Date: 2023-05-16, 18:06:12 GMT
+# © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
 #
@@ -1397,11 +1397,12 @@ FFDA..FFDC    ; Alphabetic
 2B740..2B81D  ; Alphabetic
 2B820..2CEA1  ; Alphabetic
 2CEB0..2EBE0  ; Alphabetic
+2EBF0..2EE4A  ; Alphabetic
 2F800..2FA1D  ; Alphabetic
 30000..3134A  ; Alphabetic
 31350..323AF  ; Alphabetic
 
-# Total code points: 137765
+# Total code points: 138368
 
 # ================================================
 
@@ -6853,11 +6854,12 @@ FFDA..FFDC    ; ID_Start
 2B740..2B81D  ; ID_Start
 2B820..2CEA1  ; ID_Start
 2CEB0..2EBE0  ; ID_Start
+2EBF0..2EE4A  ; ID_Start
 2F800..2FA1D  ; ID_Start
 30000..3134A  ; ID_Start
 31350..323AF  ; ID_Start
 
-# Total code points: 136345
+# Total code points: 136948
 
 # ================================================
 
@@ -7438,6 +7440,7 @@ FFDA..FFDC    ; ID_Start
 1FE0..1FEC    ; ID_Continue
 1FF2..1FF4    ; ID_Continue
 1FF6..1FFC    ; ID_Continue
+200C..200D    ; ID_Continue
 203F..2040    ; ID_Continue
 2054          ; ID_Continue
 2071          ; ID_Continue
@@ -8207,12 +8210,13 @@ FFDA..FFDC    ; ID_Continue
 2B740..2B81D  ; ID_Continue
 2B820..2CEA1  ; ID_Continue
 2CEB0..2EBE0  ; ID_Continue
+2EBF0..2EE4A  ; ID_Continue
 2F800..2FA1D  ; ID_Continue
 30000..3134A  ; ID_Continue
 31350..323AF  ; ID_Continue
 E0100..E01EF  ; ID_Continue
 
-# Total code points: 139482
+# Total code points: 140087
 
 # ================================================
 
@@ -8962,11 +8966,12 @@ FFDA..FFDC    ; XID_Start
 2B740..2B81D  ; XID_Start
 2B820..2CEA1  ; XID_Start
 2CEB0..2EBE0  ; XID_Start
+2EBF0..2EE4A  ; XID_Start
 2F800..2FA1D  ; XID_Start
 30000..3134A  ; XID_Start
 31350..323AF  ; XID_Start
 
-# Total code points: 136322
+# Total code points: 136925
 
 # ================================================
 
@@ -9543,6 +9548,7 @@ FFDA..FFDC    ; XID_Start
 1FE0..1FEC    ; XID_Continue
 1FF2..1FF4    ; XID_Continue
 1FF6..1FFC    ; XID_Continue
+200C..200D    ; XID_Continue
 203F..2040    ; XID_Continue
 2054          ; XID_Continue
 2071          ; XID_Continue
@@ -10317,12 +10323,13 @@ FFDA..FFDC    ; XID_Continue
 2B740..2B81D  ; XID_Continue
 2B820..2CEA1  ; XID_Continue
 2CEB0..2EBE0  ; XID_Continue
+2EBF0..2EE4A  ; XID_Continue
 2F800..2FA1D  ; XID_Continue
 30000..3134A  ; XID_Continue
 31350..323AF  ; XID_Continue
 E0100..E01EF  ; XID_Continue
 
-# Total code points: 139463
+# Total code points: 140068
 
 # ================================================
 
@@ -10335,6 +10342,15 @@ E0100..E01EF  ; XID_Continue
 #  - FFF9..FFFB (Interlinear annotation format characters)
 #  - 13430..13440 (Egyptian hieroglyph format characters)
 #  - Prepended_Concatenation_Mark (Exceptional format characters that should be visible)
+#
+# There are currently no stability guarantees for DICP. However, the
+# values of DICP interact with the derivation of XID_Continue
+# and NFKC_CF, for which there are stability guarantees.
+# Maintainers of this property should note that in the
+# unlikely case that the DICP value changes for an existing character
+# which is also XID_Continue=Yes, then exceptions must be put
+# in place to ensure that the NFKC_CF mapping value for that
+# existing character does not change.
 
 00AD          ; Default_Ignorable_Code_Point
 034F          ; Default_Ignorable_Code_Point
@@ -11602,7 +11618,7 @@ E0100..E01EF  ; Grapheme_Extend
 2E80..2E99    ; Grapheme_Base
 2E9B..2EF3    ; Grapheme_Base
 2F00..2FD5    ; Grapheme_Base
-2FF0..2FFB    ; Grapheme_Base
+2FF0..2FFF    ; Grapheme_Base
 3000          ; Grapheme_Base
 3001..3003    ; Grapheme_Base
 3004          ; Grapheme_Base
@@ -11657,6 +11673,7 @@ E0100..E01EF  ; Grapheme_Extend
 3196..319F    ; Grapheme_Base
 31A0..31BF    ; Grapheme_Base
 31C0..31E3    ; Grapheme_Base
+31EF          ; Grapheme_Base
 31F0..31FF    ; Grapheme_Base
 3200..321E    ; Grapheme_Base
 3220..3229    ; Grapheme_Base
@@ -12497,11 +12514,12 @@ FFFC..FFFD    ; Grapheme_Base
 2B740..2B81D  ; Grapheme_Base
 2B820..2CEA1  ; Grapheme_Base
 2CEB0..2EBE0  ; Grapheme_Base
+2EBF0..2EE4A  ; Grapheme_Base
 2F800..2FA1D  ; Grapheme_Base
 30000..3134A  ; Grapheme_Base
 31350..323AF  ; Grapheme_Base
 
-# Total code points: 146986
+# Total code points: 147594
 
 # ================================================
 

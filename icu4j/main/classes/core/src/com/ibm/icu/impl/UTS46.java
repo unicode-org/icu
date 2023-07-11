@@ -300,14 +300,6 @@ public final class UTS46 extends IDNA {
         }
         return length;
     }
-    // Some non-ASCII characters are equivalent to sequences with
-    // non-LDH ASCII characters. To find them:
-    // grep disallowed_STD3_valid IdnaMappingTable.txt (or uts46.txt)
-    private static boolean
-    isNonASCIIDisallowedSTD3Valid(int c) {
-        return c==0x2260 || c==0x226E || c==0x226F;
-    }
-
 
     // Replace the label in dest with the label string, if the label was modified.
     // If label==dest then the label was modified in-place and labelLength
@@ -421,10 +413,7 @@ public final class UTS46 extends IDNA {
                 }
             } else {
                 oredChars|=c;
-                if(disallowNonLDHDot && isNonASCIIDisallowedSTD3Valid(c)) {
-                    addLabelError(info, Error.DISALLOWED);
-                    labelString.setCharAt(i, '\ufffd');
-                } else if(c==0xfffd) {
+                if(c==0xfffd) {
                     addLabelError(info, Error.DISALLOWED);
                 }
             }

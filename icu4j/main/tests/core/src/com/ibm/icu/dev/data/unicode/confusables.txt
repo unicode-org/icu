@@ -1,11 +1,11 @@
 # confusables.txt
-# Date: 2022-08-26, 16:49:08 GMT
-# © 2022 Unicode®, Inc.
+# Date: 2023-05-16, 22:25:14 GMT
+# © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
 #
 # Unicode Security Mechanisms for UTS #39
-# Version: 15.0.0
+# Version: 15.1.0
 #
 # For documentation and usage, see https://www.unicode.org/reports/tr39
 #

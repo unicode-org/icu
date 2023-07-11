@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include <algorithm>
+#include <set>
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1453,21 +1454,29 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
     pos = bi->first();
     pos = bi->next();
 
+    bool error = false;
+    std::set<int32_t> actualBreaks;
+    std::set<int32_t> expectedBreaks;
     while (pos != BreakIterator::DONE) {
+        actualBreaks.insert(pos);
         if (expectedI >= breakPositions->size()) {
             errln("Test file \"%s\", line %d, unexpected break found at position %d",
                 testFileName, lineNumber, pos);
+            error = true;
             break;
         }
         expectedPos = breakPositions->elementAti(expectedI);
+        expectedBreaks.insert(expectedPos);
         if (pos < expectedPos) {
-            errln("Test file \"%s\", line %d, unexpected break found at position %d",
-                testFileName, lineNumber, pos);
+            errln("Test file \"%s\", line %d, unexpected break found at position %d", testFileName,
+                  lineNumber, pos);
+            error = true;
             break;
         }
         if (pos > expectedPos) {
             errln("Test file \"%s\", line %d, failed to find expected break at position %d",
-                testFileName, lineNumber, expectedPos);
+                  testFileName, lineNumber, expectedPos);
+            error = true;
             break;
         }
         pos = bi->next();
@@ -1475,8 +1484,32 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
     }
 
     if (pos==BreakIterator::DONE && expectedI<breakPositions->size()) {
-        errln("Test file \"%s\", line %d, failed to find expected break at position %d",
-            testFileName, lineNumber, breakPositions->elementAti(expectedI));
+        errln("Test file \"%s\", line %d, failed to find expected break at position %d", testFileName,
+              lineNumber, breakPositions->elementAti(expectedI));
+        error = true;
+    }
+
+    if (error) {
+        for (; pos != BreakIterator::DONE; pos = bi->next()) {
+            actualBreaks.insert(pos);
+        }
+        for (; expectedI < breakPositions->size(); ++expectedI) {
+            expectedBreaks.insert(breakPositions->elementAti(expectedI));
+        }
+        UnicodeString expected;
+        UnicodeString actual;
+        for (int32_t i = 0; i < testString.length();) {
+            const UChar32 c = testString.char32At(i);
+            i += U16_LENGTH(c);
+            expected += expectedBreaks.count(i) == 1 ? u"÷" : u"×";
+            actual += actualBreaks.count(i) == 1 ? u"÷" : u"×";
+            expected += c;
+            actual += c;
+        }
+        expected += expectedBreaks.count(testString.length()) == 1 ? u"÷" : u"×";
+        actual += actualBreaks.count(testString.length()) == 1 ? u"÷" : u"×";
+        errln("Expected : " + expected);
+        errln("Actual   : " + actual);
     }
 }
 
@@ -1823,7 +1856,7 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
                 pi = fText->moveIndex32(pi, -1);
             }
             if (sawVirama && fLinkingConsonantSet->contains(fText->char32At(pi))) {
-              setAppliedRule(p2, "GB9.3  LinkingConsonant ExtCccZwj* Virama ExtCccZwj* × LinkingConsonant");
+              setAppliedRule(p2, "GB9.3  LinkingConsonant ExtCccZwj* Virama ExtCccZwj* x LinkingConsonant");
               continue;
             }
         }
@@ -2657,6 +2690,13 @@ private:
     UnicodeSet  *fOP30;
     UnicodeSet  *fCP30;
     UnicodeSet  *fExtPictUnassigned;
+    UnicodeSet  *fAK;
+    UnicodeSet  *fAP;
+    UnicodeSet  *fAS;
+    UnicodeSet  *fVF;
+    UnicodeSet  *fVI;
+    UnicodeSet  *fPi;
+    UnicodeSet  *fPf;
 
     BreakIterator        *fCharBI;
     const UnicodeString  *fText;
@@ -2727,6 +2767,15 @@ RBBILineMonkey::RBBILineMonkey() :
     fCP30  = new UnicodeSet(u"[\\p{Line_break=CP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]", status);
     fExtPictUnassigned = new UnicodeSet(u"[\\p{Extended_Pictographic}&\\p{Cn}]", status);
 
+    fAK = new UnicodeSet(uR"([\p{Line_Break=AK}])", status);
+    fAP = new UnicodeSet(uR"([\p{Line_Break=AP}])", status);
+    fAS = new UnicodeSet(uR"([\p{Line_Break=AS}])", status);
+    fVF = new UnicodeSet(uR"([\p{Line_Break=VF}])", status);
+    fVI = new UnicodeSet(uR"([\p{Line_Break=VI}])", status);
+
+    fPi = new UnicodeSet(uR"([\p{Pi}])", status);
+    fPf = new UnicodeSet(uR"([\p{Pf}])", status);
+
     if (U_FAILURE(status)) {
         deferredStatus = status;
         return;
@@ -2786,18 +2835,24 @@ RBBILineMonkey::RBBILineMonkey() :
     fSets->addElement(fOP30, status); classNames.push_back("fOP30");
     fSets->addElement(fCP30, status); classNames.push_back("fCP30");
     fSets->addElement(fExtPictUnassigned, status); classNames.push_back("fExtPictUnassigned");
+    fSets->addElement(fAK, status); classNames.push_back("fAK");
+    fSets->addElement(fAP, status); classNames.push_back("fAP");
+    fSets->addElement(fAS, status); classNames.push_back("fAS");
+    fSets->addElement(fVF, status); classNames.push_back("fVF");
+    fSets->addElement(fVI, status); classNames.push_back("fVI");
 
-    const char *rules =
-            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?"
-            "((\\p{Line_Break=OP}|\\p{Line_Break=HY})(\\p{Line_Break=CM}|\\u200d)*)?"
-            "((\\p{Line_Break=IS})(\\p{Line_Break=CM}|\\u200d)*)?"
-            "\\p{Line_Break=NU}(\\p{Line_Break=CM}|\\u200d)*"
-            "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})(\\p{Line_Break=CM}|\\u200d)*)*"
-            "((\\p{Line_Break=CL}|\\p{Line_Break=CP})(\\p{Line_Break=CM}|\\u200d)*)?"
-            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?";
 
-    fNumberMatcher = new RegexMatcher(
-        UnicodeString(rules, -1, US_INV), 0, status);
+    UnicodeString CMx {uR"([[\p{Line_Break=CM}]\u200d])"};
+    UnicodeString rules;
+    rules = rules + u"((\\p{Line_Break=PR}|\\p{Line_Break=PO})(" + CMx + u")*)?"
+                  + u"((\\p{Line_Break=OP}|\\p{Line_Break=HY})(" + CMx + u")*)?"
+                  + u"((\\p{Line_Break=IS})(" + CMx + u")*)?"
+                  + u"\\p{Line_Break=NU}(" + CMx + u")*"
+                  + u"((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})(" + CMx + u")*)*"
+                  + u"((\\p{Line_Break=CL}|\\p{Line_Break=CP})(" + CMx + u")*)?"
+                  + u"((\\p{Line_Break=PR}|\\p{Line_Break=PO})(" + CMx + u")*)?";
+
+    fNumberMatcher = new RegexMatcher(rules, 0, status);
 
     fCharBI = BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
 
@@ -3089,39 +3144,72 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-
-        if (nextPos < fText->length()) {
-            // note: UnicodeString::char32At(length) returns ffff, not distinguishable
-            //       from a legit ffff character. So test length separately.
-            UChar32 nextChar = fText->char32At(nextPos);
-            if (fSP->contains(prevChar) && fIS->contains(thisChar) && fNU->contains(nextChar)) {
-                setAppliedRule(pos, "LB 14a Break before an IS that begins a number and follows a space");
-                break;
-            }
-        }
-
-
-          if (fIS->contains(thisChar)) {
-              setAppliedRule(pos, "LB 14b  Do not break before numeric separators, even after spaces.");
-              continue;
-        }
-
-
-        if (fOP->contains(thisChar)) {
-            // Scan backwards from prevChar to see if it is preceded by QU CM* SP*
-            int tPos = prevPos;
-            while (tPos>0 && fSP->contains(fText->char32At(tPos))) {
+        // Same as LB 14, scan backward for
+        // (sot | BK | CR | LF | NL | OP CM*| QU CM* | GL CM* | SP) [\p{Pi}&QU] CM* SP*.
+        tPos = prevPos;
+        // SP* (with the aforementioned Twist).
+        if (fSP->contains(prevChar)) {
+            while (tPos > 0 && fSP->contains(fText->char32At(tPos))) {
                 tPos = fText->moveIndex32(tPos, -1);
             }
-            while (tPos>0 && fCM->contains(fText->char32At(tPos))) {
+        }
+        // CM*.
+        while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
+            tPos = fText->moveIndex32(tPos, -1);
+        }
+        // [\p{Pi}&QU].
+        if (fPi->contains(fText->char32At(tPos)) && fQU->contains(fText->char32At(tPos))) {
+            if (tPos == 0) {
+                setAppliedRule(pos, "LB 15a sot [\\p{Pi}&QU] SP* x");
+                continue;
+            } else {
+                tPos = fText->moveIndex32(tPos, -1);
+                if (fBK->contains(fText->char32At(tPos)) || fCR->contains(fText->char32At(tPos)) ||
+                    fLF->contains(fText->char32At(tPos)) || fNL->contains(fText->char32At(tPos)) ||
+                    fSP->contains(fText->char32At(tPos)) || fZW->contains(fText->char32At(tPos))) {
+                    setAppliedRule(pos, "LB 15a (BK | CR | LF | NL | SP | ZW) [\\p{Pi}&QU] SP* x");
+                    continue;
+                }
+            }
+            // CM*.
+            while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
                 tPos = fText->moveIndex32(tPos, -1);
             }
-            if (fQU->contains(fText->char32At(tPos))) {
-                setAppliedRule(pos, "LB 15    QU SP* x OP");
+            if (fOP->contains(fText->char32At(tPos)) || fQU->contains(fText->char32At(tPos)) ||
+                fGL->contains(fText->char32At(tPos))) {
+                setAppliedRule(pos, "LB 15a (OP | QU | GL) [\\p{Pi}&QU] SP* x");
                 continue;
             }
         }
 
+        if (fPf->contains(thisChar) && fQU->contains(thisChar)) {
+            UChar32 nextChar = fText->char32At(nextPos);
+            if (nextPos == fText->length() || fSP->contains(nextChar) || fGL->contains(nextChar) ||
+                fWJ->contains(nextChar) || fCL->contains(nextChar) || fQU->contains(nextChar) ||
+                fCP->contains(nextChar) || fEX->contains(nextChar) || fIS->contains(nextChar) ||
+                fSY->contains(nextChar) || fBK->contains(nextChar) || fCR->contains(nextChar) ||
+                fLF->contains(nextChar) || fNL->contains(nextChar) || fZW->contains(nextChar)) {
+                setAppliedRule(pos, "LB 15b x [\\p{Pf}&QU] ( SP | GL | WJ | CL | QU | CP | EX | IS | SY "
+                                    "| BK | CR | LF | NL | ZW | eot)");
+                continue;
+            }
+        }
+
+        if (nextPos < fText->length()) {
+            // note: UnicodeString::char32At(length) returns ffff, not distinguishable
+            //       from a legit ffff noncharacter. So test length separately.
+            UChar32 nextChar = fText->char32At(nextPos);
+            if (fSP->contains(prevChar) && fIS->contains(thisChar) && fNU->contains(nextChar)) {
+                setAppliedRule(pos,
+                               "LB 15c Break before an IS that begins a number and follows a space");
+                break;
+            }
+        }
+
+        if (fIS->contains(thisChar)) {
+            setAppliedRule(pos, "LB 15d  Do not break before numeric separators, even after spaces.");
+            continue;
+        }
 
         //    Scan backwards for SP* CM* (CL | CP)
         if (fNS->contains(thisChar)) {
@@ -3283,15 +3371,45 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
 
-
         if ((fAL->contains(prevChar) || fHL->contains(prevChar)) && (fAL->contains(thisChar) || fHL->contains(thisChar))) {
             setAppliedRule(pos, "LB 28  Do not break between alphabetics (\"at\").");
             continue;
         }
 
-          if (fIS->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar))) {
-              setAppliedRule(pos, "LB 29  Do not break between numeric punctuation and alphabetics (\"e.g.\").");
-              continue;
+        if (fAP->contains(prevChar) &&
+            (fAK->contains(thisChar) || thisChar == U'◌' || fAS->contains(thisChar))) {
+            setAppliedRule(pos, "LB 28a.1  AP x (AK | ◌ | AS)");
+            continue;
+        }
+
+        if ((fAK->contains(prevChar) || prevChar == U'◌' || fAS->contains(prevChar)) &&
+            (fVF->contains(thisChar) || fVI->contains(thisChar))) {
+            setAppliedRule(pos, "LB 28a.2  (AK | ◌ | AS) x (VF | VI)");
+            continue;
+        }
+
+        if ((fAK->contains(prevCharX2) || prevCharX2 == U'◌' || fAS->contains(prevCharX2)) &&
+            fVI->contains(prevChar) &&
+            (fAK->contains(thisChar) || thisChar == U'◌')) {
+            setAppliedRule(pos, "LB 28a.3  (AK | ◌ | AS) VI x (AK | ◌)");
+            continue;
+        }
+
+        if (nextPos < fText->length()) {
+            // note: UnicodeString::char32At(length) returns ffff, not distinguishable
+            //       from a legit ffff noncharacter. So test length separately.
+            UChar32 nextChar = fText->char32At(nextPos);
+            if ((fAK->contains(prevChar) || prevChar == U'◌' || fAS->contains(prevChar)) &&
+                (fAK->contains(thisChar) || thisChar == U'◌' || fAS->contains(thisChar)) &&
+                fVF->contains(nextChar)) {
+                setAppliedRule(pos, "LB 28a.4  (AK | ◌ | AS) x (AK | ◌ | AS) VF");
+                continue;
+            }
+        }
+
+        if (fIS->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar))) {
+            setAppliedRule(pos, "LB 29  Do not break between numeric punctuation and alphabetics (\"e.g.\").");
+            continue;
         }
 
         //          (AL | NU) x OP
@@ -3307,7 +3425,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
         //             RI  x  RI
         if (fRI->contains(prevCharX2) && fRI->contains(prevChar) && fRI->contains(thisChar)) {
-            setAppliedRule(pos, "LB30a    RI RI  ÷  RI");
+            setAppliedRule(pos, "LB30a    RI RI  :  RI");
             break;
         }
         if (fRI->contains(prevChar) && fRI->contains(thisChar)) {
@@ -3315,7 +3433,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             // Over-write the trailing one (thisChar) to prevent it from forming another pair with a
             // following RI. This is a hack.
             thisChar = -1;
-            setAppliedRule(pos, "LB30a    RI RI  ÷  RI");
+            setAppliedRule(pos, "LB30a    RI RI  :  RI");
             continue;
         }
 
@@ -3326,7 +3444,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         if (fExtPictUnassigned->contains(prevChar) && fEM->contains(thisChar)) {
-            setAppliedRule(pos, "LB30b    [\\p{Extended_Pictographic}&\\p{Cn}] × EM");
+            setAppliedRule(pos, "LB30b    [\\p{Extended_Pictographic}&\\p{Cn}] x EM");
             continue;
         }
 
@@ -3392,6 +3510,13 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fOP30;
     delete fCP30;
     delete fExtPictUnassigned;
+    delete fAK;
+    delete fAP;
+    delete fAS;
+    delete fVF;
+    delete fVI;
+    delete fPi;
+    delete fPf;
 
     delete fCharBI;
     delete fNumberMatcher;
@@ -4206,7 +4331,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                        "Break found but not expected"),
                     name, i, seed);
 
-                for (ci=startContext; (ci = testText.moveIndex32(ci, 1));) {
+                for (ci = startContext;; (ci = testText.moveIndex32(ci, 1))) {
                     UChar32  c;
                     c = testText.char32At(ci);
 

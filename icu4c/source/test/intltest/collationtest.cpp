@@ -202,7 +202,7 @@ void CollationTest::TestImplicits() {
 
     // Implicit primary weights should be assigned for the following sets,
     // and sort in ascending order by set and then code point.
-    // See http://www.unicode.org/reports/tr10/#Implicit_Weights
+    // See https://www.unicode.org/reports/tr10/#Implicit_Weights
 
     // core Han Unified Ideographs
     UnicodeSet coreHan("[\\p{unified_ideograph}&"
@@ -221,9 +221,21 @@ void CollationTest::TestImplicits() {
     // the Unihan radical-stroke order.
     // The tests should pass either way, so we only test the order of a small set of Han characters
     // whose radical-stroke order is the same as their code point order.
+    //
+    // When the radical-stroke data (kRSUnicode) for one of these characters changes
+    // such that it no longer sorts in code point order,
+    // then we need to remove it from this set.
+    // (These changes are easiest to see in the change history of the Unicode Tools file
+    // unicodetools/data/ucd/dev/Unihan/kRSUnicode.txt.)
+    // For example, in Unicode 15.1, U+503B has a kRSUnicode value of 9.9
+    // while the neighboring characters still have 9.8. We remove the out-of-order U+503B.
+    //
+    // FYI: The Unicode Tools program GenerateUnihanCollators prints something like
+    // hanInCPOrder = [一-世丘-丫中-丼举-么乊-习乣-亏...鼢-齡齣-龏龑-龥]
+    // number of original-Unihan characters out of order: 318
     UnicodeSet someHanInCPOrder(
-            "[\\u4E00-\\u4E16\\u4E18-\\u4E2B\\u4E2D-\\u4E3C\\u4E3E-\\u4E48"
-            "\\u4E4A-\\u4E60\\u4E63-\\u4E8F\\u4E91-\\u4F63\\u4F65-\\u50F1\\u50F3-\\u50F6]",
+            u"[\u4E00-\u4E16\u4E18-\u4E2B\u4E2D-\u4E3C\u4E3E-\u4E48"
+            u"\u4E4A-\u4E60\u4E63-\u4E8F\u4E91-\u4F63\u4F65-\u503A\u503C-\u50F1\u50F3-\u50F6]",
             errorCode);
     UnicodeSet inOrder(someHanInCPOrder);
     inOrder.addAll(unassigned).freeze();
@@ -231,10 +243,12 @@ void CollationTest::TestImplicits() {
         return;
     }
     const UnicodeSet *sets[] = { &coreHan, &otherHan, &unassigned };
+    const char *const setNames[] = { "core Han", "Han extensions", "unassigned" };
     UChar32 prev = 0;
     uint32_t prevPrimary = 0;
     UTF16CollationIterator ci(cd, false, nullptr, nullptr, nullptr);
     for(int32_t i = 0; i < UPRV_LENGTHOF(sets); ++i) {
+        const char *setName = setNames[i];
         LocalPointer<UnicodeSetIterator> iter(new UnicodeSetIterator(*sets[i]));
         while(iter->next()) {
             UChar32 c = iter->getCodepoint();
@@ -246,18 +260,19 @@ void CollationTest::TestImplicits() {
                 return;
             }
             if(ce == Collation::NO_CE || ce2 != Collation::NO_CE) {
-                errln("CollationIterator.nextCE(U+%04lx) did not yield exactly one CE", (long)c);
+                errln("%s: CollationIterator.nextCE(U+%04lx) did not yield exactly one CE",
+                      setName, (long)c);
                 continue;
             }
             if((ce & 0xffffffff) != Collation::COMMON_SEC_AND_TER_CE) {
-                errln("CollationIterator.nextCE(U+%04lx) has non-common sec/ter weights: %08lx",
-                      (long)c, (long)(ce & 0xffffffff));
+                errln("%s: CollationIterator.nextCE(U+%04lx) has non-common sec/ter weights: %08lx",
+                      setName, (long)c, (long)(ce & 0xffffffff));
                 continue;
             }
             uint32_t primary = (uint32_t)(ce >> 32);
             if(!(primary > prevPrimary) && inOrder.contains(c) && inOrder.contains(prev)) {
-                errln("CE(U+%04lx)=%04lx.. not greater than CE(U+%04lx)=%04lx..",
-                      (long)c, (long)primary, (long)prev, (long)prevPrimary);
+                errln("%s: CE(U+%04lx)=%04lx.. not greater than CE(U+%04lx)=%04lx..",
+                      setName, (long)c, (long)primary, (long)prev, (long)prevPrimary);
             }
             prev = c;
             prevPrimary = primary;

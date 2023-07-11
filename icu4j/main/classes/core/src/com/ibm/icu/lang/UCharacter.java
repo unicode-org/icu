@@ -1309,6 +1309,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 72 */
         public static final int NAG_MUNDARI_ID = 327; /*[1E4D0]*/
 
+        // New block in Unicode 15.1
+
+        /** @stable ICU 74 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I_ID = 328; /*[2EBF0]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1316,7 +1321,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 328;
+        public static final int COUNT = 329;
 
         // blocks objects ---------------------------------------------------
 
@@ -2747,6 +2752,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock NAG_MUNDARI =
                 new UnicodeBlock("NAG_MUNDARI", NAG_MUNDARI_ID); /*[1E4D0]*/
 
+        // New block in Unicode 15.1
+
+        /** @stable ICU 74 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I",
+                        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I_ID); /*[2EBF0]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -3807,6 +3819,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int E_MODIFIER = 41;  /*[EM]*/
         /** @stable ICU 58 */
         public static final int ZWJ = 42;  /*[ZWJ]*/
+        /** @stable ICU 74 */
+        public static final int AKSARA = 43;  /*[AK]*/ /* from here on: new in Unicode 15.1/ICU 74 */
+        /** @stable ICU 74 */
+        public static final int AKSARA_PREBASE = 44;  /*[AP]*/
+        /** @stable ICU 74 */
+        public static final int AKSARA_START = 45;  /*[AS]*/
+        /** @stable ICU 74 */
+        public static final int VIRAMA_FINAL = 46;  /*[VF]*/
+        /** @stable ICU 74 */
+        public static final int VIRAMA = 47;  /*[VI]*/
         /**
          * One more than the highest normal LineBreak value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK).
@@ -3814,7 +3836,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 43;
+        public static final int COUNT = 48;
     }
 
     /**

@@ -369,39 +369,6 @@ public final class UCaseProps {
         }
     }
 
-    /**
-     * Add the simple case closure mapping,
-     * except if there is not actually an scf relationship between the two characters.
-     * TODO: Unicode should probably add the corresponding scf mappings.
-     * See https://crbug.com/v8/13377 and Unicode-internal PAG issue #23.
-     * If & when those scf mappings are added, we should be able to remove all of these exceptions.
-     */
-    private static void addOneSimpleCaseClosure(int c, int t, UnicodeSet set) {
-        switch (c) {
-        case 0x0390:
-            if (t == 0x1FD3) { return; }
-            break;
-        case 0x03B0:
-            if (t == 0x1FE3) { return; }
-            break;
-        case 0x1FD3:
-            if (t == 0x0390) { return; }
-            break;
-        case 0x1FE3:
-            if (t == 0x03B0) { return; }
-            break;
-        case 0xFB05:
-            if (t == 0xFB06) { return; }
-            break;
-        case 0xFB06:
-            if (t == 0xFB05) { return; }
-            break;
-        default:
-            break;
-        }
-        set.add(t);
-    }
-
     public final void addSimpleCaseClosure(int c, UnicodeSet set) {
         int props=trie.get(c);
         if(!propsHasException(props)) {
@@ -443,14 +410,14 @@ public final class UCaseProps {
                 if(hasSlot(excWord, index)) {
                     excOffset=excOffset0;
                     int mapping=getSlotValue(excWord, index, excOffset);
-                    addOneSimpleCaseClosure(c, mapping, set);
+                    set.add(mapping);
                 }
             }
             if(hasSlot(excWord, EXC_DELTA)) {
                 excOffset=excOffset0;
                 int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
                 int mapping = (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
-                addOneSimpleCaseClosure(c, mapping, set);
+                set.add(mapping);
             }
 
             /* get the closure string pointer & length */
@@ -492,7 +459,7 @@ public final class UCaseProps {
             int limit=closureOffset+closureLength;
             for(int index=closureOffset; index<limit; index+=UTF16.getCharCount(c)) {
                 int mapping=exceptions.codePointAt(index);
-                addOneSimpleCaseClosure(c, mapping, set);
+                set.add(mapping);
             }
         }
     }
