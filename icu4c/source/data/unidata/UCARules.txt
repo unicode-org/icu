@@ -1,10 +1,10 @@
 ﻿# UCA_Rules_SHORT.txt
-# Date: 2023-04-04, 00:45:16 GMT
+# Date: 2023-06-02, 18:08:39 GMT
 # © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
-# UCA Version: 15.0.0
-# UCD Version: 15.0.0
+# UCA Version: 15.1.0
+# UCD Version: 15.1.0
 # For a description of the format and usage, see
 # http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files
 
@@ -1601,7 +1601,6 @@
   <<	 ⃧
   <<	 ⃨
   <<	 ⃩
-  <<	 𐇽
 # TODO: There are several problems with this file.
 # See https://unicode-org.atlassian.net/browse/CLDR-6745
 &'\u202F'  # TODO: reset to the last space, not [last regular]
@@ -2547,6 +2546,7 @@
  <	 𑱄
  <	 𑱅
  <	 𐬹
+ <	 ‎𐩿‎
  <	 ‎𐫰‎
  <	 ‎𐫱‎
  <	 ‎𐫲‎
@@ -2617,7 +2617,6 @@
  <	 𝪉
  <	 𝪊
  <	 𝪋
- <	 ‎𐩿‎
 # TODO: do not try to set this: <	 [variable top]
 &\u30FD  # TODO: instead, reset to the last symbol so that maxVariable=symbol works
  <	 '`'
@@ -9148,6 +9147,11 @@
  <	 ⿹
  <	 ⿺
  <	 ⿻
+ <	 ⿼
+ <	 ⿽
+ <	 ⿾
+ <	 ⿿
+ <	 ㇯
  <	 ㇀
  <	 ㇁
  <	 ㇂
@@ -9264,7 +9268,6 @@
  <	 ₤
  <	 ₥
  <	 ₦
- <	 ₧
  <	 ₩
    <<<	 ￦
  <	 ₪
@@ -12309,6 +12312,7 @@
    <<<	 ⓟ
    <<<	 P
    <<<	 Ｐ
+   <<<	 ₧ / ts
    <<<	 ℙ
     =	 𝐏
     =	 𝑃

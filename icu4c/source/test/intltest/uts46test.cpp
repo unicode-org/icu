@@ -242,14 +242,6 @@ void UTS46Test::TestNotSTD3() {
     if(result!=input || info.getErrors()!=UIDNA_ERROR_BIDI) {
         errln("notSTD3.nameToASCII(ASCII-with-space.alef.edu) failed");
     }
-    // Characters that are canonically equivalent to sequences with non-LDH ASCII.
-    input=UNICODE_STRING_SIMPLE("a\\u2260b\\u226Ec\\u226Fd").unescape();
-    not3->nameToUnicode(input, result, info, errorCode);
-    if(result!=input || info.hasErrors()) {
-        prettify(result).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
-        errln("notSTD3.nameToUnicode(equiv to non-LDH ASCII) unexpected errors %04lx string %s",
-              (long)info.getErrors(), buffer);
-    }
 }
 
 void UTS46Test::TestInvalidPunycodeDigits() {
@@ -418,10 +410,6 @@ static const TestCase testCases[]={
     { "\\u65E5\\u672C\\u8A9E\\u3002\\uFF2A\\uFF30", "B",  // Japanese with fullwidth ".jp"
       "\\u65E5\\u672C\\u8A9E.jp", 0 },
     { "\\u2615", "B", "\\u2615", 0 },  // Unicode 4.0 HOT BEVERAGE
-    // some characters are disallowed because they are canonically equivalent
-    // to sequences with non-LDH ASCII
-    { "a\\u2260b\\u226Ec\\u226Fd", "B",
-      "a\\uFFFDb\\uFFFDc\\uFFFDd", UIDNA_ERROR_DISALLOWED },
     // many deviation characters, test the special mapping code
     { "1.a\\u00DF\\u200C\\u200Db\\u200C\\u200Dc\\u00DF\\u00DF\\u00DF\\u00DFd"
       "\\u03C2\\u03C3\\u00DF\\u00DF\\u00DF\\u00DF\\u00DF\\u00DF\\u00DF\\u00DFe"

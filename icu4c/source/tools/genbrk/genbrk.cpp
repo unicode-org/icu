@@ -234,7 +234,10 @@ int  main(int argc, char **argv) {
     if (U_FAILURE(status)) {
         exit(status);
     }
-    if(encoding!=nullptr ){
+    if (encoding == nullptr) {
+        // In the absence of a BOM, assume the rule file is in UTF-8.
+        encoding = "UTF-8";
+    } else {
         ruleSourceC  += signatureLength;
         ruleFileSize -= signatureLength;
     }

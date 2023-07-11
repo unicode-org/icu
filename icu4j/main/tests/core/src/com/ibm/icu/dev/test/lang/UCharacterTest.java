@@ -56,7 +56,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Expected Unicode version.
      */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance(15);
+    private final VersionInfo VERSION_ = VersionInfo.getInstance(15, 1);
 
     // constructor ===================================================
 
@@ -2414,8 +2414,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x4e07, UCharacter.NumericType.NUMERIC, 10000. },
             { 0x12432, UCharacter.NumericType.NUMERIC, 216000. },
             { 0x12433, UCharacter.NumericType.NUMERIC, 432000. },
-            { 0x4ebf, UCharacter.NumericType.NUMERIC, 100000000. },
-            { 0x5146, UCharacter.NumericType.NUMERIC, 1000000000000. },
+            { 0x5146, UCharacter.NumericType.NUMERIC, 1_000_000. },
+            { 0x4ebf, UCharacter.NumericType.NUMERIC, 100_000_000. },
             { -1, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
             { 0x61, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE, 10. },
             { 0x3000, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
@@ -3041,16 +3041,16 @@ public final class UCharacterTest extends TestFmwk
         //      UTF16.CODEPOINT_MIN_VALUE to UTF16.CODEPOINT_MAX_VALUE inclusively
         //      to obtain the value to go through the else statement.
         int[] valid_values =
-            {3058,3442,4988,8558,8559,8574,8575,8576,8577,8578,8583,8584,19975,
-             20159,20191,20740,20806,21315,33836,38433,65819,65820,65821,65822,
-             65823,65824,65825,65826,65827,65828,65829,65830,65831,65832,65833,
-             65834,65835,65836,65837,65838,65839,65840,65841,65842,65843,65861,
-             65862,65863,65868,65869,65870,65875,65876,65877,65878,65899,65900,
-             65901,65902,65903,65904,65905,65906,66378,68167};
+            {0xBF2,0xD72,0x137C,0x216E,0x216F,0x217E,0x217F,0x2180,0x2181,0x2182,0x2187,0x2188,0x4E07,
+            0x4EBF,0x4EDF,0x5104,0x5146,0x5343,0x842C,0x9621,0x1011B,0x1011C,0x1011D,0x1011E,
+            0x1011F,0x10120,0x10121,0x10122,0x10123,0x10124,0x10125,0x10126,0x10127,0x10128,0x10129,
+            0x1012A,0x1012B,0x1012C,0x1012D,0x1012E,0x1012F,0x10130,0x10131,0x10132,0x10133,0x10145,
+            0x10146,0x10147,0x1014C,0x1014D,0x1014E,0x10153,0x10154,0x10155,0x10156,0x1016B,0x1016C,
+            0x1016D,0x1016E,0x1016F,0x10170,0x10171,0x10172,0x1034A,0x10A47};
 
         int[] results =
             {1000,1000,10000,500,1000,500,1000,1000,5000,10000,50000,100000,
-             10000,100000000,1000,100000000,-2,1000,10000,1000,300,400,500,
+             10000,100000000,1000,100000000,1000000,1000,10000,1000,300,400,500,
              600,700,800,900,1000,2000,3000,4000,5000,6000,7000,8000,9000,
              10000,20000,30000,40000,50000,60000,70000,80000,90000,500,5000,
              50000,500,1000,5000,500,1000,10000,50000,300,500,500,500,500,500,

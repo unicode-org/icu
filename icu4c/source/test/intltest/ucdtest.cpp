@@ -30,7 +30,8 @@ static const char *ignorePropNames[]={
     "Expands_On_NFC",
     "Expands_On_NFKD",
     "Expands_On_NFKC",
-    "NFKC_CF"
+    "NFKC_CF",
+    "NFKC_SCF"
 };
 
 UnicodeTest::UnicodeTest()

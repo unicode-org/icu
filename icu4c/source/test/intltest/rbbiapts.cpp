@@ -1030,7 +1030,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     parseError.offset = 0;
     LocalUDataMemoryPointer data(udata_open(U_ICUDATA_BRKITR, "brk", dataFile, &status));
     uint32_t length;
-    const char *builtSource;
+    UnicodeString builtSource;
     const uint8_t *rbbiRules;
     const uint8_t *builtRules;
 
@@ -1040,12 +1040,13 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     }
 
     builtRules = (const uint8_t *)udata_getMemory(data.getAlias());
-    builtSource = (const char *)(builtRules + ((RBBIDataHeader*)builtRules)->fRuleSource);
+    builtSource = UnicodeString::fromUTF8(
+        (const char *)(builtRules + ((RBBIDataHeader *)builtRules)->fRuleSource));
     LocalPointer<RuleBasedBreakIterator> brkItr (new RuleBasedBreakIterator(builtSource, parseError, status));
     if (U_FAILURE(status)) {
         errln("%s:%d createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
                 __FILE__, __LINE__, u_errorName(status), parseError.line, parseError.offset);
-        errln(UnicodeString(builtSource));
+        errln(builtSource);
         return;
     }
     rbbiRules = brkItr->getBinaryRules(length);
