@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1689033430241,
+  "lastUpdate": 1689267457443,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9568,6 +9568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.8071626883063217,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "034a8086049336e105179d98c6f7492ee4e6b47e",
+          "message": "ICU-20898 Improve number skeleton rounding increment docs\n\nSee #2475",
+          "timestamp": "2023-07-13T18:41:05+02:00",
+          "tree_id": "797bd0b27ddcb31a228faa17e9f638741ebe7ff2",
+          "url": "https://github.com/unicode-org/icu/commit/034a8086049336e105179d98c6f7492ee4e6b47e"
+        },
+        "date": 1689267406436,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.0862103098432074,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
