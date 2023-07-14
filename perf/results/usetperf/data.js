@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1689302954641,
+  "lastUpdate": 1689339536184,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32446,6 +32446,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2655.5007,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "technicalcute@gmail.com",
+            "name": "Jiawen Geng",
+            "username": "gengjiawen"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "c7e967c456ceff6436607ca2a3da034320ca34c3",
+          "message": "ICU-22401 fix build on MSVC with cpp20",
+          "timestamp": "2023-07-14T14:31:40+02:00",
+          "tree_id": "cef2de2169d0ee3ac2f561216cd86344355b9ab2",
+          "url": "https://github.com/unicode-org/icu/commit/c7e967c456ceff6436607ca2a3da034320ca34c3"
+        },
+        "date": 1689339493637,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 60181.4437,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 96517.9659,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.5785,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 3.6278,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 13194.8733,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 43550.5179,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2283.0678,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
