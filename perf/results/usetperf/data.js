@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1689269674879,
+  "lastUpdate": 1689302954641,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32368,6 +32368,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1993.9777,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "2e45e6ec0e84a1c01812015a254ea31b286316fb",
+          "message": "ICU-22404 Unicode 15.1 beta data files & API constants\n\nSee #2492\n\nCo-authored-by: Andy Heninger <andy.heninger@gmail.com>\nCo-authored-by: Robin Leroy <egg.robin.leroy@gmail.com>",
+          "timestamp": "2023-07-13T19:26:14-07:00",
+          "tree_id": "56d55c3d7693da95923625d70f80d539ee552592",
+          "url": "https://github.com/unicode-org/icu/commit/2e45e6ec0e84a1c01812015a254ea31b286316fb"
+        },
+        "date": 1689302904904,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 70608.9978,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 112743.0533,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 11.2847,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.2262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 15416.6911,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 50993.7544,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2655.5007,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
