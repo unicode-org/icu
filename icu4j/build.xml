@@ -444,7 +444,6 @@
         <exclude name="**/*$*.class"/>
         <exclude name="**/data/**"/>
         <exclude name="com/ibm/icu/dev/test/*"/>
-        <exclude name="**/ExhaustivePersonNameFormatterTest*" />
     </patternset>
 
     <!--Class names that will be included/excluded as tests for time zone check-->

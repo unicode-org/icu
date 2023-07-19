@@ -361,7 +361,7 @@ class PersonNamePattern {
 
         @Override
         public String toString() {
-            return "Inverted version os " + underlyingPersonName.toString();
+            return "Inverted version of " + underlyingPersonName.toString();
         }
         @Override
         public Locale getNameLocale() {

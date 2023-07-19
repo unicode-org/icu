@@ -95,7 +95,6 @@ public class SimplePersonName implements PersonName {
                 String surnamePrefix = fieldValues.get("surname-prefix");
                 String surnameCore = fieldValues.get("surname-core");
 
-                StringBuilder sb = new StringBuilder();
                 if (surnamePrefix != null && surnameCore != null) {
                     fieldValues.put("surname", surnamePrefix + " " + surnameCore);
                 } else if (surnamePrefix != null) {
