@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1689338640715,
+  "lastUpdate": 1689866898917,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9958,6 +9958,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.01984900699260551,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pnacht@google.com",
+            "name": "Pedro Kaj Kjellerup Nacht",
+            "username": "pnacht"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "281a2a77ec8acc723f3603ad3d892e34b9ac2a29",
+          "message": "ICU-22350 Give maven.yml packages:write\n\nSigned-off-by: Pedro Kaj Kjellerup Nacht <pnacht@google.com>",
+          "timestamp": "2023-07-20T08:12:16-07:00",
+          "tree_id": "ba2b603c4e289458016d16a5b62686f7be65d0d4",
+          "url": "https://github.com/unicode-org/icu/commit/281a2a77ec8acc723f3603ad3d892e34b9ac2a29"
+        },
+        "date": 1689866853635,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.020022984830383155,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
