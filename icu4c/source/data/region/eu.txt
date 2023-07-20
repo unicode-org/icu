@@ -146,7 +146,6 @@ eu{
         IL{"Israel"}
         IM{"Man uhartea"}
         IN{"India"}
-        IO{"Indiako Ozeanoko lurralde britainiarra"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandia"}

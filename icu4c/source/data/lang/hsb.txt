@@ -544,9 +544,6 @@ hsb{
             ethiopic-amete-alem{"etiopiska amete-alem-protyka"}
             gregorian{"gregorianska protyka"}
             hebrew{"židowska protyka"}
-            islamic{"islamska protyka"}
-            islamic-civil{"islamska ciwilna protyka"}
-            islamic-umalqura{"islamska umalqura-protyka"}
             iso8601{"protyka po iso-8601"}
             japanese{"japanska protyka"}
             persian{"persiska protyka"}

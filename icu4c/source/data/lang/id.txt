@@ -836,11 +836,6 @@ id{
             gregorian{"Kalender Gregorian"}
             hebrew{"Kalender Ibrani"}
             indian{"Kalender Nasional India"}
-            islamic{"Kalender Islam"}
-            islamic-civil{"Kalender Sipil Islam"}
-            islamic-rgsa{"Kalender Islam (Arab Saudi, penglihatan)"}
-            islamic-tbla{"Kalender Astronomi Islam"}
-            islamic-umalqura{"Kalender Islam (Umm al-Qura)"}
             iso8601{"Kalender ISO-8601"}
             japanese{"Kalender Jepang"}
             persian{"Kalender Persia"}

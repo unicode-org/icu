@@ -146,7 +146,6 @@ tk{
         IL{"Ysraýyl"}
         IM{"Men adasy"}
         IN{"Hindistan"}
-        IO{"Britaniýanyň Hindi okeanyndaky territoriýalary"}
         IQ{"Yrak"}
         IR{"Eýran"}
         IS{"Islandiýa"}

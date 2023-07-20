@@ -335,10 +335,6 @@ th{
                 dnam{"อิเล็กตรอนโวลต์"}
                 other{"{0} อิเล็กตรอนโวลต์"}
             }
-            foodcalorie{
-                dnam{"แคลอรี"}
-                other{"{0} แคลอรี"}
-            }
             joule{
                 dnam{"จูล"}
                 other{"{0} จูล"}
@@ -393,18 +389,6 @@ th{
             }
         }
         graphics{
-            dot{
-                dnam{"ดอท"}
-                other{"{0} ดอท"}
-            }
-            dot-per-centimeter{
-                dnam{"จุดต่อเซนติเมตร"}
-                other{"{0} จุดต่อเซนติเมตร"}
-            }
-            dot-per-inch{
-                dnam{"จุดต่อนิ้ว"}
-                other{"{0} จุดต่อนิ้ว"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1191,10 +1175,6 @@ th{
                 dnam{"eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"แคลอรี"}
-                other{"{0}แคลอรี"}
-            }
             joule{
                 dnam{"จูล"}
                 other{"{0}จูล"}
@@ -1249,18 +1229,6 @@ th{
             }
         }
         graphics{
-            dot{
-                dnam{"ดอท"}
-                other{"{0}ดอท"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0}em"}
@@ -2027,10 +1995,6 @@ th{
             electronvolt{
                 dnam{"อิเล็กตรอนโวลต์"}
             }
-            foodcalorie{
-                dnam{"แคลอรี"}
-                other{"{0} แคลอรี"}
-            }
             joule{
                 dnam{"จูล"}
                 other{"{0} จูล"}
@@ -2080,20 +2044,6 @@ th{
             megahertz{
                 dnam{"MHz"}
                 other{"{0} MHz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"ดอท"}
-                other{"{0} ดอท"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
             }
         }
         length{

@@ -1,0 +1,509 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: qu
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Mario
+name ; locale; qu_AQ
+
+expectedResult; Mario
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; M
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Carlos
+name ; surname; Zabala
+name ; locale; qu_AQ
+
+expectedResult; Zabala, Carlos
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Carlos Zabala
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Zabala, C.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; C. Zabala
+
+parameters; none; short; referring; formal
+
+expectedResult; Carlos Z.
+
+parameters; none; short; referring; informal
+
+expectedResult; Carlos
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Zabala
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; CZ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; C
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; Z
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Marco
+name ; given2; Antonio
+name ; surname; Flores
+name ; locale; qu_AQ
+
+expectedResult; Flores, Marco Antonio
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Marco Antonio Flores
+
+parameters; none; long; referring; formal
+
+expectedResult; Flores, Marco A.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Marco A. Flores
+
+parameters; none; medium; referring; formal
+
+expectedResult; Flores, M. A.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Flores, Marco
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; M. A. Flores
+
+parameters; none; short; referring; formal
+
+expectedResult; Marco Flores
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Marco F.
+
+parameters; none; short; referring; informal
+
+expectedResult; Flores
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Marco
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MAF
+
+parameters; none; long; monogram; formal
+
+expectedResult; MF
+
+parameters; none; long; monogram; informal
+
+expectedResult; F
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Sr.
+name ; given; Maria García
+name ; given-informal; Mari
+name ; given2; Rosa
+name ; surname-prefix; de la
+name ; surname-core; Cruz
+name ; surname2; Quispe
+name ; generation; Jr.
+name ; credentials; A. R.
+name ; locale; qu_AQ
+
+expectedResult; A. R., Sr. Maria García Rosa de la Cruz Jr.
+
+parameters; none; long; referring; formal
+
+expectedResult; A. R., Maria García R. de la Cruz Jr.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Cruz, de la Maria García Rosa
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Cruz, de la Maria García R.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Cruz, de la M. G. R.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; M. G. R. de la Cruz
+
+parameters; none; short; referring; formal
+
+expectedResult; de la Cruz, Mari
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Mari de la Cruz
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Sr. de la Cruz
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Mari d. l. C.
+
+parameters; none; short; referring; informal
+
+expectedResult; Mari
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MRDQ
+
+parameters; none; long; monogram; formal
+
+expectedResult; MD
+
+parameters; none; long; monogram; informal
+
+expectedResult; D
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Pedro
+name ; locale; ko_AQ
+
+expectedResult; Pedro
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; P
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Ana
+name ; surname; Torres
+name ; locale; ko_AQ
+
+expectedResult; Torres Ana
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Torres A.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Torres
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Ana
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; TA
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; A
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; T
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Edwin
+name ; given2; Segundo
+name ; surname; Condori
+name ; locale; ko_AQ
+
+expectedResult; Condori Edwin Segundo
+
+parameters; none; long; referring; formal
+
+expectedResult; Condori Edwin S.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Condori E. S.
+
+parameters; none; short; referring; formal
+
+expectedResult; Condori Edwin
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Condori E.
+
+parameters; none; short; referring; informal
+
+expectedResult; Condori
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Edwin
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; CES
+
+parameters; none; long; monogram; formal
+
+expectedResult; CE
+
+parameters; none; long; monogram; informal
+
+expectedResult; C
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; E
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Prof. Dr.
+name ; given; Alejandro Manuel
+name ; given-informal; Ale
+name ; given2; César Mamani
+name ; surname-prefix; de la
+name ; surname-core; Cruz
+name ; surname2; Guzmán Huamán
+name ; generation; Jr.
+name ; credentials; Ph. D.
+name ; locale; ko_AQ
+
+expectedResult; Ph. D., Prof. Dr. de la Cruz Alejandro Manuel César Mamani Jr.
+
+parameters; none; long; referring; formal
+
+expectedResult; Ph. D., de la Cruz Alejandro Manuel C. M. Jr.
+
+parameters; none; medium; referring; formal
+
+expectedResult; de la Cruz A. M. C. M.
+
+parameters; none; short; referring; formal
+
+expectedResult; Prof. Dr. de la Cruz
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; de la Cruz A. M.
+
+parameters; none; short; referring; informal
+
+expectedResult; de la Cruz Ale
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; DGAC
+
+parameters; none; long; monogram; formal
+
+expectedResult; Ale
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; DA
+
+parameters; none; long; monogram; informal
+
+expectedResult; A
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; D
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

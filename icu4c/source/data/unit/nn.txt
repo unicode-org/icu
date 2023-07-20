@@ -268,11 +268,6 @@ nn{
                 one{"{0} kalori"}
                 other{"{0} kaloriar"}
             }
-            foodcalorie{
-                dnam{"kaloriar"}
-                one{"{0} kalori"}
-                other{"{0} kaloriar"}
-            }
             joule{
                 case{
                     genitive{
@@ -308,20 +303,6 @@ nn{
             }
         }
         graphics{
-            dot{
-                one{"{0} punkt"}
-                other{"{0} punkt"}
-            }
-            dot-per-centimeter{
-                dnam{"punkt per centimeter"}
-                one{"{0} punkt per centimeter"}
-                other{"{0} punkt per centimeter"}
-            }
-            dot-per-inch{
-                dnam{"punkt per tomme"}
-                one{"{0} punkt per tomme"}
-                other{"{0} punkt per tomme"}
-            }
             megapixel{
                 case{
                     genitive{
@@ -634,16 +615,6 @@ nn{
                 per{"{0}/v"}
             }
         }
-        graphics{
-            dot-per-centimeter{
-                one{"{0} dpcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                one{"{0} ppt"}
-                other{"{0} ppt"}
-            }
-        }
         length{
             astronomical-unit{
                 dnam{"au"}
@@ -827,15 +798,6 @@ nn{
             }
         }
         graphics{
-            dot-per-centimeter{
-                one{"{0} dpcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppt"}
-                one{"{0} ppt"}
-                other{"{0} ppt"}
-            }
             megapixel{
                 dnam{"megapikslar"}
             }

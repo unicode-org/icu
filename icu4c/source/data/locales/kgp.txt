@@ -2,21 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kgp{
-    AuxExemplarCharacters{
-        "[ª à ă â å ä ā æ b c ç d ᵉ è ĕ ê ë ē ᵍ ʰ í ì ĭ î ï ī l ⁿ ñ º ò ŏ ô ö õ ø ō œ"
-        " q ú ù ŭ û ü ū w x ÿ z]"
-    }
+    AuxExemplarCharacters{"[ªàăâåäā æ b cç d ᵉèĕêëē ᵍ ʰ íìĭîïī l ⁿñ ºòŏôöõøō œ q úùŭûüū w x ÿ z]"}
     Ellipsis{
         medial{"{0}… {1}"}
         word-final{"{0}…"}
     }
-    ExemplarCharacters{"[a á ã e é ẽ f g h i ĩ j k m n o ó p r s t u ũ v y ỹ]"}
+    ExemplarCharacters{"[aáã eéẽ f g h iĩ j k m n oó p r s t uũ v yỹ]"}
     ExemplarCharactersIndex{"[A E F G H I J K M N O P R S T U V Y]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{
-        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
-        "′ ″]"
-    }
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         latn{
             miscPatterns{
@@ -2074,28 +2068,28 @@ kgp{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫⹁、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ⹁ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
         }
     }

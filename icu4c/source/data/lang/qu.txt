@@ -525,9 +525,6 @@ qu{
             ethiopic-amete-alem{"Etíope Amete Alem Intiwatana"}
             gregorian{"Gregoriano Intiwatana"}
             hebrew{"Hebreo Intiwatana"}
-            islamic{"Islamico Intiwatana"}
-            islamic-civil{"Islamico Intiwatana (tabular, época civil)"}
-            islamic-umalqura{"Islamico Intiwatana (Umm al-Qura)"}
             iso8601{"ISO-8601 Intiwatana"}
             japanese{"Japones Intiwatana"}
             persian{"Persa Intiwatana"}

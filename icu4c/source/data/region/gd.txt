@@ -146,7 +146,6 @@ gd{
         IL{"Iosrael"}
         IM{"Eilean Mhanainn"}
         IN{"Na h-Innseachan"}
-        IO{"Ranntair Breatannach Cuan nan Innseachan"}
         IQ{"Ioràc"}
         IR{"Ioràn"}
         IS{"Innis Tìle"}

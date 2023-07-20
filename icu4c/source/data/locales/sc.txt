@@ -2,11 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sc{
-    AuxExemplarCharacters{"[ª á â å ä ã æ ç é ê ë í î ï k ñ º ó ô ö õ ø œ q ß ú û ü w x y ÿ]"}
-    ExemplarCharacters{"[a à b c d e è f g h i ì j l m n o ò p r s t u ù v z]"}
+    AuxExemplarCharacters{"[ªáâåäã æ ç éêë íîï k ñ ºóôöõø œ q ß úûü w x yÿ]"}
+    ExemplarCharacters{"[aà b c d eè f g h iì j l m n oò p r s t uù v z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T {TZ} U V W X Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … · ' ‘ ’ \u0022 “ ” « » ( ) \\[ \\] @ * / \\& # ′ ″]"}
+    ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … · '‘’ \u0022“” « » ( ) \\[ \\] @ * / \\& # ′ ″]"}
     NumberElements{
         adlm{
             miscPatterns{

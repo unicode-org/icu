@@ -625,13 +625,6 @@ he{
                 other{"{0} אלקטרון וולט"}
                 two{"{0} אלקטרון וולט"}
             }
-            foodcalorie{
-                dnam{"קלוריות"}
-                many{"{0} קלוריות"}
-                one{"קלוריה {0}"}
-                other{"{0} קלוריות"}
-                two{"{0} קלוריות"}
-            }
             joule{
                 dnam{"ג׳אול"}
                 gender{"masculine"}
@@ -731,27 +724,6 @@ he{
             }
         }
         graphics{
-            dot{
-                dnam{"נקודה קטנה"}
-                many{"{0} נקודות קטנות"}
-                one{"{0} נקודה"}
-                other{"{0} נקודות קטנות"}
-                two{"{0} נקודות קטנות"}
-            }
-            dot-per-centimeter{
-                dnam{"נקודות לסנטימטר"}
-                many{"‎{0} dpcm"}
-                one{"נקודה {0} לסנטימטר"}
-                other{"{0} נקודות לסנטימטר"}
-                two{"‎{0} dpcm‎"}
-            }
-            dot-per-inch{
-                dnam{"נקודות לאינץ׳"}
-                many{"‎{0} dpi‎"}
-                one{"‎{0} dpi‎"}
-                other{"‎{0} dots per inch‎"}
-                two{"‎{0} dpi‎"}
-            }
             em{
                 dnam{"קו מפריד מסוג em"}
                 gender{"masculine"}
@@ -2120,13 +2092,6 @@ he{
                 other{"{0} eV"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                many{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-                two{"{0} Cal"}
-            }
             joule{
                 dnam{"ג׳אול"}
                 many{"{0} J"}
@@ -2217,27 +2182,6 @@ he{
             }
         }
         graphics{
-            dot{
-                dnam{"נק׳ קטנה"}
-                many{"{0} נק' ק'"}
-                one{"{0} נק' ק'"}
-                other{"{0} נק' ק'"}
-                two{"{0} נק' ק'"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                many{"‎{0} dpcm"}
-                one{"‎{0} dpcm"}
-                other{"‎{0} dpcm"}
-                two{"‎{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                many{"‎{0} dpi‎"}
-                one{"‎{0} dpi‎"}
-                other{"‎{0} dpi‎"}
-                two{"‎{0} dpi‎"}
-            }
             em{
                 dnam{"em"}
                 many{"‎{0} em ‎"}
@@ -3542,13 +3486,6 @@ he{
                 other{"{0} eV"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                many{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-                two{"{0} Cal"}
-            }
             joule{
                 dnam{"ג׳אול"}
                 many{"{0} J"}
@@ -3636,27 +3573,6 @@ he{
             }
         }
         graphics{
-            dot{
-                dnam{"נקודה קטנה"}
-                many{"{0} נק′ קטנות"}
-                one{"{0} נק′ קטנה"}
-                other{"{0} נק′ קטנות"}
-                two{"{0} נק′ קטנות"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                many{"‎{0} dpcm"}
-                one{"‎{0} dpcm"}
-                other{"‎{0} dpcm"}
-                two{"‎{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                many{"‎{0} dpi‎"}
-                one{"‎{0} dpi‎"}
-                other{"‎{0} dpi‎"}
-                two{"‎{0} dpi‎"}
-            }
             em{
                 many{"‎{0} em ‎"}
                 one{"‎{0} em ‎"}

@@ -1124,11 +1124,6 @@ ta{
                 one{"{0} எலக்ட்ரான்வோல்ட்"}
                 other{"{0} எலக்ட்ரான்வோல்ட்ஸ்"}
             }
-            foodcalorie{
-                dnam{"கலோரிகள்"}
-                one{"{0} கலோரி"}
-                other{"{0} கலோரிகள்"}
-            }
             joule{
                 case{
                     ablative{
@@ -1321,21 +1316,6 @@ ta{
             }
         }
         graphics{
-            dot{
-                dnam{"புள்ளிகள்"}
-                one{"{0}புள்ளி"}
-                other{"{0}புள்ளிகள்"}
-            }
-            dot-per-centimeter{
-                dnam{"புள்ளிகள் / சென்டிமீட்டர்"}
-                one{"{0} புள்ளி / சென்டிமீட்டர்"}
-                other{"{0} புள்ளிகள் / சென்டிமீட்டர்"}
-            }
-            dot-per-inch{
-                dnam{"புள்ளிகள் / அங்குலம்"}
-                one{"{0} புள்ளி / அங்குலம்"}
-                other{"{0} புள்ளிகள் / அங்குலம்"}
-            }
             em{
                 case{
                     ablative{
@@ -3013,11 +2993,6 @@ ta{
                 one{"{0}eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"கலோ."}
-                one{"{0}கலோ."}
-                other{"{0}கலோ."}
-            }
             joule{
                 dnam{"ஜூல்"}
                 one{"{0}ஜூ."}
@@ -3084,21 +3059,6 @@ ta{
             }
         }
         graphics{
-            dot{
-                dnam{"புள்ளி"}
-                one{"{0}புள்ளி"}
-                other{"{0}புள்ளி"}
-            }
-            dot-per-centimeter{
-                dnam{"பு / செ.மீ"}
-                one{"{0}பு/செ.மீ"}
-                other{"{0}பு/செ.மீ"}
-            }
-            dot-per-inch{
-                dnam{"பு / அங்."}
-                one{"{0}பு/அங்."}
-                other{"{0}பு/அங்."}
-            }
             em{
                 dnam{"எம்"}
                 one{"{0}எம்"}
@@ -4060,11 +4020,6 @@ ta{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"கலோ."}
-                one{"{0} கலோ."}
-                other{"{0} கலோ."}
-            }
             joule{
                 dnam{"ஜூல்"}
                 one{"{0} ஜூ."}
@@ -4131,21 +4086,6 @@ ta{
             }
         }
         graphics{
-            dot{
-                dnam{"புள்ளி"}
-                one{"{0} புள்ளி"}
-                other{"{0} புள்ளி"}
-            }
-            dot-per-centimeter{
-                dnam{"பு / செ.மீ"}
-                one{"{0} பு / செ.மீ"}
-                other{"{0} பு / செ.மீ"}
-            }
-            dot-per-inch{
-                dnam{"பு / அங்."}
-                one{"{0} பு / அங்."}
-                other{"{0} பு / அங்."}
-            }
             em{
                 dnam{"எம்"}
                 one{"{0} எம்"}

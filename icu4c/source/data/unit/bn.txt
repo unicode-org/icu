@@ -410,11 +410,6 @@ bn{
                 one{"{0} ইলেকট্রন ভোল্ট"}
                 other{"{0} ইলেকট্রন ভোল্ট"}
             }
-            foodcalorie{
-                dnam{"ক্যালোরি"}
-                one{"{0} ক্যালোরি"}
-                other{"{0} ক্যালোরি"}
-            }
             joule{
                 dnam{"জুল"}
                 one{"{0} জুল"}
@@ -481,21 +476,6 @@ bn{
             }
         }
         graphics{
-            dot{
-                dnam{"ডট"}
-                one{"{0} ডট"}
-                other{"{0} ডট"}
-            }
-            dot-per-centimeter{
-                dnam{"সেন্টিমিটার প্রতি বিন্দু"}
-                one{"সেন্টিমিটার প্রতি {0} বিন্দু"}
-                other{"সেন্টিমিটার প্রতি {0} বিন্দু"}
-            }
-            dot-per-inch{
-                dnam{"ইঞ্চি প্রতি বিন্দু"}
-                one{"ইঞ্চি প্রতি {0} বিন্দু"}
-                other{"ইঞ্চি প্রতি {0} বিন্দু"}
-            }
             em{
                 dnam{"টাইপোগ্রাফিক em"}
                 one{"{0} em"}
@@ -1459,11 +1439,6 @@ bn{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"জুল"}
                 one{"{0} J"}
@@ -1530,21 +1505,6 @@ bn{
             }
         }
         graphics{
-            dot{
-                dnam{"ডট"}
-                one{"{0}ডট"}
-                other{"{0}ডট"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0}dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0}dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2499,11 +2459,6 @@ bn{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"জুল"}
                 one{"{0} J"}
@@ -2568,21 +2523,6 @@ bn{
             }
         }
         graphics{
-            dot{
-                dnam{"পিক্সেল"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

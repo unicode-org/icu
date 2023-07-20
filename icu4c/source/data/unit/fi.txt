@@ -1306,11 +1306,6 @@ fi{
                 one{"{0} elektronivoltti"}
                 other{"{0} elektronivolttia"}
             }
-            foodcalorie{
-                dnam{"kilokalorit"}
-                one{"{0} kilokalori"}
-                other{"{0} kilokaloria"}
-            }
             joule{
                 case{
                     elative{
@@ -1539,21 +1534,6 @@ fi{
             }
         }
         graphics{
-            dot{
-                dnam{"piste"}
-                one{"{0} piste"}
-                other{"{0} pistettä"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 case{
                     elative{
@@ -3435,11 +3415,6 @@ fi{
                 one{"{0}eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0}kcal"}
-                other{"{0}kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0}J"}
@@ -3506,21 +3481,6 @@ fi{
             }
         }
         graphics{
-            dot{
-                dnam{"piste"}
-                one{"{0}piste"}
-                other{"{0}pistettä"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0}dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0}dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0}em"}
@@ -4451,11 +4411,6 @@ fi{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -4521,21 +4476,6 @@ fi{
             }
         }
         graphics{
-            dot{
-                dnam{"piste"}
-                one{"{0} piste"}
-                other{"{0} pistettä"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

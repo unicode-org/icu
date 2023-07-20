@@ -1019,11 +1019,6 @@ el{
                 one{"{0} ηλεκτρονιοβόλτ"}
                 other{"{0} ηλεκτρονιοβόλτ"}
             }
-            foodcalorie{
-                dnam{"Θερμίδες"}
-                one{"{0} θερμίδα"}
-                other{"{0} θερμίδες"}
-            }
             joule{
                 case{
                     accusative{
@@ -1189,21 +1184,6 @@ el{
             }
         }
         graphics{
-            dot{
-                dnam{"κουκκίδα"}
-                one{"{0} κουκκίδα"}
-                other{"{0} κουκκίδες"}
-            }
-            dot-per-centimeter{
-                dnam{"κουκκίδες ανά εκατοστό"}
-                one{"{0} κουκκίδα ανά εκατοστό"}
-                other{"{0} κουκκίδες ανά εκατοστό"}
-            }
-            dot-per-inch{
-                dnam{"κουκκίδες ανά ίντσα"}
-                one{"{0} κουκκίδα ανά ίντσα"}
-                other{"{0} κουκκίδες ανά ίντσα"}
-            }
             em{
                 case{
                     accusative{
@@ -2728,11 +2708,6 @@ el{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"θερμ."}
-                one{"{0} θερμ."}
-                other{"{0} θερμ."}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -2799,21 +2774,6 @@ el{
             }
         }
         graphics{
-            dot{
-                dnam{"pixel"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -3775,11 +3735,6 @@ el{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"θερμ."}
-                one{"{0} θερμ."}
-                other{"{0} θερμ."}
-            }
             joule{
                 dnam{"τζάουλ"}
                 one{"{0} J"}
@@ -3842,21 +3797,6 @@ el{
             }
         }
         graphics{
-            dot{
-                dnam{"pixel"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"κουκ./εκ."}
-                one{"{0} κουκ./εκ."}
-                other{"{0} κουκ./εκ."}
-            }
-            dot-per-inch{
-                dnam{"κουκ./ίντσα"}
-                one{"{0} κουκ./ίντσα"}
-                other{"{0} κουκ./ίντσα"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

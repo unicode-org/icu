@@ -769,9 +769,6 @@ hu{
             gregorian{"Gergely-naptár"}
             hebrew{"Héber naptár"}
             indian{"Indiai nemzeti naptár"}
-            islamic{"Iszlám naptár"}
-            islamic-civil{"Iszlám civil naptár"}
-            islamic-umalqura{"Iszlám Umm al-Qura naptár"}
             iso8601{"ISO-8601 naptár"}
             japanese{"Japán naptár"}
             persian{"Perzsa naptár"}

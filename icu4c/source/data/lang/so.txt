@@ -642,11 +642,6 @@ so{
             gregorian{"Habeetiriska Geregoriyaan"}
             hebrew{"Habeentiriska yuhuudda"}
             indian{"Habeentiris Qarameedka Hindiya"}
-            islamic{"Habeentiriska islaamka"}
-            islamic-civil{"Taariikhda Islaamiga (tabular, civil epoch)"}
-            islamic-rgsa{"Habeentiriska Islaamka (Sacuudiga, aragtida)"}
-            islamic-tbla{"Taariikhda Islaamiga (tabular, astronomical epoch)"}
-            islamic-umalqura{"Taariikhda Islaamiga(Umm al-Qura)"}
             iso8601{"Habeentiriska ISO-8601"}
             japanese{"Habeentiriska jabbaanka"}
             persian{"Habeentiriska Baarshiyaanka"}

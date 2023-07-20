@@ -247,12 +247,6 @@ hi_Latn{
                 other{"{0} din"}
             }
         }
-        graphics{
-            dot{
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-        }
         mass{
             carat{
                 one{"{0} CD"}

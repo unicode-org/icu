@@ -406,11 +406,6 @@ tr{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kilokalori"}
-                one{"{0} kilokalori"}
-                other{"{0} kilokalori"}
-            }
             joule{
                 dnam{"jul"}
                 one{"{0} jul"}
@@ -477,21 +472,6 @@ tr{
             }
         }
         graphics{
-            dot{
-                dnam{"nokta"}
-                one{"{0} nokta"}
-                other{"{0} nokta"}
-            }
-            dot-per-centimeter{
-                dnam{"nokta/santimetre"}
-                one{"{0} nokta/santimetre"}
-                other{"{0} nokta/santimetre"}
-            }
-            dot-per-inch{
-                dnam{"nokta/inç"}
-                one{"{0} nokta/inç"}
-                other{"{0} nokta/inç"}
-            }
             em{
                 dnam{"tipografik em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ tr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"jul"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ tr{
             }
         }
         graphics{
-            dot{
-                dnam{"nokta"}
-                one{"{0} nokta"}
-                other{"{0} nokta"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2482,11 +2442,6 @@ tr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"jul"}
                 one{"{0} J"}
@@ -2553,21 +2508,6 @@ tr{
             }
         }
         graphics{
-            dot{
-                dnam{"nokta"}
-                one{"{0} nokta"}
-                other{"{0} nokta"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

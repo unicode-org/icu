@@ -851,10 +851,6 @@ fr{
             gregorian{"calendrier grégorien"}
             hebrew{"calendrier hébraïque"}
             indian{"calendrier indien"}
-            islamic{"calendrier musulman"}
-            islamic-civil{"calendrier musulman (tabulaire, époque civile)"}
-            islamic-tbla{"calendrier musulman (tabulaire, époque astronomique)"}
-            islamic-umalqura{"calendrier musulman (Umm al Qura)"}
             iso8601{"calendrier ISO 8601"}
             japanese{"calendrier japonais"}
             persian{"calendrier persan"}

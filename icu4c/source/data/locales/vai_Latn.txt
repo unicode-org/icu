@@ -4,8 +4,8 @@
 vai_Latn{
     %%Parent{"root"}
     ExemplarCharacters{
-        "[a á ã b ɓ c d ɗ e é ẽ ɛ {ɛ\u0301} {ɛ\u0303} f g h i í ĩ j k l m n ŋ o ó õ ɔ"
-        " {ɔ\u0301} {ɔ\u0303} p q r s t u ú ũ v w x y z]"
+        "[aáã b ɓ c d ɗ eéẽ ɛ{ɛ́}{ɛ̃} f g h iíĩ j k l m n ŋ oóõ ɔ{ɔ́}{ɔ̃} p q r s t u"
+        "úũ v w x y z]"
     }
     ExemplarCharactersIndex{"[A B Ɓ C D Ɗ E Ɛ F G H I J K L M N Ŋ O Ɔ P Q R S T U V W X Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}

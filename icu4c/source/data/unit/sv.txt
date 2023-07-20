@@ -784,12 +784,6 @@ sv{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kilokalorier"}
-                gender{"common"}
-                one{"{0} kilokalori"}
-                other{"{0} kilokalorier"}
-            }
             joule{
                 case{
                     genitive{
@@ -920,21 +914,6 @@ sv{
             }
         }
         graphics{
-            dot{
-                dnam{"punkt"}
-                one{"{0} px"}
-                other{"{0} punkter"}
-            }
-            dot-per-centimeter{
-                dnam{"punkter per centimeter"}
-                one{"{0} punkt per centimeter"}
-                other{"{0} punkter per centimeter"}
-            }
-            dot-per-inch{
-                dnam{"punkter per tum"}
-                one{"{0} punkt per tum"}
-                other{"{0} punkter per tum"}
-            }
             em{
                 case{
                     genitive{
@@ -2288,11 +2267,6 @@ sv{
                 one{"{0}eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0}kcal"}
-                other{"{0}kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0}J"}
@@ -2359,21 +2333,6 @@ sv{
             }
         }
         graphics{
-            dot{
-                dnam{"pkt"}
-                one{"{0}pkt"}
-                other{"{0}pkt"}
-            }
-            dot-per-centimeter{
-                dnam{"d/cm"}
-                one{"{0}d/cm"}
-                other{"{0}d/cm"}
-            }
-            dot-per-inch{
-                dnam{"d/tum"}
-                one{"{0}d/tum"}
-                other{"{0}d/tum"}
-            }
             em{
                 dnam{"fyrkant"}
                 one{"{0} fyrkant"}
@@ -3313,11 +3272,6 @@ sv{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -3384,21 +3338,6 @@ sv{
             }
         }
         graphics{
-            dot{
-                dnam{"pixlar"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"d/cm"}
-                one{"{0} d/cm"}
-                other{"{0} d/cm"}
-            }
-            dot-per-inch{
-                dnam{"d/tum"}
-                one{"{0} d/tum"}
-                other{"{0} d/tum"}
-            }
             em{
                 dnam{"fyrkant"}
                 one{"{0} fyrkant"}

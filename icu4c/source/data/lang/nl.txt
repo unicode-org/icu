@@ -899,11 +899,6 @@ nl{
             gregorian{"Gregoriaanse kalender"}
             hebrew{"Hebreeuwse kalender"}
             indian{"Indiase nationale kalender"}
-            islamic{"Islamitische kalender"}
-            islamic-civil{"Islamitische kalender (cyclisch)"}
-            islamic-rgsa{"Islamitische kalender (Saudi–Arabië)"}
-            islamic-tbla{"Islamitische kalender (epoche)"}
-            islamic-umalqura{"Islamitische kalender (Umm al-Qura)"}
             iso8601{"ISO-8601-kalender"}
             japanese{"Japanse kalender"}
             persian{"Perzische kalender"}

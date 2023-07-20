@@ -716,11 +716,6 @@ am{
                 one{"{0} ኤቮ"}
                 other{"{0} ኤቮ"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 case{
                     accusative{
@@ -841,21 +836,6 @@ am{
             }
         }
         graphics{
-            dot{
-                dnam{"ነቁጥ"}
-                one{"{0} ነቁጥ"}
-                other{"{0} ነቁጥ"}
-            }
-            dot-per-centimeter{
-                dnam{"ነበሴሜ"}
-                one{"{0} ነበሴሜ"}
-                other{"{0} ነበሴሜ"}
-            }
-            dot-per-inch{
-                dnam{"ነበኢ"}
-                one{"{0} ነበኢ"}
-                other{"{0} ነበኢ"}
-            }
             em{
                 case{
                     accusative{
@@ -2125,11 +2105,6 @@ am{
                 one{"{0} ኤቮ"}
                 other{"{0} ኤቮ"}
             }
-            foodcalorie{
-                dnam{"ካሎሪ"}
-                one{"{0} ካሎሪ"}
-                other{"{0} ካሎሪ"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -2196,21 +2171,6 @@ am{
             }
         }
         graphics{
-            dot{
-                dnam{"ነቁጥ"}
-                one{"{0} ነቁጥ"}
-                other{"{0} ነቁጥ"}
-            }
-            dot-per-centimeter{
-                dnam{"ነበሴሜ"}
-                one{"{0} ነበሴሜ"}
-                other{"{0} ነበሴሜ"}
-            }
-            dot-per-inch{
-                dnam{"ነበኢ"}
-                one{"{0} ነበኢ"}
-                other{"{0} ነበኢ"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -3162,11 +3122,6 @@ am{
                 one{"{0} ኤቮ"}
                 other{"{0} ኤቮ"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -3230,21 +3185,6 @@ am{
             }
         }
         graphics{
-            dot{
-                dnam{"ነቁጥ"}
-                one{"{0} ነቁጥ"}
-                other{"{0} ነቁጥ"}
-            }
-            dot-per-centimeter{
-                dnam{"ነበሴሜ"}
-                one{"{0} ነበሴሜ"}
-                other{"{0} ነበሴሜ"}
-            }
-            dot-per-inch{
-                dnam{"ነበኢ"}
-                one{"{0} ነበኢ"}
-                other{"{0} ነበኢ"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

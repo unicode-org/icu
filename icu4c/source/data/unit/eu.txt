@@ -406,11 +406,6 @@ eu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kaloriak"}
-                one{"{0} kaloria"}
-                other{"{0} kaloria"}
-            }
             joule{
                 dnam{"joule-ak"}
                 one{"{0} joule"}
@@ -477,21 +472,6 @@ eu{
             }
         }
         graphics{
-            dot{
-                dnam{"puntua"}
-                one{"{0} puntu"}
-                other{"{0} puntu"}
-            }
-            dot-per-centimeter{
-                dnam{"puntu zentimetroko"}
-                one{"{0} puntu zentimetroko"}
-                other{"{0} puntu zentimetroko"}
-            }
-            dot-per-inch{
-                dnam{"puntu hazbeteko"}
-                one{"{0} puntu hazbeteko"}
-                other{"{0} puntu hazbeteko"}
-            }
             em{
                 dnam{"em tipografikoa"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ eu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ eu{
             }
         }
         graphics{
-            dot{
-                dnam{"puntua"}
-                one{"{0} puntu"}
-                other{"{0} ptu"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2480,11 +2440,6 @@ eu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -2551,21 +2506,6 @@ eu{
             }
         }
         graphics{
-            dot{
-                dnam{"puntua"}
-                one{"{0} puntu"}
-                other{"{0} ptu"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

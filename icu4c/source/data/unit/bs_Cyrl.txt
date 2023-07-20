@@ -153,18 +153,6 @@ bs_Cyrl{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"тачке по центиметру"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"тачке по инчу"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -616,18 +604,6 @@ bs_Cyrl{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 few{"{0} em"}
                 one{"{0} em"}

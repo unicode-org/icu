@@ -335,10 +335,6 @@ lo{
                 dnam{"ເອ​ເລັກ​ຕ​ຣົງ​ໂວນ"}
                 other{"{0} ເອ​ເລັກ​ຕ​ຣົງ​ໂວນ"}
             }
-            foodcalorie{
-                dnam{"ແຄລໍລີ່"}
-                other{"{0} ແຄລໍລີ່"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -393,18 +389,6 @@ lo{
             }
         }
         graphics{
-            dot{
-                dnam{"ດັອດ"}
-                other{"{0} ດັອດ"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1183,10 +1167,6 @@ lo{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"ຄລ"}
-                other{"{0} ຄລ"}
-            }
             joule{
                 dnam{"ຈູນ"}
                 other{"{0} J"}
@@ -1241,18 +1221,6 @@ lo{
             }
         }
         graphics{
-            dot{
-                dnam{"ດັອດ"}
-                other{"{0} ດັອດ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -2000,10 +1968,6 @@ lo{
                 dnam{"ຄລ"}
                 other{"{0} ຄລ"}
             }
-            foodcalorie{
-                dnam{"ຄລ"}
-                other{"{0} ຄລ"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -2037,20 +2001,6 @@ lo{
             megahertz{
                 dnam{"MHz"}
                 other{"{0} MHz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"ດັອດ"}
-                other{"{0} ດັອດ"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
             }
         }
         length{

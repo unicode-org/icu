@@ -542,9 +542,6 @@ chr{
             ethiopic-amete-alem{"ᎡᏘᎣᏈᎠ ᎠᎺᏖ ᎠᎴᎻ ᏅᏙ ᏗᏎᏍᏗ"}
             gregorian{"ᎩᎴᎪᎵᎠᏂ ᏅᏙ ᏗᏎᏍᏗ"}
             hebrew{"ᎠᏂᏈᎷ ᏅᏙ ᏗᏎᏍᏗ"}
-            islamic{"ᎢᏍᎳᎻᎩ ᏅᏙ ᏗᏎᏍᏗ"}
-            islamic-civil{"ᎢᏌᎳᎻ ᏅᏙ ᏗᏎᏍᏗ (ᏴᏫ ᎡᏆᎩ)"}
-            islamic-umalqura{"ᎢᏌᎳᎻ ᏅᏙ ᏗᏎᏍᏗ (ᎥᎻ ᎠᎵ-ᏊᎳ))"}
             iso8601{"ISO-8601 ᏅᏙ ᏗᏎᏍᏗ"}
             japanese{"ᏣᏆᏂᏏ ᏅᏙ ᏗᏎᏍᏗ"}
             persian{"ᏇᏏᎠᏂ ᏅᏙ ᏗᏎᏍᏗ"}

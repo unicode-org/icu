@@ -878,9 +878,6 @@ cs{
             gregorian{"Gregoriánský kalendář"}
             hebrew{"Hebrejský kalendář"}
             indian{"Indický národní kalendář"}
-            islamic{"Islámský kalendář"}
-            islamic-civil{"Muslimský občanský kalendář"}
-            islamic-umalqura{"Muslimský kalendář (Umm al-Qura)"}
             iso8601{"Kalendář ISO-8601"}
             japanese{"Japonský kalendář"}
             persian{"Perský kalendář"}

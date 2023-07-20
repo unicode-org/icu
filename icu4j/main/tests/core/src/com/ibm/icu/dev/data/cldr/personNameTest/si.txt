@@ -1,0 +1,519 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: si
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; සෙන්ඩයා
+name ; locale; si_AQ
+
+expectedResult; සෙන්ඩයා
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; සෙ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; අයිරින්
+name ; surname; ඇඩ්ලර්
+name ; locale; si_AQ
+
+expectedResult; අයිරින්, ඇඩ්ලර්
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; අයිරින් ඇඩ්ලර්
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+
+expectedResult; ඇඩ්ලර් අයිරින්
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; අ. ඇඩ්ලර්
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ඇඩ්ලර් අ.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; අයිරින්
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ඇඩ්ලර්
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ඇඅ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; අ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ඇ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; මේරි සූ
+name ; given2; හමිෂ්
+name ; surname; වොට්සන්
+name ; locale; si_AQ
+
+expectedResult; මේරි සූ හමිෂ්, වොට්සන්
+
+parameters; sorting; long; referring; formal
+
+expectedResult; වොට්සන් මේරි සූ හමිෂ්
+
+parameters; none; long; referring; formal
+
+expectedResult; මේ. සූ. හ., වොට්සන්
+
+parameters; sorting; short; referring; formal
+
+expectedResult; මේරි සූ හ. වොට්සන්
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; වොට්සන් මේ. සූ. හ.
+
+parameters; none; short; referring; formal
+
+expectedResult; වොට්සන් මේරි සූ හ.
+
+parameters; none; medium; referring; formal
+
+expectedResult; මේරි සූ, වොට්සන්
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; මේරි සූ වොට්සන්
+
+parameters; sorting; long; referring; informal
+
+expectedResult; වොට්සන් මේ. සූ.
+
+parameters; none; short; referring; informal
+
+expectedResult; වොට්සන් මේරි සූ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; මේරි සූ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; වොට්සන්
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; වොමේහ
+
+parameters; none; long; monogram; formal
+
+expectedResult; වොමේ
+
+parameters; none; long; monogram; informal
+
+expectedResult; මේ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; වො
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; මහතා
+name ; given; බර්ට්‍රම් විල්බර්ෆෝස්
+name ; given-informal; බර්ටි
+name ; given2; හෙන්රි රොබට්
+name ; surname-core; වූස්ටර්
+name ; generation; බාල
+name ; credentials; පා.ම.
+name ; locale; si_AQ
+
+expectedResult; වූස්ටර් මහතා බර්ට්‍රම් විල්බර්ෆෝස් හෙන්රි රොබට් බාල, පා.ම.
+
+parameters; none; long; referring; formal
+
+expectedResult; වූස්ටර් බර්ට්‍රම් විල්බර්ෆෝස් හෙ. රො. බාල, පා.ම.
+
+parameters; none; medium; referring; formal
+
+expectedResult; බර්ට්‍රම් විල්බර්ෆෝස් හෙන්රි රොබට්, වූස්ටර්
+
+parameters; sorting; long; referring; formal
+
+expectedResult; බර්ට්‍රම් විල්බර්ෆෝස් හෙ. රො. වූස්ටර්
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; බ. වි. හෙ. රො., වූස්ටර්
+
+parameters; sorting; short; referring; formal
+
+expectedResult; වූස්ටර් බ. වි. හෙ. රො.
+
+parameters; none; short; referring; formal
+
+expectedResult; බර්ටි, වූස්ටර්
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; වූස්ටර් බ. වි.
+
+parameters; none; short; referring; informal
+
+expectedResult; බර්ටි වූස්ටර්
+
+parameters; sorting; long; referring; informal
+
+expectedResult; වූස්ටර් බර්ටි
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; මහතා වූස්ටර්
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; බර්ටි
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; වූබහෙ
+
+parameters; none; long; monogram; formal
+
+expectedResult; වූබ
+
+parameters; none; long; monogram; informal
+
+expectedResult; වූ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; බ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; සින්බෑඩ්
+name ; locale; fr_AQ
+
+expectedResult; සින්බෑඩ්
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; සි
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; කේතේ
+name ; surname; මුලර්
+name ; locale; fr_AQ
+
+expectedResult; කේතේ මුලර්
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; කේ. මුලර්
+
+parameters; none; short; referring; formal
+
+expectedResult; කේතේ මු.
+
+parameters; none; short; referring; informal
+
+expectedResult; මුලර්
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; කේතේ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; කේමු
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; කේ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; මු
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; සාසිලියා
+name ; given2; හමිෂ්
+name ; surname; ස්ටෝබර්
+name ; locale; fr_AQ
+
+expectedResult; සාසිලියා හමිෂ් ස්ටෝබර්
+
+parameters; none; long; referring; formal
+
+expectedResult; සාසිලියා හ. ස්ටෝබර්
+
+parameters; none; medium; referring; formal
+
+expectedResult; සාසිලියා ස්ටෝබර්
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; සා. හ. ස්ටෝබර්
+
+parameters; none; short; referring; formal
+
+expectedResult; සාසිලියා ස්.
+
+parameters; none; short; referring; informal
+
+expectedResult; සාසිලියා
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ස්ටෝබර්
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; සාහස්
+
+parameters; none; long; monogram; formal
+
+expectedResult; සාස්
+
+parameters; none; long; monogram; informal
+
+expectedResult; සා
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ස්
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; මහාචාර්ය. ආචාර්ය.
+name ; given; ඇඩා කොර්නේලියා
+name ; given-informal; නීලේ
+name ; given2; සීසර් මාටින්
+name ; surname-prefix; වොන්
+name ; surname-core; බෲල්
+name ; surname2; ගොන්සාලෙස් ඩොමින්ගෝ
+name ; generation; බාල
+name ; credentials; එම්.ඩී. පී.එච්.ඩී.
+name ; locale; fr_AQ
+
+expectedResult; මහාචාර්ය. ආචාර්ය. ඇඩා කොර්නේලියා සීසර් මාටින් වොන් බෲල් ගොන්සාලෙස් ඩොමින්ගෝ එම්.ඩී. පී.එච්.ඩී.
+
+parameters; none; long; referring; formal
+
+expectedResult; ඇඩා කොර්නේලියා සී. මා. වොන් බෲල් බාල, එම්.ඩී. පී.එච්.ඩී.
+
+parameters; none; medium; referring; formal
+
+expectedResult; මහාචාර්ය. ආචාර්ය. ඇඩා කොර්නේලියා වොන් බෲල්
+
+parameters; none; long; addressing; formal
+
+expectedResult; මහාචාර්ය. ආචාර්ය. වොන් බෲල්
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ඇ. කො. සී. මා. වොන් බෲල්
+
+parameters; none; short; referring; formal
+
+expectedResult; නීලේ වොන් බෲල්
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; නීලේ වො. බෲ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ඇසීවො
+
+parameters; none; long; monogram; formal
+
+expectedResult; නීලේ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; නීවො
+
+parameters; none; long; monogram; informal
+
+expectedResult; නී
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; වො
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

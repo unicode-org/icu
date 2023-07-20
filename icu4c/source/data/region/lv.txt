@@ -146,7 +146,6 @@ lv{
         IL{"Izraēla"}
         IM{"Menas sala"}
         IN{"Indija"}
-        IO{"Indijas okeāna Britu teritorija"}
         IQ{"Irāka"}
         IR{"Irāna"}
         IS{"Islande"}

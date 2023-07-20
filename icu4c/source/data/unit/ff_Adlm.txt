@@ -402,11 +402,6 @@ ff_Adlm{
                 one{"{0} 𞤫𞤤𞤫𞤳𞤼𞤮𞤾𞤮𞤤𞤼𞤵"}
                 other{"{0} 𞤫𞤤𞤫𞤳𞤼𞤮𞤾𞤮𞤤𞤼𞤭"}
             }
-            foodcalorie{
-                dnam{"𞤐𞤺𞤵𞤤𞤭"}
-                one{"{0} 𞤐𞤺𞤵𞤤𞤵"}
-                other{"{0} 𞤐𞤺𞤵𞤤𞤭"}
-            }
             joule{
                 dnam{"𞥁𞤵𞥅𞤤𞤶𞤭"}
                 one{"{0} 𞥁𞤵𞥅𞤤𞤱𞤵"}
@@ -479,21 +474,6 @@ ff_Adlm{
             }
         }
         graphics{
-            dot{
-                dnam{"𞤼𞤮𞤩𞥆𞤫"}
-                one{"{0} 𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-                other{"{0} 𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-            }
-            dot-per-centimeter{
-                dnam{"𞤼𞤮𞤩𞥆𞤫 𞤲𞤣𞤫𞤪 𞤧𞤢𞤲𞤼𞤭𞤥𞤫𞥅𞤼𞤮𞤤"}
-                one{"{0} 𞤼𞤮𞤩𞥆𞤫𞤪𞤫 𞤲𞤣𞤫𞤪 𞤧𞤢𞤲𞤼𞤭𞤥𞤫𞥅𞤼𞤮𞤤"}
-                other{"{0} 𞤼𞤮𞤩𞥆𞤫 𞤲𞤣𞤫𞤪 𞤧𞤢𞤲𞤼𞤭𞤥𞤫𞥅𞤼𞤮𞤤"}
-            }
-            dot-per-inch{
-                dnam{"𞤼𞤮𞤩𞥆𞤫 𞤲𞤣𞤫𞤪 𞤲𞤺𞤮𞤪𞤰𞤵"}
-                one{"{0} 𞤼𞤮𞤩𞥆𞤫𞤪𞤫 𞤲𞤣𞤫𞤪 𞤲𞤺𞤮𞤪𞤰𞤵"}
-                other{"{0} 𞤼𞤮𞤩𞥆𞤫 𞤲𞤣𞤫𞤪 𞤲𞤺𞤮𞤪𞤰𞤵"}
-            }
             em{
                 dnam{"𞤭𞤥𞤵 𞤬𞤭𞥅 𞤴𞤢𞥄𞤴𞤮"}
                 one{"{0} 𞤭𞤥𞤵"}
@@ -1460,11 +1440,6 @@ ff_Adlm{
                 one{"{0}𞤫𞤜"}
                 other{"{0}𞤫𞤜"}
             }
-            foodcalorie{
-                dnam{"𞤘𞤵𞤤"}
-                one{"{0}𞤘𞤵𞤤"}
-                other{"{0}𞤘𞤵𞤤"}
-            }
             joule{
                 dnam{"𞥁𞤵𞥅𞤤𞤱𞤵"}
                 one{"{0}𞤟"}
@@ -1531,21 +1506,6 @@ ff_Adlm{
             }
         }
         graphics{
-            dot{
-                dnam{"𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-                one{"{0}𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-                other{"{0}𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-            }
-            dot-per-centimeter{
-                dnam{"𞤼𞤩𞤧𞤥"}
-                one{"{0}𞤼𞤩𞤧𞤥"}
-                other{"{0}𞤼𞤩𞤧𞤥"}
-            }
-            dot-per-inch{
-                dnam{"𞤼𞤩𞤺𞤰"}
-                one{"{0}𞤼𞤩𞤺𞤰"}
-                other{"{0}𞤼𞤩𞤺𞤰"}
-            }
             em{
                 dnam{"𞤭𞤥𞤵"}
                 one{"{0}𞤭𞤥𞤵"}
@@ -2509,11 +2469,6 @@ ff_Adlm{
                 one{"{0} 𞤫𞤜"}
                 other{"{0} 𞤫𞤜"}
             }
-            foodcalorie{
-                dnam{"𞤘𞤵𞤤"}
-                one{"{0} 𞤘𞤵𞤤"}
-                other{"{0} 𞤘𞤵𞤤"}
-            }
             joule{
                 dnam{"𞥁𞤵𞥅𞤤𞤶𞤭"}
                 one{"{0} 𞤟"}
@@ -2580,21 +2535,6 @@ ff_Adlm{
             }
         }
         graphics{
-            dot{
-                dnam{"𞤨𞤭𞤳𞤷𞤭"}
-                one{"{0} 𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-                other{"{0} 𞤼𞤮𞤩𞥆𞤫𞤪𞤫"}
-            }
-            dot-per-centimeter{
-                dnam{"𞤼𞤩𞤧𞤥"}
-                one{"{0} 𞤼𞤩𞤧𞤥"}
-                other{"{0} 𞤼𞤩𞤧𞤥"}
-            }
-            dot-per-inch{
-                dnam{"𞤼𞤩𞤺𞤰"}
-                one{"{0} 𞤼𞤩𞤺𞤰"}
-                other{"{0} 𞤼𞤩𞤺𞤰"}
-            }
             em{
                 dnam{"𞤭𞤥𞤵"}
                 one{"{0} 𞤭𞤥𞤵"}

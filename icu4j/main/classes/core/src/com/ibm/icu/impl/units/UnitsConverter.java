@@ -193,6 +193,12 @@ public class UnitsConverter {
         private int exponentSecPerJulianYear = 0;
         /** Exponent for the speed of light meters per second" conversion rate constant */
         private int exponentSpeedOfLightMetersPerSecond = 0;
+        /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
+        private int exponentShoToM3 = 0;
+        /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
+        private int exponentTsuboToM2 = 0;
+        /** Exponent https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
+        private int exponentShakuToM = 0;
 
         /**
          * Creates Empty Factor
@@ -249,6 +255,9 @@ public class UnitsConverter {
             result.exponentMetersPerAU = this.exponentMetersPerAU;
             result.exponentSecPerJulianYear = this.exponentSecPerJulianYear;
             result.exponentSpeedOfLightMetersPerSecond = this.exponentSpeedOfLightMetersPerSecond;
+            result.exponentShoToM3 = this.exponentShoToM3;
+            result.exponentTsuboToM2 = this.exponentTsuboToM2;
+            result.exponentShakuToM = this.exponentShakuToM;
 
             return result;
         }
@@ -279,6 +288,9 @@ public class UnitsConverter {
             resultCollector.multiply(new BigDecimal("149597870700"), this.exponentMetersPerAU);
             resultCollector.multiply(new BigDecimal("31557600"), this.exponentSecPerJulianYear);
             resultCollector.multiply(new BigDecimal("299792458"), this.exponentSpeedOfLightMetersPerSecond);
+            resultCollector.multiply(new BigDecimal("1803.906836964688204"), this.exponentShoToM3);   // 2401/1331*1000
+            resultCollector.multiply(new BigDecimal("3.305785123966942"), this.exponentTsuboToM2);    // 400/121
+            resultCollector.multiply(new BigDecimal("0.033057851239669"), this.exponentShakuToM);     // 4/121
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
         }
@@ -339,6 +351,9 @@ public class UnitsConverter {
             result.exponentSecPerJulianYear = this.exponentSecPerJulianYear * power;
             result.exponentSpeedOfLightMetersPerSecond =
                 this.exponentSpeedOfLightMetersPerSecond * power;
+            result.exponentShoToM3 = this.exponentShoToM3 * power;
+            result.exponentTsuboToM2 = this.exponentTsuboToM2 * power;
+            result.exponentShakuToM = this.exponentShakuToM * power;
 
             return result;
         }
@@ -361,6 +376,9 @@ public class UnitsConverter {
             result.exponentSecPerJulianYear = this.exponentSecPerJulianYear - other.exponentSecPerJulianYear;
             result.exponentSpeedOfLightMetersPerSecond =
                 this.exponentSpeedOfLightMetersPerSecond - other.exponentSpeedOfLightMetersPerSecond;
+            result.exponentShoToM3 = this.exponentShoToM3 - other.exponentShoToM3;
+            result.exponentTsuboToM2 = this.exponentTsuboToM2 - other.exponentTsuboToM2;
+            result.exponentShakuToM = this.exponentShakuToM - other.exponentShakuToM;
 
             return result;
         }
@@ -383,6 +401,9 @@ public class UnitsConverter {
             result.exponentSecPerJulianYear = this.exponentSecPerJulianYear + other.exponentSecPerJulianYear;
             result.exponentSpeedOfLightMetersPerSecond =
                 this.exponentSpeedOfLightMetersPerSecond + other.exponentSpeedOfLightMetersPerSecond;
+            result.exponentShoToM3 = this.exponentShoToM3 + other.exponentShoToM3;
+            result.exponentTsuboToM2 = this.exponentTsuboToM2 + other.exponentTsuboToM2;
+            result.exponentShakuToM = this.exponentShakuToM  + other.exponentShakuToM;
 
             return result;
         }
@@ -430,11 +451,17 @@ public class UnitsConverter {
                 this.exponentMetersPerAU += power;
             } else if ("PI".equals(entity)) {
                 this.exponentPi += power;
-             } else if ("sec_per_julian_year".equals(entity)) {
+            } else if ("sec_per_julian_year".equals(entity)) {
                 this.exponentSecPerJulianYear += power;
             } else if ("speed_of_light_meters_per_second".equals(entity)) {
                 this.exponentSpeedOfLightMetersPerSecond += power;
-           } else {
+            } else if ("sho_to_m3".equals(entity)) {
+                this.exponentShoToM3 += power;
+            } else if ("tsubo_to_m2".equals(entity)) {
+                this.exponentTsuboToM2 += power;
+            } else if ("shaku_to_m".equals(entity)) {
+                this.exponentShakuToM += power;
+            } else {
                 BigDecimal decimalEntity = new BigDecimal(entity).pow(power, DECIMAL128);
                 this.factorNum = this.factorNum.multiply(decimalEntity);
             }

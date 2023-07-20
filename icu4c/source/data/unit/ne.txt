@@ -406,11 +406,6 @@ ne{
                 one{"{0} इलेक्ट्रोनभोल्ट"}
                 other{"{0} इलेक्ट्रोनभोल्ट"}
             }
-            foodcalorie{
-                dnam{"क्यालोरी"}
-                one{"{0}क्यालोरी"}
-                other{"{0}क्यालोरी"}
-            }
             joule{
                 dnam{"जुल"}
                 one{"{0} जुल"}
@@ -477,21 +472,6 @@ ne{
             }
         }
         graphics{
-            dot{
-                dnam{"बिन्‍दु"}
-                one{"{0}बिन्‍दु"}
-                other{"{0}बिन्‍दु"}
-            }
-            dot-per-centimeter{
-                dnam{"डट प्रति सेन्टिमिटर"}
-                one{"{0} डट प्रति सेन्टिमिटर"}
-                other{"{0} डट प्रति सेन्टिमिटर"}
-            }
-            dot-per-inch{
-                dnam{"डट प्रति इन्च"}
-                one{"{0} डट प्रति इन्च"}
-                other{"{0} डट प्रति इन्च"}
-            }
             em{
                 dnam{"टाइपोग्रापिक एम"}
                 one{"{0} em"}
@@ -1277,15 +1257,6 @@ ne{
             }
         }
         graphics{
-            dot{
-                dnam{"बिन्‍दु"}
-                one{"{0} बिन्‍दु"}
-                other{"{0} बिन्‍दु"}
-            }
-            dot-per-centimeter{
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
             pixel{
                 dnam{"पिक्सेल"}
             }
@@ -1966,11 +1937,6 @@ ne{
                 one{"{0} इलेक्ट्रोनभोल्ट"}
                 other{"{0} इलेक्ट्रोनभोल्ट"}
             }
-            foodcalorie{
-                dnam{"क्याल"}
-                one{"{0}क्याल"}
-                other{"{0} क्याल"}
-            }
             joule{
                 dnam{"जुल"}
                 one{"{0} J"}
@@ -2037,21 +2003,6 @@ ne{
             }
         }
         graphics{
-            dot{
-                dnam{"बिन्‍दु"}
-                one{"{0} बिन्‍दु"}
-                other{"{0} बिन्‍दु"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

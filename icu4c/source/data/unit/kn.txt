@@ -1488,11 +1488,6 @@ kn{
                 one{"{0} ಎಲೆಕ್ಟ್ರಾನ್‌ವೋಲ್ಟ್‌"}
                 other{"{0} ಎಲೆಕ್ಟ್ರಾನ್‌ವೋಲ್ಟ್‌ಗಳು"}
             }
-            foodcalorie{
-                dnam{"ಕ್ಯಾಲೋರಿಗಳು"}
-                one{"{0} ಕ್ಯಾಲೋರಿ"}
-                other{"{0} ಕ್ಯಾಲೋರಿಗಳು"}
-            }
             joule{
                 case{
                     accusative{
@@ -1742,21 +1737,6 @@ kn{
             }
         }
         graphics{
-            dot{
-                dnam{"ಡಾಟ್‌ಗಳು"}
-                one{"{0} ಡಾಟ್‌"}
-                other{"{0} ಡಾಟ್‌ಗಳು"}
-            }
-            dot-per-centimeter{
-                dnam{"ಡಾಟ್ಸ್ ಪರ್ ಸೆಂಟಿಮೀಟರ್"}
-                one{"{0} ಡಾಟ್ಸ್ ಪರ್ ಸೆಂಟಿಮೀಟರ್"}
-                other{"{0} ಡಾಟ್ಸ್ ಪರ್ ಸೆಂಟಿಮೀಟರ್"}
-            }
-            dot-per-inch{
-                dnam{"ಡಾಟ್ಸ್ ಪರ್ ಇಂಚ್"}
-                one{"{0} ಡಾಟ್ ಪರ್ ಇಂಚ್"}
-                other{"{0} ಡಾಟ್ಸ್ ಪರ್ ಇಂಚ್"}
-            }
             em{
                 case{
                     accusative{
@@ -3773,11 +3753,6 @@ kn{
                 one{"{0}ಎವೋ"}
                 other{"{0}ಎವೋ"}
             }
-            foodcalorie{
-                dnam{"ಕ್ಯಾಲೊ"}
-                one{"{0}ಕ್ಯಾಲೊ"}
-                other{"{0}ಕ್ಯಾಲೊ"}
-            }
             joule{
                 dnam{"ಜೌಲ್‌ಗಳು"}
                 one{"{0}ಜೌ"}
@@ -3844,21 +3819,6 @@ kn{
             }
         }
         graphics{
-            dot{
-                dnam{"ಡಾಟ್"}
-                one{"{0} ಡಾಟ್"}
-                other{"{0} ಪಿಕ್ಸೆ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0}dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0}dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0}em"}
@@ -4822,11 +4782,6 @@ kn{
                 one{"{0} ಎವೋ"}
                 other{"{0} ಎವೋ"}
             }
-            foodcalorie{
-                dnam{"ಕ್ಯಾ"}
-                one{"{0} ಕ್ಯಾ"}
-                other{"{0} ಕ್ಯಾ"}
-            }
             joule{
                 dnam{"ಜೌಲ್‌ಗಳು"}
                 one{"{0} ಜೌ"}
@@ -4893,21 +4848,6 @@ kn{
             }
         }
         graphics{
-            dot{
-                dnam{"ಪಿಕ್ಸೆಲ್‌ಗಳು"}
-                one{"{0} ಪಿಕ್ಸೆ"}
-                other{"{0} ಪಿಕ್ಸೆ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

@@ -335,10 +335,6 @@ id{
                 dnam{"elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"Kalori"}
-                other{"{0} Kalori"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} joule"}
@@ -393,18 +389,6 @@ id{
             }
         }
         graphics{
-            dot{
-                dnam{"dot"}
-                other{"{0} dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dot per sentimeter"}
-                other{"{0} dot per sentimeter"}
-            }
-            dot-per-inch{
-                dnam{"dot per inci"}
-                other{"{0} dot per inci"}
-            }
             em{
                 dnam{"em tipografis"}
                 other{"{0} em"}
@@ -1191,10 +1175,6 @@ id{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -1249,18 +1229,6 @@ id{
             }
         }
         graphics{
-            dot{
-                dnam{"dot"}
-                other{"{0} dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1997,10 +1965,6 @@ id{
             electronvolt{
                 dnam{"elektronvolt"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -2049,18 +2013,6 @@ id{
             }
         }
         graphics{
-            dot{
-                dnam{"piksel"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             megapixel{
                 dnam{"megapiksel"}
             }

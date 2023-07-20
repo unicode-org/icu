@@ -3,7 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 nn{
     %%Parent{"no"}
-    AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
+    AuxExemplarCharacters{"[áǎ čç đ èê ńñ ŋ š ŧ ü ž ä ö]"}
     NumberElements{
         latn{
             patterns{

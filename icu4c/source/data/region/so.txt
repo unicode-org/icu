@@ -146,7 +146,6 @@ so{
         IL{"Israaʼiil"}
         IM{"Jasiiradda Isle of Man"}
         IN{"Hindiya"}
-        IO{"Dhul xadeedka Badweynta Hindiya ee Biritishka"}
         IQ{"Ciraaq"}
         IR{"Iiraan"}
         IS{"Ayslaand"}

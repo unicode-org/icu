@@ -732,10 +732,6 @@ az{
             gregorian{"Qreqorian təqvimi"}
             hebrew{"Yəhudi Təqvimi"}
             indian{"Hindi təqvimi"}
-            islamic{"İslam təqvimi"}
-            islamic-civil{"Ivrit təqvimi"}
-            islamic-tbla{"İslam təqvimi (astronomik)"}
-            islamic-umalqura{"İslam təqvimi (Umm Al-Qura)"}
             iso8601{"ISO-8601 Təqvimi"}
             japanese{"Yapon Təqvimi"}
             persian{"İran Təqvimi"}

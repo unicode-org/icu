@@ -1976,11 +1976,6 @@ mr{
                 one{"{0} इलेक्ट्रॉनव्होल्ट"}
                 other{"{0} इलेक्ट्रॉनव्होल्ट्स"}
             }
-            foodcalorie{
-                dnam{"कॅलरीज"}
-                one{"{0} कॅलरी"}
-                other{"{0} कॅलरीज"}
-            }
             joule{
                 case{
                     ablative{
@@ -2302,21 +2297,6 @@ mr{
             }
         }
         graphics{
-            dot{
-                dnam{"टिंब"}
-                one{"{0}टिंब"}
-                other{"{0}टिंब"}
-            }
-            dot-per-centimeter{
-                dnam{"प्रति सेंटीमीटर बिंदू"}
-                one{"{0} प्रति सेंटीमीटर बिंदू"}
-                other{"{0} प्रति सेंटीमीटर बिंदू"}
-            }
-            dot-per-inch{
-                dnam{"प्रति इंच बिंदू"}
-                one{"{0} प्रति इंच बिंदू"}
-                other{"{0} प्रति इंच बिंदू"}
-            }
             em{
                 case{
                     ablative{
@@ -4741,11 +4721,6 @@ mr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ज्यूल"}
                 one{"{0} J"}
@@ -4812,21 +4787,6 @@ mr{
             }
         }
         graphics{
-            dot{
-                dnam{"पिक्सेल्स"}
-                one{"{0} पि"}
-                other{"{0} पि"}
-            }
-            dot-per-centimeter{
-                dnam{"प्र सें बिं"}
-                one{"{0} प्र सें बिं"}
-                other{"{0} प्र सें बिं"}
-            }
-            dot-per-inch{
-                dnam{"प्र इं बिं"}
-                one{"{0} प्र इं बिं"}
-                other{"{0} प्र इं बिं"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -5781,11 +5741,6 @@ mr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ज्यूल"}
                 one{"{0} J"}
@@ -5851,21 +5806,6 @@ mr{
             }
         }
         graphics{
-            dot{
-                dnam{"पिक्सेल्स"}
-                one{"{0} पि"}
-                other{"{0} पि"}
-            }
-            dot-per-centimeter{
-                dnam{"प्र सें बिं"}
-                one{"{0} प्र सें बिं"}
-                other{"{0} प्र सें बिं"}
-            }
-            dot-per-inch{
-                dnam{"प्र इं बिं"}
-                one{"{0} प्र इं बिं"}
-                other{"{0} प्र इं बिं"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

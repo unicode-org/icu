@@ -406,11 +406,6 @@ tk{
                 one{"{0} elektronwolt"}
                 other{"{0} elektronwolt"}
             }
-            foodcalorie{
-                dnam{"Kaloriýa"}
-                one{"{0} kaloriýa"}
-                other{"{0} kaloriýa"}
-            }
             joule{
                 dnam{"joul"}
                 one{"{0} joul"}
@@ -477,21 +472,6 @@ tk{
             }
         }
         graphics{
-            dot{
-                dnam{"nokat"}
-                one{"{0} nokat"}
-                other{"{0} nokat"}
-            }
-            dot-per-centimeter{
-                dnam{"santimetr başyna nokat"}
-                one{"{0} santimetr başyna nokat"}
-                other{"{0} santimetr başyna nokat"}
-            }
-            dot-per-inch{
-                dnam{"dýuým başyna nokat"}
-                one{"{0} dýuým başyna nokat"}
-                other{"{0} dýuým başyna nokat"}
-            }
             em{
                 dnam{"tipografik em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ tk{
                 one{"{0} eW"}
                 other{"{0} eW"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"{0} kal"}
-                other{"{0} kal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ tk{
             }
         }
         graphics{
-            dot{
-                dnam{"nokat"}
-                one{"{0} nokat"}
-                other{"{0} nokat"}
-            }
-            dot-per-centimeter{
-                dnam{"smbn"}
-                one{"{0} smbn"}
-                other{"{0} smbn"}
-            }
-            dot-per-inch{
-                dnam{"dbn"}
-                one{"{0} dbn"}
-                other{"{0} dbn"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2483,11 +2443,6 @@ tk{
                 one{"{0} eW"}
                 other{"{0} eW"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"{0} kal"}
-                other{"{0} kal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -2554,21 +2509,6 @@ tk{
             }
         }
         graphics{
-            dot{
-                dnam{"nokat"}
-                one{"{0} nokat"}
-                other{"{0} nokat"}
-            }
-            dot-per-centimeter{
-                dnam{"smbn"}
-                one{"{0} smbn"}
-                other{"{0} smbn"}
-            }
-            dot-per-inch{
-                dnam{"dbn"}
-                one{"{0} dbn"}
-                other{"{0} dbn"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

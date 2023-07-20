@@ -186,10 +186,6 @@ mzn{
                 dnam{"کالری"}
                 other{"{0} کالری"}
             }
-            foodcalorie{
-                dnam{"کالری"}
-                other{"{0} کالری"}
-            }
             joule{
                 dnam{"ژول"}
                 other{"{0} ژول"}
@@ -695,10 +691,6 @@ mzn{
             calorie{
                 dnam{"کالری"}
                 other{"{0} cal"}
-            }
-            foodcalorie{
-                dnam{"کالری"}
-                other{"{0} Cal"}
             }
             joule{
                 dnam{"ژول"}

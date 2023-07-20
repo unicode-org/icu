@@ -1,0 +1,507 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: as
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; চিন্দবাদ
+name ; locale; as_AQ
+
+expectedResult; চিন্দবাদ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; চি
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; আইৰিণ
+name ; surname; এডলাৰ
+name ; locale; as_AQ
+
+expectedResult; এডলাৰ, আইৰিণ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; আইৰিণ এডলাৰ
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; এডলাৰ, আ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; আ. এডলাৰ
+
+parameters; none; short; referring; formal
+
+expectedResult; আইৰিণ এ.
+
+parameters; none; short; referring; informal
+
+expectedResult; আইৰিণ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; এডলাৰ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; আএ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; আ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; এ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; জ’ন
+name ; given2; হামিশ্ব
+name ; surname; ৱাটছন
+name ; locale; as_AQ
+
+expectedResult; ৱাটছন, জ’ন হামিশ্ব
+
+parameters; sorting; long; referring; formal
+
+expectedResult; জ’ন হামিশ্ব ৱাটছন
+
+parameters; none; long; referring; formal
+
+expectedResult; ৱাটছন, জ’ন হা.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; জ’ন হা. ৱাটছন
+
+parameters; none; medium; referring; formal
+
+expectedResult; ৱাটছন, জ. হা.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; জ. হা. ৱাটছন
+
+parameters; none; short; referring; formal
+
+expectedResult; ৱাটছন, জ’ন
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; জ’ন ৱাটছন
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; জ’ন ৱা.
+
+parameters; none; short; referring; informal
+
+expectedResult; জহাৱা
+
+parameters; none; long; monogram; formal
+
+expectedResult; ৱাটছন
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; জ’ন
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; জৱা
+
+parameters; none; long; monogram; informal
+
+expectedResult; ৱা
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; জ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; শ্ৰী
+name ; given; নৰেন কলিতা
+name ; given-informal; নমী
+name ; given2; ৰুমী বৰুৱা
+name ; surname-core; কাকতি
+name ; generation; ক.
+name ; credentials; এম. পি.
+name ; locale; as_AQ
+
+expectedResult; নৰেন কলিতা ৰুমী বৰুৱা কাকতি এম. পি.
+
+parameters; none; long; referring; formal
+
+expectedResult; নৰেন কলিতা ৰু. ব. কাকতি এম. পি.
+
+parameters; none; medium; referring; formal
+
+expectedResult; কাকতি, নৰেন কলিতা ৰুমী বৰুৱা
+
+parameters; sorting; long; referring; formal
+
+expectedResult; কাকতি, নৰেন কলিতা ৰু. ব.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; কাকতি, ন. ক. ৰু. ব.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ন. ক. ৰু. ব. কাকতি
+
+parameters; none; short; referring; formal
+
+expectedResult; কাকতি, নমী
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; শ্ৰী কাকতি
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; নমী কাকতি
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; নমী কা.
+
+parameters; none; short; referring; informal
+
+expectedResult; নৰুকা
+
+parameters; none; long; monogram; formal
+
+expectedResult; নকা
+
+parameters; none; long; monogram; informal
+
+expectedResult; নমী
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; কা
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ন
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; চিন্দবাদ
+name ; locale; ko_AQ
+
+expectedResult; চিন্দবাদ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; চি
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; নগেন
+name ; surname; বৰা
+name ; locale; ko_AQ
+
+expectedResult; বৰা নগেন
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; বৰা ন.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; নগেন
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; বৰা
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; বন
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; ন
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ব
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; মণিমালা
+name ; given2; অজিত
+name ; surname; বৰুৱা
+name ; locale; ko_AQ
+
+expectedResult; বৰুৱা মণিমালা অজিত
+
+parameters; none; long; referring; formal
+
+expectedResult; বৰুৱা মণিমালা অ.
+
+parameters; none; medium; referring; formal
+
+expectedResult; বৰুৱা মণিমালা
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; বৰুৱা ম. অ.
+
+parameters; none; short; referring; formal
+
+expectedResult; বৰুৱা ম.
+
+parameters; none; short; referring; informal
+
+expectedResult; মণিমালা
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; বৰুৱা
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; বমঅ
+
+parameters; none; long; monogram; formal
+
+expectedResult; বম
+
+parameters; none; long; monogram; informal
+
+expectedResult; ব
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ম
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; প্ৰফ. ডা০
+name ; given; আডা কৰ্ণেলিয়া
+name ; given-informal; নীলে
+name ; given2; ইভা চ’ফিয়া
+name ; surname-prefix; ভেন ডেন
+name ; surname-core; কুকুৰনেচীয়া
+name ; surname2; বেকাৰ স্মিট
+name ; generation; জুনিয়ৰ
+name ; credentials; এম. ডি. ডি. ডি. এছ
+name ; locale; ko_AQ
+
+expectedResult; ভেন ডেন কুকুৰনেচীয়া আডা কৰ্ণেলিয়া ইভা চ’ফিয়া এম. ডি. ডি. ডি. এছ
+
+parameters; none; long; referring; formal
+
+expectedResult; ভেন ডেন কুকুৰনেচীয়া আডা কৰ্ণেলিয়া ই. চ. এম. ডি. ডি. ডি. এছ
+
+parameters; none; medium; referring; formal
+
+expectedResult; ভেন ডেন কুকুৰনেচীয়া আ. ক. ই. চ.
+
+parameters; none; short; referring; formal
+
+expectedResult; প্ৰফ. ডা০ ভেন ডেন কুকুৰনেচীয়া
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ভেন ডেন কুকুৰনেচীয়া আ. ক.
+
+parameters; none; short; referring; informal
+
+expectedResult; ভেন ডেন কুকুৰনেচীয়া নীলে
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; নীলে
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ভেআই
+
+parameters; none; long; monogram; formal
+
+expectedResult; ভেনী
+
+parameters; none; long; monogram; informal
+
+expectedResult; নী
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ভে
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

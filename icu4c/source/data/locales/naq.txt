@@ -3,7 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 naq{
     AuxExemplarCharacters{"[j l v]"}
-    ExemplarCharacters{"[a â b c d e f g h i î k m n o ô p q r s t u û w x y z ǀ ǁ ǂ ǃ]"}
+    ExemplarCharacters{"[aâ b c d e f g h iî k m n oô p q r s t uû w x y z ǀ ǁ ǂ ǃ]"}
     ExemplarCharactersIndex{"[A B C D E F G H I K M N O P Q R S T U W X Y Z]"}
     NumberElements{
         latn{

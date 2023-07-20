@@ -242,8 +242,6 @@ ee{
             gregorian{"Gregorian kalenda"}
             hebrew{"hebritɔwo ƒe kalenda"}
             indian{"india dukɔ ƒe kalenda"}
-            islamic{"islam subɔlawo ƒe kalenda"}
-            islamic-civil{"islam subɔlawo ƒe sivil kalenda"}
             japanese{"japantɔwo ƒe kalenda"}
             persian{"persiatɔwo ƒe kalenda"}
             roc{"china repɔbliktɔwo ƒe kalenda tso 1912"}

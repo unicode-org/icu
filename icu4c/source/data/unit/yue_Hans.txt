@@ -336,10 +336,6 @@ yue_Hans{
                 dnam{"电子伏特"}
                 other{"{0} 电子伏特"}
             }
-            foodcalorie{
-                dnam{"卡路里"}
-                other{"{0} 大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0} 焦耳"}
@@ -394,18 +390,6 @@ yue_Hans{
             }
         }
         graphics{
-            dot{
-                dnam{"圆点"}
-                other{"{0} 个圆点"}
-            }
-            dot-per-centimeter{
-                dnam{"每厘米点数"}
-                other{"{0} 点/厘米"}
-            }
-            dot-per-inch{
-                dnam{"每吋点数"}
-                other{"{0} 点/吋"}
-            }
             em{
                 dnam{"字体 em"}
                 other{"{0} em"}
@@ -1192,10 +1176,6 @@ yue_Hans{
                 dnam{"电子伏特"}
                 other{"{0} 电子伏特"}
             }
-            foodcalorie{
-                dnam{"大卡"}
-                other{"{0} 大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0} 焦"}
@@ -1250,18 +1230,6 @@ yue_Hans{
             }
         }
         graphics{
-            dot{
-                dnam{"圆点"}
-                other{"{0} 个圆点"}
-            }
-            dot-per-centimeter{
-                dnam{"每厘米点数"}
-                other{"{0} 点/厘米"}
-            }
-            dot-per-inch{
-                dnam{"每吋点数"}
-                other{"{0} 点/吋"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -2047,10 +2015,6 @@ yue_Hans{
                 dnam{"电子伏特"}
                 other{"{0} 电子伏特"}
             }
-            foodcalorie{
-                dnam{"大卡"}
-                other{"{0} 大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0} 焦"}
@@ -2105,18 +2069,6 @@ yue_Hans{
             }
         }
         graphics{
-            dot{
-                dnam{"圆点"}
-                other{"{0} 个圆点"}
-            }
-            dot-per-centimeter{
-                dnam{"每厘米点数"}
-                other{"{0} 点/厘米"}
-            }
-            dot-per-inch{
-                dnam{"每吋点数"}
-                other{"{0} 点/吋"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}

@@ -679,9 +679,6 @@ cy{
             gregorian{"Calendr Gregori"}
             hebrew{"Calendr Hebreaidd"}
             indian{"Calendr Cenedlaethol India"}
-            islamic{"Calendr Islam"}
-            islamic-civil{"Calendr Islamaidd (tabl, cyfnod sifil)"}
-            islamic-umalqura{"Calendr Islam (Umm al-Qura)"}
             iso8601{"Calendr ISO-8601"}
             japanese{"Calendr Japan"}
             persian{"Calendr Persia"}

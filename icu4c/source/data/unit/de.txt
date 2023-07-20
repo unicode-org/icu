@@ -1310,26 +1310,6 @@ de{
                 one{"{0} Elektronenvolt"}
                 other{"{0} Elektronenvolt"}
             }
-            foodcalorie{
-                case{
-                    accusative{
-                        one{"{0} Kilokalorie"}
-                        other{"{0} Kilokalorien"}
-                    }
-                    dative{
-                        one{"{0} Kilokalorie"}
-                        other{"{0} Kilokalorien"}
-                    }
-                    genitive{
-                        one{"{0} Kilokalorie"}
-                        other{"{0} Kilokalorien"}
-                    }
-                }
-                dnam{"Kilokalorien"}
-                gender{"feminine"}
-                one{"{0} Kilokalorien"}
-                other{"{0} Kilokalorien"}
-            }
             joule{
                 case{
                     accusative{
@@ -1546,21 +1526,6 @@ de{
             }
         }
         graphics{
-            dot{
-                dnam{"Punkt"}
-                one{"{0} Punkt"}
-                other{"{0} Punkt"}
-            }
-            dot-per-centimeter{
-                dnam{"Punkte pro Zentimeter"}
-                one{"{0} Punkt pro Zentimeter"}
-                other{"{0} Punkte pro Zentimeter"}
-            }
-            dot-per-inch{
-                dnam{"Punkte pro Inch"}
-                one{"{0} Punkt pro Inch"}
-                other{"{0} Punkte pro Inch"}
-            }
             em{
                 case{
                     accusative{
@@ -3784,11 +3749,6 @@ de{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0}J"}
@@ -3855,21 +3815,6 @@ de{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -4783,11 +4728,6 @@ de{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"Joule"}
                 one{"{0} J"}
@@ -4848,21 +4788,6 @@ de{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

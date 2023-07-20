@@ -874,11 +874,6 @@ lt{
             gregorian{"Grigaliaus kalendorius"}
             hebrew{"hebrajų kalendorius"}
             indian{"nacionalinis indų kalendorius"}
-            islamic{"islamo kalendorius"}
-            islamic-civil{"Islamo kalendorius (lentelinis, pilietinė era)"}
-            islamic-rgsa{"Islamo kalendorius (Saudo Arabija)"}
-            islamic-tbla{"Islamo kalendorius (lentelinis, astronominė era)"}
-            islamic-umalqura{"Islamo kalendorius (Umm al-Qura)"}
             iso8601{"ISO 8601 kalendorius"}
             japanese{"japonų kalendorius"}
             persian{"persų kalendorius"}

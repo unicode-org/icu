@@ -2,10 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 be{
-    AuxExemplarCharacters{
-        "[{а\u0301} {е\u0301} {ё\u0301} {і\u0301} {о\u0301} {у\u0301} {ы\u0301} {э"
-        "\u0301} {ю\u0301} {я\u0301}]"
-    }
+    AuxExemplarCharacters{"[{а́} {е́} {ё́} {і́} {о́} {у́} {ы́} {э́} {ю́} {я́}]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}

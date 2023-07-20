@@ -397,6 +397,12 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
         factor.constantExponents[CONSTANT_SEC_PER_JULIAN_YEAR] += power * signum;
     } else if (baseStr == "speed_of_light_meters_per_second") {
         factor.constantExponents[CONSTANT_SPEED_OF_LIGHT_METERS_PER_SECOND] += power * signum;
+    } else if (baseStr == "sho_to_m3") {
+        factor.constantExponents[CONSTANT_SHO_TO_M3] += power * signum;
+    } else if (baseStr == "tsubo_to_m2") {
+        factor.constantExponents[CONSTANT_TSUBO_TO_M2] += power * signum;
+    } else if (baseStr == "shaku_to_m") {
+        factor.constantExponents[CONSTANT_SHAKU_TO_M] += power * signum;
     } else {
         if (signum == Signum::NEGATIVE) {
             factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
@@ -535,7 +541,7 @@ void UnitsConverter::init(const ConversionRates &ratesInfo, UErrorCode &status) 
 
     loadConversionRate(conversionRate_, conversionRate_.source, conversionRate_.target, unitsState,
                        ratesInfo, status);
-                          
+
 }
 
 int32_t UnitsConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,

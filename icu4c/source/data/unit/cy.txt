@@ -690,15 +690,6 @@ cy{
                 two{"{0} eV"}
                 zero{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Calorïau"}
-                few{"{0} kcal"}
-                many{"{0} kcal"}
-                one{"{0} Calori"}
-                other{"{0} Calori"}
-                two{"{0} kcal"}
-                zero{"{0} Cal"}
-            }
             joule{
                 dnam{"jouleau"}
                 few{"{0} J"}
@@ -813,33 +804,6 @@ cy{
             }
         }
         graphics{
-            dot{
-                dnam{"picseli"}
-                few{"{0} px"}
-                many{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-                two{"{0} ddot"}
-                zero{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dotiau mewn centimedr"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} dot mewn centimedr"}
-                other{"{0} mewn centimedr"}
-                two{"{0} ppcm"}
-                zero{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"dotiau mewn modfedd"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} dot mewn modfedd"}
-                other{"{0} dot mewn modfedd"}
-                two{"{0} ppi"}
-                zero{"{0} ppi"}
-            }
             em{
                 dnam{"em argraffyddol"}
                 few{"{0} em"}
@@ -2511,15 +2475,6 @@ cy{
                 two{"{0} eV"}
                 zero{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0}Cal"}
-                many{"{0}Cal"}
-                one{"{0}Cal"}
-                other{"{0}Cal"}
-                two{"{0}Cal"}
-                zero{"{0}Cal"}
-            }
             joule{
                 dnam{"joule"}
                 few{"{0}J"}
@@ -2634,33 +2589,6 @@ cy{
             }
         }
         graphics{
-            dot{
-                dnam{"picseli"}
-                few{"{0} px"}
-                many{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-                two{"{0} ddot"}
-                zero{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-                two{"{0} ppcm"}
-                zero{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-                two{"{0} ppi"}
-                zero{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -4300,15 +4228,6 @@ cy{
                 two{"{0} eV"}
                 zero{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} kcal"}
-                many{"{0} kcal"}
-                one{"{0} Cal"}
-                other{"{0} kcal"}
-                two{"{0} kcal"}
-                zero{"{0} Cal"}
-            }
             joule{
                 dnam{"jouleau"}
                 few{"{0} J"}
@@ -4420,33 +4339,6 @@ cy{
             }
         }
         graphics{
-            dot{
-                dnam{"picseli"}
-                few{"{0} px"}
-                many{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-                two{"{0} ddot"}
-                zero{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-                two{"{0} ppcm"}
-                zero{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-                two{"{0} ppi"}
-                zero{"{0} ppi"}
-            }
             em{
                 few{"{0} em"}
                 many{"{0} em"}

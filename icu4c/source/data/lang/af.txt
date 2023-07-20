@@ -559,9 +559,6 @@ af{
             gregorian{"Gregoriaanse kalender"}
             hebrew{"Hebreeuse kalender"}
             indian{"Indiese nasionale kalender"}
-            islamic{"Islamitiese kalender"}
-            islamic-civil{"Islamitiese siviele kalender"}
-            islamic-umalqura{"Islamitiese kalender (Umm al-Qura)"}
             iso8601{"ISO-8601-kalender"}
             japanese{"Japannese kalender"}
             persian{"Persiese kalender"}

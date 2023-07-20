@@ -1,0 +1,465 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: lv
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Jānis
+name ; locale; lv_AQ
+
+expectedResult; Jānis
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; J
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Aina
+name ; surname; Kalniņa
+name ; locale; lv_AQ
+
+expectedResult; Kalniņa, Aina
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Aina Kalniņa
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Kalniņa Aina
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+
+expectedResult; Kalniņa, A.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; A. Kalniņa
+
+parameters; none; short; referring; formal
+
+expectedResult; Aina K.
+
+parameters; none; short; referring; informal
+
+expectedResult; Kalniņa
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Aina
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; AK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+
+expectedResult; A
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; K
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Anna
+name ; given2; Paula
+name ; surname; Bērziņa
+name ; locale; lv_AQ
+
+expectedResult; Bērziņa, Anna Paula
+
+parameters; sorting; long; referring; informal
+
+expectedResult; Anna Paula Bērziņa
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; Bērziņa Anna Paula
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+
+expectedResult; Bērziņa, A. P.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; A. P. Bērziņa
+
+parameters; none; short; referring; formal
+
+expectedResult; Bērziņa, Anna
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Anna Bērziņa
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Anna B.
+
+parameters; none; short; referring; informal
+
+expectedResult; Bērziņa
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Anna
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; APB
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+
+expectedResult; A
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; B
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; kungs
+name ; given; Pēteris
+name ; given-informal; Pēcis
+name ; given2; Kārlis
+name ; surname-core; Ozoliņš
+name ; generation; jaunākais
+name ; credentials; MP
+name ; locale; lv_AQ
+
+expectedResult; MP Pēteris Kārlis Ozoliņš
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; Ozoliņš, Pēteris Kārlis
+
+parameters; sorting; long; referring; informal
+
+expectedResult; Ozoliņš Pēteris Kārlis
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+
+expectedResult; Ozoliņš, Pēteris
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Pēteris Ozoliņš
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Ozoliņš, P. K.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; P. K. Ozoliņš
+
+parameters; none; short; referring; formal
+
+expectedResult; Pēteris O.
+
+parameters; none; short; referring; informal
+
+expectedResult; Ozoliņš
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Pēteris
+
+parameters; none; short; addressing; informal
+
+expectedResult; Pēcis
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+
+expectedResult; PKO
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+
+expectedResult; O
+
+parameters; none; short; monogram; formal
+
+expectedResult; P
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Sinbads
+name ; locale; ja_AQ
+
+expectedResult; Sinbads
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Keita
+name ; surname; Millere
+name ; locale; ja_AQ
+
+expectedResult; Millere Keita
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+
+expectedResult; Millere K.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Keita
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Pīters
+name ; given2; Džims
+name ; surname; Millers
+name ; locale; ja_AQ
+
+expectedResult; Millers Pīters D.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Millers Pīters
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+
+expectedResult; Millers P. D.
+
+parameters; none; short; referring; formal
+
+expectedResult; Millers P.
+
+parameters; none; short; referring; informal
+
+expectedResult; Pīters
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MPD
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Prof.
+name ; given; Laima Kristīne
+name ; given-informal; Ella
+name ; given2; Eva Sofija
+name ; surname-prefix; van den
+name ; surname-core; Volfa
+name ; surname2; Bērziņa-Kalniņa
+name ; generation; jaunākā
+name ; credentials; Dr.philol.
+name ; locale; ja_AQ
+
+expectedResult; Dr.philol. van den Volfa Laima Kristīne E. S.
+
+parameters; none; medium; referring; formal
+
+expectedResult; van den Volfa Laima Kristīne
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+
+expectedResult; van den Volfa L. K. E. S.
+
+parameters; none; short; referring; formal
+
+expectedResult; van den Volfa L. K.
+
+parameters; none; short; referring; informal
+
+expectedResult; Laima Kristīne
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Ella
+
+parameters; none; long; addressing; informal
+
+expectedResult; VLE
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName

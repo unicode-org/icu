@@ -680,11 +680,6 @@ eu{
             gregorian{"Egutegi gregoriarra"}
             hebrew{"Hebrear egutegia"}
             indian{"Indiar egutegia"}
-            islamic{"Islamiar egutegia"}
-            islamic-civil{"Islamiar egutegia (taula-formakoa, garai zibilekoa)"}
-            islamic-rgsa{"Islamiar egutegia (Saudi Arabia, ikuspegiak)"}
-            islamic-tbla{"Islamiar egutegia (taula-formakoa, gai astronomikokoa)"}
-            islamic-umalqura{"Islamiar egutegia (Umm al-Qura)"}
             iso8601{"ISO-8601 egutegia"}
             japanese{"Japoniar egutegia"}
             persian{"Egutegi persiarra"}

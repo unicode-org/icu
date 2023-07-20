@@ -146,7 +146,6 @@ et{
         IL{"Iisrael"}
         IM{"Mani saar"}
         IN{"India"}
-        IO{"Briti India ookeani ala"}
         IQ{"Iraak"}
         IR{"Iraan"}
         IS{"Island"}

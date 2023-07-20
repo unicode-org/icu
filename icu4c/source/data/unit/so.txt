@@ -401,11 +401,6 @@ so{
                 one{"{0} Elektarofoolt"}
                 other{"{0}Elektarofooltis"}
             }
-            foodcalorie{
-                dnam{"Kalooris"}
-                one{"{0} Kalooris"}
-                other{"{0} Kalooris"}
-            }
             joule{
                 dnam{"Juules"}
                 one{"{0} juul"}
@@ -472,21 +467,6 @@ so{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dhibco halkii sentimitir"}
-                one{"dhibco halkii sentimitir"}
-                other{"{0} dhibco halkii sentimitirkii"}
-            }
-            dot-per-inch{
-                dnam{"dhibco injigiiba"}
-                one{"{0} dhibic injigiiba"}
-                other{"{0} dhibic injigiiba"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -1450,11 +1430,6 @@ so{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"{0} Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"juules"}
                 one{"{0} J"}
@@ -1521,21 +1496,6 @@ so{
             }
         }
         graphics{
-            dot{
-                dnam{"dhibic"}
-                one{"{0}dhibic"}
-                other{"{0}dhibic"}
-            }
-            dot-per-centimeter{
-                dnam{"dhsm"}
-                one{"dhsm"}
-                other{"{0} dhsm"}
-            }
-            dot-per-inch{
-                dnam{"dhbi"}
-                one{"{0} dhbi"}
-                other{"{0} dhbi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2460,11 +2420,6 @@ so{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"{0} Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"juules"}
                 one{"{0} J"}
@@ -2526,21 +2481,6 @@ so{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dhsm"}
-                one{"dhsm"}
-                other{"{0} dhsm"}
-            }
-            dot-per-inch{
-                dnam{"dhbi"}
-                one{"{0} dhbi"}
-                other{"{0} dhbi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

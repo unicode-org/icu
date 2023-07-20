@@ -824,11 +824,6 @@ ast{
             gregorian{"calendariu gregorianu"}
             hebrew{"calendariu hebréu"}
             indian{"calendariu nacional indiu"}
-            islamic{"calendariu islámicu"}
-            islamic-civil{"calendariu islámicu (tabular, época civil)"}
-            islamic-rgsa{"calendariu islámicu (Arabia Saudita, visual)"}
-            islamic-tbla{"calendariu islámicu (tabular, época astronómica)"}
-            islamic-umalqura{"calendariu islámicu (Umm al-Qura)"}
             iso8601{"calendariu ISO-8601"}
             japanese{"calendariu xaponés"}
             persian{"calendariu persa"}

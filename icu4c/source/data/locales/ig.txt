@@ -2,16 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ig{
-    AuxExemplarCharacters{
-        "[á à ā c é è ē í ì ī {ị\u0301} {ị\u0300} ḿ {m\u0300} ń ǹ ó ò ō {ọ\u0301} {ọ"
-        "\u0300} q ú ù ū {ụ\u0301} {ụ\u0300} x]"
-    }
+    AuxExemplarCharacters{"[áàā c éèē íìī {ị́}{ị̀} ḿ{m̀} ńǹ óòō {ọ́}{ọ̀} q úùū {ụ́}{ụ̀} x]"}
     ExemplarCharacters{
-        "[a b {ch} d e ẹ f g {gb} {gh} {gw} h i ị j k {kp} {kw} l m n ṅ {nw} {ny} o ọ"
-        " p r s {sh} t u ụ v w y z]"
+        "[a b {ch} d eẹ f g {gb} {gh} {gw} h i ị j k {kp} {kw} l m n ṅ {nw} {ny} o ọ "
+        "p r s {sh} t u ụ v w y z]"
     }
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . ‘ ’ “ ” ( ) \\[ \\] \\{ \\}]"}
+    ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . ‘’ “” ( ) \\[ \\] \\{ \\}]"}
     NumberElements{
         arab{
             patterns{

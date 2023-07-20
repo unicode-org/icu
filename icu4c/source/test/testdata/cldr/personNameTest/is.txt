@@ -1,0 +1,501 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: is
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Sigurður
+name ; locale; is_AQ
+
+expectedResult; Sigurður
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Íris
+name ; surname; Adólfsdóttir
+name ; locale; is_AQ
+
+expectedResult; Íris Adólfsdóttir
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; Í. Adólfsdóttir
+
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; Adólfsdóttir
+
+parameters; none; medium; addressing; formal
+
+expectedResult; Íris A.
+
+parameters; none; short; referring; informal
+
+expectedResult; Íris
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ÍA
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; A
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Í
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Jón
+name ; given2; Hannes
+name ; surname; Valdimarsson
+name ; locale; is_AQ
+
+expectedResult; Jón Hannes Valdimarsson
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; sorting; long; referring; formal
+
+expectedResult; Jón H. Valdimarsson
+
+parameters; none; medium; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; J. H. Valdimarsson
+
+parameters; none; short; referring; formal
+
+expectedResult; Jón Valdimarsson
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; J. Valdimarsson
+
+parameters; none; short; addressing; formal
+
+expectedResult; Valdimarsson
+
+parameters; none; medium; addressing; formal
+
+expectedResult; Jón V.
+
+parameters; none; short; referring; informal
+
+expectedResult; JHV
+
+parameters; none; long; monogram; formal
+
+expectedResult; Jón
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; JV
+
+parameters; none; long; monogram; informal
+
+expectedResult; J
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; Hr.
+name ; given; Geir Jón
+name ; given-informal; Geiri
+name ; given2; Magnús Brynjar
+name ; surname-core; Skeggjason
+name ; generation; yngri
+name ; credentials; þingmaður
+name ; locale; is_AQ
+
+expectedResult; Geir Jón Magnús Brynjar Skeggjason, þingmaður
+
+parameters; none; long; referring; formal
+
+expectedResult; Geir Jón M. B. Skeggjason yngri, þingmaður
+
+parameters; none; medium; referring; formal
+
+expectedResult; Hr. Geir Jón Magnús Brynjar Skeggjason
+
+parameters; none; long; addressing; formal
+
+expectedResult; Geir Jón Magnús Brynjar Skeggjason
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Geir Jón M. B. Skeggjason
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; G. J. M. B. Skeggjason
+
+parameters; none; short; referring; formal
+
+expectedResult; Hr. G. J. Skeggjason
+
+parameters; none; short; addressing; formal
+
+expectedResult; Geir Jón Skeggjason
+
+parameters; sorting; long; referring; informal
+
+expectedResult; Geiri Skeggjason
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Hr. Skeggjason
+
+parameters; none; medium; addressing; formal
+
+expectedResult; Geiri S.
+
+parameters; none; short; referring; informal
+
+expectedResult; Geiri
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; GMS
+
+parameters; none; long; monogram; formal
+
+expectedResult; GS
+
+parameters; none; long; monogram; informal
+
+expectedResult; G
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Sinbad
+name ; locale; ko_AQ
+
+expectedResult; Sinbad
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Käthe
+name ; surname; Müller
+name ; locale; ko_AQ
+
+expectedResult; Müller, Käthe
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Müller Käthe
+
+parameters; none; long; referring; formal
+
+expectedResult; Müller, K.
+
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Müller
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+
+expectedResult; Käthe
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; K
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Zäzilia
+name ; given2; Hamish
+name ; surname; Stöber
+name ; locale; ko_AQ
+
+expectedResult; Stöber Zäzilia Hamish
+
+parameters; none; long; referring; formal
+
+expectedResult; Stöber, Zäzilia H.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Stöber, Zäzilia
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Stöber, Z. H.
+
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; Stöber, Z.
+
+parameters; none; short; referring; informal
+
+expectedResult; Zäzilia
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Stöber
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+
+expectedResult; SZH
+
+parameters; none; long; monogram; formal
+
+expectedResult; SZ
+
+parameters; none; long; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Z
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; dr.
+name ; given; Sigríður Jóna
+name ; given-informal; Sigga
+name ; given2; Valgerður Fanndís
+name ; surname-prefix; van den
+name ; surname-core; Bjarnadóttir
+name ; surname2; Jónsdóttir Möller
+name ; generation; yngri
+name ; credentials; M.A. í bókmenntafræði
+name ; locale; ko_AQ
+
+expectedResult; van den Bjarnadóttir dr. Sigríður Jóna Valgerður Fanndís yngri, M.A. í bókmenntafræði
+
+parameters; none; long; referring; formal
+
+expectedResult; van den Bjarnadóttir, Sigríður Jóna V. F., M.A. í bókmenntafræði
+
+parameters; none; medium; referring; formal
+
+expectedResult; van den Bjarnadóttir, dr. S. J. V. F.
+
+parameters; none; short; addressing; formal
+
+expectedResult; van den Bjarnadóttir, S. J. V. F.
+
+parameters; none; short; referring; formal
+
+expectedResult; van den Bjarnadóttir, S. J.
+
+parameters; none; short; referring; informal
+
+expectedResult; van den Bjarnadóttir, Sigga
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; dr. van den Bjarnadóttir
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+
+expectedResult; Sigga
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; VSV
+
+parameters; none; long; monogram; formal
+
+expectedResult; VS
+
+parameters; none; long; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

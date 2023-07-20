@@ -473,11 +473,6 @@ ur{
                 one{"{0} الیکٹرون وولٹ"}
                 other{"{0} الیکٹرون وولٹس"}
             }
-            foodcalorie{
-                dnam{"کیلوریز"}
-                one{"{0} کیلوری"}
-                other{"{0} کیلوریز"}
-            }
             joule{
                 dnam{"جول"}
                 gender{"feminine"}
@@ -553,21 +548,6 @@ ur{
             }
         }
         graphics{
-            dot{
-                dnam{"ڈاٹ"}
-                one{"{0} ڈاٹ"}
-                other{"{0} ڈاٹ"}
-            }
-            dot-per-centimeter{
-                dnam{"ڈاٹس فی سینٹی میٹر"}
-                one{"{0} ڈاٹ فی سینٹی میٹر"}
-                other{"{0} ڈاٹس فی سینٹی میٹر"}
-            }
-            dot-per-inch{
-                dnam{"ڈاٹس فی انچ"}
-                one{"{0} ڈاٹ فی انچ"}
-                other{"{0} ڈاٹس فی انچ"}
-            }
             em{
                 dnam{"ٹائپوگرافک em"}
                 gender{"masculine"}
@@ -1582,11 +1562,6 @@ ur{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"جول"}
                 one{"{0} J"}
@@ -1653,21 +1628,6 @@ ur{
             }
         }
         graphics{
-            dot{
-                dnam{"ڈاٹ"}
-                one{"{0} ڈاٹ"}
-                other{"{0} ڈاٹ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2629,11 +2589,6 @@ ur{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -2699,21 +2654,6 @@ ur{
             }
         }
         graphics{
-            dot{
-                dnam{"ڈاٹ"}
-                one{"{0} ڈاٹ"}
-                other{"{0} ڈاٹ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

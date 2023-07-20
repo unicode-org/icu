@@ -175,13 +175,6 @@ es_MX{
                 per{"{0}/a"}
             }
         }
-        graphics{
-            dot{
-                dnam{"pto"}
-                one{"{0} pto"}
-                other{"{0} ptos"}
-            }
-        }
         length{
             astronomical-unit{
                 dnam{"au"}

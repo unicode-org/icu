@@ -2,11 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sa{
-    AuxExemplarCharacters{"[\u200C\u200D ऍ ऑ \u0945 ॉ]"}
+    AuxExemplarCharacters{"[\u200C\u200D ऍ ऑ ॅ ॉ]"}
     ExemplarCharacters{
-        "[\u0951\u0952 \u093C \u0901 \u0902 ः ॐ अ आ इ ई उ ऊ ऋ ॠ ऌ ॡ ए ऐ ओ औ क ख ग घ ङ"
-        " च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ल ळ व श ष स ह ऽ ा ि ी \u0941 "
-        "\u0942 \u0943 \u0944 \u0962 \u0963 \u0947 \u0948 ो ौ \u094D]"
+        "[॑ ॒ ़ ँ ंः ॐ अ आ इ ई उ ऊ ऋ ॠ ऌ ॡ ए ऐ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ "
+        "द ध न प फ ब भ म य र ल ळ व श ष स ह ऽ ा ि ी ु ू ृ ॄ ॢ ॣ े ै ो ौ ्]"
     }
     ExemplarCharactersIndex{
         "[अ आ इ ई उ ऊ ऋ ॠ ऌ ॡ ए ऐ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ"
@@ -14,8 +13,8 @@ sa{
     }
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0० 1१ 2२ 3३ 4४ 5५ 6६ 7७ 8८ 9९]"}
     ExemplarCharactersPunctuation{
-        "[_ \\- ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\} § @ * / "
-        "\\\\ \\& # ′ ″ ` + | ~]"
+        "[_ \\- ‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] \\{ \\} § @ * / \\\\ "
+        "\\& # ′ ″ ` + | ~]"
     }
     NumberElements{
         default{"deva"}

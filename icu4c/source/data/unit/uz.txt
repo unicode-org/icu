@@ -406,11 +406,6 @@ uz{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kaloriya"}
-                one{"{0} kaloriya"}
-                other{"{0} kaloriya"}
-            }
             joule{
                 dnam{"joul"}
                 one{"{0} joul"}
@@ -477,21 +472,6 @@ uz{
             }
         }
         graphics{
-            dot{
-                dnam{"piksel"}
-                one{"{0} piksel"}
-                other{"{0} piksel"}
-            }
-            dot-per-centimeter{
-                dnam{"nuqta/santimetr"}
-                one{"{0} nuqta/santimetr"}
-                other{"{0} nuqta/santimetr"}
-            }
-            dot-per-inch{
-                dnam{"nuqta/duym"}
-                one{"{0} nuqta/duym"}
-                other{"{0} nuqta/duym"}
-            }
             em{
                 dnam{"tipografik em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ uz{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kal"}
-                one{"{0} kal"}
-                other{"{0} kal"}
-            }
             joule{
                 dnam{"joul"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ uz{
             }
         }
         graphics{
-            dot{
-                dnam{"piksel"}
-                one{"{0} piksel"}
-                other{"{0} piksel"}
-            }
-            dot-per-centimeter{
-                dnam{"nuqta/sm"}
-                one{"{0} nqt/sm"}
-                other{"{0} nuqta/sm"}
-            }
-            dot-per-inch{
-                dnam{"nuqta/duym"}
-                one{"{0} nuqta/duym"}
-                other{"{0} nuqta/duym"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2496,11 +2456,6 @@ uz{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kal"}
-                one{"{0} kal"}
-                other{"{0} kal"}
-            }
             joule{
                 dnam{"joul"}
                 one{"{0} J"}
@@ -2567,21 +2522,6 @@ uz{
             }
         }
         graphics{
-            dot{
-                dnam{"piksel"}
-                one{"{0} piksel"}
-                other{"{0} piksel"}
-            }
-            dot-per-centimeter{
-                dnam{"nuqta/sm"}
-                one{"{0} nuqta/sm"}
-                other{"{0} nuqta/sm"}
-            }
-            dot-per-inch{
-                dnam{"nuqta/duym"}
-                one{"{0} nuqta/duym"}
-                other{"{0} nuqta/duym"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

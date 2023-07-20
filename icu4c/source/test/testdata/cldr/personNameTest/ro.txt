@@ -1,0 +1,507 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ro
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Alina
+name ; locale; ro_AQ
+
+expectedResult; Alina
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; A
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Maria
+name ; surname; Popescu
+name ; locale; ro_AQ
+
+expectedResult; Popescu, Maria
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Maria Popescu
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Popescu, M.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; M. Popescu
+
+parameters; none; short; referring; formal
+
+expectedResult; Maria P.
+
+parameters; none; short; referring; informal
+
+expectedResult; Popescu
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Maria
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MP
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; P
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Alexandru
+name ; given2; Ioan
+name ; surname; Popa
+name ; locale; ro_AQ
+
+expectedResult; Popa, Alexandru Ioan
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Alexandru Ioan Popa
+
+parameters; none; long; referring; formal
+
+expectedResult; Popa, Alexandru I.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Alexandru I. Popa
+
+parameters; none; medium; referring; formal
+
+expectedResult; Popa, Alexandru
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Alexandru Popa
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Alexandru P.
+
+parameters; none; short; referring; informal
+
+expectedResult; Popa, A. I.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; A. I. Popa
+
+parameters; none; short; referring; formal
+
+expectedResult; Alexandru
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Popa
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; AIP
+
+parameters; none; long; monogram; formal
+
+expectedResult; AP
+
+parameters; none; long; monogram; informal
+
+expectedResult; A
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; P
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; Dl
+name ; given; Daniel Ionescu
+name ; given-informal; Dani
+name ; given2; Dragoș Ioan
+name ; surname-core; Ardelean
+name ; generation; Jr.
+name ; credentials; Dr.
+name ; locale; ro_AQ
+
+expectedResult; Dl Dr. Daniel Ionescu Dragoș Ioan Ardelean Jr.
+
+parameters; none; long; referring; formal
+
+expectedResult; Dr. Daniel Ionescu D. I. Ardelean Jr.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Ardelean, Daniel Ionescu Dragoș Ioan
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Ardelean, Daniel Ionescu D. I.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Ardelean, D. I. D. I.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; D. I. D. I. Ardelean
+
+parameters; none; short; referring; formal
+
+expectedResult; Ardelean, Dani
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Dani Ardelean
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Dl Ardelean
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Dani A.
+
+parameters; none; short; referring; informal
+
+expectedResult; Dani
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; DDA
+
+parameters; none; long; monogram; formal
+
+expectedResult; DA
+
+parameters; none; long; monogram; informal
+
+expectedResult; A
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; D
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Mark
+name ; locale; ko_AQ
+
+expectedResult; Mark
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; M
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Mary
+name ; surname; Johnson
+name ; locale; ko_AQ
+
+expectedResult; Johnson Mary
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Johnson M.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Johnson
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Mary
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; JM
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; J
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+
+endName
+
+name ; given; Despina
+name ; given2; Katerina
+name ; surname; Yannaki
+name ; locale; ko_AQ
+
+expectedResult; Yannaki Despina Katerina
+
+parameters; none; long; referring; formal
+
+expectedResult; Yannaki Despina K.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Yannaki Despina
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Yannaki D. K.
+
+parameters; none; short; referring; formal
+
+expectedResult; Yannaki D.
+
+parameters; none; short; referring; informal
+
+expectedResult; Despina
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Yannaki
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; YDK
+
+parameters; none; long; monogram; formal
+
+expectedResult; YD
+
+parameters; none; long; monogram; informal
+
+expectedResult; D
+
+parameters; none; medium; monogram; informal
+
+expectedResult; Y
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Prof. dr.
+name ; given; Teodora
+name ; given-informal; Teo
+name ; given2; Ana-Maria
+name ; surname-prefix; de la
+name ; surname-core; Brad
+name ; surname2; Constantinescu
+name ; generation; Jr.
+name ; credentials; MD Chirurgie dentară
+name ; locale; ko_AQ
+
+expectedResult; MD Chirurgie dentară de la Brad Prof. dr. Teodora Ana-Maria Jr.
+
+parameters; none; long; referring; formal
+
+expectedResult; MD Chirurgie dentară de la Brad Teodora A. Jr.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Prof. dr. de la Brad
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; de la Brad T. A.
+
+parameters; none; short; referring; formal
+
+expectedResult; de la Brad Teo
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; de la Brad T.
+
+parameters; none; short; referring; informal
+
+expectedResult; DTA
+
+parameters; none; long; monogram; formal
+
+expectedResult; Teo
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; DT
+
+parameters; none; long; monogram; informal
+
+expectedResult; D
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; T
+
+parameters; none; medium; monogram; informal
+
+endName

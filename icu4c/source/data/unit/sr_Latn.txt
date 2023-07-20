@@ -1468,12 +1468,6 @@ sr_Latn{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolti"}
             }
-            foodcalorie{
-                dnam{"Kalorije"}
-                few{"{0} kalorije"}
-                one{"{0} kalorija"}
-                other{"{0} kalorija"}
-            }
             joule{
                 case{
                     accusative{
@@ -1714,24 +1708,6 @@ sr_Latn{
             }
         }
         graphics{
-            dot{
-                dnam{"tačka"}
-                few{"{0} tačke"}
-                one{"{0} tačka"}
-                other{"{0} tačaka"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 case{
                     accusative{
@@ -3790,12 +3766,6 @@ sr_Latn{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -3874,24 +3844,6 @@ sr_Latn{
             }
         }
         graphics{
-            dot{
-                dnam{"tačka"}
-                few{"{0} tačke"}
-                one{"{0} tačka"}
-                other{"{0} tačaka"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -5001,12 +4953,6 @@ sr_Latn{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -5083,24 +5029,6 @@ sr_Latn{
             }
         }
         graphics{
-            dot{
-                dnam{"tačka"}
-                few{"{0} tačke"}
-                one{"{0} tačka"}
-                other{"{0} tačaka"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}

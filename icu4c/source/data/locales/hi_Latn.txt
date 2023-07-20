@@ -3,10 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hi_Latn{
     %%Parent{"en_IN"}
-    AuxExemplarCharacters{
-        "[ā ḍ ĕ ē ḥ ī ḷ {l\u0325} ṁ {m\u0310} ñ ṅ ṇ ŏ ō ṛ {r\u0325} {r\u0325\u0304} ś"
-        " ṣ ṭ ū]"
-    }
+    AuxExemplarCharacters{"[ā ḍ ĕē ḥ ī ḷ{l̥} ṁ{m̐} ñṅṇ ŏō ṛ{r̥}{r̥̄} śṣ ṭ ū]"}
     NumberElements{
         default{"latn"}
         latn{

@@ -2,9 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 rm{
-    AuxExemplarCharacters{"[á ă â å ä ā æ ç ĕ ê ë ē í ĭ î ï ī ñ ó ŏ ô ö ø ō œ ú ŭ û ü ū ÿ]"}
-    ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ò p q r s t u ù v w x y z]"}
-    ExemplarCharactersIndex{"[A À B C D E É È F G H I Ì J K L M N O Ò P Q R S T U Ù V W X Y Z]"}
+    AuxExemplarCharacters{"[áăâåäā æ ç ĕêëē íĭîïī ñ óŏôöøō œ úŭûüū ÿ]"}
+    ExemplarCharacters{"[aà b c d eéè f g h iì j k l m n oò p q r s t uù v w x y z]"}
+    ExemplarCharactersIndex{"[AÀ B C D EÉÈ F G H IÌ J K L M N OÒ P Q R S T UÙ V W X Y Z]"}
     ExemplarCharactersNumbers{"[. ’ % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
     NumberElements{
         default{"latn"}

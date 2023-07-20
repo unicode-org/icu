@@ -146,7 +146,6 @@ hsb{
         IL{"Israel"}
         IM{"Man"}
         IN{"Indiska"}
-        IO{"Britiski teritorij w Indiskim oceanje"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandska"}

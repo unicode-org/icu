@@ -98,9 +98,6 @@ fr_CA{
         Hant{"caractères chinois traditionnels"}
     }
     Types{
-        calendar{
-            islamic-umalqura{"calendrier musulman (calculé, Umm al-Qura)"}
-        }
         collation{
             big5han{"ordre de tri chinois traditionnel - Big5"}
             dictionary{"ordre de tri du dictionnaire"}

@@ -784,12 +784,6 @@ da{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kalorier"}
-                gender{"common"}
-                one{"{0} kalorie"}
-                other{"{0} kalorier"}
-            }
             joule{
                 case{
                     genitive{
@@ -920,21 +914,6 @@ da{
             }
         }
         graphics{
-            dot{
-                dnam{"prik"}
-                one{"{0} prik"}
-                other{"{0} prikker"}
-            }
-            dot-per-centimeter{
-                dnam{"prikker per centimeter"}
-                one{"{0} prik per centimeter"}
-                other{"{0} prikker per centimeter"}
-            }
-            dot-per-inch{
-                dnam{"prikker per tomme"}
-                one{"{0} prik per tomme"}
-                other{"{0} prikker per tomme"}
-            }
             em{
                 case{
                     genitive{
@@ -2288,11 +2267,6 @@ da{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -2359,21 +2333,6 @@ da{
             }
         }
         graphics{
-            dot{
-                dnam{"prik"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -3305,11 +3264,6 @@ da{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -3373,21 +3327,6 @@ da{
             }
         }
         graphics{
-            dot{
-                dnam{"prik"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

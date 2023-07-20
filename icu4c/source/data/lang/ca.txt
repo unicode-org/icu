@@ -845,9 +845,6 @@ ca{
             gregorian{"calendari gregorià"}
             hebrew{"calendari hebreu"}
             indian{"calendari hindú"}
-            islamic{"calendari islàmic"}
-            islamic-civil{"calendari civil islàmic"}
-            islamic-umalqura{"calendari islàmic (Umm al-Qura)"}
             iso8601{"calendari ISO-8601"}
             japanese{"calendari japonès"}
             persian{"calendari persa"}

@@ -343,11 +343,6 @@ yrl{
                 one{"{0} elétron-volt"}
                 other{"{0} elétron-volt-ita"}
             }
-            foodcalorie{
-                dnam{"Karuria"}
-                one{"{0} Karuria"}
-                other{"{0} Karuria-ita"}
-            }
             joule{
                 dnam{"joule-ita"}
                 one{"{0} joule"}
@@ -409,16 +404,6 @@ yrl{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"pitusá-ita sẽtimeturu rupi"}
-                one{"{0} pitusá sẽtimeturu rupi"}
-                other{"{0} pitusá-ita sẽtimeturu rupi"}
-            }
-            dot-per-inch{
-                dnam{"pitusá-ita puregada rupi"}
-                one{"{0} pitusá puregada rupi"}
-                other{"{0} pitusá-ita puregada rupi"}
-            }
             em{
                 dnam{"tipografia em"}
                 one{"{0} em"}
@@ -1520,11 +1505,6 @@ yrl{
                 dnam{"elétron-volt"}
                 one{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -1571,16 +1551,6 @@ yrl{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
             }

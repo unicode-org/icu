@@ -340,7 +340,6 @@ en_IN{
                 GyMMMd{"d MMM, y G"}
                 MEd{"E, d/M"}
                 Md{"d/M"}
-                yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E d/M/y G"}
                 yyyyMMM{"MMM, y G"}
                 yyyyMMMEd{"E, d MMM, y G"}

@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sah{
-    AuxExemplarCharacters{"[в е ё ж з ф ц ш щ ъ ь ю я]"}
+    AuxExemplarCharacters{"[в её ж з ф ц ш щ ъ ь ю я]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}

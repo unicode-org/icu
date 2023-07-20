@@ -923,11 +923,6 @@ fi{
             gregorian{"gregoriaaninen kalenteri"}
             hebrew{"juutalainen kalenteri"}
             indian{"intialainen kalenteri"}
-            islamic{"islamilainen kalenteri"}
-            islamic-civil{"islamilainen siviilikalenteri, perjantai-epookki"}
-            islamic-rgsa{"islamilainen saudiarabialainen kalenteri"}
-            islamic-tbla{"islamilainen matemaattinen kalenteri, torstai-epookki"}
-            islamic-umalqura{"islamilainen Umm al-Qura -kalenteri"}
             iso8601{"ISO 8601 -kalenteri"}
             japanese{"japanilainen kalenteri"}
             persian{"persialainen kalenteri"}

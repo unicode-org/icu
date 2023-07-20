@@ -1328,11 +1328,6 @@ hu{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kalória"}
-                one{"{0} kalória"}
-                other{"{0} kalória"}
-            }
             joule{
                 case{
                     accusative{
@@ -1561,21 +1556,6 @@ hu{
             }
         }
         graphics{
-            dot{
-                dnam{"képpont"}
-                one{"képpont"}
-                other{"{0} képpont"}
-            }
-            dot-per-centimeter{
-                dnam{"pont per centiméter"}
-                one{"{0} pont per centiméter"}
-                other{"{0} pont per centiméter"}
-            }
-            dot-per-inch{
-                dnam{"pont per hüvelyk"}
-                one{"{0} pont per hüvelyk"}
-                other{"{0} pont per hüvelyk"}
-            }
             em{
                 case{
                     accusative{
@@ -3457,11 +3437,6 @@ hu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -3528,21 +3503,6 @@ hu{
             }
         }
         graphics{
-            dot{
-                dnam{"képpont"}
-                one{"{0} képpont"}
-                other{"{0} képpont"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -4479,11 +4439,6 @@ hu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -4548,21 +4503,6 @@ hu{
             }
         }
         graphics{
-            dot{
-                dnam{"képpont"}
-                one{"{0} képpont"}
-                other{"{0} képpont"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

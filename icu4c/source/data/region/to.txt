@@ -146,7 +146,6 @@ to{
         IL{"ʻIsileli"}
         IM{"Motu Mani"}
         IN{"ʻInitia"}
-        IO{"Potu fonua moana ʻInitia fakapilitānia"}
         IQ{"ʻIlaaki"}
         IR{"ʻIlaani"}
         IS{"ʻAisilani"}

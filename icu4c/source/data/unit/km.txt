@@ -335,10 +335,6 @@ km{
                 dnam{"អេឡិចត្រូវ៉ុល"}
                 other{"{0} អេឡិចត្រូវ៉ុល"}
             }
-            foodcalorie{
-                dnam{"កាឡូរី"}
-                other{"{0} កាឡូរី"}
-            }
             joule{
                 dnam{"ស៊ូល"}
                 other{"{0} ស៊ូល"}
@@ -393,18 +389,6 @@ km{
             }
         }
         graphics{
-            dot{
-                dnam{"ចំណុច"}
-                other{"{0}ចំណុច"}
-            }
-            dot-per-centimeter{
-                dnam{"ចំណុចក្នុង១សង់ទីម៉ែត្រ"}
-                other{"{0} ចំណុចក្នុង១សង់ទីម៉ែត្រ"}
-            }
-            dot-per-inch{
-                dnam{"ចំណុចក្នុង១អ៊ីញ"}
-                other{"{0} ចំណុចក្នុង១អ៊ីញ"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1191,10 +1175,6 @@ km{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ស៊ូល"}
                 other{"{0} J"}
@@ -1249,18 +1229,6 @@ km{
             }
         }
         graphics{
-            dot{
-                dnam{"ចំណុច"}
-                other{"{0} ចំណុច"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -2011,10 +1979,6 @@ km{
                 dnam{"cal"}
                 other{"{0} cal"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ស៊ូល"}
                 other{"{0} J"}
@@ -2048,20 +2012,6 @@ km{
             megahertz{
                 dnam{"MHz"}
                 other{"{0} MHz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"ចំណុច"}
-                other{"{0} ចំណុច"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
             }
         }
         length{

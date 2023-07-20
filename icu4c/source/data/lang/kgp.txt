@@ -718,9 +718,6 @@ kgp{
             gregorian{"Papa Gregorju Prỹg-kurã-kar"}
             hebrew{"Emrajko Prỹg-kurã-kar"}
             indian{"Ĩnija Prỹg-kurã-kar pẽ"}
-            islamic{"Isirỹ Prỹg-kurã-kar"}
-            islamic-civil{"Isirỹ Prỹg-kurã-kar Siviv"}
-            islamic-umalqura{"Isirỹ Prỹg-kurã-kar (Umm al-Qura)"}
             iso8601{"Prỹg-kurã-kar ISO-8601"}
             japanese{"Japonẽj Prỹg-kurã-kar"}
             persian{"Pérsa Prỹg-kurã-kar"}

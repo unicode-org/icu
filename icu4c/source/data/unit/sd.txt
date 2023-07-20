@@ -406,11 +406,6 @@ sd{
                 one{"{0} اليڪٽرون وولٽ"}
                 other{"{0} اليڪٽرون وولٽز"}
             }
-            foodcalorie{
-                dnam{"ڪيلوريز"}
-                one{"{0} ڪيلوري"}
-                other{"{0} ڪيلوريز"}
-            }
             joule{
                 dnam{"جول"}
                 one{"{0} جول"}
@@ -477,21 +472,6 @@ sd{
             }
         }
         graphics{
-            dot{
-                dnam{"پڪسلز"}
-                one{"{0} dot"}
-                other{"{0} dots"}
-            }
-            dot-per-centimeter{
-                dnam{"في سينٽي ميٽر ڊاٽس"}
-                one{"{0} في سينٽي ميٽر ڊاٽ"}
-                other{"{0} في سينٽي ميٽر ڊاٽس"}
-            }
-            dot-per-inch{
-                dnam{"ڊاٽس في انچ"}
-                one{"{0} ڊاٽ في انچ"}
-                other{"{0} ڊاٽس في انچ"}
-            }
             em{
                 dnam{"ٽائپوگرافڪ em"}
                 one{"{0} em"}
@@ -1384,11 +1364,6 @@ sd{
             electronvolt{
                 dnam{"اليڪٽرون وولٽ"}
             }
-            foodcalorie{
-                dnam{"ڪيلوري"}
-                one{"{0} ڪيلوري"}
-                other{"{0} ڪيلوري"}
-            }
             joule{
                 dnam{"جول"}
                 one{"{0} جول"}
@@ -1444,21 +1419,6 @@ sd{
             }
         }
         graphics{
-            dot{
-                dnam{"پڪسلز"}
-                one{"{0}dot"}
-                other{"{0}dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0}dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0}dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0}em"}
@@ -2241,11 +2201,6 @@ sd{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"ڪيلوري"}
-                one{"{0} ڪيلوري"}
-                other{"{0} ڪيلوري"}
-            }
             joule{
                 dnam{"جول"}
                 one{"{0} جول"}
@@ -2312,21 +2267,6 @@ sd{
             }
         }
         graphics{
-            dot{
-                dnam{"پڪسلز"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

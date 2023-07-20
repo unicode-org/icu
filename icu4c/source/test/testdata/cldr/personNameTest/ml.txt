@@ -1,0 +1,507 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ml
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; സെൻഡയ
+name ; locale; ml_AQ
+
+expectedResult; സെൻഡയ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; സെ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ഐറീൻ
+name ; surname; ആഡ്‌ലർ
+name ; locale; ml_AQ
+
+expectedResult; ആഡ്‌ലർ, ഐറീൻ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ഐറീൻ ആഡ്‌ലർ
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; ആഡ്‌ലർ, ഐ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ഐ. ആഡ്‌ലർ
+
+parameters; none; short; referring; formal
+
+expectedResult; ഐറീൻ ആ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ആഡ്‌ലർ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ഐറീൻ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ഐആ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; ആ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ഐ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ജോൺ
+name ; given2; ചാണ്ടി
+name ; surname; പടവീട്ടിൽ
+name ; locale; ml_AQ
+
+expectedResult; പടവീട്ടിൽ, ജോൺ ചാണ്ടി
+
+parameters; sorting; long; referring; formal
+
+expectedResult; ജോൺ ചാണ്ടി പടവീട്ടിൽ
+
+parameters; none; long; referring; formal
+
+expectedResult; പടവീട്ടിൽ, ജോ. ചാ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; പടവീട്ടിൽ, ജോൺ ചാ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; ജോ. ചാ. പടവീട്ടിൽ
+
+parameters; none; short; referring; formal
+
+expectedResult; ജോൺ ചാ. പടവീട്ടിൽ
+
+parameters; none; medium; referring; formal
+
+expectedResult; പടവീട്ടിൽ, ജോൺ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ജോൺ പടവീട്ടിൽ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; പടവീട്ടിൽ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ജോൺ പ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ജോചാപ
+
+parameters; none; long; monogram; formal
+
+expectedResult; ജോൺ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ജോപ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ജോ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; പ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; ശ്രീ.
+name ; given; ബെർട്രാം വിൽബെർഫോഴ്‌സ്
+name ; given-informal; ബെർടീ
+name ; given2; ഹെൻറി റോബർട്ട്
+name ; surname-core; വൂസ്റ്റർ
+name ; generation; ജൂനിയർ
+name ; credentials; എംപി
+name ; locale; ml_AQ
+
+expectedResult; ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെൻറി റോബർട്ട് വൂസ്റ്റർ എംപി
+
+parameters; none; long; referring; formal
+
+expectedResult; വൂസ്റ്റർ, ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെൻറി റോബർട്ട്
+
+parameters; sorting; long; referring; formal
+
+expectedResult; ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെ. റോ. വൂസ്റ്റർ എംപി
+
+parameters; none; medium; referring; formal
+
+expectedResult; വൂസ്റ്റർ, ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെ. റോ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; വൂസ്റ്റർ, ബെ. വി. ഹെ. റോ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ബെ. വി. ഹെ. റോ. വൂസ്റ്റർ
+
+parameters; none; short; referring; formal
+
+expectedResult; വൂസ്റ്റർ, ബെർടീ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ബെർടീ വൂസ്റ്റർ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ശ്രീ. വൂസ്റ്റർ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ബെർടീ വൂ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ബെഹെവൂ
+
+parameters; none; long; monogram; formal
+
+expectedResult; ബെർടീ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ബെവൂ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ബെ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; വൂ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; സിൻബാദ്
+name ; locale; ko_AQ
+
+expectedResult; സിൻബാദ്
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; സി
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; കാത്തി
+name ; surname; മുള്ളർ
+name ; locale; ko_AQ
+
+expectedResult; മുള്ളർ കാത്തി
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; മുള്ളർ കാ.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; കാത്തി
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; മുള്ളർ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; മുകാ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; കാ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; മു
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; സസിലിയ
+name ; given2; ഹാമിഷ്
+name ; surname; സ്‌റ്റോബർ
+name ; locale; ko_AQ
+
+expectedResult; സ്‌റ്റോബർ സസിലിയ ഹാമിഷ്
+
+parameters; none; long; referring; formal
+
+expectedResult; സ്‌റ്റോബർ സസിലിയ ഹാ.
+
+parameters; none; medium; referring; formal
+
+expectedResult; സ്‌റ്റോബർ സ. ഹാ.
+
+parameters; none; short; referring; formal
+
+expectedResult; സ്‌റ്റോബർ സസിലിയ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; സ്‌റ്റോബർ സ.
+
+parameters; none; short; referring; informal
+
+expectedResult; സ്‌റ്റോബർ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; സസിലിയ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; സ്‌സഹാ
+
+parameters; none; long; monogram; formal
+
+expectedResult; സ്‌സ
+
+parameters; none; long; monogram; informal
+
+expectedResult; സ്‌
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; സ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; പ്രൊഫ. ഡോ.
+name ; given; എയ്‌ഡ കോർണീലിയ
+name ; given-informal; നീൽ
+name ; given2; ഇവ സോഫിയ
+name ; surname-prefix; വാൻ ഡെൻ
+name ; surname-core; ബ്ര്യൂൾ
+name ; surname2; ഗോൺസാലെസ് ഡൊമിംഗോ
+name ; generation; ജൂനിയർ
+name ; credentials; എം.ഡി. പിഎച്ച്ഡി.
+name ; locale; ko_AQ
+
+expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എയ്‌ഡ കോർണീലിയ ഇവ സോഫിയ എം.ഡി. പിഎച്ച്ഡി.
+
+parameters; none; long; referring; formal
+
+expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എയ്‌ഡ കോർണീലിയ ഇ. സോ. എം.ഡി. പിഎച്ച്ഡി.
+
+parameters; none; medium; referring; formal
+
+expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എ. കോ. ഇ. സോ.
+
+parameters; none; short; referring; formal
+
+expectedResult; പ്രൊഫ. ഡോ. വാൻ ഡെൻ ബ്ര്യൂൾ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എ. കോ.
+
+parameters; none; short; referring; informal
+
+expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ നീൽ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; വാഎഇ
+
+parameters; none; long; monogram; formal
+
+expectedResult; വാനീ
+
+parameters; none; long; monogram; informal
+
+expectedResult; നീൽ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; നീ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; വാ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

@@ -669,11 +669,6 @@ sq{
             gregorian{"kalendar gregorian"}
             hebrew{"kalendar hebraik"}
             indian{"Kalendari Kombëtar Indian"}
-            islamic{"kalendar islamik"}
-            islamic-civil{"kalendar islamik (tabelor, epoka civile)"}
-            islamic-rgsa{"kalendar islamik (Arabi Saudite, shikim)"}
-            islamic-tbla{"kalendar islamik (tabelor, epoka astronomike)"}
-            islamic-umalqura{"kalendar islamik (um al-qura)"}
             iso8601{"kalendar ISO-8601"}
             japanese{"kalendar japonez"}
             persian{"kalendar persian"}

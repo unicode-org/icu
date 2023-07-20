@@ -146,7 +146,6 @@ hu{
         IL{"Izrael"}
         IM{"Man-sziget"}
         IN{"India"}
-        IO{"Brit Indiai-óceáni Terület"}
         IQ{"Irak"}
         IR{"Irán"}
         IS{"Izland"}

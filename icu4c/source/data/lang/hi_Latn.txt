@@ -25,6 +25,7 @@ hi_Latn{
         fa{"Faarsi"}
         ff{"Fulah"}
         lah{"Lahnda"}
+        mic{"Mi'kmaq"}
         mus{"Muscogee"}
         nan{"Min Nan"}
         nb{"Norwegian Bokmal"}
@@ -41,9 +42,6 @@ hi_Latn{
         Talu{"Naya Tai Lue"}
     }
     Types{
-        calendar{
-            islamic-civil{"Islamic Civil Calendar (tabular, civil epoch)"}
-        }
         colAlternate{
             non-ignorable{"Symbols ko sort karein"}
             shifted{"Symbols ko ignore karte hue sort karein"}

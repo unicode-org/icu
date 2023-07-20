@@ -2387,13 +2387,6 @@ uk{
                 one{"{0} електрон-вольт"}
                 other{"{0} електрон-вольта"}
             }
-            foodcalorie{
-                dnam{"кілокалорії"}
-                few{"{0} кілокалорії"}
-                many{"{0} кілокалорій"}
-                one{"{0} кілокалорія"}
-                other{"{0} кілокалорії"}
-            }
             joule{
                 case{
                     accusative{
@@ -2781,27 +2774,6 @@ uk{
             }
         }
         graphics{
-            dot{
-                dnam{"точки"}
-                few{"{0} точки"}
-                many{"{0} точок"}
-                one{"{0} точка"}
-                other{"{0} точки"}
-            }
-            dot-per-centimeter{
-                dnam{"точки на сантиметр"}
-                few{"{0} точки на сантиметр"}
-                many{"{0} точок на сантиметр"}
-                one{"{0} точка на сантиметр"}
-                other{"{0} точки на сантиметр"}
-            }
-            dot-per-inch{
-                dnam{"точки на дюйм"}
-                few{"{0} точки на дюйм"}
-                many{"{0} точок на дюйм"}
-                one{"{0} точка на дюйм"}
-                other{"{0} точки на дюйм"}
-            }
             em{
                 case{
                     accusative{
@@ -5802,13 +5774,6 @@ uk{
                 one{"{0}еВ"}
                 other{"{0}еВ"}
             }
-            foodcalorie{
-                dnam{"ккал"}
-                few{"{0} ккал"}
-                many{"{0} ккал"}
-                one{"{0} ккал"}
-                other{"{0} ккал"}
-            }
             joule{
                 dnam{"Дж"}
                 few{"{0} Дж"}
@@ -5899,27 +5864,6 @@ uk{
             }
         }
         graphics{
-            dot{
-                dnam{"тчк"}
-                few{"{0} тчк"}
-                many{"{0} тчк"}
-                one{"{0} тчк"}
-                other{"{0} тчк"}
-            }
-            dot-per-centimeter{
-                dnam{"тчк/см"}
-                few{"{0} тчк/см"}
-                many{"{0} тчк/см"}
-                one{"{0} тчк/см"}
-                other{"{0} тчк/см"}
-            }
-            dot-per-inch{
-                dnam{"тчк/“"}
-                few{"{0} тчк/“"}
-                many{"{0} тчк/“"}
-                one{"{0} тчк/“"}
-                other{"{0} тчк/“"}
-            }
             em{
                 dnam{"ем"}
                 few{"{0} ем"}
@@ -7237,13 +7181,6 @@ uk{
                 one{"{0} еВ"}
                 other{"{0} еВ"}
             }
-            foodcalorie{
-                dnam{"ккал"}
-                few{"{0} ккал"}
-                many{"{0} ккал"}
-                one{"{0} ккал"}
-                other{"{0} ккал"}
-            }
             joule{
                 dnam{"джоулі"}
                 few{"{0} Дж"}
@@ -7334,27 +7271,6 @@ uk{
             }
         }
         graphics{
-            dot{
-                dnam{"тчк"}
-                few{"{0} тчк"}
-                many{"{0} тчк"}
-                one{"{0} тчк"}
-                other{"{0} тчк"}
-            }
-            dot-per-centimeter{
-                dnam{"точки на см"}
-                few{"{0} точки на см"}
-                many{"{0} точок на см"}
-                one{"{0} точка на см"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"ем"}
                 few{"{0} ем"}

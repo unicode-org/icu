@@ -146,7 +146,6 @@ ha{
         IL{"Israʼila"}
         IM{"Isle na Mutum"}
         IN{"Indiya"}
-        IO{"Yankin Birtaniya Na Tekun Indiya"}
         IQ{"Iraƙi"}
         IR{"Iran"}
         IS{"Aisalan"}

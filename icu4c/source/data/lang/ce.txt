@@ -455,7 +455,6 @@ ce{
     Types{
         calendar{
             gregorian{"григорианан"}
-            islamic{"исламан"}
             japanese{"японийн"}
             persian{"гӀажарийн"}
         }

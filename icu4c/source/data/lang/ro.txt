@@ -805,11 +805,6 @@ ro{
             gregorian{"calendar gregorian"}
             hebrew{"calendar ebraic"}
             indian{"calendar național indian"}
-            islamic{"calendar islamic"}
-            islamic-civil{"calendar islamic civil"}
-            islamic-rgsa{"calendar islamic (Arabia Saudită, lunar)"}
-            islamic-tbla{"calendar islamic (tabular, epocă astronomică)"}
-            islamic-umalqura{"calendar islamic (Umm al-Qura)"}
             iso8601{"calendar ISO-8601"}
             japanese{"calendar japonez"}
             persian{"calendar persan"}

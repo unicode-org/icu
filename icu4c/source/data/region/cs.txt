@@ -146,7 +146,6 @@ cs{
         IL{"Izrael"}
         IM{"Ostrov Man"}
         IN{"Indie"}
-        IO{"Britské indickooceánské území"}
         IQ{"Irák"}
         IR{"Írán"}
         IS{"Island"}

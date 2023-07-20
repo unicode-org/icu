@@ -146,7 +146,6 @@ yo{
         IL{"Iserẹli"}
         IM{"Isle of Man"}
         IN{"India"}
-        IO{"Etíkun Índíánì ti Ìlú Bírítísì"}
         IQ{"Iraki"}
         IR{"Irani"}
         IS{"Aṣilandi"}

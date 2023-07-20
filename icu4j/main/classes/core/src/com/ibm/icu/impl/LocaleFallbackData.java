@@ -508,7 +508,6 @@ class LocaleFallbackData {
         t.put("kxl", "Deva");
         t.put("kxm", "Thai");
         t.put("kxp", "Arab");
-        t.put("kxv", "Orya");
         t.put("ky", "Cyrl");
         t.put("ky_CN", "Arab");
         t.put("kyu", "Kali");
@@ -1196,6 +1195,9 @@ class LocaleFallbackData {
         t.put("kk_Arab", "root");
         t.put("ks_Deva", "root");
         t.put("ku_Arab", "root");
+        t.put("kxv_Deva", "root");
+        t.put("kxv_Orya", "root");
+        t.put("kxv_Telu", "root");
         t.put("ky_Arab", "root");
         t.put("ky_Latn", "root");
         t.put("ml_Arab", "root");

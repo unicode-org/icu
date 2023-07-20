@@ -109,11 +109,6 @@ pt_PT{
                 one{"{0} eletrão-volt"}
                 other{"{0} eletrões-volts"}
             }
-            foodcalorie{
-                dnam{"quilocalorias"}
-                one{"{0} quilocaloria"}
-                other{"{0} quilocalorias"}
-            }
         }
         force{
             kilowatt-hour-per-100-kilometer{
@@ -123,11 +118,6 @@ pt_PT{
             }
         }
         graphics{
-            dot{
-                dnam{"pontos"}
-                one{"{0} ponto"}
-                other{"{0} pontos"}
-            }
             megapixel{
                 dnam{"megapíxeis"}
                 one{"{0} megapíxel"}
@@ -293,29 +283,11 @@ pt_PT{
                 per{"{0}/d"}
             }
         }
-        energy{
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
                 one{"{0}kWh/100 km"}
                 other{"{0}kWh/100 km"}
-            }
-        }
-        graphics{
-            dot{
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0} ppp"}
-                other{"{0} ppp"}
             }
         }
         length{
@@ -670,11 +642,6 @@ pt_PT{
             electronvolt{
                 dnam{"eletrão-volt"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 one{"{0} J"}
                 other{"{0} J"}
@@ -723,16 +690,6 @@ pt_PT{
             }
         }
         graphics{
-            dot{
-                dnam{"pontos"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0} ppp"}
-                other{"{0} ppp"}
-            }
             megapixel{
                 dnam{"megapíxeis"}
             }

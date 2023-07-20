@@ -259,6 +259,9 @@ public class CalendarTestFmwk extends TestFmwk {
             cal.setTimeInMillis(greg.getTimeInMillis());
             for (int j=0; j<fieldsToTest.length; ++j) {
                 int f = fieldsToTest[j];
+                if (cal.getType().equals("hebrew") && greg.get(Calendar.YEAR)>2500 && logKnownIssue("ICU-22441", "Hebrew calendar illegal year length")) {
+                    break;
+                }
                 int v = cal.get(f);
                 int minActual = cal.getActualMinimum(f);
                 int maxActual = cal.getActualMaximum(f);

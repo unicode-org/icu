@@ -2393,13 +2393,6 @@ sk{
                 one{"{0} elektrónvolt"}
                 other{"{0} elektrónvoltov"}
             }
-            foodcalorie{
-                dnam{"kalórie"}
-                few{"{0} kalórie"}
-                many{"{0} kalórie"}
-                one{"{0} kalória"}
-                other{"{0} kalórií"}
-            }
             joule{
                 case{
                     accusative{
@@ -2787,27 +2780,6 @@ sk{
             }
         }
         graphics{
-            dot{
-                dnam{"bod"}
-                few{"{0} body"}
-                many{"{0} bodu"}
-                one{"{0} bod"}
-                other{"{0} bodov"}
-            }
-            dot-per-centimeter{
-                dnam{"body na centimeter"}
-                few{"{0} body na centimeter"}
-                many{"{0} bodu na centimeter"}
-                one{"{0} bod na centimeter"}
-                other{"{0} bodov na centimeter"}
-            }
-            dot-per-inch{
-                dnam{"body na palec"}
-                few{"{0} body na palec"}
-                many{"{0} bodu na palec"}
-                one{"{0} bod na palec"}
-                other{"{0} bodov na palec"}
-            }
             em{
                 case{
                     accusative{
@@ -5808,13 +5780,6 @@ sk{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -5905,27 +5870,6 @@ sk{
             }
         }
         graphics{
-            dot{
-                dnam{"bod"}
-                few{"{0} body"}
-                many{"{0} bodu"}
-                one{"{0} bod"}
-                other{"{0} bodov"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} dpcm"}
-                many{"{0} dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                many{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -7224,13 +7168,6 @@ sk{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -7320,27 +7257,6 @@ sk{
             }
         }
         graphics{
-            dot{
-                dnam{"bod"}
-                few{"{0} body"}
-                many{"{0} bodu"}
-                one{"{0} bod"}
-                other{"{0} bodov"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} dpcm"}
-                many{"{0} dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                many{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}

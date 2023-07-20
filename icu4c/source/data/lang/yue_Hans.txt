@@ -857,11 +857,6 @@ yue_Hans{
             gregorian{"公历"}
             hebrew{"希伯来历"}
             indian{"印度国历"}
-            islamic{"伊斯兰历"}
-            islamic-civil{"伊斯兰民用历"}
-            islamic-rgsa{"伊斯兰新月历"}
-            islamic-tbla{"伊斯兰天文历"}
-            islamic-umalqura{"乌姆库拉历"}
             iso8601{"国际标准 ISO 8601"}
             japanese{"日本历"}
             persian{"波斯历"}

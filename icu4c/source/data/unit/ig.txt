@@ -330,10 +330,6 @@ ig{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -388,18 +384,6 @@ ig{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1186,10 +1170,6 @@ ig{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -1244,18 +1224,6 @@ ig{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1726,26 +1694,6 @@ ig{
                 dnam{"qtr"}
                 other{"{0} qtrs"}
                 per{"{0}/q"}
-            }
-        }
-        energy{
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
             }
         }
         volume{

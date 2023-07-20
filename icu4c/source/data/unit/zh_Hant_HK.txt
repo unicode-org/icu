@@ -145,9 +145,6 @@ zh_Hant_HK{
                 dnam{"英制熱量單位"}
                 other{"{0} 英制熱量單位"}
             }
-            foodcalorie{
-                other{"{0} 卡路里"}
-            }
             kilocalorie{
                 dnam{"千卡"}
                 other{"{0} 千卡"}
@@ -747,10 +744,6 @@ zh_Hant_HK{
             }
         }
         energy{
-            foodcalorie{
-                dnam{"千卡"}
-                other{"{0} 千卡"}
-            }
             joule{
                 other{"{0} 焦耳"}
             }

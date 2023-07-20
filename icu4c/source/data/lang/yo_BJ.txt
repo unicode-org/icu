@@ -122,9 +122,6 @@ yo_BJ{
             ethiopic{"Kàlɛ́ńdà Ɛtíópíìkì"}
             gregorian{"Kàlɛ́ńdà Gregory"}
             hebrew{"Kàlɛ́ńdà Hébérù"}
-            islamic{"Kàlɛ́ńdà Lárúbáwá"}
-            islamic-civil{"Kàlɛ́ńdà ti Musulumi"}
-            islamic-umalqura{"Kàlɛ́ńdà Musulumi"}
             iso8601{"Kàlɛ́ńdà ISO-8601"}
             japanese{"Kàlɛ́ńdà ti Jàpánù"}
             persian{"Kàlɛ́ńdà Pásíànù"}
