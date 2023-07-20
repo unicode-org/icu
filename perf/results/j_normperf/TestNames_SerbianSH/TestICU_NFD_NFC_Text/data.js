@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1689866734946,
+  "lastUpdate": 1689866751769,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19678,6 +19678,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 12.960339269801034,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pnacht@google.com",
+            "name": "Pedro Kaj Kjellerup Nacht",
+            "username": "pnacht"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "281a2a77ec8acc723f3603ad3d892e34b9ac2a29",
+          "message": "ICU-22350 Give maven.yml packages:write\n\nSigned-off-by: Pedro Kaj Kjellerup Nacht <pnacht@google.com>",
+          "timestamp": "2023-07-20T08:12:16-07:00",
+          "tree_id": "ba2b603c4e289458016d16a5b62686f7be65d0d4",
+          "url": "https://github.com/unicode-org/icu/commit/281a2a77ec8acc723f3603ad3d892e34b9ac2a29"
+        },
+        "date": 1689866711742,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 13.075436578867969,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
