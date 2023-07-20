@@ -790,11 +790,6 @@ da{
             gregorian{"gregoriansk kalender"}
             hebrew{"jødisk kalender"}
             indian{"indisk nationalkalender"}
-            islamic{"islamisk kalender"}
-            islamic-civil{"verdslig islamisk kalender"}
-            islamic-rgsa{"islamisk kalender (Saudi-Arabien, observation)"}
-            islamic-tbla{"islamisk kalender (tabellarisk, astronomisk epoke)"}
-            islamic-umalqura{"islamisk kalender (Umm al-Qura)"}
             iso8601{"ISO-8601-kalender"}
             japanese{"japansk kalender"}
             persian{"persisk kalender"}

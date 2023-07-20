@@ -1,0 +1,354 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: bn
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; সিনবাদ
+name ; locale; bn_AQ
+
+expectedResult; সিনবাদ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; সি
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; আইরিন
+name ; surname; অ্যাডলার
+name ; locale; bn_AQ
+
+expectedResult; অ্যাডলার আইরিন
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; আইরিন অ্যাডলার
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; আঅ্
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; জন
+name ; given2; হামিশ
+name ; surname; ওয়াটসন
+name ; locale; bn_AQ
+
+expectedResult; ওয়াটসন জন হামিশ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; জন হামিশ ওয়াটসন
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; জহাও
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; শ্রী
+name ; given; বার্ট্রাম উইলবারফোর্স
+name ; given-informal; বার্টি
+name ; given2; হেনরি রবার্ট
+name ; surname-core; উস্টার
+name ; generation; জুনিয়র
+name ; credentials; এমপি
+name ; locale; bn_AQ
+
+expectedResult; উস্টার শ্রী বার্ট্রাম উইলবারফোর্স হেনরি রবার্ট এমপি
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; শ্রী বার্ট্রাম উইলবারফোর্স হেনরি রবার্ট উস্টার এমপি
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; উস্টার বার্ট্রাম উইলবারফোর্স হেনরি রবার্ট
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; বার্ট্রাম উইলবারফোর্স হেনরি রবার্ট উস্টার
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; বাহেউ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; সিনবাদ
+name ; locale; ko_AQ
+
+expectedResult; সিনবাদ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; সি
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; কাথে
+name ; surname; মুলার
+name ; locale; ko_AQ
+
+expectedResult; মুলার কাথে
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; মুকা
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; জাজিলিয়া
+name ; given2; হামিশ
+name ; surname; স্টোবা
+name ; locale; ko_AQ
+
+expectedResult; স্টোবা জাজিলিয়া হামিশ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; স্টোজাহা
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; প্রঃ ডঃ
+name ; given; আদা কর্নেলিয়া
+name ; given-informal; নিলে
+name ; given2; ইভা সোফিয়া
+name ; surname-prefix; ভ্যান ডেন
+name ; surname-core; উলফ
+name ; surname2; বেকার শ্মিড্ট
+name ; generation; জুনিয়র
+name ; credentials; এম.ডি.পিএইচ.ডি.
+name ; locale; ko_AQ
+
+expectedResult; ভ্যান ডেন উলফ বেকার শ্মিড্ট প্রঃ ডঃ আদা কর্নেলিয়া ইভা সোফিয়া এম.ডি.পিএইচ.ডি.
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; ভ্যান ডেন উলফ বেকার শ্মিড্ট আদা কর্নেলিয়া ইভা সোফিয়া
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; ভ্যাআই
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName

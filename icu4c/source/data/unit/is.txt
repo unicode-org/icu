@@ -1235,11 +1235,6 @@ is{
                 one{"{0} rafeindarvolt"}
                 other{"{0} rafeindarvolt"}
             }
-            foodcalorie{
-                dnam{"hitaeiningar"}
-                one{"{0} hitaeining"}
-                other{"{0} hitaeiningar"}
-            }
             joule{
                 case{
                     accusative{
@@ -1441,21 +1436,6 @@ is{
             }
         }
         graphics{
-            dot{
-                dnam{"punktar"}
-                one{"{0} punktur"}
-                other{"{0} punktar"}
-            }
-            dot-per-centimeter{
-                dnam{"punktar á sentimetra"}
-                one{"{0} punktur á sentimetra"}
-                other{"{0} punktar á sentimetra"}
-            }
-            dot-per-inch{
-                dnam{"punktar á tommu"}
-                one{"{0} punktur á tommu"}
-                other{"{0} punktar á tommu"}
-            }
             em{
                 case{
                     accusative{
@@ -3184,11 +3164,6 @@ is{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kal"}
-                one{"{0} kal"}
-                other{"{0} kal"}
-            }
             joule{
                 dnam{"júl"}
                 one{"{0} J"}
@@ -3255,21 +3230,6 @@ is{
             }
         }
         graphics{
-            dot{
-                dnam{"pixlar"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -4205,11 +4165,6 @@ is{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kal"}
-                one{"{0} kal"}
-                other{"{0} kal"}
-            }
             joule{
                 dnam{"júl"}
                 one{"{0} J"}
@@ -4275,21 +4230,6 @@ is{
             }
         }
         graphics{
-            dot{
-                dnam{"pixlar"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

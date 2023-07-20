@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fr{
-    AuxExemplarCharacters{"[á å ä ã ā ć ē í ì ī ĳ ñ ó ò ö õ ø ř š ſ ß ú ǔ]"}
+    AuxExemplarCharacters{"[áåäãā ć ē íìī ĳ ñ óòöõø ř šſ ß úǔ]"}
     Ellipsis{
         final{"{0}…"}
         initial{"… {0}"}
@@ -11,13 +11,10 @@ fr{
         word-initial{"… {0}"}
         word-medial{"{0}… {1}"}
     }
-    ExemplarCharacters{
-        "[a à â æ b c ç d e é è ê ë f g h i î ï j k l m n o ô œ p q r s t u ù û ü v w"
-        " x y ÿ z]"
-    }
+    ExemplarCharacters{"[aàâ æ b cç d eéèêë f g h iîï j k l m n oô œ p q r s t uùûü v w x yÿ z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersNumbers{"[  \\- ‑ , . % ‰ + − 0 1 2 ² 3 ³ 4 5 6 7 8 9 ᵈ ᵉ ʳ ˢ]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … ’ \u0022 “ ” « » ( ) \\[ \\] § @ * / \\& # † ‡]"}
+    ExemplarCharactersNumbers{"[  \\- ‑ , . % ‰ + − 0 1 2² 3³ 4 5 6 7 8 9 ᵈ ᵉ ʳ ˢ]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … ’ \u0022“” « » ( ) \\[ \\] § @ * / \\& # † ‡]"}
     MoreInformation{"?"}
     NumberElements{
         arab{
@@ -3034,32 +3031,32 @@ fr{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚ߴ᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ ߴ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }

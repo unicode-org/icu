@@ -1,0 +1,495 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: mr
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; माधुरी
+name ; locale; mr_AQ
+
+expectedResult; माधुरी
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; मा
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; धिरज
+name ; surname; देशपांडे
+name ; locale; mr_AQ
+
+expectedResult; देशपांडे, धिरज
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; देशपांडे, धि.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; धिरज देशपांडे
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; धि. देशपांडे
+
+parameters; none; short; referring; formal
+
+expectedResult; देशपांडे
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; धिरज दे.
+
+parameters; none; short; referring; informal
+
+expectedResult; धिदे
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; धिरज
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; दे
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; धि
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; रिधान
+name ; given2; समीर
+name ; surname; फडके
+name ; locale; mr_AQ
+
+expectedResult; फडके, रिधान समीर
+
+parameters; sorting; long; referring; formal
+
+expectedResult; रिधान समीर फडके
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; फडके, रिधान स.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; फडके, रि. स.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; फडके, रिधान
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; रि. स. फडके
+
+parameters; none; short; referring; formal
+
+expectedResult; रिधान फडके
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; रिधान फ.
+
+parameters; none; short; referring; informal
+
+expectedResult; रिधान
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; फडके
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; रिसफ
+
+parameters; none; long; monogram; formal
+
+expectedResult; रिफ
+
+parameters; none; long; monogram; informal
+
+expectedResult; रि
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; फ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; श्री.
+name ; given; धिरज देशपांडे
+name ; given-informal; धीरू
+name ; given2; विजय देशपांडे
+name ; surname-core; देशपांडे
+name ; generation; क.
+name ; credentials; एम. पी.
+name ; locale; mr_AQ
+
+expectedResult; श्री. धिरज देशपांडे विजय देशपांडे देशपांडे, एम. पी.
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; देशपांडे, धिरज देशपांडे विजय देशपांडे
+
+parameters; sorting; long; referring; formal
+
+expectedResult; देशपांडे, धिरज देशपांडे वि. दे.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; देशपांडे, धि. दे. वि. दे.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; धि. दे. वि. दे. देशपांडे
+
+parameters; none; short; referring; formal
+
+expectedResult; देशपांडे, धीरू
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; श्री. देशपांडे
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; धीरू देशपांडे
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; धीरू दे.
+
+parameters; none; short; referring; informal
+
+expectedResult; धिविदे
+
+parameters; none; long; monogram; formal
+
+expectedResult; धीदे
+
+parameters; none; long; monogram; informal
+
+expectedResult; धीरू
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; दे
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; धी
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; सिंदबाद
+name ; locale; ko_AQ
+
+expectedResult; सिंदबाद
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; सिं
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; काठे
+name ; surname; मुलर
+name ; locale; ko_AQ
+
+expectedResult; मुलर काठे
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; मुलर का.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; काठे
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; मुका
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; मुलर
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; का
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; मु
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; झाझिलिया
+name ; given2; हमीश
+name ; surname; स्टॉबर
+name ; locale; ko_AQ
+
+expectedResult; स्टॉबर झाझिलिया हमीश
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; स्टॉबर झाझिलिया
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; स्टॉबर झा. ह.
+
+parameters; none; short; referring; formal
+
+expectedResult; स्टॉबर झा.
+
+parameters; none; short; referring; informal
+
+expectedResult; झाझिलिया
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; स्टॉझाह
+
+parameters; none; long; monogram; formal
+
+expectedResult; स्टॉझा
+
+parameters; none; long; monogram; informal
+
+expectedResult; स्टॉबर
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; स्टॉ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; झा
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; प्रोफे.डॉ.
+name ; given; एडा कॉर्नेलिया
+name ; given-informal; निले
+name ; given2; सीझर मार्टिन
+name ; surname-prefix; व्हॉन
+name ; surname-core; ब्र्यूल
+name ; surname2; गोन्झालेझ डोमिंगो
+name ; generation; क.
+name ; credentials; एम.डी.पीएच.डी
+name ; locale; ko_AQ
+
+expectedResult; व्हॉन ब्र्यूल एडा कॉर्नेलिया सीझर मार्टिन एम.डी.पीएच.डी
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; व्हॉन ब्र्यूल ए. कॉ. सी. मा.
+
+parameters; none; short; referring; formal
+
+expectedResult; प्रोफे.डॉ. व्हॉन ब्र्यूल
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; व्हॉन ब्र्यूल ए. कॉ.
+
+parameters; none; short; referring; informal
+
+expectedResult; व्हॉन ब्र्यूल निले
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; व्हॉएसी
+
+parameters; none; long; monogram; formal
+
+expectedResult; व्हॉनि
+
+parameters; none; long; monogram; informal
+
+expectedResult; निले
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; व्हॉ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; नि
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName

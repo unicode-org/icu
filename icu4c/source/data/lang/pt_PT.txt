@@ -166,9 +166,6 @@ pt_PT{
             gregorian{"Calendário gregoriano"}
             hebrew{"Calendário hebraico"}
             indian{"Calendário nacional indiano"}
-            islamic{"Calendário islâmico"}
-            islamic-civil{"Calendário islâmico (civil)"}
-            islamic-umalqura{"Calendário islâmico (Umm al-Qura)"}
             japanese{"Calendário japonês"}
             persian{"Calendário persa"}
         }

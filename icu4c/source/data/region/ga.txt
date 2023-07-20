@@ -146,7 +146,6 @@ ga{
         IL{"Iosrael"}
         IM{"Oileán Mhanann"}
         IN{"an India"}
-        IO{"Críoch Aigéan Indiach na Breataine"}
         IQ{"an Iaráic"}
         IR{"an Iaráin"}
         IS{"an Íoslainn"}

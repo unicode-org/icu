@@ -406,11 +406,6 @@ as{
                 one{"{0} ইলেক্ট্ৰ’নভ’ল্ট"}
                 other{"{0} ইলেক্ট্ৰ’নভ’ল্ট"}
             }
-            foodcalorie{
-                dnam{"কেলৰি"}
-                one{"{0} কেলৰি"}
-                other{"{0} কেলৰি"}
-            }
             joule{
                 dnam{"জুল"}
                 one{"{0} জুল"}
@@ -477,21 +472,6 @@ as{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -1409,11 +1389,6 @@ as{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"কেলৰি"}
-                one{"{0} কেলৰি"}
-                other{"{0} কেলৰি"}
-            }
             joule{
                 dnam{"জুল"}
                 one{"{0} জুল"}
@@ -1480,21 +1455,6 @@ as{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2450,11 +2410,6 @@ as{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"কেলৰি"}
-                one{"{0} কেলৰি"}
-                other{"{0} কেলৰি"}
-            }
             joule{
                 dnam{"জুল"}
                 one{"{0} জুল"}
@@ -2521,21 +2476,6 @@ as{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

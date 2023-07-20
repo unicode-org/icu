@@ -800,9 +800,6 @@ ko{
             gregorian{"양력"}
             hebrew{"히브리력"}
             indian{"인도력"}
-            islamic{"이슬람력"}
-            islamic-civil{"이슬람 상용력"}
-            islamic-umalqura{"이슬람력(움 알 쿠라)"}
             iso8601{"ISO-8601 달력"}
             japanese{"일본력"}
             persian{"페르시안력"}

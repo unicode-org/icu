@@ -1211,7 +1211,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: quarter
-     * @draft ICU 72
+     * @stable ICU 72
      */
     public static final MeasureUnit QUARTER = MeasureUnit.internalGetInstance("duration", "quarter");
 
@@ -1663,7 +1663,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of mass: tonne
-     * @draft ICU 72
+     * @stable ICU 72
      */
     public static final MeasureUnit TONNE = MeasureUnit.internalGetInstance("mass", "tonne");
 
@@ -1714,6 +1714,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 65
      */
     public static final MeasureUnit BAR = MeasureUnit.internalGetInstance("pressure", "bar");
+
+    /**
+     * Constant for unit of pressure: gasoline-equivalent
+     * @draft ICU 74
+     */
+    public static final MeasureUnit GASOLINE_EQUIVALENT = MeasureUnit.internalGetInstance("pressure", "gasoline-equivalent");
 
     /**
      * Constant for unit of pressure: hectopascal

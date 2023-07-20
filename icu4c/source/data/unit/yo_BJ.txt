@@ -114,12 +114,6 @@ yo_BJ{
                 other{"{0} àwɔ́n wákàtí kílówáàtì ní kìlómítà ɔgɔ́rùn"}
             }
         }
-        graphics{
-            dot{
-                dnam{"dɔ́ɔ̀tì"}
-                other{"{0} dɔ́ɔ̀tì"}
-            }
-        }
         length{
             earth-radius{
                 dnam{"ìdinwɔ̀n ayé"}
@@ -210,12 +204,6 @@ yo_BJ{
                 dnam{"ɔd"}
                 other{"{0} ɔd"}
                 per{"{0}/ɔd"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"dɔ́ɔ̀tì"}
-                other{"{0} dɔ́ɔ̀tì"}
             }
         }
         length{
@@ -309,12 +297,6 @@ yo_BJ{
             kilowatt-hour-per-100-kilometer{
                 dnam{"KWh lɔ́rí 100km"}
                 other{"{0} KWh lɔ́rí 100km"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"dɔ́ɔ̀tì"}
-                other{"{0} dɔ́ɔ̀tì"}
             }
         }
         length{

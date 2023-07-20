@@ -109,7 +109,6 @@ mi{
         IE{"Aerana"}
         IM{"Motu Tangata"}
         IN{"Inia"}
-        IO{"Te Rohe o te Moana Īniana Piritihi"}
         IS{"Tiorangi"}
         IT{"Itāria"}
         JE{"Tiehe"}

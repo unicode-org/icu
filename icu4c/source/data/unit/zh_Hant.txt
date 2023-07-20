@@ -336,10 +336,6 @@ zh_Hant{
                 dnam{"電子伏特"}
                 other{"{0} 電子伏特"}
             }
-            foodcalorie{
-                dnam{"卡路里"}
-                other{"{0} 大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0} 焦耳"}
@@ -394,18 +390,6 @@ zh_Hant{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1192,10 +1176,6 @@ zh_Hant{
                 dnam{"電子伏特"}
                 other{"{0}電子伏特"}
             }
-            foodcalorie{
-                dnam{"大卡"}
-                other{"{0}大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0}焦"}
@@ -1250,18 +1230,6 @@ zh_Hant{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                other{"{0}px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0}em"}
@@ -2025,10 +1993,6 @@ zh_Hant{
                 dnam{"電子伏特"}
                 other{"{0} 電子伏特"}
             }
-            foodcalorie{
-                dnam{"大卡"}
-                other{"{0} 大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0} 焦"}
@@ -2076,20 +2040,6 @@ zh_Hant{
             megahertz{
                 dnam{"兆赫"}
                 other{"{0} 兆赫"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
             }
         }
         length{

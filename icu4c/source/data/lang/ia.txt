@@ -527,9 +527,6 @@ ia{
             ethiopic-amete-alem{"calendario ethiope Amete Alem"}
             gregorian{"calendario gregorian"}
             hebrew{"calendario hebraic"}
-            islamic{"calendario islamic"}
-            islamic-civil{"calendario islamic (tabular, epocha civil)"}
-            islamic-umalqura{"calendario islamic (Umm al-Qura)"}
             iso8601{"calendario ISO-8601"}
             japanese{"calendario japonese"}
             persian{"calendario persa"}

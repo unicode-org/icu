@@ -871,11 +871,6 @@ no{
             gregorian{"gregoriansk kalender"}
             hebrew{"hebraisk kalender"}
             indian{"indisk nasjonalkalender"}
-            islamic{"islamsk kalender"}
-            islamic-civil{"islamsk kalender (tabell, sivil)"}
-            islamic-rgsa{"islamsk kalender (Saudi-Arabia, observasjon)"}
-            islamic-tbla{"islamsk kalender (tabell, astronomisk)"}
-            islamic-umalqura{"islamsk kalender (Umm al-Qura)"}
             iso8601{"ISO 8601-kalender"}
             japanese{"japansk kalender"}
             persian{"persisk kalender"}

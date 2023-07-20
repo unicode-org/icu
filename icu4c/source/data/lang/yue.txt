@@ -856,11 +856,6 @@ yue{
             gregorian{"公曆"}
             hebrew{"希伯來曆"}
             indian{"印度國曆"}
-            islamic{"伊斯蘭曆"}
-            islamic-civil{"伊斯蘭民用曆"}
-            islamic-rgsa{"伊斯蘭新月曆"}
-            islamic-tbla{"伊斯蘭天文曆"}
-            islamic-umalqura{"烏姆庫拉曆"}
             iso8601{"國際標準 ISO 8601"}
             japanese{"日本曆"}
             persian{"波斯曆"}

@@ -676,9 +676,6 @@ is{
             gregorian{"Gregorískt tímatal"}
             hebrew{"Hebreskt tímatal"}
             indian{"indverskt dagatal"}
-            islamic{"Íslamskt tímatal"}
-            islamic-civil{"Íslamskt borgaradagatal"}
-            islamic-umalqura{"Íslamskt dagatal (Umm al-Qura)"}
             iso8601{"ISO-8601 tímatal"}
             japanese{"Japanskt tímatal"}
             persian{"Persneskt tímatal"}

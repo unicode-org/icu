@@ -1467,12 +1467,6 @@ sr{
                 one{"{0} електронволт"}
                 other{"{0} електронволти"}
             }
-            foodcalorie{
-                dnam{"Калорије"}
-                few{"{0} калорије"}
-                one{"{0} калорија"}
-                other{"{0} калорија"}
-            }
             joule{
                 case{
                     accusative{
@@ -1713,24 +1707,6 @@ sr{
             }
         }
         graphics{
-            dot{
-                dnam{"тачка"}
-                few{"{0} тачке"}
-                one{"{0} тачка"}
-                other{"{0} тачака"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 case{
                     accusative{
@@ -3789,12 +3765,6 @@ sr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -3873,24 +3843,6 @@ sr{
             }
         }
         graphics{
-            dot{
-                dnam{"тачка"}
-                few{"{0} тачке"}
-                one{"{0} тачка"}
-                other{"{0} тачака"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -5000,12 +4952,6 @@ sr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -5082,24 +5028,6 @@ sr{
             }
         }
         graphics{
-            dot{
-                dnam{"тачка"}
-                few{"{0} тачке"}
-                one{"{0} тачка"}
-                other{"{0} тачака"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}

@@ -404,11 +404,6 @@ ha{
                 one{"electronvolt {0}"}
                 other{"electronvolts {0}"}
             }
-            foodcalorie{
-                dnam{"Kaloris"}
-                one{"Kalori {0}"}
-                other{"Kaloris {0}"}
-            }
             joule{
                 dnam{"joules"}
                 one{"joule {0}"}
@@ -475,21 +470,6 @@ ha{
             }
         }
         graphics{
-            dot{
-                dnam{"aya"}
-                one{"aya {0}"}
-                other{"aya {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"ayoyi a sentimita"}
-                one{"{0} aya a sentimita"}
-                other{"{0} ayoyi a sentimita"}
-            }
-            dot-per-inch{
-                dnam{"ayoyi a inci"}
-                one{"{0} aya a inci"}
-                other{"{0} ayoyi a inci"}
-            }
             em{
                 dnam{"typographic em"}
                 one{"em {0}"}
@@ -1453,11 +1433,6 @@ ha{
                 one{"eV{0}"}
                 other{"eV{0}"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"Kal{0}"}
-                other{"Kal{0}"}
-            }
             joule{
                 dnam{"joule"}
                 one{"J{0}"}
@@ -1524,21 +1499,6 @@ ha{
             }
         }
         graphics{
-            dot{
-                dnam{"aya"}
-                one{"aya{0}"}
-                other{"ayoyi{0}"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"dpcm{0}"}
-                other{"dpcm{0}"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"dpi{0}"}
-                other{"dpi{0}"}
-            }
             em{
                 dnam{"em"}
                 one{"em{0}"}
@@ -2459,11 +2419,6 @@ ha{
                 one{"eV {0}"}
                 other{"eV {0}"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"Kal {0}"}
-                other{"Kal {0}"}
-            }
             joule{
                 dnam{"joules"}
                 one{"J {0}"}
@@ -2523,21 +2478,6 @@ ha{
             }
         }
         graphics{
-            dot{
-                dnam{"aya"}
-                one{"px {0}"}
-                other{"px {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"dpcm {0}"}
-                other{"dpcm {0}"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"dpi {0}"}
-                other{"dpi {0}"}
-            }
             em{
                 one{"em {0}"}
                 other{"em {0}"}

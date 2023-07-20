@@ -857,9 +857,6 @@ to{
             gregorian{"fakakelekolia"}
             hebrew{"fakahepelū"}
             indian{"fakaʻinitia"}
-            islamic{"fakamohameti"}
-            islamic-civil{"fakamohameti-sivile"}
-            islamic-umalqura{"fakamohameti-ʻumalakula"}
             iso8601{"faka-iso8601"}
             japanese{"fakasiapani"}
             persian{"fakapēsia"}

@@ -730,11 +730,6 @@ sl{
             gregorian{"gregorijanski koledar"}
             hebrew{"hebrejski koledar"}
             indian{"indijanski koledar"}
-            islamic{"islamski koledar"}
-            islamic-civil{"islamski civilni koledar"}
-            islamic-rgsa{"islamski koledar ( Saudova Arabija, opazovalni)"}
-            islamic-tbla{"islamski koledar (tabelarni, astronomska epoha)"}
-            islamic-umalqura{"islamski koledar Umm al-Qura"}
             iso8601{"koledar ISO-8601"}
             japanese{"japonski koledar"}
             persian{"perzijski koledar"}

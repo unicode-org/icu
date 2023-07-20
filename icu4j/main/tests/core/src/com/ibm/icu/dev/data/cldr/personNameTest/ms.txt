@@ -1,0 +1,383 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ms
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Sulaiman
+name ; locale; ms_AQ
+
+expectedResult; Sulaiman
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Salimah
+name ; surname; Sulaiman
+name ; locale; ms_AQ
+
+expectedResult; Sulaiman, Salimah
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; Salimah Sulaiman
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; SS
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Syed
+name ; given2; Sadiq
+name ; surname; Syed Hassan
+name ; locale; ms_AQ
+
+expectedResult; Syed Hassan, Syed Sadiq
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; Syed Sadiq Syed Hassan
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; SSS
+
+parameters; none; long; monogram; formal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; SS
+
+parameters; none; long; monogram; informal
+
+endName
+
+name ; title; Tn.
+name ; given; Syed
+name ; given-informal; Razak
+name ; given2; Abd Aziz
+name ; surname-prefix; Syed A
+name ; surname-core; Ismail
+name ; surname2; Petra
+name ; generation; Jr
+name ; credentials; MP
+name ; locale; ms_AQ
+
+expectedResult; Tn. Syed Abd Aziz Syed A Ismail Petra MP
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Ismail, Syed Abd Aziz Syed A
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; SAS
+
+parameters; none; long; monogram; formal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; RS
+
+parameters; none; long; monogram; informal
+
+endName
+
+name ; given; Razak
+name ; locale; ja_AQ
+
+expectedResult; Razak
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; R
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Arumugam
+name ; surname; Pillay
+name ; locale; ja_AQ
+
+expectedResult; Pillay Arumugam
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Arumugam
+
+parameters; none; long; addressing; informal
+
+expectedResult; Pillay
+
+parameters; none; long; addressing; formal
+
+expectedResult; PA
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Zazila
+name ; given2; Harisah
+name ; surname; Salleh
+name ; locale; ja_AQ
+
+expectedResult; Salleh Zazila Harisah
+
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Salleh Zazila H.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Salleh Zazila
+
+parameters; none; long; referring; informal
+
+expectedResult; Salleh
+
+parameters; none; long; addressing; formal
+
+expectedResult; Zazila
+
+parameters; none; long; addressing; informal
+
+expectedResult; SZH
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Prof. Dr.
+name ; given; Puteri Aida
+name ; given-informal; Intan
+name ; given2; Bahiyah
+name ; surname-prefix; binti
+name ; surname-core; Hamdan
+name ; surname2; Ariff
+name ; generation; Jr
+name ; credentials; MD DDS
+name ; locale; ja_AQ
+
+expectedResult; binti Hamdan Puteri Aida Bahiyah MD DDS
+
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; binti Hamdan Puteri Aida B. MD DDS
+
+parameters; none; medium; referring; formal
+
+expectedResult; Prof. Dr. binti Hamdan
+
+parameters; none; long; addressing; formal
+
+expectedResult; binti Hamdan Intan
+
+parameters; none; long; referring; informal
+
+expectedResult; Intan
+
+parameters; none; long; addressing; informal
+
+expectedResult; BPB
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName

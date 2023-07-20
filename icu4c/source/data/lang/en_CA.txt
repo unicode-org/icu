@@ -77,10 +77,6 @@ en_CA{
             gregorian{"Gregorian calendar"}
             hebrew{"Hebrew calendar"}
             indian{"Indian national calendar"}
-            islamic{"Islamic calendar"}
-            islamic-civil{"Islamic calendar (tabular, civil epoch)"}
-            islamic-tbla{"Islamic calendar (tabular, astronomical epoch)"}
-            islamic-umalqura{"Islamic calendar (Umm al-Qura)"}
             iso8601{"ISO-8601 calendar"}
             japanese{"Japanese calendar"}
             persian{"Persian calendar"}

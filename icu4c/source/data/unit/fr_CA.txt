@@ -203,10 +203,6 @@ fr_CA{
                 one{"{0} calorie"}
                 other{"{0} calories"}
             }
-            foodcalorie{
-                one{"{0} kilocalorie"}
-                other{"{0} kilocalories"}
-            }
             joule{
                 one{"{0} joule"}
                 other{"{0} joules"}
@@ -246,11 +242,6 @@ fr_CA{
             megahertz{
                 one{"{0} mégahertz"}
                 other{"{0} mégahertz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"point"}
             }
         }
         length{
@@ -592,21 +583,6 @@ fr_CA{
             therm-us{
                 one{"{0}therm US"}
                 other{"{0}therm US"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"p"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0}ppcm"}
-                other{"{0}ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0}ppp"}
-                other{"{0}ppp"}
             }
         }
         length{
@@ -998,10 +974,6 @@ fr_CA{
                 one{"{0} cal"}
                 other{"{0} cal"}
             }
-            foodcalorie{
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 one{"{0} J"}
                 other{"{0} J"}
@@ -1035,23 +1007,6 @@ fr_CA{
             megahertz{
                 one{"{0} MHz"}
                 other{"{0} MHz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"p"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0} ppp"}
-                other{"{0} ppp"}
             }
         }
         length{

@@ -1,0 +1,510 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: gd
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Calum
+name ; locale; gd_AQ
+
+expectedResult; Calum
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; C
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Oighrig
+name ; surname; Dhòmhnallach
+name ; locale; gd_AQ
+
+expectedResult; Dhòmhnallach, Oighrig
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Oighrig Dhòmhnallach
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Dhòmhnallach, O.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; O. Dhòmhnallach
+
+parameters; none; short; referring; formal
+
+expectedResult; Dhòmhnallach
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Oighrig
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; OD
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; D
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; O
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Dòmhnall Iain
+name ; given2; Tormod
+name ; surname; Caimbeul
+name ; locale; gd_AQ
+
+expectedResult; Caimbeul, Dòmhnall Iain Tormod
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Dòmhnall Iain Tormod Caimbeul
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Caimbeul, Dòmhnall Iain T.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Dòmhnall Iain T. Caimbeul
+
+parameters; none; medium; referring; formal
+
+expectedResult; Dòmhnall Iain Tormod
+
+parameters; none; long; addressing; informal
+
+expectedResult; Caimbeul, D. I. T.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; D. I. T. Caimbeul
+
+parameters; none; short; referring; formal
+
+expectedResult; Dòmhnall Iain T.
+
+parameters; none; short; referring; informal
+
+expectedResult; Dòmhnall Iain
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Caimbeul
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; DTC
+
+parameters; none; long; monogram; formal
+
+expectedResult; DC
+
+parameters; none; long; monogram; informal
+
+expectedResult; C
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; D
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Mgr.
+name ; given; Dòmhnall Iain
+name ; given-informal; Donaidh
+name ; given2; Bàn
+name ; surname-core; Mac a’ Ghobhainn
+name ; surname2; Chorùna
+name ; credentials; am post
+name ; locale; gd_AQ
+
+expectedResult; Mgr. Dòmhnall Iain Bàn Mac a’ Ghobhainn Chorùna am post
+
+parameters; none; long; referring; formal
+
+expectedResult; Dòmhnall Iain B. Mac a’ Ghobhainn am post
+
+parameters; none; medium; referring; formal
+
+expectedResult; Mac a’ Ghobhainn, Dòmhnall Iain Bàn
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Mac a’ Ghobhainn, Dòmhnall Iain B.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Mac a’ Ghobhainn, Donaidh Bàn
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Donaidh Bàn Mac a’ Ghobhainn
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Mac a’ Ghobhainn, D. I. B.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; D. I. B. Mac a’ Ghobhainn
+
+parameters; none; short; referring; formal
+
+expectedResult; Mgr. Mac a’ Ghobhainn
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Donaidh Bàn
+
+parameters; none; long; addressing; informal
+
+expectedResult; Donaidh B.
+
+parameters; none; short; referring; informal
+
+expectedResult; Donaidh
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; DBM
+
+parameters; none; long; monogram; formal
+
+expectedResult; DM
+
+parameters; none; long; monogram; informal
+
+expectedResult; D
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Sinbad
+name ; locale; ja_AQ
+
+expectedResult; Sinbad
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Kate
+name ; surname; Miller
+name ; locale; ja_AQ
+
+expectedResult; Miller Kate
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Miller K.
+
+parameters; none; short; referring; formal
+
+expectedResult; Miller
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Kate
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; K
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Cecilia
+name ; given2; Angela
+name ; surname; Smith
+name ; locale; ja_AQ
+
+expectedResult; Smith Cecilia Angela
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Smith Cecilia A.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Cecilia Angela
+
+parameters; none; long; addressing; informal
+
+expectedResult; Smith C. A.
+
+parameters; none; short; referring; formal
+
+expectedResult; Cecilia A.
+
+parameters; none; short; referring; informal
+
+expectedResult; Cecilia
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Smith
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; SCA
+
+parameters; none; long; monogram; formal
+
+expectedResult; SC
+
+parameters; none; long; monogram; informal
+
+expectedResult; C
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; Prof. Dr.
+name ; given; Ada Cornelia
+name ; given-informal; Neele
+name ; given2; César Martín
+name ; surname-prefix; von
+name ; surname-core; Brühl
+name ; surname2; González Domingo
+name ; generation; Jr
+name ; credentials; MD DDS
+name ; locale; ja_AQ
+
+expectedResult; von Brühl González Domingo Prof. Dr. Ada Cornelia César Martín Jr, MD DDS
+
+parameters; none; long; referring; formal
+
+expectedResult; von Brühl González Domingo Neele César Martín
+
+parameters; none; long; referring; informal
+
+expectedResult; von Brühl Ada Cornelia C. M. Jr, MD DDS
+
+parameters; none; medium; referring; formal
+
+expectedResult; von Brühl Neele César Martín
+
+parameters; none; medium; referring; informal
+
+expectedResult; von Brühl A. C. C. M.
+
+parameters; none; short; referring; formal
+
+expectedResult; Prof. Dr. von Brühl
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Neele César Martín
+
+parameters; none; long; addressing; informal
+
+expectedResult; Neele C. M.
+
+parameters; none; short; referring; informal
+
+expectedResult; Neele
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; VAC
+
+parameters; none; long; monogram; formal
+
+expectedResult; VN
+
+parameters; none; long; monogram; informal
+
+expectedResult; N
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

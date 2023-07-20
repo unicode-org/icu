@@ -2302,13 +2302,6 @@ lt{
                 one{"{0} elektronvoltas"}
                 other{"{0} elektronvoltų"}
             }
-            foodcalorie{
-                dnam{"kalorijos"}
-                few{"{0} kalorijos"}
-                many{"{0} kalorijos"}
-                one{"{0} kalorija"}
-                other{"{0} kalorijų"}
-            }
             joule{
                 case{
                     accusative{
@@ -2696,27 +2689,6 @@ lt{
             }
         }
         graphics{
-            dot{
-                dnam{"taškas"}
-                few{"{0} taškai"}
-                many{"{0} taško"}
-                one{"{0} taškas"}
-                other{"{0} taškų"}
-            }
-            dot-per-centimeter{
-                dnam{"taškai centimetre"}
-                few{"{0} taškai centimetre"}
-                many{"{0} taško centimetre"}
-                one{"{0} taškas centimetre"}
-                other{"{0} taškų centimetre"}
-            }
-            dot-per-inch{
-                dnam{"taškai colyje"}
-                few{"{0} taškai colyje"}
-                many{"{0} taško colyje"}
-                one{"{0} taškas colyje"}
-                other{"{0} taškų colyje"}
-            }
             em{
                 case{
                     accusative{
@@ -5717,13 +5689,6 @@ lt{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -5814,27 +5779,6 @@ lt{
             }
         }
         graphics{
-            dot{
-                dnam{"tšk."}
-                few{"{0} tšk."}
-                many{"{0} tšk."}
-                one{"{0} tšk."}
-                other{"{0} tšk."}
-            }
-            dot-per-centimeter{
-                dnam{"taškai centimetre"}
-                few{"{0} tšk./cm"}
-                many{"{0} tšk./cm"}
-                one{"{0} tšk./cm"}
-                other{"{0} tšk./cm"}
-            }
-            dot-per-inch{
-                dnam{"taškai colyje"}
-                few{"{0} tšk./in"}
-                many{"{0} tšk./in"}
-                one{"{0} tšk./in"}
-                other{"{0} tšk./in"}
-            }
             em{
                 dnam{"tipografinis emas"}
                 few{"{0} em"}
@@ -7127,13 +7071,6 @@ lt{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -7221,27 +7158,6 @@ lt{
             }
         }
         graphics{
-            dot{
-                dnam{"tšk."}
-                few{"{0} tšk."}
-                many{"{0} tšk."}
-                one{"{0} tšk."}
-                other{"{0} tšk."}
-            }
-            dot-per-centimeter{
-                dnam{"taškai centimetre"}
-                few{"{0} tšk./cm"}
-                many{"{0} tšk./cm"}
-                one{"{0} tšk./cm"}
-                other{"{0} tšk./cm"}
-            }
-            dot-per-inch{
-                dnam{"taškai colyje"}
-                few{"{0} tšk./in"}
-                many{"{0} tšk./in"}
-                one{"{0} tšk./in"}
-                other{"{0} tšk./in"}
-            }
             em{
                 dnam{"tipografinis emas"}
                 few{"{0} em"}

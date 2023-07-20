@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 no{
-    AuxExemplarCharacters{"[á ǎ ã č ç đ è ê í ń ñ ŋ š ŧ ú ü ž ä ö]"}
+    AuxExemplarCharacters{"[áǎã čç đ èê í ńñ ŋ š ŧ ú ü ž ä ö]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -11,12 +11,12 @@ no{
         word-initial{"… {0}"}
         word-medial{"{0} … {1}"}
     }
-    ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
+    ExemplarCharacters{"[aà b c d eé f g h i j k l m n oóòô p q r s t u v w x y z æ ø å]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
     ExemplarCharactersNumbers{"[  , % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{
-        "[\\- ‑ – , ; \\: ! ? ¿ . … ‘ ’ “ ” « » ( ) \\[ \\] \\{ \\} § @ * / \\\\ # † "
-        "‡ ′ ″]"
+        "[\\- ‑ – , ; \\: ! ? ¿ . … ‘’ “” « » ( ) \\[ \\] \\{ \\} § @ * / \\\\ # † ‡ "
+        "′ ″]"
     }
     MoreInformation{"?"}
     NumberElements{

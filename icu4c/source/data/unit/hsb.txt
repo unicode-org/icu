@@ -548,13 +548,6 @@ hsb{
                 other{"{0} elektronvoltow"}
                 two{"{0} elektronvoltaj"}
             }
-            foodcalorie{
-                dnam{"kilokalorije"}
-                few{"{0} kilokalorije"}
-                one{"{0} kilokalorija"}
-                other{"{0} kilokalorijow"}
-                two{"{0} kilokaloriji"}
-            }
             joule{
                 dnam{"joule"}
                 few{"{0} joule"}
@@ -3079,13 +3072,6 @@ hsb{
                 one{"{0} eV"}
                 other{"{0} eV"}
                 two{"{0} eV"}
-            }
-            foodcalorie{
-                dnam{"kcal"}
-                few{"{0} kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-                two{"{0} kcal"}
             }
             joule{
                 dnam{"J"}

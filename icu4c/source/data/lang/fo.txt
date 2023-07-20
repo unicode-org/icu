@@ -498,7 +498,6 @@ fo{
             ethiopic{"etiopiskur kalendari"}
             gregorian{"gregorianskur kalendari"}
             hebrew{"hebraiskur kalendari"}
-            islamic{"islamiskur kalendari"}
             iso8601{"ISO-8601 kalendari"}
             japanese{"japanskur kalendari"}
             persian{"persiskur kalendari"}

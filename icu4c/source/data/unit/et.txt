@@ -406,11 +406,6 @@ et{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolti"}
             }
-            foodcalorie{
-                dnam{"toidukalorid"}
-                one{"{0} toidukalor"}
-                other{"{0} toidukalorit"}
-            }
             joule{
                 dnam{"džaulid"}
                 one{"{0} džaul"}
@@ -477,21 +472,6 @@ et{
             }
         }
         graphics{
-            dot{
-                dnam{"punkt"}
-                one{"{0} punkt"}
-                other{"{0} punkti"}
-            }
-            dot-per-centimeter{
-                dnam{"punkte sentimeetri kohta"}
-                one{"{0} punkt sentimeetri kohta"}
-                other{"{0} punkti sentimeetri kohta"}
-            }
-            dot-per-inch{
-                dnam{"punkte tolli kohta"}
-                one{"{0} punkt tolli kohta"}
-                other{"{0} punkti tolli kohta"}
-            }
             em{
                 dnam{"tüpograafiline emm"}
                 one{"{0} emm"}
@@ -1455,11 +1435,6 @@ et{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"džaulid"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ et{
             }
         }
         graphics{
-            dot{
-                dnam{"p"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"emm"}
                 one{"{0} emm"}
@@ -2476,11 +2436,6 @@ et{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"džaulid"}
                 one{"{0} J"}
@@ -2547,21 +2502,6 @@ et{
             }
         }
         graphics{
-            dot{
-                dnam{"p"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"emm"}
                 one{"{0} emm"}

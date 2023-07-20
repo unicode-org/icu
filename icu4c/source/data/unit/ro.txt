@@ -931,12 +931,6 @@ ro{
                 one{"{0} electronvolt"}
                 other{"{0} de electronvolți"}
             }
-            foodcalorie{
-                dnam{"kilocalorii"}
-                few{"{0} kilocalorii"}
-                one{"{0} kilocalorie"}
-                other{"{0} de kilocalorii"}
-            }
             joule{
                 case{
                     genitive{
@@ -1087,24 +1081,6 @@ ro{
             }
         }
         graphics{
-            dot{
-                dnam{"punct"}
-                few{"{0} puncte"}
-                one{"{0} punct"}
-                other{"{0} de puncte"}
-            }
-            dot-per-centimeter{
-                dnam{"puncte pe centimetru"}
-                few{"{0} puncte pe centimetru"}
-                one{"{0} punct pe centimetru"}
-                other{"{0} de puncte pe centimetru"}
-            }
-            dot-per-inch{
-                dnam{"puncte pe inch"}
-                few{"{0} puncte pe inch"}
-                one{"{0} punct pe inch"}
-                other{"{0} de puncte pe inch"}
-            }
             em{
                 case{
                     genitive{
@@ -2653,12 +2629,6 @@ ro{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                few{"{0} kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -2737,24 +2707,6 @@ ro{
             }
         }
         graphics{
-            dot{
-                dnam{"pct."}
-                few{"{0} pct."}
-                one{"{0} pct"}
-                other{"{0} de pct."}
-            }
-            dot-per-centimeter{
-                dnam{"dpc"}
-                few{"{0} dpc"}
-                one{"{0} dpc"}
-                other{"{0} dpc"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -3884,12 +3836,6 @@ ro{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                few{"{0} kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -3968,24 +3914,6 @@ ro{
             }
         }
         graphics{
-            dot{
-                dnam{"pct."}
-                few{"{0} pct."}
-                one{"{0} pct"}
-                other{"{0} de pct."}
-            }
-            dot-per-centimeter{
-                dnam{"dpc"}
-                few{"{0} dpc"}
-                one{"{0} dpc"}
-                other{"{0} dpc"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 few{"{0} em"}
                 one{"{0} em"}

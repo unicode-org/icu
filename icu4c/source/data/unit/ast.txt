@@ -296,11 +296,6 @@ ast{
                 one{"{0} caloría"}
                 other{"{0} caloríes"}
             }
-            foodcalorie{
-                dnam{"Caloríes"}
-                one{"{0} Caloría"}
-                other{"{0} Caloríes"}
-            }
             joule{
                 dnam{"xulios"}
                 one{"{0} xuliu"}
@@ -1044,11 +1039,6 @@ ast{
                 one{"{0}cal"}
                 other{"{0}cal"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0}Cal"}
-                other{"{0}Cal"}
-            }
             joule{
                 dnam{"xulios"}
                 one{"{0}J"}
@@ -1786,11 +1776,6 @@ ast{
                 dnam{"cal"}
                 one{"{0} cal"}
                 other{"{0} cal"}
-            }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
             }
             joule{
                 dnam{"xulios"}

@@ -146,7 +146,6 @@ dsb{
         IL{"Israel"}
         IM{"Man"}
         IN{"Indiska"}
-        IO{"Britiski indiskooceaniski teritorium"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandska"}

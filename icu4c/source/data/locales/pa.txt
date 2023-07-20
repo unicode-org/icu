@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pa{
-    AuxExemplarCharacters{"[\u200C\u200D ਃ \u0A02 \u0A01 {ਲ\u0A3C}]"}
+    AuxExemplarCharacters{"[\u200C\u200Dਃ ਂ ਁ {ਲ਼}]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -12,14 +12,13 @@ pa{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{
-        "[\u0A71 \u0A70 \u0A3C ੦ ੧ ੨ ੩ ੪ ੫ ੬ ੭ ੮ ੯ ੴ ੳ ਉ ਊ ਓ ਅ ਆ ਐ ਔ ੲ ਇ ਈ ਏ ਸ {ਸ"
-        "\u0A3C} ਹ ਕ ਖ {ਖ\u0A3C} ਗ {ਗ\u0A3C} ਘ ਙ ਚ ਛ ਜ {ਜ\u0A3C} ਝ ਞ ਟ ਠ ਡ ਢ ਣ ਤ ਥ ਦ "
-        "ਧ ਨ ਪ ਫ {ਫ\u0A3C} ਬ ਭ ਮ ਯ ਰ ਲ ਵ ੜ \u0A4D ਾ ਿ ੀ \u0A41 \u0A42 \u0A47 \u0A48 "
-        "\u0A4B \u0A4C]"
+        "[ੱ ੰ ਼ ੦ ੧ ੨ ੩ ੪ ੫ ੬ ੭ ੮ ੯ ੴ ੳ ਉ ਊ ਓ ਅ ਆ ਐ ਔ ੲ ਇ ਈ ਏ ਸ{ਸ਼} ਹ ਕ ਖ{ਖ਼} ਗ{ਗ਼} ਘ"
+        " ਙ ਚ ਛ ਜ{ਜ਼} ਝ ਞ ਟ ਠ ਡ ਢ ਣ ਤ ਥ ਦ ਧ ਨ ਪ ਫ{ਫ਼} ਬ ਭ ਮ ਯ ਰ ਲ ਵ ੜ ੍ ਾ ਿ ੀ ੁ ੂ ੇ ੈ"
+        " ੋ ੌ]"
     }
     ExemplarCharactersIndex{"[ੳ ਅ ੲ ਸ ਹ ਕ ਖ ਗ ਘ ਙ ਚ ਛ ਜ ਝ ਞ ਟ ਠ ਡ ਢ ਣ ਤ ਥ ਦ ਧ ਨ ਪ ਫ ਬ ਭ ਮ ਯ ਰ ਲ ਵ ੜ]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0੦ 1੧ 2੨ 3੩ 4੪ 5੫ 6੬ 7੭ 8੮ 9੯]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] / \\& ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . '‘’ \u0022“” ( ) \\[ \\] / \\& ′ ″]"}
     MoreInformation{"?"}
     NumberElements{
         adlm{
@@ -2793,32 +2792,32 @@ pa{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }

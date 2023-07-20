@@ -525,9 +525,6 @@ ig{
             ethiopic-amete-alem{"Etiopic Amete Alem Kalenda"}
             gregorian{"Kalenda Gregory"}
             hebrew{"Kalịnda Hebrew"}
-            islamic{"Kalịnda Islam"}
-            islamic-civil{"Islamik Kalenda"}
-            islamic-umalqura{"Islamik Kalenda"}
             iso8601{"Kalenda ISO-8601"}
             japanese{"Kalịnda Japanese"}
             persian{"Kalịnda Persian"}

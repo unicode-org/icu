@@ -335,10 +335,6 @@ kok{
                 dnam{"इलॅक्ट्रॉनवॉल्ट्स"}
                 other{"{0} इलॅक्ट्रॉनवॉल्ट्स"}
             }
-            foodcalorie{
-                dnam{"कॅलरीज"}
-                other{"{0} कॅलरीज"}
-            }
             joule{
                 dnam{"ज्युल"}
                 other{"{0} ज्युल"}
@@ -393,18 +389,6 @@ kok{
             }
         }
         graphics{
-            dot{
-                dnam{"ठिपको"}
-                other{"{0}ठिपको"}
-            }
-            dot-per-centimeter{
-                dnam{"दर सेंटिमीटर ठिपके"}
-                other{"दर सेंटिमीटर ठिपके {0}"}
-            }
-            dot-per-inch{
-                dnam{"दर इंचाक ठिपके"}
-                other{"दर इंचाक ठिपके {0}"}
-            }
             em{
                 dnam{"टायपोग्रॅफिक एम"}
                 other{"{0} ems"}
@@ -1191,10 +1175,6 @@ kok{
                 dnam{"eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                other{"{0}Cal"}
-            }
             joule{
                 dnam{"ज्युल"}
                 other{"{0}J"}
@@ -1249,18 +1229,6 @@ kok{
             }
         }
         graphics{
-            dot{
-                dnam{"ठिपको"}
-                other{"{0}ठिपको"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0}em"}
@@ -2042,10 +2010,6 @@ kok{
                 dnam{"इलॅक्ट्रॉनवॉल्ट"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ज्युल"}
                 other{"{0} ज्यु"}
@@ -2100,18 +2064,6 @@ kok{
             }
         }
         graphics{
-            dot{
-                dnam{"ठिपको"}
-                other{"{0} ठिपको"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}

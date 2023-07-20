@@ -318,10 +318,6 @@ kea{
                 dnam{"eleton-volt"}
                 other{"{0} eletron-volt"}
             }
-            foodcalorie{
-                dnam{"Kaloria"}
-                other{"{0} Kaloria"}
-            }
             joule{
                 dnam{"J"}
                 other{"{0} joule"}
@@ -372,18 +368,6 @@ kea{
             }
         }
         graphics{
-            dot{
-                dnam{"pontu"}
-                other{"{0} pontu"}
-            }
-            dot-per-centimeter{
-                dnam{"pontu pur sentímeru"}
-                other{"{0} pontu pur sentímetru"}
-            }
-            dot-per-inch{
-                dnam{"pontu pur pulegada"}
-                other{"{0} pontu pur pulegada"}
-            }
             em{
                 dnam{"emi tipográfiku"}
                 other{"{0} emi tipográfiku"}
@@ -1197,10 +1181,6 @@ kea{
                 dnam{"cal"}
                 other{"{0} cal"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"J"}
             }
@@ -1237,20 +1217,6 @@ kea{
             megahertz{
                 dnam{"MHz"}
                 other{"{0} MHz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
             }
         }
         length{

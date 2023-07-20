@@ -544,9 +544,6 @@ dsb{
             ethiopic-amete-alem{"etiopiski amete-alem-kalendaŕ"}
             gregorian{"gregoriański kalender"}
             hebrew{"žydojski kalender"}
-            islamic{"islamski kalender"}
-            islamic-civil{"islamski ciwilny kalendaŕ"}
-            islamic-umalqura{"islamski umalqui-kalendaŕ"}
             iso8601{"iso-8601-kalender"}
             japanese{"japański kalender"}
             persian{"persiski kalender"}

@@ -137,10 +137,6 @@ sah{
                 dnam{"калорий"}
                 other{"{0} калорий"}
             }
-            foodcalorie{
-                dnam{"Калорий"}
-                other{"{0} Калорий"}
-            }
             joule{
                 dnam{"джоуль"}
                 other{"{0} джоуль"}
@@ -414,10 +410,6 @@ sah{
             calorie{
                 dnam{"кал"}
                 other{"{0} кал"}
-            }
-            foodcalorie{
-                dnam{"Кал"}
-                other{"{0} Кал"}
             }
             joule{
                 dnam{"дж"}

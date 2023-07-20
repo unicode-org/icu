@@ -335,10 +335,6 @@ jv{
                 dnam{"elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"Kalori"}
-                other{"{0} Kalori"}
-            }
             joule{
                 dnam{"jol"}
                 other{"{0} jol"}
@@ -393,18 +389,6 @@ jv{
             }
         }
         graphics{
-            dot{
-                dnam{"titik"}
-                other{"{0} titik"}
-            }
-            dot-per-centimeter{
-                dnam{"titek saben sentimeter"}
-                other{"{0} titek saben sentimeter"}
-            }
-            dot-per-inch{
-                dnam{"titek saben inci"}
-                other{"{0} titek saben inci"}
-            }
             em{
                 dnam{"tipografi em"}
                 other{"{0} em"}
@@ -1191,10 +1175,6 @@ jv{
                 dnam{"elektronvolt"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"jol"}
                 other{"{0} J"}
@@ -1249,18 +1229,6 @@ jv{
             }
         }
         graphics{
-            dot{
-                dnam{"titik"}
-                other{"{0} titik"}
-            }
-            dot-per-centimeter{
-                dnam{"tscm"}
-                other{"{0} tscm"}
-            }
-            dot-per-inch{
-                dnam{"tsi"}
-                other{"{0} tsi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1993,10 +1961,6 @@ jv{
             electronvolt{
                 dnam{"elektronvolt"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"jol"}
                 other{"{0} J"}
@@ -2042,20 +2006,6 @@ jv{
             megahertz{
                 dnam{"MHz"}
                 other{"{0} MHz"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"titik"}
-                other{"{0} titik"}
-            }
-            dot-per-centimeter{
-                dnam{"tscm"}
-                other{"{0} tscm"}
-            }
-            dot-per-inch{
-                dnam{"tsi"}
-                other{"{0} tsi"}
             }
         }
         length{

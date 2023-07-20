@@ -4,8 +4,8 @@
 mas{
     AuxExemplarCharacters{"[f q v x z]"}
     ExemplarCharacters{
-        "[a á à â ā b c d e é è ê ē ɛ g h i í ì î ī ɨ j k l m n {ny} ŋ o ó ò ô ō ɔ p "
-        "r {rr} s {sh} t u ú ù û ū ʉ {ʉ\u0301} w {wu} y {yi}]"
+        "[aáàâā b c d eéèêē ɛ g h iíìîī ɨ j k l m n {ny} ŋ oóòôō ɔ p r {rr} s {sh} t "
+        "uúùûū ʉ{ʉ́} w {wu} y {yi}]"
     }
     ExemplarCharactersIndex{"[A B C D E Ɛ G H I Ɨ J K L M N Ŋ O Ɔ P R S T U Ʉ W Y]"}
     NumberElements{

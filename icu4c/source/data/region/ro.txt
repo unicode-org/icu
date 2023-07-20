@@ -146,7 +146,6 @@ ro{
         IL{"Israel"}
         IM{"Insula Man"}
         IN{"India"}
-        IO{"Teritoriul Britanic din Oceanul Indian"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islanda"}

@@ -146,7 +146,6 @@ sq{
         IL{"Izrael"}
         IM{"Ishulli i Manit"}
         IN{"Indi"}
-        IO{"Territori Britanik i Oqeanit Indian"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandë"}

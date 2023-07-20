@@ -237,11 +237,6 @@ lb{
                 one{"{0} Kalorie"}
                 other{"{0} Kalorien"}
             }
-            foodcalorie{
-                dnam{"Liewensmëttelkalorien"}
-                one{"{0} Liewensmëttelkalorie"}
-                other{"{0} Liewensmëttelkalorien"}
-            }
             joule{
                 dnam{"Joule"}
                 one{"{0} Joule"}
@@ -1270,11 +1265,6 @@ lb{
                 dnam{"cal"}
                 one{"{0} cal"}
                 other{"{0} cal"}
-            }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
             }
             joule{
                 dnam{"joule"}

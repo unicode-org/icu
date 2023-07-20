@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pl{
-    AuxExemplarCharacters{"[à â å ä æ ç é è ê ë î ï ô ö œ q ß ù û ü v x ÿ]"}
+    AuxExemplarCharacters{"[àâåä æ ç éèêë îï ôö œ q ß ùûü v x ÿ]"}
     Ellipsis{
         word-final{"{0}…"}
         word-initial{"…{0}"}
@@ -11,8 +11,8 @@ pl{
     ExemplarCharactersIndex{"[A B C Ć D E F G H I J K L Ł M N O Ó P Q R S Ś T U V W X Y Z Ź Ż]"}
     ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{
-        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' \u0022 ” „ « » ( ) \\[ \\] \\{ \\} § @ * / "
-        "\\& # % † ‡ ′ ″ ° ~]"
+        "[\\- ‐‑ – — , ; \\: ! ? . … ' \u0022”„ « » ( ) \\[ \\] \\{ \\} § @ * / \\& #"
+        " % † ‡ ′ ″ ° ~]"
     }
     NumberElements{
         latn{
@@ -2736,28 +2736,28 @@ pl{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫⹁、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ⹁ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
         }
     }

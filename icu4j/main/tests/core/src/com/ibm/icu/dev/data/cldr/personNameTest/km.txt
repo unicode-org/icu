@@ -1,0 +1,503 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: km
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; សុខា
+name ; locale; km_AQ
+
+expectedResult; សុខា
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; សុ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; សុជាតិ
+name ; surname; សុង
+name ; locale; km_AQ
+
+expectedResult; សុង,សុជាតិ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; សុងសុជាតិ
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; សុង,សុ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; សុងសុ.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; សុជាតិ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; សុសុ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; សុង
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; សុ
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; រិទ្ធី
+name ; given2; មករា
+name ; surname; វ៉េង
+name ; locale; km_AQ
+
+expectedResult; វ៉េង,រិទ្ធីមករា
+
+parameters; sorting; long; referring; formal
+
+expectedResult; វ៉េងរិទ្ធីមករា
+
+parameters; none; long; referring; formal
+
+expectedResult; វ៉េង,រិទ្ធីម.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; វ៉េងរិទ្ធីម.
+
+parameters; none; medium; referring; formal
+
+expectedResult; វ៉េង,រិទ្ធី
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; វ៉េង,រិ.ម.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; វ៉េងរិទ្ធី
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; វ៉េងរិ.ម.
+
+parameters; none; short; referring; formal
+
+expectedResult; វ៉េងរិ.
+
+parameters; none; short; referring; informal
+
+expectedResult; រិទ្ធី
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; វ៉េរិម
+
+parameters; none; long; monogram; formal
+
+expectedResult; វ៉េរិ
+
+parameters; none; long; monogram; informal
+
+expectedResult; វ៉េង
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; វ៉េ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; រិ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; លោក
+name ; given; សុវណ្ណថេត
+name ; given-informal; ថេត
+name ; given2; សុធារ៉ា
+name ; surname-core; វេហា
+name ; credentials; សមាជិកសភា
+name ; locale; km_AQ
+
+expectedResult; វេហាលោកសុវណ្ណថេតសុធារ៉ាសមាជិកសភា
+
+parameters; none; long; referring; formal
+
+expectedResult; វេហាសុវណ្ណថេតសុ.សមាជិកសភា
+
+parameters; none; medium; referring; formal
+
+expectedResult; វេហា,សុវណ្ណថេតសុធារ៉ា
+
+parameters; sorting; long; referring; formal
+
+expectedResult; វេហា,សុវណ្ណថេតសុ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; វេហា,សុ.សុ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; វេហាសុ.សុ.
+
+parameters; none; short; referring; formal
+
+expectedResult; វេហា,ថេត
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; លោកវេហា
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; វេហាថេត
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; វេហាសុ.
+
+parameters; none; short; referring; informal
+
+expectedResult; វេសុសុ
+
+parameters; none; long; monogram; formal
+
+expectedResult; វេថេ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ថេត
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ថេ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; វេ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; ស៊ីនប៊ែត
+name ; locale; fr_AQ
+
+expectedResult; ស៊ីនប៊ែត
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ស៊ី
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; កាតេ
+name ; surname; មូលឡើ
+name ; locale; fr_AQ
+
+expectedResult; កាតេ មូលឡើ
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; កា. មូលឡើ
+
+parameters; none; short; referring; formal
+
+expectedResult; កាតេ មូ.
+
+parameters; none; short; referring; informal
+
+expectedResult; មូលឡើ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; កាតេ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; កាមូ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; កា
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; មូ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; ហ្សាហ្សីលៀ
+name ; given2; ហេមីស
+name ; surname; ស្តូបើ
+name ; locale; fr_AQ
+
+expectedResult; ហ្សាហ្សីលៀ ហេមីស ស្តូបើ
+
+parameters; none; long; referring; formal
+
+expectedResult; ហ្សាហ្សីលៀ ហេ. ស្តូបើ
+
+parameters; none; medium; referring; formal
+
+expectedResult; ហ្សាហ្សីលៀ ស្តូបើ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ហ្. ហេ. ស្តូបើ
+
+parameters; none; short; referring; formal
+
+expectedResult; ហ្សាហ្សីលៀ ស្.
+
+parameters; none; short; referring; informal
+
+expectedResult; ហ្សាហ្សីលៀ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ស្តូបើ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ហ្ហេស្
+
+parameters; none; long; monogram; formal
+
+expectedResult; ហ្ស្
+
+parameters; none; long; monogram; informal
+
+expectedResult; ស្
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ហ្
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; សាស្ត្រាចារ្យបណ្ឌិត
+name ; given; អាដា ខរនែលៀ
+name ; given-informal; នីឡេ
+name ; given2; ឆេសារ ម៉ាធីន
+name ; surname-prefix; វន់
+name ; surname-core; ប្រ៊ូល
+name ; surname2; ហ្កនហ្សាឡេស ដូមីងហ្គោ
+name ; generation; ជូនៀ
+name ; credentials; ទន្ដបណ្ឌិត
+name ; locale; fr_AQ
+
+expectedResult; សាស្ត្រាចារ្យបណ្ឌិត អាដា ខរនែលៀ ឆេសារ ម៉ាធីន វន់ ប្រ៊ូល ជូនៀ, ទន្ដបណ្ឌិត
+
+parameters; none; long; referring; formal
+
+expectedResult; អាដា ខរនែលៀ ឆេ. ម៉ា. វន់ ប្រ៊ូល ជូនៀ, ទន្ដបណ្ឌិត
+
+parameters; none; medium; referring; formal
+
+expectedResult; សាស្ត្រាចារ្យបណ្ឌិត វន់ ប្រ៊ូល
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; អា. ខ. ឆេ. ម៉ា. វន់ ប្រ៊ូល
+
+parameters; none; short; referring; formal
+
+expectedResult; នីឡេ វន់ ប្រ៊ូល
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; នីឡេ វ. ប្.
+
+parameters; none; short; referring; informal
+
+expectedResult; អាឆេប្
+
+parameters; none; long; monogram; formal
+
+expectedResult; នីឡេ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; នីវ
+
+parameters; none; long; monogram; informal
+
+expectedResult; នី
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; វ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

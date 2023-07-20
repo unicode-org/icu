@@ -530,10 +530,6 @@ ha{
             ethiopic-amete-alem{"Kalandar Ethiopic Amete Alem"}
             gregorian{"Kalandar Gregoria"}
             hebrew{"Kalandar Ibrananci"}
-            islamic{"Kalandar Musulunci"}
-            islamic-civil{"Kalandar Musulunci (tabular, civil epoch)"}
-            islamic-tbla{"Kalandar Musulunci (tabular, astronomical epoch)"}
-            islamic-umalqura{"Kalandar Musulunci (Umm al-Qura)"}
             iso8601{"Kalandar ISO-8601"}
             japanese{"Kalandar Jafan"}
             persian{"Kalandar Farisa"}

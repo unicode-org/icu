@@ -406,11 +406,6 @@ sw{
                 one{"elektrovolti {0}"}
                 other{"elektrovolti {0}"}
             }
-            foodcalorie{
-                dnam{"kalori"}
-                one{"kalori {0}"}
-                other{"kalori {0}"}
-            }
             joule{
                 dnam{"jouli"}
                 one{"jouli {0}"}
@@ -477,21 +472,6 @@ sw{
             }
         }
         graphics{
-            dot{
-                dnam{"kitone"}
-                one{"kitone {0}"}
-                other{"vitone {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"vitone kwa kila sentimita"}
-                one{"kitone {0} kwa kila sentimita"}
-                other{"vitone {0} kwa kila sentimita"}
-            }
-            dot-per-inch{
-                dnam{"vitone kwa kila inchi"}
-                one{"kitone {0} kwa kila inchi"}
-                other{"vitone {0} kwa kila inchi"}
-            }
             em{
                 dnam{"em ya kupiga chapa"}
                 one{"em {0}"}
@@ -1455,11 +1435,6 @@ sw{
                 one{"eV {0}"}
                 other{"eV {0}"}
             }
-            foodcalorie{
-                dnam{"kalori"}
-                one{"kalori {0}"}
-                other{"kalori {0}"}
-            }
             joule{
                 dnam{"jouli"}
                 one{"jouli {0}"}
@@ -1526,21 +1501,6 @@ sw{
             }
         }
         graphics{
-            dot{
-                dnam{"kitone"}
-                one{"kitone {0}"}
-                other{"vitone {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"dpcm {0}"}
-                other{"dpcm {0}"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"dpi {0}"}
-                other{"dpi {0}"}
-            }
             em{
                 dnam{"em"}
                 one{"em {0}"}
@@ -2503,11 +2463,6 @@ sw{
                 one{"eV {0}"}
                 other{"eV {0}"}
             }
-            foodcalorie{
-                dnam{"kalori"}
-                one{"kalori {0}"}
-                other{"kalori {0}"}
-            }
             joule{
                 dnam{"jouli"}
                 one{"jouli {0}"}
@@ -2574,21 +2529,6 @@ sw{
             }
         }
         graphics{
-            dot{
-                dnam{"kitone"}
-                one{"kitone {0}"}
-                other{"vitone {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"dpcm {0}"}
-                other{"dpcm {0}"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"dpi {0}"}
-                other{"dpi {0}"}
-            }
             em{
                 one{"em {0}"}
                 other{"em {0}"}

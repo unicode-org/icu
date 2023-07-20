@@ -348,11 +348,6 @@ ia{
                 one{"{0} caloria"}
                 other{"{0} calorias"}
             }
-            foodcalorie{
-                dnam{"kilocalorias"}
-                one{"{0} kilocaloria"}
-                other{"{0} kilocalorias"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} joule"}
@@ -1183,11 +1178,6 @@ ia{
                 one{"{0} cal"}
                 other{"{0} cal"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -1995,11 +1985,6 @@ ia{
                 dnam{"cal"}
                 one{"{0} cal"}
                 other{"{0} cal"}
-            }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
             }
             joule{
                 dnam{"J"}

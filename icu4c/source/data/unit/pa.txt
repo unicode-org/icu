@@ -776,11 +776,6 @@ pa{
                 one{"{0} ਇਲੈਕਟ੍ਰਾਨਵੋਲਟ"}
                 other{"{0} ਇਲੈਕਟ੍ਰਾਨਵੋਲਟ"}
             }
-            foodcalorie{
-                dnam{"ਕੈਲੋਰੀਆਂ"}
-                one{"{0} ਕੈਲੋਰੀ"}
-                other{"{0} ਕੈਲੋਰੀਆਂ"}
-            }
             joule{
                 case{
                     oblique{
@@ -910,21 +905,6 @@ pa{
             }
         }
         graphics{
-            dot{
-                dnam{"ਡਾਟ"}
-                one{"{0} ਡਾਟ"}
-                other{"{0} ਡਾਟ"}
-            }
-            dot-per-centimeter{
-                dnam{"ਡਾਟ ਪ੍ਰਤੀ ਸੈਂਟੀਮੀਟਰ"}
-                one{"{0} ਡਾਟ ਪ੍ਰਤੀ ਸੈਂਟੀਮੀਟਰ"}
-                other{"{0} ਡਾਟ ਪ੍ਰਤੀ ਸੈਂਟੀਮੀਟਰ"}
-            }
-            dot-per-inch{
-                dnam{"ਡਾਟ ਪ੍ਰਤੀ ਇੰਚ"}
-                one{"{0} ਡਾਟ ਪ੍ਰਤੀ ਇੰਚ"}
-                other{"{0} ਡਾਟ ਪ੍ਰਤੀ ਇੰਚ"}
-            }
             em{
                 case{
                     oblique{
@@ -2245,11 +2225,6 @@ pa{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"ਕੈਲੋਰੀ"}
-                one{"{0} ਕੈਲੋਰੀ"}
-                other{"{0} ਕੈਲੋਰੀਆਂ"}
-            }
             joule{
                 dnam{"ਜੂਲ"}
                 one{"{0} J"}
@@ -2316,21 +2291,6 @@ pa{
             }
         }
         graphics{
-            dot{
-                dnam{"ਡਾਟ"}
-                one{"{0} ਡਾਟ"}
-                other{"{0} ਡਾਟ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -3294,11 +3254,6 @@ pa{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"ਕੈਲੋਰੀ"}
-                one{"{0} ਕੈਲੋਰੀ"}
-                other{"{0} ਕੈਲੋਰੀਆਂ"}
-            }
             joule{
                 dnam{"ਜੂਲ"}
                 one{"{0} J"}
@@ -3365,21 +3320,6 @@ pa{
             }
         }
         graphics{
-            dot{
-                dnam{"ਡਾਟ"}
-                one{"{0} ਡਾਟ"}
-                other{"{0} ਡਾਟ"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

@@ -406,11 +406,6 @@ mk{
                 one{"{0} електронволт"}
                 other{"{0} електронволти"}
             }
-            foodcalorie{
-                dnam{"калории"}
-                one{"{0} калорија"}
-                other{"{0} калории"}
-            }
             joule{
                 dnam{"џули"}
                 one{"{0} џул"}
@@ -477,21 +472,6 @@ mk{
             }
         }
         graphics{
-            dot{
-                dnam{"точка"}
-                one{"{0} точка"}
-                other{"{0} точки"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ mk{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"џули"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ mk{
             }
         }
         graphics{
-            dot{
-                dnam{"dot"}
-                one{"{0} dot"}
-                other{"{0} dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2479,11 +2439,6 @@ mk{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"џули"}
                 one{"{0} J"}
@@ -2549,21 +2504,6 @@ mk{
             }
         }
         graphics{
-            dot{
-                dnam{"тчк."}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

@@ -259,7 +259,6 @@ ku{
             chinese{"salnameya çînî"}
             gregorian{"salnameya gregorî"}
             hebrew{"salnameya îbranî"}
-            islamic{"salnameya koçî"}
             iso8601{"salnameya ISO-8601"}
             japanese{"salnameya japonî"}
             persian{"salnameya îranî"}

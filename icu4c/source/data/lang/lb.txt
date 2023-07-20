@@ -757,8 +757,6 @@ lb{
             gregorian{"Gregorianesche Kalenner"}
             hebrew{"Hebräesche Kalenner"}
             indian{"Indeschen Nationalkalenner"}
-            islamic{"Islamesche Kalenner"}
-            islamic-civil{"Biergerlechen islamesche Kalenner"}
             iso8601{"ISO-8601-Kalenner"}
             japanese{"Japanesche Kalenner"}
             persian{"Persesche Kalenner"}

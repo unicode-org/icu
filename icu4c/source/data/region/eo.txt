@@ -96,7 +96,6 @@ eo{
         IE{"Irlando"}
         IL{"Israelo"}
         IN{"Hindujo"}
-        IO{"Brita Hindoceana Teritorio"}
         IQ{"Irako"}
         IR{"Irano"}
         IS{"Islando"}

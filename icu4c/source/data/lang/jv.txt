@@ -527,10 +527,6 @@ jv{
             ethiopic-amete-alem{"Tanggalan Etiopia Amete Alem"}
             gregorian{"Tanggalan Gregorian"}
             hebrew{"Tanggalan Ibrani"}
-            islamic{"Tanggalan Islam"}
-            islamic-civil{"Tanggalan Islam (tabel, jaman sipil)"}
-            islamic-tbla{"Tanggalan Islam (tabel, jaman astronomi)"}
-            islamic-umalqura{"Tanggalan Islam (Mekah)"}
             iso8601{"Tanggalan ISO-8601"}
             japanese{"Tanggalan Jepang"}
             persian{"Tanggalan Persia"}

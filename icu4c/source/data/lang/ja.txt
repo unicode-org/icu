@@ -878,11 +878,6 @@ ja{
             gregorian{"西暦(グレゴリオ暦)"}
             hebrew{"ユダヤ暦"}
             indian{"インド国定暦"}
-            islamic{"イスラム暦"}
-            islamic-civil{"イスラム暦(定周期、公民紀元)"}
-            islamic-rgsa{"イスラム暦(サウジアラビア、月観測)"}
-            islamic-tbla{"イスラム歴(定周期、天文紀元)"}
-            islamic-umalqura{"イスラム暦(ウンム・アルクラー)"}
             iso8601{"ISO-8601"}
             japanese{"和暦"}
             persian{"ペルシア暦"}

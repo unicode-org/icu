@@ -14,16 +14,6 @@ sw_KE{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"nukta kwa kila sentimita"}
-                one{"nukta {0} kwa kila sentimita"}
-                other{"nukta {0} kwa kila sentimita"}
-            }
-            dot-per-inch{
-                dnam{"nukta kwa kila inchi"}
-                one{"nuka {0} kwa kila inchi"}
-                other{"nukta {0} kwa kila inchi"}
-            }
             em{
                 dnam{"ukubwa wa nafasi ya fonti"}
             }

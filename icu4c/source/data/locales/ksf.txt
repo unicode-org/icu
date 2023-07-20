@@ -3,10 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ksf{
     AuxExemplarCharacters{"[q x]"}
-    ExemplarCharacters{
-        "[a á b c d e é ǝ {ǝ\u0301} ɛ {ɛ\u0301} f g h i í j k l m n ŋ o ó ɔ {ɔ\u0301}"
-        " p r s t u ú v w y z]"
-    }
+    ExemplarCharacters{"[aá b c d eé ǝ{ǝ́} ɛ{ɛ́} f g h ií j k l m n ŋ oó ɔ{ɔ́} p r s t uú v w y z]"}
     ExemplarCharactersIndex{"[A B C D E Ǝ Ɛ F G H I J K L M N Ŋ O Ɔ P R S T U V W Y Z]"}
     ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     NumberElements{

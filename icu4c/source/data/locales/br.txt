@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 br{
-    AuxExemplarCharacters{"[á à ă â å ä ã ā æ c ç é è ĕ ë ē í ì ĭ î ï ī ó ò ŏ ô ö ø ō œ q ú ŭ û ü ū ÿ]"}
+    AuxExemplarCharacters{"[áàăâåäãā æ cç éèĕëē íìĭîïī óòŏôöøō œ q úŭûüū ÿ]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -11,7 +11,7 @@ br{
         word-initial{"… {0}"}
         word-medial{"{0} … {1}"}
     }
-    ExemplarCharacters{"[a b {cʼh} {ch} d e ê f g h i j k l m n ñ o p r s t u ù v w x y z]"}
+    ExemplarCharacters{"[a b {cʼh} {ch} d eê f g h i j k l m nñ o p r s t uù v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P R S T U V W X Y Z]"}
     ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . ( ) \\[ \\] \\{ \\}]"}
@@ -6489,32 +6489,32 @@ br{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚ߴ᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ ߴ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }

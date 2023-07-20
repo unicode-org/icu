@@ -2,10 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sl{
-    AuxExemplarCharacters{
-        "[á à ă â å ä ā æ ç ć đ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ q ú ù ŭ û ü"
-        " ū w x y ÿ]"
-    }
+    AuxExemplarCharacters{"[áàăâåäā æ ç ć đ éèĕêëē íìĭîïī ñ óòŏôöøō œ q úùŭûüū w x yÿ]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -17,7 +14,7 @@ sl{
     ExemplarCharacters{"[a b c č d e f g h i j k l m n o p r s š t u v z ž]"}
     ExemplarCharactersIndex{"[A B C Č Ć D Đ E F G H I J K L M N O P Q R S Š T U V W X Y Z Ž]"}
     ExemplarCharactersNumbers{"[, . % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‑ – , ; \\: ! ? . … ' \u0022 „ ‟ « » ( ) \\[ \\] \\{ \\} @ *]"}
+    ExemplarCharactersPunctuation{"[\\- ‑ – , ; \\: ! ? . … ' \u0022„‟ « » ( ) \\[ \\] \\{ \\} @ *]"}
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -2260,32 +2257,32 @@ sl{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rs}]",
+                "[₹ ₨ {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }

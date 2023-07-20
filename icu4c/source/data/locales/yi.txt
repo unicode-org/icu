@@ -4,13 +4,12 @@
 yi{
     AuxExemplarCharacters{"[\u200E\u200F]"}
     ExemplarCharacters{
-        "[א {א\u05B7} {א\u05B8} ב {ב\u05BF} ג ד {דזש} ה ו {ו\u05BC} {וו} {וי} ז {זש} "
-        "ח ט {טש} י {י\u05B4} {יי} {ײ\u05B7} {כ\u05BC} כ ך ל מ ם נ ן ס ע {פ\u05BC} {פ"
-        "\u05BF} ף צ ץ ק ר ש {ש\u05C2} {ת\u05BC} ת]"
+        "[א{אַ}{אָ} ב {בֿ} ג ד {דזש} ה ו{וּ}{וו}{וי} ז {זש} ח ט {טש} י{יִ}{יי}{ײַ} {כ"
+        "ּ} כך ל מם נן ס ע {פּ} {פֿ}ף צץ ק ר ש {שׂ} {תּ} ת]"
     }
-    ExemplarCharactersIndex{"[\u05C2 \u05BC \u05BF א ב ג ד ה ו ז ח ט י כ ל מ נ ס ע פ צ ק ר ש ת]"}
+    ExemplarCharactersIndex{"[ׂ ּ ֿ א ב ג ד ה ו ז ח ט י כ ל מ נ ס ע פ צ ק ר ש ת]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . ' ׳ \u0022 ״ ( ) \\[ \\] / ־]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . '׳ \u0022״ ( ) \\[ \\] / ־]"}
     NumberElements{
         default{"latn"}
         latn{

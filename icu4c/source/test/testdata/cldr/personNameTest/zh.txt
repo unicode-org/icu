@@ -1,0 +1,461 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: zh
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; 宇瀚
+name ; locale; zh_AQ
+
+expectedResult; 宇瀚
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; 宇
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; 安怡
+name ; surname; 张
+name ; locale; zh_AQ
+
+expectedResult; 张安怡
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; 安怡
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 张安
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; sorting; short; referring; formal
+
+expectedResult; 安
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 张
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; monogram; formal
+parameters; none; short; addressing; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; 俊年
+name ; given2; 杰思
+name ; surname; 陈
+name ; locale; zh_AQ
+
+expectedResult; 陈俊年杰思
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+parameters; none; short; referring; formal
+parameters; sorting; long; referring; formal
+
+expectedResult; 陈俊年杰
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; 陈俊年
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; 陈俊杰
+
+parameters; none; long; monogram; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; 俊年
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 陈俊
+
+parameters; none; long; monogram; informal
+
+expectedResult; 俊
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 陈
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; monogram; formal
+parameters; none; short; addressing; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; 先生
+name ; given; 德威
+name ; given-informal; 小德
+name ; given2; 东升
+name ; surname-core; 彭
+name ; generation; 小
+name ; credentials; 议员
+name ; locale; zh_AQ
+
+expectedResult; 彭德威东升议员先生
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; 彭德威东升
+
+parameters; none; short; referring; formal
+parameters; sorting; long; referring; formal
+
+expectedResult; 彭德威东
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; 彭先生
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; 彭小德
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; 彭德东
+
+parameters; none; long; monogram; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; 彭德威
+
+parameters; none; short; referring; informal
+
+expectedResult; 小德
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 彭小
+
+parameters; none; long; monogram; informal
+
+expectedResult; 小
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 彭
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; 辛巴达
+name ; locale; en_AQ
+
+expectedResult; 辛巴达
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; 辛
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; 克特
+name ; surname; 米勒
+name ; locale; en_AQ
+
+expectedResult; 克特·米勒
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; 克·米勒
+
+parameters; none; short; referring; formal
+
+expectedResult; 克特·米
+
+parameters; none; short; referring; informal
+
+expectedResult; 克特
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 克米
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; 米勒
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; 克
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 米
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; 塞西莉亚
+name ; given2; 哈米什
+name ; surname; 施托贝尔
+name ; locale; en_AQ
+
+expectedResult; 塞西莉亚·哈米什·施托贝尔
+
+parameters; none; long; referring; formal
+
+expectedResult; 塞西莉亚·哈·施托贝尔
+
+parameters; none; medium; referring; formal
+
+expectedResult; 塞西莉亚·施托贝尔
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; 塞·哈·施托贝尔
+
+parameters; none; short; referring; formal
+
+expectedResult; 塞西莉亚·施
+
+parameters; none; short; referring; informal
+
+expectedResult; 塞西莉亚
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 施托贝尔
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; 塞哈施
+
+parameters; none; long; monogram; formal
+
+expectedResult; 塞施
+
+parameters; none; long; monogram; informal
+
+expectedResult; 塞
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 施
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; 教授
+name ; given; 艾达·科妮莉亚
+name ; given-informal; 尼尔
+name ; given2; 塞萨尔·马丁
+name ; surname-prefix; 冯
+name ; surname-core; 布鲁赫
+name ; generation; 小
+name ; credentials; 博士
+name ; locale; en_AQ
+
+expectedResult; 艾达·科妮莉亚·塞萨尔·马丁·冯·布鲁赫博士
+
+parameters; none; long; referring; formal
+
+expectedResult; 艾达·科妮莉亚·塞·冯·布鲁赫博士
+
+parameters; none; medium; referring; formal
+
+expectedResult; 艾·塞·冯·布鲁赫
+
+parameters; none; short; referring; formal
+
+expectedResult; 尼尔·冯·布鲁赫
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; 冯·布鲁赫教授
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; 尼尔·冯·布
+
+parameters; none; short; referring; informal
+
+expectedResult; 艾塞冯
+
+parameters; none; long; monogram; formal
+
+expectedResult; 尼冯
+
+parameters; none; long; monogram; informal
+
+expectedResult; 尼尔
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 冯
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; 尼
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName

@@ -149,9 +149,6 @@ nn{
         Hans{"forenkla han"}
     }
     Types{
-        calendar{
-            islamic-civil{"islamsk sivil kalender"}
-        }
         cf{
             account{"valutaformat for rekneskapsføring"}
         }

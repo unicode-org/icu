@@ -524,9 +524,6 @@ yo{
             ethiopic-amete-alem{"Èdè Kalenda Alem Amete tio Etiopia"}
             gregorian{"Kàlẹ́ńdà Gregory"}
             hebrew{"Kàlẹ́ńdà Hébérù"}
-            islamic{"Kàlẹ́ńdà Lárúbáwá"}
-            islamic-civil{"Kàlẹ́ńdà ti Musulumi"}
-            islamic-umalqura{"Kàlẹ́ńdà Musulumi"}
             iso8601{"Kàlẹ́ńdà ISO-8601"}
             japanese{"Kàlẹ́ńdà ti Jàpánù"}
             persian{"Kàlẹ́ńdà Pásíànù"}

@@ -186,8 +186,10 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "WV" },
 
                 // but Dutch monogram generation _does_ handle the prefix specially
-                { "nl_NL", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "WvP" },
-                { "nl_NL", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "WvP" },
+//                { "nl_NL", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "WvP" },   Temporary change the test because data was set to provisional
+//                { "nl_NL", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "WvP" },
+                { "nl_NL", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "WV" },
+                { "nl_NL", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "WV" },
             }),
             new NameAndTestCases("locale=en_US,given=Willem,surname=van der Plas", new String[][] {
                 // if we just use the "surname" field instead of "surname-prefix" and "surname-core", everything's
@@ -556,7 +558,8 @@ public class PersonNameFormatterTest extends TestFmwk{
                 {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
             }),
             new NameAndTestCases("given=港生,surname=陳,given2=Test,locale=zh_Hant", new String[][]{
-                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T."},
+//                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T."},  Temporary change the test because data was set to provisional
+                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
             }),
             new NameAndTestCases("given=港生,surname=陳,given2=Test,locale=zh_Hani", new String[][]{
                 {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},

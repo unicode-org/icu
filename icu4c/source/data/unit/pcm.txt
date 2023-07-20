@@ -406,11 +406,6 @@ pcm{
                 one{"{0} Ẹlẹ́ktrọ́nvolt"}
                 other{"{0} Ẹlẹ́ktrọ́nvolt"}
             }
-            foodcalorie{
-                dnam{"Kálọ́ri-dẹm"}
-                one{"{0} Kálọ́ri"}
-                other{"{0} Kálọ́ri"}
-            }
             joule{
                 dnam{"Jul-dẹm"}
                 one{"{0} Jul"}
@@ -477,21 +472,6 @@ pcm{
             }
         }
         graphics{
-            dot{
-                dnam{"dọt"}
-                one{"{0}dọt"}
-                other{"{0}dọt"}
-            }
-            dot-per-centimeter{
-                dnam{"Pọint-dẹm fọ ích sẹntímíta"}
-                one{"{0} Pọint fọ ích sẹntímíta"}
-                other{"{0} Pọint fọ ích sẹntímíta"}
-            }
-            dot-per-inch{
-                dnam{"Pọint-Dẹm Fọ Ẹ́vrí Inch"}
-                one{"{0} Pọint Fọ Ẹ́vrí Inch"}
-                other{"{0} Pọint Fọ Ẹ́vrí Inch"}
-            }
             em{
                 dnam{"Taipógráfik em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ pcm{
                 one{"{0} ẹV"}
                 other{"{0} ẹV"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"{0} Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"Joules"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ pcm{
             }
         }
         graphics{
-            dot{
-                dnam{"dọt"}
-                one{"{0} dọt"}
-                other{"{0} dọt"}
-            }
-            dot-per-centimeter{
-                dnam{"Pọints fọ ích sẹntímíta"}
-                one{"{0} PFIS"}
-                other{"{0} PFIS"}
-            }
-            dot-per-inch{
-                dnam{"Pọints Fọ Ẹ́vrí Inch"}
-                one{"{0} PFẸI"}
-                other{"{0} PFẸI"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2503,11 +2463,6 @@ pcm{
                 one{"{0} ẹV"}
                 other{"{0} ẹV"}
             }
-            foodcalorie{
-                dnam{"Kal"}
-                one{"{0} Kal"}
-                other{"{0} Kal"}
-            }
             joule{
                 dnam{"Joules"}
                 one{"{0} J"}
@@ -2573,21 +2528,6 @@ pcm{
             }
         }
         graphics{
-            dot{
-                dnam{"dọt"}
-                one{"{0} dọt"}
-                other{"{0} dọt"}
-            }
-            dot-per-centimeter{
-                dnam{"Pọints fọ ích sẹntímíta"}
-                one{"{0} PFIS"}
-                other{"{0} PFIS"}
-            }
-            dot-per-inch{
-                dnam{"Pọints Fọ Ẹ́vrí Inch"}
-                one{"{0} PFẸI"}
-                other{"{0} PFẸI"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

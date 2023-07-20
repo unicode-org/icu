@@ -882,11 +882,6 @@ tr{
             gregorian{"Miladi Takvim"}
             hebrew{"İbrani Takvimi"}
             indian{"Ulusal Hint Takvimi"}
-            islamic{"Hicri Takvim"}
-            islamic-civil{"Arap Takvimi"}
-            islamic-rgsa{"Hicri Takvim (Suudi)"}
-            islamic-tbla{"Hicri Takvim (Astronomik Evreler)"}
-            islamic-umalqura{"Hicri Takvim (Ümmü-l Kurra Takvimi)"}
             iso8601{"ISO-8601 Takvimi"}
             japanese{"Japon Takvimi"}
             persian{"İran Takvimi"}

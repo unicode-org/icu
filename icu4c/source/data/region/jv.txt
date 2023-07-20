@@ -146,7 +146,6 @@ jv{
         IL{"Israèl"}
         IM{"Pulo Man"}
         IN{"Indhia"}
-        IO{"Wilayah Inggris nang Segoro Hindia"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Èslan"}

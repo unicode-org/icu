@@ -12,19 +12,16 @@ bn{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{
-        "[\u09BC ৺ অ আ ই ঈ উ ঊ ঋ ৠ ঌ ৡ এ ঐ ও ঔ ং ঃ \u0981 ক {ক\u09CDষ} খ গ ঘ ঙ চ ছ জ "
-        "ঝ ঞ ট ঠ ড {ড\u09BC} ঢ {ঢ\u09BC} ণ ত ৎ থ দ ধ ন প ফ ব ভ ম য {য\u09BC} র ল শ ষ "
-        "স হ ঽ া ি ী \u09C1 \u09C2 \u09C3 \u09C4 \u09E2 \u09E3 ে ৈ ো ৌ \u09CD ৗ]"
+        "[় ৺ অ আ ই ঈ উ ঊ ঋ ৠ ঌ ৡ এ ঐ ও ঔ ং ঃ ঁ ক {ক্ষ} খ গ ঘ ঙ চ ছ জ ঝ ঞ ট ঠ ড{ড়} ঢ"
+        "{ঢ়} ণ ত ৎ থ দ ধ ন প ফ ব ভ ম য{য়} র ল শ ষ স হ ঽ া ি ী ু ূ ৃ ৄ ৢ ৣ ে ৈ ো ৌ ্"
+        " ৗ]"
     }
     ExemplarCharactersIndex{
-        "[অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ ক {ক\u09CDষ} খ গ ঘ ঙ চ ছ জ ঝ ঞ ট ঠ ড ঢ ণ ত থ দ ধ ন প "
-        "ফ ব ভ ম য র ল শ ষ স হ]"
+        "[অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ ক {ক্ষ} খ গ ঘ ঙ চ ছ জ ঝ ঞ ট ঠ ড ঢ ণ ত থ দ ধ ন প ফ ব ভ"
+        " ম য র ল শ ষ স হ]"
     }
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0০ 1১ 2২ 3৩ 4৪ 5৫ 6৬ 7৭ 8৮ 9৯]"}
-    ExemplarCharactersPunctuation{
-        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
-        "′ ″]"
-    }
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     MoreInformation{"?"}
     NumberElements{
         beng{
@@ -3052,32 +3049,32 @@ bn{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }
@@ -3097,75 +3094,6 @@ bn{
                 "yue",
                 "zh",
             }
-        }
-        namePattern{
-            givenFirst-long-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-long-addressing-informal{"{given} {given2} {surname} {surname2}"}
-            givenFirst-long-monogram-informal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-long-referring-informal{"{given} {given2} {surname} {surname2}"}
-            givenFirst-medium-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-medium-addressing-informal{"{given} {given2} {surname} {surname2}"}
-            givenFirst-medium-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-medium-monogram-informal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-medium-referring-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-medium-referring-informal{"{given} {given2} {surname} {surname2}"}
-            givenFirst-short-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-short-addressing-informal{"{given} {given2} {surname} {surname2}"}
-            givenFirst-short-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-short-monogram-informal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-short-referring-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-short-referring-informal{"{given} {given2} {surname} {surname2}"}
-            sorting-long-referring-informal{"{surname} {surname2}, {given} {given2}"}
-            sorting-medium-referring-formal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
-            sorting-medium-referring-informal{"{surname} {surname2}, {given} {given2}"}
-            sorting-short-referring-formal{"{surname} {surname2}, {title} {given} {given2} {credentials}"}
-            sorting-short-referring-informal{"{surname} {surname2}, {given} {given2}"}
-            surnameFirst-long-addressing-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
-            surnameFirst-long-addressing-informal{"{surname} {surname2} {given} {given2}"}
-            surnameFirst-long-monogram-informal{
-                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
-                "llCaps}"
-            }
-            surnameFirst-long-referring-informal{"{surname} {surname2} {given} {given2}"}
-            surnameFirst-medium-addressing-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
-            surnameFirst-medium-addressing-informal{"{surname} {surname2} {given} {given2}"}
-            surnameFirst-medium-monogram-formal{
-                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
-                "llCaps}"
-            }
-            surnameFirst-medium-monogram-informal{
-                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
-                "llCaps}"
-            }
-            surnameFirst-medium-referring-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
-            surnameFirst-medium-referring-informal{"{surname} {surname2} {given} {given2}"}
-            surnameFirst-short-addressing-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
-            surnameFirst-short-addressing-informal{"{surname} {surname2} {given} {given2}"}
-            surnameFirst-short-monogram-formal{
-                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
-                "llCaps}"
-            }
-            surnameFirst-short-monogram-informal{
-                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
-                "llCaps}"
-            }
-            surnameFirst-short-referring-formal{"{surname} {surname2} {title} {given} {given2} {credentials}"}
-            surnameFirst-short-referring-informal{"{surname} {surname2} {given} {given2}"}
         }
     }
 }

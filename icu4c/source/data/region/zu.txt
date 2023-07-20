@@ -146,7 +146,6 @@ zu{
         IL{"kwa-Israel"}
         IM{"i-Isle of Man"}
         IN{"i-India"}
-        IO{"i-British Indian Ocean Territory"}
         IQ{"i-Iraq"}
         IR{"i-Iran"}
         IS{"i-Iceland"}

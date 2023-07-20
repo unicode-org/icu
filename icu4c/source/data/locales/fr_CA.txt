@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fr_CA{
-    AuxExemplarCharacters{"[á å ä ã ā ē í ì ī ñ ó ò ö ø ú ǔ]"}
+    AuxExemplarCharacters{"[áåäãā ē íìī ñ óòöø úǔ]"}
     NumberElements{
         latn{
             patternsLong{

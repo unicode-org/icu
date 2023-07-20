@@ -3,7 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 haw{
     AuxExemplarCharacters{"[b c d f g j q r s t v x y z]"}
-    ExemplarCharacters{"[a ā e ē i ī o ō u ū h k l m n p w ʻ]"}
+    ExemplarCharacters{"[aā eē iī oō uū h k l m n p w ʻ]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     NumberElements{
         latn{

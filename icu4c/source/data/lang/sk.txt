@@ -683,9 +683,6 @@ sk{
             gregorian{"gregoriánsky kalendár"}
             hebrew{"židovský kalendár"}
             indian{"Indický národný kalendár"}
-            islamic{"islamský kalendár"}
-            islamic-civil{"islamský občiansky kalendár"}
-            islamic-umalqura{"islamský kalendár (Umm al-Qura)"}
             iso8601{"kalendár ISO 8601"}
             japanese{"japonský kalendár"}
             persian{"perzský kalendár"}

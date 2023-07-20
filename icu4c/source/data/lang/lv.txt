@@ -700,9 +700,6 @@ lv{
             gregorian{"Gregora kalendārs"}
             hebrew{"ebreju kalendārs"}
             indian{"Indijas nacionālais kalendārs"}
-            islamic{"islāma kalendārs"}
-            islamic-civil{"islāma pilsoņu kalendārs"}
-            islamic-umalqura{"islāma kalendārs (Umm al-kura)"}
             iso8601{"ISO 8601 kalendārs"}
             japanese{"japāņu kalendārs"}
             persian{"persiešu kalendārs"}

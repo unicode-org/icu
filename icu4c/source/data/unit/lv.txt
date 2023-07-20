@@ -1693,12 +1693,6 @@ lv{
                 other{"{0} elektronvolti"}
                 zero{"{0} elektronvoltu"}
             }
-            foodcalorie{
-                dnam{"kalorijas"}
-                one{"{0} kalorija"}
-                other{"{0} kalorijas"}
-                zero{"{0} kaloriju"}
-            }
             joule{
                 case{
                     accusative{
@@ -1984,24 +1978,6 @@ lv{
             }
         }
         graphics{
-            dot{
-                dnam{"punkts"}
-                one{"{0} p."}
-                other{"{0} p."}
-                zero{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"punkti centimetrā"}
-                one{"{0} punkts centimetrā"}
-                other{"{0} punkti centimetrā"}
-                zero{"{0} dpc"}
-            }
-            dot-per-inch{
-                dnam{"punkti collā"}
-                one{"{0} punkts collā"}
-                other{"{0} punkti collā"}
-                zero{"{0} ppi"}
-            }
             em{
                 case{
                     accusative{
@@ -4315,12 +4291,6 @@ lv{
                 other{"{0} eV"}
                 zero{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-                zero{"{0} cal"}
-            }
             joule{
                 dnam{"džouli"}
                 one{"{0} J"}
@@ -4399,24 +4369,6 @@ lv{
             }
         }
         graphics{
-            dot{
-                dnam{"punkts"}
-                one{"{0} p."}
-                other{"{0} p."}
-                zero{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpc"}
-                one{"{0} dpc"}
-                other{"{0} dpc"}
-                zero{"{0} dpc"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-                zero{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -5524,12 +5476,6 @@ lv{
                 other{"{0} eV"}
                 zero{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-                zero{"{0} cal"}
-            }
             joule{
                 dnam{"džouli"}
                 one{"{0} J"}
@@ -5606,24 +5552,6 @@ lv{
             }
         }
         graphics{
-            dot{
-                dnam{"punkts"}
-                one{"{0} p."}
-                other{"{0} p."}
-                zero{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpc"}
-                one{"{0} dpc"}
-                other{"{0} dpc"}
-                zero{"{0} dpc"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-                zero{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

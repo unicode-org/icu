@@ -4,11 +4,11 @@
 yo{
     AuxExemplarCharacters{"[c q v x z]"}
     ExemplarCharacters{
-        "[a á à b d e é è ẹ {ẹ\u0301} {ẹ\u0300} f g {gb} h i í ì j k l m ḿ {m\u0300} "
-        "{m\u0304} n ń ǹ {n\u0304} o ó ò ọ {ọ\u0301} {ọ\u0300} p r s ṣ t u ú ù w y]"
+        "[aáà b d eéè ẹ{ẹ́}{ẹ̀} f g {gb} h iíì j k l mḿ{m̀}{m̄} nńǹ{n̄} oóò ọ{ọ́}{ọ̀}"
+        " p r s ṣ t uúù w y]"
     }
     ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P R S T U W Y]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) @ * / \\& # † ‡ ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         latn{
             miscPatterns{

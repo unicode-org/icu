@@ -1,0 +1,504 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: or
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; ସିନବାଦ୍
+name ; locale; or_AQ
+
+expectedResult; ସିନବାଦ୍
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ସି
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ଆଇରେନ୍
+name ; surname; ଆଡଲର୍
+name ; locale; or_AQ
+
+expectedResult; ଆଡଲର୍, ଆଇରେନ୍
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ଆଇରେନ୍ ଆଡଲର୍
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; ଆଇରେନ୍ ଆ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ଆଡଲର୍, ଆ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ଆ. ଆଡଲର୍
+
+parameters; none; short; referring; formal
+
+expectedResult; ଆଇରେନ୍
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ଆଡଲର୍
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ଆଆ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; ଆ
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ଜନ୍
+name ; given2; ହାମିଶ
+name ; surname; ୱାଟସନ୍
+name ; locale; or_AQ
+
+expectedResult; ୱାଟସନ୍, ଜନ୍ ହାମିଶ
+
+parameters; sorting; long; referring; formal
+
+expectedResult; ଜନ୍ ହାମିଶ ୱାଟସନ୍
+
+parameters; none; long; referring; formal
+
+expectedResult; ୱାଟସନ୍, ଜନ୍ ହା.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; ଜନ୍ ହା. ୱାଟସନ୍
+
+parameters; none; medium; referring; formal
+
+expectedResult; ୱାଟସନ୍, ଜ. ହା.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ଜ. ହା. ୱାଟସନ୍
+
+parameters; none; short; referring; formal
+
+expectedResult; ୱାଟସନ୍, ଜନ୍
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ଜନ୍ ୱାଟସନ୍
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ଜନ୍ ୱା.
+
+parameters; none; short; referring; informal
+
+expectedResult; ୱାଟସନ୍
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ଜହାୱା
+
+parameters; none; long; monogram; formal
+
+expectedResult; ଜନ୍
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ଜୱା
+
+parameters; none; long; monogram; informal
+
+expectedResult; ୱା
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ଜ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; ଶ୍ରୀଯୁକ୍ତ
+name ; given; ବର୍ଟ୍ରାମ ୱିଲବର୍ଫୋର୍ସ
+name ; given-informal; ବର୍ଟି
+name ; given2; ହେନେରୀ ରୋବର୍ଟ
+name ; surname-core; ୱୋଷ୍ଟର
+name ; generation; ଜେଆର୍
+name ; credentials; ଏମପି
+name ; locale; or_AQ
+
+expectedResult; ବର୍ଟ୍ରାମ ୱିଲବର୍ଫୋର୍ସ ହେନେରୀ ରୋବର୍ଟ ୱୋଷ୍ଟର ଏମପି
+
+parameters; none; long; referring; formal
+
+expectedResult; ୱୋଷ୍ଟର, ବର୍ଟ୍ରାମ ୱିଲବର୍ଫୋର୍ସ ହେନେରୀ ରୋବର୍ଟ
+
+parameters; sorting; long; referring; formal
+
+expectedResult; ବର୍ଟ୍ରାମ ୱିଲବର୍ଫୋର୍ସ ହେ. ରୋ. ୱୋଷ୍ଟର ଏମପି
+
+parameters; none; medium; referring; formal
+
+expectedResult; ୱୋଷ୍ଟର, ବର୍ଟ୍ରାମ ୱିଲବର୍ଫୋର୍ସ ହେ. ରୋ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; ୱୋଷ୍ଟର, ବ. ୱି. ହେ. ରୋ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ବ. ୱି. ହେ. ରୋ. ୱୋଷ୍ଟର
+
+parameters; none; short; referring; formal
+
+expectedResult; ଶ୍ରୀଯୁକ୍ତ ୱୋଷ୍ଟର
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ୱୋଷ୍ଟର, ବର୍ଟି
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ବର୍ଟି ୱୋଷ୍ଟର
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ବର୍ଟି ୱୋ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ବର୍ଟି
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ବହେୱୋ
+
+parameters; none; long; monogram; formal
+
+expectedResult; ବୱୋ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ୱୋ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ବ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ସିନବାଦ
+name ; locale; ko_AQ
+
+expectedResult; ସିନବାଦ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ସି
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; କାଥେ
+name ; surname; ମୁଲେର୍
+name ; locale; ko_AQ
+
+expectedResult; ମୁଲେର୍ କାଥେ
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; ମୁଲେର୍ କା.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ମୁଲେର୍
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; କାଥେ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ମୁକା
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; କା
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ମୁ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; ଜେଆର୍
+name ; given2; ହାମିଶ
+name ; surname; ଷ୍ଟୋବର
+name ; locale; ko_AQ
+
+expectedResult; ଷ୍ଟୋବର ଜେଆର୍ ହାମିଶ
+
+parameters; none; long; referring; formal
+
+expectedResult; ଷ୍ଟୋବର ଜେଆର୍ ହା.
+
+parameters; none; medium; referring; formal
+
+expectedResult; ଷ୍ଟୋବର ଜେ. ହା.
+
+parameters; none; short; referring; formal
+
+expectedResult; ଷ୍ଟୋବର ଜେଆର୍
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ଷ୍ଟୋବର ଜେ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ଷ୍ଟୋଜେହା
+
+parameters; none; long; monogram; formal
+
+expectedResult; ଷ୍ଟୋଜେ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ଷ୍ଟୋବର
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ଜେଆର୍
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ଷ୍ଟୋ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ଜେ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; ପ୍ରଫେସର ଡ.
+name ; given; ଆଡା କର୍ଣ୍ଣେଲିଆ
+name ; given-informal; ନୋଏଲ୍
+name ; given2; ଇଭା ସୋଫିଆ
+name ; surname-prefix; ୱାନ୍ ଡେନ୍
+name ; surname-core; ୱୋଲ୍ଫ
+name ; surname2; ବେକର୍ ସ୍ମିଥ୍
+name ; generation; ଜେଆର୍
+name ; credentials; ଏମ.ଡି.ପିଏଚ.ଡି
+name ; locale; ko_AQ
+
+expectedResult; ୱାନ୍ ଡେନ୍ ୱୋଲ୍ଫ ଆଡା କର୍ଣ୍ଣେଲିଆ ଇଭା ସୋଫିଆ ଏମ.ଡି.ପିଏଚ.ଡି
+
+parameters; none; long; referring; formal
+
+expectedResult; ୱାନ୍ ଡେନ୍ ୱୋଲ୍ଫ ଆଡା କର୍ଣ୍ଣେଲିଆ ଇ. ସୋ. ଏମ.ଡି.ପିଏଚ.ଡି
+
+parameters; none; medium; referring; formal
+
+expectedResult; ୱାନ୍ ଡେନ୍ ୱୋଲ୍ଫ ଆ. କ. ଇ. ସୋ.
+
+parameters; none; short; referring; formal
+
+expectedResult; ପ୍ରଫେସର ଡ. ୱାନ୍ ଡେନ୍ ୱୋଲ୍ଫ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ୱାନ୍ ଡେନ୍ ୱୋଲ୍ଫ ଆ. କ.
+
+parameters; none; short; referring; informal
+
+expectedResult; ୱାନ୍ ଡେନ୍ ୱୋଲ୍ଫ ନୋଏଲ୍
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ନୋଏଲ୍
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ୱାଆଇ
+
+parameters; none; long; monogram; formal
+
+expectedResult; ୱାନୋ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ନୋ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ୱା
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

@@ -1306,11 +1306,6 @@ hy{
                 one{"{0} էլեկտրոն-վոլտ"}
                 other{"{0} էլեկտրոն-վոլտ"}
             }
-            foodcalorie{
-                dnam{"կալորիաներ"}
-                one{"{0} կալորիա"}
-                other{"{0} կալորիա"}
-            }
             joule{
                 case{
                     ablative{
@@ -1539,21 +1534,6 @@ hy{
             }
         }
         graphics{
-            dot{
-                dnam{"կետ"}
-                one{"{0} կետ"}
-                other{"{0} կետ"}
-            }
-            dot-per-centimeter{
-                dnam{"կետեր սանտիմետրի վրա"}
-                one{"{0} կետ սանտիմետրի վրա"}
-                other{"{0} կետ սանտիմետրի վրա"}
-            }
-            dot-per-inch{
-                dnam{"կետեր մատնաչափի վրա"}
-                one{"{0} կետ մատնաչափի վրա"}
-                other{"{0} կետ մատնաչափի վրա"}
-            }
             em{
                 case{
                     ablative{
@@ -3435,11 +3415,6 @@ hy{
                 one{"{0} էՎ"}
                 other{"{0} էՎ"}
             }
-            foodcalorie{
-                dnam{"կալ"}
-                one{"{0} կալ"}
-                other{"{0} կալ"}
-            }
             joule{
                 dnam{"Ջ"}
                 one{"{0} Ջ"}
@@ -3506,21 +3481,6 @@ hy{
             }
         }
         graphics{
-            dot{
-                dnam{"կետ"}
-                one{"{0} կետ"}
-                other{"{0} կետ"}
-            }
-            dot-per-centimeter{
-                dnam{"կսմ"}
-                one{"{0} կսմ"}
-                other{"{0} կսմ"}
-            }
-            dot-per-inch{
-                dnam{"կմչ"}
-                one{"{0} կմչ"}
-                other{"{0} կմչ"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -4483,11 +4443,6 @@ hy{
                 one{"{0} էՎ"}
                 other{"{0} էՎ"}
             }
-            foodcalorie{
-                dnam{"կալ"}
-                one{"{0} կալ"}
-                other{"{0} կալ"}
-            }
             joule{
                 dnam{"Ջ"}
                 one{"{0} Ջ"}
@@ -4554,21 +4509,6 @@ hy{
             }
         }
         graphics{
-            dot{
-                dnam{"կետ"}
-                one{"{0} կետ"}
-                other{"{0} կետ"}
-            }
-            dot-per-centimeter{
-                dnam{"կսմ"}
-                one{"{0} կսմ"}
-                other{"{0} կսմ"}
-            }
-            dot-per-inch{
-                dnam{"կմչ"}
-                one{"{0} կմչ"}
-                other{"{0} կմչ"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

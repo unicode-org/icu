@@ -1154,7 +1154,7 @@ public class RBBITestMonkey extends TestFmwk {
                 }
 
                 if (fPf.contains(thisChar) && fQU.contains(thisChar)) {
-                    int nextChar = UTF16.charAt(fText, nextPos);
+                    int nextChar = (nextPos < fText.length())? UTF16.charAt(fText, nextPos): 0;
                     if (nextPos == fText.length() || fSP.contains(nextChar) || fGL.contains(nextChar) ||
                         fWJ.contains(nextChar) || fCL.contains(nextChar) || fQU.contains(nextChar) ||
                         fCP.contains(nextChar) || fEX.contains(nextChar) || fIS.contains(nextChar) ||
@@ -1342,20 +1342,20 @@ public class RBBITestMonkey extends TestFmwk {
                     setAppliedRule(pos, "LB 28a.1  AP x (AK | ◌ | AS)");
                     continue;
                 }
-        
+
                 if ((fAK.contains(prevChar) || prevChar == '◌' || fAS.contains(prevChar)) &&
                     (fVF.contains(thisChar) || fVI.contains(thisChar))) {
                     setAppliedRule(pos, "LB 28a.2  (AK | ◌ | AS) x (VF | VI)");
                     continue;
                 }
-        
+
                 if ((fAK.contains(prevCharX2) || prevCharX2 == '◌' || fAS.contains(prevCharX2)) &&
                     fVI.contains(prevChar) &&
                     (fAK.contains(thisChar) || thisChar == '◌')) {
                     setAppliedRule(pos, "LB 28a.3  (AK | ◌ | AS) VI x (AK | ◌)");
                     continue;
                 }
-        
+
                 if (nextPos < fText.length()) {
                     // note: UnicodeString::char32At(length) returns ffff, not distinguishable
                     //       from a legit ffff noncharacter. So test length separately.
@@ -2450,4 +2450,3 @@ public class RBBITestMonkey extends TestFmwk {
         RunMonkey(rtbi, m, "sent", seed, loopCount);
     }
 }
-

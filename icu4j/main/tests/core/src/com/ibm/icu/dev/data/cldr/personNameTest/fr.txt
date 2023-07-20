@@ -1,0 +1,513 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: fr
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Adèle
+name ; locale; fr_AQ
+
+expectedResult; Adèle
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; A
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Louise
+name ; surname; Péricourt
+name ; locale; fr_AQ
+
+expectedResult; Péricourt, Louise
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Louise Péricourt
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Péricourt, L.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; L. Péricourt
+
+parameters; none; short; referring; formal
+
+expectedResult; Louise P.
+
+parameters; none; short; referring; informal
+
+expectedResult; Péricourt
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Louise
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; LP
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; L
+
+parameters; none; short; monogram; informal
+
+expectedResult; P
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Marie-Agnès
+name ; given2; Suzanne
+name ; surname; Gilot
+name ; locale; fr_AQ
+
+expectedResult; Gilot, Marie-Agnès Suzanne
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Marie-Agnès Suzanne Gilot
+
+parameters; none; long; referring; formal
+
+expectedResult; Gilot, Marie-Agnès S.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Marie-Agnès S. Gilot
+
+parameters; none; medium; referring; formal
+
+expectedResult; Gilot, Marie-Agnès
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Marie-Agnès Gilot
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Marie-Agnès G.
+
+parameters; none; short; referring; informal
+
+expectedResult; Gilot, M. S.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; M. S. Gilot
+
+parameters; none; short; referring; formal
+
+expectedResult; Marie-Agnès
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Gilot
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; MSG
+
+parameters; none; long; monogram; formal
+
+expectedResult; MG
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; G
+
+parameters; none; short; monogram; formal
+
+expectedResult; M
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; M.
+name ; given; Jean-Nicolas
+name ; given-informal; Nico
+name ; given2; Louis Marcel
+name ; surname-prefix; de
+name ; surname-core; Bouchart
+name ; generation; fils
+name ; locale; fr_AQ
+
+expectedResult; M. Jean-Nicolas Louis Marcel de Bouchart fils
+
+parameters; none; long; referring; formal
+
+expectedResult; Bouchart, Jean-Nicolas Louis Marcel de
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Bouchart, Jean-Nicolas L. M. de
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Jean-Nicolas L. M. de Bouchart
+
+parameters; none; medium; referring; formal
+
+expectedResult; Bouchart, J. L. M. de
+
+parameters; sorting; short; referring; formal
+
+expectedResult; J. L. M. de Bouchart
+
+parameters; none; short; referring; formal
+
+expectedResult; de Bouchart, Nico
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Nico de Bouchart
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; M. de Bouchart
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Nico d. B.
+
+parameters; none; short; referring; informal
+
+expectedResult; Nico
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; JLB
+
+parameters; none; long; monogram; formal
+
+expectedResult; JB
+
+parameters; none; medium; monogram; formal
+
+expectedResult; NB
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+
+expectedResult; B
+
+parameters; none; short; monogram; formal
+
+expectedResult; N
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Asmar
+name ; locale; ko_AQ
+
+expectedResult; Asmar
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; A
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Hermione
+name ; surname; Granger
+name ; locale; ko_AQ
+
+expectedResult; Granger Hermione
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Granger H.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Hermione
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Granger
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; GH
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; G
+
+parameters; none; short; monogram; formal
+
+expectedResult; H
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Ginevra
+name ; given2; Molly
+name ; surname; Weasley
+name ; locale; ko_AQ
+
+expectedResult; Weasley Ginevra Molly
+
+parameters; none; long; referring; formal
+
+expectedResult; Weasley Ginevra M.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Weasley Ginevra
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Weasley G. M.
+
+parameters; none; short; referring; formal
+
+expectedResult; Weasley G.
+
+parameters; none; short; referring; informal
+
+expectedResult; Ginevra
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Weasley
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; WGM
+
+parameters; none; long; monogram; formal
+
+expectedResult; WG
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; G
+
+parameters; none; short; monogram; informal
+
+expectedResult; W
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; Prof. Dr.
+name ; given; María Florencia
+name ; given-informal; Flor
+name ; given2; Martina Cristina
+name ; surname-prefix; von
+name ; surname-core; Brühl
+name ; surname2; González Domingo
+name ; generation; Jr.
+name ; credentials; MD DDS
+name ; locale; ko_AQ
+
+expectedResult; Prof. Dr. von Brühl María Florencia Martina Cristina Jr., MD DDS
+
+parameters; none; long; referring; formal
+
+expectedResult; von Brühl María Florencia M. C.
+
+parameters; none; medium; referring; formal
+
+expectedResult; von Brühl M. F. M. C.
+
+parameters; none; short; referring; formal
+
+expectedResult; Prof. Dr. von Brühl
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; von Brühl M. F.
+
+parameters; none; short; referring; informal
+
+expectedResult; von Brühl Flor
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Flor
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; BMM
+
+parameters; none; long; monogram; formal
+
+expectedResult; BF
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+
+expectedResult; BM
+
+parameters; none; medium; monogram; formal
+
+expectedResult; B
+
+parameters; none; short; monogram; formal
+
+expectedResult; F
+
+parameters; none; short; monogram; informal
+
+endName

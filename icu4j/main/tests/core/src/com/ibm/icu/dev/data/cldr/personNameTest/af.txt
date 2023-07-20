@@ -1,0 +1,507 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: af
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Piet
+name ; locale; af_AQ
+
+expectedResult; Piet
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; P
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Irene
+name ; surname; Rossouw
+name ; locale; af_AQ
+
+expectedResult; Rossouw, Irene
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Irene Rossouw
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Rossouw, I.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; I. Rossouw
+
+parameters; none; short; referring; formal
+
+expectedResult; Irene R.
+
+parameters; none; short; referring; informal
+
+expectedResult; Rossouw
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Irene
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; IR
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; I
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; R
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Jan
+name ; given2; Koos
+name ; surname; Van der Merwe
+name ; locale; af_AQ
+
+expectedResult; Van der Merwe, Jan Koos
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Jan Koos Van der Merwe
+
+parameters; none; long; referring; formal
+
+expectedResult; Van der Merwe, Jan K.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Jan K. Van der Merwe
+
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Van der Merwe, J. K.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; J. K. Van der Merwe
+
+parameters; none; short; referring; formal
+
+expectedResult; Van der Merwe, Jan
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Jan Van der Merwe
+
+parameters; none; long; referring; informal
+
+expectedResult; Van der Merwe
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Jan V. d. M.
+
+parameters; none; short; referring; informal
+
+expectedResult; Jan
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; JKV
+
+parameters; none; long; monogram; formal
+
+expectedResult; JV
+
+parameters; none; long; monogram; informal
+
+expectedResult; J
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; mnr.
+name ; given; Bertus Wilbers
+name ; given-informal; Bertie
+name ; given2; Henri Retief
+name ; surname-core; Wyk
+name ; generation; jnr.
+name ; credentials; LP
+name ; locale; af_AQ
+
+expectedResult; mnr. Bertus Wilbers Henri Retief Wyk jnr., LP
+
+parameters; none; long; referring; formal
+
+expectedResult; Wyk, Bertus Wilbers Henri Retief
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Bertus Wilbers H. R. Wyk LP
+
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Wyk, Bertus Wilbers H. R.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Wyk, B. W. H. R.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; B. W. H. R. Wyk
+
+parameters; none; short; referring; formal
+
+expectedResult; Wyk, Bertie
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Bertie Wyk
+
+parameters; none; long; referring; informal
+
+expectedResult; Bertie W.
+
+parameters; none; short; referring; informal
+
+expectedResult; mnr. Wyk
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Bertie
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; BHW
+
+parameters; none; long; monogram; formal
+
+expectedResult; BW
+
+parameters; none; long; monogram; informal
+
+expectedResult; B
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; W
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Sarel
+name ; locale; ja_AQ
+
+expectedResult; Sarel
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Katryn
+name ; surname; Müller
+name ; locale; ja_AQ
+
+expectedResult; Müller Katryn
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Müller K.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Katryn
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Müller
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; K
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Zalta
+name ; given2; Herman
+name ; surname; Stander
+name ; locale; ja_AQ
+
+expectedResult; Stander Zalta Herman
+
+parameters; none; long; referring; formal
+
+expectedResult; Stander Zalta H.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Stander Z. H.
+
+parameters; none; short; referring; formal
+
+expectedResult; Stander Zalta
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Stander Z.
+
+parameters; none; short; referring; informal
+
+expectedResult; Stander
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Zalta
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; SZH
+
+parameters; none; long; monogram; formal
+
+expectedResult; SZ
+
+parameters; none; long; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Z
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Prof. dr.
+name ; given; Cornelia Margarita
+name ; given-informal; Nellie
+name ; given2; Sofia Aletta
+name ; surname-prefix; van den
+name ; surname-core; Berg
+name ; surname2; Wessels Swart
+name ; generation; jnr.
+name ; credentials; MBChB PhD
+name ; locale; ja_AQ
+
+expectedResult; van den Berg Cornelia Margarita Sofia Aletta MBChB PhD
+
+parameters; none; long; referring; formal
+
+expectedResult; van den Berg Cornelia Margarita S. A. MBChB PhD
+
+parameters; none; medium; referring; formal
+
+expectedResult; van den Berg C. M. S. A.
+
+parameters; none; short; referring; formal
+
+expectedResult; Prof. dr. van den Berg
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; van den Berg Nellie
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; van den Berg C. M.
+
+parameters; none; short; referring; informal
+
+expectedResult; Nellie
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; VCS
+
+parameters; none; long; monogram; formal
+
+expectedResult; VN
+
+parameters; none; long; monogram; informal
+
+expectedResult; N
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

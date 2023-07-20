@@ -406,11 +406,6 @@ ps{
                 one{"{0} اليکټران وولټ"}
                 other{"{0} اليکټران وولټس"}
             }
-            foodcalorie{
-                dnam{"کيلريز"}
-                one{"{0} کيلري"}
-                other{"{0} کيلريز"}
-            }
             joule{
                 dnam{"جولز"}
                 one{"{0} جول"}
@@ -477,21 +472,6 @@ ps{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"ټايپو ګرافيک em"}
                 one{"{0} em"}
@@ -1842,11 +1822,6 @@ ps{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"جولز"}
                 one{"{0} J"}
@@ -1912,21 +1887,6 @@ ps{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

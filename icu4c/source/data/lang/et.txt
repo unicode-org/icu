@@ -893,11 +893,6 @@ et{
             gregorian{"Gregoriuse kalender"}
             hebrew{"juudi kalender"}
             indian{"India rahvuslik kalender"}
-            islamic{"islamikalender"}
-            islamic-civil{"islami ilmalik kalender"}
-            islamic-rgsa{"islamikalender (Saudi Araabia, vaatluspõhine)"}
-            islamic-tbla{"islamikalender (tabulaarne, astronoomiline ajastu)"}
-            islamic-umalqura{"islamikalender (Umm al-Qura)"}
             iso8601{"ISO-8601 kalender"}
             japanese{"Jaapani kalender"}
             persian{"Pärsia kalender"}

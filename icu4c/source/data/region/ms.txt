@@ -146,7 +146,6 @@ ms{
         IL{"Israel"}
         IM{"Isle of Man"}
         IN{"India"}
-        IO{"Wilayah Lautan Hindi British"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}

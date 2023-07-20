@@ -1,0 +1,522 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: es_419
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Diego
+name ; locale; es_419
+
+expectedResult; Diego
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; D
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Lucía
+name ; surname; García
+name ; locale; es_419
+
+expectedResult; García, Lucía
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; García Lucía
+
+parameters; sorting; long; referring; informal
+
+expectedResult; Lucía García
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; García, L.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; L. García
+
+parameters; none; short; referring; formal
+
+expectedResult; Lucía G.
+
+parameters; none; short; referring; informal
+
+expectedResult; García
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Lucía
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; LG
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; G
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; L
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Juan
+name ; given2; Manuel
+name ; surname; Rodríguez
+name ; locale; es_419
+
+expectedResult; Rodríguez, Juan Manuel
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Juan Manuel Rodríguez
+
+parameters; none; long; referring; formal
+
+expectedResult; Rodríguez, Juan M.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Juan M. Rodríguez
+
+parameters; none; medium; referring; formal
+
+expectedResult; Rodríguez, J. M.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; J. M. Rodríguez
+
+parameters; none; short; referring; formal
+
+expectedResult; Rodríguez, Juan
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Juan Rodríguez
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Rodríguez Juan
+
+parameters; sorting; long; referring; informal
+
+expectedResult; Rodríguez
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Juan R.
+
+parameters; none; short; referring; informal
+
+expectedResult; Juan
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; JR
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; J
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; R
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; Sr.
+name ; given; Miguel Ángel
+name ; given-informal; Migue
+name ; given2; Juan Antonio
+name ; surname-core; Pablo
+name ; surname2; Pérez
+name ; generation; II
+name ; locale; es_419
+
+expectedResult; Pablo Pérez, Sr. Miguel Ángel Juan Antonio
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Sr. Miguel Ángel Juan Antonio Pablo II
+
+parameters; none; long; referring; formal
+
+expectedResult; Pablo, Sr. Miguel Ángel Juan Antonio
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Pablo Pérez, Sr. Miguel Ángel J. A.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Miguel Ángel J. A. Pablo
+
+parameters; none; medium; referring; formal
+
+expectedResult; Pablo Pérez, Migue
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+
+expectedResult; M. Á. J. A. Pablo
+
+parameters; none; short; referring; formal
+
+expectedResult; Migue Pablo Pérez
+
+parameters; none; long; referring; informal
+
+expectedResult; Sr. Pablo Pérez
+
+parameters; none; long; addressing; formal
+
+expectedResult; Pablo, Migue
+
+parameters; sorting; short; referring; informal
+
+expectedResult; Migue Pablo
+
+parameters; none; medium; referring; informal
+
+expectedResult; Sr. Pablo
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Migue P.
+
+parameters; none; short; referring; informal
+
+expectedResult; Migue
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MPP
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; P
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Peter
+name ; locale; ko_AQ
+
+expectedResult; Peter
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; P
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Martine
+name ; surname; Sodersen
+name ; locale; ko_AQ
+
+expectedResult; Sodersen Martine
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Sodersen M.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Sodersen
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Martine
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; SM
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Christopher
+name ; given2; Hans
+name ; surname; Jacobsen
+name ; locale; ko_AQ
+
+expectedResult; Jacobsen Christopher Hans
+
+parameters; none; long; referring; formal
+
+expectedResult; Jacobsen Christopher H.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Jacobsen Christopher
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Jacobsen C. H.
+
+parameters; none; short; referring; formal
+
+expectedResult; Christopher
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Jacobsen C.
+
+parameters; none; short; referring; informal
+
+expectedResult; Jacobsen
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; JCH
+
+parameters; none; long; monogram; formal
+
+expectedResult; JC
+
+parameters; none; long; monogram; informal
+
+expectedResult; C
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; J
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; Prof. Dra.
+name ; given; Mary Sue
+name ; given-informal; Marge
+name ; given2; Marie
+name ; surname-prefix; von
+name ; surname-core; Miller
+name ; surname2; Jones
+name ; generation; II
+name ; credentials; Dr./Dra.
+name ; locale; ko_AQ
+
+expectedResult; von Miller Jones Mary Sue Marie Dr./Dra.
+
+parameters; none; long; referring; formal
+
+expectedResult; von Miller Mary Sue M. Dr./Dra.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Prof. Dra. von Miller Jones
+
+parameters; none; long; addressing; formal
+
+expectedResult; von Miller Jones Marge
+
+parameters; none; long; referring; informal
+
+expectedResult; Prof. Dra. von Miller
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; von Miller M. S. M.
+
+parameters; none; short; referring; formal
+
+expectedResult; von Miller M. S.
+
+parameters; none; short; referring; informal
+
+expectedResult; von Miller Marge
+
+parameters; none; medium; referring; informal
+
+expectedResult; Marge
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; VMM
+
+parameters; none; long; monogram; formal
+
+expectedResult; VM
+
+parameters; none; long; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

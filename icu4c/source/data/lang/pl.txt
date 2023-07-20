@@ -850,11 +850,6 @@ pl{
             gregorian{"kalendarz gregoriański"}
             hebrew{"kalendarz hebrajski"}
             indian{"narodowy kalendarz hinduski"}
-            islamic{"kalendarz muzułmański"}
-            islamic-civil{"kalendarz islamski (metoda obliczeniowa)"}
-            islamic-rgsa{"kalendarz islamski (Arabia Saudyjska, metoda wzrokowa)"}
-            islamic-tbla{"kalendarz islamski (metoda obliczeniowa, epoka astronomiczna)"}
-            islamic-umalqura{"kalendarz islamski (Umm al-Kura)"}
             iso8601{"kalendarz ISO-8601"}
             japanese{"kalendarz japoński"}
             persian{"kalendarz perski"}

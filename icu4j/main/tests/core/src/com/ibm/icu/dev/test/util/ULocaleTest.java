@@ -1651,8 +1651,8 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("stroke", "Stroke Order");
         h[0].put("japanese", "Japanese Calendar");
         h[0].put("buddhist", "Buddhist Calendar");
-        h[0].put("islamic", "Islamic Calendar");
-        h[0].put("islamic-civil", "Islamic Calendar (tabular, civil epoch)" );
+        h[0].put("islamic", "Hijri Calendar");
+        h[0].put("islamic-civil", "Hijri Calendar (tabular, civil epoch)" );
         h[0].put("hebrew", "Hebrew Calendar");
         h[0].put("chinese", "Chinese Calendar");
         h[0].put("gregorian", "Gregorian Calendar" );
@@ -1667,8 +1667,10 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F");
         h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
         h[1].put("buddhist", "\u4F5B\u5386");
-        h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");
-        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u65E5\u5386");
+//        h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");              // Temporary change the test because data was set to provisional
+//        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u65E5\u5386");  // Temporary change the test because data was set to provisional
+        h[1].put("islamic", "islamic");
+        h[1].put("islamic-civil", "islamic-civil");
         h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");
         h[1].put("chinese", "\u519C\u5386");
         h[1].put("gregorian", "\u516C\u5386");

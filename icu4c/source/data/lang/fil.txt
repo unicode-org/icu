@@ -566,11 +566,6 @@ fil{
             gregorian{"Gregorian na Kalendaryo"}
             hebrew{"Hebrew na Kalendaryo"}
             indian{"Pambansang Kalendaryong Indian"}
-            islamic{"Kalendaryong Islamic"}
-            islamic-civil{"Kalendaryong Islamic-Civil"}
-            islamic-rgsa{"Kalendaryong Islamiko (Saudi Arabia, sighting)"}
-            islamic-tbla{"Kalendaryong Islamiko (tabular, astronomikal na epoch)"}
-            islamic-umalqura{"Kalendaryong Islam (Umm al-Qura)"}
             iso8601{"ISO-8601 na Kalendaryo"}
             japanese{"Kalendaryong Japanese"}
             persian{"Kalendaryong Persian"}

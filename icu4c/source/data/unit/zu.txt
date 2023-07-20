@@ -406,11 +406,6 @@ zu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Calories"}
-                one{"{0} Calorie"}
-                other{"{0} Calories"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} i-joule"}
@@ -477,21 +472,6 @@ zu{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ zu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ zu{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2486,11 +2446,6 @@ zu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} J"}
@@ -2553,21 +2508,6 @@ zu{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

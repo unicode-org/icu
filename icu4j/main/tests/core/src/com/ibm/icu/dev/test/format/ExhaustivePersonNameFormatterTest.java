@@ -53,11 +53,19 @@ public class ExhaustivePersonNameFormatterTest extends TestFmwk {
         do {
             filename = catalogFile.readLine();
             if (filename != null) {
+                if (filename.startsWith("#")) { // comment line, skip without logging
+                    continue;
+                }
                 if (!filename.endsWith(".txt")) {
                     logln("Skipping " + filename + "...");
                     continue;
                 }
-                String[] FILENAMES_TO_SKIP = {"gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt"};
+//              String[] FILENAMES_TO_SKIP = {"gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt"};
+//              Adding some more locales to skip, with provisional personName formats)
+                String[] FILENAMES_TO_SKIP = {"gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt",
+                      "yue_Hans.txt", "fa.txt", "ja.txt", "ka.txt", "zh_Hant_HK.txt", "zh_Hant.txt",
+                      "bn.txt", "zh.txt", "nl.txt", "to.txt", "uk.txt", "my.txt", "yue.txt",
+                      "bg.txt", "tk.txt", "ps.txt", "ko.txt", "kk.txt", "ms.txt"};
                 if (Arrays.asList(FILENAMES_TO_SKIP).contains(filename)) {
                     // extra check to narrow down the files for debugging
                     logln("Skipping " + filename + "...");

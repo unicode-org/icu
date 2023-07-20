@@ -3,8 +3,8 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 yo_BJ{
     ExemplarCharacters{
-        "[a á à b d e é è ɛ {ɛ\u0301} {ɛ\u0300} f g {gb} h i í ì j k l m n o ó ò ɔ {ɔ"
-        "\u0301} {ɔ\u0300} p r s {sh} t u ú ù w y]"
+        "[aáà b d eéè ɛ{ɛ́}{ɛ̀} f g {gb} h iíì j k l m n oóò ɔ{ɔ́}{ɔ̀} p r s {sh} t u"
+        "úù w y]"
     }
     NumberElements{
         latn{

@@ -528,10 +528,6 @@ tk{
             ethiopic-amete-alem{"Efiopiýa Amete Alem senenamasy"}
             gregorian{"Grigorian senenamasy"}
             hebrew{"Ýewreý senenamasy"}
-            islamic{"Hijri-kamary senenamasy"}
-            islamic-civil{"Hijri-kamary senenamasy (tablisaly, raýat eýýamy)"}
-            islamic-tbla{"Hijri-kamary senenamasy (tablisaly, astronimiýa eýýamy)"}
-            islamic-umalqura{"Hijri-kamary senenamasy (Umm al-Kura)"}
             iso8601{"ISO-8601 senenamasy"}
             japanese{"Ýapon senenamasy"}
             persian{"Pars senenamasy"}

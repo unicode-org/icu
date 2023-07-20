@@ -4,14 +4,14 @@
 tt{
     AuxExemplarCharacters{"[ғ қ]"}
     ExemplarCharacters{
-        "[а ә б в г д е ё ж җ з и й к л м н ң о ө п р с т у ү ф х һ ц ч ш щ ъ ы ь э ю"
-        " я]"
+        "[а ә б в г д её ж җ з и й к л м н ң о ө п р с т у ү ф х һ ц ч ш щ ъ ы ь э ю "
+        "я]"
     }
     ExemplarCharactersIndex{
-        "[А Ә Б В Г Д Е Ё Ж Җ З И Й К Л М Н Ң О Ө П Р С Т У Ү Ф Х Һ Ц Ч Ш Щ Ъ Ы Ь Э Ю"
-        " Я]"
+        "[А Ә Б В Г Д ЕЁ Ж Җ З И Й К Л М Н Ң О Ө П Р С Т У Ү Ф Х Һ Ц Ч Ш Щ Ъ Ы Ь Э Ю "
+        "Я]"
     }
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # ′ ″]"}
     NumberElements{
         default{"latn"}
         latn{

@@ -538,8 +538,6 @@ mt{
             ethiopic{"Kalendarju Etjopiku"}
             gregorian{"Kalendarju Gregorjan"}
             hebrew{"Kalendarju Ebrajk"}
-            islamic{"Kalendarju Iżlamiku"}
-            islamic-civil{"Kalendarju Islamiku-Ċivili"}
             iso8601{"Kalendarju ISO-8601"}
             japanese{"Kalendarju Ġappuniż"}
         }

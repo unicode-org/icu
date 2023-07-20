@@ -146,7 +146,6 @@ no{
         IL{"Israel"}
         IM{"Man"}
         IN{"India"}
-        IO{"Det britiske territoriet i Indiahavet"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}

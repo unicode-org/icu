@@ -335,10 +335,6 @@ yo{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -393,18 +389,6 @@ yo{
             }
         }
         graphics{
-            dot{
-                dnam{"dọ́ọ̀tì"}
-                other{"{0} dọ́ọ̀tì"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1191,10 +1175,6 @@ yo{
                 dnam{"eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0}Cal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0}J"}
@@ -1249,18 +1229,6 @@ yo{
             }
         }
         graphics{
-            dot{
-                dnam{"dọ́ọ̀tì"}
-                other{"{0} dọ́ọ̀tì"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1831,30 +1799,10 @@ yo{
                 per{"{0}/ọd"}
             }
         }
-        energy{
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"KWh lọ́rí 100km"}
                 other{"{0} KWh lọ́rí 100km"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"dọ́ọ̀tì"}
-                other{"{0} dọ́ọ̀tì"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
             }
         }
         length{

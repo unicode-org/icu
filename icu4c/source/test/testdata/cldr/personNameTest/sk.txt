@@ -1,0 +1,492 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: sk
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Jozef
+name ; locale; sk_AQ
+
+expectedResult; Jozef
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; J
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Jana
+name ; surname; Kováčová
+name ; locale; sk_AQ
+
+expectedResult; Kováčová, Jana
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+
+expectedResult; Jana Kováčová
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Kováčová, J.
+
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; Kováčová
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; Jana
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; JK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; J
+
+parameters; none; short; monogram; informal
+
+expectedResult; K
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Ján
+name ; given2; Matej
+name ; surname; Slovák
+name ; locale; sk_AQ
+
+expectedResult; Slovák, Ján Matej
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Ján Matej Slovák
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+
+expectedResult; Slovák, Ján M.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Slovák, J. M.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Slovák, Ján
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+
+expectedResult; Ján Slovák
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Slovák, J.
+
+parameters; sorting; short; referring; informal
+
+expectedResult; Slovák
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; Ján
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; JMS
+
+parameters; none; long; monogram; formal
+
+expectedResult; JS
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; J
+
+parameters; none; short; monogram; informal
+
+expectedResult; S
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; pani
+name ; given; Alexandra
+name ; given-informal; Saša
+name ; given2; Zuzana
+name ; surname-core; Macáková
+name ; generation; ml.
+name ; credentials; PhD
+name ; locale; sk_AQ
+
+expectedResult; Macáková, Alexandra Zuzana (pani, PhD)
+
+parameters; sorting; long; referring; formal
+
+expectedResult; pani Alexandra Zuzana Macáková PhD
+
+parameters; none; long; referring; formal
+
+expectedResult; pani Alexandra Zuzana Macáková
+
+parameters; none; long; addressing; formal
+
+expectedResult; pani Alexandra Macáková
+
+parameters; none; medium; referring; formal
+
+expectedResult; Macáková, Alexandra Z.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Macáková, A. Z.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Macáková, Saša
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+
+expectedResult; pani Macáková
+
+parameters; none; medium; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; Saša Macáková
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Macáková, S.
+
+parameters; sorting; short; referring; informal
+
+expectedResult; Macáková
+
+parameters; none; short; addressing; formal
+
+expectedResult; Saša
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; AZM
+
+parameters; none; long; monogram; formal
+
+expectedResult; AM
+
+parameters; none; medium; monogram; formal
+
+expectedResult; SM
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+
+expectedResult; M
+
+parameters; none; short; monogram; formal
+
+expectedResult; S
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Jack
+name ; locale; ko_AQ
+
+expectedResult; Jack
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; J
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Käthe
+name ; surname; Müller
+name ; locale; ko_AQ
+
+expectedResult; Müller Käthe
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Müller
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; Käthe
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; K
+
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Zäzilia
+name ; given2; Hamish
+name ; surname; Stöber
+name ; locale; ko_AQ
+
+expectedResult; Stöber Zäzilia Hamish
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+
+expectedResult; Stöber Zäzilia
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Zäzilia
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; Stöber
+
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; SZH
+
+parameters; none; long; monogram; formal
+
+expectedResult; SZ
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; S
+
+parameters; none; short; monogram; formal
+
+expectedResult; Z
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Mgr. Ing.
+name ; given; Anna Karolína
+name ; given-informal; Sofia
+name ; given2; Eva Kristína
+name ; surname-prefix; von
+name ; surname-core; Kant
+name ; surname2; Nováková Predná
+name ; generation; ml.
+name ; credentials; CSc.
+name ; locale; ko_AQ
+
+expectedResult; Mgr. Ing. von Kant Nováková Predná Anna Karolína Eva Kristína, CSc.
+
+parameters; none; long; referring; formal
+
+expectedResult; Mgr. Ing. von Kant Nováková Predná Anna Karolína Eva Kristína
+
+parameters; none; long; addressing; formal
+
+expectedResult; Mgr. Ing. von Kant Anna Karolína
+
+parameters; none; medium; referring; formal
+
+expectedResult; Mgr. Ing. von Kant
+
+parameters; none; medium; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; von Kant Sofia
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; von Kant
+
+parameters; none; short; addressing; formal
+
+expectedResult; Sofia
+
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; KAE
+
+parameters; none; long; monogram; formal
+
+expectedResult; KA
+
+parameters; none; medium; monogram; formal
+
+expectedResult; KS
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+
+expectedResult; K
+
+parameters; none; short; monogram; formal
+
+expectedResult; S
+
+parameters; none; short; monogram; informal
+
+endName

@@ -343,11 +343,6 @@ kgp{
                 one{"{0} elétron-volt"}
                 other{"{0} elétron-volt ag"}
             }
-            foodcalorie{
-                dnam{"Karoria ag"}
-                one{"{0} Karorija"}
-                other{"{0} Karorija ag"}
-            }
             joule{
                 dnam{"joule ag"}
                 one{"{0} joule"}
@@ -409,16 +404,6 @@ kgp{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"sẽntimẽturo ki pãntu ag"}
-                one{"{0} pãntu sẽntimẽturo ki"}
-                other{"{0} pãntu ag sẽntimẽturo ki"}
-            }
-            dot-per-inch{
-                dnam{"poregana ki pãntu ag"}
-                one{"{0} pãntu poregana ki"}
-                other{"{0} pãntu ag poregana ki"}
-            }
             em{
                 dnam{"tipografiko em"}
                 one{"{0} em"}
@@ -1521,11 +1506,6 @@ kgp{
                 dnam{"elétron-volt"}
                 one{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
-            }
             joule{
                 dnam{"joule ag"}
                 one{"{0} J"}
@@ -1572,16 +1552,6 @@ kgp{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
             }

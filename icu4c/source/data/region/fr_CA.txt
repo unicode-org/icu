@@ -21,7 +21,6 @@ fr_CA{
         HM{"îles Heard et McDonald"}
         IC{"îles Canaries"}
         IM{"île de Man"}
-        IO{"territoire britannique de l’océan Indien"}
         KG{"Kirghizistan"}
         LR{"Libéria"}
         MF{"Saint-Martin (France)"}

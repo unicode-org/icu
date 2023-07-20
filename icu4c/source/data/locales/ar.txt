@@ -12,12 +12,12 @@ ar{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{
-        "[\u064B \u064C \u064D \u064E \u064F \u0650 \u0651 \u0652 \u0670 ء أ ؤ إ ئ ا "
-        "آ ب ة ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ى ي]"
+        "[ً ٌ ٍ َ ُ ِ ّ ْ ٰ ءأؤإئا آ ب ةت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن"
+        " ه و ىي]"
     }
     ExemplarCharactersIndex{"[ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي]"}
     ExemplarCharactersNumbers{"[\u061C\u200E \\- ‑ , ٫ ٬ . % ٪ ‰ ؉ + 0٠ 1١ 2٢ 3٣ 4٤ 5٥ 6٦ 7٧ 8٨ 9٩]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — ، ؛ \\: ! ؟ . … ' \u0022 « » ( ) \\[ \\]]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — ، ؛ \\: ! ؟ . … ' \u0022 « » ( ) \\[ \\]]"}
     MoreInformation{"؟"}
     NumberElements{
         arab{
@@ -3176,15 +3176,15 @@ ar{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫⹁、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ⹁ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
         }
     }

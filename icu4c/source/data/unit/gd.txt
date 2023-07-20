@@ -548,13 +548,6 @@ gd{
                 other{"{0} volt-eleactroin"}
                 two{"{0} volt-eleactroin"}
             }
-            foodcalorie{
-                dnam{"calaraidh bidhe"}
-                few{"{0} calaraidhean bidhe"}
-                one{"{0} chalaraidh bidhe"}
-                other{"{0} calaraidh bidhe"}
-                two{"{0} chalaraidh bidhe"}
-            }
             joule{
                 dnam{"joule"}
                 few{"{0} joule"}
@@ -645,27 +638,6 @@ gd{
             }
         }
         graphics{
-            dot{
-                dnam{"dotag"}
-                few{"{0} dotagan"}
-                one{"{0} dotag"}
-                other{"{0} dotag"}
-                two{"{0} dhotag"}
-            }
-            dot-per-centimeter{
-                dnam{"dotag sa cheudameatair"}
-                few{"{0} dotagan sa cheudameatair"}
-                one{"{0} dotag sa cheudameatair"}
-                other{"{0} dotag sa cheudameatair"}
-                two{"{0} dhotag sa cheudameatair"}
-            }
-            dot-per-inch{
-                dnam{"dotag san òirleach"}
-                few{"{0} dotagan san òirleach"}
-                one{"{0} dotag san òirleach"}
-                other{"{0} dotag san òirleach"}
-                two{"{0} dhotag san òirleach"}
-            }
             em{
                 dnam{"em chlò-ghrafach"}
                 few{"{0} em"}
@@ -1983,13 +1955,6 @@ gd{
                 other{"{0}eV"}
                 two{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0}Cal"}
-                one{"{0}Cal"}
-                other{"{0}Cal"}
-                two{"{0}Cal"}
-            }
             joule{
                 dnam{"joule"}
                 few{"{0}J"}
@@ -2080,27 +2045,6 @@ gd{
             }
         }
         graphics{
-            dot{
-                dnam{"dot"}
-                few{"{0}dot"}
-                one{"{0}dot"}
-                other{"{0}dot"}
-                two{"{0}dhot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0}dpcm"}
-                one{"{0}dpcm"}
-                other{"{0}dpcm"}
-                two{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0}dpi"}
-                one{"{0}dpi"}
-                other{"{0}dpi"}
-                two{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0}em"}
@@ -3398,13 +3342,6 @@ gd{
                 other{"{0} eV"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-                two{"{0} Cal"}
-            }
             joule{
                 dnam{"joule"}
                 few{"{0} J"}
@@ -3494,27 +3431,6 @@ gd{
             }
         }
         graphics{
-            dot{
-                dnam{"dotag"}
-                few{"{0} dot"}
-                one{"{0} dot"}
-                other{"{0} dot"}
-                two{"{0} dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-                two{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-                two{"{0} dpi"}
-            }
             em{
                 few{"{0} em"}
                 one{"{0} em"}

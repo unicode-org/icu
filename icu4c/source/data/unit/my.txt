@@ -335,10 +335,6 @@ my{
                 dnam{"အီလက်ထရွန်ဗို့"}
                 other{"{0} အီလက်ထရွန်ဗို့"}
             }
-            foodcalorie{
-                dnam{"ကယ်လိုရီ"}
-                other{"{0} ကယ်လိုရီ"}
-            }
             joule{
                 dnam{"ဂျူးလ်"}
                 other{"{0} ဂျူးလ်"}
@@ -393,18 +389,6 @@ my{
             }
         }
         graphics{
-            dot{
-                dnam{"အစက်"}
-                other{"{0} အစက်"}
-            }
-            dot-per-centimeter{
-                dnam{"တစ်စင်တီမီတာပါ အစက်"}
-                other{"တစ်စင်တီမီတာလျှင် {0} စက်"}
-            }
-            dot-per-inch{
-                dnam{"တစ်လက်မပါ အစက်"}
-                other{"တစ်လက်မလျှင် {0} စက်"}
-            }
             em{
                 dnam{"ပုံနှိပ်စာလုံး အရွယ်အစား"}
                 other{"{0} ems"}
@@ -1191,10 +1175,6 @@ my{
                 dnam{"အီလက်ထရွန်ဗို့"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"ကယ်လိုရီ"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ဂျူးလ်"}
                 other{"{0} J"}
@@ -1249,18 +1229,6 @@ my{
             }
         }
         graphics{
-            dot{
-                dnam{"အစက်"}
-                other{"{0} အစက်"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -2005,10 +1973,6 @@ my{
                 dnam{"အီလက်ထရွန်ဗို့"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"ကယ်လိုရီ"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ဂျူးလ်"}
                 other{"{0} J"}
@@ -2058,18 +2022,6 @@ my{
             }
         }
         graphics{
-            dot{
-                dnam{"ပစ်ဆယ်"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             megapixel{
                 dnam{"မီဂါပစ်ဆယ်"}
             }

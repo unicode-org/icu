@@ -1,0 +1,440 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: yue
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; 文傑
+name ; locale; yue_AQ
+
+expectedResult; 文傑
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; 文
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; 雅婷
+name ; surname; 張
+name ; locale; yue_AQ
+
+expectedResult; 張雅婷
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; 張雅
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; sorting; short; referring; formal
+
+expectedResult; 雅婷
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 張
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; monogram; formal
+parameters; none; short; addressing; formal
+parameters; none; short; monogram; formal
+
+expectedResult; 雅
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; 家豪
+name ; given2; 明德
+name ; surname; 林
+name ; locale; yue_AQ
+
+expectedResult; 林家豪，明
+
+parameters; none; short; referring; formal
+
+expectedResult; 林家豪明德
+
+parameters; none; long; referring; formal
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+
+expectedResult; 林家豪明
+
+parameters; none; medium; referring; formal
+
+expectedResult; 林家明
+
+parameters; none; long; monogram; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; 林家豪
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; 家豪
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 林家
+
+parameters; none; long; monogram; informal
+
+expectedResult; 家
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 林
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; monogram; formal
+parameters; none; short; addressing; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; 先生
+name ; given; 子媚
+name ; given-informal; 阿媚
+name ; given2; 惠儀
+name ; surname-core; 陳
+name ; generation; 小
+name ; credentials; 太平紳士
+name ; locale; yue_AQ
+
+expectedResult; 陳子媚先生，小惠儀太平紳士
+
+parameters; none; long; referring; formal
+
+expectedResult; 陳子媚太平紳士，小惠
+
+parameters; none; medium; referring; formal
+
+expectedResult; 陳子媚，惠
+
+parameters; none; short; referring; formal
+
+expectedResult; 陳子媚惠儀
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+
+expectedResult; 陳先生
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; 陳子媚
+
+parameters; none; short; referring; informal
+
+expectedResult; 陳子惠
+
+parameters; none; long; monogram; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; 陳阿媚
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; 阿媚
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; 陳阿
+
+parameters; none; long; monogram; informal
+
+expectedResult; 阿
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 陳
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; 凱晴
+name ; locale; fr_AQ
+
+expectedResult; 凱晴
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; 凱
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; 永翹
+name ; surname; 黃
+name ; locale; fr_AQ
+
+expectedResult; 永翹·黃
+
+parameters; none; long; referring; formal
+
+expectedResult; 永·黃
+
+parameters; none; short; referring; formal
+
+expectedResult; 永翹
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; 黃永
+
+parameters; none; long; monogram; formal
+
+expectedResult; 永
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 黃
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; monogram; formal
+parameters; none; short; addressing; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; 永強
+name ; given2; 德安
+name ; surname; 吳
+name ; locale; fr_AQ
+
+expectedResult; 永強·德安·吳
+
+parameters; none; long; referring; formal
+
+expectedResult; 永·德·吳
+
+parameters; none; short; referring; formal
+
+expectedResult; 永強·德
+
+parameters; none; medium; referring; formal
+
+expectedResult; 德吳永
+
+parameters; none; long; monogram; formal
+
+expectedResult; 永強
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; 吳
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; monogram; formal
+parameters; none; short; addressing; formal
+parameters; none; short; monogram; formal
+
+expectedResult; 永
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; 教授
+name ; given; 怡君
+name ; given-informal; 小君
+name ; given2; 達印
+name ; surname-prefix; 陳
+name ; surname-core; 陳
+name ; generation; 小
+name ; credentials; 博士
+name ; locale; fr_AQ
+
+expectedResult; 教授·怡君·達印·陳·陳·小，博士
+
+parameters; none; long; referring; formal
+
+expectedResult; 怡君·博士，小·達
+
+parameters; none; medium; referring; formal
+
+expectedResult; 怡·達·陳·陳
+
+parameters; none; short; referring; formal
+
+expectedResult; 陳·陳教授
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; 達陳怡
+
+parameters; none; long; monogram; formal
+
+expectedResult; 小君
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; 小
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; 陳
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

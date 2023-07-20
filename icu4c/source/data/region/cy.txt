@@ -146,7 +146,6 @@ cy{
         IL{"Israel"}
         IM{"Ynys Manaw"}
         IN{"India"}
-        IO{"Tiriogaeth Brydeinig Cefnfor India"}
         IQ{"Irac"}
         IR{"Iran"}
         IS{"Gwlad yr Iâ"}

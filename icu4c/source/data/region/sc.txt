@@ -146,7 +146,6 @@ sc{
         IL{"Israele"}
         IM{"Ìsula de Man"}
         IN{"Ìndia"}
-        IO{"Territòriu Britànnicu de s’Otzèanu Indianu"}
         IQ{"Iraq"}
         IR{"Iràn"}
         IS{"Islanda"}

@@ -439,11 +439,6 @@ gu{
                 one{"{0} ઇલેક્ટ્રોનવૉલ્ટ"}
                 other{"{0} ઇલેક્ટ્રોનવૉલ્ટ"}
             }
-            foodcalorie{
-                dnam{"કેલરી"}
-                one{"{0} કેલરી"}
-                other{"{0} કેલરી"}
-            }
             joule{
                 dnam{"જૂલ"}
                 gender{"masculine"}
@@ -513,21 +508,6 @@ gu{
             }
         }
         graphics{
-            dot{
-                dnam{"ડૉટ"}
-                one{"{0} px"}
-                other{"{0} ડૉટ"}
-            }
-            dot-per-centimeter{
-                dnam{"ડૉટ્સ પ્રતિ સેન્ટિમીટર"}
-                one{"{0} ડૉટ પ્રતિ સેન્ટિમીટર"}
-                other{"{0} ડૉટ્સ પ્રતિ સેન્ટિમીટર"}
-            }
-            dot-per-inch{
-                dnam{"ડૉટ્સ પ્રતિ ઇંચ"}
-                one{"{0} ડૉટ પ્રતિ ઇંચ"}
-                other{"{0} ડૉટ્સ પ્રતિ ઇંચ"}
-            }
             em{
                 dnam{"ટાઇપોગ્રાફિક એમ"}
                 gender{"masculine"}
@@ -1512,11 +1492,6 @@ gu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"જૂલ"}
                 one{"{0} J"}
@@ -1583,21 +1558,6 @@ gu{
             }
         }
         graphics{
-            dot{
-                dnam{"ડૉટ"}
-                one{"{0} px"}
-                other{"{0} ડૉટ"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2559,11 +2519,6 @@ gu{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"જૂલ"}
                 one{"{0} J"}
@@ -2629,21 +2584,6 @@ gu{
             }
         }
         graphics{
-            dot{
-                dnam{"ડૉટ"}
-                one{"{0} px"}
-                other{"{0} ડૉટ"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

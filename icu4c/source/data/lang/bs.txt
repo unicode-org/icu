@@ -816,11 +816,6 @@ bs{
             gregorian{"gregorijanski kalendar"}
             hebrew{"hebrejski kalendar"}
             indian{"indijski nacionalni kalendar"}
-            islamic{"islamski kalendar"}
-            islamic-civil{"islamski civilni kalendar, tabelarni"}
-            islamic-rgsa{"islamski kalendar za Saudijsku Arabiju"}
-            islamic-tbla{"islamski kalendar, tabelarni, astronomska epoha"}
-            islamic-umalqura{"islamski kalendar, Umm al-Qura"}
             iso8601{"kalendar ISO-8601"}
             japanese{"japanski kalendar"}
             persian{"perzijski kalendar"}

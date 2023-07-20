@@ -53,12 +53,14 @@
 
         <!-- create a catalog file for the cldr/personNameTest directory -->
         <pathconvert property="personNameTestDirContents" pathsep="${line.separator}">
-            <fileset dir="${cldrDir}/common/testData/personNameTest" includes="**" />
+            <fileset dir="${cldrDir}/common/testData/personNameTest" excludes="_*" includes="**" />
             <map from="${cldrDir}/common/testData/personNameTest/" to="" />
         </pathconvert>
         <echo message="Creating catalog.txt file" />
-        <echo message="${personNameTestDirContents}" file="${testDataDir4C}/personNameTest/catalog.txt" />
-        <echo message="${personNameTestDirContents}" file="${testDataDir4J}/personNameTest/catalog.txt" />
+        <copy file="${testDataDir4C}/personNameTest/_header.txt" tofile="${testDataDir4C}/personNameTest/catalog.txt" />
+        <echo message="${personNameTestDirContents}" file="${testDataDir4C}/personNameTest/catalog.txt" append="true" />
+        <copy file="${testDataDir4J}/personNameTest/_header.txt" tofile="${testDataDir4J}/personNameTest/catalog.txt" />
+        <echo message="${personNameTestDirContents}" file="${testDataDir4J}/personNameTest/catalog.txt" append="true" />
     </target>
 
     <!-- Deletes CLDR test data -->

@@ -2042,52 +2042,6 @@ pl{
                 one{"{0} elektronowolt"}
                 other{"{0} elektronowolta"}
             }
-            foodcalorie{
-                case{
-                    accusative{
-                        few{"{0} kalorie"}
-                        many{"{0} kalorii"}
-                        one{"{0} kalorię"}
-                        other{"{0} kalorii"}
-                    }
-                    dative{
-                        few{"{0} kaloriom"}
-                        many{"{0} kaloriom"}
-                        one{"{0} kalorii"}
-                        other{"{0} kalorii"}
-                    }
-                    genitive{
-                        few{"{0} kalorii"}
-                        many{"{0} kalorii"}
-                        one{"{0} kalorii"}
-                        other{"{0} kalorii"}
-                    }
-                    instrumental{
-                        few{"{0} kaloriami"}
-                        many{"{0} kaloriami"}
-                        one{"{0} kalorią"}
-                        other{"{0} kalorii"}
-                    }
-                    locative{
-                        few{"{0} kaloriach"}
-                        many{"{0} kaloriach"}
-                        one{"{0} kalorii"}
-                        other{"{0} kalorii"}
-                    }
-                    vocative{
-                        few{"{0} kalorie"}
-                        many{"{0} kalorii"}
-                        one{"{0} kalorio"}
-                        other{"{0} kalorii"}
-                    }
-                }
-                dnam{"kalorie"}
-                few{"{0} kalorie"}
-                gender{"feminine"}
-                many{"{0} kalorii"}
-                one{"{0} kaloria"}
-                other{"{0} kalorii"}
-            }
             joule{
                 case{
                     accusative{
@@ -2352,27 +2306,6 @@ pl{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                few{"{0} px"}
-                many{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 case{
                     accusative{
@@ -6198,13 +6131,6 @@ pl{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                few{"{0} kcal"}
-                many{"{0} kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -6295,27 +6221,6 @@ pl{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                few{"{0} px"}
-                many{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"firet"}
                 few{"{0} firety"}
@@ -7581,13 +7486,6 @@ pl{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                few{"{0} kcal"}
-                many{"{0} kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -7669,27 +7567,6 @@ pl{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                few{"{0} px"}
-                many{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 dnam{"firet"}
                 few{"{0} firety"}

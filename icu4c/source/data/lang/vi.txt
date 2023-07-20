@@ -813,11 +813,6 @@ vi{
             gregorian{"Lịch Gregory"}
             hebrew{"Lịch Do Thái"}
             indian{"Lịch Quốc gia Ấn Độ"}
-            islamic{"Lịch Hồi Giáo"}
-            islamic-civil{"Lịch Islamic-Civil"}
-            islamic-rgsa{"Lịch Hồi Giáo - Ả Rập Xê-út"}
-            islamic-tbla{"Lịch Hồi Giáo - Thiên văn"}
-            islamic-umalqura{"Lịch Hồi Giáo - Umm al-Qura"}
             iso8601{"Lịch ISO-8601"}
             japanese{"Lịch Nhật Bản"}
             persian{"Lịch Ba Tư"}

@@ -833,11 +833,6 @@ zh{
             gregorian{"公历"}
             hebrew{"希伯来历"}
             indian{"印度国定历"}
-            islamic{"伊斯兰历"}
-            islamic-civil{"伊斯兰希吉来日历"}
-            islamic-rgsa{"沙特阿拉伯伊斯兰历"}
-            islamic-tbla{"伊斯兰天文历"}
-            islamic-umalqura{"伊斯兰历（乌姆库拉）"}
             iso8601{"国际标准历法"}
             japanese{"和历"}
             persian{"波斯历"}

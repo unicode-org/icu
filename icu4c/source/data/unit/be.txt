@@ -548,13 +548,6 @@ be{
                 one{"{0} электрон-вольт"}
                 other{"{0} электрон-вольта"}
             }
-            foodcalorie{
-                dnam{"калорыі"}
-                few{"{0} калорыі"}
-                many{"{0} калорый"}
-                one{"{0} калорыя"}
-                other{"{0} калорыі"}
-            }
             joule{
                 dnam{"джоўлі"}
                 few{"{0} джоўлі"}
@@ -645,27 +638,6 @@ be{
             }
         }
         graphics{
-            dot{
-                dnam{"кропкі"}
-                few{"{0} кропкі"}
-                many{"{0} кропак"}
-                one{"{0} кропка"}
-                other{"{0} кропкі"}
-            }
-            dot-per-centimeter{
-                dnam{"кропкі на сантыметр"}
-                few{"{0} кропкі на сантыметр"}
-                many{"{0} кропак на сантыметр"}
-                one{"{0} кропка на сантыметр"}
-                other{"{0} кропкі на сантыметр"}
-            }
-            dot-per-inch{
-                dnam{"кропкі на цалю"}
-                few{"{0} кропкі на цалю"}
-                many{"{0} кропак на цалю"}
-                one{"{0} кропка на цалю"}
-                other{"{0} кропкі на цалю"}
-            }
             em{
                 dnam{"эм"}
                 few{"{0} эм"}
@@ -1983,13 +1955,6 @@ be{
                 one{"{0} эВ"}
                 other{"{0} эВ"}
             }
-            foodcalorie{
-                dnam{"кал"}
-                few{"{0} кал"}
-                many{"{0} кал"}
-                one{"{0} кал"}
-                other{"{0} кал"}
-            }
             joule{
                 dnam{"Дж"}
                 few{"{0} Дж"}
@@ -2080,27 +2045,6 @@ be{
             }
         }
         graphics{
-            dot{
-                dnam{"кр"}
-                few{"{0} кр"}
-                many{"{0} кр"}
-                one{"{0} кр"}
-                other{"{0} кр"}
-            }
-            dot-per-centimeter{
-                dnam{"кр/см"}
-                few{"{0} кр/см"}
-                many{"{0} кр/см"}
-                one{"{0} кр/см"}
-                other{"{0} кр/см"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                many{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"эм"}
                 few{"{0} эм"}
@@ -3418,13 +3362,6 @@ be{
                 one{"{0} эВ"}
                 other{"{0} эВ"}
             }
-            foodcalorie{
-                dnam{"кал"}
-                few{"{0} кал"}
-                many{"{0} кал"}
-                one{"{0} кал"}
-                other{"{0} кал"}
-            }
             joule{
                 dnam{"Дж"}
                 few{"{0} Дж"}
@@ -3515,27 +3452,6 @@ be{
             }
         }
         graphics{
-            dot{
-                dnam{"кр"}
-                few{"{0} кр"}
-                many{"{0} кр"}
-                one{"{0} кр"}
-                other{"{0} кр"}
-            }
-            dot-per-centimeter{
-                dnam{"кр/см"}
-                few{"{0} кр/см"}
-                many{"{0} кр/см"}
-                one{"{0} кр/см"}
-                other{"{0} кр/см"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} dpi"}
-                many{"{0} dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"эм"}
                 few{"{0} эм"}

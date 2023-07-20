@@ -660,11 +660,6 @@ sc{
             gregorian{"calendàriu gregorianu"}
             hebrew{"calendàriu ebràicu"}
             indian{"calendàriu natzionale indianu"}
-            islamic{"calendàriu islàmicu"}
-            islamic-civil{"calendàriu islàmicu (tabulare, època tzivile)"}
-            islamic-rgsa{"calendàriu islàmicu (Aràbia Saudita, osservatzione)"}
-            islamic-tbla{"calendàriu islàmicu (tabulare, època astronòmica)"}
-            islamic-umalqura{"calendàriu islàmicu (Umm al-Qura)"}
             iso8601{"calendàriu ISO-8601"}
             japanese{"calendàriu giaponesu"}
             persian{"calendàriu persianu"}

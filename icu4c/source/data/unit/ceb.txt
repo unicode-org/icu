@@ -395,11 +395,6 @@ ceb{
                 one{"{0} ka electronvolt"}
                 other{"{0} ka mga electronvolt"}
             }
-            foodcalorie{
-                dnam{"mga Calorie"}
-                one{"{0} ka Calorie"}
-                other{"{0} ka mga Calorie"}
-            }
             joule{
                 dnam{"mga joule"}
                 one{"{0} ka joule"}
@@ -461,21 +456,6 @@ ceb{
             }
         }
         graphics{
-            dot{
-                dnam{"mga pixel"}
-                one{"{0} dot"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"mga dot kada sentimetro"}
-                one{"{0} ka dot kada sentimetro"}
-                other{"{0} ka mga dot kada sentimetro"}
-            }
-            dot-per-inch{
-                dnam{"mga dot kada pulgada"}
-                one{"{0} ka dot kada pulgada"}
-                other{"{0} ka mga dot kada pulgada"}
-            }
             em{
                 dnam{"typographic em"}
                 one{"{0} ka em"}
@@ -1539,11 +1519,6 @@ ceb{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"mga joule"}
                 one{"{0} J"}
@@ -1600,21 +1575,6 @@ ceb{
             }
         }
         graphics{
-            dot{
-                dnam{"mga pixel"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} ka em"}
                 other{"{0} ka em"}

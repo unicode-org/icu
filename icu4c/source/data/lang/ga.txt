@@ -648,11 +648,6 @@ ga{
             gregorian{"Féilire Ghréagóra"}
             hebrew{"Féilire na nEabhrach"}
             indian{"Féilire Náisiúnta na hIndia"}
-            islamic{"Féilire Ioslamach"}
-            islamic-civil{"Féilire Ioslamach (táblach, seanré shibhialta)"}
-            islamic-rgsa{"Féilire Ioslamach (an Araib Shádach, dearcadh)"}
-            islamic-tbla{"Féilire Ioslamach (táblach, seanré réalteolaíoch)"}
-            islamic-umalqura{"Féilire Ioslamach (Umm al-Qura)"}
             iso8601{"Féilire ISO-8601"}
             japanese{"Féilire Seapánach"}
             persian{"Féilire Peirseach"}

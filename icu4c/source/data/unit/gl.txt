@@ -406,11 +406,6 @@ gl{
                 one{"{0} electronvolt"}
                 other{"{0} electronvolts"}
             }
-            foodcalorie{
-                dnam{"quilocalorías"}
-                one{"{0} quilocaloría"}
-                other{"{0} quilocalorías"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} joule"}
@@ -477,21 +472,6 @@ gl{
             }
         }
         graphics{
-            dot{
-                dnam{"puntos"}
-                one{"{0} punto"}
-                other{"{0} puntos"}
-            }
-            dot-per-centimeter{
-                dnam{"puntos por centímetro"}
-                one{"{0} punto por centímetro"}
-                other{"{0} puntos por centímetro"}
-            }
-            dot-per-inch{
-                dnam{"puntos por polgada"}
-                one{"{0} punto por polgada"}
-                other{"{0} puntos por polgada"}
-            }
             em{
                 dnam{"cuadratíns"}
                 one{"{0} cuadratín"}
@@ -1455,11 +1435,6 @@ gl{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"J"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ gl{
             }
         }
         graphics{
-            dot{
-                dnam{"ptos."}
-                one{"{0} ptos."}
-                other{"{0} ptos."}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0} ppp"}
-                other{"{0} ppp"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2492,11 +2452,6 @@ gl{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} J"}
@@ -2562,21 +2517,6 @@ gl{
             }
         }
         graphics{
-            dot{
-                dnam{"ptos."}
-                one{"{0} ptos."}
-                other{"{0} ptos."}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppp"}
-                one{"{0} ppp"}
-                other{"{0} ppp"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

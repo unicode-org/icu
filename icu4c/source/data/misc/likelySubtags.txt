@@ -3353,8 +3353,9 @@ likelySubtags:table(nofallback){
     kxq{"kxq_Latn_ID"}
     kxr{"kxr_Latn_PG"}
     kxt{"kxt_Latn_PG"}
-    kxv{"kxv_Orya_IN"}
-    kxv_Latn{"kxv_Latn_IN"}
+    kxv{"kxv_Latn_IN"}
+    kxv_Deva{"kxv_Deva_IN"}
+    kxv_Orya{"kxv_Orya_IN"}
     kxv_Telu{"kxv_Telu_IN"}
     kxw{"kxw_Latn_ZZ"}
     kxx{"kxx_Latn_CG"}

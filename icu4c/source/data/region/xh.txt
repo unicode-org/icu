@@ -146,7 +146,6 @@ xh{
         IL{"E-Israel"}
         IM{"E-Isle of Man"}
         IN{"E-Indiya"}
-        IO{"EBritish Indian Ocean Territory"}
         IQ{"E-Iraq"}
         IR{"E-Iran"}
         IS{"E-Iceland"}

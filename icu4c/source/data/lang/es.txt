@@ -759,9 +759,6 @@ es{
             gregorian{"calendario gregoriano"}
             hebrew{"calendario hebreo"}
             indian{"calendario nacional hindú"}
-            islamic{"calendario islámico"}
-            islamic-civil{"calendario islámico tabular"}
-            islamic-umalqura{"calendario islámico Umm al-Qura"}
             iso8601{"calendario ISO-8601"}
             japanese{"calendario japonés"}
             persian{"calendario persa"}

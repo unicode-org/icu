@@ -1,0 +1,507 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: sl
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Svarun
+name ; locale; sl_AQ
+
+expectedResult; Svarun
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Irena
+name ; surname; Orel
+name ; locale; sl_AQ
+
+expectedResult; Orel, Irena
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Irena Orel
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Irena O.
+
+parameters; none; short; referring; informal
+
+expectedResult; Orel, I.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; I. Orel
+
+parameters; none; short; referring; formal
+
+expectedResult; Irena
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Orel
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; IO
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; I
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; O
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Ana Marija
+name ; given2; Vera
+name ; surname; Kovač
+name ; locale; sl_AQ
+
+expectedResult; Kovač, Ana Marija Vera
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Ana Marija Vera Kovač
+
+parameters; none; long; referring; formal
+
+expectedResult; Kovač, Ana Marija V.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Ana Marija V. Kovač
+
+parameters; none; medium; referring; formal
+
+expectedResult; Kovač, Ana Marija
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Ana Marija Kovač
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Kovač, A. M. V.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; A. M. V. Kovač
+
+parameters; none; short; referring; formal
+
+expectedResult; Ana Marija K.
+
+parameters; none; short; referring; informal
+
+expectedResult; Ana Marija
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Kovač
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; AVK
+
+parameters; none; long; monogram; formal
+
+expectedResult; AK
+
+parameters; none; long; monogram; informal
+
+expectedResult; A
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; K
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; g.
+name ; given; Janez
+name ; given-informal; Jani
+name ; given2; Peter
+name ; surname-core; Novak
+name ; generation; ml.
+name ; credentials; univ. dipl. inž.
+name ; locale; sl_AQ
+
+expectedResult; g. Janez Peter Novak ml., univ. dipl. inž.
+
+parameters; none; long; referring; formal
+
+expectedResult; Janez P. Novak ml., univ. dipl. inž.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Novak, Janez Peter
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Novak, Janez P.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Novak, J. P.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; J. P. Novak
+
+parameters; none; short; referring; formal
+
+expectedResult; Novak, Jani
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Jani Novak
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; g. Novak
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Jani N.
+
+parameters; none; short; referring; informal
+
+expectedResult; Jani
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; JPN
+
+parameters; none; long; monogram; formal
+
+expectedResult; JN
+
+parameters; none; long; monogram; informal
+
+expectedResult; J
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; N
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Sinbad
+name ; locale; ko_AQ
+
+expectedResult; Sinbad
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; S
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Käthe
+name ; surname; Müller
+name ; locale; ko_AQ
+
+expectedResult; Müller Käthe
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Müller K.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Müller
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Käthe
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; K
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Zäzilia
+name ; given2; Hamish
+name ; surname; Stöber
+name ; locale; ko_AQ
+
+expectedResult; Stöber Zäzilia Hamish
+
+parameters; none; long; referring; formal
+
+expectedResult; Stöber Zäzilia H.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Stöber Zäzilia
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Stöber Z. H.
+
+parameters; none; short; referring; formal
+
+expectedResult; Stöber Z.
+
+parameters; none; short; referring; informal
+
+expectedResult; Zäzilia
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Stöber
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; SZH
+
+parameters; none; long; monogram; formal
+
+expectedResult; SZ
+
+parameters; none; long; monogram; informal
+
+expectedResult; S
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Z
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; prof. dr.
+name ; given; Ada Cornelia
+name ; given-informal; Neele
+name ; given2; César Martín
+name ; surname-prefix; von
+name ; surname-core; Brühl
+name ; surname2; González Domingo
+name ; generation; ml.
+name ; credentials; dr. med., dr. dent. med.
+name ; locale; ko_AQ
+
+expectedResult; prof. dr. von Brühl Ada Cornelia César Martín, dr. med., dr. dent. med.
+
+parameters; none; long; referring; formal
+
+expectedResult; von Brühl Ada Cornelia C. M. ml., dr. med., dr. dent. med.
+
+parameters; none; medium; referring; formal
+
+expectedResult; von Brühl A. C. C. M.
+
+parameters; none; short; referring; formal
+
+expectedResult; prof. dr. von Brühl
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; von Brühl A. C.
+
+parameters; none; short; referring; informal
+
+expectedResult; von Brühl Neele
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Neele
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; VAC
+
+parameters; none; long; monogram; formal
+
+expectedResult; VN
+
+parameters; none; long; monogram; informal
+
+expectedResult; N
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

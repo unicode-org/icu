@@ -679,11 +679,6 @@ zu{
             gregorian{"ikhalenda lesi-Gregorian"}
             hebrew{"Ikhalenda lesi-Hebrew"}
             indian{"i-Indian National Calender"}
-            islamic{"Ikhalenda lesi-Islamic"}
-            islamic-civil{"i-Islamic-Civil Calendar"}
-            islamic-rgsa{"Ikhalenda yesi-Islamic (Saudi Arabia, sighting)"}
-            islamic-tbla{"Ikhalenda yesi-Islamic (tabular, astronomical epoch)"}
-            islamic-umalqura{"Ikhalenda yesi-Islamic (Umm al-Qura)"}
             iso8601{"Ikhalenda le-ISO-8601"}
             japanese{"Ikhalenda lesi-Japanese"}
             persian{"Ikhalenda lesi-Persian"}

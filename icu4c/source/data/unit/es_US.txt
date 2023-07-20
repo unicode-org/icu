@@ -149,13 +149,6 @@ es_US{
                 dnam{"th US"}
             }
         }
-        graphics{
-            dot{
-                dnam{"punto"}
-                one{"{0} p"}
-                other{"{0} p"}
-            }
-        }
         length{
             fathom{
                 dnam{"braza"}
@@ -240,13 +233,6 @@ es_US{
                 dnam{"th US"}
                 one{"{0} th US"}
                 other{"{0} th US"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
             }
         }
         length{

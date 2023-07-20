@@ -1,0 +1,477 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: te
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; రాజశేఖర్
+name ; locale; te_AQ
+
+expectedResult; రాజశేఖర్
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; రా
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; రాజశేఖర్
+name ; surname; రెడ్డి
+name ; locale; te_AQ
+
+expectedResult; రెడ్డి, రాజశేఖర్
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; రెడ్డి రాజశేఖర్
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; రెడ్డి, రా.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; రెడ్డి రా.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; రాజశేఖర్
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; రెడ్డి
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; రెరా
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; రా
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; రె
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; సూర్య
+name ; given2; ప్రతాప్
+name ; surname; వర్మ
+name ; locale; te_AQ
+
+expectedResult; వర్మ, సూర్య ప్రతాప్
+
+parameters; sorting; long; referring; formal
+
+expectedResult; వర్మ సూర్య ప్రతాప్
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; వర్మ, సూర్య ప్ర.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; వర్మ, సూ. ప్ర.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; వర్మ సూ. ప్ర.
+
+parameters; none; short; referring; formal
+
+expectedResult; వర్మ, సూర్య
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; వర్మ సూర్య
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; వర్మ సూ.
+
+parameters; none; short; referring; informal
+
+expectedResult; వసూప్ర
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; సూర్య
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; వర్మ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; సూ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; వ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; మిస్టర్
+name ; given; చంద్ర శేఖర్
+name ; given-informal; చందు
+name ; given2; అబ్దుల్ ఆజాద్
+name ; surname-core; ఏలేటి కుమార్
+name ; generation; జూనియర్
+name ; credentials; ఎం. పి.
+name ; locale; te_AQ
+
+expectedResult; ఏలేటి కుమార్ చంద్ర శేఖర్ అబ్దుల్ ఆజాద్ ఎం. పి.
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; ఏలేటి కుమార్, చంద్ర శేఖర్ అబ్దుల్ ఆజాద్
+
+parameters; sorting; long; referring; formal
+
+expectedResult; ఏలేటి కుమార్, చంద్ర శేఖర్ అ. ఆ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; ఏలేటి కుమార్, చం. శే. అ. ఆ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ఏలేటి కుమార్ చం. శే. అ. ఆ.
+
+parameters; none; short; referring; formal
+
+expectedResult; ఏలేటి కుమార్ చం. శే.
+
+parameters; none; short; referring; informal
+
+expectedResult; మిస్టర్ ఏలేటి కుమార్
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ఏలేటి కుమార్, చందు
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ఏలేటి కుమార్ చందు
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ఏచంఅ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; చందు
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; చం
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ఏ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; రవి
+name ; locale; fr_AQ
+
+expectedResult; రవి
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ర
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; రఘు
+name ; surname; భరత్
+name ; locale; fr_AQ
+
+expectedResult; రఘు భరత్
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; ర. భరత్
+
+parameters; none; short; referring; formal
+
+expectedResult; రఘు భ.
+
+parameters; none; short; referring; informal
+
+expectedResult; భరత్
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ర.భ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; రఘు
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+endName
+
+name ; given; శంకర్
+name ; given2; నరేష్
+name ; surname; ప్రసాద్
+name ; locale; fr_AQ
+
+expectedResult; శంకర్ నరేష్ ప్రసాద్
+
+parameters; none; long; referring; formal
+
+expectedResult; శంకర్ న. ప్రసాద్
+
+parameters; none; medium; referring; formal
+
+expectedResult; శం. న. ప్రసాద్
+
+parameters; none; short; referring; formal
+
+expectedResult; శంకర్ ప్రసాద్
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; శంకర్ ప్ర.
+
+parameters; none; short; referring; informal
+
+expectedResult; శం.న.ప్ర
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; ప్రసాద్
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; శం.ప్ర
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; శంకర్
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+endName
+
+name ; title; ప్రొ. డా.
+name ; given; సూర్య ప్రతాప్
+name ; given-informal; సంధ్య
+name ; given2; లాస్య ప్రియ
+name ; surname-prefix; శర్మ
+name ; surname-core; చౌదరి
+name ; surname2; శర్మ చౌదరి
+name ; generation; జూ
+name ; credentials; ఎం. డి. పిహెచ్. డి.
+name ; locale; fr_AQ
+
+expectedResult; సూర్య ప్రతాప్ లాస్య ప్రియ శర్మ చౌదరి ఎం. డి. పిహెచ్. డి.
+
+parameters; none; long; referring; formal
+
+expectedResult; సూర్య ప్రతాప్ లా. ప్రి. శర్మ చౌదరి ఎం. డి. పిహెచ్. డి.
+
+parameters; none; medium; referring; formal
+
+expectedResult; సూ. ప్ర. లా. ప్రి. శర్మ చౌదరి
+
+parameters; none; short; referring; formal
+
+expectedResult; ప్రొ. డా. శర్మ చౌదరి
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; సంధ్య శర్మ చౌదరి
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; సంధ్య శ. చౌ.
+
+parameters; none; short; referring; informal
+
+expectedResult; సూ.లా.శ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; సంధ్య
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; సూ.శ
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName

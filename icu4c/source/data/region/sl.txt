@@ -146,7 +146,6 @@ sl{
         IL{"Izrael"}
         IM{"Otok Man"}
         IN{"Indija"}
-        IO{"Britansko ozemlje v Indijskem oceanu"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandija"}

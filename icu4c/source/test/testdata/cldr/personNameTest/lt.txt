@@ -1,0 +1,453 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: lt
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Rokas
+name ; locale; lt_AQ
+
+expectedResult; Rokas
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; R
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Irena
+name ; surname; Kazlauskienė
+name ; locale; lt_AQ
+
+expectedResult; Kazlauskienė, Irena
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Irena Kazlauskienė
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; informal
+
+expectedResult; Kazlauskienė, I.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; I. Kazlauskienė
+
+parameters; none; short; referring; formal
+
+expectedResult; Kazlauskienė
+
+parameters; none; short; addressing; formal
+
+expectedResult; Irena
+
+parameters; none; short; addressing; informal
+
+expectedResult; IK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Jonas
+name ; given2; Lukas
+name ; surname; Petrauskas
+name ; locale; lt_AQ
+
+expectedResult; Petrauskas, Jonas Lukas
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Jonas Lukas Petrauskas
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Petrauskas, Jonas L.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Petrauskas, J. L.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Petrauskas, Jonas
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; J. L. Petrauskas
+
+parameters; none; short; referring; formal
+
+expectedResult; Jonas Petrauskas
+
+parameters; none; short; referring; informal
+
+expectedResult; Petrauskas
+
+parameters; none; short; addressing; formal
+
+expectedResult; Jonas
+
+parameters; none; short; addressing; informal
+
+expectedResult; JLP
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; p.
+name ; given; Gabrielė
+name ; given-informal; Gabrė
+name ; given2; Aldona
+name ; surname-core; Petraitytė
+name ; generation; jaun.
+name ; credentials; dr.
+name ; locale; lt_AQ
+
+expectedResult; dr. p. Gabrielė Aldona Petraitytė
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+
+expectedResult; Petraitytė, Gabrielė Aldona
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Gabrielė Aldona Petraitytė
+
+parameters; none; long; addressing; informal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Petraitytė, Gabrielė A.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Petraitytė, G. A.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Petraitytė, Gabrė
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; G. A. Petraitytė
+
+parameters; none; short; referring; formal
+
+expectedResult; Gabrė Petraitytė
+
+parameters; none; short; referring; informal
+
+expectedResult; p. Petraitytė
+
+parameters; none; short; addressing; formal
+
+expectedResult; Gabrė
+
+parameters; none; short; addressing; informal
+
+expectedResult; GAP
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Jurgis
+name ; locale; ja_AQ
+
+expectedResult; Jurgis
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; J
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Kotryna
+name ; surname; Miliūtė
+name ; locale; ja_AQ
+
+expectedResult; Miliūtė Kotryna
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Kotryna
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Miliūtė
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; MK
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; K
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; M
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Sofija
+name ; given2; Rita
+name ; surname; Penkauskienė
+name ; locale; ja_AQ
+
+expectedResult; Penkauskienė Sofija Rita
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Penkauskienė Sofija R.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Penkauskienė Sofija
+
+parameters; none; medium; referring; informal
+
+expectedResult; Penkauskienė
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Sofija
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; PSR
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; P
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; S
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; prof. dr.
+name ; given; Ada Kornelija
+name ; given-informal; Nilka
+name ; given2; Eva Sofija
+name ; surname-prefix; von
+name ; surname-core; Vilkas
+name ; surname2; Jankauskas-Baranauskas
+name ; generation; jaun.
+name ; credentials; med. m. dr.
+name ; locale; ja_AQ
+
+expectedResult; prof. dr. von Vilkas Jankauskas-Baranauskas, Ada Kornelija Eva Sofija
+
+parameters; none; long; referring; formal
+
+expectedResult; von Vilkas Jankauskas-Baranauskas, Ada Kornelija Eva Sofija
+
+parameters; none; long; referring; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; med. m. dr. von Vilkas Ada Kornelija E. S. jaun.
+
+parameters; none; medium; referring; formal
+
+expectedResult; prof. dr. von Vilkas
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; von Vilkas Nilka
+
+parameters; none; medium; referring; informal
+
+expectedResult; Nilka
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; VAE
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; N
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; V
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

@@ -395,11 +395,6 @@ fo{
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kostkaloriur"}
-                one{"{0} kostkaloria"}
-                other{"{0} kostkaloriur"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} joule"}
@@ -461,21 +456,6 @@ fo{
             }
         }
         graphics{
-            dot{
-                dnam{"punkt"}
-                one{"{0} punkt"}
-                other{"{0} punkt"}
-            }
-            dot-per-centimeter{
-                dnam{"punkt fyri hvønn sentimetur"}
-                one{"{0} punkt fyri hvønn sentimetur"}
-                other{"{0} punkt fyri hvønn sentimetur"}
-            }
-            dot-per-inch{
-                dnam{"punkt fyri hvønn tumma"}
-                one{"{0} punkt fyri hvønn tumma"}
-                other{"{0} punkt fyri hvønn tumma"}
-            }
             em{
                 dnam{"prent em"}
                 one{"{0} em"}
@@ -1643,11 +1623,6 @@ fo{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kostkaloriur"}
-                one{"{0} kostkaloria"}
-                other{"{0} kostkaloriur"}
-            }
             joule{
                 dnam{"joule"}
                 one{"{0} J"}
@@ -1708,21 +1683,6 @@ fo{
             }
         }
         graphics{
-            dot{
-                dnam{"punkt"}
-                one{"{0} punkt"}
-                other{"{0} punkt"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

@@ -1186,11 +1186,6 @@ ml{
                 one{"{0} ഇലക്ട്രോൺവോൾട്ട്"}
                 other{"{0} ഇലക്ട്രോൺവോൾട്ട്"}
             }
-            foodcalorie{
-                dnam{"കലോറി"}
-                one{"{0} കലോറി"}
-                other{"{0} കലോറി"}
-            }
             joule{
                 case{
                     accusative{
@@ -1338,21 +1333,6 @@ ml{
             }
         }
         graphics{
-            dot{
-                dnam{"ഡോട്ട്"}
-                one{"{0} ഡോട്ട്"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 case{
                     accusative{
@@ -2883,11 +2863,6 @@ ml{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"കലോ."}
-                one{"{0} കലോ."}
-                other{"{0} കലോ."}
-            }
             joule{
                 dnam{"ജൂൾ"}
                 one{"{0} ജൂ."}
@@ -2954,21 +2929,6 @@ ml{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} ഡോട്ട്"}
-                other{"{0} ഡോട്ട്"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -3906,11 +3866,6 @@ ml{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"കലോ."}
-                one{"{0} കലോ."}
-                other{"{0} കലോ."}
-            }
             joule{
                 dnam{"ജൂൾ"}
                 one{"{0} ജൂ."}
@@ -3976,21 +3931,6 @@ ml{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

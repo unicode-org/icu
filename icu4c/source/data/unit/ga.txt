@@ -619,14 +619,6 @@ ga{
                 other{"{0} leictreonvolta"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Calraí"}
-                few{"{0} Chalra"}
-                many{"{0} gCalra"}
-                one{"{0} Chalra"}
-                other{"{0} Calra"}
-                two{"{0} Chalra"}
-            }
             joule{
                 dnam{"giúil"}
                 few{"{0} ghiúl"}
@@ -729,30 +721,6 @@ ga{
             }
         }
         graphics{
-            dot{
-                dnam{"ponc"}
-                few{"{0} phonc"}
-                many{"{0} bponc"}
-                one{"{0} phonc"}
-                other{"{0} ponc"}
-                two{"{0} phonc"}
-            }
-            dot-per-centimeter{
-                dnam{"poncanna sa cheintiméadar"}
-                few{"{0} phonc sa cheintiméadar"}
-                many{"{0} bponc sa cheintiméadar"}
-                one{"{0} phonc sa cheintiméadar"}
-                other{"{0} ponc sa cheintiméadar"}
-                two{"{0} phonc sa cheintiméadar"}
-            }
-            dot-per-inch{
-                dnam{"poncanna san orlach"}
-                few{"{0} phonc san orlach"}
-                many{"{0} bponc san orlach"}
-                one{"{0} phonc san orlach"}
-                other{"{0} ponc san orlach"}
-                two{"{0} phonc san orlach"}
-            }
             em{
                 dnam{"eim chlóghrafach"}
                 few{"{0} eim"}
@@ -2247,14 +2215,6 @@ ga{
                 other{"{0} eV"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0}Cal"}
-                many{"{0}Cal"}
-                one{"{0}Cal"}
-                other{"{0}Cal"}
-                two{"{0}Cal"}
-            }
             joule{
                 dnam{"giúil"}
                 few{"{0}J"}
@@ -2357,30 +2317,6 @@ ga{
             }
         }
         graphics{
-            dot{
-                dnam{"ponc"}
-                few{"{0} phonc"}
-                many{"{0} bponc"}
-                one{"{0} phonc"}
-                other{"{0} ponc"}
-                two{"{0} phonc"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-                two{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-                two{"{0} ppi"}
-            }
             em{
                 dnam{"eim"}
                 few{"{0} eim"}
@@ -3868,14 +3804,6 @@ ga{
                 other{"{0} eV"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                many{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-                two{"{0} Cal"}
-            }
             joule{
                 dnam{"giúil"}
                 few{"{0} J"}
@@ -3977,30 +3905,6 @@ ga{
             }
         }
         graphics{
-            dot{
-                dnam{"ponc"}
-                few{"{0} phonc"}
-                many{"{0} bponc"}
-                one{"{0} phonc"}
-                other{"{0} ponc"}
-                two{"{0} phonc"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                few{"{0} ppcm"}
-                many{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} ppcm"}
-                two{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                few{"{0} ppi"}
-                many{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} ppi"}
-                two{"{0} ppi"}
-            }
             em{
                 dnam{"eim"}
                 few{"{0} eim"}

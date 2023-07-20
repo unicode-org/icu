@@ -146,7 +146,6 @@ is{
         IL{"Ísrael"}
         IM{"Mön"}
         IN{"Indland"}
-        IO{"Bresku Indlandshafseyjar"}
         IQ{"Írak"}
         IR{"Íran"}
         IS{"Ísland"}

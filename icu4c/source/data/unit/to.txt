@@ -335,10 +335,6 @@ to{
                 dnam{"volotāʻelekitō"}
                 other{"volotāʻelekitō ʻe {0}"}
             }
-            foodcalorie{
-                dnam{"kaloli-kai"}
-                other{"kaloli-kai ʻe {0}"}
-            }
             joule{
                 dnam{"siule"}
                 other{"siule ʻe {0}"}
@@ -393,18 +389,6 @@ to{
             }
         }
         graphics{
-            dot{
-                dnam{"toti"}
-                other{"toti ʻe {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"toti he senitimita"}
-                other{"toti ʻe {0} he senitimita"}
-            }
-            dot-per-inch{
-                dnam{"toti he ʻinisi"}
-                other{"toti ʻe {0} he ʻinisi"}
-            }
             em{
                 dnam{"ʻemi fakataipe"}
                 other{"ʻemi fakataipe ʻe {0}"}
@@ -1191,10 +1175,6 @@ to{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kal-k"}
-                other{"{0} kal-k"}
-            }
             joule{
                 dnam{"J"}
                 other{"{0} J"}
@@ -1248,18 +1228,6 @@ to{
             }
         }
         graphics{
-            dot{
-                dnam{"t"}
-                other{"{0}t"}
-            }
-            dot-per-centimeter{
-                dnam{"t/sm"}
-                other{"{0}t/sm"}
-            }
-            dot-per-inch{
-                dnam{"t/in"}
-                other{"{0}t/in"}
-            }
             em{
                 dnam{"ʻemi"}
                 other{"{0}ʻemi"}
@@ -2006,10 +1974,6 @@ to{
             electronvolt{
                 other{"eV ʻe {0}"}
             }
-            foodcalorie{
-                dnam{"kal-k"}
-                other{"kal-k ʻe {0}"}
-            }
             joule{
                 dnam{"J"}
                 other{"J ʻe {0}"}
@@ -2059,18 +2023,6 @@ to{
             }
         }
         graphics{
-            dot{
-                dnam{"toti"}
-                other{"toti ʻe {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"toti/sm"}
-                other{"toti ʻe {0}/sm"}
-            }
-            dot-per-inch{
-                dnam{"toti/in"}
-                other{"toti ʻe {0}/in"}
-            }
             em{
                 dnam{"ʻemi"}
                 other{"ʻemi ʻe {0}"}

@@ -1,0 +1,494 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ta
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; ராஜேந்திரன்
+name ; locale; ta_AQ
+
+expectedResult; ராஜேந்திரன்
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ரா
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ராஜேந்திர
+name ; surname; சோழன்
+name ; locale; ta_AQ
+
+expectedResult; சோழன் ராஜேந்திர
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+
+expectedResult; ராஜேந்திர சோழன்
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; சோ. ராஜேந்திர
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; formal
+
+expectedResult; ராஜேந்திர சோ.
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ராஜேந்திர
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; சோரா
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+
+expectedResult; ரா
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ராஜ
+name ; given2; ராஜ
+name ; surname; சோழன்
+name ; locale; ta_AQ
+
+expectedResult; ராஜ ராஜ, சோழன்
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; சோழன் ராஜ ராஜ
+
+parameters; none; long; referring; formal
+
+expectedResult; ராஜ ரா., சோ.
+
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ராஜ ராஜ, சோ.
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+
+expectedResult; சோ. ராஜ ராஜ
+
+parameters; none; medium; referring; formal
+
+expectedResult; சோழன் ராஜ
+
+parameters; none; long; referring; informal
+
+expectedResult; சோ. ராஜ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; formal
+
+expectedResult; சோராரா
+
+parameters; none; long; monogram; formal
+
+expectedResult; சோரா
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+
+expectedResult; ராஜ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; ரா
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; திரு.
+name ; given; ராஜ ராஜன்
+name ; given-informal; ராஜன்
+name ; given2; ராஜன்
+name ; surname-core; சோழன்
+name ; generation; இளையவர்
+name ; credentials; எம்பி
+name ; locale; ta_AQ
+
+expectedResult; திரு. சோழன் ராஜ ராஜன் ராஜன் எம்பி
+
+parameters; none; long; referring; formal
+
+expectedResult; சோ. ராஜ ராஜன் ராஜன் எம்பி
+
+parameters; none; medium; referring; formal
+
+expectedResult; ராஜ ராஜன் ராஜன், சோழன்
+
+parameters; sorting; long; referring; formal
+
+expectedResult; ராஜ ராஜன் ராஜன், சோ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; திரு. சோ. ராஜ ராஜன்
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+
+expectedResult; ராஜ ராஜன் ரா., சோ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ராஜன் ராஜன், சோழன்
+
+parameters; sorting; long; referring; informal
+
+expectedResult; ராஜன் ராஜன், சோ.
+
+parameters; sorting; medium; referring; informal
+
+expectedResult; திரு. ராஜ ராஜன்
+
+parameters; none; short; addressing; formal
+
+expectedResult; ராஜன் ரா., சோ.
+
+parameters; sorting; short; referring; informal
+
+expectedResult; சோ. ராஜ ராஜன்
+
+parameters; none; short; referring; formal
+
+expectedResult; சோழன் ராஜன்
+
+parameters; none; long; referring; informal
+
+expectedResult; சோ. ராஜன்
+
+parameters; none; medium; referring; informal
+
+expectedResult; சோராரா
+
+parameters; none; long; monogram; formal
+
+expectedResult; ராஜன்
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; சோரா
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+
+expectedResult; ரா
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; அல்போன்சோ
+name ; locale; fr_AQ
+
+expectedResult; அல்போன்சோ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; அ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; அல்போன்சோ
+name ; surname; ஹெர்னாண்டஸ்
+name ; locale; fr_AQ
+
+expectedResult; அல்போன்சோ ஹெர்னாண்டஸ்
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; அ. ஹெர்னாண்டஸ்
+
+parameters; none; medium; addressing; formal
+parameters; none; short; referring; formal
+
+expectedResult; ஹெர்னாண்டஸ்
+
+parameters; none; short; addressing; formal
+
+expectedResult; அல்போன்சோ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; அஹெ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; ஹெ
+
+parameters; none; short; monogram; formal
+
+expectedResult; அ
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; அல்போன்சோ
+name ; given2; எர்னஸ்டோ
+name ; surname; ஹெர்னாண்டஸ்
+name ; locale; fr_AQ
+
+expectedResult; அல்போன்சோ எர்னஸ்டோ ஹெர்னாண்டஸ்
+
+parameters; none; long; referring; formal
+
+expectedResult; அல்போன்சோ எ. ஹெர்னாண்டஸ்
+
+parameters; none; medium; referring; formal
+
+expectedResult; அல்போன்சோ ஹெர்னாண்டஸ்
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; அ. எ. ஹெர்னாண்டஸ்
+
+parameters; none; short; referring; formal
+
+expectedResult; அ. ஹெர்னாண்டஸ்
+
+parameters; none; medium; addressing; formal
+
+expectedResult; ஹெர்னாண்டஸ்
+
+parameters; none; short; addressing; formal
+
+expectedResult; அல்போன்சோ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; அஎஹெ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; அஹெ
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; ஹெ
+
+parameters; none; short; monogram; formal
+
+expectedResult; அ
+
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; பேராசிரியர்
+name ; given; அல்போன்சோ
+name ; given-informal; அல்போன்ஸ்
+name ; given2; எர்னஸ்டோ
+name ; surname-prefix; வான்
+name ; surname-core; ஹெர்னாண்டஸ்
+name ; generation; இளைய
+name ; credentials; பிஎச்.டி
+name ; locale; fr_AQ
+
+expectedResult; அல்போன்சோ எர்னஸ்டோ வான் ஹெர்னாண்டஸ் பிஎச்.டி
+
+parameters; none; long; referring; formal
+
+expectedResult; அல்போன்சோ எ. வான் ஹெர்னாண்டஸ் பிஎச்.டி
+
+parameters; none; medium; referring; formal
+
+expectedResult; பேராசிரியர் அல்போன்சோ வான் ஹெர்னாண்டஸ்
+
+parameters; none; long; addressing; formal
+
+expectedResult; பேராசிரியர் அ. வான் ஹெர்னாண்டஸ்
+
+parameters; none; medium; addressing; formal
+
+expectedResult; பேராசிரியர் வான் ஹெர்னாண்டஸ்
+
+parameters; none; short; addressing; formal
+
+expectedResult; அல்போன்ஸ் வான் ஹெர்னாண்டஸ்
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; அ. எ. வான் ஹெர்னாண்டஸ்
+
+parameters; none; short; referring; formal
+
+expectedResult; அல்போன்ஸ்
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; informal
+
+expectedResult; அஎவா
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; அவா
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+expectedResult; வா
+
+parameters; none; short; monogram; formal
+
+expectedResult; அ
+
+parameters; none; short; monogram; informal
+
+endName

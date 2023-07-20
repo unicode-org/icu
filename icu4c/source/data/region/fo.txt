@@ -146,7 +146,6 @@ fo{
         IL{"Ísrael"}
         IM{"Isle of Man"}
         IN{"India"}
-        IO{"Stóra Bretlands Indiahavoyggjar"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Ísland"}

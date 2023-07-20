@@ -1,0 +1,500 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ar
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; منير
+name ; locale; ar_AQ
+
+expectedResult; منير
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; م
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; سميرة
+name ; surname; النجار
+name ; locale; ar_AQ
+
+expectedResult; النجار، سميرة
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; سميرة النجار
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; س.. النجار
+
+parameters; none; short; referring; informal
+
+expectedResult; س. النجار
+
+parameters; none; short; referring; formal
+
+expectedResult; النجار
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; سميرة
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; س.ا
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ا
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; كمال
+name ; given2; مجدي
+name ; surname; العامر
+name ; locale; ar_AQ
+
+expectedResult; العامر، كمال مجدي
+
+parameters; sorting; long; referring; formal
+
+expectedResult; كمال مجدي العامر
+
+parameters; none; long; referring; formal
+
+expectedResult; العامر، كمال م.
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; كمال م. العامر
+
+parameters; none; medium; referring; formal
+
+expectedResult; العامر، كمال
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; كمال العامر
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ك.. العامر
+
+parameters; none; short; referring; informal
+
+expectedResult; ك. العامر
+
+parameters; none; short; referring; formal
+
+expectedResult; العامر
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ك.م.ا
+
+parameters; none; long; monogram; formal
+
+expectedResult; كمال
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ك.ا
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ا
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; السيد
+name ; given; أحمد رامي
+name ; given-informal; وسام
+name ; given2; نجيب محفوظ
+name ; surname-prefix; أبو
+name ; surname-core; الأغا
+name ; surname2; علم الدين
+name ; generation; الابن
+name ; credentials; النائب
+name ; locale; ar_AQ
+
+expectedResult; السيد أحمد رامي نجيب محفوظ أبو الأغا الابن، النائب
+
+parameters; none; long; referring; formal
+
+expectedResult; أبو الأغا، أحمد رامي نجيب محفوظ
+
+parameters; sorting; long; referring; formal
+
+expectedResult; السيد أحمد رامي ن. م. أبو الأغا
+
+parameters; none; medium; referring; formal
+
+expectedResult; أبو الأغا، أحمد رامي ن. م.
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; السيد أ. ر. أبو الأغا
+
+parameters; none; short; referring; formal
+
+expectedResult; أبو الأغا، وسام
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; السيد أبو الأغا
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; وسام أبو الأغا
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; و.. أبو الأغا
+
+parameters; none; short; referring; informal
+
+expectedResult; أ.ن.أ
+
+parameters; none; long; monogram; formal
+
+expectedResult; وسام
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; أ.أ
+
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; و.أ
+
+parameters; none; long; monogram; informal
+
+expectedResult; أ
+
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; سندباد
+name ; locale; ko_AQ
+
+expectedResult; سندباد
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; س
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; كاثرين
+name ; surname; مولر
+name ; locale; ko_AQ
+
+expectedResult; مولر، كاثرين
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; مولر كاثرين
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; مولر، ك.
+
+parameters; none; short; referring; formal
+
+expectedResult; مولر ك.
+
+parameters; none; short; referring; informal
+
+expectedResult; كاثرين
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; مولر
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; م.ك
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; ك
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; م
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; زيزينيا
+name ; given2; هاميش
+name ; surname; ستوبر
+name ; locale; ko_AQ
+
+expectedResult; ستوبر، زيزينيا هاميش
+
+parameters; none; long; referring; formal
+
+expectedResult; ستوبر، زيزينيا ه.
+
+parameters; none; medium; referring; formal
+
+expectedResult; ستوبر زيزينيا
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ستوبر، ز. ه.
+
+parameters; none; short; referring; formal
+
+expectedResult; ستوبر ز.
+
+parameters; none; short; referring; informal
+
+expectedResult; زيزينيا
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; س.ز.ه
+
+parameters; none; long; monogram; formal
+
+expectedResult; ستوبر
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; س.ز
+
+parameters; none; long; monogram; informal
+
+expectedResult; ز
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; س
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; الدكتور
+name ; given; عايدة كورنيليا
+name ; given-informal; نيللي
+name ; given2; سيزار مارتن
+name ; surname-prefix; فون
+name ; surname-core; برول
+name ; surname2; غونزاليس دومينغو
+name ; generation; الإبن
+name ; credentials; طبيب وجراح
+name ; locale; ko_AQ
+
+expectedResult; فون برول، عايدة كورنيليا سيزار مارتن
+
+parameters; none; long; referring; formal
+
+expectedResult; فون برول، عايدة كورنيليا س. م.
+
+parameters; none; medium; referring; formal
+
+expectedResult; فون برول، ع. ك. س. م.
+
+parameters; none; short; referring; formal
+
+expectedResult; الدكتور فون برول
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; فون برول ع. ك.
+
+parameters; none; short; referring; informal
+
+expectedResult; فون برول نيللي
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; ف.ع.س
+
+parameters; none; long; monogram; formal
+
+expectedResult; نيللي
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ف.ن
+
+parameters; none; long; monogram; informal
+
+expectedResult; ف
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ن
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName

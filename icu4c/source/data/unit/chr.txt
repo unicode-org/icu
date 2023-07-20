@@ -406,11 +406,6 @@ chr{
                 one{"{0} ᎡᎴᏆᎾᏉᏔ"}
                 other{"{0} ᎡᎴᏆᎾᏉᏔᏍ"}
             }
-            foodcalorie{
-                dnam{"ᏗᏓᎵᏥᏍᏗᏍᎩ"}
-                one{"{0} ᎠᏓᎵᏥᏍᏗᏍᎩ"}
-                other{"{0} ᏗᏓᎵᏥᏍᏗᏍᎩ"}
-            }
             joule{
                 dnam{"ᏗᏦᎤᎵ"}
                 one{"{0} ᏦᎤᎵ"}
@@ -477,16 +472,6 @@ chr{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"ᏧᏓᏓᎸ ᎤᏍᏗ ᎠᏟᎶᏗ ᎢᏳᏓᎵ"}
-                one{"{0} ᎤᏓᏓᎸ ᎤᏍᏗ ᎠᏟᎶᏗ ᎢᏳᏓᎵ"}
-                other{"{0} ᏧᏓᏓᎸ ᎤᏍᏗ ᎠᏟᎶᏗ ᎢᏳᏓᎵ"}
-            }
-            dot-per-inch{
-                dnam{"ᏧᏓᏓᎸ ᎢᏏᎳᏗᏍᏗ ᎢᏳᏓᎵ"}
-                one{"{0} ᎤᏓᏓᎸ ᎢᏏᎳᏗᏍᏗ ᎢᏳᏓᎵ"}
-                other{"{0} ᏧᏓᏓᎸ ᎢᏏᎳᏗᏍᏗ ᎢᏳᏓᎵ"}
-            }
             em{
                 dnam{"ᎪᏪᎸ em"}
                 one{"{0} em"}
@@ -1450,11 +1435,6 @@ chr{
                 one{"{0}eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0}Cal"}
-                other{"{0}Cal"}
-            }
             joule{
                 dnam{"ᏦᎤᎵ"}
                 one{"{0}J"}
@@ -1521,16 +1501,6 @@ chr{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0}dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0}dpi"}
-                other{"{0}dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2471,11 +2441,6 @@ chr{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"ᏗᏦᎤᎵ"}
                 one{"{0} J"}
@@ -2542,16 +2507,6 @@ chr{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

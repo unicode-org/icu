@@ -1,0 +1,478 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: he
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; יונתן
+name ; locale; he_AQ
+
+expectedResult; יונתן
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; י
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; דנית
+name ; surname; לוי
+name ; locale; he_AQ
+
+expectedResult; לוי, דנית
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; דנית לוי
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; לוי דנית
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; דנית ל.
+
+parameters; none; short; referring; informal
+
+expectedResult; לוי, ד.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ד. לוי
+
+parameters; none; short; referring; formal
+
+expectedResult; דנית
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ד״ל
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; לוי
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+endName
+
+name ; given; יונתן
+name ; given2; חיים
+name ; surname; כהן
+name ; locale; he_AQ
+
+expectedResult; יונתן חיים כהן
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; כהן יונתן חיים
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; כהן, יונתן ח.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; כהן, י. ח.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; כהן, יונתן
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; יונתן כהן
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; יונתן כ.
+
+parameters; none; short; referring; informal
+
+expectedResult; י. כהן
+
+parameters; none; short; referring; formal
+
+expectedResult; יונתן
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; יח״כ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; כהן
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+endName
+
+name ; title; מר
+name ; given; בנימין
+name ; given-informal; בני
+name ; given2; משה
+name ; surname-prefix; אבן
+name ; surname-core; אבן-גבירול
+name ; generation; ג׳וניור
+name ; credentials; ח״כ
+name ; locale; he_AQ
+
+expectedResult; אבן אבן-גבירול מר בנימין משה ח״כ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; מר בנימין משה אבן אבן-גבירול ח״כ
+
+parameters; none; long; referring; formal
+parameters; none; medium; referring; formal
+
+expectedResult; אבן-גבירול, בנימין מ. אבן
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; אבן-גבירול, ב. מ. אבן
+
+parameters; sorting; short; referring; formal
+
+expectedResult; מר ב. אבן אבן-גבירול
+
+parameters; none; short; referring; formal
+
+expectedResult; אבן אבן-גבירול, בני
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; בני אבן אבן-גבירול
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; מר אבן אבן-גבירול
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; בני א. א.
+
+parameters; none; short; referring; informal
+
+expectedResult; במ״א
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; בני
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+endName
+
+name ; given; ולדימיר
+name ; locale; ko_AQ
+
+expectedResult; ולדימיר
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ו
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; יוליה
+name ; surname; שטרן
+name ; locale; ko_AQ
+
+expectedResult; שטרן יוליה
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; שטרן י.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; יוליה
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; שטרן
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; שי
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; י
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; ש
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; אמילי
+name ; given2; אנט
+name ; surname; פרידמן
+name ; locale; ko_AQ
+
+expectedResult; פרידמן אמילי אנט
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+
+expectedResult; פרידמן אמילי א.
+
+parameters; none; medium; referring; formal
+
+expectedResult; פרידמן א. א.
+
+parameters; none; short; referring; formal
+
+expectedResult; פרידמן אמילי
+
+parameters; none; medium; referring; informal
+
+expectedResult; פרידמן א.
+
+parameters; none; short; referring; informal
+
+expectedResult; פרידמן
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; אמילי
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; פאא
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; א
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; פ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; פרופ׳
+name ; given; רונית
+name ; given-informal; רוני
+name ; given2; חנה
+name ; surname-prefix; בן
+name ; surname-core; ארי
+name ; surname2; מזרחי
+name ; generation; ג׳וניור
+name ; credentials; ד״ר
+name ; locale; ko_AQ
+
+expectedResult; בן ארי מזרחי פרופ׳ רונית חנה ד״ר
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+
+expectedResult; בן ארי רונית ח. ד״ר
+
+parameters; none; medium; referring; formal
+
+expectedResult; בן ארי, פרופ׳
+
+parameters; none; short; addressing; formal
+
+expectedResult; בן ארי ר. ח.
+
+parameters; none; short; referring; formal
+
+expectedResult; פרופ׳ בן ארי
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+
+expectedResult; בן ארי רוני
+
+parameters; none; medium; referring; informal
+
+expectedResult; בן ארי ר.
+
+parameters; none; short; referring; informal
+
+expectedResult; רוני
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ברח
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; ב
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ר
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName

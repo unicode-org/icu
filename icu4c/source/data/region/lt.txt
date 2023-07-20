@@ -146,7 +146,6 @@ lt{
         IL{"Izraelis"}
         IM{"Meno Sala"}
         IN{"Indija"}
-        IO{"Indijos Vandenyno Britų Sritis"}
         IQ{"Irakas"}
         IR{"Iranas"}
         IS{"Islandija"}

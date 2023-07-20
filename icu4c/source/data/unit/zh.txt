@@ -335,10 +335,6 @@ zh{
                 dnam{"电子伏特"}
                 other{"{0}电子伏特"}
             }
-            foodcalorie{
-                dnam{"卡路里"}
-                other{"{0}卡路里"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0}焦耳"}
@@ -393,18 +389,6 @@ zh{
             }
         }
         graphics{
-            dot{
-                dnam{"点"}
-                other{"{0}点"}
-            }
-            dot-per-centimeter{
-                dnam{"点/厘米"}
-                other{"{0} 点/厘米"}
-            }
-            dot-per-inch{
-                dnam{"点/英寸"}
-                other{"{0}点/英寸"}
-            }
             em{
                 dnam{"em"}
                 other{"{0} em"}
@@ -1191,10 +1175,6 @@ zh{
                 dnam{"eV"}
                 other{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                other{"{0}Cal"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0}J"}
@@ -1249,18 +1229,6 @@ zh{
             }
         }
         graphics{
-            dot{
-                dnam{"dot"}
-                other{"{0}dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0}dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 other{"{0}em"}
@@ -1924,10 +1892,6 @@ zh{
                 dnam{"电子伏"}
                 other{"{0}电子伏"}
             }
-            foodcalorie{
-                dnam{"大卡"}
-                other{"{0}大卡"}
-            }
             joule{
                 dnam{"焦耳"}
                 other{"{0}焦耳"}
@@ -1953,20 +1917,6 @@ zh{
             newton{
                 dnam{"牛"}
                 other{"{0}牛"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                other{"{0} dpi"}
             }
         }
         length{

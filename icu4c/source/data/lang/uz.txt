@@ -548,10 +548,6 @@ uz{
             ethiopic-amete-alem{"Amete Alem habash taqvimi"}
             gregorian{"grigorian taqvimi"}
             hebrew{"yahudiy taqvimi"}
-            islamic{"islomiy taqvim"}
-            islamic-civil{"jadvalli islomiy taqvim"}
-            islamic-tbla{"jadvalli islomiy taqvim (astronomik davr)"}
-            islamic-umalqura{"islomiy taqvim (Ummul Quro)"}
             iso8601{"ISO-8601 taqvimi"}
             japanese{"yapon taqvimi"}
             persian{"fors taqvimi"}

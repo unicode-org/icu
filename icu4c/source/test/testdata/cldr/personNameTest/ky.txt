@@ -1,0 +1,437 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ky
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Сыймык
+name ; locale; ky_AQ
+
+expectedResult; Сыймык
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; С
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Каныкей
+name ; surname; Алымбекова
+name ; locale; ky_AQ
+
+expectedResult; Алымбекова, Каныкей
+
+parameters; sorting; short; referring; informal
+
+expectedResult; Алымбекова Каныкей
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+
+expectedResult; Каныкей Алымбекова
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; К. Алымбекова
+
+parameters; none; short; referring; formal
+
+expectedResult; Алымбекова
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Каныкей А.
+
+parameters; none; short; referring; informal
+
+expectedResult; Каныкей
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; КА
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Касым
+name ; given2; Жоомарт
+name ; surname; Токаев
+name ; locale; ky_AQ
+
+expectedResult; Касым Жоомарт Токаев
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Токаев Касым Жоомарт
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+
+expectedResult; Токаев, Касым
+
+parameters; sorting; short; referring; informal
+
+expectedResult; К. Ж. Токаев
+
+parameters; none; short; referring; formal
+
+expectedResult; Касым Т.
+
+parameters; none; short; referring; informal
+
+expectedResult; Токаев
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Касым
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; КЖТ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Мырза
+name ; given; Чыңгыз Айтматов
+name ; given-informal; Чыке
+name ; given2; Исхак Раззаков
+name ; surname-prefix; уулу
+name ; surname-core; Төрөкул
+name ; surname2; Махмудов
+name ; generation; Кенже
+name ; credentials; Парламент мүчөсү
+name ; locale; ky_AQ
+
+expectedResult; уулу Төрөкул Махмудов, Мырза Чыңгыз Айтматов Исхак Раззаков Парламент мүчөсү
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+
+expectedResult; Мырза Чыңгыз Айтматов Исхак Раззаков уулу Төрөкул Махмудов Парламент мүчөсү
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Ч. А. И. Р. уулу Төрөкул
+
+parameters; none; short; referring; formal
+
+expectedResult; Мырза уулу Төрөкул
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; уулу Төрөкул, Чыке
+
+parameters; sorting; short; referring; informal
+
+expectedResult; Чыке у. Т.
+
+parameters; none; short; referring; informal
+
+expectedResult; Чыке
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ЧИУ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Синбад
+name ; locale; ja_AQ
+
+expectedResult; Синбад
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; С
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Кэйт
+name ; surname; Мюллер
+name ; locale; ja_AQ
+
+expectedResult; Мюллер Кэйт
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Мюллер К.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Мюллер
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Кэйт
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; МК
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Зазилия
+name ; given2; Хамиш
+name ; surname; Штобер
+name ; locale; ja_AQ
+
+expectedResult; Штобер Зазилия Хамиш
+
+parameters; none; long; referring; formal
+
+expectedResult; Штобер Зазилия Х.
+
+parameters; none; medium; referring; formal
+
+expectedResult; Штобер Зазилия
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Штобер З. Х.
+
+parameters; none; short; referring; formal
+
+expectedResult; Штобер З.
+
+parameters; none; short; referring; informal
+
+expectedResult; Зазилия
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; Штобер
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ШЗХ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; Проф. Доктор.
+name ; given; Алтынай Сулайманова
+name ; given-informal; Чыке
+name ; given2; Асель Сартбаева
+name ; surname-prefix; ван ден
+name ; surname-core; Вольф
+name ; surname2; Бекер Шмидт
+name ; generation; Кенже
+name ; credentials; Илимдин кандидаты
+name ; locale; ja_AQ
+
+expectedResult; ван ден Вольф Алтынай Сулайманова Асель Сартбаева Илимдин кандидаты
+
+parameters; none; long; referring; formal
+
+expectedResult; ван ден Вольф Алтынай Сулайманова А. С. Илимдин кандидаты
+
+parameters; none; medium; referring; formal
+
+expectedResult; Проф. Доктор. ван ден Вольф
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; ван ден Вольф А. С. А. С.
+
+parameters; none; short; referring; formal
+
+expectedResult; ван ден Вольф А. С.
+
+parameters; none; short; referring; informal
+
+expectedResult; ван ден Вольф Чыке
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Чыке
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ВАА
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName

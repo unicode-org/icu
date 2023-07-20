@@ -1,0 +1,507 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: ne
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; सुन्दर
+name ; locale; ne_AQ
+
+expectedResult; सुन्दर
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; सु
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; रमेश
+name ; surname; पोख्रेल
+name ; locale; ne_AQ
+
+expectedResult; पोख्रेल, रमेश
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; रमेश पोख्रेल
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; पोख्रेल, र.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; र. पोख्रेल
+
+parameters; none; short; referring; formal
+
+expectedResult; रमेश पो.
+
+parameters; none; short; referring; informal
+
+expectedResult; पोख्रेल
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; रमेश
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; रपो
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; पो
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; र
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; प्रेमप्रसाद
+name ; given2; हिमलाल
+name ; surname; वास्तोला
+name ; locale; ne_AQ
+
+expectedResult; वास्तोला, प्रेमप्रसाद हिमलाल
+
+parameters; sorting; long; referring; formal
+
+expectedResult; प्रेमप्रसाद हिमलाल वास्तोला
+
+parameters; none; long; referring; formal
+
+expectedResult; वास्तोला, प्रेमप्रसाद हि.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; प्रेमप्रसाद हि. वास्तोला
+
+parameters; none; medium; referring; formal
+
+expectedResult; वास्तोला, प्रेमप्रसाद
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; प्रेमप्रसाद वास्तोला
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; वास्तोला, प्रे. हि.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; प्रे. हि. वास्तोला
+
+parameters; none; short; referring; formal
+
+expectedResult; प्रेमप्रसाद वा.
+
+parameters; none; short; referring; informal
+
+expectedResult; प्रेमप्रसाद
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; प्रेहिवा
+
+parameters; none; long; monogram; formal
+
+expectedResult; वास्तोला
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; प्रेवा
+
+parameters; none; long; monogram; informal
+
+expectedResult; प्रे
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; वा
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; title; श्री
+name ; given; बर्ट्राम विलबरफोर्स
+name ; given-informal; बर्टी
+name ; given2; हेनरी रोबर्ट
+name ; surname-core; वुस्टर
+name ; generation; जेआर
+name ; credentials; एमपी
+name ; locale; ne_AQ
+
+expectedResult; बर्ट्राम विलबरफोर्स हेनरी रोबर्ट वुस्टर एमपी
+
+parameters; none; long; referring; formal
+
+expectedResult; वुस्टर, बर्ट्राम विलबरफोर्स हेनरी रोबर्ट
+
+parameters; sorting; long; referring; formal
+
+expectedResult; बर्ट्राम विलबरफोर्स हे. रो. वुस्टर एमपी
+
+parameters; none; medium; referring; formal
+
+expectedResult; वुस्टर, बर्ट्राम विलबरफोर्स हे. रो.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; वुस्टर, ब. वि. हे. रो.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ब. वि. हे. रो. वुस्टर
+
+parameters; none; short; referring; formal
+
+expectedResult; वुस्टर, बर्टी
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; बर्टी वुस्टर
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; श्री वुस्टर
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; बर्टी वु.
+
+parameters; none; short; referring; informal
+
+expectedResult; बर्टी
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; बहेवु
+
+parameters; none; long; monogram; formal
+
+expectedResult; बवु
+
+parameters; none; long; monogram; informal
+
+expectedResult; वु
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; ब
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; सिनबाद
+name ; locale; ko_AQ
+
+expectedResult; सिनबाद
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; सि
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; क्याथी
+name ; surname; मुलर
+name ; locale; ko_AQ
+
+expectedResult; मुलर क्याथी
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; मुलर क्या.
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; क्याथी
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; मुक्या
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; क्या
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; मुलर
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; मु
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; जाजिला
+name ; given2; हार्निस
+name ; surname; स्टोबर
+name ; locale; ko_AQ
+
+expectedResult; स्टोबर जाजिला हार्निस
+
+parameters; none; long; referring; formal
+
+expectedResult; स्टोबर जाजिला हा.
+
+parameters; none; medium; referring; formal
+
+expectedResult; स्टोबर जा. हा.
+
+parameters; none; short; referring; formal
+
+expectedResult; स्टोबर जाजिला
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; स्टोबर जा.
+
+parameters; none; short; referring; informal
+
+expectedResult; स्टोजाहा
+
+parameters; none; long; monogram; formal
+
+expectedResult; जाजिला
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; स्टोजा
+
+parameters; none; long; monogram; informal
+
+expectedResult; स्टोबर
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; स्टो
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; जा
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; प्रोफेसर डाक्टर
+name ; given; एडा कर्नेलिया
+name ; given-informal; नीले
+name ; given2; सिजर मार्टिन
+name ; surname-prefix; भोन
+name ; surname-core; ब्रुहल
+name ; surname2; गोन्जालेज डोमिङ्गोज
+name ; generation; जेनेरेसन
+name ; credentials; एमडी डिडिएस
+name ; locale; ko_AQ
+
+expectedResult; भोन ब्रुहल एडा कर्नेलिया सिजर मार्टिन एमडी डिडिएस
+
+parameters; none; long; referring; formal
+
+expectedResult; भोन ब्रुहल एडा कर्नेलिया सि. मा. एमडी डिडिएस
+
+parameters; none; medium; referring; formal
+
+expectedResult; प्रोफेसर डाक्टर भोन ब्रुहल
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; भोन ब्रुहल ए. क. सि. मा.
+
+parameters; none; short; referring; formal
+
+expectedResult; भोन ब्रुहल ए. क.
+
+parameters; none; short; referring; informal
+
+expectedResult; भोन ब्रुहल नीले
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; भोएसि
+
+parameters; none; long; monogram; formal
+
+expectedResult; नीले
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; भोनी
+
+parameters; none; long; monogram; informal
+
+expectedResult; नी
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; भो
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

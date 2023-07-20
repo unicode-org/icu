@@ -13,10 +13,7 @@ ms{
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{
-        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
-        "′ ″]"
-    }
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     MoreInformation{"?"}
     NumberElements{
         adlm{
@@ -3635,32 +3632,32 @@ ms{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }
@@ -3672,34 +3669,6 @@ ms{
             }
         }
         namePattern{
-            givenFirst-long-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-long-addressing-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
-            givenFirst-long-referring-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-medium-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-medium-addressing-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-medium-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-medium-monogram-informal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-medium-referring-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-medium-referring-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-short-addressing-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-short-addressing-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-short-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-short-monogram-informal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}"
-            }
-            givenFirst-short-referring-formal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
-            givenFirst-short-referring-informal{"{title} {given} {given2} {surname} {surname2} {credentials}"}
             sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
             sorting-long-referring-informal{"{surname-core}, {given} {given2} {surname-prefix}"}
             sorting-medium-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}

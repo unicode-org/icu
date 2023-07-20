@@ -587,14 +587,6 @@ br{
                 other{"{0} elektronvolt"}
                 two{"{0} elektronvolt"}
             }
-            foodcalorie{
-                dnam{"kaloriennoù bras"}
-                few{"{0} c'halorienn vras"}
-                many{"{0} a galoriennoù bras"}
-                one{"{0} galorienn vras"}
-                other{"{0} kalorienn vras"}
-                two{"{0} galorienn vras"}
-            }
             joule{
                 dnam{"jouloù"}
                 few{"{0} joul"}
@@ -681,30 +673,6 @@ br{
             }
         }
         graphics{
-            dot{
-                dnam{"pik"}
-                few{"{0} fik"}
-                many{"{0} a bikoù"}
-                one{"{0} pik"}
-                other{"{0} pik"}
-                two{"{0} bik"}
-            }
-            dot-per-centimeter{
-                dnam{"pikoù dre santimetr"}
-                few{"{0} fik dre santimetr"}
-                many{"{0} a bikoù dre santimetr"}
-                one{"{0} pik dre santimetr"}
-                other{"{0} pik dre santimetr"}
-                two{"{0} bik dre santimetr"}
-            }
-            dot-per-inch{
-                dnam{"pikoù dre veutad"}
-                few{"{0} fik dre veutad"}
-                many{"{0} a bikoù dre veutad"}
-                one{"{0} pik dre veutad"}
-                other{"{0} pik dre veutad"}
-                two{"{0} bik dre veutad"}
-            }
             em{
                 dnam{"esaouenn em"}
                 few{"{0} esaouenn em"}
@@ -2175,14 +2143,6 @@ br{
                 other{"{0}eV"}
                 two{"{0}eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0}Cal"}
-                many{"{0}Cal"}
-                one{"{0}Cal"}
-                other{"{0}Cal"}
-                two{"{0}Cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0}J"}
@@ -2277,30 +2237,6 @@ br{
             }
         }
         graphics{
-            dot{
-                dnam{"pik"}
-                few{"{0}pik"}
-                many{"{0}pik"}
-                one{"{0}pik"}
-                other{"{0}pik"}
-                two{"{0}pik"}
-            }
-            dot-per-centimeter{
-                dnam{"pdcm"}
-                few{"{0}pdcm"}
-                many{"{0}pdcm"}
-                one{"{0}pdcm"}
-                other{"{0}pdcm"}
-                two{"{0}pdcm"}
-            }
-            dot-per-inch{
-                dnam{"pdm"}
-                few{"{0}pdm"}
-                many{"{0}pdm"}
-                one{"{0}pdm"}
-                other{"{0}pdm"}
-                two{"{0}pdm"}
-            }
             em{
                 dnam{"em"}
                 few{"{0}em"}
@@ -3750,14 +3686,6 @@ br{
                 other{"{0} eV"}
                 two{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                few{"{0} Cal"}
-                many{"{0} Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-                two{"{0} Cal"}
-            }
             joule{
                 dnam{"J"}
                 few{"{0} J"}
@@ -3850,30 +3778,6 @@ br{
             }
         }
         graphics{
-            dot{
-                dnam{"pik"}
-                few{"{0} pik"}
-                many{"{0} pik"}
-                one{"{0} pik"}
-                other{"{0} pik"}
-                two{"{0} pik"}
-            }
-            dot-per-centimeter{
-                dnam{"pdcm"}
-                few{"{0} pdcm"}
-                many{"{0} pdcm"}
-                one{"{0} pdcm"}
-                other{"{0} pdcm"}
-                two{"{0} pdcm"}
-            }
-            dot-per-inch{
-                dnam{"pdm"}
-                few{"{0} pdm"}
-                many{"{0} pdm"}
-                one{"{0} pdm"}
-                other{"{0} pdm"}
-                two{"{0} pdm"}
-            }
             em{
                 few{"{0} em"}
                 many{"{0} em"}

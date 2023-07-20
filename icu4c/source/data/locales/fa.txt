@@ -2,17 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fa{
-    AuxExemplarCharacters{
-        "[ـ\u200C\u200D\u200E\u200F \u064E \u0650 \u064F \u0652 \u0656 \u0670 إ ك ى ي"
-        "]"
-    }
+    AuxExemplarCharacters{"[ـ\u200C\u200D\u200E\u200F َ ِ ُ ْ ٖ ٰ إ ك ىي]"}
     ExemplarCharacters{
-        "[\u064B \u064D \u064C \u0651 \u0654 آ ا ء أ ؤ ئ ب پ ت ث ج چ ح خ د ذ ر ز ژ س "
-        "ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ة ی]"
+        "[ً ٍ ٌ ّ ٔ آ ا ءأؤئ ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن "
+        "و هة ی]"
     }
     ExemplarCharactersIndex{"[آ ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی]"}
     ExemplarCharactersNumbers{"[\u200E , ٫ ٬ . % ٪ ‰ ؉ + − 0۰ 1۱ 2۲ 3۳ 4۴ 5۵ 6۶ 7۷ 8۸ 9۹]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ ، ٫ ٬ ؛ \\: ! ؟ . … ‹ › « » ( ) \\[ \\] * / \\\\]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ ، ٫ ٬ ؛ \\: ! ؟ . … ‹ › « » ( ) \\[ \\] * / \\\\]"}
     MoreInformation{"؟"}
     NumberElements{
         arab{
@@ -3812,13 +3809,13 @@ fa{
     parse{
         number{
             lenient{
-                "[\\-‐‒–⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‐‑ ‒ – −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }
@@ -3838,38 +3835,14 @@ fa{
         namePattern{
             givenFirst-long-addressing-formal{"{title} {surname}"}
             givenFirst-long-addressing-informal{"{given-informal}"}
-            givenFirst-long-monogram-formal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}"
-            }
-            givenFirst-long-monogram-informal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}"
-            }
             givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {generation}، {credentials}"}
             givenFirst-long-referring-informal{"{given-informal} {surname}"}
             givenFirst-medium-addressing-formal{"{title} {surname}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
-            givenFirst-medium-monogram-formal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}"
-            }
-            givenFirst-medium-monogram-informal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}"
-            }
             givenFirst-medium-referring-formal{"{title} {given} {given2} {surname} {generation}، {credentials}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
-            givenFirst-short-monogram-formal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}"
-            }
-            givenFirst-short-monogram-informal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}"
-            }
             givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
             sorting-long-referring-formal{"{surname-core}، {given} {given2} {surname-prefix}"}
@@ -3880,38 +3853,14 @@ fa{
             sorting-short-referring-informal{"{surname}، {given-informal}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
-            surnameFirst-long-monogram-formal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}"
-            }
-            surnameFirst-long-monogram-informal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}"
-            }
             surnameFirst-long-referring-formal{"{surname}، {title} {given} {given2} {generation}، {credentials}"}
             surnameFirst-long-referring-informal{"{surname}، {given-informal}"}
             surnameFirst-medium-addressing-formal{"{title} {surname}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
-            surnameFirst-medium-monogram-formal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}"
-            }
-            surnameFirst-medium-monogram-informal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}"
-            }
             surnameFirst-medium-referring-formal{"{surname}، {given} {given2-initial} {generation}، {credentials}"}
             surnameFirst-medium-referring-informal{"{surname}، {given-informal}"}
             surnameFirst-short-addressing-formal{"{title} {surname}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
-            surnameFirst-short-monogram-formal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}"
-            }
-            surnameFirst-short-monogram-informal{
-                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
-                "-allCaps}"
-            }
             surnameFirst-short-referring-formal{"{surname}، {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname}، {given-initial}"}
         }

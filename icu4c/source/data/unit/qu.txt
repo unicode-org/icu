@@ -335,10 +335,6 @@ qu{
                 dnam{"eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 dnam{"joule"}
                 other{"{0} J"}
@@ -393,18 +389,6 @@ qu{
             }
         }
         graphics{
-            dot{
-                dnam{"chiku"}
-                other{"{0} chiku"}
-            }
-            dot-per-centimeter{
-                dnam{"puntos por centímetro"}
-                other{"{0} puntos por centímetro"}
-            }
-            dot-per-inch{
-                dnam{"puntos por pulgada"}
-                other{"{0} puntos por pulgada"}
-            }
             em{
                 dnam{"tipográfico em"}
                 other{"{0} tipográfico em"}
@@ -1038,26 +1022,6 @@ qu{
             liter-per-100-kilometer{
                 dnam{"L/100 km"}
                 other{"{0} L/100 km"}
-            }
-        }
-        energy{
-            foodcalorie{
-                dnam{"kcal"}
-                other{"{0} kcal"}
-            }
-        }
-        graphics{
-            dot{
-                dnam{"punto"}
-                other{"{0} punto"}
-            }
-            dot-per-centimeter{
-                dnam{"ppcm"}
-                other{"{0} ppcm"}
-            }
-            dot-per-inch{
-                dnam{"ppi"}
-                other{"{0} ppi"}
             }
         }
         length{

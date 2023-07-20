@@ -406,11 +406,6 @@ fil{
                 one{"{0} electronvolt"}
                 other{"{0} electronvolt"}
             }
-            foodcalorie{
-                dnam{"Calories"}
-                one{"{0} Calorie"}
-                other{"{0} na Calories"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} joule"}
@@ -477,21 +472,6 @@ fil{
             }
         }
         graphics{
-            dot{
-                dnam{"tuldok"}
-                one{"{0} tuldok"}
-                other{"{0} tuldok"}
-            }
-            dot-per-centimeter{
-                dnam{"tuldok bawat sentimetro"}
-                one{"{0} tuldok bawat sentimetro"}
-                other{"{0} tuldok bawat sentimetro"}
-            }
-            dot-per-inch{
-                dnam{"tuldok bawat pulgada"}
-                one{"{0} tuldok bawat pulgada"}
-                other{"{0} tuldok bawat pulgada"}
-            }
             em{
                 dnam{"tipograpikang em"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ fil{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} J"}
@@ -1526,21 +1501,6 @@ fil{
             }
         }
         graphics{
-            dot{
-                dnam{"tuldok"}
-                one{"{0}dot"}
-                other{"{0}dot"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2492,11 +2452,6 @@ fil{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"Cal"}
-                one{"{0} Cal"}
-                other{"{0} Cal"}
-            }
             joule{
                 dnam{"joules"}
                 one{"{0} J"}
@@ -2563,21 +2518,6 @@ fil{
             }
         }
         graphics{
-            dot{
-                dnam{"tuldok"}
-                one{"{0} tuldok"}
-                other{"{0} tuldok"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} dpcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} dpi"}
-                other{"{0} dpi"}
-            }
             em{
                 one{"{0} em"}
                 other{"{0} em"}

@@ -406,11 +406,6 @@ si{
                 one{"{0} ඉලේට්‍රෝන වෝල්ට්"}
                 other{"{0} ඉලේට්‍රෝන වෝල්ට්"}
             }
-            foodcalorie{
-                dnam{"කැලරි"}
-                one{"කැලරි {0}"}
-                other{"කැලරි {0}"}
-            }
             joule{
                 dnam{"ජුල්"}
                 one{"ජුල් {0}"}
@@ -477,21 +472,6 @@ si{
             }
         }
         graphics{
-            dot{
-                dnam{"තිත"}
-                one{"{0}තිත"}
-                other{"{0}තිත"}
-            }
-            dot-per-centimeter{
-                dnam{"සෙන්ටිමීටරයකට තිත්"}
-                one{"සෙන්ටිමීටරයකට තිත් {0}"}
-                other{"සෙන්ටිමීටරයකට තිත් {0}"}
-            }
-            dot-per-inch{
-                dnam{"අඟලකට තිත්"}
-                one{"අඟලකට තිත් {0}"}
-                other{"අඟලකට තිත් {0}"}
-            }
             em{
                 dnam{"යතුරු ලියන එම්"}
                 one{"{0} em"}
@@ -1455,11 +1435,6 @@ si{
                 one{"{0} ඉවෝ"}
                 other{"{0} ඉවෝ"}
             }
-            foodcalorie{
-                dnam{"කැල"}
-                one{"කැල {0}"}
-                other{"කැල {0}"}
-            }
             joule{
                 dnam{"ජුල්"}
                 one{"ජු {0}"}
@@ -1526,21 +1501,6 @@ si{
             }
         }
         graphics{
-            dot{
-                dnam{"තිත"}
-                one{"{0} තිත"}
-                other{"තිත් {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}
@@ -2504,11 +2464,6 @@ si{
                 one{"{0} ඉවෝ"}
                 other{"{0} ඉවෝ"}
             }
-            foodcalorie{
-                dnam{"කැල"}
-                one{"කැල {0}"}
-                other{"කැල {0}"}
-            }
             joule{
                 dnam{"ජුල්"}
                 one{"ජු {0}"}
@@ -2575,21 +2530,6 @@ si{
             }
         }
         graphics{
-            dot{
-                dnam{"තිත"}
-                one{"{0} තිත"}
-                other{"තිත් {0}"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 one{"{0} em"}

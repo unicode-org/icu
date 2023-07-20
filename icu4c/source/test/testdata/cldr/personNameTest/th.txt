@@ -1,0 +1,400 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: th
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; ธนา
+name ; locale; th_AQ
+
+expectedResult; ธนา
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ธ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ไอริณ
+name ; surname; กล้าหาญ
+name ; locale; th_AQ
+
+expectedResult; กล้าหาญ, ไอริณ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ไอริณ กล้าหาญ
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ไอริณ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ไก
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; มานี
+name ; given2; ชัยยศ
+name ; surname; พิชิตชัย
+name ; locale; th_AQ
+
+expectedResult; พิชิตชัย, มานี ชัยยศ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; มานี ชัยยศ พิชิตชัย
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; short; addressing; formal
+
+expectedResult; พิชิตชัย, มานี
+
+parameters; sorting; long; referring; informal
+
+expectedResult; มานี พิชิตชัย
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; มชัพิ
+
+parameters; none; long; monogram; formal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; มานี
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; มพิ
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+endName
+
+name ; title; คุณ
+name ; given; ปรีชา
+name ; given-informal; ชาติ
+name ; given2; กล้าหาญ
+name ; surname-core; แสงระวี
+name ; locale; th_AQ
+
+expectedResult; คุณ ปรีชา กล้าหาญ แสงระวี
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; medium; addressing; formal
+parameters; none; medium; referring; formal
+parameters; none; short; addressing; formal
+
+expectedResult; แสงระวี, ปรีชา กล้าหาญ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; คุณ ปรีชา แสงระวี
+
+parameters; none; short; referring; formal
+
+expectedResult; แสงระวี, ชาติ
+
+parameters; sorting; long; referring; informal
+
+expectedResult; ชาติ แสงระวี
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+parameters; none; short; referring; informal
+
+expectedResult; ชาติ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ปกแ
+
+parameters; none; long; monogram; formal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; ปแ
+
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+
+endName
+
+name ; given; ซินแบด
+name ; locale; ja_AQ
+
+expectedResult; ซินแบด
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ซิ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; เคเทอ
+name ; surname; มึลเลอร์
+name ; locale; ja_AQ
+
+expectedResult; มึลเลอร์ เคเทอ
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; เคเทอ
+
+parameters; none; long; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; มึเ
+
+parameters; none; long; monogram; informal
+
+expectedResult; มึ
+
+parameters; none; long; monogram; formal
+parameters; none; medium; monogram; formal
+
+expectedResult; เ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; ซาซิเลีย
+name ; given2; ฮามิช
+name ; surname; สโตเบอร์
+name ; locale; ja_AQ
+
+expectedResult; สโตเบอร์ ซาซิเลีย ฮามิช
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; ซาซิเลีย
+
+parameters; none; long; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; สซ
+
+parameters; none; long; monogram; informal
+
+expectedResult; ซ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; ส
+
+parameters; none; long; monogram; formal
+parameters; none; medium; monogram; formal
+
+endName
+
+name ; title; ศ.ดร.
+name ; given; เอดา คอร์เนเลีย
+name ; given-informal; นีเลอะ
+name ; given2; เซซาร์ มาร์ติน
+name ; surname-prefix; วอน
+name ; surname-core; บรืล
+name ; surname2; กอนซาเลซ โดมิงโก
+name ; generation; จูเนียร์
+name ; credentials; พ.บ. ท.บ.
+name ; locale; ja_AQ
+
+expectedResult; วอน บรืล กอนซาเลซ โดมิงโก ศ.ดร. เอดา คอร์เนเลีย เซซาร์ มาร์ติน พ.บ. ท.บ.
+
+parameters; none; long; addressing; formal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; นีเลอะ
+
+parameters; none; long; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; วนี
+
+parameters; none; long; monogram; informal
+
+expectedResult; นี
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+expectedResult; ว
+
+parameters; none; long; monogram; formal
+parameters; none; medium; monogram; formal
+
+endName

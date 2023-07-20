@@ -264,8 +264,6 @@ fur{
             gregorian{"calendari gregorian"}
             hebrew{"calendari ebreu"}
             indian{"calendari nazionâl indian"}
-            islamic{"calendari islamic"}
-            islamic-civil{"calendari islamic civîl"}
             japanese{"calendari gjaponês"}
             roc{"calendari de Republiche di Cine"}
         }

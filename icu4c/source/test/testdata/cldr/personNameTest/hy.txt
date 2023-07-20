@@ -1,0 +1,479 @@
+# Test data for unit conversions
+#  Copyright © 1991-2023 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-DFS-2016
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
+# CLDR person name formatting test data for: hy
+#
+# Test lines have the following structure:
+#
+# enum ; <type> ; <value>(', ' <value)
+#   For all the elements in <…> below, the possible choices that could appear in the file.
+#   For example, <field> could be any of title, given, … credentials.
+#   Verify that all of these values work with the implementation.
+#
+# name ; <field>('-'<modifier>) ; <value>
+#   A sequence of these is to be used to build a person name object with the given field values.
+#   If the <field> is 'locale', then the value is the locale of the name.
+#     That will always be the last field in the name.
+#     NOTE: the locale for the name (where different than the test file's locale) will generally not match the text.
+#     It is chosen to exercise the person name formatting, by having a different given-surname order than the file's locale.
+#
+# expectedResult; <value>
+#   This line follows a sequence of name lines, and indicates the that all the following parameter lines have this expected value.
+#
+# parameters; <options>; <length>; <usage>; <formality>
+#   Each of these parameter lines should be tested to see that when formatting the current name with these parameters, 
+#   the expected value is produced.
+#
+# endName
+#   Indicates the end of the values to be tested with the current name.
+#
+# =====
+# Example:
+#     enum ; field ; title, given, given2, surname, surname2, generation, credentials
+#     …
+#
+#     name ; given; Iris
+#     name ; surname; Falke
+#     name ; locale; de
+#
+#     expectedResult; Falke, Iris
+#
+#     parameters; sorting; long; referring; formal
+#     parameters; sorting; medium; referring; informal
+#
+#     endName
+#
+#     name ; given; Max
+#     name ; given2; Ben
+#     name ; surname; Mustermann
+#     …
+# =====
+
+enum ; field ; title, given, given2, surname, surname2, generation, credentials
+enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
+enum ; options ; none, sorting
+enum ; length ; long, medium, short
+enum ; usage ; referring, addressing, monogram
+enum ; formality ; formal, informal
+
+name ; given; Արթուր
+name ; locale; hy_AQ
+
+expectedResult; Արթուր
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; Ա
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Հեղինե
+name ; surname; Ադամյան
+name ; locale; hy_AQ
+
+expectedResult; Ադամյան Հեղինե
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Հեղինե Ադամյան
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Ադամյան Հ․
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Հ․ Ադամյան
+
+parameters; none; short; referring; formal
+
+expectedResult; Հեղինե Ա․
+
+parameters; none; short; referring; informal
+
+expectedResult; Ադամյան
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Հեղինե
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ՀԱ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; Ա
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Հ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Հովհաննես
+name ; given2; Արմենի
+name ; surname; Դարբինյան
+name ; locale; hy_AQ
+
+expectedResult; Հովհաննես Արմենի Դարբինյան
+
+parameters; none; long; referring; formal
+
+expectedResult; Հովհաննես Ա․ Դարբինյան
+
+parameters; none; medium; referring; formal
+
+expectedResult; Դարբինյան Հովհաննես
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Հովհաննես Դարբինյան
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Դարբինյան Հ․
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Հ․ Դարբինյան
+
+parameters; none; short; referring; formal
+
+expectedResult; Հովհաննես Դ․
+
+parameters; none; short; referring; informal
+
+expectedResult; Դարբինյան
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Հովհաննես
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ՀԴ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; Դ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Հ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; պրն
+name ; given; Հայկ
+name ; given-informal; Հայկո
+name ; given2; Պարգևի
+name ; surname-core; Տեր-Պողոսյան
+name ; credentials; բ․գ․դ․
+name ; locale; hy_AQ
+
+expectedResult; բ․գ․դ․ պրն Հայկ Պարգևի Տեր-Պողոսյան
+
+parameters; none; long; referring; formal
+
+expectedResult; բ․գ․դ․ Հայկ Պ․ Տեր-Պողոսյան
+
+parameters; none; medium; referring; formal
+
+expectedResult; Հայկո Տեր-Պողոսյան
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Տեր-Պողոսյան Հայկո
+
+parameters; sorting; long; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Տեր-Պողոսյան Հայկ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+
+expectedResult; պրն Տեր-Պողոսյան
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Հ․ Տեր-Պողոսյան
+
+parameters; none; short; referring; formal
+
+expectedResult; Տեր-Պողոսյան Հ․
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Հայկո Տ․
+
+parameters; none; short; referring; informal
+
+expectedResult; Հայկո
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ՀՏ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; Հ
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; Տ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName
+
+name ; given; Սինբադ
+name ; locale; ko_AQ
+
+expectedResult; Սինբադ
+
+parameters; none; long; addressing; formal
+parameters; none; long; addressing; informal
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; addressing; formal
+parameters; none; medium; addressing; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+parameters; none; short; addressing; formal
+parameters; none; short; addressing; informal
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Ս
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+parameters; none; medium; monogram; formal
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; formal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Քեյթ
+name ; surname; Մյուլեր
+name ; locale; ko_AQ
+
+expectedResult; Մյուլեր Քեյթ
+
+parameters; none; long; referring; formal
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Մյուլեր Ք․
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Մյուլեր
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Քեյթ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ՄՔ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; Մ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Ք
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; given; Ցեցիլիա
+name ; given2; Համիշ
+name ; surname; Շտյոբեր
+name ; locale; ko_AQ
+
+expectedResult; Շտյոբեր Ցեցիլիա Համիշ
+
+parameters; none; long; referring; formal
+
+expectedResult; Շտյոբեր Ցեցիլիա
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; formal
+parameters; none; medium; referring; informal
+
+expectedResult; Շտյոբեր Ց․
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; Շտյոբեր
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; Ցեցիլիա
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ՇՑ
+
+parameters; none; long; monogram; formal
+parameters; none; long; monogram; informal
+
+expectedResult; Շ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+expectedResult; Ց
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+endName
+
+name ; title; դ-ր
+name ; given; Ադա Կոռնելիա
+name ; given-informal; Նիլ
+name ; given2; Սեզար Մարտին
+name ; surname-prefix; վան դեն
+name ; surname-core; Վոլֆ
+name ; surname2; Գոնսալես Դոմինգո
+name ; generation; կրտսեր
+name ; credentials; բ․գ․դ․
+name ; locale; ko_AQ
+
+expectedResult; բ․գ․դ․ վան դեն Վոլֆ Ադա Կոռնելիա Սեզար Մարտին
+
+parameters; none; long; referring; formal
+
+expectedResult; բ․գ․դ․ վան դեն Վոլֆ Ադա Կոռնելիա
+
+parameters; none; medium; referring; formal
+
+expectedResult; վան դեն Վոլֆ Ա․ Կ․
+
+parameters; none; short; referring; formal
+parameters; none; short; referring; informal
+
+expectedResult; դ-ր վան դեն Վոլֆ
+
+parameters; none; long; addressing; formal
+parameters; none; medium; addressing; formal
+parameters; none; short; addressing; formal
+
+expectedResult; վան դեն Վոլֆ Նիլ
+
+parameters; none; long; referring; informal
+parameters; none; medium; referring; informal
+
+expectedResult; Նիլ
+
+parameters; none; long; addressing; informal
+parameters; none; medium; addressing; informal
+parameters; none; short; addressing; informal
+
+expectedResult; ՎԱ
+
+parameters; none; long; monogram; formal
+
+expectedResult; ՎՆ
+
+parameters; none; long; monogram; informal
+
+expectedResult; Ն
+
+parameters; none; medium; monogram; informal
+parameters; none; short; monogram; informal
+
+expectedResult; Վ
+
+parameters; none; medium; monogram; formal
+parameters; none; short; monogram; formal
+
+endName

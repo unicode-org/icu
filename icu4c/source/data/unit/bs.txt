@@ -477,12 +477,6 @@ bs{
                 one{"{0} elektron volt"}
                 other{"{0} elektron volti"}
             }
-            foodcalorie{
-                dnam{"kalorije"}
-                few{"{0} kalorije"}
-                one{"{0} kalorija"}
-                other{"{0} kalorija"}
-            }
             joule{
                 dnam{"džuli"}
                 few{"{0} džula"}
@@ -561,24 +555,6 @@ bs{
             }
         }
         graphics{
-            dot{
-                dnam{"tačka"}
-                few{"{0} tačke"}
-                one{"{0} tačka"}
-                other{"{0} tačaka"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -1752,11 +1728,6 @@ bs{
             }
         }
         graphics{
-            dot{
-                few{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
@@ -2794,12 +2765,6 @@ bs{
                 one{"{0} eV"}
                 other{"{0} eV"}
             }
-            foodcalorie{
-                dnam{"kal."}
-                few{"{0} kal."}
-                one{"{0} kal."}
-                other{"{0} kal."}
-            }
             joule{
                 dnam{"džuli"}
                 few{"{0} J"}
@@ -2878,24 +2843,6 @@ bs{
             }
         }
         graphics{
-            dot{
-                dnam{"px"}
-                few{"{0} px"}
-                one{"{0} px"}
-                other{"{0} px"}
-            }
-            dot-per-centimeter{
-                dnam{"dpcm"}
-                few{"{0} ppcm"}
-                one{"{0} ppcm"}
-                other{"{0} dpcm"}
-            }
-            dot-per-inch{
-                dnam{"dpi"}
-                few{"{0} ppi"}
-                one{"{0} ppi"}
-                other{"{0} dpi"}
-            }
             em{
                 dnam{"em"}
                 few{"{0} em"}
