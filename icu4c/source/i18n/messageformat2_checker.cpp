@@ -46,6 +46,18 @@ static bool areDefaultKeys(const KeyList& keys) {
     return true;
 }
 
+void MessageFormatter::Checker::check(const Expression& e, UErrorCode& error) {
+    CHECK_ERROR(error);
+
+// TODO check other errors in expressions
+    (void) e;
+
+    // Checking for duplicate option names was already done
+    // during parsing (it has to be, since once parsed,
+    // the representation as an `OptionMap` guarantees
+    // unique keys)
+}
+
 void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
     CHECK_ERROR(error);
     U_ASSERT(dataModel.hasSelectors());

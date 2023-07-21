@@ -328,6 +328,7 @@ class U_I18N_API MessageFormatter : public Format {
          void checkDeclarations(UErrorCode&);
          void checkSelectors(UErrorCode&);
          void checkVariants(UErrorCode&);
+         void check(const MessageFormatDataModel::Expression&, UErrorCode&);
          void check(const MessageFormatDataModel::Pattern&, UErrorCode&);
          const MessageFormatDataModel& dataModel;
      };

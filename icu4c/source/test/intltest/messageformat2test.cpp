@@ -679,8 +679,14 @@ void TestMessageFormat2::testDataModelErrors() {
                                          when 1 * {First is one}\n\
                                          when * 1 {Second is one}\n", U_NONEXHAUSTIVE_PATTERN);
 
+    // Duplicate option names
+    testSemanticallyInvalidPattern(++i, "{{:foo a=1 b=2 a=1}}", U_DUPLICATE_OPTION_NAME);
+    testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=1}}", U_DUPLICATE_OPTION_NAME);
+    testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
+    testSemanticallyInvalidPattern(++i, "{{|x| :foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
+
+
     /* TODO:
-       Duplicate option names
        Unresolved variables
        Unknown functions
        Selector errors

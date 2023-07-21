@@ -317,10 +317,16 @@ public:
         class Builder : public UMemory {
         public:
             // Adopts `value`
+            // Precondition: `key` is not already in the map. (The caller must
+            // check this)
             Builder& add(const UnicodeString& key, V* value, UErrorCode& errorCode) {
                 if (U_FAILURE(errorCode)) {
                     return *this;
                 }
+                // Check that the key is not already in the map.
+                // (If not for this check, the invariant that keys->size()
+                // == contents->count() could be violated.)
+                U_ASSERT(!contents->containsKey(key));
                 // Copy `key` so it can be stored in the vector
                 LocalPointer<UnicodeString> adoptedKey(new UnicodeString(key));
                 if (!adoptedKey.isValid()) {
@@ -352,6 +358,12 @@ public:
 
             Builder& addAll(const OptionMap& other, UErrorCode& errorCode) {
                 addAll(other.contents, errorCode);
+            }
+
+            // This is provided so that builders can check for duplicate keys
+            // (for example, adding duplicate options is an error)
+            bool has(const UnicodeString& key) const {
+                return contents->containsKey(key);
             }
 
             // Copying `build()` (leaves `this` valid)

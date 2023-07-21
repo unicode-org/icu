@@ -299,7 +299,12 @@ Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operan
             return *this;
         }
     }
-    options->add(key, value, errorCode);
+    // If the option name is already in the map, emit a data model error
+    if (options->has(key)) {
+        errorCode = U_DUPLICATE_OPTION_NAME;
+    } else {
+        options->add(key, value, errorCode);
+    }
     return *this;
 }
 
