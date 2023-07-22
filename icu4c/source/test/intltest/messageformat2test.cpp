@@ -759,6 +759,16 @@ void TestMessageFormat2::testResolutionErrors() {
                                          when 1 {The value is one.}\n\
                                          when * {{|horse| :select}}\n", U_FORMATTING_ERROR);
 
+    // Unsupported expressions
+    testRuntimeErrorPattern(++i, "{The value is {@horse}.}", U_UNSUPPORTED_PROPERTY);
+    testRuntimeErrorPattern(++i, "match {|horse| ^private}\n\
+                                  when 1 {The value is one.}\n\
+                                  when * {The value is not one.}\n", U_UNSUPPORTED_PROPERTY);
+    testRuntimeErrorPattern(++i, "{hello {|4.2| @number}}", U_UNSUPPORTED_PROPERTY);
+    testRuntimeErrorPattern(++i, "{{<tag}}", U_UNSUPPORTED_PROPERTY);
+    testRuntimeErrorPattern(++i, "let $bar = {|42| ~plural} match {|horse|} when * {{$bar}}",
+                            U_UNSUPPORTED_PROPERTY);
+
     /* TODO:
        Selector errors
        Formatting errors
