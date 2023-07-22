@@ -14,8 +14,6 @@ U_NAMESPACE_BEGIN namespace message2 {
 // Checks semantic properties for data models
 // ------------------------------------------------
 
-using Binding    = MessageFormatDataModel::Binding;
-using Bindings    = MessageFormatDataModel::Bindings;
 using Key         = MessageFormatDataModel::Key;
 using SelectorKeys = MessageFormatDataModel::SelectorKeys;
 using KeyList     = MessageFormatDataModel::KeyList;
@@ -32,8 +30,14 @@ using VariantMap    = MessageFormatDataModel::VariantMap;
 
 void MessageFormatter::Checker::check(const Pattern& p, UErrorCode& error) {
     CHECK_ERROR(error);
-    (void) p;
-    // TODO
+
+    for (size_t i = 0; i < p.numParts(); i++) {
+        const PatternPart& part = *p.getPart(i);
+        // Check each expression part. Text parts are error-free
+        if (!part.isText()) {
+            check(part.contents(), error);
+        }
+    }
 }
 
 static bool areDefaultKeys(const KeyList& keys) {
@@ -46,16 +50,51 @@ static bool areDefaultKeys(const KeyList& keys) {
     return true;
 }
 
-void MessageFormatter::Checker::check(const Expression& e, UErrorCode& error) {
+void MessageFormatter::Checker::check(const Operand& rand, UErrorCode& error) {
     CHECK_ERROR(error);
 
-// TODO check other errors in expressions
-    (void) e;
+    // Nothing to check for literals
+    if (rand.isLiteral()) {
+        return;
+    }
+
+// TODO: Variables = resolution error, checked during formatting
+// Anything else to check here?
+}
+
+void MessageFormatter::Checker::check(const OptionMap& options, UErrorCode& error) {
+    CHECK_ERROR(error);
+
+    // Check the RHS of each option
+    size_t pos = OptionMap::FIRST;
+    UnicodeString k; // not used
+    const Operand* rhs;
+    while(true) {
+        if (!options.next(pos, k, rhs)) {
+            break;
+        }
+        U_ASSERT(rhs != nullptr);
+        check(*rhs, error);
+    }
+}
+
+void MessageFormatter::Checker::check(const Expression& e, UErrorCode& error) {
+    CHECK_ERROR(error);
 
     // Checking for duplicate option names was already done
     // during parsing (it has to be, since once parsed,
     // the representation as an `OptionMap` guarantees
     // unique keys)
+
+    // For function calls, check the operand and the RHSs of options
+    if (e.isFunctionCall()) {
+        const Operator& rator = e.getOperator();
+        if (!e.isStandaloneAnnotation()) {
+            const Operand& rand = e.getOperand();
+            check(rand, error);
+        }
+        check(rator.getOptions(), error);
+    }
 }
 
 void MessageFormatter::Checker::checkVariants(UErrorCode& error) {

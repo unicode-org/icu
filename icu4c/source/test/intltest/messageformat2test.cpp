@@ -509,6 +509,22 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
     }
 }
 
+// Pattern is expected to result in a runtime error
+void TestMessageFormat2::testMessageFormatting(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
+    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
+    if (U_SUCCESS(errorCode)) {
+      builder->setPattern(s, errorCode);
+      LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
+      UnicodeString result;
+      LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+      if (U_FAILURE(errorCode)) {
+          return;
+      }
+
+      mf->formatToString(*arguments, errorCode, result);
+    }
+}
+
 /*
  Tests a single pattern, which is expected to be valid.
 
@@ -613,9 +629,8 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
 }
 
 /*
- Tests a single pattern, which is expected to cause the formatter to
- emit a data model error, resolution error, selection error, or
- formatting error
+ Tests a single pattern, which is expected to cause the parser to
+ emit a data model error
 
  `testNum`: Test number (only used for diagnostic output)
  `s`: The pattern string.
@@ -628,6 +643,37 @@ void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const 
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
 
     testMessageFormatter(s, parseError, errorCode);
+
+    if (!U_FAILURE(errorCode)) {
+        dataerrln("TestMessageFormat2::testSemanticallyInvalidPattern #%d - expected test to fail, but it passed", testNum);
+        logln(UnicodeString("TestMessageFormat2::testSemanticallyInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+    } else if (errorCode != expectedErrorCode) {
+        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with U_MESSAGE_PARSE_ERROR, but it failed with a different error", testNum);
+        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+
+    } else {
+        errorCode.reset();
+    }
+}
+
+/*
+ Tests a single pattern, which is expected to cause the formatter
+ to emit a resolution error, selection error, or
+ formatting error
+
+ `testNum`: Test number (only used for diagnostic output)
+ `s`: The pattern string.
+ `expectedErrorCode`: the error code expected to be returned by the formatter
+
+ TODO: For now, the line and character numbers are not checked
+*/
+void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
+    UParseError parseError;
+    IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+
+    testMessageFormatting(s, parseError, errorCode);
 
     if (!U_FAILURE(errorCode)) {
         dataerrln("TestMessageFormat2::testSemanticallyInvalidPattern #%d - expected test to fail, but it passed", testNum);
@@ -684,10 +730,20 @@ void TestMessageFormat2::testDataModelErrors() {
     testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=1}}", U_DUPLICATE_OPTION_NAME);
     testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
     testSemanticallyInvalidPattern(++i, "{{|x| :foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
+}
 
+void TestMessageFormat2::testResolutionErrors() {
+    uint32_t i = 0;
+
+    // The following tests are syntactically valid and free of data model errors,
+    // but should trigger a resolution error
+
+    // Unresolved variable
+    testSemanticallyInvalidPattern(++i, "{{$oops}}", U_UNRESOLVED_VARIABLE);
+    testSemanticallyInvalidPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", U_UNRESOLVED_VARIABLE);
+    // TODO add more
 
     /* TODO:
-       Unresolved variables
        Unknown functions
        Selector errors
        Formatting errors

@@ -1737,8 +1737,8 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
             result += *val;
             return;
         }
-        // Unbound variable -- Should have been a data model error checked during that phase
-        status = U_UNDEFINED_KEYWORD;
+        // Unbound variable -- Resolution error
+        status = U_UNRESOLVED_VARIABLE;
         return;
     }
     // Must be a literal

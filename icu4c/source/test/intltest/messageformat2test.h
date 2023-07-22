@@ -30,16 +30,19 @@ public:
     void testValidJsonPatterns(void);
     void testInvalidPatterns(void);
     void testDataModelErrors(void);
+    void testResolutionErrors(void);
     // Test the data model API
     void testAPI(void);
     void testAPISimple(void);
 
 private:
     void testMessageFormatter(const UnicodeString&, UParseError&, UErrorCode&);
+    void testMessageFormatting(const UnicodeString&, UParseError&, UErrorCode&);
     void testPattern(const UnicodeString&, uint32_t, const char*);
     template<size_t N>
     void testPatterns(const UnicodeString(&) [N], const char*);
     void testSemanticallyInvalidPattern(uint32_t, const UnicodeString&, UErrorCode);
+    void testRuntimeErrorPattern(uint32_t, const UnicodeString&, UErrorCode);
     void testInvalidPattern(uint32_t, const UnicodeString&);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t, uint32_t);
