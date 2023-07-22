@@ -249,6 +249,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testDataModelErrors);
+    TESTCASE_AUTO(testResolutionErrors);
     TESTCASE_AUTO(testAPI);
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testValidJsonPatterns);
@@ -739,12 +740,26 @@ void TestMessageFormat2::testResolutionErrors() {
     // but should trigger a resolution error
 
     // Unresolved variable
-    testSemanticallyInvalidPattern(++i, "{{$oops}}", U_UNRESOLVED_VARIABLE);
-    testSemanticallyInvalidPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", U_UNRESOLVED_VARIABLE);
+    testRuntimeErrorPattern(++i, "{{$oops}}", U_UNRESOLVED_VARIABLE);
+    testRuntimeErrorPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", U_UNRESOLVED_VARIABLE);
     // TODO add more
 
+    // Unknown function
+    testRuntimeErrorPattern(++i, "{The value is {horse :func}.}", U_UNKNOWN_FUNCTION);
+    testRuntimeErrorPattern(++i, "match {|horse| :func}\n\
+                                         when 1 {The value is one.}\n\
+                                         when * {The value is not one.}\n", U_UNKNOWN_FUNCTION);
+    // Using formatter as selector
+    testRuntimeErrorPattern(++i, "match {|horse| :number}\n\
+                                         when 1 {The value is one.}\n\
+                                         when * {The value is not one.}\n", U_SELECTOR_ERROR);
+
+    // Using selector as formatter
+    testRuntimeErrorPattern(++i, "match {|horse|}\n\
+                                         when 1 {The value is one.}\n\
+                                         when * {{|horse| :select}}\n", U_FORMATTING_ERROR);
+
     /* TODO:
-       Unknown functions
        Selector errors
        Formatting errors
           e.g. calls to custom functions with constraints on their arguments;

@@ -1754,15 +1754,11 @@ bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const
 }
 
 // Precondition: `env` defines `functionName` as a selector. (This is determined when checking the data model)
-MessageFormatter::ResolvedExpression* MessageFormatter::formatSelector(const FunctionRegistry& env, const Hashtable& arguments, const FunctionName& functionName, const OptionMap& variableOptions, const Operand& rand, UErrorCode& status) const {
+MessageFormatter::ResolvedExpression* MessageFormatter::formatSelector(const SelectorFactory& selectorFactory, const Hashtable& arguments, const OptionMap& variableOptions, const Operand& rand, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
-    // Look up the selector
-    const SelectorFactory* selectorFactory = env.getSelector(functionName);
-    // This should have been checked earlier
-    U_ASSERT(selectorFactory != nullptr);
     // Create a specific instance of the selector
-    LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), arguments, status));
+    LocalPointer<Selector> selector(selectorFactory.createSelector(getLocale(), arguments, status));
     // Resolve the operand
     LocalPointer<UnicodeString> resolvedOperand(new UnicodeString());
     if (!resolvedOperand.isValid()) {
@@ -1808,21 +1804,79 @@ Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const Op
 }
 
 // Precondition: `env` defines `functionName` as a formatter. (This is determined when checking the data model)
-void MessageFormatter::formatFunctionCall(const FunctionRegistry& env, const Hashtable& arguments, const FunctionName& functionName, const OptionMap& variableOptions, const Operand& rand, UnicodeString& result, UErrorCode& status) const {
+void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments, const OptionMap& variableOptions, const Operand& rand, UnicodeString& result, UErrorCode& status) const {
     CHECK_ERROR(status);
 
-    // Look up the formatter
-    const FormatterFactory* formatterFactory = env.getFormatter(functionName);
-    // This should have been checked earlier
-    U_ASSERT(formatterFactory != nullptr);
-    // Create a specific instance of the selector
-    const LocalPointer<Formatter> formatter(formatterFactory->createFormatter(getLocale(), arguments, status));
+    // Create a specific instance of the formatter
+    const LocalPointer<Formatter> formatter(formatterFactory.createFormatter(getLocale(), arguments, status));
     // Resolve the operand
     UnicodeString resolvedOperand;
     formatOperand(arguments, rand, status, resolvedOperand);
     LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
     CHECK_ERROR(status);
     formatter->format(resolvedOperand, *resolvedOptions, result, status);
+}
+
+// https://github.com/unicode-org/message-format-wg/issues/409
+// Unknown function = unknown function error
+// Formatter used as selector  = selector error
+// Selector used as formatter = formatting error
+const SelectorFactory* MessageFormatter::lookupSelectorFactory(const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    if (isBuiltInSelector(functionName)) {
+        return standardFunctionRegistry->getSelector(functionName);
+    }
+    if (isBuiltInFormatter(functionName)) {
+        status = U_SELECTOR_ERROR;
+        return nullptr;
+    }
+    if (customFunctionRegistry.isValid()) {
+        const FunctionRegistry& customFunctionRegistry = getCustomFunctionRegistry();
+        const SelectorFactory* customSelector = customFunctionRegistry.getSelector(functionName);
+        if (customSelector != nullptr) {
+            return customSelector;
+        }
+        if (customFunctionRegistry.getFormatter(functionName) != nullptr) {
+            status = U_SELECTOR_ERROR;
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    status = U_UNKNOWN_FUNCTION;
+    return nullptr;
+}
+
+const FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    if (isBuiltInFormatter(functionName)) {
+        return standardFunctionRegistry->getFormatter(functionName);
+    }
+    if (isBuiltInSelector(functionName)) {
+        status = U_FORMATTING_ERROR;
+        return nullptr;
+    }
+    if (customFunctionRegistry.isValid()) {
+        const FunctionRegistry& customFunctionRegistry = getCustomFunctionRegistry();
+        const FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
+        if (customFormatter != nullptr) {
+            return customFormatter;
+        }
+        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
+            status = U_FORMATTING_ERROR;
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    status = U_UNKNOWN_FUNCTION;
+    return nullptr;
 }
 
 MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status) const {
@@ -1836,21 +1890,21 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
         const FunctionName& functionName = rator.getFunctionName();
-        // Look up the function name in either the standard function
-        // registry (if it's a standard function) or the custom registry
-        // This means standard functions take precedence over custom
-        // definitions of the same names
-        const FunctionRegistry& env = isBuiltInSelector(functionName) ?
-            *standardFunctionRegistry :
-            // It's safe to call this b/c an unbound function
-            // would have been flagged as an error earlier
-            getCustomFunctionRegistry();
+
+        // Look up the selector for this function
+        const SelectorFactory* selectorFactory = lookupSelectorFactory(functionName, status);
+        NULL_ON_ERROR(status);
+        // If no error was set, the selector should be non-null
+        U_ASSERT(selectorFactory != nullptr);
+
         // Evaluate the function call with the given options, applied to the operand
-        return formatSelector(env, arguments, functionName,
+        return formatSelector(*selectorFactory, arguments,
                               rator.getOptions(), expr.getOperand(), status);
     }
     // Plug in the "text" selector
-    return formatSelector(*standardFunctionRegistry, arguments, TEXT_SELECTOR,
+    const SelectorFactory* textSelectorFactory = lookupSelectorFactory(TEXT_SELECTOR, status);
+    U_ASSERT(U_SUCCESS(status) && textSelectorFactory != nullptr);
+    return formatSelector(*textSelectorFactory, arguments,
                           emptyOptions(), expr.getOperand(), status);
 }
 
@@ -1862,15 +1916,19 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
         status = U_UNSUPPORTED_PROPERTY;
         return;
     }
-    // Function call - Not supported yet
-    // TODO
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
         const FunctionName& functionName = rator.getFunctionName();
-        const FunctionRegistry& env = isBuiltInFormatter(functionName) ? 
-                                      *standardFunctionRegistry : getCustomFunctionRegistry();
-        formatFunctionCall(env, arguments, functionName,
-                               rator.getOptions(), expr.getOperand(), result, status);
+
+        // Look up the formatter for this function
+        const FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
+        CHECK_ERROR(status);
+        // If no error was set, the formatter should be non-null
+        U_ASSERT(formatterFactory != nullptr);
+
+        // Format the call
+        formatFunctionCall(*formatterFactory, arguments,
+                           rator.getOptions(), expr.getOperand(), result, status);
         return;
     }
     formatOperand(arguments, expr.getOperand(), status, result);
@@ -2169,8 +2227,109 @@ void MessageFormatter::formatSelectors(const Hashtable& arguments, const Express
     formatPattern(arguments, pat, status, result);
 }
 
+static bool isLocal(const UVector& localEnv, const VariableName& v) {
+    for (size_t i = 0; ((int32_t) i) < localEnv.size(); i++) {
+        const void* definition = localEnv[i];
+        U_ASSERT(definition != nullptr);
+        if (*((VariableName*) definition) == v) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv, const OptionMap& options, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    // Check the RHS of each option
+    size_t pos = OptionMap::FIRST;
+    UnicodeString k; // not used
+    const Operand* rhs;
+    while(true) {
+        if (!options.next(pos, k, rhs)) {
+            break;
+        }
+        U_ASSERT(rhs != nullptr);
+        check(globalEnv, localEnv, *rhs, status);
+    }
+}
+
+void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv, const Operand& rand, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    // Nothing to check for literals
+    if (rand.isLiteral()) {
+        return;
+    }
+
+    // Check that variable is in scope
+    const VariableName& var = rand.asVariable();
+    // Check local scope
+    if (isLocal(localEnv, var)) {
+        return;
+    }
+    // Check global scope
+    if (globalEnv.containsKey(var)) {
+        return;
+    }
+    status = U_UNRESOLVED_VARIABLE;
+}
+
+void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv, const Expression& expr, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    // Check for unresolved variable errors
+    if (expr.isFunctionCall()) {
+        const Operator& rator = expr.getOperator();
+        if (!expr.isStandaloneAnnotation()) {
+            const Operand& rand = expr.getOperand();
+            check(globalEnv, localEnv, rand, status);
+        }
+        check(globalEnv, localEnv, rator.getOptions(), status);
+    }
+
+    if (!expr.isReserved()) {
+        // Check the operand
+        const Operand& rand = expr.getOperand();
+        check(globalEnv, localEnv, rand, status);
+    }
+}
+
+// Check for resolution errors
+void MessageFormatter::checkDeclarations(const Hashtable& arguments, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    const Bindings& decls = dataModel->getLocalVariables();
+
+    // Create an empty environment
+    LocalPointer<UVector> localEnv(new UVector(status));
+    CHECK_ERROR(status);
+    localEnv->setDeleter(uprv_deleteUObject);
+    for (size_t i = 0; i < decls.length(); i++) {
+        const Binding* decl = decls.get(i);
+        U_ASSERT(decl != nullptr);
+        const Expression* rhs = decl->getValue();
+        check(arguments, *localEnv, *rhs, status);
+        // Add the LHS to the environment for checking the next declaration
+        LocalPointer<UnicodeString> definition(new UnicodeString(decl->var));
+        if (!definition.isValid()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        localEnv->adoptElement(definition.orphan(), status);
+        CHECK_ERROR(status);
+    }
+}
+
 void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
+
+    // Note: we currently evaluate variables lazily,
+    // without memoization. This call is still necessary
+    // to check out-of-scope uses of local variables in
+    // right-hand sides (unresolved variable errors can
+    // only be checked when arguments are known)
+    checkDeclarations(arguments, status);
 
     if (!dataModel->hasSelectors()) {
         formatPattern(arguments, dataModel->getPattern(), status, result);

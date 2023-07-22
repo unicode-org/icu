@@ -365,19 +365,22 @@ class U_I18N_API MessageFormatter : public Format {
      void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats the parts of a function call in a selector context
-     ResolvedExpression* formatSelector(const FunctionRegistry&, const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+     ResolvedExpression* formatSelector(const SelectorFactory&, const Hashtable&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
     // Formats an expression in a selector context
      ResolvedExpression* formatSelectorExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression in a pattern context
      void formatPatternExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
      Hashtable* resolveOptions(const Hashtable&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-     void formatFunctionCall(const FunctionRegistry&, const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
+     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
      void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatSelectors(const Hashtable& arguments, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
     // Function registry methods
     bool isBuiltInSelector(const FunctionName&) const;
     bool isBuiltInFormatter(const FunctionName&) const;
+    const SelectorFactory* lookupSelectorFactory(const FunctionName&, UErrorCode& status) const;
+    const FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode& status) const;
+
     // Precondition: custom function registry exists
     const FunctionRegistry& getCustomFunctionRegistry() const {
         U_ASSERT(customFunctionRegistry.isValid());
@@ -389,6 +392,12 @@ class U_I18N_API MessageFormatter : public Format {
         U_ASSERT(emptyOptionsMap.isValid());
         return *emptyOptionsMap;
     }
+
+    // Checking for resolution errors
+    void checkDeclarations(const Hashtable&, UErrorCode&) const;
+    void check(const Hashtable&, const UVector&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+    void check(const Hashtable&, const UVector&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+    void check(const Hashtable&, const UVector&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
 
     LocalPointer<MessageFormatDataModel::OptionMap> emptyOptionsMap;
 
