@@ -336,6 +336,8 @@ class U_I18N_API MessageFormatter : public Format {
      };
 
      // Intermediate classes for formatting
+     void resolveVariables(const Hashtable&, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
+     void resolveVariables(const Hashtable&, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
 
      // Represents the result of resolving an expression in a selector
      // context.
@@ -343,17 +345,16 @@ class U_I18N_API MessageFormatter : public Format {
      // and the looked-up selector function otherwise.
      // The `Hashtable` (UnicodeString -> UnicodeString)
      // is the result of resolving the options
-     // in the annotation (an empty option map
-     // is created if necessary).
+     // in the annotation.
      // The `operand` is the result of resolving the operand.
      class ResolvedExpression : public UMemory {
          public:
          virtual ~ResolvedExpression();
          const LocalPointer<Selector> selectorFunction;
          const LocalPointer<Hashtable> resolvedOptions;
-         const LocalPointer<UnicodeString> resolvedOperand;
+         const UnicodeString resolvedOperand;
          // Adopts all its arguments
-         ResolvedExpression(Selector* s, Hashtable* o, UnicodeString* r) : selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+         ResolvedExpression(Selector* s, Hashtable* o, UnicodeString r) : selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
      };
 
      // Selection methods
@@ -364,8 +365,6 @@ class U_I18N_API MessageFormatter : public Format {
      // Formatting methods
      void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
-     // Formats the parts of a function call in a selector context
-     ResolvedExpression* formatSelector(const SelectorFactory&, const Hashtable&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
     // Formats an expression in a selector context
      ResolvedExpression* formatSelectorExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression in a pattern context
@@ -388,9 +387,12 @@ class U_I18N_API MessageFormatter : public Format {
     }
 
     // Convenience method for formatting selectors
-    const MessageFormatDataModel::OptionMap& emptyOptions() const {
-        U_ASSERT(emptyOptionsMap.isValid());
-        return *emptyOptionsMap;
+    Hashtable* emptyOptions(UErrorCode& success) const {
+        // Creates a new hashtable -- this is annoying!
+        if (U_FAILURE(success)) {
+            return nullptr;
+        }
+        return new Hashtable(compareVariableName, nullptr, success);
     }
 
     // Checking for resolution errors
@@ -398,8 +400,6 @@ class U_I18N_API MessageFormatter : public Format {
     void check(const Hashtable&, const UVector&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
     void check(const Hashtable&, const UVector&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
     void check(const Hashtable&, const UVector&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-
-    LocalPointer<MessageFormatDataModel::OptionMap> emptyOptionsMap;
 
     // Registry for built-in functions
     LocalPointer<FunctionRegistry> standardFunctionRegistry;

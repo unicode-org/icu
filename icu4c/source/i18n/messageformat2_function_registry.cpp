@@ -279,6 +279,10 @@ bool StandardFunctions::Plural::matches(const UnicodeString& value, const Unicod
     // Try parsing the scrutinee as a double
     double valToCheck;
     strToDouble(value, valToCheck, errorCode);
+    // Invalid format error => value is not a number; return a selector error
+    if (errorCode == U_INVALID_FORMAT_ERROR) {
+        errorCode = U_SELECTOR_ERROR;
+    }
     FALSE_ON_ERROR(errorCode);
 
     // TODO: does the Integer case need to be there?

@@ -149,12 +149,6 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
                                    UErrorCode &success) : locale(builder.locale) {
     CHECK_ERROR(success);
 
-    // Set up the empty options map (this is for convenience
-    // when formatting selectors)
-    LocalPointer<OptionMap::Builder> optsBuilder(OptionMap::builder(success));
-    emptyOptionsMap.adoptInstead(optsBuilder->build(success));
-    CHECK_ERROR(success);
-
     // Set up the custom function registry, if given
     if (builder.customFunctionRegistry.isValid()) {
         customFunctionRegistry.adoptInstead(builder.customFunctionRegistry.orphan());
@@ -1753,29 +1747,6 @@ bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const
     return (standardFunctionRegistry->hasSelector(functionName));
 }
 
-// Precondition: `env` defines `functionName` as a selector. (This is determined when checking the data model)
-MessageFormatter::ResolvedExpression* MessageFormatter::formatSelector(const SelectorFactory& selectorFactory, const Hashtable& arguments, const OptionMap& variableOptions, const Operand& rand, UErrorCode& status) const {
-    NULL_ON_ERROR(status);
-
-    // Create a specific instance of the selector
-    LocalPointer<Selector> selector(selectorFactory.createSelector(getLocale(), arguments, status));
-    // Resolve the operand
-    LocalPointer<UnicodeString> resolvedOperand(new UnicodeString());
-    if (!resolvedOperand.isValid()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    formatOperand(arguments, rand, status, *resolvedOperand);
-    LocalPointer<Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
-    NULL_ON_ERROR(status);
-    LocalPointer<ResolvedExpression> result(new ResolvedExpression(selector.orphan(), resolvedOptions.orphan(), resolvedOperand.orphan()));
-    if (!result.isValid()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result.orphan();
-}
-
 Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const OptionMap& options, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
@@ -1879,33 +1850,96 @@ const FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionN
     return nullptr;
 }
 
+void MessageFormatter::resolveVariables(const Hashtable& arguments, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    if (rand.isLiteral()) {
+        formatLiteral(rand.asLiteral(), resolvedOperand);
+        isFunction = false;
+        return;
+    }
+    // Must be variable
+    const VariableName& var = rand.asVariable();
+    // Resolve it
+    const Bindings& env = dataModel->getLocalVariables();
+    bool found = false;
+    const Expression* referent = lookup(env, var, found);
+    if (found) {
+        U_ASSERT(referent != nullptr);
+        // Resolve the referent
+        return resolveVariables(arguments, *referent, isFunction, resolvedOptions, resolvedOperand, functionName, status);
+    }
+    // Must be global; resolution errors were already checked
+    U_ASSERT(arguments.containsKey(var));
+    UnicodeString* val = (UnicodeString*) arguments.get(var);
+    U_ASSERT(val != nullptr);
+    isFunction = false;
+    resolvedOperand = *val;
+}
+
+void MessageFormatter::resolveVariables(const Hashtable& arguments, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
+    CHECK_ERROR(status);
+
+    // Unsupported expression error
+    if (expr.isReserved()) {
+        status = U_UNSUPPORTED_PROPERTY;
+        return;
+    }
+
+    const Operand& rand = expr.getOperand();
+
+    // Literal or variable
+    if (!expr.isFunctionCall()) {
+        return resolveVariables(arguments, rand, isFunction, resolvedOptions, resolvedOperand, functionName, status);
+    }
+
+    // Function call -- resolve the operand and options
+    isFunction = true;
+    formatOperand(arguments, expr.getOperand(), status, resolvedOperand);
+    const Operator& rator = expr.getOperator();
+    functionName = rator.getFunctionName().name;
+    LocalPointer<Hashtable> tempResolvedOptions(resolveOptions(arguments, rator.getOptions(), status));
+    CHECK_ERROR(status);
+    resolvedOptions = tempResolvedOptions.orphan();
+}
+
 MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
-    // Formatting error
-    if (expr.isReserved()) {
-        status = U_UNSUPPORTED_PROPERTY;
-        return nullptr;
-    }
-    if (expr.isFunctionCall()) {
-        const Operator& rator = expr.getOperator();
-        const FunctionName& functionName = rator.getFunctionName();
+    Hashtable* resolvedOptions = nullptr;
+    UnicodeString operand;
+    UnicodeString functionName;
+    bool isFunction = false;
+    resolveVariables(arguments, expr, isFunction, resolvedOptions, operand, functionName, status);
+    NULL_ON_ERROR(status);
+    const SelectorFactory* selectorFactory;
+    if (isFunction) {
+        U_ASSERT(resolvedOptions != nullptr);
 
         // Look up the selector for this function
-        const SelectorFactory* selectorFactory = lookupSelectorFactory(functionName, status);
+        selectorFactory = lookupSelectorFactory(functionName, status);
         NULL_ON_ERROR(status);
-        // If no error was set, the selector should be non-null
-        U_ASSERT(selectorFactory != nullptr);
-
-        // Evaluate the function call with the given options, applied to the operand
-        return formatSelector(*selectorFactory, arguments,
-                              rator.getOptions(), expr.getOperand(), status);
+    } else {
+        // Plug in the "text" selector
+        selectorFactory = lookupSelectorFactory(TEXT_SELECTOR, status);
+        U_ASSERT(U_SUCCESS(status));
     }
-    // Plug in the "text" selector
-    const SelectorFactory* textSelectorFactory = lookupSelectorFactory(TEXT_SELECTOR, status);
-    U_ASSERT(U_SUCCESS(status) && textSelectorFactory != nullptr);
-    return formatSelector(*textSelectorFactory, arguments,
-                          emptyOptions(), expr.getOperand(), status);
+    // If no error was set, the selector should be non-null
+    U_ASSERT(selectorFactory != nullptr);
+
+    if (resolvedOptions == nullptr) {
+        resolvedOptions = emptyOptions(status);
+        NULL_ON_ERROR(status);
+    }
+    // Create a specific instance of the selector
+    LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), arguments, status));
+    // Represent the function call with the given options, applied to the operand
+    LocalPointer<ResolvedExpression> result(new ResolvedExpression(selector.orphan(), resolvedOptions, operand));
+    if (!result.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result.orphan();
 }
 
 void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
@@ -1975,7 +2009,7 @@ void MessageFormatter::matchSelectorKeys(const ResolvedExpression& rv, const UVe
         UnicodeString* k = ((UnicodeString*) keys[i]);
         U_ASSERT(rv.selectorFunction.isValid());
         const Selector& selectorImpl = *rv.selectorFunction;
-        if (selectorImpl.matches(*(rv.resolvedOperand), *k, *(rv.resolvedOptions), status)) {
+        if (selectorImpl.matches(rv.resolvedOperand, *k, *(rv.resolvedOptions), status)) {
             CHECK_ERROR(status);
             // `matches` does not adopt its elements
             matches.addElement(k, status);

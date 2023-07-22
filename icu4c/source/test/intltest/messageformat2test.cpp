@@ -769,8 +769,15 @@ void TestMessageFormat2::testResolutionErrors() {
     testRuntimeErrorPattern(++i, "let $bar = {|42| ~plural} match {|horse|} when * {{$bar}}",
                             U_UNSUPPORTED_PROPERTY);
 
+    // Selector error
+    testRuntimeErrorPattern(++i, "match {|horse| :plural}\n\
+                                  when 1 {The value is one.}\n\
+                                  when * {The value is not one.}\n", U_SELECTOR_ERROR);
+    testRuntimeErrorPattern(++i, "let $sel = {|horse| :plural}\n\
+                                  match {$sel}\n\
+                                  when 1 {The value is one.}\n\
+                                  when * {The value is not one.}\n", U_SELECTOR_ERROR);
     /* TODO:
-       Selector errors
        Formatting errors
           e.g. calls to custom functions with constraints on their arguments;
           handling these errors properly
