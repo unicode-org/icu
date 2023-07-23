@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1689876595673,
+  "lastUpdate": 1690130106442,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9988,6 +9988,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 13.334136435453525,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "2238f1c2c1279a83af4aae7f6eaec44d667f0c98",
+          "message": "ICU-20297 Improve discoverability of currency formatting",
+          "timestamp": "2023-07-23T09:23:13-07:00",
+          "tree_id": "44a268be510bfe054933a46b370170c3e7f3ea23",
+          "url": "https://github.com/unicode-org/icu/commit/2238f1c2c1279a83af4aae7f6eaec44d667f0c98"
+        },
+        "date": 1690130060206,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 8.764754400154954,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
