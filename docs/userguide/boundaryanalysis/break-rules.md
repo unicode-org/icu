@@ -113,7 +113,7 @@ These rules will match "`abc`", "`hello_world`", `"hi-there"`,
 They will not match "`-abc`", "`multiple__joiners`", "`tail-`"
 
 A full match is composed of pieces or submatches, possibly from different rules,
-with adjacent submatches linked by at least one overlapping character.
+with adjacent submatches linked by one overlapping character.
 
 In the example below, matching "`hello_world`",
 
