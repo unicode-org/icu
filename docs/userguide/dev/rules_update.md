@@ -125,7 +125,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
     For this example, the rule file is `icu4c/source/data/brkitr/rules/char.txt`.
     (If the change is for word or line break, which have multiple rule files for tailorings, only update the root file at this time.)
 
-    Start by looking at how existing similar rules are being handled, and also refer to the ICU user guide section on [Break Rules](../userguide/boundaryanalysis/break-rules.md) for an explanation of rule syntax and behavior.
+    Start by looking at how existing similar rules are being handled, and also refer to the ICU user guide section on [Break Rules](../boundaryanalysis/break-rules) for an explanation of rule syntax and behavior.
 
     The transformation from UAX or CLDR style rules to ICU rules can be non-trivial. Sources of difficulties include:
 
@@ -133,11 +133,14 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
 
     -  ICU rules match a run of text that does not have boundaries in its interior (unless the rule contains a "hard break", represented by a '/'. UAX and CLDR rules, on the other hand, tell whether a single text position is or is not a break, with the rule expressing pre and post context around that position. This transformation is generally not hard, and the ICU form  of the rules is often simpler.
 
+    In the line break rules, for the most part, rules begin and end with required (non-conditional) characters of some class other than `$CM`. By convention, line break rules never chain on `$CM`. Rules beginning with a combining mark all have the form `^$CM+ $Something`, meaning that they only match at the start of text, that they can't be chained into. This helps keep the overall chaining behavior of the line break rules somewhat easier to understand.
 
 4.  **Rebuild the ICU data with the updated rules.**
 
         cd icu4c/source/data
         make
+
+    This runs the `genbrk` tool.  The tool looks for a Unicode signature byte sequence and otherwise assumes the rule files are encoded as UTF-8; in the ICU source tree, rule files are encoded as UTF-8.
 
 5.  **Rerun the data-driven test**, `rbbi/TestExtended`. With luck, it may pass. Failures fall into two classes:
 
