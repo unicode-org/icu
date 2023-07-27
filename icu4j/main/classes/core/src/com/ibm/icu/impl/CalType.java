@@ -26,9 +26,7 @@ public enum CalType {
     ISLAMIC_UMALQURA("islamic-umalqura"),
     JAPANESE("japanese"),
     PERSIAN("persian"),
-    ROC("roc"),
-
-    UNKNOWN("unknown");
+    ROC("roc");
 
     String id;
 

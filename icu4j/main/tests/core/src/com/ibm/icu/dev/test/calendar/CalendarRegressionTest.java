@@ -2186,6 +2186,9 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
         HashSet ALLSET = new HashSet();
         for (int i = 0; i < ALL.length; i++) {
+            if (ALL[i] == "unknown") {
+                errln("Calendar.getKeywordValuesForLocale should not return \"unknown\"");
+            }
             ALLSET.add(ALL[i]);
         }
 
