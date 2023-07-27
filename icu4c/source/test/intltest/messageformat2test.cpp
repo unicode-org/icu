@@ -81,27 +81,17 @@ UnicodeString jsonTestCasesValid[] = {
     "let $foo = {$bar :number minimumFractionDigits=foo} {bar {$foo}}",
     "let $foo = {$bar :number} {bar {$foo}}",
     "let $foo = {$bar} let $bar = {$baz} {bar {$foo}}",
-    "match {$foo} when |1| {one} when * {other}",
     "match {$foo :select} when |1| {one} when * {other}",
     "match {$foo :plural} when 1 {one} when * {other}",
-    "match {$foo} when 1 {one} when * {other}",
     "match {$foo :plural} when 1 {one} when * {other}",
-    "match {$foo} when one {one} when * {other}",
     "match {$foo :plural} when one {one} when * {other}",
-    "match {$foo} when 1 {=1} when one {one} when * {other}",
     "match {$foo :plural} when 1 {=1} when one {one} when * {other}",
-    "match {$foo} when one {one} when 1 {=1} when * {other}",
     "match {$foo :plural} when one {one} when 1 {=1} when * {other}",
-    "match {$foo} {$bar} when one one {one one} when one * {one other} when * * {other}",
     "match {$foo :plural} {$bar :plural} when one one {one one} when one * {one other} when * * {other}",
-    "let $foo = {$bar} match {$foo} when one {one} when * {other}",
     "let $foo = {$bar} match {$foo :plural} when one {one} when * {other}",
-    "let $foo = {$bar} match {$foo} when one {one} when * {other}",
     "let $foo = {$bar} match {$foo :plural} when one {one} when * {other}",
-    "let $bar = {$none} match {$foo} when one {one} when * {{$bar}}",
     "let $bar = {$none} match {$foo :plural} when one {one} when * {{$bar}}",
-    "let $bar = {$none} match {$foo} when one {one} when * {{$bar}}",
-    "let $bar = {$none :plural} match {$foo} when one {one} when * {{$bar}}",
+    "let $bar = {$none :plural} match {$foo :select} when one {one} when * {{$bar}}",
     "{{+tag}}", // Modified next few patterns to reflect lack of special markup syntax
     "{{-tag}}",
     // Modified next few patterns to reflect lack of special markup syntax
@@ -123,10 +113,8 @@ UnicodeString jsonTestCasesValid[] = {
     "{hello {|foo| !number}}",
     "{hello {|foo| *number}}",
     "{hello {#number}}",
-    "match {$foo !select} when |1| {one} when * {other}",
-    "match {$foo ^select} when |1| {one} when * {other}",
     "{{<tag}}",
-    "let $bar = {$none ~plural} match {$foo} when * {{$bar}}",
+    "let $bar = {$none ~plural} match {$foo :select} when * {{$bar}}",
     // tests for reserved syntax with escaped chars
     "{hello {|4.2| @num\\\\ber}}",
     "{hello {|4.2| @num\\{be\\|r}}",
@@ -167,31 +155,31 @@ UnicodeString jsonTestCasesValid[] = {
     "{hel\\{\\\\lo}",
     "{hel\\{\\}lo}",
     // tests for ':' in unquoted literals
-    "match {$foo} when o:ne {one} when * {other}",
-    "match {$foo} when one: {one} when * {other}",
+    "match {$foo :select} when o:ne {one} when * {other}",
+    "match {$foo :select} when one: {one} when * {other}",
     "let $foo = {$bar :fun option=a:b} {bar {$foo}}",
     "let $foo = {$bar :fun option=a:b:c} {bar {$foo}}",
     // tests for newlines in literals and text
     "{hello {|wo\nrld|}}",
     "{hello wo\nrld}",
     // multiple scrutinees, with or without whitespace
-    "match {$foo} {$bar} when one * {one} when * * {other}",
-    "match {$foo} {$bar}when one * {one} when * * {other}",
-    "match {$foo}{$bar} when one * {one} when * * {other}",
-    "match {$foo}{$bar}when one * {one} when * * {other}",
-    "match{$foo} {$bar} when one * {one} when * * {other}",
-    "match{$foo} {$bar}when one * {one} when * * {other}",
-    "match{$foo}{$bar} when one * {one} when * * {other}",
-    "match{$foo}{$bar}when one * {one} when * * {other}",
+    "match {$foo :select} {$bar :select} when one * {one} when * * {other}",
+    "match {$foo :select} {$bar :select}when one * {one} when * * {other}",
+    "match {$foo :select}{$bar :select} when one * {one} when * * {other}",
+    "match {$foo :select}{$bar :select}when one * {one} when * * {other}",
+    "match{$foo :select} {$bar :select} when one * {one} when * * {other}",
+    "match{$foo :select} {$bar :select}when one * {one} when * * {other}",
+    "match{$foo :select}{$bar :select} when one * {one} when * * {other}",
+    "match{$foo :select}{$bar :select}when one * {one} when * * {other}",
     // multiple variants, with or without whitespace
-    "match {$foo} {$bar} when one * {one} when * * {other}",
-    "match {$foo} {$bar} when one * {one}when * * {other}",
-    "match {$foo} {$bar}when one * {one} when * * {other}",
-    "match {$foo} {$bar}when one * {one}when * * {other}",
+    "match {$foo :select} {$bar :select} when one * {one} when * * {other}",
+    "match {$foo :select} {$bar :select} when one * {one}when * * {other}",
+    "match {$foo :select} {$bar :select}when one * {one} when * * {other}",
+    "match {$foo :select} {$bar :select}when one * {one}when * * {other}",
     // one or multiple keys, with or without whitespace before pattern
-    "match {$foo} {$bar} when one *{one} when * * {foo}",
-    "match {$foo} {$bar} when one * {one} when * * {foo}",
-    "match {$foo} {$bar} when one *  {one} when * * {foo}",
+    "match {$foo :select} {$bar :select} when one *{one} when * * {foo}",
+    "match {$foo :select} {$bar :select} when one * {one} when * * {foo}",
+    "match {$foo :select} {$bar :select} when one *  {one} when * * {foo}",
     // zero, one or multiple options, with or without whitespace before '}'
     "{{:foo}}",
     "{{:foo }}",
@@ -210,7 +198,7 @@ UnicodeString jsonTestCasesValid[] = {
     "{{$bar    :foo}}",
     "{{$bar    :foo   }}",
     // Trailing whitespace at end of message should be accepted
-    "match {$foo} {$bar} when one * {one} when * * {other}   ",
+    "match {$foo :select} {$bar :select} when one * {one} when * * {other}   ",
     "{hi} ",
     // Variable names can contain '-' or ':'
     "{{$bar:foo}}",
@@ -350,7 +338,7 @@ System.out.println(result);
   builder.adoptInstead(MessageFormatter::builder(errorCode));
 
   // Pattern matching
-  pattern = "match {$photoCount} {$userGender}\n\
+  pattern = "match {$photoCount :select} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
                      when 1 * {{$userName} added a new photo to their album.}\n \
@@ -698,31 +686,24 @@ void TestMessageFormat2::testDataModelErrors() {
     // Examples taken from https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
 
     // Variant key mismatch
-    testSemanticallyInvalidPattern(++i, "match {$foo} {$bar} when one{one}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$foo} {$bar} when one {one}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$foo} {$bar} when one  {one}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$foo :f} {$bar :f} when one{one}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$foo :f} {$bar :f} when one {one}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$foo :f} {$bar :f} when one  {one}", U_VARIANT_KEY_MISMATCH);
  
-    testSemanticallyInvalidPattern(++i, "match {$foo} when * * {foo}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$one}\n\
+    testSemanticallyInvalidPattern(++i, "match {$foo :f} when * * {foo}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$one :f}\n\
                              when 1 2 {Too many}\n\
                              when * {Otherwise}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$one} {$two}\n\
+    testSemanticallyInvalidPattern(++i, "match {$one :f} {$two :f}\n\
                              when 1 2 {Two keys}\n\
                              when * {Missing a key}\n\
                              when * * {Otherwise}", U_VARIANT_KEY_MISMATCH);
 
-    /*
-      TODO: add tests with
-      0 variants and 0 selectors
-      0 variants and 1 selector
-      1 variant and 0 selectors
-     */
-
     // Non-exhaustive patterns
-    testSemanticallyInvalidPattern(++i, "match {$one}\n\
+    testSemanticallyInvalidPattern(++i, "match {$one :f}\n\
                                          when 1 {Value is one}\n\
                                          when 2 {Value is two}\n", U_NONEXHAUSTIVE_PATTERN);
-    testSemanticallyInvalidPattern(++i, "match {$one} {$two}\n\
+    testSemanticallyInvalidPattern(++i, "match {$one :f} {$two :f}\n\
                                          when 1 * {First is one}\n\
                                          when * 1 {Second is one}\n", U_NONEXHAUSTIVE_PATTERN);
 
@@ -731,6 +712,34 @@ void TestMessageFormat2::testDataModelErrors() {
     testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=1}}", U_DUPLICATE_OPTION_NAME);
     testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
     testSemanticallyInvalidPattern(++i, "{{|x| :foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
+
+    // Missing selector annotation
+    testSemanticallyInvalidPattern(++i, "match {$one}\n\
+                                         when 1 {Value is one}\n\
+                                         when * {Value is not one}\n", U_MISSING_SELECTOR_ANNOTATION);
+    testSemanticallyInvalidPattern(++i, "let $one = {|The one|}\n\
+                                         match {$one}\n\
+                                         when 1 {Value is one}\n\
+                                         when * {Value is not one}\n", U_MISSING_SELECTOR_ANNOTATION);
+    testSemanticallyInvalidPattern(++i, "match {|horse| ^private}\n\
+                                         when 1 {The value is one.}\n          \
+                                         when * {The value is not one.}\n", U_MISSING_SELECTOR_ANNOTATION);
+    testSemanticallyInvalidPattern(++i, "match {$foo !select} when |1| {one} when * {other}",
+                                   U_MISSING_SELECTOR_ANNOTATION);
+    testSemanticallyInvalidPattern(++i, "match {$foo ^select} when |1| {one} when * {other}",
+                                   U_MISSING_SELECTOR_ANNOTATION);
+
+    // This should *not* trigger a "missing selector annotation" error
+    testPattern("let $one = {|The one| :select}\n\
+                 match {$one}\n\
+                 when 1 {Value is one}\n\
+                 when * {Value is not one}", ++i, "testDataModelErrors");
+    // Neither should this
+    testPattern("let $one = {|The one| :select}\n\
+                 let $two = {$one}\n\
+                 match {$two}\n\
+                 when 1 {Value is one}\n\
+                 when * {Value is not one}", ++i, "testDataModelErrors");
 }
 
 void TestMessageFormat2::testResolutionErrors() {
@@ -755,18 +764,15 @@ void TestMessageFormat2::testResolutionErrors() {
                                          when * {The value is not one.}\n", U_SELECTOR_ERROR);
 
     // Using selector as formatter
-    testRuntimeErrorPattern(++i, "match {|horse|}\n\
+    testRuntimeErrorPattern(++i, "match {|horse| :select}\n\
                                          when 1 {The value is one.}\n\
                                          when * {{|horse| :select}}\n", U_FORMATTING_ERROR);
 
     // Unsupported expressions
     testRuntimeErrorPattern(++i, "{The value is {@horse}.}", U_UNSUPPORTED_PROPERTY);
-    testRuntimeErrorPattern(++i, "match {|horse| ^private}\n\
-                                  when 1 {The value is one.}\n\
-                                  when * {The value is not one.}\n", U_UNSUPPORTED_PROPERTY);
     testRuntimeErrorPattern(++i, "{hello {|4.2| @number}}", U_UNSUPPORTED_PROPERTY);
     testRuntimeErrorPattern(++i, "{{<tag}}", U_UNSUPPORTED_PROPERTY);
-    testRuntimeErrorPattern(++i, "let $bar = {|42| ~plural} match {|horse|} when * {{$bar}}",
+    testRuntimeErrorPattern(++i, "let $bar = {|42| ~plural} match {|horse| :select} when * {{$bar}}",
                             U_UNSUPPORTED_PROPERTY);
 
     // Selector error

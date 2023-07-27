@@ -576,6 +576,7 @@ typedef enum UErrorCode {
     U_UNRESOLVED_VARIABLE,           /** A variable is referred to but not bound by any definition */
     U_UNKNOWN_FUNCTION,              /** An annotation refers to a function not defined by the standard or custom function registry */
     U_SELECTOR_ERROR,                /** A selector function is applied to an operand of the wrong type */
+    U_MISSING_SELECTOR_ANNOTATION,   /** A selector expression evaluates to an unannotated operand */
     U_FORMATTING_ERROR,              /** Covers all runtime errors: for example, an internally inconsistent set of options. */
 
 #ifndef U_HIDE_DEPRECATED_API

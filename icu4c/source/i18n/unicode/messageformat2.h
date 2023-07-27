@@ -16,6 +16,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"
+#include "unicode/messageformat2_checker.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2_function_registry.h"
 #include "unicode/messageformat2_macros.h"
@@ -325,8 +326,8 @@ class U_I18N_API MessageFormatter : public Format {
          void check(UErrorCode& error);
          Checker(const MessageFormatDataModel& m) : dataModel(m) {}
          private:
-         void checkDeclarations(UErrorCode&);
-         void checkSelectors(UErrorCode&);
+         void checkDeclarations(TypeEnvironment&, UErrorCode&);
+         void checkSelectors(const TypeEnvironment&, UErrorCode&);
          void checkVariants(UErrorCode&);
          void check(const MessageFormatDataModel::OptionMap&, UErrorCode&);
          void check(const MessageFormatDataModel::Operand&, UErrorCode&);
