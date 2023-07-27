@@ -1814,14 +1814,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 }
             }
         }
-        return CalType.UNKNOWN;
+        return null;
     }
 
     private static Calendar createInstance(ULocale locale) {
         Calendar cal = null;
         TimeZone zone = TimeZone.forULocaleOrDefault(locale);
         CalType calType = getCalendarTypeForLocale(locale);
-        if (calType == CalType.UNKNOWN) {
+        if (calType == null) {
             // fallback to Gregorian
             calType = CalType.GREGORIAN;
         }
