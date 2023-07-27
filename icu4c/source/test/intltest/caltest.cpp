@@ -4756,7 +4756,7 @@ void CalendarTest::TestEthiopicCalendarSetTemporalMonthCode() {
       { 2022, UCAL_MAY, 15, 2014, icu::EthiopicCalendar::GENBOT, 7, "M09", 8},
       { 2022, UCAL_JUNE, 16, 2014, icu::EthiopicCalendar::SENE, 9, "M10", 9},
       { 2022, UCAL_JULY, 17, 2014, icu::EthiopicCalendar::HAMLE, 10, "M11", 10},
-      { 2022, UCAL_AUGUST, 18, 2014, icu::EthiopicCalendar::NEHASSA, 12, "M12", 11},
+      { 2022, UCAL_AUGUST, 18, 2014, icu::EthiopicCalendar::NEHASSE, 12, "M12", 11},
       { 2022, UCAL_SEPTEMBER, 6, 2014, icu::EthiopicCalendar::PAGUMEN, 1, "M13", 12},
       { 2022, UCAL_SEPTEMBER, 10, 2014, icu::EthiopicCalendar::PAGUMEN, 5, "M13", 12},
       { 2022, UCAL_SEPTEMBER, 11, 2015, icu::EthiopicCalendar::MESKEREM, 1, "M01", 0},
