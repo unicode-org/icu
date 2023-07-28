@@ -289,6 +289,9 @@ public class PersianCalendar extends Calendar {
         { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
         {/*                                   */}, // JULIAN_DAY
         {/*                                   */}, // MILLISECONDS_IN_DAY
+        {/*                                   */}, // IS_LEAP_MONTH
+        {        0,        0,       11,      11 }, // ORDINAL_MONTH
+
     };
 
     /**
@@ -436,6 +439,7 @@ public class PersianCalendar extends Calendar {
         internalSet(YEAR, year);
         internalSet(EXTENDED_YEAR, year);
         internalSet(MONTH, month);
+        internalSet(ORDINAL_MONTH, month);
         internalSet(DAY_OF_MONTH, dayOfMonth);
         internalSet(DAY_OF_YEAR, dayOfYear);       
     }    
