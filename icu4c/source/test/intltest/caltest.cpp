@@ -5157,7 +5157,7 @@ void CalendarTest::TestHebrewCalendarOrdinalMonthSet() {
     VerifyMonth(this, "cc2", cc2.getAlias(), icu::HebrewCalendar::ADAR, 6, false, "M06");
     VerifyMonth(this, "cc3", cc3.getAlias(), icu::HebrewCalendar::ADAR, 6, false, "M06");
 
-    cc1->set(UCAL_ORDINAL_MONTH, 6);
+    cc1->set(UCAL_ORDINAL_MONTH, 7);
     cc2->setTemporalMonthCode("M07", status);
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc3->set(UCAL_MONTH, icu::HebrewCalendar::NISAN);
