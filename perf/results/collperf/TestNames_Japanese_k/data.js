@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1690478632235,
+  "lastUpdate": 1690504719805,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22732,6 +22732,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7962615.5765,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "73b61ceece7811e3e50bf8f8803bb6dca6828893",
+          "message": "ICU-22444 Remove \"unknown\" from Calendar.getKeywordValuesForLocale\n\nRemove CalType enum value UNKNOWN and use null for unknown CalType\nThis value is an internal enum and the only place use it is inside Calendar.java\nUse null for that instead (same as C++)",
+          "timestamp": "2023-07-27T17:07:01-07:00",
+          "tree_id": "30a39dea4aa3d7c298e12e68c578e9708d7b0f01",
+          "url": "https://github.com/unicode-org/icu/commit/73b61ceece7811e3e50bf8f8803bb6dca6828893"
+        },
+        "date": 1690504671046,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 414.8045,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 33830911.7266,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7790854.1027,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 33696278.504,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 8976793.378,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
