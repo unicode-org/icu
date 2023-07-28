@@ -395,6 +395,8 @@ public class IslamicCalendar extends Calendar {
         {        1,        1,  5000000,  5000000}, // EXTENDED_YEAR
         {/*                                   */}, // JULIAN_DAY
         {/*                                   */}, // MILLISECONDS_IN_DAY
+        {/*                                   */}, // IS_LEAP_MONTH 
+        {        0,        0,       11,      11 }, // ORDINAL_MONTH
     };
 
     /*
@@ -917,6 +919,7 @@ public class IslamicCalendar extends Calendar {
         internalSet(YEAR, year);
         internalSet(EXTENDED_YEAR, year);
         internalSet(MONTH, month);
+        internalSet(ORDINAL_MONTH, month);
         internalSet(DAY_OF_MONTH, dayOfMonth);
         internalSet(DAY_OF_YEAR, dayOfYear);
     }
@@ -1030,6 +1033,29 @@ public class IslamicCalendar extends Calendar {
             civil = (cType == CalculationType.ISLAMIC_CIVIL);
         }
     }
+
+    //-------------------------------------------------------------------------
+    // Temporal Calendar API.
+    //-------------------------------------------------------------------------
+    /**
+     * {@icu} Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     * @return true if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     * @draft ICU 74
+     */
+    public boolean inTemporalLeapYear() {
+        return getActualMaximum(DAY_OF_YEAR) == 355;
+    }
+
+    //-------------------------------------------------------------------------
+    // End of Temporal Calendar API
+    //-------------------------------------------------------------------------
 
     /*
     private static CalendarFactory factory;

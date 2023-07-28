@@ -53,7 +53,7 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY",
             "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
             "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
-            "JULIAN_DAY", "MILLISECONDS_IN_DAY"
+            "JULIAN_DAY", "MILLISECONDS_IN_DAY", "IS_LEAP_YEAR", "ORDINAL_MONTH"
         };
 
 
@@ -1427,6 +1427,7 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                             cal.get(Calendar.SECOND) != fields[5] ||
                             cal.get(Calendar.MILLISECOND) != fields[6]) {
                             errln("Field " + field +
+                                  " " + (op==0 ? "add" : "roll") +
                                   " (" + FIELD_NAME[field] +
                                   ") FAIL, expected " +
                                   fields[0] +
