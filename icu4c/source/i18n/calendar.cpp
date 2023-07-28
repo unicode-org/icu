@@ -1827,7 +1827,6 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
             }
             set(field, newYear);
             pinField(UCAL_MONTH,status);
-            pinField(UCAL_ORDINAL_MONTH,status);
             pinField(UCAL_DAY_OF_MONTH,status);
             return;
         }
@@ -1836,7 +1835,6 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
         // Rolling the year can involve pinning the DAY_OF_MONTH.
         set(field, internalGet(field) + amount);
         pinField(UCAL_MONTH,status);
-        pinField(UCAL_ORDINAL_MONTH,status);
         pinField(UCAL_DAY_OF_MONTH,status);
         return;
 
