@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1690589353595,
+  "lastUpdate": 1690594300357,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10108,6 +10108,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.7825666575349688,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d511cad90d3144ab7324f4368261249ff27a9f59",
+          "message": "ICU-22407 Implement Java Temporal Calendar API\n\nSee #2526",
+          "timestamp": "2023-07-28T18:17:38-07:00",
+          "tree_id": "3ca05f99e25564f615c60db5305c9105e1533ec5",
+          "url": "https://github.com/unicode-org/icu/commit/d511cad90d3144ab7324f4368261249ff27a9f59"
+        },
+        "date": 1690594240618,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.561214635170659,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
