@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1690589147991,
+  "lastUpdate": 1690594585041,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20218,6 +20218,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 5.456627246138006,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d511cad90d3144ab7324f4368261249ff27a9f59",
+          "message": "ICU-22407 Implement Java Temporal Calendar API\n\nSee #2526",
+          "timestamp": "2023-07-28T18:17:38-07:00",
+          "tree_id": "3ca05f99e25564f615c60db5305c9105e1533ec5",
+          "url": "https://github.com/unicode-org/icu/commit/d511cad90d3144ab7324f4368261249ff27a9f59"
+        },
+        "date": 1690594522436,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.237514915931267,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
