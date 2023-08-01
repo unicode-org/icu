@@ -322,6 +322,9 @@
     <ClCompile Include="localebuilder.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="ulocbuilder.cpp">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
     <ClCompile Include="localematcher.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
@@ -1130,6 +1133,9 @@
       <Filter>idna</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\localebuilder.h">
+      <Filter>locales &amp; resources</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\ulocbuilder.h">
       <Filter>locales &amp; resources</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\localematcher.h">
