@@ -653,6 +653,7 @@ group: resourcebundle
     locbased.o
     loclikely.o
     localebuilder.o
+    ulocbuilder.o
   deps
     udata ucol_swp
     sort stringenumeration uhash uvector

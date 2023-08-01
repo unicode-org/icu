@@ -127,6 +127,7 @@
     <ClCompile Include="utmstest.c" />
     <ClCompile Include="cldrtest.c" />
     <ClCompile Include="cloctst.c" />
+    <ClCompile Include="ulocbuildertst.c" />
     <ClCompile Include="cposxtst.c" />
     <ClCompile Include="crelativedateformattest.c" />
     <ClCompile Include="crestst.c" />

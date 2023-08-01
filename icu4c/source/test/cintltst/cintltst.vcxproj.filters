@@ -234,6 +234,9 @@
     <ClCompile Include="cloctst.c">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="ulocbuildertst.c">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
     <ClCompile Include="cposxtst.c">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>

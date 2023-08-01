@@ -17,6 +17,7 @@
 #include "cintltst.h"
 
 void addLocaleTest(TestNode**);
+void addLocaleBuilderTest(TestNode**);
 void addCLDRTest(TestNode**);
 void addUnicodeTest(TestNode**);
 void addUStringTest(TestNode**);
@@ -41,6 +42,7 @@ void addUtility(TestNode** root)
     addTrie2Test(root);
     addUCPTrieTest(root);
     addLocaleTest(root);
+    addLocaleBuilderTest(root);
     addCLDRTest(root);
     addUnicodeTest(root);
     addUStringTest(root);
