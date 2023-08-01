@@ -98,11 +98,8 @@ public class PersonNameFormatterImpl {
     /**
      * THIS IS A DUMMY CONSTRUCTOR JUST FOR THE USE OF THE UNIT TESTS TO CHECK SOME OF THE INTERNAL IMPLEMENTATION!
      */
-    public PersonNameFormatterImpl(Locale locale, String[] patterns) {
+    public PersonNameFormatterImpl(Locale locale, String[] gnFirstPatterns, String[] snFirstPatterns, String[] gnFirstLocales, String[] snFirstLocales) {
         // first, set dummy values for the other fields
-        snFirstPatterns = null;
-        gnFirstLocales = null;
-        snFirstLocales = null;
         length = PersonNameFormatter.Length.MEDIUM;
         usage = PersonNameFormatter.Usage.REFERRING;
         formality = PersonNameFormatter.Formality.FORMAL;
@@ -114,10 +111,22 @@ public class PersonNameFormatterImpl {
         nativeSpaceReplacement = " ";
         formatterLocaleUsesSpaces = true;
 
-        // then, set values for the fields we actually care about
+        // then, set values for the fields we actually care about (all but gnFirstPatterns are optional)
         this.locale = locale;
-        gnFirstPatterns = PersonNamePattern.makePatterns(patterns, this);
-
+        this.gnFirstPatterns = PersonNamePattern.makePatterns(gnFirstPatterns, this);
+        this.snFirstPatterns = (snFirstPatterns != null) ? PersonNamePattern.makePatterns(snFirstPatterns, this) : null;
+        if (gnFirstLocales != null) {
+            this.gnFirstLocales = new HashSet<>();
+            Collections.addAll(this.gnFirstLocales, gnFirstLocales);
+        } else {
+            this.gnFirstLocales = null;
+        }
+        if (snFirstLocales != null) {
+            this.snFirstLocales = new HashSet<>();
+            Collections.addAll(this.snFirstLocales, snFirstLocales);
+        } else {
+            this.snFirstLocales = null;
+        }
     }
 
     @Override
@@ -193,6 +202,8 @@ public class PersonNameFormatterImpl {
 
     private final Set<String> LOCALES_THAT_DONT_USE_SPACES = new HashSet<>(Arrays.asList("ja", "zh", "yue", "km", "lo", "my"));
 
+    static final Set NON_DEFAULT_SCRIPTS = new HashSet<>(Arrays.asList("Hani", "Hira", "Kana"));
+
     /**
      * Returns the value of the resource, as a string array.
      * @param resource An ICUResourceBundle of type STRING or ARRAY.  If ARRAY, this function just returns it
@@ -223,23 +234,57 @@ public class PersonNameFormatterImpl {
             return false;
         }
 
-        String localeStr = getNameLocale(name).toString();
+        // Otherwise, search the gnFirstLocales and snFirstLocales for the locale's name.
+        // For our purposes, the "locale's name" is the locale the name itself gives us (if it
+        // has one), or the locale we guess for the name (if it doesn't).
+        Locale nameLocale = name.getNameLocale();
+        if (nameLocale == null) {
+            nameLocale = getNameLocale(name);
+        }
+
+        // this is a hack to deal with certain script codes that are valid, but not the default, for their locales--
+        // to make the parent-chain lookup work right, we need to replace any of those script codes (in the name's locale)
+        // with the appropriate default script for whatever language and region we have
+        ULocale nameULocale = ULocale.forLocale(nameLocale);
+        if (NON_DEFAULT_SCRIPTS.contains(nameULocale.getScript())) {
+            ULocale.Builder builder = new ULocale.Builder();
+            builder.setLocale(nameULocale);
+            builder.setScript(null);
+            nameULocale = ULocale.addLikelySubtags(builder.build());
+        }
+
+        // now search for the locale in the gnFirstLocales and snFirstLocales lists...
+        String localeStr = nameULocale.getName();
+        String origLocaleStr = localeStr;
+        String languageCode = nameULocale.getLanguage();
+
         do {
+            // first check if the locale is in one of those lists
             if (gnFirstLocales.contains(localeStr)) {
                 return true;
             } else if (snFirstLocales.contains(localeStr)) {
                 return false;
             }
 
-            int lastUnderbarPos = localeStr.lastIndexOf("_");
-            if (lastUnderbarPos >= 0) {
-                localeStr = localeStr.substring(0, lastUnderbarPos);
-            } else {
-                localeStr = "root";
+            // if not, try again with "und" in place of the language code (this lets us use "und_CN" to match
+            // all locales with a region code of "CN" and makes sure the last thing we try is always "und", which
+            // is required to be in gnFirstLocales or snFirstLocales)
+            String undStr = localeStr.replaceAll("^" + languageCode, "und");
+            if (gnFirstLocales.contains(undStr)) {
+                return true;
+            } else if (snFirstLocales.contains(undStr)) {
+                return false;
             }
-        } while (!localeStr.equals("root"));
 
-        // should never get here-- "root" should always be in one of the locales
+            // if we haven't found the locale ID yet, look up its parent locale ID and try again-- if getParentLocaleID()
+            // returns null (i.e., we have a locale ID, such as "zh_Hant", that inherits directly from "root"), try again
+            // with just the locale ID's language code (this fixes it so that "zh_Hant" matches "zh", even though "zh" isn't,
+            // strictly speaking, its parent locale)
+            String parentLocaleStr = ICUResourceBundle.getParentLocaleID(localeStr, origLocaleStr, ICUResourceBundle.OpenType.LOCALE_DEFAULT_ROOT);
+            localeStr = (parentLocaleStr != null) ? parentLocaleStr : languageCode;
+        } while (localeStr != null);
+
+        // should never get here ("und" should always be in gnFirstLocales or snFirstLocales), but if we do...
         return true;
     }
 

@@ -319,8 +319,8 @@ public class PersonNameFormatter {
      * @deprecated This API is for unit testing only.
      */
     @Deprecated
-    public PersonNameFormatter(Locale locale, String[] patterns) {
-        this.impl = new PersonNameFormatterImpl(locale, patterns);
+    public PersonNameFormatter(Locale locale, String[] gnFirstPatterns, String[] snFirstPatterns, String[] gnFirstLocales, String[] snFirstLocales) {
+        this.impl = new PersonNameFormatterImpl(locale, gnFirstPatterns, snFirstPatterns, gnFirstLocales, snFirstLocales);
     }
 
     /**
