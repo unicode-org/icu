@@ -440,7 +440,7 @@ public class PersonNameFormatterTest extends TestFmwk{
         // a more extensive text of the literal text elision logic
         PersonNameFormatter pnf = new PersonNameFormatter(Locale.US, new String[] {
             "1{title}1 2{given}2 3{given2}3 4{surname}4 5{surname2}5 6{generation}6"
-        });
+        }, null, null, null);
 
         String[][] testCases = new String[][] {
             { "locale=en_US,title=Dr.,given=Richard,given2=Theodore,surname=Gillam,surname2=Morgan,generation=III", "1Dr.1 2Richard2 3Theodore3 4Gillam4 5Morgan5 6III6" },
@@ -467,7 +467,7 @@ public class PersonNameFormatterTest extends TestFmwk{
             "A {title} {given} {given2} {surname} {surname2} {generation}",
             "B {given} {given2} {surname} {surname2}",
             "C {given} {surname}",
-        });
+        }, null, null, null);
 
         String[][] testCases = new String[][] {
 //                { "locale=en_US,title=Dr.,given=Richard,given2=Theodore,surname=Gillam,surname2=Morgan,generation=III", "A Dr. Richard Theodore Gillam Morgan III" },
@@ -502,7 +502,7 @@ public class PersonNameFormatterTest extends TestFmwk{
         };
 
         for (String[] testCase : testCases) {
-            PersonNameFormatter pnf = new PersonNameFormatter(new Locale("hu", "HU"), new String[] { testCase[0] } );
+            PersonNameFormatter pnf = new PersonNameFormatter(new Locale("hu", "HU"), new String[] { testCase[0] }, null, null, null );
             String expectedResult = testCase[1];
             String actualResult = pnf.formatToString(name);
 
@@ -565,5 +565,37 @@ public class PersonNameFormatterTest extends TestFmwk{
                 {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
             }),
         }, false);
+    }
+
+    @Test
+    public void TestNameOrderFromLocale() {
+        PersonNameFormatter pnf = new PersonNameFormatter(Locale.US,
+                new String[] { "{given} {surname}" },       // gnFirstPatterns
+                new String[] { "{surname} {given}" },       // snFirstPatterns
+                new String[] { "und", "zh_Hant" },          // gnFirstLocales
+                new String[] { "zh", "und_CN", "und_SG" }   // snFirstLocales
+        );
+
+        String[][] testCases = new String[][] {
+                { "en",         "Given Sur" }, // should match "und"
+                { "zh",         "Sur Given" }, // should match "zh"
+                { "en_US",      "Given Sur" }, // should match "und"
+                { "zh_CN",      "Sur Given" }, // should match "und_CN"
+                { "zh_TW",      "Given Sur" }, // should match "zh_Hant"
+                { "zh_Hans",    "Sur Given" }, // should match "zh"
+                { "zh_Hant",    "Given Sur" }, // should match "zh_Hant"
+                { "zh_Hant_CN", "Given Sur" }, // should match "zh_Hant", NOT "und_CN"
+                { "en_CN",      "Sur Given" }, // should match "und_CN"
+                { "de_DE",      "Given Sur" }, // should match "und"
+        };
+
+        for (String[] testCase : testCases) {
+            String localeID = testCase[0];
+            String expectedResult = testCase[1];
+
+            SimplePersonName name = buildPersonName("given=Given,surname=Sur,locale=" + localeID);
+            String actualResult = pnf.formatToString(name);
+            assertEquals("Wrong result for " + localeID, expectedResult, actualResult);
+        }
     }
 }

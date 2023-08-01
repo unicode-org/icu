@@ -1285,7 +1285,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         return result;
     }
 
-    private static String getParentLocaleID(String name, String origName, OpenType openType) {
+    public static String getParentLocaleID(String name, String origName, OpenType openType) {
         // early out if the locale ID has a variant code or ends with _
         if (name.endsWith("_") || !ULocale.getVariant(name).isEmpty()) {
             int lastUnderbarPos = name.lastIndexOf('_');
