@@ -18,6 +18,19 @@ as of the following commit from 2023-05-09:
   https://github.com/unicode-org/message-format-wg/commit/194f6efcec5bf396df36a19bd6fa78d1fa2e0867
 */
 
+static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+
+    LocalPointer<FunctionRegistry::Builder> builder(FunctionRegistry::builder(errorCode));
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    return builder->setFormatter("person", new PersonNameFormatterFactory(), errorCode)
+        .build(errorCode);
+}
+
 void TestMessageFormat2::checkResult(const UnicodeString& testName,
                  const UnicodeString& pattern,
                  const UnicodeString& result,
@@ -91,7 +104,7 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
     if (customRegistry != nullptr) {
         mf.adoptInstead(builder
                         ->setPattern(pattern, errorCode)
-                        .setFunctionRegistry(customRegistry, errorCode)
+                        .setFunctionRegistry(customRegistry)
                         .build(parseError, errorCode));
     } else {
         mf.adoptInstead(builder
@@ -119,19 +132,6 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
     mf->formatToString(*arguments, errorCode, result);
 
     checkResult(testName, pattern, result, expected, errorCode, expectedErrorCode);
-}
-
-FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-
-    LocalPointer<FunctionRegistry::Builder> builder(FunctionRegistry::builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    return builder->setFormatter("person", new PersonNameFormatterFactory(), errorCode)
-        .build(errorCode);
 }
 
 void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {

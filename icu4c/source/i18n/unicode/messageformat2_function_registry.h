@@ -148,12 +148,9 @@ class StandardFunctions {
         void format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const;
 
         private:
+        Locale locale;
         friend class DateTimeFactory;
-
-        // Adopts `df`
-        DateTime(icu::DateFormat* df) : icuFormatter(df) {
-            U_ASSERT(df != nullptr);
-        }
+        DateTime(Locale l) : locale(l) {}
         const LocalPointer<icu::DateFormat> icuFormatter;
     };
 

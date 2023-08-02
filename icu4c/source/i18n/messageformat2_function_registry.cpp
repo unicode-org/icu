@@ -339,28 +339,50 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
 Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
+    // TODO
+    (void) fixedOptions;
+
+    Formatter* result = new DateTime(locale);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
+}
+
+void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
+
     LocalPointer<DateFormat> df;
 
-    UnicodeString* opt = (UnicodeString*) fixedOptions.get(UnicodeString("skeleton"));
+    UnicodeString* opt = (UnicodeString*) variableOptions.get(UnicodeString("skeleton"));
     if (opt != nullptr) {
         // Same as getInstanceForSkeleton(), see ICU 9029
         // Based on test/intltest/dtfmttst.cpp - TestPatterns()
         LocalPointer<DateTimePatternGenerator> generator(DateTimePatternGenerator::createInstance(locale, errorCode));
-        NULL_ON_ERROR(errorCode);
+        // TODO: figure out why this happens
+        if (errorCode == U_USING_DEFAULT_WARNING) {
+            errorCode = U_ZERO_ERROR;
+        }
+        CHECK_ERROR(errorCode);
         UnicodeString pattern = generator->getBestPattern(*opt, errorCode);
         df.adoptInstead(new SimpleDateFormat(pattern, locale, errorCode));
+        // TODO: figure out why this happens
+        if (errorCode == U_USING_DEFAULT_WARNING) {
+            errorCode = U_ZERO_ERROR;
+        }
     } else {
-        opt = (UnicodeString*) fixedOptions.get(UnicodeString("pattern"));
+        opt = (UnicodeString*) variableOptions.get(UnicodeString("pattern"));
         if (opt != nullptr) {
             df.adoptInstead(new SimpleDateFormat(*opt, locale, errorCode));
         } else {
-            opt = (UnicodeString*) fixedOptions.get(UnicodeString("datestyle"));
+            opt = (UnicodeString*) variableOptions.get(UnicodeString("datestyle"));
             DateFormat::EStyle dateStyle = DateFormat::NONE;
             if (opt != nullptr) {
                 dateStyle = stringToStyle(*opt, errorCode);
             }
             DateFormat::EStyle timeStyle = DateFormat::NONE;
-            opt = (UnicodeString*) fixedOptions.get(UnicodeString("timestyle"));
+            opt = (UnicodeString*) variableOptions.get(UnicodeString("timestyle"));
             if (opt != nullptr) {
                 timeStyle = stringToStyle(*opt, errorCode);
             }
@@ -373,25 +395,15 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, co
         }
     }
 
-    NULL_ON_ERROR(errorCode);
-    Formatter* result = new DateTime(df.orphan());
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result;
-}
-
-void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
-
-    // No variable options (?) TODO
-    (void) variableOptions;
-
     // Parse the given string as a date
-    UDate date = icuFormatter->parse(toFormat, errorCode);
+    // TODO: this assumes the string is in "seconds" format;
+    // since this doesn't take a UDate object, I'm not sure
+    // what to assume
+//    UDate date = df->parse(toFormat, errorCode);
+    double resultDate;
+    strToDouble(toFormat, resultDate, errorCode);
     CHECK_ERROR(errorCode);
-    icuFormatter->format(date, result);
+    df->format(UDate(resultDate), result);
 }
 
 // --------- TextFactory

@@ -11,7 +11,6 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/messageformat2_macros.h"
-#include "unicode/parseerr.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
 #include "hash.h"
@@ -95,7 +94,8 @@ public:
     using OptionMap = OrderedMap<Operand>;
 
 
-    struct FunctionName : UMemory {
+    class FunctionName : public UMemory {
+        public:
         enum Sigil {
             OPEN,
             CLOSE,
@@ -106,9 +106,13 @@ public:
         
         FunctionName(UnicodeString s) : name(s), sigil(Sigil::DEFAULT) {}
         FunctionName(UnicodeString n, Sigil s) : name(n), sigil(s) {}
-        FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
 
         UnicodeString toString() const;
+        private:
+        friend class Operator;
+
+        FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
+
     };
 
     // Immutable list; wraps a vector
@@ -166,20 +170,6 @@ public:
                 contents->adoptElement(element, errorCode);
                 return *this;
             }
-            // adding copies the thing being added
-            Builder& add(const T& element, UErrorCode errorCode) {
-                if (U_FAILURE(errorCode)) {
-                    return *this;
-                }
-                U_ASSERT(contents != nullptr);
-                T* elementPtr(new T(element));
-                if (elementPtr == nullptr) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                }
-                contents->adoptElement(elementPtr, errorCode);
-                return *this;
-            }
-
             // Postcondition: U_FAILURE(errorCode) or returns a list such that isBogus() = false
             List<T>* build(UErrorCode &errorCode) const {
                 if (U_FAILURE(errorCode)) {
@@ -312,10 +302,6 @@ public:
             pos = pos + 1;
             return true;
         }
-        bool isEmpty() const {
-            U_ASSERT(!isBogus());
-            return (contents->count() == 0);
-        }
         class Builder : public UMemory {
         public:
             // Adopts `value`
@@ -339,35 +325,11 @@ public:
                 contents->put(key, value, errorCode);
                 return *this;
             }
-
-            Builder& addAll(const Hashtable& other, UErrorCode& errorCode) {
-                if (U_FAILURE(errorCode)) {
-                    return *this;
-                }
-                int32_t pos = UHASH_FIRST;
-                UHashElement* element;
-                while (true) {
-                    element = other.nextElement(pos);
-                    if (element == nullptr) {
-                        break;
-                    }
-                    UnicodeString *key = static_cast<UnicodeString *>(element->key.pointer);
-                    V* value = static_cast<V*>(element->value.pointer);
-                    U_ASSERT(key != nullptr && value != nullptr);
-                    add(*key, value, errorCode);
-                }
-            }
-
-            Builder& addAll(const OptionMap& other, UErrorCode& errorCode) {
-                addAll(other.contents, errorCode);
-            }
-
             // This is provided so that builders can check for duplicate keys
             // (for example, adding duplicate options is an error)
             bool has(const UnicodeString& key) const {
                 return contents->containsKey(key);
             }
-
             // Copying `build()` (leaves `this` valid)
             OrderedMap<V>* build(UErrorCode& errorCode) const {
                 if (U_FAILURE(errorCode)) {
@@ -633,7 +595,6 @@ public:
       class Builder : public UMemory {
       public:
           Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);
-          Builder& add(const SelectorKeys& key, const Pattern& value, UErrorCode& errorCode);
           // this should be a *copying* build() (leaves `this` valid)
           // Needs to be const to enforce that when MessageFormatDataModel
           // constructor calls VariantMap::build(), it copies the variants
@@ -919,14 +880,6 @@ public:
   class Binding {
   public:
        static Binding* create(const UnicodeString& var, Expression* e, UErrorCode& errorCode);
-       Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
-       // This needs a copy constructor so that `Bindings` is deeply-copyable,
-       // which is in turn so that MessageFormatDataModel::build() can be copying
-       // (it has to copy the builder's locals)
-       Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
-         U_ASSERT(!other.isBogus());
-       }
-         
        const UnicodeString var;
        // Postcondition: result is non-null
        const Expression* getValue() const {
@@ -934,6 +887,16 @@ public:
            return value.getAlias();
        }
   private:
+       friend class List<Binding>;
+
+       Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
+       // This needs a copy constructor so that `Bindings` is deeply-copyable,
+       // which is in turn so that MessageFormatDataModel::build() can be copying
+       // (it has to copy the builder's locals)
+       Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
+         U_ASSERT(!other.isBogus());
+       }
+
        const LocalPointer<Expression> value;
        bool isBogus() const { return !value.isValid(); }
   }; // class Binding

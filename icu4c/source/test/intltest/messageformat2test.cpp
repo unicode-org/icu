@@ -236,6 +236,7 @@ void
 TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testAPICustomFunctions);
     TESTCASE_AUTO(testCustomFunctions);
 
     TESTCASE_AUTO(testDataModelErrors);
@@ -254,7 +255,7 @@ void TestMessageFormat2::testAPISimple() {
   IcuTestErrorCode errorCode1(*this, "testAPI");
   UErrorCode errorCode = (UErrorCode) errorCode1;
   UParseError parseError;
-  Locale locale = "en";
+  Locale locale = "en_US";
 // Null checks and error checks elided
   MessageFormatter::Builder* builder = MessageFormatter::builder(errorCode);
   /* MessageFormatter* mf = */ builder
@@ -325,19 +326,35 @@ void TestMessageFormat2::testAPI() {
         return;
   }
 
-  builder.adoptInstead(MessageFormatter::builder(errorCode));
-
   mf.adoptInstead(builder
-        ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
+        ->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}", errorCode)
         .setLocale(locale)
         .build(parseError, errorCode));
-  /*
-result = mf.formatToString(Map.of("today", new Date()));
-// "Today is Tue, Aug 16, 2022."
-System.out.println(result);
-  */
 
-  builder.adoptInstead(MessageFormatter::builder(errorCode));
+  arguments->removeAll();
+  result.setTo("");
+  value.setTo("");
+/*
+  UDate dateValue = UDate(5264498352317.0); // Sunday, October 28, 2136 8:39:12 AM PST
+  LocalPointer<DateFormat> dfmt(DateFormat::createDateInstance());
+  value = dfmt->format(dateValue, value);
+ */
+  value = "5264498352317.0";
+
+  arguments->put("today", &value, errorCode);
+  expected = "Today is Sun, Oct 28, 2136.";
+  mf->formatToString(*arguments, errorCode, result);
+
+  if (result != expected) {
+    logln("Expected output: " + expected + "\nGot output: " + result);
+    errorCode = U_MESSAGE_PARSE_ERROR;
+    return;
+  }
+  if (U_FAILURE(errorCode)) {
+        dataerrln(result);
+        logln(UnicodeString("TestMessageFormat2::testAPI failed test with pattern: " + pattern));
+        return;
+  }
 
   // Pattern matching
   pattern = "match {$photoCount :select} {$userGender :select}\n\
@@ -417,69 +434,80 @@ System.out.println(result);
       return;
   }
 
-                  /*
-​​Using custom functions:
-final Mf2FunctionRegistry functionRegistry = Mf2FunctionRegistry.builder()
-        .setFormatter("person", new PersonNameFormatterFactory())
-        .setDefaultFormatterNameForType(Person.class, "person")
-        .build();
+}
 
-Person who = new Person("Mr.", "John", "Doe");
+static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
 
-MessageFormatter mf;
-String result;
-                  */
+    LocalPointer<FunctionRegistry::Builder> builder(FunctionRegistry::builder(errorCode));
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    // Note that this doesn't use `setDefaultFormatterNameForType()`; not implemented yet
+    return builder->setFormatter("person", new PersonNameFormatterFactory(), errorCode)
+        .build(errorCode);
+}
 
-   builder.adoptInstead(MessageFormatter::builder(errorCode));
+// Custom functions example from the ICU4C API design doc
+// Note: error/null checks are omitted
+void TestMessageFormat2::testAPICustomFunctions() {
+    IcuTestErrorCode errorCode1(*this, "testAPICustomFunctions");
+    UErrorCode errorCode = (UErrorCode) errorCode1;
+    UParseError parseError;
+    Locale locale = "en_US";
+
+// Set up custom function registry
+
+    LocalPointer<FunctionRegistry> functionRegistry(personFunctionRegistry(errorCode));
+
+    // Using a text-based representation since formatting objects isn't implemented yet
+    // The custom person() implementation (not shown) parses a comma-separated string
+    UnicodeString person = "\"Mr.\", \"John\", \"Doe\"";
+
+    LocalPointer<MessageFormatter> mf;
+
+    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    arguments->put("name", &person, errorCode);
+
+    UnicodeString result;
 
 // This fails, because we did not provide a function registry:
-   mf.adoptInstead(builder
+    mf.adoptInstead(MessageFormatter::builder(errorCode)
         ->setPattern("{Hello {$name :person formality=informal}}", errorCode)
         .setLocale(locale)
         .build(parseError, errorCode));
-   if (U_SUCCESS(errorCode)) {
-     // Should have failed
-     errorCode = U_MESSAGE_PARSE_ERROR;
-   } else {
-     errorCode1.reset();
-   }
-                   //result = mf.formatToString(Map.of("name", who));
+    mf->formatToString(*arguments, errorCode, result);
+    U_ASSERT(errorCode == U_UNKNOWN_FUNCTION);
 
-                  /*
-// The setClassToFormatterMapping tells the formatter that the class Person is to be handled
-// by the :person function, so this works. Similar to MessageFormat.
-mf = MessageFormatter.builder()
-        .setFunctionRegistry(functionRegistry)
-        .setPattern("{Hello {$name}}")
-        .setLocale(locale)
-        .build();
-result = mf.formatToString(Map.of("name", who));
-// => "Hello John"
+    errorCode = U_ZERO_ERROR;
+    result.remove();
+    MessageFormatter::Builder& mfBuilder = MessageFormatter::builder(errorCode)
+        ->setFunctionRegistry(personFunctionRegistry(errorCode))
+        .setLocale(locale);
 
-mf = MessageFormatter.builder()
-        .setFunctionRegistry(functionRegistry)
-        .setPattern("{Hello {$name :person formality=informal}}")
-        .setLocale(locale)
-        .build();
-result = mf.formatToString(Map.of("name", who));
-// => "Hello John"
+    // Note that the function registry has to be recreated each time, because build()
+    // invalidates the builder
+    mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=informal}}", errorCode)
+        .setFunctionRegistry(personFunctionRegistry(errorCode))
+        .build(parseError, errorCode));
+    mf->formatToString(*arguments, errorCode, result);
+    U_ASSERT(result == "Hello John");
 
-mf = MessageFormatter.builder()
-        .setFunctionRegistry(functionRegistry)
-        .setPattern("{Hello {$name :person formality=formal}}")
-        .setLocale(locale)
-        .build();
-result = mf.formatToString(Map.of("name", who));
-// => "Hello Mr. Doe"
+    result.remove();
+    mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=formal}}", errorCode)
+        .setFunctionRegistry(personFunctionRegistry(errorCode))
+        .build(parseError, errorCode));
+    mf->formatToString(*arguments, errorCode, result);
+    U_ASSERT(result == "Hello Mr. Doe");
 
-mf = MessageFormatter.builder()
-        .setFunctionRegistry(functionRegistry)
-        .setPattern("{Hello {$name :person formality=formal length=long}}")
-        .setLocale(locale)
-        .build();
-result = mf.formatToString(Map.of("name", who));
-// => "Hello Mr. John Doe"
-*/
+    result.remove();
+    mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=formal length=long}}", errorCode)
+        .setFunctionRegistry(personFunctionRegistry(errorCode))
+        .build(parseError, errorCode));
+    mf->formatToString(*arguments, errorCode, result);
+    U_ASSERT(result == "Hello Mr. John Doe");
 }
 
 void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {

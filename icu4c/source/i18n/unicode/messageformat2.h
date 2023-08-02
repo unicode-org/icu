@@ -147,8 +147,7 @@ class U_I18N_API MessageFormatter : public Format {
         Builder& setLocale(Locale locale);
         Builder& setPattern(const UnicodeString& pattern, UErrorCode& errorCode);
         // Takes ownership of the FunctionRegistry
-        // TODO: should these methods copy or adopt?
-        Builder& setFunctionRegistry(FunctionRegistry* functionRegistry, UErrorCode& errorCode);
+        Builder& setFunctionRegistry(FunctionRegistry* functionRegistry);
         // Takes ownership of the data model
         Builder& setDataModel(MessageFormatDataModel* dataModel);
         // Returns an immutable MessageFormatter
@@ -170,6 +169,12 @@ class U_I18N_API MessageFormatter : public Format {
      */
 
       // Note: this is a destructive build(); it invalidates the builder
+/*
+  TODO: It's probably better for this method to either copy the builder,
+  or use a reference to (e.g.) a function registry with the assumption that it
+  has the same lifetime as the formatter.
+  See the custom functions example in messageformat2test.cpp for motivation.
+*/
         MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode);
     };
 

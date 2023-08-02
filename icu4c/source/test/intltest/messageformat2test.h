@@ -38,6 +38,7 @@ public:
     // Test the data model API
     void testAPI(void);
     void testAPISimple(void);
+    void testAPICustomFunctions(void);
     // Test custom functions
     void testCustomFunctions(void);
 

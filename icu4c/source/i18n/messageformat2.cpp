@@ -120,14 +120,10 @@ MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeSt
     return *this;
 }
 
-MessageFormatter::Builder& MessageFormatter::Builder::setFunctionRegistry(FunctionRegistry* reg, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
-
+// Precondition: `reg` is non-null
+MessageFormatter::Builder& MessageFormatter::Builder::setFunctionRegistry(FunctionRegistry* reg) {
+    U_ASSERT(reg != nullptr);
     customFunctionRegistry.adoptInstead(reg);
-    if (!customFunctionRegistry.isValid()) {
-        // This would mean the given FunctionRegistry was null
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
     return *this;
 }
 
