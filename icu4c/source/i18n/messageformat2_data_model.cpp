@@ -247,6 +247,26 @@ Reserved::Builder& Reserved::Builder::add(Literal& part, UErrorCode &errorCode) 
 
 //------------------------ Operator
 
+UnicodeString FunctionName::toString() const {
+    UnicodeString result;
+    switch (sigil) {
+        case OPEN: {
+            result += PLUS;
+            break;
+        }
+        case CLOSE: {
+            result += HYPHEN;
+            break;
+        }
+        default: {
+            result += COLON;
+            break;
+        }
+    }
+    result += name;
+    return result;
+}
+
 const FunctionName& Operator::getFunctionName() const {
     U_ASSERT(!isBogus() && !isReserved());
     return functionName;

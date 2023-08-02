@@ -10,6 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "plurrule_impl.h"
+
 #include "unicode/format.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/unistr.h"
@@ -17,16 +19,25 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+using namespace pluralimpl;
+
 // Tokens for parser and serializer
  
 // Syntactically significant characters
 #define LEFT_CURLY_BRACE ((UChar32)0x007B)
 #define RIGHT_CURLY_BRACE ((UChar32)0x007D)
-#define SPACE ((UChar32)0x0020)
 #define HTAB ((UChar32)0x0009)
 #define CR ((UChar32)0x000D)
 #define LF ((UChar32)0x000A)
+
+/*
 #define BACKSLASH ((UChar32)0x005C)
+#define SPACE ((UChar32)0x0020)
+// Both used (in a `key` context) and reserved (in an annotation context)
+#define ASTERISK ((UChar32)0x002A)
+*/
+
+
 #define PIPE ((UChar32)0x007C)
 #define EQUALS ((UChar32)0x003D)
 #define DOLLAR ((UChar32)0x0024)
@@ -36,13 +47,10 @@ U_NAMESPACE_BEGIN namespace message2 {
 #define PERIOD ((UChar32)0x002E)
 #define UNDERSCORE ((UChar32)0x005F)
 
-// Both used (in a `key` context) and reserved (in an annotation context)
-#define ASTERISK ((UChar32)0x002A)
 
 // Reserved sigils
 #define BANG ((UChar32)0x0021)
 #define AT ((UChar32)0x0040)
-#define POUND ((UChar32)0x0023)
 #define PERCENT ((UChar32)0x0025)
 #define CARET ((UChar32)0x005E)
 #define AMPERSAND ((UChar32)0x0026)

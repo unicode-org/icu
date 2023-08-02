@@ -107,6 +107,8 @@ public:
         FunctionName(UnicodeString s) : name(s), sigil(Sigil::DEFAULT) {}
         FunctionName(UnicodeString n, Sigil s) : name(n), sigil(s) {}
         FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
+
+        UnicodeString toString() const;
     };
 
     // Immutable list; wraps a vector

@@ -47,12 +47,7 @@ void SERIALIZER::emit(const UnicodeString& s) {
 }
 
 void SERIALIZER::emit(const FunctionName& f) {
-    switch (f.sigil) {
-        case FunctionName::Sigil::OPEN: { emit(PLUS); break; }
-        case FunctionName::Sigil::CLOSE: { emit(HYPHEN); break; }
-        case FunctionName::Sigil::DEFAULT: { emit(COLON); break; }
-    }
-    emit(f.name);
+    emit(f.toString());
 }
 
 template <size_t N>

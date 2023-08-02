@@ -120,6 +120,17 @@ MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeSt
     return *this;
 }
 
+MessageFormatter::Builder& MessageFormatter::Builder::setFunctionRegistry(FunctionRegistry* reg, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    customFunctionRegistry.adoptInstead(reg);
+    if (!customFunctionRegistry.isValid()) {
+        // This would mean the given FunctionRegistry was null
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return *this;
+}
+
 MessageFormatter::Builder& MessageFormatter::Builder::setLocale(Locale loc) {
     locale = loc;
     return *this;
@@ -283,7 +294,7 @@ static bool isReservedStart(UChar32 c) {
     switch (c) {
     case BANG:
     case AT:
-    case POUND:
+    case NUMBER_SIGN:
     case PERCENT:
     case CARET:
     case AMPERSAND:
@@ -1956,13 +1967,40 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
 
         // Look up the formatter for this function
         const FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
-        CHECK_ERROR(status);
-        // If no error was set, the formatter should be non-null
-        U_ASSERT(formatterFactory != nullptr);
 
-        // Format the call
-        formatFunctionCall(*formatterFactory, arguments,
-                           rator.getOptions(), expr.getOperand(), result, status);
+        if (U_SUCCESS(status)) {
+            // If no error was set, the formatter should be non-null
+            U_ASSERT(formatterFactory != nullptr);
+            
+            // Format the call
+            formatFunctionCall(*formatterFactory, arguments,
+                               rator.getOptions(), expr.getOperand(), result, status);
+        }
+
+        // Check for errors and use a fallback value if necessary
+        if (U_FAILURE(status)) {
+            /*
+              https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
+              "Fallback Resolution" section
+             */
+            // expression with no operand: function name
+            if (expr.isStandaloneAnnotation()) {
+                result += functionName.toString();
+                return;
+            }
+            // expression with literal operand: |value|
+            const Operand& rand = expr.getOperand();
+            if (rand.isLiteral()) {
+                result += PIPE;
+                result += rand.asLiteral().contents;
+                result += PIPE;
+                return;
+            }
+            // Must be a variable
+            result += DOLLAR;
+            result += rand.asVariable();
+            return;
+        }
         return;
     }
     formatOperand(arguments, expr.getOperand(), status, result);

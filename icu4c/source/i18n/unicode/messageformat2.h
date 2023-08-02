@@ -130,7 +130,7 @@ class U_I18N_API MessageFormatter : public Format {
      * The mutable Builder class allows each part of the MessageFormatter to be initialized
      * separately; calling its `build()` method yields an immutable MessageFormatter.
      */
-    class Builder {
+    class U_I18N_API Builder {
         friend class MessageFormatter;
       private:
         Builder() : locale(Locale::getDefault()), customFunctionRegistry(nullptr) {}
@@ -147,7 +147,8 @@ class U_I18N_API MessageFormatter : public Format {
         Builder& setLocale(Locale locale);
         Builder& setPattern(const UnicodeString& pattern, UErrorCode& errorCode);
         // Takes ownership of the FunctionRegistry
-        Builder& setFunctionRegistry(FunctionRegistry* functionRegistry);
+        // TODO: should these methods copy or adopt?
+        Builder& setFunctionRegistry(FunctionRegistry* functionRegistry, UErrorCode& errorCode);
         // Takes ownership of the data model
         Builder& setDataModel(MessageFormatDataModel* dataModel);
         // Returns an immutable MessageFormatter

@@ -9,6 +9,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/messageformat2_function_registry.h"
 #include "unicode/unistr.h"
 #include "unicode/fmtable.h"
 #include "unicode/parseerr.h"
@@ -17,6 +18,9 @@
 /**
  * TestMessageFormat2 tests MessageFormat2
  */
+
+using namespace icu::message2;
+
 class TestMessageFormat2: public IntlTest {
 public:
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
@@ -34,6 +38,8 @@ public:
     // Test the data model API
     void testAPI(void);
     void testAPISimple(void);
+    // Test custom functions
+    void testCustomFunctions(void);
 
 private:
     void testMessageFormatter(const UnicodeString&, UParseError&, UErrorCode&);
@@ -46,6 +52,32 @@ private:
     void testInvalidPattern(uint32_t, const UnicodeString&);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t, uint32_t);
+
+    // Custom function testing
+    void checkResult(const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&, UErrorCode);
+    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&);
+    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&, UErrorCode);
+    void testPersonFormatter(IcuTestErrorCode&);
+}; // class TestMessageFormat2
+
+// Custom function classes
+class PersonNameFormatterFactory : public FormatterFactory {
+    
+    public:
+    Formatter* createFormatter(Locale, const Hashtable&, UErrorCode&) const;
+};
+
+class PersonNameFormatter : public Formatter {
+    public:
+    void format(const UnicodeString&, const Hashtable&, UnicodeString&, UErrorCode& errorCode) const;
+};
+
+// Custom function test utilities
+class SplitString {
+    public:
+    static const uint32_t FIRST = 0;
+    static const uint32_t LAST = -1;
+    static bool nextPart(const UnicodeString&, UnicodeString&, uint32_t&);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
