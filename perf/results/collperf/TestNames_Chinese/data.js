@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1690863446413,
+  "lastUpdate": 1691098204675,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23056,6 +23056,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 3425974.7632,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "6ba5a1a1b76a7d7dfb79e2a2db40c0cd6c401411",
+          "message": "ICU-22365 C API for ULocaleBuilder\n\nSee #2520\n\nICU-22365 Fix comments",
+          "timestamp": "2023-08-03T14:11:12-07:00",
+          "tree_id": "c3a5b82dc4184091283bdea640ab3c2e816b53dd",
+          "url": "https://github.com/unicode-org/icu/commit/6ba5a1a1b76a7d7dfb79e2a2db40c0cd6c401411"
+        },
+        "date": 1691098155871,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.9712,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 11599941.965,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2800502.6922,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 10431223.211,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 3009178.0691,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
