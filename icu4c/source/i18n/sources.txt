@@ -98,6 +98,7 @@ messageformat2.cpp
 messageformat2_checker.cpp
 messageformat2_data_model.cpp
 messageformat2_function_registry.cpp
+messageformat2_parser.cpp
 messageformat2_serializer.cpp
 name2uni.cpp
 nfrs.cpp
