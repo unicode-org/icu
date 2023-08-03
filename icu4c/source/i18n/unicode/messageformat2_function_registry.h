@@ -112,14 +112,14 @@ class U_I18N_API FunctionRegistry : UMemory {
     void checkStandard() const;
 
     bool hasFormatter(const FunctionName& f) const {
-        if (!formatters->containsKey(f.name)) {
+        if (!formatters->containsKey(f.toString())) {
             return false;
         }
         U_ASSERT(getFormatter(f) != nullptr);
         return true;
     }
     bool hasSelector(const FunctionName& s) const {
-        if (!selectors->containsKey(s.name)) {
+        if (!selectors->containsKey(s.toString())) {
             return false;
         }
         U_ASSERT(getSelector(s) != nullptr);

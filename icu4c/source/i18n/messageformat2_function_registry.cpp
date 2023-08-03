@@ -89,11 +89,11 @@ const SelectorFactory* FunctionRegistry::getSelector(const FunctionName& selecto
 }
 
 void FunctionRegistry::checkFormatter(const char* s) const {
-    U_ASSERT(hasFormatter(UnicodeString(s)));
+    U_ASSERT(hasFormatter(FunctionName(UnicodeString(s))));
 }
 
 void FunctionRegistry::checkSelector(const char* s) const {
-    U_ASSERT(hasSelector(UnicodeString(s)));
+    U_ASSERT(hasSelector(FunctionName(UnicodeString(s))));
 }
 
 // Debugging

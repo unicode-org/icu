@@ -79,17 +79,6 @@ void TypeEnvironment::extend(const VariableName& var, Type t, UErrorCode& errorC
 TypeEnvironment::~TypeEnvironment() {}
 
 // ---------------------
-void MessageFormatter::Checker::check(const Pattern& p, UErrorCode& error) {
-    CHECK_ERROR(error);
-
-    for (size_t i = 0; i < p.numParts(); i++) {
-        const PatternPart& part = *p.getPart(i);
-        // Check each expression part. Text parts are error-free
-        if (!part.isText()) {
-            check(part.contents(), error);
-        }
-    }
-}
 
 static bool areDefaultKeys(const KeyList& keys) {
     U_ASSERT(keys.length() > 0);
@@ -99,53 +88,6 @@ static bool areDefaultKeys(const KeyList& keys) {
         }
     }
     return true;
-}
-
-void MessageFormatter::Checker::check(const Operand& rand, UErrorCode& error) {
-    CHECK_ERROR(error);
-
-    // Nothing to check for literals
-    if (rand.isLiteral()) {
-        return;
-    }
-
-// TODO: Variables = resolution error, checked during formatting
-// Anything else to check here?
-}
-
-void MessageFormatter::Checker::check(const OptionMap& options, UErrorCode& error) {
-    CHECK_ERROR(error);
-
-    // Check the RHS of each option
-    size_t pos = OptionMap::FIRST;
-    UnicodeString k; // not used
-    const Operand* rhs;
-    while(true) {
-        if (!options.next(pos, k, rhs)) {
-            break;
-        }
-        U_ASSERT(rhs != nullptr);
-        check(*rhs, error);
-    }
-}
-
-void MessageFormatter::Checker::check(const Expression& e, UErrorCode& error) {
-    CHECK_ERROR(error);
-
-    // Checking for duplicate option names was already done
-    // during parsing (it has to be, since once parsed,
-    // the representation as an `OptionMap` guarantees
-    // unique keys)
-
-    // For function calls, check the operand and the RHSs of options
-    if (e.isFunctionCall()) {
-        const Operator& rator = e.getOperator();
-        if (!e.isStandaloneAnnotation()) {
-            const Operand& rand = e.getOperand();
-            check(rand, error);
-        }
-        check(rator.getOptions(), error);
-    }
 }
 
 void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
@@ -173,7 +115,6 @@ void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
             return;
         }
         defaultExists |= areDefaultKeys(keys);
-        check(*pattern, error);
     }
     if (!defaultExists) {
         error = U_NONEXHAUSTIVE_PATTERN;
@@ -245,7 +186,7 @@ void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode
     }
 }
 
-// TODO: currently this only handles a single error
+// Currently, this only reports the first data model error
 void MessageFormatter::Checker::check(UErrorCode& error) {
     CHECK_ERROR(error);
 
@@ -253,7 +194,7 @@ void MessageFormatter::Checker::check(UErrorCode& error) {
     checkDeclarations(typeEnv, error);
     // Pattern message
     if (!dataModel.hasSelectors()) {
-      check(dataModel.getPattern(), error);
+        return;
     } else {
       // Selectors message
       checkSelectors(typeEnv, error);

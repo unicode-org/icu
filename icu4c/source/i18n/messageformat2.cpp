@@ -2256,7 +2256,6 @@ void MessageFormatter::formatSelectors(const Hashtable& arguments, const Express
     CHECK_ERROR(status);
 
     // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
-    // TODO: check that each variant has a number of keys equal to the length of the selectors
 
     // Resolve Selectors
     // res is a vector of ResolvedExpressions
