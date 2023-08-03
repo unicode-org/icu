@@ -11,23 +11,19 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/messageformat2_macros.h"
+#include "unicode/messageformat2_utils.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
-#include "hash.h"
-#include "uvector.h"
 
-U_NAMESPACE_BEGIN  namespace message2 {
+U_NAMESPACE_BEGIN namespace message2 {
 
-// TBD
-using VariableName   = UnicodeString;
-// TBD
+// Defined for convenience, in case we end up using a different
+// string representation in the data model
 using String         = UnicodeString;
-
-// -----------------------------------------------------------------------
-// Helpers (not public)
-
-// For now, represent variable names as strings
-#define compareVariableName uhash_compareUnicodeString
+// Defined for convenience, in case we end up using a different
+// representation in the data model for variable references and/or
+// variable definitions
+using VariableName   = UnicodeString;
 
 // -----------------------------------------------------------------------
 // Public MessageFormatDataModel class
@@ -36,52 +32,62 @@ using String         = UnicodeString;
  * <p>MessageFormat2 is a Technical Preview API implementing MessageFormat 2.0.
  * Since it is not final, documentation has not yet been added everywhere.
  *
- * <p>See <a target="github"
-href="https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md">the
- * description of the syntax with examples and use cases</a> and the corresponding
- * <a target="github"
-href="https://github.com/unicode-org/message-format-wg/blob/main/spec/message.abnf">ABNF</a> grammar.</p>
- *
  * The `MessageFormatDataModel` class describes a parsed representation of the text of a message.
  * This representation is public as higher-level APIs for messages will need to know its public
  * interface: for example, to re-instantiate a parsed message with different values for imported
 variables.
  *
+ * The MessageFormatDataModel API implements <a target="github"
+href="https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md">the
+ * specification of the abstract syntax (data model representation)</a> for MessageFormat.
+ *
  * @internal ICU 74.0 technology preview
  * @deprecated This API is for technology preview only.
  */
 
-// Forward declarations
-class MessageFormatter;
-
 /*
-TODO: explain in more detail why AST nodes need copy constructors:
- -> because temporary (mutable) lists within builders can contain immutable nodes
- -> though immutable, they must be copied when calling build() since the builder could go out of scope before the immutable result of the builder does, resulting in non-uniquely-owned pointers; or, further mutating operations could be called on the builder, resulting in unexpected mutation to the data model due to unexpected sharing 
+  Classes that represent nodes in the data model are nested inside the
+  `MessageFormatDataModel` class.
 
-the copy constructors do *deep* copies, e.g. copying an entire vector
-*/
+  Classes such as `Expression`, `Pattern` and `VariantMap` are immutable and
+  are constructed using the builder pattern.
 
-/*
-TODO: Intermediate Builder->Builder& methods are currently not const,
-because that seems like a lot of copying.
-But maybe they should be?
+  Most classes representing nodes have copy constructors. This is because builders
+  contain immutable data that must be copied when calling `build()`, since the builder
+  could go out of scope before the immutable result of the builder does. Copying is
+  also necessary to prevent unexpected mutation if intermediate builders are saved
+  and mutated again after calling `build()`.
+
+  The copy constructors perform a deep copy, for example by copying the entire
+  list of options for an `Operator` (and copying the entire underlying vector.)
+  Some internal fields should be `const`, but are declared as non-`const` to make
+  the copy constructor simpler to implement. (These are noted throughout.) In
+  other words, those fields are `const` except during the execution of a copy
+  constructor.
+
+  On the other hand, intermediate `Builder` methods that return a `Builder&`
+  mutate the state of the builder, so in code like:
+
+  Expression::Builder& exprBuilder = Expression::builder()-> setOperand(foo);
+  Expression::Builder& exprBuilder2 = exprBuilder.setOperator(bar);
+
+  the call to `setOperator()` would mutate `exprBuilder`, since `exprBuilder`
+  and `exprBuilder2` are references to the same object.
+
+  An alternate choice would be to make `build()` destructive, so that copying would
+  be unnecessary. Or, both copying and moving variants of `build()` could be
+  provided. Copying variants of the intermediate `Builder` methods could be
+  provided as well, if this proved useful.
 */
 class U_I18N_API MessageFormatDataModel : public UMemory {
-
-    friend class MessageFormatter;
 
 public:
     // Forward declarations
     class Binding;
     class Expression;
     class Key;
-    template<typename T>
-    class List;
     class Operand;
     class Operator;
-    template<typename V>
-    class OrderedMap;
     class Pattern;
     class PatternPart;
     class Reserved;
@@ -93,7 +99,8 @@ public:
     using KeyList = List<Key>;
     using OptionMap = OrderedMap<Operand>;
 
-
+    // Corresponds to the `FunctionRef` interface defined in
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
     class FunctionName : public UMemory {
         public:
         enum Sigil {
@@ -103,381 +110,16 @@ public:
         };
         const UnicodeString name;
         const Sigil sigil;
-        
         FunctionName(UnicodeString s) : name(s), sigil(Sigil::DEFAULT) {}
         FunctionName(UnicodeString n, Sigil s) : name(n), sigil(s) {}
 
         UnicodeString toString() const;
         private:
+        // Function names only need to be copied when copying an `Operator`
         friend class Operator;
 
         FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
-
     };
-
-    // Immutable list; wraps a vector
-    template<typename T>
-    class List : public UMemory {
-    private:
-        // This should be const, but is non-const to make the copy constructor easier
-        /* const */ LocalPointer<UVector> contents;
-
-    public:
-        size_t length() const {
-            U_ASSERT(!isBogus());
-            return contents->size();
-        }
-
-        // Out-of-bounds is an internal error
-        // To avoid undue copying, get() returns a T* since UVector::get() returns a void*.
-        const T* get(size_t i) const {
-            U_ASSERT(!isBogus());
-            U_ASSERT(!(length() <= 0 || i >= length()));
-            return static_cast<const T *>(contents->elementAt(i));
-        }
-
-        // Returns true iff this contains `element`
-        bool contains(const T& element) const {
-            U_ASSERT(!isBogus());
-
-            size_t index;
-            return find(element, index);
-        }
-
-        // Returns true iff this contains `element` and returns
-        // its first index in `index`. Returns false otherwise
-        bool find(const T& element, size_t& index) const {
-            U_ASSERT(!isBogus());
-
-            for (size_t i = 0; i < length(); i++) {
-                if (*(get(i)) == element) {
-                    index = i;
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        class Builder : public UMemory {
-            // Provides a wrapper around a vector
-        public:
-            // adding adopts the thing being added
-            Builder& add(T *element, UErrorCode errorCode) {
-                if (U_FAILURE(errorCode)) {
-                    return *this;
-                }
-                U_ASSERT(contents != nullptr);
-                contents->adoptElement(element, errorCode);
-                return *this;
-            }
-            // Postcondition: U_FAILURE(errorCode) or returns a list such that isBogus() = false
-            List<T>* build(UErrorCode &errorCode) const {
-                if (U_FAILURE(errorCode)) {
-                    return nullptr;
-                }
-                LocalPointer<List<T>> adopted(buildList(*this, errorCode));
-                if (!adopted.isValid() || adopted->isBogus()) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                    return nullptr;
-                }
-                return adopted.orphan();
-            }
-
-        private:
-            friend class List;
-            LocalPointer<UVector> contents;
-            Builder(UErrorCode& errorCode) {
-                if (U_FAILURE(errorCode)) {
-                    return;
-                }
-                // initialize `contents`
-                contents.adoptInstead(new UVector(errorCode));
-                if (U_FAILURE(errorCode)) {
-                    return;
-                }
-                contents->setDeleter(uprv_deleteUObject);
-            }
-        }; // class List::Builder
-
-        static Builder* builder(UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            LocalPointer<Builder> result(new Builder(errorCode));
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            return result.orphan();
-        }
-
-    private:
-        friend class Builder; // NOTE: Builder should only call buildList(); not the constructors
-        friend class Pattern;
-        friend class Reserved;
-        friend class SelectorKeys;
-
-        // Helper functions for vector copying
-        // T1 must have a copy constructor
-        // This may leave dst->pointer == nullptr, which is handled by the UVector assign() method
-        template <typename T1>
-        static void copyElements(UElement *dst, UElement *src) {
-            dst->pointer = new T1(*(static_cast<T1 *>(src->pointer)));
-        }
-
-        // Copies the contents of `builder`
-        // This won't compile unless T is a type that has a copy assignment operator
-        static List<T>* buildList(const Builder &builder, UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            List<T>* result;
-            U_ASSERT(builder.contents != nullptr);
-
-            LocalPointer<UVector> adoptedContents(new UVector(builder.contents->size(), errorCode));
-            adoptedContents->assign(*builder.contents, &copyElements<T>, errorCode);
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            result = new List<T>(adoptedContents.orphan());
-
-            // Finally, check for null
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        } 
-
-        List(const List<T>& other) {
-            UErrorCode errorCode = U_ZERO_ERROR;
-            U_ASSERT(!other.isBogus());
-            contents.adoptInstead(new UVector(other.length(), errorCode));
-            if (U_FAILURE(errorCode)) {
-                contents.adoptInstead(nullptr);
-                return;
-            }
-            contents->assign(*other.contents, &copyElements<T>, errorCode);
-            if (U_FAILURE(errorCode)) {
-                contents.adoptInstead(nullptr);
-            }
-        }
-        // Adopts `contents`
-        List(UVector* things) : contents(things) {
-            U_ASSERT(things != nullptr);
-        }
-        // If a copy constructor fails, the list is left in an inconsistent state,
-        // because copying has to allocate a new vector.
-        // Copy constructors can't take error codes as arguments. So we have to
-        // resort to this, and all methods must check the invariant and signal an
-        // error if it's false. The error should be U_MEMORY_ALLOCATION_ERROR,
-        // since isBogus iff an allocation failed.
-        // For classes that contain a List member, there is no guarantee that
-        // the list will be non-bogus, but if it is, any operations on that list
-        // will fail (assertion failure)
-        bool isBogus() const { return !contents.isValid(); }
-    }; // class List
-
-    // Immutable ordered map from strings to pointers to arbitrary values
-    template<typename V>
-    class OrderedMap : public UMemory {
-        // Provides an immutable wrapper around a hash table.
-        // Also stores the order in which keys were added.
-
-    private:
-        size_t size() const {
-            U_ASSERT(!isBogus());
-            return keys->size();
-        }
-
-    public:
-        static constexpr size_t FIRST = 0;
-        // Returns true if there are elements remaining
-        bool next(size_t &pos, UnicodeString& k, const V*& v) const {
-            U_ASSERT(!isBogus());
-            U_ASSERT(pos >= FIRST);
-            if (pos >= size()) {
-                return false;
-            }
-            k = *((UnicodeString*)keys->elementAt(pos));
-            v = (V*) contents->get(k);
-            pos = pos + 1;
-            return true;
-        }
-        class Builder : public UMemory {
-        public:
-            // Adopts `value`
-            // Precondition: `key` is not already in the map. (The caller must
-            // check this)
-            Builder& add(const UnicodeString& key, V* value, UErrorCode& errorCode) {
-                if (U_FAILURE(errorCode)) {
-                    return *this;
-                }
-                // Check that the key is not already in the map.
-                // (If not for this check, the invariant that keys->size()
-                // == contents->count() could be violated.)
-                U_ASSERT(!contents->containsKey(key));
-                // Copy `key` so it can be stored in the vector
-                LocalPointer<UnicodeString> adoptedKey(new UnicodeString(key));
-                if (!adoptedKey.isValid()) {
-                    return *this;
-                }
-                UnicodeString* k = adoptedKey.orphan();
-                keys->adoptElement(k, errorCode);
-                contents->put(key, value, errorCode);
-                return *this;
-            }
-            // This is provided so that builders can check for duplicate keys
-            // (for example, adding duplicate options is an error)
-            bool has(const UnicodeString& key) const {
-                return contents->containsKey(key);
-            }
-            // Copying `build()` (leaves `this` valid)
-            OrderedMap<V>* build(UErrorCode& errorCode) const {
-                if (U_FAILURE(errorCode)) {
-                    return nullptr;
-                }
-
-                LocalPointer<Hashtable> adoptedContents(copyHashtable(*contents));
-                LocalPointer<UVector> adoptedKeys(copyStringVector(*keys));
-
-                if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
-                    return nullptr;
-                }
-                LocalPointer<OrderedMap<V>> result(
-                    OrderedMap<V>::create(adoptedContents.orphan(),
-                                          adoptedKeys.orphan(),
-                                          errorCode));
-                if (U_FAILURE(errorCode)) {
-                    return nullptr;
-                }
-                return result.orphan();
-            }
-            // TODO
-            // could add a non-copying / moving build() that invalidates `this`
-            // The parser itself would be a good use case for this
-            // OrderedMap<V>* build(UErrorCode& errorCode);
-        private:
-            friend class OrderedMap;
-        
-            // Only called by builder()
-            Builder(UErrorCode& errorCode) {
-                // initialize `keys`
-                keys.adoptInstead(new UVector(errorCode));
-                if (U_FAILURE(errorCode)) {
-                    return;
-                }
-                keys->setDeleter(uprv_deleteUObject);
- 
-                // initialize `contents`
-                // No value comparator needed
-                contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
-                if (U_FAILURE(errorCode)) {
-                    return;
-                }
-                // The `contents` hashtable owns the values, but does not own the keys
-                contents->setValueDeleter(uprv_deleteUObject);
-            }
-        
-            // Hashtable representing the underlying map
-            LocalPointer<Hashtable> contents;
-            // Maintain a list of keys that encodes the order in which
-            // keys are added. This wastes some space, but allows us to
-            // re-use ICU4C's Hashtable abstraction without re-implementing
-            // an ordered version of it.
-            LocalPointer<UVector> keys;
-        }; // class OrderedMap<V>::Builder
-
-        static Builder* builder(UErrorCode &errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            LocalPointer<Builder> result(new Builder(errorCode));
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            return result.orphan();
-        }
-
-    private:
-        friend class VariantMap;
-        friend class Operator;
-        // Helpers
-
-        static void copyStrings(UElement *dst, UElement *src) {
-            dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
-        }
-
-        static Hashtable* copyHashtable(const Hashtable& other) {
-            UErrorCode errorCode = U_ZERO_ERROR;
-            // No value comparator needed
-            LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            // The hashtable owns the values
-            adoptedContents->setValueDeleter(uprv_deleteUObject);
-
-            // Copy all the key/value bindings over
-            const UHashElement *e;
-            int32_t pos = UHASH_FIRST;
-            V *val;
-            while ((e = other.nextElement(pos)) != nullptr) {
-                val = new V(*(static_cast<V *>(e->value.pointer)));
-                if (val == nullptr) {
-                    return nullptr;
-                }
-                UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
-                adoptedContents->put(*s, val, errorCode);
-                if (U_FAILURE(errorCode)) {
-                    return nullptr;
-                }
-            }
-
-            return adoptedContents.orphan();
-        }
-
-        static UVector* copyStringVector(const UVector& other) {
-            UErrorCode errorCode = U_ZERO_ERROR;
-            LocalPointer<UVector> adoptedKeys(new UVector(other.size(), errorCode));
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            adoptedKeys->assign(other, &copyStrings, errorCode);
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            return adoptedKeys.orphan();
-
-        }
-        // See comments under `List`
-        bool isBogus() const { return (!contents.isValid() || !keys.isValid()); }
-
-        OrderedMap<V>(const OrderedMap<V>& other) : contents(copyHashtable(*other.contents)), keys(copyStringVector(*other.keys)) {
-            U_ASSERT(!other.isBogus());
-        }
-
-        // Postcondition: U_FAILURE(errorCode) || !((return value).isBogus())
-        static OrderedMap<V>* create(Hashtable* c, UVector* k, UErrorCode& errorCode) {
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-            LocalPointer<OrderedMap<V>> result(new OrderedMap<V>(c, k));
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            } else if (result->isBogus()) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return nullptr;
-            }
-            return result.orphan();
-        }
-        OrderedMap<V>(Hashtable* c, UVector* k) : contents(c), keys(k) {
-            // It would be an error if `c` and `k` had different sizes
-            U_ASSERT(c->count() == k->size());
-        }
-        // Hashtable representing the underlying map
-        const LocalPointer<Hashtable> contents;
-        // List of keys
-        const LocalPointer<UVector> keys;
-    }; // class OrderedMap<V>
 
     class Literal : public UObject {
     public:
@@ -561,7 +203,7 @@ public:
           LocalPointer<List<Key>::Builder> keys;
       public:
           Builder& add(Key* key, UErrorCode& errorCode);
-          // TODO: is addAll() necessary?
+          // Note: ICU4J has an `addAll()` method, which is omitted here.
           SelectorKeys* build(UErrorCode& errorCode) const;
       }; // class SelectorKeys::Builder
       static Builder* builder(UErrorCode& errorCode);
@@ -582,23 +224,38 @@ public:
       SelectorKeys(KeyList* ks) : keys(ks) {}
   }; // class SelectorKeys
 
+  /*
+    A `VariantMap` maps a list of keys onto a `Pattern`, following
+    the `variant` production in the grammar:
+
+    variant = when 1*(s key) [s] pattern
+
+    https://github.com/unicode-org/message-format-wg/blob/main/spec/message.abnf#L9
+
+    The map uses the `key` list as its key, and the `pattern` as the value.
+
+    This representation mirrors the ICU4J API:
+         public OrderedMap<SelectorKeys, Pattern> getVariants();
+
+    Since the `OrderedMap` class defined above is not polymorphic on its key
+    values, `VariantMap` is defined as a separate data type that wraps an
+    `OrderedMap<Pattern>`.
+
+    The `VariantMap::Builder::add()` method encodes its `SelectorKeys` as
+    a string, and the VariantMap::next() method decodes it. 
+   */
   class VariantMap : public UMemory {
-      // Wraps an OrderedMap<Pattern>
-      // Has a different put() function since we want to stringify the key
-      // list to hash it
-      
   public:
       static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
-      // Passing a SelectorKeys*& (same for Pattern*&) is to avoid
-      // copying, since List::get() returns a T*
+      // Because List::get() returns a T*,
+      // the out-parameters for `next()` are references to pointers
+      // rather than references to a `SelectorKeys` or a `Pattern`,
+      // in order to avoid either copying or creating a reference to
+      // a temporary value.
       bool next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
       class Builder : public UMemory {
       public:
           Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);
-          // this should be a *copying* build() (leaves `this` valid)
-          // Needs to be const to enforce that when MessageFormatDataModel
-          // constructor calls VariantMap::build(), it copies the variants
-          // rather than moving them
           VariantMap* build(UErrorCode& errorCode) const;
       private:
           friend class VariantMap;
@@ -613,12 +270,12 @@ public:
   private:
       friend class Builder;
       VariantMap(OrderedMap<Pattern>* vs, List<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
-          // it would be an error for `vs` and `ks` to have different sizes
-          U_ASSERT(vs->contents->count() == ((int32_t) ks->length()));
+          // Check invariant: `vs` and `ks` have the same size
+          U_ASSERT(vs->size() == ks->length());
       }
       const LocalPointer<OrderedMap<Pattern>> contents;
-      // TODO: this is really annoying
-      // however, it will be in the same order as the contents of the OrderedMap
+      // See the method implementations for comments on
+      // how `keyLists` is used.
       const LocalPointer<List<SelectorKeys>> keyLists;
   }; // class VariantMap
 
@@ -639,7 +296,6 @@ public:
           
       public:
           Builder& add(Literal& part, UErrorCode &errorCode);
-          // TODO: is addAll() necessary?
           Reserved *build(UErrorCode &errorCode) const;
       }; // class Reserved::Builder
 
@@ -687,6 +343,7 @@ public:
             Builder& setReserved(Reserved* reserved);
             Builder& setFunctionName(FunctionName* func);
             Builder& addOption(const UnicodeString &key, Operand* value, UErrorCode& errorCode);
+            // Note: ICU4J has an `addAll()` method, which is omitted here.
             Operator* build(UErrorCode& errorCode) const;
         };
 
@@ -725,14 +382,19 @@ public:
   class Expression : public UObject {
   public:
 
-      // TODO: include these or not?
+      // Returns true iff the `Operator` of `this`
+      // is a function call with no argument.
       bool isStandaloneAnnotation() const;
-      // Returns true for function calls with operands as well as
-      // standalone annotations.
+      // Returns true iff the `Operator` of `this`
+      // is a function call (with or without an operand).
       // Reserved sequences are not function calls
       bool isFunctionCall() const;
+      // Returns true iff the `Operator` of `this`
+      // is a reserved sequence
       bool isReserved() const;
+      // Precondition: (isFunctionCall() || isReserved())
       const Operator& getOperator() const;
+      // Precondition: !isStandaloneAnnotation()
       const Operand& getOperand() const;
 
       class Builder {
@@ -781,19 +443,11 @@ public:
       Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(new Operand(rAnd)) {}
       Expression(const Operand &rAnd) : rator(nullptr), rand(new Operand(rAnd)){}
       Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(nullptr) {}
-      /*
-        TODO: I thought about using an Optional class here instead of nullable
-        pointers. But that doesn't really work since we can't use the STL and therefore
-        can't use `std::move` and therefore can't use move constructors/move assignment
-        operators.
-      */
-
-        // Non-const for copy constructors; effectively const
-        /* const */ LocalPointer<Operator> rator;
-        /* const */ LocalPointer<Operand> rand;
+      // Non-const for copy constructors; effectively const
+      /* const */ LocalPointer<Operator> rator;
+      /* const */ LocalPointer<Operand> rand;
     }; // class Expression
 
-    // TODO: No builder, for now, since this is just created in one step
   class PatternPart : public UObject {
   public:
       static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode);
@@ -851,7 +505,7 @@ public:
       public:
           // Takes ownership of `part`
           Builder& add(PatternPart *part, UErrorCode &errorCode);
-          // TODO: is addAll() necessary?
+          // Note: ICU4J has an `addAll()` method, which is omitted here.
           Pattern *build(UErrorCode &errorCode);
       }; // class Pattern::Builder
 
@@ -903,12 +557,15 @@ public:
 
   const Bindings& getLocalVariables() const { return *bindings; }
 
-  // This is so that we can avoid having getSelectors(), getVariants(),
-  // and getPattern() take error codes / signal an error if you call the wrong one
-  // TODO
+  // The `hasSelectors()` method is provided so that `getSelectors()`,
+  // `getVariants()` and `getPattern()` can rely on preconditions
+  // rather than taking error codes as arguments.
   bool hasSelectors() const;
+  // Precondition: hasSelectors()
   const ExpressionList& getSelectors() const;
+  // Precondition: hasSelectors()
   const VariantMap& getVariants() const;
+  // Precondition: !hasSelectors()
   const Pattern& getPattern() const;
 
   class Builder {
@@ -964,9 +621,6 @@ public:
     // Do not define default assignment operator
     const MessageFormatDataModel &operator=(const MessageFormatDataModel &) = delete;
 
-    // This *copies* the contents of `builder`, so that it can be re-used / mutated
-    // while preserving the immutability of this data model
-    // TODO: add tests for this
     MessageFormatDataModel(const Builder& builder, UErrorCode &status);
 }; // class MessageFormatDataModel
 

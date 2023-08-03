@@ -268,8 +268,8 @@ Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, const 
 bool StandardFunctions::Plural::matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     FALSE_ON_ERROR(errorCode);
 
-    // TODO: This does not handle the '*' key, which is represented as a non-string
-    // and thus shouldn't be passed to this
+    // This does not handle the '*' key, which is represented as a non-string
+    // and thus shouldn't be passed to this method
     U_ASSERT(key != UnicodeString(ASTERISK));
 
     int64_t offset;
@@ -339,7 +339,7 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
 Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
-    // TODO
+    // Fixed options not used
     (void) fixedOptions;
 
     Formatter* result = new DateTime(locale);

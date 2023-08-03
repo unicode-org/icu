@@ -17,8 +17,6 @@ using Expression      = MessageFormatDataModel::Expression;
 using ExpressionList  = MessageFormatDataModel::ExpressionList;
 using Key             = MessageFormatDataModel::Key;
 using KeyList         = MessageFormatDataModel::KeyList;
-template<typename T>
-using List            = MessageFormatDataModel::List<T>;
 using Literal         = MessageFormatDataModel::Literal;
 using OptionMap       = MessageFormatDataModel::OptionMap;
 using Operand         = MessageFormatDataModel::Operand;
@@ -1690,7 +1688,6 @@ PARSER::~Parser() {}
 // ------------------------------------------------------
 // Formatting
 
-// TODO
 // Postcondition: !found || result is non-null
 const Expression* lookup(const Bindings& env, const VariableName& lhs, bool& found) {
     size_t len = env.length();
@@ -1719,10 +1716,12 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
     if (rand.isVariable()) {
         // Check if it's local or global
         // TODO: name shadowing errors
+        // See https://github.com/unicode-org/message-format-wg/issues/310
         VariableName var = rand.asVariable();
         const Bindings& env = dataModel->getLocalVariables();
-        // TODO: maybe env should actually bind names to some sort of resolved value
-        // TODO: is evaluation of locals eager or lazy? Treating it as lazy for now
+        // TODO: is evaluation of locals eager or lazy? Treating it as lazy for now --
+        // so the env binds names to an Expression, not a resolved value
+        // See https://github.com/unicode-org/message-format-wg/issues/299
         bool found = false;
         const Expression* rhs = lookup(env, var, found);
         if (found) {
