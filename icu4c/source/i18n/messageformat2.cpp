@@ -31,7 +31,6 @@ using PrioritizedVariantList = List<PrioritizedVariant>;
 
 #define TEXT_SELECTOR UnicodeString("select")
 
-
 // -------------------------------------
 // Creates a MessageFormat instance based on the pattern.
 
@@ -83,9 +82,10 @@ MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MessageFormat
   return *this;
 }
 
-// Note: this is a destructive build(); it invalidates the builder
 /*
-  TODO: It's probably better for this method to either copy the builder,
+  For now, this is a destructive build(); it invalidates the builder
+
+  It's probably better for this method to either copy the builder,
   or use a reference to (e.g.) a function registry with the assumption that it
   has the same lifetime as the formatter.
   See the custom functions example in messageformat2test.cpp for motivation.
@@ -206,13 +206,16 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
 
     if (rand.isVariable()) {
         // Check if it's local or global
-        // TODO: name shadowing errors
-        // See https://github.com/unicode-org/message-format-wg/issues/310
+        // TODO: Currently, this code allows name shadowing, but depending on the
+        // resolution of:
+        //   https://github.com/unicode-org/message-format-wg/issues/310
+        // it might need to forbid it.
         VariableName var = rand.asVariable();
         const Bindings& env = dataModel->getLocalVariables();
-        // TODO: is evaluation of locals eager or lazy? Treating it as lazy for now --
-        // so the env binds names to an Expression, not a resolved value
-        // See https://github.com/unicode-org/message-format-wg/issues/299
+        // TODO: Currently, this code implements lazy evaluation of locals.
+        // That is, the environment binds names to an Expression, not a resolved value.
+        // Eager vs. lazy evaluation is an open issue:
+        // see https://github.com/unicode-org/message-format-wg/issues/299
         bool found = false;
         const Expression* rhs = lookup(env, var, found);
         if (found) {
