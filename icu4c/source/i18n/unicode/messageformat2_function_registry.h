@@ -89,9 +89,9 @@ class U_I18N_API FunctionRegistry : UMemory {
         LocalPointer<Hashtable> selectors;
       public:
         // Adopts `formatterFunction`
-        Builder& setFormatter(const UnicodeString& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode);
+        Builder& setFormatter(const FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode);
         // Adopts `selectorFunction`
-        Builder& setSelector(const UnicodeString& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode);
+        Builder& setSelector(const FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode);
 
         FunctionRegistry* build(UErrorCode& errorCode);
         // Not sure yet about the others from icu4j

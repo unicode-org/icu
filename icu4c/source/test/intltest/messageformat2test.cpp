@@ -446,7 +446,7 @@ static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
         return nullptr;
     }
     // Note that this doesn't use `setDefaultFormatterNameForType()`; not implemented yet
-    return builder->setFormatter("person", new PersonNameFormatterFactory(), errorCode)
+    return builder->setFormatter(FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
         .build(errorCode);
 }
 

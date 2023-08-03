@@ -56,36 +56,36 @@ FunctionRegistry::Builder::Builder(UErrorCode& errorCode)  {
     selectors->setValueDeleter(uprv_deleteUObject);
 }
 
-FunctionRegistry::Builder& FunctionRegistry::Builder::setSelector(const UnicodeString& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode) {
+FunctionRegistry::Builder& FunctionRegistry::Builder::setSelector(const FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
     if (selectorFactory == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return *this;
     }
 
-    selectors->put(selectorName, selectorFactory, errorCode);
+    selectors->put(selectorName.toString(), selectorFactory, errorCode);
     return *this;
 }
 
-FunctionRegistry::Builder& FunctionRegistry::Builder::setFormatter(const UnicodeString& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode) {
+FunctionRegistry::Builder& FunctionRegistry::Builder::setFormatter(const FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
     if (formatterFactory == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return *this;
     }
 
-    formatters->put(formatterName, formatterFactory, errorCode);
+    formatters->put(formatterName.toString(), formatterFactory, errorCode);
     return *this;
 }
 
 const FormatterFactory* FunctionRegistry::getFormatter(const FunctionName& formatterName) const {
     // Caller must check for null
-    return ((FormatterFactory*) formatters->get(formatterName.name));
+    return ((FormatterFactory*) formatters->get(formatterName.toString()));
 }
 
 const SelectorFactory* FunctionRegistry::getSelector(const FunctionName& selectorName) const {
     // Caller must check for null
-    return ((SelectorFactory*) selectors->get(selectorName.name));
+    return ((SelectorFactory*) selectors->get(selectorName.toString()));
 }
 
 void FunctionRegistry::checkFormatter(const char* s) const {

@@ -27,7 +27,7 @@ static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    return builder->setFormatter("person", new PersonNameFormatterFactory(), errorCode)
+    return builder->setFormatter(FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
         .build(errorCode);
 }
 
