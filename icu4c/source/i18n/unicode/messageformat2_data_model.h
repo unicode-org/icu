@@ -121,6 +121,8 @@ public:
         FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
     };
 
+    // Corresponds to the `Literal` interface defined in
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
     class Literal : public UObject {
     public:
         const bool isQuoted = false;
@@ -135,14 +137,15 @@ public:
         friend class Reserved;
 
         Literal(const Literal& other) : isQuoted(other.isQuoted), contents(other.contents) {}
-        // Makes it easier for new wildcard Keys to be initialized
+        // Because Key uses `Literal` as its underlying representation,
+        // this provides a default constructor for wildcard keys
         Literal() {}
     };
     
+    // Represents a `Literal | VariableRef` -- see the `operand?` field of the `FunctionRef`
+    // interface defined at:
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
     class Operand : public UObject {
-        // An operand can either be a variable reference or a literal.
-        // There is a separate Literal class (which can be quoted or unquoted)
-        // to make it easier to distinguish |x| from x when serializing the data model.
     public:
         // Variable
         static Operand* create(const VariableName& s, UErrorCode& errorCode);
@@ -161,185 +164,196 @@ public:
         Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
         Operand(const Literal& l) : isVariableReference(false), string(l) {}
 
-        // copy constructor is used so that builders work properly -- see comment under copyElements()
+        // Copy constructor
         Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
 
         const bool isVariableReference;
         const Literal string;
     }; // class Operand
 
-  class Key : public UObject {
-  // A key is either a literal or the "wildcard" symbol.
-  public:
-      bool isWildcard() const { return wildcard; }
-      // Precondition: !isWildcard()
-      const Literal& asLiteral() const;
-      static Key* create(UErrorCode& errorCode);
-      static Key* create(const Literal& lit, UErrorCode& errorCode);
+    // Corresponds to the `Literal | CatchallKey` that is the
+    // element type of the `keys` array in the `Variant` interface
+    // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#messages
+    class Key : public UObject {
+    public:
+        // A key is either a literal or the "wildcard" symbol.
 
-  private:
-      friend class List<Key>;
-      friend class VariantMap;
+        bool isWildcard() const { return wildcard; }
+        // Precondition: !isWildcard()
+        const Literal& asLiteral() const;
+        static Key* create(UErrorCode& errorCode);
+        static Key* create(const Literal& lit, UErrorCode& errorCode);
 
-      Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
-      void toString(UnicodeString& result) const;
+    private:
+        friend class List<Key>;
+        friend class VariantMap;
+
+        Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
+        void toString(UnicodeString& result) const;
     
-      // wildcard constructor
-      Key() : wildcard(true) {}
-      // concrete key constructor
-      Key(const Literal& lit) : wildcard(false), contents(lit) {}
-      const bool wildcard; // True if this represents the wildcard "*"
-      const Literal contents;
-  }; // class Key
+        // wildcard constructor
+        Key() : wildcard(true) {}
+        // concrete key constructor
+        Key(const Literal& lit) : wildcard(false), contents(lit) {}
+        const bool wildcard; // True if this represents the wildcard "*"
+        const Literal contents;
+    }; // class Key
 
-  // Represents the left-hand side of a `when` clause
-  class SelectorKeys : public UObject {
-  public:
-      const KeyList& getKeys() const;
-      class Builder {
-      private:
-          friend class SelectorKeys;
-          Builder(UErrorCode& errorCode);
-          LocalPointer<List<Key>::Builder> keys;
-      public:
-          Builder& add(Key* key, UErrorCode& errorCode);
-          // Note: ICU4J has an `addAll()` method, which is omitted here.
-          SelectorKeys* build(UErrorCode& errorCode) const;
-      }; // class SelectorKeys::Builder
-      static Builder* builder(UErrorCode& errorCode);
+    // Corresponds to the `keys` array in the `Variant` interface
+    // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#messages
+    class SelectorKeys : public UObject {
+    public:
+        const KeyList& getKeys() const;
+        class Builder {
+        private:
+            friend class SelectorKeys;
+            Builder(UErrorCode& errorCode);
+            LocalPointer<List<Key>::Builder> keys;
+        public:
+            Builder& add(Key* key, UErrorCode& errorCode);
+            // Note: ICU4J has an `addAll()` method, which is omitted here.
+            SelectorKeys* build(UErrorCode& errorCode) const;
+        }; // class SelectorKeys::Builder
+        static Builder* builder(UErrorCode& errorCode);
 
-  private:
-      friend class List<SelectorKeys>;
-      friend class VariantMap;
-      // SelectorKeys needs a copy constructor because VariantMap::Builder has a copying
-      // build() method, which in turn is because we want MessageFormatDataModel::Builder to have a copying
-      // build() method
-      SelectorKeys(const SelectorKeys& other) : keys(new KeyList(*(other.keys))) {
-          U_ASSERT(!other.isBogus());
-      }
+    private:
+        friend class List<SelectorKeys>;
+        friend class VariantMap;
 
-      const LocalPointer<KeyList> keys;
-      bool isBogus() const { return !keys.isValid(); }
-      // Adopts `keys`
-      SelectorKeys(KeyList* ks) : keys(ks) {}
-  }; // class SelectorKeys
+        SelectorKeys(const SelectorKeys& other) : keys(new KeyList(*(other.keys))) {
+            U_ASSERT(!other.isBogus());
+        }
 
-  /*
-    A `VariantMap` maps a list of keys onto a `Pattern`, following
-    the `variant` production in the grammar:
+        const LocalPointer<KeyList> keys;
+        bool isBogus() const { return !keys.isValid(); }
+        // Adopts `keys`
+        SelectorKeys(KeyList* ks) : keys(ks) {}
+    }; // class SelectorKeys
 
-    variant = when 1*(s key) [s] pattern
+    /*
+      A `VariantMap` maps a list of keys onto a `Pattern`, following
+      the `variant` production in the grammar:
 
-    https://github.com/unicode-org/message-format-wg/blob/main/spec/message.abnf#L9
+      variant = when 1*(s key) [s] pattern
 
-    The map uses the `key` list as its key, and the `pattern` as the value.
+      https://github.com/unicode-org/message-format-wg/blob/main/spec/message.abnf#L9
 
-    This representation mirrors the ICU4J API:
-         public OrderedMap<SelectorKeys, Pattern> getVariants();
+      The map uses the `key` list as its key, and the `pattern` as the value.
 
-    Since the `OrderedMap` class defined above is not polymorphic on its key
-    values, `VariantMap` is defined as a separate data type that wraps an
-    `OrderedMap<Pattern>`.
+      This representation mirrors the ICU4J API:
+      public OrderedMap<SelectorKeys, Pattern> getVariants();
 
-    The `VariantMap::Builder::add()` method encodes its `SelectorKeys` as
-    a string, and the VariantMap::next() method decodes it. 
-   */
-  class VariantMap : public UMemory {
-  public:
-      static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
-      // Because List::get() returns a T*,
-      // the out-parameters for `next()` are references to pointers
-      // rather than references to a `SelectorKeys` or a `Pattern`,
-      // in order to avoid either copying or creating a reference to
-      // a temporary value.
-      bool next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
-      class Builder : public UMemory {
-      public:
-          Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);
-          VariantMap* build(UErrorCode& errorCode) const;
-      private:
-          friend class VariantMap;
+      Since the `OrderedMap` class defined above is not polymorphic on its key
+      values, `VariantMap` is defined as a separate data type that wraps an
+      `OrderedMap<Pattern>`.
+
+      The `VariantMap::Builder::add()` method encodes its `SelectorKeys` as
+      a string, and the VariantMap::next() method decodes it.
+    */
+    class VariantMap : public UMemory {
+    public:
+        static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
+        // Because List::get() returns a T*,
+        // the out-parameters for `next()` are references to pointers
+        // rather than references to a `SelectorKeys` or a `Pattern`,
+        // in order to avoid either copying or creating a reference to
+        // a temporary value.
+        bool next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
+        class Builder : public UMemory {
+        public:
+            Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);
+            VariantMap* build(UErrorCode& errorCode) const;
+        private:
+            friend class VariantMap;
           
-          static void concatenateKeys(const SelectorKeys& keys, UnicodeString& result);
-          Builder(UErrorCode& errorCode);
-          LocalPointer<OrderedMap<Pattern>::Builder> contents;
-          LocalPointer<List<SelectorKeys>::Builder> keyLists;
-      }; // class VariantMap::Builder
+            static void concatenateKeys(const SelectorKeys& keys, UnicodeString& result);
+            Builder(UErrorCode& errorCode);
+            LocalPointer<OrderedMap<Pattern>::Builder> contents;
+            LocalPointer<List<SelectorKeys>::Builder> keyLists;
+        }; // class VariantMap::Builder
 
-      static Builder* builder(UErrorCode& errorCode);
-  private:
-      friend class Builder;
-      VariantMap(OrderedMap<Pattern>* vs, List<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
-          // Check invariant: `vs` and `ks` have the same size
-          U_ASSERT(vs->size() == ks->length());
-      }
-      const LocalPointer<OrderedMap<Pattern>> contents;
-      // See the method implementations for comments on
-      // how `keyLists` is used.
-      const LocalPointer<List<SelectorKeys>> keyLists;
-  }; // class VariantMap
+        static Builder* builder(UErrorCode& errorCode);
+    private:
+        friend class Builder;
+        VariantMap(OrderedMap<Pattern>* vs, List<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
+            // Check invariant: `vs` and `ks` have the same size
+            U_ASSERT(vs->size() == ks->length());
+        }
+        const LocalPointer<OrderedMap<Pattern>> contents;
+        // See the method implementations for comments on
+        // how `keyLists` is used.
+        const LocalPointer<List<SelectorKeys>> keyLists;
+    }; // class VariantMap
 
-  // Matching the draft schema at https://github.com/unicode-org/message-format-wg/pull/393/ ,
-  // `Reserved` is exposed
-  // Corresponds to `reserved` in the grammar
-  class Reserved : public UMemory {
-  public:
-      size_t numParts() const;
-      // Precondition: i < numParts()
-      const Literal* getPart(size_t i) const;
-      class Builder {
-      private:
-          friend class Reserved;
+    // Corresponds to the `Reserved` interface
+    // defined in
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions 
+    class Reserved : public UMemory {
+    public:
+        size_t numParts() const;
+        // Precondition: i < numParts()
+        const Literal* getPart(size_t i) const;
+        class Builder {
+        private:
+            friend class Reserved;
           
-          Builder(UErrorCode &errorCode);
-          LocalPointer<List<Literal>::Builder> parts;
+            Builder(UErrorCode &errorCode);
+            LocalPointer<List<Literal>::Builder> parts;
           
-      public:
-          Builder& add(Literal& part, UErrorCode &errorCode);
-          Reserved *build(UErrorCode &errorCode) const;
-      }; // class Reserved::Builder
+        public:
+            Builder& add(Literal& part, UErrorCode &errorCode);
+            Reserved *build(UErrorCode &errorCode) const;
+        }; // class Reserved::Builder
 
-      static Builder *builder(UErrorCode &errorCode);
-  private:
-      friend class Operator;
+        static Builder *builder(UErrorCode &errorCode);
+    private:
+        friend class Operator;
       
-      // See comments under SelectorKeys' copy constructor; this is analogous
-      bool isBogus() const { return !parts.isValid(); }
+        // See comments under SelectorKeys' copy constructor; this is analogous
+        bool isBogus() const { return !parts.isValid(); }
       
-      // Reserved needs a copy constructor in order to make Expression deeply copyable
-      Reserved(const Reserved& other) : parts(new List<Literal>(*other.parts)) {
-          U_ASSERT(!other.isBogus());
-      }
+        // Reserved needs a copy constructor in order to make Expression deeply copyable
+        Reserved(const Reserved& other) : parts(new List<Literal>(*other.parts)) {
+            U_ASSERT(!other.isBogus());
+        }
 
-      // Possibly-empty list of parts
-      // `literal` reserved as a quoted literal; `reserved-char` / `reserved-escape`
-      // strings represented as unquoted literals
-      const LocalPointer<List<Literal>> parts;
+        // Possibly-empty list of parts
+        // `literal` reserved as a quoted literal; `reserved-char` / `reserved-escape`
+        // strings represented as unquoted literals
+        const LocalPointer<List<Literal>> parts;
       
-      // Can only be called by Builder
-      // Takes ownership of `ps`
-      Reserved(List<Literal> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
-  };
+        // Can only be called by Builder
+        // Takes ownership of `ps`
+        Reserved(List<Literal> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+    };
 
-  class Operator : public UMemory {
-      // An operator represents either a function name together with
-      // a list of options, which may be empty;
-      // or a reserved sequence (which has no meaning and may result
-      // in a formatting error).
-  public:
-      const FunctionName& getFunctionName() const;
-      const Reserved& asReserved() const;
-      const OptionMap &getOptions() const;
-      bool isReserved() const { return isReservedSequence; }
+    // Corresponds to the `FunctionRef | Reserved` type in the
+    // `Expression` interface defined in
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
+    class Operator : public UMemory {
+        /*
+          An operator represents either a function name together with
+          a list of options, which may be empty;
+          or a reserved sequence (which has no meaning and may result
+          in a formatting error.
+        */
+    public:
+        bool isReserved() const { return isReservedSequence; }
+        // Precondition: !isReserved()
+        const FunctionName& getFunctionName() const;
+        // Precondition: isReserved()
+        const Reserved& asReserved() const;
+        // Precondition: isReserved()
+        const OptionMap &getOptions() const;
 
-      class Builder {
-      private:
-          friend class Operator;
-          Builder() {}
-          LocalPointer<Reserved> asReserved;
-          LocalPointer<FunctionName> functionName;
-          LocalPointer<OptionMap::Builder> options;
-      public:
+        class Builder {
+        private:
+            friend class Operator;
+            Builder() {}
+            LocalPointer<Reserved> asReserved;
+            LocalPointer<FunctionName> functionName;
+            LocalPointer<OptionMap::Builder> options;
+        public:
             Builder& setReserved(Reserved* reserved);
             Builder& setFunctionName(FunctionName* func);
             Builder& addOption(const UnicodeString &key, Operand* value, UErrorCode& errorCode);
@@ -347,252 +361,258 @@ public:
             Operator* build(UErrorCode& errorCode) const;
         };
 
-       static Builder* builder(UErrorCode& errorCode);
-  private:
-      friend class Expression; // makes copy constructor easier
-      
-      // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
-      static Operator* create(const Reserved& r, UErrorCode& errorCode);
-
-      // Takes ownership of `opts`
-      // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
-      static Operator* create(const FunctionName& f, OptionMap* opts, UErrorCode& errorCode);
-
-      // Function call constructor; adopts `l`, which must be non-null
-      Operator(FunctionName f, OptionMap *l)
-          : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {
-          U_ASSERT(l != nullptr);
-      }
-
-      // Reserved sequence constructor
-      // Result is bogus if copy of `r` fails
-      Operator(const Reserved& r) : isReservedSequence(true), functionName(FunctionName(UnicodeString(""))), options(nullptr), reserved(new Reserved(r)) {}
-
-      // Operator needs a copy constructor in order to make Expression deeply copyable
-      Operator(const Operator& other);
-
-      bool isBogus() const;
-      const bool isReservedSequence;
-      const FunctionName functionName;
-      // Non-const for copy constructors, effectively const
-      /* const */ LocalPointer<OptionMap> options;
-      /* const */ LocalPointer<Reserved> reserved;
-  }; // class Operator
-  
-  class Expression : public UObject {
-  public:
-
-      // Returns true iff the `Operator` of `this`
-      // is a function call with no argument.
-      bool isStandaloneAnnotation() const;
-      // Returns true iff the `Operator` of `this`
-      // is a function call (with or without an operand).
-      // Reserved sequences are not function calls
-      bool isFunctionCall() const;
-      // Returns true iff the `Operator` of `this`
-      // is a reserved sequence
-      bool isReserved() const;
-      // Precondition: (isFunctionCall() || isReserved())
-      const Operator& getOperator() const;
-      // Precondition: !isStandaloneAnnotation()
-      const Operand& getOperand() const;
-
-      class Builder {
-      private:
-          friend class Expression;
-          Builder() {}
-          LocalPointer<Operand> rand;
-          LocalPointer<Operator> rator;
-      public:
-          Builder& setOperand(Operand* rAnd);
-          Builder& setOperator(Operator* rAtor);
-          // Postcondition: U_FAILURE(errorCode) || (result != nullptr && !isBogus(result))
-          Expression *build(UErrorCode& errorCode) const;
-      }; // class Expression::Builder
-
-      static Builder* builder(UErrorCode& errorCode);
-
+        static Builder* builder(UErrorCode& errorCode);
     private:
-      friend class PatternPart;      // makes copy constructors easier
-      friend class Binding;          // makes copy constructors easier
-      friend class List<Expression>; // makes copy constructors easier
+        friend class Expression;
+      
+        // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
+        static Operator* create(const Reserved& r, UErrorCode& errorCode);
 
+        // Takes ownership of `opts`
+        // Postcondition: if U_SUCCESS(errorCode), then return value is non-bogus
+        static Operator* create(const FunctionName& f, OptionMap* opts, UErrorCode& errorCode);
+
+        // Function call constructor; adopts `l`, which must be non-null
+        Operator(FunctionName f, OptionMap *l)
+            : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {
+            U_ASSERT(l != nullptr);
+        }
+
+        // Reserved sequence constructor
+        // Result is bogus if copy of `r` fails
+        Operator(const Reserved& r) : isReservedSequence(true), functionName(FunctionName(UnicodeString(""))), options(nullptr), reserved(new Reserved(r)) {}
+
+        // Copy constructor
+        Operator(const Operator& other);
+
+        bool isBogus() const;
+        const bool isReservedSequence;
+        const FunctionName functionName;
+        /* const */ LocalPointer<OptionMap> options;
+        /* const */ LocalPointer<Reserved> reserved;
+    }; // class Operator
+  
+    // Corresponds to the `FunctionRef | Reserved` type in the
+    // `Expression` interface defined in
+    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
+    class Expression : public UObject {
         /*
           An expression is represented as the application of an optional operator to an optional operand.
-          For example (using a made-up quasi-s-expression notation):
 
-          { |42| :fun opt=value } => Expression(operator=Some(fun, {opt: value}),
-                                                operand=Some(Literal(42)))
-          abcd                    => Expression(operator=None, operand=Some(String("abcd")))
-          { : fun opt=value }     => Expression(operator=Some(fun, {opt: value}),
-                                                operand=None)
+                                      Operator               | Operand
+                                      --------------------------------
+          { |42| :fun opt=value } =>  (FunctionName=fun,     | Literal(quoted=true, contents="42")
+                                      options={opt: value})
+          { abcd }                =>  null                   | Literal(quoted=false, contents="abcd")
+          { : fun opt=value }     =>  (FunctionName=fun,
+                                      options={opt: value})  | null
 
-          An expression where both operand and operator are None can't be constructed.
+          An expression where both operand and operator are null can't be constructed using
+          the builder interface.
         */
+    public:
 
-      // Expression needs a copy constructor in order to make Pattern deeply copyable
-      Expression(const Expression& other);
+        // Returns true iff the `Operator` of `this`
+        // is a function call with no argument.
+        bool isStandaloneAnnotation() const;
+        // Returns true iff the `Operator` of `this`
+        // is a function call (with or without an operand).
+        // Reserved sequences are not function calls
+        bool isFunctionCall() const;
+        // Returns true iff the `Operator` of `this`
+        // is a reserved sequence
+        bool isReserved() const;
+        // Precondition: (isFunctionCall() || isReserved())
+        const Operator& getOperator() const;
+        // Precondition: !isStandaloneAnnotation()
+        const Operand& getOperand() const;
 
-      // Here, a separate variable isBogus tracks if any copies failed.
-      // This is because rator = nullptr and rand = nullptr are semantic here,
-      // so this can't just be a predicate that checks if those are null
-      bool bogus = false; // copy constructors explicitly set this to true on failure
+        class Builder {
+        private:
+            friend class Expression;
+            Builder() {}
+            LocalPointer<Operand> rand;
+            LocalPointer<Operator> rator;
+        public:
+            Builder& setOperand(Operand* rAnd);
+            Builder& setOperator(Operator* rAtor);
+            // Postcondition: U_FAILURE(errorCode) || (result != nullptr && !isBogus(result))
+            Expression *build(UErrorCode& errorCode) const;
+        }; // class Expression::Builder
 
-      bool isBogus() const;
+        static Builder* builder(UErrorCode& errorCode);
 
-      Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(new Operand(rAnd)) {}
-      Expression(const Operand &rAnd) : rator(nullptr), rand(new Operand(rAnd)){}
-      Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(nullptr) {}
-      // Non-const for copy constructors; effectively const
-      /* const */ LocalPointer<Operator> rator;
-      /* const */ LocalPointer<Operand> rand;
+    private:
+        friend class PatternPart;
+        friend class Binding;
+        friend class List<Expression>;
+
+        // Expression needs a copy constructor in order to make Pattern deeply copyable
+        Expression(const Expression& other);
+
+        // Here, a separate variable isBogus tracks if any copies failed.
+        // This is because rator = nullptr and rand = nullptr are semantic here,
+        // so this can't just be a predicate that checks if those are null
+        bool bogus = false; // copy constructors explicitly set this to true on failure
+
+        bool isBogus() const;
+
+        Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(new Operand(rAnd)) {}
+        Expression(const Operand &rAnd) : rator(nullptr), rand(new Operand(rAnd)){}
+        Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(nullptr) {}
+        /* const */ LocalPointer<Operator> rator;
+        /* const */ LocalPointer<Operand> rand;
     }; // class Expression
 
-  class PatternPart : public UObject {
-  public:
-      static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode);
-      // Takes ownership of `e`
-      static PatternPart* create(Expression* e, UErrorCode& errorCode);
-      bool isText() const { return isRawText; }
-      // Precondition: !isText()
-      const Expression& contents() const;
-      // Precondition: isText();
-      const UnicodeString& asText() const;
+    // Represents the `body` field of the `Pattern` interface
+    // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
+    class PatternPart : public UObject {
+    public:
+        static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode);
+        // Takes ownership of `e`
+        static PatternPart* create(Expression* e, UErrorCode& errorCode);
+        bool isText() const { return isRawText; }
+        // Precondition: !isText()
+        const Expression& contents() const;
+        // Precondition: isText();
+        const UnicodeString& asText() const;
 
-  private:
-      friend class List<PatternPart>;
-      friend class Pattern;
-      // Text
-      PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
-      // Expression
-      PatternPart(Expression* e) : isRawText(false), expression(e) {}
+    private:
+        friend class List<PatternPart>;
+        friend class Pattern;
+        // Text
+        PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
+        // Expression
+        PatternPart(Expression* e) : isRawText(false), expression(e) {}
 
-      // If !isRawText and the copy of the other expression fails,
-      // then isBogus() will be true for this PatternPart
-      // PatternPart needs a copy constructor in order to make Pattern deeply copyable
-      PatternPart(const PatternPart& other) : isRawText(other.isText()), text(other.text), expression(isRawText ? nullptr : new Expression(other.contents()))  {
-          U_ASSERT(!other.isBogus());
-      }
+        // If !isRawText and the copy of the other expression fails,
+        // then isBogus() will be true for this PatternPart
+        // PatternPart needs a copy constructor in order to make Pattern deeply copyable
+        PatternPart(const PatternPart& other) : isRawText(other.isText()), text(other.text), expression(isRawText ? nullptr : new Expression(other.contents()))  {
+            U_ASSERT(!other.isBogus());
+        }
 
-      // Either Expression or TextPart can show up in a pattern
-      // This class exists so Text can be distinguished from Expression
-      // when serializing a Pattern
-      const bool isRawText;
-      // Not used if !isRawText
-      const UnicodeString text;
-      // null if isRawText
-      const LocalPointer<Expression> expression;
+        const bool isRawText;
+        // Not used if !isRawText
+        const UnicodeString text;
+        // null if isRawText
+        const LocalPointer<Expression> expression;
       
-      bool isBogus() const { return (!isRawText && !expression.isValid()); }
-  }; // class PatternPart
+        bool isBogus() const { return (!isRawText && !expression.isValid()); }
+    }; // class PatternPart
 
-  class Pattern : public UObject {
-  public:
-      size_t numParts() const { return parts->length(); }
-      // Precondition: i < numParts()
-      const PatternPart* getPart(size_t i) const;
+    // Represents the `Pattern` interface
+    // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
+    class Pattern : public UObject {
+    public:
+        size_t numParts() const { return parts->length(); }
+        // Precondition: i < numParts()
+        const PatternPart* getPart(size_t i) const;
 
-      class Builder {
-      private:
-          friend class Pattern;
+        class Builder {
+        private:
+            friend class Pattern;
           
-          Builder(UErrorCode &errorCode);
-          // Note this is why PatternPart and all its enclosed classes need
-          // copy constructors: when the build() method is called on `parts`,
-          // it should copy `parts` rather than moving it
-          LocalPointer<List<PatternPart>::Builder> parts;
+            Builder(UErrorCode &errorCode);
+            // Note this is why PatternPart and all its enclosed classes need
+            // copy constructors: when the build() method is called on `parts`,
+            // it should copy `parts` rather than moving it
+            LocalPointer<List<PatternPart>::Builder> parts;
           
-      public:
-          // Takes ownership of `part`
-          Builder& add(PatternPart *part, UErrorCode &errorCode);
-          // Note: ICU4J has an `addAll()` method, which is omitted here.
-          Pattern *build(UErrorCode &errorCode);
-      }; // class Pattern::Builder
+        public:
+            // Takes ownership of `part`
+            Builder& add(PatternPart *part, UErrorCode &errorCode);
+            // Note: ICU4J has an `addAll()` method, which is omitted here.
+            Pattern *build(UErrorCode &errorCode);
+        }; // class Pattern::Builder
 
-      static Builder *builder(UErrorCode &errorCode);
+        static Builder *builder(UErrorCode &errorCode);
       
-  private:
-      friend class MessageFormatDataModel;
-      friend class List<PatternPart>;
-      friend class OrderedMap<Pattern>;
+    private:
+        friend class MessageFormatDataModel;
+        friend class List<PatternPart>;
+        friend class OrderedMap<Pattern>;
 
-      // Possibly-empty list of parts
-      const LocalPointer<List<PatternPart>> parts;
+        // Possibly-empty list of parts
+        const LocalPointer<List<PatternPart>> parts;
       
-      bool isBogus() const { return !parts.isValid(); }
-      // Can only be called by Builder
-      // Takes ownership of `ps`
-      Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+        bool isBogus() const { return !parts.isValid(); }
+        // Can only be called by Builder
+        // Takes ownership of `ps`
+        Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
 
-      // If the copy of the other list fails,
-      // then isBogus() will be true for this Pattern
-      // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
-      // moving build
-      Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
+        // If the copy of the other list fails,
+        // then isBogus() will be true for this Pattern
+        // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
+        // moving build
+        Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
     }; // class Pattern
 
-  class Binding {
-  public:
-       static Binding* create(const UnicodeString& var, Expression* e, UErrorCode& errorCode);
-       const UnicodeString var;
-       // Postcondition: result is non-null
-       const Expression* getValue() const {
-           U_ASSERT(!isBogus());
-           return value.getAlias();
-       }
-  private:
-       friend class List<Binding>;
+    // Represents the `Declaration` interface
+    // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#messages
+    class Binding {
+    public:
+        static Binding* create(const UnicodeString& var, Expression* e, UErrorCode& errorCode);
+        const UnicodeString var;
+        // Postcondition: result is non-null
+        const Expression* getValue() const {
+            U_ASSERT(!isBogus());
+            return value.getAlias();
+        }
+    private:
+        friend class List<Binding>;
 
-       Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
-       // This needs a copy constructor so that `Bindings` is deeply-copyable,
-       // which is in turn so that MessageFormatDataModel::build() can be copying
-       // (it has to copy the builder's locals)
-       Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
-         U_ASSERT(!other.isBogus());
-       }
+        Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
+        // This needs a copy constructor so that `Bindings` is deeply-copyable,
+        // which is in turn so that MessageFormatDataModel::build() can be copying
+        // (it has to copy the builder's locals)
+        Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
+            U_ASSERT(!other.isBogus());
+        }
 
-       const LocalPointer<Expression> value;
-       bool isBogus() const { return !value.isValid(); }
-  }; // class Binding
+        const LocalPointer<Expression> value;
+        bool isBogus() const { return !value.isValid(); }
+    }; // class Binding
 
-  const Bindings& getLocalVariables() const { return *bindings; }
+    // Public MessageFormatDataModel methods
 
-  // The `hasSelectors()` method is provided so that `getSelectors()`,
-  // `getVariants()` and `getPattern()` can rely on preconditions
-  // rather than taking error codes as arguments.
-  bool hasSelectors() const;
-  // Precondition: hasSelectors()
-  const ExpressionList& getSelectors() const;
-  // Precondition: hasSelectors()
-  const VariantMap& getVariants() const;
-  // Precondition: !hasSelectors()
-  const Pattern& getPattern() const;
+    const Bindings& getLocalVariables() const { return *bindings; }
+    // The `hasSelectors()` method is provided so that `getSelectors()`,
+    // `getVariants()` and `getPattern()` can rely on preconditions
+    // rather than taking error codes as arguments.
+    bool hasSelectors() const;
+    // Precondition: hasSelectors()
+    const ExpressionList& getSelectors() const;
+    // Precondition: hasSelectors()
+    const VariantMap& getVariants() const;
+    // Precondition: !hasSelectors()
+    const Pattern& getPattern() const;
 
-  class Builder {
-  private:
-      friend class MessageFormatDataModel;
-      Builder(UErrorCode& errorCode);
-      void buildSelectorsMessage(UErrorCode& errorCode);
-      LocalPointer<Pattern> pattern;
-      LocalPointer<ExpressionList::Builder> selectors;
-      LocalPointer<VariantMap::Builder> variants;
-      LocalPointer<Bindings::Builder> locals;
+    class Builder {
+    private:
+        friend class MessageFormatDataModel;
+        Builder(UErrorCode& errorCode);
+        void buildSelectorsMessage(UErrorCode& errorCode);
+        LocalPointer<Pattern> pattern;
+        LocalPointer<ExpressionList::Builder> selectors;
+        LocalPointer<VariantMap::Builder> variants;
+        LocalPointer<Bindings::Builder> locals;
       
-  public:
-      // Note that these methods are not const -- they mutate `this` and return a reference to `this`,
-      // rather than a const reference to a new builder
+    public:
+        // Note that these methods are not const -- they mutate `this` and return a reference to `this`,
+        // rather than a const reference to a new builder
       
-      // Takes ownership of `expression`
-      Builder& addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
-      // No addLocalVariables() yet
-      // Takes ownership
-      Builder& addSelector(Expression* selector, UErrorCode& errorCode);
-      // No addSelectors() yet
-      // Takes ownership
-      Builder& addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
-      Builder& setPattern(Pattern* pattern);
-      MessageFormatDataModel* build(UErrorCode& errorCode) const;
-  }; // class MessageFormatDataModel::Builder
+        // Takes ownership of `expression`
+        Builder& addLocalVariable(const UnicodeString& variableName, Expression* expression, UErrorCode &errorCode);
+        // No addLocalVariables() yet
+        // Takes ownership
+        Builder& addSelector(Expression* selector, UErrorCode& errorCode);
+        // No addSelectors() yet
+        // Takes ownership
+        Builder& addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& errorCode);
+        Builder& setPattern(Pattern* pattern);
+        MessageFormatDataModel* build(UErrorCode& errorCode) const;
+    }; // class MessageFormatDataModel::Builder
 
   static Builder* builder(UErrorCode& errorCode);
   
