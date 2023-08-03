@@ -33,8 +33,6 @@ using PrioritizedVariantList = List<PrioritizedVariant>;
 
 #define PARSER MessageFormatter::Parser
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormatter)
-
 /*
     The `ERROR()` macro sets `errorCode` to `U_MESSAGE_PARSE_ERROR
     and sets the offset in `parseError` to `index`. It does not alter control flow.
@@ -140,6 +138,13 @@ MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MessageFormat
   return *this;
 }
 
+// Note: this is a destructive build(); it invalidates the builder
+/*
+  TODO: It's probably better for this method to either copy the builder,
+  or use a reference to (e.g.) a function registry with the assumption that it
+  has the same lifetime as the formatter.
+  See the custom functions example in messageformat2test.cpp for motivation.
+*/
 MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
@@ -1609,41 +1614,6 @@ void PARSER::parseBody(UErrorCode &errorCode) {
         break;
     }
     }
-}
-
-// Deep copy methods for AST nodes
-//
-
-/*
-template<>
-void copyElements<Expression>(UElement *dst, UElement *src) {
-    dst->pointer = new Expression(*(static_cast<Expression*>(src->pointer)));
-}
-
-template<>
-void copyElements<PatternPart>(UElement *dst, UElement *src) {
-    dst->pointer = new PatternPart(*(static_cast<PatternPart*>(src->pointer)));
-}
-*/
-                    
-// Not yet implemented
-MessageFormatter* MessageFormatter::clone() const { return nullptr; }
-
-// Not yet implemented
-bool MessageFormatter::operator==(const Format &other) const { return (this == &other); }
-// Not yet implemented
-bool MessageFormatter::operator!=(const Format &other) const { return (this != &other); }
-
-// Not yet implemented
-UnicodeString &MessageFormatter::format(const Formattable &, UnicodeString &appendTo, FieldPosition &,
-                                      UErrorCode &status) const {
-    status = U_UNSUPPORTED_ERROR;
-    return appendTo;
-}
-
-// Not yet implemented
-void MessageFormatter::parseObject(const UnicodeString &, Formattable &, ParsePosition &status) const {
-    status = U_UNSUPPORTED_ERROR;
 }
 
 // -------------------------------------
