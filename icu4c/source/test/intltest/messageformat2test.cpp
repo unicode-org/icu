@@ -10,6 +10,16 @@
 using namespace icu::message2;
 
 /*
+  TODO: Tests need to be unified in a single format that
+  both ICU4C and ICU4J can use, rather than being embedded in code.
+
+  Tests are included in their current state to give a sense of
+  how much test coverage has been achieved. Most of the testing is
+  of the parser/serializer; the formatter needs to be tested more
+  thoroughly.
+*/
+
+/*
 Tests reflect the syntax specified in
 
   https://github.com/unicode-org/message-format-wg/commits/main/spec/message.abnf
@@ -17,12 +27,12 @@ Tests reflect the syntax specified in
 as of the following commit from 2023-05-09:
   https://github.com/unicode-org/message-format-wg/commit/194f6efcec5bf396df36a19bd6fa78d1fa2e0867
 
-   Since the MessageFormat2 "parser" is currently only a validator,
-   the following tests only verify that valid messages are validated by the parser
+   The following tests only verify that valid messages are validated by the parser
    and that invalid messages are rejected with an error reflecting the correct line number
    and offset for the unexpected character.
-*/
 
+   TODO: check formatting output as well
+*/
 // These tests are from the icu4j test suite under icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2/
 UnicodeString validTestCases[] = {
     // From Mf2IcuTest.java
@@ -52,7 +62,6 @@ UnicodeString validTestCases[] = {
   <p>Original JSON file
   <a href="https://github.com/messageformat/messageformat/blob/master/packages/mf2-messageformat/src/__fixtures/test-messages.json">here</a>.</p>
   Some have been modified or added to reflect syntax changes that post-date the JSON file.
-
  */
 UnicodeString jsonTestCasesValid[] = {
     "{hello}",
@@ -251,30 +260,35 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
 }
 
 // Example for design doc
+// TODO: This doesn't currently check the formatting
+// results, just exercises the API
 void TestMessageFormat2::testAPISimple() {
-  IcuTestErrorCode errorCode1(*this, "testAPI");
-  UErrorCode errorCode = (UErrorCode) errorCode1;
-  UParseError parseError;
-  Locale locale = "en_US";
-// Null checks and error checks elided
-  MessageFormatter::Builder* builder = MessageFormatter::builder(errorCode);
-  /* MessageFormatter* mf = */ builder
+    IcuTestErrorCode errorCode1(*this, "testAPI");
+    UErrorCode errorCode = (UErrorCode) errorCode1;
+    UParseError parseError;
+    Locale locale = "en_US";
+
+    // TODO: Since this is the example used in the
+    // design doc, it elides null checks and error checks.
+    // To be used in the test suite, it should include those checks
+    // Null checks and error checks elided
+    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
+    /* LocalPointer<MessageFormatter> mf( */ builder
         ->setPattern(u"{Hello, {$userName}!}", errorCode)
         .build(parseError, errorCode);
 
-// TODO formatting calls
-  delete builder;
-  builder = MessageFormatter::builder(errorCode);
+    // Recreate the builder
+    builder = MessageFormatter::builder(errorCode);
 
-  /* mf = */ builder
+    /* mf.adoptInstead( */ builder
         ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
         .setLocale(locale)
         .build(parseError, errorCode);
 
-  delete builder;
-  builder = MessageFormatter::builder(errorCode);
+    // Recreate the builder
+    builder = MessageFormatter::builder(errorCode);
 
-  /* mf = */ builder
+    /* mf.adoptInstead( */ builder
         ->setPattern("match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
@@ -282,82 +296,78 @@ void TestMessageFormat2::testAPISimple() {
                      when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}",
-                errorCode)
+                     errorCode)
         .setLocale(locale)
         .build(parseError, errorCode);
 }
 
-
+// Design doc example, with more details
+// TODO: eliminate repetitive code
 void TestMessageFormat2::testAPI() {
-  IcuTestErrorCode errorCode1(*this, "testAPI");
-  UErrorCode errorCode = (UErrorCode) errorCode1;
-  UParseError parseError;
-  Locale locale = "en";
-  LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
-  if (U_FAILURE(errorCode)) {
-    return;
-  }
+    IcuTestErrorCode errorCode1(*this, "testAPI");
+    UErrorCode errorCode = (UErrorCode) errorCode1;
+    UParseError parseError;
+    Locale locale = "en_US";
+    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
 
-  UnicodeString pattern = u"{Hello, {$userName}!}";
-  LocalPointer<MessageFormatter> mf(builder
-        ->setPattern(pattern, errorCode)
-        .build(parseError, errorCode));
-  if (U_FAILURE(errorCode)) {
-    return;
-  }
+    UnicodeString pattern = u"{Hello, {$userName}!}";
+    LocalPointer<MessageFormatter> mf(builder
+                                      ->setPattern(pattern, errorCode)
+                                      .build(parseError, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
 
-  LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-  if (U_FAILURE(errorCode)) {
-    return;
-  }
-  UnicodeString value = "John";
-  arguments->put("userName", &value, errorCode);
-  UnicodeString expected = "Hello, John!";
-  UnicodeString result;
-  mf->formatToString(*arguments, errorCode, result);
-  if (result != expected) {
-    logln("Expected output: " + expected + "\nGot output: " + result);
-    errorCode = U_MESSAGE_PARSE_ERROR;
-    return;
-  }
-  if (U_FAILURE(errorCode)) {
+    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    UnicodeString value = "John";
+    arguments->put("userName", &value, errorCode);
+    UnicodeString expected = "Hello, John!";
+    UnicodeString result;
+    mf->formatToString(*arguments, errorCode, result);
+    if (result != expected) {
+        logln("Expected output: " + expected + "\nGot output: " + result);
+        errorCode = U_MESSAGE_PARSE_ERROR;
+        return;
+    }
+    if (U_FAILURE(errorCode)) {
         dataerrln(result);
         logln(UnicodeString("TestMessageFormat2::testAPI failed test with pattern: " + pattern));
         return;
-  }
+    }
 
-  mf.adoptInstead(builder
-        ->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}", errorCode)
-        .setLocale(locale)
-        .build(parseError, errorCode));
+    mf.adoptInstead(builder
+                    ->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}", errorCode)
+                    .setLocale(locale)
+                    .build(parseError, errorCode));
 
-  arguments->removeAll();
-  result.setTo("");
-  value.setTo("");
-/*
-  UDate dateValue = UDate(5264498352317.0); // Sunday, October 28, 2136 8:39:12 AM PST
-  LocalPointer<DateFormat> dfmt(DateFormat::createDateInstance());
-  value = dfmt->format(dateValue, value);
- */
-  value = "5264498352317.0";
+    arguments->removeAll();
+    result.setTo("");
+    value.setTo("");
+    value = "5264498352317.0";  // Sunday, October 28, 2136 8:39:12 AM PST
 
-  arguments->put("today", &value, errorCode);
-  expected = "Today is Sun, Oct 28, 2136.";
-  mf->formatToString(*arguments, errorCode, result);
+    arguments->put("today", &value, errorCode);
+    expected = "Today is Sun, Oct 28, 2136.";
+    mf->formatToString(*arguments, errorCode, result);
 
-  if (result != expected) {
-    logln("Expected output: " + expected + "\nGot output: " + result);
-    errorCode = U_MESSAGE_PARSE_ERROR;
-    return;
-  }
-  if (U_FAILURE(errorCode)) {
+    if (result != expected) {
+        logln("Expected output: " + expected + "\nGot output: " + result);
+        errorCode = U_MESSAGE_PARSE_ERROR;
+        return;
+    }
+    if (U_FAILURE(errorCode)) {
         dataerrln(result);
         logln(UnicodeString("TestMessageFormat2::testAPI failed test with pattern: " + pattern));
         return;
-  }
+    }
 
-  // Pattern matching
-  pattern = "match {$photoCount :select} {$userGender :select}\n\
+    // Pattern matching
+    pattern = "match {$photoCount :select} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
                      when 1 * {{$userName} added a new photo to their album.}\n \
@@ -365,47 +375,47 @@ void TestMessageFormat2::testAPI() {
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
-  mf.adoptInstead(builder
-        ->setPattern(pattern, errorCode)
-        .setLocale(locale)
-        .build(parseError, errorCode));
+    mf.adoptInstead(builder
+                    ->setPattern(pattern, errorCode)
+                    .setLocale(locale)
+                    .build(parseError, errorCode));
 
-  arguments->removeAll();
-  UnicodeString value1 = "12";
-  arguments->put("photoCount", &value1, errorCode);
-  UnicodeString value2 = "feminine";
-  UnicodeString value3 = "Maria";
-  arguments->put("userGender", &value2, errorCode);
-  arguments->put("userName", &value3, errorCode);
+    arguments->removeAll();
+    UnicodeString value1 = "12";
+    arguments->put("photoCount", &value1, errorCode);
+    UnicodeString value2 = "feminine";
+    UnicodeString value3 = "Maria";
+    arguments->put("userGender", &value2, errorCode);
+    arguments->put("userName", &value3, errorCode);
 
-  result.remove();
-  mf->formatToString(*arguments, errorCode, result);
+    result.remove();
+    mf->formatToString(*arguments, errorCode, result);
 
-  if (U_FAILURE(errorCode)) {
-      dataerrln(pattern);
-      logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
-      return;
-  }
+    if (U_FAILURE(errorCode)) {
+        dataerrln(pattern);
+        logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
+        return;
+    }
 
-  expected = "Maria added 12 photos to her album.";
+    expected = "Maria added 12 photos to her album.";
 
-  if (result != expected) {
-      dataerrln(pattern);
-      logln("Expected output: " + expected + "\nGot output: " + result);
-      errorCode = U_MESSAGE_PARSE_ERROR;
-      return;
-  }
+    if (result != expected) {
+        dataerrln(pattern);
+        logln("Expected output: " + expected + "\nGot output: " + result);
+        errorCode = U_MESSAGE_PARSE_ERROR;
+        return;
+    }
 
-  arguments->removeAll();
-  value1 = "1";
-  arguments->put("photoCount", &value1, errorCode);
-  value2 = "feminine";
-  value3 = "Maria";
-  arguments->put("userGender", &value2, errorCode);
-  arguments->put("userName", &value3, errorCode);
+    arguments->removeAll();
+    value1 = "1";
+    arguments->put("photoCount", &value1, errorCode);
+    value2 = "feminine";
+    value3 = "Maria";
+    arguments->put("userGender", &value2, errorCode);
+    arguments->put("userName", &value3, errorCode);
 
-  // Built-in functions
-  pattern = "match {$photoCount :plural} {$userGender :select}\n\
+    // Built-in functions
+    pattern = "match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
                      when 1 * {{$userName} added a new photo to their album.}\n \
@@ -413,27 +423,26 @@ void TestMessageFormat2::testAPI() {
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
-  expected = "Maria added a new photo to her album.";
+    expected = "Maria added a new photo to her album.";
 
-  builder->setPattern(pattern, errorCode);
-  mf.adoptInstead(builder->build(parseError, errorCode));
+    builder->setPattern(pattern, errorCode);
+    mf.adoptInstead(builder->build(parseError, errorCode));
 
-  result.remove();
-  mf->formatToString(*arguments, errorCode, result);
+    result.remove();
+    mf->formatToString(*arguments, errorCode, result);
 
-  if (U_FAILURE(errorCode)) {
-      dataerrln(pattern);
-      logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
-      return;
-  }
+    if (U_FAILURE(errorCode)) {
+        dataerrln(pattern);
+        logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
+        return;
+    }
 
-  if (result != expected) {
-      dataerrln(pattern);
-      logln("Expected output: " + expected + "\nGot output: " + result);
-      errorCode = U_MESSAGE_PARSE_ERROR;
-      return;
-  }
-
+    if (result != expected) {
+        dataerrln(pattern);
+        logln("Expected output: " + expected + "\nGot output: " + result);
+        errorCode = U_MESSAGE_PARSE_ERROR;
+        return;
+    }
 }
 
 static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
@@ -452,6 +461,7 @@ static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
 
 // Custom functions example from the ICU4C API design doc
 // Note: error/null checks are omitted
+// (same comments as in testAPISimple() -- TODO)
 void TestMessageFormat2::testAPICustomFunctions() {
     IcuTestErrorCode errorCode1(*this, "testAPICustomFunctions");
     UErrorCode errorCode = (UErrorCode) errorCode1;
@@ -475,9 +485,9 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
 // This fails, because we did not provide a function registry:
     mf.adoptInstead(MessageFormatter::builder(errorCode)
-        ->setPattern("{Hello {$name :person formality=informal}}", errorCode)
-        .setLocale(locale)
-        .build(parseError, errorCode));
+                    ->setPattern("{Hello {$name :person formality=informal}}", errorCode)
+                    .setLocale(locale)
+                    .build(parseError, errorCode));
     mf->formatToString(*arguments, errorCode, result);
     U_ASSERT(errorCode == U_UNKNOWN_FUNCTION);
 
@@ -490,22 +500,22 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Note that the function registry has to be recreated each time, because build()
     // invalidates the builder
     mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=informal}}", errorCode)
-        .setFunctionRegistry(personFunctionRegistry(errorCode))
-        .build(parseError, errorCode));
+                    .setFunctionRegistry(personFunctionRegistry(errorCode))
+                    .build(parseError, errorCode));
     mf->formatToString(*arguments, errorCode, result);
     U_ASSERT(result == "Hello John");
 
     result.remove();
     mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=formal}}", errorCode)
-        .setFunctionRegistry(personFunctionRegistry(errorCode))
-        .build(parseError, errorCode));
+                    .setFunctionRegistry(personFunctionRegistry(errorCode))
+                    .build(parseError, errorCode));
     mf->formatToString(*arguments, errorCode, result);
     U_ASSERT(result == "Hello Mr. Doe");
 
     result.remove();
     mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=formal length=long}}", errorCode)
-        .setFunctionRegistry(personFunctionRegistry(errorCode))
-        .build(parseError, errorCode));
+                    .setFunctionRegistry(personFunctionRegistry(errorCode))
+                    .build(parseError, errorCode));
     mf->formatToString(*arguments, errorCode, result);
     U_ASSERT(result == "Hello Mr. John Doe");
 }
