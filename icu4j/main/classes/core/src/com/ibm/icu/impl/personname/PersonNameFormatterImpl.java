@@ -202,7 +202,7 @@ public class PersonNameFormatterImpl {
 
     private final Set<String> LOCALES_THAT_DONT_USE_SPACES = new HashSet<>(Arrays.asList("ja", "zh", "yue", "km", "lo", "my"));
 
-    static final Set NON_DEFAULT_SCRIPTS = new HashSet<>(Arrays.asList("Hani", "Hira", "Kana"));
+    static final Set<String> NON_DEFAULT_SCRIPTS = new HashSet<>(Arrays.asList("Hani", "Hira", "Kana"));
 
     /**
      * Returns the value of the resource, as a string array.
