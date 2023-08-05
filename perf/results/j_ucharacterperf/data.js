@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1691179991416,
+  "lastUpdate": 1691201549288,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -74518,6 +74518,222 @@ window.BENCHMARK_DATA = {
           {
             "name": "testJDKIsIdentifierIgnorable",
             "value": 3.5388957585826426,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "720e5741ccaa112c4faafffdedeb7459b66c5673",
+          "message": "ICU-22362 Fix build error in exhaustive tests resulting from last PersonName change.",
+          "timestamp": "2023-08-04T18:44:00-07:00",
+          "tree_id": "8c935ae46d180a82badbb8d09daee03d69b9082b",
+          "url": "https://github.com/unicode-org/icu/commit/720e5741ccaa112c4faafffdedeb7459b66c5673"
+        },
+        "date": 1691201507507,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "testJDKIsDefined",
+            "value": 3.2202637233271867,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLetterOrDigit",
+            "value": 1.6779366377843739,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUpperCase",
+            "value": 1.5508132455949213,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsDigit",
+            "value": 2.1373213007831797,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLetter",
+            "value": 3.0771062694519027,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUnicodeIdentifierPart",
+            "value": 3.2734901346839367,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsTitleCase",
+            "value": 3.0652209894711193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsWhiteSpace",
+            "value": 1.780002829492642,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsISOControl",
+            "value": 0.3068526957224337,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKGetNumericValue",
+            "value": 7.070550195589513,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUnicodeIdentifierStart",
+            "value": 3.0624075359186036,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsSpaceChar",
+            "value": 2.142212595238947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKDigit",
+            "value": 3.1004948956391107,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKGetType",
+            "value": 3.1006133214795555,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsWhiteSpace",
+            "value": 3.0990058236419684,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsISOControl",
+            "value": 0.7619338073491628,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUpperCase",
+            "value": 6.23839994820442,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testDigit",
+            "value": 1.7790556416949852,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLowerCase",
+            "value": 2.238824857838171,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testGetType",
+            "value": 2.2915491259079768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUnicodeIdentifierStart",
+            "value": 3.4393617344400607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUnicodeIdentifierPart",
+            "value": 3.106472639232155,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsIdentifierIgnorable",
+            "value": 2.5555605962891805,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLetter",
+            "value": 2.1504207451789425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testGetNumericValue",
+            "value": 1.6698152421227288,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsTitleCase",
+            "value": 2.1829261468954946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsDigit",
+            "value": 3.1165234161170705,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsSpaceChar",
+            "value": 3.091641873998233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLetterOrDigit",
+            "value": 3.088216605815242,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLowerCase",
+            "value": 6.139871801714083,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsDefined",
+            "value": 2.2287130431433946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsIdentifierIgnorable",
+            "value": 3.084961964483437,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
