@@ -556,6 +556,9 @@
     <ClCompile Include="localebuildertest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="uniquecharstrtst.cpp">
+      <Filter>resources</Filter>
+    </ClCompile>
     <ClCompile Include="localematchertest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
@@ -959,6 +962,9 @@
     </ClInclude>
     <ClInclude Include="localebuildertest.h">
       <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="uniquecharstrtst.h">
+      <Filter>resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

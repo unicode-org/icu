@@ -33,6 +33,7 @@
 #include "uvectest.h" 
 #include "aliastst.h"
 #include "usettest.h"
+#include "uniquecharstrtst.h"
 
 extern IntlTest *createBytesTrieTest();
 extern IntlTest *createLocaleMatcherTest();
@@ -79,6 +80,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO_CREATE_CLASS(StaticUnicodeSetsTest);
 #endif
     TESTCASE_AUTO_CLASS(LocaleBuilderTest);
+    TESTCASE_AUTO_CLASS(UniqueCharStringsTest);
     TESTCASE_AUTO_CREATE_CLASS(LocaleMatcherTest);
     TESTCASE_AUTO_END;
 }

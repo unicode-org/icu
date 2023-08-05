@@ -62,7 +62,10 @@ public:
             return 0;
         }
         // The string points into the resource bundle.
-        const char16_t *p = s.getBuffer();
+        // s.getBuffer() may return not null-terminated string
+        // and casue illegal memory access problem because
+        // uhash_geti/puti expect null-terminated string.
+        const char16_t *p = ((UnicodeString&)s).getTerminatedBuffer();
         int32_t oldIndex = uhash_geti(&map, p);
         if (oldIndex != 0) {  // found duplicate
             return oldIndex;
