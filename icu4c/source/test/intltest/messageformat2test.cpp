@@ -247,6 +247,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testAPICustomFunctions);
     TESTCASE_AUTO(testCustomFunctions);
+    TESTCASE_AUTO(testBuiltInFunctions);
 
     TESTCASE_AUTO(testDataModelErrors);
     TESTCASE_AUTO(testResolutionErrors);
@@ -278,7 +279,7 @@ void TestMessageFormat2::testAPISimple() {
         .build(parseError, errorCode);
 
     // Recreate the builder
-    builder = MessageFormatter::builder(errorCode);
+    builder.adoptInstead(MessageFormatter::builder(errorCode));
 
     /* mf.adoptInstead( */ builder
         ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
@@ -286,7 +287,7 @@ void TestMessageFormat2::testAPISimple() {
         .build(parseError, errorCode);
 
     // Recreate the builder
-    builder = MessageFormatter::builder(errorCode);
+    builder.adoptInstead(MessageFormatter::builder(errorCode));
 
     /* mf.adoptInstead( */ builder
         ->setPattern("match {$photoCount :plural} {$userGender :select}\n\

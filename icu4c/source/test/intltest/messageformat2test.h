@@ -39,6 +39,8 @@ public:
     void testAPI(void);
     void testAPISimple(void);
     void testAPICustomFunctions(void);
+    // Test standard functions
+    void testBuiltInFunctions(void);
     // Test custom functions
     void testCustomFunctions(void);
 
@@ -54,10 +56,16 @@ private:
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t, uint32_t);
 
+    // Built-in function testing
+    void testDateTime(IcuTestErrorCode&);
+    void testNumbers(IcuTestErrorCode&);
+
     // Custom function testing
     void checkResult(const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&, UErrorCode);
-    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&);
-    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&, UErrorCode);
+    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, const UnicodeString& argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
+    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, const UnicodeString& argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&);
+    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName1, const UnicodeString& argValue1, const UnicodeString& argName2, const UnicodeString& argValue2, const UnicodeString& expected, Locale, IcuTestErrorCode&);
+    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const Hashtable&, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
     void testPersonFormatter(IcuTestErrorCode&);
 }; // class TestMessageFormat2
 

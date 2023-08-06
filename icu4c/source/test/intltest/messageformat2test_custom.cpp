@@ -38,7 +38,15 @@ void TestMessageFormat2::checkResult(const UnicodeString& testName,
                  IcuTestErrorCode& errorCode,
                  UErrorCode expectedErrorCode) {
 
-  if (errorCode != expectedErrorCode) {
+    bool bad = false;
+    // Can't compare error codes directly because of warnings
+    if (expectedErrorCode == U_ZERO_ERROR) {
+        bad = U_FAILURE(errorCode);
+    } else {
+        bad = errorCode != expectedErrorCode;
+    }
+
+  if (bad) {
         dataerrln(pattern);
         if (U_SUCCESS(expectedErrorCode)) {
             logln(testName + UnicodeString(" failed test with error code ") + (int32_t)errorCode);
@@ -67,6 +75,7 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
                                                      const UnicodeString& argName,
                                                      const UnicodeString& argValue,
                                                      const UnicodeString& expected,
+                                                     Locale loc,
                                                      IcuTestErrorCode& errorCode) {
     testWithPatternAndArguments(testName,
                                 customRegistry,
@@ -74,6 +83,7 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
                                 argName,
                                 argValue,
                                 expected,
+                                loc,
                                 errorCode,
                                 U_ZERO_ERROR);
 }
@@ -85,6 +95,71 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
                                                      const UnicodeString& argName,
                                                      const UnicodeString& argValue,
                                                      const UnicodeString& expected,
+                                                     Locale loc,
+                                                     IcuTestErrorCode& errorCode,
+                                                     UErrorCode expectedErrorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
+    LocalPointer<UnicodeString> argValuePointer(new UnicodeString(argValue));
+    if (!argValuePointer.isValid()) {
+        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
+    arguments->put(argName, argValuePointer.orphan(), errorCode);
+    testWithPatternAndArguments(testName, customRegistry, pattern,
+                                *arguments, expected, loc, errorCode, expectedErrorCode);
+}
+
+void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testName,
+                                                     FunctionRegistry* customRegistry,
+                                                     const UnicodeString& pattern,
+                                                     const UnicodeString& argName1,
+                                                     const UnicodeString& argValue1,
+                                                     const UnicodeString& argName2,
+                                                     const UnicodeString& argValue2,
+                                                     const UnicodeString& expected,
+                                                     Locale loc,
+                                                     IcuTestErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
+    LocalPointer<UnicodeString> argValuePointer1(new UnicodeString(argValue1));
+    if (!argValuePointer1.isValid()) {
+        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    LocalPointer<UnicodeString> argValuePointer2(new UnicodeString(argValue2));
+    if (!argValuePointer2.isValid()) {
+        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
+    arguments->put(argName1, argValuePointer1.orphan(), errorCode);
+    arguments->put(argName2, argValuePointer2.orphan(), errorCode);
+    testWithPatternAndArguments(testName, customRegistry, pattern,
+                                *arguments, expected, loc, errorCode, U_ZERO_ERROR);
+}
+
+void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testName,
+                                                     FunctionRegistry* customRegistry,
+                                                     const UnicodeString& pattern,
+                                                     const Hashtable& arguments,
+                                                     const UnicodeString& expected,
+                                                     Locale loc,
                                                      IcuTestErrorCode& errorCode,
                                                      UErrorCode expectedErrorCode) {
 
@@ -104,11 +179,13 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
     if (customRegistry != nullptr) {
         mf.adoptInstead(builder
                         ->setPattern(pattern, errorCode)
+                        .setLocale(loc)
                         .setFunctionRegistry(customRegistry)
                         .build(parseError, errorCode));
     } else {
         mf.adoptInstead(builder
                         ->setPattern(pattern, errorCode)
+                        .setLocale(loc)
                         .build(parseError, errorCode));
     }
 
@@ -116,20 +193,8 @@ void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testNa
         return;
     }
 
-    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    LocalPointer<UnicodeString> argValuePointer(new UnicodeString(argValue));
-    if (!argValuePointer.isValid()) {
-        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    arguments->put(argName, argValuePointer.orphan(), errorCode);
     UnicodeString result;
-    mf->formatToString(*arguments, errorCode, result);
+    mf->formatToString(arguments, errorCode, result);
 
     checkResult(testName, pattern, result, expected, errorCode, expectedErrorCode);
 }
@@ -142,6 +207,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
 
     UnicodeString name = "name";
     UnicodeString person = "\"Mr.\", \"John\", \"Doe\"";
+    Locale locale = "en";
 
     testWithPatternAndArguments("testPersonFormatter",
                                 nullptr,
@@ -149,6 +215,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello $name",
+                                locale,
                                 errorCode,
                                 U_UNKNOWN_FUNCTION);
 
@@ -158,6 +225,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello $name",
+                                locale,
                                 errorCode,
                                 U_UNKNOWN_FUNCTION);
 
@@ -167,6 +235,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello Mr. Doe",
+                                locale,
                                 errorCode);
 
     // recreate custom registry
@@ -181,6 +250,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello John",
+                                locale,
                                 errorCode);
 
     // recreate custom registry
@@ -195,6 +265,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello Mr. John Doe",
+                                locale,
                                 errorCode);
     customRegistry.adoptInstead(personFunctionRegistry(errorCode));
     if (U_FAILURE(errorCode)) {
@@ -207,6 +278,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello John Doe",
+                                locale,
                                 errorCode);
     customRegistry.adoptInstead(personFunctionRegistry(errorCode));
     if (U_FAILURE(errorCode)) {
@@ -219,6 +291,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 name,
                                 person,
                                 "Hello Mr. Doe",
+                                locale,
                                 errorCode);
 }
 

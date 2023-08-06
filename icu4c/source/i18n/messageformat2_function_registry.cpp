@@ -122,36 +122,15 @@ static void strToInt(const UnicodeString& s, int64_t& result, UErrorCode& errorC
     result = asNumber.getInt64(errorCode);
 }
 
-static void strToDouble(const UnicodeString& s, double& result, UErrorCode& errorCode) {
+static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(errorCode));
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(loc, errorCode));
     CHECK_ERROR(errorCode);
     Formattable asNumber;
     numberFormat->parse(s, asNumber, errorCode);
     CHECK_ERROR(errorCode);
     result = asNumber.getDouble(errorCode);
-}
-
-void getOffset(const Hashtable& fixedOptions, const Hashtable& variableOptions, int64_t& offset, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-
-    // Offset is determined by the variable options if it's defined,
-    // then by the fixed options if they exist and define `offset`,
-    // and finally defaults to 0
-    UnicodeString* offsetStr = static_cast<UnicodeString*>(variableOptions.get(UnicodeString("offset")));
-    bool hasOffset = offsetStr != nullptr;
-    offset = 0;
-    if (!hasOffset) {
-        offsetStr = static_cast<UnicodeString*>(fixedOptions.get(UnicodeString("offset")));
-        if (offsetStr != nullptr) {
-            strToInt(*offsetStr, offset, errorCode);
-        }
-    } else if (!hasOffset) {
-        offset = 0;
-    } else {
-        strToInt(*offsetStr, offset, errorCode);
-    }
 }
 
 // Specific formatter implementations
@@ -231,22 +210,19 @@ void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hash
     }
     CHECK_ERROR(errorCode);
     
-    int64_t offset;
-    getOffset(fixedOptions, variableOptions, offset, errorCode);
-    CHECK_ERROR(errorCode);
-
     // TODO: NumberFormatterFactory.java dispatches on the type of `toFormat`,
     // but here the formatters only take strings.
     // Try to parse the string as a number, as in the `else` case there
     double numberValue;
-    strToDouble(toFormat, numberValue, errorCode);
+    strToDouble(toFormat, locale, numberValue, errorCode);
     if (U_FAILURE(errorCode)) {
         errorCode = U_ZERO_ERROR;
-        result.setTo(UnicodeString("NaN"));
+        result += UnicodeString("NaN");
+        return;
     }
-    number::FormattedNumber numberResult = realFormatter->formatDouble(numberValue - offset, errorCode);
+    number::FormattedNumber numberResult = realFormatter->formatDouble(numberValue, errorCode);
     CHECK_ERROR(errorCode);
-    result.setTo(numberResult.toString(errorCode));
+    result += numberResult.toString(errorCode);
 }
 
 // --------- PluralFactory
@@ -272,13 +248,9 @@ bool StandardFunctions::Plural::matches(const UnicodeString& value, const Unicod
     // and thus shouldn't be passed to this method
     U_ASSERT(key != UnicodeString(ASTERISK));
 
-    int64_t offset;
-    getOffset(fixedOptions, variableOptions, offset, errorCode);
-    FALSE_ON_ERROR(errorCode);
-
     // Try parsing the scrutinee as a double
     double valToCheck;
-    strToDouble(value, valToCheck, errorCode);
+    strToDouble(value, locale, valToCheck, errorCode);
     // Invalid format error => value is not a number; return a selector error
     if (errorCode == U_INVALID_FORMAT_ERROR) {
         errorCode = U_SELECTOR_ERROR;
@@ -291,7 +263,7 @@ bool StandardFunctions::Plural::matches(const UnicodeString& value, const Unicod
     if (!fixedOptions.containsKey(UnicodeString("skeleton")) && !variableOptions.containsKey(UnicodeString("skeleton"))) {
         // Try parsing the key as a Double
         double keyAsDouble;
-        strToDouble(key, keyAsDouble, errorCode);
+        strToDouble(key, locale, keyAsDouble, errorCode);
         if (U_SUCCESS(errorCode)) {
             if (valToCheck == keyAsDouble) {
                 return true;
@@ -304,7 +276,7 @@ bool StandardFunctions::Plural::matches(const UnicodeString& value, const Unicod
         }
     }
 
-    UnicodeString match = rules->select(valToCheck - offset);
+    UnicodeString match = rules->select(valToCheck);
     return (match == key);
 }
 
@@ -360,17 +332,8 @@ void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Ha
         // Same as getInstanceForSkeleton(), see ICU 9029
         // Based on test/intltest/dtfmttst.cpp - TestPatterns()
         LocalPointer<DateTimePatternGenerator> generator(DateTimePatternGenerator::createInstance(locale, errorCode));
-        // TODO: figure out why this happens
-        if (errorCode == U_USING_DEFAULT_WARNING) {
-            errorCode = U_ZERO_ERROR;
-        }
-        CHECK_ERROR(errorCode);
         UnicodeString pattern = generator->getBestPattern(*opt, errorCode);
         df.adoptInstead(new SimpleDateFormat(pattern, locale, errorCode));
-        // TODO: figure out why this happens
-        if (errorCode == U_USING_DEFAULT_WARNING) {
-            errorCode = U_ZERO_ERROR;
-        }
     } else {
         opt = (UnicodeString*) variableOptions.get(UnicodeString("pattern"));
         if (opt != nullptr) {
@@ -399,9 +362,9 @@ void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Ha
     // TODO: this assumes the string is in "seconds" format;
     // since this doesn't take a UDate object, I'm not sure
     // what to assume
-//    UDate date = df->parse(toFormat, errorCode);
+    //    UDate date = df->parse(toFormat, errorCode);
     double resultDate;
-    strToDouble(toFormat, resultDate, errorCode);
+    strToDouble(toFormat, locale, resultDate, errorCode);
     CHECK_ERROR(errorCode);
     df->format(UDate(resultDate), result);
 }
