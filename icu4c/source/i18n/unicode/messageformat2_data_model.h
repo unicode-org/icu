@@ -156,16 +156,14 @@ public:
         bool isLiteral() const { return !isVariable(); }
         VariableName asVariable() const;
         const Literal& asLiteral() const;
-    private:
-        friend class Expression;
-        friend class OrderedMap<Operand>;
-
-        // Represent variable names as unquoted literals
-        Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
-        Operand(const Literal& l) : isVariableReference(false), string(l) {}
 
         // Copy constructor
         Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
+
+    private:
+        // Represent variable names as unquoted literals
+        Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
+        Operand(const Literal& l) : isVariableReference(false), string(l) {}
 
         const bool isVariableReference;
         const Literal string;
@@ -427,6 +425,10 @@ public:
         // Precondition: !isStandaloneAnnotation()
         const Operand& getOperand() const;
 
+        // Expression needs a copy constructor in order to make Pattern deeply copyable
+        // (and for closures)
+        Expression(const Expression& other);
+
         class Builder {
         private:
             friend class Expression;
@@ -443,12 +445,6 @@ public:
         static Builder* builder(UErrorCode& errorCode);
 
     private:
-        friend class PatternPart;
-        friend class Binding;
-        friend class List<Expression>;
-
-        // Expression needs a copy constructor in order to make Pattern deeply copyable
-        Expression(const Expression& other);
 
         // Here, a separate variable isBogus tracks if any copies failed.
         // This is because rator = nullptr and rand = nullptr are semantic here,
@@ -527,11 +523,15 @@ public:
         }; // class Pattern::Builder
 
         static Builder *builder(UErrorCode &errorCode);
+
+        // If the copy of the other list fails,
+        // then isBogus() will be true for this Pattern
+        // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
+        // moving build
+        Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
       
     private:
         friend class MessageFormatDataModel;
-        friend class List<PatternPart>;
-        friend class OrderedMap<Pattern>;
 
         // Possibly-empty list of parts
         const LocalPointer<List<PatternPart>> parts;
@@ -541,11 +541,6 @@ public:
         // Takes ownership of `ps`
         Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
 
-        // If the copy of the other list fails,
-        // then isBogus() will be true for this Pattern
-        // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
-        // moving build
-        Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
     }; // class Pattern
 
     // Represents the `Declaration` interface

@@ -179,21 +179,6 @@ MessageFormatter::~MessageFormatter() {}
 // ------------------------------------------------------
 // Formatting
 
-// Postcondition: !found || result is non-null
-const Expression* lookup(const Bindings& env, const VariableName& lhs, bool& found) {
-    size_t len = env.length();
-    for (int32_t i = len - 1; i >= 0; i--) {
-        const Binding& b = *env.get(i);
-        if (b.var == lhs) {
-            found = true;
-            // getValue() guarantees result is non-null
-            return b.getValue();
-        }
-    }
-    found = false;
-    return nullptr;
-}
-
 // Note: formatting a literal can't fail
 // (see https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#literal-resolution )
 // so formatLiteral() doesn't take an error code.
@@ -201,7 +186,7 @@ void formatLiteral(const Literal& lit, UnicodeString& result) {
     result += lit.contents;
 }
 
-void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& rand, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatOperand(const Hashtable& arguments, const Environment& env, const Operand& rand, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     if (rand.isVariable()) {
@@ -211,17 +196,14 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
         //   https://github.com/unicode-org/message-format-wg/issues/310
         // it might need to forbid it.
         VariableName var = rand.asVariable();
-        const Bindings& env = dataModel->getLocalVariables();
         // TODO: Currently, this code implements lazy evaluation of locals.
         // That is, the environment binds names to an Expression, not a resolved value.
         // Eager vs. lazy evaluation is an open issue:
         // see https://github.com/unicode-org/message-format-wg/issues/299
-        bool found = false;
-        const Expression* rhs = lookup(env, var, found);
-        if (found) {
-            U_ASSERT(rhs != nullptr);
+        const Closure* rhs = env.lookup(var);
+        if (rhs != nullptr) {
             // Function calls can't occur on the rhs as an option => use formatPatternExpression
-            formatPatternExpression(arguments, *rhs, status, result);
+            formatPatternExpression(arguments, rhs->getEnv(), rhs->getExpr(), status, result);
             return;
         }
         // Not found in locals -- must be global
@@ -232,7 +214,11 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Operand& 
             return;
         }
         // Unbound variable -- Resolution error
-        status = U_UNRESOLVED_VARIABLE;
+        status = U_UNRESOLVED_VARIABLE_WARNING;
+        // Use fallback per
+        // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
+        result += DOLLAR;
+        result += rand.asVariable();
         return;
     }
     // Must be a literal
@@ -247,7 +233,7 @@ bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const
     return (standardFunctionRegistry->hasSelector(functionName));
 }
 
-Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const OptionMap& options, UErrorCode& status) const {
+Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const Environment& env, const OptionMap& options, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
     size_t pos = OptionMap::FIRST;
@@ -262,7 +248,7 @@ Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const Op
         }
         U_ASSERT(v != nullptr);
         UnicodeString rhsTemp;
-        formatOperand(arguments, *v, status, rhsTemp);
+        formatOperand(arguments, env, *v, status, rhsTemp);
         NULL_ON_ERROR(status);
         rhs.adoptInstead(new UnicodeString(rhsTemp));
         if (!rhs.isValid()) {
@@ -275,15 +261,15 @@ Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const Op
 }
 
 // Precondition: `env` defines `functionName` as a formatter. (This is determined when checking the data model)
-void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments, const OptionMap& variableOptions, const Operand& rand, UnicodeString& result, UErrorCode& status) const {
+void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments,const Environment& env, const OptionMap& variableOptions, const Operand& rand, UnicodeString& result, UErrorCode& status) const {
     CHECK_ERROR(status);
 
     // Create a specific instance of the formatter
     const LocalPointer<Formatter> formatter(formatterFactory.createFormatter(getLocale(), arguments, status));
     // Resolve the operand
     UnicodeString resolvedOperand;
-    formatOperand(arguments, rand, status, resolvedOperand);
-    LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, variableOptions, status));
+    formatOperand(arguments, env, rand, status, resolvedOperand);
+    LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, env, variableOptions, status));
     CHECK_ERROR(status);
     formatter->format(resolvedOperand, *resolvedOptions, result, status);
 }
@@ -350,7 +336,7 @@ const FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionN
     return nullptr;
 }
 
-void MessageFormatter::resolveVariables(const Hashtable& arguments, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
+void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     if (rand.isLiteral()) {
@@ -361,13 +347,10 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Operan
     // Must be variable
     const VariableName& var = rand.asVariable();
     // Resolve it
-    const Bindings& env = dataModel->getLocalVariables();
-    bool found = false;
-    const Expression* referent = lookup(env, var, found);
-    if (found) {
-        U_ASSERT(referent != nullptr);
+    const Closure* referent = env.lookup(var);
+    if (referent != nullptr) {
         // Resolve the referent
-        return resolveVariables(arguments, *referent, isFunction, resolvedOptions, resolvedOperand, functionName, status);
+        return resolveVariables(arguments, referent->getEnv(), referent->getExpr(), isFunction, resolvedOptions, resolvedOperand, functionName, status);
     }
     // Must be global; resolution errors were already checked
     U_ASSERT(arguments.containsKey(var));
@@ -377,7 +360,7 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Operan
     resolvedOperand = *val;
 }
 
-void MessageFormatter::resolveVariables(const Hashtable& arguments, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
+void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Unsupported expression error
@@ -390,27 +373,27 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Expres
 
     // Literal or variable
     if (!expr.isFunctionCall()) {
-        return resolveVariables(arguments, rand, isFunction, resolvedOptions, resolvedOperand, functionName, status);
+        return resolveVariables(arguments, env, rand, isFunction, resolvedOptions, resolvedOperand, functionName, status);
     }
 
     // Function call -- resolve the operand and options
     isFunction = true;
-    formatOperand(arguments, expr.getOperand(), status, resolvedOperand);
+    formatOperand(arguments, env, expr.getOperand(), status, resolvedOperand);
     const Operator& rator = expr.getOperator();
     functionName = rator.getFunctionName().name;
-    LocalPointer<Hashtable> tempResolvedOptions(resolveOptions(arguments, rator.getOptions(), status));
+    LocalPointer<Hashtable> tempResolvedOptions(resolveOptions(arguments, env, rator.getOptions(), status));
     CHECK_ERROR(status);
     resolvedOptions = tempResolvedOptions.orphan();
 }
 
-MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status) const {
+MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     Hashtable* resolvedOptions = nullptr;
     UnicodeString operand;
     UnicodeString functionName;
     bool isFunction = false;
-    resolveVariables(arguments, expr, isFunction, resolvedOptions, operand, functionName, status);
+    resolveVariables(arguments, globalEnv, expr, isFunction, resolvedOptions, operand, functionName, status);
     NULL_ON_ERROR(status);
     const SelectorFactory* selectorFactory;
     if (isFunction) {
@@ -442,7 +425,7 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     return result.orphan();
 }
 
-void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Environment& globalEnv, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // Formatting error
@@ -462,7 +445,7 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
             U_ASSERT(formatterFactory != nullptr);
             
             // Format the call
-            formatFunctionCall(*formatterFactory, arguments,
+            formatFunctionCall(*formatterFactory, arguments, globalEnv,
                                rator.getOptions(), expr.getOperand(), result, status);
         }
 
@@ -492,10 +475,10 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
         }
         return;
     }
-    formatOperand(arguments, expr.getOperand(), status, result);
+    formatOperand(arguments, globalEnv, expr.getOperand(), status, result);
 
 }
-void MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatPattern(const Hashtable& arguments, const Environment& globalEnv, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     for (size_t i = 0; i < pat.numParts(); i++) {
@@ -504,13 +487,13 @@ void MessageFormatter::formatPattern(const Hashtable& arguments, const Pattern& 
         if (part->isText()) {
             result += part->asText();
         } else {
-            formatPatternExpression(arguments, part->contents(), status, result);
+            formatPatternExpression(arguments, globalEnv, part->contents(), status, result);
         }
     }
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-selectors
-void MessageFormatter::resolveSelectors(const Hashtable& arguments, const ExpressionList& selectors, UErrorCode &status, UVector& res) const {
+void MessageFormatter::resolveSelectors(const Hashtable& arguments, const Environment& env, const ExpressionList& selectors, UErrorCode &status, UVector& res) const {
     CHECK_ERROR(status);
 
     // 1. Let res be a new empty list of resolved values that support selection.
@@ -519,7 +502,7 @@ void MessageFormatter::resolveSelectors(const Hashtable& arguments, const Expres
     LocalPointer<ResolvedExpression> rv;
     for (size_t i = 0; i < selectors.length(); i++) {
         // 2i. Let rv be the resolved value of exp.
-        rv.adoptInstead(formatSelectorExpression(arguments, *selectors.get(i), status));
+        rv.adoptInstead(formatSelectorExpression(arguments, env, *selectors.get(i), status));
         // 2ii. If selection is supported for rv:
         // (Always true, since here, selector functions are strings)
         // 2ii(a). Append rv as the last element of the list res.
@@ -745,7 +728,7 @@ void sortVariants(const UVector& pref, UErrorCode& status, UVector& vars) {
     // 7. Select the pattern of `var`
 }
 
-void MessageFormatter::formatSelectors(const Hashtable& arguments, const ExpressionList& selectors, const VariantMap& variants, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatSelectors(const Hashtable& arguments, const Environment& env, const ExpressionList& selectors, const VariantMap& variants, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
@@ -755,7 +738,7 @@ void MessageFormatter::formatSelectors(const Hashtable& arguments, const Express
     LocalPointer<UVector> res(new UVector(status));
     CHECK_ERROR(status);
 //    res->setDeleter(uprv_deleteUObject);
-    resolveSelectors(arguments, selectors, status, *res);
+    resolveSelectors(arguments, env, selectors, status, *res);
 
     // Resolve Preferences
     // pref is a vector of vectors of strings
@@ -784,21 +767,10 @@ void MessageFormatter::formatSelectors(const Hashtable& arguments, const Express
     const Pattern& pat = var.pat;
 
     // Format the pattern
-    formatPattern(arguments, pat, status, result);
+    formatPattern(arguments, env, pat, status, result);
 }
 
-static bool isLocal(const UVector& localEnv, const VariableName& v) {
-    for (size_t i = 0; ((int32_t) i) < localEnv.size(); i++) {
-        const void* definition = localEnv[i];
-        U_ASSERT(definition != nullptr);
-        if (*((VariableName*) definition) == v) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv, const OptionMap& options, UErrorCode &status) const {
+void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check the RHS of each option
@@ -814,7 +786,7 @@ void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv
     }
 }
 
-void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv, const Operand& rand, UErrorCode &status) const {
+void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Nothing to check for literals
@@ -825,17 +797,17 @@ void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv
     // Check that variable is in scope
     const VariableName& var = rand.asVariable();
     // Check local scope
-    if (isLocal(localEnv, var)) {
+    if (localEnv.defines(var)) {
         return;
     }
     // Check global scope
     if (globalEnv.containsKey(var)) {
         return;
     }
-    status = U_UNRESOLVED_VARIABLE;
+    status = U_UNRESOLVED_VARIABLE_WARNING;
 }
 
-void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv, const Expression& expr, UErrorCode &status) const {
+void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check for unresolved variable errors
@@ -856,27 +828,26 @@ void MessageFormatter::check(const Hashtable& globalEnv, const UVector& localEnv
 }
 
 // Check for resolution errors
-void MessageFormatter::checkDeclarations(const Hashtable& arguments, UErrorCode &status) const {
+void MessageFormatter::checkDeclarations(const Hashtable& arguments, Environment& env, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     const Bindings& decls = dataModel->getLocalVariables();
 
-    // Create an empty environment
-    LocalPointer<UVector> localEnv(new UVector(status));
     CHECK_ERROR(status);
-    localEnv->setDeleter(uprv_deleteUObject);
     for (size_t i = 0; i < decls.length(); i++) {
         const Binding* decl = decls.get(i);
         U_ASSERT(decl != nullptr);
         const Expression* rhs = decl->getValue();
-        check(arguments, *localEnv, *rhs, status);
+        check(arguments, env, *rhs, status);
+
+        // Add a closure to the global environment,
+        // memoizing the value of localEnv up to this point
+        LocalPointer<Closure> closure(new Closure(*rhs, env, status));
+        CHECK_ERROR(status);
+
         // Add the LHS to the environment for checking the next declaration
-        LocalPointer<UnicodeString> definition(new UnicodeString(decl->var));
-        if (!definition.isValid()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        localEnv->adoptElement(definition.orphan(), status);
+        // Note: without the call to orphan() (if *closure is used), a double-free occurs
+        env.add(decl->var, *(closure.orphan()), status);
         CHECK_ERROR(status);
     }
 }
@@ -889,14 +860,90 @@ void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &st
     // to check out-of-scope uses of local variables in
     // right-hand sides (unresolved variable errors can
     // only be checked when arguments are known)
-    checkDeclarations(arguments, status);
+
+    LocalPointer<Environment> globalEnv(new Environment(status));
+    CHECK_ERROR(status);
+    checkDeclarations(arguments, *globalEnv, status);
 
     if (!dataModel->hasSelectors()) {
-        formatPattern(arguments, dataModel->getPattern(), status, result);
+        // Note: without the calls to orphan() (if *globalEnv is used), a double-free occurs
+        formatPattern(arguments, *(globalEnv.orphan()), dataModel->getPattern(), status, result);
     } else {
-        formatSelectors(arguments, dataModel->getSelectors(), dataModel->getVariants(), status, result);
+        formatSelectors(arguments, *(globalEnv.orphan()), dataModel->getSelectors(), dataModel->getVariants(), status, result);
     }
     return;
+}
+
+// ---------------- Environments and closures
+MessageFormatter::Closure::Closure(const Expression& expression, const Environment& environment, UErrorCode& status) {
+    // Copies the expression and environment
+    CHECK_ERROR(status);
+    expr.adoptInstead(new Expression(expression));
+    if (!expr.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    env.adoptInstead(new Environment(environment));
+    if (!env.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    isBogus_ = false;
+}
+
+MessageFormatter::Closure::Closure(const Closure& other) {
+    U_ASSERT(!other.isBogus());
+    isBogus_ = false;
+    // Copies the expression and environment
+    expr.adoptInstead(new Expression(*other.expr));
+    if (!expr.isValid()) {
+        isBogus_ = true;
+        return;
+    }
+    env.adoptInstead(new Environment(*other.env));
+    if (!env.isValid()) {
+        isBogus_ = true;
+    }
+}
+
+MessageFormatter::Environment::Environment(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    if (!contents.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    // The environment owns the values
+    contents->setValueDeleter(uprv_deleteUObject);
+}
+
+MessageFormatter::Environment::Environment(const Environment& other) {
+    U_ASSERT(other.contents.isValid());
+    contents.adoptInstead(copyHashtable<Closure>(*other.contents));
+    // If the copy failed, !contents.isValid() will be true; other Environment operations
+    // check for that condition
+}
+
+bool MessageFormatter::Environment::defines(const VariableName& v) const {
+    U_ASSERT(contents.isValid());
+    return (contents->containsKey(v));
+}
+
+void MessageFormatter::Environment::add(const VariableName& v, const Closure& c, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    U_ASSERT(contents.isValid());
+    Closure* copy = new Closure(c);
+    if (copy == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    contents->put(v, copy, errorCode);
+}
+
+// Postcondition: !found || result is non-null
+const MessageFormatter::Closure* MessageFormatter::Environment::lookup(const VariableName& v) const {
+    U_ASSERT(contents.isValid());
+    return ((const Closure*) contents->get(v));
 }
 
 } // namespace message2

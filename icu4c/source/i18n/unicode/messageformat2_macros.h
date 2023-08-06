@@ -30,13 +30,6 @@ using namespace pluralimpl;
 #define CR ((UChar32)0x000D)
 #define LF ((UChar32)0x000A)
 
-/*
-#define BACKSLASH ((UChar32)0x005C)
-#define SPACE ((UChar32)0x0020)
-// Both used (in a `key` context) and reserved (in an annotation context)
-#define ASTERISK ((UChar32)0x002A)
-*/
-
 
 #define PIPE ((UChar32)0x007C)
 #define EQUALS ((UChar32)0x003D)

@@ -25,6 +25,37 @@ static UBool compareVariableName(const UElement e1, const UElement e2) {
     return uhash_compareUnicodeString(e1, e2);
 }
 
+// Shared by OrderedMap and Environment
+template<typename V>
+static Hashtable* copyHashtable(const Hashtable& other) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    // No value comparator needed
+    LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    // The hashtable owns the values
+    adoptedContents->setValueDeleter(uprv_deleteUObject);
+
+    // Copy all the key/value bindings over
+    const UHashElement *e;
+    int32_t pos = UHASH_FIRST;
+    V *val;
+    while ((e = other.nextElement(pos)) != nullptr) {
+        val = new V(*(static_cast<V *>(e->value.pointer)));
+        if (val == nullptr) {
+            return nullptr;
+        }
+        UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
+        adoptedContents->put(*s, val, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return nullptr;
+        }
+    }
+    return adoptedContents.orphan();
+}
+
+
 
 // Polymorphic immutable list class (constructed using the builder pattern),
 // that uses a UVector as its underlying representation
@@ -225,7 +256,7 @@ public:
     }
 
     // Copy constructor
-    OrderedMap<V>(const OrderedMap<V>& other) : contents(copyHashtable(*other.contents)), keys(copyStringVector(*other.keys)) {
+    OrderedMap<V>(const OrderedMap<V>& other) : contents(copyHashtable<V>(*other.contents)), keys(copyStringVector(*other.keys)) {
         U_ASSERT(!other.isBogus());
     }
 
@@ -263,7 +294,7 @@ public:
                 return nullptr;
             }
 
-            LocalPointer<Hashtable> adoptedContents(copyHashtable(*contents));
+            LocalPointer<Hashtable> adoptedContents(copyHashtable<V>(*contents));
             LocalPointer<UVector> adoptedKeys(copyStringVector(*keys));
 
             if (!adoptedContents.isValid() || !adoptedKeys.isValid()) {
@@ -327,34 +358,6 @@ private:
         dst->pointer = new UnicodeString(*(static_cast<UnicodeString *>(src->pointer)));
     }
 
-    static Hashtable* copyHashtable(const Hashtable& other) {
-        UErrorCode errorCode = U_ZERO_ERROR;
-        // No value comparator needed
-        LocalPointer<Hashtable> adoptedContents(new Hashtable(compareVariableName, nullptr, errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        // The hashtable owns the values
-        adoptedContents->setValueDeleter(uprv_deleteUObject);
-
-        // Copy all the key/value bindings over
-        const UHashElement *e;
-        int32_t pos = UHASH_FIRST;
-        V *val;
-        while ((e = other.nextElement(pos)) != nullptr) {
-            val = new V(*(static_cast<V *>(e->value.pointer)));
-            if (val == nullptr) {
-                return nullptr;
-            }
-            UnicodeString *s = static_cast<UnicodeString *>(e->key.pointer);
-            adoptedContents->put(*s, val, errorCode);
-            if (U_FAILURE(errorCode)) {
-                return nullptr;
-            }
-        }
-        return adoptedContents.orphan();
-    }
-
     static UVector* copyStringVector(const UVector& other) {
         UErrorCode errorCode = U_ZERO_ERROR;
         LocalPointer<UVector> adoptedKeys(new UVector(other.size(), errorCode));
@@ -392,6 +395,7 @@ private:
     // List of keys
     const LocalPointer<UVector> keys;
 }; // class OrderedMap<V>
+
 
 } // namespace message2
 U_NAMESPACE_END

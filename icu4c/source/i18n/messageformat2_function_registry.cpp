@@ -162,7 +162,7 @@ number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Hasht
     return result.orphan();
 }
 
-void addAll(const Hashtable& source, Hashtable& dest, UErrorCode& errorCode) {
+static void addAll(const Hashtable& source, Hashtable& dest, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
     int32_t pos = UHASH_FIRST;

@@ -277,6 +277,52 @@ public:
 
     // Intermediate classes used internally in the formatter
 
+    class Closure;
+    class Environment : public UMemory {
+        public:
+        // Copies its closure argument
+        void add(const VariableName&, const Closure&, UErrorCode&);
+        bool defines(const VariableName&) const;
+        const Closure* lookup(const VariableName&) const;
+        Environment(UErrorCode&);
+        Environment(const Environment&);
+        private:
+        // Maps VariableName onto Closure*
+        LocalPointer<Hashtable> contents;
+    };
+    class Closure : public UMemory {
+        using Expression = MessageFormatDataModel::Expression;
+        public:
+        // Copies the expression and environment
+        Closure(const Expression& expression, const Environment& environment, UErrorCode&);
+        // Needs a copy constructor to make environments copyable
+        Closure(const Closure& c);
+        const Expression& getExpr() const {
+            U_ASSERT(!isBogus());
+            return *expr;
+        }
+        const Environment& getEnv() const {
+            U_ASSERT(!isBogus());
+            return *env;
+        }
+        private:
+        // An unevaluated expression
+        /* const */ LocalPointer<Expression> expr;
+        // The environment mapping names used in this
+        // expression to other expressions
+        /* const */ LocalPointer<Environment> env;
+        // Used to indicate copy constructor failures
+        bool isBogus_;
+        bool isBogus() const {
+            if (isBogus_) {
+                return true;
+            }
+            U_ASSERT(expr.isValid());
+            U_ASSERT(env.isValid());
+            return false;
+        }
+    };
+
     // `ResolvedExpression`
     // represents the result of resolving an expression in a selector
     // context.
@@ -289,31 +335,33 @@ public:
     class ResolvedExpression : public UMemory {
     public:
         virtual ~ResolvedExpression();
+        const bool isFallback; // if isFallback is true, this expression will be matched to the catchall variant
         const LocalPointer<Selector> selectorFunction;
         const LocalPointer<Hashtable> resolvedOptions;
         const UnicodeString resolvedOperand;
         // Adopts all its arguments
-        ResolvedExpression(Selector* s, Hashtable* o, UnicodeString r) : selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+        ResolvedExpression(Selector* s, Hashtable* o, UnicodeString r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+        ResolvedExpression() : isFallback(true) {}
     };
-     void resolveVariables(const Hashtable&, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
-     void resolveVariables(const Hashtable&, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
+     void resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
+     void resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
 
      // Selection methods
-     void resolveSelectors(const Hashtable&, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
+     void resolveSelectors(const Hashtable&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
      void matchSelectorKeys(const ResolvedExpression&, const UVector&, UErrorCode&, UVector&) const;
      void resolvePreferences(const UVector&, const MessageFormatDataModel::VariantMap&, UErrorCode&, UVector& pref) const;
 
      // Formatting methods
      void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
-     void formatPattern(const Hashtable&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
+     void formatPattern(const Hashtable&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats an expression in a selector context
-     ResolvedExpression* formatSelectorExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     ResolvedExpression* formatSelectorExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression in a pattern context
-     void formatPatternExpression(const Hashtable&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
-     Hashtable* resolveOptions(const Hashtable&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
-     void formatOperand(const Hashtable&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
-     void formatSelectors(const Hashtable& arguments, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
+     void formatPatternExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
+     Hashtable* resolveOptions(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
+     void formatOperand(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
+     void formatSelectors(const Hashtable& arguments, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods
      bool isBuiltInSelector(const FunctionName&) const;
@@ -337,10 +385,10 @@ public:
      }
 
      // Checking for resolution errors
-     void checkDeclarations(const Hashtable&, UErrorCode&) const;
-     void check(const Hashtable&, const UVector&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
-     void check(const Hashtable&, const UVector&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
-     void check(const Hashtable&, const UVector&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     void checkDeclarations(const Hashtable&, Environment&, UErrorCode&) const;
+     void check(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     void check(const Hashtable&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+     void check(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
 
      // Registry for built-in functions
      LocalPointer<FunctionRegistry> standardFunctionRegistry;

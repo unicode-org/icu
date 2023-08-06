@@ -288,7 +288,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             callTest(*test, par);
           }
           break;
-        TESTCLASS(60,TestMessageFormat2);
+        TESTCLASS(60,message2::TestMessageFormat2);
         default: name = ""; break; //needed to end loop
     }
     if (exec) {

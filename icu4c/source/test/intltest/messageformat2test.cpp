@@ -303,72 +303,43 @@ void TestMessageFormat2::testAPISimple() {
 }
 
 // Design doc example, with more details
-// TODO: eliminate repetitive code
 void TestMessageFormat2::testAPI() {
-    IcuTestErrorCode errorCode1(*this, "testAPI");
-    UErrorCode errorCode = (UErrorCode) errorCode1;
-    UParseError parseError;
+    IcuTestErrorCode errorCode(*this, "testAPI");
     Locale locale = "en_US";
-    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
 
-    UnicodeString pattern = u"{Hello, {$userName}!}";
-    LocalPointer<MessageFormatter> mf(builder
-                                      ->setPattern(pattern, errorCode)
-                                      .build(parseError, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    // Pattern: "{Hello, {$userName}!}"
+    LocalPointer<Hashtable> arguments(Args::of("userName", "John", errorCode));
+    CHECK_ERROR(errorCode);
+    LocalPointer<TestCase> test(testBuilder->setName("testAPI")
+                                .setPattern("{Hello, {$userName}!}")
+                                .setArguments(arguments.orphan())
+                                .setExpected("Hello, John!")
+                                .setLocale(locale, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-    UnicodeString value = "John";
-    arguments->put("userName", &value, errorCode);
-    UnicodeString expected = "Hello, John!";
-    UnicodeString result;
-    mf->formatToString(*arguments, errorCode, result);
-    if (result != expected) {
-        logln("Expected output: " + expected + "\nGot output: " + result);
-        errorCode = U_MESSAGE_PARSE_ERROR;
-        return;
-    }
-    if (U_FAILURE(errorCode)) {
-        dataerrln(result);
-        logln(UnicodeString("TestMessageFormat2::testAPI failed test with pattern: " + pattern));
-        return;
-    }
+    // Pattern: "{Today is {$today ..."
+    UnicodeString value = "5264498352317.0";  // Sunday, October 28, 2136 8:39:12 AM PST
+    arguments.adoptInstead(Args::of("today", value, errorCode));
+    CHECK_ERROR(errorCode);
 
-    mf.adoptInstead(builder
-                    ->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}", errorCode)
-                    .setLocale(locale)
-                    .build(parseError, errorCode));
+    test.adoptInstead(testBuilder->setName("testAPI")
+                      .setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}")
+                      .setArguments(arguments.orphan())
+                      .setExpected("Today is Sun, Oct 28, 2136.")
+                      .setLocale(locale, errorCode)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    arguments->removeAll();
-    result.setTo("");
-    value.setTo("");
-    value = "5264498352317.0";  // Sunday, October 28, 2136 8:39:12 AM PST
+    // Pattern matching - plural
+    arguments.adoptInstead(Args::of("photoCount", "12",
+                                    "userGender", "feminine",
+                                    "userName", "Maria",
+                                    errorCode));
+    CHECK_ERROR(errorCode);
 
-    arguments->put("today", &value, errorCode);
-    expected = "Today is Sun, Oct 28, 2136.";
-    mf->formatToString(*arguments, errorCode, result);
-
-    if (result != expected) {
-        logln("Expected output: " + expected + "\nGot output: " + result);
-        errorCode = U_MESSAGE_PARSE_ERROR;
-        return;
-    }
-    if (U_FAILURE(errorCode)) {
-        dataerrln(result);
-        logln(UnicodeString("TestMessageFormat2::testAPI failed test with pattern: " + pattern));
-        return;
-    }
-
-    // Pattern matching
-    pattern = "match {$photoCount :select} {$userGender :select}\n\
+    UnicodeString pattern = "match {$photoCount :select} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
                      when 1 * {{$userName} added a new photo to their album.}\n \
@@ -376,46 +347,22 @@ void TestMessageFormat2::testAPI() {
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
-    mf.adoptInstead(builder
-                    ->setPattern(pattern, errorCode)
-                    .setLocale(locale)
-                    .build(parseError, errorCode));
 
-    arguments->removeAll();
-    UnicodeString value1 = "12";
-    arguments->put("photoCount", &value1, errorCode);
-    UnicodeString value2 = "feminine";
-    UnicodeString value3 = "Maria";
-    arguments->put("userGender", &value2, errorCode);
-    arguments->put("userName", &value3, errorCode);
-
-    result.remove();
-    mf->formatToString(*arguments, errorCode, result);
-
-    if (U_FAILURE(errorCode)) {
-        dataerrln(pattern);
-        logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
-        return;
-    }
-
-    expected = "Maria added 12 photos to her album.";
-
-    if (result != expected) {
-        dataerrln(pattern);
-        logln("Expected output: " + expected + "\nGot output: " + result);
-        errorCode = U_MESSAGE_PARSE_ERROR;
-        return;
-    }
-
-    arguments->removeAll();
-    value1 = "1";
-    arguments->put("photoCount", &value1, errorCode);
-    value2 = "feminine";
-    value3 = "Maria";
-    arguments->put("userGender", &value2, errorCode);
-    arguments->put("userName", &value3, errorCode);
+    test.adoptInstead(testBuilder->setName("testAPI")
+                      .setPattern(pattern)
+                      .setArguments(arguments.orphan())
+                      .setExpected("Maria added 12 photos to her album.")
+                      .setLocale(locale, errorCode)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
     // Built-in functions
+    arguments.adoptInstead(Args::of("photoCount", "1",
+                                    "userGender", "feminine",
+                                    "userName", "Maria",
+                                    errorCode));
+    CHECK_ERROR(errorCode);
+
     pattern = "match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
@@ -424,26 +371,13 @@ void TestMessageFormat2::testAPI() {
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
-    expected = "Maria added a new photo to her album.";
-
-    builder->setPattern(pattern, errorCode);
-    mf.adoptInstead(builder->build(parseError, errorCode));
-
-    result.remove();
-    mf->formatToString(*arguments, errorCode, result);
-
-    if (U_FAILURE(errorCode)) {
-        dataerrln(pattern);
-        logln(UnicodeString("TestMessageFormat2::testAPI failed test with error code ") + (int32_t)errorCode);
-        return;
-    }
-
-    if (result != expected) {
-        dataerrln(pattern);
-        logln("Expected output: " + expected + "\nGot output: " + result);
-        errorCode = U_MESSAGE_PARSE_ERROR;
-        return;
-    }
+    test.adoptInstead(testBuilder->setName("testAPI")
+                      .setPattern(pattern)
+                      .setArguments(arguments.orphan())
+                      .setExpected("Maria added a new photo to her album.")
+                      .setLocale(locale, errorCode)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
@@ -541,11 +475,15 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
 
 // Pattern is expected to result in a runtime error
 void TestMessageFormat2::testMessageFormatting(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
+    UnicodeString result;
+    testMessageFormatting(s, parseError, result, errorCode);
+}
+
+void TestMessageFormat2::testMessageFormatting(const UnicodeString& s, UParseError& parseError, UnicodeString& result, UErrorCode& errorCode) {
     LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
     if (U_SUCCESS(errorCode)) {
       builder->setPattern(s, errorCode);
       LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
-      UnicodeString result;
       LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
       if (U_FAILURE(errorCode)) {
           return;
@@ -719,6 +657,47 @@ void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const Unicode
     }
 }
 
+/*
+ Tests a single pattern, which is expected to cause the formatter
+ to emit a resolution error, selection error, or
+ formatting error
+
+ `testNum`: Test number (only used for diagnostic output)
+ `s`: The pattern string.
+ `expectedErrorCode`: the error code expected to be returned by the formatter
+
+ TODO: For now, the line and character numbers are not checked
+*/
+void TestMessageFormat2::testRuntimeWarningPattern(uint32_t testNum, const UnicodeString& s, const UnicodeString& expectedResult, UErrorCode expectedErrorCode) {
+    UParseError parseError;
+    IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+
+    UnicodeString result;
+
+    testMessageFormatting(s, parseError, result, errorCode);
+
+    if (errorCode == expectedErrorCode) {
+        if (expectedResult != result) {
+            dataerrln(s);
+            logln("Expected output: " + expectedResult + "\nGot output: " + result);
+            ((UErrorCode&)errorCode) = U_MESSAGE_PARSE_ERROR;
+            return;
+        }
+        errorCode.reset();
+        return;
+    }
+
+    if (!U_FAILURE(errorCode)) {
+        dataerrln("TestMessageFormat2::testSemanticallyInvalidPattern #%d - expected test to fail, but it passed", testNum);
+        logln(UnicodeString("TestMessageFormat2::testSemanticallyInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+    } else {
+        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with error code ", expectedErrorCode, " but it failed with a different error: ", errorCode);
+        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+        return;
+    }
+}
+
 void TestMessageFormat2::testDataModelErrors() {
     uint32_t i = 0;
 
@@ -790,8 +769,8 @@ void TestMessageFormat2::testResolutionErrors() {
     // but should trigger a resolution error
 
     // Unresolved variable
-    testRuntimeErrorPattern(++i, "{{$oops}}", U_UNRESOLVED_VARIABLE);
-    testRuntimeErrorPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", U_UNRESOLVED_VARIABLE);
+    testRuntimeWarningPattern(++i, "{{$oops}}", "$oops", U_UNRESOLVED_VARIABLE_WARNING);
+    testRuntimeWarningPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", "$forward", U_UNRESOLVED_VARIABLE_WARNING);
     // TODO add more
 
     // Unknown function
