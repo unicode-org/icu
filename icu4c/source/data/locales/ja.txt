@@ -4172,5 +4172,6 @@ ja{
             surnameFirst-short-monogram-formal{"{given-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-monogram-allCaps}"}
         }
+        nativeSpaceReplacement{""}
     }
 }

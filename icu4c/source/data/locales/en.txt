@@ -2767,5 +2767,9 @@ en{
             surnameFirst-short-referring-formal{"{surname} {given-initial}{given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
         }
+        parameterDefault{
+            formality{"informal"}
+            length{"medium"}
+        }
     }
 }
