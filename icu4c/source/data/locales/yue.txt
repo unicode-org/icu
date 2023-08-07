@@ -3705,5 +3705,6 @@ yue{
             surnameFirst-short-referring-formal{"{surname} {given}，{given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given}"}
         }
+        nativeSpaceReplacement{""}
     }
 }

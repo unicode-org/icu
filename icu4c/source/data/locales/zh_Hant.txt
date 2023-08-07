@@ -7947,5 +7947,6 @@ zh_Hant{
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
         }
+        nativeSpaceReplacement{""}
     }
 }

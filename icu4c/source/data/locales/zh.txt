@@ -5642,5 +5642,6 @@ zh{
             surnameFirst-short-referring-formal{"{surname} {given} {given2}"}
             surnameFirst-short-referring-informal{"{surname} {given}"}
         }
+        nativeSpaceReplacement{""}
     }
 }

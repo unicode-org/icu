@@ -41893,6 +41893,11 @@ structLocale:table(nofallback){
             surnameFirst-short-referring-formal{""}
             surnameFirst-short-referring-informal{""}
         }
+        nativeSpaceReplacement{""}
+        parameterDefault{
+            formality{""}
+            length{""}
+        }
     }
     transformNames{
         BGN{""}

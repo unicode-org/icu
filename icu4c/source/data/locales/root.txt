@@ -3678,5 +3678,10 @@ root{
             surnameFirst-short-referring-formal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
             surnameFirst-short-referring-informal:alias{"/LOCALE/personNames/namePattern/surnameFirst-long-referring-formal"}
         }
+        nativeSpaceReplacement{" "}
+        parameterDefault{
+            formality{"formal"}
+            length{"medium"}
+        }
     }
 }

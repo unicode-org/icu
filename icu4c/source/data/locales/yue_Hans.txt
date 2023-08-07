@@ -3651,5 +3651,6 @@ yue_Hans{
         initialPattern{
             initial{"{0}"}
         }
+        nativeSpaceReplacement{""}
     }
 }
