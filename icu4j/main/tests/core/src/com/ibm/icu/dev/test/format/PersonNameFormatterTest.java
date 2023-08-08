@@ -102,19 +102,35 @@ public class PersonNameFormatterTest extends TestFmwk{
         executeTestCases(new NameAndTestCases[]{
             new NameAndTestCases("locale=en_US,title=Mr.,given=Richard,given-informal=Rich,given2=Theodore,surname=Gillam", new String[][] {
                 // test all the different combinations of parameters with the normal name order
-                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Mr. Richard Theodore Gillam" },
-                { "en_US", "LONG",   "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich Gillam" },
-                { "en_US", "LONG",   "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
-                { "en_US", "LONG",   "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
-                { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "Richard T. Gillam" },
-                { "en_US", "MEDIUM", "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich Gillam" },
-                { "en_US", "MEDIUM", "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
-                { "en_US", "MEDIUM", "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
-                //{ "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "R. T. Gillam" },
-                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "R.T. Gillam" }, // result changed with CLDR 43-alpha1
-                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich G." },
-                { "en_US", "SHORT",  "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
-                { "en_US", "SHORT",  "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
+                { "en_US", "LONG",    "REFERRING",  "FORMAL",   "DEFAULT", "", "Mr. Richard Theodore Gillam" },
+                { "en_US", "LONG",    "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich Gillam" },
+                { "en_US", "LONG",    "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
+                { "en_US", "LONG",    "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
+                { "en_US", "MEDIUM",  "REFERRING",  "FORMAL",   "DEFAULT", "", "Richard T. Gillam" },
+                { "en_US", "MEDIUM",  "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich Gillam" },
+                { "en_US", "MEDIUM",  "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
+                { "en_US", "MEDIUM",  "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
+                //{ "en_US", "SHORT",   "REFERRING",  "FORMAL",   "DEFAULT", "", "R. T. Gillam" },
+                { "en_US", "SHORT",   "REFERRING",  "FORMAL",   "DEFAULT", "", "R.T. Gillam" }, // result changed with CLDR 43-alpha1
+                { "en_US", "SHORT",   "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich G." },
+                { "en_US", "SHORT",   "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
+                { "en_US", "SHORT",   "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
+
+                // test DEFAULT length (in English [and all other current locales], this is the same as MEDIUM)
+                { "en_US", "DEFAULT", "REFERRING",  "FORMAL",   "DEFAULT", "", "Richard T. Gillam" },
+                { "en_US", "DEFAULT", "REFERRING",  "INFORMAL", "DEFAULT", "", "Rich Gillam" },
+                { "en_US", "DEFAULT", "ADDRESSING", "FORMAL",   "DEFAULT", "", "Mr. Gillam" },
+                { "en_US", "DEFAULT", "ADDRESSING", "INFORMAL", "DEFAULT", "", "Rich" },
+
+                // test DEFAULT formality (in English, this is the same as INFORMAL)
+                { "en_US", "LONG",    "REFERRING",  "DEFAULT",  "DEFAULT", "", "Rich Gillam" },
+                { "en_US", "LONG",    "ADDRESSING", "DEFAULT",  "DEFAULT", "", "Rich" },
+                { "en_US", "MEDIUM",  "REFERRING",  "DEFAULT",  "DEFAULT", "", "Rich Gillam" },
+                { "en_US", "MEDIUM",  "ADDRESSING", "DEFAULT",  "DEFAULT", "", "Rich" },
+                { "en_US", "SHORT",   "REFERRING",  "DEFAULT",  "DEFAULT", "", "Rich G." },
+                { "en_US", "SHORT",   "ADDRESSING", "DEFAULT",  "DEFAULT", "", "Rich" },
+                { "en_US", "DEFAULT", "REFERRING",  "DEFAULT",  "DEFAULT", "", "Rich Gillam" },
+                { "en_US", "DEFAULT", "ADDRESSING", "DEFAULT",  "DEFAULT", "", "Rich" },
 
                 // test all the different combinations of parameters for "sorting" order
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "SORTING", "", "Gillam, Richard Theodore" },
@@ -331,6 +347,35 @@ public class PersonNameFormatterTest extends TestFmwk{
             new NameAndTestCases("locale=ja_JP,given=Shinzo,surname=Abe,preferredOrder=givenFirst", new String[][] {
                 { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "Shinzo Abe" },
             }),
+
+            // the formatter can also override the ordering and always format names in GN-first or SN-first order
+            // (this repeats some of the test cases above for clarity)
+            new NameAndTestCases("locale=en_US,given=Shinzo,surname=Abe", new String[][] {
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT",               "", "Shinzo Abe" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_GIVEN_FIRST",     "", "Shinzo Abe" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_SURNAME_FIRST",   "", "Abe Shinzo" },
+            }),
+            new NameAndTestCases("locale=ja_JP,given=Shinzo,surname=Abe", new String[][] {
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT",               "", "Abe Shinzo" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_GIVEN_FIRST",     "", "Shinzo Abe" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_SURNAME_FIRST",   "", "Abe Shinzo" },
+            }),
+            new NameAndTestCases("locale=ja_JP,given=晋三,surname=安倍", new String[][] {
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT",               "", "安倍晋三" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_GIVEN_FIRST",     "", "晋三安倍" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_SURNAME_FIRST",   "", "安倍晋三" },
+            }),
+            new NameAndTestCases("locale=en_US,given=Shinzo,surname=Abe,preferredOrder=surnameFirst", new String[][] {
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT",               "", "Abe Shinzo" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_GIVEN_FIRST",     "", "Shinzo Abe" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_SURNAME_FIRST",   "", "Abe Shinzo" },
+            }),
+            new NameAndTestCases("locale=ja_JP,given=Shinzo,surname=Abe,preferredOrder=givenFirst", new String[][] {
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT",               "", "Shinzo Abe" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_GIVEN_FIRST",     "", "Shinzo Abe" },
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "FORCE_SURNAME_FIRST",   "", "Abe Shinzo" },
+            }),
+
         }, false);
     }
 
@@ -387,13 +432,12 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎駿" },
                 { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "宮崎駿" },
             }),
-            // (Thai, despite not using spaces between words, DOES use spaces between the given name and surname_
+            // (Thai and Lao, despite not using spaces between words, DO use spaces between the given name and surname
             new NameAndTestCases("locale=th_TH,given=ไอริณ,surname=กล้าหาญ", new String[][] {
                 { "th_TH", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "ไอริณ กล้าหาญ" },
             }),
-            // (Lao, on the other hand, does NOT put a space between the given name and surname)
             new NameAndTestCases("locale=lo_LA,given=ໄອຣີນ,surname=ແອດເລີ", new String[][] {
-                { "lo_LA", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "ໄອຣີນແອດເລີ" },
+                { "lo_LA", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "ໄອຣີນ ແອດເລີ" },
             }),
         }, false);
     }
@@ -597,5 +641,23 @@ public class PersonNameFormatterTest extends TestFmwk{
             String actualResult = pnf.formatToString(name);
             assertEquals("Wrong result for " + localeID, expectedResult, actualResult);
         }
+    }
+
+    @Test
+    public void TestDefaultFormality() {
+        executeTestCases(new NameAndTestCases[]{
+            // in English, DEFAULT formality is the same as INFORMAL
+            new NameAndTestCases("locale=en_US,title=Mr.,given=Richard,given-informal=Rich,given2=Theodore,surname=Gillam", new String[][] {
+                {"en_US", "DEFAULT", "REFERRING", "FORMAL", "DEFAULT", "", "Richard T. Gillam"},
+                {"en_US", "DEFAULT", "REFERRING", "INFORMAL", "DEFAULT", "", "Rich Gillam"},
+                {"en_US", "DEFAULT", "REFERRING", "DEFAULT", "DEFAULT", "", "Rich Gillam"},
+            }),
+            // in other languages (we're using German here), DEFAULT formality is the same as FORMAL
+            new NameAndTestCases("locale=de_DE,title=Herr,given=Friedrich,given-informal=Fritz,given2=Georg,surname=Schellhammer", new String[][] {
+                {"de_DE", "DEFAULT", "REFERRING", "FORMAL", "DEFAULT", "", "Friedrich G. Schellhammer"},
+                {"de_DE", "DEFAULT", "REFERRING", "INFORMAL", "DEFAULT", "", "Fritz Schellhammer"},
+                {"de_DE", "DEFAULT", "REFERRING", "DEFAULT", "DEFAULT", "", "Friedrich G. Schellhammer"},
+            })
+        }, false);
     }
 }

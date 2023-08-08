@@ -29,7 +29,6 @@ public class PersonNameFormatterImpl {
     private final boolean capitalizeSurname;
     private final String foreignSpaceReplacement;
     private final String nativeSpaceReplacement;
-    private final boolean formatterLocaleUsesSpaces;
     private final PersonNameFormatter.Length length;
     private final PersonNameFormatter.Usage usage;
     private final PersonNameFormatter.Formality formality;
@@ -54,8 +53,7 @@ public class PersonNameFormatterImpl {
         this.initialPattern = rb.getStringWithFallback("personNames/initialPattern/initial");
         this.initialSequencePattern = rb.getStringWithFallback("personNames/initialPattern/initialSequence");
         this.foreignSpaceReplacement = rb.getStringWithFallback("personNames/foreignSpaceReplacement");
-        this.formatterLocaleUsesSpaces = !LOCALES_THAT_DONT_USE_SPACES.contains(locale.getLanguage());
-        this.nativeSpaceReplacement = formatterLocaleUsesSpaces ? " " : "";
+        this.nativeSpaceReplacement = rb.getStringWithFallback("personNames/nativeSpaceReplacement");
 
         // asjust for combinations of parameters that don't make sense in practice
         if (usage == PersonNameFormatter.Usage.MONOGRAM) {
@@ -72,9 +70,12 @@ public class PersonNameFormatterImpl {
         // different for different names), load patterns for both given-first and surname-first names.  (If the user has
         // specified SORTING, we don't need to do this-- we just load the "sorting" patterns and ignore the name's order.)
         final String RESOURCE_PATH_PREFIX = "personNames/namePattern/";
-        String resourceNameBody = length.toString().toLowerCase() + "-" + usage.toString().toLowerCase() + "-"
-                + formality.toString().toLowerCase();
-        if (displayOrder == PersonNameFormatter.DisplayOrder.DEFAULT) {
+        String lengthStr = (length != PersonNameFormatter.Length.DEFAULT) ? length.toString().toLowerCase()
+                : rb.getStringWithFallback("personNames/parameterDefault/length");
+        String formalityStr = (formality != PersonNameFormatter.Formality.DEFAULT) ? formality.toString().toLowerCase()
+                : rb.getStringWithFallback("personNames/parameterDefault/formality");
+        String resourceNameBody = lengthStr + "-" + usage.toString().toLowerCase() + "-" + formalityStr;
+        if (displayOrder != PersonNameFormatter.DisplayOrder.SORTING) {
             ICUResourceBundle gnFirstResource = rb.getWithFallback(RESOURCE_PATH_PREFIX + "givenFirst-" + resourceNameBody);
             ICUResourceBundle snFirstResource = rb.getWithFallback(RESOURCE_PATH_PREFIX + "surnameFirst-" + resourceNameBody);
 
@@ -109,7 +110,6 @@ public class PersonNameFormatterImpl {
         capitalizeSurname = false;
         foreignSpaceReplacement = " ";
         nativeSpaceReplacement = " ";
-        formatterLocaleUsesSpaces = true;
 
         // then, set values for the fields we actually care about (all but gnFirstPatterns are optional)
         this.locale = locale;
@@ -200,8 +200,6 @@ public class PersonNameFormatterImpl {
         return capitalizeSurname;
     }
 
-    private final Set<String> LOCALES_THAT_DONT_USE_SPACES = new HashSet<>(Arrays.asList("ja", "zh", "yue", "km", "lo", "my"));
-
     static final Set<String> NON_DEFAULT_SCRIPTS = new HashSet<>(Arrays.asList("Hani", "Hira", "Kana"));
 
     /**
@@ -227,6 +225,14 @@ public class PersonNameFormatterImpl {
      * @return If true, use given-first order to format the name; if false, use surname-first order.
      */
     private boolean nameIsGnFirst(PersonName name) {
+        // if the formatter has its display order set to one of the "force" values, that overrides
+        // all this logic and the name's preferred-order property
+        if (this.displayOrder == PersonNameFormatter.DisplayOrder.FORCE_GIVEN_FIRST) {
+            return true;
+        } else if (this.displayOrder == PersonNameFormatter.DisplayOrder.FORCE_SURNAME_FIRST) {
+            return false;
+        }
+
         // the name can declare its order-- check that first (it overrides any locale-based calculation)
         if (name.getPreferredOrder() == PersonName.PreferredOrder.GIVEN_FIRST) {
             return true;

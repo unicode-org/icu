@@ -92,7 +92,13 @@ public class PersonNameFormatter {
          * When Formality is INFORMAL, may only include one field.
          * @draft ICU 73
          */
-        SHORT
+        SHORT,
+
+        /**
+         * The default name length for the locale.  For most locales, this is the same as MEDIUM.
+         * @draft ICU 74
+         */
+        DEFAULT
     }
 
     /**
@@ -138,7 +144,14 @@ public class PersonNameFormatter {
          * of the given name.
          * @draft ICU 73
          */
-        INFORMAL
+        INFORMAL,
+
+        /**
+         * The default formality for the locale.  For most locales, this is the same as FORMAL, but for English,
+         * this is the same as INFORMAL.
+         * @draft ICU 74
+         */
+        DEFAULT
     }
 
     /**
@@ -158,7 +171,21 @@ public class PersonNameFormatter {
          * of the name: "Smith, John".
          * @draft ICU 73
          */
-        SORTING
+        SORTING,
+
+        /**
+         * Forces the formatter to format the name in given-first order.  If the name itself specifies
+         * a display order, this overrides it.
+         * @draft ICU 74
+         */
+        FORCE_GIVEN_FIRST,
+
+        /**
+         * Forces the formatter to format the name in surname-first order.  If the name itself specifies
+         * a display order, this overrides it.
+         * @draft ICU 74
+         */
+        FORCE_SURNAME_FIRST,
     }
 
     private final PersonNameFormatterImpl impl;
@@ -260,9 +287,9 @@ public class PersonNameFormatter {
        }
 
         private Locale locale = Locale.getDefault();
-        private Length length = Length.MEDIUM;
+        private Length length = Length.DEFAULT;
         private Usage usage = Usage.REFERRING;
-        private Formality formality = Formality.FORMAL;
+        private Formality formality = Formality.DEFAULT;
         private DisplayOrder displayOrder = DisplayOrder.DEFAULT;
         private boolean surnameAllCaps = false;
     }
