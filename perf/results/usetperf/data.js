@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1691528232227,
+  "lastUpdate": 1691534145450,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33538,6 +33538,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2267.2476,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "56850c9a42eab1a28c65e0c177accd9ea9272a5d",
+          "message": "ICU-22402 Add support in ICU and in the CLDR-to-ICU tool for the new nativeSpaceReplacement and parameterDefault\nresources for PersonNameFormatter in CLDR. Regenerated the ICU4J data resources as well as the ICU4C resources\nto include the new resources.",
+          "timestamp": "2023-08-08T14:42:02-07:00",
+          "tree_id": "cd236353f48d24d9672525c7419db8b180222a96",
+          "url": "https://github.com/unicode-org/icu/commit/56850c9a42eab1a28c65e0c177accd9ea9272a5d"
+        },
+        "date": 1691534099490,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 60235.3262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 96468.8536,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.44,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3187,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 3.625,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 13120.716,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 42823.6156,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2269.7463,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
