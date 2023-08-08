@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1691528050058,
+  "lastUpdate": 1691533983550,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23110,6 +23110,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 19694085.7789,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "56850c9a42eab1a28c65e0c177accd9ea9272a5d",
+          "message": "ICU-22402 Add support in ICU and in the CLDR-to-ICU tool for the new nativeSpaceReplacement and parameterDefault\nresources for PersonNameFormatter in CLDR. Regenerated the ICU4J data resources as well as the ICU4C resources\nto include the new resources.",
+          "timestamp": "2023-08-08T14:42:02-07:00",
+          "tree_id": "cd236353f48d24d9672525c7419db8b180222a96",
+          "url": "https://github.com/unicode-org/icu/commit/56850c9a42eab1a28c65e0c177accd9ea9272a5d"
+        },
+        "date": 1691533931956,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 298.749,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 76429766.875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15975445.9912,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 72819955.3134,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 17384788.1152,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
