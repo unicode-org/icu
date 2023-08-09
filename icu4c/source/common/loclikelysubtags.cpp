@@ -241,9 +241,11 @@ private:
                 return false;
             }
             for (int i = 0; i < length; ++i) {
-                stringArray.getValue(i, value);  // returns true because i < length
-                rawIndexes[i] = strings.add(value.getUnicodeString(errorCode), errorCode);
-                if (U_FAILURE(errorCode)) { return false; }
+                if (stringArray.getValue(i, value)) {  // returns true because i < length
+                    int32_t strLength = 0;
+                    rawIndexes[i] = strings.add(value.getString(strLength, errorCode), errorCode);
+                    if (U_FAILURE(errorCode)) { return false; }
+                }
             }
         }
         return true;
@@ -261,10 +263,10 @@ private:
         lang[0] = 'a' + ((encoded % 27) - 1);
         lang[1] = 'a' + (((encoded / 27 ) % 27) - 1);
         if (encoded / (27 * 27) == 0) {
-            return UnicodeString(lang, 2);
+            return UnicodeString(lang, 2, US_INV);
         }
         lang[2] = 'a' + ((encoded / (27 * 27)) - 1);
-        return UnicodeString(lang, 3);
+        return UnicodeString(lang, 3, US_INV);
     }
     UnicodeString toScript(int encoded) {
         if (encoded == 0) {
@@ -278,7 +280,8 @@ private:
         if (script == nullptr) {
             return UNICODE_STRING_SIMPLE("");
         }
-        return UnicodeString(script, 4);
+        U_ASSERT(uprv_strlen(script) == 4);
+        return UnicodeString(script, 4, US_INV);
     }
     UnicodeString m49IndexToCode(const ResourceArray &m49Array, ResourceValue &value, int index, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) {
@@ -306,7 +309,7 @@ private:
         char region[2];
         region[0] = 'A' + ((encoded % 27) - 1);
         region[1] = 'A' + (((encoded / 27) % 27) - 1);
-        return UnicodeString(region, 2);
+        return UnicodeString(region, 2, US_INV);
     }
 
     bool readLSREncodedStrings(const ResourceTable &table, const char* key, ResourceValue &value, const ResourceArray& m49Array,
@@ -321,9 +324,10 @@ private:
                 return false;
             }
             for (int i = 0; i < length; ++i) {
-                rawIndexes[i*3] = strings.add(toLanguage(vectors[i]), errorCode);
-                rawIndexes[i*3+1] = strings.add(toScript(vectors[i]), errorCode);
-                rawIndexes[i*3+2] = strings.add(toRegion(m49Array, value, vectors[i], errorCode), errorCode);
+                rawIndexes[i*3] = strings.addByValue(toLanguage(vectors[i]), errorCode);
+                rawIndexes[i*3+1] = strings.addByValue(toScript(vectors[i]), errorCode);
+                rawIndexes[i*3+2] = strings.addByValue(
+                    toRegion(m49Array, value, vectors[i], errorCode), errorCode);
                 if (U_FAILURE(errorCode)) { return false; }
             }
             length *= 3;
