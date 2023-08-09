@@ -721,7 +721,9 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
     for (inputIndex=0; inputIndex < normalizedLen; ) {
         UChar32 c = nfdId.char32At(inputIndex);
         inputIndex += U16_LENGTH(c);
-        This->fSpoofData->confusableLookup(c, skelStr);
+        if (!u_hasBinaryProperty(c, UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
+            This->fSpoofData->confusableLookup(c, skelStr);
+        }
     }
 
     gNfdNormalizer->normalize(skelStr, dest, *status);

@@ -31,7 +31,10 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.SpoofChecker;
@@ -66,6 +69,7 @@ public class SpoofCheckerTest extends TestFmwk {
 
     String han_Hiragana = "\u3086\u308A \u77F3\u7530";  // Hiragana, space, Han
 
+    static final UnicodeSet DEFAULT_IGNORABLE_CODE_POINT = new UnicodeSet("\\p{di}");
 
     /*
      * Test basic constructor.
@@ -376,6 +380,15 @@ public class SpoofCheckerTest extends TestFmwk {
         s = "I1l0O";
         String dest = sc.getSkeleton(SpoofChecker.ANY_CASE, s);
         assertEquals("", dest, "lllOO");
+
+        // Example from UTS #55, Section 5.1.3 https://www.unicode.org/reports/tr55/#General-Security-Profile,
+        // of a minimal pair with a ZWNJ in Persian.
+        final String behrooz = "بهروز";
+        final String update = "به‌روز";
+        // These strings differ only by a ZWNJ.
+        assertEquals("", update.replace("\u200C", ""), behrooz);
+        checkResult = sc.areConfusable(behrooz, update);
+        assertEquals("", SpoofChecker.SINGLE_SCRIPT_CONFUSABLE, checkResult);
     }
 
     @Test
@@ -724,6 +737,13 @@ public class SpoofCheckerTest extends TestFmwk {
                 if (!normalizer.isNormalized(from)) {
                     // The source character was not NFD.
                     // Skip this case; the first step in obtaining a skeleton is to NFD the input,
+                    // so the mapping in this line of confusables.txt will never be applied.
+                    continue;
+                }
+
+                if (DEFAULT_IGNORABLE_CODE_POINT.containsSome(from)) {
+                    // The source character is a default ignorable code point.
+                    // Skip this case; the second step in obtaining a skeleton is to remove DIs,
                     // so the mapping in this line of confusables.txt will never be applied.
                     continue;
                 }

@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ICUBinary;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.ICUBinary.Authenticate;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -1509,7 +1510,9 @@ public class SpoofChecker {
         for (int inputIndex = 0; inputIndex < normalizedLen;) {
             int c = Character.codePointAt(nfdId, inputIndex);
             inputIndex += Character.charCount(c);
-            this.fSpoofData.confusableLookup(c, skelSB);
+            if (!UCharacter.hasBinaryProperty(c, UProperty.DEFAULT_IGNORABLE_CODE_POINT)) {
+                this.fSpoofData.confusableLookup(c, skelSB);
+            }
         }
         String skelStr = skelSB.toString();
         skelStr = nfdNormalizer.normalize(skelStr);
