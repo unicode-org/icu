@@ -1,14 +1,23 @@
-package main.java.org.unicode.icu.tool.cldrtoicu.generator;
+package org.unicode.icu.tool.cldrtoicu.generator;
 
-import com.google.common.base.Splitter;
-import main.java.org.unicode.icu.tool.cldrtoicu.CodeGenerator;
-import org.unicode.cldr.api.*;
+import static com.google.common.base.CharMatcher.whitespace;
 
 import java.io.PrintWriter;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import static com.google.common.base.CharMatcher.whitespace;
+import org.unicode.cldr.api.AttributeKey;
+import org.unicode.cldr.api.CldrData;
+import org.unicode.cldr.api.CldrDataSupplier;
+import org.unicode.cldr.api.CldrDataType;
+import org.unicode.cldr.api.CldrPath;
+import org.unicode.cldr.api.CldrValue;
+import org.unicode.icu.tool.cldrtoicu.CodeGenerator;
+
+import com.google.common.base.Splitter;
 
 public class ResourceFallbackCodeGenerator implements CodeGenerator {
     private Map<String, String> defaultScripts;

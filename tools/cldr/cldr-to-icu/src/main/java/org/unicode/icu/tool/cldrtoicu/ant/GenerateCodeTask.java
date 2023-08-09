@@ -2,17 +2,20 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.ant;
 
-import main.java.org.unicode.icu.tool.cldrtoicu.CodeGenerator;
-import main.java.org.unicode.icu.tool.cldrtoicu.generator.ResourceFallbackCodeGenerator;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+import org.unicode.icu.tool.cldrtoicu.CodeGenerator;
+import org.unicode.icu.tool.cldrtoicu.generator.ResourceFallbackCodeGenerator;
 
 // Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class GenerateCodeTask extends Task {

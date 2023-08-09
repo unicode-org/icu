@@ -71,6 +71,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestUcalOpenBufferRead, "tsformat/ccaltst/TestUcalOpenBufferRead");
     addTest(root, &TestGetTimeZoneOffsetFromLocal, "tsformat/ccaltst/TestGetTimeZoneOffsetFromLocal");
     addTest(root, &TestFWWithISO8601, "tsformat/ccaltst/TestFWWithISO8601");
+    addTest(root, &TestGetIanaTimeZoneID, "tstformat/ccaltst/TestGetIanaTimeZoneID");
 }
 
 /* "GMT" */
@@ -2823,6 +2824,55 @@ TestFWWithISO8601() {
                     locale, i, actual);
         }
         ucal_close(cal);
+    }
+}
+
+void
+TestGetIanaTimeZoneID() {
+    const UChar* UNKNOWN = u"Etc/Unknown";
+    typedef struct {
+        const UChar* id;
+        const UChar* expected;
+    } IanaTimeZoneIDTestData;
+    
+    const IanaTimeZoneIDTestData TESTDATA[] = {
+        {u"",                   UNKNOWN},
+        {0,                     UNKNOWN},
+        {UNKNOWN,               UNKNOWN},
+        {u"America/New_York",   u"America/New_York"},
+        {u"Asia/Calcutta",      u"Asia/Kolkata"},
+        {u"Europe/Kiev",        u"Europe/Kyiv"},
+        {u"Europe/Zaporozhye",  u"Europe/Kyiv"},
+        {u"Etc/GMT-1",          u"Etc/GMT-1"},
+        {u"Etc/GMT+20",         UNKNOWN},
+        {u"PST8PDT",            u"PST8PDT"},
+        {u"GMT-08:00",          UNKNOWN},
+        {0,                     0}
+    };
+
+    for (int32_t i = 0; TESTDATA[i].expected != 0; i++) {
+        UErrorCode sts = U_ZERO_ERROR;
+        UChar ianaID[128];
+        int32_t ianaLen = 0;
+
+        ianaLen = ucal_getIanaTimeZoneID(TESTDATA[i].id, -1, ianaID, sizeof(ianaID), &sts);
+
+        if (u_strcmp(TESTDATA[i].expected, UNKNOWN) == 0) {
+            if (sts != U_ILLEGAL_ARGUMENT_ERROR) {
+                log_err("Expected U_ILLEGAL_ERROR: TESTDATA[%d]", i);
+            }
+        } else {
+            if (u_strlen(TESTDATA[i].expected) != ianaLen || u_strncmp(TESTDATA[i].expected, ianaID, ianaLen) != 0) {
+                log_err("Error: TESTDATA[%d]", i);
+            }
+            // Calling ucal_getIanaTimeZoneID with an IANA ID should return the same
+            UChar ianaID2[128];
+            int32_t ianaLen2 = 0;
+            ianaLen2 = ucal_getIanaTimeZoneID(ianaID, ianaLen, ianaID2, sizeof(ianaID2), &sts);
+            if (U_FAILURE(sts) || ianaLen != ianaLen2 || u_strncmp(ianaID, ianaID2, ianaLen) != 0) {
+                    log_err("Error: IANA ID for IANA ID %s", ianaID);
+                }
+        }
     }
 }
 
