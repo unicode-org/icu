@@ -140,6 +140,18 @@ void IntlTestSpoof::testSpoofAPI() {
         TEST_ASSERT(UnicodeString("lllOO") == dest);
         TEST_ASSERT(&dest == &retStr);
     TEST_TEARDOWN;
+
+    TEST_SETUP
+        // Example from UTS #55, Section 5.1.3 https://www.unicode.org/reports/tr55/#General-Security-Profile
+        // of a minimal pair with a ZWNJ in Persian.
+        const UnicodeString behrooz(u"بهروز");
+        const UnicodeString update(u"به‌روز");
+        // These strings differ only by a ZWNJ.
+        TEST_ASSERT(UnicodeString(update).findAndReplace(u"\u200C", u"") == behrooz);
+        int32_t checkResults = uspoof_areConfusableUnicodeString(sc, behrooz, update, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, checkResults);
+    TEST_TEARDOWN;
 }
 
 
@@ -381,6 +393,13 @@ void IntlTestSpoof::testConfData() {
             // The source character was not NFD.
             // Skip this case; the first step in obtaining a skeleton is to NFD the input,
             //  so the mapping in this line of confusables.txt will never be applied.
+            continue;
+        }
+
+        if (u_hasBinaryProperty(from.char32At(0), UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
+            // The source character is a default ignorable code point.
+            // Skip this case; the second step in obtaining a skeleton is to remove DIs,
+            // so the mapping in this line of confusables.txt will never be applied.
             continue;
         }
 
