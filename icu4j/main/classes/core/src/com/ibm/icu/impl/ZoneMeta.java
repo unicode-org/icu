@@ -69,7 +69,7 @@ public final class ZoneMeta {
             systemZones = REF_SYSTEM_ZONES.get();
         }
         if (systemZones == null) {
-            Set<String> systemIDs = new TreeSet<String>();
+            Set<String> systemIDs = new TreeSet<>();
             String[] allIDs = getZoneIDs();
             for (String id : allIDs) {
                 // exclude Etc/Unknown
@@ -79,7 +79,7 @@ public final class ZoneMeta {
                 systemIDs.add(id);
             }
             systemZones = Collections.unmodifiableSet(systemIDs);
-            REF_SYSTEM_ZONES = new SoftReference<Set<String>>(systemZones);
+            REF_SYSTEM_ZONES = new SoftReference<>(systemZones);
         }
         return systemZones;
     }
@@ -96,7 +96,7 @@ public final class ZoneMeta {
             canonicalSystemZones = REF_CANONICAL_SYSTEM_ZONES.get();
         }
         if (canonicalSystemZones == null) {
-            Set<String> canonicalSystemIDs = new TreeSet<String>();
+            Set<String> canonicalSystemIDs = new TreeSet<>();
             String[] allIDs = getZoneIDs();
             for (String id : allIDs) {
                 // exclude Etc/Unknown
@@ -109,7 +109,7 @@ public final class ZoneMeta {
                 }
             }
             canonicalSystemZones = Collections.unmodifiableSet(canonicalSystemIDs);
-            REF_CANONICAL_SYSTEM_ZONES = new SoftReference<Set<String>>(canonicalSystemZones);
+            REF_CANONICAL_SYSTEM_ZONES = new SoftReference<>(canonicalSystemZones);
         }
         return canonicalSystemZones;
     }
@@ -128,7 +128,7 @@ public final class ZoneMeta {
             canonicalSystemLocationZones = REF_CANONICAL_SYSTEM_LOCATION_ZONES.get();
         }
         if (canonicalSystemLocationZones == null) {
-            Set<String> canonicalSystemLocationIDs = new TreeSet<String>();
+            Set<String> canonicalSystemLocationIDs = new TreeSet<>();
             String[] allIDs = getZoneIDs();
             for (String id : allIDs) {
                 // exclude Etc/Unknown
@@ -144,7 +144,7 @@ public final class ZoneMeta {
                 }
             }
             canonicalSystemLocationZones = Collections.unmodifiableSet(canonicalSystemLocationIDs);
-            REF_CANONICAL_SYSTEM_LOCATION_ZONES = new SoftReference<Set<String>>(canonicalSystemLocationZones);
+            REF_CANONICAL_SYSTEM_LOCATION_ZONES = new SoftReference<>(canonicalSystemLocationZones);
         }
         return canonicalSystemLocationZones;
     }
@@ -182,7 +182,7 @@ public final class ZoneMeta {
         }
 
         // Filter by region/rawOffset
-        Set<String> result = new TreeSet<String>();
+        Set<String> result = new TreeSet<>();
         for (String id : baseSet) {
             if (region != null) {
                 String r = getRegion(id);
@@ -339,9 +339,9 @@ public final class ZoneMeta {
         return zoneIdx;
     }
 
-    private static ICUCache<String, String> CANONICAL_ID_CACHE = new SimpleCache<String, String>();
-    private static ICUCache<String, String> REGION_CACHE = new SimpleCache<String, String>();
-    private static ICUCache<String, Boolean> SINGLE_COUNTRY_CACHE = new SimpleCache<String, Boolean>();
+    private static ICUCache<String, String> CANONICAL_ID_CACHE = new SimpleCache<>();
+    private static ICUCache<String, String> REGION_CACHE = new SimpleCache<>();
+    private static ICUCache<String, Boolean> SINGLE_COUNTRY_CACHE = new SimpleCache<>();
 
     public static String getCanonicalCLDRID(TimeZone tz) {
         if (tz instanceof OlsonTimeZone) {
@@ -353,7 +353,7 @@ public final class ZoneMeta {
     /**
      * Return the canonical id for this tzid defined by CLDR, which might be
      * the id itself. If the given tzid is not known, return null.
-     * 
+     *
      * Note: This internal API supports all known system IDs and "Etc/Unknown" (which is
      * NOT a system ID).
      */
@@ -417,6 +417,33 @@ public final class ZoneMeta {
             // fall through
         }
         return canonical;
+    }
+
+    /**
+     * Returns primary IANA zone ID for the input zone ID. When input zone ID
+     * is not known, this method returns null.
+     *
+     * @param tzid  An input zone ID.
+     * @return  A primary IANA zone ID equivalent to the input zone ID.
+     */
+    public static String getIanaID(String tzid) {
+        // First, get CLDR canonical ID
+        String canonicalID = getCanonicalCLDRID(tzid);
+        if (canonicalID == null) {
+            return null;
+        }
+        // Find IANA mapping if any.
+        UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
+                "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle ianaMap = keyTypeData.get("ianaMap");
+        UResourceBundle ianaTzMap = ianaMap.get("timezone");
+        try {
+            return ianaTzMap.getString(canonicalID.replace('/', ':'));
+        } catch (MissingResourceException e) {
+            // No IANA zone ID mapping. In this case, ianaId set by getCanonicalCLDRID()
+            // is also a primary IANA id.
+            return canonicalID;
+        }
     }
 
     /**

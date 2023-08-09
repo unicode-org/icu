@@ -2390,6 +2390,35 @@ public class TimeZoneTest extends TestFmwk
                          zone.getRawOffset(), raw);
         }
     }
+
+    @Test
+    public void TestGetIanaID() {
+        final String UNKNOWN = TimeZone.UNKNOWN_ZONE_ID;
+
+        final String[][] TESTDATA = {
+                {"",                    UNKNOWN},
+                {null,                  UNKNOWN},
+                {UNKNOWN,               UNKNOWN},
+                {"America/New_York",    "America/New_York"},
+                {"Asia/Calcutta",       "Asia/Kolkata"},
+                {"Europe/Kiev",         "Europe/Kyiv"},
+                {"Europe/Zaporozhye",   "Europe/Kyiv"},
+                {"Etc/GMT-1",           "Etc/GMT-1"},
+                {"Etc/GMT+20",          UNKNOWN},
+                {"PST8PDT",             "PST8PDT"},
+                {"GMT-08:00",           UNKNOWN},
+        };
+
+        for (String[] test : TESTDATA) {
+            String ianaId = TimeZone.getIanaID(test[0]);
+            assertEquals("IANA ID for " + test[0], test[1], ianaId);
+            if (test[1].equals(UNKNOWN)) {
+                // Calling getIanaID with an IANA ID should return the same
+                String ianaId2 = TimeZone.getIanaID(ianaId);
+                assertEquals("IANA ID for " + ianaId, ianaId, ianaId2);
+            }
+        }
+    }
 }
 
 //eof

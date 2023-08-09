@@ -106,6 +106,8 @@ public:
     void TestCasablancaNameAndOffset22041();
     void TestRawOffsetAndOffsetConsistency22041();
 
+    void TestGetIanaID();
+
     static const UDate INTERVAL;
 
 private:
