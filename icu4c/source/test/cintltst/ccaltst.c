@@ -101,7 +101,10 @@ static const UCalGetTypeTest ucalGetTypeTests[] = {
     { "fr_CH",                   UCAL_DEFAULT,   "gregorian" },
     { "fr_SA",                   UCAL_DEFAULT,   "islamic-umalqura" },
     { "fr_CH@rg=sazzzz",         UCAL_DEFAULT,   "islamic-umalqura" },
+    { "fr_CH@rg=sa14",           UCAL_DEFAULT,   "islamic-umalqura" },
     { "fr_CH@calendar=japanese;rg=sazzzz", UCAL_DEFAULT, "japanese" },
+    { "fr_CH@rg=twcyi",          UCAL_DEFAULT,   "gregorian" }, // test for ICU-22364
+    { "fr_CH@rg=ugw",            UCAL_DEFAULT,   "gregorian" }, // test for ICU-22364
     { "fr_TH@rg=SA",             UCAL_DEFAULT,   "buddhist"  }, /* ignore malformed rg tag */
     { "th@rg=SA",                UCAL_DEFAULT,   "buddhist"  }, /* ignore malformed rg tag */
     { "",                        UCAL_GREGORIAN, "gregorian" },
@@ -1613,7 +1616,7 @@ void TestGregorianChange() {
 }
 
 static void TestGetKeywordValuesForLocale() {
-#define PREFERRED_SIZE 16
+#define PREFERRED_SIZE 26
 #define MAX_NUMBER_OF_KEYWORDS 5
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
             { "root",        "gregorian", NULL, NULL, NULL, NULL },
@@ -1632,8 +1635,20 @@ static void TestGetKeywordValuesForLocale() {
             { "zh_TW",       "gregorian", "roc", "chinese", NULL, NULL },
             { "ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla" },
             { "th@rg=SAZZZZ", "islamic-umalqura", "gregorian", "islamic", "islamic-rgsa", NULL },
+
+            // tests for ICU-22364
+            { "zh_CN@rg=TW",           "gregorian", "chinese", NULL, NULL, NULL }, // invalid subdivision code
+            { "zh_CN@rg=TWzzzz",       "gregorian", "roc", "chinese", NULL, NULL }, // whole region
+            { "zh_TW@rg=TWxxxx",       "gregorian", "roc", "chinese", NULL, NULL }, // invalid subdivision code (ignored)
+            { "zh_TW@rg=ARa",          "gregorian", NULL, NULL, NULL, NULL }, // single-letter subdivision code
+            { "zh_TW@rg=AT1",          "gregorian", NULL, NULL, NULL, NULL }, // single-digit subdivision code
+            { "zh_TW@rg=USca",         "gregorian", NULL, NULL, NULL, NULL }, // two-letter subdivision code
+            { "zh_TW@rg=IT53",         "gregorian", NULL, NULL, NULL, NULL }, // two-digit subdivision code
+            { "zh_TW@rg=AUnsw",        "gregorian", NULL, NULL, NULL, NULL }, // three-letter subdivision code
+            { "zh_TW@rg=EE130",        "gregorian", NULL, NULL, NULL, NULL }, // three-digit subdivision code
+            { "zh_TW@rg=417zzzz",      "gregorian", NULL, NULL, NULL, NULL }, // three-digit region code
     };
-    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5, 4 };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5, 4, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1 };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, size, j;
     UEnumeration *all, *pref;

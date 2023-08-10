@@ -2182,6 +2182,18 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             {"zh_TW",       "gregorian", "roc", "chinese"},
             {"ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla"},
             {"th@rg=SAZZZZ", "islamic-umalqura", "gregorian", "islamic", "islamic-rgsa"},
+
+            // tests for ICU-22364
+            { "zh_CN@rg=TW",           "gregorian", "chinese" }, // invalid subdivision code
+            { "zh_CN@rg=TWzzzz",       "gregorian", "roc", "chinese", }, // whole region
+            { "zh_TW@rg=TWxxxx",       "gregorian", "roc", "chinese" }, // invalid subdivision code (ignored)
+            { "zh_TW@rg=ARa",          "gregorian" }, // single-letter subdivision code
+            { "zh_TW@rg=AT1",          "gregorian" }, // single-digit subdivision code
+            { "zh_TW@rg=USca",         "gregorian" }, // two-letter subdivision code
+            { "zh_TW@rg=IT53",         "gregorian" }, // two-digit subdivision code
+            { "zh_TW@rg=AUnsw",        "gregorian" }, // three-letter subdivision code
+            { "zh_TW@rg=EE130",        "gregorian" }, // three-digit subdivision code
+            { "zh_TW@rg=417zzzz",      "gregorian" }, // three-digit region code
         };
 
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
