@@ -5,6 +5,11 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 # Basic instructions for running the LdmlConverter via Maven
 
+> Note: While this document provides useful background information about the
+  LdmlConverter, the actual complete process for integrating CLDR data to ICU
+  is described in the document `../../../docs/processes/cldr-icu.md` which is
+  best viewed as
+  [CLDR-ICU integration](https://unicode-org.github.io/icu/processes/cldr-icu.html)
 
 ## Requirements
 
