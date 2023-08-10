@@ -2403,8 +2403,9 @@ Locale::getLocaleCache()
 }
 
 class KeywordEnumeration : public StringEnumeration {
-private:
+protected:
     char *keywords;
+private:
     char *current;
     int32_t length;
     UnicodeString currUSKey;
@@ -2510,6 +2511,17 @@ public:
         }
         if (resultLength != nullptr) *resultLength = 0;
         return nullptr;
+    }
+    virtual int32_t count(UErrorCode &/*status*/) const override {
+        char *kw = keywords;
+        int32_t result = 0;
+        while(*kw) {
+            if (uloc_toUnicodeLocaleKey(kw) != nullptr) {
+                result++;
+            }
+            kw += uprv_strlen(kw)+1;
+        }
+        return result;
     }
 };
 
