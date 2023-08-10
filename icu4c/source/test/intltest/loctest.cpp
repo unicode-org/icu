@@ -3989,6 +3989,8 @@ LocaleTest::TestCreateUnicodeKeywords() {
     LocalPointer<StringEnumeration> keys(l.createUnicodeKeywords(status));
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
+    assertEquals("count", 2, keys->count(status));
+
     const char* key;
     int32_t resultLength;
 
@@ -4139,6 +4141,11 @@ LocaleTest::TestCreateUnicodeKeywordSet() {
                result.find("ca") != result.end());
     assertTrue("set::find(\"co\")",
                result.find("co") != result.end());
+
+    LocalPointer<StringEnumeration> se(l.createUnicodeKeywords(status), status);
+    status.errIfFailureAndReset("\"%s\" createUnicodeKeywords()", l.getName());
+    assertEquals("count()", 2, se->count(status));
+    status.errIfFailureAndReset("\"%s\" count()", l.getName());
 }
 
 void
@@ -4154,6 +4161,10 @@ LocaleTest::TestCreateUnicodeKeywordSetEmpty() {
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
     assertEquals("set::size()", 0, static_cast<int32_t>(result.size()));
+
+    LocalPointer<StringEnumeration> se(l.createUnicodeKeywords(status), status);
+    assertTrue("createUnicodeKeywords", se.isNull());
+    status.expectErrorAndReset(U_MEMORY_ALLOCATION_ERROR);
 }
 
 void
@@ -4174,6 +4185,12 @@ LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse() {
                result.find("x") == result.end());
     assertTrue("getUnicodeKeywords set::find(\"foo\")",
                result.find("foo") == result.end());
+    assertEquals("set::size()", 1, static_cast<int32_t>(result.size()));
+
+    LocalPointer<StringEnumeration> se(l.createUnicodeKeywords(status), status);
+    status.errIfFailureAndReset("\"%s\" createUnicodeKeywords()", l.getName());
+    assertEquals("count()", 1, se->count(status));
+    status.errIfFailureAndReset("\"%s\" count()", l.getName());
 }
 
 void
