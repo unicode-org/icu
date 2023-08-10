@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1691621331218,
+  "lastUpdate": 1691630373131,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10408,6 +10408,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.0943780216721124,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "86193b1b982528ab1a4407e80cd3bdac2e23fc26",
+          "message": "ICU-22404 Improve documentation of segmentation rules",
+          "timestamp": "2023-08-10T03:01:20+02:00",
+          "tree_id": "5f10e968738ce16dc4e4ca46654093d68e80a29d",
+          "url": "https://github.com/unicode-org/icu/commit/86193b1b982528ab1a4407e80cd3bdac2e23fc26"
+        },
+        "date": 1691630323873,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.0749549675797545,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
