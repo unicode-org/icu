@@ -982,10 +982,12 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     public static String getRegionForSupplementalData(
                             ULocale locale, boolean inferRegion) {
         String region = locale.getKeywordValue("rg");
-        if (region != null && region.length() == 6) {
-            String regionUpper = AsciiUtil.toUpperString(region);
-            if (regionUpper.endsWith("ZZZZ")) {
-            	return regionUpper.substring(0,2);
+        if (region != null && region.length() >= 3 && region.length() <= 7) {
+            if (Character.isLetter(region.charAt(0))) {
+                return AsciiUtil.toUpperString(region.substring(0, 2));
+            } else {
+                // assume three-digit region code
+                return region.substring(0, 3);
             }
         }
         region = locale.getCountry();

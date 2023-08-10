@@ -811,15 +811,19 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
 
     // First check for rg keyword value
     int32_t rgLen = uloc_getKeywordValue(localeID, "rg", rgBuf, ULOC_RG_BUFLEN, &rgStatus);
-    if (U_FAILURE(rgStatus) || rgLen != 6) {
+    if (U_FAILURE(rgStatus) || rgLen < 3 || rgLen > 7) {
         rgLen = 0;
     } else {
         // rgBuf guaranteed to be zero terminated here, with text len 6
-        char *rgPtr = rgBuf;
-        for (; *rgPtr!= 0; rgPtr++) {
-            *rgPtr = uprv_toupper(*rgPtr);
+        // chop off the subdivision code (which will generally be "zzzz" anyway)
+        if (uprv_isASCIILetter(rgBuf[0])) {
+            rgLen = 2;
+            rgBuf[0] = uprv_toupper(rgBuf[0]);
+            rgBuf[1] = uprv_toupper(rgBuf[1]);
+        } else {
+            // assume three-digit region code
+            rgLen = 3;
         }
-        rgLen = (uprv_strcmp(rgBuf+2, "ZZZZ") == 0)? 2: 0;
     }
 
     if (rgLen == 0) {

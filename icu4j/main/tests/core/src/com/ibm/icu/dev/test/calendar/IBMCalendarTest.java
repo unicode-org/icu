@@ -1099,7 +1099,10 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 "fr_CH",
                 "fr_SA",
                 "fr_CH@rg=sazzzz",
+                "fr_CH@rg=sa14",
                 "fr_CH@calendar=japanese;rg=sazzzz",
+                "fr_CH@rg=twcyi", // test for ICU-22364
+                "fr_CH@rg=ugw", // test for ICU-22364
                 "fr_TH@rg=SA",  // ignore malformed rg tag, use buddhist
                 "th@rg=SA",		// ignore malformed rg tag, use buddhist
         };
@@ -1121,7 +1124,10 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 "gregorian",
                 "islamic-umalqura",
                 "islamic-umalqura",
+                "islamic-umalqura",
                 "japanese",
+                "gregorian",
+                "gregorian",
                 "buddhist",
                 "buddhist",
         };
