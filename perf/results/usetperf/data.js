@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1691707385545,
+  "lastUpdate": 1691716717457,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34006,6 +34006,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2331.6303,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "chachoi@blackberry.com",
+            "name": "James Choi",
+            "username": "chachoi"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "b70b2d0433d5004f72b5d7590a82879673527ae0",
+          "message": "ICU-22363 Add support for QNX 7.1\n\nSigned-off-by: James Choi <chachoi@blackberry.com>",
+          "timestamp": "2023-08-10T17:46:01-07:00",
+          "tree_id": "a41aa016f03b75259a403b5549008671b4835d54",
+          "url": "https://github.com/unicode-org/icu/commit/b70b2d0433d5004f72b5d7590a82879673527ae0"
+        },
+        "date": 1691716661376,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 111167.0008,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 131444.1251,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5389,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.15,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.9595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 15616.9502,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 49950.9341,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2696.269,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
