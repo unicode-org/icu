@@ -546,6 +546,26 @@ static void TestUSpoofCAPI(void) {
     TEST_TEARDOWN;
 
     /*
+     * uspoof_areBidiConfusable()
+     */
+    TEST_SETUP
+        int32_t checkResults;
+
+        checkResults = uspoof_areBidiConfusable(sc, UBIDI_LTR, scLatin, -1, scMixed, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+
+        checkResults = uspoof_areBidiConfusable(sc, UBIDI_LTR, goodGreek, -1, scLatin, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        checkResults = uspoof_areBidiConfusable(sc, UBIDI_LTR, lll_Latin_a, -1, lll_Latin_b, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, checkResults);
+
+    TEST_TEARDOWN;
+
+    /*
      * areConfusableUTF8
      */
     TEST_SETUP
@@ -577,6 +597,38 @@ static void TestUSpoofCAPI(void) {
 
     TEST_TEARDOWN;
 
+    /*
+     * areBidiConfusableUTF8
+     */
+    TEST_SETUP
+        int32_t checkResults;
+        char s1[200];
+        char s2[200];
+
+
+        u_strToUTF8(s1, sizeof(s1), NULL, scLatin, -1, &status);
+        u_strToUTF8(s2, sizeof(s2), NULL, scMixed, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_areBidiConfusableUTF8(sc, UBIDI_LTR, s1, -1, s2, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+
+        u_strToUTF8(s1, sizeof(s1), NULL, goodGreek, -1, &status);
+        u_strToUTF8(s2, sizeof(s2), NULL, scLatin, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_areBidiConfusableUTF8(sc, UBIDI_LTR, s1, -1, s2, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        u_strToUTF8(s1, sizeof(s1), NULL, lll_Latin_a, -1, &status);
+        u_strToUTF8(s2, sizeof(s2), NULL, lll_Latin_b, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_areBidiConfusableUTF8(sc, UBIDI_LTR, s1, -1, s2, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, checkResults);
+
+    TEST_TEARDOWN;
+
 
   /*
    * getSkeleton
@@ -596,6 +648,31 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
 
         skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, NULL, 0, &status);
+        TEST_ASSERT_EQ(U_BUFFER_OVERFLOW_ERROR, status);
+        TEST_ASSERT_EQ(3, skelLength);
+        status = U_ZERO_ERROR;
+
+    TEST_TEARDOWN;
+
+
+    /*
+     * getBidiSkeleton
+     */
+
+    TEST_SETUP
+        UChar dest[100];
+        int32_t   skelLength;
+
+        skelLength = uspoof_getBidiSkeleton(sc, UBIDI_LTR, lll_Latin_a, -1, dest, UPRV_LENGTHOF(dest), &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, u_strcmp(lll_Skel, dest));
+        TEST_ASSERT_EQ(u_strlen(lll_Skel), skelLength);
+
+        skelLength = uspoof_getBidiSkeletonUTF8(sc, UBIDI_LTR, goodLatinUTF8, -1, (char *)dest,
+                                                UPRV_LENGTHOF(dest), &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        skelLength = uspoof_getBidiSkeleton(sc, UBIDI_LTR, lll_Latin_a, -1, NULL, 0, &status);
         TEST_ASSERT_EQ(U_BUFFER_OVERFLOW_ERROR, status);
         TEST_ASSERT_EQ(3, skelLength);
         status = U_ZERO_ERROR;

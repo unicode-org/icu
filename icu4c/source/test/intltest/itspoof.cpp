@@ -95,6 +95,7 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testSpoofAPI);
     TESTCASE_AUTO(testSkeleton);
+    TESTCASE_AUTO(testBidiSkeleton);
     TESTCASE_AUTO(testAreConfusable);
     TESTCASE_AUTO(testInvisible);
     TESTCASE_AUTO(testConfData);
@@ -154,10 +155,13 @@ void IntlTestSpoof::testSpoofAPI() {
     TEST_TEARDOWN;
 }
 
+#define CHECK_SKELETON(type, input, expected)                                                           \
+    UPRV_BLOCK_MACRO_BEGIN { checkSkeleton(sc, type, input, expected, __LINE__); }                      \
+    UPRV_BLOCK_MACRO_END
 
-#define CHECK_SKELETON(type, input, expected) UPRV_BLOCK_MACRO_BEGIN { \
-    checkSkeleton(sc, type, input, expected, __LINE__); \
-} UPRV_BLOCK_MACRO_END
+#define CHECK_BIDI_SKELETON(type, input, expected)                                                           \
+    UPRV_BLOCK_MACRO_BEGIN { checkBidiSkeleton(sc, type, input, expected, __LINE__); }                      \
+    UPRV_BLOCK_MACRO_END
 
 
 // testSkeleton.   Spot check a number of confusable skeleton substitutions from the 
@@ -227,6 +231,15 @@ void IntlTestSpoof::testSkeleton() {
     TEST_TEARDOWN;
 }
 
+void IntlTestSpoof::testBidiSkeleton() {
+    TEST_SETUP
+    CHECK_BIDI_SKELETON(u"A1<שׂ", UBIDI_LTR, u"Al<ש\u0307");
+    CHECK_BIDI_SKELETON(u"Αשֺ>1", UBIDI_LTR, u"Al<ש\u0307");
+    CHECK_BIDI_SKELETON(u"A1<שׂ", UBIDI_RTL, u"ש\u0307>Al");
+    CHECK_BIDI_SKELETON(u"Αשֺ>1", UBIDI_RTL, u"l<ש\u0307A");
+    TEST_TEARDOWN;
+}
+
 
 //
 //  Run a single confusable skeleton transformation test case.
@@ -252,6 +265,31 @@ void IntlTestSpoof::checkSkeleton(const USpoofChecker *sc, uint32_t type,
     }
 }
 
+//
+//  Run a single confusable bidiSkeleton transformation test case.
+//
+void IntlTestSpoof::checkBidiSkeleton(const USpoofChecker *sc, const UnicodeString &input,
+                                      UBiDiDirection direction, const UnicodeString &expected,
+                                      int32_t lineNum) {
+    UnicodeString uInput = input.unescape();
+    UnicodeString uExpected = expected.unescape();
+
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString actual;
+    uspoof_getBidiSkeletonUnicodeString(sc, direction, uInput, actual, &status);
+    if (U_FAILURE(status)) {
+        errln("File %s, Line %d, Test case from line %d, status is %s", __FILE__, __LINE__, lineNum,
+              u_errorName(status));
+        return;
+    }
+    if (uExpected != actual) {
+        errln("File %s, Line %d, Test case from line %d, Actual and Expected skeletons differ.",
+              __FILE__, __LINE__, lineNum);
+        errln(UnicodeString(" Actual   Skeleton: \"") + actual + UnicodeString("\"\n") +
+              UnicodeString(" Expected Skeleton: \"") + uExpected + UnicodeString("\""));
+    }
+}
+
 void IntlTestSpoof::testAreConfusable() {
     TEST_SETUP
         UnicodeString s1("A long string that will overflow stack buffers.  A long string that will overflow stack buffers. "
@@ -259,6 +297,20 @@ void IntlTestSpoof::testAreConfusable() {
         UnicodeString s2("A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. "
                          "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. ");
         int32_t result = uspoof_areConfusableUnicodeString(sc, s1, s2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, result);
+
+    TEST_TEARDOWN;
+}
+
+void IntlTestSpoof::testAreBidiConfusable() {
+    TEST_SETUP
+        const UnicodeString jHyphen2(u"J-2");
+        // The following string has RLMs around the 2–, flipping it; it uses an
+        // EN DASH instead of the HYPHEN-MINUS above.
+        const UnicodeString j2Dash(u"J\u200F2\u2013\u200F");
+        TEST_ASSERT(j2Dash == u"J‏2–‏");
+        int32_t result = uspoof_areBidiConfusableUnicodeString(sc, UBIDI_LTR, jHyphen2, j2Dash, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, result);
 
