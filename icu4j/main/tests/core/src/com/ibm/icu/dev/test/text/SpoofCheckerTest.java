@@ -36,6 +36,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.SpoofChecker;
 import com.ibm.icu.text.SpoofChecker.CheckResult;
@@ -455,6 +456,16 @@ public class SpoofCheckerTest extends TestFmwk {
 
     }
 
+    @Test
+    public void TestBidiSkeleton() {
+        final SpoofChecker sc = new SpoofChecker.Builder().build();
+        final String testName = "TestBidiSkeleton";
+        checkBidiSkeleton(sc, Bidi.DIRECTION_LEFT_TO_RIGHT, "A1<שׂ", "Al<ש\u0307", testName);
+        checkBidiSkeleton(sc, Bidi.DIRECTION_LEFT_TO_RIGHT, "Αשֺ>1", "Al<ש\u0307", testName);
+        checkBidiSkeleton(sc, Bidi.DIRECTION_RIGHT_TO_LEFT, "A1<שׂ", "ש\u0307>Al", testName);
+        checkBidiSkeleton(sc, Bidi.DIRECTION_RIGHT_TO_LEFT, "Αשֺ>1", "l<ש\u0307A", testName);
+    }
+
     // Internal function to run a single skeleton test case.
     //
     // Run a single confusable skeleton transformation test case.
@@ -470,6 +481,19 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals(testName + " test at line " + lineNumberOfTest + " :  Expected (escaped): " + expected, uExpected, actual);
     }
 
+    // Internal function to run a single skeleton test case.
+    //
+    // Run a single confusable skeleton transformation test case.
+    //
+    void checkBidiSkeleton(SpoofChecker sc, int direction, String input, String expected, String testName) {
+        assertEquals(
+            "bidiSkeleton(" +
+            (direction == Bidi.DIRECTION_LEFT_TO_RIGHT ? "LTR" : "RTL") +
+            ", \"" + input +"\")",
+            expected,
+            sc.getBidiSkeleton(direction, input));
+    }
+
     @Test
     public void TestAreConfusable() {
         SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CONFUSABLE).build();
@@ -478,6 +502,21 @@ public class SpoofCheckerTest extends TestFmwk {
         String s2 = "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. "
                 + "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. ";
         assertEquals("", SpoofChecker.SINGLE_SCRIPT_CONFUSABLE, sc.areConfusable(s1, s2));
+    }
+
+    @Test
+    public void TestAreBidiConfusable() {
+        SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CONFUSABLE).build();
+        final String jHyphen2 = "J-2";
+        // The following string has RLMs around the 2–, flipping it; it uses an
+        // EN DASH instead of the HYPHEN-MINUS above.
+        final String j2Dash = "J\u200F2\u2013\u200F";
+        assertEquals("Unescaped display of j2Dash", "J‏2–‏", j2Dash);
+
+        assertEquals(
+            "Expected single-script confusability",
+            SpoofChecker.SINGLE_SCRIPT_CONFUSABLE,
+            sc.areConfusable(Bidi.DIRECTION_LEFT_TO_RIGHT, jHyphen2, j2Dash));
     }
 
     @Test

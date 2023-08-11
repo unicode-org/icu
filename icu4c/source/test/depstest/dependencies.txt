@@ -917,7 +917,7 @@ group: charset_detector
 group: spoof_detection
     uspoof.o uspoof_build.o uspoof_conf.o uspoof_impl.o scriptset.o
   deps
-    uniset_props regex unorm uscript
+    uniset_props regex unorm uscript ubidi
 
 group: alphabetic_index
     alphaindex.o

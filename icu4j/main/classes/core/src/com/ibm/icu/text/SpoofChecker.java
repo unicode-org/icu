@@ -81,6 +81,22 @@ import com.ibm.icu.util.ULocale;
  * application startup), and the more efficient {@link SpoofChecker#areConfusable} method can be used at runtime.
  *
  * <p>
+ * If the paragraph direction used to display the strings is known, it should be passed to {@link SpoofChecker#areConfusable}:
+ *
+ * <pre>
+ * <code>
+ * // These strings look identical when rendered in a left-to-right context.
+ * // They look distinct in a right-to-left context.
+ * String s1 = "A1\u05D0";  // A1א
+ * String s2 = "A\u05D01";  // Aא1
+ *
+ * SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CONFUSABLE).build();
+ * int result = sc.areConfusable(Bidi.DIRECTION_LEFT_TO_RIGHT, s1, s2);
+ * System.out.println(result != 0);  // true
+ * </code>
+ * </pre>
+ *
+ * <p>
  * UTS 39 defines two strings to be <em>confusable</em> if they map to the same skeleton. A <em>skeleton</em> is a
  * sequence of families of confusable characters, where each family has a single exemplar character.
  * {@link SpoofChecker#getSkeleton} computes the skeleton for a particular string, so the following snippet is
@@ -1422,7 +1438,7 @@ public class SpoofChecker {
     }
 
     /**
-     * Check the whether two specified strings are visually confusable. The types of confusability to be tested - single
+     * Check whether two specified strings are visually confusable. The types of confusability to be tested - single
      * script, mixed script, or whole script - are determined by the check options set for the SpoofChecker.
      *
      * The tests to be performed are controlled by the flags SINGLE_SCRIPT_CONFUSABLE MIXED_SCRIPT_CONFUSABLE
@@ -1442,7 +1458,7 @@ public class SpoofChecker {
      */
     public int areConfusable(String s1, String s2) {
         //
-        // See section 4 of UAX 39 for the algorithm for checking whether two strings are confusable,
+        // See section 4 of UTS #39 for the algorithm for checking whether two strings are confusable,
         // and for definitions of the types (single, whole, mixed-script) of confusables.
 
         // We only care about a few of the check flags. Ignore the others.
@@ -1480,9 +1496,101 @@ public class SpoofChecker {
         }
 
         // Turn off flags that the user doesn't want
+        return result & fChecks;
+    }
+
+    /**
+     * Check whether two specified strings are visually when displayed in a paragraph with the given direction.
+     * The types of confusability to be tested—single script, mixed script, or whole script—are determined by the check options set for the SpoofChecker.
+     *
+     * The tests to be performed are controlled by the flags SINGLE_SCRIPT_CONFUSABLE MIXED_SCRIPT_CONFUSABLE
+     * WHOLE_SCRIPT_CONFUSABLE At least one of these tests must be selected.
+     *
+     * ANY_CASE is a modifier for the tests. Select it if the identifiers may be of mixed case. If identifiers are case
+     * folded for comparison and display to the user, do not select the ANY_CASE option.
+     *
+     *
+     * @param direction The paragraph direction with which the identifiers are displayed.
+     *                  Must be either {@link Bidi#DIRECTION_LEFT_TO_RIGHT} or {@link Bidi#DIRECTION_RIGHT_TO_LEFT}.
+     * @param s1
+     *            The first of the two strings to be compared for confusability.
+     * @param s2
+     *            The second of the two strings to be compared for confusability.
+     * @return Non-zero if s1 and s1 are confusable. If not 0, the value will indicate the type(s) of confusability
+     *         found, as defined by spoof check test constants.
+     * @draft ICU 74
+     */
+    public int areConfusable(int direction, CharSequence s1, CharSequence s2) {
+        //
+        // See section 4 of UTS #39 for the algorithm for checking whether two strings are confusable,
+        // and for definitions of the types (single, whole, mixed-script) of confusables.
+
+        // We only care about a few of the check flags. Ignore the others.
+        // If no tests relevant to this function have been specified, signal an error.
+        // TODO: is this really the right thing to do? It's probably an error on
+        // the caller's part, but logically we would just return 0 (no error).
+        if ((this.fChecks & CONFUSABLE) == 0) {
+            throw new IllegalArgumentException("No confusable checks are enabled.");
+        }
+
+        // Compute the skeletons and check for confusability.
+        String s1Skeleton = getBidiSkeleton(direction, s1);
+        String s2Skeleton = getBidiSkeleton(direction, s2);
+        if (!s1Skeleton.equals(s2Skeleton)) {
+            return 0;
+        }
+
+        // If we get here, the strings are confusable. Now we just need to set the flags for the appropriate classes
+        // of confusables according to UTS 39 section 4.
+        // Start by computing the resolved script sets of s1 and s2.
+        ScriptSet s1RSS = new ScriptSet();
+        getResolvedScriptSet(s1, s1RSS);
+        ScriptSet s2RSS = new ScriptSet();
+        getResolvedScriptSet(s2, s2RSS);
+
+        // Turn on all applicable flags
+        int result = 0;
+        if (s1RSS.intersects(s2RSS)) {
+            result |= SINGLE_SCRIPT_CONFUSABLE;
+        } else {
+            result |= MIXED_SCRIPT_CONFUSABLE;
+            if (!s1RSS.isEmpty() && !s2RSS.isEmpty()) {
+                result |= WHOLE_SCRIPT_CONFUSABLE;
+            }
+        }
+
+        // Turn off flags that the user doesn't want
         result &= fChecks;
 
         return result;
+    }
+
+    /**
+     * Get the "bidiSkeleton" for an identifier string and a direction.
+     * Skeletons are a transformation of the input string;
+     * Two identifiers are LTR-confusable if their LTR bidiSkeletons are identical;
+     * they are RTL-confusable if their RTL bidiSkeletons are identical.
+     * See Unicode Technical Standard #39 for additional information:
+     * https://www.unicode.org/reports/tr39/#Confusable_Detection.
+     *
+     * Using skeletons directly makes it possible to quickly check whether an identifier is confusable with any of some
+     * large set of existing identifiers, by creating an efficiently searchable collection of the skeletons.
+     *
+     * Skeletons are computed using the algorithm and data described in UTS #39.
+     *
+     * @param direction The paragraph direction with which the string is displayed.
+     *                  Must be either {@link Bidi#DIRECTION_LEFT_TO_RIGHT} or {@link Bidi#DIRECTION_RIGHT_TO_LEFT}.
+     * @param str The input string whose bidiSkeleton will be generated.
+     * @return The output skeleton string.
+     *
+     * @draft ICU 74
+     */
+    public String getBidiSkeleton(int direction, CharSequence str) {
+        if (direction != Bidi.DIRECTION_LEFT_TO_RIGHT && direction != Bidi.DIRECTION_RIGHT_TO_LEFT) {
+            throw new IllegalArgumentException("direction should be DIRECTION_LEFT_TO_RIGHT or DIRECTION_RIGHT_TO_LEFT");
+        }
+        Bidi bidi = new Bidi(str.toString(), direction);
+        return getSkeleton(bidi.writeReordered(Bidi.KEEP_BASE_COMBINING | Bidi.DO_MIRRORING));
     }
 
     /**
