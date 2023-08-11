@@ -1,3 +1,5 @@
+# © 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 function hook_preconfigure {
 	if [ "${TARGET_SYSNAME}" == "nto" ]; then
 # set the current directory for use in configure_opts

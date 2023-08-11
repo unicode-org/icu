@@ -1,3 +1,5 @@
+# © 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 INSTALL_TARGETS =
 
 ifeq ($(strip $(CPULIST)),)
