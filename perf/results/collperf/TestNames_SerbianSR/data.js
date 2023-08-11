@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1691707229667,
+  "lastUpdate": 1691716327359,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23488,6 +23488,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 23361252.9347,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "chachoi@blackberry.com",
+            "name": "James Choi",
+            "username": "chachoi"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "b70b2d0433d5004f72b5d7590a82879673527ae0",
+          "message": "ICU-22363 Add support for QNX 7.1\n\nSigned-off-by: James Choi <chachoi@blackberry.com>",
+          "timestamp": "2023-08-10T17:46:01-07:00",
+          "tree_id": "a41aa016f03b75259a403b5549008671b4835d54",
+          "url": "https://github.com/unicode-org/icu/commit/b70b2d0433d5004f72b5d7590a82879673527ae0"
+        },
+        "date": 1691716281181,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 523.8877,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 72041114.1713,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 19008837.049,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 71409080.1775,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 21566338.3824,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
