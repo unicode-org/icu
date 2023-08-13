@@ -256,6 +256,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testValidJsonPatterns);
     TESTCASE_AUTO(testValidPatterns);
     TESTCASE_AUTO(testComplexMessage);
+
     TESTCASE_AUTO(testInvalidPatterns);
     TESTCASE_AUTO_END;
 }
@@ -424,7 +425,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
                     .setLocale(locale)
                     .build(parseError, errorCode));
     mf->formatToString(*arguments, errorCode, result);
-    U_ASSERT(errorCode == U_UNKNOWN_FUNCTION);
+    U_ASSERT(errorCode == U_UNKNOWN_FUNCTION_WARNING);
 
     errorCode = U_ZERO_ERROR;
     result.remove();
@@ -467,7 +468,8 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
         mf->getPattern(serialized);
         if (normalized != serialized) {
           logln("Expected output: " + normalized + "\nGot output: " + serialized);
-          errorCode = U_MESSAGE_PARSE_ERROR;
+          // TODO: ???
+          errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
       }
     }
@@ -532,8 +534,12 @@ void TestMessageFormat2::testValidPatterns() {
     testPatterns(validTestCases, "testValidPatterns");
 }
 
+
 void TestMessageFormat2::testValidJsonPatterns() {
-    testPatterns(jsonTestCasesValid, "testValidJsonPatterns");
+//    testPatterns(jsonTestCasesValid, "testValidJsonPatterns");
+    IcuTestErrorCode errorCode(*this, "jsonTests");
+
+    jsonTests(errorCode);
 }
 
 /*
@@ -570,30 +576,21 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
  The error is assumed to be on line `expectedErrorLine`, offset `expectedErrorOffset`.
 */
 void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeString& s, uint32_t expectedErrorOffset, uint32_t expectedErrorLine) {
-    UParseError parseError;
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+    // TODO
+    (void) testNum;
 
-    testMessageFormatter(s, parseError, errorCode);
-
-    if (!U_FAILURE(errorCode)) {
-        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail, but it passed", testNum);
-        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    if (U_FAILURE(errorCode)) {
         return;
-    } else if (errorCode != U_MESSAGE_PARSE_ERROR) {
-        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with U_MESSAGE_PARSE_ERROR, but it failed with a different error", testNum);
-        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
-        return;
-
-    } else {
-        // Check the line and character numbers
-        if (parseError.line != ((int32_t) expectedErrorLine) || parseError.offset != ((int32_t) expectedErrorOffset)) {
-            dataerrln("TestMessageFormat2::testInvalidPattern #%d - wrong line or character offset in parse error; expected (line %d, offset %d), got (line %d, offset %d)",
-                      testNum, expectedErrorLine, expectedErrorOffset, parseError.line, parseError.offset);
-            logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed #") + ((int32_t) testNum) + UnicodeString(" with error code ")+(int32_t)errorCode+" by returning the wrong line number or offset in the parse error");
-        } else {
-            errorCode.reset();
-        }
     }
+    testBuilder->setName("testInvalidPattern");
+
+    LocalPointer<TestCase> test(testBuilder->setPattern(s)
+                                .setExpectedWarning(U_SYNTAX_WARNING)
+                                .setExpectedLineNumberAndOffset(expectedErrorLine ,expectedErrorOffset)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 /*
@@ -617,7 +614,7 @@ void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const 
         logln(UnicodeString("TestMessageFormat2::testSemanticallyInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
         return;
     } else if (errorCode != expectedErrorCode) {
-        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with U_MESSAGE_PARSE_ERROR, but it failed with a different error", testNum);
+        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with #%d, but it failed with a different error", expectedErrorCode, testNum);
         logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
         return;
 
@@ -648,7 +645,7 @@ void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const Unicode
         logln(UnicodeString("TestMessageFormat2::testSemanticallyInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
         return;
     } else if (errorCode != expectedErrorCode) {
-        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with U_MESSAGE_PARSE_ERROR, but it failed with a different error", testNum);
+        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with #%d, but it failed with a different error", testNum, expectedErrorCode);
         logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
         return;
 
@@ -680,7 +677,8 @@ void TestMessageFormat2::testRuntimeWarningPattern(uint32_t testNum, const Unico
         if (expectedResult != result) {
             dataerrln(s);
             logln("Expected output: " + expectedResult + "\nGot output: " + result);
-            ((UErrorCode&)errorCode) = U_MESSAGE_PARSE_ERROR;
+           // TODO: ??
+            ((UErrorCode&)errorCode) = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         errorCode.reset();
@@ -769,15 +767,16 @@ void TestMessageFormat2::testResolutionErrors() {
     // but should trigger a resolution error
 
     // Unresolved variable
-    testRuntimeWarningPattern(++i, "{{$oops}}", "$oops", U_UNRESOLVED_VARIABLE_WARNING);
-    testRuntimeWarningPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", "$forward", U_UNRESOLVED_VARIABLE_WARNING);
+    testRuntimeWarningPattern(++i, "{{$oops}}", "{$oops}", U_UNRESOLVED_VARIABLE_WARNING);
+    testRuntimeWarningPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", "{$forward}", U_UNRESOLVED_VARIABLE_WARNING);
     // TODO add more
 
     // Unknown function
-    testRuntimeErrorPattern(++i, "{The value is {horse :func}.}", U_UNKNOWN_FUNCTION);
-    testRuntimeErrorPattern(++i, "match {|horse| :func}\n\
+    testRuntimeWarningPattern(++i, "{The value is {horse :func}.}", "The value is {|horse|}.", U_UNKNOWN_FUNCTION_WARNING);
+    testRuntimeWarningPattern(++i, "match {|horse| :func}\n\
                                          when 1 {The value is one.}\n\
-                                         when * {The value is not one.}\n", U_UNKNOWN_FUNCTION);
+                                         when * {The value is not one.}\n",
+                              "The value is not one.", U_UNKNOWN_FUNCTION_WARNING);
     // Using formatter as selector
     testRuntimeErrorPattern(++i, "match {|horse| :number}\n\
                                          when 1 {The value is one.}\n\

@@ -90,6 +90,14 @@ static bool areDefaultKeys(const KeyList& keys) {
     return true;
 }
 
+// TODO: don't duplicate this
+static void setError(UErrorCode newError, UErrorCode& existingError) {
+    // Don't overwrite an existing warning
+    if (existingError == U_ZERO_ERROR) {
+        existingError = newError;
+    }
+}
+
 void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
     CHECK_ERROR(error);
     U_ASSERT(dataModel.hasSelectors());
@@ -111,13 +119,13 @@ void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
         const KeyList& keys = selectorKeys->getKeys();
         if (keys.length() != numSelectors) {
             // Variant key mismatch
-            error = U_VARIANT_KEY_MISMATCH;
+            setError(U_VARIANT_KEY_MISMATCH, error);
             return;
         }
         defaultExists |= areDefaultKeys(keys);
     }
     if (!defaultExists) {
-        error = U_NONEXHAUSTIVE_PATTERN;
+        setError(U_NONEXHAUSTIVE_PATTERN, error);
         return;
     }
 }
@@ -137,7 +145,7 @@ void requireAnnotated(const TypeEnvironment& t, const Expression& selectorExpr, 
         }
     }
     // If this code is reached, an error was detected
-    error = U_MISSING_SELECTOR_ANNOTATION;
+    setError(U_MISSING_SELECTOR_ANNOTATION, error);
 }
 
 void MessageFormatter::Checker::checkSelectors(const TypeEnvironment& t, UErrorCode& error) {

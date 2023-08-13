@@ -52,6 +52,9 @@ using namespace pluralimpl;
 #define QUESTION ((UChar32)0x003F)
 #define TILDE ((UChar32)0x007E)
 
+// Fallback
+#define REPLACEMENT ((UChar32) 0xFFFD)
+
 // MessageFormat2 uses three keywords: `let`, `when`, and `match`.
 
 static constexpr UChar32 ID_LET[] = {
@@ -102,7 +105,6 @@ inline bool isWhitespace(UChar32 c) {
     if (U_FAILURE(errorCode)) {                                                                         \
         return false; \
     }
-
 } // namespace message2
 U_NAMESPACE_END
 

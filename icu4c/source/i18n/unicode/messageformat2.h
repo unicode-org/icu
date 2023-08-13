@@ -305,6 +305,9 @@ public:
             U_ASSERT(!isBogus());
             return *env;
         }
+        // If this is left undefined, deleting a closure from the
+        // environment causes a segfault
+        virtual ~Closure();
         private:
         // An unevaluated expression
         /* const */ LocalPointer<Expression> expr;
@@ -359,6 +362,7 @@ public:
      // Formats an expression in a pattern context
      void formatPatternExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
      Hashtable* resolveOptions(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UnicodeString&, UErrorCode&) const;
      void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
      void formatOperand(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatSelectors(const Hashtable& arguments, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;

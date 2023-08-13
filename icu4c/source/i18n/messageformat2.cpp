@@ -179,6 +179,20 @@ MessageFormatter::~MessageFormatter() {}
 // ------------------------------------------------------
 // Formatting
 
+// TODO: don't duplicate this
+static void setError(UErrorCode newError, UErrorCode& existingError) {
+    // Don't overwrite an existing warning
+    if (existingError == U_ZERO_ERROR) {
+        existingError = newError;
+    }
+}
+
+// See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
+static void fallback(const VariableName& v, UnicodeString& result) {
+    result += DOLLAR;
+    result += v;
+}
+
 // Note: formatting a literal can't fail
 // (see https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#literal-resolution )
 // so formatLiteral() doesn't take an error code.
@@ -214,11 +228,10 @@ void MessageFormatter::formatOperand(const Hashtable& arguments, const Environme
             return;
         }
         // Unbound variable -- Resolution error
-        status = U_UNRESOLVED_VARIABLE_WARNING;
+        setError(U_UNRESOLVED_VARIABLE_WARNING, status);
         // Use fallback per
         // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-        result += DOLLAR;
-        result += rand.asVariable();
+        fallback(rand.asVariable(), result);
         return;
     }
     // Must be a literal
@@ -271,7 +284,33 @@ void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFacto
     formatOperand(arguments, env, rand, status, resolvedOperand);
     LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, env, variableOptions, status));
     CHECK_ERROR(status);
+    // Formatting functions can set warnings. We don't want those to override
+    // MessageFormat warnings.
+    UErrorCode savedStatus = status;    
     formatter->format(resolvedOperand, *resolvedOptions, result, status);
+    if (U_SUCCESS(status) && status != savedStatus) {
+        // Function set a different warning -- restore the old one
+        status = savedStatus;
+    }
+}
+
+// Precondition: `env` defines `functionName` as a formatter. (This is determined when checking the data model)
+void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments,const Environment& env, const OptionMap& variableOptions, UnicodeString& result, UErrorCode& status) const {
+    CHECK_ERROR(status);
+
+    // Create a specific instance of the formatter
+    const LocalPointer<Formatter> formatter(formatterFactory.createFormatter(getLocale(), arguments, status));
+    LocalPointer<const Hashtable> resolvedOptions(resolveOptions(arguments, env, variableOptions, status));
+    CHECK_ERROR(status);
+    // Formatting functions can set warnings. We don't want those to override
+    // MessageFormat warnings.
+    UErrorCode savedStatus = status;    
+    // TODO: is passing in the empty string to a nullary function correct?
+    formatter->format(UnicodeString(), *resolvedOptions, result, status);
+    if (U_SUCCESS(status) && status != savedStatus) {
+        // Function set a different warning -- restore the old one
+        status = savedStatus;
+    }
 }
 
 // https://github.com/unicode-org/message-format-wg/issues/409
@@ -303,7 +342,7 @@ const SelectorFactory* MessageFormatter::lookupSelectorFactory(const FunctionNam
     // isn't built-in, or the function doesn't exist in either the built-in
     // or custom registry.
     // Unknown function error
-    status = U_UNKNOWN_FUNCTION;
+    setError(U_UNKNOWN_FUNCTION_WARNING, status);
     return nullptr;
 }
 
@@ -332,7 +371,7 @@ const FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionN
     // isn't built-in, or the function doesn't exist in either the built-in
     // or custom registry.
     // Unknown function error
-    status = U_UNKNOWN_FUNCTION;
+    setError(U_UNKNOWN_FUNCTION_WARNING, status);
     return nullptr;
 }
 
@@ -352,12 +391,18 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Enviro
         // Resolve the referent
         return resolveVariables(arguments, referent->getEnv(), referent->getExpr(), isFunction, resolvedOptions, resolvedOperand, functionName, status);
     }
-    // Must be global; resolution errors were already checked
-    U_ASSERT(arguments.containsKey(var));
-    UnicodeString* val = (UnicodeString*) arguments.get(var);
-    U_ASSERT(val != nullptr);
+    // Check globals
+    if (arguments.containsKey(var)) {
+        UnicodeString* val = (UnicodeString*) arguments.get(var);
+        U_ASSERT(val != nullptr);
+        isFunction = false;
+        resolvedOperand = *val;
+        return;
+    }
+    // Unresolved variable -- could be a previous warning
     isFunction = false;
-    resolvedOperand = *val;
+    resolvedOperand += DOLLAR;
+    resolvedOperand += var;
 }
 
 void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
@@ -365,7 +410,7 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Enviro
 
     // Unsupported expression error
     if (expr.isReserved()) {
-        status = U_UNSUPPORTED_PROPERTY;
+        setError(U_UNSUPPORTED_PROPERTY, status);
         return;
     }
 
@@ -408,16 +453,22 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
         U_ASSERT(U_SUCCESS(status));
     }
     // If no error was set, the selector should be non-null
-    U_ASSERT(selectorFactory != nullptr);
-
-    if (resolvedOptions == nullptr) {
-        resolvedOptions = emptyOptions(status);
-        NULL_ON_ERROR(status);
+    LocalPointer<ResolvedExpression> result;
+    if (selectorFactory != nullptr) {
+        if (resolvedOptions == nullptr) {
+            resolvedOptions = emptyOptions(status);
+            NULL_ON_ERROR(status);
+        }
+        // Create a specific instance of the selector
+        LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), arguments, status));
+        // Represent the function call with the given options, applied to the operand
+        result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, operand));
+    } else {
+        // If the selector factory was null, there must have been
+        // an earlier unknown function warning
+        U_ASSERT(status == U_UNKNOWN_FUNCTION_WARNING);
+        result.adoptInstead(new ResolvedExpression());
     }
-    // Create a specific instance of the selector
-    LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), arguments, status));
-    // Represent the function call with the given options, applied to the operand
-    LocalPointer<ResolvedExpression> result(new ResolvedExpression(selector.orphan(), resolvedOptions, operand));
     if (!result.isValid()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
@@ -425,14 +476,28 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     return result.orphan();
 }
 
+static bool isMessageFormatWarning(UErrorCode status) {
+    switch(status) {
+        case U_UNRESOLVED_VARIABLE_WARNING:
+        case U_SYNTAX_WARNING:
+        case U_UNKNOWN_FUNCTION_WARNING: {
+            return true;
+        }
+        default: {
+            return false;
+        }
+    }
+}
+
 void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Environment& globalEnv, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // Formatting error
     if (expr.isReserved()) {
-        status = U_UNSUPPORTED_PROPERTY;
+        setError(U_UNSUPPORTED_PROPERTY, status);
         return;
     }
+
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
         const FunctionName& functionName = rator.getFunctionName();
@@ -440,17 +505,25 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
         // Look up the formatter for this function
         const FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
 
-        if (U_SUCCESS(status)) {
-            // If no error was set, the formatter should be non-null
-            U_ASSERT(formatterFactory != nullptr);
-            
+        // If the formatter factory was null, there must have been
+        // an earlier error/warning
+        if (formatterFactory == nullptr) {
+            U_ASSERT(isMessageFormatWarning(status) || status == U_FORMATTING_ERROR);
+        }
+
+        if (U_SUCCESS(status) && formatterFactory != nullptr) {
             // Format the call
-            formatFunctionCall(*formatterFactory, arguments, globalEnv,
-                               rator.getOptions(), expr.getOperand(), result, status);
+            if (expr.isStandaloneAnnotation()) {
+                formatFunctionCall(*formatterFactory, arguments, globalEnv,
+                                   rator.getOptions(), result, status);
+            } else {
+                formatFunctionCall(*formatterFactory, arguments, globalEnv,
+                                   rator.getOptions(), expr.getOperand(), result, status);
+            }
         }
 
         // Check for errors and use a fallback value if necessary
-        if (U_FAILURE(status)) {
+        if (isMessageFormatWarning(status)) {
             /*
               https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
               "Fallback Resolution" section
@@ -458,26 +531,24 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
             // expression with no operand: function name
             if (expr.isStandaloneAnnotation()) {
                 result += functionName.toString();
-                return;
+            } else {
+                // expression with literal operand: |value|
+                const Operand& rand = expr.getOperand();
+                if (rand.isLiteral()) {
+                    result += PIPE;
+                    result += rand.asLiteral().contents;
+                    result += PIPE;
+                } else {
+                    // Must be a variable
+                    fallback(rand.asVariable(), result);
+                }
             }
-            // expression with literal operand: |value|
-            const Operand& rand = expr.getOperand();
-            if (rand.isLiteral()) {
-                result += PIPE;
-                result += rand.asLiteral().contents;
-                result += PIPE;
-                return;
-            }
-            // Must be a variable
-            result += DOLLAR;
-            result += rand.asVariable();
-            return;
         }
-        return;
+    } else {
+        formatOperand(arguments, globalEnv, expr.getOperand(), status, result);
     }
-    formatOperand(arguments, globalEnv, expr.getOperand(), status, result);
-
 }
+
 void MessageFormatter::formatPattern(const Hashtable& arguments, const Environment& globalEnv, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
@@ -487,7 +558,17 @@ void MessageFormatter::formatPattern(const Hashtable& arguments, const Environme
         if (part->isText()) {
             result += part->asText();
         } else {
-            formatPatternExpression(arguments, globalEnv, part->contents(), status, result);
+            UnicodeString partResult;
+            formatPatternExpression(arguments, globalEnv, part->contents(), status, partResult);
+            // If there were any warnings, then 
+            // ", the string representation of each fallback value MUST be the concatenation of a U+007B LEFT CURLY BRACKET {, the fallback value as a string, and a U+007D RIGHT CURLY BRACKET }."
+            // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
+            bool containsFallbacks = isMessageFormatWarning(status);
+            if (containsFallbacks) {
+                partResult.insert(0, LEFT_CURLY_BRACE);
+                partResult += RIGHT_CURLY_BRACE;
+            }
+            result += partResult;
         }
     }
 }
@@ -510,21 +591,62 @@ void MessageFormatter::resolveSelectors(const Hashtable& arguments, const Enviro
     }
 }
 
+static void keysToArray(const UVector& keys, UnicodeString* out) {
+    for (int32_t i = 0; i < keys.size(); i++) {
+        out[i] = *((UnicodeString*) keys[i]);
+    }
+}
+
+static void arrayToKeys(const UnicodeString* in/*[]*/, size_t len, UVector& keys, UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    keys.removeAllElements();
+    if (in == nullptr) {
+        return;
+    }
+    LocalPointer<UnicodeString> s;
+
+    for (size_t i = 0; i < len; i++) {
+        s.adoptInstead(new UnicodeString(in[i]));
+        if (!s.isValid()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        keys.adoptElement(s.orphan(), status);
+    }
+}
+
+
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `keys` and `matches` are both vectors of strings
 void MessageFormatter::matchSelectorKeys(const ResolvedExpression& rv, const UVector& keys, UErrorCode& status, UVector& matches) const {
     CHECK_ERROR(status);
 
-    for (size_t i = 0; ((int32_t) i) < keys.size(); i++) {
-        UnicodeString* k = ((UnicodeString*) keys[i]);
-        U_ASSERT(rv.selectorFunction.isValid());
-        const Selector& selectorImpl = *rv.selectorFunction;
-        if (selectorImpl.matches(rv.resolvedOperand, *k, *(rv.resolvedOptions), status)) {
-            CHECK_ERROR(status);
-            // `matches` does not adopt its elements
-            matches.addElement(k, status);
-        }
+    if (rv.isFallback) {
+        // Return an empty list of matches
+        matches.removeAllElements();
+        return;
     }
+
+    U_ASSERT(rv.selectorFunction.isValid());
+    const Selector& selectorImpl = *rv.selectorFunction;
+    
+    // As input to selectKeys(), copy the `keys` vector into
+    // an array of strings
+    size_t numKeys = keys.size();
+    LocalArray<UnicodeString> keysIn(new UnicodeString[numKeys]);
+    keysToArray(keys, keysIn.getAlias());
+    // As output for selectKeys(), create a new empty array
+    // with the same size as `keys`
+    LocalArray<UnicodeString> keysOut(new UnicodeString[numKeys]);
+    if (!keysOut.isValid()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    size_t numberMatching = 0;
+    selectorImpl.selectKey(rv.resolvedOperand, keysIn.getAlias(), numKeys, *(rv.resolvedOptions), keysOut.getAlias(), numberMatching, status);
+    arrayToKeys(keysOut.getAlias(), numberMatching, matches, status);
 }
 
 // Compare strings by value
@@ -582,6 +704,7 @@ void MessageFormatter::resolvePreferences(const UVector& res, const VariantMap& 
         // 2iv. Let matches be the result of calling the method MatchSelectorKeys(rv, keys)
         matches.adoptInstead(new UVector(status));
         CHECK_ERROR(status);
+        matches->setDeleter(uprv_deleteUObject);
         // Set comparator; `matches` is a vector of strings and we want to be able to search it
         matches->setComparer(stringsEqual);
         // `matches` does not adopt its elements
@@ -804,7 +927,7 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
     if (globalEnv.containsKey(var)) {
         return;
     }
-    status = U_UNRESOLVED_VARIABLE_WARNING;
+    setError(U_UNRESOLVED_VARIABLE_WARNING, status);
 }
 
 void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
@@ -818,12 +941,6 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
             check(globalEnv, localEnv, rand, status);
         }
         check(globalEnv, localEnv, rator.getOptions(), status);
-    }
-
-    if (!expr.isReserved()) {
-        // Check the operand
-        const Operand& rand = expr.getOperand();
-        check(globalEnv, localEnv, rand, status);
     }
 }
 
@@ -869,6 +986,12 @@ void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &st
         // Note: without the calls to orphan() (if *globalEnv is used), a double-free occurs
         formatPattern(arguments, *(globalEnv.orphan()), dataModel->getPattern(), status, result);
     } else {
+        // Check for errors/warnings -- if so, then the result is the fallback value
+        // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
+        if (isMessageFormatWarning(status)) {
+            result += REPLACEMENT;
+            return;
+        }
         formatSelectors(arguments, *(globalEnv.orphan()), dataModel->getSelectors(), dataModel->getVariants(), status, result);
     }
     return;
@@ -946,6 +1069,7 @@ const MessageFormatter::Closure* MessageFormatter::Environment::lookup(const Var
     return ((const Closure*) contents->get(v));
 }
 
+MessageFormatter::Closure::~Closure() {}
 } // namespace message2
 U_NAMESPACE_END
 

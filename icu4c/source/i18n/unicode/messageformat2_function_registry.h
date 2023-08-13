@@ -44,7 +44,13 @@ class U_COMMON_API Selector : public UMemory {
  public:
     // TODO: Same comment about the `value` argument as in Formatter
     // TODO: Needs an error code because parsing `value` as a number can error
-    virtual bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& options, UErrorCode& errorCode) const = 0;
+    // Takes an array of keys and returns a sub-array (through the out-param `prefs`)
+    // containing all matching keys, sorted in order of preference (best first).
+    /*
+      TODO: Needed to change this in order to support best-match.
+      See selectKey() in message-value.ts
+     */
+    virtual void selectKey(const UnicodeString& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
 
@@ -203,7 +209,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const;
+        void selectKey(const UnicodeString& value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -225,7 +231,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        bool matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const;
+        void selectKey(const UnicodeString& value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

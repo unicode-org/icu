@@ -150,7 +150,7 @@ public:
         // Variable
         static Operand* create(const VariableName& s, UErrorCode& errorCode);
         // Literal
-        static Operand* create(Literal& lit, UErrorCode& errorCode);
+        static Operand* create(const Literal& lit, UErrorCode& errorCode);
 
         bool isVariable() const { return isVariableReference; }
         bool isLiteral() const { return !isVariable(); }

@@ -69,7 +69,8 @@ void TestMessageFormat2::checkResult(const UnicodeString& testName,
   if (result != expected) {
       dataerrln(pattern);
       logln("Expected output: " + expected + "\nGot output: " + result);
-      ((UErrorCode&)errorCode) = U_MESSAGE_PARSE_ERROR;
+      // TODO: ??
+      ((UErrorCode&)errorCode) = U_ILLEGAL_ARGUMENT_ERROR;
       return;
   }
 }
@@ -219,20 +220,20 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
                                 "{Hello {$name :person formality=formal}}",
                                 name,
                                 person,
-                                "Hello $name",
+                                "Hello {$name}",
                                 locale,
                                 errorCode,
-                                U_UNKNOWN_FUNCTION);
+                                U_UNKNOWN_FUNCTION_WARNING);
 
     testWithPatternAndArguments("testPersonFormatter",
                                 nullptr,
                                 "{Hello {$name :person formality=informal}}",
                                 name,
                                 person,
-                                "Hello $name",
+                                "Hello {$name}",
                                 locale,
                                 errorCode,
-                                U_UNKNOWN_FUNCTION);
+                                U_UNKNOWN_FUNCTION_WARNING);
 
     testWithPatternAndArguments("testPersonFormatter",
                                 customRegistry.orphan(),

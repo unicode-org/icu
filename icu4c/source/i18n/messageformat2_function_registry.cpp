@@ -150,7 +150,12 @@ number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Hasht
         if (minFractionDigits != nullptr) {
             int64_t minFractionDigitsInt;
             strToInt(*minFractionDigits, minFractionDigitsInt, status);
-            nf = nf.precision(number::Precision::minFraction(minFractionDigitsInt));
+            if (U_FAILURE(status)) {
+                // option didn't parse as an int -- reset error and use default
+                status= U_ZERO_ERROR;
+            } else {
+                nf = nf.precision(number::Precision::minFraction(minFractionDigitsInt));
+            }
         }
     }
     NULL_ON_ERROR(status);
@@ -206,6 +211,10 @@ void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hash
         addAll(fixedOptions, *mergedOptions, errorCode);
         addAll(variableOptions, *mergedOptions, errorCode);
         CHECK_ERROR(errorCode);
+/*
+  TODO: check options/ignore invalid here?
+*/
+
         realFormatter.adoptInstead(formatterForOptions(locale, *mergedOptions, errorCode));
     }
     CHECK_ERROR(errorCode);
@@ -241,12 +250,14 @@ Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, const 
     return result;
 }
 
-bool StandardFunctions::Plural::matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const {
-    FALSE_ON_ERROR(errorCode);
+void StandardFunctions::Plural::selectKey(const UnicodeString& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
 
-    // This does not handle the '*' key, which is represented as a non-string
-    // and thus shouldn't be passed to this method
-    U_ASSERT(key != UnicodeString(ASTERISK));
+    // Variable options not used
+    (void) variableOptions;
+
+    // Parse the selector value
+    // ---------------------------
 
     // Try parsing the scrutinee as a double
     double valToCheck;
@@ -255,18 +266,25 @@ bool StandardFunctions::Plural::matches(const UnicodeString& value, const Unicod
     if (errorCode == U_INVALID_FORMAT_ERROR) {
         errorCode = U_SELECTOR_ERROR;
     }
-    FALSE_ON_ERROR(errorCode);
+    CHECK_ERROR(errorCode);
 
     // TODO: does the Integer case need to be there?
     // See PluralSelectoryFactory.java
 
-    if (!fixedOptions.containsKey(UnicodeString("skeleton")) && !variableOptions.containsKey(UnicodeString("skeleton"))) {
-        // Try parsing the key as a Double
-        double keyAsDouble;
-        strToDouble(key, locale, keyAsDouble, errorCode);
+    // Generate the matches
+    // -----------------------
+
+    U_ASSERT(keys != nullptr);
+    // First, check for an exact match
+    numMatching = 0;
+    double keyAsDouble = 0;
+    for (size_t i = 0; i < numKeys; i++) {
+        // Try parsing the key as a double
+        strToDouble(keys[i], locale, keyAsDouble, errorCode);
         if (U_SUCCESS(errorCode)) {
             if (valToCheck == keyAsDouble) {
-                return true;
+                prefs[numMatching++] = keys[i];
+                break;
             }
         }
         else {
@@ -277,7 +295,14 @@ bool StandardFunctions::Plural::matches(const UnicodeString& value, const Unicod
     }
 
     UnicodeString match = rules->select(valToCheck);
-    return (match == key);
+    
+    // Next, check for a match based on the plural category
+    for (size_t i = 0; i < numKeys; i ++) {
+        if (match == keys[i]) {
+            prefs[numMatching++] = keys[i];
+            break;
+        }
+    }
 }
 
 StandardFunctions::Plural::~Plural() {}
@@ -384,13 +409,22 @@ Selector* StandardFunctions::TextFactory::createSelector(Locale locale, const Ha
     return result;
 }
 
-bool StandardFunctions::TextSelector::matches(const UnicodeString& value, const UnicodeString& key, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(const UnicodeString& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
+
     // Just compares the key and value as strings
-    FALSE_ON_ERROR(errorCode);
 
-    (void) variableOptions; // Unused parameter
+    (void) options; // Unused parameter
 
-    return (key == value);
+    U_ASSERT(prefs != nullptr);
+    numMatching = 0;
+    for (size_t i = 0; i < numKeys; i++) {
+        if (keys[i] == value) {
+            numMatching++;
+            prefs[0] = keys[i];
+            break;
+        }
+    }
 }
 
 StandardFunctions::TextSelector::~TextSelector() {}

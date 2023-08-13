@@ -72,7 +72,7 @@ const Literal& Operand::asLiteral() const {
 }
 
 // Literal
-/* static */ Operand* Operand::create(Literal& lit, UErrorCode& errorCode) {
+/* static */ Operand* Operand::create(const Literal& lit, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
