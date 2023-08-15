@@ -1,5 +1,5 @@
 # CollationTest_CLDR_SHIFTED_SHORT.txt
-# Date: 2023-06-02, 18:08:48 GMT
+# Date: 2023-08-11, 17:59:41 GMT
 # © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html

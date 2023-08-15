@@ -1,5 +1,5 @@
 # emoji-sequences.txt
-# Date: 2023-05-05, 23:24:34 GMT
+# Date: 2023-06-05, 21:39:54 GMT
 # © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
@@ -784,7 +784,7 @@
 1F1F9 1F1F2   ; RGI_Emoji_Flag_Sequence      ; flag: Turkmenistan                                             # E2.0   [1] (🇹🇲)
 1F1F9 1F1F3   ; RGI_Emoji_Flag_Sequence      ; flag: Tunisia                                                  # E2.0   [1] (🇹🇳)
 1F1F9 1F1F4   ; RGI_Emoji_Flag_Sequence      ; flag: Tonga                                                    # E2.0   [1] (🇹🇴)
-1F1F9 1F1F7   ; RGI_Emoji_Flag_Sequence      ; flag: Turkey                                                   # E2.0   [1] (🇹🇷)
+1F1F9 1F1F7   ; RGI_Emoji_Flag_Sequence      ; flag: Türkiye                                                  # E2.0   [1] (🇹🇷)
 1F1F9 1F1F9   ; RGI_Emoji_Flag_Sequence      ; flag: Trinidad & Tobago                                        # E2.0   [1] (🇹🇹)
 1F1F9 1F1FB   ; RGI_Emoji_Flag_Sequence      ; flag: Tuvalu                                                   # E2.0   [1] (🇹🇻)
 1F1F9 1F1FC   ; RGI_Emoji_Flag_Sequence      ; flag: Taiwan                                                   # E2.0   [1] (🇹🇼)
