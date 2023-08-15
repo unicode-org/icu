@@ -1074,15 +1074,34 @@ static void exprFallback(Expression::Builder& exprBuilder, UErrorCode &errorCode
     exprBuilder.setOperand(fallbackOperand.orphan());
 }
 
-
-Expression* PARSER::parseExpression(UErrorCode &errorCode) {
+static Expression* exprFallback(UErrorCode &errorCode) {
     NULL_ON_ERROR(errorCode);
+
+    LocalPointer<Expression::Builder> exprBuilder(Expression::builder(errorCode));
+    NULL_ON_ERROR(errorCode);
+
+    // Construct a literal consisting just of  The U+FFFD REPLACEMENT CHARACTER
+    // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
+    LocalPointer<Operand> fallbackOperand(Operand::create(Literal(false, UnicodeString(REPLACEMENT)), errorCode));
+    NULL_ON_ERROR(errorCode);
+    
+    exprBuilder->setOperand(fallbackOperand.orphan());
+    return exprBuilder->build(errorCode);
+}
+
+// Sets `parseError` to true if there was an error parsing this expression
+// Uses a flag rather than just returning a fallback expression because which
+// fallback to use depends on context
+Expression* PARSER::parseExpression(bool& err, UErrorCode &errorCode) {
+    NULL_ON_ERROR(errorCode);
+    err = false;
 
     // Early return if out of input -- no more work is possible
     // (and parseExpression shouldn't be able to return null if U_SUCCESS(errorCode))
     U_ASSERT(inBounds(source, index));
 
     // Parse opening brace
+    bool sawOpener = source[index] == LEFT_CURLY_BRACE;
     parseToken(LEFT_CURLY_BRACE, errorCode);
     // Optional whitespace after opening brace
     parseOptionalWhitespace(errorCode);
@@ -1116,7 +1135,10 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
             } else {
                 // Not a literal, variable or annotation -- error out
                 ERROR(parseError, errorCode, index);
+                // Set the operand in order to avoid an invalid state error --
+                // however, the caller will ignore the result
                 exprFallback(*exprBuilder, errorCode);
+                err = true;
                 break;
             }
             break;
@@ -1125,6 +1147,18 @@ Expression* PARSER::parseExpression(UErrorCode &errorCode) {
     }
     // For why we don't parse optional whitespace here, even though the grammar
     // allows it, see comments in parseLiteralWithAnnotation() and parseOptions()
+
+    // Handle the case of a valid expression with extra junk and then a '}'
+    // TODO: again, not fully specified, but see
+    // https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L312
+    if (!err && sawOpener) {
+        if (inBounds(source, index) && (source[index] != RIGHT_CURLY_BRACE)) {
+            ERROR(parseError, errorCode, index);
+        }
+        while (inBounds(source, index) && (source[index] != RIGHT_CURLY_BRACE)) {
+            index++;
+        }
+    }
 
     // Parse closing brace
     parseToken(RIGHT_CURLY_BRACE, errorCode);
@@ -1158,7 +1192,11 @@ void PARSER::parseDeclarations(UErrorCode &errorCode) {
         // (which must return a non-null value)
         CHECK_BOUNDS(source, index, parseError, errorCode);
         
-        LocalPointer<Expression> rhs(parseExpression(errorCode));
+        bool rhsError = false;
+        LocalPointer<Expression> rhs(parseExpression(rhsError, errorCode));
+        if (rhsError) {
+            rhs.adoptInstead(exprFallback(errorCode));
+        }
         parseOptionalWhitespace(errorCode);
         // Restore precondition
         CHECK_BOUNDS(source, index, parseError, errorCode);
@@ -1313,10 +1351,26 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
         keysBuilder->add(k.orphan(), errorCode);
     }
 
+/*
+    // Try to recover from errors, e.g. when*{foo}
+    if (!isWhitespace(source[index])) {
+        while (inBounds(source, index) && source[index] != LEFT_CURLY_BRACE) {
+            index++;
+        }
+    }
+*/
+
     // We've seen at least one whitespace-key pair, so now we can parse
     // *(s key) [s]
-    while (isWhitespace(source[index])) {
+    while (source[index] != LEFT_CURLY_BRACE) { // Try to recover from errors
+        bool wasWhitespace = isWhitespace(source[index]);
         parseRequiredWhitespace(errorCode);
+        if (!wasWhitespace) {
+            // Avoid infinite loop when parsing something like:
+            // when * @{!... 
+            index++;
+        }
+
         // Restore precondition
         CHECK_BOUNDS_NULL(source, index, parseError, errorCode);
 
@@ -1365,9 +1419,28 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
         switch (source[index]) {
         case LEFT_CURLY_BRACE: {
             // Must be expression
-            expression.adoptInstead(parseExpression(errorCode));
-            NULL_ON_ERROR(errorCode);
-            part.adoptInstead(PatternPart::create(expression.orphan(), errorCode));
+            bool rhsError = false;
+            // TODO: this is the only way to get the error recovery shown in
+            // https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L279
+            // -- backtracking so that the erroneous contents of the '{}' can be re-parsed
+            // as text
+            uint32_t oldIndex = index + 1;
+            expression.adoptInstead(parseExpression(rhsError, errorCode));
+            if (rhsError) {
+                // Add a text part "{}"
+                // TODO this isn't documented in the spec,
+                // but see https://github.com/messageformat/messageformat/blob/main/packages/mf2-messageformat/src/__fixtures/test-messages.json#L266
+                index = oldIndex;
+                UnicodeString errorPattern(LEFT_CURLY_BRACE);
+                while (inBounds(source, index) && source[index] != RIGHT_CURLY_BRACE) {
+                    errorPattern += source[index++];
+                }
+                errorPattern += RIGHT_CURLY_BRACE;
+                part.adoptInstead(PatternPart::create(errorPattern, errorCode));
+            } else {
+                NULL_ON_ERROR(errorCode);
+                part.adoptInstead(PatternPart::create(expression.orphan(), errorCode));
+            }
             NULL_ON_ERROR(errorCode);
             result->add(part.orphan(), errorCode);
             break;
@@ -1425,7 +1498,14 @@ void PARSER::parseSelectors(UErrorCode &errorCode) {
             break;
         }
 
-        expression.adoptInstead(parseExpression(errorCode));
+        bool selectorError = false;
+        expression.adoptInstead(parseExpression(selectorError, errorCode));
+        if (selectorError) {
+            // TODO: what happens if one of the variant keys is the
+            // fallback string? this should be a `nomatch` according
+            // to the spec, but there's no way to pass that through
+            expression.adoptInstead(exprFallback(errorCode));
+        }
         empty = false;
 
         if (U_FAILURE(errorCode)) {
@@ -1501,15 +1581,38 @@ static void setError(UErrorCode newError, UErrorCode& existingError) {
   No postcondition (on return, `index` might equal `source.length()` with U_SUCCESS(errorCode)),
   because a message can end with a body (trailing whitespace is optional)
 */
+
+void PARSER::errorPattern(UErrorCode &errorCode) {
+    CHECK_ERROR(errorCode);
+    setError(U_SYNTAX_WARNING, errorCode);
+    // Set to empty pattern
+    LocalPointer<Pattern::Builder> result(Pattern::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    // If still in bounds, then add the remaining input as a single text part
+    // to the pattern
+    /*
+      TODO: this behavior isn't documented in the spec, but it comes from
+      https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L236
+     */
+    UnicodeString partStr(LEFT_CURLY_BRACE);
+    while (inBounds(source, index)) {
+        partStr += source[index++];
+    }
+    // Add curly braces around the entire output
+    // TODO: also not documented in the spec
+    partStr += RIGHT_CURLY_BRACE;
+    LocalPointer<PatternPart> part(PatternPart::create(partStr, errorCode));
+    if (U_SUCCESS(errorCode)) {
+        result->add(part.orphan(), errorCode);
+    }
+    dataModel.setPattern(result->build(errorCode));
+}
+
 void PARSER::parseBody(UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
     // Out-of-input is a syntax warning
     if (!inBounds(source, index)) {
-        setError(U_SYNTAX_WARNING, errorCode);
-        // Set to empty pattern
-        LocalPointer<Pattern::Builder> result(Pattern::builder(errorCode));
-        CHECK_ERROR(errorCode);
-        dataModel.setPattern(result->build(errorCode));
+        errorPattern(errorCode);
         return;
     }
 
@@ -1529,6 +1632,7 @@ void PARSER::parseBody(UErrorCode &errorCode) {
     }
     default: {
         ERROR(parseError, errorCode, index);
+        errorPattern(errorCode);
         return;
     }
     }

@@ -442,6 +442,7 @@ typedef enum UErrorCode {
     U_UNRESOLVED_VARIABLE_WARNING = -119,  /** A variable is referred to but not bound by any definition (note: this is a warning and not an error, so formatting can proceed with a fallback string) */
     U_SYNTAX_WARNING = -118,               /** Includes all syntax errors (for now). This is a warning because fallback strings are used */
     U_UNKNOWN_FUNCTION_WARNING = -117,              /** An annotation refers to a function not defined by the standard or custom function registry  (this is a warning and not an error, so formatting can proceed with a fallback string)*/
+    U_VARIANT_KEY_MISMATCH_WARNING = -116,          /** In a match-construct, one or more variants had a different number of keys from the number of selectors */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -575,7 +576,6 @@ typedef enum UErrorCode {
     U_NUMBER_SKELETON_SYNTAX_ERROR,   /**< The number skeleton passed to C++ NumberFormatter or C UNumberFormatter was invalid or contained a syntax error. @stable ICU 62 */
 
     /* MessageFormat 2.0 errors */
-    U_VARIANT_KEY_MISMATCH,          /** In a match-construct, one or more variants had a different number of keys from the number of selectors */
     U_NONEXHAUSTIVE_PATTERN,         /** In a match-construct, the variants do not cover all possible values */
     U_DUPLICATE_OPTION_NAME,         /** In an annotation, the same option name appears more than once */
     U_SELECTOR_ERROR,                /** A selector function is applied to an operand of the wrong type */

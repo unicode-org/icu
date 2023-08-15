@@ -189,8 +189,12 @@ static void setError(UErrorCode newError, UErrorCode& existingError) {
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
 static void fallback(const VariableName& v, UnicodeString& result) {
+    // Add braces
+    // There is really no consistency to these rules -- TODO
+    result += LEFT_CURLY_BRACE;
     result += DOLLAR;
     result += v;
+    result += RIGHT_CURLY_BRACE;
 }
 
 // Note: formatting a literal can't fail
@@ -274,7 +278,7 @@ Hashtable* MessageFormatter::resolveOptions(const Hashtable& arguments, const En
 }
 
 // Precondition: `env` defines `functionName` as a formatter. (This is determined when checking the data model)
-void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments,const Environment& env, const OptionMap& variableOptions, const Operand& rand, UnicodeString& result, UErrorCode& status) const {
+void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments,const Environment& env, const OptionMap& variableOptions, const Operand& rand, bool& callSucceeded, UnicodeString& result, UErrorCode& status) const {
     CHECK_ERROR(status);
 
     // Create a specific instance of the formatter
@@ -288,14 +292,17 @@ void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFacto
     // MessageFormat warnings.
     UErrorCode savedStatus = status;    
     formatter->format(resolvedOperand, *resolvedOptions, result, status);
-    if (U_SUCCESS(status) && status != savedStatus) {
-        // Function set a different warning -- restore the old one
-        status = savedStatus;
+    if (U_SUCCESS(status)) {
+        callSucceeded = true;
+        if (status != savedStatus) {
+            // Function set a different warning -- restore the old one
+            status = savedStatus;
+        }
     }
 }
 
 // Precondition: `env` defines `functionName` as a formatter. (This is determined when checking the data model)
-void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments,const Environment& env, const OptionMap& variableOptions, UnicodeString& result, UErrorCode& status) const {
+void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFactory, const Hashtable& arguments,const Environment& env, const OptionMap& variableOptions, bool& callSucceeded, UnicodeString& result, UErrorCode& status) const {
     CHECK_ERROR(status);
 
     // Create a specific instance of the formatter
@@ -307,9 +314,12 @@ void MessageFormatter::formatFunctionCall(const FormatterFactory& formatterFacto
     UErrorCode savedStatus = status;    
     // TODO: is passing in the empty string to a nullary function correct?
     formatter->format(UnicodeString(), *resolvedOptions, result, status);
-    if (U_SUCCESS(status) && status != savedStatus) {
-        // Function set a different warning -- restore the old one
-        status = savedStatus;
+    if (U_SUCCESS(status)) {
+        callSucceeded = true;
+        if (status != savedStatus) {
+            // Function set a different warning -- restore the old one
+            status = savedStatus;
+        }
     }
 }
 
@@ -375,7 +385,10 @@ const FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionN
     return nullptr;
 }
 
-void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
+// hasOperand set to true if `rand` resolves to an expression that's a unary function call
+// for example $foo => {$bar :plural} => hasOperand set to true
+//             $foo => {:func} => hasOperand set to false
+void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Operand& rand, bool& isFunction, bool& hasOperand, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     if (rand.isLiteral()) {
@@ -389,7 +402,7 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Enviro
     const Closure* referent = env.lookup(var);
     if (referent != nullptr) {
         // Resolve the referent
-        return resolveVariables(arguments, referent->getEnv(), referent->getExpr(), isFunction, resolvedOptions, resolvedOperand, functionName, status);
+        return resolveVariables(arguments, referent->getEnv(), referent->getExpr(), isFunction, hasOperand, resolvedOptions, resolvedOperand, functionName, status);
     }
     // Check globals
     if (arguments.containsKey(var)) {
@@ -405,7 +418,7 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Enviro
     resolvedOperand += var;
 }
 
-void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
+void MessageFormatter::resolveVariables(const Hashtable& arguments, const Environment& env, const Expression& expr, bool& isFunction, bool& hasOperand, Hashtable*& resolvedOptions, UnicodeString& resolvedOperand, UnicodeString& functionName, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Unsupported expression error
@@ -414,21 +427,26 @@ void MessageFormatter::resolveVariables(const Hashtable& arguments, const Enviro
         return;
     }
 
-    const Operand& rand = expr.getOperand();
-
     // Literal or variable
     if (!expr.isFunctionCall()) {
-        return resolveVariables(arguments, env, rand, isFunction, resolvedOptions, resolvedOperand, functionName, status);
+        return resolveVariables(arguments, env, expr.getOperand(), isFunction, hasOperand, resolvedOptions, resolvedOperand, functionName, status);
     }
 
     // Function call -- resolve the operand and options
     isFunction = true;
-    formatOperand(arguments, env, expr.getOperand(), status, resolvedOperand);
     const Operator& rator = expr.getOperator();
     functionName = rator.getFunctionName().name;
     LocalPointer<Hashtable> tempResolvedOptions(resolveOptions(arguments, env, rator.getOptions(), status));
     CHECK_ERROR(status);
     resolvedOptions = tempResolvedOptions.orphan();
+   
+    if (expr.isStandaloneAnnotation()) {
+        // Nothing more to resolve
+        hasOperand = false;  
+    } else {
+        hasOperand = true;
+        formatOperand(arguments, env, expr.getOperand(), status, resolvedOperand);
+    }
 }
 
 MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(const Hashtable& arguments, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
@@ -438,7 +456,8 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     UnicodeString operand;
     UnicodeString functionName;
     bool isFunction = false;
-    resolveVariables(arguments, globalEnv, expr, isFunction, resolvedOptions, operand, functionName, status);
+    bool hasOperand = false;
+    resolveVariables(arguments, globalEnv, expr, isFunction, hasOperand, resolvedOptions, operand, functionName, status);
     NULL_ON_ERROR(status);
     const SelectorFactory* selectorFactory;
     if (isFunction) {
@@ -462,7 +481,11 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
         // Create a specific instance of the selector
         LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), arguments, status));
         // Represent the function call with the given options, applied to the operand
-        result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, operand));
+        if (hasOperand) {
+            result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, operand));
+        } else {
+            result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions));
+        }
     } else {
         // If the selector factory was null, there must have been
         // an earlier unknown function warning
@@ -480,7 +503,8 @@ static bool isMessageFormatWarning(UErrorCode status) {
     switch(status) {
         case U_UNRESOLVED_VARIABLE_WARNING:
         case U_SYNTAX_WARNING:
-        case U_UNKNOWN_FUNCTION_WARNING: {
+        case U_UNKNOWN_FUNCTION_WARNING:
+        case U_VARIANT_KEY_MISMATCH_WARNING: {
             return true;
         }
         default: {
@@ -489,7 +513,8 @@ static bool isMessageFormatWarning(UErrorCode status) {
     }
 }
 
-void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Environment& globalEnv, const Expression& expr, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const Environment& globalEnv, const Expression& expr, 
+UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // Formatting error
@@ -501,6 +526,8 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
         const FunctionName& functionName = rator.getFunctionName();
+        bool useFallback = false;
+        bool functionCallSucceeded = false;
 
         // Look up the formatter for this function
         const FormatterFactory* formatterFactory = lookupFormatterFactory(functionName, status);
@@ -509,39 +536,52 @@ void MessageFormatter::formatPatternExpression(const Hashtable& arguments, const
         // an earlier error/warning
         if (formatterFactory == nullptr) {
             U_ASSERT(isMessageFormatWarning(status) || status == U_FORMATTING_ERROR);
+            useFallback = true;
         }
 
         if (U_SUCCESS(status) && formatterFactory != nullptr) {
             // Format the call
             if (expr.isStandaloneAnnotation()) {
                 formatFunctionCall(*formatterFactory, arguments, globalEnv,
-                                   rator.getOptions(), result, status);
+                                   rator.getOptions(), functionCallSucceeded, result, status);
             } else {
                 formatFunctionCall(*formatterFactory, arguments, globalEnv,
-                                   rator.getOptions(), expr.getOperand(), result, status);
+                                   rator.getOptions(), expr.getOperand(), functionCallSucceeded, result, status);
             }
         }
 
+        // If the function call failed, use a fallback value
+        useFallback |= !functionCallSucceeded;
+
         // Check for errors and use a fallback value if necessary
-        if (isMessageFormatWarning(status)) {
+        // Fall back if either the function is unknown, or the call failed
+        if (useFallback) {
+            // Add curlies -- TODO there is no consistency here,
+            // but it matches https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L216
             /*
               https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
               "Fallback Resolution" section
              */
-            // expression with no operand: function name
-            if (expr.isStandaloneAnnotation()) {
-                result += functionName.toString();
+            if (!expr.isStandaloneAnnotation() && !expr.getOperand().isLiteral()) {
+                fallback(expr.getOperand().asVariable(), result);
             } else {
-                // expression with literal operand: |value|
-                const Operand& rand = expr.getOperand();
-                if (rand.isLiteral()) {
-                    result += PIPE;
-                    result += rand.asLiteral().contents;
-                    result += PIPE;
+                result += LEFT_CURLY_BRACE;
+                // expression with no operand: function name
+                if (expr.isStandaloneAnnotation()) {
+                    result += functionName.toString();
                 } else {
-                    // Must be a variable
-                    fallback(rand.asVariable(), result);
+                    // expression with literal operand: |value|
+                    const Operand& rand = expr.getOperand();
+                    if (rand.isLiteral()) {
+                        result += PIPE;
+                        result += rand.asLiteral().contents;
+                        result += PIPE;
+                    } else {
+                        // Must be a variable
+                        fallback(rand.asVariable(), result);
+                    }
                 }
+                result += RIGHT_CURLY_BRACE;
             }
         }
     } else {
@@ -556,15 +596,21 @@ void MessageFormatter::formatPattern(const Hashtable& arguments, const Environme
         const PatternPart* part = pat.getPart(i);
         U_ASSERT(part != nullptr);
         if (part->isText()) {
+    /*
+      TODO: this behavior isn't documented in the spec, but it comes from
+      https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L236
+     */
             result += part->asText();
         } else {
             UnicodeString partResult;
-            formatPatternExpression(arguments, globalEnv, part->contents(), status, partResult);
-            // If there were any warnings, then 
-            // ", the string representation of each fallback value MUST be the concatenation of a U+007B LEFT CURLY BRACKET {, the fallback value as a string, and a U+007D RIGHT CURLY BRACKET }."
-            // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
-            bool containsFallbacks = isMessageFormatWarning(status);
-            if (containsFallbacks) {
+            bool treatAsText = false;
+            formatPatternExpression(arguments, globalEnv, part->contents(), /* treatAsText, */ status, partResult);
+            // TODO: maybe this isn't necessary, since the parser would format that as a text part?
+            // TODO: conditionally adding the '{'/'}' in error cases isn't documented,
+            // but for example in https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L288 , even though
+            // `{|42| :number minimumFractionDigits 2}`, the result of the function call
+            // is rendered without braces
+            if (treatAsText) {
                 partResult.insert(0, LEFT_CURLY_BRACE);
                 partResult += RIGHT_CURLY_BRACE;
             }
@@ -645,7 +691,7 @@ void MessageFormatter::matchSelectorKeys(const ResolvedExpression& rv, const UVe
     }
 
     size_t numberMatching = 0;
-    selectorImpl.selectKey(rv.resolvedOperand, keysIn.getAlias(), numKeys, *(rv.resolvedOptions), keysOut.getAlias(), numberMatching, status);
+    selectorImpl.selectKey(rv.hasOperand ? &rv.resolvedOperand : nullptr, keysIn.getAlias(), numKeys, *(rv.resolvedOptions), keysOut.getAlias(), numberMatching, status);
     arrayToKeys(keysOut.getAlias(), numberMatching, matches, status);
 }
 

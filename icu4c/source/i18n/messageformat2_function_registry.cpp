@@ -250,11 +250,18 @@ Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, const 
     return result;
 }
 
-void StandardFunctions::Plural::selectKey(const UnicodeString& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(const UnicodeString* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Variable options not used
     (void) variableOptions;
+
+    // Argument must be present
+    if (valuePtr == nullptr) {
+        errorCode = U_SELECTOR_ERROR;
+        return;
+    }
+    const UnicodeString& value = *valuePtr;
 
     // Parse the selector value
     // ---------------------------
@@ -409,17 +416,23 @@ Selector* StandardFunctions::TextFactory::createSelector(Locale locale, const Ha
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(const UnicodeString& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(const UnicodeString* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
 
     (void) options; // Unused parameter
 
+    // Argument must be non-null
+    if (value == nullptr) {
+        errorCode = U_SELECTOR_ERROR;
+        return;
+    }
+
     U_ASSERT(prefs != nullptr);
     numMatching = 0;
     for (size_t i = 0; i < numKeys; i++) {
-        if (keys[i] == value) {
+        if (keys[i] == *value) {
             numMatching++;
             prefs[0] = keys[i];
             break;

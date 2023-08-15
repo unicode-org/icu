@@ -205,11 +205,12 @@ public:
         MessageFormatDataModel::Reserved* parseReserved(UErrorCode &);
         MessageFormatDataModel::Operator* parseAnnotation(UErrorCode &);
         void parseLiteralOrVariableWithAnnotation(bool, UErrorCode &, MessageFormatDataModel::Expression::Builder&);
-        MessageFormatDataModel::Expression* parseExpression(UErrorCode &);
+        MessageFormatDataModel::Expression* parseExpression(bool&, UErrorCode &);
         void parseTextEscape(UErrorCode&, String&);
         void parseText(UErrorCode&, String&);
         MessageFormatDataModel::Key* parseKey(UErrorCode&);
         MessageFormatDataModel::SelectorKeys* parseNonEmptyKeys(UErrorCode&);
+        void errorPattern(UErrorCode&);
         MessageFormatDataModel::Pattern* parsePattern(UErrorCode&);
 
         // The input string
@@ -339,15 +340,17 @@ public:
     public:
         virtual ~ResolvedExpression();
         const bool isFallback; // if isFallback is true, this expression will be matched to the catchall variant
+        const bool hasOperand;
         const LocalPointer<Selector> selectorFunction;
         const LocalPointer<Hashtable> resolvedOptions;
         const UnicodeString resolvedOperand;
         // Adopts all its arguments
-        ResolvedExpression(Selector* s, Hashtable* o, UnicodeString r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
-        ResolvedExpression() : isFallback(true) {}
+        ResolvedExpression(Selector* s, Hashtable* o, UnicodeString r) : isFallback(false), hasOperand(true), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+        ResolvedExpression(Selector* s, Hashtable* o) : isFallback(false), hasOperand(false), selectorFunction(s), resolvedOptions(o) {}
+        ResolvedExpression() : isFallback(true), hasOperand(false) {}
     };
-     void resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
-     void resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
+     void resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
+     void resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, bool&, Hashtable*&, UnicodeString&, UnicodeString&, UErrorCode &) const;
 
      // Selection methods
      void resolveSelectors(const Hashtable&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
@@ -362,8 +365,8 @@ public:
      // Formats an expression in a pattern context
      void formatPatternExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&, UnicodeString&) const;
      Hashtable* resolveOptions(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UnicodeString&, UErrorCode&) const;
-     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UnicodeString&, UErrorCode&) const;
+     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, bool&, UnicodeString&, UErrorCode&) const;
+     void formatFunctionCall(const FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, bool&, UnicodeString&, UErrorCode&) const;
      void formatOperand(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatSelectors(const Hashtable& arguments, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 

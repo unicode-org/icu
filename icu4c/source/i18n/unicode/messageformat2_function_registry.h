@@ -50,7 +50,8 @@ class U_COMMON_API Selector : public UMemory {
       TODO: Needed to change this in order to support best-match.
       See selectKey() in message-value.ts
      */
-    virtual void selectKey(const UnicodeString& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    // `value` may be null, because the selector might be nullary
+    virtual void selectKey(const UnicodeString* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
 
@@ -209,7 +210,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(const UnicodeString& value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const UnicodeString* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -231,7 +232,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        void selectKey(const UnicodeString& value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const UnicodeString* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

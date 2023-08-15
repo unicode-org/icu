@@ -593,6 +593,10 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
     TestUtils::runTestCase(*this, *test, errorCode);
 }
 
+static bool isWarning(UErrorCode errorCode) {
+    return (errorCode < 0);
+}
+
 /*
  Tests a single pattern, which is expected to cause the parser to
  emit a data model error
@@ -604,8 +608,25 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
  TODO: For now, the line and character numbers are not checked
 */
 void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
-    UParseError parseError;
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+
+    // TODO
+    (void) testNum;
+
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    testBuilder->setName("testDataModelErrors")
+                .setPattern(s);
+                
+    if (isWarning(expectedErrorCode)) {
+        testBuilder->setExpectedWarning(expectedErrorCode);
+    } else {
+        testBuilder->setExpectedError(expectedErrorCode);
+    }
+
+    TestUtils::runTestCase(*this, *testBuilder->build(errorCode), errorCode);
+    
+/*
+
 
     testMessageFormatter(s, parseError, errorCode);
 
@@ -621,6 +642,8 @@ void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const 
     } else {
         errorCode.reset();
     }
+*/
+
 }
 
 /*
@@ -704,24 +727,24 @@ void TestMessageFormat2::testDataModelErrors() {
     // Examples taken from https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
 
     // Variant key mismatch
-    testSemanticallyInvalidPattern(++i, "match {$foo :f} {$bar :f} when one{one}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$foo :f} {$bar :f} when one {one}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$foo :f} {$bar :f} when one  {one}", U_VARIANT_KEY_MISMATCH);
+    testSemanticallyInvalidPattern(++i, "match {$foo :plural} {$bar :plural} when one{one}", U_VARIANT_KEY_MISMATCH_WARNING);
+    testSemanticallyInvalidPattern(++i, "match {$foo :plural} {$bar :plural} when one {one}", U_VARIANT_KEY_MISMATCH_WARNING);
+    testSemanticallyInvalidPattern(++i, "match {$foo :plural} {$bar :plural} when one  {one}", U_VARIANT_KEY_MISMATCH_WARNING);
  
-    testSemanticallyInvalidPattern(++i, "match {$foo :f} when * * {foo}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$one :f}\n\
+    testSemanticallyInvalidPattern(++i, "match {$foo :plural} when * * {foo}", U_VARIANT_KEY_MISMATCH_WARNING);
+    testSemanticallyInvalidPattern(++i, "match {$one :plural}\n\
                              when 1 2 {Too many}\n\
-                             when * {Otherwise}", U_VARIANT_KEY_MISMATCH);
-    testSemanticallyInvalidPattern(++i, "match {$one :f} {$two :f}\n\
+                             when * {Otherwise}", U_VARIANT_KEY_MISMATCH_WARNING);
+    testSemanticallyInvalidPattern(++i, "match {$one :plural} {$two :plural}\n\
                              when 1 2 {Two keys}\n\
                              when * {Missing a key}\n\
-                             when * * {Otherwise}", U_VARIANT_KEY_MISMATCH);
+                             when * * {Otherwise}", U_VARIANT_KEY_MISMATCH_WARNING);
 
     // Non-exhaustive patterns
-    testSemanticallyInvalidPattern(++i, "match {$one :f}\n\
+    testSemanticallyInvalidPattern(++i, "match {$one :plural}\n\
                                          when 1 {Value is one}\n\
                                          when 2 {Value is two}\n", U_NONEXHAUSTIVE_PATTERN);
-    testSemanticallyInvalidPattern(++i, "match {$one :f} {$two :f}\n\
+    testSemanticallyInvalidPattern(++i, "match {$one :plural} {$two :plural}\n\
                                          when 1 * {First is one}\n\
                                          when * 1 {Second is one}\n", U_NONEXHAUSTIVE_PATTERN);
 

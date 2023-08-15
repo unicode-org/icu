@@ -320,13 +320,8 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     TestUtils::runTestCase(*this, *test, errorCode);
 
     // Missing '=' after `bar`
-    /*
-      This differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L280
-      in which the expected result is "foo",
-      but since "foo" is a fallback value for $bar, it should be enclosed in curly braces
-     */
     test.adoptInstead(testBuilder->setPattern("let $bar {|foo|} {{$bar}}")
-                                .setExpected("{foo}")
+                                .setExpected("foo")
                                 .setExpectedWarning(U_SYNTAX_WARNING)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -396,7 +391,174 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // Resume at 235
+    test.adoptInstead(testBuilder->setPattern("no braces")
+                      .setExpected("{no braces}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("no braces {$foo}")
+                      .setExpected("{no braces {$foo}}")
+                      .setArgument("foo", "2", errorCode)
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{missing end brace")
+                      .setExpected("missing end brace")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{missing end {$brace")
+                      .setExpected("missing end {$brace}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{extra} content")
+                      .setExpected("extra")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L265
+    // where the expected output is "empty {}" --
+    // which is inconsistent with https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L280 ,
+    // where the expected output contains '{'/'}' enclosing the contents of the bad expression
+    // changed the expected output to { } here
+    test.adoptInstead(testBuilder->setPattern("{empty { }}")
+                      .setExpected("empty { }")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{bad {:}}")
+                      .setExpected("bad {:}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{unquoted {literal}}")
+                      .setExpected("unquoted literal")
+                      .setExpectSuccess()
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{bad {\\u0000placeholder}}")
+                      .setExpected("bad {\\u0000placeholder}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{no-equal {|42| :number minimumFractionDigits 2}}")
+                      .setExpected("no-equal 42.00")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{bad {:placeholder option=}}")
+                      .setExpected("bad {:placeholder}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{bad {:placeholder option value}}")
+                      .setExpected("bad {:placeholder}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{bad {:placeholder option}}")
+                      .setExpected("bad {:placeholder}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{bad {$placeholder option}}")
+                      .setExpected("bad {$placeholder}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{no {$placeholder end}")
+                      .setExpected("no {$placeholder}")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+/*
+TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L326 , where the
+expected result is "foo"; but complies with the spec:
+
+  "If the message being formatted has any Syntax or Data Model errors, the result of pattern selection MUST be a pattern resolving to a single fallback value using the message's fallback string defined in the formatting context or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER �."
+*/
+
+    test.adoptInstead(testBuilder->setPattern("match {} when * {foo}")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L335 ,
+    // where success is expected
+    test.adoptInstead(testBuilder->setPattern("match {+foo} when * {foo}")
+                      .setExpected("foo")
+                      .setExpectedWarning(U_UNKNOWN_FUNCTION_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L339 ,
+    // where the expected result is "foo";
+    // that contradicts https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection , which says:
+    // "If the message being formatted has any Syntax or Data Model errors, the result of pattern selection MUST be a pattern resolving to a single fallback value using the message's fallback string defined in the formatting context or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER �."
+    test.adoptInstead(testBuilder->setPattern("match {|foo|} when*{foo}")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: Same comment as for "match {|foo|} when*{foo}"
+    test.adoptInstead(testBuilder->setPattern("match when * {foo}")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: Same comment as for "match {|foo|} when*{foo}"
+    test.adoptInstead(testBuilder->setPattern("match {|x|} when * foo")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: Same comment as for "match {|foo|} when*{foo}"
+    test.adoptInstead(testBuilder->setPattern("match {|x|} when * {foo} extra")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: Same comment as for "match {|foo|} when*{foo}"
+    test.adoptInstead(testBuilder->setPattern("match |x| when * {foo}")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: same comment -- data model error in this case
+    test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when * * {foo}")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_VARIANT_KEY_MISMATCH_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: same comment -- data model error in this case
+    test.adoptInstead(testBuilder->setPattern("match {$foo :plural} {$bar :plural} when * {foo}")
+                      .setExpected("\uFFFD")
+                      .setExpectedWarning(U_VARIANT_KEY_MISMATCH_WARNING)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);   
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

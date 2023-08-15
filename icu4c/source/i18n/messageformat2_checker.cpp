@@ -119,7 +119,7 @@ void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
         const KeyList& keys = selectorKeys->getKeys();
         if (keys.length() != numSelectors) {
             // Variant key mismatch
-            setError(U_VARIANT_KEY_MISMATCH, error);
+            setError(U_VARIANT_KEY_MISMATCH_WARNING, error);
             return;
         }
         defaultExists |= areDefaultKeys(keys);

@@ -321,8 +321,8 @@ class TestCase : public UMemory {
         offset(builder.hasLineNumberAndOffset ? builder.offset : 0),
         ignoreError(builder.ignoreError) {
         // If an error is not expected, then the expected
-        // output should be non-empty
-        U_ASSERT(expectFailure() || expectWarning() || expected != "");
+        // output should be present
+        U_ASSERT(expectFailure() || expectWarning() || hasExpectedOutput);
     }
     public:
     static TestCase::Builder* builder(UErrorCode& errorCode) {
