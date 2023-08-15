@@ -65,7 +65,7 @@ https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest ge
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni15.1/snapshot
+export UNICODE_DATA=$UNIDATA_ROOT/uni15.1/20230811
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -114,6 +114,8 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
     for the pre-release (alpha, beta) data files,
     download all of https://www.unicode.org/Public/draft/
     (you can omit or discard the UCD/charts/ and UCD/ucdxml/ files/folders)
+  + if one of us produces the alpha.zip or beta.zip collection of data files for publication,
+    then we can use its contents directly (no FTP from unicode.org necessary)
   + for final-release data files, the source of truth are the files in
     https://www.unicode.org/Public/(version) [=UCD],
     https://www.unicode.org/Public/UCA/(version),
@@ -125,21 +127,27 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
     ~ inside ucd: extract Unihan.zip to "here" (.../UCD/ucd/Unihan/*.txt), delete Unihan.zip
     ~ split Unihan into single-property files
       ~/unitools/mine/src$ py/splitunihan.py $UNICODE_DATA/UCD/ucd/Unihan
+    ~ TODO: for updating ICU, we should not need Unihan.zip contents, correct?
   + alternate way of fetching files, if available:
     copy the files from a Unicode Tools workspace that is up to date with
     https://github.com/unicode-org/unicodetools
     and which might at this point be *ahead* of "Public"
     ~ before the Unicode release copy files from "dev" subfolders, for example
       https://github.com/unicode-org/unicodetools/tree/main/unicodetools/data/ucd/dev
-  + get GraphemeBreakTest-cldr.txt from $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
+- get the CLDR version of GraphemeBreakTest.txt from CLDR (if it has been updated there already)
     or from the UCD/cldr/ output folder of the Unicode Tools:
     From Unicode 12/CLDR 35/ICU 64 to Unicode 15.0/CLDR 43/ICU 73,
     CLDR used modified grapheme break rules.
+    This might happen again.
   cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt icu4c/source/test/testdata
     or
   cp ~/unitools/mine/Generated/UCD/15.1.0/cldr/GraphemeBreakTest-cldr.txt icu4c/source/test/testdata/GraphemeBreakTest.txt
+  cp ~/unitools/mine/Generated/UCD/15.1.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
+  cp ~/unitools/mine/Generated/UCD/15.1.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
   + TODO: figure out whether we need a CLDR version of LineBreakTest.txt:
     unicodetools issue #492
+- cp -v $UNICODE_DATA/security/confusables.txt $ICU4C_UNIDATA
+  + TODO: modify preparseucd.py to copy this file
 
 * Note: Since Unicode 15.1, data files are no longer published with version suffixes
   even during the alpha or beta.
@@ -153,8 +161,6 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   + For debugging, and tweaking how ppucd.txt is written,
     the tool has an --only_ppucd option:
     py/preparseucd.py $UNICODE_DATA --only_ppucd path/to/ppucd/outputfile
-
-- cp -v $UNICODE_DATA/security/confusables.txt $ICU4C_UNIDATA
 
 * new constants for new property values
 - preparseucd.py error:
@@ -330,18 +336,18 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
     you need to reconfigure with unicore data; see the "configure" line above.
   output:
     ...
-    make[1]: Entering directory '/usr/local/google/home/elango/oss/icu/icu4c/data'
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt73b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt73b
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt73l.dat ./out/icu4j/icudt73b.dat -s ./out/build/icudt73l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt73b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt73b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt73b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt73b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt73b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt73b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt73b/
+    make[1]: Entering directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt74b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt74b
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt74l.dat ./out/icu4j/icudt74b.dat -s ./out/build/icudt74l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt74b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt74b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt74b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt74b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt74b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt74b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt74b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt73b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt74b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
-    make[1]: Leaving directory '/usr/local/google/home/elango/oss/icu/icu4c/data'
+    make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
 - copy the big-endian Unicode data files to another location,
   separate from the other data files,
   and then refresh ICU4J

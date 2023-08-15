@@ -1,6 +1,6 @@
 # Original file:
 # IdnaMappingTable.txt
-# Date: 2023-05-15, 22:37:02 GMT
+# Date: 2023-08-10, 22:32:27 GMT
 # © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
@@ -2053,7 +2053,7 @@
 1E9A          >0061 02BE                # 1.1  LATIN SMALL LETTER A WITH RIGHT HALF RING
 1E9B          >1E61                     # 2.0  LATIN SMALL LETTER LONG S WITH DOT ABOVE
 # 1E9C..1E9D  valid                     # 5.1  LATIN SMALL LETTER LONG S WITH DIAGONAL STROKE..LATIN SMALL LETTER LONG S WITH HIGH STROKE
-1E9E          >0073 0073                # 5.1  LATIN CAPITAL LETTER SHARP S
+1E9E          >00DF                     # 5.1  LATIN CAPITAL LETTER SHARP S
 # 1E9F        valid                     # 5.1  LATIN SMALL LETTER DELTA
 1EA0          >1EA1                     # 1.1  LATIN CAPITAL LETTER A WITH DOT BELOW
 # 1EA1        valid                     # 1.1  LATIN SMALL LETTER A WITH DOT BELOW
@@ -3439,7 +3439,7 @@
 # 31C0..31CF  valid                     # 4.1  CJK STROKE T..CJK STROKE N
 # 31D0..31E3  valid                     # 5.1  CJK STROKE H..CJK STROKE Q
 31E4..31EE    >FFFD                     # NA   <reserved-31E4>..<reserved-31EE>
-# 31EF        valid                     # 15.1 IDEOGRAPHIC DESCRIPTION CHARACTER SUBTRACTION
+31EF          >FFFD                     # 15.1 IDEOGRAPHIC DESCRIPTION CHARACTER SUBTRACTION
 # 31F0..31FF  valid                     # 3.2  KATAKANA LETTER SMALL KU..KATAKANA LETTER SMALL RO
 3200          >0028 1100 0029           #1.1  PARENTHESIZED HANGUL KIYEOK
 3201          >0028 1102 0029           #1.1  PARENTHESIZED HANGUL NIEUN
@@ -8465,8 +8465,8 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 2CEA2..2CEAF  >FFFD                     # NA   <reserved-2CEA2>..<reserved-2CEAF>
 # 2CEB0..2EBE0valid                     # 10.0 CJK UNIFIED IDEOGRAPH-2CEB0..CJK UNIFIED IDEOGRAPH-2EBE0
 2EBE1..2EBEF  >FFFD                     # NA   <reserved-2EBE1>..<reserved-2EBEF>
-# 2EBF0..2EE4Avalid                     # 15.1 CJK UNIFIED IDEOGRAPH-2EBF0..CJK UNIFIED IDEOGRAPH-2EE4A
-2EE4B..2F7FF  >FFFD                     # NA   <reserved-2EE4B>..<reserved-2F7FF>
+# 2EBF0..2EE5Dvalid                     # 15.1 CJK UNIFIED IDEOGRAPH-2EBF0..CJK UNIFIED IDEOGRAPH-2EE5D
+2EE5E..2F7FF  >FFFD                     # NA   <reserved-2EE5E>..<reserved-2F7FF>
 2F800         >4E3D                     # 3.1  CJK COMPATIBILITY IDEOGRAPH-2F800
 2F801         >4E38                     # 3.1  CJK COMPATIBILITY IDEOGRAPH-2F801
 2F802         >4E41                     # 3.1  CJK COMPATIBILITY IDEOGRAPH-2F802

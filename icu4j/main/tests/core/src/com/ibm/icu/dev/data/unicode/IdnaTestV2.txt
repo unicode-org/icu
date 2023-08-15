@@ -1,5 +1,5 @@
 # IdnaTestV2.txt
-# Date: 2023-06-06, 23:32:28 GMT
+# Date: 2023-08-15, 23:21:16 GMT
 # © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
@@ -217,6 +217,8 @@ o\u0308bb; öbb; ; xn--bb-eka; ; ;  # öbb
 Öbb; öbb; ; xn--bb-eka; ; ;  # öbb
 O\u0308bb; öbb; ; xn--bb-eka; ; ;  # öbb
 xn--bb-eka; öbb; ; xn--bb-eka; ; ;  # öbb
+FAẞ.de; faß.de; ; xn--fa-hia.de; ; fass.de;  # faß.de
+FAẞ.DE; faß.de; ; xn--fa-hia.de; ; fass.de;  # faß.de
 βόλος.com; ; ; xn--nxasmm1c.com; ; xn--nxasmq6b.com;  # βόλος.com
 βο\u0301λος.com; βόλος.com; ; xn--nxasmm1c.com; ; xn--nxasmq6b.com;  # βόλος.com
 ΒΟ\u0301ΛΟΣ.COM; βόλοσ.com; ; xn--nxasmq6b.com; ; ;  # βόλοσ.com
@@ -1470,18 +1472,18 @@ xn--0s9c.xn--8ug8324p; 𐨿.🄆—; [V5, V6]; xn--0s9c.xn--8ug8324p; ; ;  # �
 xn--lmb18944c0g2z.xn----2k81m; 򔊱񁦮۸.󠾭-; [V3, V6]; xn--lmb18944c0g2z.xn----2k81m; ; ;  # ۸.-
 𼗸\u07CD𐹮。\u06DDᡎᠴ; 𼗸\u07CD𐹮.\u06DDᡎᠴ; [B1, B5, B6, V6]; xn--osb0855kcc2r.xn--tlb299fhc; ; ;  # ߍ𐹮.ᡎᠴ
 xn--osb0855kcc2r.xn--tlb299fhc; 𼗸\u07CD𐹮.\u06DDᡎᠴ; [B1, B5, B6, V6]; xn--osb0855kcc2r.xn--tlb299fhc; ; ;  # ߍ𐹮.ᡎᠴ
-\u200DᠮႾ🄂.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--2nd129ay2gnw71c.xn--zvb692j9664aic1g; ; xn--2nd129ai554b.xn--zvb3124wpkpf; [B1, V6] # ᠮႾ🄂.🚗ࡁ
-\u200DᠮႾ1,.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--1,-ogkx89c39j.xn--zvb692j9664aic1g; ; xn--1,-ogkx89c.xn--zvb3124wpkpf; [B1, B6, V6] # ᠮႾ1,.🚗ࡁ
-\u200Dᠮⴞ1,.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--1,-v3o161c53q.xn--zvb692j9664aic1g; ; xn--1,-v3o625k.xn--zvb3124wpkpf; [B1, B6, V6] # ᠮⴞ1,.🚗ࡁ
-xn--1,-v3o625k.xn--zvb3124wpkpf; ᠮⴞ1,.🚗\u0841𮹌; [B1, B6, V6]; xn--1,-v3o625k.xn--zvb3124wpkpf; ; ;  # ᠮⴞ1,.🚗ࡁ
-xn--1,-v3o161c53q.xn--zvb692j9664aic1g; \u200Dᠮⴞ1,.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--1,-v3o161c53q.xn--zvb692j9664aic1g; ; ;  # ᠮⴞ1,.🚗ࡁ
-xn--1,-ogkx89c.xn--zvb3124wpkpf; ᠮႾ1,.🚗\u0841𮹌; [B1, B6, V6]; xn--1,-ogkx89c.xn--zvb3124wpkpf; ; ;  # ᠮႾ1,.🚗ࡁ
-xn--1,-ogkx89c39j.xn--zvb692j9664aic1g; \u200DᠮႾ1,.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--1,-ogkx89c39j.xn--zvb692j9664aic1g; ; ;  # ᠮႾ1,.🚗ࡁ
-\u200Dᠮⴞ🄂.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--h7e341b0wlbv45b.xn--zvb692j9664aic1g; ; xn--h7e438h1p44a.xn--zvb3124wpkpf; [B1, V6] # ᠮⴞ🄂.🚗ࡁ
-xn--h7e438h1p44a.xn--zvb3124wpkpf; ᠮⴞ🄂.🚗\u0841𮹌; [B1, V6]; xn--h7e438h1p44a.xn--zvb3124wpkpf; ; ;  # ᠮⴞ🄂.🚗ࡁ
-xn--h7e341b0wlbv45b.xn--zvb692j9664aic1g; \u200Dᠮⴞ🄂.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--h7e341b0wlbv45b.xn--zvb692j9664aic1g; ; ;  # ᠮⴞ🄂.🚗ࡁ
-xn--2nd129ai554b.xn--zvb3124wpkpf; ᠮႾ🄂.🚗\u0841𮹌; [B1, V6]; xn--2nd129ai554b.xn--zvb3124wpkpf; ; ;  # ᠮႾ🄂.🚗ࡁ
-xn--2nd129ay2gnw71c.xn--zvb692j9664aic1g; \u200DᠮႾ🄂.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--2nd129ay2gnw71c.xn--zvb692j9664aic1g; ; ;  # ᠮႾ🄂.🚗ࡁ
+\u200DᠮႾ🄂.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--2nd129ay2gnw71c.xn--zvb692j9664aic1g; ; xn--2nd129ai554b.xn--zvb3124wpkpf; [B1, V6] # ᠮႾ🄂.🚗ࡁ𮹌
+\u200DᠮႾ1,.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--1,-ogkx89c39j.xn--zvb692j9664aic1g; ; xn--1,-ogkx89c.xn--zvb3124wpkpf; [B1, B6, V6] # ᠮႾ1,.🚗ࡁ𮹌
+\u200Dᠮⴞ1,.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--1,-v3o161c53q.xn--zvb692j9664aic1g; ; xn--1,-v3o625k.xn--zvb3124wpkpf; [B1, B6, V6] # ᠮⴞ1,.🚗ࡁ𮹌
+xn--1,-v3o625k.xn--zvb3124wpkpf; ᠮⴞ1,.🚗\u0841𮹌; [B1, B6, V6]; xn--1,-v3o625k.xn--zvb3124wpkpf; ; ;  # ᠮⴞ1,.🚗ࡁ𮹌
+xn--1,-v3o161c53q.xn--zvb692j9664aic1g; \u200Dᠮⴞ1,.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--1,-v3o161c53q.xn--zvb692j9664aic1g; ; ;  # ᠮⴞ1,.🚗ࡁ𮹌
+xn--1,-ogkx89c.xn--zvb3124wpkpf; ᠮႾ1,.🚗\u0841𮹌; [B1, B6, V6]; xn--1,-ogkx89c.xn--zvb3124wpkpf; ; ;  # ᠮႾ1,.🚗ࡁ𮹌
+xn--1,-ogkx89c39j.xn--zvb692j9664aic1g; \u200DᠮႾ1,.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--1,-ogkx89c39j.xn--zvb692j9664aic1g; ; ;  # ᠮႾ1,.🚗ࡁ𮹌
+\u200Dᠮⴞ🄂.🚗\u0841𮹌\u200C; ; [B1, C1, C2, V6]; xn--h7e341b0wlbv45b.xn--zvb692j9664aic1g; ; xn--h7e438h1p44a.xn--zvb3124wpkpf; [B1, V6] # ᠮⴞ🄂.🚗ࡁ𮹌
+xn--h7e438h1p44a.xn--zvb3124wpkpf; ᠮⴞ🄂.🚗\u0841𮹌; [B1, V6]; xn--h7e438h1p44a.xn--zvb3124wpkpf; ; ;  # ᠮⴞ🄂.🚗ࡁ𮹌
+xn--h7e341b0wlbv45b.xn--zvb692j9664aic1g; \u200Dᠮⴞ🄂.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--h7e341b0wlbv45b.xn--zvb692j9664aic1g; ; ;  # ᠮⴞ🄂.🚗ࡁ𮹌
+xn--2nd129ai554b.xn--zvb3124wpkpf; ᠮႾ🄂.🚗\u0841𮹌; [B1, V6]; xn--2nd129ai554b.xn--zvb3124wpkpf; ; ;  # ᠮႾ🄂.🚗ࡁ𮹌
+xn--2nd129ay2gnw71c.xn--zvb692j9664aic1g; \u200DᠮႾ🄂.🚗\u0841𮹌\u200C; [B1, C1, C2, V6]; xn--2nd129ay2gnw71c.xn--zvb692j9664aic1g; ; ;  # ᠮႾ🄂.🚗ࡁ𮹌
 \u0601\u0697．𑚶񼡷⾆; \u0601\u0697.𑚶񼡷舌; [B1, V5, V6]; xn--jfb41a.xn--tc1ap851axo39c; ; ;  # ڗ.𑚶舌
 \u0601\u0697.𑚶񼡷舌; ; [B1, V5, V6]; xn--jfb41a.xn--tc1ap851axo39c; ; ;  # ڗ.𑚶舌
 xn--jfb41a.xn--tc1ap851axo39c; \u0601\u0697.𑚶񼡷舌; [B1, V5, V6]; xn--jfb41a.xn--tc1ap851axo39c; ; ;  # ڗ.𑚶舌
