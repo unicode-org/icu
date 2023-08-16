@@ -42,15 +42,16 @@ import com.ibm.icu.impl.locale.BaseLocale;
 import com.ibm.icu.impl.locale.Extension;
 import com.ibm.icu.impl.locale.InternalLocaleBuilder;
 import com.ibm.icu.impl.locale.KeyTypeData;
+import com.ibm.icu.impl.locale.LSR;
 import com.ibm.icu.impl.locale.LanguageTag;
 import com.ibm.icu.impl.locale.LocaleExtensions;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
 import com.ibm.icu.impl.locale.ParseStatus;
 import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
+import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
-
 /**
  * {@icuenhanced java.util.Locale}.{@icu _usage_}
  *
@@ -2722,12 +2723,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             trailing = loc.localeID.substring(trailingIndex);
         }
 
-        String newLocaleID =
-                createLikelySubtagsString(
-                        tags[0],
-                        tags[1],
-                        tags[2],
-                        trailing);
+        LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(
+            new ULocale(loc.getLanguage(), loc.getScript(), loc.getCountry()), true);
+        String newLocaleID = createTagString(max.language, max.script, max.region,
+            trailing);
 
         return newLocaleID == null ? loc : new ULocale(newLocaleID);
     }
@@ -2819,148 +2818,22 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     @Deprecated
     public static ULocale minimizeSubtags(ULocale loc, Minimize fieldToFavor) {
         String[] tags = new String[3];
+        String trailing = null;
 
         int trailingIndex = parseTagString(
                 loc.localeID,
                 tags);
 
-        String originalLang = tags[0];
-        String originalScript = tags[1];
-        String originalRegion = tags[2];
-        String originalTrailing = null;
-
         if (trailingIndex < loc.localeID.length()) {
-            /*
-             * Create a String that contains everything
-             * after the language, script, and region.
-             */
-            originalTrailing = loc.localeID.substring(trailingIndex);
+            trailing = loc.localeID.substring(trailingIndex);
         }
 
-        /**
-         * First, we need to first get the maximization
-         * by adding any likely subtags.
-         **/
-        String maximizedLocaleID =
-                createLikelySubtagsString(
-                        originalLang,
-                        originalScript,
-                        originalRegion,
-                        null);
+        LSR lsr = XLikelySubtags.INSTANCE.minimizeSubtags(
+            loc.getLanguage(), loc.getScript(), loc.getCountry(), fieldToFavor);
+        String newLocaleID = createTagString(lsr.language, lsr.script, lsr.region,
+            trailing);
 
-        /**
-         * If maximization fails, there's nothing
-         * we can do.
-         **/
-        if (isEmptyString(maximizedLocaleID)) {
-            return loc;
-        }
-        else {
-            /**
-             * Start first with just the language.
-             **/
-            String tag =
-                    createLikelySubtagsString(
-                            originalLang,
-                            null,
-                            null,
-                            null);
-
-            if (tag.equals(maximizedLocaleID)) {
-                String newLocaleID =
-                        createTagString(
-                                originalLang,
-                                null,
-                                null,
-                                originalTrailing);
-
-                return new ULocale(newLocaleID);
-            }
-        }
-
-        /**
-         * Next, try the language and region.
-         **/
-        if (fieldToFavor == Minimize.FAVOR_REGION) {
-            if (originalRegion.length() != 0) {
-                String tag =
-                        createLikelySubtagsString(
-                                originalLang,
-                                null,
-                                originalRegion,
-                                null);
-
-                if (tag.equals(maximizedLocaleID)) {
-                    String newLocaleID =
-                            createTagString(
-                                    originalLang,
-                                    null,
-                                    originalRegion,
-                                    originalTrailing);
-
-                    return new ULocale(newLocaleID);
-                }
-            }
-            if (originalScript.length() != 0){
-                String tag =
-                        createLikelySubtagsString(
-                                originalLang,
-                                originalScript,
-                                null,
-                                null);
-
-                if (tag.equals(maximizedLocaleID)) {
-                    String newLocaleID =
-                            createTagString(
-                                    originalLang,
-                                    originalScript,
-                                    null,
-                                    originalTrailing);
-
-                    return new ULocale(newLocaleID);
-                }
-            }
-        } else { // FAVOR_SCRIPT, so
-            if (originalScript.length() != 0){
-                String tag =
-                        createLikelySubtagsString(
-                                originalLang,
-                                originalScript,
-                                null,
-                                null);
-
-                if (tag.equals(maximizedLocaleID)) {
-                    String newLocaleID =
-                            createTagString(
-                                    originalLang,
-                                    originalScript,
-                                    null,
-                                    originalTrailing);
-
-                    return new ULocale(newLocaleID);
-                }
-            }
-            if (originalRegion.length() != 0) {
-                String tag =
-                        createLikelySubtagsString(
-                                originalLang,
-                                null,
-                                originalRegion,
-                                null);
-
-                if (tag.equals(maximizedLocaleID)) {
-                    String newLocaleID =
-                            createTagString(
-                                    originalLang,
-                                    null,
-                                    originalRegion,
-                                    originalTrailing);
-
-                    return new ULocale(newLocaleID);
-                }
-            }
-        }
-        return loc;
+        return newLocaleID == null ? loc : new ULocale(newLocaleID);
     }
 
     /**
@@ -3007,10 +2880,9 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @return The new tag string.
      **/
     private static String createTagString(String lang, String script, String region,
-            String trailing, String alternateTags) {
+            String trailing) {
 
         LocaleIDParser parser = null;
-        boolean regionAppended = false;
 
         StringBuilder tag = new StringBuilder();
 
@@ -3018,8 +2890,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             appendTag(
                     lang,
                     tag);
-        }
-        else if (isEmptyString(alternateTags)) {
+        } else {
             /*
              * Append the value for an unknown language, if
              * we found no language.
@@ -3028,66 +2899,17 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     UNDEFINED_LANGUAGE,
                     tag);
         }
-        else {
-            parser = new LocaleIDParser(alternateTags);
-
-            String alternateLang = parser.getLanguage();
-
-            /*
-             * Append the value for an unknown language, if
-             * we found no language.
-             */
-            appendTag(
-                    !isEmptyString(alternateLang) ? alternateLang : UNDEFINED_LANGUAGE,
-                            tag);
-        }
 
         if (!isEmptyString(script)) {
             appendTag(
                     script,
                     tag);
         }
-        else if (!isEmptyString(alternateTags)) {
-            /*
-             * Parse the alternateTags string for the script.
-             */
-            if (parser == null) {
-                parser = new LocaleIDParser(alternateTags);
-            }
-
-            String alternateScript = parser.getScript();
-
-            if (!isEmptyString(alternateScript)) {
-                appendTag(
-                        alternateScript,
-                        tag);
-            }
-        }
 
         if (!isEmptyString(region)) {
             appendTag(
                     region,
                     tag);
-
-            regionAppended = true;
-        }
-        else if (!isEmptyString(alternateTags)) {
-            /*
-             * Parse the alternateTags string for the region.
-             */
-            if (parser == null) {
-                parser = new LocaleIDParser(alternateTags);
-            }
-
-            String alternateRegion = parser.getCountry();
-
-            if (!isEmptyString(alternateRegion)) {
-                appendTag(
-                        alternateRegion,
-                        tag);
-
-                regionAppended = true;
-            }
         }
 
         if (trailing != null && trailing.length() > 1) {
@@ -3107,7 +2929,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 separators = 1;
             }
 
-            if (regionAppended) {
+            if (!isEmptyString(region)) {
                 /*
                  * If we appended a region, we may need to strip
                  * the extra separator from the variant portion.
@@ -3132,21 +2954,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
 
         return tag.toString();
-    }
-
-    /**
-     * Create a tag string from the supplied parameters.  The lang, script and region
-     * parameters may be null references.If the lang parameter is an empty string, the
-     * default value for an unknown language is written to the output buffer.
-     *
-     * @param lang The language tag to use.
-     * @param script The script tag to use.
-     * @param region The region tag to use.
-     * @param trailing Any trailing data to append to the new tag.
-     * @return The new String.
-     **/
-    static String createTagString(String lang, String script, String region, String trailing) {
-        return createTagString(lang, script, region, trailing, null);
     }
 
     /**
@@ -3212,144 +3019,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
             return index == -1 ? localeID.length() : index;
         }
-    }
-
-    private static String lookupLikelySubtags(String localeId) {
-        UResourceBundle bundle =
-                UResourceBundle.getBundleInstance(
-                        ICUData.ICU_BASE_NAME, "likelySubtags");
-        try {
-            return bundle.getString(localeId);
-        }
-        catch(MissingResourceException e) {
-            return null;
-        }
-    }
-
-    private static String createLikelySubtagsString(String lang, String script, String region,
-            String variants) {
-
-        /**
-         * Try the language with the script and region first.
-         */
-        if (!isEmptyString(script) && !isEmptyString(region)) {
-
-            String searchTag =
-                    createTagString(
-                            lang,
-                            script,
-                            region,
-                            null);
-
-            String likelySubtags = lookupLikelySubtags(searchTag);
-
-            /*
-            if (likelySubtags == null) {
-                if (likelySubtags2 != null) {
-                    System.err.println("Tag mismatch: \"(null)\" \"" + likelySubtags2 + "\"");
-                }
-            }
-            else if (likelySubtags2 == null) {
-                System.err.println("Tag mismatch: \"" + likelySubtags + "\" \"(null)\"");
-            }
-            else if (!likelySubtags.equals(likelySubtags2)) {
-                System.err.println("Tag mismatch: \"" + likelySubtags + "\" \"" + likelySubtags2
-                    + "\"");
-            }
-             */
-            if (likelySubtags != null) {
-                // Always use the language tag from the
-                // maximal string, since it may be more
-                // specific than the one provided.
-                return createTagString(
-                        null,
-                        null,
-                        null,
-                        variants,
-                        likelySubtags);
-            }
-        }
-
-        /**
-         * Try the language with just the script.
-         **/
-        if (!isEmptyString(script)) {
-
-            String searchTag =
-                    createTagString(
-                            lang,
-                            script,
-                            null,
-                            null);
-
-            String likelySubtags = lookupLikelySubtags(searchTag);
-            if (likelySubtags != null) {
-                // Always use the language tag from the
-                // maximal string, since it may be more
-                // specific than the one provided.
-                return createTagString(
-                        null,
-                        null,
-                        region,
-                        variants,
-                        likelySubtags);
-            }
-        }
-
-        /**
-         * Try the language with just the region.
-         **/
-        if (!isEmptyString(region)) {
-
-            String searchTag =
-                    createTagString(
-                            lang,
-                            null,
-                            region,
-                            null);
-
-            String likelySubtags = lookupLikelySubtags(searchTag);
-
-            if (likelySubtags != null) {
-                // Always use the language tag from the
-                // maximal string, since it may be more
-                // specific than the one provided.
-                return createTagString(
-                        null,
-                        script,
-                        null,
-                        variants,
-                        likelySubtags);
-            }
-        }
-
-        /**
-         * Finally, try just the language.
-         **/
-        {
-            String searchTag =
-                    createTagString(
-                            lang,
-                            null,
-                            null,
-                            null);
-
-            String likelySubtags = lookupLikelySubtags(searchTag);
-
-            if (likelySubtags != null) {
-                // Always use the language tag from the
-                // maximal string, since it may be more
-                // specific than the one provided.
-                return createTagString(
-                        null,
-                        script,
-                        region,
-                        variants,
-                        likelySubtags);
-            }
-        }
-
-        return null;
     }
 
     // --------------------------------

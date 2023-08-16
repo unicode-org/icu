@@ -489,7 +489,7 @@ public final class LocaleDistanceBuilder {
         Set<LSR> paradigmLSRs = new LinkedHashSet<>();  // could be TreeSet if LSR were Comparable
         for (String paradigm : paradigms) {
             ULocale pl = new ULocale(paradigm);
-            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl);
+            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl, false);
             // Clear the LSR flags to make the data equality test in
             // LocaleDistanceTest happy.
             paradigmLSRs.add(new LSR(max.language, max.script, max.region, LSR.DONT_CARE_FLAGS));
@@ -887,7 +887,7 @@ public final class LocaleDistanceBuilder {
     }
 
     public static final void main(String[] args) throws IOException {
-        XLikelySubtags.Data likelyData = LikelySubtagsBuilder.build();
+        XLikelySubtags.Data likelyData = XLikelySubtags.Data.load();
         LocaleDistance.Data distanceData = build();
         System.out.println("Writing LocaleDistance.Data to " + TXT_PATH + '/' + TXT_FILE_NAME);
         try (PrintWriter out = openWriter()) {

@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.tool.locale.LikelySubtagsBuilder;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.util.LocaleMatcher;
@@ -869,17 +868,10 @@ public class LocaleMatcherTest extends TestFmwk {
         long start = System.nanoTime();
         for (int i = iterations; i > 0; --i) {
             for (ULocale locale : list) {
-                XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale);
+                XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale, false);
             }
         }
         return System.nanoTime() - start;
-    }
-
-    @Test
-    public void testLikelySubtagsLoadedDataSameAsBuiltFromScratch() {
-        XLikelySubtags.Data built = LikelySubtagsBuilder.build();
-        XLikelySubtags.Data loaded = XLikelySubtags.Data.load();
-        assertEquals("run LocaleDistanceBuilder and update ICU4C langInfo.txt", built, loaded);
     }
 
     private static final class TestCase implements Cloneable {

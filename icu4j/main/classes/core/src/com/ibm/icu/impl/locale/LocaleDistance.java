@@ -225,8 +225,8 @@ public class LocaleDistance {
     // VisibleForTesting
     public int testOnlyDistance(ULocale desired, ULocale supported,
             int threshold, FavorSubtag favorSubtag) {
-        LSR supportedLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported);
-        LSR desiredLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired);
+        LSR supportedLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported, false);
+        LSR desiredLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired, false);
         int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR }, 1,
                 shiftDistance(threshold), favorSubtag, LocaleMatcher.Direction.WITH_ONE_WAY);
         return getDistanceFloor(indexAndDistance);

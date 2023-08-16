@@ -4605,8 +4605,8 @@ const char* const full_data[][3] = {
     "am"
   }, {
     "und_Ethi_ER",
-    "am_Ethi_ER",
-    "am_ER"
+    "ti_Ethi_ER",
+    "ti_ER"
   }, {
     "und_FI",
     "fi_Latn_FI",
@@ -5381,8 +5381,8 @@ const char* const full_data[][3] = {
     "trv"
   }, {
     "und_Latn_HK",
-    "zh_Latn_HK",
-    "zh_Latn_HK"
+    "en_Latn_HK",
+    "en_HK"
   }, {
     "und_Latn_AQ",
     "_Latn_AQ",

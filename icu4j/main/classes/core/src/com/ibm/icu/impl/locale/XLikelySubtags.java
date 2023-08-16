@@ -15,6 +15,7 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.Region;
 import com.ibm.icu.util.ULocale;
 
 public final class XLikelySubtags {
@@ -180,7 +181,7 @@ public final class XLikelySubtags {
     }
 
     // VisibleForTesting
-    public LSR makeMaximizedLsrFrom(ULocale locale) {
+    public LSR makeMaximizedLsrFrom(ULocale locale, boolean returnInputIfUnmatch) {
         String name = locale.getName();  // Faster than .toLanguageTag().
         if (name.startsWith("@x=")) {
             String tag = locale.toLanguageTag();
@@ -189,8 +190,12 @@ public final class XLikelySubtags {
             // und-x-subtag-subtag...
             return new LSR(tag, "", "", LSR.EXPLICIT_LSR);
         }
-        return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
-                locale.getVariant());
+        LSR max = makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
+                locale.getVariant(), returnInputIfUnmatch);
+        if (max.language.isEmpty() && max.script.isEmpty() && max.region.isEmpty()) {
+            return new LSR(locale.getLanguage(), locale.getScript(), locale.getCountry(), LSR.EXPLICIT_LSR);
+        }
+        return max;
     }
 
     public LSR makeMaximizedLsrFrom(Locale locale) {
@@ -201,10 +206,10 @@ public final class XLikelySubtags {
             return new LSR(tag, "", "", LSR.EXPLICIT_LSR);
         }
         return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
-                locale.getVariant());
+                locale.getVariant(), false);
     }
 
-    private LSR makeMaximizedLsr(String language, String script, String region, String variant) {
+    private LSR makeMaximizedLsr(String language, String script, String region, String variant, boolean returnInputIfUnmatch) {
         // Handle pseudolocales like en-XA, ar-XB, fr-PSCRACK.
         // They should match only themselves,
         // not other locales with what looks like the same language and script subtags.
@@ -248,13 +253,23 @@ public final class XLikelySubtags {
         language = getCanonical(languageAliases, language);
         // (We have no script mappings.)
         region = getCanonical(regionAliases, region);
-        return maximize(language, script, region);
+        return maximize(language, script, region, returnInputIfUnmatch);
+    }
+
+    /**
+     * Helper method to find out a region is a macroregion
+     */
+    private boolean isMacroregion(String region) {
+        Region.RegionType type = Region.getInstance(region).getType();
+        return type == Region.RegionType.WORLD ||
+            type == Region.RegionType.CONTINENT ||
+            type == Region.RegionType.SUBCONTINENT ;
     }
 
     /**
      * Raw access to addLikelySubtags. Input must be in canonical format, eg "en", not "eng" or "EN".
      */
-    private LSR maximize(String language, String script, String region) {
+    private LSR maximize(String language, String script, String region, boolean returnInputIfUnmatch) {
         if (language.equals("und")) {
             language = "";
         }
@@ -268,7 +283,9 @@ public final class XLikelySubtags {
             return new LSR(language, script, region, LSR.EXPLICIT_LSR);  // already maximized
         }
 
-        int retainOldMask = 0;
+        boolean retainLanguage = false;
+        boolean retainScript = false;
+        boolean retainRegion = false;
         BytesTrie iter = new BytesTrie(trie);
         long state;
         int value;
@@ -280,34 +297,33 @@ public final class XLikelySubtags {
         } else {
             value = trieNext(iter, language, 0);
         }
+        boolean matchLanguage = (value >= 0);
+        boolean matchScript = false;
         if (value >= 0) {
-            if (!language.isEmpty()) {
-                retainOldMask |= 4;
-            }
+            retainLanguage = ! language.isEmpty();
             state = iter.getState64();
         } else {
-            retainOldMask |= 4;
+            retainLanguage = true;
             iter.resetToState64(trieUndState);  // "und" ("*")
             state = 0;
         }
 
+        if (value >= 0 && !script.isEmpty()) {
+            matchScript = true;
+        }
         if (value > 0) {
             // Intermediate or final value from just language.
             if (value == SKIP_SCRIPT) {
                 value = 0;
             }
-            if (!script.isEmpty()) {
-                retainOldMask |= 2;
-            }
+            retainScript = ! script.isEmpty();
         } else {
             value = trieNext(iter, script, 0);
             if (value >= 0) {
-                if (!script.isEmpty()) {
-                    retainOldMask |= 2;
-                }
+                retainScript = ! script.isEmpty();
                 state = iter.getState64();
             } else {
-                retainOldMask |= 2;
+                retainScript = true;
                 if (state == 0) {
                     iter.resetToState64(trieUndZzzzState);  // "und-Zzzz" ("**")
                 } else {
@@ -319,19 +335,19 @@ public final class XLikelySubtags {
             }
         }
 
+        boolean matchRegion = false;
         if (value > 0) {
             // Final value from just language or language+script.
-            if (!region.isEmpty()) {
-                retainOldMask |= 1;
-            }
+            retainRegion = ! region.isEmpty();
         } else {
             value = trieNext(iter, region, 0);
             if (value >= 0) {
-                if (!region.isEmpty()) {
-                    retainOldMask |= 1;
+                if (!region.isEmpty() && !isMacroregion(region)) {
+                    retainRegion = true;
+                    matchRegion = true;
                 }
             } else {
-                retainOldMask |= 1;
+                retainRegion = true;
                 if (state == 0) {
                     value = defaultLsrIndex;
                 } else {
@@ -343,25 +359,30 @@ public final class XLikelySubtags {
         }
         LSR result = lsrs[value];
 
+        if (returnInputIfUnmatch &&
+            (!(matchLanguage || matchScript || (matchRegion && language.isEmpty())))) {
+            return new LSR("", "", "", LSR.EXPLICIT_LSR);  // no matching.
+        }
         if (language.isEmpty()) {
             language = "und";
         }
 
-        if (retainOldMask == 0) {
+        if (! (retainLanguage || retainScript || retainRegion)) {
             assert result.flags == LSR.IMPLICIT_LSR;
             return result;
         }
-        if ((retainOldMask & 4) == 0) {
+        if (!retainLanguage) {
             language = result.language;
         }
-        if ((retainOldMask & 2) == 0) {
+        if (!retainScript) {
             script = result.script;
         }
-        if ((retainOldMask & 1) == 0) {
+        if (!retainRegion) {
             region = result.region;
         }
+        int retainMask = (retainLanguage ? 4 : 0) + (retainScript ? 2 : 0) + (retainRegion ? 1 : 0);
         // retainOldMask flags = LSR explicit-subtag flags
-        return new LSR(language, script, region, retainOldMask);
+        return new LSR(language, script, region, retainMask);
     }
 
     /**
@@ -502,50 +523,37 @@ public final class XLikelySubtags {
         }
     }
 
-    LSR minimizeSubtags(String languageIn, String scriptIn, String regionIn,
+    public LSR minimizeSubtags(String languageIn, String scriptIn, String regionIn,
             ULocale.Minimize fieldToFavor) {
-        LSR result = maximize(languageIn, scriptIn, regionIn);
-
-        // We could try just a series of checks, like:
-        // LSR result2 = addLikelySubtags(languageIn, "", "");
-        // if result.equals(result2) return result2;
-        // However, we can optimize 2 of the cases:
-        //   (languageIn, "", "")
-        //   (languageIn, "", regionIn)
-
-        // value00 = lookup(result.language, "", "")
-        BytesTrie iter = new BytesTrie(trie);
-        int value = trieNext(iter, result.language, 0);
-        assert value >= 0;
-        if (value == 0) {
-            value = trieNext(iter, "", 0);
-            assert value >= 0;
-            if (value == 0) {
-                value = trieNext(iter, "", 0);
+        LSR max = maximize(languageIn, scriptIn, regionIn, true);
+        if (max.language.isEmpty() && max.region.isEmpty() && max.script.isEmpty()) {
+            // Cannot match, return as is
+            return new LSR(languageIn, scriptIn, regionIn, LSR.EXPLICIT_LSR);
+        }
+        LSR test = maximize(max.language, "", "", true);
+        if (test.isEquivalentTo(max)) {
+            return new LSR(max.language, "", "", LSR.DONT_CARE_FLAGS);
+        }
+        if (ULocale.Minimize.FAVOR_REGION == fieldToFavor) {
+            test = maximize(max.language, "", max.region, true);
+            if (test.isEquivalentTo(max)) {
+                return new LSR(max.language, "", max.region, LSR.DONT_CARE_FLAGS);
+            }
+            test = maximize(max.language, max.script, "", true);
+            if (test.isEquivalentTo(max)) {
+                return new LSR(max.language, max.script, "", LSR.DONT_CARE_FLAGS);
+            }
+        } else {
+            test = maximize(max.language, max.script, "", true);
+            if (test.isEquivalentTo(max)) {
+                return new LSR(max.language, max.script, "", LSR.DONT_CARE_FLAGS);
+            }
+            test = maximize(max.language, "", max.region, true);
+            if (test.isEquivalentTo(max)) {
+                return new LSR(max.language, "", max.region, LSR.DONT_CARE_FLAGS);
             }
         }
-        assert value > 0;
-        LSR value00 = lsrs[value];
-        boolean favorRegionOk = false;
-        if (result.script.equals(value00.script)) { //script is default
-            if (result.region.equals(value00.region)) {
-                return new LSR(result.language, "", "", LSR.DONT_CARE_FLAGS);
-            } else if (fieldToFavor == ULocale.Minimize.FAVOR_REGION) {
-                return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
-            } else {
-                favorRegionOk = true;
-            }
-        }
-
-        // The last case is not as easy to optimize.
-        // Maybe do later, but for now use the straightforward code.
-        LSR result2 = maximize(languageIn, scriptIn, "");
-        if (result2.equals(result)) {
-            return new LSR(result.language, result.script, "", LSR.DONT_CARE_FLAGS);
-        } else if (favorRegionOk) {
-            return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
-        }
-        return result;
+        return new LSR(max.language, max.script, max.region, LSR.DONT_CARE_FLAGS);
     }
 
     private Map<String, LSR> getTable() {
