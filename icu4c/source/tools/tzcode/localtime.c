@@ -12,6 +12,7 @@
 
 #include <stdbool.h>
 
+#include "cstring.h"
 #include "private.h"
 #include "tzfile.h"
 #include "fcntl.h"
@@ -955,7 +956,7 @@ tzparse(const char *name, register struct state *const sp,
 			name = getzname(name);
 			stdlen = name - stdname;
 		}
-		if (*name == '\0')
+		if (isempty(name))
 			return -1;
 		name = getoffset(name, &stdoffset);
 		if (name == NULL)
@@ -982,7 +983,7 @@ tzparse(const char *name, register struct state *const sp,
 			if (name == NULL)
 				return -1;
 		} else	dstoffset = stdoffset - SECSPERHOUR;
-		if (*name == '\0' && load_result != 0)
+		if (isempty(name) && load_result != 0)
 			name = TZDEFRULESTRING;
 		if (*name == ',' || *name == ';') {
 			struct rule	start;
@@ -1227,7 +1228,7 @@ tzset(void)
 		}
 	}
 #endif /* defined ALL_STATE */
-	if (*name == '\0') {
+	if (isempty(name)) {
 		/*
 		** User wants it fast rather than right.
 		*/
