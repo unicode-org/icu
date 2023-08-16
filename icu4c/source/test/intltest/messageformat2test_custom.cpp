@@ -316,7 +316,7 @@ void TestMessageFormat2::testCustomFunctions() {
 
 // -------------- Custom function implementations
 
-Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -376,11 +376,16 @@ bool parsePerson(const UnicodeString& toFormat, UnicodeString& title, UnicodeStr
     return (pos == SplitString::LAST);
 }
 
-void PersonNameFormatter::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
+FormattedPlaceholder* PersonNameFormatter::format(const Formattable* arg, const Hashtable& variableOptions,  UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
-        return;
+        return nullptr;
     }
 
+    if (arg == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    const Formattable& toFormat = *arg;
 /*
   Note: this test diverges from the ICU4J version of it a bit by using variable options
   to pass both "formality" and "length"
@@ -391,44 +396,55 @@ void PersonNameFormatter::format(const UnicodeString& toFormat, const Hashtable&
     bool useFormal = formalityOpt != nullptr && *formalityOpt == "formal";
     UnicodeString length = lengthOpt == nullptr ? "short" : *lengthOpt;
 
-    UnicodeString title;
-    UnicodeString firstName;
-    UnicodeString lastName;
-    bool isPerson = parsePerson(toFormat, title, firstName, lastName);
-
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    if (isPerson) {
-            if (length == "long") {
-                result += title;
-                result += " ";
-                result += firstName;
-                result += " ";
-                result += lastName;
-            } else if (length == "medium") {
-                if (useFormal) {
-                    result += firstName;
-                    result += " ";
-                    result += lastName;
-                } else {
-                    result += title;
-                    result += " ";
-                    result += firstName;
-                }
-            } else if (useFormal) {
-                // Default to "short" length
-                result += title;
-                result += " ";
-                result += lastName;
-            } else {
-                result += firstName;
+    LocalPointer<Person> p;
+    switch (toFormat.getType()) {
+        case Formattable::Type::kObject: {
+            // Cast to "Person"
+            const UObject* asObject = toFormat.getObject();
+            if (asObject == nullptr) {
+                // Treat the result as empty for null
+                return FormattedPlaceholder::create(UnicodeString(), errorCode);;
             }
+            p.adoptInstead((Person*) asObject);
+            break;
+        }
+        default: {
+            // If the input is not a person, just return it
+            return FormattedPlaceholder::create(toFormat.getString(), errorCode);
+        }
     }
-    else {
-        result = toFormat;
+
+    UnicodeString title = p->title;
+    UnicodeString firstName = p->firstName;
+    UnicodeString lastName = p->lastName;
+
+    UnicodeString result;
+    if (length == "long") {
+        result += title;
+        result += " ";
+        result += firstName;
+        result += " ";
+        result += lastName;
+    } else if (length == "medium") {
+        if (useFormal) {
+            result += firstName;
+            result += " ";
+            result += lastName;
+        } else {
+            result += title;
+            result += " ";
+            result += firstName;
+        }
+    } else if (useFormal) {
+        // Default to "short" length
+        result += title;
+        result += " ";
+        result += lastName;
+    } else {
+        result += firstName;
     }
+
+    return FormattedPlaceholder::create(result, errorCode);
 }
 
 // Utilities
@@ -456,7 +472,7 @@ void PersonNameFormatter::format(const UnicodeString& toFormat, const Hashtable&
 /*
   See ICU4J: CustomFormatterGrammarCaseTest.java
 */
-Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -500,16 +516,37 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, const Ha
     result += postfix;
 }
 
-void GrammarCasesFormatter::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
+FormattedPlaceholder* GrammarCasesFormatter::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
-        return;
+        return nullptr;
     }
-    const UnicodeString* grammarCase = (UnicodeString*) variableOptions.get("case");
-    if (grammarCase != nullptr && (*grammarCase == "dative" || *grammarCase == "genitive")) {
-        getDativeAndGenitive(toFormat, result);
-    } else {
-        result += toFormat;
+
+    if (arg == nullptr) {
+        errorCode = U_FORMATTING_ERROR;
+        return nullptr;
     }
+
+    const Formattable& toFormat = *arg;
+    UnicodeString result;
+
+    switch (toFormat.getType()) {
+        case Formattable::Type::kString: {
+            const UnicodeString& in = toFormat.getString();
+            const UnicodeString* grammarCase = (UnicodeString*) variableOptions.get("case");
+            if (grammarCase != nullptr && (*grammarCase == "dative" || *grammarCase == "genitive")) {
+                getDativeAndGenitive(in, result);
+            } else {
+                result += in;
+            }
+            break;
+        }
+        default: {
+            result += toFormat.getString();
+            break;
+        }
+    }
+
+    return FormattedPlaceholder::create(result, errorCode);
 }
 
 /* static */ FunctionRegistry* GrammarCasesFormatter::customRegistry(UErrorCode& errorCode) {
@@ -608,7 +645,7 @@ void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) 
 /*
   See ICU4J: CustomFormatterListTest.java
 */
-Formatter* ListFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* ListFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -625,45 +662,16 @@ Formatter* ListFormatterFactory::createFormatter(Locale locale, const Hashtable&
     return result;
 }
 
-static const UnicodeString* parseList(const UnicodeString& toFormat, size_t& n_items, UErrorCode& errorCode) {
+FormattedPlaceholder* message2::ListFormatter::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    n_items = 0;
-    for (size_t i = 0; ((int32_t) i) < toFormat.length(); i++) {
-        if (toFormat[i] == COMMA) {
-            n_items++;
-        }
-    }
-    // Account for last item
-    n_items++;
-    UnicodeString* result = new UnicodeString[n_items];
-    size_t j = 0;
-    for (size_t i = 0; i < n_items; i++) {
-        U_ASSERT(((int32_t) j) < toFormat.length());
-        UnicodeString temp;
-        U_ASSERT(toFormat[j] == '\"');
-        j++; // Consume the opening '\"'
-        while (toFormat[j] != '\"') {
-            temp += toFormat[j++];
-        }
-        U_ASSERT(toFormat[j] == '\"');
-        j++; // Consume the closing '\"'
-        if (i < (n_items - 1)) {
-            U_ASSERT(toFormat[j] == COMMA);
-            j++; // Consume the comma
-            U_ASSERT(toFormat[j] == SPACE);
-            j++; // Consume the space
-        }
-        result[i] = temp;
-    }
-    return result;
-}
 
-void message2::ListFormatter::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return;
+    if (arg == nullptr) {
+        errorCode = U_FORMATTING_ERROR;
+        return nullptr;
     }
+    const Formattable& toFormat = *arg;
 
     UnicodeString* optType = (UnicodeString*) variableOptions.get("type");
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
@@ -684,15 +692,36 @@ void message2::ListFormatter::format(const UnicodeString& toFormat, const Hashta
         }
     }
     LocalPointer<icu::ListFormatter> lf(icu::ListFormatter::createInstance(locale, type, width, errorCode));
-    CHECK_ERROR(errorCode);
+    NULL_ON_ERROR(errorCode);
 
-    // Parse toFormat...
-    size_t n_items;
-    LocalArray<const UnicodeString> listToFormat(parseList(toFormat, n_items, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
+    UnicodeString result;
+
+    switch (toFormat.getType()) {
+        case Formattable::Type::kArray: {
+            int32_t n_items;
+            const Formattable* objs = toFormat.getArray(n_items);
+            if (objs == nullptr) {
+                errorCode = U_FORMATTING_ERROR;
+                return nullptr;
+            }
+            LocalArray<UnicodeString> parts(new UnicodeString[n_items]);
+            if (!parts.isValid()) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
+            for (size_t i = 0; ((int32_t) i) < n_items; i++) {
+                parts[i] = objs[i].getString();
+            }
+            lf->format(parts.orphan(), n_items, result, errorCode);
+            break;
+        }
+        default: {
+            result += toFormat.getString();
+            break;
+        }
     }
-    lf->format(listToFormat.getAlias(), n_items, result, errorCode);
+
+    return FormattedPlaceholder::create(result, errorCode);
 }
 
 void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
@@ -703,13 +732,16 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
 
     LocalPointer<Hashtable> arguments(Args::of("languages", progLanguages, errorCode));
+    LocalPointer<FunctionRegistry> reg(ListFormatter::customRegistry(errorCode));
     CHECK_ERROR(errorCode);
+
+    testBuilder->setFunctionRegistry(reg.orphan());
     LocalPointer<TestCase> test(testBuilder->setName("testListFormatter")
                                 .setPattern("{I know {$languages :listformat type=AND}!}")
                                 .setArguments(arguments.orphan())
                                 .setExpected("I know C/C++, Java, and Python!")
                                 .build(errorCode));
-    TestUtils::runTestCase(*this, ListFormatter::customRegistry(errorCode), *test, errorCode);
+    TestUtils::runTestCase(*this, *test, errorCode);
 
     arguments.adoptInstead(Args::of("languages", progLanguages, errorCode));
     CHECK_ERROR(errorCode);
@@ -718,7 +750,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
                       .setArguments(arguments.orphan())
                       .setExpected("You are allowed to use C/C++, Java, or Python!")
                       .build(errorCode));
-    TestUtils::runTestCase(*this, ListFormatter::customRegistry(errorCode), *test, errorCode);
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 /*
@@ -866,7 +898,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     return result.orphan();
 }
 
-Formatter* ResourceManagerFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* ResourceManagerFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -897,45 +929,46 @@ static void addAll(const Hashtable& source, Hashtable& dest, UErrorCode& errorCo
     }
 }
 
-void ResourceManager::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return;
+FormattedPlaceholder* ResourceManager::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+
+    if (arg == nullptr) {
+        errorCode = U_FORMATTING_ERROR;
+        return nullptr;
     }
+
+    const UnicodeString& in = arg->getString();
 
     UnicodeString* propsStr = (UnicodeString*) variableOptions.get("resbundle");
     // If properties were provided, look up the given string in the properties,
     // yielding a message
     if (propsStr != nullptr) {
         LocalPointer<Hashtable> props(parseProperties(*propsStr, errorCode));
-        if (U_FAILURE(errorCode)) {
-            return;
-        }
-        UnicodeString* msg = (UnicodeString*) props->get(toFormat);
+        NULL_ON_ERROR(errorCode);
+
+        UnicodeString* msg = (UnicodeString*) props->get(in);
         if (msg == nullptr) {
             // No message given for this key -- just format the key
-            result += toFormat;
-            return;
+            return FormattedPlaceholder::create(in, errorCode);
         }
         LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
-        if (U_FAILURE(errorCode)) {
-            return;
-        }
+        NULL_ON_ERROR(errorCode);
         UParseError parseErr;
         // Any parse/data model errors will be propagated
         LocalPointer<MessageFormatter> mf(mfBuilder
                                           ->setPattern(*msg, errorCode)
                                           .build(parseErr, errorCode));
-        if (U_FAILURE(errorCode)) {
-            return;
-        }
+        NULL_ON_ERROR(errorCode);
         // We want to include any variable options for `msgRef` as fixed
         // options for the contained message. So create a new map
         // and add all arguments and variable options into it
         // Create a new map and add both the arguments and variable options into it
         LocalPointer<Hashtable> mergedOptions(new Hashtable(compareVariableName, nullptr, errorCode));
-        CHECK_ERROR(errorCode);
+        NULL_ON_ERROR(errorCode);
         addAll(fixedOptions, *mergedOptions, errorCode);
         addAll(variableOptions, *mergedOptions, errorCode);
+        UnicodeString result;
+        // TODO: add formatToParts too, and use that here?
         mf->formatToString(*mergedOptions, errorCode, result);
         // Here, we want to ignore errors (this matches the behavior in the ICU4J test).
         // For example: we want $gcase to default to "$gcase" if the gcase option was
@@ -943,12 +976,10 @@ void ResourceManager::format(const UnicodeString& toFormat, const Hashtable& var
         if (U_FAILURE(errorCode)) {
             errorCode = U_ZERO_ERROR;
         }
-        return;
+        return FormattedPlaceholder::create(result, errorCode);
     }
     // No properties provided -- just format the key
-    result += toFormat;
-    return;
-
+    return FormattedPlaceholder::create(in, errorCode);
 }
 
 

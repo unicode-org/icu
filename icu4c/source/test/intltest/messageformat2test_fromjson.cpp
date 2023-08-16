@@ -38,6 +38,10 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
     testBuilder->setName("jsonTests");
 
+/*
+  TODO: go through tests with arguments, change to be typed if possible
+*/
+
     LocalPointer<TestCase> test(testBuilder->setPattern("{hello}")
                                 .setExpected("hello")
                                 .build(errorCode));

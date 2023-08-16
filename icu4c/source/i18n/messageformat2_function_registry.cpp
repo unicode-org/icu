@@ -78,7 +78,7 @@ FunctionRegistry::Builder& FunctionRegistry::Builder::setFormatter(const Functio
     return *this;
 }
 
-const FormatterFactory* FunctionRegistry::getFormatter(const FunctionName& formatterName) const {
+FormatterFactory* FunctionRegistry::getFormatter(const FunctionName& formatterName) const {
     // Caller must check for null
     return ((FormatterFactory*) formatters->get(formatterName.toString()));
 }
@@ -183,7 +183,7 @@ static void addAll(const Hashtable& source, Hashtable& dest, UErrorCode& errorCo
     }
 }
 
-Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     Formatter* result = new Number(locale, fixedOptions);
@@ -194,9 +194,28 @@ Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, cons
     return result;
 }
 
+static FormattedPlaceholder* notANumber(UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalPointer<Formattable> s(new Formattable("NaN"));
+    if (!s.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return FormattedPlaceholder::create(s.orphan(), errorCode);
+}
+
 // variableOptions = map of *resolved* options (strings)
-void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
+FormattedPlaceholder* StandardFunctions::Number::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+
+    // Argument must be non-null
+    if (arg == nullptr) {
+        errorCode = U_FORMATTING_ERROR;
+        return nullptr;
+    }
+
+    const Formattable& toFormat = *arg;
 
     LocalPointer<number::LocalizedNumberFormatter> realFormatter;
     if (variableOptions.count() == 0) {
@@ -207,31 +226,59 @@ void StandardFunctions::Number::format(const UnicodeString& toFormat, const Hash
     } else {
         // Create a new map and add both the arguments and variable options into it
         LocalPointer<Hashtable> mergedOptions(new Hashtable(compareVariableName, nullptr, errorCode));
-        CHECK_ERROR(errorCode);
+        NULL_ON_ERROR(errorCode);
         addAll(fixedOptions, *mergedOptions, errorCode);
         addAll(variableOptions, *mergedOptions, errorCode);
-        CHECK_ERROR(errorCode);
+        NULL_ON_ERROR(errorCode);
 /*
   TODO: check options/ignore invalid here?
 */
 
         realFormatter.adoptInstead(formatterForOptions(locale, *mergedOptions, errorCode));
     }
-    CHECK_ERROR(errorCode);
-    
-    // TODO: NumberFormatterFactory.java dispatches on the type of `toFormat`,
-    // but here the formatters only take strings.
-    // Try to parse the string as a number, as in the `else` case there
-    double numberValue;
-    strToDouble(toFormat, locale, numberValue, errorCode);
-    if (U_FAILURE(errorCode)) {
-        errorCode = U_ZERO_ERROR;
-        result += UnicodeString("NaN");
-        return;
+    NULL_ON_ERROR(errorCode);
+
+    number::FormattedNumber numberResult;
+    switch (toFormat.getType()) {
+        case Formattable::Type::kDouble: {
+            numberResult = realFormatter->formatDouble(toFormat.getDouble(),
+                                                       errorCode);
+            break;
+        }
+        case Formattable::Type::kLong: {
+            numberResult = realFormatter->formatInt(toFormat.getLong(),
+                                                    errorCode);
+            break;
+        }
+        case Formattable::Type::kInt64: {
+            numberResult = realFormatter->formatInt(toFormat.getInt64(),
+                                                    errorCode);
+            break;
+        }
+        case Formattable::Type::kString: {
+            // Try to parse the string as a number, as in the `else` case there
+            // TODO: see if the behavior here matches the function registry spec
+            double numberValue;
+            UErrorCode localErrorCode;
+            strToDouble(toFormat.getString(), locale, numberValue, localErrorCode);
+            if (U_FAILURE(localErrorCode)) {
+                return notANumber(errorCode);
+            }
+            break;
+        }
+        default: {
+            // Other types can't be parsed as a number
+            return notANumber(errorCode);
+        }   
     }
-    number::FormattedNumber numberResult = realFormatter->formatDouble(numberValue, errorCode);
-    CHECK_ERROR(errorCode);
-    result += numberResult.toString(errorCode);
+    
+    NULL_ON_ERROR(errorCode);
+    LocalPointer<number::FormattedNumber> num(&numberResult);
+    if (!num.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return FormattedPlaceholder::create(num.orphan(), errorCode);
 }
 
 // --------- PluralFactory
@@ -250,7 +297,7 @@ Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, const 
     return result;
 }
 
-void StandardFunctions::Plural::selectKey(const UnicodeString* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(const Formattable* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Variable options not used
@@ -261,22 +308,38 @@ void StandardFunctions::Plural::selectKey(const UnicodeString* valuePtr, const U
         errorCode = U_SELECTOR_ERROR;
         return;
     }
-    const UnicodeString& value = *valuePtr;
 
-    // Parse the selector value
-    // ---------------------------
-
-    // Try parsing the scrutinee as a double
+    // Only doubles and integers can match
     double valToCheck;
-    strToDouble(value, locale, valToCheck, errorCode);
-    // Invalid format error => value is not a number; return a selector error
-    if (errorCode == U_INVALID_FORMAT_ERROR) {
-        errorCode = U_SELECTOR_ERROR;
+    switch (valuePtr->getType()) {
+        case Formattable::Type::kDouble: {
+            valToCheck = valuePtr->getDouble();
+            break;
+        }
+        case Formattable::Type::kLong: {
+            valToCheck = (double) valuePtr->getLong();
+            break;
+        }
+        case Formattable::Type::kInt64: {
+            valToCheck = (double) valuePtr->getInt64();
+            break;
+        }
+        case Formattable::Type::kString: {
+            // Try parsing the scrutinee as a double
+            strToDouble(valuePtr->getString(), locale, valToCheck, errorCode);
+            // Invalid format error => value is not a number; return a selector error
+            if (errorCode == U_INVALID_FORMAT_ERROR) {
+                errorCode = U_SELECTOR_ERROR;
+                return;
+            }
+            CHECK_ERROR(errorCode);
+            break;
+        }
+        default: {
+            numMatching = 0;
+            return;
+        }
     }
-    CHECK_ERROR(errorCode);
-
-    // TODO: does the Integer case need to be there?
-    // See PluralSelectoryFactory.java
 
     // Generate the matches
     // -----------------------
@@ -340,7 +403,7 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
     return DateFormat::EStyle::kNone;
 }
 
-Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     // Fixed options not used
@@ -354,8 +417,14 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, co
     return result;
 }
 
-void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
+FormattedPlaceholder* StandardFunctions::DateTime::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+
+    if (arg == nullptr) {
+        errorCode = U_FORMATTING_ERROR;
+        return nullptr;
+    }
+    const Formattable& toFormat = *arg;
 
     LocalPointer<DateFormat> df;
 
@@ -390,15 +459,9 @@ void StandardFunctions::DateTime::format(const UnicodeString& toFormat, const Ha
         }
     }
 
-    // Parse the given string as a date
-    // TODO: this assumes the string is in "seconds" format;
-    // since this doesn't take a UDate object, I'm not sure
-    // what to assume
-    //    UDate date = df->parse(toFormat, errorCode);
-    double resultDate;
-    strToDouble(toFormat, locale, resultDate, errorCode);
-    CHECK_ERROR(errorCode);
-    df->format(UDate(resultDate), result);
+    UnicodeString result;
+    df->format(toFormat, result, 0, errorCode);
+    return FormattedPlaceholder::create(result, errorCode);
 }
 
 // --------- TextFactory
@@ -416,7 +479,7 @@ Selector* StandardFunctions::TextFactory::createSelector(Locale locale, const Ha
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(const UnicodeString* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(const Formattable* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
@@ -431,8 +494,12 @@ void StandardFunctions::TextSelector::selectKey(const UnicodeString* value, cons
 
     U_ASSERT(prefs != nullptr);
     numMatching = 0;
+
+    // Convert to string
+    const UnicodeString& valueAsString = value->getString();
+
     for (size_t i = 0; i < numKeys; i++) {
-        if (keys[i] == *value) {
+        if (keys[i] == valueAsString) {
             numMatching++;
             prefs[0] = keys[i];
             break;
@@ -444,7 +511,7 @@ StandardFunctions::TextSelector::~TextSelector() {}
 
 // --------- IdentityFactory
 
-Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const {
+Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
     // No state
     (void) locale;
     (void) fixedOptions;
@@ -458,12 +525,16 @@ Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, co
 
 }
 
-void StandardFunctions::Identity::format(const UnicodeString& toFormat, const Hashtable& variableOptions, UnicodeString& result, UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
+FormattedPlaceholder* StandardFunctions::Identity::format(const Formattable* toFormat, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
 
     (void) variableOptions; // unused parameter
-    // Just returns the string
-    result = toFormat;
+    if (toFormat == nullptr) {
+        errorCode = U_FORMATTING_ERROR;
+        return nullptr;
+    }
+    // Just returns the input value as a string
+    return FormattedPlaceholder::create(toFormat->getString(), errorCode);
 }
 
 StandardFunctions::Identity::~Identity() {}
