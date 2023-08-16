@@ -16,11 +16,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -54,7 +56,10 @@ import com.ibm.icu.util.ULocale.Minimize;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
-@RunWith(JUnit4.class)
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+
+@RunWith(JUnitParamsRunner.class)
 public class ULocaleTest extends TestFmwk {
 
     // Ticket #8078 and #11674
@@ -1947,7 +1952,7 @@ public class ULocaleTest extends TestFmwk {
                     "de__POSIX_1901"
                 }, {
                     "und",
-                    ""
+                    "en"
                 }
         };
 
@@ -2760,8 +2765,8 @@ public class ULocaleTest extends TestFmwk {
                     "am"
                 }, {
                     "und_Ethi_ER",
-                    "am_Ethi_ER",
-                    "am_ER"
+                    "ti_Ethi_ER",
+                    "ti_ER"
                 }, {
                     "und_FI",
                     "fi_Latn_FI",
@@ -3536,8 +3541,8 @@ public class ULocaleTest extends TestFmwk {
                     "trv"
                 }, {
                     "und_Latn_HK",
-                    "zh_Latn_HK",
-                    "zh_Latn_HK"
+                    "en_Latn_HK",
+                    "en_HK"
                 }, {
                     "und_Latn_AQ",
                     "_Latn_AQ",
@@ -5416,5 +5421,104 @@ public class ULocaleTest extends TestFmwk {
             testFile.close();
         }
 
+    }
+
+    boolean isKnownSourceFor20777(String s) {
+        return s.equals("und-001") ||
+            s.equals("und-AQ") ||
+            s.equals("und-CC") ||
+            s.equals("und-SL") ||
+            s.equals("und-SS") ||
+            s.equals("und-ZM") ||
+            s.startsWith("und-Latn-");
+    }
+
+    private static final class TestCase implements Cloneable {
+        private static final String ENDL = System.getProperties().getProperty("line.separator");
+
+        int lineNr = 0;
+
+        String source = "";
+        String addLikely = "";
+        String removeFavorScript = "";
+        String removeFavorRegion = "";
+
+        @Override
+        public TestCase clone() throws CloneNotSupportedException {
+            return (TestCase) super.clone();
+        }
+
+        @Override
+        public String toString() {
+            return (new StringBuilder(source))
+                .append(";")
+                .append(addLikely)
+                .append(";")
+                .append(removeFavorScript)
+                .append(";")
+                .append(removeFavorRegion)
+                .toString();
+        }
+    }
+    static List<TestCase> readLikelySubtagsTestCases() throws Exception {
+        List<TestCase> tests = new ArrayList<>();
+        TestCase test = new TestCase();
+        BufferedReader testFile = TestUtil.getDataReader("likelySubtags.txt");
+        try {
+            String line;
+            while ((line = testFile.readLine()) != null) {
+                if (line.startsWith("#")) continue;
+                String [] fields = line.split("[ \t]?;[ \t]?");
+                if (fields.length < 2) continue;
+                test.source = fields[0];
+                test.addLikely = fields[1];
+                test.removeFavorScript = (fields.length < 3) || fields[2].isEmpty() ? test.addLikely : fields[2];
+                test.removeFavorRegion = (fields.length < 4) || fields[3].isEmpty() ? test.removeFavorScript : fields[3];
+                tests.add(test.clone());
+            }
+        } finally {
+            testFile.close();
+        }
+        return tests;
+    }
+
+    @Test
+    @Parameters(method = "readLikelySubtagsTestCases")
+    public void likelySubtagsDataDriven(TestCase test) {
+        ULocale l = ULocale.forLanguageTag(test.source);
+        if (isKnownSourceFor20777(test.source)) {
+            if (test.addLikely.equals(ULocale.addLikelySubtags(l).toLanguageTag())) {
+                logKnownIssue("ICU-20777", "addLikelySubtags(" + test.source + ")");
+            }
+            if (test.removeFavorRegion.equals(ULocale.minimizeSubtags(l).toLanguageTag())) {
+                logKnownIssue("ICU-20777", "minimizeSubtags(" + test.source + ")");
+            }
+            if (test.removeFavorScript.equals(ULocale.minimizeSubtags(
+                l, ULocale.Minimize.FAVOR_SCRIPT).toLanguageTag())) {
+                logKnownIssue("ICU-20777", "minimizeSubtags(" + test.source + ") - FAVOR_SCRIPT");
+            }
+        } else {
+            if (test.addLikely.equals("FAIL")) {
+                assertEquals("addLikelySubtags(" + test.source + ") should be unchanged",
+                    l, ULocale.addLikelySubtags(l));
+            } else {
+                assertEquals("addLikelySubtags(" + test.source + ")",
+                    test.addLikely, ULocale.addLikelySubtags(l).toLanguageTag());
+            }
+            if (test.removeFavorRegion.equals("FAIL")) {
+                assertEquals("minimizeSubtags(" + test.source + ") should be unchanged",
+                    l, ULocale.minimizeSubtags(l));
+            } else {
+                assertEquals("minimizeSubtags(" + test.source + ")",
+                    test.removeFavorRegion, ULocale.minimizeSubtags(l).toLanguageTag());
+            }
+            if (test.removeFavorScript.equals("FAIL")) {
+                assertEquals("minimizeSubtags(" + test.source + ") - FAVOR_SCRIPT should be unchanged",
+                    l, ULocale.minimizeSubtags(l, ULocale.Minimize.FAVOR_SCRIPT));
+            } else {
+                assertEquals("minimizeSubtags(" + test.source + ") - FAVOR_SCRIPT",
+                    test.removeFavorScript, ULocale.minimizeSubtags(l, ULocale.Minimize.FAVOR_SCRIPT).toLanguageTag());
+            }
+        }
     }
 }

@@ -237,6 +237,7 @@ ulocimp_addLikelySubtags(const char* localeID,
  *
  * @param localeID The locale to minimize
  * @param sink The output sink receiving the maximized locale
+ * @param favorScript favor to keep script if true, region if false.
  * @param err Error information if minimizing the locale failed.  If the length
  * of the localeID and the null-terminator is greater than the maximum allowed size,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
@@ -245,6 +246,7 @@ ulocimp_addLikelySubtags(const char* localeID,
 U_CAPI void U_EXPORT2
 ulocimp_minimizeSubtags(const char* localeID,
                         icu::ByteSink& sink,
+                        bool favorScript,
                         UErrorCode* err);
 
 U_CAPI const char * U_EXPORT2
