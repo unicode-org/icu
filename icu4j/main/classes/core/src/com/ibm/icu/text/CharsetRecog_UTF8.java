@@ -87,7 +87,6 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
         } else if (numValid == 0 && numInvalid == 0) {
             // Plain ASCII. Confidence must be > 10, it's more likely than UTF-16, which
             //              accepts ASCII with confidence = 10.
-            // TODO: add plain ASCII as an explicitly detected type.
             confidence = 15;
         } else if (numValid > numInvalid*10) {
             // Probably corrupt utf-8 data.  Valid sequences aren't likely by chance.
