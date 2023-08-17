@@ -609,6 +609,7 @@ cc_library(
         "uloc.cpp",
         "uloc_tag.cpp",
         "uloc_keytype.cpp",
+        "ulocale.cpp",
         "ulocbuilder.cpp",
         "uresbund.cpp",
         "uresdata.cpp",
