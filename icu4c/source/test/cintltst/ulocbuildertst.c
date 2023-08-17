@@ -5,6 +5,11 @@
 #include "cstring.h"
 #include "unicode/uloc.h"
 #include "unicode/ulocbuilder.h"
+#include "unicode/ulocale.h"
+
+#define WHERE __FILE__ ":" XLINE(__LINE__) " "
+#define XLINE(s) LINE(s)
+#define LINE(s) #s
 
 #ifndef UPRV_LENGTHOF
 #define UPRV_LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -1674,6 +1679,61 @@ static void TestSetLocale() {
     ulocbld_close(bld2);
 }
 
+static void TestBuildULocale() {
+    ULocaleBuilder* bld1 = ulocbld_open();
+    UErrorCode status = U_ZERO_ERROR;
+
+    ulocbld_setLanguage(bld1, "fr", -1);
+    ULocale* fr = ulocbld_buildULocale(bld1, &status);
+    if (assertSuccess(WHERE "ulocbld_buildULocale()", &status)) {
+        assertEquals(WHERE "ulocale_getLanguage()", "fr", ulocale_getLanguage(fr));
+    }
+
+    ulocbld_setLanguage(bld1, "ar", -1);
+    ulocbld_setScript(bld1, "Arab", -1);
+    ulocbld_setRegion(bld1, "EG", -1);
+    ulocbld_setVariant(bld1, "3456-abcde", -1);
+    ulocbld_setUnicodeLocaleKeyword(bld1, "nu", -1, "thai", -1);
+    ulocbld_setUnicodeLocaleKeyword(bld1, "co", -1, "stroke", -1);
+    ulocbld_setUnicodeLocaleKeyword(bld1, "ca", -1, "chinese", -1);
+    ULocale* l = ulocbld_buildULocale(bld1, &status);
+
+    if (assertSuccess(WHERE "ulocbld_buildULocale()", &status)) {
+        assertEquals(WHERE "ulocale_getLanguage()", "ar", ulocale_getLanguage(l));
+        assertEquals(WHERE "ulocale_getScript()", "Arab", ulocale_getScript(l));
+        assertEquals(WHERE "ulocale_getRegion()", "EG", ulocale_getRegion(l));
+        assertEquals(WHERE "ulocale_getVariant()", "3456_ABCDE", ulocale_getVariant(l));
+        char buf[ULOC_FULLNAME_CAPACITY];
+        assertIntEquals(WHERE "ulocale_getUnicodeKeywordValue(\"nu\")", 4,
+                     ulocale_getUnicodeKeywordValue(l, "nu", -1, buf, ULOC_FULLNAME_CAPACITY, &status));
+        if (assertSuccess(WHERE "ulocale_getUnicodeKeywordValue(\"nu\")", &status)) {
+            assertEquals(WHERE "ulocale_getUnicodeKeywordValue(\"nu\")", "thai", buf);
+        }
+
+        status = U_ZERO_ERROR;
+        assertIntEquals(WHERE "ulocale_getUnicodeKeywordValue(\"co\")", 6,
+                     ulocale_getUnicodeKeywordValue(l, "co", -1, buf, ULOC_FULLNAME_CAPACITY, &status));
+        if (assertSuccess(WHERE "ulocale_getUnicodeKeywordValue(\"co\")", &status)) {
+            assertEquals(WHERE "ulocale_getUnicodeKeywordValue(\"co\")", "stroke", buf);
+        }
+
+        status = U_ZERO_ERROR;
+        assertIntEquals(WHERE "ulocale_getUnicodeKeywordValue(\"ca\")", 7,
+                     ulocale_getUnicodeKeywordValue(l, "ca", -1, buf, ULOC_FULLNAME_CAPACITY, &status));
+        if (assertSuccess(WHERE "ulocale_getUnicodeKeywordValue(\"ca\")", &status)) {
+            assertEquals(WHERE "ulocale_getUnicodeKeywordValue(\"ca\")", "chinese", buf);
+        }
+        ulocale_close(l);
+    }
+    ulocbld_adoptULocale(bld1, fr);
+    char buf[ULOC_FULLNAME_CAPACITY];
+    ulocbld_buildLocaleID(bld1, buf, ULOC_FULLNAME_CAPACITY, &status);
+    if (assertSuccess(WHERE "ulocbld_buildULocale()", &status)) {
+        assertEquals(WHERE "ulocbld_buildULocale()", "fr", buf);
+    }
+    ulocbld_close(bld1);
+}
+
 
 static void TestPosixCases() {
     UErrorCode status = U_ZERO_ERROR;
@@ -1731,5 +1791,6 @@ void addLocaleBuilderTest(TestNode** root)
     TESTCASE(TestSetExtensionValidateOthersWellFormed);
     TESTCASE(TestSetExtensionValidateOthersIllFormed);
     TESTCASE(TestSetLocale);
+    TESTCASE(TestBuildULocale);
     TESTCASE(TestPosixCases);
 }
