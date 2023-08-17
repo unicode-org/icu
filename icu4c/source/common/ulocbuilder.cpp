@@ -48,6 +48,13 @@ void ulocbld_setLocale(ULocaleBuilder* builder, const char* locale, int32_t leng
     INTERNAL(builder)->setLocale(l);
 }
 
+void
+ulocbld_adoptULocale(ULocaleBuilder* builder, ULocale* locale) {
+    if (builder == nullptr) return;
+    INTERNAL(builder)->setLocale(*(reinterpret_cast<const icu::Locale*>(locale)));
+    ulocale_close(locale);
+}
+
 #define STRING_PIECE(s, l) ((l)<0 ? StringPiece(s) : StringPiece((s), (l)))
 
 #define IMPL_ULOCBLD_SETTER(N) \
@@ -85,6 +92,22 @@ void ulocbld_clear(ULocaleBuilder* builder) {
 void ulocbld_clearExtensions(ULocaleBuilder* builder) {
     if (builder == nullptr) return;
     INTERNAL(builder)->clearExtensions();
+}
+
+
+ULocale* ulocbld_buildULocale(ULocaleBuilder* builder, UErrorCode* err) {
+    if (builder == nullptr) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+    icu::Locale l = INTERNAL(builder)->build(*err);
+    if (U_FAILURE(*err)) return nullptr;
+    icu::Locale* r = l.clone();
+    if (r == nullptr) {
+        *err = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return reinterpret_cast<ULocale*>(r);
 }
 
 int32_t ulocbld_buildLocaleID(ULocaleBuilder* builder,

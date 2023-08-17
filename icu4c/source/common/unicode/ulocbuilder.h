@@ -4,6 +4,7 @@
 #define __ULOCBUILDER_H__
 
 #include "unicode/localpointer.h"
+#include "unicode/ulocale.h"
 #include "unicode/utypes.h"
 
 /**
@@ -100,6 +101,22 @@ ulocbld_close(ULocaleBuilder* builder);
  */
 U_CAPI void U_EXPORT2
 ulocbld_setLocale(ULocaleBuilder* builder, const char* locale, int32_t length);
+
+/**
+ * Resets the <code>ULocaleBuilder</code> to match the provided
+ * <code>ULocale</code>. Existing state is discarded.
+ *
+ * <p>The locale must be not bogus.
+ * <p>This method clears the internal UErrorCode.
+ *
+ * @param builder the builder.
+ * @param locale the locale, a ULocale* pointer. The builder adopts the locale
+ *               after the call and the client must not delete it.
+ *
+ * @draft ICU 74
+ */
+U_CAPI void U_EXPORT2
+ulocbld_adoptULocale(ULocaleBuilder* builder, ULocale* locale);
 
 /**
  * Resets the ULocaleBuilder to match the provided IETF BCP 47 language tag.
@@ -346,6 +363,24 @@ ulocbld_clearExtensions(ULocaleBuilder* builder);
 U_CAPI int32_t U_EXPORT2
 ulocbld_buildLocaleID(ULocaleBuilder* builder, char* locale,
                       int32_t localeCapacity, UErrorCode* err);
+
+/**
+ * Build the ULocale object from the fields set on this builder.
+ * If any set methods or during the ulocbld_buildULocale() call require memory
+ * allocation but fail U_MEMORY_ALLOCATION_ERROR will be set to status.
+ * If any of the fields set by the setters are not well-formed, the status
+ * will be set to U_ILLEGAL_ARGUMENT_ERROR. The state of the builder will
+ * not change after the ulocbld_buildULocale() call and the caller is
+ * free to keep using the same builder to build more locales.
+ *
+ * @param builder the builder.
+ * @param err the error code.
+ * @return the locale, a ULocale* pointer. The created ULocale must be
+ *          destroyed by calling {@link ulocale_close}.
+ * @draft ICU 74
+ */
+U_CAPI ULocale* U_EXPORT2
+ulocbld_buildULocale(ULocaleBuilder* builder, UErrorCode* err);
 
 /**
  * Build the IETF BCP 47 language tag string from the fields set on this builder.
