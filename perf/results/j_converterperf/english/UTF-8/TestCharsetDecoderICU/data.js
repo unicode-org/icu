@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692222569753,
+  "lastUpdate": 1692300565794,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10678,6 +10678,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5897440486663783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "27181e36a6bed372482e5a11c25009fa4dd971f1",
+          "message": "ICU-22435 Add C API for Locale \n\nSee #2531",
+          "timestamp": "2023-08-17T12:15:47-07:00",
+          "tree_id": "df38124fc9221054d4d0427422e9a1842fc06d98",
+          "url": "https://github.com/unicode-org/icu/commit/27181e36a6bed372482e5a11c25009fa4dd971f1"
+        },
+        "date": 1692300511914,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.7176735631959419,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
