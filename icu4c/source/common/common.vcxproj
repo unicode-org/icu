@@ -186,6 +186,7 @@
     <ClCompile Include="ucat.cpp" />
     <ClCompile Include="uloc.cpp" />
     <ClCompile Include="uloc_tag.cpp" />
+    <ClCompile Include="ulocale.cpp" />
     <ClCompile Include="ures_cnv.cpp" />
     <ClCompile Include="uresbund.cpp" />
     <ClCompile Include="uresdata.cpp" />

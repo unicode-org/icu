@@ -14,8 +14,9 @@
 using icu::CheckedArrayByteSink;
 using icu::StringPiece;
 
-#define EXTERNAL(i) ((ULocaleBuilder*)(i))
-#define INTERNAL(e) ((icu::LocaleBuilder*)(e))
+#define EXTERNAL(i) (reinterpret_cast<ULocaleBuilder*>(i))
+#define INTERNAL(e) (reinterpret_cast<icu::LocaleBuilder*>(e))
+#define CONST_INTERNAL(e) (reinterpret_cast<const icu::LocaleBuilder*>(e))
 
 ULocaleBuilder* ulocbld_open() {
     return EXTERNAL(new icu::LocaleBuilder());
@@ -141,5 +142,5 @@ UBool ulocbld_copyErrorTo(const ULocaleBuilder* builder, UErrorCode *outErrorCod
         *outErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return true;
     }
-    return INTERNAL(builder)->copyErrorTo(*outErrorCode);
+    return CONST_INTERNAL(builder)->copyErrorTo(*outErrorCode);
 }
