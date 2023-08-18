@@ -305,42 +305,17 @@ void putFormattableArg(Hashtable& arguments, const UnicodeString& k, long arg, U
     }
 }
 
+void putFormattableArg(Hashtable& arguments, const UnicodeString& k, double arg, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    Formattable* valPtr(new Formattable(arg));
+    if (valPtr == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        arguments.put(k, valPtr, errorCode);
+    }
+}
+
 void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode) {
-/*
-        // Check that the skeleton is respected
-        assertEquals("cached formatter",
-                "Testing 12°C.",
-                mf2.formatToString(Args.of("count", 12, "unit", "C")));
-        assertEquals("cached formatter",
-                "Testing 12.50°F.",
-                mf2.formatToString(Args.of("count", 12.5, "unit", "F")));
-        assertEquals("cached formatter",
-                "Testing 12.54°C.",
-                mf2.formatToString(Args.of("count", 12.54, "unit", "C")));
-        assertEquals("cached formatter",
-                "Testing 12.54°F.",
-                mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
-
-        message = "{Testing {$count :temp unit=$unit skeleton=(.0/w)}.}";
-        mf2 = MessageFormatter.builder()
-                .setFunctionRegistry(registry)
-                .setPattern(message)
-                .build();
-        // Check that the skeleton is respected
-        assertEquals("cached formatter",
-                "Testing 12°C.",
-                mf2.formatToString(Args.of("count", 12, "unit", "C")));
-        assertEquals("cached formatter",
-                "Testing 12.5°F.",
-                mf2.formatToString(Args.of("count", 12.5, "unit", "F")));
-        assertEquals("cached formatter",
-                "Testing 12.5°C.",
-                mf2.formatToString(Args.of("count", 12.54, "unit", "C")));
-        assertEquals("cached formatter",
-                "Testing 12.5°F.",
-                mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
-*/
-
     LocalPointer<FunctionRegistry::Builder> frBuilder(FunctionRegistry::builder(errorCode));
     CHECK_ERROR(errorCode);
 
@@ -397,6 +372,68 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
     assertEquals("cached formatter", ((int32_t) (maxCount * 2)), counter->formatCount);
     assertEquals("cached formatter", 1, counter->fFormatterCount);
     assertEquals("cached formatter", 1, counter->cFormatterCount);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.0, errorCode);
+    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12°C.", result);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.5, errorCode);
+    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12.50°F.", result);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.54, errorCode);
+    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12.54°C.", result);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.54321, errorCode);
+    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12.54°F.", result);
+
+    // Check skeleton
+    message = "{Testing {$count :temp unit=$unit skeleton=|.0/w|}.}";
+    mfBuilder->setPattern(message, errorCode);
+    mf.adoptInstead(mfBuilder->build(parseError, errorCode));
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.0, errorCode);
+    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12°C.", result);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.5, errorCode);
+    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12.5°F.", result);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.54, errorCode);
+    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12.5°C.", result);
+
+    result.remove();
+    putFormattableArg(*arguments, countKey, 12.54321, errorCode);
+    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    CHECK_ERROR(errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("cached formatter", "Testing 12.5°F.", result);
+
 }
 
 void TestMessageFormat2::testPluralWithOffset(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
