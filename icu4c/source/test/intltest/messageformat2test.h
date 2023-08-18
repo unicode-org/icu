@@ -84,8 +84,20 @@ private:
     void testMessageRefFormatter(IcuTestErrorCode&);
 
     // Feature tests
+    void testEmptyMessage(TestCase::Builder&, IcuTestErrorCode&);
+    void testPlainText(TestCase::Builder&, IcuTestErrorCode&);
+    void testPlaceholders(TestCase::Builder&, IcuTestErrorCode&);
+    void testArgumentMissing(TestCase::Builder&, IcuTestErrorCode&);
+    void testDefaultLocale(TestCase::Builder&, IcuTestErrorCode&);
+    void testSpecialPluralWithDecimals(TestCase::Builder&, IcuTestErrorCode&);
+    void testDefaultFunctionAndOptions(TestCase::Builder&, IcuTestErrorCode&);
+    void testSimpleSelection(TestCase::Builder&, IcuTestErrorCode&);
+    void testComplexSelection(TestCase::Builder&, IcuTestErrorCode&);
+    void testSimpleLocalVariable(TestCase::Builder&, IcuTestErrorCode&);
+    void testLocalVariableWithSelect(TestCase::Builder&, IcuTestErrorCode&);
     void testDateFormat(TestCase::Builder&, IcuTestErrorCode&);
     void testPlural(TestCase::Builder&, IcuTestErrorCode&);
+
     void testPluralOrdinal(TestCase::Builder&, IcuTestErrorCode&);
     void testFormatterIsCreatedOnce(IcuTestErrorCode&);
     void testPluralWithOffset(TestCase::Builder&, IcuTestErrorCode&);
@@ -93,6 +105,15 @@ private:
     void testDeclareBeforeUse(TestCase::Builder&, IcuTestErrorCode&);
     void testVariableOptionsInSelector(TestCase::Builder&, IcuTestErrorCode&);
     void testVariableOptionsInSelectorWithLocalVar(TestCase::Builder&, IcuTestErrorCode&);
+
+    // MessageFormat 1 tests
+    void testSample(TestCase::Builder&, IcuTestErrorCode&);
+    void testStaticFormat(IcuTestErrorCode&);
+    void testSimpleFormat(TestCase::Builder&, IcuTestErrorCode&);
+    void testSelectFormatToPattern(TestCase::Builder&, IcuTestErrorCode&);
+    void testMessageFormatDateTimeSkeleton(TestCase::Builder&, IcuTestErrorCode&);
+    void testMf1Behavior(TestCase::Builder&, IcuTestErrorCode&);
+
 }; // class TestMessageFormat2
 
 

@@ -12,6 +12,7 @@ using namespace icu::message2;
 
 /*
   Tests based on ICU4J's MessageFormat2Test.java
+and Mf2FeaturesTest.java
 */
 
 /*
@@ -29,6 +30,282 @@ as of the following commit from 2023-05-09:
 
 */
 
+void TestMessageFormat2::testEmptyMessage(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test(testBuilder.setPattern("{}")
+                                .setExpected("")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);    
+}
+
+void TestMessageFormat2::testPlainText(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test(testBuilder.setPattern("{Hello World!}")
+                                .setExpected("Hello World!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);    
+}
+
+void TestMessageFormat2::testPlaceholders(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test(testBuilder.setPattern("{Hello, {$userName}!}")
+                                .setExpected("Hello, John!")
+                                .setArgument("userName", "John", errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);    
+}
+
+void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    UnicodeString message = "{Hello {$name}, today is {$today :datetime skeleton=yMMMMdEEEE}.}";
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    CHECK_ERROR(errorCode);
+
+    // November 23, 2022 at 7:42:37.123 PM
+    cal->set(2022, Calendar::NOVEMBER, 23, 19, 42, 37);
+    UDate TEST_DATE = cal->getTime(errorCode);
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test(testBuilder.setPattern(message)
+                                .setArgument("name", "John", errorCode)
+                                .setDateArgument("today", TEST_DATE, errorCode) 
+                                .setExpected("Hello John, today is Wednesday, November 23, 2022.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setPattern(message)
+                                .clearArguments()
+                                .setArgument("name", "John", errorCode)
+                                .setExpected("Hello John, today is {$today}.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setPattern(message)
+                                .clearArguments()
+                                .setDateArgument("today", TEST_DATE, errorCode)
+                                .setExpected("Hello {$name}, today is Wednesday, November 23, 2022.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setPattern(message)
+                                .clearArguments()
+                                .setExpected("Hello {$name}, today is {$today}.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
+
+void TestMessageFormat2::testDefaultLocale(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    CHECK_ERROR(errorCode);
+    // November 23, 2022 at 7:42:37.123 PM
+    cal->set(2022, Calendar::NOVEMBER, 23, 19, 42, 37);
+    UDate TEST_DATE = cal->getTime(errorCode);
+    CHECK_ERROR(errorCode);
+
+    UnicodeString message = "{Date: {$date :datetime skeleton=yMMMMdEEEE}.}";
+    UnicodeString expectedEn = "Date: Wednesday, November 23, 2022.";
+    UnicodeString expectedRo = "Date: miercuri, 23 noiembrie 2022.";
+
+    testBuilder.setPattern(message);
+
+    LocalPointer<TestCase> test;
+    test.adoptInstead(testBuilder.clearArguments()
+                                .setDateArgument("date", TEST_DATE, errorCode)
+                                .setExpected(expectedEn)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setExpected(expectedRo)
+                                .setLocale(Locale("ro"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    Locale originalLocale = Locale::getDefault();
+    Locale::setDefault(Locale::forLanguageTag("ro", errorCode), errorCode);
+    CHECK_ERROR(errorCode);
+
+    test.adoptInstead(testBuilder.setExpected(expectedEn)
+                                .setLocale(Locale("en", "US"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setExpected(expectedRo)
+                                .clearLocale()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    
+    Locale::setDefault(originalLocale, errorCode);
+    CHECK_ERROR(errorCode);
+}
+
+void TestMessageFormat2::testSpecialPluralWithDecimals(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    UnicodeString message;
+
+    message = "let $amount = {$count :number}\n\
+                match {$amount :plural}\n\
+                  when 1 {I have {$amount} dollar.}\n\
+                  when * {I have {$amount} dollars.}\n";
+
+    LocalPointer<TestCase> test;
+
+    test.adoptInstead(testBuilder.setPattern(message)
+                                .clearArguments()
+                                .setArgument("count", (long) 1, errorCode)
+                                .setExpected("I have 1 dollar.")
+                                .setLocale(Locale("en", "US"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    message = "let $amount = {$count :number skeleton=|.00*|}\n\
+                match {$amount :plural skeleton=|.00*|}\n\
+                  when 1 {I have {$amount} dollar.}\n\
+                  when * {I have {$amount} dollars.}\n";
+
+    test.adoptInstead(testBuilder.setPattern(message)
+                                .setExpected("I have 1.00 dollar.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
+
+void TestMessageFormat2::testDefaultFunctionAndOptions(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    CHECK_ERROR(errorCode);
+    // November 23, 2022 at 7:42:37.123 PM
+    cal->set(2022, Calendar::NOVEMBER, 23, 19, 42, 37);
+    UDate TEST_DATE = cal->getTime(errorCode);
+    CHECK_ERROR(errorCode);
+    LocalPointer<TestCase> test;
+
+    test.adoptInstead(testBuilder.setPattern("{Testing date formatting: {$date}.}")
+                                .clearArguments()
+                                .setDateArgument("date", TEST_DATE, errorCode)
+                                .setExpected("Testing date formatting: 23.11.2022, 19:42.")
+                                .setLocale(Locale("ro"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setPattern("{Testing date formatting: {$date :datetime}.}")
+                                .setExpected("Testing date formatting: 23.11.2022, 19:42.")
+                                .setLocale(Locale("ro"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
+
+void TestMessageFormat2::testSimpleSelection(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    (void) testBuilder;
+    (void) errorCode;
+
+    /* Covered by testPlural */
+}
+
+void TestMessageFormat2::testComplexSelection(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test;
+
+    UnicodeString message = "match {$photoCount :plural} {$userGender :select}\n\
+                 when 1 masculine {{$userName} added a new photo to his album.}\n\
+                 when 1 feminine {{$userName} added a new photo to her album.}\n\
+                 when 1 * {{$userName} added a new photo to their album.}\n\
+                 when * masculine {{$userName} added {$photoCount} photos to his album.}\n\
+                 when * feminine {{$userName} added {$photoCount} photos to her album.}\n\
+                 when * * {{$userName} added {$photoCount} photos to their album.}";
+    testBuilder.setPattern(message);
+
+    long count = 1;
+    test.adoptInstead(testBuilder.setArgument("photoCount", count, errorCode)
+                                .setArgument("userGender", "masculine", errorCode)
+                                .setArgument("userName", "John", errorCode)
+                                .setExpected("John added a new photo to his album.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setArgument("userGender", "feminine", errorCode)
+                                .setArgument("userName", "Anna", errorCode)
+                                .setExpected("Anna added a new photo to her album.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setArgument("userGender", "unknown", errorCode)
+                                .setArgument("userName", "Anonymous", errorCode)
+                                .setExpected("Anonymous added a new photo to their album.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    count = 13;
+    test.adoptInstead(testBuilder.setArgument("photoCount", count, errorCode)
+                                .setArgument("userGender", "masculine", errorCode)
+                                .setArgument("userName", "John", errorCode)
+                                .setExpected("John added 13 photos to his album.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setArgument("userGender", "feminine", errorCode)
+                                .setArgument("userName", "Anna", errorCode)
+                                .setExpected("Anna added 13 photos to her album.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setArgument("userGender", "unknown", errorCode)
+                                .setArgument("userName", "Anonymous", errorCode)
+                                .setExpected("Anonymous added 13 photos to their album.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
+
+void TestMessageFormat2::testSimpleLocalVariable(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test;
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    CHECK_ERROR(errorCode);
+    // November 23, 2022 at 7:42:37.123 PM
+    cal->set(2022, Calendar::NOVEMBER, 23, 19, 42, 37);
+    UDate TEST_DATE = cal->getTime(errorCode);
+    CHECK_ERROR(errorCode);
+
+    testBuilder.setPattern("let $expDate = {$expDate :datetime skeleton=yMMMdE}\n\
+                            {Your tickets expire on {$expDate}.}");
+
+    long count = 1;
+    test.adoptInstead(testBuilder.setArgument("count", count, errorCode)
+                      .setLocale(Locale("en"), errorCode)
+                      .setDateArgument("expDate", TEST_DATE, errorCode)
+                      .setExpected("Your tickets expire on Wed, Nov 23, 2022.")
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
+
+void TestMessageFormat2::testLocalVariableWithSelect(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<TestCase> test;
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    CHECK_ERROR(errorCode);
+    // November 23, 2022 at 7:42:37.123 PM
+    cal->set(2022, Calendar::NOVEMBER, 23, 19, 42, 37);
+    UDate TEST_DATE = cal->getTime(errorCode);
+    CHECK_ERROR(errorCode);
+
+    testBuilder.setPattern("let $expDate = {$expDate :datetime skeleton=yMMMdE}\n\
+                match {$count :plural}\n\
+                when 1 {Your ticket expires on {$expDate}.}\n\
+                when * {Your {$count} tickets expire on {$expDate}.}\n");
+
+    long count = 1;
+    test.adoptInstead(testBuilder.setArgument("count", count, errorCode)
+                      .setLocale(Locale("en"), errorCode)
+                      .setDateArgument("expDate", TEST_DATE, errorCode)
+                      .setExpected("Your ticket expires on Wed, Nov 23, 2022.")
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    count = 3;
+    test.adoptInstead(testBuilder.setArgument("count", count, errorCode)
+                                .setExpected("Your 3 tickets expire on Wed, Nov 23, 2022.")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
+
 void TestMessageFormat2::testDateFormat(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
     LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
     CHECK_ERROR(errorCode);
@@ -38,6 +315,7 @@ void TestMessageFormat2::testDateFormat(TestCase::Builder& testBuilder, IcuTestE
     CHECK_ERROR(errorCode);
 
     LocalPointer<TestCase> test(testBuilder.setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+                                .setLocale(Locale("en"), errorCode)
                                 .setExpected("Your card expires on Thu, Oct 27, 2022!")
                                 .setDateArgument("exp", expiration, errorCode)
                                 .build(errorCode));
@@ -781,6 +1059,18 @@ void TestMessageFormat2::featureTests() {
 
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
     testBuilder->setName("featureTests");
+
+    testEmptyMessage(*testBuilder, errorCode);
+    testPlainText(*testBuilder, errorCode);
+    testPlaceholders(*testBuilder, errorCode);
+    testArgumentMissing(*testBuilder, errorCode);
+    testDefaultLocale(*testBuilder, errorCode);
+    testSpecialPluralWithDecimals(*testBuilder, errorCode);
+    testDefaultFunctionAndOptions(*testBuilder, errorCode);
+    testSimpleSelection(*testBuilder, errorCode);
+    testComplexSelection(*testBuilder, errorCode);
+    testSimpleLocalVariable(*testBuilder, errorCode);
+    testLocalVariableWithSelect(*testBuilder, errorCode);
 
     testDateFormat(*testBuilder, errorCode);
     testPlural(*testBuilder, errorCode);

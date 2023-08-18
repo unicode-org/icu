@@ -149,6 +149,13 @@ class TestCase : public UMemory {
             return setExpectedWarning(U_ZERO_ERROR)
                   .setExpectedError(U_ZERO_ERROR);
         }
+        Builder& clearLocale() {
+            if (locale.isValid()) {
+                locale.orphan();
+            }
+            return *this;
+        }
+
         Builder& setLocale(Locale loc, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
             Locale* l = new Locale(loc);
