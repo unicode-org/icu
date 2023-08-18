@@ -24,19 +24,21 @@ U_NAMESPACE_BEGIN namespace message2 {
 
 // TODO: can we use lambdas instead, as in icu4j?
 
-// Fixed options = arguments passed in to format()
-// Variable options = option list specified in a single expression
-
+// TODO: create some other data structure to represent resolved options,
+// so as to avoid using a Hashtable
 using FunctionName = MessageFormatDataModel::FunctionName;
 
 class U_COMMON_API Formatter : public UMemory {
  public:
-    // TODO: Java uses `Object` for the argument type. Using `Formattable` here.
+    // TODO: Java uses `Object` for the argument type. Using `FormattedPlaceholder` here.
+    // See if any examples require using an argument that's not a FormattedPlaceholder
     // Needs an error code because internal details may require calling functions that can fail
     // (e.g. parsing a string as a number, for Number)
 
+    // TODO: should change the Hashtable type to a specific `Options` type for type safety
+
     // Operand can be null
-    virtual FormattedPlaceholder* format(const Formattable* toFormat, const Hashtable& variableOptions, UErrorCode& errorCode) const = 0;
+    virtual FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const = 0;
     virtual ~Formatter();
 };
 
@@ -52,9 +54,12 @@ class U_COMMON_API Selector : public UMemory {
       See selectKey() in message-value.ts
      */
     // `value` may be null, because the selector might be nullary
-    virtual void selectKey(const Formattable* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
+
+// TODO: This differs from ICU4J, where a separate `fixedOptions` map is passed in
+// We evaluate options eagerly, so all options are resolved and are per-expression
 
 // Interface/mixin classes
 class U_COMMON_API FormatterFactory : public UMemory {
@@ -63,14 +68,14 @@ class U_COMMON_API FormatterFactory : public UMemory {
     // it returns a Formatter* (not a Formatter&)
     // TODO
     // Note: this method is not const, as formatter factories can have local state
-    virtual Formatter* createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) = 0;
+    virtual Formatter* createFormatter(Locale locale, UErrorCode& errorCode) = 0;
     virtual ~FormatterFactory();
 };
 
 class U_COMMON_API SelectorFactory : public UMemory {
   public:
     // Same comment as FormatterFactory::createFormatter
-    virtual Selector* createSelector(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) const = 0;
+    virtual Selector* createSelector(Locale locale, UErrorCode& errorCode) const = 0;
     virtual ~SelectorFactory();
 };
 
@@ -150,12 +155,12 @@ class StandardFunctions {
 
     class DateTimeFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(Locale locale, const Hashtable& arguments, UErrorCode& errorCode);
+        Formatter* createFormatter(Locale locale, UErrorCode& errorCode);
     };
 
     class DateTime : public Formatter {
         public:
-        FormattedPlaceholder* format(const Formattable* toFormat, const Hashtable& variableOptions, UErrorCode& errorCode) const;
+        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const;
 
         private:
         Locale locale;
@@ -166,31 +171,30 @@ class StandardFunctions {
 
     class NumberFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(Locale locale, const Hashtable& arguments, UErrorCode& errorCode);
+        Formatter* createFormatter(Locale locale, UErrorCode& errorCode);
     };
         
     class Number : public Formatter {
         public:
-        FormattedPlaceholder* format(const Formattable* toFormat, const Hashtable& variableOptions, UErrorCode& errorCode) const;
+        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const;
 
         private:
         friend class NumberFactory;
 
-        Number(Locale loc, const Hashtable& opts) : locale(loc), fixedOptions(opts), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
+        Number(Locale loc) : locale(loc), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
 
         const Locale locale;
-        const Hashtable& fixedOptions;
         const number::LocalizedNumberFormatter icuFormatter;
     };
 
     class IdentityFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(Locale locale, const Hashtable& arguments, UErrorCode& errorCode);
+        Formatter* createFormatter(Locale locale, UErrorCode& errorCode);
     };
 
     class Identity : public Formatter {
     public:
-        FormattedPlaceholder* format(const Formattable* toFormat, const Hashtable& variableOptions, UErrorCode& errorCode) const;
+        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const;
         
     private:
         friend class IdentityFactory;
@@ -202,7 +206,7 @@ class StandardFunctions {
     class PluralFactory : public SelectorFactory {
     public:
         virtual ~PluralFactory();
-        Selector* createSelector(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
+        Selector* createSelector(Locale locale, UErrorCode& errorCode) const;
 
     private:
         friend class MessageFormatter;
@@ -213,34 +217,36 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(const Formattable* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
 
         // Adopts `r`
-        Plural(Locale loc, const Hashtable& opts, UPluralType t, PluralRules* r) : locale(loc), fixedOptions(opts), type(t), rules(r) {}
+        Plural(Locale loc, UPluralType t, PluralRules* r) : locale(loc), type(t), rules(r) {}
         ~Plural();
 
         const Locale locale;
-        const Hashtable& fixedOptions;
         const UPluralType type;
         LocalPointer<PluralRules> rules;
     };
 
     class TextFactory : public SelectorFactory {
         public:
-        Selector* createSelector(Locale locale, const Hashtable& arguments, UErrorCode& errorCode) const;
+        Selector* createSelector(Locale locale, UErrorCode& errorCode) const;
     };
 
     class TextSelector : public Selector {
     public:
-        void selectKey(const Formattable* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;
-        
-        TextSelector() {}
+
+        // Formatting `value` to a string might require the locale 
+        const Locale locale;
+
+        TextSelector(Locale l) : locale(l) {}
         ~TextSelector();
     };
 };

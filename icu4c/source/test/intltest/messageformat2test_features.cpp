@@ -4,6 +4,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/gregocal.h"
 #include "unicode/messageformat2.h"
 #include "messageformat2test.h"
 
@@ -33,42 +34,57 @@ void TestMessageFormat2::testDateFormat(TestCase::Builder& testBuilder, IcuTestE
     CHECK_ERROR(errorCode);
 
     cal->set(2022, Calendar::OCTOBER, 27);
-    UDate expirationDate = cal->getTime(errorCode);
+    UDate expiration = cal->getTime(errorCode);
     CHECK_ERROR(errorCode);
-    char expiration[100];
-    snprintf(expiration, sizeof(expiration), "%lf", expirationDate);
 
     LocalPointer<TestCase> test(testBuilder.setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
                                 .setExpected("Your card expires on Thu, Oct 27, 2022!")
-                                .setArgument("exp", expiration, errorCode)
+                                .setDateArgument("exp", expiration, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp :datetime datestyle=full}!}")
                       .setExpected("Your card expires on Thursday, October 27, 2022!")
-                      .setArgument("exp", expiration, errorCode)
+                      .setDateArgument("exp", expiration, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp :datetime datestyle=long}!}")
                       .setExpected("Your card expires on October 27, 2022!")
-                      .setArgument("exp", expiration, errorCode)
+                      .setDateArgument("exp", expiration, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp :datetime datestyle=medium}!}")
                       .setExpected("Your card expires on Oct 27, 2022!")
-                      .setArgument("exp", expiration, errorCode)
+                      .setDateArgument("exp", expiration, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp :datetime datestyle=short}!}")
                       .setExpected("Your card expires on 10/27/22!")
-                      .setArgument("exp", expiration, errorCode)
+                      .setDateArgument("exp", expiration, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    /* TODO: Omitted last few tests that have non-string arguments */
+/*
+  TODO: for now, this doesn't work, because Formattable includes a date tag but not calendar
+
+  and I'm not sure how to use RTTI to pass it as an object and then chek the tag in DateTime::format...
+  if that's even allowed
+
+    cal.adoptInstead(new GregorianCalendar(2022, Calendar::OCTOBER, 27, errorCode));
+    if (cal.isValid()) {
+        Formattable calArg(cal.orphan());
+        test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+                          .setExpected("Your card expires on Thu, Oct 27, 2022!")
+                          .setArgument("exp", calArg, errorCode)
+                          .build(errorCode));
+        TestUtils::runTestCase(*this, *test, errorCode);
+    }
+*/
+    // TODO: Last few test cases involve implicit formatters based on type of object --
+    // we haven't implemented that
 }
 
 void TestMessageFormat2::testPlural(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
@@ -76,14 +92,29 @@ void TestMessageFormat2::testPlural(TestCase::Builder& testBuilder, IcuTestError
                 when 1 {You have one notification.}\n           \
                 when * {You have {$count} notifications.}\n";
 
+    long count = 1;
     LocalPointer<TestCase> test(testBuilder.setPattern(message)
                                 .setExpected("You have one notification.")
-                                .setArgument("count", "1", errorCode)
+                                .setArgument("count", count, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
+    count = 42;
     test.adoptInstead(testBuilder.setExpected("You have 42 notifications.")
-                      .setArgument("count", "42", errorCode)
+                      .setArgument("count", count, errorCode)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    count = 1;
+    test.adoptInstead(testBuilder.setPattern(message)
+                      .setExpected("You have one notification.")
+                      .setArgument("count", count, errorCode)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    count = 42;
+    test.adoptInstead(testBuilder.setExpected("You have 42 notifications.")
+                      .setArgument("count", count, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }
@@ -155,46 +186,69 @@ TemperatureFormatter::TemperatureFormatter(Locale l, TemperatureFormatterFactory
         return;
     }
     // The environment owns the values
-    cachedFormatters->setValueDeleter(uprv_deleteUObject);
+ //   cachedFormatters->setValueDeleter(uprv_deleteUObject);
 }
  
-Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
+Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-
-    // fixedOptions not used
-    (void) fixedOptions;
 
     LocalPointer<Formatter> result(new TemperatureFormatter(locale, *this, errorCode));
     NULL_ON_ERROR(errorCode)
     return result.orphan();
 }
 
-FormattedPlaceholder* TemperatureFormatter::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+// TODO: copy-pasted
+static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
+    // Returns null if key is absent or is not a string
+    if (opts.containsKey(key)) {
+        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
+        U_ASSERT(val != nullptr);
+        if (val->getType() == FormattedPlaceholder::Type::STRING) {
+            result = val->getString();
+            exists = true;
+            return;
+        }
+        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC && val->getInput().getType() == Formattable::Type::kString) {
+            // TODO: this is why it would be good to not have two different string representations
+            result = val->getInput().getString();
+            exists = true;
+            return;
+        }
+    }
+    exists = false;
+}
+
+FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
         errorCode = U_FORMATTING_ERROR;
         return nullptr;
     }
-    const Formattable& toFormat = *arg;
+    // Assume arg is not-yet-formatted
+    const Formattable& toFormat = arg->getInput();
 
     counter.formatCount++;
 
-    const UnicodeString* unit = (UnicodeString*) variableOptions.get("unit");
-    const UnicodeString* skeleton = (UnicodeString*) variableOptions.get("skeleton");
-    U_ASSERT(unit != nullptr);
+    UnicodeString unit;
+    bool unitExists = false;
+    getStringOpt(variableOptions, "unit", unit, unitExists);
+    U_ASSERT(unitExists);
+    UnicodeString skeleton;
+    bool skeletonExists = false;
+    getStringOpt(variableOptions, "skeleton", skeleton, skeletonExists);
 
-    number::LocalizedNumberFormatter* realNfCached = (number::LocalizedNumberFormatter*) cachedFormatters->get(*unit);
+    number::LocalizedNumberFormatter* realNfCached = (number::LocalizedNumberFormatter*) cachedFormatters->get(unit);
     number::LocalizedNumberFormatter realNf;
     if (realNfCached == nullptr) {
-        number::LocalizedNumberFormatter nf = skeleton != nullptr
-                    ? number::NumberFormatter::forSkeleton(*skeleton, errorCode).locale(locale)
+        number::LocalizedNumberFormatter nf = skeletonExists
+                    ? number::NumberFormatter::forSkeleton(skeleton, errorCode).locale(locale)
                     : number::NumberFormatter::withLocale(locale);
 
-        if (*unit == "C") {
+        if (unit == "C") {
             counter.cFormatterCount++;
             realNf = nf.unit(MeasureUnit::getCelsius());
-        } else if (*unit == "F") {
+        } else if (unit == "F") {
             counter.fFormatterCount++;
             realNf = nf.unit(MeasureUnit::getFahrenheit());
         } else {
@@ -205,12 +259,17 @@ FormattedPlaceholder* TemperatureFormatter::format(const Formattable* arg, const
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
-        cachedFormatters->put(*unit, realNfCached, errorCode);
+        cachedFormatters->put(unit, realNfCached, errorCode);
     } else {
         realNf = *realNfCached;
     }
 
     number::FormattedNumber result;
+    LocalPointer<Formattable> copied(new Formattable(toFormat));
+    if (!copied.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     switch (toFormat.getType()) {
         case Formattable::Type::kDouble: {
             result = realNf.formatDouble(toFormat.getDouble(),
@@ -228,11 +287,13 @@ FormattedPlaceholder* TemperatureFormatter::format(const Formattable* arg, const
             break;
         }
         default: {
-            return FormattedPlaceholder::create(UnicodeString(), errorCode);
+            return FormattedPlaceholder::create(copied.orphan(), UnicodeString(), errorCode);
         }
     }
-    return FormattedPlaceholder::create(&result, errorCode);
+    return FormattedPlaceholder::create(copied.orphan(), std::move(result), errorCode);
 }
+
+TemperatureFormatter::~TemperatureFormatter() {}
 
 void TestMessageFormat2::testFormatterIsCreatedOnce(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
 /*
@@ -277,18 +338,18 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(TestCase::Builder& testBuild
                 mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
 */
 
-    TemperatureFormatter::customRegistry(errorCode);
-    UnicodeString message = "{Testing {$count :temp unit=$unit skeleton=(.00/w)}.}";
+    LocalPointer<FunctionRegistry> reg(TemperatureFormatter::customRegistry(errorCode));
+    CHECK_ERROR(errorCode);
+    UnicodeString message = "{Testing {$count :temp unit=$unit skeleton=|.00/w|}.}";
     testBuilder.setFunctionRegistry(TemperatureFormatter::customRegistry(errorCode))
                .setPattern(message);
     
     const size_t maxCount = 10;
     char expected[20];
-    char arg[5];
     LocalPointer<TestCase> test;
     for (size_t count = 0; count < maxCount; count++) {
+        long arg = (long) count;
         snprintf(expected, sizeof(expected), "Testing %zu°C.", count);
-        snprintf(arg, sizeof(arg), "%zu", count);
         test.adoptInstead(testBuilder.setExpected(expected)
             .setArgument("count", arg, errorCode)
             .setArgument("unit", "C", errorCode)

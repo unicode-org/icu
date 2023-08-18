@@ -319,6 +319,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     // Missing '$' before `bar`
     test.adoptInstead(testBuilder->setPattern("let bar = {|foo|} {{$bar}}")
                                 .setExpected("{$bar}")
+                                .clearArguments()
                                 .setExpectedWarning(U_SYNTAX_WARNING)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);

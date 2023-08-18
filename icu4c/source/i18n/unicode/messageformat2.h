@@ -348,14 +348,14 @@ public:
         const bool isFallback; // if isFallback is true, this expression will be matched to the catchall variant
         const LocalPointer<Selector> selectorFunction;
         const LocalPointer<Hashtable> resolvedOptions;
-        const Formattable* resolvedOperand;
+        const LocalPointer<FormattedPlaceholder> resolvedOperand;
         // Adopts all its arguments
-        ResolvedExpression(Selector* s, Hashtable* o, const Formattable* r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+        ResolvedExpression(Selector* s, Hashtable* o, FormattedPlaceholder* r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
         ResolvedExpression(Selector* s, Hashtable* o) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(nullptr) {}
         ResolvedExpression() : isFallback(true), resolvedOperand(nullptr) {}
     };
-     Formattable* resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
-     Formattable* resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
+     FormattedPlaceholder* resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
+     FormattedPlaceholder* resolveVariables(const Hashtable&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
 
      // Selection methods
      void resolveSelectors(const Hashtable&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
@@ -365,13 +365,13 @@ public:
      // Formatting methods
      void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatPattern(const Hashtable&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
-     // Formats an expression in a selector context
+     // Formats an expression that appears as a selector
      ResolvedExpression* formatSelectorExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
-     // Formats an expression in a pattern context
-     FormattedPlaceholder* formatPatternExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     // Formats an expression that appears in a pattern or as the definition of a local variable
+     FormattedPlaceholder* formatExpression(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      Hashtable* resolveOptions(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
      FormattedPlaceholder* formatFunctionCall(FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, Formattable*, bool&, UErrorCode&) const;
-     Formattable* formatOperand(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+     FormattedPlaceholder* formatOperand(const Hashtable&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;
      void formatSelectors(const Hashtable& arguments, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods

@@ -10,21 +10,33 @@
 #include "uvector.h" // U_ASSERT
 
 U_NAMESPACE_BEGIN namespace message2 {
-   
-UnicodeString FormattedPlaceholder::toString(UErrorCode& status) const {
+
+UnicodeString FormattedPlaceholder::toString(Locale locale, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return UnicodeString();
     }
 
-    if (isFormattedNumber()) {
-        U_ASSERT(num.isValid());
-        return num->toString(status);
+    switch (getType()) {
+        case FormattedPlaceholder::Type::STRING: {
+            return getString();
+        }
+        case FormattedPlaceholder::Type::NUMBER: {
+            const number::FormattedNumber& num = getNumber();
+            return num.toString(status);
+        }
+        default: {
+            const Formattable& input = getInput();
+            LocalPointer<FormattedPlaceholder> formatted(FormattedPlaceholder::format(locale, input, status));
+            if (U_FAILURE(status)) {
+                return UnicodeString();
+            }
+            return formatted->toString(locale, status);
+        }
     }
-    U_ASSERT(value.isValid());
-    U_ASSERT(value->getType() == Formattable::Type::kString);
-    return value->getString();
 }
-                      
+
+FormattedPlaceholder::~FormattedPlaceholder() {}
+
 } // namespace message2
 U_NAMESPACE_END
 

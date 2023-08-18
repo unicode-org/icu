@@ -10,80 +10,13 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-class Args {
-    public:
-    static Hashtable* of(UnicodeString name, UnicodeString value, UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        LocalPointer<Hashtable> result(newHashtable(errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        addWithCopy(result.getAlias(), name, value, errorCode);
-        return result.orphan();
-    }
-    static Hashtable* of(UnicodeString name1, UnicodeString value1,
-                         UnicodeString name2, UnicodeString value2,
-                         UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        LocalPointer<Hashtable> result(newHashtable(errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        addWithCopy(result.getAlias(), name1, value1, errorCode);
-        addWithCopy(result.getAlias(), name2, value2, errorCode);
-        return result.orphan();
-    }
-    static Hashtable* of(UnicodeString name1, UnicodeString value1,
-                         UnicodeString name2, UnicodeString value2,
-                         UnicodeString name3, UnicodeString value3,
-                         UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        LocalPointer<Hashtable> result(newHashtable(errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        addWithCopy(result.getAlias(), name1, value1, errorCode);
-        addWithCopy(result.getAlias(), name2, value2, errorCode);
-        addWithCopy(result.getAlias(), name3, value3, errorCode);
-        return result.orphan();
-    }
-    private:
-    static void addWithCopy(Hashtable* result,
-                            UnicodeString name,
-                            UnicodeString value,
-                            UErrorCode& errorCode) {
-        CHECK_ERROR(errorCode);
-        LocalPointer<UnicodeString> val(new UnicodeString(value));
-        if (!val.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        result->put(name, val.orphan(), errorCode);
-    }
-    static Hashtable* newHashtable(UErrorCode& errorCode) {
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        LocalPointer<Hashtable> result(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-        if (U_FAILURE(errorCode)) {
-            return nullptr;
-        }
-        return result.orphan();
-    }
-};
-
 class TestCase : public UMemory {
     public:
     const UnicodeString testName;
     const UnicodeString pattern;
     const Locale locale;
-    const LocalPointer<Hashtable> arguments;
+    // Not owned by this!
+    const Hashtable* arguments;
 
     private:
     const UErrorCode expectedError;
@@ -149,19 +82,50 @@ class TestCase : public UMemory {
         Builder& setArgument(const UnicodeString& k, const UnicodeString& val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
-            if (!arguments.isValid()) {
-                initArgs(errorCode);
-                THIS_ON_ERROR(errorCode);
-            }
-            UnicodeString* valPtr = new UnicodeString(val);
-            if (valPtr == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            } else {
-                arguments->put(k, valPtr, errorCode);
-            }
-            return *this;
+            Formattable* valPtr(new Formattable(val));
+            return setArgument(k, valPtr, errorCode);
         }
-        Builder& setArguments(Hashtable* args) { arguments.adoptInstead(args); return *this; }
+        Builder& setArgument(const UnicodeString& k, const UnicodeString* val, size_t count, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            LocalArray<Formattable> arr(new Formattable[count]);
+            if (!arr.isValid()) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return *this;
+            }
+            for (size_t i = 0; i < count; i++) {
+                arr[i] = Formattable(val[i]);
+            }
+            Formattable* valPtr(new Formattable(arr.getAlias(), count));
+            return setArgument(k, valPtr, errorCode);
+        }
+        Builder& setArgument(const UnicodeString& k, double val, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            Formattable* valPtr(new Formattable(val));
+            return setArgument(k, valPtr, errorCode);
+        }
+        Builder& setArgument(const UnicodeString& k, long val, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            Formattable* valPtr(new Formattable(val));
+            return setArgument(k, valPtr, errorCode);
+        }
+        Builder& setDateArgument(const UnicodeString& k, UDate date, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            Formattable* valPtr(new Formattable(Formattable(date, Formattable::kIsDate)));
+            return setArgument(k, valPtr, errorCode);
+        }
+
+        // val has to be uniquely owned because the copy constructor for
+        // a Formattable of an object doesn't work
+        Builder& setArgument(const UnicodeString& k, UObject* val, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            Formattable* valPtr(new Formattable(val));
+            return setArgument(k, valPtr, errorCode);
+        }
         Builder& clearArguments() {
             if (arguments.isValid()) {
                 arguments->removeAll();
@@ -210,18 +174,11 @@ class TestCase : public UMemory {
             functionRegistry.adoptInstead(reg);
             return *this;
         }
-        TestCase* build(UErrorCode& errorCode) {
+        TestCase* build(UErrorCode& errorCode) const {
             NULL_ON_ERROR(errorCode);
-            if (!arguments.isValid()) {
-                // Initialize to empty hash
-                initArgs(errorCode);
-                NULL_ON_ERROR(errorCode);
-            }
-            TestCase* result = new TestCase(*this);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
+            LocalPointer<TestCase> result(new TestCase(*this, errorCode));
+            NULL_ON_ERROR(errorCode);
+            return result.orphan();
         }
 
         private:
@@ -239,20 +196,39 @@ class TestCase : public UMemory {
         bool ignoreError;
         LocalPointer<FunctionRegistry> functionRegistry;
 
-        void initArgs(UErrorCode& errorCode) {
-            CHECK_ERROR(errorCode);
-            arguments.adoptInstead(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+        Builder& setArgument(const UnicodeString& k, Formattable* val, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            if (!arguments.isValid()) {
+                arguments.adoptInstead(initArgs(errorCode));
+                THIS_ON_ERROR(errorCode);
+            }
+            if (val == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            } else {
+                arguments->put(k, val, errorCode);
+            }
+            return *this;
+        }
+
+        static Hashtable* initArgs(UErrorCode& errorCode) {
+            NULL_ON_ERROR(errorCode);
+            Hashtable* result = new Hashtable(uhash_compareUnicodeString, nullptr, errorCode);
+            if (result == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
         }
 
         Builder() : pattern(""), hasExpectedOutput(false), expected(""), expectedError(U_ZERO_ERROR), expectedWarning(U_ZERO_ERROR), hasLineNumberAndOffset(false), ignoreError(false) {}
     };
 
     private:
-    TestCase(Builder& builder) :
+    TestCase(const Builder& builder, UErrorCode& errorCode) :
         testName(builder.testName),
         pattern(builder.pattern),
         locale(!builder.locale.isValid() ? Locale::getDefault() : *builder.locale),
-        arguments(builder.arguments.orphan()),
+        arguments(builder.arguments.isValid() ? builder.arguments.getAlias() : Builder::initArgs(errorCode)),
         expectedError(builder.expectedError),
         expectedWarning(builder.expectedWarning),
         hasExpectedOutput(builder.hasExpectedOutput),
@@ -282,7 +258,7 @@ class TestUtils {
 
     // Runs a single test case
     static void runTestCase(IntlTest& tmsg,
-                            TestCase& testCase,
+                            const TestCase& testCase,
                             IcuTestErrorCode& errorCode) {
         CHECK_ERROR(errorCode);
 

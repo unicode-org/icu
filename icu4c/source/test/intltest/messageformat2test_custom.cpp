@@ -36,269 +36,67 @@ static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
         .build(errorCode);
 }
 
-void TestMessageFormat2::checkResult(const UnicodeString& testName,
-                 const UnicodeString& pattern,
-                 const UnicodeString& result,
-                 const UnicodeString& expected,
-                 IcuTestErrorCode& errorCode,
-                 UErrorCode expectedErrorCode) {
-
-    bool bad = false;
-    // Can't compare error codes directly because of warnings
-    if (expectedErrorCode == U_ZERO_ERROR) {
-        bad = U_FAILURE(errorCode);
-    } else {
-        bad = errorCode != expectedErrorCode;
-    }
-
-  if (bad) {
-        dataerrln(pattern);
-        if (U_SUCCESS(expectedErrorCode)) {
-            logln(testName + UnicodeString(" failed test with error code ") + (int32_t)errorCode);
-        } else if (U_SUCCESS(errorCode)) {
-            logln(testName + UnicodeString(" succeeded test, but was expected to fail with ") + (int32_t)expectedErrorCode);
-            return;
-        } else {
-            logln(testName + UnicodeString(" failed test with error code ") + (int32_t)errorCode + ", but was expected to fail with error code " + (int32_t)expectedErrorCode);
-            return;
-        }
-  }
-
-  errorCode.reset();
-
-  if (result != expected) {
-      dataerrln(pattern);
-      logln("Expected output: " + expected + "\nGot output: " + result);
-      // TODO: ??
-      ((UErrorCode&)errorCode) = U_ILLEGAL_ARGUMENT_ERROR;
-      return;
-  }
-}
-
-void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testName,
-                                                     FunctionRegistry* customRegistry,
-                                                     const UnicodeString& pattern,
-                                                     const UnicodeString& argName,
-                                                     const UnicodeString& argValue,
-                                                     const UnicodeString& expected,
-                                                     Locale loc,
-                                                     IcuTestErrorCode& errorCode) {
-    testWithPatternAndArguments(testName,
-                                customRegistry,
-                                pattern,
-                                argName,
-                                argValue,
-                                expected,
-                                loc,
-                                errorCode,
-                                U_ZERO_ERROR);
-}
-
-// TODO: only supports a single message argument for now
-void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testName,
-                                                     FunctionRegistry* customRegistry,
-                                                     const UnicodeString& pattern,
-                                                     const UnicodeString& argName,
-                                                     const UnicodeString& argValue,
-                                                     const UnicodeString& expected,
-                                                     Locale loc,
-                                                     IcuTestErrorCode& errorCode,
-                                                     UErrorCode expectedErrorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    LocalPointer<UnicodeString> argValuePointer(new UnicodeString(argValue));
-    if (!argValuePointer.isValid()) {
-        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    arguments->put(argName, argValuePointer.orphan(), errorCode);
-    testWithPatternAndArguments(testName, customRegistry, pattern,
-                                *arguments, expected, loc, errorCode, expectedErrorCode);
-}
-
-void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testName,
-                                                     FunctionRegistry* customRegistry,
-                                                     const UnicodeString& pattern,
-                                                     const UnicodeString& argName1,
-                                                     const UnicodeString& argValue1,
-                                                     const UnicodeString& argName2,
-                                                     const UnicodeString& argValue2,
-                                                     const UnicodeString& expected,
-                                                     Locale loc,
-                                                     IcuTestErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    LocalPointer<UnicodeString> argValuePointer1(new UnicodeString(argValue1));
-    if (!argValuePointer1.isValid()) {
-        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    LocalPointer<UnicodeString> argValuePointer2(new UnicodeString(argValue2));
-    if (!argValuePointer2.isValid()) {
-        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    arguments->put(argName1, argValuePointer1.orphan(), errorCode);
-    arguments->put(argName2, argValuePointer2.orphan(), errorCode);
-    testWithPatternAndArguments(testName, customRegistry, pattern,
-                                *arguments, expected, loc, errorCode, U_ZERO_ERROR);
-}
-
-void TestMessageFormat2::testWithPatternAndArguments(const UnicodeString& testName,
-                                                     FunctionRegistry* customRegistry,
-                                                     const UnicodeString& pattern,
-                                                     const Hashtable& arguments,
-                                                     const UnicodeString& expected,
-                                                     Locale loc,
-                                                     IcuTestErrorCode& errorCode,
-                                                     UErrorCode expectedErrorCode) {
-
-    UParseError parseError; // Ignored in these tests
-
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    LocalPointer<MessageFormatter> mf;
-
-    if (customRegistry != nullptr) {
-        mf.adoptInstead(builder
-                        ->setPattern(pattern, errorCode)
-                        .setLocale(loc)
-                        .setFunctionRegistry(customRegistry)
-                        .build(parseError, errorCode));
-    } else {
-        mf.adoptInstead(builder
-                        ->setPattern(pattern, errorCode)
-                        .setLocale(loc)
-                        .build(parseError, errorCode));
-    }
-
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    UnicodeString result;
-    mf->formatToString(arguments, errorCode, result);
-
-    checkResult(testName, pattern, result, expected, errorCode, expectedErrorCode);
-}
-
 void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
     LocalPointer<FunctionRegistry> customRegistry(personFunctionRegistry(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
     UnicodeString name = "name";
-    UnicodeString person = "\"Mr.\", \"John\", \"Doe\"";
-    Locale locale = "en";
+    LocalPointer<Person> person(new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe")));
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    testBuilder->setName("testPersonFormatter");
+    testBuilder->setLocale(Locale("en"), errorCode);
 
-    testWithPatternAndArguments("testPersonFormatter",
-                                nullptr,
-                                "{Hello {$name :person formality=formal}}",
-                                name,
-                                person,
-                                "Hello {$name}",
-                                locale,
-                                errorCode,
-                                U_UNKNOWN_FUNCTION_WARNING);
+    LocalPointer<TestCase> test(testBuilder->setPattern("{Hello {$name :person formality=formal}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello {$name}")
+                                .setExpectedWarning(U_UNKNOWN_FUNCTION_WARNING)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    testWithPatternAndArguments("testPersonFormatter",
-                                nullptr,
-                                "{Hello {$name :person formality=informal}}",
-                                name,
-                                person,
-                                "Hello {$name}",
-                                locale,
-                                errorCode,
-                                U_UNKNOWN_FUNCTION_WARNING);
+    test.adoptInstead(testBuilder->setPattern("{Hello {$name :person formality=informal}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello {$name}")
+                                .setExpectedWarning(U_UNKNOWN_FUNCTION_WARNING)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    testWithPatternAndArguments("testPersonFormatter",
-                                customRegistry.orphan(),
-                                "{Hello {$name :person formality=formal}}",
-                                name,
-                                person,
-                                "Hello Mr. Doe",
-                                locale,
-                                errorCode);
+    testBuilder->setFunctionRegistry(customRegistry.orphan());
 
-    // recreate custom registry
-    customRegistry.adoptInstead(personFunctionRegistry(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    test.adoptInstead(testBuilder->setPattern("{Hello {$name :person formality=formal}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello Mr. Doe")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    testWithPatternAndArguments("testPersonFormatter",
-                                customRegistry.orphan(),
-                                "{Hello {$name :person formality=informal}}",
-                                name,
-                                person,
-                                "Hello John",
-                                locale,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Hello {$name :person formality=informal}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello John")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    // recreate custom registry
-    customRegistry.adoptInstead(personFunctionRegistry(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    test.adoptInstead(testBuilder->setPattern("{Hello {$name :person formality=formal length=long}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello Mr. John Doe")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    testWithPatternAndArguments("testPersonFormatter",
-                                customRegistry.orphan(),
-                                "{Hello {$name :person formality=formal length=long}}",
-                                name,
-                                person,
-                                "Hello Mr. John Doe",
-                                locale,
-                                errorCode);
-    customRegistry.adoptInstead(personFunctionRegistry(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    test.adoptInstead(testBuilder->setPattern("{Hello {$name :person formality=formal length=medium}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello John Doe")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    testWithPatternAndArguments("testPersonFormatter",
-                                customRegistry.orphan(),
-                                "{Hello {$name :person formality=formal length=medium}}",
-                                name,
-                                person,
-                                "Hello John Doe",
-                                locale,
-                                errorCode);
-    customRegistry.adoptInstead(personFunctionRegistry(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-
-    testWithPatternAndArguments("testPersonFormatter",
-                                customRegistry.orphan(),
-                                "{Hello {$name :person formality=formal length=short}}",
-                                name,
-                                person,
-                                "Hello Mr. Doe",
-                                locale,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Hello {$name :person formality=formal length=short}}")
+                                .setArgument(name, person.getAlias(), errorCode)
+                                .setExpected("Hello Mr. Doe")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 
@@ -316,17 +114,13 @@ void TestMessageFormat2::testCustomFunctions() {
 
 // -------------- Custom function implementations
 
-Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
+Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
 
     // Locale not used
     (void) locale;
-    // Fixed options not used -- unlike in ICU4J version of this
-    // test, all options are passed in using `variableOptions`
-    // TODO
-    (void) fixedOptions;
 
     Formatter* result = new PersonNameFormatter();
     if (result == nullptr) {
@@ -335,48 +129,30 @@ Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, const Hash
     return result;
 }
 
-// Trims start/end " marks from s,
-// returning true if open/close quotes are present
-// and false otherwise
-bool parsePart(UnicodeString& s) {
-    int32_t len = s.length();
-    if (len < 2) {
-        return false;
-    }
-    if (s[0] == '\"') {
-        if (s[len - 1] == '\"') {
-            s.extract(1, len - 2, s);
-            return true;
+// TODO: don't duplicate this
+static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
+    // Returns null if key is absent or is not a string
+
+    // Handle both cases since this may be a Formattable value without previous
+    // formatting applied
+    if (opts.containsKey(key)) {
+        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
+        U_ASSERT(val != nullptr);
+        if (val->getType() == FormattedPlaceholder::Type::STRING) {
+            result = val->getString();
+            exists = true;
+            return;
+        }
+        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC && val->getInput().getType() == Formattable::Type::kString) {
+            result = val->getInput().getString();
+            exists = true;
+            return;
         }
     }
-    return false;
+    exists = false;
 }
 
-// Returns true iff `toFormat` can be parsed as a person (comma-separated list of (title, firstname, lastname))
-bool parsePerson(const UnicodeString& toFormat, UnicodeString& title, UnicodeString& firstName, UnicodeString& lastName) {
-    uint32_t pos = SplitString::FIRST;
-    if (!SplitString::nextPart(toFormat, title, pos)) {
-        return false;
-    }
-    if (!parsePart(title)) {
-        return false;
-    }
-    if (!SplitString::nextPart(toFormat, firstName, pos)) {
-        return false;
-    }
-    if (!parsePart(firstName)) {
-        return false;
-    }
-    if (!SplitString::nextPart(toFormat, lastName, pos)) {
-        return false;
-    }
-    if (!parsePart(lastName)) {
-        return false;
-    }
-    return (pos == SplitString::LAST);
-}
-
-FormattedPlaceholder* PersonNameFormatter::format(const Formattable* arg, const Hashtable& variableOptions,  UErrorCode& errorCode) const {
+FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions,  UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -385,18 +161,22 @@ FormattedPlaceholder* PersonNameFormatter::format(const Formattable* arg, const 
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
-    const Formattable& toFormat = *arg;
+
+    // Assumes what's being passed in is not-yet-formatted
+    const Formattable& toFormat = arg->getInput();
 /*
   Note: this test diverges from the ICU4J version of it a bit by using variable options
   to pass both "formality" and "length"
 */
-    const UnicodeString* formalityOpt = (const UnicodeString*) variableOptions.get("formality");
-    const UnicodeString* lengthOpt = (const UnicodeString*) variableOptions.get("length");
+    UnicodeString formalityOpt, lengthOpt;
+    bool hasFormality, hasLength;
+    getStringOpt(variableOptions, UnicodeString("formality"), formalityOpt, hasFormality);
+    getStringOpt(variableOptions, UnicodeString("length"), lengthOpt, hasLength);
 
-    bool useFormal = formalityOpt != nullptr && *formalityOpt == "formal";
-    UnicodeString length = lengthOpt == nullptr ? "short" : *lengthOpt;
+    bool useFormal = hasFormality && formalityOpt == "formal";
+    UnicodeString length = hasLength ? lengthOpt : "short";
 
-    LocalPointer<Person> p;
+    Person* p;
     switch (toFormat.getType()) {
         case Formattable::Type::kObject: {
             // Cast to "Person"
@@ -405,7 +185,7 @@ FormattedPlaceholder* PersonNameFormatter::format(const Formattable* arg, const 
                 // Treat the result as empty for null
                 return FormattedPlaceholder::create(UnicodeString(), errorCode);;
             }
-            p.adoptInstead((Person*) asObject);
+            p = (Person*) asObject;
             break;
         }
         default: {
@@ -469,20 +249,18 @@ FormattedPlaceholder* PersonNameFormatter::format(const Formattable* arg, const 
     return true;
 }
 
+Person::~Person() {}
+
 /*
   See ICU4J: CustomFormatterGrammarCaseTest.java
 */
-Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
+Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
 
     // Locale not used
     (void) locale;
-    // Fixed options not used -- unlike in ICU4J version of this
-    // test, all options are passed in using `variableOptions`
-    // TODO
-    (void) fixedOptions;
 
     Formatter* result = new GrammarCasesFormatter();
     if (result == nullptr) {
@@ -516,7 +294,7 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, const Ha
     result += postfix;
 }
 
-FormattedPlaceholder* GrammarCasesFormatter::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -526,14 +304,17 @@ FormattedPlaceholder* GrammarCasesFormatter::format(const Formattable* arg, cons
         return nullptr;
     }
 
-    const Formattable& toFormat = *arg;
+    // Assumes the argument is not-yet-formatted
+    const Formattable& toFormat = arg->getInput();
     UnicodeString result;
 
     switch (toFormat.getType()) {
         case Formattable::Type::kString: {
             const UnicodeString& in = toFormat.getString();
-            const UnicodeString* grammarCase = (UnicodeString*) variableOptions.get("case");
-            if (grammarCase != nullptr && (*grammarCase == "dative" || *grammarCase == "genitive")) {
+            UnicodeString grammarCase;
+            bool hasCase = false;
+            getStringOpt(variableOptions, "case", grammarCase, hasCase);
+            if (hasCase && (grammarCase == "dative" || grammarCase == "genitive")) {
                 getDativeAndGenitive(in, result);
             } else {
                 result += in;
@@ -560,75 +341,60 @@ FormattedPlaceholder* GrammarCasesFormatter::format(const Formattable* arg, cons
             .build(errorCode));
 }
 
-void TestMessageFormat2::runTest(const MessageFormatter& mf, const UnicodeString& testName, 
-                                 const UnicodeString& expected,
-                                 const UnicodeString& name,
-                                 const UnicodeString& value,
-                                 UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    LocalPointer<Hashtable> args(Args::of(name, value, errorCode));
-    CHECK_ERROR(errorCode);
-    runTest(mf, testName, expected, *args, errorCode);
-}
-
-void TestMessageFormat2::runTest(const MessageFormatter& mf, const UnicodeString& testName, 
-                                 const UnicodeString& expected,
-                                 const UnicodeString& name1,
-                                 const UnicodeString& value1,
-                                 const UnicodeString& name2,
-                                 const UnicodeString& value2,
-                                 UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    UnicodeString result;
-    LocalPointer<Hashtable> args(Args::of(name1, value1, name2, value2, errorCode));
-    CHECK_ERROR(errorCode);
-    runTest(mf, testName, expected, *args, errorCode);
-}
-
-void TestMessageFormat2::runTest(const MessageFormatter& mf, const UnicodeString& testName, 
-                                 const UnicodeString& expected,
-                                 const Hashtable& args,
-                                 UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-
-    UnicodeString result;
-    mf.formatToString(args, errorCode, result);
-    if (U_SUCCESS(errorCode)) {
-        assertEquals(testName, expected, result);
-    }
-    if (U_FAILURE(errorCode)) {
-        dataerrln(testName);
-        logln(testName + UnicodeString(" failed test with error code ") + (int32_t)errorCode);
-        return;
-    }
-}
-
 void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-    UParseError parseErr;
-    LocalPointer<MessageFormatter> mf(MessageFormatter::builder(errorCode)
-                ->setFunctionRegistry(GrammarCasesFormatter::customRegistry(errorCode))
-                .setLocale(Locale("ro"))
-                .setPattern("{Cartea {$owner :grammarBB case=genitive}}", errorCode)
-                .build(parseErr, errorCode));
+    CHECK_ERROR(errorCode);
 
-    runTest(*mf, "case - genitive", "Cartea Mariei", "owner", "Maria", errorCode);
-    runTest(*mf, "case - genitive", "Cartea Rodicăi", "owner", "Rodica", errorCode);
-    runTest(*mf, "case - genitive", "Cartea Ilenei", "owner", "Ileana", errorCode);
-    runTest(*mf, "case - genitive", "Cartea lui Petre", "owner", "Petre", errorCode);
+    LocalPointer<FunctionRegistry> customRegistry(GrammarCasesFormatter::customRegistry(errorCode));
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    testBuilder->setName("testGrammarCasesFormatter - genitive");
+    testBuilder->setFunctionRegistry(customRegistry.orphan());
+    testBuilder->setLocale(Locale("ro"), errorCode);
+    testBuilder->setPattern("{Cartea {$owner :grammarBB case=genitive}}");
+    LocalPointer<TestCase> test;
 
-    mf.adoptInstead(MessageFormatter::builder(errorCode)
-                    ->setFunctionRegistry(GrammarCasesFormatter::customRegistry(errorCode))
-                    .setLocale(Locale("ro"))
-                    .setPattern("{M-a sunat {$owner :grammarBB case=nominative}}", errorCode)
-                    .build(parseErr, errorCode));
+    test.adoptInstead(testBuilder->setArgument("owner", "Maria", errorCode)
+                                .setExpected("Cartea Mariei")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    runTest(*mf, "case - nominative", "M-a sunat Maria", "owner", "Maria", errorCode);
-    runTest(*mf, "case - nominative", "M-a sunat Rodica", "owner", "Rodica", errorCode);
-    runTest(*mf, "case - nominative", "M-a sunat Ileana", "owner", "Ileana", errorCode);
-    runTest(*mf, "case - nominative", "M-a sunat Petre", "owner", "Petre", errorCode);
+    test.adoptInstead(testBuilder->setArgument("owner", "Rodica", errorCode)
+                                .setExpected("Cartea Rodicăi")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument("owner", "Ileana", errorCode)
+                                .setExpected("Cartea Ilenei")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument("owner", "Petre", errorCode)
+                                .setExpected("Cartea lui Petre")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    testBuilder->setName("testGrammarCasesFormatter - nominative");
+    testBuilder->setPattern("{M-a sunat {$owner :grammarBB case=nominative}}");
+
+    test.adoptInstead(testBuilder->setArgument("owner", "Maria", errorCode)
+                                .setExpected("M-a sunat Maria")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument("owner", "Rodica", errorCode)
+                                .setExpected("M-a sunat Rodica")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument("owner", "Ileana", errorCode)
+                                .setExpected("M-a sunat Ileana")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument("owner", "Petre", errorCode)
+                                .setExpected("M-a sunat Petre")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 /* static */ FunctionRegistry* message2::ListFormatter::customRegistry(UErrorCode& errorCode) {
@@ -645,15 +411,10 @@ void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) 
 /*
   See ICU4J: CustomFormatterListTest.java
 */
-Formatter* ListFormatterFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
+Formatter* ListFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-
-    // Fixed options not used -- unlike in ICU4J version of this
-    // test, all options are passed in using `variableOptions`
-    // TODO
-    (void) fixedOptions;
 
     Formatter* result = new ListFormatter(locale);
     if (result == nullptr) {
@@ -662,7 +423,7 @@ Formatter* ListFormatterFactory::createFormatter(Locale locale, const Hashtable&
     return result;
 }
 
-FormattedPlaceholder* message2::ListFormatter::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -671,23 +432,28 @@ FormattedPlaceholder* message2::ListFormatter::format(const Formattable* arg, co
         errorCode = U_FORMATTING_ERROR;
         return nullptr;
     }
-    const Formattable& toFormat = *arg;
+    // Assumes arg is not-yet-formatted
+    const Formattable& toFormat = arg->getInput();
 
-    UnicodeString* optType = (UnicodeString*) variableOptions.get("type");
+    bool hasType;
+    UnicodeString optType;
+    getStringOpt(variableOptions, "type", optType, hasType);
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
-    if (optType != nullptr) {
-        if (*optType == "OR") {
+    if (hasType) {
+        if (optType == "OR") {
             type = UListFormatterType::ULISTFMT_TYPE_OR;
-        } else if (*optType == "UNITS") {
+        } else if (optType == "UNITS") {
             type = UListFormatterType::ULISTFMT_TYPE_UNITS;
         }
     }
-    UnicodeString* optWidth = (UnicodeString*) variableOptions.get("width");
+    bool hasWidth;
+    UnicodeString optWidth;
+    getStringOpt(variableOptions, "width", optWidth, hasWidth);
     UListFormatterWidth width = UListFormatterWidth::ULISTFMT_WIDTH_WIDE;
-    if (optWidth != nullptr) {
-        if (*optWidth == "SHORT") {
+    if (hasWidth) {
+        if (optWidth == "SHORT") {
             width = UListFormatterWidth::ULISTFMT_WIDTH_SHORT;
-        } else if (*optType == "NARROW") {
+        } else if (optWidth == "NARROW") {
             width = UListFormatterWidth::ULISTFMT_WIDTH_NARROW;
         }
     }
@@ -728,26 +494,27 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
-    UnicodeString progLanguages = "\"C/C++\", \"Java\", \"Python\"";
+    const UnicodeString progLanguages[3] = {
+        "C/C++",
+        "Java",
+        "Python"
+    };
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
 
-    LocalPointer<Hashtable> arguments(Args::of("languages", progLanguages, errorCode));
     LocalPointer<FunctionRegistry> reg(ListFormatter::customRegistry(errorCode));
     CHECK_ERROR(errorCode);
 
     testBuilder->setFunctionRegistry(reg.orphan());
+    testBuilder->setArgument("languages", progLanguages, 3, errorCode);
+
     LocalPointer<TestCase> test(testBuilder->setName("testListFormatter")
                                 .setPattern("{I know {$languages :listformat type=AND}!}")
-                                .setArguments(arguments.orphan())
                                 .setExpected("I know C/C++, Java, and Python!")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    arguments.adoptInstead(Args::of("languages", progLanguages, errorCode));
-    CHECK_ERROR(errorCode);
     test.adoptInstead(testBuilder->setName("testListFormatter")
                       .setPattern("{You are allowed to use {$languages :listformat type=OR}!}")
-                      .setArguments(arguments.orphan())
                       .setExpected("You are allowed to use C/C++, Java, or Python!")
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -898,7 +665,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     return result.orphan();
 }
 
-Formatter* ResourceManagerFactory::createFormatter(Locale locale, const Hashtable& fixedOptions, UErrorCode& errorCode) {
+Formatter* ResourceManagerFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -906,30 +673,56 @@ Formatter* ResourceManagerFactory::createFormatter(Locale locale, const Hashtabl
     // Locale not used
     (void) locale;
 
-    Formatter* result = new ResourceManager(fixedOptions);
+    Formatter* result = new ResourceManager();
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-static void addAll(const Hashtable& source, Hashtable& dest, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+static Hashtable* localToGlobal(const Hashtable& variableOptions, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    LocalPointer<Hashtable> result(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    NULL_ON_ERROR(errorCode);
 
     int32_t pos = UHASH_FIRST;
-    while (true) {
-        const UHashElement* element = source.nextElement(pos);
+    LocalPointer<Formattable> argValue;
+    while(true) {
+        const UHashElement* element = variableOptions.nextElement(pos);
         if (element == nullptr) {
             break;
         }
-        UnicodeString *key = static_cast<UnicodeString *>(element->key.pointer);
-        UnicodeString* value = static_cast<UnicodeString*>(element->value.pointer);
-        U_ASSERT(key != nullptr && value != nullptr);
-        dest.put(*key, value, errorCode);
+        FormattedPlaceholder* val = (FormattedPlaceholder*) element->value.pointer;
+        if (val == nullptr) {
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return nullptr;
+        }
+        switch (val->getType()) {
+            case FormattedPlaceholder::Type::STRING: {
+                argValue.adoptInstead(new Formattable(val->getString()));
+                if (!argValue.isValid()) {
+                    errorCode = U_MEMORY_ALLOCATION_ERROR;
+                    return nullptr;
+                }
+                break;
+            }
+            default: {
+                argValue.adoptInstead(new Formattable(val->getInput()));
+                break;
+            }
+        }
+        UnicodeString* k = (UnicodeString*) element->key.pointer;
+        if (k == nullptr) {
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return nullptr;
+        }
+        result->put(*k, argValue.orphan(), errorCode);
+        NULL_ON_ERROR(errorCode);
     }
+    return result.orphan();
 }
 
-FormattedPlaceholder* ResourceManager::format(const Formattable* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -937,13 +730,16 @@ FormattedPlaceholder* ResourceManager::format(const Formattable* arg, const Hash
         return nullptr;
     }
 
-    const UnicodeString& in = arg->getString();
+    // Assumes arg is not-yet-formatted
+    const UnicodeString& in = arg->getInput().getString();
 
-    UnicodeString* propsStr = (UnicodeString*) variableOptions.get("resbundle");
+    bool hasPropsStr;
+    UnicodeString propsStr;
+    getStringOpt(variableOptions, "resbundle", propsStr, hasPropsStr);
     // If properties were provided, look up the given string in the properties,
     // yielding a message
-    if (propsStr != nullptr) {
-        LocalPointer<Hashtable> props(parseProperties(*propsStr, errorCode));
+    if (hasPropsStr) {
+        LocalPointer<Hashtable> props(parseProperties(propsStr, errorCode));
         NULL_ON_ERROR(errorCode);
 
         UnicodeString* msg = (UnicodeString*) props->get(in);
@@ -959,6 +755,7 @@ FormattedPlaceholder* ResourceManager::format(const Formattable* arg, const Hash
                                           ->setPattern(*msg, errorCode)
                                           .build(parseErr, errorCode));
         NULL_ON_ERROR(errorCode);
+/*
         // We want to include any variable options for `msgRef` as fixed
         // options for the contained message. So create a new map
         // and add all arguments and variable options into it
@@ -967,9 +764,16 @@ FormattedPlaceholder* ResourceManager::format(const Formattable* arg, const Hash
         NULL_ON_ERROR(errorCode);
         addAll(fixedOptions, *mergedOptions, errorCode);
         addAll(variableOptions, *mergedOptions, errorCode);
+*/
         UnicodeString result;
+
+        // variableOptions maps strings to FormattedPlaceholder*, but
+        // external arguments maps strings to Formattable*
+        LocalPointer<Hashtable> arguments(localToGlobal(variableOptions, errorCode));
+        NULL_ON_ERROR(errorCode);
+
         // TODO: add formatToParts too, and use that here?
-        mf->formatToString(*mergedOptions, errorCode, result);
+        mf->formatToString(*arguments, errorCode, result);
         // Here, we want to ignore errors (this matches the behavior in the ICU4J test).
         // For example: we want $gcase to default to "$gcase" if the gcase option was
         // omitted.
@@ -984,44 +788,73 @@ FormattedPlaceholder* ResourceManager::format(const Formattable* arg, const Hash
 
 
 void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-    UParseError parseErr;
+    CHECK_ERROR(errorCode);
 
     LocalPointer<Hashtable> properties(ResourceManager::properties(errorCode));
-    LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    testBuilder->setLocale(Locale("ro"), errorCode);
+    testBuilder->setFunctionRegistry(ResourceManager::customRegistry(errorCode));
+    testBuilder->setPattern(*((UnicodeString*) properties->get("firefox")));
+    LocalPointer<TestCase> test;
+    testBuilder->setName("message-ref");
 
-    LocalPointer<MessageFormatter> mf(mfBuilder
-                                      ->setPattern(*((UnicodeString*) properties->get("firefox")), errorCode)
-                                      .build(parseErr,errorCode));
-    runTest(*mf, "cust-grammar", "Firefox", "gcase", "whatever", errorCode);
-    runTest(*mf, "cust-grammar", "Firefoxin", "gcase", "genitive", errorCode);
-    mf.adoptInstead(mfBuilder
-                ->setPattern(*((UnicodeString*) properties->get("chrome")), errorCode)
-                .build(parseErr, errorCode));
-    runTest(*mf, "cust-grammar", "Chrome", "gcase", "whatever", errorCode);
-    runTest(*mf, "cust-grammar", "Chromen", "gcase", "genitive", errorCode);
+    test.adoptInstead(testBuilder->setArgument("gcase", "whatever", errorCode)
+                                .setExpected("Firefox")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setArgument("gcase", "genitive", errorCode)
+                                .setExpected("Firefoxin")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    LocalPointer<MessageFormatter> mf1(MessageFormatter::builder(errorCode)
-                ->setFunctionRegistry(ResourceManager::customRegistry(errorCode))
-                .setPattern("{Please start {$browser :msgRef gcase=genitive resbundle=$res}}", errorCode)
-                .build(parseErr, errorCode));
-    LocalPointer<MessageFormatter> mf2(MessageFormatter::builder(errorCode)
-                ->setFunctionRegistry(ResourceManager::customRegistry(errorCode))
-                .setPattern("{Please start {$browser :msgRef resbundle=$res}}", errorCode)
-                .build(parseErr, errorCode));
+    testBuilder->setPattern(*((UnicodeString*) properties->get("chrome")));
 
+    test.adoptInstead(testBuilder->setArgument("gcase", "whatever", errorCode)
+                                .setExpected("Chrome")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setArgument("gcase", "genitive", errorCode)
+                                .setExpected("Chromen")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    // TODO: fix this to pass properties as a hash table
     UnicodeString propertiesStr = ResourceManager::propertiesAsString(*properties);
-    runTest(*mf1, "cust-grammar", "Please start Firefoxin", "browser", "firefox", "res", propertiesStr, errorCode);
-    runTest(*mf2, "cust-grammar", "Please start Firefox", "browser", "firefox", "res", propertiesStr, errorCode);
-    runTest(*mf1, "cust-grammar", "Please start Chromen", "browser", "chrome", "res", propertiesStr, errorCode);
-    runTest(*mf2, "cust-grammar", "Please start Chrome", "browser", "chrome", "res", propertiesStr, errorCode);
-    runTest(*mf1, "cust-grammar", "Please start Safarin", "browser", "safari", "res", propertiesStr, errorCode);
-    runTest(*mf2, "cust-grammar", "Please start Safari", "browser", "safari", "res", propertiesStr, errorCode);
+
+    testBuilder->setPattern("{Please start {$browser :msgRef gcase=genitive resbundle=$res}}");
+    test.adoptInstead(testBuilder->setArgument("browser", "firefox", errorCode)
+                                .setArgument("res", propertiesStr, errorCode)
+                                .setExpected("Please start Firefoxin")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setArgument("browser", "chrome", errorCode)
+                                .setArgument("res", propertiesStr, errorCode)
+                                .setExpected("Please start Chromen")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setArgument("browser", "safari", errorCode)
+                                .setArgument("res", propertiesStr, errorCode)
+                                .setExpected("Please start Safarin")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    testBuilder->setPattern("{Please start {$browser :msgRef resbundle=$res}}");
+    test.adoptInstead(testBuilder->setArgument("browser", "firefox", errorCode)
+                                .setArgument("res", propertiesStr, errorCode)
+                                .setExpected("Please start Firefox")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setArgument("browser", "chrome", errorCode)
+                                .setArgument("res", propertiesStr, errorCode)
+                                .setExpected("Please start Chrome")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+   test.adoptInstead(testBuilder->setArgument("browser", "safari", errorCode)
+                                .setArgument("res", propertiesStr, errorCode)
+                                .setExpected("Please start Safari")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -310,37 +310,31 @@ void TestMessageFormat2::testAPI() {
     Locale locale = "en_US";
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
 
+ 
     // Pattern: "{Hello, {$userName}!}"
-    LocalPointer<Hashtable> arguments(Args::of("userName", "John", errorCode));
-    CHECK_ERROR(errorCode);
     LocalPointer<TestCase> test(testBuilder->setName("testAPI")
                                 .setPattern("{Hello, {$userName}!}")
-                                .setArguments(arguments.orphan())
+                                .setArgument("userName", "John", errorCode)
                                 .setExpected("Hello, John!")
                                 .setLocale(locale, errorCode)
-                                .build(errorCode));
+                                .build(errorCode));  
     TestUtils::runTestCase(*this, *test, errorCode);
 
     // Pattern: "{Today is {$today ..."
-    UnicodeString value = "5264498352317.0";  // Sunday, October 28, 2136 8:39:12 AM PST
-    arguments.adoptInstead(Args::of("today", value, errorCode));
-    CHECK_ERROR(errorCode);
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    // Sunday, October 28, 2136 8:39:12 AM PST
+    cal->set(2136, Calendar::OCTOBER, 28, 8, 39, 12);
+    UDate date = cal->getTime(errorCode);
 
     test.adoptInstead(testBuilder->setName("testAPI")
                       .setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}")
-                      .setArguments(arguments.orphan())
+                      .setDateArgument("today", date, errorCode)
                       .setExpected("Today is Sun, Oct 28, 2136.")
                       .setLocale(locale, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     // Pattern matching - plural
-    arguments.adoptInstead(Args::of("photoCount", "12",
-                                    "userGender", "feminine",
-                                    "userName", "Maria",
-                                    errorCode));
-    CHECK_ERROR(errorCode);
-
     UnicodeString pattern = "match {$photoCount :select} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
@@ -350,21 +344,18 @@ void TestMessageFormat2::testAPI() {
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
 
+    long photoCount = 12;
     test.adoptInstead(testBuilder->setName("testAPI")
                       .setPattern(pattern)
-                      .setArguments(arguments.orphan())
+                      .setArgument("photoCount", photoCount, errorCode)
+                      .setArgument("userGender", "feminine", errorCode)
+                      .setArgument("userName", "Maria", errorCode)
                       .setExpected("Maria added 12 photos to her album.")
                       .setLocale(locale, errorCode)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     // Built-in functions
-    arguments.adoptInstead(Args::of("photoCount", "1",
-                                    "userGender", "feminine",
-                                    "userName", "Maria",
-                                    errorCode));
-    CHECK_ERROR(errorCode);
-
     pattern = "match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
@@ -373,9 +364,12 @@ void TestMessageFormat2::testAPI() {
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
+    photoCount = 1;
     test.adoptInstead(testBuilder->setName("testAPI")
                       .setPattern(pattern)
-                      .setArguments(arguments.orphan())
+                      .setArgument("photoCount", photoCount, errorCode)
+                      .setArgument("userGender", "feminine", errorCode)
+                      .setArgument("userName", "Maria", errorCode)
                       .setExpected("Maria added a new photo to her album.")
                       .setLocale(locale, errorCode)
                       .build(errorCode));
@@ -409,14 +403,13 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
     LocalPointer<FunctionRegistry> functionRegistry(personFunctionRegistry(errorCode));
 
-    // Using a text-based representation since formatting objects isn't implemented yet
-    // The custom person() implementation (not shown) parses a comma-separated string
-    UnicodeString person = "\"Mr.\", \"John\", \"Doe\"";
+    Person* person = new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe"));
 
     LocalPointer<MessageFormatter> mf;
 
     LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    arguments->put("name", &person, errorCode);
+    LocalPointer<Formattable> argVal(new Formattable(person));
+    arguments->put("name", argVal.orphan(), errorCode);
 
     UnicodeString result;
 

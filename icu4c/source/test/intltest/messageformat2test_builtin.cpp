@@ -19,257 +19,267 @@ as of the following commit from 2023-05-09:
 */
 
 void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    CHECK_ERROR(errorCode);
 
+    LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    CHECK_ERROR(errorCode);
+
+    testBuilder->setName("testDateTime");
     // November 23, 2022 at 7:42:37.123 PM
-    UnicodeString TEST_DATE = "1669261357123";
+    cal->set(2022, Calendar::NOVEMBER, 23, 19, 42, 37);
+    UDate TEST_DATE = cal->getTime(errorCode);
     UnicodeString date = "date";
-    Locale loc = Locale("ro");
+    testBuilder->setLocale(Locale("ro"), errorCode);
 
-    testWithPatternAndArguments("testDateTime",
-                                nullptr,
-                                "{Testing date formatting: {$date :datetime}.}",
-                                date,
-                                TEST_DATE,
-                                "Testing date formatting: 23.11.2022, 19:42.",
-                                loc,
-                                errorCode);
+    LocalPointer<TestCase> test(testBuilder->setPattern("{Testing date formatting: {$date :datetime}.}")
+                                .setExpected("Testing date formatting: 23.11.2022, 19:42.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    loc = Locale("ro", "RO");
+    testBuilder->setLocale(Locale("ro", "RO"), errorCode);
 
     // Skeleton
-    testWithPatternAndArguments("testDateTime",
-                                nullptr,
-                                "{Testing date formatting: {$date :datetime skeleton=yMMMMd}.}",
-                                date,
-                                TEST_DATE,
-                                "Testing date formatting: 23 noiembrie 2022.",
-                                loc,
-                                errorCode);
-    testWithPatternAndArguments("testDateTime",
-                                nullptr,
-                                "{Testing date formatting: {$date :datetime skeleton=jm}.}",
-                                date,
-                                TEST_DATE,
-                                "Testing date formatting: 19:42.",
-                                loc,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime skeleton=yMMMMd}.}")
+                                .setExpected("Testing date formatting: 23 noiembrie 2022.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    loc = Locale("en");
-    testWithPatternAndArguments("testDateTime",
-                                nullptr,
-                                "{Testing date formatting: {$date :datetime skeleton=yMMMd}.}",
-                                date,
-                                TEST_DATE,
-                                "Testing date formatting: Nov 23, 2022.",
-                                loc,
-                                errorCode);
-    testWithPatternAndArguments("testDateTime",
-                                nullptr,
-                                "{Testing date formatting: {$date :datetime skeleton=yMMMdjms}.}",
-                                date,
-                                TEST_DATE,
-                                "Testing date formatting: Nov 23, 2022, 7:42:37\u202FPM.",
-                                loc,
-                                errorCode);
-   testWithPatternAndArguments("testDateTime",
-                                nullptr,
-                                "{Testing date formatting: {$date :datetime skeleton=jm}.}",
-                                date,
-                                TEST_DATE,
-                                "Testing date formatting: 7:42\u202FPM.",
-                                loc,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime skeleton=jm}.}")
+                                .setExpected("Testing date formatting: 19:42.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    testBuilder->setLocale(Locale("en"), errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime skeleton=yMMMd}.}")
+                                .setExpected("Testing date formatting: Nov 23, 2022.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime skeleton=yMMMdjms}.}")
+                                .setExpected("Testing date formatting: Nov 23, 2022, 7:42:37\u202FPM.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime skeleton=jm}.}")
+                                .setExpected("Testing date formatting: 7:42\u202FPM.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
    // Style
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime datestyle=long}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: November 23, 2022.",
-                              loc,
-                              errorCode);
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime datestyle=medium}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: Nov 23, 2022.",
-                              loc,
-                              errorCode);
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime datestyle=short}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: 11/23/22.",
-                              loc,
-                              errorCode);
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime timestyle=long}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: 7:42:37\u202FPM PST.",
-                              loc,
-                              errorCode);
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime timestyle=medium}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: 7:42:37\u202FPM.",
-                              loc,
-                              errorCode);
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime timestyle=short}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: 7:42\u202FPM.",
-                              loc,
-                              errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime datestyle=long}.}")
+                                .setExpected("Testing date formatting: November 23, 2022.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime datestyle=medium}.}")
+                                .setExpected("Testing date formatting: Nov 23, 2022.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime datestyle=short}.}")
+                                .setExpected("Testing date formatting: 11/23/22.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime timestyle=long}.}")
+                                .setExpected("Testing date formatting: 7:42:37\u202FPM PST.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime timestyle=medium}.}")
+                                .setExpected("Testing date formatting: 7:42:37\u202FPM.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime timestyle=short}.}")
+                                .setExpected("Testing date formatting: 7:42\u202FPM.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
   // Pattern
-  testWithPatternAndArguments("testDateTime",
-                              nullptr,
-                              "{Testing date formatting: {$date :datetime pattern=|d 'of' MMMM, y 'at' HH:mm|}.}",
-                              date,
-                              TEST_DATE,
-                              "Testing date formatting: 23 of November, 2022 at 19:42.",
-                              loc,
-                              errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime pattern=|d 'of' MMMM, y 'at' HH:mm|}.}")
+                                .setExpected("Testing date formatting: 23 of November, 2022 at 19:42.")
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 void TestMessageFormat2::testNumbers(IcuTestErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    CHECK_ERROR(errorCode);
 
-    UnicodeString value = "1234567890.97531";
+    double value = 1234567890.97531;
     UnicodeString val = "val";
-    Locale loc = Locale("ro");
+
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    testBuilder->setName("testNumbers");
 
     // Literals
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{From literal: {123456789 :number}!}",
-                                val,
-                                value,
-                                "From literal: 123.456.789!",
-                                loc,
-                                errorCode);
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{From literal: {|123456789,531| :number}!}",
-                                val,
-                                value,
-                                "From literal: 123.456.789,531!",
-                                loc,
-                                errorCode);
+    LocalPointer<TestCase> test(testBuilder->setPattern("{From literal: {123456789 :number}!}")
+                                .setArgument(val, value, errorCode)
+                                .setExpected("From literal: 123.456.789!")
+                                .setLocale(Locale("ro"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 
-    loc = Locale("my");
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{From literal: {|\u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041| :number}!}",
-                                val,
-                                value,
-                                "From literal: \u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041!",
-                                loc,
-                                errorCode);
-    // Skeletons
-    loc = Locale("ro");
-    value = "1234567890,97531";
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Skeletons, minFraction: {$val :number skeleton=|.00000000*|}!}",
-                                val,
-                                value,
-                                "Skeletons, minFraction: 1.234.567.890,97531000!",
-                                loc,
-                                errorCode);
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Skeletons, maxFraction: {$val :number skeleton=|.###|}!}",
-                                val,
-                                value,
-                                "Skeletons, maxFraction: 1.234.567.890,975!",
-                                loc,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{From literal: {|123456789,531| :number}!}")
+                                .setArgument(val, value, errorCode)
+                                .setExpected("From literal: 123.456.789,531!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{From literal: {|\u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041| :number}!}")
+                                .setArgument(val, value, errorCode)
+                                .setExpected("From literal: \u1041\u1042\u1043,\u1044\u1045\u1046,\u1047\u1048\u1049.\u1045\u1043\u1041!")
+                                .setLocale(Locale("my"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+
+    // Testing that the detection works for various types (without specifying :number)
+/*
+        TestUtils.runTestCase(new TestCase.Builder()
+                .pattern("{Default double: {$val}!}")
+                .locale("en-IN")
+                .arguments(Args.of("val", value))
+                .expected("Default double: 1,23,45,67,890.97531!")
+                .build());
+        TestUtils.runTestCase(new TestCase.Builder()
+                .pattern("{Default double: {$val}!}")
+                .locale("ro")
+                .arguments(Args.of("val", value))
+                .expected("Default double: 1.234.567.890,97531!")
+                .build());
+        TestUtils.runTestCase(new TestCase.Builder()
+                .pattern("{Default float: {$val}!}")
+                .locale("ro")
+                .arguments(Args.of("val", 3.1415926535))
+                .expected("Default float: 3,141593!")
+                .build());
+        TestUtils.runTestCase(new TestCase.Builder()
+                .pattern("{Default long: {$val}!}")
+                .locale("ro")
+                .arguments(Args.of("val", 1234567890123456789L))
+                .expected("Default long: 1.234.567.890.123.456.789!")
+                .build());
+        TestUtils.runTestCase(new TestCase.Builder()
+                .pattern("{Default number: {$val}!}")
+                .locale("ro")
+                .arguments(Args.of("val", new BigDecimal("1234567890123456789.987654321")))
+                .expected("Default number: 1.234.567.890.123.456.789,987654!")
+                .build());
+        TestUtils.runTestCase(new TestCase.Builder()
+                .pattern("{Price: {$val}}")
+                .locale("de")
+                .arguments(Args.of("val", new CurrencyAmount(1234.56, Currency.getInstance("EUR"))))
+                .expected("Price: 1.234,56\u00A0\u20AC")
+                .build());
+
+*/
+
+/* TODO: uncomment these
+    test.adoptInstead(testBuilder->setPattern("{Default double: {$val}!}")
+                                .setLocale(Locale("en", "IN"))
+                                .setArgument(val, value, errorCode)
+                                .setExpected("Default double: 1,23,45,67,890.97531!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Default double: {$val}!}")
+                                .setLocale(Locale("ro"))
+                                .setArgument(val, value, errorCode)
+                                .setExpected("Default double: 1.234.567.890,97531!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Default float: {$val}!}")
+                                .setLocale(Locale("ro"))
+                                .setArgument(val, 3.1415926535, errorCode)
+                                .setExpected("Default float: 3,141593!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Default long: {$val}!}")
+                                .setLocale(Locale("ro"))
+                                .setArgument(val, (long) 1234567890123456789, errorCode)
+                                .setExpected("Default long: 1.234.567.890.123.456.789!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Default number: {$val}!}")
+                                .setLocale(Locale("ro"))
+                                .setArgument(val, BigDecimal("1234567890123456789.987654321", errorCode)
+                                .setExpected("Default number: 1.234.567.890.123.456.789,987654!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+*/
+    // Omitted CurrencyAmount test since it's not supported by Formattable
+ 
+   // Skeletons
+    value = 1234567890.97531;
+    testBuilder->setLocale(Locale("ro"), errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Skeletons, minFraction: {$val :number skeleton=|.00000000*|}!}")
+                                .setArgument(val, value, errorCode)
+                                .setExpected("Skeletons, minFraction: 1.234.567.890,97531000!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Skeletons, maxFraction: {$val :number skeleton=|.###|}!}")
+                                .setArgument(val, value, errorCode)
+                                .setExpected("Skeletons, maxFraction: 1.234.567.890,975!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
     // Currency
-    loc = Locale("de");
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Skeletons, currency: {$val :number skeleton=|currency/EUR|}!}",
-                                val,
-                                value,
-                                "Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!",
-                                loc,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Skeletons, currency: {$val :number skeleton=|currency/EUR|}!}")
+                                .setArgument(val, value, errorCode)
+                                .setExpected("Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!")
+                                .setLocale(Locale("de"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
     // Currency as a parameter
-    loc = Locale("de");
-    UnicodeString skel = "skel";
-    UnicodeString skelValue = "currency/EUR";
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Skeletons, currency: {$val :number skeleton=$skel}!}",
-                                val,
-                                value,
-                                skel,
-                                skelValue,
-                                "Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!",
-                                loc,
-                                errorCode);
-    skelValue = "currency/JPY";
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Skeletons, currency: {$val :number skeleton=$skel}!}",
-                                val,
-                                value,
-                                skel,
-                                skelValue,
-                                "Skeletons, currency: 1.234.567.891\u00A0\u00A5!",
-                                loc,
-                                errorCode);
+    test.adoptInstead(testBuilder->setPattern("{Skeletons, currency: {$val :number skeleton=$skel}!}")
+                                .setArgument(val, value, errorCode)
+                                .setArgument("skel", "currency/EUR", errorCode)
+                                .setExpected("Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Skeletons, currency: {$val :number skeleton=$skel}!}")
+                                .setArgument(val, value, errorCode)
+                                .setArgument("skel", "currency/JPY", errorCode)
+                                .setExpected("Skeletons, currency: 1.234.567.891\u00A0\u00A5!")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
     // Various measures
-    loc = Locale("ro");
-    UnicodeString celsius = "27";
-    UnicodeString valC = "valC";
-    UnicodeString valF = "valF";
-    UnicodeString fahrenheit = "80,6";
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "let $intl = {$valC :number skeleton=|unit/celsius|}\n\
+    test.adoptInstead(testBuilder->setPattern("let $intl = {$valC :number skeleton=|unit/celsius|}\n\
                                  let $us = {$valF :number skeleton=|unit/fahrenheit|}\n\
-                                 {Temperature: {$intl} ({$us})}",
-                                valC,
-                                celsius,
-                                valF,
-                                fahrenheit,
-                                "Temperature: 27 \u00B0C (80,6 \u00B0F)",
-                                loc,
-                                errorCode);
-    UnicodeString len = "len";
-    UnicodeString lenVal = "1,75";
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Height: {$len :number skeleton=|unit/meter|}}",
-                                len,
-                                lenVal,
-                                "Height: 1,75 m",
-                                loc,
-                                errorCode);
-    loc = Locale("de");
-    testWithPatternAndArguments("testNumbers",
-                                nullptr,
-                                "{Skeletons, currency: {$val :number skeleton=|currency/EUR|}!}",
-                                val,
-                                value,
-                                "Skeletons, currency: 1.234.567.890,98\u00A0\u20AC!",
-                                loc,
-                                errorCode);
+                                 {Temperature: {$intl} ({$us})}")
+                                .setArgument("valC", 27.0, errorCode)
+                                .setArgument("valF", 80.6, errorCode)
+                                .setExpected("Temperature: 27 \u00B0C (80,6 \u00B0F)")
+                                .setLocale(Locale("ro"), errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("{Height: {$len :number skeleton=|unit/meter|}}")
+                                .setArgument("len", 1.75, errorCode)
+                                .setExpected("Height: 1,75 m")
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 void TestMessageFormat2::testBuiltInFunctions() {

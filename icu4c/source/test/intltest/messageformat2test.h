@@ -73,8 +73,10 @@ private:
     // Custom function testing
     void checkResult(const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&, UErrorCode);
     void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, const UnicodeString& argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
-    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, const UnicodeString& argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&);
-    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName1, const UnicodeString& argValue1, const UnicodeString& argName2, const UnicodeString& argValue2, const UnicodeString& expected, Locale, IcuTestErrorCode&);
+    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, Formattable* argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
+    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, Formattable* argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&);
+    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, double argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&);
+    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName1, Formattable* argValue1, const UnicodeString& argName2, Formattable* argValue2, const UnicodeString& expected, Locale, IcuTestErrorCode&);
     void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const Hashtable&, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
     void testPersonFormatter(IcuTestErrorCode&);
     void testGrammarCasesFormatter(IcuTestErrorCode&);
@@ -98,28 +100,31 @@ private:
 class PersonNameFormatterFactory : public FormatterFactory {
     
     public:
-    Formatter* createFormatter(Locale, const Hashtable&, UErrorCode&);
+    Formatter* createFormatter(Locale, UErrorCode&);
 };
 
-struct Person : public UObject {
+class Person : public UObject {
+    public:
     UnicodeString title;
     UnicodeString firstName;
     UnicodeString lastName;
+    Person(UnicodeString t, UnicodeString f, UnicodeString l) : title(t), firstName(f), lastName(l) {}
+    ~Person();
 };
 
 class PersonNameFormatter : public Formatter {
     public:
-    FormattedPlaceholder* format(const Formattable*, const Hashtable&, UErrorCode& errorCode) const;
+    FormattedPlaceholder* format(FormattedPlaceholder*, const Hashtable&, UErrorCode& errorCode) const;
 };
 
 class GrammarCasesFormatterFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, const Hashtable&, UErrorCode&);
+    Formatter* createFormatter(Locale, UErrorCode&);
 };
 
 class GrammarCasesFormatter : public Formatter {
     public:
-    FormattedPlaceholder* format(const Formattable*, const Hashtable&, UErrorCode& errorCode) const;
+    FormattedPlaceholder* format(FormattedPlaceholder*, const Hashtable&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     private:
     void getDativeAndGenitive(const UnicodeString&, UnicodeString& result) const;
@@ -127,12 +132,12 @@ class GrammarCasesFormatter : public Formatter {
 
 class ListFormatterFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, const Hashtable&, UErrorCode&);
+    Formatter* createFormatter(Locale, UErrorCode&);
 };
 
 class ListFormatter : public Formatter {
     public:
-    FormattedPlaceholder* format(const Formattable*, const Hashtable&, UErrorCode& errorCode) const;
+    FormattedPlaceholder* format(FormattedPlaceholder*, const Hashtable&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     private:
     friend class ListFormatterFactory;
@@ -142,26 +147,21 @@ class ListFormatter : public Formatter {
 
 class ResourceManagerFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, const Hashtable&, UErrorCode&);
+    Formatter* createFormatter(Locale, UErrorCode&);
 };
 
 class ResourceManager : public Formatter {
     public:
-    FormattedPlaceholder* format(const Formattable*, const Hashtable&, UErrorCode& errorCode) const;
+    FormattedPlaceholder* format(FormattedPlaceholder*, const Hashtable&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     static Hashtable* properties(UErrorCode&);
     static UnicodeString propertiesAsString(const Hashtable&);
     static Hashtable* parseProperties(const UnicodeString&, UErrorCode&);
-    private:
-    friend class ResourceManagerFactory;
-
-    const Hashtable& fixedOptions;
-    ResourceManager(const Hashtable& opts) : fixedOptions(opts) {} 
 };
 
 class TemperatureFormatterFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, const Hashtable&, UErrorCode&);
+    Formatter* createFormatter(Locale, UErrorCode&);
     TemperatureFormatterFactory() {}
 
     private:
@@ -175,8 +175,9 @@ class TemperatureFormatterFactory : public FormatterFactory {
 
 class TemperatureFormatter : public Formatter {
     public:
-    FormattedPlaceholder* format(const Formattable*, const Hashtable&, UErrorCode& errorCode) const;
+    FormattedPlaceholder* format(FormattedPlaceholder*, const Hashtable&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
+    ~TemperatureFormatter();
     private:
     friend class TemperatureFormatterFactory;
     const Locale locale;
