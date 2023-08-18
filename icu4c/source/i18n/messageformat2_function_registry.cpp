@@ -156,6 +156,53 @@ static void getStringOpt(const Hashtable& opts, const UnicodeString& key, Unicod
     exists = false;
 }
 
+static void tryStringToNumber(const UnicodeString& s, int64_t& result) {
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    // Try to parse string as int
+    int64_t tempResult;
+    strToInt(s, tempResult, localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        result = tempResult;
+    }
+}
+
+static void getIntOpt(const Hashtable& opts, const UnicodeString& key, int64_t& result) {
+    // Doesn't modify `result` if `key` is absent or can't be coerced to a number
+    if (opts.containsKey(key)) {
+        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
+        U_ASSERT(val != nullptr);
+        if (val->getType() == FormattedPlaceholder::Type::STRING) {
+            tryStringToNumber(val->getString(), result);
+            return;
+        }
+        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC) {
+            switch (val->getInput().getType()) {
+                case Formattable::Type::kDouble: {
+                    result = (int64_t) val->getInput().getDouble();
+                    return;
+                }
+                case Formattable::Type::kLong: {
+                     result = (int64_t) val->getInput().getLong();
+                     return;
+                }
+                case Formattable::Type::kInt64: {
+                     result = val->getInput().getInt64();
+                     return;
+                }
+                case Formattable::Type::kString: {
+                    tryStringToNumber(val->getInput().getString(), result);
+                    return;
+                }
+                default: {
+                    // Can't be cast to number
+                    return;
+                }
+            }
+        }
+        // No case for FormattedNumber
+    }
+}
+
 number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Hashtable& options, UErrorCode& status) {
     NULL_ON_ERROR(status);
 
@@ -212,7 +259,7 @@ static FormattedPlaceholder* notANumber(UErrorCode& errorCode) {
     return FormattedPlaceholder::create(s.orphan(), errorCode);
 }
 
-static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, Formattable* fp, UnicodeString s, UErrorCode& errorCode) {
+static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, Formattable* fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     U_ASSERT(fp != nullptr);
 
@@ -222,7 +269,7 @@ static FormattedPlaceholder* stringAsNumber(Locale locale, const number::Localiz
     if (U_FAILURE(localErrorCode)) {
         return notANumber(errorCode);
     }
-    return FormattedPlaceholder::create(fp, nf.formatDouble(numberValue, errorCode), errorCode);
+    return FormattedPlaceholder::create(fp, nf.formatDouble(numberValue - offset, errorCode), errorCode);
 }
 
 // variableOptions = map of *resolved* options (strings)
@@ -233,6 +280,9 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
     if (arg == nullptr) {
         return notANumber(errorCode);
     }
+
+    int64_t offset = 0;
+    getIntOpt(variableOptions, UnicodeString("offset"), offset);
 
     LocalPointer<number::LocalizedNumberFormatter> realFormatter;
     if (variableOptions.count() == 0) {
@@ -253,7 +303,7 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
     }
     switch (arg->getType()) {
         case FormattedPlaceholder::Type::STRING: {
-            return stringAsNumber(locale, *realFormatter, copiedInput.orphan(), arg->getString(), errorCode);
+            return stringAsNumber(locale, *realFormatter, copiedInput.orphan(), arg->getString(), offset, errorCode);
         }
         case FormattedPlaceholder::Type::NUMBER: {
             // TODO: passing in a number just returns the same number,
@@ -265,21 +315,21 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
             const Formattable& toFormat = arg->getInput(); 
             switch (toFormat.getType()) {
             case Formattable::Type::kDouble: {
-                numberResult = realFormatter->formatDouble(toFormat.getDouble(), errorCode);
+                numberResult = realFormatter->formatDouble(toFormat.getDouble() - offset, errorCode);
                 break;
             }
             case Formattable::Type::kLong: {
-                numberResult = realFormatter->formatInt(toFormat.getLong(), errorCode);
+                numberResult = realFormatter->formatInt(toFormat.getLong() - offset, errorCode);
                 break;
             }
             case Formattable::Type::kInt64: {
-                numberResult = realFormatter->formatInt(toFormat.getInt64(), errorCode);
+                numberResult = realFormatter->formatInt(toFormat.getInt64() - offset, errorCode);
                 break;
             }
             case Formattable::Type::kString: {
                 // Try to parse the string as a number, as in the `else` case there
                 // TODO: see if the behavior here matches the function registry spec
-                return stringAsNumber(locale, *realFormatter, copiedInput.orphan(), toFormat.getString(), errorCode);
+                return stringAsNumber(locale, *realFormatter, copiedInput.orphan(), toFormat.getString(), offset, errorCode);
             }
             default: {
                 // Other types can't be parsed as a number
@@ -320,6 +370,9 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
         errorCode = U_SELECTOR_ERROR;
         return;
     }
+    
+    int64_t offset = 0;
+    getIntOpt(variableOptions, UnicodeString("offset"), offset);
 
     // Only doubles and integers can match
     double valToCheck;
@@ -379,7 +432,7 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
     }
 
     UnicodeString match = valuePtr->getType() == FormattedPlaceholder::Type::NUMBER ? rules->select(valuePtr->getNumber(), errorCode)
-        : rules->select(valToCheck);
+        : rules->select(valToCheck - offset);
     CHECK_ERROR(errorCode);
 
     // Next, check for a match based on the plural category

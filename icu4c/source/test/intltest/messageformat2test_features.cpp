@@ -437,15 +437,97 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
 }
 
 void TestMessageFormat2::testPluralWithOffset(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
+    UnicodeString message = "match {$count :plural offset=2}\n\
+                  when 1 {Anna}\n\
+                  when 2 {Anna and Bob}\n\
+                  when one {Anna, Bob, and {$count :number offset=2} other guest}\n\
+                  when * {Anna, Bob, and {$count :number offset=2} other guests}\n";
 
-    (void) testBuilder;
-    (void) errorCode;
+    testBuilder.setPattern(message);
+    testBuilder.setName("plural with offset");
+
+    LocalPointer<TestCase> test(testBuilder.setExpected("Anna")
+                                .setArgument("count", (long) 1, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna and Bob")
+                          .setArgument("count", (long) 2, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 1 other guest")
+                          .setArgument("count", (long) 3, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 2 other guests")
+                          .setArgument("count", (long) 4, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 10 other guests")
+                          .setArgument("count", (long) 12, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 void TestMessageFormat2::testPluralWithOffsetAndLocalVar(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
-    (void) testBuilder;
-    (void) errorCode;
+  
+    // $foo should "inherit" the offset
+    UnicodeString message = "let $foo = {$count :number offset=2}\
+                match {$foo :plural}\n                                 \
+                when 1 {Anna}\n                                        \
+                when 2 {Anna and Bob}\n                                \
+                when one {Anna, Bob, and {$foo} other guest}\n         \
+                when * {Anna, Bob, and {$foo} other guests}\n";
 
+    testBuilder.setPattern(message);
+    testBuilder.setName("plural with offset and local var");
+
+    LocalPointer<TestCase> test(testBuilder.setExpected("Anna")
+                                .setArgument("count", (long) 1, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna and Bob")
+                          .setArgument("count", (long) 2, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 1 other guest")
+                          .setArgument("count", (long) 3, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 2 other guests")
+                          .setArgument("count", (long) 4, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 10 other guests")
+                          .setArgument("count", (long) 12, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+  
+    message = "let $foo = {$amount :number skeleton=|.00/w|}\n\
+                match {$foo :plural}\n\
+                when 1 {Last dollar}\n\
+                when one {{$foo} dollar}\n\
+                when * {{$foo} dollars}\n";
+    testBuilder.setPattern(message);
+    test.adoptInstead(testBuilder.setExpected("Last dollar")
+                          .setArgument("amount", (long) 1, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setExpected("2 dollars")
+                          .setArgument("amount", (long) 2, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    test.adoptInstead(testBuilder.setExpected("3 dollars")
+                          .setArgument("amount", (long) 3, errorCode)
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 void TestMessageFormat2::testDeclareBeforeUse(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
