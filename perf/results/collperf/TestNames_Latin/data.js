@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692301572374,
+  "lastUpdate": 1692377938143,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23866,6 +23866,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2204810.1272,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ffc449de6243b17857b5d67854bdec723bf06f21",
+          "message": "ICU-20777 Merge the likelySubtags implemention\n\nChange testdata/likelySubtags.txt to consider FAIL line\n\nICU-20777 Fix Java Tests\n\nICU-20777 Fix all issues\n\nICU-20777 Incase timeout\n\nICU-20777\n\nICU-20777 Skip Data Driven test",
+          "timestamp": "2023-08-18T09:35:54-07:00",
+          "tree_id": "c3e30331616dbbed862e21a941a266410240f79e",
+          "url": "https://github.com/unicode-org/icu/commit/ffc449de6243b17857b5d67854bdec723bf06f21"
+        },
+        "date": 1692377886429,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 393.1663,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3939697.0466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1782176.3776,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 3757673.262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1885746.8051,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
