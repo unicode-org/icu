@@ -142,6 +142,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestLSTMThai);
     TESTCASE_AUTO(TestLSTMBurmese);
     TESTCASE_AUTO(TestRandomAccess);
+    TESTCASE_AUTO(TestExternalBreakEngineWithFakeTaiLe);
+    TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5665,6 +5667,194 @@ void RBBITest::TestRandomAccess() {
         idx = randomStringIndex();
         assertEquals(WHERE, expectedPreceding(idx), bi->preceding(idx));
     }
+}
+
+// A Fake Tai Le break engine which handle Unicode Tai Le (Tale) block
+// https://unicode.org/charts/PDF/U1950.pdf
+// U+1950 - U+197F and always break after Tone letters (U+1970-U+1974)
+class FakeTaiLeBreakEngine : public ExternalBreakEngine {
+ public:
+  FakeTaiLeBreakEngine() : block(0x1950, 0x197f), tones(0x1970, 0x1974) {
+  }
+  virtual ~FakeTaiLeBreakEngine() {
+  }
+  virtual bool isFor(UChar32 c, const char* /* locale */) const override {
+      // We implmement this for any locale, not return false for some langauge
+      // here.
+      return handles(c);
+  }
+  virtual bool handles(UChar32 c) const override {
+      return block.contains(c);
+  }
+  virtual int32_t fillBreak(UText* text,  int32_t start, int32_t end,
+                            int32_t* foundBreaks, int32_t foundBreaksCapacity,
+                            UErrorCode& status) const override {
+       if (U_FAILURE(status)) return 0;
+       int32_t i = 0;
+       // Save the state of the utext
+       int64_t savedIndex = utext_getNativeIndex(text);
+       if (savedIndex != start) {
+           utext_setNativeIndex(text, start);
+       }
+       int32_t current;
+       while((current = (int32_t)utext_getNativeIndex(text)) < end) {
+         UChar32 c = utext_current32(text);
+         // Break after tone marks as a fake break point.
+         if (tones.contains(c)) {
+             if (i >= foundBreaksCapacity) {
+                 status = U_BUFFER_OVERFLOW_ERROR;
+                 utext_setNativeIndex(text, savedIndex);
+                 return i;
+             }
+             foundBreaks[i++] = current;
+         }
+         UTEXT_NEXT32(text);
+       }
+       // Restore the utext
+       if (savedIndex != current) {
+           utext_setNativeIndex(text, savedIndex);
+       }
+       return i;
+  }
+
+ private:
+  UnicodeSet block;
+  UnicodeSet tones;
+};
+
+// A Fake Yue Break Engine which handle CJK Unified Ideographs
+// block (U+4E00-U+9FFF) when locale start with 'yue' and break
+// after every character.
+class FakeYueBreakEngine : public ExternalBreakEngine {
+ public:
+  FakeYueBreakEngine() : block(0x4e00, 0x9FFF) {
+  }
+  virtual ~FakeYueBreakEngine() {
+  }
+  virtual bool isFor(UChar32 c, const char* locale) const override {
+      // We implmement this for any locale starts with "yue" such as
+      // "yue", "yue-CN", "yue-Hant-CN", etc.
+      return handles(c) && uprv_strncmp("yue", locale, 3) == 0;
+  }
+  virtual bool handles(UChar32 c) const override {
+      return block.contains(c);
+  }
+  virtual int32_t fillBreak(UText* text,  int32_t start, int32_t end,
+                            int32_t* foundBreaks, int32_t foundBreaksCapacity,
+                            UErrorCode& status) const override {
+       (void)text;
+       if (U_FAILURE(status)) return 0;
+       int32_t i = 0;
+       int32_t current = start;
+       while (current++ < end) {
+           // A fake word segmentation by breaking every two Unicode.
+           if ((current - start) % 2 == 0) {
+               if (i >= foundBreaksCapacity) {
+                   status = U_BUFFER_OVERFLOW_ERROR;
+                   return i;
+               }
+               foundBreaks[i++] = current;
+           }
+       }
+       return i;
+  }
+
+ private:
+  UnicodeSet block;
+};
+
+void RBBITest::TestExternalBreakEngineWithFakeYue() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString text(u"a bc def一兩年前佢真係唔鍾意畀我影相i jk lmn");
+
+    std::vector<int32_t> actual1;
+    {
+        LocalPointer<BreakIterator> bi1(
+            BreakIterator::createWordInstance(Locale::getRoot(), status),
+            status);
+        bi1->setText(text);
+        assertTrue(WHERE "BreakIterator::createWordInstance( root )",
+                   U_SUCCESS(status));
+
+        do {
+            actual1.push_back(bi1->current());
+        } while(bi1->next() != BreakIterator::DONE);
+    }
+
+    std::vector<int32_t> expected1({{ 0, 1, 2, 4, 5, 8, 10, 12, 13, 14, 15,
+      16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 30}});
+    assertTrue("root break Yue as Chinese", expected1 == actual1);
+
+    status = U_ZERO_ERROR;
+    RuleBasedBreakIterator::registerExternalBreakEngine(
+        new FakeYueBreakEngine(), status);
+    assertTrue(WHERE "registerExternalBreakEngine w FakeYueBreakEngine",
+               U_SUCCESS(status));
+
+    std::vector<int32_t> actual2;
+    {
+        status = U_ZERO_ERROR;
+        LocalPointer<BreakIterator> bi2(
+            BreakIterator::createWordInstance(Locale("yue"), status), status);
+        assertTrue(WHERE "BreakIterator::createWordInstance( yue )",
+                   U_SUCCESS(status));
+        bi2->setText(text);
+        do {
+            actual2.push_back(bi2->current());
+        } while(bi2->next() != BreakIterator::DONE);
+    }
+    std::vector<int32_t> expected2({{ 0, 1, 2, 4, 5, 8, 10, 12, 14, 16, 18, 20,
+      22, 23, 24, 26, 27, 30}});
+    assertTrue(WHERE "break Yue by Fake external breaker",
+               expected2 == actual2);
+}
+
+void RBBITest::TestExternalBreakEngineWithFakeTaiLe() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString text(
+        u"a bc defᥛᥫᥒᥰᥖᥭᥰᥞᥝᥰᥙᥥᥢᥛᥫᥒᥰᥑᥩᥢᥲᥔᥣᥝᥴᥓᥬᥖᥩᥢᥲᥛᥣᥝᥱᥙᥝᥱᥙᥤᥱᥓᥣᥒᥛᥣᥰᥓᥧ"
+        u"ᥰᥘᥩᥰᥗᥪᥒᥴᥛᥣᥰᥘᥬᥰᥝᥣᥱᥘᥒᥱᥔᥣᥛᥴᥘᥫᥢi jk lmn");
+
+    std::vector<int32_t> actual1;
+    {
+        LocalPointer<BreakIterator> bi1(
+            BreakIterator::createLineInstance(Locale::getRoot(), status),
+            status);
+        bi1->setText(text);
+        assertTrue(WHERE "BreakIterator::createLineInstance( root )",
+                   U_SUCCESS(status));
+
+        do {
+            actual1.push_back(bi1->current());
+        } while(bi1->next() != BreakIterator::DONE);
+    }
+
+    std::vector<int32_t> expected1({{
+      0, 2, 5, 86, 89, 92 }});
+    assertTrue(WHERE "root break Tai Le", expected1 == actual1);
+
+    RuleBasedBreakIterator::registerExternalBreakEngine(
+        new FakeTaiLeBreakEngine(), status);
+    assertTrue(WHERE "registerExternalBreakEngine w FakeTaiLeBreakEngine",
+               U_SUCCESS(status));
+
+    std::vector<int32_t> actual2;
+    {
+        status = U_ZERO_ERROR;
+        LocalPointer<BreakIterator> bi2(
+            BreakIterator::createLineInstance(Locale("tdd"), status), status);
+        assertTrue(WHERE "BreakIterator::createLineInstance( tdd )",
+                   U_SUCCESS(status));
+        bi2->setText(text);
+        do {
+            actual2.push_back(bi2->current());
+        } while(bi2->next() != BreakIterator::DONE);
+    }
+    std::vector<int32_t> expected2({{
+         0, 2, 5, 11, 14, 17, 24, 28, 32, 38, 42, 45, 48, 54, 57, 60, 64, 67,
+         70, 73, 76, 80, 86, 89, 92}});
+    assertTrue("break Tai Le by Fake external breaker",
+               expected2 == actual2);
 }
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION

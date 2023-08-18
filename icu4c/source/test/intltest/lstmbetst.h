@@ -40,7 +40,7 @@ public:
 
 private:
     const LanguageBreakEngine* createEngineFromTestData(const char* model, UScriptCode script, UErrorCode& status);
-    void runTestFromFile(const char* filename);
+    void runTestFromFile(const char* filename, const char* locale);
     void runTestWithLargeMemory(const char* model, UScriptCode script);
 
     // Test parameters, from the test framework and test invocation.
