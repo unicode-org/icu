@@ -87,7 +87,7 @@ private:
     void testDateFormat(TestCase::Builder&, IcuTestErrorCode&);
     void testPlural(TestCase::Builder&, IcuTestErrorCode&);
     void testPluralOrdinal(TestCase::Builder&, IcuTestErrorCode&);
-    void testFormatterIsCreatedOnce(TestCase::Builder&, IcuTestErrorCode&);
+    void testFormatterIsCreatedOnce(IcuTestErrorCode&);
     void testPluralWithOffset(TestCase::Builder&, IcuTestErrorCode&);
     void testPluralWithOffsetAndLocalVar(TestCase::Builder&, IcuTestErrorCode&);
     void testDeclareBeforeUse(TestCase::Builder&, IcuTestErrorCode&);
@@ -163,9 +163,6 @@ class TemperatureFormatterFactory : public FormatterFactory {
     public:
     Formatter* createFormatter(Locale, UErrorCode&);
     TemperatureFormatterFactory() {}
-
-    private:
-    friend class TemperatureFormatter;
 
     size_t constructCount;
     size_t formatCount;

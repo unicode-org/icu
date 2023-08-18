@@ -207,7 +207,7 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
         return result;
     }
 
-    static FormattedPlaceholder* create(Formattable* v, UErrorCode& status) {
+    static FormattedPlaceholder* create(const Formattable* v, UErrorCode& status) {
         NULL_ON_ERROR(status);
         FormattedPlaceholder* result(new FormattedPlaceholder(v));
         if (result == nullptr) {
@@ -292,14 +292,14 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
     private:
 
     // All constructors adopt their arguments
-    FormattedPlaceholder(Formattable* f, UnicodeString* s) : type(Type::STRING), string(s), input(f) {
+    FormattedPlaceholder(const Formattable* f, UnicodeString* s) : type(Type::STRING), string(s), input(f) {
         U_ASSERT(f != nullptr);
         U_ASSERT(s != nullptr);
     }
-    FormattedPlaceholder(Formattable* f, number::FormattedNumber v) : type(Type::NUMBER), num(std::move(v)), input(f) {
+    FormattedPlaceholder(const Formattable* f, number::FormattedNumber v) : type(Type::NUMBER), num(std::move(v)), input(f) {
         U_ASSERT(f != nullptr);
     }
-    FormattedPlaceholder(Formattable* f) : type(Type::DYNAMIC), input(f) { U_ASSERT(f != nullptr); }
+    FormattedPlaceholder(const Formattable* f) : type(Type::DYNAMIC), input(f) { U_ASSERT(f != nullptr); }
 
     Type type;
     // ?? - Should this be a Formattable or a FormattedValue?
@@ -311,7 +311,9 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
 
     // If the other two fields are invalid,
     // this is assumed to be a not-formatted-yet value
-    LocalPointer<Formattable> input;
+
+    // This does not own input (it may be in the global environment
+    const Formattable* input;
 
 //    LocalPointer<FormattedPlaceholder> next;
 };

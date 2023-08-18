@@ -166,17 +166,6 @@ void TestMessageFormat2::testPluralOrdinal(TestCase::Builder& testBuilder, IcuTe
     TestUtils::runTestCase(*this, *test, errorCode);
 }
 
-/* static */ FunctionRegistry* message2::TemperatureFormatter::customRegistry(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    LocalPointer<FunctionRegistry::Builder> frBuilder(FunctionRegistry::builder(errorCode));
-    NULL_ON_ERROR(errorCode);
-
-    return(frBuilder->
-            setFormatter(FunctionName("temp"), new TemperatureFormatterFactory(), errorCode)
-            .build(errorCode));
-}
-
 TemperatureFormatter::TemperatureFormatter(Locale l, TemperatureFormatterFactory& c, UErrorCode& errorCode) : locale(l), counter(c) {
     CHECK_ERROR(errorCode);
 
@@ -186,7 +175,8 @@ TemperatureFormatter::TemperatureFormatter(Locale l, TemperatureFormatterFactory
         return;
     }
     // The environment owns the values
- //   cachedFormatters->setValueDeleter(uprv_deleteUObject);
+    //   cachedFormatters->setValueDeleter(uprv_deleteUObject);
+    counter.constructCount++;
 }
  
 Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
@@ -295,15 +285,28 @@ FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, co
 
 TemperatureFormatter::~TemperatureFormatter() {}
 
-void TestMessageFormat2::testFormatterIsCreatedOnce(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
-/*
-        // Check that the constructor was only called once,
-        // and the formatter as many times as the public call to format.
-        assertEquals("cached formatter", 1, counter.constructCount);
-        assertEquals("cached formatter", maxCount * 2, counter.formatCount);
-        assertEquals("cached formatter", 1, counter.fFormatterCount);
-        assertEquals("cached formatter", 1, counter.cFormatterCount);
+void putFormattableArg(Hashtable& arguments, const UnicodeString& k, const UnicodeString& arg, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    Formattable* valPtr(new Formattable(arg));
+    if (valPtr == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        arguments.put(k, valPtr, errorCode);
+    }
+}
 
+void putFormattableArg(Hashtable& arguments, const UnicodeString& k, long arg, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    Formattable* valPtr(new Formattable(arg));
+    if (valPtr == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        arguments.put(k, valPtr, errorCode);
+    }
+}
+
+void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode) {
+/*
         // Check that the skeleton is respected
         assertEquals("cached formatter",
                 "Testing 12°C.",
@@ -338,31 +341,62 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(TestCase::Builder& testBuild
                 mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
 */
 
-    LocalPointer<FunctionRegistry> reg(TemperatureFormatter::customRegistry(errorCode));
+    LocalPointer<FunctionRegistry::Builder> frBuilder(FunctionRegistry::builder(errorCode));
+    CHECK_ERROR(errorCode);
+
+    // Counter will be adopted by function registry
+    TemperatureFormatterFactory* counter = new TemperatureFormatterFactory();
+    if (counter == nullptr) {
+        ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    LocalPointer<FunctionRegistry> reg(frBuilder->setFormatter(FunctionName("temp"),
+                                                               counter, errorCode)
+                                       .build(errorCode));
     CHECK_ERROR(errorCode);
     UnicodeString message = "{Testing {$count :temp unit=$unit skeleton=|.00/w|}.}";
-    testBuilder.setFunctionRegistry(TemperatureFormatter::customRegistry(errorCode))
-               .setPattern(message);
-    
+
+    LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    mfBuilder->setPattern(message, errorCode);
+    mfBuilder->setFunctionRegistry(reg.getAlias());
+    UParseError parseError;
+    LocalPointer<MessageFormatter> mf(mfBuilder->build(parseError, errorCode));
+    UnicodeString result;
+    UnicodeString countKey("count");
+    UnicodeString unitKey("unit");
+
     const size_t maxCount = 10;
     char expected[20];
-    LocalPointer<TestCase> test;
+    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    CHECK_ERROR(errorCode);
     for (size_t count = 0; count < maxCount; count++) {
         long arg = (long) count;
         snprintf(expected, sizeof(expected), "Testing %zu°C.", count);
-        test.adoptInstead(testBuilder.setExpected(expected)
-            .setArgument("count", arg, errorCode)
-            .setArgument("unit", "C", errorCode)
-            .build(errorCode));
-        TestUtils::runTestCase(*this, *test, errorCode);
+
+        putFormattableArg(*arguments, countKey, arg, errorCode);
+        putFormattableArg(*arguments, unitKey, "C", errorCode);
+        CHECK_ERROR(errorCode);
+
+        mf->formatToString(*arguments, errorCode, result);
+        assertEquals("temperature formatter", expected, result);
+        result.remove();
 
         snprintf(expected, sizeof(expected), "Testing %zu°F.", count);
-        test.adoptInstead(testBuilder.setExpected(expected)
-            .setArgument("count", arg, errorCode)
-            .setArgument("unit", "F", errorCode)
-            .build(errorCode));
-        TestUtils::runTestCase(*this, *test, errorCode);
+        putFormattableArg(*arguments, countKey, arg, errorCode);
+        putFormattableArg(*arguments, unitKey, "F", errorCode);
+        CHECK_ERROR(errorCode);
+        
+        mf->formatToString(*arguments, errorCode, result);
+        assertEquals("temperature formatter", expected, result);
+        result.remove();
     }
+
+    assertEquals("cached formatter", 1, counter->constructCount);
+    assertEquals("cached formatter", ((int32_t) (maxCount * 2)), counter->formatCount);
+    assertEquals("cached formatter", 1, counter->fFormatterCount);
+    assertEquals("cached formatter", 1, counter->cFormatterCount);
 }
 
 void TestMessageFormat2::testPluralWithOffset(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
@@ -405,7 +439,7 @@ void TestMessageFormat2::featureTests() {
     testDateFormat(*testBuilder, errorCode);
     testPlural(*testBuilder, errorCode);
     testPluralOrdinal(*testBuilder, errorCode);
-    testFormatterIsCreatedOnce(*testBuilder, errorCode);
+    testFormatterIsCreatedOnce(errorCode);
     testPluralWithOffset(*testBuilder, errorCode);
     testPluralWithOffsetAndLocalVar(*testBuilder, errorCode);
     testDeclareBeforeUse(*testBuilder, errorCode);
