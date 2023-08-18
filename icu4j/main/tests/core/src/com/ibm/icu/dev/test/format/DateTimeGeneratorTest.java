@@ -65,9 +65,9 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 {"zh-TW",  "CCCCm",   "BBBBhh:mm"},
                 {"zh-TW",  "CCCCCm",  "BBBBBh:mm"},
                 {"zh-TW",  "CCCCCCm", "BBBBBhh:mm"},
-                {"de",     "Cm",      "HH:mm"},
+                {"de",     "Cm",      "H:mm"},
                 {"de",     "CCm",     "HH:mm"},
-                {"de",     "CCCm",    "HH:mm"},
+                {"de",     "CCCm",    "H:mm"},
                 {"de",     "CCCCm",   "HH:mm"},
                 {"en",     "Cm",      "h:mm\u202Fa"},
                 {"en",     "CCm",     "hh:mm\u202Fa"},
@@ -502,7 +502,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"JJmm", "23:58"},
 
         new ULocale("zh_Hans_CN"),
-        new String[] {"yM", "1999\u5E741\u6708"},
+        new String[] {"yM", "1999/1"},
         new String[] {"yMMM", "1999\u5E741\u6708"}, // (fixed expected result per ticket 6872<-6626)
         new String[] {"yMd", "1999/1/13"},
         new String[] {"yMMMd", "1999\u5E741\u670813\u65E5"}, // (fixed expected result per ticket 6872<-6626)
@@ -1793,7 +1793,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void testBestPattern() {
         // generic test for DateTimePatternGenerator::getBestPattern() that can be used to test multiple
@@ -1840,19 +1840,19 @@ public class DateTimeGeneratorTest extends TestFmwk {
             String skeleton = testCases[i + 1];
             String expectedPattern = testCases[i + 2];
             String actualPattern = null;
-        
+
             if (!skeleton.equals("full")) {
                 DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
                 actualPattern = dtpg.getBestPattern(skeleton);
             } else {
                 DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
                 SimpleDateFormat sdf = (SimpleDateFormat)df;
-            
+
                 if (sdf != null) {
                     actualPattern = sdf.toPattern();
                 }
             }
-        
+
             assertEquals("Wrong result for test case " + localeID + "/" + skeleton, expectedPattern, actualPattern);
         }
     }
@@ -1921,7 +1921,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                                            "EEEE d MMMM, y 'da' HH:mm",
                                            "d MMMM, y 'da' HH:mm",
                                            "d MMM, y, HH:mm",
-                                           "y-MM-dd, HH:mm" } ),
+                                           "d/M/y, HH:mm" } ),
         };
 
         String[] enDTPatterns = {
@@ -2030,7 +2030,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void testRegionOverride() {
         String[][] testCases = {
@@ -2044,11 +2044,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
             String localeID = testCase[0];
             String expectedPattern = testCase[1];
             String expectedHourCycle = testCase[2];
-        
+
             DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(new ULocale(localeID));
             String actualHourCycle = dtpg.getDefaultHourCycle().toString();
             String actualPattern = dtpg.getBestPattern("jmm");
-            
+
             assertEquals("Wrong hour cycle", expectedHourCycle, actualHourCycle);
             assertEquals("Wrong pattern", expectedPattern, actualPattern);
         }

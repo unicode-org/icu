@@ -575,8 +575,6 @@ en_001{
             }
             dram{
                 dnam{"dram"}
-                one{"{0} dram"}
-                other{"{0} drams"}
             }
             drop{
                 one{"{0} drops"}
@@ -608,10 +606,6 @@ en_001{
                 dnam{"hl"}
                 one{"{0} hl"}
                 other{"{0} hl"}
-            }
-            jigger{
-                one{"{0} jigger"}
-                other{"{0} jiggers"}
             }
             liter{
                 dnam{"litres"}

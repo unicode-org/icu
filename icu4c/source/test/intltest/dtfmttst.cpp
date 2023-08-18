@@ -1914,12 +1914,12 @@ void DateFormatTest::TestQuarters()
     const char *ES_MX_DATA[] = {
         "yyyy MM dd",
 
-        "QQQQ y",  "fp", "1970 01 01", "1.er trimestre 1970", "1970 01 01",
+        "QQQQ y",  "fp", "1970 01 01", "1.\\u00BA trimestre 1970",  "1970 01 01",
         "QQQ y",   "fp", "1970 01 01", "T1 1970",             "1970 01 01",
         "QQQQQ y", "fp", "1970 01 01", "1 1970",              "1970 01 01",
-        "qqqq",    "fp", "1970 01 01", "1.er trimestre",      "1970 01 01",
+        "qqqq",    "fp", "1970 01 01", "1.\\u00BA trimestre",      "1970 01 01",
         "qqq",     "fp", "1970 01 01", "T1",                  "1970 01 01",
-        "qqqqq",   "fp", "1970 01 01", "1T",                  "1970 01 01",
+        "qqqqq",   "fp", "1970 01 01", "1",                  "1970 01 01",
     };
 
     expect(EN_DATA, UPRV_LENGTHOF(EN_DATA), Locale("en", "", ""));
@@ -4456,7 +4456,7 @@ void DateFormatTest::TestFormatsWithNumberSystems()
     const UDate date = 1451556000000.0; // for UTC: grego 31-Dec-2015 10 AM, hebrew 19 tevet 5776, chinese yi-wei 11mo 21day
     const TestFmtWithNumSysItem items[] = {
         { "haw@calendar=gregorian", DateFormat::kShort, UnicodeString("d/M/yy"),               UnicodeString("31/xii/15") },
-        { "he@calendar=hebrew",     DateFormat::kLong, CharsToUnicodeString("d \\u05D1MMMM y"), CharsToUnicodeString("\\u05D9\\u05F4\\u05D8 \\u05D1\\u05D8\\u05D1\\u05EA \\u05EA\\u05E9\\u05E2\\u05F4\\u05D5") }, 
+        { "he@calendar=hebrew",     DateFormat::kLong, CharsToUnicodeString("d \\u05D1MMMM y"), CharsToUnicodeString("\\u05D9\\u05F4\\u05D8 \\u05D1\\u05D8\\u05D1\\u05EA \\u05EA\\u05E9\\u05E2\\u05F4\\u05D5") },
         { "zh@calendar=chinese",      DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u5EFF\\u4E00") },
         { "zh_Hant@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u51AC\\u6708\\u5EFF\\u4E00") },
         { "ja@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("U\\u5E74MMMd\\u65E5"), CharsToUnicodeString("\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u4E8C\\u4E00\\u65E5") },

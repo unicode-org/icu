@@ -14,14 +14,6 @@ bho{
         latn{
             patterns{
                 currencyFormat{"¤#,##0.00"}
-                decimalFormat{"#,##0.###"}
-            }
-            symbols{
-                decimal{"."}
-                group{","}
-                minusSign{"-"}
-                percentSign{"%"}
-                plusSign{"+"}
             }
         }
     }
@@ -55,16 +47,6 @@ bho{
                 "yMMMMd",
                 "yMMMd",
                 "yMMdd",
-            }
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                Hmsv{"HH:mm:ss v"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                hmsv{"h:mm:ss a v"}
-                yMMMd{"y MMM d"}
-                yMd{"y-MM-dd"}
             }
             dayNames{
                 format{

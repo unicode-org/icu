@@ -167,8 +167,10 @@ public class ConversionRates {
                         factor = valueString;
                     } else if ("offset".equals(keyString)) {
                         offset = valueString;
+                    } else if ("systems".equals(keyString)) {
+                        // just ignore for time being
                     } else {
-                        assert false : "The key must be target, factor or offset";
+                        assert false : "The key must be target, factor, systems or offset";
                     }
                 }
 

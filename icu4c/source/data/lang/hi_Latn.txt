@@ -18,6 +18,7 @@ hi_Latn{
     }
     Languages{
         af{"Afreeki"}
+        bgc{"Hariyaanvi"}
         bn{"Bangla"}
         bo{"Tibbati"}
         ckb{"Kurdish, Sorani"}

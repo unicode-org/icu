@@ -929,8 +929,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 595)
-        errln("Expected getISOLanguages() to return 595 languages; it returned %d", testCount);
+    if (testCount != 596)
+        errln("Expected getISOLanguages() to return 596 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -3884,10 +3884,10 @@ LocaleTest::TestKeywordVariants() {
         UErrorCode expectedStatus;
     } testCases[] = {
         {
-            "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = buddhist   ", 
-            "de_DE@calendar=buddhist;collation=Phonebook;currency=euro", 
+            "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = buddhist   ",
+            "de_DE@calendar=buddhist;collation=Phonebook;currency=euro",
             //"de_DE",
-            //"de_DE@calendar=buddhist;collation=Phonebook;currency=euro", 
+            //"de_DE@calendar=buddhist;collation=Phonebook;currency=euro",
             {"calendar", "collation", "currency"},
             3,
             U_ZERO_ERROR
@@ -4401,7 +4401,7 @@ void LocaleTest::TestGetLocale() {
 #if !UCONFIG_NO_SERVICE
     const char *req;
     Locale valid, actual, reqLoc;
-    
+
     // Calendar
 #if !UCONFIG_NO_FORMATTING
     {
@@ -4462,7 +4462,7 @@ void LocaleTest::TestGetLocale() {
                 errln("FAIL: DecimalFormatSymbols::getLocale() failed");
             } else {
                 _checklocs("DecimalFormatSymbols", req, valid, actual);
-            }        
+            }
         }
         delete nf;
     }
@@ -4491,7 +4491,7 @@ void LocaleTest::TestGetLocale() {
             } else {
                 _checklocs("SimpleDateFormat", req, valid, actual);
             }
-    
+
             const DateFormatSymbols* sym = dat->getDateFormatSymbols();
             if (sym == nullptr) {
                 errln("FAIL: getDateFormatSymbols returned nullptr");
@@ -4503,7 +4503,7 @@ void LocaleTest::TestGetLocale() {
                 errln("FAIL: DateFormatSymbols::getLocale() failed");
             } else {
                 _checklocs("DateFormatSymbols", req, valid, actual);
-            }        
+            }
         }
         delete df;
     }
@@ -4526,7 +4526,7 @@ void LocaleTest::TestGetLocale() {
             } else {
                 _checklocs("BreakIterator", req, valid, actual);
             }
-        
+
             // After registering something, the behavior should be different
             URegistryKey key = BreakIterator::registerInstance(brk, reqLoc, UBRK_WORD, ec);
             brk = 0; // registerInstance adopts
@@ -4796,8 +4796,8 @@ void LocaleTest::TestCanonicalization()
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
         { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
         { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
-        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
-        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
+        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" },
+        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" },
         { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
         { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
         { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" }, /* POSIX ID */
@@ -4883,11 +4883,11 @@ void LocaleTest::TestCanonicalization()
         { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR" },
         { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP" },
     };
-    
+
     static const char* label[] = { "createFromName", "createCanonical", "Locale" };
 
     int32_t i, j;
-    
+
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
         for (j=0; j<3; ++j) {
             const char* expected = (j==1) ? testCases[i].canonicalID : testCases[i].getNameID;
@@ -5359,7 +5359,7 @@ void LocaleTest::TestCurrencyByDate()
 
     char16_t USD[4];
     ucurr_forLocaleAndDate("en_US", date, 1, USD, 4, &status);
-    
+
 	char16_t YEN[4];
     ucurr_forLocaleAndDate("ja_JP", date, 1, YEN, 4, &status);
 
@@ -5417,7 +5417,7 @@ void LocaleTest::TestBug11421() {
 
 //  TestBug13277. The failure manifests as valgrind errors.
 //                See the trac ticket for details.
-//                
+//
 
 void LocaleTest::TestBug13277() {
     UErrorCode status = U_ZERO_ERROR;

@@ -12600,10 +12600,6 @@ supplementalData:table(nofallback){
         blo{
             primary{
                 scripts{"Latn"}
-                territories{
-                    "BJ",
-                    "TG",
-                }
             }
         }
         blt{
@@ -14289,6 +14285,11 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{"Arab"}
+            }
+        }
+        ie{
+            secondary{
+                scripts{"Latn"}
             }
         }
         ife{
@@ -27521,7 +27522,7 @@ supplementalData:table(nofallback){
         }
         BJ{
             blo{
-                populationShareF:int{47260000}
+                populationShareF:int{47300000}
             }
             fon{
                 populationShareF:int{49250000}
@@ -32946,7 +32947,7 @@ supplementalData:table(nofallback){
         }
         TG{
             blo{
-                populationShareF:int{47140000}
+                populationShareF:int{47150000}
             }
             ee{
                 populationShareF:int{49170000}

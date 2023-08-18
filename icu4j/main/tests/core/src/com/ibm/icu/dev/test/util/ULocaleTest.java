@@ -1267,7 +1267,7 @@ public class ULocaleTest extends TestFmwk {
                 new Item("zh",      NM_DIA, CAP_MID, LEN_FU, SUB_SU, "fr_CA",  "加拿大法语" ),
                 new Item("zh",      NM_DIA, CAP_MID, LEN_FU, SUB_SU, "fr_CH",  "瑞士法语" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "ar_001", "現代標準阿拉伯文" ),
-                new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "nl_BE",  "佛蘭芒文" ),
+                new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "nl_BE",  "法蘭德斯文" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "ro_MD",  "摩爾多瓦文" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_AU",  "英文（澳洲）" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_CA",  "英文（加拿大）" ),
@@ -1672,10 +1672,8 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F");
         h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
         h[1].put("buddhist", "\u4F5B\u5386");
-//        h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");              // Temporary change the test because data was set to provisional
-//        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u65E5\u5386");  // Temporary change the test because data was set to provisional
-        h[1].put("islamic", "islamic");
-        h[1].put("islamic-civil", "islamic-civil");
+        h[1].put("islamic", "伊斯兰历");
+        h[1].put("islamic-civil", "伊斯兰希吉来日历");
         h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");
         h[1].put("chinese", "\u519C\u5386");
         h[1].put("gregorian", "\u516C\u5386");

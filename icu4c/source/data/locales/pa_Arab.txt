@@ -54,7 +54,6 @@ pa_Arab{
             availableFormats{
                 HHmmss{"HH:mm:ss"}
                 Md{"d/M"}
-                ms{"mm:ss"}
                 yMMM{"MMM y"}
                 yQQQ{"QQQ y"}
             }
@@ -107,10 +106,6 @@ pa_Arab{
             }
             eras{
                 abbreviated{
-                    "ايساپورو",
-                    "سں",
-                }
-                wide{
                     "ايساپورو",
                     "سں",
                 }

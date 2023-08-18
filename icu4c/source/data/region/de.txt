@@ -146,6 +146,7 @@ de{
         IL{"Israel"}
         IM{"Isle of Man"}
         IN{"Indien"}
+        IO{"Britisches Territorium im Indischen Ozean"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
@@ -296,6 +297,9 @@ de{
         ZM{"Sambia"}
         ZW{"Simbabwe"}
         ZZ{"Unbekannte Region"}
+    }
+    Countries%chagos{
+        IO{"Chagos-Archipel"}
     }
     Countries%short{
         GB{"UK"}

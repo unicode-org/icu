@@ -698,7 +698,7 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
     VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
     VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
-    VerifygetSymbols(esMX, UDAT_STANDALONE_NARROW_QUARTERS, 1, "2T");
+    VerifygetSymbols(esMX, UDAT_STANDALONE_NARROW_QUARTERS, 1, "2");
     VerifygetSymbols(def, UDAT_NARROW_QUARTERS, 2, "3");
     VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_ABBREVIATED, 0, "\\u7532\\u5B50");
     VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_NARROW, 59, "\\u7678\\u4EA5");
@@ -1969,47 +1969,47 @@ static void TestNarrowQuarters(void) {
         u"en_US", u"QQQQ y",  u"1st quarter 1970",
         u"en_US", u"QQQ y",   u"Q1 1970",
         u"en_US", u"QQQQQ y", u"1 1970",
-        u"es_MX", u"QQQQ y",  u"1.er trimestre 1970",
+        u"es_MX", u"QQQQ y",  u"1.º trimestre 1970",
         u"es_MX", u"QQQ y",   u"T1 1970",
         u"es_MX", u"QQQQQ y", u"1 1970",
         u"en_US", u"qqqq",    u"1st quarter",
         u"en_US", u"qqq",     u"Q1",
         u"en_US", u"qqqqq",   u"1",
-        u"es_MX", u"qqqq",    u"1.er trimestre",
+        u"es_MX", u"qqqq",    u"1.º trimestre",
         u"es_MX", u"qqq",     u"T1",
-        u"es_MX", u"qqqqq",   u"1T",
+        u"es_MX", u"qqqqq",   u"1",
     };
-    
+
     UErrorCode err = U_ZERO_ERROR;
     UChar result[100];
     UDate parsedDate = 0;
     UDate expectedFormatParsedDate = 0;
     UDate expectedStandaloneParsedDate = 0;
-    
+
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
         const UChar* localeID = testCases[i];
         const UChar* pattern = testCases[i + 1];
         const UChar* expectedResult = testCases[i + 2];
-        
+
         err = U_ZERO_ERROR;
-        
+
         UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, austrdup(localeID), u"UTC", 0, pattern, -1, &err);
-        
+
         udat_format(df, 0, result, 100, NULL, &err);
-        
+
         if (assertSuccess("Formatting date failed", &err)) {
             assertUEquals("Wrong formatting result", expectedResult, result);
         }
-        
+
         bool patternIsStandaloneQuarter = u_strchr(pattern, u'q') != NULL;
-        
+
         parsedDate = udat_parse(df, expectedResult, -1, NULL, &err);
         if (!patternIsStandaloneQuarter && expectedFormatParsedDate == 0) {
             expectedFormatParsedDate = parsedDate;
         } else if (patternIsStandaloneQuarter && expectedStandaloneParsedDate == 0) {
             expectedStandaloneParsedDate = parsedDate;
         }
-        
+
         if (assertSuccess("Parsing date failed", &err)) {
             if (patternIsStandaloneQuarter) {
                 assertDoubleEquals("Wrong parsing result", expectedStandaloneParsedDate, parsedDate);
@@ -2017,7 +2017,7 @@ static void TestNarrowQuarters(void) {
                 assertDoubleEquals("Wrong parsing result", expectedFormatParsedDate, parsedDate);
             }
         }
-        
+
         udat_close(df);
     }
 }
@@ -2027,13 +2027,13 @@ static void TestExtraneousCharacters(void) {
     UErrorCode err = U_ZERO_ERROR;
     UCalendar* cal = ucal_open(u"UTC", -1, "en_US", UCAL_GREGORIAN, &err);
     UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, "en_US", u"UTC", -1, u"yyyyMMdd", -1, &err);
-    
+
     if (assertSuccess("Failed to create date formatter and calendar", &err)) {
         udat_setLenient(df, false);
 
         udat_parseCalendar(df, cal, u"2021", -1, NULL, &err);
         assertTrue("Success parsing '2021'", err == U_PARSE_ERROR);
-        
+
         err = U_ZERO_ERROR;
         udat_parseCalendar(df, cal, u"2021-", -1, NULL, &err);
         assertTrue("Success parsing '2021-'", err == U_PARSE_ERROR);

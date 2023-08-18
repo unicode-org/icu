@@ -146,6 +146,7 @@ lt{
         IL{"Izraelis"}
         IM{"Meno Sala"}
         IN{"Indija"}
+        IO{"Indijos Vandenyno Britų Sritis"}
         IQ{"Irakas"}
         IR{"Iranas"}
         IS{"Islandija"}
@@ -296,6 +297,9 @@ lt{
         ZM{"Zambija"}
         ZW{"Zimbabvė"}
         ZZ{"nežinoma sritis"}
+    }
+    Countries%chagos{
+        IO{"Čagoso salynas"}
     }
     Countries%short{
         GB{"JK"}

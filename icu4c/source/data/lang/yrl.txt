@@ -556,9 +556,6 @@ yrl{
         yue{"kãtunei (katuwa)"}
         zh{"xinanheẽga, mãdarĩ"}
     }
-    Languages%short{
-        en_US{"ẽgirixi (EUA)"}
-    }
     Languages%variant{
         ps{"puxitu"}
     }
@@ -890,7 +887,6 @@ yrl{
     }
     characterLabelPattern{
         all{"{0} — panhé"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — kũpatibilidadi"}
         enclosed{"{0} — sikĩdawa"}
         extended{"{0} — pukuwa"}
@@ -907,10 +903,5 @@ yrl{
         language{"Nheẽga: {0}"}
         script{"Letarasawa-ita: {0}"}
         territory{"Tẽdawa: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

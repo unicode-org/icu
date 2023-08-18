@@ -38,7 +38,7 @@ The full process requires local copies of
 * CLDR (the source of most of the data, and some Java tools)
 * The complete ICU source tree, including:
   * tools: includes the LdmlConverter build tool and associated config files
-  * icu4c: the target for converted CLDR data, and source for ICU4J data; includes tests for the converted data 
+  * icu4c: the target for converted CLDR data, and source for ICU4J data; includes tests for the converted data
   * icu4j: the target for updated data jars; includes tests for the converted data
 
 For an official CLDR data integration into ICU, these should be clean, freshly
@@ -105,14 +105,14 @@ There are several environment variables that need to be defined.
 
    * `CLDR_TMP_DIR`: Parent of temporary CLDR production data. Defaults to
      `$CLDR_DIR/../cldr-aux` (sibling to `CLDR_DIR`).
-     
+
      > **NOTE:** As of CLDR 36 and 37, the GenerateProductionData tool no longer
        generates data by default into `$CLDR_TMP_DIR/production`; instead it
        generates data into `$CLDR_DIR/../cldr-staging/production` (though there is
        a command-line option to override this). However the rest of the build still
        assumes that the generated data is in `$CLDR_TMP_DIR/production`.
        So `CLDR_TMP_DIR` must be defined to be `CLDR_DIR/../cldr-staging`.
-       
+
 3. ICU-related variables
 
    * `ICU4C_DIR`: Path to root of ICU4C sources, below which is the source dir.
@@ -121,9 +121,9 @@ There are several environment variables that need to be defined.
 
    * `TOOLS_ROOT`: Path to root of ICU tools directory, below which are (e.g.) the
      cldr and unicodetools dirs.
- 
+
 # Process
- 
+
 ## 1 Environment variables
 
 1a. Java and ant variables, adjust for your system
@@ -277,7 +277,7 @@ ant copy-cldr-testdata
 cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4C_DIR/source/test/testdata/
 cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/
 open $ICU4C_DIR/source/test/testdata/localeCanonicalization.txt
-open $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/ocaleCanonicalization.txt
+open $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/localeCanonicalization.txt
 ```
 At the beginning of each file add the following line:\
 ```
@@ -286,7 +286,7 @@ At the beginning of each file add the following line:\
 
 5e. For now, manually re-add the `lstm` entries in `data/brkitr/root.txt`
 ```
-open $ICU4C_DIR/source/data/brkitr/root.txt 
+open $ICU4C_DIR/source/data/brkitr/root.txt
 ```
 Paste the following block after the dictionaries block and before the final closing '}':
 ```
@@ -435,7 +435,7 @@ ant checkTest -Dtestclass='com.ibm.icu.dev.test.format.MeasureUnitTest'
 13b. Optionally run the tests in exhautive mode
 
 Optionally run before committing changes, or run to diagnose failures from
-running exhastive CI tests in the PR using `/azp run CI-Exhaustive`: 
+running exhastive CI tests in the PR using `/azp run CI-Exhaustive`:
 ```
 cd $ICU4J_ROOT
 ant exhaustiveCheck 2>&1 | tee $NOTES/icu4j-newData-antCheckEx.txt
@@ -465,7 +465,7 @@ rebuilding of other kinds of data and/or code. For example:
 
 If you see a failure such as
 ```
-MeasureUnitTest	testCLDRUnitAvailability	Failure	(MeasureUnitTest.java:3410) : Unit present in CLDR but not available via constant in MeasureUnit: speed-beaufort 
+MeasureUnitTest	testCLDRUnitAvailability	Failure	(MeasureUnitTest.java:3410) : Unit present in CLDR but not available via constant in MeasureUnit: speed-beaufort
 ```
 then you will need to update the C and J library and test code for new measurement
 units, see the procedure at
@@ -575,9 +575,3 @@ When you are all ready, click the "Publish release" button.
 
 For cldr-staging, go to [unicode-org/cldr-staging/tags](https://github.com/unicode-org/cldr-staging/tags)
 and do something similar.
-
-
-
-
-
-

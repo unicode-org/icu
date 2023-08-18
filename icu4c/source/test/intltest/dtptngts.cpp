@@ -245,7 +245,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
     UnicodeString patternResults_zh_Hans_CN[] = {
         // zh_Hans_CN                                                     // 7 zh_Hans_CN
-        CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 00: yM -> y\u5E74M\u6708
+        CharsToUnicodeString("1999/1"),                                   // 00: yM
         CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 01: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)
         CharsToUnicodeString("1999/1/13"),                                // 02: yMd
         CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),             // 03: yMMMd -> yyyy\u5E74MMMd\u65E5 (fixed expected result per ticket:6626:)
@@ -588,7 +588,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
 
     // ======== Test getSkeleton and getBaseSkeleton
-    
+
     int32_t i, count = UPRV_LENGTHOF(testGetSkeletonAndBase);
     for (i = 0; i < count; i++) {
         status = U_ZERO_ERROR;
@@ -1168,9 +1168,9 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
             {"zh-TW",  "CCCCm",   "BBBBhh:mm"},
             {"zh-TW",  "CCCCCm",  "BBBBBh:mm"},
             {"zh-TW",  "CCCCCCm", "BBBBBhh:mm"},
-            {"de",     "Cm",      "HH:mm"},
+            {"de",     "Cm",      "H:mm"},
             {"de",     "CCm",     "HH:mm"},
-            {"de",     "CCCm",    "HH:mm"},
+            {"de",     "CCCm",    "H:mm"},
             {"de",     "CCCCm",   "HH:mm"},
             {"en",     "Cm",      "h:mm\\u202Fa"},
             {"en",     "CCm",     "hh:mm\\u202Fa"},
@@ -1465,13 +1465,13 @@ void IntlTestDateTimePatternGeneratorAPI::test20640_HourCyclArsEnNH() {
 void IntlTestDateTimePatternGeneratorAPI::testFallbackWithDefaultRootLocale() {
     UErrorCode status = U_ZERO_ERROR;
     char original[ULOC_FULLNAME_CAPACITY];
-    
+
     uprv_strcpy(original, uloc_getDefault());
     uloc_setDefault("root", &status);
     if (U_FAILURE(status)) {
         errln("ERROR: Failed to change the default locale to root! Default is: %s\n", uloc_getDefault());
     }
- 
+
     DateTimePatternGenerator* dtpg = icu::DateTimePatternGenerator::createInstance("abcdedf", status);
 
     if (U_FAILURE(status)) {
@@ -1603,23 +1603,23 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
         { "ckb_IR",     "mmSSS",       u"mm:ss\u066bSSS"     },
         { "ckb_IR",     "BSSS",        u"SSS \u251c'Dayperiod': B\u2524" },
     };
-    
+
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         UErrorCode err = U_ZERO_ERROR;
         UnicodeString actualPattern;
-        
+
         if (uprv_strcmp(testCases[i].skeleton, "full") != 0) {
             LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].localeID, err), err);
             actualPattern = dtpg->getBestPattern(UnicodeString(testCases[i].skeleton), err);
         } else {
             LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kFull, testCases[i].localeID));
             SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(df.getAlias());
-            
+
             if (sdf != nullptr) {
                 sdf->toPattern(actualPattern);
             }
         }
-        
+
         if (U_FAILURE(err)) {
             errln("Failure for test case %s/%s: %s", testCases[i].localeID, testCases[i].skeleton, u_errorName(err));
         } else {
@@ -1654,7 +1654,7 @@ void IntlTestDateTimePatternGeneratorAPI::testDateTimePatterns() {
         { "ha", { UnicodeString(u"EEEE d MMMM, y 'da' HH:mm"),
                   UnicodeString(u"d MMMM, y 'da' HH:mm"),
                   UnicodeString(u"d MMM, y, HH:mm"),
-                  UnicodeString(u"y-MM-dd, HH:mm") } },
+                  UnicodeString(u"d/M/y, HH:mm") } },
         { nullptr, { UnicodeString(""), UnicodeString(""), // terminator
                     UnicodeString(""), UnicodeString("") } },
     };
@@ -1776,11 +1776,11 @@ void IntlTestDateTimePatternGeneratorAPI::testRegionOverride() {
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         UErrorCode err = U_ZERO_ERROR;
         LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].locale, err));
-        
+
         if (assertSuccess("Error creating dtpg", err)) {
             UDateFormatHourCycle actualHourCycle = dtpg->getDefaultHourCycle(err);
             UnicodeString actualPattern = dtpg->getBestPattern(u"jmm", err);
-            
+
             if (assertSuccess("Error using dtpg", err)) {
                 assertEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
                 assertEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);

@@ -146,6 +146,7 @@ eu{
         IL{"Israel"}
         IM{"Man uhartea"}
         IN{"India"}
+        IO{"Indiako Ozeanoko lurralde britainiarra"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandia"}
@@ -296,6 +297,9 @@ eu{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"Eskualde ezezaguna"}
+    }
+    Countries%chagos{
+        IO{"Chagos uhartedia"}
     }
     Countries%short{
         GB{"EB"}

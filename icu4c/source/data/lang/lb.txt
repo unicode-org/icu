@@ -876,9 +876,4 @@ lb{
         script{"Schrëft: {0}"}
         territory{"Regioun: {0}"}
     }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
-    }
 }

@@ -651,8 +651,4 @@ ks{
         script{"رَسم الخط: {0}"}
         territory{"علاقہٕ: {0}"}
     }
-    localeDisplayPattern{
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
-    }
 }

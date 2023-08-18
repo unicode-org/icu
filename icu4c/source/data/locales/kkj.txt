@@ -12,17 +12,14 @@ kkj{
         "[A B Ɓ C D Ɗ {Ɗy} E Ɛ F G {Gb} {Gw} H I{I̧} J K {Kp} {Kw} L M {Mb} N {Nd} {N"
         "j} {Ny} Ŋ {Ŋg} {Ŋgb} {Ŋgw} O Ɔ{Ɔ̧} P R S T U{U̧} V W Y]"
     }
-    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[, \\: ! ? . … ‘ ‹ › “” « » ( ) *]"}
     NumberElements{
-        default{"latn"}
         latn{
             symbols{
                 decimal{","}
                 group{"."}
             }
         }
-        native{"latn"}
     }
     calendar{
         generic{
@@ -114,33 +111,6 @@ kkj{
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "sɔndi",
-                        "lundi",
-                        "mardi",
-                        "mɛrkɛrɛdi",
-                        "yedi",
-                        "vaŋdɛrɛdi",
-                        "mɔnɔ sɔndi",
-                    }
-                    narrow{
-                        "so",
-                        "lu",
-                        "ma",
-                        "mɛ",
-                        "ye",
-                        "va",
-                        "ms",
-                    }
-                    short{
-                        "sɔndi",
-                        "lundi",
-                        "mardi",
-                        "mɛrkɛrɛdi",
-                        "yedi",
-                        "vaŋdɛrɛdi",
-                        "mɔnɔ sɔndi",
-                    }
                     wide{
                         "sɔndi",
                         "lundi",
@@ -152,15 +122,6 @@ kkj{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "sɔndi",
-                        "lundi",
-                        "mardi",
-                        "mɛrkɛrɛdi",
-                        "yedi",
-                        "vaŋdɛrɛdi",
-                        "mɔnɔ sɔndi",
-                    }
                     narrow{
                         "so",
                         "lu",
@@ -178,36 +139,11 @@ kkj{
                         "ye",
                         "va",
                         "ms",
-                    }
-                    wide{
-                        "sɔndi",
-                        "lundi",
-                        "mardi",
-                        "mɛrkɛrɛdi",
-                        "yedi",
-                        "vaŋdɛrɛdi",
-                        "mɔnɔ sɔndi",
                     }
                 }
             }
             monthNames{
                 format{
-                    wide{
-                        "pamba",
-                        "wanja",
-                        "mbiyɔ mɛndoŋgɔ",
-                        "Nyɔlɔmbɔŋgɔ",
-                        "Mɔnɔ ŋgbanja",
-                        "Nyaŋgwɛ ŋgbanja",
-                        "kuŋgwɛ",
-                        "fɛ",
-                        "njapi",
-                        "nyukul",
-                        "M11",
-                        "ɓulɓusɛ",
-                    }
-                }
-                stand-alone{
                     wide{
                         "pamba",
                         "wanja",
@@ -239,13 +175,6 @@ kkj{
                 "0"{"muka"}
                 "1"{"nɛmɛnɔ"}
             }
-        }
-    }
-    listPattern{
-        standard{
-            end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
     }
 }

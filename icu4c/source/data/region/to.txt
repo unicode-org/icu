@@ -146,6 +146,7 @@ to{
         IL{"ʻIsileli"}
         IM{"Motu Mani"}
         IN{"ʻInitia"}
+        IO{"Potu fonua moana ʻInitia fakapilitānia"}
         IQ{"ʻIlaaki"}
         IR{"ʻIlaani"}
         IS{"ʻAisilani"}
@@ -297,6 +298,9 @@ to{
         ZW{"Simipapuei"}
         ZZ{"Potu fonua taʻeʻiloa pe hala"}
     }
+    Countries%chagos{
+        IO{"ʻOtu motu Sakōsi"}
+    }
     Countries%short{
         HK{"Hongi Kongi"}
         MO{"Makau"}
@@ -308,6 +312,7 @@ to{
         CG{"Kongo (Lepupelika)"}
         CZ{"Lepupelika Seki"}
         FK{"ʻOtumotu Malivina"}
+        NZ{"ʻAotealoa"}
         SZ{"Suasilani"}
     }
 }

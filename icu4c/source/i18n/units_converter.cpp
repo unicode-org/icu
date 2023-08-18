@@ -403,6 +403,8 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
         factor.constantExponents[CONSTANT_TSUBO_TO_M2] += power * signum;
     } else if (baseStr == "shaku_to_m") {
         factor.constantExponents[CONSTANT_SHAKU_TO_M] += power * signum;
+    } else if (baseStr == "AMU") {
+        factor.constantExponents[CONSTANT_AMU] += power * signum;
     } else {
         if (signum == Signum::NEGATIVE) {
             factor.factorDen *= std::pow(strToDouble(baseStr, status), power);

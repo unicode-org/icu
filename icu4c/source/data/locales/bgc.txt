@@ -14,18 +14,6 @@ bgc{
     }
     NumberElements{
         default{"deva"}
-        latn{
-            patterns{
-                decimalFormat{"#,##0.###"}
-            }
-            symbols{
-                decimal{"."}
-                group{","}
-                minusSign{"-"}
-                percentSign{"%"}
-                plusSign{"+"}
-            }
-        }
     }
     calendar{
         gregorian{

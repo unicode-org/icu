@@ -14,12 +14,6 @@ raj{
     }
     NumberElements{
         default{"deva"}
-        latn{
-            symbols{
-                decimal{"."}
-            }
-        }
-        native{"latn"}
     }
     calendar{
         gregorian{

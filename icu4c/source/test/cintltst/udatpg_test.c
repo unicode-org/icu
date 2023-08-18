@@ -120,7 +120,7 @@ static void TestOpenClose() {
 
     /* Verify that the clone has the custom decimal symbol. */
     s=udatpg_getDecimal(dtpg2, &length);
-    if(s==pipeString || length!=1 || 0!=u_memcmp(s, pipeString, length) || s[length]!=0) { 
+    if(s==pipeString || length!=1 || 0!=u_memcmp(s, pipeString, length) || s[length]!=0) {
         log_err("udatpg_getDecimal(cloned object) did not return the expected string\n");
         return;
     }
@@ -149,10 +149,10 @@ static void TestUsage() {
     const AppendItemNameData * appItemNameDataPtr;
     UChar bestPattern[20];
     UChar result[20];
-    int32_t length;    
+    int32_t length;
     UChar *s;
     const UChar *r;
-    
+
     dtpg=udatpg_open("fi", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err_status(errorCode, "udatpg_open(fi) failed - %s\n", u_errorName(errorCode));
@@ -164,12 +164,12 @@ static void TestUsage() {
         log_err("udatpg_getBestPattern failed - %s\n", u_errorName(errorCode));
         return;
     }
-    if((u_memcmp(bestPattern, expectingBestPattern, length)!=0) || bestPattern[length]!=0) { 
+    if((u_memcmp(bestPattern, expectingBestPattern, length)!=0) || bestPattern[length]!=0) {
         log_err("udatpg_getBestPattern did not return the expected string\n");
         return;
     }
-    
-    
+
+
     /* Test skeleton == NULL */
     s=NULL;
     length = udatpg_getBestPattern(dtpg, s, 0, bestPattern, 20, &errorCode);
@@ -177,37 +177,37 @@ static void TestUsage() {
         log_err("udatpg_getBestPattern failed in illegal argument - skeleton is NULL.\n");
         return;
     }
-    
+
     /* Test udatpg_getSkeleton */
     length = udatpg_getSkeleton(dtpg, testPattern, 5, result, 20,  &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udatpg_getSkeleton failed - %s\n", u_errorName(errorCode));
         return;
     }
-    if((u_memcmp(result, expectingSkeleton, length)!=0) || result[length]!=0) { 
+    if((u_memcmp(result, expectingSkeleton, length)!=0) || result[length]!=0) {
         log_err("udatpg_getSkeleton did not return the expected string\n");
         return;
     }
-    
+
     /* Test pattern == NULL */
     s=NULL;
     length = udatpg_getSkeleton(dtpg, s, 0, result, 20, &errorCode);
     if(!U_FAILURE(errorCode)&&(length!=0) ) {
         log_err("udatpg_getSkeleton failed in illegal argument - pattern is NULL.\n");
         return;
-    }    
-    
+    }
+
     /* Test udatpg_getBaseSkeleton */
     length = udatpg_getBaseSkeleton(dtpg, testPattern, 5, result, 20,  &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udatpg_getBaseSkeleton failed - %s\n", u_errorName(errorCode));
         return;
     }
-    if((u_memcmp(result, expectingBaseSkeleton, length)!=0) || result[length]!=0) { 
+    if((u_memcmp(result, expectingBaseSkeleton, length)!=0) || result[length]!=0) {
         log_err("udatpg_getBaseSkeleton did not return the expected string\n");
         return;
     }
-    
+
     /* Test pattern == NULL */
     s=NULL;
     length = udatpg_getBaseSkeleton(dtpg, s, 0, result, 20, &errorCode);
@@ -215,17 +215,17 @@ static void TestUsage() {
         log_err("udatpg_getBaseSkeleton failed in illegal argument - pattern is NULL.\n");
         return;
     }
-    
+
     /* set append format to {1}{0} */
     udatpg_setAppendItemFormat( dtpg, UDATPG_MONTH_FIELD, testFormat, 7 );
     r = udatpg_getAppendItemFormat(dtpg, UDATPG_MONTH_FIELD, &length);
-    
-    
-    if(length!=7 || 0!=u_memcmp(r, testFormat, length) || r[length]!=0) { 
+
+
+    if(length!=7 || 0!=u_memcmp(r, testFormat, length) || r[length]!=0) {
         log_err("udatpg_setAppendItemFormat did not return the expected string\n");
         return;
     }
-    
+
     for (appItemNameDataPtr = appendItemNameData; appItemNameDataPtr->field <  UDATPG_FIELD_COUNT; appItemNameDataPtr++) {
         int32_t nameLength;
         const UChar * namePtr = udatpg_getAppendItemName(dtpg, appItemNameDataPtr->field, &nameLength);
@@ -233,21 +233,21 @@ static void TestUsage() {
             log_err("udatpg_getAppendItemName returns invalid name for field %d\n", (int)appItemNameDataPtr->field);
         }
     }
-    
+
     /* set append name to hr */
     udatpg_setAppendItemName(dtpg, UDATPG_HOUR_FIELD, appendItemName, 2);
     r = udatpg_getAppendItemName(dtpg, UDATPG_HOUR_FIELD, &length);
-    
-    if(length!=2 || 0!=u_memcmp(r, appendItemName, length) || r[length]!=0) { 
+
+    if(length!=2 || 0!=u_memcmp(r, appendItemName, length) || r[length]!=0) {
         log_err("udatpg_setAppendItemName did not return the expected string\n");
         return;
     }
-    
+
     /* set date time format to {1}{0} */
     udatpg_setDateTimeFormat( dtpg, testFormat, 7 );
     r = udatpg_getDateTimeFormat(dtpg, &length);
-    
-    if(length!=7 || 0!=u_memcmp(r, testFormat, length) || r[length]!=0) { 
+
+    if(length!=7 || 0!=u_memcmp(r, testFormat, length) || r[length]!=0) {
         log_err("udatpg_setDateTimeFormat did not return the expected string\n");
         return;
     }
@@ -260,9 +260,9 @@ static void TestBuilder() {
     UDateTimePatternConflict conflict;
     UEnumeration *en;
     UChar result[20];
-    int32_t length, pLength;  
+    int32_t length, pLength;
     const UChar *s, *p;
-    const UChar* ptrResult[2]; 
+    const UChar* ptrResult[2];
     int32_t count=0;
     UDateTimePatternGenerator *generator;
     int32_t formattedCapacity, resultLen,patternCapacity ;
@@ -271,16 +271,16 @@ static void TestBuilder() {
     UDate sampleDate = 837039928046.0;
     static const char locale[]= "fr";
     UErrorCode status=U_ZERO_ERROR;
-    
+
     /* test create an empty DateTimePatternGenerator */
     dtpg=udatpg_openEmpty(&errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udatpg_openEmpty() failed - %s\n", u_errorName(errorCode));
         return;
     }
-    
+
     /* Add a pattern */
-    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, false, result, 20, 
+    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, false, result, 20,
                                  &length, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udatpg_addPattern() failed - %s\n", u_errorName(errorCode));
@@ -316,12 +316,12 @@ static void TestBuilder() {
         log_err("udatpg_replaceFieldTypes failed!\n");
         return;
     }
-    
+
     /* Get all skeletons and the crroespong pattern for each skeleton. */
     ptrResult[0] = testPattern2;
-    ptrResult[1] = redundantPattern; 
+    ptrResult[1] = redundantPattern;
     count=0;
-    en = udatpg_openSkeletons(dtpg, &errorCode);  
+    en = udatpg_openSkeletons(dtpg, &errorCode);
     if (U_FAILURE(errorCode) || (length==0) ) {
         log_err("udatpg_openSkeletons failed!\n");
         return;
@@ -335,7 +335,7 @@ static void TestBuilder() {
         count++;
     }
     uenum_close(en);
-    
+
     /* Get all baseSkeletons */
     en = udatpg_openBaseSkeletons(dtpg, &errorCode);
     count=0;
@@ -352,9 +352,9 @@ static void TestBuilder() {
         return;
     }
     uenum_close(en);
-    
+
     udatpg_close(dtpg);
-    
+
     /* sample code in Userguide */
     patternCapacity = UPRV_LENGTHOF(pattern);
     status=U_ZERO_ERROR;
@@ -489,7 +489,7 @@ static void TestGetFieldDisplayNames() {
             UChar expName[kFieldDisplayNameMax];
             UChar getName[kFieldDisplayNameMax];
             u_unescape(testDataPtr->expected, expName, kFieldDisplayNameMax);
-            
+
             int32_t getLen = udatpg_getFieldDisplayName(dtpgen, testDataPtr->field, testDataPtr->width,
                                                         getName, kFieldDisplayNameMax, &status);
             if ( U_FAILURE(status) ) {
@@ -604,7 +604,7 @@ static void TestEras(void) {
         "en_001@calendar=buddhist",
         "en@calendar=buddhist",
     };
-    
+
     UErrorCode err = U_ZERO_ERROR;
     for (int32_t i = 0; i < UPRV_LENGTHOF(localeIDs); i++) {
         const char* locale = localeIDs[i];
@@ -612,7 +612,7 @@ static void TestEras(void) {
         if (U_SUCCESS(err)) {
             UChar pattern[200];
             udatpg_getBestPattern(dtpg, u"y", 1, pattern, 200, &err);
-            
+
             if (u_strchr(pattern, u'G') == NULL) {
                 log_err("missing era field for locale %s\n", locale);
             }
@@ -653,7 +653,7 @@ static void TestDateTimePatterns(void) {
         { "ha", { u"EEEE d MMMM, y 'da' HH:mm",
                   u"d MMMM, y 'da' HH:mm",
                   u"d MMM, y, HH:mm",
-                  u"y-MM-dd, HH:mm" } },
+                  u"d/M/y, HH:mm" } },
         { NULL, { NULL, NULL, NULL, NULL } } // terminator
     };
 

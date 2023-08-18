@@ -620,8 +620,4 @@ gsw{
         script{"Schrift: {0}"}
         territory{"Regioon: {0}"}
     }
-    localeDisplayPattern{
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
-    }
 }

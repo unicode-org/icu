@@ -632,9 +632,6 @@ ceb{
             "Zambian Kwacha",
         }
     }
-    Currencies%narrow{
-        BYN{"BYN"}
-    }
     CurrencyPlurals{
         AED{
             one{"UAE dirham"}
@@ -1266,7 +1263,7 @@ ceb{
         }
     }
     CurrencyUnitPatterns{
-        one{"{1} {0}"}
+        one{"{0} {1}"}
         other{"{1} {0}"}
     }
 }
