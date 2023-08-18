@@ -157,15 +157,17 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
     }
 
     /*
-      Three types:
+      Four types:
       STRING => plain string with no metadata
       NUMBER => FormattedNumber
       DYNAMIC => Formattable -- a ready-to-format thing that hasn't been formatted yet
+      FALLBACK => Something resulting in a formatting error; getString() returns the fallback string
      */
     enum Type {
         NUMBER,
         STRING,
-        DYNAMIC
+        DYNAMIC,
+        FALLBACK
     };
 
     Type getType() const { return type; }
@@ -197,8 +199,11 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
     const Formattable& getInput() const {
         return *input;
     }
+    const Formattable* aliasInput() const {
+        return input;
+    }
 
-    static FormattedPlaceholder* create(Formattable* input, number::FormattedNumber v, UErrorCode& status) {
+    static FormattedPlaceholder* create(const Formattable* input, number::FormattedNumber v, UErrorCode& status) {
         NULL_ON_ERROR(status);
         FormattedPlaceholder* result(new FormattedPlaceholder(input, std::move(v)));
         if (result == nullptr) {
@@ -216,20 +221,39 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
         return result;
     }
 
-    static FormattedPlaceholder* create(Formattable* input, UnicodeString s, UErrorCode& status) {
+    static FormattedPlaceholder* create(const Formattable* input, UnicodeString s, UErrorCode& status) {
         NULL_ON_ERROR(status);
         LocalPointer<UnicodeString> sPtr(new UnicodeString(s));
         if (!sPtr.isValid()) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
-        FormattedPlaceholder* result(new FormattedPlaceholder(input, sPtr.orphan()));
+        FormattedPlaceholder* result(new FormattedPlaceholder(input, sPtr.orphan(), false));
         if (result == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return result;
     }
 
+    static FormattedPlaceholder* createFallback(UErrorCode& status) {
+        return createFallback(UnicodeString(REPLACEMENT), status);
+    }
+
+    static FormattedPlaceholder* createFallback(UnicodeString s, UErrorCode& status) {
+        NULL_ON_ERROR(status);
+        LocalPointer<UnicodeString> sPtr(new UnicodeString(s));
+        LocalPointer<Formattable> input(new Formattable(s));
+        if (!sPtr.isValid() || !input.isValid()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        FormattedPlaceholder* result(new FormattedPlaceholder(input.orphan(), sPtr.orphan(), true));
+        if (result == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+/*
     static FormattedPlaceholder* create(UnicodeString s, UErrorCode& status) {
         NULL_ON_ERROR(status);
         LocalPointer<UnicodeString> sPtr(new UnicodeString(s));
@@ -238,13 +262,13 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
-        FormattedPlaceholder* result(new FormattedPlaceholder(input.orphan(), sPtr.orphan()));
+        FormattedPlaceholder* result(new FormattedPlaceholder(input.orphan(), sPtr.orphan(), false));
         if (result == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return result;
     }
-
+*/
     // Formats a `Formattable` using defaults
     static FormattedPlaceholder* format(Locale loc, const Formattable& in, UErrorCode& status) {
         NULL_ON_ERROR(status);
@@ -292,7 +316,7 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
     private:
 
     // All constructors adopt their arguments
-    FormattedPlaceholder(const Formattable* f, UnicodeString* s) : type(Type::STRING), string(s), input(f) {
+    FormattedPlaceholder(const Formattable* f, UnicodeString* s, bool isFallback) : type(isFallback ? Type::FALLBACK : Type::STRING), string(s), input(f) {
         U_ASSERT(f != nullptr);
         U_ASSERT(s != nullptr);
     }
@@ -312,7 +336,7 @@ class FormattedPlaceholder : /* public FormattedValue,*/  public UMemory {
     // If the other two fields are invalid,
     // this is assumed to be a not-formatted-yet value
 
-    // This does not own input (it may be in the global environment
+    // This does not own input (it may be in the global environment)
     const Formattable* input;
 
 //    LocalPointer<FormattedPlaceholder> next;

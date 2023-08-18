@@ -269,7 +269,13 @@ static FormattedPlaceholder* stringAsNumber(Locale locale, const number::Localiz
     if (U_FAILURE(localErrorCode)) {
         return notANumber(errorCode);
     }
-    return FormattedPlaceholder::create(fp, nf.formatDouble(numberValue - offset, errorCode), errorCode);
+    UErrorCode savedStatus = errorCode;
+    number::FormattedNumber result = nf.formatDouble(numberValue - offset, errorCode);
+    // Ignore U_USING_DEFAULT_WARNING
+    if (errorCode == U_USING_DEFAULT_WARNING) {
+        errorCode = savedStatus;
+    }
+    return FormattedPlaceholder::create(fp, std::move(result), errorCode);
 }
 
 // variableOptions = map of *resolved* options (strings)
@@ -280,6 +286,8 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
     if (arg == nullptr) {
         return notANumber(errorCode);
     }
+
+    U_ASSERT(arg->getType() != FormattedPlaceholder::Type::FALLBACK);
 
     int64_t offset = 0;
     getIntOpt(variableOptions, UnicodeString("offset"), offset);
@@ -336,6 +344,11 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
                 return notANumber(errorCode);
             }
             }
+            break;
+        }
+        default: {
+            // Should be unreachable -- see assertion above
+            U_ASSERT(false);
         }
     }
     
@@ -393,11 +406,16 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
         }
         case Formattable::Type::kString: {
             // Try parsing the scrutinee as a double
+            UErrorCode savedStatus = errorCode;
             strToDouble(value.getString(), locale, valToCheck, errorCode);
             // Invalid format error => value is not a number; return a selector error
             if (errorCode == U_INVALID_FORMAT_ERROR) {
                 errorCode = U_SELECTOR_ERROR;
                 return;
+            }
+            // Suppress the U_USING_DEFAULT_WARNING warning
+            if (errorCode == U_USING_DEFAULT_WARNING) {
+                errorCode = savedStatus;
             }
             CHECK_ERROR(errorCode);
             break;
@@ -417,18 +435,17 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
     double keyAsDouble = 0;
     for (size_t i = 0; i < numKeys; i++) {
         // Try parsing the key as a double
-        strToDouble(keys[i], locale, keyAsDouble, errorCode);
-        if (U_SUCCESS(errorCode)) {
+        UErrorCode localErrorCode = U_ZERO_ERROR;
+        strToDouble(keys[i], locale, keyAsDouble, localErrorCode);
+        if (U_SUCCESS(localErrorCode)) {
             if (valToCheck == keyAsDouble) {
                 prefs[numMatching++] = keys[i];
                 break;
             }
         }
-        else {
-            // We're going to try a different matching strategy,
-            // so ignore the failure by resetting the error code
-            errorCode = U_ZERO_ERROR;
-        }
+    }
+    if (numMatching > 0) {
+        return;
     }
 
     UnicodeString match = valuePtr->getType() == FormattedPlaceholder::Type::NUMBER ? rules->select(valuePtr->getNumber(), errorCode)
@@ -540,7 +557,7 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
 
     UnicodeString result;
     df->format(toFormat, result, 0, errorCode);
-    return FormattedPlaceholder::create(result, errorCode);
+    return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
 }
 
 // --------- TextFactory
@@ -614,7 +631,7 @@ FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* 
         return nullptr;
     }
     // Just returns the input value as a string
-    return FormattedPlaceholder::create(toFormat->getString(), errorCode);
+    return FormattedPlaceholder::create(toFormat->aliasInput(), toFormat->getString(), errorCode);
 }
 
 StandardFunctions::Identity::~Identity() {}

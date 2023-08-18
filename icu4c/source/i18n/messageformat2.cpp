@@ -276,9 +276,7 @@ static void setError(UErrorCode newError, UErrorCode& existingError) {
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
-static Formattable* fallback(bool useBraces, const VariableName& v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
+static UnicodeString fallback(bool useBraces, const VariableName& v) {
     UnicodeString val;
     if (useBraces) {
         val += LEFT_CURLY_BRACE;
@@ -288,11 +286,7 @@ static Formattable* fallback(bool useBraces, const VariableName& v, UErrorCode& 
     if (useBraces) {
         val += RIGHT_CURLY_BRACE;
     }
-    Formattable* part = new Formattable(val);
-    if (part == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return part;
+    return val;
 }
 
 static const UnicodeString formatLiteral(const Literal& lit) {
@@ -354,7 +348,7 @@ FormattedPlaceholder* MessageFormatter::formatOperand(MessageFormatter::Context&
             // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
             // Use braces
             // TODO: consistent rules?
-            result.adoptInstead(FormattedPlaceholder::create(fallback(true, rand.asVariable(), status), status));
+            result.adoptInstead(FormattedPlaceholder::createFallback(fallback(true, rand.asVariable()), status));
         }
     } else {
         // Must be a literal
@@ -485,7 +479,7 @@ FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const
             // Unresolved variable -- could be a previous warning
             // Fallback string does not include braces
             // There is really no consistency to these rules -- TODO
-            result.adoptInstead(FormattedPlaceholder::create(fallback(false, var, status), status));
+            result.adoptInstead(FormattedPlaceholder::createFallback(fallback(false, var), status));
         }
     }
     NULL_ON_ERROR(status);
@@ -581,7 +575,7 @@ static FormattedPlaceholder* fallbackFunctionName(const FunctionName& functionNa
     result += LEFT_CURLY_BRACE;
     result += functionName.toString();
     result += RIGHT_CURLY_BRACE;
-    LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(result, status));
+    LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::createFallback(result, status));
     NULL_ON_ERROR(status);
     return fp.orphan();
 }
@@ -591,7 +585,7 @@ static FormattedPlaceholder* fallbackOperand(const Operand& rand, UErrorCode& st
 
     LocalPointer<FormattedPlaceholder> result;
     if (rand.isVariable()) {
-        result.adoptInstead(FormattedPlaceholder::create(fallback(true, rand.asVariable(), status), status));
+        result.adoptInstead(FormattedPlaceholder::createFallback(fallback(true, rand.asVariable()), status));
     } else {
         // Add curlies -- TODO there is no consistency here,
         // but it matches https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L216
@@ -606,7 +600,7 @@ static FormattedPlaceholder* fallbackOperand(const Operand& rand, UErrorCode& st
         fallbackStr += rand.asLiteral().contents;
         fallbackStr += PIPE;
         fallbackStr += RIGHT_CURLY_BRACE;
-        result.adoptInstead(FormattedPlaceholder::create(fallbackStr, status));
+        result.adoptInstead(FormattedPlaceholder::createFallback(fallbackStr, status));
     }
 
     NULL_ON_ERROR(status);
@@ -621,7 +615,7 @@ FormattedPlaceholder* MessageFormatter::formatExpression(MessageFormatter::Conte
         setError(U_UNSUPPORTED_PROPERTY, status);
         // Use the fallback string
         // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-        LocalPointer<FormattedPlaceholder> result(FormattedPlaceholder::create(UnicodeString(REPLACEMENT), status));
+        LocalPointer<FormattedPlaceholder> result(FormattedPlaceholder::createFallback(status));
         NULL_ON_ERROR(status);
         return result.orphan();
     }
@@ -638,31 +632,28 @@ FormattedPlaceholder* MessageFormatter::formatExpression(MessageFormatter::Conte
             LocalPointer<FormattedPlaceholder> arg;
             if (!expr.isStandaloneAnnotation()) {
                 arg.adoptInstead(formatOperand(context, globalEnv, expr.getOperand(), status));
+                NULL_ON_ERROR(status);
+                // Don't call the function on error values
+                if (arg->getType() == FormattedPlaceholder::Type::FALLBACK) {
+                    return arg.orphan();
+                }
             }
-
             // Resolve the options
             LocalPointer<const Hashtable> resolvedOptions(resolveOptions(context, globalEnv, variableOptions, status));
             NULL_ON_ERROR(status);
-            // Formatting functions can set warnings. We don't want those to override
-            // MessageFormat warnings.
-            UErrorCode savedStatus = status;
             // Operand may be null
             LocalPointer<FormattedPlaceholder> result(formatter->format(arg.isValid() ? arg.orphan() : nullptr,
                                                                         *resolvedOptions,
                                                                         status));
             // If the call succeeded, return the result
             if (result != nullptr) {
-                if (status != savedStatus) {
-                    if (U_SUCCESS(status)) {
-                        // Function set a different warning -- restore the old one
-                        status = savedStatus;
-                    }
-                }
                 return result.orphan();
+            } else if (status == U_ZERO_ERROR) {
+                status = U_FORMATTING_ERROR;
             }
         }
 
-        // If we reached here, the call failed
+        // If this code was reached, the call failed
 
         // Check for errors and use a fallback value if necessary
         // Fall back if either the function is unknown, or the call failed
