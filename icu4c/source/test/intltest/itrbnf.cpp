@@ -1250,8 +1250,15 @@ IntlTestRBNF::TestDurations()
             { "10,293", "2:51:33" },
             { nullptr, nullptr}
         };
-        
         doTest(formatter, testData, true);
+        
+        static const char* const fractionalTestData[][2] = {
+            { "1234", "20:34" },
+            { "1234.2", "20:34" },
+            { "1234.7", "20:35" },
+            { nullptr, nullptr }
+        };
+        doTest(formatter, fractionalTestData, false);
         
 #if !UCONFIG_NO_COLLATION
         formatter->setLenient(true);
