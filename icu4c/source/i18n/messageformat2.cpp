@@ -355,8 +355,6 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatOper
             setError(U_UNRESOLVED_VARIABLE_WARNING, status);
             // Use fallback per
             // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-            // Use braces
-            // TODO: consistent rules?
             result.adoptInstead(FormattedPlaceholderWithFallback::createFallback(fallback(rand.asVariable()), status));
         }
     } else {
@@ -489,8 +487,6 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVar
             NULL_ON_ERROR(status);
         } else {
             // Unresolved variable -- could be a previous warning
-            // Fallback string does not include braces
-            // There is really no consistency to these rules -- TODO
             result.adoptInstead(FormattedPlaceholderWithFallback::createFallback(fallback(var), status));
         }
     }
@@ -690,18 +686,9 @@ void MessageFormatter::formatPattern(Context& context, const Environment& global
         const PatternPart* part = pat.getPart(i);
         U_ASSERT(part != nullptr);
         if (part->isText()) {
-    /*
-      TODO: this behavior isn't documented in the spec, but it comes from
-      https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L236
-     */
             result += part->asText();
         } else {
             LocalPointer<FormattedPlaceholderWithFallback> formattedPart(formatExpression(context, globalEnv, part->contents(), status));
-            // TODO: maybe this isn't necessary, since the parser would format that as a text part?
-            // TODO: conditionally adding the '{'/'}' in error cases isn't documented,
-            // but for example in https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L288 , even though
-            // `{|42| :number minimumFractionDigits 2}`, the result of the function call
-            // is rendered without braces
             CHECK_ERROR(status);
             result += formattedPart->toString(locale, status);
         }
