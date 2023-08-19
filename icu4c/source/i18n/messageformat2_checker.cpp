@@ -90,14 +90,6 @@ static bool areDefaultKeys(const KeyList& keys) {
     return true;
 }
 
-// TODO: don't duplicate this
-static void setError(UErrorCode newError, UErrorCode& existingError) {
-    // Don't overwrite an existing warning
-    if (existingError == U_ZERO_ERROR) {
-        existingError = newError;
-    }
-}
-
 void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
     CHECK_ERROR(error);
     U_ASSERT(dataModel.hasSelectors());

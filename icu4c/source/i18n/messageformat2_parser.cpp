@@ -1568,14 +1568,6 @@ void PARSER::parseSelectors(UErrorCode &errorCode) {
     }
 }
 
-// TODO: don't duplicate this
-static void setError(UErrorCode newError, UErrorCode& existingError) {
-    // Don't overwrite an existing warning
-    if (existingError == U_ZERO_ERROR) {
-        existingError = newError;
-    }
-}
-
 /*
   Consume a `body` (matching the nonterminal in the grammar),
   No postcondition (on return, `index` might equal `source.length()` with U_SUCCESS(errorCode)),

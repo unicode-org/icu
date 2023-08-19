@@ -105,6 +105,14 @@ inline bool isWhitespace(UChar32 c) {
     if (U_FAILURE(errorCode)) {                                                                         \
         return false; \
     }
+
+inline void setError(UErrorCode newError, UErrorCode& existingError) {
+    // Don't overwrite an existing warning
+    if (existingError == U_ZERO_ERROR) {
+        existingError = newError;
+    }
+}
+
 } // namespace message2
 U_NAMESPACE_END
 

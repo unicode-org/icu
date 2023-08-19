@@ -280,14 +280,6 @@ const Formatter* MessageFormatter::Context::maybeCachedFormatter(const FunctionN
 // ------------------------------------------------------
 // Formatting
 
-// TODO: don't duplicate this
-static void setError(UErrorCode newError, UErrorCode& existingError) {
-    // Don't overwrite an existing warning
-    if (existingError == U_ZERO_ERROR) {
-        existingError = newError;
-    }
-}
-
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
 static UnicodeString fallback(const VariableName& v) {
     UnicodeString val;
