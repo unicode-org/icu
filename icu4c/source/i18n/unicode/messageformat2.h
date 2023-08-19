@@ -549,15 +549,15 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
         virtual ~ResolvedExpression();
         const bool isFallback; // if isFallback is true, this expression will be matched to the catchall variant
         const LocalPointer<Selector> selectorFunction;
-        const LocalPointer<Hashtable> resolvedOptions;
+        const LocalPointer<FunctionRegistry::Options> resolvedOptions;
         const LocalPointer<FormattedPlaceholder> resolvedOperand;
         // Adopts all its arguments
-        ResolvedExpression(Selector* s, Hashtable* o, FormattedPlaceholder* r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
-        ResolvedExpression(Selector* s, Hashtable* o) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(nullptr) {}
+        ResolvedExpression(Selector* s, FunctionRegistry::Options* o, FormattedPlaceholder* r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
+        ResolvedExpression(Selector* s, FunctionRegistry::Options* o) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(nullptr) {}
         ResolvedExpression() : isFallback(true), resolvedOperand(nullptr) {}
     }; // class ResolvedExpression
-     FormattedPlaceholderWithFallback* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
-     FormattedPlaceholderWithFallback* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
+     FormattedPlaceholderWithFallback* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, FunctionRegistry::Options*&, UnicodeString&, UErrorCode &) const;
+     FormattedPlaceholderWithFallback* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, FunctionRegistry::Options*&, UnicodeString&, UErrorCode &) const;
 
      // Selection methods
      void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
@@ -572,7 +572,7 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      ResolvedExpression* formatSelectorExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression that appears in a pattern or as the definition of a local variable
      FormattedPlaceholderWithFallback* formatExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
-     Hashtable* resolveOptions(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     FunctionRegistry::Options* resolveOptions(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
      FormattedPlaceholder* formatFunctionCall(FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, Formattable*, bool&, UErrorCode&) const;
      FormattedPlaceholderWithFallback* fallbackFunctionName(const FunctionName&, UErrorCode&) const;
      FormattedPlaceholderWithFallback* formatOperand(Context&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;

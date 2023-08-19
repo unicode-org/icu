@@ -373,11 +373,11 @@ bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const
     return (standardFunctionRegistry->hasSelector(functionName));
 }
 
-Hashtable* MessageFormatter::resolveOptions(MessageFormatter::Context& context, const Environment& env, const OptionMap& options, UErrorCode& status) const {
+FunctionRegistry::Options* MessageFormatter::resolveOptions(MessageFormatter::Context& context, const Environment& env, const OptionMap& options, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
     size_t pos = OptionMap::FIRST;
-    LocalPointer<Hashtable> result(new Hashtable(compareVariableName, nullptr, status));
+    LocalPointer<FunctionRegistry::Options> result(FunctionRegistry::Options::create(status));
     NULL_ON_ERROR(status);
     while (true) {
         UnicodeString k;
@@ -462,7 +462,7 @@ FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& f
 // hasOperand set to true if `rand` resolves to an expression that's a unary function call
 // for example $foo => {$bar :plural} => hasOperand set to true
 //             $foo => {:func} => hasOperand set to false
-MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Operand& rand, bool& isFunction, FunctionRegistry::Options*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     LocalPointer<FormattedPlaceholderWithFallback> result;
@@ -496,7 +496,7 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVar
 
 // Resolves the expression just enough to expose a function call
 // (or until a literal is reached)
-MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Expression& expr, bool& isFunction, FunctionRegistry::Options*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     // Unsupported expression error
@@ -514,10 +514,9 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVar
     isFunction = true;
     const Operator& rator = expr.getOperator();
     functionName = rator.getFunctionName().name;
-    LocalPointer<Hashtable> tempResolvedOptions(resolveOptions(context, env, rator.getOptions(), status));
+    resolvedOptions = resolveOptions(context, env, rator.getOptions(), status);
     NULL_ON_ERROR(status);
-    resolvedOptions = tempResolvedOptions.orphan();
-   
+
     if (expr.isStandaloneAnnotation()) {
         // Nothing more to resolve
         return nullptr;
@@ -529,13 +528,14 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVar
 MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression(Context& context, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
-    Hashtable* resolvedOptions = nullptr;
+    FunctionRegistry::Options* resolvedOptions = nullptr;
     UnicodeString operand;
     UnicodeString functionName;
     // isFunction will be set to true if `expr` resolves to a function call 
     bool isFunction = false;
     LocalPointer<FormattedPlaceholderWithFallback> maybeOperand(resolveVariables(context, globalEnv, expr, isFunction, resolvedOptions, functionName, status));
     NULL_ON_ERROR(status);
+    U_ASSERT(resolvedOptions != nullptr);
     const SelectorFactory* selectorFactory;
     if (isFunction) {
         U_ASSERT(resolvedOptions != nullptr);
@@ -551,10 +551,6 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     // If no error was set, the selector should be non-null
     LocalPointer<ResolvedExpression> result;
     if (selectorFactory != nullptr) {
-        if (resolvedOptions == nullptr) {
-            resolvedOptions = emptyOptions(status);
-            NULL_ON_ERROR(status);
-        }
         // Create a specific instance of the selector
         LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), status));
         // Represent the function call with the given options, applied to the operand
@@ -605,7 +601,7 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatExpr
         const FunctionName& functionName = rator.getFunctionName();
         const OptionMap& variableOptions = rator.getOptions();
         // Resolve the options
-        LocalPointer<const Hashtable> resolvedOptions(resolveOptions(context, globalEnv, variableOptions, status));
+        LocalPointer<const FunctionRegistry::Options> resolvedOptions(resolveOptions(context, globalEnv, variableOptions, status));
         NULL_ON_ERROR(status);
  
         const Formatter* formatter = context.maybeCachedFormatter(functionName, status);

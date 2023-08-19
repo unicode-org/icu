@@ -28,38 +28,8 @@ U_NAMESPACE_BEGIN namespace message2 {
 // so as to avoid using a Hashtable
 using FunctionName = MessageFormatDataModel::FunctionName;
 
-class U_COMMON_API Formatter : public UMemory {
- public:
-    // TODO: Java uses `Object` for the argument type. Using `FormattedPlaceholder` here.
-    // See if any examples require using an argument that's not a FormattedPlaceholder
-    // Needs an error code because internal details may require calling functions that can fail
-    // (e.g. parsing a string as a number, for Number)
-
-    // TODO: should change the Hashtable type to a specific `Options` type for type safety
-
-    // TODO: FormattedPlaceholder is not const because numbers can only be passed by move
-    // See comments in StandardFunctions::number::format()
-
-    // Operand can be null
-    virtual FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const = 0;
-    virtual ~Formatter();
-};
-
-// Interface/mixin class
-class U_COMMON_API Selector : public UMemory {
- public:
-    // TODO: Same comment about the `value` argument as in Formatter
-    // TODO: Needs an error code because parsing `value` as a number can error
-    // Takes an array of keys and returns a sub-array (through the out-param `prefs`)
-    // containing all matching keys, sorted in order of preference (best first).
-    /*
-      TODO: Needed to change this in order to support best-match.
-      See selectKey() in message-value.ts
-     */
-    // `value` may be null, because the selector might be nullary
-    virtual void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
-    virtual ~Selector();
-};
+class Formatter;
+class Selector;
 
 // TODO: This differs from ICU4J, where a separate `fixedOptions` map is passed in
 // We evaluate options eagerly, so all options are resolved and are per-expression
@@ -96,6 +66,23 @@ class U_I18N_API FunctionRegistry : UMemory {
     FormatterFactory* getFormatter(const FunctionName& formatterName) const;
     const SelectorFactory* getSelector(const FunctionName& selectorName) const;
     // Not sure yet about the others from icu4j
+
+    class U_COMMON_API Options : public UMemory {
+        // Represents the options for a function
+        public:
+        bool getDateOption(const UnicodeString&, UDate&) const;
+        double getDoubleOption(const UnicodeString&, double) const;
+        int64_t getIntOption(const UnicodeString&, int64_t) const;
+        bool getStringOption(const UnicodeString&, UnicodeString&) const;
+        bool empty() const;
+
+        private:
+        friend class MessageFormatter;
+        static Options* create(UErrorCode&);
+        void put(const UnicodeString&, FormattedPlaceholder*, UErrorCode&);
+
+        LocalPointer<Hashtable> contents;
+    };
 
     class Builder {
       private:
@@ -147,6 +134,37 @@ class U_I18N_API FunctionRegistry : UMemory {
     const LocalPointer<Hashtable> selectors;
  };
 
+class U_COMMON_API Formatter : public UMemory {
+ public:
+    // TODO: Java uses `Object` for the argument type. Using `FormattedPlaceholder` here.
+    // See if any examples require using an argument that's not a FormattedPlaceholder
+    // Needs an error code because internal details may require calling functions that can fail
+    // (e.g. parsing a string as a number, for Number)
+
+    // TODO: FormattedPlaceholder is not const because numbers can only be passed by move
+    // See comments in StandardFunctions::number::format()
+
+    // Operand can be null
+    virtual FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const = 0;
+    virtual ~Formatter();
+};
+
+// Interface/mixin class
+class U_COMMON_API Selector : public UMemory {
+ public:
+    // TODO: Same comment about the `value` argument as in Formatter
+    // TODO: Needs an error code because parsing `value` as a number can error
+    // Takes an array of keys and returns a sub-array (through the out-param `prefs`)
+    // containing all matching keys, sorted in order of preference (best first).
+    /*
+      TODO: Needed to change this in order to support best-match.
+      See selectKey() in message-value.ts
+     */
+    // `value` may be null, because the selector might be nullary
+    virtual void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual ~Selector();
+};
+
 // Built-in functions
 /*
       Following icu4j, the standard functions are :datetime, :number,
@@ -163,7 +181,7 @@ class StandardFunctions {
 
     class DateTime : public Formatter {
         public:
-        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const;
+        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
 
         private:
         Locale locale;
@@ -179,7 +197,7 @@ class StandardFunctions {
         
     class Number : public Formatter {
         public:
-        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const;
+        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
 
         private:
         friend class NumberFactory;
@@ -197,7 +215,7 @@ class StandardFunctions {
 
     class Identity : public Formatter {
     public:
-        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const;
+        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
         
     private:
         friend class IdentityFactory;
@@ -220,7 +238,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -241,7 +259,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const Hashtable& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

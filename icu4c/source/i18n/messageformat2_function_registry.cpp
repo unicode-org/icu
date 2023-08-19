@@ -137,6 +137,7 @@ static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErr
 
 // --------- Number
 
+/*
 static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
     // Returns null if key is absent or is not a string
     // (including if the key is an explicit NULL argument)
@@ -219,27 +220,24 @@ static void getIntOpt(const Hashtable& opts, const UnicodeString& key, int64_t& 
         }
     }
 }
+*/
 
-number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Hashtable& options, UErrorCode& status) {
+number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const FunctionRegistry::Options& options, UErrorCode& status) {
     NULL_ON_ERROR(status);
 
     number::UnlocalizedNumberFormatter nf;
-    bool hasSkeleton = false;
     UnicodeString skeleton;
-    getStringOpt(options, UnicodeString("skeleton"), skeleton, hasSkeleton);
-    if (hasSkeleton) {
+    if (options.getStringOption(UnicodeString("skeleton"), skeleton)) {
         nf = number::NumberFormatter::forSkeleton(skeleton, status);
     } else {
         nf = number::NumberFormatter::with();
-        bool hasMinFractionDigits = false;
         UnicodeString minFractionDigits;
-        getStringOpt(options, UnicodeString("minimumFractionDigits"), minFractionDigits, hasMinFractionDigits);
-        if (hasMinFractionDigits) {
+        if (options.getStringOption(UnicodeString("minimumFractionDigits"), minFractionDigits)) {
             int64_t minFractionDigitsInt;
             strToInt(minFractionDigits, minFractionDigitsInt, status);
             if (U_FAILURE(status)) {
                 // option didn't parse as an int -- reset error and use default
-                status= U_ZERO_ERROR;
+                status = U_ZERO_ERROR;
             } else {
                 nf = nf.precision(number::Precision::minFraction(minFractionDigitsInt));
             }
@@ -291,7 +289,7 @@ static FormattedPlaceholder* stringAsNumber(Locale locale, const number::Localiz
 }
 
 // variableOptions = map of *resolved* options (strings)
-FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     // No argument => return "NaN"
@@ -299,17 +297,16 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
         return notANumber(errorCode);
     }
 
-    int64_t offset = 0;
-    getIntOpt(variableOptions, UnicodeString("offset"), offset);
+    int64_t offset = options.getIntOption(UnicodeString("offset"), 0);
 
     LocalPointer<number::LocalizedNumberFormatter> realFormatter;
-    if (variableOptions.count() == 0) {
+    if (options.empty()) {
         realFormatter.adoptInstead(new number::LocalizedNumberFormatter(icuFormatter));
         if (!realFormatter.isValid()) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
     } else {
-        realFormatter.adoptInstead(formatterForOptions(locale, variableOptions, errorCode));
+        realFormatter.adoptInstead(formatterForOptions(locale, options, errorCode));
     }
     NULL_ON_ERROR(errorCode);
 
@@ -420,11 +417,8 @@ static void tryWithFormattable(const Locale& locale, const Formattable& value, d
     noMatch = false;
 }
 
-void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
-
-    // Variable options not used
-    (void) variableOptions;
 
     // Argument must be present
     if (valuePtr == nullptr) {
@@ -432,8 +426,7 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
         return;
     }
 
-    int64_t offset = 0;
-    getIntOpt(variableOptions, UnicodeString("offset"), offset);
+    int64_t offset = options.getIntOption(UnicodeString("offset"), 0);
 
     // Only doubles and integers can match
     double valToCheck;
@@ -538,7 +531,7 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, UE
     return result;
 }
 
-FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -549,29 +542,22 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
     LocalPointer<DateFormat> df;
 
     UnicodeString opt;
-    bool hasSkeleton = false;
-    getStringOpt(variableOptions, UnicodeString("skeleton"), opt, hasSkeleton);
-    if (hasSkeleton) {
+    if (options.getStringOption(UnicodeString("skeleton"), opt)) {
         // Same as getInstanceForSkeleton(), see ICU 9029
         // Based on test/intltest/dtfmttst.cpp - TestPatterns()
         LocalPointer<DateTimePatternGenerator> generator(DateTimePatternGenerator::createInstance(locale, errorCode));
         UnicodeString pattern = generator->getBestPattern(opt, errorCode);
         df.adoptInstead(new SimpleDateFormat(pattern, locale, errorCode));
     } else {
-        bool hasPattern = false;
-        getStringOpt(variableOptions, UnicodeString("pattern"), opt, hasPattern);
-        if (hasPattern) {
+        if (options.getStringOption(UnicodeString("pattern"), opt)) {
             df.adoptInstead(new SimpleDateFormat(opt, locale, errorCode));
         } else {
-            bool hasOpt = false;
-            getStringOpt(variableOptions, UnicodeString("datestyle"), opt, hasOpt);
             DateFormat::EStyle dateStyle = DateFormat::NONE;
-            if (hasOpt) {
+            if (options.getStringOption(UnicodeString("datestyle"), opt)) {
                 dateStyle = stringToStyle(opt, errorCode);
             }
             DateFormat::EStyle timeStyle = DateFormat::NONE;
-            getStringOpt(variableOptions, UnicodeString("timestyle"), opt, hasOpt);
-            if (hasOpt) {
+            if (options.getStringOption(UnicodeString("timestyle"), opt)) {
                 timeStyle = stringToStyle(opt, errorCode);
             }
             if (dateStyle == DateFormat::NONE && timeStyle == DateFormat::NONE) {
@@ -616,7 +602,7 @@ Selector* StandardFunctions::TextFactory::createSelector(Locale locale, UErrorCo
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
@@ -667,10 +653,10 @@ Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, UE
 
 }
 
-FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* toFormat, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
-    (void) variableOptions; // unused parameter
+    (void) options; // unused parameter
     if (toFormat == nullptr) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
