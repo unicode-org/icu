@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692377666874,
+  "lastUpdate": 1692417676852,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10738,6 +10738,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 2.6274492396390374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a7a2fdbcf257fa22c7a24cfae838675dafd5e071",
+          "message": "ICU-22324 Script moving folders to maven structure",
+          "timestamp": "2023-08-18T20:58:16-07:00",
+          "tree_id": "96a79ac750efc3947bb08a8d52bb81896b783086",
+          "url": "https://github.com/unicode-org/icu/commit/a7a2fdbcf257fa22c7a24cfae838675dafd5e071"
+        },
+        "date": 1692417618322,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 2.926890098120993,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
