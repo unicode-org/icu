@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692418345233,
+  "lastUpdate": 1692418415275,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21388,6 +21388,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 16.713724398179675,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a7a2fdbcf257fa22c7a24cfae838675dafd5e071",
+          "message": "ICU-22324 Script moving folders to maven structure",
+          "timestamp": "2023-08-18T20:58:16-07:00",
+          "tree_id": "96a79ac750efc3947bb08a8d52bb81896b783086",
+          "url": "https://github.com/unicode-org/icu/commit/a7a2fdbcf257fa22c7a24cfae838675dafd5e071"
+        },
+        "date": 1692418353546,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 19.894028308577862,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
