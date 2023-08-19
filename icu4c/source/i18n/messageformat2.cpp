@@ -296,24 +296,12 @@ static UnicodeString fallback(const VariableName& v) {
     return val;
 }
 
-UnicodeString fallbackLiteral(bool useBraces, const Literal& lit) {
-    // Add curlies -- TODO there is no consistency here,
-    // but it matches https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L216
-    /*
-      https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
-      "Fallback Resolution" section
-    */
+UnicodeString fallbackLiteral(const Literal& lit) {
     UnicodeString fallbackStr;
-    if (useBraces) {
-        fallbackStr += LEFT_CURLY_BRACE;
-    }
     // expression with literal operand: |value|
     fallbackStr += PIPE;
     fallbackStr += lit.contents;
     fallbackStr += PIPE;
-    if (useBraces) {
-        fallbackStr += RIGHT_CURLY_BRACE;
-    }
     return fallbackStr;
 }
 
@@ -344,7 +332,7 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::evalArgume
 /* static */ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatLiteral(const Literal& lit, UErrorCode& status) {
     NULL_ON_ERROR(status);
     LocalPointer<FormattedPlaceholderWithFallback> result(
-        FormattedPlaceholderWithFallback::create(fallbackLiteral(false, lit), evalLiteral(lit), status));
+        FormattedPlaceholderWithFallback::create(fallbackLiteral(lit), evalLiteral(lit), status));
     NULL_ON_ERROR(status);
     return result.orphan();
 }
