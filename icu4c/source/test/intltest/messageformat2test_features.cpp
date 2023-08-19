@@ -76,6 +76,8 @@ void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, Icu
                                 .setExpected("Hello John, today is Wednesday, November 23, 2022.")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
+
+    // Missing date argument
     test.adoptInstead(testBuilder.setPattern(message)
                                 .clearArguments()
                                 .setArgument("name", "John", errorCode)
@@ -88,6 +90,8 @@ void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, Icu
                                 .setExpected("Hello {$name}, today is Wednesday, November 23, 2022.")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
+
+    // Both arguments missing
     test.adoptInstead(testBuilder.setPattern(message)
                                 .clearArguments()
                                 .setExpected("Hello {$name}, today is {$today}.")
@@ -490,7 +494,7 @@ FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, co
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
-        errorCode = U_FORMATTING_ERROR;
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
     // Assume arg is not-yet-formatted

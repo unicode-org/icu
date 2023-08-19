@@ -300,7 +300,7 @@ FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, c
     }
 
     if (arg == nullptr) {
-        errorCode = U_FORMATTING_ERROR;
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
 
@@ -429,7 +429,7 @@ FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg,
     }
 
     if (arg == nullptr) {
-        errorCode = U_FORMATTING_ERROR;
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
     // Assumes arg is not-yet-formatted
@@ -467,7 +467,7 @@ FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg,
             int32_t n_items;
             const Formattable* objs = toFormat.getArray(n_items);
             if (objs == nullptr) {
-                errorCode = U_FORMATTING_ERROR;
+                errorCode = U_FORMATTING_WARNING;
                 return nullptr;
             }
             LocalArray<UnicodeString> parts(new UnicodeString[n_items]);
@@ -726,7 +726,7 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const H
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
-        errorCode = U_FORMATTING_ERROR;
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
 

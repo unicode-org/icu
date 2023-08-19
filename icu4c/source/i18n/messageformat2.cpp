@@ -178,9 +178,22 @@ MessageFormatter::~MessageFormatter() {}
 
 static bool isMessageFormatWarning(UErrorCode status) {
     switch(status) {
+        case U_FORMATTING_WARNING:
         case U_UNRESOLVED_VARIABLE_WARNING:
         case U_SYNTAX_WARNING:
         case U_UNKNOWN_FUNCTION_WARNING:
+        case U_VARIANT_KEY_MISMATCH_WARNING: {
+            return true;
+        }
+        default: {
+            return false;
+        }
+    }
+}
+
+static bool isSyntaxOrDataModelWarning(UErrorCode status) {
+    switch(status) {
+        case U_SYNTAX_WARNING:
         case U_VARIANT_KEY_MISMATCH_WARNING: {
             return true;
         }
@@ -276,51 +289,69 @@ static void setError(UErrorCode newError, UErrorCode& existingError) {
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
-static UnicodeString fallback(bool useBraces, const VariableName& v) {
+static UnicodeString fallback(const VariableName& v) {
     UnicodeString val;
-    if (useBraces) {
-        val += LEFT_CURLY_BRACE;
-    }
     val += DOLLAR;
     val += v;
-    if (useBraces) {
-        val += RIGHT_CURLY_BRACE;
-    }
     return val;
 }
 
-static const UnicodeString formatLiteral(const Literal& lit) {
+UnicodeString fallbackLiteral(bool useBraces, const Literal& lit) {
+    // Add curlies -- TODO there is no consistency here,
+    // but it matches https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L216
+    /*
+      https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
+      "Fallback Resolution" section
+    */
+    UnicodeString fallbackStr;
+    if (useBraces) {
+        fallbackStr += LEFT_CURLY_BRACE;
+    }
+    // expression with literal operand: |value|
+    fallbackStr += PIPE;
+    fallbackStr += lit.contents;
+    fallbackStr += PIPE;
+    if (useBraces) {
+        fallbackStr += RIGHT_CURLY_BRACE;
+    }
+    return fallbackStr;
+}
+
+static const UnicodeString evalLiteral(const Literal& lit) {
     return lit.contents;
 }
 
-static Formattable* formatLiteral(const Literal& lit, UErrorCode& status) {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::evalArgument(const MessageFormatter::Context& context, const VariableName& var, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
-    LocalPointer<Formattable> result(new Formattable(lit.contents));
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    U_ASSERT(context.hasVar(var));
+
+    const Formattable* val = context.getVar(var);
+    LocalPointer<FormattedPlaceholderWithFallback> result;
+    UnicodeString fallbackStr = fallback(var);
+    if (val == nullptr) {
+        // This means the variable was explicitly set to "null" in the arguments,
+        // not that it's unbound.
+        // Represent this as the special "null" FormattedPlaceholder
+        result.adoptInstead(FormattedPlaceholderWithFallback::create(fallbackStr, status));
+    } else {
+        result.adoptInstead(FormattedPlaceholderWithFallback::create(fallbackStr, val, status));
     }
+    NULL_ON_ERROR(status);
     return result.orphan();
 }
 
-const Formattable* MessageFormatter::evalArgument(const MessageFormatter::Context& context, const VariableName& var, UErrorCode& status) const {
+/* static */ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatLiteral(const Literal& lit, UErrorCode& status) {
     NULL_ON_ERROR(status);
-
-    const Formattable* val = context.getVar(var);
-    // TODO: ???
-    if (val == nullptr) {
-        Formattable* part = new Formattable(UnicodeString(""));
-        if (part == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return part;
-    }
-    return val;
+    LocalPointer<FormattedPlaceholderWithFallback> result(
+        FormattedPlaceholderWithFallback::create(fallbackLiteral(false, lit), evalLiteral(lit), status));
+    NULL_ON_ERROR(status);
+    return result.orphan();
 }
 
-FormattedPlaceholder* MessageFormatter::formatOperand(MessageFormatter::Context& context, const Environment& env, const Operand& rand, UErrorCode &status) const {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatOperand(MessageFormatter::Context& context, const Environment& env, const Operand& rand, UErrorCode &status) const {
     NULL_ON_ERROR(status);
-    LocalPointer<FormattedPlaceholder> result;
+    LocalPointer<FormattedPlaceholderWithFallback> result;
     if (rand.isVariable()) {
         // Check if it's local or global
         // TODO: Currently, this code allows name shadowing, but depending on the
@@ -338,9 +369,7 @@ FormattedPlaceholder* MessageFormatter::formatOperand(MessageFormatter::Context&
         }
         // Not found in locals -- must be global
         if (context.hasVar(var)) {
-            const Formattable* f = evalArgument(context, var, status);
-            U_ASSERT(f != nullptr);
-            result.adoptInstead(FormattedPlaceholder::create(f, status));
+            result.adoptInstead(evalArgument(context, var, status));
         } else {
             // Unbound variable -- Resolution error
             setError(U_UNRESOLVED_VARIABLE_WARNING, status);
@@ -348,11 +377,11 @@ FormattedPlaceholder* MessageFormatter::formatOperand(MessageFormatter::Context&
             // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
             // Use braces
             // TODO: consistent rules?
-            result.adoptInstead(FormattedPlaceholder::createFallback(fallback(true, rand.asVariable()), status));
+            result.adoptInstead(FormattedPlaceholderWithFallback::createFallback(fallback(rand.asVariable()), status));
         }
     } else {
         // Must be a literal
-        result.adoptInstead(FormattedPlaceholder::create(formatLiteral(rand.asLiteral(), status), status));
+        result.adoptInstead(formatLiteral(rand.asLiteral(), status));
     }
     NULL_ON_ERROR(status);
     return result.orphan();
@@ -372,8 +401,6 @@ Hashtable* MessageFormatter::resolveOptions(MessageFormatter::Context& context, 
     size_t pos = OptionMap::FIRST;
     LocalPointer<Hashtable> result(new Hashtable(compareVariableName, nullptr, status));
     NULL_ON_ERROR(status);
-    // Options are fully evaluated before calling the function
-    LocalPointer<FormattedPlaceholder> rhs;
     while (true) {
         UnicodeString k;
         const Operand* v;
@@ -381,9 +408,13 @@ Hashtable* MessageFormatter::resolveOptions(MessageFormatter::Context& context, 
             break;
         }
         U_ASSERT(v != nullptr);
-        rhs.adoptInstead(formatOperand(context, env, *v, status));
-        NULL_ON_ERROR(status);
-        result->put(k, rhs.orphan(), status);
+        // Options are fully evaluated before calling the function
+        LocalPointer<FormattedPlaceholderWithFallback> formattedRand(formatOperand(context, env, *v, status));
+        NULL_ON_ERROR(status);        
+        // No fallback needed for options, and ignore any options that fail to resolve
+        if (!formattedRand->isFallback()) {
+            result->put(k, formattedRand->takeFormattedPlaceholder(), status);
+        }
     }
     return result.orphan();
 }
@@ -428,7 +459,7 @@ FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& f
         return standardFunctionRegistry->getFormatter(functionName);
     }
     if (isBuiltInSelector(functionName)) {
-        status = U_FORMATTING_ERROR;
+        status = U_FORMATTING_WARNING;
         return nullptr;
     }
     if (customFunctionRegistry != nullptr) {
@@ -438,7 +469,7 @@ FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& f
             return customFormatter;
         }
         if (customFunctionRegistry.getSelector(functionName) != nullptr) {
-            status = U_FORMATTING_ERROR;
+            status = U_FORMATTING_WARNING;
             return nullptr;
         }
     }
@@ -453,13 +484,13 @@ FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& f
 // hasOperand set to true if `rand` resolves to an expression that's a unary function call
 // for example $foo => {$bar :plural} => hasOperand set to true
 //             $foo => {:func} => hasOperand set to false
-FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Operand& rand, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
-    LocalPointer<FormattedPlaceholder> result;
+    LocalPointer<FormattedPlaceholderWithFallback> result;
     if (rand.isLiteral()) {
         isFunction = false;
-        result.adoptInstead(FormattedPlaceholder::create(formatLiteral(rand.asLiteral(), status), status));
+        result.adoptInstead(formatLiteral(rand.asLiteral(), status));
     } else {
         // Must be variable
         const VariableName& var = rand.asVariable();
@@ -474,12 +505,13 @@ FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const
         isFunction = false;
         // Check globals
         if (context.hasVar(var)) {
-            result.adoptInstead(FormattedPlaceholder::create(evalArgument(context, var, status), status));
+            result.adoptInstead(evalArgument(context, var, status));
+            NULL_ON_ERROR(status);
         } else {
             // Unresolved variable -- could be a previous warning
             // Fallback string does not include braces
             // There is really no consistency to these rules -- TODO
-            result.adoptInstead(FormattedPlaceholder::createFallback(fallback(false, var), status));
+            result.adoptInstead(FormattedPlaceholderWithFallback::createFallback(fallback(var), status));
         }
     }
     NULL_ON_ERROR(status);
@@ -488,7 +520,7 @@ FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const
 
 // Resolves the expression just enough to expose a function call
 // (or until a literal is reached)
-FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Expression& expr, bool& isFunction, Hashtable*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     // Unsupported expression error
@@ -514,7 +546,7 @@ FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const
         // Nothing more to resolve
         return nullptr;
     } else {
-        return formatOperand(context, env, expr.getOperand(), status);
+        return(formatOperand(context, env, expr.getOperand(), status));
     }
 }
 
@@ -526,7 +558,7 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     UnicodeString functionName;
     // isFunction will be set to true if `expr` resolves to a function call 
     bool isFunction = false;
-    LocalPointer<FormattedPlaceholder> maybeOperand(resolveVariables(context, globalEnv, expr, isFunction, resolvedOptions, functionName, status));
+    LocalPointer<FormattedPlaceholderWithFallback> maybeOperand(resolveVariables(context, globalEnv, expr, isFunction, resolvedOptions, functionName, status));
     NULL_ON_ERROR(status);
     const SelectorFactory* selectorFactory;
     if (isFunction) {
@@ -551,7 +583,20 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
         LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), status));
         // Represent the function call with the given options, applied to the operand
         if (maybeOperand.isValid()) {
-            result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, maybeOperand.orphan()));
+            if (maybeOperand->isFallback()) {
+                // Use a null expression if it's a syntax or data model warning;
+                // create a valid (non-fallback) formatted placeholder from the
+                // fallback string otherwise
+                if (isSyntaxOrDataModelWarning(status)) {
+                    result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions));
+                } else {
+                    LocalPointer<FormattedPlaceholder> operand(maybeOperand->promoteFallback(status));
+                    NULL_ON_ERROR(status);
+                    result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, operand.orphan()));
+                }
+            } else {
+                result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, maybeOperand->takeFormattedPlaceholder()));
+            }
         } else {
             result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions));
         }
@@ -568,54 +613,15 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     return result.orphan();
 }
 
-static FormattedPlaceholder* fallbackFunctionName(const FunctionName& functionName, UErrorCode& status) {
-    NULL_ON_ERROR(status);
-
-    UnicodeString result;
-    result += LEFT_CURLY_BRACE;
-    result += functionName.toString();
-    result += RIGHT_CURLY_BRACE;
-    LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::createFallback(result, status));
-    NULL_ON_ERROR(status);
-    return fp.orphan();
-}
-
-static FormattedPlaceholder* fallbackOperand(const Operand& rand, UErrorCode& status) {
-    NULL_ON_ERROR(status);
-
-    LocalPointer<FormattedPlaceholder> result;
-    if (rand.isVariable()) {
-        result.adoptInstead(FormattedPlaceholder::createFallback(fallback(true, rand.asVariable()), status));
-    } else {
-        // Add curlies -- TODO there is no consistency here,
-        // but it matches https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L216
-        /*
-          https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md
-          "Fallback Resolution" section
-        */
-        UnicodeString fallbackStr;
-        fallbackStr += LEFT_CURLY_BRACE;
-        // expression with literal operand: |value|
-        fallbackStr += PIPE;
-        fallbackStr += rand.asLiteral().contents;
-        fallbackStr += PIPE;
-        fallbackStr += RIGHT_CURLY_BRACE;
-        result.adoptInstead(FormattedPlaceholder::createFallback(fallbackStr, status));
-    }
-
-    NULL_ON_ERROR(status);
-    return result.orphan();
-}
-
-FormattedPlaceholder* MessageFormatter::formatExpression(MessageFormatter::Context& context, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
+MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatExpression(MessageFormatter::Context& context, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     // Formatting error
     if (expr.isReserved()) {
         setError(U_UNSUPPORTED_PROPERTY, status);
-        // Use the fallback string
+        // Use the default fallback string
         // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-        LocalPointer<FormattedPlaceholder> result(FormattedPlaceholder::createFallback(status));
+        LocalPointer<FormattedPlaceholderWithFallback> result(FormattedPlaceholderWithFallback::createFallback(status));
         NULL_ON_ERROR(status);
         return result.orphan();
     }
@@ -624,48 +630,76 @@ FormattedPlaceholder* MessageFormatter::formatExpression(MessageFormatter::Conte
         const Operator& rator = expr.getOperator();
         const FunctionName& functionName = rator.getFunctionName();
         const OptionMap& variableOptions = rator.getOptions();
+        // Resolve the options
+        LocalPointer<const Hashtable> resolvedOptions(resolveOptions(context, globalEnv, variableOptions, status));
+        NULL_ON_ERROR(status);
  
         const Formatter* formatter = context.maybeCachedFormatter(functionName, status);
+         
+        if (!expr.isStandaloneAnnotation()) {
+            // Format the argument
+            LocalPointer<FormattedPlaceholderWithFallback> arg;
+            arg.adoptInstead(formatOperand(context, globalEnv, expr.getOperand(), status));
+            NULL_ON_ERROR(status);
+            // Don't call the function on error values
+            if (arg->isFallback()) {
+                return arg.orphan();
+            }
+
+            // Create this in case it's needed
+            LocalPointer<FormattedPlaceholderWithFallback> argFallback(arg->fallbackToSource(status));
+            NULL_ON_ERROR(status);
+
+            if (U_SUCCESS(status) && formatter != nullptr) {
+                // Format the call
                         
-        if (U_SUCCESS(status) && formatter != nullptr) {
-            // Format the call
-            LocalPointer<FormattedPlaceholder> arg;
-            if (!expr.isStandaloneAnnotation()) {
-                arg.adoptInstead(formatOperand(context, globalEnv, expr.getOperand(), status));
-                NULL_ON_ERROR(status);
-                // Don't call the function on error values
-                if (arg->getType() == FormattedPlaceholder::Type::FALLBACK) {
-                    return arg.orphan();
+                // Save off the fallbacks, since the formatter
+                // takes ownership of its arg
+                UnicodeString argFallbackStr = arg->getFallbackString();
+
+                LocalPointer<FormattedPlaceholder> result(formatter->format(arg->takeFormattedPlaceholder(),
+                                                                            *resolvedOptions,
+                                                                            status));
+                // If the call succeeded, return the result
+                if (result != nullptr && U_SUCCESS(status)) {
+                    return FormattedPlaceholderWithFallback::create(argFallbackStr,
+                                                                    result.orphan(),
+                                                                    status);
+                } else if (status == U_ZERO_ERROR) {
+                    // Set U_FORMATTING_WARNING if formatting function returned null
+                    // but didn't set an error code
+                    status = U_FORMATTING_WARNING;
                 }
             }
-            // Resolve the options
-            LocalPointer<const Hashtable> resolvedOptions(resolveOptions(context, globalEnv, variableOptions, status));
-            NULL_ON_ERROR(status);
-            // Operand may be null
-            LocalPointer<FormattedPlaceholder> result(formatter->format(arg.isValid() ? arg.orphan() : nullptr,
+            // Call either returned null or set an error code, or formatter was null -- return a fallback
+            return argFallback.orphan();
+        }
+
+        // No operand
+        if (formatter != nullptr) {
+            // Call formatter with null argument
+            LocalPointer<FormattedPlaceholder> result(formatter->format(nullptr,
                                                                         *resolvedOptions,
                                                                         status));
             // If the call succeeded, return the result
-            if (result != nullptr) {
-                return result.orphan();
+            if (result != nullptr && U_SUCCESS(status)) {
+                return FormattedPlaceholderWithFallback::create(functionName.toString(),
+                                                                result.orphan(),
+                                                                status);
             } else if (status == U_ZERO_ERROR) {
-                status = U_FORMATTING_ERROR;
+                // Set U_FORMATTING_WARNING if formatting function returned null
+                // but didn't set an error code
+                status = U_FORMATTING_WARNING;
             }
+            // Call either returned null or set an error code -- return a fallback
+            return FormattedPlaceholderWithFallback::createFallback(functionName.toString(), status);
         }
 
-        // If this code was reached, the call failed
-
-        // Check for errors and use a fallback value if necessary
-        // Fall back if either the function is unknown, or the call failed
-        if (expr.isStandaloneAnnotation()) {
-            return fallbackFunctionName(functionName, status);
-        } else {
-            return fallbackOperand(expr.getOperand(), status);
-        }
+        // If we reached this point, the formatter is null --
+        // Must have been a previous unknown function warning
+        return FormattedPlaceholderWithFallback::createFallback(functionName.toString(), status);
     } else {
-        LocalPointer<FormattedPlaceholder> fp(formatOperand(context, globalEnv, expr.getOperand(), status));
-        NULL_ON_ERROR(status);
-        return fp.orphan();
+        return formatOperand(context, globalEnv, expr.getOperand(), status);
     }
 }
 
@@ -682,7 +716,7 @@ void MessageFormatter::formatPattern(Context& context, const Environment& global
      */
             result += part->asText();
         } else {
-            LocalPointer<FormattedPlaceholder> formattedPart(formatExpression(context, globalEnv, part->contents(), status));
+            LocalPointer<FormattedPlaceholderWithFallback> formattedPart(formatExpression(context, globalEnv, part->contents(), status));
             // TODO: maybe this isn't necessary, since the parser would format that as a text part?
             // TODO: conditionally adding the '{'/'}' in error cases isn't documented,
             // but for example in https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L288 , even though
@@ -810,11 +844,10 @@ void MessageFormatter::resolvePreferences(const UVector& res, const VariantMap& 
                 // 2ii(b)(a) Assert that key is a literal.
                 // (Not needed)
                 // 2ii(b)(b) Let `ks` be the resolved value of `key`.
-                LocalPointer<Formattable> ks(formatLiteral(key.asLiteral(), status));
+                const UnicodeString& ks = evalLiteral(key.asLiteral());
                 CHECK_ERROR(status);
-                U_ASSERT(ks->getType() == Formattable::Type::kString);
                 // 2ii(b)(c) Append `ks` as the last element of the list `keys`.
-                LocalPointer<UnicodeString> keyAsString(new UnicodeString(ks->getString()));
+                LocalPointer<UnicodeString> keyAsString(new UnicodeString(ks));
                 if (!keyAsString.isValid()) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
@@ -869,7 +902,7 @@ void filterVariants(const VariantMap& variants, const UVector& pref, UErrorCode 
             // 2i(c). Assert that `key` is a literal.
             // (Not needed)
             // 2i(d). Let `ks` be the resolved value of `key`.
-            UnicodeString ks = formatLiteral(key.asLiteral());
+            UnicodeString ks = evalLiteral(key.asLiteral());
             // 2i(e). Let `matches` be the list of strings at index `i` of `pref`.
             const UVector& matches = *((UVector*) pref[i]);
             // 2i(f). If `matches` includes `ks`
@@ -954,7 +987,7 @@ void sortVariants(const UVector& pref, UErrorCode& status, UVector& vars) {
                 // 5iii(c)(a). Assert that `key` is a literal.
                 // (Not needed)
                 // 5iii(c)(b). Let `ks` be the resolved value of `key`.
-                UnicodeString ks = formatLiteral(key.asLiteral());
+                UnicodeString ks = evalLiteral(key.asLiteral());
                 // 5iii(c)(c) Let matchpref be the integer position of ks in `matches`.
                 U_ASSERT(matches.contains(&ks));
                 matchpref = matches.indexOf(&ks);

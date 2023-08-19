@@ -24,13 +24,22 @@ UnicodeString FormattedPlaceholder::toString(Locale locale, UErrorCode& status) 
             const number::FormattedNumber& num = getNumber();
             return num.toString(status);
         }
-        default: {
-            const Formattable& input = getInput();
-            LocalPointer<FormattedPlaceholder> formatted(FormattedPlaceholder::format(locale, input, status));
+        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+            // TODO: is it correct to format null as ""?
+            return UnicodeString();
+        }
+        case FormattedPlaceholder::Type::DYNAMIC: {
+            // "Finalize" formatting, e.g. applying default formatters
+            // to dates/numbers
+            LocalPointer<FormattedPlaceholder> formatted(FormattedPlaceholder::format(locale, aliasInput(), status));
             if (U_FAILURE(status)) {
                 return UnicodeString();
             }
             return formatted->toString(locale, status);
+        }
+        default: {
+            // Should be unreachable
+            U_ASSERT(false);
         }
     }
 }

@@ -139,18 +139,29 @@ static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErr
 
 static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
     // Returns null if key is absent or is not a string
+    // (including if the key is an explicit NULL argument)
     if (opts.containsKey(key)) {
         FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
         U_ASSERT(val != nullptr);
-        if (val->getType() == FormattedPlaceholder::Type::STRING) {
-            result = val->getString();
-            exists = true;
-            return;
-        }
-        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC && val->getInput().getType() == Formattable::Type::kString) {
-            result = val->getInput().getString();
-            exists = true;
-            return;
+        switch (val->getType()) {
+            case FormattedPlaceholder::Type::STRING: {
+                result = val->getString();
+                exists = true;
+                return;
+            }
+            case FormattedPlaceholder::Type::DYNAMIC: {
+                if (val->getInput().getType() == Formattable::Type::kString) {
+                    result = val->getInput().getString();
+                    exists = true;
+                    return;
+                }
+                break;
+            }
+           case FormattedPlaceholder::Type::NUMBER:
+           case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+               // Not a string key
+               break;
+           }
         }
     }
     exists = false;
@@ -171,23 +182,24 @@ static void getIntOpt(const Hashtable& opts, const UnicodeString& key, int64_t& 
     if (opts.containsKey(key)) {
         FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
         U_ASSERT(val != nullptr);
-        if (val->getType() == FormattedPlaceholder::Type::STRING) {
-            tryStringToNumber(val->getString(), result);
-            return;
-        }
-        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC) {
-            switch (val->getInput().getType()) {
+        switch (val->getType()) {
+            case FormattedPlaceholder::Type::STRING: {
+                tryStringToNumber(val->getString(), result);
+                return;
+            }
+            case FormattedPlaceholder::Type::DYNAMIC: {
+                switch (val->getInput().getType()) {
                 case Formattable::Type::kDouble: {
                     result = (int64_t) val->getInput().getDouble();
                     return;
                 }
                 case Formattable::Type::kLong: {
-                     result = (int64_t) val->getInput().getLong();
-                     return;
+                    result = (int64_t) val->getInput().getLong();
+                    return;
                 }
                 case Formattable::Type::kInt64: {
-                     result = val->getInput().getInt64();
-                     return;
+                    result = val->getInput().getInt64();
+                    return;
                 }
                 case Formattable::Type::kString: {
                     tryStringToNumber(val->getInput().getString(), result);
@@ -197,9 +209,14 @@ static void getIntOpt(const Hashtable& opts, const UnicodeString& key, int64_t& 
                     // Can't be cast to number
                     return;
                 }
+                }
+            }
+            case FormattedPlaceholder::Type::NUMBER:
+            case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+                // Can't be cast to number
+                return;
             }
         }
-        // No case for FormattedNumber
     }
 }
 
@@ -251,15 +268,10 @@ Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, UErr
 static FormattedPlaceholder* notANumber(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Formattable> s(new Formattable("NaN"));
-    if (!s.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return FormattedPlaceholder::create(s.orphan(), errorCode);
+    return FormattedPlaceholder::create(UnicodeString("NaN"), errorCode);
 }
 
-static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, Formattable* fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
+static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, const Formattable* fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     U_ASSERT(fp != nullptr);
 
@@ -287,8 +299,6 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
         return notANumber(errorCode);
     }
 
-    U_ASSERT(arg->getType() != FormattedPlaceholder::Type::FALLBACK);
-
     int64_t offset = 0;
     getIntOpt(variableOptions, UnicodeString("offset"), offset);
 
@@ -304,14 +314,9 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
     NULL_ON_ERROR(errorCode);
 
     number::FormattedNumber numberResult;
-    LocalPointer<Formattable> copiedInput(new Formattable(arg->getInput()));
-    if (!copiedInput.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
     switch (arg->getType()) {
         case FormattedPlaceholder::Type::STRING: {
-            return stringAsNumber(locale, *realFormatter, copiedInput.orphan(), arg->getString(), offset, errorCode);
+            return stringAsNumber(locale, *realFormatter, arg->aliasInput(), arg->getString(), offset, errorCode);
         }
         case FormattedPlaceholder::Type::NUMBER: {
             // TODO: passing in a number just returns the same number,
@@ -337,7 +342,7 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
             case Formattable::Type::kString: {
                 // Try to parse the string as a number, as in the `else` case there
                 // TODO: see if the behavior here matches the function registry spec
-                return stringAsNumber(locale, *realFormatter, copiedInput.orphan(), toFormat.getString(), offset, errorCode);
+                return stringAsNumber(locale, *realFormatter, arg->aliasInput(), toFormat.getString(), offset, errorCode);
             }
             default: {
                 // Other types can't be parsed as a number
@@ -346,14 +351,13 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
             }
             break;
         }
-        default: {
-            // Should be unreachable -- see assertion above
-            U_ASSERT(false);
+        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+            return notANumber(errorCode);
         }
     }
     
     NULL_ON_ERROR(errorCode);
-    return FormattedPlaceholder::create(copiedInput.orphan(), std::move(numberResult), errorCode);
+    return FormattedPlaceholder::create(arg->aliasInput(), std::move(numberResult), errorCode);
 }
 
 // --------- PluralFactory
@@ -372,25 +376,19 @@ Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, UError
     return result;
 }
 
-void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
-
-    // Variable options not used
-    (void) variableOptions;
-
-    // Argument must be present
-    if (valuePtr == nullptr) {
-        errorCode = U_SELECTOR_ERROR;
+static void tryAsString(const Locale& locale, const UnicodeString& s, double& valToCheck, bool& noMatch) {
+    // Try parsing the inputString as a double
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    strToDouble(s, locale, valToCheck, localErrorCode);
+    // Invalid format error => value is not a number; no match
+    if (U_FAILURE(localErrorCode)) {
+        noMatch = true;
         return;
     }
-    
-    int64_t offset = 0;
-    getIntOpt(variableOptions, UnicodeString("offset"), offset);
+    noMatch = false;
+}
 
-    // Only doubles and integers can match
-    double valToCheck;
-    const Formattable& value = valuePtr->getType() == FormattedPlaceholder::Type::STRING ? Formattable(valuePtr->getString()) : valuePtr->getInput();
-
+static void tryWithFormattable(const Locale& locale, const Formattable& value, double& valToCheck, bool& noMatch) {
     switch (value.getType()) {
         case Formattable::Type::kDouble: {
             valToCheck = value.getDouble();
@@ -405,25 +403,59 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
             break;
         }
         case Formattable::Type::kString: {
-            // Try parsing the scrutinee as a double
-            UErrorCode savedStatus = errorCode;
-            strToDouble(value.getString(), locale, valToCheck, errorCode);
-            // Invalid format error => value is not a number; return a selector error
-            if (errorCode == U_INVALID_FORMAT_ERROR) {
-                errorCode = U_SELECTOR_ERROR;
-                return;
-            }
-            // Suppress the U_USING_DEFAULT_WARNING warning
-            if (errorCode == U_USING_DEFAULT_WARNING) {
-                errorCode = savedStatus;
-            }
-            CHECK_ERROR(errorCode);
+            tryAsString(locale, value.getString(), valToCheck, noMatch);
             break;
         }
         default: {
-            numMatching = 0;
+            noMatch = true;
             return;
         }
+    }
+    noMatch = false;
+}
+
+void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Hashtable& variableOptions, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
+
+    // Variable options not used
+    (void) variableOptions;
+
+    // Argument must be present
+    if (valuePtr == nullptr) {
+        errorCode = U_SELECTOR_ERROR;
+        return;
+    }
+
+    int64_t offset = 0;
+    getIntOpt(variableOptions, UnicodeString("offset"), offset);
+
+    // Only doubles and integers can match
+    double valToCheck;
+    bool noMatch = true;
+
+    switch (valuePtr->getType()) {
+        // Formatted string: try parsing it as a number
+        case FormattedPlaceholder::Type::STRING: {
+            tryAsString(locale, valuePtr->getString(), valToCheck, noMatch);
+            break;
+        }
+        // Number: use the original input and parse it as a number
+        case FormattedPlaceholder::Type::NUMBER:
+        // Formattable: check if it's a number or parseable as a number
+        case FormattedPlaceholder::Type::DYNAMIC: {
+            tryWithFormattable(locale, valuePtr->getInput(), valToCheck, noMatch);
+        }
+        // These values never match; noMatch is already true
+        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+            break;
+        }
+    }
+
+    if (noMatch) {
+        // Non-number => selector error
+        errorCode = U_SELECTOR_ERROR;
+        numMatching = 0;
+        return;
     }
 
     // Generate the matches
@@ -448,11 +480,11 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
         return;
     }
 
-    UnicodeString match = valuePtr->getType() == FormattedPlaceholder::Type::NUMBER ? rules->select(valuePtr->getNumber(), errorCode)
+    // If there was no exact match, check for a match based on the plural category
+    UnicodeString match = valuePtr->isFormattedNumber() ? rules->select(valuePtr->getNumber(), errorCode)
         : rules->select(valToCheck - offset);
     CHECK_ERROR(errorCode);
 
-    // Next, check for a match based on the plural category
     for (size_t i = 0; i < numKeys; i ++) {
         if (match == keys[i]) {
             prefs[numMatching++] = keys[i];
@@ -504,11 +536,9 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
-        errorCode = U_FORMATTING_ERROR;
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
-    // TODO: is this correct if arg is a Number or formatted string?
-    const Formattable& toFormat = arg->getInput();
 
     LocalPointer<DateFormat> df;
 
@@ -539,12 +569,7 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
                 timeStyle = stringToStyle(opt, errorCode);
             }
             if (dateStyle == DateFormat::NONE && timeStyle == DateFormat::NONE) {
-                LocalPointer<Formattable> copy(new Formattable(toFormat));
-                if (!copy.isValid()) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                    return nullptr;
-                }
-                return FormattedPlaceholder::formatDateWithDefaults(locale, copy.orphan(), errorCode);
+                df.adoptInstead(FormattedPlaceholder::defaultDateTimeInstance(locale, errorCode));
             } else {
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
                 if (!df.isValid()) {
@@ -555,8 +580,22 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
         }
     }
 
+    NULL_ON_ERROR(errorCode);
+
     UnicodeString result;
-    df->format(toFormat, result, 0, errorCode);
+    // TODO: is this correct if arg is a Number or formatted string?
+    switch (arg->getType()) {
+        case FormattedPlaceholder::Type::DYNAMIC: {
+            df->format(arg->getInput(), result, 0, errorCode);
+            break;
+        }
+        case FormattedPlaceholder::Type::STRING:
+        case FormattedPlaceholder::Type::NUMBER: 
+        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+            errorCode = U_FORMATTING_WARNING;
+            return nullptr;
+        }
+    }
     return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
 }
 
@@ -627,7 +666,7 @@ FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* 
 
     (void) variableOptions; // unused parameter
     if (toFormat == nullptr) {
-        errorCode = U_FORMATTING_ERROR;
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
     // Just returns the input value as a string

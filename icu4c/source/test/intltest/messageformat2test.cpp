@@ -246,6 +246,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(featureTests);
+    TESTCASE_AUTO(messageFormat1Tests);
     TESTCASE_AUTO(testAPICustomFunctions);
     TESTCASE_AUTO(testCustomFunctions);
     TESTCASE_AUTO(testBuiltInFunctions);
@@ -786,9 +787,9 @@ void TestMessageFormat2::testResolutionErrors() {
     // Unresolved variable
     testRuntimeWarningPattern(++i, "{{$oops}}", "{$oops}", U_UNRESOLVED_VARIABLE_WARNING);
     testRuntimeWarningPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", "{$forward}", U_UNRESOLVED_VARIABLE_WARNING);
-    // TODO add more
 
     // Unknown function
+    // TODO: Are there supposed to be braces around |horse|?
     testRuntimeWarningPattern(++i, "{The value is {horse :func}.}", "The value is {|horse|}.", U_UNKNOWN_FUNCTION_WARNING);
     testRuntimeWarningPattern(++i, "match {|horse| :func}\n\
                                          when 1 {The value is one.}\n\
@@ -800,9 +801,10 @@ void TestMessageFormat2::testResolutionErrors() {
                                          when * {The value is not one.}\n", U_SELECTOR_ERROR);
 
     // Using selector as formatter
-    testRuntimeErrorPattern(++i, "match {|horse| :select}\n\
-                                         when 1 {The value is one.}\n\
-                                         when * {{|horse| :select}}\n", U_FORMATTING_ERROR);
+    testRuntimeWarningPattern(++i, "match {|horse| :select}\n\
+                                         when 1 {The value is one.}\n   \
+                                         when * {{|horse| :select}}\n", 
+                              "{|horse|}", U_FORMATTING_WARNING);
 
     // Unsupported expressions
     testRuntimeErrorPattern(++i, "{The value is {@horse}.}", U_UNSUPPORTED_PROPERTY);
@@ -823,6 +825,13 @@ void TestMessageFormat2::testResolutionErrors() {
        Formatting errors
           e.g. calls to custom functions with constraints on their arguments;
           handling these errors properly
+
+          - function checks condition on its arg, returns a formatting error
+          - function checks condition on its arg, returns a different error
+          - function checks condition on its options, returns a formatting error
+          - function checks condition on its options, returns a different error
+          - function returns an arbitrary warning code -- make sure that's caught and overridden
+          with a formatting warning
      */
 }
 

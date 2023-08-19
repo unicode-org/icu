@@ -87,6 +87,7 @@ class TestCase : public UMemory {
         }
         Builder& setArgument(const UnicodeString& k, const UnicodeString* val, size_t count, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
+            U_ASSERT(val != nullptr);
 
             LocalArray<Formattable> arr(new Formattable[count]);
             if (!arr.isValid()) {
@@ -111,6 +112,11 @@ class TestCase : public UMemory {
             Formattable* valPtr(new Formattable(val));
             return setArgument(k, valPtr, errorCode);
         }
+        Builder& setNullArgument(const UnicodeString& k, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
+
+            return setArgument(k, (Formattable*) nullptr, errorCode);
+        }
         Builder& setDateArgument(const UnicodeString& k, UDate date, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
@@ -122,6 +128,7 @@ class TestCase : public UMemory {
         // a Formattable of an object doesn't work
         Builder& setArgument(const UnicodeString& k, UObject* val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
+            U_ASSERT(val != nullptr);
 
             Formattable* valPtr(new Formattable(val));
             return setArgument(k, valPtr, errorCode);
@@ -210,11 +217,8 @@ class TestCase : public UMemory {
                 arguments.adoptInstead(initArgs(errorCode));
                 THIS_ON_ERROR(errorCode);
             }
-            if (val == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            } else {
-                arguments->put(k, val, errorCode);
-            }
+            // val may be null
+            arguments->put(k, val, errorCode);
             return *this;
         }
 

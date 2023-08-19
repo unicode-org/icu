@@ -35,6 +35,7 @@ public:
     void testValidPatterns(void);
     void testValidJsonPatterns(void);
     void featureTests(void);
+    void messageFormat1Tests(void);
     void testInvalidPatterns(void);
     void testDataModelErrors(void);
     void testResolutionErrors(void);
@@ -108,7 +109,7 @@ private:
 
     // MessageFormat 1 tests
     void testSample(TestCase::Builder&, IcuTestErrorCode&);
-    void testStaticFormat(IcuTestErrorCode&);
+    void testStaticFormat(TestCase::Builder&, IcuTestErrorCode&);
     void testSimpleFormat(TestCase::Builder&, IcuTestErrorCode&);
     void testSelectFormatToPattern(TestCase::Builder&, IcuTestErrorCode&);
     void testMessageFormatDateTimeSkeleton(TestCase::Builder&, IcuTestErrorCode&);

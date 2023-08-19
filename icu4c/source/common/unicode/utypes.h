@@ -443,6 +443,7 @@ typedef enum UErrorCode {
     U_SYNTAX_WARNING = -118,               /** Includes all syntax errors (for now). This is a warning because fallback strings are used */
     U_UNKNOWN_FUNCTION_WARNING = -117,              /** An annotation refers to a function not defined by the standard or custom function registry  (this is a warning and not an error, so formatting can proceed with a fallback string)*/
     U_VARIANT_KEY_MISMATCH_WARNING = -116,          /** In a match-construct, one or more variants had a different number of keys from the number of selectors */
+    U_FORMATTING_WARNING           = -115,          /** Covers all runtime errors: for example, an internally inconsistent set of options. */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -580,7 +581,6 @@ typedef enum UErrorCode {
     U_DUPLICATE_OPTION_NAME,         /** In an annotation, the same option name appears more than once */
     U_SELECTOR_ERROR,                /** A selector function is applied to an operand of the wrong type */
     U_MISSING_SELECTOR_ANNOTATION,   /** A selector expression evaluates to an unannotated operand */
-    U_FORMATTING_ERROR,              /** Covers all runtime errors: for example, an internally inconsistent set of options. */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**

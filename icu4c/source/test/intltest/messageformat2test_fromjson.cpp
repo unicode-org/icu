@@ -183,7 +183,6 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: crash here
     test.adoptInstead(testBuilder->setPattern("let $foo = {$foo} let $foo = {42} {bar {$foo}}")
                                 .setExpected("bar 42")
                                 .setArgument("foo", "foo", errorCode)
@@ -374,15 +373,6 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
                       .setIgnoreError()
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
-
-    /*
-      This differs from
-
-      https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L227
-
-      in which the expected result is "{+markup}",
-      but as per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution , the fallback value should be the operand
-     */
 
     test.adoptInstead(testBuilder->setPattern("{{|foo| +markup}}")
                       .setExpected("{|foo|}")

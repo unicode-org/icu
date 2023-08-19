@@ -111,12 +111,47 @@ void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-  // Pattern
+    // Pattern
     test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime pattern=|d 'of' MMMM, y 'at' HH:mm|}.}")
                                 .setExpected("Testing date formatting: 23 of November, 2022 at 19:42.")
                                 .setDateArgument(date, TEST_DATE, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
+
+    // Error cases
+    // Number as argument
+    test.adoptInstead(testBuilder->setPattern("let $num = {|42| :number}\n\
+                                              {Testing date formatting: {$num :datetime}}")
+                                .clearArguments()
+                                .setExpected("Testing date formatting: {|42|}")
+                                .setExpectedWarning(U_FORMATTING_WARNING)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    // Literal string as argument
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {|horse| :datetime}}")
+                                .setExpected("Testing date formatting: |horse|")
+                                .setExpectedWarning(U_FORMATTING_WARNING)
+                                .build(errorCode));
+    // Formatted string as argument
+    test.adoptInstead(testBuilder->setPattern("let $dateStr = {$date :datetime}\n\
+                                               {Testing date formatting: {$dateStr :datetime}}")
+                                .setExpected("Testing date formatting: $date")
+                                .setExpectedWarning(U_FORMATTING_WARNING)
+                                .setDateArgument(date, TEST_DATE, errorCode)
+                                .build(errorCode));
+    // Null as argument
+    // NOTE: this currently treats $date as an unresolved variable,
+    // because calling put() with a null value on a Hashtable unsets the variable.
+    // However, we might change the representation for arguments and have to
+    // change this test. TODO
+    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime}}")
+                                .setExpected("Testing date formatting: {$date}")
+                                .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
+                                .setNullArgument(date, errorCode)
+                                .build(errorCode));
+
+    TestUtils::runTestCase(*this, *test, errorCode);
+
 }
 
 void TestMessageFormat2::testNumbers(IcuTestErrorCode& errorCode) {

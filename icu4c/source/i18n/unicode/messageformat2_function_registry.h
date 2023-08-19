@@ -37,6 +37,8 @@ class U_COMMON_API Formatter : public UMemory {
 
     // TODO: should change the Hashtable type to a specific `Options` type for type safety
 
+    // TODO: FormattedPlaceholder is not const because numbers can only be passed by move
+
     // Operand can be null
     virtual FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const Hashtable& options, UErrorCode& errorCode) const = 0;
     virtual ~Formatter();

@@ -364,6 +364,160 @@ public:
         }
     };
 
+    // Represents a FormattedPlaceholder together with its fallback string
+    // (a representation of the source that will be used if a function call
+    // errors out on this operand).
+    // This is a separate class so that custom function implementations don't
+    // need to track fallback strings.
+    class FormattedPlaceholderWithFallback : public UMemory {
+        public:
+        // Annotate an existing FormattedPlaceholder with a fallback string
+        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, FormattedPlaceholder* fp, UErrorCode& status) {
+            NULL_ON_ERROR(status);
+            U_ASSERT(fp != nullptr);
+            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(fallbackString, fp);
+            if (result == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+        // STRING constructor
+        // Example: evaluating a literal would give:
+        // The fallback string is different: for example: fallbackString=|42|, fp={ input=Formattable("42"), s="42"}
+        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const UnicodeString& s, UErrorCode& status) {
+            NULL_ON_ERROR(status);
+     
+            LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(s, status));
+            NULL_ON_ERROR(status);
+            LocalPointer<FormattedPlaceholderWithFallback> result(new FormattedPlaceholderWithFallback(fallbackString, fp.orphan()));
+            if (!result.isValid()) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
+            return result.orphan();
+        }
+        // NULL_ARGUMENT constructor
+        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, UErrorCode& status) {
+            NULL_ON_ERROR(status);
+     
+            LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(status));
+            NULL_ON_ERROR(status);
+            LocalPointer<FormattedPlaceholderWithFallback> result(new FormattedPlaceholderWithFallback(fallbackString, fp.orphan()));
+            if (!result.isValid()) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
+            return result.orphan();
+        }
+        // DYNAMIC constructor
+        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const Formattable* f, UErrorCode& status) {
+            NULL_ON_ERROR(status);
+     
+            LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(f, status));
+            NULL_ON_ERROR(status);
+            LocalPointer<FormattedPlaceholderWithFallback> result(new FormattedPlaceholderWithFallback(fallbackString, fp.orphan()));
+            if (!result.isValid()) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
+            return result.orphan();
+        }
+        // FALLBACK constructor with specific fallback string
+        static FormattedPlaceholderWithFallback* createFallback(UnicodeString fallbackString, UErrorCode& status) {
+            NULL_ON_ERROR(status);
+     
+            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(fallbackString);
+            if (result == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+        // FALLBACK constructor with default fallback string
+        static FormattedPlaceholderWithFallback* createFallback(UErrorCode& status) {
+            NULL_ON_ERROR(status);
+     
+            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(UnicodeString(REPLACEMENT));
+            if (result == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+        // Extract the fallback string and use that to create a new FormattedPlaceholderWithFallback
+        FormattedPlaceholderWithFallback* fallbackToSource(UErrorCode& status) const {
+            NULL_ON_ERROR(status);
+            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(fallbackString);
+            if (result == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result;
+        }
+        bool isFallback() const {
+            return !fp.isValid();
+        }
+        // Invalidates `this` -- used when resolving options and we
+        // need to insert this into a hash table
+        FormattedPlaceholder* takeFormattedPlaceholder() {
+            U_ASSERT(!isFallback());
+            return fp.orphan();
+        }
+        const FormattedPlaceholder& getFormattedPlaceholder() const {
+            U_ASSERT(!isFallback());
+            return *fp;
+        }
+        // Creates a new STRING-typed FormattedPlaceholder with this
+        // fallback string. See `MessageFormatter:formatSelectorExpression()` for
+        // how this is used
+        FormattedPlaceholder* promoteFallback(UErrorCode& status) const {
+            U_ASSERT(isFallback());
+            return FormattedPlaceholder::create(fallbackString, status);
+        }
+        UnicodeString toString(const Locale& loc, UErrorCode& status) const {
+            if (U_FAILURE(status)) {
+                return UnicodeString();
+            }
+            // If it's a fallback, just return the fallback string
+            if (!fp.isValid()) {
+                return bracesFallbackString();
+            }
+            return fp->toString(loc, status);
+        }
+        const UnicodeString& getFallbackString() const {
+            return fallbackString;
+        }
+        private:
+        FormattedPlaceholderWithFallback(UnicodeString fb, FormattedPlaceholder* fph) : fallbackString(fb), fp(fph) { U_ASSERT(fph != nullptr); } 
+        FormattedPlaceholderWithFallback(UnicodeString fb) : fallbackString(fb) {}
+        
+       UnicodeString bracesFallbackString() const {
+/*
+"If the resolved pattern includes any fallback values and the formatting result is a concatenated string or a sequence of strings, the string representation of each fallback value MUST be the concatenation of a U+007B LEFT CURLY BRACKET {, the fallback value as a string, and a U+007D RIGHT CURLY BRACKET }."
+
+See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
+*/
+            UnicodeString result;
+            result += LEFT_CURLY_BRACE;
+            result += fallbackString;
+            result += RIGHT_CURLY_BRACE;
+            return result;
+       }
+
+        /* This is used in examples like the following:
+           
+           let $var = {|42| :number}
+           {{$var :datetime}}
+           
+           The :datetime function errors, so we need to use
+           |42| as the fallback. This is neither the string "$var"
+           nor $var's value (42) nor the static representation
+           of var's RHS ("{|42| :number}"). Thus it needs to be
+           dynamically determined.
+        */
+        const UnicodeString fallbackString;
+
+        // Null if this is a fallback
+        LocalPointer<FormattedPlaceholder> fp;
+    }; // class FormattedPlaceholderWithFallback
+
     // `ResolvedExpression`
     // represents the result of resolving an expression in a selector
     // context.
@@ -385,8 +539,8 @@ public:
         ResolvedExpression(Selector* s, Hashtable* o) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(nullptr) {}
         ResolvedExpression() : isFallback(true), resolvedOperand(nullptr) {}
     }; // class ResolvedExpression
-     FormattedPlaceholder* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
-     FormattedPlaceholder* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
+     FormattedPlaceholderWithFallback* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
+     FormattedPlaceholderWithFallback* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, Hashtable*&, UnicodeString&, UErrorCode &) const;
 
      // Selection methods
      void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
@@ -394,16 +548,18 @@ public:
      void resolvePreferences(const UVector&, const MessageFormatDataModel::VariantMap&, UErrorCode&, UVector& pref) const;
 
      // Formatting methods
+     static FormattedPlaceholderWithFallback* formatLiteral(const MessageFormatDataModel::Literal& lit, UErrorCode& status);
      void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatPattern(Context&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats an expression that appears as a selector
      ResolvedExpression* formatSelectorExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression that appears in a pattern or as the definition of a local variable
-     FormattedPlaceholder* formatExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     FormattedPlaceholderWithFallback* formatExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      Hashtable* resolveOptions(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
      FormattedPlaceholder* formatFunctionCall(FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, Formattable*, bool&, UErrorCode&) const;
-     FormattedPlaceholder* formatOperand(Context&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;
-     const Formattable* evalArgument(const Context&, const VariableName&, UErrorCode&) const;
+     FormattedPlaceholderWithFallback* fallbackFunctionName(const FunctionName&, UErrorCode&) const;
+     FormattedPlaceholderWithFallback* formatOperand(Context&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+     FormattedPlaceholderWithFallback* evalArgument(const Context&, const VariableName&, UErrorCode&) const;
      void formatSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods
