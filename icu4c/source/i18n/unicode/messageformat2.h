@@ -315,53 +315,70 @@ public:
 
     // Intermediate classes used internally in the formatter
 
-    class Closure;
-    class Environment : public UMemory {
-        public:
-        // Copies its closure argument
-        void add(const VariableName&, const Closure&, UErrorCode&);
-        bool defines(const VariableName&) const;
-        const Closure* lookup(const VariableName&) const;
-        Environment(UErrorCode&);
-        Environment(const Environment&);
-        private:
-        // Maps VariableName onto Closure*
-        LocalPointer<Hashtable> contents;
-    };
+    class Environment;
+    // A closure represents the right-hand side of a variable
+    // declaration, along with an environment giving values
+    // to its free variables
     class Closure : public UMemory {
         using Expression = MessageFormatDataModel::Expression;
         public:
-        // Copies the expression and environment
-        Closure(const Expression& expression, const Environment& environment, UErrorCode&);
-        // Needs a copy constructor to make environments copyable
-        Closure(const Closure& c);
+        static Closure* create(const Expression&, const Environment&, UErrorCode&);
         const Expression& getExpr() const {
-            U_ASSERT(!isBogus());
-            return *expr;
+            return expr;
         }
         const Environment& getEnv() const {
-            U_ASSERT(!isBogus());
-            return *env;
+            return env;
         }
-        // If this is left undefined, deleting a closure from the
-        // environment causes a segfault
         virtual ~Closure();
         private:
+        Closure(const Expression& expression, const Environment& environment) : expr(expression), env(environment) {}
+
         // An unevaluated expression
-        /* const */ LocalPointer<Expression> expr;
+        const Expression& expr;
         // The environment mapping names used in this
         // expression to other expressions
-        /* const */ LocalPointer<Environment> env;
-        // Used to indicate copy constructor failures
-        bool isBogus_;
-        bool isBogus() const {
-            if (isBogus_) {
-                return true;
-            }
-            U_ASSERT(expr.isValid());
-            U_ASSERT(env.isValid());
-            return false;
-        }
+        const Environment& env;
+    };
+    // An environment is represented as a linked chain of
+    // non-empty environments, terminating at an empty environment.
+    // It's searched using linear search.
+    class Environment : public UMemory {
+        public:
+        virtual const Closure* lookup(const VariableName&) const = 0;
+        static Environment* create(UErrorCode&);
+        static Environment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+        virtual ~Environment();
+    };
+    class NonEmptyEnvironment;
+    class EmptyEnvironment : public Environment {
+        private:
+        friend class Environment;
+
+        const Closure* lookup(const VariableName&) const;
+        static EmptyEnvironment* create(UErrorCode&);
+        virtual ~EmptyEnvironment();
+        // Adopts its closure argument
+        static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+
+        EmptyEnvironment() {}
+    };
+    class NonEmptyEnvironment : public Environment {
+        private:
+        friend class Environment;
+        const Closure* lookup(const VariableName&) const;
+        // Adopts its closure argument
+        static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+        virtual ~NonEmptyEnvironment();
+    private:
+        friend class Environment;
+
+        NonEmptyEnvironment(const VariableName& v, Closure* c, const Environment& e) : var(v), rhs(c), parent(e) {}
+
+        // Maps VariableName onto Closure*
+        // Chain of linked environments
+        VariableName var;
+        const LocalPointer<Closure> rhs; // should be valid
+        const Environment& parent;
     };
 
     // Represents a FormattedPlaceholder together with its fallback string
@@ -584,7 +601,7 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      }
 
      // Checking for resolution errors
-     void checkDeclarations(const Hashtable&, Environment&, UErrorCode&) const;
+     void checkDeclarations(const Hashtable&, Environment*&, UErrorCode&) const;
      void check(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      void check(const Hashtable&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
      void check(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;

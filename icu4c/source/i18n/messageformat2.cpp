@@ -597,9 +597,7 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatExpr
         setError(U_UNSUPPORTED_PROPERTY, status);
         // Use the default fallback string
         // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-        LocalPointer<FormattedPlaceholderWithFallback> result(FormattedPlaceholderWithFallback::createFallback(status));
-        NULL_ON_ERROR(status);
-        return result.orphan();
+        return FormattedPlaceholderWithFallback::createFallback(status);
     }
 
     if (expr.isFunctionCall()) {
@@ -1041,7 +1039,7 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
     // Check that variable is in scope
     const VariableName& var = rand.asVariable();
     // Check local scope
-    if (localEnv.defines(var)) {
+    if (localEnv.lookup(var) != nullptr) {
         return;
     }
     // Check global scope
@@ -1066,26 +1064,25 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
 }
 
 // Check for resolution errors
-void MessageFormatter::checkDeclarations(const Hashtable& arguments, Environment& env, UErrorCode &status) const {
+void MessageFormatter::checkDeclarations(const Hashtable& arguments, Environment*& env, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     const Bindings& decls = dataModel->getLocalVariables();
+    U_ASSERT(env != nullptr);
 
-    CHECK_ERROR(status);
     for (size_t i = 0; i < decls.length(); i++) {
         const Binding* decl = decls.get(i);
         U_ASSERT(decl != nullptr);
         const Expression* rhs = decl->getValue();
-        check(arguments, env, *rhs, status);
+        check(arguments, *env, *rhs, status);
 
         // Add a closure to the global environment,
         // memoizing the value of localEnv up to this point
-        LocalPointer<Closure> closure(new Closure(*rhs, env, status));
+        Closure* closure = Closure::create(*rhs, *env, status);
         CHECK_ERROR(status);
 
         // Add the LHS to the environment for checking the next declaration
-        // Note: without the call to orphan() (if *closure is used), a double-free occurs
-        env.add(decl->var, *(closure.orphan()), status);
+        env = Environment::create(decl->var, closure, *env, status);
         CHECK_ERROR(status);
     }
 }
@@ -1099,14 +1096,16 @@ void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &st
     // right-hand sides (unresolved variable errors can
     // only be checked when arguments are known)
 
-    LocalPointer<Environment> globalEnv(new Environment(status));
     LocalPointer<Context> context(Context::create(*this, arguments, status));
+
+    Environment* env = Environment::create(status);
     CHECK_ERROR(status);
-    checkDeclarations(arguments, *globalEnv, status);
+    checkDeclarations(arguments, env, status);
+    CHECK_ERROR(status);
+    LocalPointer<Environment> globalEnv(env);
 
     if (!dataModel->hasSelectors()) {
-        // Note: without the calls to orphan() (if *globalEnv is used), a double-free occurs
-        formatPattern(*context, *(globalEnv.orphan()), dataModel->getPattern(), status, result);
+        formatPattern(*context, *globalEnv, dataModel->getPattern(), status, result);
     } else {
         // Check for errors/warnings -- if so, then the result is the fallback value
         // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
@@ -1114,82 +1113,59 @@ void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &st
             result += REPLACEMENT;
             return;
         }
-        formatSelectors(*context, *(globalEnv.orphan()), dataModel->getSelectors(), dataModel->getVariants(), status, result);
+        formatSelectors(*context, *globalEnv, dataModel->getSelectors(), dataModel->getVariants(), status, result);
     }
     return;
 }
 
 // ---------------- Environments and closures
-MessageFormatter::Closure::Closure(const Expression& expression, const Environment& environment, UErrorCode& status) {
-    // Copies the expression and environment
-    CHECK_ERROR(status);
-    expr.adoptInstead(new Expression(expression));
-    if (!expr.isValid()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    env.adoptInstead(new Environment(environment));
-    if (!env.isValid()) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    isBogus_ = false;
-}
 
-MessageFormatter::Closure::Closure(const Closure& other) {
-    U_ASSERT(!other.isBogus());
-    isBogus_ = false;
-    // Copies the expression and environment
-    expr.adoptInstead(new Expression(*other.expr));
-    if (!expr.isValid()) {
-        isBogus_ = true;
-        return;
-    }
-    env.adoptInstead(new Environment(*other.env));
-    if (!env.isValid()) {
-        isBogus_ = true;
-    }
-}
-
-MessageFormatter::Environment::Environment(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
-    if (!contents.isValid()) {
+MessageFormatter::Environment* MessageFormatter::Environment::create(const VariableName& var, Closure* c, const Environment& parent, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Environment* result = new NonEmptyEnvironment(var, c, parent);
+    if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
+        return nullptr;
     }
-    // The environment owns the values
-    contents->setValueDeleter(uprv_deleteUObject);
+    return result;
 }
 
-MessageFormatter::Environment::Environment(const Environment& other) {
-    U_ASSERT(other.contents.isValid());
-    contents.adoptInstead(copyHashtable<Closure>(*other.contents));
-    // If the copy failed, !contents.isValid() will be true; other Environment operations
-    // check for that condition
-}
-
-bool MessageFormatter::Environment::defines(const VariableName& v) const {
-    U_ASSERT(contents.isValid());
-    return (contents->containsKey(v));
-}
-
-void MessageFormatter::Environment::add(const VariableName& v, const Closure& c, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    U_ASSERT(contents.isValid());
-    Closure* copy = new Closure(c);
-    if (copy == nullptr) {
+MessageFormatter::Environment* MessageFormatter::Environment::create(UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Environment* result = new EmptyEnvironment();
+    if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
+        return nullptr;
     }
-    contents->put(v, copy, errorCode);
+    return result;
 }
 
-// Postcondition: !found || result is non-null
-const MessageFormatter::Closure* MessageFormatter::Environment::lookup(const VariableName& v) const {
-    U_ASSERT(contents.isValid());
-    return ((const Closure*) contents->get(v));
+MessageFormatter::Closure* MessageFormatter::Closure::create(const Expression& expr, const Environment& env, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Closure* result = new Closure(expr, env);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    return result;
 }
+
+const MessageFormatter::Closure* MessageFormatter::EmptyEnvironment::lookup(const VariableName& v) const {
+    (void) v;
+    return nullptr;
+}
+
+const MessageFormatter::Closure* MessageFormatter::NonEmptyEnvironment::lookup(const VariableName& v) const {
+    if (v == var) {
+        U_ASSERT(rhs.isValid());
+        return rhs.getAlias();
+    }
+    return parent.lookup(v);
+}
+
+MessageFormatter::Environment::~Environment() {}
+MessageFormatter::NonEmptyEnvironment::~NonEmptyEnvironment() {}
+MessageFormatter::EmptyEnvironment::~EmptyEnvironment() {}
 
 MessageFormatter::Closure::~Closure() {}
 } // namespace message2
