@@ -82,8 +82,6 @@ public final class LdmlConverter {
     // TODO: Do all supplemental data in one go and split similarly to locale data (using RbPath).
     private static final Predicate<CldrPath> GENDER_LIST_PATHS =
         supplementalMatcher("gender");
-    private static final Predicate<CldrPath> LIKELY_SUBTAGS_PATHS =
-        supplementalMatcher("likelySubtags");
     private static final Predicate<CldrPath> METAZONE_PATHS =
         supplementalMatcher("metaZones", "primaryZones");
     private static final Predicate<CldrPath> METADATA_PATHS =
@@ -153,7 +151,6 @@ public final class LdmlConverter {
         RBNF(LDML),
         DAY_PERIODS(SUPPLEMENTAL),
         GENDER_LIST(SUPPLEMENTAL),
-        LIKELY_SUBTAGS(SUPPLEMENTAL),
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
         UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
@@ -480,10 +477,6 @@ public final class LdmlConverter {
 
             case GENDER_LIST:
                 processSupplemental("genderList", GENDER_LIST_PATHS, "misc", false);
-                break;
-
-            case LIKELY_SUBTAGS:
-                processSupplemental("likelySubtags", LIKELY_SUBTAGS_PATHS, "misc", false);
                 break;
 
             case SUPPLEMENTAL_DATA:
