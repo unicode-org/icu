@@ -319,6 +319,12 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
             return stringAsNumber(locale, *realFormatter, arg->aliasInput(), arg->getString(), offset, errorCode);
         }
         case FormattedPlaceholder::Type::NUMBER: {
+/*
+  This is why functions can't just take a `const FormattedPlaceholder*`.
+  The number can't be copied, so we have to invalidate the input
+  `FormattedPlaceholder*`. At the same time, we can't just return a `const FormattedPlaceholder*`
+  since if we do allocate a new FormattedPlaceholder*, the caller has to take ownership
+*/
             // TODO: passing in a number just returns the same number,
             // with options ignored. is that right?
             numberResult = arg->getNumber();

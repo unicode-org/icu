@@ -657,13 +657,13 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatExpr
                 // takes ownership of its arg
                 UnicodeString argFallbackStr = arg->getFallbackString();
 
-                LocalPointer<FormattedPlaceholder> result(formatter->format(arg->takeFormattedPlaceholder(),
-                                                                            *resolvedOptions,
-                                                                            status));
+                FormattedPlaceholder* result = formatter->format(arg->takeFormattedPlaceholder(),
+                                                                 *resolvedOptions,
+                                                                 status);
                 // If the call succeeded, return the result
                 if (result != nullptr && U_SUCCESS(status)) {
                     return FormattedPlaceholderWithFallback::create(argFallbackStr,
-                                                                    result.orphan(),
+                                                                    result,
                                                                     status);
                 } else if (status == U_ZERO_ERROR) {
                     // Set U_FORMATTING_WARNING if formatting function returned null
