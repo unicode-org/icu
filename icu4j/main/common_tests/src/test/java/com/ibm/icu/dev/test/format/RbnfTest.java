@@ -362,6 +362,13 @@ public class RbnfTest extends TestFmwk {
 
         doTest(formatter, testData, true);
 
+        String[][] fractionalTestData = {
+                { "1234", "20:34" },
+                { "1234.2", "20:34" },
+                { "1234.7", "20:35" }
+        };
+        doTest(formatter, fractionalTestData, false);
+
         String[][] testDataLenient = {
                 { "2-51-33", "10,293" },
         };
