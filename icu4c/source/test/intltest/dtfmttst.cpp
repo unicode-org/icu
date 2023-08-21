@@ -1914,12 +1914,12 @@ void DateFormatTest::TestQuarters()
     const char *ES_MX_DATA[] = {
         "yyyy MM dd",
 
-        "QQQQ y",  "fp", "1970 01 01", "1.er trimestre 1970", "1970 01 01",
+        "QQQQ y",  "fp", "1970 01 01", "1.\\u00BA trimestre 1970",  "1970 01 01",
         "QQQ y",   "fp", "1970 01 01", "T1 1970",             "1970 01 01",
         "QQQQQ y", "fp", "1970 01 01", "1 1970",              "1970 01 01",
-        "qqqq",    "fp", "1970 01 01", "1.er trimestre",      "1970 01 01",
+        "qqqq",    "fp", "1970 01 01", "1.\\u00BA trimestre",      "1970 01 01",
         "qqq",     "fp", "1970 01 01", "T1",                  "1970 01 01",
-        "qqqqq",   "fp", "1970 01 01", "1T",                  "1970 01 01",
+        "qqqqq",   "fp", "1970 01 01", "1",                  "1970 01 01",
     };
 
     expect(EN_DATA, UPRV_LENGTHOF(EN_DATA), Locale("en", "", ""));

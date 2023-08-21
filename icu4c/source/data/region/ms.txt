@@ -146,6 +146,7 @@ ms{
         IL{"Israel"}
         IM{"Isle of Man"}
         IN{"India"}
+        IO{"Wilayah Lautan Hindi British"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
@@ -296,6 +297,9 @@ ms{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
+    }
+    Countries%chagos{
+        IO{"Kepulauan Chagos"}
     }
     Countries%short{
         GB{"UK"}

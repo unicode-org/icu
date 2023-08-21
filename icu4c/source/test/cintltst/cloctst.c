@@ -5337,8 +5337,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "und_AQ",
-    "_Latn_AQ",
-    "_AQ"
+    "en_Latn_AQ",
+    "en_AQ"
   }, {
     "und_Zzzz",
     "en_Latn_US",
@@ -5361,8 +5361,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "und_Zzzz_AQ",
-    "_Latn_AQ",
-    "_AQ"
+    "en_Latn_AQ",
+    "en_AQ"
   }, {
     "und_Latn",
     "en_Latn_US",
@@ -5385,8 +5385,8 @@ const char* const full_data[][3] = {
     "en_HK"
   }, {
     "und_Latn_AQ",
-    "_Latn_AQ",
-    "_AQ"
+    "en_Latn_AQ",
+    "en_AQ"
   }, {
     "und_Hans",
     "zh_Hans_CN",
@@ -5457,8 +5457,8 @@ const char* const full_data[][3] = {
     "zh_Moon_HK"
   }, {
     "und_Moon_AQ",
-    "_Moon_AQ",
-    "_Moon_AQ"
+    "en_Moon_AQ",
+    "en_Moon_AQ"
   }, {
     "es",
     "es_Latn_ES",
@@ -7067,7 +7067,7 @@ static const UldnItem zh_DiaMidLong[] = {
 static const UldnItem zh_Hant_DiaMidLong[] = {
     // zh and zh_Hant both have dialect names for the following in ICU 73
     { "ar_001",                 TEST_ULDN_LOCALE, u"現代標準阿拉伯文" },
-    { "nl_BE",                  TEST_ULDN_LOCALE, u"佛蘭芒文" },
+    { "nl_BE",                  TEST_ULDN_LOCALE, u"法蘭德斯文" },
     { "ro_MD",                  TEST_ULDN_LOCALE, u"摩爾多瓦文" },
     // zh_Hant no dialect names for the following in ICU-73,
     // use standard name

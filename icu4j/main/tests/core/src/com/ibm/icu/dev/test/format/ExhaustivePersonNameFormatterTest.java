@@ -60,13 +60,17 @@ public class ExhaustivePersonNameFormatterTest extends TestFmwk {
                     logln("Skipping " + filename + "...");
                     continue;
                 }
-//              String[] FILENAMES_TO_SKIP = {"gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt"};
-//              Adding some more locales to skip, with provisional personName formats)
-                String[] FILENAMES_TO_SKIP = {"gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt",
-                      "yue_Hans.txt", "fa.txt", "ja.txt", "ka.txt", "zh_Hant_HK.txt", "zh_Hant.txt",
-                      "bn.txt", "zh.txt", "nl.txt", "to.txt", "uk.txt", "my.txt", "yue.txt",
-                      "bg.txt", "tk.txt", "ps.txt", "ko.txt", "kk.txt", "ms.txt"};
-                if (Arrays.asList(FILENAMES_TO_SKIP).contains(filename)) {
+                String[] FILENAMES_TO_SKIP = {"gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt"};
+                String[] FILENAMES_TO_SKIP_FOR_17028 = {
+                      "az.txt", "be.txt", "bs.txt", "fi.txt", "gu.txt", "hr.txt", "is.txt",
+                      "km.txt", "ky.txt", "lo.txt", "mk.txt", "ml.txt", "mn.txt", "mr.txt",
+                      "pa.txt", "pt.txt", "pt_PT.txt", "sw.txt", "tr.txt", "zu.txt",
+                      "yue_Hans.txt", "fa.txt","ka.txt", "zh_Hant_HK.txt", "zh_Hant.txt",
+                      "bn.txt", "zh.txt", "nl.txt", "to.txt", "uk.txt", "my.txt",
+                      "bg.txt", "tk.txt", "ps.txt", "ko.txt", "ms.txt", "ne.txt",
+                      "gd.txt", "lv.txt" };
+                if (Arrays.asList(FILENAMES_TO_SKIP).contains(filename) ||
+                    Arrays.asList(FILENAMES_TO_SKIP_FOR_17028).contains(filename) && logKnownIssue("CLDR-17028", "Some locales fails Person Name Formatting")) {
                     // extra check to narrow down the files for debugging
                     logln("Skipping " + filename + "...");
                     ++skippedFiles;

@@ -606,7 +606,6 @@ pcm{
     }
     characterLabelPattern{
         all{"{0} — ọl"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — Fít ích ọ́da"}
         enclosed{"{0} — Sọráund"}
         extended{"{0} — Strẹch"}
@@ -625,10 +624,5 @@ pcm{
         language{"Lángwej: {0}"}
         script{"Haú to raít tins: {0}"}
         territory{"Éria: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

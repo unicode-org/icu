@@ -146,6 +146,7 @@ ig{
         IL{"Israel"}
         IM{"Isle of Man"}
         IN{"India"}
+        IO{"British Indian Ocean Territory"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
@@ -296,6 +297,9 @@ ig{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"Mpaghara Amaghị"}
+    }
+    Countries%chagos{
+        IO{"Chagos Archipelago"}
     }
     Countries%short{
         GB{"UK"}

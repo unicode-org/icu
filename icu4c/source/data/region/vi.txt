@@ -146,6 +146,7 @@ vi{
         IL{"Israel"}
         IM{"Đảo Man"}
         IN{"Ấn Độ"}
+        IO{"Lãnh thổ Ấn Độ Dương thuộc Anh"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
@@ -297,6 +298,9 @@ vi{
         ZW{"Zimbabwe"}
         ZZ{"Vùng không xác định"}
     }
+    Countries%chagos{
+        IO{"Quần đảo Chagos"}
+    }
     Countries%short{
         HK{"Hồng Kông"}
         MO{"Macao"}
@@ -308,6 +312,7 @@ vi{
         CI{"Bờ Biển Ngà"}
         CZ{"Cộng hòa Séc"}
         FK{"Quần đảo Falkland (Islas Malvinas)"}
+        NZ{"Aotearoa New Zealand"}
         SZ{"Swaziland"}
         TL{"Đông Timor"}
     }

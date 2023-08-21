@@ -49,6 +49,7 @@ dsb{
         bem{"bemba"}
         bez{"bena"}
         bg{"bulgaršćina"}
+        bgc{"haryanvišćina"}
         bho{"bhojpurišćina"}
         bi{"bislamšćina"}
         bin{"binišćina"}
@@ -334,6 +335,7 @@ dsb{
         pt_PT{"europejska portugalšćina"}
         qu{"kečua"}
         quc{"kʼicheʼ"}
+        raj{"rajasthanišćina"}
         rap{"rapanuišćina"}
         rar{"rarotonganšćina"}
         rhg{"rohingyašćina"}
@@ -544,6 +546,9 @@ dsb{
             ethiopic-amete-alem{"etiopiski amete-alem-kalendaŕ"}
             gregorian{"gregoriański kalender"}
             hebrew{"žydojski kalender"}
+            islamic{"islamski kalender"}
+            islamic-civil{"islamski ciwilny kalendaŕ"}
+            islamic-umalqura{"islamski umalqui-kalendaŕ"}
             iso8601{"iso-8601-kalender"}
             japanese{"japański kalender"}
             persian{"persiski kalender"}
@@ -619,10 +624,11 @@ dsb{
     }
     characterLabelPattern{
         all{"{0} — wšykne"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — kompatibilita"}
         enclosed{"{0} — skašćikowany"}
         extended{"{0} — rozšyrjony"}
+        facing-left{"{0} nalěwo"}
+        facing-right{"{0} napšawo"}
         historic{"{0} — historiski"}
         miscellaneous{"{0} — wšake"}
         other{"{0} — druge"}
@@ -640,10 +646,5 @@ dsb{
         language{"Rěc: {0}"}
         script{"Pismo: {0}"}
         territory{"Region: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

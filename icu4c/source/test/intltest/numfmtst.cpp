@@ -2138,10 +2138,10 @@ void NumberFormatTest::TestCurrencyVariants(){
         {"en-US", u"CDF", u"CDF", u"CDF", u"CDF", u"CDF", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
         {"sw-CD", u"CDF", u"FC", u"FC", u"FC", u"FC", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
         {"en-US", u"GEL", u"GEL", u"₾", u"GEL", u"GEL", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
-        {"ka-GE", u"GEL", u"₾", u"₾", u"₾", u"₾", U_USING_FALLBACK_WARNING}, // narrow: fallback to ka
-        {"ka", u"GEL", u"₾", u"₾", u"₾", u"₾", U_ZERO_ERROR}, // no fallback on narrow
-        {"zh-TW", u"TWD", u"$", u"$", u"NT$", u"$", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
-        {"ccp", u"TRY", u"TRY", u"₺", u"TRY", u"TL", U_ZERO_ERROR}, // no fallback on variant
+        {"ka-GE", u"GEL", u"₾", u"₾", u"₾", u"₾", U_USING_DEFAULT_WARNING}, // narrow: fallback to ka
+        {"ka", u"GEL", u"₾", u"₾", u"₾", u"₾", U_USING_DEFAULT_WARNING}, // narrow fallback to short
+        {"zh-TW", u"TWD", u"$", u"$", u"NT$", u"$", U_USING_DEFAULT_WARNING}, // narrow: fallback to short
+        {"ccp", u"TRY", u"TRY", u"₺", u"TRY", u"TL", U_USING_DEFAULT_WARNING}, // everything fallback to root
     };
     for (const auto& cas : cases) {
         status.setScope(cas.isoCode);

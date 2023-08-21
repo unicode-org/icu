@@ -197,8 +197,10 @@ public class UnitsConverter {
         private int exponentShoToM3 = 0;
         /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
         private int exponentTsuboToM2 = 0;
-        /** Exponent https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
+        /** Exponent for https://en.wikipedia.org/wiki/Japanese_units_of_measurement */
         private int exponentShakuToM = 0;
+        /** Exponent for Atomic Mass Unit */
+        private int exponentAMU = 0;
 
         /**
          * Creates Empty Factor
@@ -258,6 +260,7 @@ public class UnitsConverter {
             result.exponentShoToM3 = this.exponentShoToM3;
             result.exponentTsuboToM2 = this.exponentTsuboToM2;
             result.exponentShakuToM = this.exponentShakuToM;
+            result.exponentAMU = this.exponentAMU;
 
             return result;
         }
@@ -288,9 +291,10 @@ public class UnitsConverter {
             resultCollector.multiply(new BigDecimal("149597870700"), this.exponentMetersPerAU);
             resultCollector.multiply(new BigDecimal("31557600"), this.exponentSecPerJulianYear);
             resultCollector.multiply(new BigDecimal("299792458"), this.exponentSpeedOfLightMetersPerSecond);
-            resultCollector.multiply(new BigDecimal("1803.906836964688204"), this.exponentShoToM3);   // 2401/1331*1000
+            resultCollector.multiply(new BigDecimal("0.001803906836964688204"), this.exponentShoToM3);   // 2401/(1331*1000)
             resultCollector.multiply(new BigDecimal("3.305785123966942"), this.exponentTsuboToM2);    // 400/121
             resultCollector.multiply(new BigDecimal("0.033057851239669"), this.exponentShakuToM);     // 4/121
+            resultCollector.multiply(new BigDecimal("1.66053878283E-27"), this.exponentAMU);
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
         }
@@ -354,6 +358,7 @@ public class UnitsConverter {
             result.exponentShoToM3 = this.exponentShoToM3 * power;
             result.exponentTsuboToM2 = this.exponentTsuboToM2 * power;
             result.exponentShakuToM = this.exponentShakuToM * power;
+            result.exponentAMU = this.exponentAMU * power;
 
             return result;
         }
@@ -379,6 +384,7 @@ public class UnitsConverter {
             result.exponentShoToM3 = this.exponentShoToM3 - other.exponentShoToM3;
             result.exponentTsuboToM2 = this.exponentTsuboToM2 - other.exponentTsuboToM2;
             result.exponentShakuToM = this.exponentShakuToM - other.exponentShakuToM;
+            result.exponentAMU = this.exponentAMU - other.exponentAMU;
 
             return result;
         }
@@ -404,6 +410,7 @@ public class UnitsConverter {
             result.exponentShoToM3 = this.exponentShoToM3 + other.exponentShoToM3;
             result.exponentTsuboToM2 = this.exponentTsuboToM2 + other.exponentTsuboToM2;
             result.exponentShakuToM = this.exponentShakuToM  + other.exponentShakuToM;
+            result.exponentAMU = this.exponentAMU  + other.exponentAMU;
 
             return result;
         }
@@ -461,6 +468,8 @@ public class UnitsConverter {
                 this.exponentTsuboToM2 += power;
             } else if ("shaku_to_m".equals(entity)) {
                 this.exponentShakuToM += power;
+            } else if ("AMU".equals(entity)) {
+                this.exponentAMU += power;
             } else {
                 BigDecimal decimalEntity = new BigDecimal(entity).pow(power, DECIMAL128);
                 this.factorNum = this.factorNum.multiply(decimalEntity);

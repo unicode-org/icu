@@ -44,10 +44,6 @@ eo{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "atm",
-                "ptm",
-            }
             AmPmMarkersAbbr{
                 "atm",
                 "ptm",
@@ -98,32 +94,13 @@ eo{
                         "sabato",
                     }
                 }
-                stand-alone{
-                    wide{
-                        "dimanĉo",
-                        "lundo",
-                        "mardo",
-                        "merkredo",
-                        "ĵaŭdo",
-                        "vendredo",
-                        "sabato",
-                    }
-                }
             }
             eras{
                 abbreviated{
                     "aK",
                     "pK",
                 }
-                narrow{
-                    "aK",
-                    "pK",
-                }
                 narrow%variant{
-                    "aK",
-                    "pK",
-                }
-                wide{
                     "aK",
                     "pK",
                 }
@@ -144,22 +121,6 @@ eo{
                         "nov",
                         "dec",
                     }
-                    wide{
-                        "januaro",
-                        "februaro",
-                        "marto",
-                        "aprilo",
-                        "majo",
-                        "junio",
-                        "julio",
-                        "aŭgusto",
-                        "septembro",
-                        "oktobro",
-                        "novembro",
-                        "decembro",
-                    }
-                }
-                stand-alone{
                     wide{
                         "januaro",
                         "februaro",

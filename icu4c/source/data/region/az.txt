@@ -146,6 +146,7 @@ az{
         IL{"İsrail"}
         IM{"Men adası"}
         IN{"Hindistan"}
+        IO{"Britaniyanın Hind Okeanı Ərazisi"}
         IQ{"İraq"}
         IR{"İran"}
         IS{"İslandiya"}
@@ -296,6 +297,9 @@ az{
         ZM{"Zambiya"}
         ZW{"Zimbabve"}
         ZZ{"Naməlum Region"}
+    }
+    Countries%chagos{
+        IO{"Çaqos arxipelaqı"}
     }
     Countries%short{
         GB{"BK"}

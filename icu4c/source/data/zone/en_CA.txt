@@ -30,9 +30,6 @@ en_CA{
         "Atlantic:St_Helena"{
             ec{"Saint Helena"}
         }
-        "Etc:Unknown"{
-            ec{"unknown city"}
-        }
         "meta:Afghanistan"{
             ss{"AFT"}
         }

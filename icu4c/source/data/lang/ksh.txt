@@ -517,7 +517,6 @@ ksh{
         territory{"de Jähjend afjekööz met „{0}“"}
     }
     localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
         pattern{"{0} en {1}"}
         separator{"{0} uß {1}"}
     }

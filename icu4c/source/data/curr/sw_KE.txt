@@ -458,7 +458,7 @@ sw_KE{
             other{"riali za Omani"}
         }
         PAB{
-            one{"balboa ya Panama"}
+            one{"balboa za Panama"}
             other{"balboa za Panama"}
         }
         PKR{

@@ -41,48 +41,9 @@ kl{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             dayNames{
                 format{
                     abbreviated{
-                        "sap",
-                        "ata",
-                        "mar",
-                        "pin",
-                        "sis",
-                        "tal",
-                        "arf",
-                    }
-                    short{
-                        "sap",
-                        "ata",
-                        "mar",
-                        "pin",
-                        "sis",
-                        "tal",
-                        "arf",
-                    }
-                    wide{
-                        "sapaat",
-                        "ataasinngorneq",
-                        "marlunngorneq",
-                        "pingasunngorneq",
-                        "sisamanngorneq",
-                        "tallimanngorneq",
-                        "arfininngorneq",
-                    }
-                }
-                stand-alone{
-                    short{
                         "sap",
                         "ata",
                         "mar",
@@ -134,20 +95,6 @@ kl{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "jan",
-                        "febr",
-                        "mar",
-                        "apr",
-                        "maj",
-                        "jun",
-                        "jul",
-                        "aug",
-                        "sept",
-                        "okt",
-                        "nov",
-                        "dec",
-                    }
                     wide{
                         "januaari",
                         "februaari",

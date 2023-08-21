@@ -146,6 +146,7 @@ hsb{
         IL{"Israel"}
         IM{"Man"}
         IN{"Indiska"}
+        IO{"Britiski teritorij w Indiskim oceanje"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandska"}
@@ -296,6 +297,9 @@ hsb{
         ZM{"Sambija"}
         ZW{"Simbabwe"}
         ZZ{"njeznaty region"}
+    }
+    Countries%chagos{
+        IO{"Chagoske kupy"}
     }
     Countries%short{
         GB{"UK"}

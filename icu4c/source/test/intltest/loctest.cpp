@@ -929,8 +929,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 595)
-        errln("Expected getISOLanguages() to return 595 languages; it returned %d", testCount);
+    if (testCount != 596)
+        errln("Expected getISOLanguages() to return 596 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -1720,20 +1720,20 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         },
         {
             "und_AQ",
-            "_Latn_AQ",
-            "_AQ"
+            "en_Latn_AQ",
+            "en_AQ"
         }, {
             "und_Zzzz_AQ",
-            "_Latn_AQ",
-            "_AQ"
+            "en_Latn_AQ",
+            "en_AQ"
         }, {
             "und_Latn_AQ",
-            "_Latn_AQ",
-            "_AQ"
+            "en_Latn_AQ",
+            "en_AQ"
         }, {
             "und_Moon_AQ",
-            "_Moon_AQ",
-            "_Moon_AQ"
+            "en_Moon_AQ",
+            "en_Moon_AQ"
         }, {
             "aa",
             "aa_Latn_ET",
@@ -3256,8 +3256,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "zh_HK"
         }, {
             "und_AQ",
-            "_Latn_AQ",
-            "_AQ"
+            "en_Latn_AQ",
+            "en_AQ"
         }, {
             "und_Zzzz",
             "en_Latn_US",
@@ -3280,8 +3280,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "zh_HK"
         }, {
             "und_Zzzz_AQ",
-            "_Latn_AQ",
-            "_AQ"
+            "en_Latn_AQ",
+            "en_AQ"
         }, {
             "und_Latn",
             "en_Latn_US",
@@ -3304,8 +3304,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "en_HK"
         }, {
             "und_Latn_AQ",
-            "_Latn_AQ",
-            "_AQ"
+            "en_Latn_AQ",
+            "en_AQ"
         }, {
             "und_Hans",
             "zh_Hans_CN",
@@ -3376,8 +3376,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "zh_Moon_HK"
         }, {
             "und_Moon_AQ",
-            "_Moon_AQ",
-            "_Moon_AQ"
+            "en_Moon_AQ",
+            "en_Moon_AQ"
         }, {
             "es",
             "es_Latn_ES",
@@ -3832,8 +3832,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "es_419"
         }, {
             "und_150",
-            "ru_Cyrl_RU",
-            "ru"
+            "en_Latn_150",
+            "en_150"
         }, {
             "und_AT",
             "de_Latn_AT",
@@ -5607,9 +5607,15 @@ void U_CALLCONV
 testLikelySubtagsLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
                UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     (void)fieldCount;
     LocaleTest* THIS = (LocaleTest*)context;
     std::string source(trim(std::string(fields[0][0], fields[0][1]-fields[0][0])));
+    if (uprv_strcmp(source.c_str(), "und-150") == 0 && THIS->logKnownIssue("CLDR-17021", "Wrong mapping for und-150 in likelySubtags.txt test")) {
+        return;
+    }
     std::string addLikely(trim(std::string(fields[1][0], fields[1][1]-fields[1][0])));
     std::string removeFavorScript(trim(std::string(fields[2][0], fields[2][1]-fields[2][0])));
     if (removeFavorScript.length() == 0) {

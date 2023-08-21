@@ -16,7 +16,7 @@ ps_PK{
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE د y د MMMM d",
-                "د y د MMMM d",
+                "y MMMM d",
                 "y MMM d",
                 "y/M/d",
                 "{1} {0}",
@@ -45,28 +45,12 @@ ps_PK{
                         "ربيع",
                         "ربيع II",
                         "جماعه",
-                        "جموما II",
+                        "جماعه II",
                         "رجب",
                         "شعبان",
                         "رمضان",
                         "شوال",
                         "ذي القعده",
-                        "ذي الحج",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "محرم",
-                        "د صفرے د",
-                        "ربيع",
-                        "ربيع II",
-                        "جماعه",
-                        "جموما II",
-                        "رجب",
-                        "شعبان",
-                        "رمضان",
-                        "شوال",
-                        "دالقاعده",
                         "ذي الحج",
                     }
                 }
@@ -83,46 +67,10 @@ ps_PK{
         weekOfMonth{
             dn{"د مياشتے اونۍ"}
         }
-        weekOfMonth-narrow{
-            dn{"د مياشتے اونۍ"}
-        }
-        weekOfMonth-short{
-            dn{"د مياشتے اونۍ"}
-        }
         weekdayOfMonth{
             dn{"د مياشتے اونۍ ورځ"}
         }
-        weekdayOfMonth-narrow{
-            dn{"د مياشتے اونۍ ورځ"}
-        }
-        weekdayOfMonth-short{
-            dn{"د مياشتے اونۍ ورځ"}
-        }
         year{
-            relativeTime{
-                future{
-                    one{"په {0} کال کے"}
-                    other{"په {0} کالونو کے"}
-                }
-                past{
-                    one{"{0} کال مخکے"}
-                    other{"{0} کاله مخکے"}
-                }
-            }
-        }
-        year-narrow{
-            relativeTime{
-                future{
-                    one{"په {0} کال کے"}
-                    other{"په {0} کالونو کے"}
-                }
-                past{
-                    one{"{0} کال مخکے"}
-                    other{"{0} کاله مخکے"}
-                }
-            }
-        }
-        year-short{
             relativeTime{
                 future{
                     one{"په {0} کال کے"}

@@ -146,6 +146,7 @@ pt{
         IL{"Israel"}
         IM{"Ilha de Man"}
         IN{"Índia"}
+        IO{"Território Britânico do Oceano Índico"}
         IQ{"Iraque"}
         IR{"Irã"}
         IS{"Islândia"}
@@ -296,6 +297,9 @@ pt{
         ZM{"Zâmbia"}
         ZW{"Zimbábue"}
         ZZ{"Região desconhecida"}
+    }
+    Countries%chagos{
+        IO{"Arquipélago de Chagos"}
     }
     Countries%short{
         HK{"Hong Kong"}

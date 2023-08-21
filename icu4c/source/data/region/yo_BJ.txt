@@ -39,6 +39,7 @@ yo_BJ{
         CH{"switishilandi"}
         CL{"Shílè"}
         CN{"Sháínà"}
+        CW{"Kúrásáò"}
         CZ{"Shɛ́ɛ́kì"}
         DG{"Diego Gashia"}
         DJ{"Díbɔ́ótì"}
@@ -61,6 +62,7 @@ yo_BJ{
         KZ{"Kashashatani"}
         LC{"Lushia"}
         LI{"Lɛshitɛnisiteni"}
+        MF{"Ìlú Mátíìnì"}
         MH{"Etikun Máshali"}
         MO{"Agbègbè Ìshàkóso Pàtàkì Macao"}
         MZ{"Moshamibiku"}
@@ -108,13 +110,9 @@ yo_BJ{
         ZZ{"Àgbègbè àìmɔ̀"}
     }
     Countries%short{
-        GB{"Gɛ̀ɛ́sì"}
         PS{"Palɛsítínì"}
-        US{"Amɛrikà"}
     }
     Countries%variant{
-        CZ{"Shɛ́ɛ́kì"}
         TL{"Ìlà Òòrùn Tímɔ̀"}
-        TR{"Tɔɔki"}
     }
 }

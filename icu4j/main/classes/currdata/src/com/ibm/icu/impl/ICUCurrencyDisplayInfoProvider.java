@@ -12,6 +12,7 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfoProvider;
@@ -206,18 +207,19 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         public String getPluralName(String isoCode, String pluralKey ) {
             StandardPlural plural = StandardPlural.orNullFromString(pluralKey);
             String[] pluralsData = fetchPluralsData(isoCode);
+            Set<String> pluralKeys = fetchUnitPatterns().keySet();
 
             // See http://unicode.org/reports/tr35/#Currencies, especially the fallback rule.
             String result = null;
             if (plural != null) {
                 result = pluralsData[1 + plural.ordinal()];
             }
-            if (result == null && fallback) {
+            if (result == null && ( fallback || pluralKeys.contains(pluralKey) ) ) {
                 // First fall back to the "other" plural variant
                 // Note: If plural is already "other", this fallback is benign
                 result = pluralsData[1 + StandardPlural.OTHER.ordinal()];
             }
-            if (result == null && fallback) {
+            if (result == null && ( fallback || pluralKeys.contains(pluralKey) ) ) {
                 // If that fails, fall back to the display name
                 FormattingData formattingData = fetchFormattingData(isoCode);
                 result = formattingData.displayName;

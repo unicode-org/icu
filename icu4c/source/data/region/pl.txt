@@ -146,6 +146,7 @@ pl{
         IL{"Izrael"}
         IM{"Wyspa Man"}
         IN{"Indie"}
+        IO{"Brytyjskie Terytorium Oceanu Indyjskiego"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandia"}
@@ -296,6 +297,9 @@ pl{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"Nieznany region"}
+    }
+    Countries%chagos{
+        IO{"Archipelag Czagos"}
     }
     Countries%short{
         GB{"Wlk. Bryt."}

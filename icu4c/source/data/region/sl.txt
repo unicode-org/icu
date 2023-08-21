@@ -146,6 +146,7 @@ sl{
         IL{"Izrael"}
         IM{"Otok Man"}
         IN{"Indija"}
+        IO{"Britansko ozemlje v Indijskem oceanu"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandija"}
@@ -296,6 +297,9 @@ sl{
         ZM{"Zambija"}
         ZW{"Zimbabve"}
         ZZ{"Neznano ali neveljavno območje"}
+    }
+    Countries%chagos{
+        IO{"Otočje Chagos"}
     }
     Countries%short{
         GB{"ZK"}

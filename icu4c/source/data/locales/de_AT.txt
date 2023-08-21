@@ -71,20 +71,6 @@ de_AT{
                         "Nov",
                         "Dez",
                     }
-                    wide{
-                        "Jänner",
-                        "Februar",
-                        "März",
-                        "April",
-                        "Mai",
-                        "Juni",
-                        "Juli",
-                        "August",
-                        "September",
-                        "Oktober",
-                        "November",
-                        "Dezember",
-                    }
                 }
             }
         }

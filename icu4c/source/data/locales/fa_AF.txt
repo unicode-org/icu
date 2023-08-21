@@ -61,25 +61,10 @@ fa_AF{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        afternoon1{"ظهر"}
-                        afternoon2{"بعدازچاشت"}
-                        morning1{"بامداد"}
-                        morning2{"صبح"}
-                        night1{"شب"}
-                        night2{"نیمه‌شب"}
-                    }
                     narrow{
                         afternoon1{"بعد از چاشت"}
                         morning1{"ب"}
                         night1{"ش"}
-                    }
-                    wide{
-                        afternoon1{"ظهر"}
-                        afternoon2{"بعدازچاشت"}
-                        morning1{"بامداد"}
-                        morning2{"صبح"}
-                        night2{"نیمه‌شب"}
                     }
                 }
             }
@@ -98,20 +83,6 @@ fa_AF{
                         "اکتوبر",
                         "نومبر",
                         "دسم",
-                    }
-                    narrow{
-                        "ج",
-                        "ف",
-                        "م",
-                        "ا",
-                        "م",
-                        "ج",
-                        "ج",
-                        "ا",
-                        "س",
-                        "ا",
-                        "ن",
-                        "د",
                     }
                     wide{
                         "جنوری",
@@ -175,20 +146,6 @@ fa_AF{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "ر۱",
-                        "ر۲",
-                        "ر۳",
-                        "ر۴",
-                    }
-                    wide{
-                        "ربع اول",
-                        "ربع دوم",
-                        "ربع سوم",
-                        "ربع چهارم",
-                    }
-                }
-                stand-alone{
                     abbreviated{
                         "ر۱",
                         "ر۲",

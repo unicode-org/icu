@@ -25,14 +25,12 @@ class LocaleFallbackData {
         t.put("ab", "Cyrl");
         t.put("abh", "Arab");
         t.put("abl", "Rjng");
-        t.put("abq", "Cyrl");
         t.put("abv", "Arab");
         t.put("acm", "Arab");
         t.put("acq", "Arab");
         t.put("acw", "Arab");
         t.put("acx", "Arab");
         t.put("adf", "Arab");
-        t.put("adp", "Tibt");
         t.put("adx", "Tibt");
         t.put("ady", "Cyrl");
         t.put("ae", "Avst");
@@ -53,7 +51,6 @@ class LocaleFallbackData {
         t.put("aio", "Mymr");
         t.put("aiq", "Arab");
         t.put("ajp", "Arab");
-        t.put("ajt", "Arab");
         t.put("akk", "Xsux");
         t.put("akv", "Cyrl");
         t.put("alk", "Laoo");
@@ -140,7 +137,6 @@ class LocaleFallbackData {
         t.put("bhu", "Deva");
         t.put("biy", "Deva");
         t.put("bjf", "Syrc");
-        t.put("bji", "Ethi");
         t.put("bjj", "Deva");
         t.put("bjm", "Arab");
         t.put("blk", "Mymr");
@@ -230,7 +226,6 @@ class LocaleFallbackData {
         t.put("def", "Arab");
         t.put("deh", "Arab");
         t.put("der", "Beng");
-        t.put("dgl", "Arab");
         t.put("dhi", "Deva");
         t.put("dhn", "Gujr");
         t.put("dho", "Deva");
@@ -246,7 +241,6 @@ class LocaleFallbackData {
         t.put("doi", "Deva");
         t.put("dox", "Ethi");
         t.put("dre", "Tibt");
-        t.put("drh", "Mong");
         t.put("drq", "Deva");
         t.put("drs", "Ethi");
         t.put("dry", "Deva");
@@ -295,7 +289,6 @@ class LocaleFallbackData {
         t.put("gdx", "Deva");
         t.put("gez", "Ethi");
         t.put("ggg", "Arab");
-        t.put("ggn", "Deva");
         t.put("gha", "Arab");
         t.put("ghe", "Deva");
         t.put("ghr", "Arab");
@@ -502,10 +495,8 @@ class LocaleFallbackData {
         t.put("kvt", "Mymr");
         t.put("kvx", "Arab");
         t.put("kvy", "Kali");
-        t.put("kxc", "Ethi");
         t.put("kxf", "Mymr");
         t.put("kxk", "Mymr");
-        t.put("kxl", "Deva");
         t.put("kxm", "Thai");
         t.put("kxp", "Arab");
         t.put("ky", "Cyrl");
@@ -513,7 +504,6 @@ class LocaleFallbackData {
         t.put("kyu", "Kali");
         t.put("kyv", "Deva");
         t.put("kyw", "Deva");
-        t.put("kzh", "Arab");
         t.put("lab", "Lina");
         t.put("lad", "Hebr");
         t.put("lae", "Deva");
@@ -681,7 +671,6 @@ class LocaleFallbackData {
         t.put("otb", "Tibt");
         t.put("otk", "Orkh");
         t.put("oty", "Gran");
-        t.put("oui", "Ougr");
         t.put("pa", "Guru");
         t.put("pa_PK", "Arab");
         t.put("pal", "Phli");
@@ -716,7 +705,6 @@ class LocaleFallbackData {
         t.put("pll", "Mymr");
         t.put("pmh", "Brah");
         t.put("pnt", "Grek");
-        t.put("ppa", "Deva");
         t.put("pra", "Khar");
         t.put("prc", "Arab");
         t.put("prd", "Arab");
@@ -767,6 +755,7 @@ class LocaleFallbackData {
         t.put("sbu", "Tibt");
         t.put("sck", "Deva");
         t.put("scl", "Arab");
+        t.put("scl_IN", "Arab");
         t.put("scp", "Deva");
         t.put("sct", "Laoo");
         t.put("scu", "Takr");
@@ -885,7 +874,6 @@ class LocaleFallbackData {
         t.put("trm", "Arab");
         t.put("trw", "Arab");
         t.put("tsd", "Grek");
-        t.put("tsf", "Deva");
         t.put("tsj", "Tibt");
         t.put("tt", "Cyrl");
         t.put("tth", "Laoo");

@@ -760,9 +760,6 @@ hsb{
             "sambiski kwacha",
         }
     }
-    Currencies%narrow{
-        EUR{"€"}
-    }
     CurrencyPlurals{
         ADP{
             few{"andorraske pesety"}

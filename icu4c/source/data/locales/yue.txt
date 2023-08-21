@@ -6,14 +6,6 @@ yue{
         "[乍 仂 伏 佐 侶 僳 兆 兌 兹 凸 别 券 勳 卑 卞 占 叶 嘅 堤 墎 壤 奥 孜 峇 嶼 巽 栗 楔 涅 渾 澎 灘 燦 狄 琳 瑚 甫 碑"
         " 礁 纜 艇 芒 苗 茨 蓬 蚩 蜀 裘 謬 酋 隴 雀 髪]"
     }
-    Ellipsis{
-        final{"{0}…"}
-        initial{"…{0}"}
-        medial{"{0}…{1}"}
-        word-final{"{0} …"}
-        word-initial{"… {0}"}
-        word-medial{"{0} … {1}"}
-    }
     ExemplarCharacters{
         "[一 丁 七 丈 三 上 下 丌 不 丑 且 世 丘 丙 丟 並 中 串 丸 丹 主 乃 久 么 之 乎 乏 乖 乘 乙 九 也 乾 亂 了 予 事 二"
         " 于 云 互 五 井 些 亞 亡 交 亥 亦 亨 享 京 亮 人 什 仁 仇 今 介 仍 仔 他 付 仙 代 令 以 仰 仲 件 任 份 企 伊 伍 伐"
@@ -91,34 +83,10 @@ yue{
     }
     MoreInformation{"？"}
     NumberElements{
-        default{"latn"}
         finance{"hantfin"}
-        hanidec{
-            patterns{
-                currencyFormat{"¤#,##0.00"}
-                decimalFormat{"#,##0.###"}
-                percentFormat{"#,##0%"}
-                scientificFormat{"#E0"}
-            }
-            symbols{
-                approximatelySign{"~"}
-                decimal{"."}
-                exponential{"E"}
-                group{","}
-                infinity{"∞"}
-                minusSign{"-"}
-                nan{"非數值"}
-                perMille{"‰"}
-                percentSign{"%"}
-                plusSign{"+"}
-                superscriptingExponent{"×"}
-            }
-        }
         latn{
             miscPatterns{
-                approximately{"~{0}"}
                 atLeast{"{0}+"}
-                atMost{"≤{0}"}
                 range{"{0}-{1}"}
             }
             patterns{
@@ -126,49 +94,6 @@ yue{
                 accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
-                decimalFormat{"#,##0.###"}
-                percentFormat{"#,##0%"}
-                scientificFormat{"#E0"}
-            }
-            patternsLong{
-                decimalFormat{
-                    1000{
-                        other{"0千"}
-                    }
-                    10000{
-                        other{"0萬"}
-                    }
-                    100000{
-                        other{"00萬"}
-                    }
-                    1000000{
-                        other{"000萬"}
-                    }
-                    10000000{
-                        other{"0000萬"}
-                    }
-                    100000000{
-                        other{"0億"}
-                    }
-                    1000000000{
-                        other{"00億"}
-                    }
-                    10000000000{
-                        other{"000億"}
-                    }
-                    100000000000{
-                        other{"0000億"}
-                    }
-                    1000000000000{
-                        other{"0兆"}
-                    }
-                    10000000000000{
-                        other{"00兆"}
-                    }
-                    100000000000000{
-                        other{"000兆"}
-                    }
-                }
             }
             patternsShort{
                 currencyFormat{
@@ -249,18 +174,7 @@ yue{
                 }
             }
             symbols{
-                decimal{"."}
-                exponential{"E"}
-                group{","}
-                infinity{"∞"}
-                list{";"}
-                minusSign{"-"}
                 nan{"非數值"}
-                perMille{"‰"}
-                percentSign{"%"}
-                plusSign{"+"}
-                superscriptingExponent{"×"}
-                timeSeparator{":"}
             }
         }
         minimalPairs{
@@ -271,7 +185,6 @@ yue{
                 other{"{0} 本書"}
             }
         }
-        minimumGroupingDigits{"1"}
         native{"hanidec"}
         traditional{"hant"}
     }
@@ -292,30 +205,13 @@ yue{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
-                "GyMd",
-            }
             availableFormats{
                 Ed{"d日（E）"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MEd{"M/d（E）"}
-                MMM{"LLL"}
                 MMMEd{"M月d日E"}
-                MMMMd{"M月d日"}
-                MMMd{"M月d日"}
-                Md{"M/d"}
-                d{"d日"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
@@ -372,10 +268,7 @@ yue{
                     "UMMMd",
                     "d=hanidays",
                 }
-                {
-                    "rMMMd",
-                    "d=hanidays",
-                }
+                "rMMMd",
                 "rMd",
             }
             availableFormats{
@@ -635,34 +528,6 @@ yue{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "冬月",
-                        "臘月",
-                    }
-                    narrow{
-                        "正",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                        "七",
-                        "八",
-                        "九",
-                        "十",
-                        "冬",
-                        "臘",
-                    }
                     wide{
                         "正月",
                         "二月",
@@ -679,20 +544,6 @@ yue{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "冬月",
-                        "臘月",
-                    }
                     narrow{
                         "正",
                         "二",
@@ -706,20 +557,6 @@ yue{
                         "十",
                         "冬",
                         "臘",
-                    }
-                    wide{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "冬月",
-                        "臘月",
                     }
                 }
             }
@@ -744,83 +581,6 @@ yue{
         coptic{
             monthNames{
                 format{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -860,114 +620,16 @@ yue{
                 "ahmmssz",
                 "ahmmss",
                 "ahmm",
-                "UMMMEEEEd",
-                "UMMMd",
+                {
+                    "UMMMEEEEd",
+                    "d=hanidays",
+                }
+                {
+                    "UMMMd",
+                    "d=hanidays",
+                }
                 "UMMMd",
                 "UMd",
-            }
-            cyclicNameSets{
-                dayParts{
-                    format{
-                        abbreviated{
-                            "子",
-                            "丑",
-                            "寅",
-                            "卯",
-                            "辰",
-                            "巳",
-                            "午",
-                            "未",
-                            "申",
-                            "酉",
-                            "戌",
-                            "亥",
-                        }
-                    }
-                }
-                years{
-                    format{
-                        abbreviated{
-                            "甲子",
-                            "乙丑",
-                            "丙寅",
-                            "丁卯",
-                            "戊辰",
-                            "己巳",
-                            "庚午",
-                            "辛未",
-                            "壬申",
-                            "癸酉",
-                            "甲戌",
-                            "乙亥",
-                            "丙子",
-                            "丁丑",
-                            "戊寅",
-                            "己卯",
-                            "庚辰",
-                            "辛巳",
-                            "壬午",
-                            "癸未",
-                            "甲申",
-                            "乙酉",
-                            "丙戌",
-                            "丁亥",
-                            "戊子",
-                            "己丑",
-                            "庚寅",
-                            "辛卯",
-                            "壬辰",
-                            "癸巳",
-                            "甲午",
-                            "乙未",
-                            "丙申",
-                            "丁酉",
-                            "戊戌",
-                            "己亥",
-                            "庚子",
-                            "辛丑",
-                            "壬寅",
-                            "癸卯",
-                            "甲辰",
-                            "乙巳",
-                            "丙午",
-                            "丁未",
-                            "戊申",
-                            "己酉",
-                            "庚戌",
-                            "辛亥",
-                            "壬子",
-                            "癸丑",
-                            "甲寅",
-                            "乙卯",
-                            "丙辰",
-                            "丁巳",
-                            "戊午",
-                            "己未",
-                            "庚申",
-                            "辛酉",
-                            "壬戌",
-                            "癸亥",
-                        }
-                    }
-                }
-                zodiacs{
-                    format{
-                        abbreviated{
-                            "鼠",
-                            "牛",
-                            "虎",
-                            "兔",
-                            "龍",
-                            "蛇",
-                            "馬",
-                            "羊",
-                            "猴",
-                            "雞",
-                            "狗",
-                            "豬",
-                        }
-                    }
-                }
             }
             monthNames{
                 format{
@@ -1063,83 +725,6 @@ yue{
         ethiopic{
             monthNames{
                 format{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -1194,11 +779,6 @@ yue{
                 Bh{"Bh時"}
                 Bhm{"Bh:mm"}
                 Bhms{"Bh:mm:ss"}
-                E{"ccc"}
-                EBhm{"E h:mm B"}
-                EBhms{"E h:mm:ss B"}
-                EHm{"E HH:mm"}
-                EHms{"E HH:mm:ss"}
                 Ed{"d E"}
                 Ehm{"ah:mmE"}
                 Ehms{"ah:mm:ssE"}
@@ -1211,7 +791,6 @@ yue{
                 Hms{"H:mm:ss"}
                 M{"M月"}
                 MEd{"M/d（E）"}
-                MMM{"LLL"}
                 MMMEd{"M月d日 E"}
                 MMMMd{"M月d日"}
                 MMMd{"M月d日"}
@@ -1220,7 +799,6 @@ yue{
                 h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
-                ms{"mm:ss"}
                 y{"G y年"}
                 yyyy{"G y年"}
                 yyyyM{"G y/M"}
@@ -1280,12 +858,6 @@ yue{
                     M{"G y/M/d至y/M/d"}
                     d{"G y/M/d至y/M/d"}
                     y{"G y/M/d至y/M/d"}
-                }
-                H{
-                    H{"HH–HH"}
-                }
-                Hm{
-                    H{"HH:mm–HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm–HH:mm [v]"}
@@ -1379,15 +951,7 @@ yue{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "上午",
-                "下午",
-            }
             AmPmMarkersAbbr{
-                "上午",
-                "下午",
-            }
-            AmPmMarkersNarrow{
                 "上午",
                 "下午",
             }
@@ -1422,18 +986,12 @@ yue{
                 "yMd",
                 "yMd",
             }
-            appendItems{
-                Timezone{"{0} {1}"}
-            }
             availableFormats{
                 Bh{"Bh時"}
                 Bhm{"Bh:mm"}
                 Bhms{"Bh:mm:ss"}
-                E{"ccc"}
                 EBhm{"E Bh:mm"}
                 EBhms{"E Bh:mm:ss"}
-                EHm{"E HH:mm"}
-                EHms{"E HH:mm:ss"}
                 Ed{"d E"}
                 Ehm{"E ah:mm"}
                 Ehms{"E ah:mm:ss"}
@@ -1442,13 +1000,10 @@ yue{
                 GyMMMEd{"Gy年M月d日 E"}
                 GyMMMd{"Gy年M月d日"}
                 H{"H時"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
                 Hmsv{"HH:mm:ss [v]"}
                 Hmv{"HH:mm [v]"}
                 M{"M月"}
                 MEd{"M/d（E）"}
-                MMM{"LLL"}
                 MMMEd{"M月d日 E"}
                 MMMMW{
                     other{"M月第W個星期"}
@@ -1463,7 +1018,6 @@ yue{
                 hms{"ah:mm:ss"}
                 hmsv{"ah:mm:ss [v]"}
                 hmv{"ah:mm [v]"}
-                ms{"mm:ss"}
                 y{"y年"}
                 yM{"y/M"}
                 yMEd{"y/M/d（E）"}
@@ -1481,24 +1035,6 @@ yue{
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
-                    }
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
                     short{
                         "日",
                         "一",
@@ -1519,15 +1055,6 @@ yue{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
-                    }
                     narrow{
                         "日",
                         "一",
@@ -1536,24 +1063,6 @@ yue{
                         "四",
                         "五",
                         "六",
-                    }
-                    short{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
-                    wide{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
                     }
                 }
             }
@@ -1568,59 +1077,6 @@ yue{
                         morning2{"朝早"}
                         night1{"凌晨"}
                     }
-                    narrow{
-                        afternoon1{"中午"}
-                        afternoon2{"下晝"}
-                        evening1{"夜晚"}
-                        midnight{"午夜"}
-                        morning1{"清晨"}
-                        morning2{"朝早"}
-                        night1{"凌晨"}
-                    }
-                    wide{
-                        afternoon1{"中午"}
-                        afternoon2{"下晝"}
-                        evening1{"夜晚"}
-                        midnight{"午夜"}
-                        morning1{"清晨"}
-                        morning2{"朝早"}
-                        night1{"凌晨"}
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        afternoon1{"中午"}
-                        afternoon2{"下晝"}
-                        am{"上午"}
-                        evening1{"夜晚"}
-                        midnight{"午夜"}
-                        morning1{"清晨"}
-                        morning2{"朝早"}
-                        night1{"凌晨"}
-                        pm{"下午"}
-                    }
-                    narrow{
-                        afternoon1{"中午"}
-                        afternoon2{"下晝"}
-                        am{"上午"}
-                        evening1{"夜晚"}
-                        midnight{"午夜"}
-                        morning1{"清晨"}
-                        morning2{"朝早"}
-                        night1{"凌晨"}
-                        pm{"下午"}
-                    }
-                    wide{
-                        afternoon1{"中午"}
-                        afternoon2{"下晝"}
-                        am{"上午"}
-                        evening1{"夜晚"}
-                        midnight{"午夜"}
-                        morning1{"清晨"}
-                        morning2{"朝早"}
-                        night1{"凌晨"}
-                        pm{"下午"}
-                    }
                 }
             }
             eras{
@@ -1629,22 +1085,6 @@ yue{
                     "西元",
                 }
                 abbreviated%variant{
-                    "公元前",
-                    "公元",
-                }
-                narrow{
-                    "西元前",
-                    "西元",
-                }
-                narrow%variant{
-                    "公元前",
-                    "公元",
-                }
-                wide{
-                    "西元前",
-                    "西元",
-                }
-                wide%variant{
                     "公元前",
                     "公元",
                 }
@@ -1697,11 +1137,7 @@ yue{
                     d{"GGGGGy年M月dd日至y年M月dd日"}
                     y{"GGGGGy年M月dd日至y年M月dd日"}
                 }
-                H{
-                    H{"HH–HH"}
-                }
                 Hm{
-                    H{"HH:mm–HH:mm"}
                     m{"HH:mm至HH:mm"}
                 }
                 Hmv{
@@ -1796,78 +1232,6 @@ yue{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -1886,38 +1250,6 @@ yue{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "第1季",
-                        "第2季",
-                        "第3季",
-                        "第4季",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "第1季",
-                        "第2季",
-                        "第3季",
-                        "第4季",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "第1季",
-                        "第2季",
-                        "第3季",
-                        "第4季",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                     wide{
                         "第1季",
                         "第2季",
@@ -1943,16 +1275,6 @@ yue{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
-                "GyMd",
-            }
             eras{
                 abbreviated{
                     "創世紀元",
@@ -1960,88 +1282,6 @@ yue{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "提斯利月",
-                        "瑪西班月",
-                        "基斯流月",
-                        "提別月",
-                        "細罷特月",
-                        "亞達月 I",
-                        "亞達月",
-                        "尼散月",
-                        "以珥月",
-                        "西彎月",
-                        "搭模斯月",
-                        "埃波月",
-                        "以祿月",
-                        "亞達月 II",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                        "7",
-                    }
-                    wide{
-                        "提斯利月",
-                        "瑪西班月",
-                        "基斯流月",
-                        "提別月",
-                        "細罷特月",
-                        "亞達月 I",
-                        "亞達月",
-                        "尼散月",
-                        "以珥月",
-                        "西彎月",
-                        "搭模斯月",
-                        "埃波月",
-                        "以祿月",
-                        "亞達月 II",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "提斯利月",
-                        "瑪西班月",
-                        "基斯流月",
-                        "提別月",
-                        "細罷特月",
-                        "亞達月 I",
-                        "亞達月",
-                        "尼散月",
-                        "以珥月",
-                        "西彎月",
-                        "搭模斯月",
-                        "埃波月",
-                        "以祿月",
-                        "亞達月 II",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                        "7",
-                    }
                     wide{
                         "提斯利月",
                         "瑪西班月",
@@ -2069,78 +1309,6 @@ yue{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "制檀邏月",
-                        "吠舍佉月",
-                        "逝瑟吒月",
-                        "頞沙荼月",
-                        "室羅伐拏月",
-                        "婆羅鉢陀月",
-                        "頞涇縛庚闍月",
-                        "迦剌底迦月",
-                        "末伽始羅月",
-                        "報沙月",
-                        "磨祛月",
-                        "頗勒窶拏月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "制檀邏月",
-                        "吠舍佉月",
-                        "逝瑟吒月",
-                        "頞沙荼月",
-                        "室羅伐拏月",
-                        "婆羅鉢陀月",
-                        "頞涇縛庚闍月",
-                        "迦剌底迦月",
-                        "末伽始羅月",
-                        "報沙月",
-                        "磨祛月",
-                        "頗勒窶拏月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "制檀邏月",
-                        "吠舍佉月",
-                        "逝瑟吒月",
-                        "頞沙荼月",
-                        "室羅伐拏月",
-                        "婆羅鉢陀月",
-                        "頞涇縛庚闍月",
-                        "迦剌底迦月",
-                        "末伽始羅月",
-                        "報沙月",
-                        "磨祛月",
-                        "頗勒窶拏月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "制檀邏月",
                         "吠舍佉月",
@@ -2174,30 +1342,13 @@ yue{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
-                "GyMd",
-            }
             availableFormats{
                 Ed{"d日（E）"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MEd{"M/d（E）"}
-                MMM{"LLL"}
                 MMMEd{"M月d日E"}
-                MMMMd{"M月d日"}
-                MMMd{"M月d日"}
-                Md{"M/d"}
-                d{"d日"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
@@ -2230,64 +1381,6 @@ yue{
                         "閃瓦魯月",
                         "都爾喀爾德月",
                         "都爾黑哲月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "穆哈蘭姆月",
-                        "色法爾月",
-                        "賴比月 I",
-                        "賴比月 II",
-                        "主馬達月 I",
-                        "主馬達月 II",
-                        "賴哲卜月",
-                        "舍爾邦月",
-                        "賴買丹月",
-                        "閃瓦魯月",
-                        "都爾喀爾德月",
-                        "都爾黑哲月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "穆哈蘭姆月",
-                        "色法爾月",
-                        "賴比月 I",
-                        "賴比月 II",
-                        "主馬達月 I",
-                        "主馬達月 II",
-                        "賴哲卜月",
-                        "舍爾邦月",
-                        "賴買丹月",
-                        "閃瓦魯月",
-                        "都爾喀爾德月",
-                        "都爾黑哲月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "穆哈蘭姆月",
@@ -2322,37 +1415,17 @@ yue{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
-                "GyMd",
-            }
             availableFormats{
                 Ed{"d日（E）"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                H{"H時"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                M{"M月"}
-                MEd{"M/d（E）"}
-                MMM{"LLL"}
                 MMMEd{"M月d日E"}
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
-                Md{"M/d"}
-                d{"d日"}
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
-                ms{"mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
@@ -2612,84 +1685,9 @@ yue{
                 abbreviated{
                     "波斯曆",
                 }
-                wide{
-                    "波斯曆",
-                }
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -2723,31 +1721,13 @@ yue{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMEEEEd",
-                "GyMd",
-                "GyMd",
-                "GyMd",
-            }
             availableFormats{
-                E{"ccc"}
                 Ed{"d日（E）"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
-                M{"M月"}
-                MEd{"M/d（E）"}
-                MMM{"LLL"}
                 MMMEd{"M月d日E"}
-                MMMMd{"M月d日"}
-                MMMd{"M月d日"}
-                Md{"M/d"}
-                d{"d日"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
@@ -2881,96 +1861,16 @@ yue{
                 }
             }
         }
-        day-narrow{
-            dn{"日"}
-            relative{
-                "-1"{"尋日"}
-                "0"{"今日"}
-                "1"{"聽日"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 日後"}
-                }
-                past{
-                    other{"{0} 日前"}
-                }
-            }
-        }
-        day-short{
-            dn{"日"}
-            relative{
-                "-1"{"尋日"}
-                "0"{"今日"}
-                "1"{"聽日"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 日後"}
-                }
-                past{
-                    other{"{0} 日前"}
-                }
-            }
-        }
         dayOfYear{
-            dn{"年日"}
-        }
-        dayOfYear-narrow{
-            dn{"年日"}
-        }
-        dayOfYear-short{
             dn{"年日"}
         }
         dayperiod{
             dn{"上午/下午"}
         }
-        dayperiod-narrow{
-            dn{"上午/下午"}
-        }
-        dayperiod-short{
-            dn{"上午/下午"}
-        }
         era{
             dn{"年代"}
         }
-        era-narrow{
-            dn{"年代"}
-        }
-        era-short{
-            dn{"年代"}
-        }
         fri{
-            relative{
-                "-1"{"上星期五"}
-                "0"{"今個星期五"}
-                "1"{"下星期五"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期五後"}
-                }
-                past{
-                    other{"{0} 個星期五前"}
-                }
-            }
-        }
-        fri-narrow{
-            relative{
-                "-1"{"上星期五"}
-                "0"{"今個星期五"}
-                "1"{"下星期五"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期五後"}
-                }
-                past{
-                    other{"{0} 個星期五前"}
-                }
-            }
-        }
-        fri-short{
             relative{
                 "-1"{"上星期五"}
                 "0"{"今個星期五"}
@@ -2999,55 +1899,11 @@ yue{
                 }
             }
         }
-        hour-narrow{
-            dn{"小時"}
-            relativeTime{
-                future{
-                    other{"{0} 小時後"}
-                }
-                past{
-                    other{"{0} 小時前"}
-                }
-            }
-        }
-        hour-short{
-            dn{"小時"}
-            relativeTime{
-                future{
-                    other{"{0} 小時後"}
-                }
-                past{
-                    other{"{0} 小時前"}
-                }
-            }
-        }
         minute{
             dn{"分鐘"}
             relative{
                 "0"{"呢分鐘"}
             }
-            relativeTime{
-                future{
-                    other{"{0} 分鐘後"}
-                }
-                past{
-                    other{"{0} 分鐘前"}
-                }
-            }
-        }
-        minute-narrow{
-            dn{"分鐘"}
-            relativeTime{
-                future{
-                    other{"{0} 分鐘後"}
-                }
-                past{
-                    other{"{0} 分鐘前"}
-                }
-            }
-        }
-        minute-short{
-            dn{"分鐘"}
             relativeTime{
                 future{
                     other{"{0} 分鐘後"}
@@ -3072,69 +1928,7 @@ yue{
                 }
             }
         }
-        mon-narrow{
-            relative{
-                "-1"{"上星期一"}
-                "0"{"今個星期一"}
-                "1"{"下星期一"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期一後"}
-                }
-                past{
-                    other{"{0} 個星期一前"}
-                }
-            }
-        }
-        mon-short{
-            relative{
-                "-1"{"上星期一"}
-                "0"{"今個星期一"}
-                "1"{"下星期一"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期一後"}
-                }
-                past{
-                    other{"{0} 個星期一前"}
-                }
-            }
-        }
         month{
-            dn{"月"}
-            relative{
-                "-1"{"上個月"}
-                "0"{"今個月"}
-                "1"{"下個月"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個月後"}
-                }
-                past{
-                    other{"{0} 個月前"}
-                }
-            }
-        }
-        month-narrow{
-            dn{"月"}
-            relative{
-                "-1"{"上個月"}
-                "0"{"今個月"}
-                "1"{"下個月"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個月後"}
-                }
-                past{
-                    other{"{0} 個月前"}
-                }
-            }
-        }
-        month-short{
             dn{"月"}
             relative{
                 "-1"{"上個月"}
@@ -3166,69 +1960,14 @@ yue{
                 }
             }
         }
-        quarter-narrow{
-            dn{"季"}
-            relative{
-                "-1"{"上季"}
-                "0"{"今季"}
-                "1"{"下季"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 季後"}
-                }
-                past{
-                    other{"{0} 季前"}
-                }
-            }
-        }
         quarter-short{
-            dn{"季"}
             relative{
                 "-1"{"上季"}
                 "0"{"今季"}
                 "1"{"下季"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 季後"}
-                }
-                past{
-                    other{"{0} 季前"}
-                }
             }
         }
         sat{
-            relative{
-                "-1"{"上星期六"}
-                "0"{"今個星期六"}
-                "1"{"下星期六"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期六後"}
-                }
-                past{
-                    other{"{0} 個星期六前"}
-                }
-            }
-        }
-        sat-narrow{
-            relative{
-                "-1"{"上星期六"}
-                "0"{"今個星期六"}
-                "1"{"下星期六"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期六後"}
-                }
-                past{
-                    other{"{0} 個星期六前"}
-                }
-            }
-        }
-        sat-short{
             relative{
                 "-1"{"上星期六"}
                 "0"{"今個星期六"}
@@ -3257,59 +1996,7 @@ yue{
                 }
             }
         }
-        second-narrow{
-            dn{"秒"}
-            relativeTime{
-                future{
-                    other{"{0} 秒後"}
-                }
-                past{
-                    other{"{0} 秒前"}
-                }
-            }
-        }
-        second-short{
-            dn{"秒"}
-            relativeTime{
-                future{
-                    other{"{0} 秒後"}
-                }
-                past{
-                    other{"{0} 秒前"}
-                }
-            }
-        }
         sun{
-            relative{
-                "-1"{"上星期日"}
-                "0"{"今個星期日"}
-                "1"{"下星期日"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期日後"}
-                }
-                past{
-                    other{"{0} 個星期日前"}
-                }
-            }
-        }
-        sun-narrow{
-            relative{
-                "-1"{"上星期日"}
-                "0"{"今個星期日"}
-                "1"{"下星期日"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期日後"}
-                }
-                past{
-                    other{"{0} 個星期日前"}
-                }
-            }
-        }
-        sun-short{
             relative{
                 "-1"{"上星期日"}
                 "0"{"今個星期日"}
@@ -3339,36 +2026,6 @@ yue{
                 }
             }
         }
-        thu-narrow{
-            relative{
-                "-1"{"上星期四"}
-                "0"{"今個星期四"}
-                "1"{"下星期四"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期四後"}
-                }
-                past{
-                    other{"{0} 個星期四前"}
-                }
-            }
-        }
-        thu-short{
-            relative{
-                "-1"{"上星期四"}
-                "0"{"今個星期四"}
-                "1"{"下星期四"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期四後"}
-                }
-                past{
-                    other{"{0} 個星期四前"}
-                }
-            }
-        }
         tue{
             relative{
                 "-1"{"上星期二"}
@@ -3384,67 +2041,7 @@ yue{
                 }
             }
         }
-        tue-narrow{
-            relative{
-                "-1"{"上星期二"}
-                "0"{"今個星期二"}
-                "1"{"下星期二"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期二後"}
-                }
-                past{
-                    other{"{0} 個星期二前"}
-                }
-            }
-        }
-        tue-short{
-            relative{
-                "-1"{"上星期二"}
-                "0"{"今個星期二"}
-                "1"{"下星期二"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期二後"}
-                }
-                past{
-                    other{"{0} 個星期二前"}
-                }
-            }
-        }
         wed{
-            relative{
-                "-1"{"上星期三"}
-                "0"{"今個星期三"}
-                "1"{"下星期三"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期三後"}
-                }
-                past{
-                    other{"{0} 個星期三前"}
-                }
-            }
-        }
-        wed-narrow{
-            relative{
-                "-1"{"上星期三"}
-                "0"{"今個星期三"}
-                "1"{"下星期三"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 個星期三後"}
-                }
-                past{
-                    other{"{0} 個星期三前"}
-                }
-            }
-        }
-        wed-short{
             relative{
                 "-1"{"上星期三"}
                 "0"{"今個星期三"}
@@ -3476,65 +2073,13 @@ yue{
                 }
             }
         }
-        week-narrow{
-            dn{"週"}
-            relative{
-                "-1"{"上星期"}
-                "0"{"今個星期"}
-                "1"{"下星期"}
-            }
-            relativePeriod{"{0}嘅星期"}
-            relativeTime{
-                future{
-                    other{"{0} 個星期後"}
-                }
-                past{
-                    other{"{0} 個星期前"}
-                }
-            }
-        }
-        week-short{
-            dn{"週"}
-            relative{
-                "-1"{"上星期"}
-                "0"{"今個星期"}
-                "1"{"下星期"}
-            }
-            relativePeriod{"{0}嘅星期"}
-            relativeTime{
-                future{
-                    other{"{0} 個星期後"}
-                }
-                past{
-                    other{"{0} 個星期前"}
-                }
-            }
-        }
         weekOfMonth{
-            dn{"月週"}
-        }
-        weekOfMonth-narrow{
-            dn{"月週"}
-        }
-        weekOfMonth-short{
             dn{"月週"}
         }
         weekday{
             dn{"週天"}
         }
-        weekday-narrow{
-            dn{"週天"}
-        }
-        weekday-short{
-            dn{"週天"}
-        }
         weekdayOfMonth{
-            dn{"月平日"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"月平日"}
-        }
-        weekdayOfMonth-short{
             dn{"月平日"}
         }
         year{
@@ -3553,45 +2098,7 @@ yue{
                 }
             }
         }
-        year-narrow{
-            dn{"年"}
-            relative{
-                "-1"{"舊年"}
-                "0"{"今年"}
-                "1"{"下年"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 年後"}
-                }
-                past{
-                    other{"{0} 年前"}
-                }
-            }
-        }
-        year-short{
-            dn{"年"}
-            relative{
-                "-1"{"舊年"}
-                "0"{"今年"}
-                "1"{"下年"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} 年後"}
-                }
-                past{
-                    other{"{0} 年前"}
-                }
-            }
-        }
         zone{
-            dn{"時區"}
-        }
-        zone-narrow{
-            dn{"時區"}
-        }
-        zone-short{
             dn{"時區"}
         }
     }
@@ -3602,41 +2109,11 @@ yue{
             middle{"{0}、{1}"}
             start{"{0}、{1}"}
         }
-        or-narrow{
-            2{"{0} 或 {1}"}
-            end{"{0} 或 {1}"}
-            middle{"{0}、{1}"}
-            start{"{0}、{1}"}
-        }
-        or-short{
-            2{"{0} 或 {1}"}
-            end{"{0} 或 {1}"}
-            middle{"{0}、{1}"}
-            start{"{0}、{1}"}
-        }
         standard{
             2{"{0}同{1}"}
             end{"{0}同{1}"}
             middle{"{0}、{1}"}
             start{"{0}、{1}"}
-        }
-        standard-narrow{
-            2{"{0}同{1}"}
-            end{"{0}同{1}"}
-            middle{"{0}、{1}"}
-            start{"{0}、{1}"}
-        }
-        standard-short{
-            2{"{0}同{1}"}
-            end{"{0}同{1}"}
-            middle{"{0}、{1}"}
-            start{"{0}、{1}"}
-        }
-        unit{
-            2{"{0} {1}"}
-            end{"{0} {1}"}
-            middle{"{0} {1}"}
-            start{"{0} {1}"}
         }
         unit-narrow{
             2{"{0}{1}"}
@@ -3662,6 +2139,7 @@ yue{
             initial{"{0}"}
         }
         namePattern{
+            givenFirst-long-addressing-formal{"{surname}{title}"}
             givenFirst-long-addressing-informal{"{given-informal}"}
             givenFirst-long-monogram-formal{
                 "{given2-monogram-allCaps}{surname-monogram-allCaps}{given-monogram-a"
@@ -3670,11 +2148,13 @@ yue{
             givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}"}
             givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {generation}，{credentials}"}
             givenFirst-long-referring-informal{"{given-informal}"}
+            givenFirst-medium-addressing-formal{"{surname}{title}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
             givenFirst-medium-referring-formal{"{given} {credentials}，{generation} {given2-initial}"}
             givenFirst-medium-referring-informal{"{given-informal}"}
+            givenFirst-short-addressing-formal{"{surname}{title}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
             givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
@@ -3682,23 +2162,21 @@ yue{
             givenFirst-short-referring-informal{"{given-informal}"}
             sorting-long-referring-formal{"{surname-core} {given} {given2}"}
             sorting-long-referring-informal{"{surname} {given-informal}"}
-            sorting-medium-referring-formal{"{surname-core} {given} {given2}"}
             sorting-medium-referring-informal{"{surname} {given-informal}"}
             sorting-short-referring-formal{"{surname-core} {given-initial} {given2-initial}"}
             sorting-short-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-long-addressing-formal{"{surname}{title}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
-            surnameFirst-long-monogram-formal{
-                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
-                "llCaps}"
-            }
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
             surnameFirst-long-referring-formal{"{surname} {given} {title}，{generation} {given2} {credentials}"}
             surnameFirst-long-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-medium-addressing-formal{"{surname}{title}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
             surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
             surnameFirst-medium-referring-formal{"{surname} {given} {credentials}，{generation} {given2-initial}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{surname}{title}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}

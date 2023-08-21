@@ -96,11 +96,11 @@ es_GT{
                 "d 'de' MMMM 'de' y G",
                 "d/MM/y G",
                 "d/MM/yy GGGGG",
-                "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             DateTimeSkeletons{
                 "HHmmsszzzz",
@@ -160,6 +160,14 @@ es_GT{
             }
         }
         gregorian{
+            AmPmMarkers{
+                "a. m.",
+                "p. m.",
+            }
+            AmPmMarkersAbbr{
+                "a. m.",
+                "p. m.",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -169,10 +177,10 @@ es_GT{
                 "d 'de' MMMM 'de' y",
                 "d/MM/y",
                 "d/MM/yy",
-                "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
             }
             DateTimeSkeletons{
@@ -184,6 +192,22 @@ es_GT{
                 "yMMMMd",
                 "yMMd",
                 "yyMMd",
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                    narrow{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                    wide{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                }
             }
             intervalFormats{
                 MEd{

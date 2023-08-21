@@ -464,7 +464,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "dM", "11/10 \\u2013 11/20",
 
-                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "My", "2007\u5E7411\u6708",
+                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "My", "2007/11",
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EdM", "11/10\\u5468\\u516d\\u81f311/20\\u5468\\u4e8c",
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "d", "10\\u201320\\u65e5",
@@ -485,21 +485,21 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hm", "\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:00\\u81F3\\u4E0B\\u53482:10",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:00\\u81F3\\u4E0B\\u53482:10",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmz", "GMT-8 \\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmz", "GMT-8\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "h", "\\u4e0a\\u534810\\u65F6\\u81f3\\u4e0b\\u53482\\u65f6",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810\\u65F6\\u81F3\\u4E0B\\u53482\\u65F6",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810\\u65F6\\u81F3\\u4E0B\\u53482\\u65F6",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hz", "GMT-8 \\u4e0a\\u534810\\u65F6\\u81f3\\u4e0b\\u53482\\u65f6",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hz", "GMT-8\\u4e0a\\u534810\\u65F6\\u81f3\\u4e0b\\u53482\\u65f6",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "dMMMM", "1\\u670810\\u65e5", // (fixed expected result per ticket 6872<-6626)
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hm", "\\u4e0a\\u534810:00\\u81f310:20",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:00\\u81F310:20",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:00\\u81F310:20",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "h", "\\u4e0a\\u534810\\u65f6",
 
@@ -691,7 +691,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "th", "BE 2550 10 10 10:10:10", "BE 2550 11 10 10:10:10", "d", "10/10 \\u2013 10/11",
 
-                "th", "BE 2550 10 10 10:10:10", "BE 2550 11 10 10:10:10", "y", "\u0E1E.\u0E28. 2550",
+                "th", "BE 2550 10 10 10:10:10", "BE 2550 11 10 10:10:10", "y", "2550",
 
 
                 "th", "BE 2550 10 10 10:10:10", "BE 2550 11 10 10:10:10", "MMM", "\u0E15.\u0E04.\u2013\u0E1E.\u0E22.",
@@ -1595,7 +1595,7 @@ public class DateIntervalFormatTest extends TestFmwk {
         dateIntervalFormat.setTimeZone(from.getTimeZone());
         // Month names are default (English), format is Catalan
         assertEquals("Wrong date interval",
-                "January de 2000\u2009–\u2009February de 2001", dateIntervalFormat.format(interval));
+                "January del 2000\u2009–\u2009February del 2001", dateIntervalFormat.format(interval));
     }
 
     @Test
@@ -1611,7 +1611,7 @@ public class DateIntervalFormatTest extends TestFmwk {
         dateIntervalFormat.setTimeZone(from.getTimeZone());
         // Month names are German, format is Catalan
         assertEquals("Wrong date interval",
-                "Januar de 2000\u2009–\u2009Februar de 2001", dateIntervalFormat.format(interval));
+                "Januar del 2000\u2009–\u2009Februar del 2001", dateIntervalFormat.format(interval));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -2264,7 +2264,7 @@ public class DateIntervalFormatTest extends TestFmwk {
             {"0\u202FAM", "00", "00", "0\u202FAM", "0\u202FAM", "0 (hour: 00)", "0\u202FAM"},
             {"12\u202FAM", "00", "00", "12\u202FAM", "12\u202FAM", "0 (hour: 12)", "12\u202FAM"},
             {"12\u202FAM", "00", "00", "12\u202FAM", "12\u202FAM", "0 (hour: 12)", "12\u202FAM"},
-            {"0 am", "00", "00", "0 am", "0 am", "0 (\u0918\u0902\u091F\u093E: 00)", "\u0930\u093E\u0924 0"}
+            {"0 am", "0", "0", "0 am", "0 am", "0 (\u0918\u0902\u091F\u093E: 0)", "\u0930\u093E\u0924 0"}
         };
 
         int i = 0;
