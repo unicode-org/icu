@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692642036265,
+  "lastUpdate": 1692654788917,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10648,6 +10648,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.1454361474747365,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "667ee72b7c2921d28b935af4e620832054452a09",
+          "message": "ICU-22457 count() of getUnicodeKeywords is incorrect\n\nThe count() is incorrect if the Locale contains extension which is not -u-\nfor example -x-, -t-.\n\nCurrently, this PR only contains tests to show the problem.\n\nICU-22457 Fix the enum_count",
+          "timestamp": "2023-08-21T14:44:10-07:00",
+          "tree_id": "f6dec3a2cb7bd8ab9f252016e48591c596b1a679",
+          "url": "https://github.com/unicode-org/icu/commit/667ee72b7c2921d28b935af4e620832054452a09"
+        },
+        "date": 1692654735675,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.3508960364592983,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
