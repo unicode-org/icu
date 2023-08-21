@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692418687215,
+  "lastUpdate": 1692627699232,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23974,6 +23974,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1785616.0505,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "1fc560c07f34165a56b109b1a3c4be27d345a4ad",
+          "message": "ICU-22465 Change .s to .data() for replacing TinyString with CharString.\n\nThis was forgotten by ICU-7496 which replaced the local TinyString data\ntype with the shared CharString data type, but as it's in code heavily\nnested in #ifdef's it hasn't been noticed until now.",
+          "timestamp": "2023-08-21T15:57:20+02:00",
+          "tree_id": "966093ae5aeb7a7004e6267c7a180025cf1b5425",
+          "url": "https://github.com/unicode-org/icu/commit/1fc560c07f34165a56b109b1a3c4be27d345a4ad"
+        },
+        "date": 1692627648004,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 393.0984,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3932342.8935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1785103.42,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 3741429.6215,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1877364.3741,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
