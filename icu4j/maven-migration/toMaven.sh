@@ -148,17 +148,23 @@ function mainModuleToMaven() {
   echo "Migrating $1 to maven"
   moveMainModuleToMaven $1 classes main
   moveMainModuleToMaven $1 tests test
+  mkdir -p main/$MODULE_NAME/src/main/resources/
+  ln -s ../../../../../../LICENSE main/$MODULE_NAME/src/main/resources/LICENSE
 }
 
 function simpleModuleToMaven() {
   # 1. $1: component name (core, charset, etc)
   export MODULE_NAME=$1
+  export LICENSE_PATH=$2
   echo "Migrating $MODULE_NAME to maven"
 
   safeMoveDir com $MODULE_NAME/src $MODULE_NAME/src/main/java
   splitJavaToResources $MODULE_NAME/src/main
 
   removeEclipseProjectFiles $MODULE_NAME
+
+  mkdir -p $MODULE_NAME/src/main/resources/
+  ln -s $LICENSE_PATH $MODULE_NAME/src/main/resources/LICENSE
 
   echo "  Remove empty folders from '$MODULE_NAME'"
   removeEmptyFolders $MODULE_NAME
@@ -231,13 +237,13 @@ function moveCircDepTestOutOfCore() {
 # ===============================================================
 # Here starts the real script execution
 
+if [ -f "main/core/pom.xml" ]; then
+  echo "ERROR: looks like the structure was already migrated to maven?"
+  exit
+fi
 if [ ! -f "main/classes/core/build.xml" ]; then
   echo "ERROR: the current folder when running this script should be <icu_root>/icu4j"
   echo "It is currently $PWD."
-  exit
-fi
-if [ -f "main/core/pom.xml" ]; then
-  echo "ERROR: looks like the structure was already migrated to maven?"
   exit
 fi
 
@@ -269,10 +275,10 @@ mainModuleToMaven framework
 echo "===================================="
 echo "==== Migrating the root modules ===="
 echo "===================================="
-simpleModuleToMaven demos
-simpleModuleToMaven samples
-simpleModuleToMaven tools/build 
-simpleModuleToMaven tools/misc
+simpleModuleToMaven demos        ../../../../../LICENSE
+simpleModuleToMaven samples      ../../../../../LICENSE
+simpleModuleToMaven tools/build  ../../../../../../LICENSE
+simpleModuleToMaven tools/misc   ../../../../../../LICENSE
 
 echo "================================================================================="
 echo "==== Moving core unit tests that depend on non-core (circular dependencies) ====="

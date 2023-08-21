@@ -15,7 +15,8 @@
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
-    <mf.Automatic-Module-Name>com.ibm.icu.charset</mf.Automatic-Module-Name>
+    <module-name>charset</module-name>
+    <proj.displayname>charset</proj.displayname>
   </properties>
 
   <dependencies>
@@ -54,5 +55,20 @@
     </dependency>
 
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Export-Package>com.ibm.icu.charset</Export-Package>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

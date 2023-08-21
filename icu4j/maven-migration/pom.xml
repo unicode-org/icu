@@ -39,34 +39,40 @@
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>
 
-    <mf.Manifest-Version>1.0</mf.Manifest-Version>
-    <mf.Specification-Title>${proj-title} (${proj.displayname})</mf.Specification-Title>
-    <mf.Implementation-Title>${proj-title} (${proj.displayname})</mf.Implementation-Title>
-    <mf.Bundle-Description>${proj-title} (${proj.displayname})</mf.Bundle-Description>
-    <mf.Automatic-Module-Name>com.ibm.icu.${project.artifactId}</mf.Automatic-Module-Name>
-
-    <api.doc.version>73 Release Candidate</api.doc.version>
     <!-- Variables used to generate the javadoc -->
+    <api.doc.version>74 Release Candidate</api.doc.version>
     <icu4j.api.doc.window.title>ICU4J ${api.doc.version}</icu4j.api.doc.window.title>
     <icu4j.api.doc.header>ICU4J ${api.doc.version}</icu4j.api.doc.header>
     <icu4j.api.doc.copyright.footer>&lt;font size=-1&gt;Copyright © 2016 Unicode, Inc. and others.&lt;/font&gt;</icu4j.api.doc.copyright.footer>
     <!-- Needs to be overriden in sub-modules -->
     <icu4j.api.doc.root.dir>${project.basedir}</icu4j.api.doc.root.dir>
 
-    <mf.Specification-Version>73</mf.Specification-Version>
-    <mf.Implementation-Version>73.0.1</mf.Implementation-Version>
-    <mf.Bundle-Version>73.0.1</mf.Bundle-Version>
+    <!-- Used for the .jar Manifest files -->
+
+    <mf.Specification-Version>74</mf.Specification-Version>
+    <mf.Implementation-Version>74.0.1</mf.Implementation-Version>
+    <mf.Bundle-Version>74.0.1</mf.Bundle-Version>
+
+    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
+
+    <!-- For most modules artifactId does not have an "icu4j" prefix, so this is a good default -->
+    <module-name>${project.artifactId}</module-name>
+
+    <!-- Manifest fields that rarely change, if ever -->
+    <mf.Specification-Title>${proj-title} (${proj.displayname})</mf.Specification-Title>
+    <mf.Implementation-Title>${proj-title} (${proj.displayname})</mf.Implementation-Title>
+    <mf.Bundle-Description>${proj-title} (${proj.displayname})</mf.Bundle-Description>
+    <mf.Bundle-SymbolicName>com.ibm.icu.${module-name}</mf.Bundle-SymbolicName>
+    <mf.Automatic-Module-Name>com.ibm.icu.${module-name}</mf.Automatic-Module-Name>
+    <mf.Bundle-Name>ICU4J ${proj.displayname}</mf.Bundle-Name>
 
     <mf.Specification-Vendor>Unicode, Inc.</mf.Specification-Vendor>
     <mf.Implementation-Vendor>Unicode, Inc.</mf.Implementation-Vendor>
     <mf.Bundle-Vendor>Unicode, Inc.</mf.Bundle-Vendor>
     <mf.Implementation-Vendor-Id>org.unicode</mf.Implementation-Vendor-Id>
+    <mf.Manifest-Version>1.0</mf.Manifest-Version>
     <mf.Bundle-ManifestVersion>2</mf.Bundle-ManifestVersion>
-    <mf.Bundle-Name>ICU4J ${proj.displayname}</mf.Bundle-Name>
-
-    <mf.Automatic-Module-Name>com.ibm.icu.${project.artifactId}</mf.Automatic-Module-Name>
     <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
-    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
   </properties>
 
   <build>

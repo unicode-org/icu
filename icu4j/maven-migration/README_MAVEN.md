@@ -20,7 +20,7 @@ checkout `<feature_branch>`, and run script from where you copied it.
   Probably modify the step that produces the .jar files (in the C/C++ world)
 - done: The tests for localespi should become integration tests
 - We might want some integration tests to begin with
-- `LICENSE`, `security.policy`, anything else from `main/shared/` => LICENSE should be symlink.
+- done: `LICENSE`, `security.policy`, anything else from `main/shared/` => LICENSE should be symlink.
 - done: The `.lst` files. All tests pass without, we can probably delete them. But need more testing.
   If not, we need a way to generate them (right now I've copied them by hand)
 - Double-check dependencies.

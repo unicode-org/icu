@@ -16,6 +16,14 @@
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
+
+    <mf.Automatic-Module-Name>com.ibm.icu</mf.Automatic-Module-Name>
+    <mf.Bundle-SymbolicName>com.ibm.icu</mf.Bundle-SymbolicName>
+    <mf.Bundle-Name>ICU4J</mf.Bundle-Name>
+    <localTitle>International Components for Unicode for Java</localTitle>
+    <mf.Bundle-Description>${localTitle}</mf.Bundle-Description>
+    <mf.Implementation-Title>${localTitle}</mf.Implementation-Title>
+    <mf.Specification-Title>${localTitle}</mf.Specification-Title>
   </properties>
 
   <dependencies>
@@ -70,6 +78,17 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Main-Class>com.ibm.icu.util.VersionInfo</Main-Class>
+              <Export-Package>com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util</Export-Package>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>
