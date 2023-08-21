@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692626970879,
+  "lastUpdate": 1692638014046,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10828,6 +10828,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.6096014153701158,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "248b1c2a13fc7fc346e9e9419c4794df8a590ad9",
+          "message": "ICU-22309 update to LICENSE v3, Readme.md, CONTRIBUTING.md\n\n- LICENSE is now the v3 license with the correct year and title\n- README.md now has the required features and drops Terms of Use\n- CONTRIBUTING.md now matches the updated language",
+          "timestamp": "2023-08-21T11:48:04-05:00",
+          "tree_id": "ebf670f363b6ef1b0628ce3d13b5d3270995cc65",
+          "url": "https://github.com/unicode-org/icu/commit/248b1c2a13fc7fc346e9e9419c4794df8a590ad9"
+        },
+        "date": 1692637962069,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.597502846932023,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
