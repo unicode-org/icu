@@ -70,7 +70,7 @@ no{
         BT{"Bhutan"}
         BV{"Bouvetøya"}
         BW{"Botswana"}
-        BY{"Hviterussland"}
+        BY{"Belarus"}
         BZ{"Belize"}
         CA{"Canada"}
         CC{"Kokosøyene"}
@@ -85,6 +85,7 @@ no{
         CN{"Kina"}
         CO{"Colombia"}
         CP{"Clippertonøya"}
+        CQ{"Sark"}
         CR{"Costa Rica"}
         CU{"Cuba"}
         CV{"Kapp Verde"}
@@ -146,6 +147,7 @@ no{
         IL{"Israel"}
         IM{"Man"}
         IN{"India"}
+        IO{"Det britiske territoriet i Indiahavet"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
@@ -296,6 +298,9 @@ no{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"ukjent område"}
+    }
+    Countries%chagos{
+        IO{"Chagosøyene"}
     }
     Countries%short{
         HK{"Hongkong"}

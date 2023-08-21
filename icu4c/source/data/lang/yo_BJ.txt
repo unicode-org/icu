@@ -112,7 +112,6 @@ yo_BJ{
     }
     Scripts%stand-alone{
         Hans{"Hans tí wɔ́n mú rɔrùn."}
-        Hant{"Hans àtɔwɔ́dɔ́wɔ́"}
     }
     Types{
         calendar{
@@ -184,9 +183,14 @@ yo_BJ{
         }
     }
     characterLabelPattern{
+        category-list{"{0}: {1}"}
         scripts{"àwɔ́n ìwé - {0}"}
     }
     codePatterns{
         script{"Ìshɔwɔ́kɔ̀wé: {0}"}
+    }
+    localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
+        separator{"{0}, {1}"}
     }
 }

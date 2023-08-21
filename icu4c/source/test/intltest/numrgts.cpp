@@ -2455,11 +2455,13 @@ void NumberFormatRegressionTest::Test4212072() {
                         UnicodeString("Construct DecimalFormat(") + pat + ")")) {
                 continue;
             }
-            if (*df != f2) {
-                UnicodeString l, p;
+            UnicodeString f2Pat;
+            f2.toPattern(f2Pat);
+            if (pat != f2Pat) {
+                UnicodeString l;
                 errln(UnicodeString("FAIL: ") + type[j] + avail[i].getDisplayName(l) +
                       " -> \"" + pat +
-                      "\" -> \"" + f2.toPattern(p) + "\"");
+                      "\" -> \"" + f2Pat + "\"");
             } else {
                 UnicodeString l, p;
                 logln(UnicodeString("PASS: ") + type[j] + avail[i].getDisplayName(l) +
@@ -2488,11 +2490,11 @@ void NumberFormatRegressionTest::Test4212072() {
                 continue;
             }
 
-            if (*df != f2) {
-                UnicodeString l, p;
+            if (pat != f2Pat) {
+                UnicodeString l;
                 errln(UnicodeString("FAIL: ") + type[j] + avail[i].getDisplayName(l) +
                       " -> localized \"" + pat +
-                      "\" -> \"" + f2.toPattern(p) + "\"");
+                      "\" -> \"" + f2Pat + "\"");
             }
 
             delete nf;

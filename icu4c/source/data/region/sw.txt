@@ -146,6 +146,7 @@ sw{
         IL{"Israeli"}
         IM{"Kisiwa cha Man"}
         IN{"India"}
+        IO{"Eneo la Uingereza katika Bahari Hindi"}
         IQ{"Iraki"}
         IR{"Iran"}
         IS{"Aisilandi"}

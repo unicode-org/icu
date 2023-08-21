@@ -273,7 +273,8 @@ public class TimeZoneFormatTest extends TestFmwk {
                                 }
                             } else {
                                 // Specific or generic: raw offset must be preserved.
-                                if (inOffsets[0] != outOffsets[0]) {
+                                if (inOffsets[0] != outOffsets[0] && !(LOCALES[locidx].getName().startsWith("ku") && tzids[tzidx].equals("America/Miquelon")
+                                        && logKnownIssue("CLDR-17024", "TestTimeZoneRoundTrip exhaust. fail with tz=America/Miquelon, locale=ku"))) {
                                     if (JDKTZ && tzids[tzidx].startsWith("SystemV/")) {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones

@@ -146,6 +146,7 @@ xh{
         IL{"E-Israel"}
         IM{"E-Isle of Man"}
         IN{"E-Indiya"}
+        IO{"EBritish Indian Ocean Territory"}
         IQ{"E-Iraq"}
         IR{"E-Iran"}
         IS{"E-Iceland"}
@@ -296,6 +297,9 @@ xh{
         ZM{"EZambia"}
         ZW{"EZimbabwe"}
         ZZ{"Ingingqi Engaziwayo"}
+    }
+    Countries%chagos{
+        IO{"EChagos Archipelago"}
     }
     Countries%short{
         GB{"E-UK"}

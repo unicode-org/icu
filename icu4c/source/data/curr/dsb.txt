@@ -760,9 +760,6 @@ dsb{
             "sambiska kwacha",
         }
     }
-    Currencies%narrow{
-        EUR{"€"}
-    }
     CurrencyPlurals{
         ADP{
             few{"andorraske pesety"}
@@ -1166,12 +1163,6 @@ dsb{
             other{"etiopiskich birrow"}
             two{"etiopiskej birra"}
         }
-        EUR{
-            few{"euro"}
-            one{"euro"}
-            other{"euro"}
-            two{"euro"}
-        }
         FJD{
             few{"fidźiske dolary"}
             one{"fidźiski dolar"}
@@ -1225,12 +1216,6 @@ dsb{
             one{"guatemalski quetzal"}
             other{"guatemalskich quetzalow"}
             two{"guatemalskej quetzala"}
-        }
-        GWP{
-            few{"Guinea-Bissau peso"}
-            one{"Guinea-Bissau peso"}
-            other{"Guinea-Bissau peso"}
-            two{"Guinea-Bissau peso"}
         }
         GYD{
             few{"guyańske dolary"}

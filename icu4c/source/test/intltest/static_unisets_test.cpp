@@ -73,6 +73,7 @@ void StaticUnicodeSetsTest::testSetCoverage() {
     const Locale* allAvailableLocales = Locale::getAvailableLocales(localeCount);
     for (int32_t i = 0; i < localeCount; i++) {
         Locale locale = allAvailableLocales[i];
+        const char* locName = locale.getName();
         DecimalFormatSymbols dfs(locale, status);
         UnicodeString localeName;
         locale.getDisplayName(localeName);
@@ -81,7 +82,10 @@ void StaticUnicodeSetsTest::testSetCoverage() {
 #define ASSERT_IN_SET(name, foo) assertInSet(localeName, UnicodeString("" #name ""), name, foo)
 
         ASSERT_IN_SET(decimals, dfs.getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
-        ASSERT_IN_SET(grouping, dfs.getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
+        if (locName==nullptr || uprv_strncmp(locName,"nqo",3) != 0 ||
+                !logKnownIssue("CLDR-17023", "Number symbols and/or parseLenients messed up for N’Ko")) {
+            ASSERT_IN_SET(grouping, dfs.getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
+        }
         ASSERT_IN_SET(plusSign, dfs.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol));
         ASSERT_IN_SET(minusSign, dfs.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol));
         ASSERT_IN_SET(percent, dfs.getConstSymbol(DecimalFormatSymbols::kPercentSymbol));

@@ -146,6 +146,7 @@ lv{
         IL{"Izraēla"}
         IM{"Menas sala"}
         IN{"Indija"}
+        IO{"Indijas okeāna Britu teritorija"}
         IQ{"Irāka"}
         IR{"Irāna"}
         IS{"Islande"}
@@ -296,6 +297,9 @@ lv{
         ZM{"Zambija"}
         ZW{"Zimbabve"}
         ZZ{"nezināms reģions"}
+    }
+    Countries%chagos{
+        IO{"Čagosu arhipelāgs"}
     }
     Countries%short{
         HK{"Honkonga"}

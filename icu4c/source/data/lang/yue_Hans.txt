@@ -267,7 +267,7 @@ yue_Hans{
         inh{"印古什文"}
         io{"伊多文"}
         is{"冰岛文"}
-        it{"义大利文"}
+        it{"意大利文"}
         iu{"因纽特文"}
         izh{"英格里亚文"}
         ja{"日文"}
@@ -1066,7 +1066,6 @@ yue_Hans{
     }
     characterLabelPattern{
         all{"{0} — 全部"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — 相容性"}
         enclosed{"{0} — 包围"}
         extended{"{0} — 扩充"}
@@ -1087,7 +1086,6 @@ yue_Hans{
     }
     localeDisplayPattern{
         keyTypePattern{"{0}：{1}"}
-        pattern{"{0} ({1})"}
         separator{"{0}，{1}"}
     }
 }

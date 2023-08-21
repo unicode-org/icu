@@ -714,16 +714,18 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
         Set<String> localLangExceptions = new HashSet<>();
-        if (logKnownIssue("cldrbug:8903", "No localized language name for nmg, nds")) {
+        if (logKnownIssue("cldrbug:17001", "No localized language name for nmg, vmw")) {
             localLangExceptions.add("nmg");
-            localLangExceptions.add("nds");
+            localLangExceptions.add("vmw");
         }
 
         for (int i = 0; i < locales.length; ++i) {
-            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
+            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])
+                  && !localLangExceptions.contains(locales[i].getLanguage())) {
                  errln("Could not get English localized country for " + locales[i]);
             }
-            if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])){
+            if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])
+                && !localLangExceptions.contains(locales[i].getLanguage())) {
                 errln("Could not get English localized language for " + locales[i]);
             }
 

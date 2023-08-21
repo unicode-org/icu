@@ -146,6 +146,7 @@ sq{
         IL{"Izrael"}
         IM{"Ishulli i Manit"}
         IN{"Indi"}
+        IO{"Territori Britanik i Oqeanit Indian"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandë"}
@@ -296,6 +297,9 @@ sq{
         ZM{"Zambi"}
         ZW{"Zimbabve"}
         ZZ{"I panjohur"}
+    }
+    Countries%chagos{
+        IO{"Arkipelagu i Çagosit"}
     }
     Countries%short{
         GB{"MB"}

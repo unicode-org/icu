@@ -202,7 +202,7 @@
                 ha, haw, he, hi, hi_Latn, hr, hsb, hu, hy
 
                 // I
-                ia, id, ig, ii, in, in_ID, is, it, iw, iw_IL
+                ia, id, ie, ig, ii, in, in_ID, is, it, iw, iw_IL
 
                 // J
                 ja, jgo, jmc, jv
@@ -212,20 +212,20 @@
                 ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, ky
 
                 // L
-                lag, lb, lg, lkt, ln, lo, lrc, lt, lu, luo, luy, lv
+                lag, lb, lg, lij, lkt, lmo, ln, lo, lrc, lt, lu, luo, luy, lv
 
                 // M
                 mai, mas, mer, mfe, mg, mgh, mgo, mi, mk, ml, mn, mni, mni_IN, mo, mr, ms
                 mt, mua, my, mzn
 
                 // N
-                naq, nb, nd, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nus, nyn
+                naq, nb, nd, nds, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nqo, nus, nyn
 
                 // O
-                om, or, os
+                oc, om, or, os
 
                 // P
-                pa, pa_Arab, pa_IN, pa_PK, pcm, pl, ps, pt
+                pa, pa_Arab, pa_IN, pa_PK, pcm, pl, prg, ps, pt
 
                 // Q
                 qu
@@ -236,7 +236,7 @@
                 // S
                 sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_IN, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
                 shi, shi_Latn, shi_MA, si, sk, sl, smn, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn
-                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw
+                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw, syr, szl
 
                 // T
                 ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tr, tt, twq, tzm
@@ -245,7 +245,7 @@
                 ug, uk, ur, uz, uz_AF, uz_Arab, uz_Cyrl, uz_UZ
 
                 // V
-                vai, vai_LR, vai_Latn, vi, vun
+                vai, vai_LR, vai_Latn, vi, vmw, vun
 
                 // W
                 wae, wo
@@ -257,7 +257,7 @@
                 yav, yi, yo, yrl, yue, yue_CN, yue_HK, yue_Hans
 
                 // Z
-                zgh, zh, zh_CN, zh_HK, zh_Hant, zh_MO, zh_SG, zh_TW, zu
+                za, zgh, zh, zh_CN, zh_HK, zh_Hant, zh_MO, zh_SG, zh_TW, zu
             </localeIds>
 
             <!-- The following elements configure directories in which a subset of the available
@@ -311,7 +311,7 @@
                     id_ID, id, ig, in, in_ID, is, it, iw_IL, iw, ja,
 
                     // K-P
-                    ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lkt, ln, lo, lt, lv,
+                    ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lij, lkt, ln, lo, lt, lv,
                     mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO,
                     om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
@@ -470,4 +470,3 @@
         <generateCode cOutDir="${genCCodeDir}" javaOutDir="${genJavaCodeDir}" action="clean" />
     </target>
 </project>
-

@@ -11,15 +11,6 @@ mni{
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         default{"beng"}
-        latn{
-            symbols{
-                decimal{"."}
-                group{","}
-                minusSign{"-"}
-                percentSign{"%"}
-                plusSign{"+"}
-            }
-        }
     }
     calendar{
         generic{
@@ -99,14 +90,8 @@ mni{
                 "yyMd",
             }
             availableFormats{
-                GyMMM{"G y MMM"}
-                GyMMMEd{"G y MMM d, E"}
-                GyMMMd{"G y MMM d"}
                 GyMd{"GGGGG dd-MM-y"}
                 MEd{"d/M, E"}
-                MMMEd{"MMM d, E"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
                 Md{"d/M"}
                 yM{"M/y"}
                 yMEd{"d/M/y, E"}
@@ -115,19 +100,9 @@ mni{
                 yMMMM{"MMMM y"}
                 yMMMd{"MMM d, y"}
                 yMd{"d/M/y"}
-                yQQQ{"y QQQ"}
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "নোংমাইজিং",
-                        "নিংথৌকাবা",
-                        "লৈবাকপোকপা",
-                        "য়ুমশকৈশা",
-                        "শগোলশেন",
-                        "ইরাই",
-                        "থাংজ",
-                    }
                     narrow{
                         "নোং",
                         "নিং",
@@ -148,15 +123,6 @@ mni{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "নোংমাইজিং",
-                        "নিংথৌকাবা",
-                        "লৈবাকপোকপা",
-                        "য়ুমশকৈশা",
-                        "শগোলশেন",
-                        "ইরাই",
-                        "থাংজ",
-                    }
                     narrow{
                         "নো",
                         "নিং",
@@ -165,15 +131,6 @@ mni{
                         "শগ",
                         "ইরা",
                         "থাং",
-                    }
-                    wide{
-                        "নোংমাইজিং",
-                        "নিংথৌকাবা",
-                        "লৈবাকপোকপা",
-                        "য়ুমশকৈশা",
-                        "শগোলশেন",
-                        "ইরাই",
-                        "থাংজ",
                     }
                 }
             }
@@ -190,14 +147,14 @@ mni{
             monthNames{
                 format{
                     abbreviated{
-                        "জানুৱারি",
+                        "জন",
                         "ফেব্রুৱারি",
                         "মার্চ",
                         "এপ্রিল",
                         "মে",
                         "জুন",
                         "জুলাই",
-                        "আগস্ট",
+                        "ওগ",
                         "সেপ্টেম্বর",
                         "ওক্টোবর",
                         "নভেম্বর",
@@ -218,14 +175,14 @@ mni{
                         "ডি",
                     }
                     wide{
-                        "জানুৱারি",
+                        "জনুৱারী",
                         "ফেব্রুৱারি",
                         "মার্চ",
                         "এপ্রিল",
                         "মে",
                         "জুন",
                         "জুলাই",
-                        "আগস্ট",
+                        "‌ওগষ্ট",
                         "সেপ্টেম্বর",
                         "ওক্টোবর",
                         "নভেম্বর",
@@ -279,26 +236,6 @@ mni{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "অহানবা মসুং",
-                        "অনীশুবা মসুং",
-                        "অহুমশুবা মসুং",
-                        "মরীশুবা মসুং",
-                    }
-                    wide{
-                        "অহানবা মসুং",
-                        "অনীশুবা মসুং",
-                        "অহুমশুবা মসুং",
-                        "মরীশুবা মসুং",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "অহানবা মসুং",
-                        "অনীশুবা মসুং",
-                        "অহুমশুবা মসুং",
-                        "মরীশুবা মসুং",
-                    }
                     wide{
                         "অহানবা মসুং",
                         "অনীশুবা মসুং",
@@ -318,22 +255,6 @@ mni{
                 "1"{"হয়েং"}
             }
         }
-        day-narrow{
-            dn{"নুমিৎ"}
-            relative{
-                "-1"{"ঙরাং"}
-                "0"{"ঙসি"}
-                "1"{"হয়েং"}
-            }
-        }
-        day-short{
-            dn{"নুমিৎ"}
-            relative{
-                "-1"{"ঙরাং"}
-                "0"{"ঙসি"}
-                "1"{"হয়েং"}
-            }
-        }
         dayperiod{
             dn{"এ এম/পি এম"}
         }
@@ -343,55 +264,19 @@ mni{
         hour{
             dn{"পুং"}
         }
-        hour-narrow{
-            dn{"পুং"}
-        }
-        hour-short{
-            dn{"পুং"}
-        }
         minute{
-            dn{"মিনট"}
-        }
-        minute-narrow{
-            dn{"মিনট"}
-        }
-        minute-short{
             dn{"মিনট"}
         }
         month{
             dn{"থা"}
         }
-        month-narrow{
-            dn{"থা"}
-        }
-        month-short{
-            dn{"থা"}
-        }
         quarter{
-            dn{"মসুং"}
-        }
-        quarter-narrow{
-            dn{"মসুং"}
-        }
-        quarter-short{
             dn{"মসুং"}
         }
         second{
             dn{"সেকেণ্ড"}
         }
-        second-narrow{
-            dn{"সেকেণ্ড"}
-        }
-        second-short{
-            dn{"সেকেণ্ড"}
-        }
         week{
-            dn{"চয়োল"}
-        }
-        week-narrow{
-            dn{"চয়োল"}
-        }
-        week-short{
             dn{"চয়োল"}
         }
         weekday{
@@ -405,12 +290,6 @@ mni{
                 "1"{"মথং চহি"}
             }
         }
-        year-narrow{
-            dn{"চহী"}
-        }
-        year-short{
-            dn{"চহী"}
-        }
         zone{
             dn{"টাইম জোন"}
         }
@@ -419,8 +298,6 @@ mni{
         standard{
             2{"{0} অমসুং {1}"}
             end{"{0} অমসুং {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{

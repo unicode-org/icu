@@ -5,4 +5,11 @@ ha_NE{
     Scripts{
         Cans{"Haɗaɗɗun Gaɓoɓin Ƴan Asali na Kanada"}
     }
+    characterLabelPattern{
+        category-list{"{0}: {1}"}
+        strokes{
+            one{"bugu-bugu {0}"}
+            other{"bugu-bugu {0}"}
+        }
+    }
 }

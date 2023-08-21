@@ -85,6 +85,7 @@ sc{
         CN{"Tzina"}
         CO{"Colòmbia"}
         CP{"Ìsula de Clipperton"}
+        CQ{"Sark"}
         CR{"Costa Rica"}
         CU{"Cuba"}
         CV{"Cabu birde"}
@@ -146,6 +147,7 @@ sc{
         IL{"Israele"}
         IM{"Ìsula de Man"}
         IN{"Ìndia"}
+        IO{"Territòriu Britànnicu de s’Otzèanu Indianu"}
         IQ{"Iraq"}
         IR{"Iràn"}
         IS{"Islanda"}
@@ -296,6 +298,9 @@ sc{
         ZM{"Zàmbia"}
         ZW{"Zimbabwe"}
         ZZ{"regione disconnota"}
+    }
+    Countries%chagos{
+        IO{"Artzipèlagu Chagos"}
     }
     Countries%short{
         GB{"RU"}

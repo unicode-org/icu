@@ -100,9 +100,6 @@ There are several environment variables that need to be defined.
    * `CLDR_DIR`: This is the path to the to root of standard CLDR sources, below
      which are the common and tools directories.
 
-   * `CLDR_CLASSES`: Path to the CLDR Tools classes directory. If not set, defaults
-     to `$CLDR_DIR/tools/java/classes`.
-
    * `CLDR_TMP_DIR`: Parent of temporary CLDR production data. Defaults to
      `$CLDR_DIR/../cldr-aux` (sibling to `CLDR_DIR`).
      
@@ -277,7 +274,7 @@ ant copy-cldr-testdata
 cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4C_DIR/source/test/testdata/
 cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/
 open $ICU4C_DIR/source/test/testdata/localeCanonicalization.txt
-open $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/ocaleCanonicalization.txt
+open $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/localeCanonicalization.txt
 ```
 At the beginning of each file add the following line:\
 ```
@@ -575,9 +572,3 @@ When you are all ready, click the "Publish release" button.
 
 For cldr-staging, go to [unicode-org/cldr-staging/tags](https://github.com/unicode-org/cldr-staging/tags)
 and do something similar.
-
-
-
-
-
-

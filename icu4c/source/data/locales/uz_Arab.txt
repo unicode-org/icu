@@ -12,10 +12,6 @@ uz_Arab{
     NumberElements{
         arabext{
             symbols{
-                decimal{"٫"}
-                exponential{"×۱۰^"}
-                group{"٬"}
-                percentSign{"٪"}
                 timeSeparator{":"}
             }
         }

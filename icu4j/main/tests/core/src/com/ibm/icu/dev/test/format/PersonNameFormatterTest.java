@@ -596,17 +596,16 @@ public class PersonNameFormatterTest extends TestFmwk{
             // based on the name locale we pass in (we're using the given2 field to tell whether
             // we got the zh_Hans or zh_Hant formatter)
             new NameAndTestCases("given=港生,surname=陳,given2=Test", new String[][]{
-                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
+                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T"},
             }),
             new NameAndTestCases("given=港生,surname=陳,given2=Test,locale=zh", new String[][]{
-                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
+                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T"},
             }),
             new NameAndTestCases("given=港生,surname=陳,given2=Test,locale=zh_Hant", new String[][]{
-//                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T."},  Temporary change the test because data was set to provisional
-                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
+                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T."},
             }),
             new NameAndTestCases("given=港生,surname=陳,given2=Test,locale=zh_Hani", new String[][]{
-                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生Test"},
+                {"en", "MEDIUM", "REFERRING", "FORMAL",   "DEFAULT", "", "陳港生T"},
             }),
         }, false);
     }
@@ -652,11 +651,11 @@ public class PersonNameFormatterTest extends TestFmwk{
                 {"en_US", "DEFAULT", "REFERRING", "INFORMAL", "DEFAULT", "", "Rich Gillam"},
                 {"en_US", "DEFAULT", "REFERRING", "DEFAULT", "DEFAULT", "", "Rich Gillam"},
             }),
-            // in other languages (we're using German here), DEFAULT formality is the same as FORMAL
-            new NameAndTestCases("locale=de_DE,title=Herr,given=Friedrich,given-informal=Fritz,given2=Georg,surname=Schellhammer", new String[][] {
-                {"de_DE", "DEFAULT", "REFERRING", "FORMAL", "DEFAULT", "", "Friedrich G. Schellhammer"},
-                {"de_DE", "DEFAULT", "REFERRING", "INFORMAL", "DEFAULT", "", "Fritz Schellhammer"},
-                {"de_DE", "DEFAULT", "REFERRING", "DEFAULT", "DEFAULT", "", "Friedrich G. Schellhammer"},
+            // in other languages (we're using pt_PT which seems to be the only locale rather than root to enforce formal), DEFAULT formality is the same as FORMAL
+            new NameAndTestCases("locale=pt_PT,title=Herr,given=Friedrich,given-informal=Fritz,given2=Georg,surname=Schellhammer", new String[][] {
+                {"pt_PT", "DEFAULT", "REFERRING", "FORMAL", "DEFAULT", "", "Friedrich G. Schellhammer"},
+                {"pt_PT", "DEFAULT", "REFERRING", "INFORMAL", "DEFAULT", "", "Fritz Schellhammer"},
+                {"pt_PT", "DEFAULT", "REFERRING", "DEFAULT", "DEFAULT", "", "Friedrich G. Schellhammer"},
             })
         }, false);
     }

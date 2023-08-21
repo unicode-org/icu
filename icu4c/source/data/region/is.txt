@@ -146,6 +146,7 @@ is{
         IL{"Ísrael"}
         IM{"Mön"}
         IN{"Indland"}
+        IO{"Bresku Indlandshafseyjar"}
         IQ{"Írak"}
         IR{"Íran"}
         IS{"Ísland"}
@@ -296,6 +297,9 @@ is{
         ZM{"Sambía"}
         ZW{"Simbabve"}
         ZZ{"Óþekkt svæði"}
+    }
+    Countries%chagos{
+        IO{"Chagos-eyjaklasinn"}
     }
     Countries%short{
         HK{"Hong Kong"}

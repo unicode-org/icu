@@ -1267,7 +1267,7 @@ public class ULocaleTest extends TestFmwk {
                 new Item("zh",      NM_DIA, CAP_MID, LEN_FU, SUB_SU, "fr_CA",  "加拿大法语" ),
                 new Item("zh",      NM_DIA, CAP_MID, LEN_FU, SUB_SU, "fr_CH",  "瑞士法语" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "ar_001", "現代標準阿拉伯文" ),
-                new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "nl_BE",  "佛蘭芒文" ),
+                new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "nl_BE",  "法蘭德斯文" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "ro_MD",  "摩爾多瓦文" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_AU",  "英文（澳洲）" ),
                 new Item("zh_Hant", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_CA",  "英文（加拿大）" ),
@@ -1672,10 +1672,8 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F");
         h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
         h[1].put("buddhist", "\u4F5B\u5386");
-//        h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");              // Temporary change the test because data was set to provisional
-//        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u65E5\u5386");  // Temporary change the test because data was set to provisional
-        h[1].put("islamic", "islamic");
-        h[1].put("islamic-civil", "islamic-civil");
+        h[1].put("islamic", "伊斯兰历");
+        h[1].put("islamic-civil", "伊斯兰希吉来日历");
         h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");
         h[1].put("chinese", "\u519C\u5386");
         h[1].put("gregorian", "\u516C\u5386");
@@ -3497,8 +3495,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_HK"
                 }, {
                     "und_AQ",
-                    "_Latn_AQ",
-                    "_AQ"
+                    "en_Latn_AQ",
+                    "en_AQ"
                 }, {
                     "und_Zzzz",
                     "en_Latn_US",
@@ -3521,8 +3519,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_HK"
                 }, {
                     "und_Zzzz_AQ",
-                    "_Latn_AQ",
-                    "_AQ"
+                    "en_Latn_AQ",
+                    "en_AQ"
                 }, {
                     "und_Latn",
                     "en_Latn_US",
@@ -3545,8 +3543,8 @@ public class ULocaleTest extends TestFmwk {
                     "en_HK"
                 }, {
                     "und_Latn_AQ",
-                    "_Latn_AQ",
-                    "_AQ"
+                    "en_Latn_AQ",
+                    "en_AQ"
                 }, {
                     "und_Hans",
                     "zh_Hans_CN",
@@ -3617,8 +3615,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_Moon_HK"
                 }, {
                     "und_Moon_AQ",
-                    "_Moon_AQ",
-                    "_Moon_AQ"
+                    "en_Moon_AQ",
+                    "en_Moon_AQ"
                 }, {
                     "es",
                     "es_Latn_ES",
@@ -4073,8 +4071,8 @@ public class ULocaleTest extends TestFmwk {
                     "es_419"
                 }, {
                     "und_150",
-                    "ru_Cyrl_RU",
-                    "ru"
+                    "en_Latn_150",
+                    "en_150"
                 }, {
                     "und_AT",
                     "de_Latn_AT",
@@ -5497,7 +5495,7 @@ public class ULocaleTest extends TestFmwk {
                 l, ULocale.Minimize.FAVOR_SCRIPT).toLanguageTag())) {
                 logKnownIssue("ICU-20777", "minimizeSubtags(" + test.source + ") - FAVOR_SCRIPT");
             }
-        } else {
+        } else if (!test.source.equals("und-150") && !logKnownIssue("CLDR-17021", "Wrong mapping for und-150 in likelySubtags.txt test")) {
             if (test.addLikely.equals("FAIL")) {
                 assertEquals("addLikelySubtags(" + test.source + ") should be unchanged",
                     l, ULocale.addLikelySubtags(l));

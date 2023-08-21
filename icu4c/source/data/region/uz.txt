@@ -146,6 +146,7 @@ uz{
         IL{"Isroil"}
         IM{"Men oroli"}
         IN{"Hindiston"}
+        IO{"Britaniyaning Hind okeanidagi hududi"}
         IQ{"Iroq"}
         IR{"Eron"}
         IS{"Islandiya"}

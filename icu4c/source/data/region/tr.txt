@@ -87,7 +87,7 @@ tr{
         CP{"Clipperton Adası"}
         CR{"Kosta Rika"}
         CU{"Küba"}
-        CV{"Cape Verde"}
+        CV{"Cabo Verde"}
         CW{"Curaçao"}
         CX{"Christmas Adası"}
         CY{"Kıbrıs"}
@@ -146,6 +146,7 @@ tr{
         IL{"İsrail"}
         IM{"Man Adası"}
         IN{"Hindistan"}
+        IO{"Britanya Hint Okyanusu Toprakları"}
         IQ{"Irak"}
         IR{"İran"}
         IS{"İzlanda"}
@@ -296,6 +297,9 @@ tr{
         ZM{"Zambiya"}
         ZW{"Zimbabve"}
         ZZ{"Bilinmeyen Bölge"}
+    }
+    Countries%chagos{
+        IO{"Chagos Takımadaları"}
     }
     Countries%short{
         GB{"BK"}

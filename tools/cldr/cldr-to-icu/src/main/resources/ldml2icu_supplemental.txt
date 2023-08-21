@@ -153,23 +153,45 @@
 //supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"](?:[@status="%W"])?
     ; /unitQuantities/<FIFO>/$1 ; values="$2"
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values=1
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values=1
     ; /convertUnits/$1/offset ; values=$3
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/offset ; values=$4
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+    ; /convertUnits/$1/systems ; values="$3"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/systems ; values="$4"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+    ; /convertUnits/$1/offset ; values=$3
+    ; /convertUnits/$1/systems ; values="$4"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/offset ; values=$4
+    ; /convertUnits/$1/systems ; values="$5"
 
 # note the following will go into metadata.txt, not units.txt
 //supplementalData/metadata/alias/(unit|usage)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]

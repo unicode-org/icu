@@ -6063,6 +6063,7 @@ structLocale:table(nofallback){
         vi{""}
         vls{""}
         vmf{""}
+        vmw{""}
         vo{""}
         vot{""}
         vro{""}
@@ -52736,4 +52737,3 @@ structLocale:table(nofallback){
         }
     }
 }
-

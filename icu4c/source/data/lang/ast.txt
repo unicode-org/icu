@@ -1003,7 +1003,6 @@ ast{
     }
     characterLabelPattern{
         all{"{0} — too"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — compatibilidá"}
         enclosed{"{0} — arrodiáu"}
         extended{"{0} — enantáu"}
@@ -1020,10 +1019,5 @@ ast{
         language{"Llingua: {0}"}
         script{"Alfabetu: {0}"}
         territory{"Rexón: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }
