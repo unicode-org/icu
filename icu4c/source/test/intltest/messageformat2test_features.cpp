@@ -469,7 +469,7 @@ Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCod
     return result.orphan();
 }
 
-FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* TemperatureFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {

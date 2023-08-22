@@ -199,7 +199,10 @@ class U_COMMON_API Formatter : public UMemory {
     // See comments in StandardFunctions::number::format()
 
     // Operand can be null
-    virtual FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const = 0;
+
+    // If argument is const, result must be const, since we may want to return the argument unchanged
+    // TODO: this is potentially a memory leak since the result might be newly allocated or might be previously owned
+    virtual const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const = 0;
     virtual ~Formatter();
 };
 
@@ -235,7 +238,7 @@ class StandardFunctions {
 
     class DateTime : public Formatter {
         public:
-        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
 
         private:
         Locale locale;
@@ -251,7 +254,7 @@ class StandardFunctions {
         
     class Number : public Formatter {
         public:
-        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
 
         private:
         friend class NumberFactory;
@@ -269,7 +272,7 @@ class StandardFunctions {
 
     class Identity : public Formatter {
     public:
-        FormattedPlaceholder* format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
         
     private:
         friend class IdentityFactory;

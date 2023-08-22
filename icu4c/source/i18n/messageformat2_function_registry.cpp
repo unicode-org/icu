@@ -360,8 +360,7 @@ static FormattedPlaceholder* stringAsNumber(Locale locale, const number::Localiz
     return FormattedPlaceholder::create(fp, std::move(result), errorCode);
 }
 
-// variableOptions = map of *resolved* options (strings)
-FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* StandardFunctions::Number::format(const FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     // No argument => return "NaN"
@@ -396,8 +395,9 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
 */
             // TODO: passing in a number just returns the same number,
             // with options ignored. is that right?
-            numberResult = arg->getNumber();
-            break;
+            // numberResult = arg->getNumber();
+            return arg;
+//            break;
         }
         case FormattedPlaceholder::Type::DYNAMIC: {
             const Formattable& toFormat = arg->getInput(); 
@@ -596,7 +596,7 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, UE
     return result;
 }
 
-FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* StandardFunctions::DateTime::format(const FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -717,7 +717,7 @@ Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, UE
 
 }
 
-FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* toFormat, const Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* StandardFunctions::Identity::format(const FormattedPlaceholder* toFormat, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     (void) options; // unused parameter

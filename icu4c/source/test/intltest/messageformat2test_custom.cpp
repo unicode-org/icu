@@ -129,7 +129,7 @@ Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode
     return result;
 }
 
-FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
+const FormattedPlaceholder* PersonNameFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -271,7 +271,7 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, UErrorCo
     result += postfix;
 }
 
-FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* GrammarCasesFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -399,7 +399,7 @@ Formatter* ListFormatterFactory::createFormatter(Locale locale, UErrorCode& erro
     return result;
 }
 
-FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* message2::ListFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -694,7 +694,7 @@ static Arguments* localToGlobal(const Options& options, UErrorCode& errorCode) {
     return args->build(errorCode);
 }
 
-FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
+const FormattedPlaceholder* ResourceManager::format(const FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -728,8 +728,6 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const O
         NULL_ON_ERROR(errorCode);
         UnicodeString result;
 
-        // variableOptions maps strings to FormattedPlaceholder*, but
-        // external arguments maps strings to Formattable*
         LocalPointer<Arguments> arguments(localToGlobal(options, errorCode));
         NULL_ON_ERROR(errorCode);
 
