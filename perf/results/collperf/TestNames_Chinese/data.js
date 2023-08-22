@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692741755715,
+  "lastUpdate": 1692747760198,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24298,6 +24298,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2801576.3163,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "fb0f36203affeddff8e1456bce634d996466659e",
+          "message": "ICU-22324 Small fixes for script moving folders to maven structure\n\n- Symlinks to LICENSE, so that it is included in the .jar files\n- Fixed version in the jar manifests (s/73/74/)\n- Added Main-Class, Export-Package, some *-Title and *-Description\n\nAt this point the .jar files (including manifests) produced by ant / maven\nare byte to byte identical, except for some small differences that are\nexpected and can be explained (will cover them in the email to the team)",
+          "timestamp": "2023-08-22T16:19:43-07:00",
+          "tree_id": "7b67f9a79cb3c9fea9b04b72dd0cf90e42ffcf95",
+          "url": "https://github.com/unicode-org/icu/commit/fb0f36203affeddff8e1456bce634d996466659e"
+        },
+        "date": 1692747697719,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 261.6082,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 14707410.7771,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 3029770.0129,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 13463791.3643,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 3239302.4338,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
