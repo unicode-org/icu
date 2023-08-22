@@ -204,6 +204,245 @@ static bool isSyntaxOrDataModelWarning(UErrorCode status) {
 }
 
 // ------------------------------------------------------
+// MessageArguments
+
+using Arguments = MessageArguments;
+using Options = FunctionRegistry::Options;
+using Option = FunctionRegistry::Option;
+
+bool Arguments::has(const UnicodeString& arg) const {
+    U_ASSERT(contents.isValid() && objectContents.isValid());
+    return contents->containsKey(arg) || objectContents->containsKey(arg);
+}
+
+const Formattable* Arguments::get(const UnicodeString& arg) const {
+    U_ASSERT(has(arg));
+    const Formattable* result = static_cast<const Formattable*>(contents->get(arg));
+    if (result == nullptr) {
+        result = static_cast<const Formattable*>(objectContents->get(arg));
+    }
+    return result;
+}
+
+static Formattable* createFormattable(const UnicodeString& s, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(s);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+static Formattable* createFormattableDouble(double val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+static Formattable* createFormattableLong(long val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+static Formattable* createFormattableInt64(int64_t val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+static Formattable* createFormattableDate(UDate val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(val, Formattable::kIsDate);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+static Formattable* createFormattableArray(const UnicodeString* in, size_t count, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalArray<Formattable> arr(new Formattable[count]);
+    if (!arr.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+
+    LocalPointer<Formattable> val;
+    for (size_t i = 0; i < count; i++) {
+        // TODO
+        // Without this explicit cast, `val` is treated as if it's
+        // an object when it's assigned into `arr[i]`. I don't know why.
+        val.adoptInstead(new Formattable((const UnicodeString&) in[i]));
+        if (!val.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        arr[i] = *val;
+    }
+
+    Formattable* result(new Formattable(arr.orphan(), count));
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+static Formattable* createFormattableObject(UObject* obj, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result(new Formattable(obj));
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+Arguments::Builder::Builder(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    objectContents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    CHECK_ERROR(errorCode);
+    // The `contents` hashtable owns the values, but does not own the keys
+    contents->setValueDeleter(uprv_deleteUObject);
+    // The `objectContents` hashtable does not own the values
+}
+
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString& val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattable(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addDouble(const UnicodeString& name, double val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattableDouble(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addInt64(const UnicodeString& name, int64_t val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattableInt64(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addLong(const UnicodeString& name, long val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattableLong(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattableDate(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString* arr, size_t count, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattableArray(arr, count, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+// Does not adopt the object
+Arguments::Builder& Arguments::Builder::addObject(const UnicodeString& name, UObject* obj, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* value(createFormattableObject(obj, errorCode));
+    THIS_ON_ERROR(errorCode);
+
+    objectContents->put(name, value, errorCode);
+    return *this;
+}
+
+// Adopts its argument
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, Formattable* value, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    U_ASSERT(value != nullptr);
+
+    contents->put(name, value, errorCode);
+    return *this;
+}
+
+/* static */ MessageArguments::Builder* MessageArguments::builder(UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    MessageArguments::Builder* result = new MessageArguments::Builder(errorCode);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+MessageArguments* MessageArguments::Builder::build(UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+    U_ASSERT(contents.isValid() && objectContents.isValid());
+
+    LocalPointer<Hashtable> contentsCopied(new Hashtable(compareVariableName, nullptr, errorCode));
+    LocalPointer<Hashtable> objectContentsCopied(new Hashtable(compareVariableName, nullptr, errorCode));
+    NULL_ON_ERROR(errorCode);
+    // The `contents` hashtable owns the values, but does not own the keys
+    contents->setValueDeleter(uprv_deleteUObject);
+    // The `objectContents` hashtable does not own the values
+
+    int32_t pos = UHASH_FIRST;
+    LocalPointer<Formattable> optionValue;
+    // Copy the non-objects
+    while (true) {
+        const UHashElement* element = contents->nextElement(pos);
+        if (element == nullptr) {
+            break;
+        }
+        const Formattable& toCopy = *(static_cast<Formattable*>(element->value.pointer));
+        optionValue.adoptInstead(new Formattable(toCopy));
+        if (!optionValue.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        UnicodeString* key = static_cast<UnicodeString*>(element->key.pointer);
+        contentsCopied->put(*key, optionValue.orphan(), errorCode);
+    }
+    // Copy the objects
+    pos = UHASH_FIRST;
+    while (true) {
+        const UHashElement* element = objectContents->nextElement(pos);
+        if (element == nullptr) {
+            break;
+        }
+        UnicodeString* key = static_cast<UnicodeString*>(element->key.pointer);
+        objectContentsCopied->put(*key, element->value.pointer, errorCode);
+    }
+    MessageArguments* result = new MessageArguments(contentsCopied.orphan(), objectContentsCopied.orphan());
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+// ------------------------------------------------------
 // Context
 
 const Formatter* MessageFormatter::CachedFormatters::getFormatter(const FunctionName& f) {
@@ -226,15 +465,15 @@ MessageFormatter::CachedFormatters::CachedFormatters(UErrorCode& errorCode) {
 }
 
 bool MessageFormatter::Context::hasVar(const VariableName& f) const {
-    return arguments.containsKey(f);
+    return arguments.has(f);
 } 
 
 const Formattable* MessageFormatter::Context::getVar(const VariableName& f) const {
     U_ASSERT(hasVar(f));
-    return ((const Formattable*) arguments.get(f));
+    return arguments.get(f);
 } 
 
-/* static */ MessageFormatter::Context* MessageFormatter::Context::create(const MessageFormatter& mf, const Hashtable& args, UErrorCode& errorCode) {
+/* static */ MessageFormatter::Context* MessageFormatter::Context::create(const MessageFormatter& mf, const Arguments& args, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     Context* result = new Context(mf, args);
@@ -309,16 +548,8 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::evalArgume
     const Formattable* val = context.getVar(var);
     LocalPointer<FormattedPlaceholderWithFallback> result;
     UnicodeString fallbackStr = fallback(var);
-    if (val == nullptr) {
-        // This means the variable was explicitly set to "null" in the arguments,
-        // not that it's unbound.
-        // Represent this as the special "null" FormattedPlaceholder
-        result.adoptInstead(FormattedPlaceholderWithFallback::create(fallbackStr, status));
-    } else {
-        result.adoptInstead(FormattedPlaceholderWithFallback::create(fallbackStr, val, status));
-    }
-    NULL_ON_ERROR(status);
-    return result.orphan();
+    U_ASSERT(val != nullptr); // The MessageArguments API shouldn't allow this
+    return FormattedPlaceholderWithFallback::create(fallbackStr, val, status);
 }
 
 /* static */ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatLiteral(const Literal& lit, UErrorCode& status) {
@@ -377,7 +608,7 @@ FunctionRegistry::Options* MessageFormatter::resolveOptions(MessageFormatter::Co
     NULL_ON_ERROR(status);
 
     size_t pos = OptionMap::FIRST;
-    LocalPointer<FunctionRegistry::Options> result(FunctionRegistry::Options::create(status));
+    LocalPointer<Options> result(new Options(status));
     NULL_ON_ERROR(status);
     while (true) {
         UnicodeString k;
@@ -388,10 +619,54 @@ FunctionRegistry::Options* MessageFormatter::resolveOptions(MessageFormatter::Co
         U_ASSERT(v != nullptr);
         // Options are fully evaluated before calling the function
         LocalPointer<FormattedPlaceholderWithFallback> formattedRand(formatOperand(context, env, *v, status));
+        LocalPointer<Option> functionOption;
         NULL_ON_ERROR(status);        
         // No fallback needed for options, and ignore any options that fail to resolve
         if (!formattedRand->isFallback()) {
-            result->put(k, formattedRand->takeFormattedPlaceholder(), status);
+            const FormattedPlaceholder& fp = formattedRand->getFormattedPlaceholder();
+            switch (fp.getType()) {
+                case FormattedPlaceholder::STRING: 
+                case FormattedPlaceholder::NUMBER: {
+                    // Format the result and pass it as a string option
+                    UnicodeString formattedValue = fp.toString(locale, status);
+                    NULL_ON_ERROR(status);
+                    functionOption.adoptInstead(Option::createString(formattedValue, status));
+                    NULL_ON_ERROR(status);
+                    break;
+                }
+                case FormattedPlaceholder::DYNAMIC: {
+                    const Formattable& f = fp.getInput();
+                    switch (f.getType()) {
+                         case Formattable::Type::kDate: {
+                             functionOption.adoptInstead(Option::createDate(f.getDate(), status));
+                             break;
+                         }
+                         case Formattable::Type::kDouble: {
+                             functionOption.adoptInstead(Option::createDouble(f.getDouble(), status));
+                             break;
+                         }
+                         case Formattable::Type::kLong: {
+                             functionOption.adoptInstead(Option::createLong(f.getLong(), status));
+                             break;
+                         }
+                         case Formattable::Type::kInt64: {
+                             functionOption.adoptInstead(Option::createInt64(f.getInt64(), status));
+                             break;
+                         }
+                         case Formattable::Type::kString: {
+                             functionOption.adoptInstead(Option::createString(f.getString(), status));
+                             break;
+                         }
+                         default: {
+                             // Options with array or object types are ignored
+                             continue;
+                         }
+                    }
+                    break;
+                }
+            }
+            NULL_ON_ERROR(status);
+            result->add(k, functionOption.orphan(), status);
         }
     }
     return result.orphan();
@@ -1008,7 +1283,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
     formatPattern(context, env, pat, status, result);
 }
 
-void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
+void MessageFormatter::check(const Arguments& globalEnv, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check the RHS of each option
@@ -1024,7 +1299,7 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
     }
 }
 
-void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
+void MessageFormatter::check(const Arguments& globalEnv, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Nothing to check for literals
@@ -1039,13 +1314,13 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
         return;
     }
     // Check global scope
-    if (globalEnv.containsKey(var)) {
+    if (globalEnv.has(var)) {
         return;
     }
     setError(U_UNRESOLVED_VARIABLE_WARNING, status);
 }
 
-void MessageFormatter::check(const Hashtable& globalEnv, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
+void MessageFormatter::check(const Arguments& globalEnv, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check for unresolved variable errors
@@ -1060,7 +1335,7 @@ void MessageFormatter::check(const Hashtable& globalEnv, const Environment& loca
 }
 
 // Check for resolution errors
-void MessageFormatter::checkDeclarations(const Hashtable& arguments, Environment*& env, UErrorCode &status) const {
+void MessageFormatter::checkDeclarations(const Arguments& arguments, Environment*& env, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     const Bindings& decls = dataModel->getLocalVariables();
@@ -1083,7 +1358,7 @@ void MessageFormatter::checkDeclarations(const Hashtable& arguments, Environment
     }
 }
 
-void MessageFormatter::formatToString(const Hashtable& arguments, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // Note: we currently evaluate variables lazily,

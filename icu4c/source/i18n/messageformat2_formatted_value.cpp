@@ -24,10 +24,6 @@ UnicodeString FormattedPlaceholder::toString(Locale locale, UErrorCode& status) 
             const number::FormattedNumber& num = getNumber();
             return num.toString(status);
         }
-        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
-            // TODO: is it correct to format null as ""?
-            return UnicodeString();
-        }
         case FormattedPlaceholder::Type::DYNAMIC: {
             // "Finalize" formatting, e.g. applying default formatters
             // to dates/numbers

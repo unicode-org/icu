@@ -122,7 +122,7 @@ void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
     // Number as argument
     test.adoptInstead(testBuilder->setPattern("let $num = {|42| :number}\n\
                                               {Testing date formatting: {$num :datetime}}")
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setExpected("Testing date formatting: {|42|}")
                                 .setExpectedWarning(U_FORMATTING_WARNING)
                                 .build(errorCode));
@@ -135,7 +135,7 @@ void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
     // Formatted string as argument
     test.adoptInstead(testBuilder->setPattern("let $dateStr = {$date :datetime}\n\
                                                {Testing date formatting: {$dateStr :datetime}}")
-                                .setExpected("Testing date formatting: $date")
+                                .setExpected("Testing date formatting: {$date}")
                                 .setExpectedWarning(U_FORMATTING_WARNING)
                                 .setDateArgument(date, TEST_DATE, errorCode)
                                 .build(errorCode));
@@ -144,11 +144,15 @@ void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
     // because calling put() with a null value on a Hashtable unsets the variable.
     // However, we might change the representation for arguments and have to
     // change this test. TODO
+
+// TODO: now with MessageArguments we just forbid null. is that good?
+/*
     test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime}}")
                                 .setExpected("Testing date formatting: {$date}")
                                 .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
                                 .setNullArgument(date, errorCode)
                                 .build(errorCode));
+*/
 
     TestUtils::runTestCase(*this, *test, errorCode);
 

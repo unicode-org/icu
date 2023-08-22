@@ -7,6 +7,7 @@
 
 #include "unicode/dtptngen.h"
 #include "unicode/messageformat2.h"
+#include "unicode/messageformat2_formatted_value.h"
 #include "unicode/numberformatter.h"
 #include "unicode/smpdtfmt.h"
 #include "uvector.h" // U_ASSERT
@@ -107,20 +108,185 @@ void FunctionRegistry::checkStandard() const {
     checkSelector("gender");
 }
 
-// Formatter/selector helpers
+// ------------------------------------------------------
+// Options
 
+using Option = FunctionRegistry::Option;
+using Options = FunctionRegistry::Options;
 
-static void strToInt(const UnicodeString& s, int64_t& result, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+bool Options::getStringOption(const UnicodeString& key, UnicodeString& value) const {
+    U_ASSERT(contents.isValid());
 
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(errorCode));
-    CHECK_ERROR(errorCode);
+    const Option* optionValue = static_cast<const Option*>(contents->get(key));
+    if (optionValue != nullptr) {
+        switch (optionValue->getType()) {
+            case Option::Type::STRING: {
+                value = optionValue->getString();
+                return true;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+    // In all other cases, there is no string option with this name
+    return false;
+}
+
+static bool tryStringToNumber(const UnicodeString& s, int64_t& result) {
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    // Try to parse string as int
+
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(localErrorCode));
+    if (U_FAILURE(localErrorCode)) {
+        return false;
+    }
     numberFormat->setParseIntegerOnly(true);
     Formattable asNumber;
-    numberFormat->parse(s, asNumber, errorCode);
-    CHECK_ERROR(errorCode);
-    result = asNumber.getInt64(errorCode);
+    numberFormat->parse(s, asNumber, localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        result = asNumber.getInt64(localErrorCode);
+        if (U_SUCCESS(localErrorCode)) {
+            return true;
+        }
+    }
+    return false;
 }
+
+bool tryFormattableAsNumber(const Formattable& optionValue, int64_t& result) {
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    if (optionValue.isNumeric()) {
+        result = optionValue.getInt64(localErrorCode);
+        if (U_SUCCESS(localErrorCode)) {
+            return true;
+        }
+    } else {
+        if (tryStringToNumber(optionValue.getString(), result)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int64_t Options::getIntOption(const UnicodeString& key, int64_t defaultVal) const {
+    U_ASSERT(contents.isValid());
+
+    const Option* optionValue = static_cast<const Option*>(contents->get(key));
+    int64_t result = defaultVal;
+    if (optionValue != nullptr) {
+        switch (optionValue->getType()) {
+            case Option::Type::STRING: {
+                // Try to parse string as int
+                if (tryStringToNumber(optionValue->getString(), result)) {
+                    return result;
+                }
+                // Try input
+                if (tryFormattableAsNumber(optionValue->getString(), result)) {
+                    return result;
+                }
+                break;
+            }
+            case Option::Type::DOUBLE: {
+                return optionValue->getDouble();
+                break;
+            }
+            case Option::Type::LONG: {
+                return optionValue->getLong();
+                break;
+            }
+            case Option::Type::INT64: {
+                return optionValue->getInt64();
+                break;
+            }
+            case Option::Type::DATE: {
+                // Not a number
+                break;
+            }
+        }
+    }
+    // Value was either not in the options, or was a string not parsable as a number,
+    // or overflow occurred while parsing the string,
+    // or it was a date, Return the default value that was provided
+    return defaultVal;
+}
+
+const Option* Options::nextElement(int32_t& pos, UnicodeString& key) const {
+    U_ASSERT(contents.isValid());
+
+    const UHashElement* e = contents->nextElement(pos);
+    if (e == nullptr) {
+        return nullptr;
+    }
+    key = *(static_cast<UnicodeString*> (e->key.pointer));
+    return static_cast<const Option*> (e->value.pointer);
+}
+
+// Adopts its argument
+void Options::add(const UnicodeString& name, Option* value, UErrorCode& errorCode) {
+    U_ASSERT(contents.isValid());
+    contents->put(name, value, errorCode);
+}
+
+/* static */ Option* Option::createDouble(double val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Option* result = new Option(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Option* Option::createInt64(int64_t val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Option* result = new Option(val, Option::Type::INT64);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Option* Option::createLong(long val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Option* result = new Option(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Option* Option::createDate(UDate val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Option* result = new Option(val, Option::Type::DATE);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Option* Option::createString(const UnicodeString& val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Option* result = new Option(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+bool Options::empty() const {
+    U_ASSERT(contents.isValid());
+    return contents->count() == 0;
+}
+
+Options::Options(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    CHECK_ERROR(errorCode);
+    // The `contents` hashtable owns the values, but does not own the keys
+    contents->setValueDeleter(uprv_deleteUObject);
+}
+
+// Formatter/selector helpers
 
 static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -133,96 +299,13 @@ static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErr
     result = asNumber.getDouble(errorCode);
 }
 
+Option::~Option() {}
+
 // Specific formatter implementations
 
 // --------- Number
 
-/*
-static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
-    // Returns null if key is absent or is not a string
-    // (including if the key is an explicit NULL argument)
-    if (opts.containsKey(key)) {
-        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
-        U_ASSERT(val != nullptr);
-        switch (val->getType()) {
-            case FormattedPlaceholder::Type::STRING: {
-                result = val->getString();
-                exists = true;
-                return;
-            }
-            case FormattedPlaceholder::Type::DYNAMIC: {
-                if (val->getInput().getType() == Formattable::Type::kString) {
-                    result = val->getInput().getString();
-                    exists = true;
-                    return;
-                }
-                break;
-            }
-           case FormattedPlaceholder::Type::NUMBER:
-           case FormattedPlaceholder::Type::NULL_ARGUMENT: {
-               // Not a string key
-               break;
-           }
-        }
-    }
-    exists = false;
-}
-
-static void tryStringToNumber(const UnicodeString& s, int64_t& result) {
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    // Try to parse string as int
-    int64_t tempResult;
-    strToInt(s, tempResult, localErrorCode);
-    if (U_SUCCESS(localErrorCode)) {
-        result = tempResult;
-    }
-}
-
-static void getIntOpt(const Hashtable& opts, const UnicodeString& key, int64_t& result) {
-    // Doesn't modify `result` if `key` is absent or can't be coerced to a number
-    if (opts.containsKey(key)) {
-        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
-        U_ASSERT(val != nullptr);
-        switch (val->getType()) {
-            case FormattedPlaceholder::Type::STRING: {
-                tryStringToNumber(val->getString(), result);
-                return;
-            }
-            case FormattedPlaceholder::Type::DYNAMIC: {
-                switch (val->getInput().getType()) {
-                case Formattable::Type::kDouble: {
-                    result = (int64_t) val->getInput().getDouble();
-                    return;
-                }
-                case Formattable::Type::kLong: {
-                    result = (int64_t) val->getInput().getLong();
-                    return;
-                }
-                case Formattable::Type::kInt64: {
-                    result = val->getInput().getInt64();
-                    return;
-                }
-                case Formattable::Type::kString: {
-                    tryStringToNumber(val->getInput().getString(), result);
-                    return;
-                }
-                default: {
-                    // Can't be cast to number
-                    return;
-                }
-                }
-            }
-            case FormattedPlaceholder::Type::NUMBER:
-            case FormattedPlaceholder::Type::NULL_ARGUMENT: {
-                // Can't be cast to number
-                return;
-            }
-        }
-    }
-}
-*/
-
-number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const FunctionRegistry::Options& options, UErrorCode& status) {
+number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Options& options, UErrorCode& status) {
     NULL_ON_ERROR(status);
 
     number::UnlocalizedNumberFormatter nf;
@@ -230,18 +313,8 @@ number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const Funct
     if (options.getStringOption(UnicodeString("skeleton"), skeleton)) {
         nf = number::NumberFormatter::forSkeleton(skeleton, status);
     } else {
-        nf = number::NumberFormatter::with();
-        UnicodeString minFractionDigits;
-        if (options.getStringOption(UnicodeString("minimumFractionDigits"), minFractionDigits)) {
-            int64_t minFractionDigitsInt;
-            strToInt(minFractionDigits, minFractionDigitsInt, status);
-            if (U_FAILURE(status)) {
-                // option didn't parse as an int -- reset error and use default
-                status = U_ZERO_ERROR;
-            } else {
-                nf = nf.precision(number::Precision::minFraction(minFractionDigitsInt));
-            }
-        }
+        int64_t minFractionDigits = options.getIntOption(UnicodeString("minimumFractionDigits"), 0);
+        nf = number::NumberFormatter::with().precision(number::Precision::minFraction(minFractionDigits));
     }
     NULL_ON_ERROR(status);
     LocalPointer<number::LocalizedNumberFormatter> result(new number::LocalizedNumberFormatter(nf.locale(locale)));
@@ -289,7 +362,7 @@ static FormattedPlaceholder* stringAsNumber(Locale locale, const number::Localiz
 }
 
 // variableOptions = map of *resolved* options (strings)
-FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     // No argument => return "NaN"
@@ -354,9 +427,6 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
             }
             break;
         }
-        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
-            return notANumber(errorCode);
-        }
     }
     
     NULL_ON_ERROR(errorCode);
@@ -417,7 +487,7 @@ static void tryWithFormattable(const Locale& locale, const Formattable& value, d
     noMatch = false;
 }
 
-void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present
@@ -443,10 +513,6 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
         // Formattable: check if it's a number or parseable as a number
         case FormattedPlaceholder::Type::DYNAMIC: {
             tryWithFormattable(locale, valuePtr->getInput(), valToCheck, noMatch);
-        }
-        // These values never match; noMatch is already true
-        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
-            break;
         }
     }
 
@@ -531,7 +597,7 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, UE
     return result;
 }
 
-FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -582,8 +648,7 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
             break;
         }
         case FormattedPlaceholder::Type::STRING:
-        case FormattedPlaceholder::Type::NUMBER: 
-        case FormattedPlaceholder::Type::NULL_ARGUMENT: {
+        case FormattedPlaceholder::Type::NUMBER: {
             errorCode = U_FORMATTING_WARNING;
             return nullptr;
         }
@@ -602,7 +667,7 @@ Selector* StandardFunctions::TextFactory::createSelector(Locale locale, UErrorCo
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
@@ -653,7 +718,7 @@ Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, UE
 
 }
 
-FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* toFormat, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     (void) options; // unused parameter

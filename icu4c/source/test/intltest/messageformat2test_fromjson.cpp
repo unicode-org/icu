@@ -71,7 +71,7 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
 
     test.adoptInstead(testBuilder->setPattern("{hello {$place}}")
                                 .setExpected("hello {$place}")
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -318,7 +318,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     // Missing '$' before `bar`
     test.adoptInstead(testBuilder->setPattern("let bar = {|foo|} {{$bar}}")
                                 .setExpected("{$bar}")
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setExpectedWarning(U_SYNTAX_WARNING)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);

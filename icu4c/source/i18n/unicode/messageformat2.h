@@ -38,6 +38,50 @@ U_NAMESPACE_BEGIN namespace message2 {
  * @deprecated This API is for technology preview only.
  */
 
+// TODO: doc comments
+// Represents the arguments to a message
+class U_I18N_API MessageArguments : public UMemory {
+  public:
+    class Builder {
+    public:
+        Builder& add(const UnicodeString&, const UnicodeString&, UErrorCode&);
+        Builder& addDouble(const UnicodeString&, double, UErrorCode&);
+        Builder& addInt64(const UnicodeString&, int64_t, UErrorCode&);
+        Builder& addLong(const UnicodeString&, long, UErrorCode&);
+        Builder& addDate(const UnicodeString&, UDate, UErrorCode&);
+        // Adds an array of strings
+        // Adopts its argument
+        Builder& add(const UnicodeString&, const UnicodeString*, size_t, UErrorCode&);
+        // Does not adopt its UObject argument. Argument must be non-null
+        Builder& addObject(const UnicodeString&, UObject*, UErrorCode&);
+        // Does not invalidate the builder
+        MessageArguments* build(UErrorCode&) const;
+    private:
+        friend class MessageArguments;
+        Builder(UErrorCode&);
+        Builder& add(const UnicodeString&, Formattable*, UErrorCode&);
+        LocalPointer<Hashtable> contents;
+        // Keep a separate hash table for objects, which does not
+        // own the values
+        // This is because a Formattable that wraps an object can't
+        // be copied
+        LocalPointer<Hashtable> objectContents;
+    }; // class MessageArguments::Builder
+    static Builder* builder(UErrorCode&);
+  private:
+    friend class MessageFormatter;
+    bool has(const UnicodeString&) const;
+    const Formattable* get(const UnicodeString&) const;
+
+    MessageArguments& add(const UnicodeString&, Formattable*, UErrorCode&);
+    MessageArguments(Hashtable* c, Hashtable* o) : contents(c), objectContents(o) {}
+    LocalPointer<Hashtable> contents;
+    // Keep a separate hash table for objects, which does not
+    // own the values
+    LocalPointer<Hashtable> objectContents;
+}; // class MessageArguments
+
+
 // Note: This class does not currently inherit from the existing
 // `Format` class.
 class U_I18N_API MessageFormatter : UMemory {
@@ -50,7 +94,7 @@ public:
      */
     virtual ~MessageFormatter();
 
-    virtual void formatToString(const Hashtable& arguments, UErrorCode &status, UnicodeString &result) const;
+    virtual void formatToString(const MessageArguments& arguments, UErrorCode &status, UnicodeString &result) const;
  
     Locale getLocale() const { return locale; }
     void getPattern(UnicodeString& result) const {
@@ -153,12 +197,12 @@ public:
         bool hasVar(const VariableName&) const;
         const Formattable* getVar(const VariableName& var) const;
 
-        static Context* create(const MessageFormatter& mf, const Hashtable& args, UErrorCode& errorCode);
+        static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
         private:
-        Context(const MessageFormatter& mf, const Hashtable& args) : parent(mf), arguments(args) {}
+        Context(const MessageFormatter& mf, const MessageArguments& args) : parent(mf), arguments(args) {}
 
         const MessageFormatter& parent;
-        const Hashtable& arguments; // External message arguments
+        const MessageArguments& arguments; // External message arguments
     };
 
     // Parser class (private)
@@ -413,19 +457,6 @@ public:
             }
             return result.orphan();
         }
-        // NULL_ARGUMENT constructor
-        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, UErrorCode& status) {
-            NULL_ON_ERROR(status);
-     
-            LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(status));
-            NULL_ON_ERROR(status);
-            LocalPointer<FormattedPlaceholderWithFallback> result(new FormattedPlaceholderWithFallback(fallbackString, fp.orphan()));
-            if (!result.isValid()) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return nullptr;
-            }
-            return result.orphan();
-        }
         // DYNAMIC constructor
         static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const Formattable* f, UErrorCode& status) {
             NULL_ON_ERROR(status);
@@ -540,8 +571,7 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
     // context.
     // The selector function is `:identity` for a simple expression,
     // and the looked-up selector function otherwise.
-    // The `Hashtable` (UnicodeString -> UnicodeString)
-    // is the result of resolving the options
+    // The `FunctionRegistry::Options` is the result of resolving the options
     // in the annotation.
     // The `operand` is the result of resolving the operand.
     class ResolvedExpression : public UMemory {
@@ -601,10 +631,10 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      }
 
      // Checking for resolution errors
-     void checkDeclarations(const Hashtable&, Environment*&, UErrorCode&) const;
-     void check(const Hashtable&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
-     void check(const Hashtable&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
-     void check(const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     void checkDeclarations(const MessageArguments&, Environment*&, UErrorCode&) const;
+     void check(const MessageArguments&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     void check(const MessageArguments&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+     void check(const MessageArguments&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
 
      // The locale this MessageFormatter was created with
      const Locale locale;

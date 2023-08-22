@@ -129,6 +129,7 @@ Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode
     return result;
 }
 
+/*
 // TODO: don't duplicate this
 static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
     // Returns null if key is absent or is not a string
@@ -151,8 +152,9 @@ static void getStringOpt(const Hashtable& opts, const UnicodeString& key, Unicod
     }
     exists = false;
 }
+*/
 
-FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions,  UErrorCode& errorCode) const {
+FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -170,8 +172,8 @@ FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, con
 */
     UnicodeString formalityOpt, lengthOpt;
     bool hasFormality, hasLength;
-    getStringOpt(variableOptions, UnicodeString("formality"), formalityOpt, hasFormality);
-    getStringOpt(variableOptions, UnicodeString("length"), lengthOpt, hasLength);
+    hasFormality = options.getStringOption(UnicodeString("formality"), formalityOpt);
+    hasLength = options.getStringOption(UnicodeString("length"), lengthOpt);
 
     bool useFormal = hasFormality && formalityOpt == "formal";
     UnicodeString length = hasLength ? lengthOpt : "short";
@@ -294,7 +296,7 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, UErrorCo
     result += postfix;
 }
 
-FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -312,8 +314,7 @@ FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, c
         case Formattable::Type::kString: {
             const UnicodeString& in = toFormat.getString();
             UnicodeString grammarCase;
-            bool hasCase = false;
-            getStringOpt(variableOptions, "case", grammarCase, hasCase);
+            bool hasCase = options.getStringOption(UnicodeString("case"), grammarCase);
             if (hasCase && (grammarCase == "dative" || grammarCase == "genitive")) {
                 getDativeAndGenitive(in, result);
             } else {
@@ -423,7 +424,7 @@ Formatter* ListFormatterFactory::createFormatter(Locale locale, UErrorCode& erro
     return result;
 }
 
-FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -435,9 +436,8 @@ FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg,
     // Assumes arg is not-yet-formatted
     const Formattable& toFormat = arg->getInput();
 
-    bool hasType;
     UnicodeString optType;
-    getStringOpt(variableOptions, "type", optType, hasType);
+    bool hasType = options.getStringOption(UnicodeString("type"), optType);
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
     if (hasType) {
         if (optType == "OR") {
@@ -446,9 +446,8 @@ FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg,
             type = UListFormatterType::ULISTFMT_TYPE_UNITS;
         }
     }
-    bool hasWidth;
     UnicodeString optWidth;
-    getStringOpt(variableOptions, "width", optWidth, hasWidth);
+    bool hasWidth = options.getStringOption(UnicodeString("width"), optWidth);
     UListFormatterWidth width = UListFormatterWidth::ULISTFMT_WIDTH_WIDE;
     if (hasWidth) {
         if (optWidth == "SHORT") {
@@ -670,59 +669,57 @@ Formatter* ResourceManagerFactory::createFormatter(Locale locale, UErrorCode& er
         return nullptr;
     }
 
-    // Locale not used
-    (void) locale;
-
-    Formatter* result = new ResourceManager();
+    Formatter* result = new ResourceManager(locale);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-static Hashtable* localToGlobal(const Hashtable& variableOptions, UErrorCode& errorCode) {
+using Arguments = MessageArguments;
+using Options = FunctionRegistry::Options;
+using Option = FunctionRegistry::Option;
+
+static Arguments* localToGlobal(const Options& options, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<Hashtable> result(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    LocalPointer<Arguments::Builder> args(Arguments::builder(errorCode));
     NULL_ON_ERROR(errorCode);
 
-    int32_t pos = UHASH_FIRST;
-    LocalPointer<Formattable> argValue;
-    while(true) {
-        const UHashElement* element = variableOptions.nextElement(pos);
-        if (element == nullptr) {
+    int32_t pos = Options::FIRST;
+    UnicodeString optionName;
+    while (true) {
+        const Option* optionValue = options.nextElement(pos, optionName);
+        if (optionValue == nullptr) {
             break;
         }
-        FormattedPlaceholder* val = (FormattedPlaceholder*) element->value.pointer;
-        if (val == nullptr) {
-            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-            return nullptr;
-        }
-        switch (val->getType()) {
-            case FormattedPlaceholder::Type::STRING: {
-                argValue.adoptInstead(new Formattable(val->getString()));
-                if (!argValue.isValid()) {
-                    errorCode = U_MEMORY_ALLOCATION_ERROR;
-                    return nullptr;
-                }
+        switch (optionValue->getType()) {
+            case Option::STRING: {
+                // add it as a string arg
+                args->add(optionName, optionValue->getString(), errorCode);
                 break;
             }
-            default: {
-                argValue.adoptInstead(new Formattable(val->getInput()));
+            case Option::DOUBLE: {
+                args->addDouble(optionName, optionValue->getDouble(), errorCode);
                 break;
             }
-        }
-        UnicodeString* k = (UnicodeString*) element->key.pointer;
-        if (k == nullptr) {
-            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-            return nullptr;
-        }
-        result->put(*k, argValue.orphan(), errorCode);
-        NULL_ON_ERROR(errorCode);
+            case Option::INT64: {
+                args->addInt64(optionName, optionValue->getInt64(), errorCode);
+                break;
+            }
+            case Option::LONG: {
+                args->addLong(optionName, optionValue->getLong(), errorCode);
+                break;
+            }
+            case Option::DATE: {
+                args->addDate(optionName, optionValue->getDate(), errorCode);
+                break;
+            }
+            }
     }
-    return result.orphan();
+    return args->build(errorCode);
 }
 
-FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -733,9 +730,8 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const H
     // Assumes arg is not-yet-formatted
     const UnicodeString& in = arg->getInput().getString();
 
-    bool hasPropsStr;
     UnicodeString propsStr;
-    getStringOpt(variableOptions, "resbundle", propsStr, hasPropsStr);
+    bool hasPropsStr = options.getStringOption(UnicodeString("resbundle"), propsStr);
     // If properties were provided, look up the given string in the properties,
     // yielding a message
     if (hasPropsStr) {
@@ -769,7 +765,7 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const H
 
         // variableOptions maps strings to FormattedPlaceholder*, but
         // external arguments maps strings to Formattable*
-        LocalPointer<Hashtable> arguments(localToGlobal(variableOptions, errorCode));
+        LocalPointer<Arguments> arguments(localToGlobal(options, errorCode));
         NULL_ON_ERROR(errorCode);
 
         // TODO: add formatToParts too, and use that here?

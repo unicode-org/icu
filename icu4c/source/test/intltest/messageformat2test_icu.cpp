@@ -185,7 +185,7 @@ void TestMessageFormat2::testMf1Behavior(TestCase::Builder& testBuilder, IcuTest
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    test.adoptInstead(testBuilder.clearArguments()
+    test.adoptInstead(testBuilder.clearArguments(errorCode)
                       .setExpectSuccess()
                       .setArgument(goodArgumentsNames[0], user, errorCode)
                       .setDateArgument(goodArgumentsNames[1], testDate, errorCode)

@@ -79,13 +79,13 @@ void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, Icu
 
     // Missing date argument
     test.adoptInstead(testBuilder.setPattern(message)
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setArgument("name", "John", errorCode)
                                 .setExpected("Hello John, today is {$today}.")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setPattern(message)
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setDateArgument("today", TEST_DATE, errorCode)
                                 .setExpected("Hello {$name}, today is Wednesday, November 23, 2022.")
                                 .build(errorCode));
@@ -93,7 +93,7 @@ void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, Icu
 
     // Both arguments missing
     test.adoptInstead(testBuilder.setPattern(message)
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setExpected("Hello {$name}, today is {$today}.")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -116,7 +116,7 @@ void TestMessageFormat2::testDefaultLocale(TestCase::Builder& testBuilder, IcuTe
     testBuilder.setPattern(message);
 
     LocalPointer<TestCase> test;
-    test.adoptInstead(testBuilder.clearArguments()
+    test.adoptInstead(testBuilder.clearArguments(errorCode)
                                 .setDateArgument("date", TEST_DATE, errorCode)
                                 .setExpected(expectedEn)
                                 .build(errorCode));
@@ -156,7 +156,7 @@ void TestMessageFormat2::testSpecialPluralWithDecimals(TestCase::Builder& testBu
     LocalPointer<TestCase> test;
 
     test.adoptInstead(testBuilder.setPattern(message)
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setArgument("count", (long) 1, errorCode)
                                 .setExpected("I have 1 dollar.")
                                 .setLocale(Locale("en", "US"), errorCode)
@@ -186,7 +186,7 @@ void TestMessageFormat2::testDefaultFunctionAndOptions(TestCase::Builder& testBu
     LocalPointer<TestCase> test;
 
     test.adoptInstead(testBuilder.setPattern("{Testing date formatting: {$date}.}")
-                                .clearArguments()
+                                .clearArguments(errorCode)
                                 .setDateArgument("date", TEST_DATE, errorCode)
                                 .setExpected("Testing date formatting: 23.11.2022, 19:42.")
                                 .setLocale(Locale("ro"), errorCode)
@@ -469,28 +469,7 @@ Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCod
     return result.orphan();
 }
 
-// TODO: copy-pasted
-static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
-    // Returns null if key is absent or is not a string
-    if (opts.containsKey(key)) {
-        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
-        U_ASSERT(val != nullptr);
-        if (val->getType() == FormattedPlaceholder::Type::STRING) {
-            result = val->getString();
-            exists = true;
-            return;
-        }
-        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC && val->getInput().getType() == Formattable::Type::kString) {
-            // TODO: this is why it would be good to not have two different string representations
-            result = val->getInput().getString();
-            exists = true;
-            return;
-        }
-    }
-    exists = false;
-}
-
-FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, const Hashtable& variableOptions, UErrorCode& errorCode) const {
+FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     if (arg == nullptr) {
@@ -503,12 +482,10 @@ FormattedPlaceholder* TemperatureFormatter::format(FormattedPlaceholder* arg, co
     counter.formatCount++;
 
     UnicodeString unit;
-    bool unitExists = false;
-    getStringOpt(variableOptions, "unit", unit, unitExists);
+    bool unitExists = options.getStringOption(UnicodeString("unit"), unit);
     U_ASSERT(unitExists);
     UnicodeString skeleton;
-    bool skeletonExists = false;
-    getStringOpt(variableOptions, "skeleton", skeleton, skeletonExists);
+    bool skeletonExists = options.getStringOption(UnicodeString("skeleton"), skeleton);
 
     number::LocalizedNumberFormatter* realNfCached = (number::LocalizedNumberFormatter*) cachedFormatters->get(unit);
     number::LocalizedNumberFormatter realNf;
@@ -626,14 +603,16 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
 
     const size_t maxCount = 10;
     char expected[20];
-    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
+    LocalPointer<MessageArguments::Builder> argumentsBuilder(MessageArguments::builder(errorCode));
+    LocalPointer<MessageArguments> arguments;
     CHECK_ERROR(errorCode);
     for (size_t count = 0; count < maxCount; count++) {
         long arg = (long) count;
         snprintf(expected, sizeof(expected), "Testing %zu°C.", count);
 
-        putFormattableArg(*arguments, countKey, arg, errorCode);
-        putFormattableArg(*arguments, unitKey, "C", errorCode);
+        argumentsBuilder->addLong(countKey, arg, errorCode);
+        argumentsBuilder->add(unitKey, "C", errorCode);
+        arguments.adoptInstead(argumentsBuilder->build(errorCode));
         CHECK_ERROR(errorCode);
 
         mf->formatToString(*arguments, errorCode, result);
@@ -641,8 +620,9 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
         result.remove();
 
         snprintf(expected, sizeof(expected), "Testing %zu°F.", count);
-        putFormattableArg(*arguments, countKey, arg, errorCode);
-        putFormattableArg(*arguments, unitKey, "F", errorCode);
+        argumentsBuilder->addLong(countKey, arg, errorCode);
+        argumentsBuilder->add(unitKey, "F", errorCode);
+        arguments.adoptInstead(argumentsBuilder->build(errorCode));
         CHECK_ERROR(errorCode);
         
         mf->formatToString(*arguments, errorCode, result);
@@ -656,29 +636,34 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
     assertEquals("cached formatter", 1, counter->cFormatterCount);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.0, errorCode);
-    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.0, errorCode);
+    argumentsBuilder->add(unitKey, "C", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12°C.", result);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.5, errorCode);
-    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.5, errorCode);
+    argumentsBuilder->add(unitKey, "F", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12.50°F.", result);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.54, errorCode);
-    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.54, errorCode);
+    argumentsBuilder->add(unitKey, "C", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12.54°C.", result);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.54321, errorCode);
-    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.54321, errorCode);
+    argumentsBuilder->add(unitKey, "F", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
+
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12.54°F.", result);
@@ -689,29 +674,36 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
     mf.adoptInstead(mfBuilder->build(parseError, errorCode));
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.0, errorCode);
-    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.0, errorCode);
+    argumentsBuilder->add(unitKey, "C", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
+
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12°C.", result);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.5, errorCode);
-    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.5, errorCode);
+    argumentsBuilder->add(unitKey, "F", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
+
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12.5°F.", result);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.54, errorCode);
-    putFormattableArg(*arguments, unitKey, "C", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.54, errorCode);
+    argumentsBuilder->add(unitKey, "C", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
+
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12.5°C.", result);
 
     result.remove();
-    putFormattableArg(*arguments, countKey, 12.54321, errorCode);
-    putFormattableArg(*arguments, unitKey, "F", errorCode);
+    argumentsBuilder->addDouble(countKey, 12.54321, errorCode);
+    argumentsBuilder->add(unitKey, "F", errorCode);
+    arguments.adoptInstead(argumentsBuilder->build(errorCode));
     CHECK_ERROR(errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("cached formatter", "Testing 12.5°F.", result);

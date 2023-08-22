@@ -67,6 +67,57 @@ class U_I18N_API FunctionRegistry : UMemory {
     const SelectorFactory* getSelector(const FunctionName& selectorName) const;
     // Not sure yet about the others from icu4j
 
+    class U_COMMON_API Option : public UMemory {
+        public:
+        enum Type {
+            STRING,
+            DOUBLE,
+            INT64,
+            LONG,
+            DATE          
+        };
+        Type getType() const { return type; }
+        const UnicodeString& getString() const {
+            U_ASSERT(type == STRING);
+            return string;
+        }
+        int64_t getInt64() const {
+            U_ASSERT(type == INT64);
+            return static_cast<int64_t>(num);
+        }
+        int64_t getLong() const {
+            U_ASSERT(type == LONG);
+            return static_cast<long>(num);
+        }
+        UDate getDate() const {
+            U_ASSERT(type == DATE);
+            return ((UDate) num);
+        }
+        double getDouble() const {
+            U_ASSERT(type == DOUBLE);
+            return num;
+        }
+        virtual ~Option();
+        private:
+        friend class MessageFormatter;
+
+        static Option* createDate(UDate, UErrorCode&);
+        static Option* createDouble(double, UErrorCode&);
+        static Option* createLong(long, UErrorCode&);
+        static Option* createInt64(int64_t, UErrorCode&);
+        static Option* createString(const UnicodeString&, UErrorCode&);
+        Type type;
+        union {
+            UnicodeString string;
+            double num;
+        };
+        Option(double val) : type(Type::DOUBLE), num(val) {}
+        Option(long val) : type(Type::LONG), num(val) {}
+        Option(int64_t val, Type t) : type(t), num(val) {}
+        Option(UDate val, Type t) : type(t), num(val) {}
+        Option(const UnicodeString val) : type(Type::STRING), string(val) {}
+    }; // class FunctionOption
+
     class U_COMMON_API Options : public UMemory {
         // Represents the options for a function
         public:
@@ -75,14 +126,17 @@ class U_I18N_API FunctionRegistry : UMemory {
         int64_t getIntOption(const UnicodeString&, int64_t) const;
         bool getStringOption(const UnicodeString&, UnicodeString&) const;
         bool empty() const;
+        static const int32_t FIRST = UHASH_FIRST;
+        const Option* nextElement(int32_t&, UnicodeString&) const;
 
         private:
         friend class MessageFormatter;
-        static Options* create(UErrorCode&);
-        void put(const UnicodeString&, FormattedPlaceholder*, UErrorCode&);
+        Options(UErrorCode&);
+        void add(const UnicodeString&, Option*, UErrorCode&);
 
+        // Values are FunctionOption*
         LocalPointer<Hashtable> contents;
-    };
+    }; // class Option
 
     class Builder {
       private:

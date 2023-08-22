@@ -57,17 +57,15 @@ class FormattedPlaceholder : public UMemory {
     }
 
     /*
-      Four types:
+      Three types:
       STRING => plain string with no metadata
       NUMBER => FormattedNumber
       DYNAMIC => Formattable -- a ready-to-format thing that hasn't been formatted yet
-      NULL_ARGUMENT => a null value -- this can only happen if a message argument was set to nullptr
      */
     enum Type {
         NUMBER,
         STRING,
-        DYNAMIC,
-        NULL_ARGUMENT,
+        DYNAMIC
     };
 
     Type getType() const { return type; }
@@ -87,22 +85,10 @@ class FormattedPlaceholder : public UMemory {
         return std::move(num);
     }
     const Formattable& getInput() const {
-        U_ASSERT(hasInput());
         return *input;
     }
     const Formattable* aliasInput() const {
-        U_ASSERT(hasInput());
         return input;
-    }
-
-    // Null argument constructor (NULL_ARGUMENT)
-    static FormattedPlaceholder* create(UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        FormattedPlaceholder* result(new FormattedPlaceholder());
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
     }
 
     // Creates a formatted number (NUMBER)
@@ -203,17 +189,6 @@ class FormattedPlaceholder : public UMemory {
         return FormattedPlaceholder::create(toFormat, result, errorCode);
     }
 
-    bool hasInput() const {
-        switch (getType()) {
-            case Type::NULL_ARGUMENT: {
-                return false;
-            }
-            default: {
-                return true;
-            }
-        }
-    }
-
     // All constructors adopt their arguments
     FormattedPlaceholder(const Formattable* f, UnicodeString s) : type(Type::STRING), string(s), input(f) {
         U_ASSERT(f != nullptr);
@@ -223,7 +198,6 @@ class FormattedPlaceholder : public UMemory {
         U_ASSERT(f != nullptr);
     }
     FormattedPlaceholder(const Formattable* f) : type(Type::DYNAMIC), input(f) { U_ASSERT(f != nullptr); }
-    FormattedPlaceholder() : type(Type::NULL_ARGUMENT), input(nullptr) {}
 
     Type type;
     // ?? - Should this be a Formattable or a FormattedValue?
@@ -238,7 +212,6 @@ class FormattedPlaceholder : public UMemory {
     // This does not own input (it may be in the global environment)
     // TODO: since Formattables are immutable, can we use a reference here instead?
     // (not if it means a Formattable would have to be copied)
-    // Null if and only if the type is NULL_ARGUMENT
     const Formattable* input;
 };
 

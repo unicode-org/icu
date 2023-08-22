@@ -408,9 +408,9 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
     LocalPointer<MessageFormatter> mf;
 
-    LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    LocalPointer<Formattable> argVal(new Formattable(person));
-    arguments->put("name", argVal.orphan(), errorCode);
+    LocalPointer<MessageArguments::Builder> argumentsBuilder(MessageArguments::builder(errorCode));
+    argumentsBuilder->addObject("name", person, errorCode);
+    LocalPointer<MessageArguments> arguments(argumentsBuilder->build(errorCode));
 
     UnicodeString result;
 
@@ -470,6 +470,7 @@ void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseErro
     }
 }
 
+/*
 // Pattern is expected to result in a runtime error
 void TestMessageFormat2::testMessageFormatting(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
     UnicodeString result;
@@ -481,6 +482,12 @@ void TestMessageFormat2::testMessageFormatting(const UnicodeString& s, UParseErr
     if (U_SUCCESS(errorCode)) {
       builder->setPattern(s, errorCode);
       LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
+
+    LocalPointer<MessageArguments::Builder> argumentsBuilder(MessageArguments::builder(errorCode));
+    LocalPointer<Formattable> argVal(new Formattable(person));
+    argumentsBuilder->add("name", argVal.orphan(), errorCode);
+    LocalPointer<MessageArguments> arguments(argumentsBuilder->build(errorCode));
+
       LocalPointer<Hashtable> arguments(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
       if (U_FAILURE(errorCode)) {
           return;
@@ -489,6 +496,7 @@ void TestMessageFormat2::testMessageFormatting(const UnicodeString& s, UParseErr
       mf->formatToString(*arguments, errorCode, result);
     }
 }
+*/
 
 /*
  Tests a single pattern, which is expected to be valid.
@@ -619,26 +627,6 @@ void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const 
     }
 
     TestUtils::runTestCase(*this, *testBuilder->build(errorCode), errorCode);
-    
-/*
-
-
-    testMessageFormatter(s, parseError, errorCode);
-
-    if (!U_FAILURE(errorCode)) {
-        dataerrln("TestMessageFormat2::testSemanticallyInvalidPattern #%d - expected test to fail, but it passed", testNum);
-        logln(UnicodeString("TestMessageFormat2::testSemanticallyInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
-        return;
-    } else if (errorCode != expectedErrorCode) {
-        dataerrln("TestMessageFormat2::testInvalidPattern #%d - expected test to fail with #%d, but it failed with a different error", expectedErrorCode, testNum);
-        logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
-        return;
-
-    } else {
-        errorCode.reset();
-    }
-*/
-
 }
 
 /*
@@ -653,9 +641,20 @@ void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const 
  TODO: For now, the line and character numbers are not checked
 */
 void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
-    UParseError parseError;
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+    char testName[50];
+    snprintf(testName, sizeof(testName), "testInvalidPattern (errors): %u", testNum);
 
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+
+    LocalPointer<TestCase> test(testBuilder->setName(testName)
+                                .setPattern(s)
+                                .setExpectedError(expectedErrorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+
+/*
     testMessageFormatting(s, parseError, errorCode);
 
     if (!U_FAILURE(errorCode)) {
@@ -670,6 +669,7 @@ void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const Unicode
     } else {
         errorCode.reset();
     }
+*/
 }
 
 /*
@@ -684,10 +684,19 @@ void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const Unicode
  TODO: For now, the line and character numbers are not checked
 */
 void TestMessageFormat2::testRuntimeWarningPattern(uint32_t testNum, const UnicodeString& s, const UnicodeString& expectedResult, UErrorCode expectedErrorCode) {
-    UParseError parseError;
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
+    char testName[50];
+    snprintf(testName, sizeof(testName), "testInvalidPattern (warnings): %u", testNum);
 
-    UnicodeString result;
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    LocalPointer<TestCase> test(testBuilder->setName(testName)
+                                .setPattern(s)
+                                .setExpected(expectedResult)
+                                .setExpectedWarning(expectedErrorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+/*
 
     testMessageFormatting(s, parseError, result, errorCode);
 
@@ -712,6 +721,7 @@ void TestMessageFormat2::testRuntimeWarningPattern(uint32_t testNum, const Unico
         logln(UnicodeString("TestMessageFormat2::testInvalidPattern failed test ") + s + UnicodeString(" with error code ")+(int32_t)errorCode);
         return;
     }
+*/
 }
 
 void TestMessageFormat2::testDataModelErrors() {

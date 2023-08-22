@@ -16,7 +16,7 @@ class TestCase : public UMemory {
     const UnicodeString pattern;
     const Locale locale;
     // Not owned by this!
-    const Hashtable* arguments;
+    const MessageArguments* arguments;
 
     private:
     const UErrorCode expectedError;
@@ -81,14 +81,18 @@ class TestCase : public UMemory {
         Builder& setPattern(UnicodeString pat) { pattern = pat; return *this; }
         Builder& setArgument(const UnicodeString& k, const UnicodeString& val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
-
+            arguments->add(k, val, errorCode);
+            return *this;
+/*
             Formattable* valPtr(new Formattable(val));
             return setArgument(k, valPtr, errorCode);
+*/
         }
         Builder& setArgument(const UnicodeString& k, const UnicodeString* val, size_t count, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
             U_ASSERT(val != nullptr);
-
+            
+/*
             LocalArray<Formattable> arr(new Formattable[count]);
             if (!arr.isValid()) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -97,31 +101,55 @@ class TestCase : public UMemory {
             for (size_t i = 0; i < count; i++) {
                 arr[i] = Formattable(val[i]);
             }
-            Formattable* valPtr(new Formattable(arr.getAlias(), count));
-            return setArgument(k, valPtr, errorCode);
+*/
+
+/*
+            Formattable* valPtr(new Formattable(val, count));
+            if (valPtr == nullptr) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return *this;
+            }
+*/
+            arguments->add(k, val, count, errorCode);
+            return *this;
         }
+
         Builder& setArgument(const UnicodeString& k, double val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
+            arguments->addDouble(k, val, errorCode);
+            return *this;
+/*
             Formattable* valPtr(new Formattable(val));
             return setArgument(k, valPtr, errorCode);
+*/
         }
         Builder& setArgument(const UnicodeString& k, long val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
+            arguments->addLong(k, val, errorCode);
+            return *this;
+/*
             Formattable* valPtr(new Formattable(val));
             return setArgument(k, valPtr, errorCode);
+*/
         }
+/*
         Builder& setNullArgument(const UnicodeString& k, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
             return setArgument(k, (Formattable*) nullptr, errorCode);
         }
+*/
         Builder& setDateArgument(const UnicodeString& k, UDate date, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
+            arguments->addDate(k, date, errorCode);
+/*
             Formattable* valPtr(new Formattable(Formattable(date, Formattable::kIsDate)));
             return setArgument(k, valPtr, errorCode);
+*/
+            return *this;
         }
 
         // val has to be uniquely owned because the copy constructor for
@@ -130,12 +158,17 @@ class TestCase : public UMemory {
             THIS_ON_ERROR(errorCode);
             U_ASSERT(val != nullptr);
 
+            arguments->addObject(k, val, errorCode);
+            return *this;
+/*
             Formattable* valPtr(new Formattable(val));
             return setArgument(k, valPtr, errorCode);
+*/
         }
-        Builder& clearArguments() {
+        Builder& clearArguments(UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
             if (arguments.isValid()) {
-                arguments->removeAll();
+                arguments.adoptInstead(MessageArguments::builder(errorCode));
             };
             return *this;
         }
@@ -199,7 +232,7 @@ class TestCase : public UMemory {
         UnicodeString testName;
         UnicodeString pattern;
         LocalPointer<Locale> locale;
-        LocalPointer<Hashtable> arguments;
+        LocalPointer<MessageArguments::Builder> arguments;
         bool hasExpectedOutput;
         UnicodeString expected;
         UErrorCode expectedError;
@@ -210,28 +243,7 @@ class TestCase : public UMemory {
         bool ignoreError;
         LocalPointer<FunctionRegistry> functionRegistry;
 
-        Builder& setArgument(const UnicodeString& k, Formattable* val, UErrorCode& errorCode) {
-            THIS_ON_ERROR(errorCode);
-
-            if (!arguments.isValid()) {
-                arguments.adoptInstead(initArgs(errorCode));
-                THIS_ON_ERROR(errorCode);
-            }
-            // val may be null
-            arguments->put(k, val, errorCode);
-            return *this;
-        }
-
-        static Hashtable* initArgs(UErrorCode& errorCode) {
-            NULL_ON_ERROR(errorCode);
-            Hashtable* result = new Hashtable(uhash_compareUnicodeString, nullptr, errorCode);
-            if (result == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-
-        Builder() : pattern(""), hasExpectedOutput(false), expected(""), expectedError(U_ZERO_ERROR), expectedWarning(U_ZERO_ERROR), hasLineNumberAndOffset(false), ignoreError(false) {}
+        Builder(UErrorCode& errorCode) : pattern(""), arguments(MessageArguments::builder(errorCode)), hasExpectedOutput(false), expected(""), expectedError(U_ZERO_ERROR), expectedWarning(U_ZERO_ERROR), hasLineNumberAndOffset(false), ignoreError(false) {}
     };
 
     private:
@@ -239,7 +251,7 @@ class TestCase : public UMemory {
         testName(builder.testName),
         pattern(builder.pattern),
         locale(!builder.locale.isValid() ? Locale::getDefault() : *builder.locale),
-        arguments(builder.arguments.isValid() ? builder.arguments.getAlias() : Builder::initArgs(errorCode)),
+        arguments(builder.arguments->build(errorCode)),
         expectedError(builder.expectedError),
         expectedWarning(builder.expectedWarning),
         hasExpectedOutput(builder.hasExpectedOutput),
@@ -249,6 +261,7 @@ class TestCase : public UMemory {
         offset(builder.hasLineNumberAndOffset ? builder.offset : 0),
         ignoreError(builder.ignoreError),
         functionRegistry(builder.functionRegistry.getAlias()) {
+        U_ASSERT(builder.arguments.isValid());
         // If an error is not expected, then the expected
         // output should be present
         U_ASSERT(expectFailure() || expectWarning() || hasExpectedOutput);
@@ -256,11 +269,7 @@ class TestCase : public UMemory {
     public:
     static TestCase::Builder* builder(UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
-        Builder* result = new Builder();
-        if (result == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
+        return new Builder(errorCode);
     }
 }; // class TestCase
 
