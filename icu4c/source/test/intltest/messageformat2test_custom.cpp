@@ -129,31 +129,6 @@ Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode
     return result;
 }
 
-/*
-// TODO: don't duplicate this
-static void getStringOpt(const Hashtable& opts, const UnicodeString& key, UnicodeString& result, bool& exists) {
-    // Returns null if key is absent or is not a string
-
-    // Handle both cases since this may be a Formattable value without previous
-    // formatting applied
-    if (opts.containsKey(key)) {
-        FormattedPlaceholder* val = (FormattedPlaceholder*) opts.get(key);
-        U_ASSERT(val != nullptr);
-        if (val->getType() == FormattedPlaceholder::Type::STRING) {
-            result = val->getString();
-            exists = true;
-            return;
-        }
-        if (val->getType() == FormattedPlaceholder::Type::DYNAMIC && val->getInput().getType() == Formattable::Type::kString) {
-            result = val->getInput().getString();
-            exists = true;
-            return;
-        }
-    }
-    exists = false;
-}
-*/
-
 FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
@@ -751,16 +726,6 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const O
                                           ->setPattern(*msg, errorCode)
                                           .build(parseErr, errorCode));
         NULL_ON_ERROR(errorCode);
-/*
-        // We want to include any variable options for `msgRef` as fixed
-        // options for the contained message. So create a new map
-        // and add all arguments and variable options into it
-        // Create a new map and add both the arguments and variable options into it
-        LocalPointer<Hashtable> mergedOptions(new Hashtable(compareVariableName, nullptr, errorCode));
-        NULL_ON_ERROR(errorCode);
-        addAll(fixedOptions, *mergedOptions, errorCode);
-        addAll(variableOptions, *mergedOptions, errorCode);
-*/
         UnicodeString result;
 
         // variableOptions maps strings to FormattedPlaceholder*, but

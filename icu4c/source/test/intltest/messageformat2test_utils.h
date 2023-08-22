@@ -83,33 +83,10 @@ class TestCase : public UMemory {
             THIS_ON_ERROR(errorCode);
             arguments->add(k, val, errorCode);
             return *this;
-/*
-            Formattable* valPtr(new Formattable(val));
-            return setArgument(k, valPtr, errorCode);
-*/
         }
         Builder& setArgument(const UnicodeString& k, const UnicodeString* val, size_t count, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
             U_ASSERT(val != nullptr);
-            
-/*
-            LocalArray<Formattable> arr(new Formattable[count]);
-            if (!arr.isValid()) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return *this;
-            }
-            for (size_t i = 0; i < count; i++) {
-                arr[i] = Formattable(val[i]);
-            }
-*/
-
-/*
-            Formattable* valPtr(new Formattable(val, count));
-            if (valPtr == nullptr) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return *this;
-            }
-*/
             arguments->add(k, val, count, errorCode);
             return *this;
         }
@@ -119,36 +96,17 @@ class TestCase : public UMemory {
 
             arguments->addDouble(k, val, errorCode);
             return *this;
-/*
-            Formattable* valPtr(new Formattable(val));
-            return setArgument(k, valPtr, errorCode);
-*/
         }
         Builder& setArgument(const UnicodeString& k, long val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
             arguments->addLong(k, val, errorCode);
             return *this;
-/*
-            Formattable* valPtr(new Formattable(val));
-            return setArgument(k, valPtr, errorCode);
-*/
         }
-/*
-        Builder& setNullArgument(const UnicodeString& k, UErrorCode& errorCode) {
-            THIS_ON_ERROR(errorCode);
-
-            return setArgument(k, (Formattable*) nullptr, errorCode);
-        }
-*/
         Builder& setDateArgument(const UnicodeString& k, UDate date, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
             arguments->addDate(k, date, errorCode);
-/*
-            Formattable* valPtr(new Formattable(Formattable(date, Formattable::kIsDate)));
-            return setArgument(k, valPtr, errorCode);
-*/
             return *this;
         }
 
@@ -160,10 +118,6 @@ class TestCase : public UMemory {
 
             arguments->addObject(k, val, errorCode);
             return *this;
-/*
-            Formattable* valPtr(new Formattable(val));
-            return setArgument(k, valPtr, errorCode);
-*/
         }
         Builder& clearArguments(UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);

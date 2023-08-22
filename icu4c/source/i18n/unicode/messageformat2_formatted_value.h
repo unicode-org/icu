@@ -195,8 +195,6 @@ class FormattedPlaceholder : public UMemory {
     FormattedPlaceholder(const Formattable& f) : type(Type::DYNAMIC), input(f) {}
 
     Type type;
-    // ?? - Should this be a Formattable or a FormattedValue?
-    // Maybe this shouldn't allow a Formattable, only a string or number (and other types if we want)?
 
     // If `type` is not DYNAMIC, then the contents are either a formatted string,
     // or a formatted number
@@ -204,9 +202,6 @@ class FormattedPlaceholder : public UMemory {
         UnicodeString string;
         number::FormattedNumber num;
     };
-    // This does not own input (it may be in the global environment)
-    // TODO: since Formattables are immutable, can we use a reference here instead?
-    // (not if it means a Formattable would have to be copied)
     const Formattable& input;
 };
 
