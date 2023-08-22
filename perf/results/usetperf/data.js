@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692722649439,
+  "lastUpdate": 1692742182342,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34942,6 +34942,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2001.3968,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@apple.com",
+            "name": "Peter Edberg",
+            "username": "pedberg"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "2270c174a5839b97a3bab9f9e67db7594778a905",
+          "message": "ICU-22325 CLDR release-44-alpha1 to main:\n  - binaries, binary-as-source, CLDR data sources;\n  - CLDR test data & dtd, ICU lib/tool/test source updates.",
+          "timestamp": "2023-08-22T14:40:51-07:00",
+          "tree_id": "73386c8714dd865d71e0a70c780302b83a4289d4",
+          "url": "https://github.com/unicode-org/icu/commit/2270c174a5839b97a3bab9f9e67db7594778a905"
+        },
+        "date": 1692742124205,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 72250.6192,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 115853.705,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 11.5948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.3542,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 15283.0861,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 50215.3907,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2636.9987,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
