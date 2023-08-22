@@ -27,7 +27,7 @@ UnicodeString FormattedPlaceholder::toString(Locale locale, UErrorCode& status) 
         case FormattedPlaceholder::Type::DYNAMIC: {
             // "Finalize" formatting, e.g. applying default formatters
             // to dates/numbers
-            LocalPointer<FormattedPlaceholder> formatted(FormattedPlaceholder::format(locale, aliasInput(), status));
+            LocalPointer<FormattedPlaceholder> formatted(FormattedPlaceholder::format(locale, getInput(), status));
             if (U_FAILURE(status)) {
                 return UnicodeString();
             }

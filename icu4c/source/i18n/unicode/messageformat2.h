@@ -71,7 +71,7 @@ class U_I18N_API MessageArguments : public UMemory {
   private:
     friend class MessageFormatter;
     bool has(const UnicodeString&) const;
-    const Formattable* get(const UnicodeString&) const;
+    const Formattable& get(const UnicodeString&) const;
 
     MessageArguments& add(const UnicodeString&, Formattable*, UErrorCode&);
     MessageArguments(Hashtable* c, Hashtable* o) : contents(c), objectContents(o) {}
@@ -195,7 +195,7 @@ public:
         const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode& errorCode);
 
         bool hasVar(const VariableName&) const;
-        const Formattable* getVar(const VariableName& var) const;
+        const Formattable& getVar(const VariableName& var) const;
 
         static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
         private:
@@ -458,7 +458,7 @@ public:
             return result.orphan();
         }
         // DYNAMIC constructor
-        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const Formattable* f, UErrorCode& status) {
+        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const Formattable& f, UErrorCode& status) {
             NULL_ON_ERROR(status);
      
             LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(f, status));

@@ -215,13 +215,14 @@ bool Arguments::has(const UnicodeString& arg) const {
     return contents->containsKey(arg) || objectContents->containsKey(arg);
 }
 
-const Formattable* Arguments::get(const UnicodeString& arg) const {
+const Formattable& Arguments::get(const UnicodeString& arg) const {
     U_ASSERT(has(arg));
     const Formattable* result = static_cast<const Formattable*>(contents->get(arg));
     if (result == nullptr) {
         result = static_cast<const Formattable*>(objectContents->get(arg));
     }
-    return result;
+    U_ASSERT(result != nullptr);
+    return *result;
 }
 
 static Formattable* createFormattable(const UnicodeString& s, UErrorCode& errorCode) {
@@ -468,7 +469,7 @@ bool MessageFormatter::Context::hasVar(const VariableName& f) const {
     return arguments.has(f);
 } 
 
-const Formattable* MessageFormatter::Context::getVar(const VariableName& f) const {
+const Formattable& MessageFormatter::Context::getVar(const VariableName& f) const {
     U_ASSERT(hasVar(f));
     return arguments.get(f);
 } 
@@ -545,10 +546,9 @@ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::evalArgume
 
     U_ASSERT(context.hasVar(var));
 
-    const Formattable* val = context.getVar(var);
+    const Formattable& val = context.getVar(var);
     LocalPointer<FormattedPlaceholderWithFallback> result;
     UnicodeString fallbackStr = fallback(var);
-    U_ASSERT(val != nullptr); // The MessageArguments API shouldn't allow this
     return FormattedPlaceholderWithFallback::create(fallbackStr, val, status);
 }
 

@@ -342,9 +342,8 @@ static FormattedPlaceholder* notANumber(UErrorCode& errorCode) {
     return FormattedPlaceholder::create(UnicodeString("NaN"), errorCode);
 }
 
-static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, const Formattable* fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
+static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, const Formattable& fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    U_ASSERT(fp != nullptr);
 
     double numberValue;
     UErrorCode localErrorCode = U_ZERO_ERROR;
@@ -386,7 +385,7 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
     number::FormattedNumber numberResult;
     switch (arg->getType()) {
         case FormattedPlaceholder::Type::STRING: {
-            return stringAsNumber(locale, *realFormatter, arg->aliasInput(), arg->getString(), offset, errorCode);
+            return stringAsNumber(locale, *realFormatter, arg->getInput(), arg->getString(), offset, errorCode);
         }
         case FormattedPlaceholder::Type::NUMBER: {
 /*
@@ -418,7 +417,7 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
             case Formattable::Type::kString: {
                 // Try to parse the string as a number, as in the `else` case there
                 // TODO: see if the behavior here matches the function registry spec
-                return stringAsNumber(locale, *realFormatter, arg->aliasInput(), toFormat.getString(), offset, errorCode);
+                return stringAsNumber(locale, *realFormatter, arg->getInput(), toFormat.getString(), offset, errorCode);
             }
             default: {
                 // Other types can't be parsed as a number
@@ -430,7 +429,7 @@ FormattedPlaceholder* StandardFunctions::Number::format(FormattedPlaceholder* ar
     }
     
     NULL_ON_ERROR(errorCode);
-    return FormattedPlaceholder::create(arg->aliasInput(), std::move(numberResult), errorCode);
+    return FormattedPlaceholder::create(arg->getInput(), std::move(numberResult), errorCode);
 }
 
 // --------- PluralFactory
@@ -653,7 +652,7 @@ FormattedPlaceholder* StandardFunctions::DateTime::format(FormattedPlaceholder* 
             return nullptr;
         }
     }
-    return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
+    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
 }
 
 // --------- TextFactory
@@ -727,7 +726,7 @@ FormattedPlaceholder* StandardFunctions::Identity::format(FormattedPlaceholder* 
         return nullptr;
     }
     // Just returns the input value as a string
-    return FormattedPlaceholder::create(toFormat->aliasInput(), toFormat->getString(), errorCode);
+    return FormattedPlaceholder::create(toFormat->getInput(), toFormat->getString(), errorCode);
 }
 
 StandardFunctions::Identity::~Identity() {}

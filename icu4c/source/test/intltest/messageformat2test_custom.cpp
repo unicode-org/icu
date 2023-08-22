@@ -185,14 +185,14 @@ FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, con
             const UObject* asObject = toFormat.getObject();
             if (asObject == nullptr) {
                 // Treat the result as empty for null
-                return FormattedPlaceholder::create(arg->aliasInput(), UnicodeString(), errorCode);;
+                return FormattedPlaceholder::create(arg->getInput(), UnicodeString(), errorCode);;
             }
             p = (Person*) asObject;
             break;
         }
         default: {
             // If the input is not a person, just return it
-            return FormattedPlaceholder::create(arg->aliasInput(), toFormat.getString(), errorCode);
+            return FormattedPlaceholder::create(arg->getInput(), toFormat.getString(), errorCode);
         }
     }
 
@@ -226,7 +226,7 @@ FormattedPlaceholder* PersonNameFormatter::format(FormattedPlaceholder* arg, con
         result += firstName;
     }
 
-    return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
+    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
 }
 
 // Utilities
@@ -328,7 +328,7 @@ FormattedPlaceholder* GrammarCasesFormatter::format(FormattedPlaceholder* arg, c
         }
     }
 
-    return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
+    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
 }
 
 /* static */ FunctionRegistry* GrammarCasesFormatter::customRegistry(UErrorCode& errorCode) {
@@ -486,7 +486,7 @@ FormattedPlaceholder* message2::ListFormatter::format(FormattedPlaceholder* arg,
         }
     }
 
-    return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
+    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
 }
 
 void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
@@ -741,7 +741,7 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const O
         UnicodeString* msg = (UnicodeString*) props->get(in);
         if (msg == nullptr) {
             // No message given for this key -- just format the key
-            return FormattedPlaceholder::create(arg->aliasInput(), in, errorCode);
+            return FormattedPlaceholder::create(arg->getInput(), in, errorCode);
         }
         LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
         NULL_ON_ERROR(errorCode);
@@ -776,10 +776,10 @@ FormattedPlaceholder* ResourceManager::format(FormattedPlaceholder* arg, const O
         if (U_FAILURE(errorCode)) {
             errorCode = U_ZERO_ERROR;
         }
-        return FormattedPlaceholder::create(arg->aliasInput(), result, errorCode);
+        return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
     }
     // No properties provided -- just format the key
-    return FormattedPlaceholder::create(arg->aliasInput(), in, errorCode);
+    return FormattedPlaceholder::create(arg->getInput(), in, errorCode);
 }
 
 

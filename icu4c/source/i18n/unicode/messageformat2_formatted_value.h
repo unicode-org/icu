@@ -43,15 +43,15 @@ class FormattedPlaceholder : public UMemory {
         return df.orphan();
     }
 
-    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable* savedInput, double toFormat, UErrorCode& errorCode) {
+    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable& savedInput, double toFormat, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         return create(savedInput, number::NumberFormatter::withLocale(locale).formatDouble(toFormat, errorCode), errorCode);
     }
-    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable* savedInput, int32_t toFormat, UErrorCode& errorCode) {
+    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable& savedInput, int32_t toFormat, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         return create(savedInput, number::FormattedNumber(number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode)), errorCode);
     }
-    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable* savedInput, int64_t toFormat, UErrorCode& errorCode) {
+    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable& savedInput, int64_t toFormat, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
         return create(savedInput, number::FormattedNumber(number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode)), errorCode);
     }
@@ -85,14 +85,16 @@ class FormattedPlaceholder : public UMemory {
         return std::move(num);
     }
     const Formattable& getInput() const {
-        return *input;
+        return input;
     }
+/*
     const Formattable* aliasInput() const {
         return input;
     }
+*/
 
     // Creates a formatted number (NUMBER)
-    static FormattedPlaceholder* create(const Formattable* input, number::FormattedNumber v, UErrorCode& status) {
+    static FormattedPlaceholder* create(const Formattable& input, number::FormattedNumber v, UErrorCode& status) {
         NULL_ON_ERROR(status);
         FormattedPlaceholder* result(new FormattedPlaceholder(input, std::move(v)));
         if (result == nullptr) {
@@ -102,7 +104,7 @@ class FormattedPlaceholder : public UMemory {
     }
 
     // Creates an unformatted value (DYNAMIC)
-    static FormattedPlaceholder* create(const Formattable* v, UErrorCode& status) {
+    static FormattedPlaceholder* create(const Formattable& v, UErrorCode& status) {
         NULL_ON_ERROR(status);
         FormattedPlaceholder* result(new FormattedPlaceholder(v));
         if (result == nullptr) {
@@ -112,7 +114,7 @@ class FormattedPlaceholder : public UMemory {
     }
 
     // Creates a formatted string (STRING), saving its input
-    static FormattedPlaceholder* create(const Formattable* input, UnicodeString s, UErrorCode& status) {
+    static FormattedPlaceholder* create(const Formattable& input, UnicodeString s, UErrorCode& status) {
         NULL_ON_ERROR(status);
         FormattedPlaceholder* result(new FormattedPlaceholder(input, s));
         if (result == nullptr) {
@@ -140,30 +142,29 @@ class FormattedPlaceholder : public UMemory {
         return result;
     }
     // Formats a `Formattable` using defaults
-    static FormattedPlaceholder* format(Locale loc, const Formattable* in, UErrorCode& status) {
+    static FormattedPlaceholder* format(Locale loc, const Formattable& in, UErrorCode& status) {
         NULL_ON_ERROR(status);
-        U_ASSERT(in != nullptr);
 
         LocalPointer<FormattedPlaceholder> result;
-        switch (in->getType()) {
+        switch (in.getType()) {
             case Formattable::Type::kDate: {
                 result.adoptInstead(formatDateWithDefaults(loc, in, status));
                 break;
             }
             case Formattable::Type::kDouble: {
-                result.adoptInstead(formatNumberWithDefaults(loc, in, in->getDouble(), status));
+                result.adoptInstead(formatNumberWithDefaults(loc, in, in.getDouble(), status));
                 break;
             }
             case Formattable::Type::kLong: {
-                result.adoptInstead(formatNumberWithDefaults(loc, in, in->getLong(), status));
+                result.adoptInstead(formatNumberWithDefaults(loc, in, in.getLong(), status));
                 break;
             }
             case Formattable::Type::kInt64: {
-                result.adoptInstead(formatNumberWithDefaults(loc, in, in->getInt64(), status));
+                result.adoptInstead(formatNumberWithDefaults(loc, in, in.getInt64(), status));
                 break;
             }
             case Formattable::Type::kString: {
-                result.adoptInstead(create(in, in->getString(), status));
+                result.adoptInstead(create(in, in.getString(), status));
                 break;
             }
             default: {
@@ -179,25 +180,19 @@ class FormattedPlaceholder : public UMemory {
 
     private:
 
-    static FormattedPlaceholder* formatDateWithDefaults(Locale locale, const Formattable* toFormat, UErrorCode& errorCode) {
+    static FormattedPlaceholder* formatDateWithDefaults(Locale locale, const Formattable& toFormat, UErrorCode& errorCode) {
         NULL_ON_ERROR(errorCode);
-        U_ASSERT(toFormat != nullptr);
         LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
         NULL_ON_ERROR(errorCode);
         UnicodeString result;
-        df->format(*toFormat, result, 0, errorCode);
+        df->format(toFormat, result, 0, errorCode);
         return FormattedPlaceholder::create(toFormat, result, errorCode);
     }
 
-    // All constructors adopt their arguments
-    FormattedPlaceholder(const Formattable* f, UnicodeString s) : type(Type::STRING), string(s), input(f) {
-        U_ASSERT(f != nullptr);
-    }
+    FormattedPlaceholder(const Formattable& f, UnicodeString s) : type(Type::STRING), string(s), input(f) {}
 
-    FormattedPlaceholder(const Formattable* f, number::FormattedNumber v) : type(Type::NUMBER), num(std::move(v)), input(f) {
-        U_ASSERT(f != nullptr);
-    }
-    FormattedPlaceholder(const Formattable* f) : type(Type::DYNAMIC), input(f) { U_ASSERT(f != nullptr); }
+    FormattedPlaceholder(const Formattable& f, number::FormattedNumber v) : type(Type::NUMBER), num(std::move(v)), input(f) {}
+    FormattedPlaceholder(const Formattable& f) : type(Type::DYNAMIC), input(f) {}
 
     Type type;
     // ?? - Should this be a Formattable or a FormattedValue?
@@ -212,7 +207,7 @@ class FormattedPlaceholder : public UMemory {
     // This does not own input (it may be in the global environment)
     // TODO: since Formattables are immutable, can we use a reference here instead?
     // (not if it means a Formattable would have to be copied)
-    const Formattable* input;
+    const Formattable& input;
 };
 
 } // namespace message2
