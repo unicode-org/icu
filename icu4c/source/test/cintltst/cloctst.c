@@ -6886,6 +6886,10 @@ static void TestIsRightToLeft() {
     if(uloc_isRightToLeft("root") || !uloc_isRightToLeft("EN-HEBR")) {
         log_err("uloc_isRightToLeft() failed");
     }
+    // ICU-22466 Make sure no crash when locale is bogus
+    uloc_isRightToLeft(
+        "uF-Vd_u-VaapoPos-u1-Pos-u1-Pos-u1-Pos-u1-oPos-u1-Pufu1-PuosPos-u1-Pos-u1-Pos-u1-Pzghu1-Pos-u1-PoP-u1@osus-u1");
+    uloc_isRightToLeft("-Xa");
 }
 
 typedef struct {

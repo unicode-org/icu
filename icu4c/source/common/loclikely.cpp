@@ -483,7 +483,16 @@ _uloc_addLikelySubtags(const char* localeID,
         if(U_FAILURE(*err)) {
             goto error;
         }
-        icu::LSR lsr = likelySubtags->makeMaximizedLsrFrom(icu::Locale::createFromName(localeID), true, *err);
+        // We need to keep l on the stack because lsr may point into internal
+        // memory of l.
+        icu::Locale l = icu::Locale::createFromName(localeID);
+        if (l.isBogus()) {
+            goto error;
+        }
+        icu::LSR lsr = likelySubtags->makeMaximizedLsrFrom(l, true, *err);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
         const char* language = lsr.language;
         if (uprv_strcmp(language, "und") == 0) {
             language = "";
