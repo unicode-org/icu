@@ -596,14 +596,12 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
 
      // Formatting methods
      static FormattedPlaceholderWithFallback* formatLiteral(const MessageFormatDataModel::Literal& lit, UErrorCode& status);
-     void formatBuiltInCall(const Hashtable&, const FunctionName&, const MessageFormatDataModel::OptionMap&, const MessageFormatDataModel::Operand&, UErrorCode&, UnicodeString&) const;
      void formatPattern(Context&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats an expression that appears as a selector
      ResolvedExpression* formatSelectorExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      // Formats an expression that appears in a pattern or as the definition of a local variable
      FormattedPlaceholderWithFallback* formatExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      FunctionRegistry::Options* resolveOptions(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-     FormattedPlaceholder* formatFunctionCall(FormatterFactory&, const Hashtable&, const Environment&, const MessageFormatDataModel::OptionMap&, Formattable*, bool&, UErrorCode&) const;
      FormattedPlaceholderWithFallback* fallbackFunctionName(const FunctionName&, UErrorCode&) const;
      FormattedPlaceholderWithFallback* formatOperand(Context&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;
      FormattedPlaceholderWithFallback* evalArgument(const Context&, const VariableName&, UErrorCode&) const;
@@ -619,15 +617,6 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      const FunctionRegistry& getCustomFunctionRegistry() const {
          U_ASSERT(customFunctionRegistry != nullptr);
          return *customFunctionRegistry;
-     }
-
-     // Convenience method for formatting selectors
-     Hashtable* emptyOptions(UErrorCode& success) const {
-         // Creates a new hashtable -- this is annoying!
-         if (U_FAILURE(success)) {
-             return nullptr;
-         }
-         return new Hashtable(compareVariableName, nullptr, success);
      }
 
      // Checking for resolution errors
