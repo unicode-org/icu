@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692655415575,
+  "lastUpdate": 1692722667738,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24136,6 +24136,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7323735.5699,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "5d6d197a03c100428cd523346ace880ef9e56fe5",
+          "message": "ICU-22466 Fix incorrect memory read while the locale is bogus\n\nICU-22466 Fix illegal read\n\nICU-22466 Fix memory issue",
+          "timestamp": "2023-08-22T09:22:12-07:00",
+          "tree_id": "6d844428e019275808c91ed0d9ae6633ec07eb3a",
+          "url": "https://github.com/unicode-org/icu/commit/5d6d197a03c100428cd523346ace880ef9e56fe5"
+        },
+        "date": 1692722604291,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 372.8787,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 31501238.9963,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7428953.8712,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 30762069.0793,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 8674412.2833,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
