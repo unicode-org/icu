@@ -456,6 +456,10 @@ XLikelySubtags::~XLikelySubtags() {
 LSR XLikelySubtags::makeMaximizedLsrFrom(const Locale &locale,
                                          bool returnInputIfUnmatch,
                                          UErrorCode &errorCode) const {
+    if (locale.isBogus()) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return LSR("", "", "", LSR::EXPLICIT_LSR);
+    }
     const char *name = locale.getName();
     if (uprv_isAtSign(name[0]) && name[1] == 'x' && name[2] == '=') {  // name.startsWith("@x=")
         // Private use language tag x-subtag-subtag... which CLDR changes to
