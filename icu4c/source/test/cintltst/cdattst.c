@@ -31,10 +31,12 @@
 #include "cintltst.h"
 #include "cdattst.h"
 #include "cformtst.h"
+#include "cstring.h"
 #include "cmemory.h"
 
 #include <math.h>
 #include <stdbool.h>
+#include <stdio.h> // for sprintf()
 
 static void TestExtremeDates(void);
 static void TestAllLocales(void);
@@ -48,6 +50,7 @@ static void TestMapDateToCalFields(void);
 static void TestNarrowQuarters(void);
 static void TestExtraneousCharacters(void);
 static void TestParseTooStrict(void);
+static void TestHourCycle(void);
 
 void addDateForTest(TestNode** root);
 
@@ -72,6 +75,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestNarrowQuarters);
     TESTCASE(TestExtraneousCharacters);
     TESTCASE(TestParseTooStrict);
+    TESTCASE(TestHourCycle);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -2075,6 +2079,54 @@ static void TestParseTooStrict(void) {
 
     ucal_close(cal);
     udat_close(df);
+}
+
+static void TestHourCycle(void) {
+    static const UDate date = -845601267742; // March 16, 1943 at 3:45 PM
+    const UChar* testCases[] = {
+        // test some locales for which we have data
+        u"en_US", u"Tuesday, March 16, 1943 at 3:45:32 PM",
+        u"en_CA", u"Tuesday, March 16, 1943 at 3:45:32 p.m.",
+        u"en_GB", u"Tuesday, 16 March 1943 at 15:45:32",
+        u"en_AU", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        // test a couple locales for which we don't have specific locale files (we should still get the correct hour cycle)
+        u"en_CO", u"Tuesday, March 16, 1943 at 3:45:32 PM",
+        u"en_MX", u"Tuesday, March 16, 1943 at 15:45:32",
+        // test that the rg subtag does the right thing
+        u"en_US@rg=GBzzzz", u"Tuesday, March 16, 1943 at 15:45:32",
+        u"en_US@rg=CAzzzz", u"Tuesday, March 16, 1943 at 3:45:32 PM",
+        u"en_CA@rg=USzzzz", u"Tuesday, March 16, 1943 at 3:45:32 p.m.",
+        u"en_GB@rg=USzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        u"en_GB@rg=CAzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        u"en_GB@rg=AUzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        // test that the hc ("hours") subtag does the right thing
+        u"en_US@hours=h23", u"Tuesday, March 16, 1943 at 15:45:32",
+        u"en_GB@hours=h12", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        // test that the rg and hc subtags do the right thing when used together
+        u"en_US@rg=GBzzzz;hours=h12", u"Tuesday, March 16, 1943 at 3:45:32 PM",
+        u"en_GB@rg=USzzzz;hours=h23", u"Tuesday, 16 March 1943 at 15:45:32",
+    };
+    
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 2) {
+        char errorMessage[200];
+        char* locale = austrdup(testCases[i]);
+        
+        UErrorCode err = U_ZERO_ERROR;
+        sprintf(errorMessage, "Error creating formatter for %s", locale);
+        if (assertSuccess(errorMessage, &err)) {
+            UDateFormat* df = udat_open(UDAT_MEDIUM, UDAT_FULL, austrdup(testCases[i]), u"America/Los_Angeles", -1, NULL, 0, &err);
+            sprintf(errorMessage, "Error formatting value for %s", locale);
+            if (assertSuccess(errorMessage, &err)) {
+                UChar result[100];
+                udat_format(df, date, result, 100, NULL, &err);
+                
+                sprintf(errorMessage, "Wrong result for %s", locale);
+                assertUEquals(errorMessage, testCases[i + 1], result);
+                
+                udat_close(df);
+            }
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

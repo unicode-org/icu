@@ -268,6 +268,8 @@ public:
     void Test20741_ABFields();
     void Test22023_UTCWithMinusZero();
     void TestNumericFieldStrictParse();
+    void TestHourCycle();
+    void TestHCInLocale();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);
