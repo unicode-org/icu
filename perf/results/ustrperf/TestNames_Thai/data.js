@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692748287772,
+  "lastUpdate": 1692801229810,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43006,6 +43006,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 57.6799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "f79fe9347a2db853b1114ab3846ced39c86cc09d",
+          "message": "ICU-22332 bidiSkeleton and LTR- and RTL-confusabilities",
+          "timestamp": "2023-08-23T15:56:02+02:00",
+          "tree_id": "f522c1c6196216eafeed48e5d7c855a327567abf",
+          "url": "https://github.com/unicode-org/icu/commit/f79fe9347a2db853b1114ab3846ced39c86cc09d"
+        },
+        "date": 1692801172145,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.995,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.6814,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.6533,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 35.3485,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 41.5673,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.502,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 26.2551,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.6382,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 150.8115,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 27.7619,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 55.8055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 48.8183,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
