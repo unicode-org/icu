@@ -17,13 +17,66 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-// Defined for convenience, in case we end up using a different
-// string representation in the data model
-using String         = UnicodeString;
-// Defined for convenience, in case we end up using a different
-// representation in the data model for variable references and/or
-// variable definitions
-using VariableName   = UnicodeString;
+class Text : public UMemory {
+    public:
+    virtual UnicodeString toString() const = 0;
+};
+
+class DefaultString : public Text {
+public:
+    DefaultString() {}
+    UnicodeString toString() const { return UnicodeString(REPLACEMENT); }
+};
+
+class Name : public Text {
+    public:
+    virtual UChar sigil() const = 0;
+    virtual const UnicodeString& name() const = 0;
+    UnicodeString toString() const {
+        UnicodeString result(sigil());
+        result += name();
+        return result;
+    }
+};
+
+class VariableName : public Name {
+    public:
+    UChar sigil() const { return DOLLAR; }
+    const UnicodeString& name() const { return variableName; }
+    inline bool operator== (const VariableName& other) const { return other.name() == name(); }
+    VariableName(const UnicodeString& s) : variableName(s) {}
+    VariableName() : variableName(UnicodeString("")) {}
+    private:
+    const UnicodeString variableName;
+};
+
+// Corresponds to the `FunctionRef` interface defined in
+// https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
+class FunctionName : public Name {
+public:
+    enum Sigil {
+        OPEN,
+        CLOSE,
+        DEFAULT
+    };
+    UChar sigil() const {
+        switch (functionSigil) {
+        case Sigil::OPEN: { return PLUS; }
+        case Sigil::CLOSE: { return HYPHEN; }
+        case Sigil::DEFAULT: { return COLON; }
+        }
+        U_ASSERT(false);
+    }
+    const UnicodeString& name() const { return functionName; }
+    FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
+    FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
+    FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}    
+    virtual ~FunctionName();
+
+private:
+    const UnicodeString functionName;
+    const Sigil functionSigil;
+};
 
 // -----------------------------------------------------------------------
 // Public MessageFormatDataModel class
@@ -99,44 +152,36 @@ public:
     using KeyList = List<Key>;
     using OptionMap = OrderedMap<Operand>;
 
-    // Corresponds to the `FunctionRef` interface defined in
-    // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
-    class FunctionName : public UMemory {
-        public:
-        enum Sigil {
-            OPEN,
-            CLOSE,
-            DEFAULT
-        };
-        const UnicodeString name;
-        const Sigil sigil;
-        FunctionName(UnicodeString s) : name(s), sigil(Sigil::DEFAULT) {}
-        FunctionName(UnicodeString n, Sigil s) : name(n), sigil(s) {}
-
-        UnicodeString toString() const;
-        private:
-        // Function names only need to be copied when copying an `Operator`
-        friend class Operator;
-
-        FunctionName(const FunctionName& other) : name(other.name), sigil(other.sigil) {}
-    };
-
     // Corresponds to the `Literal` interface defined in
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
-    class Literal : public UObject {
+    class Literal : public Text {
     public:
         const bool isQuoted = false;
-        const UnicodeString contents;
-
+        UnicodeString toString() const {
+            UnicodeString result = UnicodeString(PIPE);
+            result += stringContents();
+            result += PIPE;
+            return result;
+        }
+        const Formattable& getContents() const {
+            return contents;
+        }
+        const UnicodeString& stringContents() const {
+            U_ASSERT(contents.getType() == Formattable::Type::kString);
+            return contents.getString();
+        }
         Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
+        Literal(const Literal& other) : isQuoted(other.isQuoted), contents(other.contents) {}
+        virtual ~Literal();
 
     private:
         friend class Key;
         friend class List<Literal>;
+        friend class LiteralOperand;
         friend class Operand;
         friend class Reserved;
 
-        Literal(const Literal& other) : isQuoted(other.isQuoted), contents(other.contents) {}
+        const Formattable contents; // Guaranteed to be a string
         // Because Key uses `Literal` as its underlying representation,
         // this provides a default constructor for wildcard keys
         Literal() {}
@@ -151,22 +196,45 @@ public:
         static Operand* create(const VariableName& s, UErrorCode& errorCode);
         // Literal
         static Operand* create(const Literal& lit, UErrorCode& errorCode);
-
+        // Null argument (represents the absence of an operand)
+        static Operand* create(UErrorCode& errorCode);
+        virtual bool isVariable() const = 0;
+        virtual bool isLiteral() const = 0;
+        bool isNull() const { return !(isVariable() || isLiteral()); } ;
+        virtual const VariableName* asVariable() const = 0;
+        virtual const Literal* asLiteral() const = 0;
+        static Operand* create(const Operand&);
+/*
         bool isVariable() const { return isVariableReference; }
         bool isLiteral() const { return !isVariable(); }
         VariableName asVariable() const;
         const Literal& asLiteral() const;
 
         // Copy constructor
-        Operand(const Operand& other) : isVariableReference(other.isVariableReference), string(other.string) {}
+        Operand(const Operand& other) : isVariableReference(other.isVariableReference) {
+            if (other.isVariableReference) {
+                lit = other.lit;
+            } else {
+                var = other.var;
+            }
+        }
+*/
+        virtual ~Operand();
 
     private:
+/*
         // Represent variable names as unquoted literals
-        Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var)) {}
+        Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var.name())) {}
         Operand(const Literal& l) : isVariableReference(false), string(l) {}
 
         const bool isVariableReference;
-        const Literal string;
+        const UnicodeString contents;
+
+        union {
+            Literal lit;
+            VariableName var;
+        };
+*/
     }; // class Operand
 
     // Corresponds to the `Literal | CatchallKey` that is the
@@ -303,6 +371,7 @@ public:
             Reserved *build(UErrorCode &errorCode) const;
         }; // class Reserved::Builder
 
+        const DefaultString fallback;
         static Builder *builder(UErrorCode &errorCode);
     private:
         friend class Operator;
@@ -311,7 +380,7 @@ public:
         bool isBogus() const { return !parts.isValid(); }
       
         // Reserved needs a copy constructor in order to make Expression deeply copyable
-        Reserved(const Reserved& other) : parts(new List<Literal>(*other.parts)) {
+        Reserved(const Reserved& other) : fallback(DefaultString()), parts(new List<Literal>(*other.parts)) {
             U_ASSERT(!other.isBogus());
         }
 
@@ -322,7 +391,7 @@ public:
       
         // Can only be called by Builder
         // Takes ownership of `ps`
-        Reserved(List<Literal> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+        Reserved(List<Literal> *ps) : fallback(DefaultString()), parts(ps) { U_ASSERT(ps != nullptr); }
     };
 
     // Corresponds to the `FunctionRef | Reserved` type in the
@@ -394,6 +463,7 @@ public:
     // `Expression` interface defined in
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
     class Expression : public UObject {
+        // TODO: update this. Operand is always present but may be the NullOperand
         /*
           An expression is represented as the application of an optional operator to an optional operand.
 
@@ -424,6 +494,8 @@ public:
         const Operator& getOperator() const;
         // Precondition: !isStandaloneAnnotation()
         const Operand& getOperand() const;
+        // May return null operand
+        const Operand& getAnyOperand() const;
 
         // Expression needs a copy constructor in order to make Pattern deeply copyable
         // (and for closures)
@@ -453,9 +525,9 @@ public:
 
         bool isBogus() const;
 
-        Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(new Operand(rAnd)) {}
-        Expression(const Operand &rAnd) : rator(nullptr), rand(new Operand(rAnd)){}
-        Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(nullptr) {}
+        Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(Operand::create(rAnd)) {}
+        Expression(const Operand &rAnd) : rator(nullptr), rand(Operand::create(rAnd)) {}
+        Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(new NullOperand()) {}
         /* const */ LocalPointer<Operator> rator;
         /* const */ LocalPointer<Operand> rand;
     }; // class Expression
@@ -529,6 +601,7 @@ public:
         // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
         // moving build
         Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
+        static Pattern* create(const Pattern& other);
       
     private:
         friend class MessageFormatDataModel;
@@ -547,8 +620,8 @@ public:
     // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#messages
     class Binding {
     public:
-        static Binding* create(const UnicodeString& var, Expression* e, UErrorCode& errorCode);
-        const UnicodeString var;
+        static Binding* create(const VariableName& var, Expression* e, UErrorCode& errorCode);
+        const VariableName var;
         // Postcondition: result is non-null
         const Expression* getValue() const {
             U_ASSERT(!isBogus());
@@ -557,7 +630,7 @@ public:
     private:
         friend class List<Binding>;
 
-        Binding(const UnicodeString& v, Expression* e) : var(v), value(e) {}
+        Binding(const VariableName& v, Expression* e) : var(v), value(e) {}
         // This needs a copy constructor so that `Bindings` is deeply-copyable,
         // which is in turn so that MessageFormatDataModel::build() can be copying
         // (it has to copy the builder's locals)
@@ -614,6 +687,64 @@ public:
   virtual ~MessageFormatDataModel();
 
   private:
+  
+     class VariableOperand : public Operand {
+         public:
+         bool isVariable() const { return true; }
+         bool isLiteral() const { return false; }
+         const VariableName* asVariable() const { return &var; }
+         const Literal* asLiteral() const {
+             U_ASSERT(false);
+             return nullptr;
+         }
+         VariableOperand(const VariableOperand&);
+         private:
+         friend class Operand;
+
+         const VariableName var;
+         VariableOperand(const VariableName& v) : var(v) {}
+     }; // class VariableOperand
+
+     class LiteralOperand : public Operand {
+         public:
+         bool isVariable() const { return false; }
+         bool isLiteral() const { return true; }
+         const VariableName* asVariable() const {
+             U_ASSERT(false);
+             return nullptr;
+         }
+         const Literal* asLiteral() const {
+             return &lit;
+         }
+         LiteralOperand(const LiteralOperand&);
+         private:
+         friend class Operand;
+
+         const Literal lit;
+         LiteralOperand(const Literal& l) : lit(l) {}
+     }; // class LiteralOperand
+
+     class NullOperand : public Operand {
+         public:
+         bool isVariable() const { return false; }
+         bool isLiteral() const { return false; }
+         const VariableName* asVariable() const {
+             U_ASSERT(false);
+             return nullptr;
+         }
+         const Literal* asLiteral() const {
+             U_ASSERT(false);
+             return nullptr;
+         }
+         private:
+         friend class Operand;
+         friend class Expression;
+
+         // Fallback string
+         const DefaultString fallback;
+         NullOperand() : fallback(DefaultString()) {}
+     }; // class NullOperand
+
      // The expressions that are being matched on.
      // Null iff this is a `pattern` message.
      LocalPointer<ExpressionList> selectors;

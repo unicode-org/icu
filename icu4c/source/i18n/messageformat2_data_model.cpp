@@ -54,34 +54,26 @@ SelectorKeys::Builder::Builder(UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    Operand* result = new Operand(s);
+    Operand* result = new VariableOperand(s);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
-
-VariableName Operand::asVariable() const {
-    U_ASSERT(isVariable());
-    return string.contents;
-}
-
-const Literal& Operand::asLiteral() const {
-    U_ASSERT(isLiteral());
-    return string;
-}
-
+ 
 // Literal
 /* static */ Operand* Operand::create(const Literal& lit, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    Operand* result = new Operand(lit);
+    Operand* result = new LiteralOperand(lit);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
+
+Literal::~Literal() {}
 
 //---------------- Key
 
@@ -111,8 +103,9 @@ const Literal& Operand::asLiteral() const {
 void Key::toString(UnicodeString& result) const {
     if (isWildcard()) {
         result += ASTERISK;
+        return;
     }
-    result += contents.contents;
+    result += contents.stringContents();
 }
 
 const Literal& Key::asLiteral() const {
@@ -247,30 +240,12 @@ Reserved::Builder& Reserved::Builder::add(Literal& part, UErrorCode &errorCode) 
 
 //------------------------ Operator
 
-UnicodeString FunctionName::toString() const {
-    UnicodeString result;
-    switch (sigil) {
-        case OPEN: {
-            result += PLUS;
-            break;
-        }
-        case CLOSE: {
-            result += HYPHEN;
-            break;
-        }
-        default: {
-            result += COLON;
-            break;
-        }
-    }
-    result += name;
-    return result;
-}
-
 const FunctionName& Operator::getFunctionName() const {
     U_ASSERT(!isBogus() && !isReserved());
     return functionName;
 }
+
+FunctionName::~FunctionName() {}
 
 const Reserved& Operator::asReserved() const {
     U_ASSERT(!isBogus() && isReserved());
@@ -427,9 +402,10 @@ Operator::Operator(const Operator& other) : isReservedSequence(other.isReservedS
 
 // ------------ Expression
 
+
 bool Expression::isStandaloneAnnotation() const {
     U_ASSERT(!isBogus());
-    return !rand.isValid();
+    return rand->isNull();
 }
 
 // Returns true for function calls with operands as well as
@@ -455,6 +431,24 @@ const Operand& Expression::getOperand() const {
     return *rand;
 }
 
+// May return null operand
+const Operand& Expression::getAnyOperand() const {
+    return *rand;
+}
+
+Operand* Operand::create(const Operand& other) {
+    if (other.isNull()) {
+        return new NullOperand();
+    } else if (other.isVariable()) {
+        return new VariableOperand(*other.asVariable());
+    } else {
+        U_ASSERT(other.isLiteral());
+        return new LiteralOperand(*other.asLiteral());
+    }
+}
+
+Operand::~Operand() {}
+
 Expression::Builder& Expression::Builder::setOperand(Operand* rAnd) {
     U_ASSERT(rAnd != nullptr);
     rand.adoptInstead(rAnd);
@@ -472,19 +466,27 @@ Expression* Expression::Builder::build(UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    if (!rand.isValid() && !rator.isValid()) {
+    if ((!rand.isValid() || rand->isNull()) && !rator.isValid()) {
         errorCode = U_INVALID_STATE_ERROR;
         return nullptr;
     }
     LocalPointer<Expression> result;
+    Operand* exprRand;
     if (rand.isValid()) {
-        if (rator.isValid()) {
-            result.adoptInstead(new Expression(*rator, *rand));
-        } else {
-            result.adoptInstead(new Expression(*rand));
-        }
+        exprRand = rand.getAlias();
     } else {
-        result.adoptInstead(new Expression(*rator));
+        U_ASSERT(rator.isValid());
+        exprRand = new NullOperand();
+    }
+    if (exprRand == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+
+    if (rator.isValid()) {
+        result.adoptInstead(new Expression(*rator, *exprRand));
+    } else {
+        result.adoptInstead(new Expression(*exprRand));
     }
     if (!result.isValid() || result->isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -509,7 +511,7 @@ Expression::Expression(const Expression& other) {
     U_ASSERT(!other.isBogus());
     if (other.rator.isValid() && other.rand.isValid()) {
         rator.adoptInstead(new Operator(*(other.rator)));
-        rand.adoptInstead(new Operand(*(other.rand)));
+        rand.adoptInstead(Operand::create(*(other.rand)));
         bogus = !(rator.isValid() && rand.isValid());
         return;
     }
@@ -521,7 +523,7 @@ Expression::Expression(const Expression& other) {
     }
     U_ASSERT(other.rand.isValid());
     rator.adoptInstead(nullptr);
-    rand.adoptInstead(new Operand(*(other.rand)));
+    rand.adoptInstead(Operand::create(*(other.rand)));
     bogus = !rand.isValid();
 }
 
@@ -575,6 +577,10 @@ const UnicodeString& PatternPart::asText() const {
 
 // ---------------- Pattern
 
+/* static */ Pattern* Pattern::create(const Pattern& p) {
+    return new Pattern(p);
+}
+
 const PatternPart* Pattern::getPart(size_t i) const {
     U_ASSERT(!isBogus() && i < numParts());
     return parts->get(i);
@@ -614,7 +620,7 @@ Pattern::Builder& Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode
 
 // ---------------- Binding
 
-/* static */ Binding* Binding::create(const UnicodeString& var, Expression* e, UErrorCode& errorCode) {
+/* static */ Binding* Binding::create(const VariableName& var, Expression* e, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -682,7 +688,7 @@ void MessageFormatDataModel::Builder::buildSelectorsMessage(UErrorCode& errorCod
 MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    LocalPointer<Binding> b(Binding::create(variableName, expression, errorCode));
+    LocalPointer<Binding> b(Binding::create(VariableName(variableName), expression, errorCode));
     THIS_ON_ERROR(errorCode);
     locals->add(b.orphan(), errorCode);
 

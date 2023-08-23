@@ -129,18 +129,19 @@ Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode
     return result;
 }
 
-const FormattedPlaceholder* PersonNameFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
+const FullyFormatted* PersonNameFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
 
-    if (arg == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    // Argument must be present
+    if (arg.isNull()) {
+        errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
 
     // Assumes what's being passed in is not-yet-formatted
-    const Formattable& toFormat = arg->getInput();
+    const Formattable& toFormat = arg.getInput();
 /*
   Note: this test diverges from the ICU4J version of it a bit by using variable options
   to pass both "formality" and "length"
@@ -160,14 +161,15 @@ const FormattedPlaceholder* PersonNameFormatter::format(const FormattedPlacehold
             const UObject* asObject = toFormat.getObject();
             if (asObject == nullptr) {
                 // Treat the result as empty for null
-                return FormattedPlaceholder::create(arg->getInput(), UnicodeString(), errorCode);;
+                return FormattedString::create(arg, UnicodeString(), errorCode);;
             }
             p = (Person*) asObject;
             break;
         }
         default: {
-            // If the input is not a person, just return it
-            return FormattedPlaceholder::create(arg->getInput(), toFormat.getString(), errorCode);
+            // If the input is not a person, return null
+            errorCode = U_FORMATTING_WARNING;
+            return nullptr;
         }
     }
 
@@ -201,7 +203,7 @@ const FormattedPlaceholder* PersonNameFormatter::format(const FormattedPlacehold
         result += firstName;
     }
 
-    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
+    return FormattedString::create(arg, result, errorCode);
 }
 
 // Utilities
@@ -271,18 +273,19 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, UErrorCo
     result += postfix;
 }
 
-const FormattedPlaceholder* GrammarCasesFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* GrammarCasesFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
 
-    if (arg == nullptr) {
+    // Argument must be present
+    if (arg.isNull()) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
 
     // Assumes the argument is not-yet-formatted
-    const Formattable& toFormat = arg->getInput();
+    const Formattable& toFormat = arg.getInput();
     UnicodeString result;
 
     switch (toFormat.getType()) {
@@ -303,7 +306,7 @@ const FormattedPlaceholder* GrammarCasesFormatter::format(const FormattedPlaceho
         }
     }
 
-    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
+    return FormattedString::create(arg, result, errorCode);
 }
 
 /* static */ FunctionRegistry* GrammarCasesFormatter::customRegistry(UErrorCode& errorCode) {
@@ -399,17 +402,18 @@ Formatter* ListFormatterFactory::createFormatter(Locale locale, UErrorCode& erro
     return result;
 }
 
-const FormattedPlaceholder* message2::ListFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* message2::ListFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
 
-    if (arg == nullptr) {
+    // Argument must be present
+    if (arg.isNull()) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
     // Assumes arg is not-yet-formatted
-    const Formattable& toFormat = arg->getInput();
+    const Formattable& toFormat = arg.getInput();
 
     UnicodeString optType;
     bool hasType = options.getStringOption(UnicodeString("type"), optType);
@@ -461,7 +465,7 @@ const FormattedPlaceholder* message2::ListFormatter::format(const FormattedPlace
         }
     }
 
-    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
+    return FormattedString::create(arg, result, errorCode);
 }
 
 void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
@@ -694,16 +698,17 @@ static Arguments* localToGlobal(const Options& options, UErrorCode& errorCode) {
     return args->build(errorCode);
 }
 
-const FormattedPlaceholder* ResourceManager::format(const FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* ResourceManager::format(const FormattingInput& arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
-    if (arg == nullptr) {
+    // Argument must be present
+    if (arg.isNull()) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
 
     // Assumes arg is not-yet-formatted
-    const UnicodeString& in = arg->getInput().getString();
+    const UnicodeString& in = arg.getInput().getString();
 
     UnicodeString propsStr;
     bool hasPropsStr = options.getStringOption(UnicodeString("resbundle"), propsStr);
@@ -715,8 +720,9 @@ const FormattedPlaceholder* ResourceManager::format(const FormattedPlaceholder* 
 
         UnicodeString* msg = (UnicodeString*) props->get(in);
         if (msg == nullptr) {
-            // No message given for this key -- just format the key
-            return FormattedPlaceholder::create(arg->getInput(), in, errorCode);
+            // No message given for this key -- error out
+            errorCode = U_FORMATTING_WARNING;
+            return nullptr;
         }
         LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
         NULL_ON_ERROR(errorCode);
@@ -739,10 +745,11 @@ const FormattedPlaceholder* ResourceManager::format(const FormattedPlaceholder* 
         if (U_FAILURE(errorCode)) {
             errorCode = U_ZERO_ERROR;
         }
-        return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
+        return FormattedString::create(arg, result, errorCode);
     }
-    // No properties provided -- just format the key
-    return FormattedPlaceholder::create(arg->getInput(), in, errorCode);
+    // Properties must be provided
+    errorCode = U_FORMATTING_WARNING;
+    return nullptr;
 }
 
 

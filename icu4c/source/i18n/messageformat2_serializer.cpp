@@ -46,8 +46,9 @@ void SERIALIZER::emit(const UnicodeString& s) {
     result += s;
 }
 
-void SERIALIZER::emit(const FunctionName& f) {
-    emit(f.toString());
+void SERIALIZER::emit(const Name& s) {
+    result += s.sigil();
+    result += s.name();
 }
 
 template <size_t N>
@@ -61,9 +62,10 @@ void SERIALIZER::emit(const UChar32 (&token)[N]) {
 void SERIALIZER::emit(const Literal& l) {
     if (l.isQuoted) {
       emit(PIPE);
-      for (size_t i = 0; ((int32_t) i) < l.contents.length(); i++) {
+      const UnicodeString& contents = l.stringContents();
+      for (size_t i = 0; ((int32_t) i) < contents.length(); i++) {
         // Re-escape any PIPE or BACKSLASH characters
-        switch(l.contents[i]) {
+        switch(contents[i]) {
         case BACKSLASH:
         case PIPE: {
           emit(BACKSLASH);
@@ -73,11 +75,11 @@ void SERIALIZER::emit(const Literal& l) {
           break;
         }
         }
-        emit(l.contents[i]);
+        emit(contents[i]);
       }
       emit(PIPE);
     } else {
-      emit(l.contents);
+      emit(l.stringContents());
     }
 }
 
@@ -106,11 +108,10 @@ void SERIALIZER::emit(const SelectorKeys& k) {
 
 void SERIALIZER::emit(const Operand& rand) {
     if (rand.isVariable()) {
-        emit(DOLLAR);
-        emit(rand.asVariable());
+        emit(*rand.asVariable());
     } else {
         // Literal: quoted or unquoted
-        emit(rand.asLiteral());
+        emit(*rand.asLiteral());
     }
 }
 
@@ -148,7 +149,7 @@ void SERIALIZER::emit(const Expression& expr) {
             if (l.isQuoted) {
               emit(l);
             } else {
-              const UnicodeString& s = l.contents;
+              const UnicodeString& s = l.stringContents();
               for (size_t j = 0; ((int32_t) j) < s.length(); j++) {
                 switch(s[j]) {
                 case LEFT_CURLY_BRACE:
@@ -219,7 +220,6 @@ void SERIALIZER::serializeDeclarations() {
         // No whitespace needed here -- see `message` in the grammar
         emit(ID_LET);
         whitespace();
-        emit(DOLLAR);
         emit(b.var);
         // No whitespace needed here -- see `declaration` in the grammar
         emit(EQUALS);

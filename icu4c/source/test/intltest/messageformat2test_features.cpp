@@ -469,15 +469,16 @@ Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCod
     return result.orphan();
 }
 
-const FormattedPlaceholder* TemperatureFormatter::format(const FormattedPlaceholder* arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* TemperatureFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
-    if (arg == nullptr) {
+    // Argument must be present
+    if (arg.isNull()) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
     // Assume arg is not-yet-formatted
-    const Formattable& toFormat = arg->getInput();
+    const Formattable& toFormat = arg.getInput();
 
     counter.formatCount++;
 
@@ -514,11 +515,6 @@ const FormattedPlaceholder* TemperatureFormatter::format(const FormattedPlacehol
     }
 
     number::FormattedNumber result;
-    LocalPointer<Formattable> copied(new Formattable(toFormat));
-    if (!copied.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
     switch (toFormat.getType()) {
         case Formattable::Type::kDouble: {
             result = realNf.formatDouble(toFormat.getDouble(),
@@ -536,10 +532,10 @@ const FormattedPlaceholder* TemperatureFormatter::format(const FormattedPlacehol
             break;
         }
         default: {
-            return FormattedPlaceholder::create(copied.orphan(), UnicodeString(), errorCode);
+            return FormattedString::create(arg, UnicodeString(), errorCode);
         }
     }
-    return FormattedPlaceholder::create(copied.orphan(), std::move(result), errorCode);
+    return FormattedNumber::create(arg, std::move(result), errorCode);
 }
 
 TemperatureFormatter::~TemperatureFormatter() {}

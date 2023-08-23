@@ -210,16 +210,16 @@ using Arguments = MessageArguments;
 using Options = FunctionRegistry::Options;
 using Option = FunctionRegistry::Option;
 
-bool Arguments::has(const UnicodeString& arg) const {
+bool Arguments::has(const VariableName& arg) const {
     U_ASSERT(contents.isValid() && objectContents.isValid());
-    return contents->containsKey(arg) || objectContents->containsKey(arg);
+    return contents->containsKey(arg.name()) || objectContents->containsKey(arg.name());
 }
 
-const Formattable& Arguments::get(const UnicodeString& arg) const {
+const Formattable& Arguments::get(const VariableName& arg) const {
     U_ASSERT(has(arg));
-    const Formattable* result = static_cast<const Formattable*>(contents->get(arg));
+    const Formattable* result = static_cast<const Formattable*>(contents->get(arg.name()));
     if (result == nullptr) {
-        result = static_cast<const Formattable*>(objectContents->get(arg));
+        result = static_cast<const Formattable*>(objectContents->get(arg.name()));
     }
     U_ASSERT(result != nullptr);
     return *result;
@@ -465,8 +465,8 @@ MessageFormatter::CachedFormatters::CachedFormatters(UErrorCode& errorCode) {
     cache->setValueDeleter(uprv_deleteUObject);
 }
 
-bool MessageFormatter::Context::hasVar(const VariableName& f) const {
-    return arguments.has(f);
+bool MessageFormatter::Context::hasVar(const VariableName& v) const {
+    return arguments.has(v);
 } 
 
 const Formattable& MessageFormatter::Context::getVar(const VariableName& f) const {
@@ -539,36 +539,33 @@ UnicodeString fallbackLiteral(const Literal& lit) {
 }
 */
 
-static const UnicodeString evalLiteral(const Literal& lit) {
-    return lit.contents;
+static const Formattable& evalLiteral(const Literal& lit) {
+    return lit.getContents();
 }
 
-const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::evalArgument(const MessageFormatter::Context& context, const VariableName& var, UErrorCode& status) const {
+// Precondition: `e` is an expression consisting of a variable name
+const FormattedPlaceholder* MessageFormatter::evalArgument(const MessageFormatter::Context& context, const VariableName& var, UErrorCode& status) const {
     NULL_ON_ERROR(status);
-
     U_ASSERT(context.hasVar(var));
-
-    const Formattable& val = context.getVar(var);
-    UnicodeString fallbackStr = fallback(var);
-    return FormattedPlaceholderWithFallback::create(fallbackStr, val, status);
+    return FormattingInputNotNull::create(var, context.getVar(var), status);
 }
 
-/* static */ MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatLiteral(const Literal& lit, UErrorCode& status) {
+/* static */ const FormattedPlaceholder* MessageFormatter::formatLiteral(const Literal& lit, UErrorCode& status) {
     NULL_ON_ERROR(status);
-    return
-        FormattedPlaceholderWithFallback::create(fallbackLiteral(lit), evalLiteral(lit), status);
+    return FormattingInputNotNull::create(lit, evalLiteral(lit), status);
 }
 
-const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatOperand(MessageFormatter::Context& context, const Environment& env, const Operand& rand, UErrorCode &status) const {
+const FormattedPlaceholder* MessageFormatter::formatOperand(MessageFormatter::Context& context, const Environment& env, const Operand& rand, UErrorCode &status) const {
     NULL_ON_ERROR(status);
-    const FormattedPlaceholderWithFallback* result;
+    U_ASSERT(!rand.isNull());
+    const FormattedPlaceholder* result;
     if (rand.isVariable()) {
         // Check if it's local or global
         // TODO: Currently, this code allows name shadowing, but depending on the
         // resolution of:
         //   https://github.com/unicode-org/message-format-wg/issues/310
         // it might need to forbid it.
-        VariableName var = rand.asVariable();
+        const VariableName& var = *rand.asVariable();
         // TODO: Currently, this code implements lazy evaluation of locals.
         // That is, the environment binds names to an Expression, not a resolved value.
         // Eager vs. lazy evaluation is an open issue:
@@ -585,11 +582,13 @@ const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::form
             setError(U_UNRESOLVED_VARIABLE_WARNING, status);
             // Use fallback per
             // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-            result = FormattedPlaceholderWithFallback::createFallback(fallback(rand.asVariable()), status);
+            result = Fallback::create(var, status);
         }
+    } else if (rand.isLiteral()) {
+        result = formatLiteral(*rand.asLiteral(), status);
     } else {
-        // Must be a literal
-        result = formatLiteral(rand.asLiteral(), status);
+        // Should be unreachable
+        U_ASSERT(false);
     }
     NULL_ON_ERROR(status);
     return result;
@@ -617,51 +616,44 @@ FunctionRegistry::Options* MessageFormatter::resolveOptions(MessageFormatter::Co
         }
         U_ASSERT(v != nullptr);
         // Options are fully evaluated before calling the function
-        const FormattedPlaceholderWithFallback* formattedRand(formatOperand(context, env, *v, status));
+        const FormattedPlaceholder* formattedRand(formatOperand(context, env, *v, status));
         LocalPointer<Option> functionOption;
         NULL_ON_ERROR(status);        
-        // No fallback needed for options, and ignore any options that fail to resolve
+        // Ignore any options that fail to resolve
         if (!formattedRand->isFallback()) {
-            const FormattedPlaceholder& fp = formattedRand->getFormattedPlaceholder();
-            switch (fp.getType()) {
-                case FormattedPlaceholder::STRING: 
-                case FormattedPlaceholder::NUMBER: {
-                    // Format the result and pass it as a string option
-                    UnicodeString formattedValue = fp.toString(locale, status);
-                    NULL_ON_ERROR(status);
-                    functionOption.adoptInstead(Option::createString(formattedValue, status));
-                    NULL_ON_ERROR(status);
+            if (formattedRand->hasOutput()) {
+                // Format the result and pass it as a string option
+                UnicodeString formattedValue = formattedRand->toString(locale, status);
+                NULL_ON_ERROR(status);
+                functionOption.adoptInstead(Option::createString(formattedValue, status));
+            } else {
+                U_ASSERT(formattedRand->hasInput());
+                const Formattable& f = (static_cast<const FormattingInputNotNull*>(formattedRand))->getInput();
+                switch (f.getType()) {
+                case Formattable::Type::kDate: {
+                    functionOption.adoptInstead(Option::createDate(f.getDate(), status));
                     break;
                 }
-                case FormattedPlaceholder::DYNAMIC: {
-                    const Formattable& f = fp.getInput();
-                    switch (f.getType()) {
-                         case Formattable::Type::kDate: {
-                             functionOption.adoptInstead(Option::createDate(f.getDate(), status));
-                             break;
-                         }
-                         case Formattable::Type::kDouble: {
-                             functionOption.adoptInstead(Option::createDouble(f.getDouble(), status));
-                             break;
-                         }
-                         case Formattable::Type::kLong: {
-                             functionOption.adoptInstead(Option::createLong(f.getLong(), status));
-                             break;
-                         }
-                         case Formattable::Type::kInt64: {
-                             functionOption.adoptInstead(Option::createInt64(f.getInt64(), status));
-                             break;
-                         }
-                         case Formattable::Type::kString: {
-                             functionOption.adoptInstead(Option::createString(f.getString(), status));
-                             break;
-                         }
-                         default: {
-                             // Options with array or object types are ignored
-                             continue;
-                         }
-                    }
+                case Formattable::Type::kDouble: {
+                    functionOption.adoptInstead(Option::createDouble(f.getDouble(), status));
                     break;
+                }
+                case Formattable::Type::kLong: {
+                    functionOption.adoptInstead(Option::createLong(f.getLong(), status));
+                    break;
+                }
+                case Formattable::Type::kInt64: {
+                    functionOption.adoptInstead(Option::createInt64(f.getInt64(), status));
+                    break;
+                }
+                case Formattable::Type::kString: {
+                    functionOption.adoptInstead(Option::createString(f.getString(), status));
+                    break;
+                }
+                default: {
+                    // Options with array or object types are ignored
+                    continue;
+                }
                 }
             }
             NULL_ON_ERROR(status);
@@ -736,16 +728,16 @@ FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& f
 // hasOperand set to true if `rand` resolves to an expression that's a unary function call
 // for example $foo => {$bar :plural} => hasOperand set to true
 //             $foo => {:func} => hasOperand set to false
-const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Operand& rand, bool& isFunction, FunctionRegistry::Options*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
+const FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Operand& rand, bool& isFunction, FunctionRegistry::Options*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
-    const FormattedPlaceholderWithFallback* result;
+    const FormattedPlaceholder* result;
     if (rand.isLiteral()) {
         isFunction = false;
-        result = formatLiteral(rand.asLiteral(), status);
+        result = formatLiteral(*rand.asLiteral(), status);
     } else {
         // Must be variable
-        const VariableName& var = rand.asVariable();
+        const VariableName& var = *rand.asVariable();
         // Resolve it
         const Closure* referent = env.lookup(var);
         if (referent != nullptr) {
@@ -761,7 +753,7 @@ const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::reso
             NULL_ON_ERROR(status);
         } else {
             // Unresolved variable -- could be a previous warning
-            result = FormattedPlaceholderWithFallback::createFallback(fallback(var), status);
+            result = Fallback::create(var, status);
         }
     }
     NULL_ON_ERROR(status);
@@ -770,7 +762,7 @@ const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::reso
 
 // Resolves the expression just enough to expose a function call
 // (or until a literal is reached)
-const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Expression& expr, bool& isFunction, FunctionRegistry::Options*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
+const FormattedPlaceholder* MessageFormatter::resolveVariables(Context& context, const Environment& env, const Expression& expr, bool& isFunction, FunctionRegistry::Options*& resolvedOptions, UnicodeString& functionName, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     // Unsupported expression error
@@ -787,7 +779,7 @@ const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::reso
     // Function call -- resolve the operand and options
     isFunction = true;
     const Operator& rator = expr.getOperator();
-    functionName = rator.getFunctionName().name;
+    functionName = rator.getFunctionName().name();
     resolvedOptions = resolveOptions(context, env, rator.getOptions(), status);
     NULL_ON_ERROR(status);
 
@@ -807,7 +799,7 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     UnicodeString functionName;
     // isFunction will be set to true if `expr` resolves to a function call 
     bool isFunction = false;
-    const FormattedPlaceholderWithFallback* maybeOperand = resolveVariables(context, globalEnv, expr, isFunction, resolvedOptions, functionName, status);
+    const FormattedPlaceholder* maybeOperand = resolveVariables(context, globalEnv, expr, isFunction, resolvedOptions, functionName, status);
     NULL_ON_ERROR(status);
     U_ASSERT(resolvedOptions != nullptr);
     const SelectorFactory* selectorFactory;
@@ -836,12 +828,12 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
                 if (isSyntaxOrDataModelWarning(status)) {
                     result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions));
                 } else {
-                    LocalPointer<FormattedPlaceholder> operand(maybeOperand->promoteFallback(status));
+                    LocalPointer<FormattedPlaceholder> operand(FullyFormatted::promoteFallback(*(static_cast<const Fallback*>(maybeOperand)), status));
                     NULL_ON_ERROR(status);
                     result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, operand.orphan()));
                 }
             } else {
-                result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, maybeOperand->getFormattedPlaceholderAlias()));
+                result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions, maybeOperand));
             }
         } else {
             result.adoptInstead(new ResolvedExpression(selector.orphan(), resolvedOptions));
@@ -859,7 +851,7 @@ MessageFormatter::ResolvedExpression* MessageFormatter::formatSelectorExpression
     return result.orphan();
 }
 
-const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::formatExpression(MessageFormatter::Context& context, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
+const FormattedPlaceholder* MessageFormatter::formatExpression(MessageFormatter::Context& context, const Environment& globalEnv, const Expression& expr, UErrorCode &status) const {
     NULL_ON_ERROR(status);
 
     // Formatting error
@@ -867,7 +859,7 @@ const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::form
         setError(U_UNSUPPORTED_PROPERTY, status);
         // Use the default fallback string
         // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-        return FormattedPlaceholderWithFallback::createFallback(status);
+        return Fallback::create(expr.getOperator().asReserved().fallback, status);
     }
 
     if (expr.isFunctionCall()) {
@@ -880,67 +872,39 @@ const MessageFormatter::FormattedPlaceholderWithFallback* MessageFormatter::form
  
         const Formatter* formatter = context.maybeCachedFormatter(functionName, status);
          
-        if (!expr.isStandaloneAnnotation()) {
-            // Format the argument
-            const FormattedPlaceholderWithFallback* arg = formatOperand(context, globalEnv, expr.getOperand(), status);
-            NULL_ON_ERROR(status);
-            // Don't call the function on error values
-            if (arg->isFallback()) {
-                return arg;
-            }
-
-            // Create this in case it's needed
-            LocalPointer<FormattedPlaceholderWithFallback> argFallback(arg->fallbackToSource(status));
-            NULL_ON_ERROR(status);
-
-            if (U_SUCCESS(status) && formatter != nullptr) {
-                // Format the call
-                        
-                // Save off the fallbacks, since the formatter
-                // takes ownership of its arg
-                UnicodeString argFallbackStr = arg->getFallbackString();
-
-                const FormattedPlaceholder* result = formatter->format(arg->getFormattedPlaceholderAlias(),
-                                                                 *resolvedOptions,
-                                                                 status);
-                // If the call succeeded, return the result
-                if (result != nullptr && U_SUCCESS(status)) {
-                    return FormattedPlaceholderWithFallback::create(argFallbackStr,
-                                                                    result,
-                                                                    status);
-                } else if (status == U_ZERO_ERROR) {
-                    // Set U_FORMATTING_WARNING if formatting function returned null
-                    // but didn't set an error code
-                    status = U_FORMATTING_WARNING;
-                }
-            }
-            // Call either returned null or set an error code, or formatter was null -- return a fallback
-            return argFallback.orphan();
+        // Format the argument
+        const Operand& rand = expr.getAnyOperand();
+        const FormattedPlaceholder* arg;
+        if (rand.isNull()) {
+            arg = FormattingInput::create(functionName, status);
+        } else {
+            arg = formatOperand(context, globalEnv, rand, status);
+        }
+        NULL_ON_ERROR(status);
+        // Don't call the function on error values
+        if (arg->isFallback()) {
+            return arg;
         }
 
-        // No operand
-        if (formatter != nullptr) {
-            // Call formatter with null argument
-            const FormattedPlaceholder* result(formatter->format(nullptr,
-                                                                 *resolvedOptions,
-                                                                 status));
+        if (U_SUCCESS(status) && formatter != nullptr) {
+            // Format the call
+            const FormattedPlaceholder* result = formatter->format(*(static_cast<const FormattingInput*>(arg)),
+                                                                   *resolvedOptions,
+                                                                   status);
             // If the call succeeded, return the result
             if (result != nullptr && U_SUCCESS(status)) {
-                return FormattedPlaceholderWithFallback::create(functionName.toString(),
-                                                                result,
-                                                                status);
+                return result;
             } else if (status == U_ZERO_ERROR) {
                 // Set U_FORMATTING_WARNING if formatting function returned null
                 // but didn't set an error code
                 status = U_FORMATTING_WARNING;
             }
-            // Call either returned null or set an error code -- return a fallback
-            return FormattedPlaceholderWithFallback::createFallback(functionName.toString(), status);
         }
 
         // If we reached this point, the formatter is null --
         // Must have been a previous unknown function warning
-        return FormattedPlaceholderWithFallback::createFallback(functionName.toString(), status);
+        return (rand.isNull() ? Fallback::create(functionName, status)
+                : arg->fallbackToSource(status));
     } else {
         return formatOperand(context, globalEnv, expr.getOperand(), status);
     }
@@ -955,7 +919,7 @@ void MessageFormatter::formatPattern(Context& context, const Environment& global
         if (part->isText()) {
             result += part->asText();
         } else {
-            const FormattedPlaceholderWithFallback* formattedPart(formatExpression(context, globalEnv, part->contents(), status));
+            const FormattedPlaceholder* formattedPart(formatExpression(context, globalEnv, part->contents(), status));
             CHECK_ERROR(status);
             result += formattedPart->toString(locale, status);
         }
@@ -1034,7 +998,9 @@ void MessageFormatter::matchSelectorKeys(const ResolvedExpression& rv, const UVe
     }
 
     size_t numberMatching = 0;
-    selectorImpl.selectKey(rv.resolvedOperand, keysIn.getAlias(), numKeys, *(rv.resolvedOptions), keysOut.getAlias(), numberMatching, status);
+    if (!rv.isFallback) {
+        selectorImpl.selectKey(*(static_cast<const FormattingInput*>(rv.resolvedOperand)), keysIn.getAlias(), numKeys, *(rv.resolvedOptions), keysOut.getAlias(), numberMatching, status);
+    }
     arrayToKeys(keysOut.getAlias(), numberMatching, matches, status);
 }
 
@@ -1078,7 +1044,7 @@ void MessageFormatter::resolvePreferences(const UVector& res, const VariantMap& 
                 // 2ii(b)(a) Assert that key is a literal.
                 // (Not needed)
                 // 2ii(b)(b) Let `ks` be the resolved value of `key`.
-                const UnicodeString& ks = evalLiteral(key.asLiteral());
+                const UnicodeString& ks = key.asLiteral().stringContents();
                 CHECK_ERROR(status);
                 // 2ii(b)(c) Append `ks` as the last element of the list `keys`.
                 LocalPointer<UnicodeString> keyAsString(new UnicodeString(ks));
@@ -1136,7 +1102,7 @@ void filterVariants(const VariantMap& variants, const UVector& pref, UErrorCode 
             // 2i(c). Assert that `key` is a literal.
             // (Not needed)
             // 2i(d). Let `ks` be the resolved value of `key`.
-            UnicodeString ks = evalLiteral(key.asLiteral());
+            UnicodeString ks = key.asLiteral().stringContents();
             // 2i(e). Let `matches` be the list of strings at index `i` of `pref`.
             const UVector& matches = *((UVector*) pref[i]);
             // 2i(f). If `matches` includes `ks`
@@ -1221,7 +1187,7 @@ void sortVariants(const UVector& pref, UErrorCode& status, UVector& vars) {
                 // 5iii(c)(a). Assert that `key` is a literal.
                 // (Not needed)
                 // 5iii(c)(b). Let `ks` be the resolved value of `key`.
-                UnicodeString ks = evalLiteral(key.asLiteral());
+                UnicodeString ks = key.asLiteral().stringContents();
                 // 5iii(c)(c) Let matchpref be the integer position of ks in `matches`.
                 U_ASSERT(matches.contains(&ks));
                 matchpref = matches.indexOf(&ks);
@@ -1306,7 +1272,7 @@ void MessageFormatter::check(const Arguments& globalEnv, const Environment& loca
     }
 
     // Check that variable is in scope
-    const VariableName& var = rand.asVariable();
+    const VariableName& var = *rand.asVariable();
     // Check local scope
     if (localEnv.lookup(var) != nullptr) {
         return;

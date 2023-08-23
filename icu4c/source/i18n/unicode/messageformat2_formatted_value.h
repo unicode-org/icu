@@ -16,11 +16,22 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/formattedvalue.h"
+#include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2_macros.h"
 #include "unicode/numberformatter.h"
 #include "unicode/smpdtfmt.h"
 
 U_NAMESPACE_BEGIN namespace message2 {
+
+class FormattedString;
+class FormattedNumber;
+class FormattingInput;
+class FullyFormatted;
+
+extern FormattedString* formatDateWithDefaults(Locale locale, const FormattingInput& in, UErrorCode& errorCode);
+extern FormattedNumber* formatNumberWithDefaults(Locale locale, const FormattingInput& in, double toFormat, UErrorCode& errorCode);
+extern FormattedNumber* formatNumberWithDefaults(Locale locale, const FormattingInput& in, int32_t toFormat, UErrorCode& errorCode);
+extern FormattedNumber* formatNumberWithDefaults(Locale locale, const FormattingInput& in, int64_t toFormat, UErrorCode& errorCode);
 
 /*
   TODO
@@ -30,180 +41,169 @@ U_NAMESPACE_BEGIN namespace message2 {
   but is available to be manipulated by formatting functions or deconstructed
   by selector functions.
 */
+
+class Fallback;
+
 class FormattedPlaceholder : public UMemory {
     public:
-
-    static DateFormat* defaultDateTimeInstance(Locale locale, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
-        LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
-        if (!df.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        return df.orphan();
-    }
-
-    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable& savedInput, double toFormat, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
-        return create(savedInput, number::NumberFormatter::withLocale(locale).formatDouble(toFormat, errorCode), errorCode);
-    }
-    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable& savedInput, int32_t toFormat, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
-        return create(savedInput, number::FormattedNumber(number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode)), errorCode);
-    }
-    static FormattedPlaceholder* formatNumberWithDefaults(Locale locale, const Formattable& savedInput, int64_t toFormat, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
-        return create(savedInput, number::FormattedNumber(number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode)), errorCode);
-    }
-
-    /*
-      Three types:
-      STRING => plain string with no metadata
-      NUMBER => FormattedNumber
-      DYNAMIC => Formattable -- a ready-to-format thing that hasn't been formatted yet
-     */
-    enum Type {
-        NUMBER,
-        STRING,
-        DYNAMIC
-    };
-
-    Type getType() const { return type; }
-    bool isFormattedNumber() const { return (getType() == Type::NUMBER); }
-    UnicodeString toString(Locale locale, UErrorCode& status) const;
-
-    const UnicodeString& getString() const {
-        U_ASSERT(type == Type::STRING);
-        return string;
-    }
-    const number::FormattedNumber& getNumber() const {
-        U_ASSERT(type == Type::NUMBER);
-        return num;
-    }
-    number::FormattedNumber getNumber() {
-        U_ASSERT(type == Type::NUMBER);
-        return std::move(num);
-    }
-    const Formattable& getInput() const {
-        return input;
-    }
-/*
-    const Formattable* aliasInput() const {
-        return input;
-    }
-*/
-
-    // Creates a formatted number (NUMBER)
-    static FormattedPlaceholder* create(const Formattable& input, number::FormattedNumber v, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        FormattedPlaceholder* result(new FormattedPlaceholder(input, std::move(v)));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-
-    // Creates an unformatted value (DYNAMIC)
-    static FormattedPlaceholder* create(const Formattable& v, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        FormattedPlaceholder* result(new FormattedPlaceholder(v));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-
-    // Creates a formatted string (STRING), saving its input
-    static FormattedPlaceholder* create(const Formattable& input, UnicodeString s, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        FormattedPlaceholder* result(new FormattedPlaceholder(input, s));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-
-    // Sets input to `s` (same input and formatted result) - type STRING
-    // The fallback string is different: for example: fallback=|42|, input="42", s="42"
-    static FormattedPlaceholder* create(const UnicodeString& s, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        // TODO: perhaps this could be optimized?
-        // depends if we ever want to distinguish between "an input string, not yet formatted"
-
-        LocalPointer<Formattable> input(new Formattable(s));
-        if (!input.isValid()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        FormattedPlaceholder* result(new FormattedPlaceholder(input.orphan(), s));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-    // Formats a `Formattable` using defaults
-    static FormattedPlaceholder* format(Locale loc, const Formattable& in, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-
-        LocalPointer<FormattedPlaceholder> result;
-        switch (in.getType()) {
-            case Formattable::Type::kDate: {
-                result.adoptInstead(formatDateWithDefaults(loc, in, status));
-                break;
-            }
-            case Formattable::Type::kDouble: {
-                result.adoptInstead(formatNumberWithDefaults(loc, in, in.getDouble(), status));
-                break;
-            }
-            case Formattable::Type::kLong: {
-                result.adoptInstead(formatNumberWithDefaults(loc, in, in.getLong(), status));
-                break;
-            }
-            case Formattable::Type::kInt64: {
-                result.adoptInstead(formatNumberWithDefaults(loc, in, in.getInt64(), status));
-                break;
-            }
-            case Formattable::Type::kString: {
-                result.adoptInstead(create(in, in.getString(), status));
-                break;
-            }
-            default: {
-                result.adoptInstead(create(in, status));
-                break;
-            }
-        }
-        NULL_ON_ERROR(status);
-        return result.orphan();
-    }
+    virtual bool hasInput() const = 0;
+    virtual bool isFallback() const = 0;
+    virtual bool hasOutput() const = 0;
+    // Precondition: hasOutput()
+    const FullyFormatted& getOutput() const;
+    virtual UnicodeString toString(Locale locale, UErrorCode& status) const = 0;
+    virtual const Fallback* fallbackToSource(UErrorCode&) const = 0;
+    static DateFormat* defaultDateTimeInstance(Locale, UErrorCode&);
 
     virtual ~FormattedPlaceholder();
-
-    private:
-
-    static FormattedPlaceholder* formatDateWithDefaults(Locale locale, const Formattable& toFormat, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
-        LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
-        NULL_ON_ERROR(errorCode);
-        UnicodeString result;
-        df->format(toFormat, result, 0, errorCode);
-        return FormattedPlaceholder::create(toFormat, result, errorCode);
-    }
-
-    FormattedPlaceholder(const Formattable& f, UnicodeString s) : type(Type::STRING), string(s), input(f) {}
-
-    FormattedPlaceholder(const Formattable& f, number::FormattedNumber v) : type(Type::NUMBER), num(std::move(v)), input(f) {}
-    FormattedPlaceholder(const Formattable& f) : type(Type::DYNAMIC), input(f) {}
-
-    Type type;
-
-    // If `type` is not DYNAMIC, then the contents are either a formatted string,
-    // or a formatted number
-    union {
-        UnicodeString string;
-        number::FormattedNumber num;
-    };
-    const Formattable& input;
 };
+
+class FormattingInput;
+class FullyFormatted;
+
+class Fallback : public FormattedPlaceholder {
+    public:
+    bool hasInput() const { return false; }
+    virtual bool isFallback() const { return true; }
+    bool hasOutput() const { return false; }
+    UnicodeString toString(Locale locale, UErrorCode& status) const;
+    UnicodeString toString() const;
+    static Fallback* create(const Text&, UErrorCode& status);
+    // TODO: this doesn't work
+    // const Fallback* fallbackToSource() const { return static_cast<const Fallback*>(this); }
+    const Fallback* fallbackToSource(UErrorCode& status) const { return Fallback::create(fallback, status); }
+
+    virtual ~Fallback();
+    private:
+    friend class FormattingInput;
+    friend class FullyFormatted;
+
+    const Text& fallback;
+    Formattable fallbackAsFmtable;
+    Fallback(const Text& t);
+}; // class Fallback
+
+class FormattingInput : public Fallback {
+    public:
+    virtual bool isNull() const { return true; }
+    virtual bool isFallback() const override { return false; }
+    virtual const Formattable& getInput() const {
+        U_ASSERT(false);
+    }
+    virtual ~FormattingInput();
+    static FormattingInput* create(const FunctionName& fn, UErrorCode& errorCode) {
+        NULL_ON_ERROR(errorCode);
+        FormattingInput* result = new FormattingInput(fn);
+        if (result == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+    private:
+    friend class FormattingInputNotNull;
+
+    // Since this is used to represent an absent argument,
+    // there is always a function name to use as a fallback
+    FormattingInput(const Text& fn) : Fallback(fn) {}
+}; // class FormattingInput
+
+class FormattingInputNotNull : public FormattingInput {
+    public:
+    bool isNull() const override { return false; }
+    bool hasInput() const { return true; }
+    bool hasOutput() const { return false; }
+    UnicodeString toString(Locale locale, UErrorCode& status) const;
+    const Formattable& getInput() const override {
+        return input;
+    }
+    // Creates an unformatted value
+    static FormattingInputNotNull* create(const Text& source, const Formattable& v, UErrorCode& status) {
+        NULL_ON_ERROR(status);
+        FormattingInputNotNull* result(new FormattingInputNotNull(source, v));
+        if (result == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+    virtual ~FormattingInputNotNull();
+    private:
+    friend class FullyFormatted;
+
+    const Formattable& input;
+    FormattingInputNotNull(const Text& p, const Formattable& f) : FormattingInput(p), input(f) {}
+}; // class FormattingInputNotNull
+
+class FormattedString;
+class FormattedNumber;
+
+class FullyFormatted : public FormattingInputNotNull {
+    public:
+    virtual bool isFormattedNumber() const = 0;
+    virtual bool isFormattedString() const = 0;
+    bool hasInput() const { return true; }
+    bool hasOutput() const { return true; }
+    // Formats a `Formattable` using defaults
+    static FullyFormatted* format(Locale loc, const FormattingInput& in, UErrorCode& status);
+    static FullyFormatted* create(const FormattingInput&, UnicodeString, UErrorCode&);
+    static FullyFormatted* promoteFallback(const Fallback&, UErrorCode& status);
+    
+    private:
+    friend class FormattedString;
+    friend class FormattedNumber;
+
+    FullyFormatted(const FormattingInputNotNull& i) : FormattingInputNotNull(i.fallback, i.input) {}
+    FullyFormatted(const FormattingInput& i) : FormattingInputNotNull(i.fallback, i.fallbackAsFmtable) {} 
+
+}; // class FullyFormatted
+
+class FormattedString : public FullyFormatted {
+    public:
+    UnicodeString toString(Locale locale, UErrorCode& status) const;
+    bool isFormattedNumber() const { return false; }
+    bool isFormattedString() const { return true; }
+    const UnicodeString& getString() const {
+        return string;
+    }
+    // Creates a formatted string, saving its input
+    static FormattedString* create(const FormattingInput& input, const UnicodeString& s, UErrorCode& status) {
+        NULL_ON_ERROR(status);
+        FormattedString* result(new FormattedString(input, s));
+        if (result == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+    virtual ~FormattedString();
+    private:
+    const UnicodeString string;
+    FormattedString(const FormattingInputNotNull& i, const UnicodeString& s) : FullyFormatted(i), string(s) {}
+    FormattedString(const FormattingInput& i, const UnicodeString& s) : FullyFormatted(i), string(s) {}
+}; // class FormattedString
+
+
+class FormattedNumber : public FullyFormatted {
+    public:
+    UnicodeString toString(Locale locale, UErrorCode& status) const;
+    bool isFormattedNumber() const { return true; }
+    bool isFormattedString() const { return false; }
+    const number::FormattedNumber& getNumber() const {
+        return num;
+    }
+    // Creates a formatted number (NUMBER)
+    static FormattedNumber* create(const FormattingInput& input, number::FormattedNumber v, UErrorCode& status) {
+        NULL_ON_ERROR(status);
+        U_ASSERT(!input.isNull());
+        FormattedNumber* result(new FormattedNumber(static_cast<const FormattingInputNotNull&>(input), std::move(v)));
+        if (result == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return result;
+    }
+    virtual ~FormattedNumber();
+    private:
+    const number::FormattedNumber num;
+    FormattedNumber(const FormattingInputNotNull& i, number::FormattedNumber n) : FullyFormatted(i), num(std::move(n)) {}
+}; // class FormattedNumber
 
 } // namespace message2
 U_NAMESPACE_END

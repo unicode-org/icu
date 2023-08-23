@@ -24,10 +24,6 @@ U_NAMESPACE_BEGIN namespace message2 {
 
 // TODO: can we use lambdas instead, as in icu4j?
 
-// TODO: create some other data structure to represent resolved options,
-// so as to avoid using a Hashtable
-using FunctionName = MessageFormatDataModel::FunctionName;
-
 class Formatter;
 class Selector;
 
@@ -190,19 +186,21 @@ class U_I18N_API FunctionRegistry : UMemory {
 
 class U_COMMON_API Formatter : public UMemory {
  public:
-    // TODO: Java uses `Object` for the argument type. Using `FormattedPlaceholder` here.
-    // See if any examples require using an argument that's not a FormattedPlaceholder
+    // TODO: Java uses `Object` for the argument type. Using `FormattingInput` here.
+    // See if any examples require using an argument that's not a FormattingInput
     // Needs an error code because internal details may require calling functions that can fail
     // (e.g. parsing a string as a number, for Number)
 
-    // TODO: FormattedPlaceholder is not const because numbers can only be passed by move
+    // TODO: FormattingInput is not const because numbers can only be passed by move
     // See comments in StandardFunctions::number::format()
 
     // Operand can be null
 
     // If argument is const, result must be const, since we may want to return the argument unchanged
     // TODO: this is potentially a memory leak since the result might be newly allocated or might be previously owned
-    virtual const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const = 0;
+
+    // TODO: Non-null, but fallbacks are treated as the absence of an arg
+    virtual const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const = 0;
     virtual ~Formatter();
 };
 
@@ -218,7 +216,7 @@ class U_COMMON_API Selector : public UMemory {
       See selectKey() in message-value.ts
      */
     // `value` may be null, because the selector might be nullary
-    virtual void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual void selectKey(const FormattingInput& value, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
 
@@ -238,7 +236,7 @@ class StandardFunctions {
 
     class DateTime : public Formatter {
         public:
-        const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
 
         private:
         Locale locale;
@@ -254,7 +252,7 @@ class StandardFunctions {
         
     class Number : public Formatter {
         public:
-        const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
 
         private:
         friend class NumberFactory;
@@ -272,12 +270,13 @@ class StandardFunctions {
 
     class Identity : public Formatter {
     public:
-        const FormattedPlaceholder* format(const FormattedPlaceholder* toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
         
     private:
         friend class IdentityFactory;
 
-        Identity() {}
+        const Locale& locale;
+        Identity(const Locale& loc) : locale(loc) {}
         ~Identity();
     };
 
@@ -295,7 +294,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const FormattingInput& value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -316,7 +315,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        void selectKey(const FormattedPlaceholder* value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(const FormattingInput& value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

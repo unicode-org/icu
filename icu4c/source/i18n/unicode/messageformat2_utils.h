@@ -42,7 +42,7 @@ static Hashtable* copyHashtable(const Hashtable& other) {
     int32_t pos = UHASH_FIRST;
     V *val;
     while ((e = other.nextElement(pos)) != nullptr) {
-        val = new V(*(static_cast<V *>(e->value.pointer)));
+        val = V::create(*(static_cast<V *>(e->value.pointer)));
         if (val == nullptr) {
             return nullptr;
         }

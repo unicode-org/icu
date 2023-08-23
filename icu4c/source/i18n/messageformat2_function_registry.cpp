@@ -336,20 +336,20 @@ Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, UErr
     return result;
 }
 
-static FormattedPlaceholder* notANumber(UErrorCode& errorCode) {
+static const FullyFormatted* notANumber(const FormattingInput& in, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    return FormattedPlaceholder::create(UnicodeString("NaN"), errorCode);
+    return FormattedString::create(in, UnicodeString("NaN"), errorCode);
 }
 
-static FormattedPlaceholder* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, const Formattable& fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
+static const FullyFormatted* stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, const FormattingInput& fp, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     double numberValue;
     UErrorCode localErrorCode = U_ZERO_ERROR;
     strToDouble(s, locale, numberValue, localErrorCode);
     if (U_FAILURE(localErrorCode)) {
-        return notANumber(errorCode);
+        return notANumber(fp, errorCode);
     }
     UErrorCode savedStatus = errorCode;
     number::FormattedNumber result = nf.formatDouble(numberValue - offset, errorCode);
@@ -357,15 +357,15 @@ static FormattedPlaceholder* stringAsNumber(Locale locale, const number::Localiz
     if (errorCode == U_USING_DEFAULT_WARNING) {
         errorCode = savedStatus;
     }
-    return FormattedPlaceholder::create(fp, std::move(result), errorCode);
+    return FormattedNumber::create(fp, std::move(result), errorCode);
 }
 
-const FormattedPlaceholder* StandardFunctions::Number::format(const FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* StandardFunctions::Number::format(const FormattingInput& arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     // No argument => return "NaN"
-    if (arg == nullptr) {
-        return notANumber(errorCode);
+    if (arg.isNull()) {
+        return notANumber(arg, errorCode);
     }
 
     int64_t offset = options.getIntOption(UnicodeString("offset"), 0);
@@ -382,54 +382,46 @@ const FormattedPlaceholder* StandardFunctions::Number::format(const FormattedPla
     NULL_ON_ERROR(errorCode);
 
     number::FormattedNumber numberResult;
-    switch (arg->getType()) {
-        case FormattedPlaceholder::Type::STRING: {
-            return stringAsNumber(locale, *realFormatter, arg->getInput(), arg->getString(), offset, errorCode);
+
+    if (arg.hasOutput()) {
+        const FullyFormatted& val = arg.getOutput();
+        if (val.isFormattedString()) {
+            return stringAsNumber(locale, *realFormatter, arg, static_cast<const FormattedString&>(val).getString(), offset, errorCode);
+        } else {
+            U_ASSERT(val.isFormattedNumber());
+            return &val;
         }
-        case FormattedPlaceholder::Type::NUMBER: {
-/*
-  This is why functions can't just take a `const FormattedPlaceholder*`.
-  The number can't be copied, so we have to invalidate the input
-  `FormattedPlaceholder*`. At the same time, we can't just return a `const FormattedPlaceholder*`
-  since if we do allocate a new FormattedPlaceholder*, the caller has to take ownership
-*/
-            // TODO: passing in a number just returns the same number,
-            // with options ignored. is that right?
-            // numberResult = arg->getNumber();
-            return arg;
-//            break;
-        }
-        case FormattedPlaceholder::Type::DYNAMIC: {
-            const Formattable& toFormat = arg->getInput(); 
-            switch (toFormat.getType()) {
-            case Formattable::Type::kDouble: {
-                numberResult = realFormatter->formatDouble(toFormat.getDouble() - offset, errorCode);
-                break;
-            }
-            case Formattable::Type::kLong: {
-                numberResult = realFormatter->formatInt(toFormat.getLong() - offset, errorCode);
-                break;
-            }
-            case Formattable::Type::kInt64: {
-                numberResult = realFormatter->formatInt(toFormat.getInt64() - offset, errorCode);
-                break;
-            }
-            case Formattable::Type::kString: {
-                // Try to parse the string as a number, as in the `else` case there
-                // TODO: see if the behavior here matches the function registry spec
-                return stringAsNumber(locale, *realFormatter, arg->getInput(), toFormat.getString(), offset, errorCode);
-            }
-            default: {
-                // Other types can't be parsed as a number
-                return notANumber(errorCode);
-            }
-            }
-            break;
-        }
+    }
+    // Already handled the null case
+    U_ASSERT(arg.hasInput());
+
+    const Formattable& toFormat = arg.getInput(); 
+    switch (toFormat.getType()) {
+    case Formattable::Type::kDouble: {
+        numberResult = realFormatter->formatDouble(toFormat.getDouble() - offset, errorCode);
+        break;
+    }
+    case Formattable::Type::kLong: {
+        numberResult = realFormatter->formatInt(toFormat.getLong() - offset, errorCode);
+        break;
+    }
+    case Formattable::Type::kInt64: {
+        numberResult = realFormatter->formatInt(toFormat.getInt64() - offset, errorCode);
+        break;
+    }
+    case Formattable::Type::kString: {
+        // Try to parse the string as a number, as in the `else` case there
+        // TODO: see if the behavior here matches the function registry spec
+        return stringAsNumber(locale, *realFormatter, arg, toFormat.getString(), offset, errorCode);
+    }
+    default: {
+        // Other types can't be parsed as a number
+        return notANumber(arg, errorCode);
+    }
     }
     
     NULL_ON_ERROR(errorCode);
-    return FormattedPlaceholder::create(arg->getInput(), std::move(numberResult), errorCode);
+    return FormattedNumber::create(arg, std::move(numberResult), errorCode);
 }
 
 // --------- PluralFactory
@@ -476,7 +468,7 @@ static void tryWithFormattable(const Locale& locale, const Formattable& value, d
         }
         case Formattable::Type::kString: {
             tryAsString(locale, value.getString(), valToCheck, noMatch);
-            break;
+            return;
         }
         default: {
             noMatch = true;
@@ -486,11 +478,11 @@ static void tryWithFormattable(const Locale& locale, const Formattable& value, d
     noMatch = false;
 }
 
-void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, const UnicodeString* keys/*[]*/, size_t numKeys, const Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(const FormattingInput& arg, const UnicodeString* keys/*[]*/, size_t numKeys, const Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present
-    if (valuePtr == nullptr) {
+    if (arg.isNull()) {
         errorCode = U_SELECTOR_ERROR;
         return;
     }
@@ -501,18 +493,16 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
     double valToCheck;
     bool noMatch = true;
 
-    switch (valuePtr->getType()) {
+    bool hasOutput = arg.hasOutput();
+    bool isFormattedNumber = hasOutput && arg.getOutput().isFormattedNumber();
+    bool isFormattedString = hasOutput && !isFormattedNumber;
+
+    if (isFormattedString) {
+        const FullyFormatted& val = arg.getOutput();
         // Formatted string: try parsing it as a number
-        case FormattedPlaceholder::Type::STRING: {
-            tryAsString(locale, valuePtr->getString(), valToCheck, noMatch);
-            break;
-        }
-        // Number: use the original input and parse it as a number
-        case FormattedPlaceholder::Type::NUMBER:
-        // Formattable: check if it's a number or parseable as a number
-        case FormattedPlaceholder::Type::DYNAMIC: {
-            tryWithFormattable(locale, valuePtr->getInput(), valToCheck, noMatch);
-        }
+        tryAsString(locale, static_cast<const FormattedString&>(val).getString(), valToCheck, noMatch);
+    } else {
+        tryWithFormattable(locale, arg.getInput(), valToCheck, noMatch);
     }
 
     if (noMatch) {
@@ -545,8 +535,13 @@ void StandardFunctions::Plural::selectKey(const FormattedPlaceholder* valuePtr, 
     }
 
     // If there was no exact match, check for a match based on the plural category
-    UnicodeString match = valuePtr->isFormattedNumber() ? rules->select(valuePtr->getNumber(), errorCode)
-        : rules->select(valToCheck - offset);
+    UnicodeString match;
+    if (isFormattedNumber) {
+        const FormattedNumber& val = static_cast<const FormattedNumber&>(arg.getOutput());
+        match = rules->select(val.getNumber(), errorCode);
+    } else {
+        match = rules->select(valToCheck - offset);
+    }
     CHECK_ERROR(errorCode);
 
     for (size_t i = 0; i < numKeys; i ++) {
@@ -596,10 +591,11 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, UE
     return result;
 }
 
-const FormattedPlaceholder* StandardFunctions::DateTime::format(const FormattedPlaceholder* arg, const Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* StandardFunctions::DateTime::format(const FormattingInput& arg, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
-    if (arg == nullptr) {
+    // Argument must be present
+    if (arg.isNull()) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
@@ -640,19 +636,15 @@ const FormattedPlaceholder* StandardFunctions::DateTime::format(const FormattedP
     NULL_ON_ERROR(errorCode);
 
     UnicodeString result;
-    // TODO: is this correct if arg is a Number or formatted string?
-    switch (arg->getType()) {
-        case FormattedPlaceholder::Type::DYNAMIC: {
-            df->format(arg->getInput(), result, 0, errorCode);
-            break;
-        }
-        case FormattedPlaceholder::Type::STRING:
-        case FormattedPlaceholder::Type::NUMBER: {
-            errorCode = U_FORMATTING_WARNING;
-            return nullptr;
-        }
+    if (!arg.hasOutput()) {
+        U_ASSERT(arg.hasInput()); // Handled null case already
+        df->format(arg.getInput(), result, 0, errorCode);
+    } else {
+        // TODO: is this right?
+        errorCode = U_FORMATTING_WARNING;
+        return nullptr;
     }
-    return FormattedPlaceholder::create(arg->getInput(), result, errorCode);
+    return FormattedString::create(arg, result, errorCode);
 }
 
 // --------- TextFactory
@@ -666,7 +658,7 @@ Selector* StandardFunctions::TextFactory::createSelector(Locale locale, UErrorCo
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* value, const UnicodeString* keys/*[]*/, size_t numKeys, const Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(const FormattingInput& value, const UnicodeString* keys/*[]*/, size_t numKeys, const Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
@@ -674,7 +666,7 @@ void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* valu
     (void) options; // Unused parameter
 
     // Argument must be non-null
-    if (value == nullptr) {
+    if (value.isNull()) {
         errorCode = U_SELECTOR_ERROR;
         return;
     }
@@ -684,7 +676,7 @@ void StandardFunctions::TextSelector::selectKey(const FormattedPlaceholder* valu
 
     // Convert to string
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    UnicodeString formattedValue = value->toString(locale, localErrorCode);
+    UnicodeString formattedValue = value.toString(locale, localErrorCode);
     if (U_FAILURE(localErrorCode)) {
         // Don't pass the error through, just return "no match"
         numMatching = 0;
@@ -705,10 +697,7 @@ StandardFunctions::TextSelector::~TextSelector() {}
 // --------- IdentityFactory
 
 Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
-    // Locale not used
-    (void) locale;
-
-    Formatter* result = new Identity();
+    Formatter* result = new Identity(locale);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
@@ -717,16 +706,17 @@ Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, UE
 
 }
 
-const FormattedPlaceholder* StandardFunctions::Identity::format(const FormattedPlaceholder* toFormat, const Options& options, UErrorCode& errorCode) const {
+const FullyFormatted* StandardFunctions::Identity::format(const FormattingInput& toFormat, const Options& options, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     (void) options; // unused parameter
-    if (toFormat == nullptr) {
+    if (toFormat.isNull()) {
         errorCode = U_FORMATTING_WARNING;
         return nullptr;
     }
     // Just returns the input value as a string
-    return FormattedPlaceholder::create(toFormat->getInput(), toFormat->getString(), errorCode);
+    UnicodeString formattedValue = toFormat.toString(locale, errorCode);
+    return FormattedString::create(toFormat, formattedValue, errorCode);
 }
 
 StandardFunctions::Identity::~Identity() {}

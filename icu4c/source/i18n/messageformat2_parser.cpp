@@ -443,7 +443,7 @@ void PARSER::parseTokenWithWhitespace(UChar32 c,
   (Matches the `name` nonterminal in the grammar.)
 */
 void PARSER::parseName(UErrorCode &errorCode,
-                       VariableName &name) {
+                       UnicodeString &name) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -467,7 +467,7 @@ void PARSER::parseName(UErrorCode &errorCode,
   (Matches the `variable` nonterminal in the grammar.)
 */
 void PARSER::parseVariableName(UErrorCode &errorCode,
-                               VariableName &var) {
+                               UnicodeString& var) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -535,7 +535,7 @@ FunctionName* PARSER::parseFunction(UErrorCode &errorCode) {
 */
 void PARSER::parseEscapeSequence(EscapeKind kind,
                                  UErrorCode &errorCode,
-                                 String &str) {
+                                 UnicodeString &str) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
@@ -602,7 +602,7 @@ void PARSER::parseEscapeSequence(EscapeKind kind,
   nonterminal in the grammar
 */
 void PARSER::parseLiteralEscape(UErrorCode &errorCode,
-                                String &str) {
+                                UnicodeString &str) {
     parseEscapeSequence(LITERAL, errorCode, str);
 }
 
@@ -610,7 +610,7 @@ void PARSER::parseLiteralEscape(UErrorCode &errorCode,
   Consume a literal, matching the `literal` nonterminal in the grammar.
   May be quoted or unquoted -- returns true iff quoted
 */
-void PARSER::parseLiteral(UErrorCode &errorCode, bool& quoted, String& contents) {
+void PARSER::parseLiteral(UErrorCode &errorCode, bool& quoted, UnicodeString& contents) {
     CHECK_ERROR(errorCode);
     CHECK_BOUNDS(source, index, parseError, errorCode);
 
@@ -666,19 +666,19 @@ void PARSER::parseOption(UErrorCode &errorCode,
     U_ASSERT(inBounds(source, index));
 
     // Parse LHS
-    String lhs;
+    UnicodeString lhs;
     parseName(errorCode, lhs);
 
     // Parse '='
     parseTokenWithWhitespace(EQUALS, errorCode);
 
-    String rhsStr;
+    UnicodeString rhsStr;
     LocalPointer<Operand> rand;
     // Parse RHS, which is either a literal or variable
     switch (source[index]) {
     case DOLLAR: {
         parseVariableName(errorCode, rhsStr);
-        rand.adoptInstead(Operand::create(rhsStr, errorCode));
+        rand.adoptInstead(Operand::create(VariableName(rhsStr), errorCode));
         break;
     }
     default: {
@@ -777,7 +777,7 @@ is involved and there's no state to save.
 }
 
 void PARSER::parseReservedEscape(UErrorCode &errorCode,
-                                 String &str) {
+                                 UnicodeString &str) {
     parseEscapeSequence(RESERVED, errorCode, str);
 }
 
@@ -792,7 +792,7 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
     CHECK_ERROR(errorCode);
 
     bool empty = true;
-    String chunk;
+    UnicodeString chunk;
     while(reservedChunkFollows(source[index])) {
         empty = false;
         // reserved-char
@@ -821,7 +821,7 @@ void PARSER::parseReservedChunk(UErrorCode &errorCode,
             CHECK_ERROR(errorCode);
             chunk.setTo(u"", 0);
         } else if (source[index] == PIPE || isUnquotedStart(source[index])) {
-            String s;
+            UnicodeString s;
             bool isQuoted;
             parseLiteral(errorCode, isQuoted, s);
             Literal lit(isQuoted, s);
@@ -865,7 +865,7 @@ Reserved* PARSER::parseReserved(UErrorCode &errorCode) {
     }
 
     // Add the start char as a separate text chunk
-    String firstCharString(source[index]);
+    UnicodeString firstCharString(source[index]);
     Literal firstChunk(false, firstCharString);
     builder->add(firstChunk, errorCode);
     NULL_ON_ERROR(errorCode);
@@ -995,11 +995,11 @@ void PARSER::parseLiteralOrVariableWithAnnotation(bool isVariable,
 
     LocalPointer<Operand> adoptedRand;
     if (isVariable) {
-        VariableName var;
+        UnicodeString var;
         parseVariableName(errorCode, var);
-        adoptedRand.adoptInstead(Operand::create(var, errorCode));
+        adoptedRand.adoptInstead(Operand::create(VariableName(var), errorCode));
     } else {
-        String s;
+        UnicodeString s;
         bool isQuoted;
         parseLiteral(errorCode, isQuoted, s);
         Literal lit(isQuoted, s);
@@ -1184,7 +1184,7 @@ void PARSER::parseDeclarations(UErrorCode &errorCode) {
         parseRequiredWhitespace(errorCode);
         // Restore precondition
         CHECK_BOUNDS(source, index, parseError, errorCode);
-        VariableName lhs;
+        UnicodeString lhs;
         parseVariableName(errorCode, lhs);
         parseTokenWithWhitespace(EQUALS, errorCode);
 
@@ -1215,7 +1215,7 @@ void PARSER::parseDeclarations(UErrorCode &errorCode) {
   Consume an escaped curly brace, or backslash, matching the `text-escape`
   nonterminal in the grammar
 */
-void PARSER::parseTextEscape(UErrorCode &errorCode, String &str) {
+void PARSER::parseTextEscape(UErrorCode &errorCode, UnicodeString &str) {
     parseEscapeSequence(TEXT, errorCode, str);
 }
 
@@ -1223,7 +1223,7 @@ void PARSER::parseTextEscape(UErrorCode &errorCode, String &str) {
   Consume a non-empty sequence of text characters and escaped text characters,
   matching the `text` nonterminal in the grammar
 */
-void PARSER::parseText(UErrorCode &errorCode, String &str) {
+void PARSER::parseText(UErrorCode &errorCode, UnicodeString &str) {
     CHECK_ERROR(errorCode);
     CHECK_BOUNDS(source, index, parseError, errorCode);
     
@@ -1272,7 +1272,7 @@ Key* PARSER::parseKey(UErrorCode &errorCode) {
     }
     default: {
         // Literal
-        String s;
+        UnicodeString s;
         bool isQuoted;
         parseLiteral(errorCode, isQuoted, s);
         Literal lit(isQuoted, s);
@@ -1447,7 +1447,7 @@ Pattern* PARSER::parsePattern(UErrorCode &errorCode) {
         }
         default: {
             // Must be text
-            String s;
+            UnicodeString s;
             parseText(errorCode, s);
             part.adoptInstead(PatternPart::create(s, errorCode));
             NULL_ON_ERROR(errorCode);

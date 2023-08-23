@@ -50,9 +50,9 @@ TypeEnvironment::TypeEnvironment(UErrorCode& errorCode) {
 
 Type TypeEnvironment::get(const VariableName& var) const {
     for (size_t i = 0; ((int32_t) i) < annotated->size(); i++) {
-        VariableName* lhs = (VariableName*) (*annotated)[i];
+        UnicodeString* lhs = (UnicodeString*) (*annotated)[i];
         U_ASSERT(lhs != nullptr);
-        if (*lhs == var) {
+        if (*lhs == var.name()) {
             return Annotated;
         }
     }
@@ -68,7 +68,7 @@ void TypeEnvironment::extend(const VariableName& var, Type t, UErrorCode& errorC
         return;
     }
 
-    LocalPointer<UnicodeString> s(new UnicodeString(var));
+    LocalPointer<UnicodeString> s(new UnicodeString(var.name()));
     if (!s.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -131,7 +131,7 @@ void requireAnnotated(const TypeEnvironment& t, const Expression& selectorExpr, 
     if (!selectorExpr.isReserved()) {
         const Operand& rand = selectorExpr.getOperand();
         if (rand.isVariable()) {
-            if (t.get(rand.asVariable()) == Type::Annotated) {
+            if (t.get(*rand.asVariable()) == Type::Annotated) {
                 return; // No error
             }
         }
@@ -166,7 +166,7 @@ Type typeOf(TypeEnvironment& t, const Expression& expr) {
         return Type::Unannotated;
     }
     U_ASSERT(rand.isVariable());
-    return t.get(rand.asVariable());
+    return t.get(*rand.asVariable());
 }
 
 void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode& error) {
