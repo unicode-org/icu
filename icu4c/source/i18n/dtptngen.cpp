@@ -38,6 +38,7 @@
 #include "hash.h"
 #include "uhash.h"
 #include "uresimp.h"
+#include "ulocimp.h"
 #include "dtptngen_impl.h"
 #include "ucln_in.h"
 #include "charstr.h"
@@ -655,17 +656,9 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
     if (U_FAILURE(status)) { return; }
 
     const char *language = locale.getLanguage();
-    const char *country = locale.getCountry();
-    
-    char regionOverride[8];
-    int32_t regionOverrideLength = locale.getKeywordValue("rg", regionOverride, sizeof(regionOverride), status);
-    if (U_SUCCESS(status) && regionOverrideLength > 0) {
-        country = regionOverride;
-        if (regionOverrideLength > 2) {
-            // chop off any subdivision codes that may have been included
-            regionOverride[2] = '\0';
-        }
-    }
+    char baseCountry[8];
+    ulocimp_getRegionForSupplementalData(locale.getName(), false, baseCountry, 8, &status);
+    const char* country = baseCountry;
     
     Locale maxLocale;  // must be here for correct lifetime
     if (*language == '\0' || *country == '\0') {

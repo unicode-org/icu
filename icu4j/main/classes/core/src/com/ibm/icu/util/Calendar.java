@@ -3790,7 +3790,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             // First, try to get a pattern from PATTERN_CACHE
             String calType = cal.getType();
             String key = loc.getBaseName() + "+" + calType;
-            PatternData patternData = PATTERN_CACHE.get(key);
+            PatternData patternData = null;
+            boolean hasHourCycleKeywords = loc.getKeywordValue("rg") != null
+                    || loc.getKeywordValue("hours") != null;
+            if (!hasHourCycleKeywords) {
+                // don't look in the cache if the locale specifies the rg or hc ("hours") keywords
+                patternData = PATTERN_CACHE.get(key);
+            }
             if (patternData == null) {
                 // Cache missed.  Get one from bundle
                 try {
@@ -3798,7 +3804,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 } catch (MissingResourceException e) {
                     patternData = new PatternData(DEFAULT_PATTERNS, null, DEFAULT_ATTIME_PATTERNS);
                 }
-                PATTERN_CACHE.put(key, patternData);
+                if (!hasHourCycleKeywords) {
+                    PATTERN_CACHE.put(key, patternData);
+                }
             }
             return patternData;
         }
@@ -3824,33 +3832,41 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         String[] dateTimePatternsOverrides = new String[patternsSize];
         int i = 0; // index for dateTimePatterns, dateTimePatternsOverrides
 
-        String baseLocID = locale.getBaseName();
-        if (baseLocID.length() > 0 && !baseLocID.equals("und")) {
-            ULocale baseLoc = new ULocale(baseLocID);
-            // The following is different from ICU4C, where we can get the valid locale
-            // for the SimpleDateFormat object. Here we do not have a SimpleDateFormat and
-            // valid locale for the Calendar is a bit meaningless.
-            ULocale validLoc = ULocale.addLikelySubtags(dtPatternsRb.getULocale());
-            if (validLoc != baseLoc) {
-                String baseReg = baseLoc.getCountry();
-                if ((baseReg.length() > 0 && !baseReg.equals(validLoc.getCountry()))
-                        || !baseLoc.getLanguage().equals(validLoc.getLanguage())) {
-                    // use DTPG if the standard time formats may have the wrong time cycle,
-                    // because the valid locale differs in important ways (region, language)
-                    // from the base locale.
-                    // We could *also* check whether they do actually have a mismatch with
-                    // the time cycle preferences for the region, but that is a lot more
-                    // work for little or no additional benefit, since just going ahead
-                    // and always synthesizing the time format as per the following should
-                    // create a locale-appropriate pattern with cycle that matches the
-                    // region preferences anyway.
-                    // In this case we get the first 4 entries of dateTimePatterns using
-                    // DateTimePatternGenerator, not resource data.
-                    DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstanceNoStdPat(locale);
-                    for (; i < 4; i++) {
-                        dateTimePatterns[i] = dtpg.getBestPattern(TIME_SKELETONS[i]);
+        boolean useDTPG = false;
+        if (locale.getKeywordValue("rg") != null || locale.getKeywordValue("hours") != null) {
+            useDTPG = true;
+        } else {
+            String baseLocID = locale.getBaseName();
+            if (!baseLocID.isEmpty() && !baseLocID.equals("und")) {
+                ULocale baseLoc = new ULocale(baseLocID);
+                // The following is different from ICU4C, where we can get the valid locale
+                // for the SimpleDateFormat object. Here we do not have a SimpleDateFormat and
+                // valid locale for the Calendar is a bit meaningless.
+                ULocale validLoc = ULocale.addLikelySubtags(dtPatternsRb.getULocale());
+                if (validLoc != baseLoc) {
+                    String baseReg = baseLoc.getCountry();
+                    if ((!baseReg.isEmpty() && !baseReg.equals(validLoc.getCountry()))
+                            || !baseLoc.getLanguage().equals(validLoc.getLanguage())) {
+                        useDTPG = true;
                     }
                 }
+            }
+        }
+        if (useDTPG) {
+            // use DTPG if the standard time formats may have the wrong time cycle,
+            // because the valid locale differs in important ways (region, language)
+            // from the base locale.
+            // We could *also* check whether they do actually have a mismatch with
+            // the time cycle preferences for the region, but that is a lot more
+            // work for little or no additional benefit, since just going ahead
+            // and always synthesizing the time format as per the following should
+            // create a locale-appropriate pattern with cycle that matches the
+            // region preferences anyway.
+            // In this case we get the first 4 entries of dateTimePatterns using
+            // DateTimePatternGenerator, not resource data.
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstanceNoStdPat(locale);
+            for (; i < TIME_SKELETONS.length; i++) {
+                dateTimePatterns[i] = dtpg.getBestPattern(TIME_SKELETONS[i]);
             }
         }
 
