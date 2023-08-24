@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692832260806,
+  "lastUpdate": 1692904494206,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -24352,6 +24352,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 25979652.353,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ea0dbd4c4166831278a2004511a1f252d77b983d",
+          "message": "ICU-22462 Rename to PersonNameConsistencyTest\n\nRename ExhaustivePersonNameFormatterTest to PersonNameConsistencyTest\nAlways run. Paramaterize the test so each test file are run in their\nown test case and report the failure/success separately",
+          "timestamp": "2023-08-24T11:45:27-07:00",
+          "tree_id": "6ebfdeda6c30a504e083255f5909305041026c46",
+          "url": "https://github.com/unicode-org/icu/commit/ea0dbd4c4166831278a2004511a1f252d77b983d"
+        },
+        "date": 1692904397086,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 652.0129,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 93912077.885,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 24220640.7878,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 98862691.8014,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 29514535.915,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
