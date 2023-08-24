@@ -10,6 +10,7 @@
 
 #include "charstr.h"
 #include "cmemory.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_USE
 #define EXTERNAL(i) (reinterpret_cast<ULocale*>(i))
@@ -56,14 +57,16 @@ int32_t ulocale_get ##N ( \
     CONST_INTERNAL(locale)->get ## N( \
         keywordLength < 0 ? StringPiece(keyword) : StringPiece(keyword, keywordLength), \
         sink, *err); \
-    if (U_FAILURE(*err)) return 0; \
-    if (sink.Overflowed()) { \
-       *err = U_BUFFER_OVERFLOW_ERROR; \
-       return sink.NumberOfBytesAppended()+1; \
+    int32_t reslen = sink.NumberOfBytesAppended(); \
+    if (U_FAILURE(*err)) { \
+        return reslen; \
     } \
-    int32_t len = sink.NumberOfBytesWritten(); \
-    if (len < bufferCapacity) valueBuffer[len] = '\0'; \
-    return len; \
+    if (sink.Overflowed()) { \
+        *err = U_BUFFER_OVERFLOW_ERROR; \
+    } else { \
+        u_terminateChars(valueBuffer, bufferCapacity, reslen, err); \
+    } \
+    return reslen; \
 }
 
 #define IMPL_ULOCALE_GET_KEYWORDS(N) \
