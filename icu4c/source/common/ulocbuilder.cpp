@@ -10,6 +10,7 @@
 #include "unicode/umachine.h"
 #include "unicode/ulocbuilder.h"
 #include "cstring.h"
+#include "ustr_imp.h"
 
 using icu::CheckedArrayByteSink;
 using icu::StringPiece;
@@ -95,18 +96,10 @@ int32_t ulocbld_buildLocaleID(ULocaleBuilder* builder,
     icu::Locale l = INTERNAL(builder)->build(*err);
     if (U_FAILURE(*err)) return 0;
     int32_t length = (int32_t)(uprv_strlen(l.getName()));
-    if (length <= bufferCapacity) {
-        uprv_strncpy(buffer, l.getName(), length);
-        if (length < bufferCapacity) {
-            buffer[length] = '\0';
-        } else {
-            *err = U_STRING_NOT_TERMINATED_WARNING;
-        }
-        return length;
+    if (0 < length && length <= bufferCapacity) {
+        uprv_memcpy(buffer, l.getName(), length);
     }
-    *err = U_BUFFER_OVERFLOW_ERROR;
-    uprv_memcpy(buffer, l.getName(), bufferCapacity);
-    return length;
+    return u_terminateChars(buffer, bufferCapacity, length, err);
 }
 
 int32_t ulocbld_buildLanguageTag(ULocaleBuilder* builder,
@@ -119,22 +112,16 @@ int32_t ulocbld_buildLanguageTag(ULocaleBuilder* builder,
     if (U_FAILURE(*err)) return 0;
     CheckedArrayByteSink sink(buffer, bufferCapacity);
     l.toLanguageTag(sink, *err);
+    int32_t reslen = sink.NumberOfBytesAppended();
     if (U_FAILURE(*err)) {
-        return 0;
+        return reslen;
     }
     if (sink.Overflowed()) {
         *err = U_BUFFER_OVERFLOW_ERROR;
-        return sink.NumberOfBytesAppended();
-    }
-    int32_t written = sink.NumberOfBytesWritten();
-
-    if (written <  bufferCapacity) {
-        // null terminate
-        buffer[written] = '\0';
     } else {
-        *err = U_STRING_NOT_TERMINATED_WARNING;
+        u_terminateChars(buffer, bufferCapacity, reslen, err);
     }
-    return written;
+    return reslen;
 }
 
 UBool ulocbld_copyErrorTo(const ULocaleBuilder* builder, UErrorCode *outErrorCode) {
