@@ -214,6 +214,53 @@ import com.ibm.icu.util.ULocale;
  * COMMON or INHERITED, such as numbers and punctuation, are ignored when computing whether a string has multiple
  * scripts.
  *
+ * <h2>Advanced bidirectional usage</h2>
+ * If the paragraph direction with which the identifiers will be displayed is not known, there are
+ * multiple options for confusable detection depending on the circumstances.
+ *
+ * <p>
+ * In some circumstances, the only concern is confusion between identifiers displayed with the same
+ * paragraph direction.
+ *
+ * <p>
+ * An example is the case where identifiers are usernames prefixed with the @ symbol.
+ * That symbol will appear to the left in a left-to-right context, and to the right in a
+ * right-to-left context, so that an identifier displayed in a left-to-right context can never be
+ * confused with an identifier displayed in a right-to-left context:
+ * <ul>
+ * <li>
+ * The usernames "A1א" (A one aleph) and "Aא1" (A aleph 1)
+ * would be considered confusable, since they both appear as @A1א in a left-to-right context, and the
+ * usernames "אA_1" (aleph A underscore one) and "א1_A" (aleph one underscore A) would be considered
+ * confusable, since they both appear as A_1א@ in a right-to-left context.
+ * </li>
+ * <li>
+ * The username "Mark_" would not be considered confusable with the username "_Mark",
+ * even though the latter would appear as Mark_@ in a right-to-left context, and the
+ * former as @Mark_ in a left-to-right context.
+ * </li>
+ * </ul>
+ * <p>
+ * In that case, the caller should check for both LTR-confusability and RTL-confusability:
+ *
+ * <pre>
+ * <code>
+ * boolean confusableInEitherDirection =
+ *     sc.areConfusable(Bidi.DIRECTION_LEFT_TO_RIGHT, id1, id2) ||
+ *     sc.areConfusable(Bidi.DIRECTION_RIGHT_TO_LEFT, id1, id2);
+ * </code>
+ * </pre>
+ *
+ * If the bidiSkeleton is used, the LTR and RTL skeleta should be kept separately and compared, LTR
+ * with LTR and RTL with RTL.
+ *
+ * <p>
+ * In cases where confusability between the visual appearances of an identifier displayed in a
+ * left-to-right context with another identifier displayed in a right-to-left context is a concern,
+ * the LTR skeleton of one can be compared with the RTL skeleton of the other.  However, this
+ * very broad definition of confusability may have unexpected results; for instance, it treats the
+ * ASCII identifiers "Mark_" and "_Mark" as confusable.
+ *
  * <h2>Additional Information</h2>
  *
  * <p>
