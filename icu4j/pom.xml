@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ibm.icu</groupId>
+  <artifactId>icu4j-root</artifactId>
+  <version>74.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>${proj-title} (${project.artifactId})</name>
+  <description>International Component for Unicode for Java (ICU4J) is a mature, widely used Java library
+    providing Unicode and Globalization support</description>
+
+  <organization>
+    <name>Unicode, Inc.</name>
+    <url>https://icu.unicode.org/</url>
+  </organization>
+
+  <modules>
+    <module>main</module>
+    <module>demos</module>
+    <module>samples</module>
+    <module>tools/misc</module>
+  </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <junit.version>4.13.2</junit.version>
+    <junitparams.version>1.1.1</junitparams.version>
+
+    <proj-title>International Components for Unicode for Java</proj-title>
+    <proj.displayname>${project.artifactId}</proj.displayname>
+
+    <!-- Variables used to generate the javadoc -->
+    <api.doc.version>74 Release Candidate</api.doc.version>
+    <icu4j.api.doc.window.title>ICU4J ${api.doc.version}</icu4j.api.doc.window.title>
+    <icu4j.api.doc.header>ICU4J ${api.doc.version}</icu4j.api.doc.header>
+    <icu4j.api.doc.copyright.footer>&lt;font size=-1&gt;Copyright © 2016 Unicode, Inc. and others.&lt;/font&gt;</icu4j.api.doc.copyright.footer>
+    <!-- Needs to be overriden in sub-modules -->
+    <icu4j.api.doc.root.dir>${project.basedir}</icu4j.api.doc.root.dir>
+
+    <!-- Used for the .jar Manifest files -->
+
+    <mf.Specification-Version>74</mf.Specification-Version>
+    <mf.Implementation-Version>74.0.1</mf.Implementation-Version>
+    <mf.Bundle-Version>74.0.1</mf.Bundle-Version>
+
+    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
+
+    <!-- For most modules artifactId does not have an "icu4j" prefix, so this is a good default -->
+    <module-name>${project.artifactId}</module-name>
+
+    <!-- Manifest fields that rarely change, if ever -->
+    <mf.Specification-Title>${proj-title} (${proj.displayname})</mf.Specification-Title>
+    <mf.Implementation-Title>${proj-title} (${proj.displayname})</mf.Implementation-Title>
+    <mf.Bundle-Description>${proj-title} (${proj.displayname})</mf.Bundle-Description>
+    <mf.Bundle-SymbolicName>com.ibm.icu.${module-name}</mf.Bundle-SymbolicName>
+    <mf.Automatic-Module-Name>com.ibm.icu.${module-name}</mf.Automatic-Module-Name>
+    <mf.Bundle-Name>ICU4J ${proj.displayname}</mf.Bundle-Name>
+
+    <mf.Specification-Vendor>Unicode, Inc.</mf.Specification-Vendor>
+    <mf.Implementation-Vendor>Unicode, Inc.</mf.Implementation-Vendor>
+    <mf.Bundle-Vendor>Unicode, Inc.</mf.Bundle-Vendor>
+    <mf.Implementation-Vendor-Id>org.unicode</mf.Implementation-Vendor-Id>
+    <mf.Manifest-Version>1.0</mf.Manifest-Version>
+    <mf.Bundle-ManifestVersion>2</mf.Bundle-ManifestVersion>
+    <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
+  </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>4.0.0-M9</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.4.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.6.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.6.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>3.0.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.5.0</version>
+          <configuration>
+            <excludePackageNames>com.ibm.icu.impl,com.ibm.icu.impl.*,com.ibm.icu.dev.*,com.ibm.icu.samples,com.ibm.icu.samples.*</excludePackageNames>
+            <!--
+              The ant project specified <doclint>reference,html</doclint>.
+              But that fails in main\core\src\main\java because maven enforces dependencies more strictly:
+                [ERROR] com\ibm\icu\text\UnicodeFilter.java:15: error: reference not found
+                [ERROR]  * {@link com.ibm.icu.text.Transliterator}
+                [ERROR] com\ibm\icu\util\ULocale.java:100: error: reference not found
+                [ERROR]  * {@link com.ibm.icu.text.Collator}
+            -->
+            <doclint>html</doclint>
+            <notimestamp>true</notimestamp>
+            <nodeprecatedlist>true</nodeprecatedlist>
+            <quiet>true</quiet>
+            <windowtitle>${icu4j.api.doc.window.title}</windowtitle>
+            <doctitle>${icu4j.api.doc.window.title}</doctitle>
+            <header>${icu4j.api.doc.header}</header>
+            <bottom>${icu4j.api.doc.copyright.footer}</bottom>
+            <stylesheetfile>stylesheet8.css</stylesheetfile>
+            <encoding>UTF-8</encoding>
+            <docencoding>UTF-8</docencoding>
+            <charset>UTF-8</charset>
+            <breakiterator>true</breakiterator>
+            <use>true</use>
+            <!-- <verbose>true</verbose> -->
+            <additionalJOptions>
+              <additionalJOption>-J-Djcitesourcepath=${icu4j.api.doc.root.dir}/samples/src/main/java${path.separator}${icu4j.api.doc.root.dir}/demos/src/main/java${path.separator}${icu4j.api.doc.root.dir}/main/core/src/main/java</additionalJOption>
+              <additionalJOption>-J-Dfile.encoding=UTF-8</additionalJOption>
+              <additionalJOption>-J-Djciteverbose=true</additionalJOption>
+            </additionalJOptions>
+            <taglets>
+              <taglet>
+                <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
+                <!-- We can use `tagletArtifact` instead of `tagletpath`,
+                     but then we must `mvn install` the `tools_build` artifact. -->
+                <tagletpath>${icu4j.api.doc.root.dir}/tools/build/target/classes</tagletpath>
+              </taglet>
+              <taglet>
+                <tagletClass>ch.arrenbrecht.jcite.JCiteTaglet</tagletClass>
+              </taglet>
+            </taglets>
+            <tagletArtifacts>
+              <tagletArtifact>
+                <groupId>org.mcraig</groupId>
+                <artifactId>jcite</artifactId>
+                <version>1.13.0</version>
+              </tagletArtifact>
+              <!-- Dependencies for org.mcraig:jcite -->
+              <tagletArtifact>
+                <groupId>commons-discovery</groupId>
+                <artifactId>commons-discovery</artifactId>
+                <version>0.5</version>
+              </tagletArtifact>
+              <tagletArtifact>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+              </tagletArtifact>
+            </tagletArtifacts>
+            <tags>
+              <tag>
+                <name>category</name>
+                <placement>a</placement>
+                <head>Category:</head>
+              </tag>
+            </tags>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+              <manifestEntries>
+                <Automatic-Module-Name>${mf.Automatic-Module-Name}</Automatic-Module-Name>
+                <Bundle-Copyright>${mf.Bundle-Copyright}</Bundle-Copyright>
+                <Specification-Title>${mf.Specification-Title}</Specification-Title>
+                <Specification-Version>${mf.Specification-Version}</Specification-Version>
+                <Specification-Vendor>${mf.Specification-Vendor}</Specification-Vendor>
+                <Implementation-Title>${mf.Implementation-Title}</Implementation-Title>
+                <Implementation-Version>${mf.Implementation-Version}</Implementation-Version>
+                <Implementation-Vendor>${mf.Implementation-Vendor}</Implementation-Vendor>
+                <Implementation-Vendor-Id>${mf.Implementation-Vendor-Id}</Implementation-Vendor-Id>
+                <Bundle-ManifestVersion>${mf.Bundle-ManifestVersion}</Bundle-ManifestVersion>
+                <Bundle-Name>${mf.Bundle-Name}</Bundle-Name>
+                <Bundle-Description>${mf.Bundle-Description}</Bundle-Description>
+                <Bundle-SymbolicName>${mf.Bundle-SymbolicName}</Bundle-SymbolicName>
+                <Bundle-Version>${mf.Bundle-Version}</Bundle-Version>
+                <Bundle-Vendor>${mf.Bundle-Vendor}</Bundle-Vendor>
+                <Bundle-Copyright>${mf.Bundle-Copyright}</Bundle-Copyright>
+                <Bundle-RequiredExecutionEnvironment>${mf.Bundle-RequiredExecutionEnvironment}</Bundle-RequiredExecutionEnvironment>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.2.5</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+  </build>
+
+  <profiles>
+
+    <!-- This is used to create the *-sources.jar for individual modules -->
+    <!-- TODO: the shaded equivalent. -->
+    <profile>
+      <id>with_sources</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to create the *-javadoc.jar for individual modules -->
+    <!-- TODO: the shaded equivalent. -->
+    <profile>
+      <id>with_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to create the *-javadoc.jar for individual modules -->
+    <profile>
+      <id>with_full_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- The tools/build module depends on the old tools.jar (jdk 1.8)
+      The com.sun.javadoc package was deprecated in Java 11, and has been removed for Java 17.
+      JDK 11 does not include tools.jar anymore. The code must be updated, see migration guide at
+      https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
+    -->
+    <profile>
+      <id>old_jdk_taglet</id>
+      <activation>
+        <jdk>[1.7,1.8]</jdk>
+      </activation>
+      <modules>
+         <module>tools/build</module>
+      </modules>
+    </profile>
+  </profiles>
+
+</project>

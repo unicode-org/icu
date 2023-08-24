@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>main</artifactId>
+    <version>74.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>icu4j</artifactId>
+
+  <properties>
+    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
+
+    <mf.Automatic-Module-Name>com.ibm.icu</mf.Automatic-Module-Name>
+    <mf.Bundle-SymbolicName>com.ibm.icu</mf.Bundle-SymbolicName>
+    <mf.Bundle-Name>ICU4J</mf.Bundle-Name>
+    <localTitle>International Components for Unicode for Java</localTitle>
+    <mf.Bundle-Description>${localTitle}</mf.Bundle-Description>
+    <mf.Implementation-Title>${localTitle}</mf.Implementation-Title>
+    <mf.Specification-Title>${localTitle}</mf.Specification-Title>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>collate</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>currdata</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>langdata</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>regiondata</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>translit</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+              <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+              <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Main-Class>com.ibm.icu.util.VersionInfo</Main-Class>
+              <Export-Package>com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util</Export-Package>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
