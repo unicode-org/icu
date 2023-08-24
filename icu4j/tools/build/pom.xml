@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>icu4j-root</artifactId>
+    <version>74.0.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>tools_build</artifactId>
+
+  <properties>
+    <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>jdk.tools</groupId>
+      <artifactId>jdk.tools</artifactId>
+      <version>1.8</version>
+      <scope>system</scope>
+      <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+    </dependency>
+  </dependencies>
+
+</project>

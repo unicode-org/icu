@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>icu4j-root</artifactId>
+    <version>74.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>main</artifactId>
+  <packaging>pom</packaging>
+
+  <properties>
+    <icu4j.api.doc.root.dir>${project.basedir}/..</icu4j.api.doc.root.dir>
+  </properties>
+
+  <modules>
+    <module>framework</module>
+    <module>core</module>
+
+    <!-- For publishing to Maven Central -->
+    <module>charset</module>
+    <module>collate</module>
+    <module>currdata</module>
+    <module>langdata</module>
+    <module>regiondata</module>
+    <module>translit</module>
+    <module>common_tests</module>
+
+    <!-- Shaded jar for publishing to Maven Central -->
+    <module>icu4j</module>
+
+    <!-- For publishing to Maven Central. Not shaded, but depends on the shaded artifacts above.
+         Also contains all the project properties (developers, scm, etc) needed for maven publishing.
+    -->
+    <module>localespi</module>
+  </modules>
+
+</project>
