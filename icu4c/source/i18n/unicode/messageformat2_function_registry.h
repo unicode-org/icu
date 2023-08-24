@@ -186,21 +186,14 @@ class U_I18N_API FunctionRegistry : UMemory {
 
 class U_COMMON_API Formatter : public UMemory {
  public:
-    // TODO: Java uses `Object` for the argument type. Using `FormattingInput` here.
-    // See if any examples require using an argument that's not a FormattingInput
+    // TODO: Java uses `Object` for the argument type.
+    // In our case, `FormattedValueBuilder` covers all the possible argument types
+    // that may be needed
     // Needs an error code because internal details may require calling functions that can fail
     // (e.g. parsing a string as a number, for Number)
 
-    // TODO: FormattingInput is not const because numbers can only be passed by move
-    // See comments in StandardFunctions::number::format()
-
-    // Operand can be null
-
-    // If argument is const, result must be const, since we may want to return the argument unchanged
-    // TODO: this is potentially a memory leak since the result might be newly allocated or might be previously owned
-
-    // TODO: Non-null, but fallbacks are treated as the absence of an arg
-    virtual const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const = 0;
+    // Operand can be null (call context.hasOperand())
+    virtual void format(FormattedValueBuilder& context, UErrorCode& errorCode) const = 0;
     virtual ~Formatter();
 };
 
@@ -216,7 +209,7 @@ class U_COMMON_API Selector : public UMemory {
       See selectKey() in message-value.ts
      */
     // `value` may be null, because the selector might be nullary
-    virtual void selectKey(const FormattingInput& value, const UnicodeString* keys/*[]*/, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual void selectKey(FormattedValueBuilder& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
 
@@ -236,7 +229,7 @@ class StandardFunctions {
 
     class DateTime : public Formatter {
         public:
-        const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        void format(FormattedValueBuilder& context, UErrorCode& errorCode) const;
 
         private:
         Locale locale;
@@ -252,7 +245,7 @@ class StandardFunctions {
         
     class Number : public Formatter {
         public:
-        const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        void format(FormattedValueBuilder& context, UErrorCode& errorCode) const;
 
         private:
         friend class NumberFactory;
@@ -270,7 +263,7 @@ class StandardFunctions {
 
     class Identity : public Formatter {
     public:
-        const FullyFormatted* format(const FormattingInput& toFormat, const FunctionRegistry::Options& options, UErrorCode& errorCode) const;
+        void format(FormattedValueBuilder& context, UErrorCode& errorCode) const;
         
     private:
         friend class IdentityFactory;
@@ -294,7 +287,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(const FormattingInput& value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattedValueBuilder& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -315,7 +308,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        void selectKey(const FormattingInput& value, const UnicodeString* keys, size_t numKeys, const FunctionRegistry::Options& options, UnicodeString* prefs, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattedValueBuilder& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

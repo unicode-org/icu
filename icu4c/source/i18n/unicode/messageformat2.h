@@ -38,6 +38,7 @@ U_NAMESPACE_BEGIN namespace message2 {
  * @deprecated This API is for technology preview only.
  */
 
+
 // TODO: doc comments
 // Represents the arguments to a message
 class U_I18N_API MessageArguments : public UMemory {
@@ -69,7 +70,9 @@ class U_I18N_API MessageArguments : public UMemory {
     }; // class MessageArguments::Builder
     static Builder* builder(UErrorCode&);
   private:
+    friend class Context;
     friend class MessageFormatter;
+
     bool has(const VariableName&) const;
     const Formattable& get(const VariableName&) const;
 
@@ -81,6 +84,112 @@ class U_I18N_API MessageArguments : public UMemory {
     LocalPointer<Hashtable> objectContents;
 }; // class MessageArguments
 
+
+// TODO: internal classes, should be private
+// TODO: maybe move to a different header file?
+
+    class Context;
+
+    // Map from expression pointers to Formatters
+    class CachedFormatters : public UMemory {
+        private:
+        friend class Context;
+        friend class MessageFormatter;
+
+        LocalPointer<Hashtable> cache;
+
+        const Formatter* getFormatter(const FunctionName&);
+        void setFormatter(const FunctionName&, Formatter*, UErrorCode& errorCode);
+        CachedFormatters(UErrorCode&);
+    };
+    // Context needed for formatting an expression
+
+    class Context : public UMemory {
+        public:
+        const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode& errorCode);
+
+        bool hasVar(const VariableName&) const;
+        const Formattable& getVar(const VariableName& var) const;
+
+        static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
+        private:
+        Context(const MessageFormatter& mf, const MessageArguments& args) : parent(mf), arguments(args) {}
+
+        const MessageFormatter& parent;
+        const MessageArguments& arguments; // External message arguments
+    };
+
+
+// Intermediate classes used internally in the formatter
+// TODO: these should be private to MessageFormatter, but are used by the FormattedValueBuilder so they aren't
+class Environment;
+// A closure represents the right-hand side of a variable
+// declaration, along with an environment giving values
+// to its free variables
+class Closure : public UMemory {
+    using Expression = MessageFormatDataModel::Expression;
+public:
+    static Closure* create(const Expression&, const Environment&, UErrorCode&);
+    const Expression& getExpr() const {
+        return expr;
+    }
+    const Environment& getEnv() const {
+        return env;
+    }
+    virtual ~Closure();
+private:
+    Closure(const Expression& expression, const Environment& environment) : expr(expression), env(environment) {}
+
+    // An unevaluated expression
+    const Expression& expr;
+    // The environment mapping names used in this
+    // expression to other expressions
+    const Environment& env;
+};
+
+// An environment is represented as a linked chain of
+// non-empty environments, terminating at an empty environment.
+// It's searched using linear search.
+class Environment : public UMemory {
+public:
+    virtual const Closure* lookup(const VariableName&) const = 0;
+    static Environment* create(UErrorCode&);
+    static Environment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+    virtual ~Environment();
+};
+
+class NonEmptyEnvironment;
+class EmptyEnvironment : public Environment {
+private:
+    friend class Environment;
+
+    const Closure* lookup(const VariableName&) const;
+    static EmptyEnvironment* create(UErrorCode&);
+    virtual ~EmptyEnvironment();
+    // Adopts its closure argument
+    static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+
+    EmptyEnvironment() {}
+};
+
+class NonEmptyEnvironment : public Environment {
+private:
+    friend class Environment;
+    const Closure* lookup(const VariableName&) const;
+    // Adopts its closure argument
+    static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+    virtual ~NonEmptyEnvironment();
+private:
+    friend class Environment;
+
+    NonEmptyEnvironment(const VariableName& v, Closure* c, const Environment& e) : var(v), rhs(c), parent(e) {}
+
+    // Maps VariableName onto Closure*
+    // Chain of linked environments
+    VariableName var;
+    const LocalPointer<Closure> rhs; // should be valid
+    const Environment& parent;
+};
 
 // Note: This class does not currently inherit from the existing
 // `Format` class.
@@ -166,6 +275,7 @@ public:
 
   private:
     friend class Builder;
+    friend class Context;
 
     MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
@@ -173,37 +283,6 @@ public:
 
     // Do not define default assignment operator
     const MessageFormatter &operator=(const MessageFormatter &) = delete;
-
-    // Context needed for formatting an expression
-    class Context;
-
-    // Map from expression pointers to Formatters
-    class CachedFormatters : public UMemory {
-        private:
-        friend class Context;
-        friend class MessageFormatter;
-
-        LocalPointer<Hashtable> cache;
-
-        const Formatter* getFormatter(const FunctionName&);
-        void setFormatter(const FunctionName&, Formatter*, UErrorCode& errorCode);
-        CachedFormatters(UErrorCode&);
-    };
-
-    class Context : public UMemory {
-        public:
-        const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode& errorCode);
-
-        bool hasVar(const VariableName&) const;
-        const Formattable& getVar(const VariableName& var) const;
-
-        static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
-        private:
-        Context(const MessageFormatter& mf, const MessageArguments& args) : parent(mf), arguments(args) {}
-
-        const MessageFormatter& parent;
-        const MessageArguments& arguments; // External message arguments
-    };
 
     // Parser class (private)
     class Parser : public UMemory {
@@ -357,73 +436,6 @@ public:
         const MessageFormatDataModel& dataModel;
     };
 
-    // Intermediate classes used internally in the formatter
-
-    class Environment;
-    // A closure represents the right-hand side of a variable
-    // declaration, along with an environment giving values
-    // to its free variables
-    class Closure : public UMemory {
-        using Expression = MessageFormatDataModel::Expression;
-        public:
-        static Closure* create(const Expression&, const Environment&, UErrorCode&);
-        const Expression& getExpr() const {
-            return expr;
-        }
-        const Environment& getEnv() const {
-            return env;
-        }
-        virtual ~Closure();
-        private:
-        Closure(const Expression& expression, const Environment& environment) : expr(expression), env(environment) {}
-
-        // An unevaluated expression
-        const Expression& expr;
-        // The environment mapping names used in this
-        // expression to other expressions
-        const Environment& env;
-    };
-    // An environment is represented as a linked chain of
-    // non-empty environments, terminating at an empty environment.
-    // It's searched using linear search.
-    class Environment : public UMemory {
-        public:
-        virtual const Closure* lookup(const VariableName&) const = 0;
-        static Environment* create(UErrorCode&);
-        static Environment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
-        virtual ~Environment();
-    };
-    class NonEmptyEnvironment;
-    class EmptyEnvironment : public Environment {
-        private:
-        friend class Environment;
-
-        const Closure* lookup(const VariableName&) const;
-        static EmptyEnvironment* create(UErrorCode&);
-        virtual ~EmptyEnvironment();
-        // Adopts its closure argument
-        static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
-
-        EmptyEnvironment() {}
-    };
-    class NonEmptyEnvironment : public Environment {
-        private:
-        friend class Environment;
-        const Closure* lookup(const VariableName&) const;
-        // Adopts its closure argument
-        static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
-        virtual ~NonEmptyEnvironment();
-    private:
-        friend class Environment;
-
-        NonEmptyEnvironment(const VariableName& v, Closure* c, const Environment& e) : var(v), rhs(c), parent(e) {}
-
-        // Maps VariableName onto Closure*
-        // Chain of linked environments
-        VariableName var;
-        const LocalPointer<Closure> rhs; // should be valid
-        const Environment& parent;
-    };
 
 /*
     // Represents a FormattedPlaceholder together with its fallback string
@@ -575,6 +587,7 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
     // The `FunctionRegistry::Options` is the result of resolving the options
     // in the annotation.
     // The `operand` is the result of resolving the operand.
+/*
     class ResolvedExpression : public UMemory {
     public:
         virtual ~ResolvedExpression();
@@ -587,26 +600,27 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
         ResolvedExpression(Selector* s, FunctionRegistry::Options* o) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(nullptr) {}
         ResolvedExpression() : isFallback(true), resolvedOperand(nullptr) {}
     }; // class ResolvedExpression
-     const FormattedPlaceholder* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Operand&, bool&, FunctionRegistry::Options*&, UnicodeString&, UErrorCode &) const;
-     const FormattedPlaceholder* resolveVariables(Context&, const Environment& env, const MessageFormatDataModel::Expression&, bool&, FunctionRegistry::Options*&, UnicodeString&, UErrorCode &) const;
+*/
+
+     void resolveVariables(const Environment& env, const MessageFormatDataModel::Operand&, FormattedValueBuilder&, UErrorCode &) const;
+     void resolveVariables(const Environment& env, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode &) const;
 
      // Selection methods
      void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
-     void matchSelectorKeys(const ResolvedExpression&, const UVector&, UErrorCode&, UVector&) const;
+     void matchSelectorKeys(const UVector&, FormattedValueBuilder&, UErrorCode&, UVector&) const;
      void resolvePreferences(const UVector&, const MessageFormatDataModel::VariantMap&, UErrorCode&, UVector& pref) const;
 
      // Formatting methods
-     static const FormattedPlaceholder* formatLiteral(const MessageFormatDataModel::Literal&, UErrorCode& status);
+     void formatLiteral(const MessageFormatDataModel::Literal&, FormattedValueBuilder&) const;
      void formatPattern(Context&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats an expression that appears as a selector
-     ResolvedExpression* formatSelectorExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     void formatSelectorExpression(const Environment& env, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode&) const;
      // Formats an expression that appears in a pattern or as the definition of a local variable
-     const FormattedPlaceholder* formatExpression(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
-     FunctionRegistry::Options* resolveOptions(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-    // FormattedPlaceholder* fallbackFunctionName(const FunctionName&, UErrorCode&) const;
-     const FormattedPlaceholder* formatOperand(Context&, const Environment& env, const MessageFormatDataModel::Operand&, UErrorCode&) const;
-     const FormattedPlaceholder* evalArgument(const Context&, const VariableName&, UErrorCode&) const;
-     void formatSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
+     void formatExpression(const Environment&, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode&) const;
+     void resolveOptions(const Environment& env, const MessageFormatDataModel::OptionMap&, FormattedValueBuilder&, UErrorCode&) const;
+     void formatOperand(const Environment&, const MessageFormatDataModel::Operand&, FormattedValueBuilder&, UErrorCode&) const;
+     void evalArgument(const VariableName&, FormattedValueBuilder&) const;
+     void formatSelectors(Context& context, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods
      bool isBuiltInSelector(const FunctionName&) const;

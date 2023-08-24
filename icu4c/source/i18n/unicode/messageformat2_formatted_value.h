@@ -27,6 +27,7 @@ class FormattedString;
 class FormattedNumber;
 class FormattingInput;
 class FullyFormatted;
+class Selector;
 
 extern FormattedString* formatDateWithDefaults(Locale locale, const FormattingInput& in, UErrorCode& errorCode);
 extern FormattedNumber* formatNumberWithDefaults(Locale locale, const FormattingInput& in, double toFormat, UErrorCode& errorCode);
@@ -42,168 +43,107 @@ extern FormattedNumber* formatNumberWithDefaults(Locale locale, const Formatting
   by selector functions.
 */
 
-class Fallback;
 
-class FormattedPlaceholder : public UMemory {
-    public:
-    virtual bool hasInput() const = 0;
-    virtual bool isFallback() const = 0;
-    virtual bool hasOutput() const = 0;
-    // Precondition: hasOutput()
-    const FullyFormatted& getOutput() const;
-    virtual UnicodeString toString(Locale locale, UErrorCode& status) const = 0;
-    virtual const Fallback* fallbackToSource(UErrorCode&) const = 0;
-    static DateFormat* defaultDateTimeInstance(Locale, UErrorCode&);
+using Literal         = MessageFormatDataModel::Literal;
 
-    virtual ~FormattedPlaceholder();
-};
+class Context;
+class Formatter;
+class MessageFormatter;
 
-class FormattingInput;
-class FullyFormatted;
-
-class Fallback : public FormattedPlaceholder {
-    public:
-    bool hasInput() const { return false; }
-    virtual bool isFallback() const { return true; }
-    bool hasOutput() const { return false; }
-    UnicodeString toString(Locale locale, UErrorCode& status) const;
-    UnicodeString toString() const;
-    static Fallback* create(const Text&, UErrorCode& status);
-    // TODO: this doesn't work
-    // const Fallback* fallbackToSource() const { return static_cast<const Fallback*>(this); }
-    const Fallback* fallbackToSource(UErrorCode& status) const { return Fallback::create(fallback, status); }
-
-    virtual ~Fallback();
+// This is per-operand/expression being formatted,
+// so it's not part of the MessageFormatter object
+class FormattedValueBuilder : public UMemory {
     private:
-    friend class FormattingInput;
-    friend class FullyFormatted;
+    friend class MessageFormatter;
 
-    const Text& fallback;
-    Formattable fallbackAsFmtable;
-    Fallback(const Text& t);
-}; // class Fallback
+    using Builder = FormattedValueBuilder;
 
-class FormattingInput : public Fallback {
+    FormattedValueBuilder(Context&);
+
+    Context& context;
+
+    static FormattedValueBuilder* create(Context& context, UErrorCode& errorCode);
+    FormattedValueBuilder* create(UErrorCode& errorCode);
+
+    Builder& setParseError(uint32_t line, uint32_t offset);
+    Builder& setUnresolvedVariable(const VariableName&);
+    Builder& setUnknownFunction(const FunctionName&);
+    Builder& setVariantKeyMismatch();
+    Builder& setFormattingWarning(const FunctionName&);
+    Builder& setNonexhaustivePattern();
+    Builder& setDuplicateOptionName();
+    Builder& setReservedError();
+    Builder& setSelectorError(const UnicodeString&);
+    Builder& setMissingSelectorAnnotation();
+    // Resets input and output and uses existing fallback
+    Builder& setFallback();
+    Builder& setFallback(const Literal&);
+    Builder& setFallback(const VariableName&);
+    Builder& setFallback(const FunctionName&);
+    Builder& setFunctionName(const FunctionName&);
+    // Function name must be set; clears it
+    Builder& resolveSelector(Selector*);
+    Builder& setStringOption(const UnicodeString&, const UnicodeString&);
+    Builder& setDateOption(const UnicodeString&, UDate);
+    Builder& setNumericOption(const UnicodeString&, double);
+    Builder& setInput(const UObject*);
+    Builder& setInput(const Formattable&);
+    Builder& setInput(const UnicodeString&);
+    Builder& setObjectInput(UObject*);
+    Builder& setOutput(const UnicodeString&);
+    Builder& setOutput(number::FormattedNumber&&);
+    Builder& propagateErrors(const FormattedValueBuilder& localContext);
+    // If any errors were set, update `status` accordingly
+    Builder& checkErrors(UErrorCode& status);
+    Builder& promoteFallbackToInput();
+    // Doesn't change output if it already exists
+    // Appends to `result`
+    void formatToString(const Locale& locale, UnicodeString& result);
+
+    bool buildToFunctionCall();
+    // If there is a formatter name, clear it and
+    // call the function, setting the input and/or output appropriately
+    // Precondition: hasFormatter()
+    void evalPendingFunctionCall();
+
     public:
-    virtual bool isNull() const { return true; }
-    virtual bool isFallback() const override { return false; }
-    virtual const Formattable& getInput() const {
-        U_ASSERT(false);
-    }
-    virtual ~FormattingInput();
-    static FormattingInput* create(const FunctionName& fn, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
-        FormattingInput* result = new FormattingInput(fn);
-        if (result == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-    private:
-    friend class FormattingInputNotNull;
-
-    // Since this is used to represent an absent argument,
-    // there is always a function name to use as a fallback
-    FormattingInput(const Text& fn) : Fallback(fn) {}
-}; // class FormattingInput
-
-class FormattingInputNotNull : public FormattingInput {
-    public:
-    bool isNull() const override { return false; }
-    bool hasInput() const { return true; }
-    bool hasOutput() const { return false; }
-    UnicodeString toString(Locale locale, UErrorCode& status) const;
-    const Formattable& getInput() const override {
-        return input;
-    }
-    // Creates an unformatted value
-    static FormattingInputNotNull* create(const Text& source, const Formattable& v, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        FormattingInputNotNull* result(new FormattingInputNotNull(source, v));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-    virtual ~FormattingInputNotNull();
-    private:
-    friend class FullyFormatted;
-
-    const Formattable& input;
-    FormattingInputNotNull(const Text& p, const Formattable& f) : FormattingInput(p), input(f) {}
-}; // class FormattingInputNotNull
-
-class FormattedString;
-class FormattedNumber;
-
-class FullyFormatted : public FormattingInputNotNull {
-    public:
-    virtual bool isFormattedNumber() const = 0;
-    virtual bool isFormattedString() const = 0;
-    bool hasInput() const { return true; }
-    bool hasOutput() const { return true; }
-    // Formats a `Formattable` using defaults
-    static FullyFormatted* format(Locale loc, const FormattingInput& in, UErrorCode& status);
-    static FullyFormatted* create(const FormattingInput&, UnicodeString, UErrorCode&);
-    static FullyFormatted* promoteFallback(const Fallback&, UErrorCode& status);
+    void formatWithDefaults(UErrorCode& errorCode);
     
-    private:
-    friend class FormattedString;
-    friend class FormattedNumber;
+    bool hasGlobal(const VariableName& v) { return hasGlobalAsFormattable(v) || hasGlobalAsObject(v); }
+    bool hasGlobalAsFormattable(const VariableName&);
+    bool hasGlobalAsObject(const VariableName&);
+    const Formattable& getGlobalAsFormattable(const VariableName&);
+    const UObject* getGlobalAsObject(const VariableName&);
+    bool hasOperand() const;
+    bool hasSelector() const;
+    bool hasFormatter() const;
+    bool hasOperator() const { return (hasSelector() || hasFormatter()); }
+    const FunctionName& getOperator() const;
+    const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode&) const;
+    // Precondition: hasSelector()
+    const Selector& getSelector() const;
+    bool hasFormattableInput() const;
+    bool hasObjectInput() const;
+    const Formattable& getFormattableInput() const;
+    const UObject* getObjectInput() const;
+    bool hasStringOutput() const;
+    bool hasNumberOutput() const;
+    bool hasOutput() { return (hasStringOutput() || hasNumberOutput()); }
+    // just gets existing output, doesn't force evaluation
+    const UnicodeString& getStringOutput() const;
+    const number::FormattedNumber& getNumberOutput() const;
+    bool getStringOption(UnicodeString&) const;
+    bool getNumericOption(double&) const;
+    bool isFallback() const;
+    bool hasParseError() const;
+    bool hasDataModelError() const;
+    bool hasUnknownFunctionError() const;
+    bool hasSelectorError() const;
+    bool hasError() const;
+    bool hasWarning() const;
 
-    FullyFormatted(const FormattingInputNotNull& i) : FormattingInputNotNull(i.fallback, i.input) {}
-    FullyFormatted(const FormattingInput& i) : FormattingInputNotNull(i.fallback, i.fallbackAsFmtable) {} 
-
-}; // class FullyFormatted
-
-class FormattedString : public FullyFormatted {
-    public:
-    UnicodeString toString(Locale locale, UErrorCode& status) const;
-    bool isFormattedNumber() const { return false; }
-    bool isFormattedString() const { return true; }
-    const UnicodeString& getString() const {
-        return string;
-    }
-    // Creates a formatted string, saving its input
-    static FormattedString* create(const FormattingInput& input, const UnicodeString& s, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        FormattedString* result(new FormattedString(input, s));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-    virtual ~FormattedString();
-    private:
-    const UnicodeString string;
-    FormattedString(const FormattingInputNotNull& i, const UnicodeString& s) : FullyFormatted(i), string(s) {}
-    FormattedString(const FormattingInput& i, const UnicodeString& s) : FullyFormatted(i), string(s) {}
-}; // class FormattedString
-
-
-class FormattedNumber : public FullyFormatted {
-    public:
-    UnicodeString toString(Locale locale, UErrorCode& status) const;
-    bool isFormattedNumber() const { return true; }
-    bool isFormattedString() const { return false; }
-    const number::FormattedNumber& getNumber() const {
-        return num;
-    }
-    // Creates a formatted number (NUMBER)
-    static FormattedNumber* create(const FormattingInput& input, number::FormattedNumber v, UErrorCode& status) {
-        NULL_ON_ERROR(status);
-        U_ASSERT(!input.isNull());
-        FormattedNumber* result(new FormattedNumber(static_cast<const FormattingInputNotNull&>(input), std::move(v)));
-        if (result == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-        return result;
-    }
-    virtual ~FormattedNumber();
-    private:
-    const number::FormattedNumber num;
-    FormattedNumber(const FormattingInputNotNull& i, number::FormattedNumber n) : FullyFormatted(i), num(std::move(n)) {}
-}; // class FormattedNumber
+    virtual ~FormattedValueBuilder();
+};
 
 } // namespace message2
 U_NAMESPACE_END
