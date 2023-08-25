@@ -309,6 +309,13 @@ class PersonNamePattern {
             for (PersonName.FieldModifier modifierID : modifierIDs) {
                 this.modifiers.put(modifierID, FieldModifierImpl.forName(modifierID, formatterImpl));
             }
+
+            if (this.modifiers.containsKey(PersonName.FieldModifier.RETAIN)
+                    && this.modifiers.containsKey(PersonName.FieldModifier.INITIAL)) {
+                FieldModifierImpl.InitialModifier initialModifier
+                        = (FieldModifierImpl.InitialModifier) this.modifiers.get(PersonName.FieldModifier.INITIAL);
+                initialModifier.setRetainPunctuation(true);
+            }
         }
 
         @Override

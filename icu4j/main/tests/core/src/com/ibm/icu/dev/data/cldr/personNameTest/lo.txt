@@ -53,159 +53,232 @@
 # =====
 
 enum ; field ; title, given, given2, surname, surname2, generation, credentials
-enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
-enum ; options ; none, sorting
+enum ; modifiers ; informal, allCaps, initialCap, initial, retain, monogram, prefix, core, vocative, genitive
+enum ; order ; givenFirst, surnameFirst, sorting
 enum ; length ; long, medium, short
 enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
-name ; given; ເຊນດາຢາ
+# nativeG
+name ; given; ຄຳຫຼ້າ
 name ; locale; lo_AQ
 
-expectedResult; ເຊນດາຢາ
+expectedResult; ຄຳຫຼ້າ
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
+
+expectedResult; ຄຳ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
+
+endName
+
+# nativeGS
+name ; given; ນາລິນ
+name ; surname; ເອກະພົນ
+name ; locale; lo_AQ
+
+expectedResult; ເອກະພົນ, ນາລິນ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ນາລິນ ເອກະພົນ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+
+expectedResult; ເອກະພົນ ນາລິນ
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ເອກະພົນ
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; ນາລິນ
+
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ນເ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; ເນ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ນ
+
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; ເ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
-name ; given; ໄອຣີນ
-name ; surname; ແອດເລີ
+# nativeGGS
+name ; given; ມະນີ
+name ; given2; ມະນີຈັນ
+name ; surname; ວັດທະນາ
 name ; locale; lo_AQ
 
-expectedResult; ແອດເລີ,ໄອຣີນ
-
-parameters; sorting; long; referring; formal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; formal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; formal
-parameters; sorting; short; referring; informal
-
-expectedResult; ໄອຣີນແອດເລີ
-
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
-
-expectedResult; ແອດເລີ
-
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
-
-expectedResult; ໄອຣີນ
-
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-
-expectedResult; ໄແ
-
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-
-expectedResult; ແ
-
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
-
-expectedResult; ໄ
-
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
-
-endName
-
-name ; given; ມາຣີ ຊູ
-name ; given2; ຮາມິຊ
-name ; surname; ວັດສັນ
-name ; locale; lo_AQ
-
-expectedResult; ວັດສັນ,ມາຣີຊູຮາມິຊ
+expectedResult; ວັດທະນາ, ມະນີ ມະນີຈັນ
 
 parameters; sorting; long; referring; formal
 parameters; sorting; medium; referring; formal
 parameters; sorting; short; referring; formal
 
-expectedResult; ມາຣີຊູຮາມິຊວັດສັນ
+expectedResult; ມະນີ ມະນີຈັນ ວັດທະນາ
 
-parameters; none; long; referring; formal
-parameters; none; medium; referring; formal
-parameters; none; short; referring; formal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; ວັດສັນ,ມາຣີຊູ
+expectedResult; ວັດທະນາ ມະນີ ມະນີຈັນ
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; ວັດທະນາ, ມະນີ
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ມາຣີຊູວັດສັນ
+expectedResult; ມະນີ ວັດທະນາ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
 
-expectedResult; ມາຣີຊູ
+expectedResult; ວັດທະນາ ມະນີ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
 
-expectedResult; ວັດສັນ
+expectedResult; ວັດທະນາ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
-expectedResult; ມຮວັ
+expectedResult; ມມວັ
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; ມະນີ
+
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ວັມມ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; ມວັ
 
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; ວັ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; ມ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# nativeFull
 name ; title; ທ.
 name ; given; ເບີແທຣັມ ວິວເບີຟອດຊ
 name ; given-informal; ເບີຕີ
@@ -215,185 +288,324 @@ name ; generation; ຮຸ່ນລູກ
 name ; credentials; ສ.ສ.
 name ; locale; lo_AQ
 
-expectedResult; ສ.ສ.ທ.ເບີແທຣັມວິວເບີຟອດຊເຮັນຣີໂຣເບີດວູສເຕີຮຸ່ນລູກ
+expectedResult; ສ.ສ. ທ. ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ ວູສເຕີ ຮຸ່ນລູກ
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
 
-expectedResult; ສ.ສ.ເບີແທຣັມວິວເບີຟອດຊເຮັນຣີໂຣເບີດວູສເຕີ
+expectedResult; ສ.ສ. ວູສເຕີ ທ. ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ ຮຸ່ນລູກ
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; long; referring; formal
 
-expectedResult; ວູສເຕີ,ເບີແທຣັມວິວເບີຟອດຊເຮັນຣີໂຣເບີດ
+expectedResult; ສ.ສ. ວູສເຕີ ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ ຮຸ່ນລູກ
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ສ.ສ. ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ ວູສເຕີ
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; ວູສເຕີ, ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ
 
 parameters; sorting; long; referring; formal
 parameters; sorting; medium; referring; formal
 parameters; sorting; short; referring; formal
 
-expectedResult; ເບີແທຣັມວິວເບີຟອດຊເຮັນຣີໂຣເບີດວູສເຕີ
+expectedResult; ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ ວູສເຕີ
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; ວູສເຕີ,ເບີຕີ
+expectedResult; ວູສເຕີ ເບີແທຣັມ ວິວເບີຟອດຊ ເຮັນຣີ ໂຣເບີດ
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; ວູສເຕີ ເບີແທຣັມ ວິວເບີຟອດຊ
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ວູສເຕີ, ເບີຕີ
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ເບີຕີວູສເຕີ
+expectedResult; ເບີຕີ ວູສເຕີ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
 
-expectedResult; ທ.ວູສເຕີ
+expectedResult; ວູສເຕີ ເບີຕີ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; ທ. ວູສເຕີ
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; ເບີຕີ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ວູເເ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; ເເວູ
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; monogram; formal
 
 expectedResult; ເວູ
 
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; ວູ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; ເ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignG
 name ; given; ຊິນແບດ
 name ; locale; ko_AQ
 
 expectedResult; ຊິນແບດ
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; ຊິ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGS
 name ; given; ເຄທີ
 name ; surname; ມູລເລີ
 name ; locale; ko_AQ
 
+expectedResult; ມູລເລີ, ເຄທີ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ເຄທີ ມູລເລີ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+
 expectedResult; ມູລເລີ ເຄທີ
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; ມູລເລີ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; ເຄທີ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; ມູເ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ເມູ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; ມູ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; ເ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGGS
 name ; given; ຊາຊິເລຍ
 name ; given2; ຮາມີສ
 name ; surname; ສໂຕເບີ
 name ; locale; ko_AQ
 
+expectedResult; ສໂຕເບີ, ຊາຊິເລຍ ຮາມີສ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
 expectedResult; ສໂຕເບີ ຊາຊິເລຍ ຮາມີສ
 
-parameters; none; long; referring; formal
-parameters; none; medium; referring; formal
-parameters; none; short; referring; formal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; ຊາຊິເລຍ ຮາມີສ ສໂຕເບີ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; short; referring; formal
+
+expectedResult; ສໂຕເບີ, ຊາຊິເລຍ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; ສໂຕເບີ ຊາຊິເລຍ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ຊາຊິເລຍ ສໂຕເບີ
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
 
 expectedResult; ຊາຊິເລຍ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; ສໂຕເບີ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; ສຊຮ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ຊຮສ
+
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; ຊສ
+
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; ສ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; ຊ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignFull
 name ; title; ສຈ. ປອ.
 name ; given; ເອດາ ຄໍນີເລຍ
 name ; given-informal; ນີເລ
@@ -405,52 +617,100 @@ name ; generation; ຮຸ່ນລູກ
 name ; credentials; ດຣ. ປອ.
 name ; locale; ko_AQ
 
+expectedResult; ດຣ. ປອ. ສຈ. ປອ. ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ ວອນ ບຣູລ ຮຸ່ນລູກ
+
+parameters; givenFirst; long; referring; formal
+
 expectedResult; ດຣ. ປອ. ວອນ ບຣູລ ສຈ. ປອ. ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ ຮຸ່ນລູກ
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
 
 expectedResult; ດຣ. ປອ. ວອນ ບຣູລ ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ ຮຸ່ນລູກ
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ດຣ. ປອ. ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ ວອນ ບຣູລ
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; ບຣູລ, ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ ວອນ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; ວອນ ບຣູລ ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; ເອດາ ຄໍນີເລຍ ເຊຊາ ມາຕິນ ວອນ ບຣູລ
+
+parameters; givenFirst; short; referring; formal
 
 expectedResult; ວອນ ບຣູລ ເອດາ ຄໍນີເລຍ
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; ສຈ. ປອ. ວອນ ບຣູລ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; ວອນ ບຣູລ, ນີເລ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; ນີເລ ວອນ ບຣູລ
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
 
 expectedResult; ວອນ ບຣູລ ນີເລ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; ນີເລ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ນີວ
+
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; ວເເ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ເເວ
+
+parameters; givenFirst; long; monogram; formal
 
 expectedResult; ນີ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; ວ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName

@@ -161,6 +161,14 @@ public interface PersonName {
         ALL_CAPS("allCaps"),
 
         /**
+         * When used in conjunction with "initial", preserves the punctuation between the initials
+         * as it existed in the original name field (e.g., "Jean-Claude" initializes into "J-C"
+         * instead of "J.C.")  Has no effect if "initial" isn't also present in the list of modifiers.
+         * @draft ICU 74
+         */
+        RETAIN("retain"),
+
+        /**
          * Requests the field value with the first grapheme of each word converted to titlecase.
          * A PersonName object might handle this modifier itself to capitalize words more
          * selectively.

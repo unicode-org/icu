@@ -53,29 +53,42 @@
 # =====
 
 enum ; field ; title, given, given2, surname, surname2, generation, credentials
-enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
-enum ; options ; none, sorting
+enum ; modifiers ; informal, allCaps, initialCap, initial, retain, monogram, prefix, core, vocative, genitive
+enum ; order ; givenFirst, surnameFirst, sorting
 enum ; length ; long, medium, short
 enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
-name ; given; Sinbod
+# nativeG
+name ; given; Bobur
 name ; locale; uz_AQ
 
-expectedResult; Sinbod
+expectedResult; Bobur
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -83,22 +96,29 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; S
+expectedResult; B
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
-name ; given; Iren
-name ; surname; Adler
+# nativeGS
+name ; given; Alisher
+name ; surname; Sattorov
 name ; locale; uz_AQ
 
-expectedResult; Adler, Iren
+expectedResult; Sattorov, Alisher
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
@@ -106,150 +126,226 @@ parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Iren Adler
+expectedResult; Alisher Sattorov
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
 
-expectedResult; Adler, I.
+expectedResult; Sattorov Alisher
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Sattorov, A.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; I. Adler
+expectedResult; A. Sattorov
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; Iren A.
+expectedResult; Sattorov A.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
 
-expectedResult; Adler
+expectedResult; Alisher S.
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; short; referring; informal
 
-expectedResult; Iren
+expectedResult; Sattorov
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
-expectedResult; IA
+expectedResult; Alisher
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; AS
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; SA
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; A
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
-expectedResult; I
+expectedResult; S
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
-name ; given; Jon
-name ; given2; Hemish
-name ; surname; Vatson
+# nativeGGS
+name ; given; Muhammad
+name ; given2; Yusuf
+name ; surname; Qodirov
 name ; locale; uz_AQ
 
-expectedResult; Vatson, Jon Hemish
+expectedResult; Qodirov, Muhammad Yusuf
 
 parameters; sorting; long; referring; formal
 
-expectedResult; Jon Hemish Vatson
+expectedResult; Muhammad Yusuf Qodirov
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
 
-expectedResult; Vatson, Jon H.
+expectedResult; Qodirov Muhammad Yusuf
+
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Qodirov, Muhammad Y.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; Jon H. Vatson
+expectedResult; Muhammad Y. Qodirov
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; medium; referring; formal
 
-expectedResult; Vatson, J. H.
+expectedResult; Qodirov Muhammad Y.
 
-parameters; sorting; short; referring; formal
+parameters; surnameFirst; medium; referring; formal
 
-expectedResult; J. H. Vatson
-
-parameters; none; short; referring; formal
-
-expectedResult; Vatson, Jon
+expectedResult; Qodirov, Muhammad
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Jon Vatson
+expectedResult; Muhammad Qodirov
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
-expectedResult; Jon V.
+expectedResult; Qodirov Muhammad
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
-expectedResult; Vatson
+expectedResult; Qodirov, M. Y.
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; sorting; short; referring; formal
 
-expectedResult; JHV
+expectedResult; M. Y. Qodirov
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; Jon
+expectedResult; Qodirov M. Y.
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; surnameFirst; short; referring; formal
 
-expectedResult; JV
+expectedResult; Muhammad Q.
 
-parameters; none; long; monogram; informal
+parameters; givenFirst; short; referring; informal
 
-expectedResult; J
+expectedResult; Qodirov M.
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; short; referring; informal
 
-expectedResult; V
+expectedResult; Muhammad
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; Qodirov
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; MYQ
+
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; QMY
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; MQ
+
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; QM
+
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; M
+
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
+
+expectedResult; Q
+
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# nativeFull
 name ; title; Janob
 name ; given; Alisher
 name ; given-informal; Alisher
 name ; given2; Salimovich
 name ; surname-core; Qodirov
 name ; generation; Kichik
-name ; credentials; MP
+name ; credentials; Deputat
 name ; locale; uz_AQ
 
-expectedResult; Alisher Salimovich Qodirov MP
+expectedResult; Alisher Salimovich Qodirov Deputat
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
+
+expectedResult; Qodirov Alisher Salimovich Deputat
+
+parameters; surnameFirst; long; referring; formal
 
 expectedResult; Qodirov, Alisher Salimovich
 
 parameters; sorting; long; referring; formal
 
-expectedResult; Alisher S. Qodirov MP
+expectedResult; Alisher S. Qodirov Deputat
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; Qodirov Alisher S. Deputat
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Qodirov, Alisher S.
 
@@ -263,8 +359,13 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Alisher Qodirov
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; Qodirov Alisher
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Qodirov, A. S.
 
@@ -272,176 +373,329 @@ parameters; sorting; short; referring; formal
 
 expectedResult; A. S. Qodirov
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Janob Qodirov
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; Qodirov A. S.
+
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Alisher Q.
 
-parameters; none; short; referring; informal
+parameters; givenFirst; short; referring; informal
+
+expectedResult; Qodirov A.
+
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Alisher
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; ASQ
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; QAS
+
+parameters; surnameFirst; long; monogram; formal
 
 expectedResult; AQ
 
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; QA
+
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; A
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; Q
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# foreignG
 name ; given; Sinbad
 name ; locale; ko_AQ
 
 expectedResult; Sinbad
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; S
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGS
 name ; given; Kete
 name ; surname; Myuller
 name ; locale; ko_AQ
 
+expectedResult; Myuller, Kete
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Kete Myuller
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+
 expectedResult; Myuller Kete
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Myuller, K.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; K. Myuller
+
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Myuller K.
 
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; Kete M.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; Myuller
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Kete
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; KM
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; MK
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; K
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; M
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# foreignGGS
 name ; given; Zaziliya
 name ; given2; Hemish
 name ; surname; Shtober
 name ; locale; ko_AQ
 
+expectedResult; Shtober, Zaziliya Hemish
+
+parameters; sorting; long; referring; formal
+
 expectedResult; Shtober Zaziliya Hemish
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Zaziliya Hemish Shtober
+
+parameters; givenFirst; long; referring; formal
+
+expectedResult; Shtober, Zaziliya H.
+
+parameters; sorting; medium; referring; formal
 
 expectedResult; Shtober Zaziliya H.
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Zaziliya H. Shtober
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; Shtober, Zaziliya
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Shtober Zaziliya
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Zaziliya Shtober
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; Shtober, Z. H.
+
+parameters; sorting; short; referring; formal
 
 expectedResult; Shtober Z. H.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; Z. H. Shtober
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; Zaziliya S.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; Shtober Z.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Zaziliya
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; Shtober
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; SZH
 
-parameters; none; long; monogram; formal
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ZHS
+
+parameters; givenFirst; long; monogram; formal
 
 expectedResult; SZ
 
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ZS
+
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; S
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; Z
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignFull
 name ; title; Prof. Dr.
 name ; given; Ada Kornelia
 name ; given-informal; Nil
@@ -453,55 +707,112 @@ name ; generation; Kichik
 name ; credentials; M.D. Ph.D.
 name ; locale; ko_AQ
 
+expectedResult; Ada Kornelia Yeva Sofiya van den Volf M.D. Ph.D.
+
+parameters; givenFirst; long; referring; formal
+
 expectedResult; van den Volf Ada Kornelia Yeva Sofiya M.D. Ph.D.
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Ada Kornelia Y. S. van den Volf M.D. Ph.D.
+
+parameters; givenFirst; medium; referring; formal
 
 expectedResult; van den Volf Ada Kornelia Y. S. M.D. Ph.D.
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Volf, Ada Kornelia Yeva Sofiya van den
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Volf, Ada Kornelia Y. S. van den
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Volf, A. K. Y. S. van den
+
+parameters; sorting; short; referring; formal
+
+expectedResult; A. K. Y. S. van den Volf
+
+parameters; givenFirst; short; referring; formal
 
 expectedResult; van den Volf A. K. Y. S.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Prof. Dr. van den Volf
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; van den Volf A. K.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; van den Volf, Nil
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Nil van den Volf
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; van den Volf Nil
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Nil v. d. V.
+
+parameters; givenFirst; short; referring; informal
+
+expectedResult; AYV
+
+parameters; givenFirst; long; monogram; formal
 
 expectedResult; Nil
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; VAY
 
-parameters; none; long; monogram; formal
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; NV
+
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; VN
 
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; N
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; V
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName

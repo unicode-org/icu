@@ -4,7 +4,7 @@
 #  SPDX-License-Identifier: Unicode-DFS-2016
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
 #
-# CLDR person name formatting test data for: id
+# CLDR person name formatting test data for: ti
 #
 # Test lines have the following structure:
 #
@@ -60,10 +60,10 @@ enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
 # nativeG
-name ; given; Budi
-name ; locale; id_AQ
+name ; given; ዘንዳያ
+name ; locale; ti_AQ
 
-expectedResult; Budi
+expectedResult; ዘንዳያ
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -96,7 +96,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; B
+expectedResult; ዘ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
@@ -114,53 +114,45 @@ parameters; surnameFirst; short; monogram; informal
 endName
 
 # nativeGS
-name ; given; Maria
-name ; surname; Wijaya
-name ; locale; id_AQ
+name ; given; ኣይሪን
+name ; surname; ኣድለር
+name ; locale; ti_AQ
 
-expectedResult; Wijaya, Maria
+expectedResult; ኣድለር, ኣይሪን
 
-parameters; surnameFirst; long; referring; formal
-parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; formal
-parameters; surnameFirst; medium; referring; informal
 parameters; sorting; long; referring; formal
-parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; Maria Wijaya
+expectedResult; ኣይሪን ኣድለር
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
 parameters; givenFirst; medium; referring; informal
-
-expectedResult; Wijaya, M.
-
-parameters; surnameFirst; short; referring; formal
-parameters; surnameFirst; short; referring; informal
-parameters; sorting; short; referring; formal
-
-expectedResult; M. Wijaya
-
 parameters; givenFirst; short; referring; formal
 
-expectedResult; Maria W.
+expectedResult; ኣድለር ኣይሪን
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; ኣይሪን ኣ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Wijaya
+expectedResult; ኣድለር ኣ.
 
-parameters; givenFirst; long; addressing; formal
-parameters; givenFirst; medium; addressing; formal
-parameters; givenFirst; short; addressing; formal
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; referring; informal
 
-expectedResult; Maria
+expectedResult; ኣይሪን
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -169,87 +161,93 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; MW
+expectedResult; ኣድለር
 
-parameters; givenFirst; long; monogram; formal
-parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
 
-expectedResult; WM
+expectedResult; ኣኣ
 
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; long; monogram; formal
 parameters; surnameFirst; long; monogram; informal
 
-expectedResult; M
+expectedResult; ኣ
 
-parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; informal
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; informal
-
-expectedResult; W
-
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
 parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; medium; monogram; informal
 parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # nativeGGS
-name ; given; Ahmad Albar
-name ; given2; bin
-name ; surname; Akbar
-name ; locale; id_AQ
+name ; given; ሜሪ ሱ
+name ; given2; ሃሚሽ
+name ; surname; ዋትሰን
+name ; locale; ti_AQ
 
-expectedResult; Akbar, Ahmad Albar bin
+expectedResult; ዋትሰን, ሜሪ ሱ ሃሚሽ
 
-parameters; surnameFirst; long; referring; formal
 parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
-expectedResult; Ahmad Albar bin Akbar
+expectedResult; ሜሪ ሱ ሃሚሽ ዋትሰን
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; Akbar, Ahmad Albar b.
+expectedResult; ዋትሰን ሜሪ ሱ ሃሚሽ
 
-parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
+parameters; sorting; long; referring; informal
+
+expectedResult; ዋትሰን, ሜሪ ሱ ሃ.
+
 parameters; sorting; medium; referring; formal
 
-expectedResult; Ahmad Albar b. Akbar
+expectedResult; ሜሪ ሱ ሃ. ዋትሰን
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Akbar, Ahmad Albar
+expectedResult; ዋትሰን ሜሪ ሱ ሃ.
 
-parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ዋትሰን ሜ. ሱ.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ዋትሰን, ሜሪ ሱ
+
 parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
-expectedResult; Ahmad Albar Akbar
+expectedResult; ሜሪ ሱ ዋትሰን
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Akbar, A. A. b.
+expectedResult; ዋትሰን ሜሪ ሱ
 
-parameters; surnameFirst; short; referring; formal
-parameters; sorting; short; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
-expectedResult; A. A. b. Akbar
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; Ahmad Albar A.
+expectedResult; ሜሪ ሱ ዋ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Akbar, A. A.
-
-parameters; surnameFirst; short; referring; informal
-
-expectedResult; Ahmad Albar
+expectedResult; ሜሪ ሱ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -258,122 +256,122 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; Akbar
+expectedResult; ዋትሰን
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
-expectedResult; AAB
+expectedResult; ሜሃዋ
+
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; ዋሜሃ
 
 parameters; surnameFirst; long; monogram; formal
 
-expectedResult; ABA
+expectedResult; ዋሜ
 
-parameters; givenFirst; long; monogram; formal
-
-expectedResult; AA
-
-parameters; givenFirst; long; monogram; informal
 parameters; surnameFirst; long; monogram; informal
 
-expectedResult; A
+expectedResult; ሜ
 
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
+
+expectedResult; ዋ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
 parameters; givenFirst; medium; monogram; formal
 parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; formal
-parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; formal
-parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # nativeFull
-name ; title; Bapak
-name ; given; Dwi Putro
-name ; given-informal; Dwi
-name ; given2; bin
-name ; surname-core; Adinata
-name ; credentials; MP
-name ; locale; id_AQ
+name ; title; ኣይተ
+name ; given; በርትረም ዊልበርፎርስ
+name ; given-informal; በርቲ
+name ; given2; ሄንሪ ሮበርት
+name ; surname-core; ዉስተር
+name ; generation; ማንጁስ
+name ; credentials; ኣባል ባይቶ
+name ; locale; ti_AQ
 
-expectedResult; Bapak Adinata, Dwi Putro bin MP
+expectedResult; ኣይተ ዉስተር በርትረም ዊልበርፎርስ ሄንሪ ሮበርት ማንጁስ, ኣባል ባይቶ
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; addressing; formal
 
-expectedResult; Bapak Dwi Putro bin Adinata MP
+expectedResult; ኣይተ በርትረም ዊልበርፎርስ ሄንሪ ሮበርት ዉስተር ኣባል ባይቶ
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; Adinata, Dwi Putro b. MP
+expectedResult; ዉስተር ኣይተ በርትረም ዊልበርፎርስ ሄንሪ ሮበርት ኣባል ባይቶ
 
-parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; short; referring; formal
+parameters; sorting; long; referring; informal
 
-expectedResult; Dwi Putro b. Adinata MP
+expectedResult; በርትረም ዊልበርፎርስ ሄ. ሮ. ዉስተር ማንጁስ, ኣባል ባይቶ
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Adinata, Dwi Putro bin
+expectedResult; ዉስተር በርትረም ዊልበርፎርስ ሄ. ሮ. ማንጁስ, ኣባል ባይቶ
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ዉስተር, በርትረም ዊልበርፎርስ ሄንሪ ሮበርት
 
 parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
-expectedResult; Adinata, Dwi Putro b.
+expectedResult; ዉስተር, በርትረም ዊልበርፎርስ ሄ. ሮ.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; Adinata, D. P. b.
-
-parameters; surnameFirst; short; referring; formal
-parameters; sorting; short; referring; formal
-
-expectedResult; D. P. b. Adinata
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; Adinata, D. P.
+expectedResult; ዉስተር በ. ዊ.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; Bapak Adinata
+expectedResult; ዉስተር, በርቲ
+
+parameters; sorting; medium; referring; informal
+
+expectedResult; በርቲ ዉስተር
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; ኣይተ ዉስተር
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
-expectedResult; Adinata, Dwi
+expectedResult; ዉስተር በርቲ
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
-expectedResult; Dwi Adinata
-
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; medium; referring; informal
-
-expectedResult; Dwi A.
+expectedResult; በርቲ ዉ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; ADB
+expectedResult; በሄዉ
 
-parameters; surnameFirst; long; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
-expectedResult; DBA
-
-parameters; givenFirst; long; monogram; formal
-
-expectedResult; Dwi
+expectedResult; በርቲ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -382,35 +380,35 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; AD
+expectedResult; ዉበሄ
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ዉበ
 
 parameters; surnameFirst; long; monogram; informal
 
-expectedResult; DA
+expectedResult; በ
 
-parameters; givenFirst; long; monogram; informal
-
-expectedResult; A
-
-parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; short; monogram; formal
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; short; monogram; formal
-
-expectedResult; D
-
-parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal
+
+expectedResult; ዉ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
 # foreignG
-name ; given; Sinbad
-name ; locale; ja_AQ
+name ; given; ሲንባድ
+name ; locale; ko_AQ
 
-expectedResult; Sinbad
+expectedResult; ሲንባድ
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -443,7 +441,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; S
+expectedResult; ሲ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
@@ -461,53 +459,63 @@ parameters; surnameFirst; short; monogram; informal
 endName
 
 # foreignGS
-name ; given; Kathe
-name ; surname; Muller
-name ; locale; ja_AQ
+name ; given; ካቲ
+name ; surname; ሙለር
+name ; locale; ko_AQ
 
-expectedResult; Muller, Kathe
+expectedResult; ሙለር, ካቲ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ሙለር ካ.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ሙለር ካቲ
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
 parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; formal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
-expectedResult; Kathe Muller
+expectedResult; ካቲ ሙለር
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
 parameters; givenFirst; medium; referring; informal
-
-expectedResult; Muller, K.
-
-parameters; surnameFirst; short; referring; formal
-parameters; surnameFirst; short; referring; informal
-parameters; sorting; short; referring; formal
-
-expectedResult; K. Muller
-
 parameters; givenFirst; short; referring; formal
 
-expectedResult; Kathe M.
+expectedResult; ካቲ ሙ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Muller
+expectedResult; ሙለር
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
-expectedResult; Kathe
+expectedResult; ሙካ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ካሙ
+
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; ካቲ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -516,87 +524,89 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; KM
+expectedResult; ሙ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
-
-expectedResult; MK
-
-parameters; surnameFirst; long; monogram; formal
-parameters; surnameFirst; long; monogram; informal
-
-expectedResult; K
-
-parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; informal
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; informal
-
-expectedResult; M
-
 parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; medium; monogram; informal
 parameters; surnameFirst; medium; monogram; formal
 parameters; surnameFirst; short; monogram; formal
+
+expectedResult; ካ
+
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # foreignGGS
-name ; given; Zazilia
-name ; given2; Hamish
-name ; surname; Stober
-name ; locale; ja_AQ
+name ; given; ዛዚሊያ
+name ; given2; ሃሚሽ
+name ; surname; ስቶበር
+name ; locale; ko_AQ
 
-expectedResult; Stober, Zazilia Hamish
+expectedResult; ስቶበር, ዛዚሊያ ሃሚሽ
+
+parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ስቶበር ዛዚሊያ ሃሚሽ
 
 parameters; surnameFirst; long; referring; formal
-parameters; sorting; long; referring; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
+parameters; sorting; long; referring; informal
 
-expectedResult; Zazilia Hamish Stober
+expectedResult; ስቶበር, ዛዚሊያ ሃ.
 
-parameters; givenFirst; long; referring; formal
-
-expectedResult; Stober, Zazilia H.
-
-parameters; surnameFirst; medium; referring; formal
 parameters; sorting; medium; referring; formal
 
-expectedResult; Zazilia H. Stober
+expectedResult; ዛዚሊያ ሃሚሽ ስቶበር
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; short; referring; formal
+
+expectedResult; ስቶበር ዛዚሊያ ሃ.
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ዛዚሊያ ሃ. ስቶበር
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Stober, Zazilia
+expectedResult; ስቶበር, ዛዚሊያ
+
+parameters; sorting; medium; referring; informal
+
+expectedResult; ስቶበር ዛዚሊያ
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
-expectedResult; Zazilia Stober
+expectedResult; ዛዚሊያ ስቶበር
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Stober, Z. H.
-
-parameters; surnameFirst; short; referring; formal
-parameters; sorting; short; referring; formal
-
-expectedResult; Z. H. Stober
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; Stober, Z.
+expectedResult; ስቶበር ዛ.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; Zazilia S.
+expectedResult; ዛዚሊያ ስ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Zazilia
+expectedResult; ስቶበር
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+
+expectedResult; ዛዚሊያ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -605,126 +615,127 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; Stober
-
-parameters; givenFirst; long; addressing; formal
-parameters; givenFirst; medium; addressing; formal
-parameters; givenFirst; short; addressing; formal
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
-
-expectedResult; SZH
+expectedResult; ስዛሃ
 
 parameters; surnameFirst; long; monogram; formal
 
-expectedResult; ZHS
+expectedResult; ዛሃስ
 
-parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
-expectedResult; SZ
+expectedResult; ስዛ
 
 parameters; surnameFirst; long; monogram; informal
 
-expectedResult; ZS
+expectedResult; ስ
 
+parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
-
-expectedResult; S
-
 parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; medium; monogram; informal
 parameters; surnameFirst; medium; monogram; formal
 parameters; surnameFirst; short; monogram; formal
 
-expectedResult; Z
+expectedResult; ዛ
 
-parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # foreignFull
-name ; title; Prof. Dr.
-name ; given; Ada Cornelia
-name ; given-informal; Neele
-name ; given2; Cesar Martín
-name ; surname-prefix; von
-name ; surname-core; Bruhl
-name ; surname2; Gonzalez Domingo
-name ; generation; Jr
-name ; credentials; M.D., Ph.D.
-name ; locale; ja_AQ
+name ; title; ፕሮ. ዶር.
+name ; given; ኣዳ ኮርኒሊያ
+name ; given-informal; ኒሊ
+name ; given2; ሲዘር ማርቲን
+name ; surname-prefix; ቮን
+name ; surname-core; ብሩሂ
+name ; surname2; ጎንዛሌዝ ዶሚንጐ
+name ; generation; ማንጁስ
+name ; credentials; ሓኪም መጥባሕቲ ስኒ
+name ; locale; ko_AQ
 
-expectedResult; Prof. Dr. von Bruhl, Ada Cornelia Cesar Martín Jr, M.D., Ph.D.
+expectedResult; ቮን ብሩሂ ጎንዛሌዝ ዶሚንጐ, ፕሮ. ዶር. ኣዳ ኮርኒሊያ ሲዘር ማርቲን ሓኪም መጥባሕቲ ስኒ
 
-parameters; surnameFirst; long; referring; formal
+parameters; sorting; long; referring; informal
 
-expectedResult; Prof. Dr. Ada Cornelia Cesar Martín von Bruhl Jr, M.D., Ph.D.
-
-parameters; givenFirst; long; referring; formal
-
-expectedResult; von Bruhl, Ada Cornelia C. M. Jr, M.D., Ph.D.
-
-parameters; surnameFirst; medium; referring; formal
-
-expectedResult; Ada Cornelia C. M. von Bruhl Jr, M.D., Ph.D.
-
-parameters; givenFirst; medium; referring; formal
-
-expectedResult; Bruhl, Ada Cornelia Cesar Martín von
-
-parameters; sorting; long; referring; formal
-
-expectedResult; Bruhl, Ada Cornelia C. M. von
-
-parameters; sorting; medium; referring; formal
-
-expectedResult; Bruhl, A. C. C. M. von
-
-parameters; sorting; short; referring; formal
-
-expectedResult; von Bruhl, A. C. C. M.
+expectedResult; ቮን ብሩሂ ጎንዛሌዝ ዶሚንጐ ፕሮ. ዶር. ኣዳ ኮርኒሊያ ሲዘር ማርቲን ሓኪም መጥባሕቲ ስኒ
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; A. C. C. M. von Bruhl
+expectedResult; ፕሮ. ዶር. ኣዳ ኮርኒሊያ ሲዘር ማርቲን ቮን ብሩሂ ጎንዛሌዝ ዶሚንጐ ሓኪም መጥባሕቲ ስኒ
 
+parameters; givenFirst; long; referring; formal
 parameters; givenFirst; short; referring; formal
 
-expectedResult; Prof. Dr. von Bruhl
+expectedResult; ፕሮ. ዶር. ቮን ብሩሂ ኣዳ ኮርኒሊያ ሲዘር ማርቲን ማንጁስ, ሓኪም መጥባሕቲ ስኒ
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; ቮን ብሩሂ ኣዳ ኮርኒሊያ ሲ. ማ. ማንጁስ, ሓኪም መጥባሕቲ ስኒ
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ኣዳ ኮርኒሊያ ሲ. ማ. ቮን ብሩሂ ማንጁስ, ሓኪም መጥባሕቲ ስኒ
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; ብሩሂ, ኣዳ ኮርኒሊያ ሲዘር ማርቲን ቮን
+
+parameters; sorting; long; referring; formal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; ብሩሂ, ኣዳ ኮርኒሊያ ሲ. ማ. ቮን
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; ፕሮ. ዶር. ቮን ብሩሂ
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
-expectedResult; von Bruhl, A. C.
+expectedResult; ቮን ብሩሂ ኣ. ኮ.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; von Bruhl, Neele
+expectedResult; ቮን ብሩሂ, ኒሊ
+
+parameters; sorting; medium; referring; informal
+
+expectedResult; ቮን ብሩሂ ኒሊ
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
-expectedResult; Neele von Bruhl
+expectedResult; ኒሊ ቮን ብሩሂ
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Neele v. B.
+expectedResult; ኒሊ ቮ. ብ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Neele
+expectedResult; ቮኣሲ
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ኣሲቮ
+
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; ቮኒ
+
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ኒሊ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -733,34 +744,18 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ACV
+expectedResult; ቮ
 
 parameters; givenFirst; long; monogram; formal
-
-expectedResult; VAC
-
-parameters; surnameFirst; long; monogram; formal
-
-expectedResult; NV
-
 parameters; givenFirst; long; monogram; informal
-
-expectedResult; VN
-
-parameters; surnameFirst; long; monogram; informal
-
-expectedResult; N
-
-parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; informal
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; informal
-
-expectedResult; V
-
 parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; medium; monogram; informal
 parameters; surnameFirst; medium; monogram; formal
 parameters; surnameFirst; short; monogram; formal
+
+expectedResult; ኒ
+
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
