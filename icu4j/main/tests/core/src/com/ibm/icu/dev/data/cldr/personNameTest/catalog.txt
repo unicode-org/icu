@@ -16,6 +16,7 @@ br.txt
 brx.txt
 bs.txt
 ca.txt
+chr.txt
 cs.txt
 cy.txt
 da.txt
@@ -54,6 +55,7 @@ hsb.txt
 hu.txt
 hy.txt
 id.txt
+ie.txt
 ig.txt
 is.txt
 it.txt
@@ -105,10 +107,13 @@ sr_Latn.txt
 sr_Latn_BA.txt
 sv.txt
 sw.txt
+sw_KE.txt
 syr.txt
 ta.txt
 te.txt
+tg.txt
 th.txt
+ti.txt
 tk.txt
 to.txt
 tr.txt
@@ -117,6 +122,7 @@ uk.txt
 ur.txt
 uz.txt
 vi.txt
+wo.txt
 xh.txt
 yo.txt
 yo_BJ.txt

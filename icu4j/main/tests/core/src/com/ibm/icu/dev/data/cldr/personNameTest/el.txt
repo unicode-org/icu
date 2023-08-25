@@ -53,29 +53,42 @@
 # =====
 
 enum ; field ; title, given, given2, surname, surname2, generation, credentials
-enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
-enum ; options ; none, sorting
+enum ; modifiers ; informal, allCaps, initialCap, initial, retain, monogram, prefix, core, vocative, genitive
+enum ; order ; givenFirst, surnameFirst, sorting
 enum ; length ; long, medium, short
 enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
+# nativeG
 name ; given; Δημήτρης
 name ; locale; el_AQ
 
 expectedResult; Δημήτρης
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -85,15 +98,22 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Δ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# nativeGS
 name ; given; Ειρήνη
 name ; surname; Πολίτη
 name ; locale; el_AQ
@@ -109,36 +129,64 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Ειρήνη Πολίτη
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+
+expectedResult; Πολίτη Ειρήνη
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Πολίτη Ε.
+
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Ειρήνη
 
-parameters; none; long; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; Πολίτη
 
-parameters; none; long; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; ΕΠ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; ΠΕ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# nativeGGS
 name ; given; Πέτρος
 name ; given2; Νικόλαος
 name ; surname; Καρατζής
@@ -150,16 +198,24 @@ parameters; sorting; long; referring; formal
 parameters; sorting; medium; referring; formal
 parameters; sorting; short; referring; formal
 
+expectedResult; Καρατζής Πέτρος Νικόλαος
+
+parameters; surnameFirst; long; referring; formal
+
 expectedResult; Πέτρος Νικόλαος Καρατζής
 
-parameters; none; long; referring; formal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+
+expectedResult; Καρατζής Πέτρος Ν.
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Καρατζής, Πέτρος
 
@@ -167,30 +223,59 @@ parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
+expectedResult; Καρατζής Πέτρος
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
 expectedResult; Πέτρος Καρατζής
 
-parameters; none; long; referring; informal
+parameters; givenFirst; long; referring; informal
+
+expectedResult; Καρατζής Π. Ν.
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; Καρατζής Π.
+
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Καρατζής
 
-parameters; none; long; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Πέτρος
 
-parameters; none; long; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ΚΠΝ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; ΠΝΚ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
 endName
 
+# nativeFull
 name ; title; Κος
 name ; given; Νικόλαος Καρατζής
 name ; given-informal; Νίκος
@@ -200,14 +285,14 @@ name ; locale; el_AQ
 
 expectedResult; Κος Νικόλαος Καρατζής Κωνσταντίνος Μάριος Χατζής
 
-parameters; none; long; referring; formal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
 
 expectedResult; Χατζής, Νικόλαος Καρατζής Κωνσταντίνος Μάριος
 
@@ -215,9 +300,21 @@ parameters; sorting; long; referring; formal
 parameters; sorting; medium; referring; formal
 parameters; sorting; short; referring; formal
 
+expectedResult; Χατζής Νικόλαος Καρατζής Κωνσταντίνος Μάριος
+
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Χατζής Νικόλαος Καρατζής Κ. Μ.
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Χατζής Ν. Κ. Κ. Μ.
+
+parameters; surnameFirst; short; referring; formal
+
 expectedResult; Νικόλαος Καρατζής
 
-parameters; none; short; addressing; informal
+parameters; givenFirst; short; addressing; informal
 
 expectedResult; Χατζής, Νίκος
 
@@ -227,144 +324,268 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Νίκος Χατζής
 
-parameters; none; long; referring; informal
+parameters; givenFirst; long; referring; informal
+
+expectedResult; Χατζής Ν. Κ.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; Χατζής Νίκος
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Κος Χατζής
 
-parameters; none; long; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Νίκος
 
-parameters; none; long; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; ΝΚΧ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; ΧΝΚ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignG
 name ; given; Σινμπάντ
 name ; locale; ja_AQ
 
 expectedResult; Σινμπάντ
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; Σ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGS
 name ; given; Κάτε
 name ; surname; Μίλερ
 name ; locale; ja_AQ
 
+expectedResult; Μίλερ, Κάτε
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
+
+expectedResult; Κάτε Μίλερ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+
 expectedResult; Μίλερ Κάτε
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Μίλερ Κ.
 
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Μίλερ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Κάτε
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ΚΜ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
 expectedResult; ΜΚ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGGS
 name ; given; Ζεζίλια
 name ; given2; Χάμις
 name ; surname; Στέμπερ
 name ; locale; ja_AQ
 
+expectedResult; Στέμπερ, Ζεζίλια Χάμις
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; Ζεζίλια Χάμις Στέμπερ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+
 expectedResult; Στέμπερ Ζεζίλια Χάμις
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
 
 expectedResult; Στέμπερ Ζεζίλια Χ.
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Στέμπερ, Ζεζίλια
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Ζεζίλια Στέμπερ
+
+parameters; givenFirst; long; referring; informal
 
 expectedResult; Στέμπερ Ζεζίλια
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Στέμπερ Ζ. Χ.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Στέμπερ Ζ.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Ζεζίλια
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; Στέμπερ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; ΖΧΣ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
 expectedResult; ΣΖΧ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignFull
 name ; title; Καθ. δρ.
 name ; given; Άντα Κορνέλια
 name ; given-informal; Νιλ
@@ -376,46 +597,88 @@ name ; generation; Τζούνιορ
 name ; credentials; Δρ.Ι. Δρ.Χ.Ο
 name ; locale; ja_AQ
 
+expectedResult; Καθ. δρ. Άντα Κορνέλια Σέσαρ Μαρτίν φον Μπριλ Γκονθάλεθ Δομίνγκο Δρ.Ι. Δρ.Χ.Ο
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+
 expectedResult; φον Μπριλ Άντα Κορνέλια Σέσαρ Μαρτίν Δρ.Ι. Δρ.Χ.Ο
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
 
 expectedResult; φον Μπριλ Άντα Κορνέλια Σ. Μ. Δρ.Ι. Δρ.Χ.Ο
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Μπριλ, φον Άντα Κορνέλια Σέσαρ Μαρτίν
+
+parameters; sorting; long; referring; formal
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; φον Μπριλ Ά. Κ. Σ. Μ.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Καθ. δρ. φον Μπριλ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; φον Μπριλ Ά. Κ.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; φον Μπριλ, Νιλ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Άντα Κορνέλια
+
+parameters; givenFirst; short; addressing; informal
+
+expectedResult; Νιλ φον Μπριλ
+
+parameters; givenFirst; long; referring; informal
 
 expectedResult; φον Μπριλ Νιλ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; ΑΣΦ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
 expectedResult; Νιλ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; ΦΑΣ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName

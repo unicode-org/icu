@@ -53,29 +53,42 @@
 # =====
 
 enum ; field ; title, given, given2, surname, surname2, generation, credentials
-enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
-enum ; options ; none, sorting
+enum ; modifiers ; informal, allCaps, initialCap, initial, retain, monogram, prefix, core, vocative, genitive
+enum ; order ; givenFirst, surnameFirst, sorting
 enum ; length ; long, medium, short
 enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
+# nativeG
 name ; given; Jiří
 name ; locale; cs_AQ
 
 expectedResult; Jiří
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -85,15 +98,22 @@ parameters; sorting; short; referring; informal
 
 expectedResult; J
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# nativeGS
 name ; given; Jana
 name ; surname; Nováková
 name ; locale; cs_AQ
@@ -107,12 +127,21 @@ parameters; sorting; medium; referring; informal
 
 expectedResult; Jana Nováková
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; Nováková Jana
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Nováková, J.
 
@@ -121,33 +150,49 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Nováková
 
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Jana
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; JN
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+
+expectedResult; NJ
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
 
 expectedResult; J
 
-parameters; none; short; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; N
 
-parameters; none; short; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# nativeGGS
 name ; given; Josef
 name ; given2; Václav
 name ; surname; Svoboda
@@ -159,8 +204,13 @@ parameters; sorting; long; referring; formal
 
 expectedResult; Josef Václav Svoboda
 
-parameters; none; long; addressing; formal
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; addressing; formal
+
+expectedResult; Svoboda Josef Václav
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; addressing; formal
 
 expectedResult; Svoboda, Josef V.
 
@@ -177,10 +227,17 @@ parameters; sorting; medium; referring; informal
 
 expectedResult; Josef Svoboda
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; Svoboda Josef
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; Svoboda, J.
 
@@ -188,36 +245,55 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Svoboda
 
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Josef
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; JVS
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; SJV
+
+parameters; surnameFirst; long; monogram; formal
 
 expectedResult; JS
 
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+
+expectedResult; SJ
+
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
 
 expectedResult; J
 
-parameters; none; short; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; S
 
-parameters; none; short; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# nativeFull
 name ; title; paní
 name ; given; Alexandra
 name ; given-informal; Saša
@@ -225,24 +301,36 @@ name ; given2; Zuzana
 name ; surname-core; Machová
 name ; surname2; Ondřejová
 name ; generation; st.
-name ; credentials; PhD
+name ; credentials; Ph.D.
 name ; locale; cs_AQ
 
-expectedResult; paní Alexandra Zuzana Machová Ondřejová, PhD
+expectedResult; paní Alexandra Zuzana Machová Ondřejová, Ph.D.
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
 
-expectedResult; paní Alexandra Zuzana Machová Ondřejová
+expectedResult; paní Machová Ondřejová Alexandra Zuzana, Ph.D.
 
-parameters; none; long; addressing; formal
+parameters; surnameFirst; long; referring; formal
 
-expectedResult; Machová, Alexandra Zuzana (paní, PhD)
+expectedResult; Machová, Alexandra Zuzana (paní, Ph.D.)
 
 parameters; sorting; long; referring; formal
 
+expectedResult; paní Alexandra Zuzana Machová Ondřejová
+
+parameters; givenFirst; long; addressing; formal
+
+expectedResult; paní Machová Ondřejová Alexandra Zuzana
+
+parameters; surnameFirst; long; addressing; formal
+
 expectedResult; paní Alexandra Machová
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; paní Machová Alexandra
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Machová, Alexandra Z.
 
@@ -257,16 +345,24 @@ expectedResult; Machová, Saša
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 
+expectedResult; Machová Saša
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+
 expectedResult; paní Machová
 
-parameters; none; medium; addressing; formal
-parameters; none; short; referring; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; referring; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Saša Machová
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; Machová, S.
 
@@ -274,220 +370,414 @@ parameters; sorting; short; referring; informal
 
 expectedResult; Machová
 
-parameters; none; short; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Saša
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; AZM
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; MAZ
+
+parameters; surnameFirst; long; monogram; formal
 
 expectedResult; AM
 
-parameters; none; medium; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+
+expectedResult; MA
+
+parameters; surnameFirst; medium; monogram; formal
+
+expectedResult; MS
+
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
 
 expectedResult; SM
 
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; informal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; informal
 
 expectedResult; M
 
-parameters; none; short; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; S
 
-parameters; none; short; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignG
 name ; given; Jack
 name ; locale; ko_AQ
 
 expectedResult; Jack
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; J
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGS
 name ; given; Käthe
 name ; surname; Müller
 name ; locale; ko_AQ
 
+expectedResult; Müller, Käthe
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+
+expectedResult; Käthe Müller
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+
 expectedResult; Müller Käthe
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Müller, K.
+
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; Müller
 
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Käthe
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; KM
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
 
 expectedResult; MK
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
 
 expectedResult; K
 
-parameters; none; short; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; M
 
-parameters; none; short; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# foreignGGS
 name ; given; Zäzilia
 name ; given2; Hamish
 name ; surname; Stöber
 name ; locale; ko_AQ
 
+expectedResult; Stöber, Zäzilia Hamish
+
+parameters; sorting; long; referring; formal
+
 expectedResult; Stöber Zäzilia Hamish
 
-parameters; none; long; addressing; formal
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; addressing; formal
+
+expectedResult; Zäzilia Hamish Stöber
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; addressing; formal
+
+expectedResult; Stöber, Zäzilia H.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Stöber, Zäzilia
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
 
 expectedResult; Stöber Zäzilia
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Zäzilia Stöber
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; Stöber, Z. H.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Stöber, Z.
+
+parameters; sorting; short; referring; informal
 
 expectedResult; Zäzilia
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; Stöber
 
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
-parameters; none; short; referring; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; SZH
 
-parameters; none; long; monogram; formal
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ZHS
+
+parameters; givenFirst; long; monogram; formal
 
 expectedResult; SZ
 
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+
+expectedResult; ZS
+
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
 
 expectedResult; S
 
-parameters; none; short; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; Z
 
-parameters; none; short; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
-name ; title; Mgr. Ing.
-name ; given; Anna Jaroslava
-name ; given-informal; Slávka
-name ; given2; Eva Lucie
+# foreignFull
+name ; title; Prof. Dr.
+name ; given; Ada Cornelia
+name ; given-informal; Neele
+name ; given2; César Martín
 name ; surname-prefix; von
-name ; surname-core; Kant
-name ; surname2; Novotná Dvořáková
-name ; generation; ml.
-name ; credentials; CSc.
+name ; surname-core; Brühl
+name ; surname2; González Domingo
+name ; generation; Jr.
+name ; credentials; M.D. DDS.
 name ; locale; ko_AQ
 
-expectedResult; Mgr. Ing. von Kant Novotná Dvořáková Anna Jaroslava Eva Lucie, CSc.
+expectedResult; Prof. Dr. Ada Cornelia César Martín von Brühl González Domingo, M.D. DDS.
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
 
-expectedResult; Mgr. Ing. von Kant Novotná Dvořáková Anna Jaroslava Eva Lucie
+expectedResult; Prof. Dr. von Brühl González Domingo Ada Cornelia César Martín, M.D. DDS.
 
-parameters; none; long; addressing; formal
+parameters; surnameFirst; long; referring; formal
 
-expectedResult; Mgr. Ing. von Kant Anna Jaroslava
+expectedResult; Prof. Dr. Ada Cornelia César Martín von Brühl González Domingo
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; long; addressing; formal
 
-expectedResult; Mgr. Ing. von Kant
+expectedResult; Prof. Dr. von Brühl González Domingo Ada Cornelia César Martín
 
-parameters; none; medium; addressing; formal
-parameters; none; short; referring; formal
+parameters; surnameFirst; long; addressing; formal
 
-expectedResult; von Kant Slávka
+expectedResult; Brühl, Ada Cornelia César Martín von (Prof. Dr., M.D. DDS.)
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; sorting; long; referring; formal
 
-expectedResult; von Kant
+expectedResult; Prof. Dr. Ada Cornelia von Brühl
 
-parameters; none; short; addressing; formal
+parameters; givenFirst; medium; referring; formal
 
-expectedResult; Slávka
+expectedResult; Prof. Dr. von Brühl Ada Cornelia
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; informal
+parameters; surnameFirst; medium; referring; formal
 
-expectedResult; KAE
+expectedResult; Brühl, Ada Cornelia C. M. von
 
-parameters; none; long; monogram; formal
+parameters; sorting; medium; referring; formal
 
-expectedResult; KA
+expectedResult; Prof. Dr. von Brühl
 
-parameters; none; medium; monogram; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; referring; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; referring; formal
 
-expectedResult; KS
+expectedResult; Brühl, A. C. C. M.
 
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; informal
+parameters; sorting; short; referring; formal
 
-expectedResult; K
+expectedResult; Brühl, Neele von
 
-parameters; none; short; monogram; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
 
-expectedResult; S
+expectedResult; Neele von Brühl
 
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; von Brühl Neele
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Brühl, N.
+
+parameters; sorting; short; referring; informal
+
+expectedResult; von Brühl
+
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; Neele
+
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ACB
+
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; BAC
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; AB
+
+parameters; givenFirst; medium; monogram; formal
+
+expectedResult; BA
+
+parameters; surnameFirst; medium; monogram; formal
+
+expectedResult; BN
+
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+
+expectedResult; NB
+
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+
+expectedResult; B
+
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; formal
+
+expectedResult; N
+
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName

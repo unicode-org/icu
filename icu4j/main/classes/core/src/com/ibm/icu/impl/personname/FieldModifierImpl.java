@@ -30,7 +30,10 @@ abstract class FieldModifierImpl {
             case INITIAL_CAP:
                 return new InitialCapModifier(formatterImpl.getLocale());
             case INITIAL:
-                return new InitialModifier(formatterImpl.getInitialPattern(), formatterImpl.getInitialSequencePattern());
+                return new InitialModifier(formatterImpl.getLocale(), formatterImpl.getInitialPattern(), formatterImpl.getInitialSequencePattern());
+            case RETAIN:
+                // "retain" is handled by InitialMofidier and PersonNamePattern.NameFieldImpl
+                return NOOP_MODIFIER;
             case MONOGRAM:
                 return MONOGRAM_MODIFIER;
             default:
@@ -103,25 +106,44 @@ abstract class FieldModifierImpl {
      * (In English, these patterns put periods after each initial and connect them with spaces.)
      * This is default behavior of the "initial" modifier.
      */
-    private static class InitialModifier extends FieldModifierImpl {
+    static class InitialModifier extends FieldModifierImpl {
+        private final Locale locale;
         private final SimpleFormatter initialFormatter;
         private final SimpleFormatter initialSequenceFormatter;
+        private boolean retainPunctuation;
 
-        public InitialModifier(String initialPattern, String initialSequencePattern) {
+        public InitialModifier(Locale locale, String initialPattern, String initialSequencePattern) {
+            this.locale = locale;
             this.initialFormatter = SimpleFormatter.compile(initialPattern);
             this.initialSequenceFormatter = SimpleFormatter.compile(initialSequencePattern);
+            this.retainPunctuation = false;
+        }
+
+        public void setRetainPunctuation(boolean retain) {
+            this.retainPunctuation = retain;
         }
 
         @Override
         public String modifyField(String fieldValue) {
+            String separator = "";
             String result = null;
-            StringTokenizer tok = new StringTokenizer(fieldValue, " ");
-            while (tok.hasMoreTokens()) {
-                String curInitial = getFirstGrapheme(tok.nextToken());
-                if (result == null) {
-                    result = initialFormatter.format(curInitial);
-                } else {
-                    result = initialSequenceFormatter.format(result, initialFormatter.format(curInitial));
+            BreakIterator bi = BreakIterator.getWordInstance(locale);
+            bi.setText(fieldValue);
+            int wordStart = bi.first();
+            for (int wordEnd = bi.next(); wordEnd != BreakIterator.DONE; wordStart = wordEnd, wordEnd = bi.next()) {
+                String word = fieldValue.substring(wordStart, wordEnd);
+                if (Character.isLetter(word.charAt(0))) {
+                    String curInitial = getFirstGrapheme(word);
+                    if (result == null) {
+                        result = initialFormatter.format(curInitial);
+                    } else if (retainPunctuation) {
+                        result = result + separator + initialFormatter.format(curInitial);
+                        separator = "";
+                    } else {
+                        result = initialSequenceFormatter.format(result, initialFormatter.format(curInitial));
+                    }
+                } else if (!Character.isWhitespace(word.charAt(0))) {
+                    separator = separator + word;
                 }
             }
             return result;

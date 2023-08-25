@@ -275,6 +275,14 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "JSS" },
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "JS" },
             }),
+            new NameAndTestCases("locale=en_US,given=John-Paul,given2=Stephen-David-George,surname=Smith", new String[][] {
+                { "en_US", "LONG",   "REFERRING",  "FORMAL",   "DEFAULT", "", "John-Paul Stephen-David-George Smith" },
+                { "en_US", "MEDIUM", "REFERRING",  "FORMAL",   "DEFAULT", "", "John-Paul S.D.G. Smith" },
+                { "en_US", "SHORT",  "REFERRING",  "FORMAL",   "DEFAULT", "", "J.P.S.D.G. Smith" },
+                { "en_US", "SHORT",  "REFERRING",  "INFORMAL", "DEFAULT", "", "John-Paul S." },
+                { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "DEFAULT", "", "JSS" },
+                { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "DEFAULT", "", "JS" },
+            }),
         }, false);
     }
 
@@ -514,11 +522,11 @@ public class PersonNameFormatterTest extends TestFmwk{
         }, null, null, null);
 
         String[][] testCases = new String[][] {
-//                { "locale=en_US,title=Dr.,given=Richard,given2=Theodore,surname=Gillam,surname2=Morgan,generation=III", "A Dr. Richard Theodore Gillam Morgan III" },
-//                { "locale=en_US,title=Mr.,given=Richard,given2=Theodore,surname=Gillam", "A Mr. Richard Theodore Gillam" },
-//                { "locale=en_US,given=Richard,given2=Theodore,surname=Gillam",            "B Richard Theodore Gillam" },
-//                { "locale=en_US,given=Richard,surname=Gillam",                            "C Richard Gillam" },
-//                { "locale=en_US,given=Richard",                                           "C Richard" },
+                { "locale=en_US,title=Dr.,given=Richard,given2=Theodore,surname=Gillam,surname2=Morgan,generation=III", "A Dr. Richard Theodore Gillam Morgan III" },
+                { "locale=en_US,title=Mr.,given=Richard,given2=Theodore,surname=Gillam", "A Mr. Richard Theodore Gillam" },
+                { "locale=en_US,given=Richard,given2=Theodore,surname=Gillam",            "B Richard Theodore Gillam" },
+                { "locale=en_US,given=Richard,surname=Gillam",                            "C Richard Gillam" },
+                { "locale=en_US,given=Richard",                                           "C Richard" },
                 { "locale=en_US,title=Dr.,generation=III",                                "A Dr. III" }
         };
 
@@ -658,5 +666,26 @@ public class PersonNameFormatterTest extends TestFmwk{
                 {"pt_PT", "DEFAULT", "REFERRING", "DEFAULT", "DEFAULT", "", "Friedrich G. Schellhammer"},
             })
         }, false);
+    }
+
+    @Test
+    public void TestRetainPunctuation() {
+        // test for the "retain" modifier, since no locale is actually using it yet
+        SimplePersonName name = buildPersonName("locale=en_US,given=John-Paul,given2=Stephen-David-George,surname=Smith");
+
+        String[][] testCases = new String[][] {
+            { "{given-initial} {given2-initial} {surname}", "J. P. S. D. G. Smith" },
+            { "{given-initial-retain} {given2-initial} {surname}", "J.-P. S. D. G. Smith" },
+            { "{given-initial-retain} {given2-initial-retain} {surname}", "J.-P. S.-D.-G. Smith" },
+            { "{given-retain-initial} {given2-retain-initial} {surname}", "J.-P. S.-D.-G. Smith" },
+        };
+
+        for (String[] testCase : testCases) {
+            PersonNameFormatter pnf = new PersonNameFormatter(Locale.US, new String[] { testCase[0] }, null, null, null );
+            String expectedResult = testCase[1];
+            String actualResult = pnf.formatToString(name);
+
+            assertEquals("Wrong result", expectedResult, actualResult);
+        }
     }
 }

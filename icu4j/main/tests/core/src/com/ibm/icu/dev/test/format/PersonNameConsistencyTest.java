@@ -14,6 +14,7 @@ import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
 import com.ibm.icu.text.SimplePersonName;
+import com.ibm.icu.dev.test.rbbi.RBBITstUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -30,16 +31,10 @@ public class PersonNameConsistencyTest extends TestFmwk {
     private static final String DATA_PATH = TestUtil.DATA_PATH + "cldr/personNameTest/";
 
     static private Collection<String> FILENAMES_TO_SKIP =
-         Arrays.asList("gaa.txt", "dsb.txt", "syr.txt", "hsb.txt", "lij.txt");
+         Arrays.asList("gaa.txt", "syr.txt", "lij.txt");
 
     static private Collection<String> FILENAMES_TO_SKIP_FOR_17028 =
-        Arrays.asList("az.txt", "be.txt", "bs.txt", "fi.txt", "gu.txt", "hr.txt", "is.txt",
-                      "km.txt", "ky.txt", "lo.txt", "mk.txt", "ml.txt", "mn.txt", "mr.txt",
-                      "pa.txt", "pt.txt", "pt_PT.txt", "sw.txt", "tr.txt", "zu.txt",
-                      "yue_Hans.txt", "fa.txt","ka.txt", "zh_Hant_HK.txt", "zh_Hant.txt",
-                      "bn.txt", "zh.txt", "nl.txt", "to.txt", "uk.txt", "my.txt",
-                      "bg.txt", "tk.txt", "ps.txt", "ko.txt", "ms.txt", "ne.txt",
-                      "gd.txt", "lv.txt" );
+        Arrays.asList("yue_Hans.txt", "to.txt", "gl.txt", "ie.txt" );
 
     static List<String> readTestCases() throws Exception {
         List<String> tests = new ArrayList<>();
@@ -59,6 +54,20 @@ public class PersonNameConsistencyTest extends TestFmwk {
         return tests;
     }
 
+    private boolean shouldSkipTest(String filename, String errorMsg) {
+        if (FILENAMES_TO_SKIP.contains(filename)) {
+            return true;
+        }
+        if (FILENAMES_TO_SKIP_FOR_17028.contains(filename) &&
+                logKnownIssue("ICU-17028", errorMsg)) {
+            return true;
+        }
+        if (filename.equals("my.txt") && RBBITstUtils.skipDictionaryTest()) {
+            return true;
+        }
+        return false;
+    }
+
     @Test
     @Parameters(method = "readTestCases")
     public void TestPersonNames(String filename) throws IOException {
@@ -75,17 +84,14 @@ public class PersonNameConsistencyTest extends TestFmwk {
             System.out.println(filename + " had " + errors + " errors");
         } catch (Exception e) {
             String errorMsg = e.toString() + " " + e.getMessage();
-            if (FILENAMES_TO_SKIP.contains(filename) ||
-                (FILENAMES_TO_SKIP_FOR_17028.contains(filename) &&
-                 logKnownIssue("ICU-17028", errorMsg))) {
+            if (shouldSkipTest(filename, errorMsg)) {
                 System.out.println("Test throw exception on " + filename + ": " + errorMsg);
                 return;
             }
         }
         if (errors != 0) {
             String errorMsg = "ERROR: Testing against '" + filename + "' contains " + errors + " errors.";
-            if (FILENAMES_TO_SKIP.contains(filename) ||
-                (FILENAMES_TO_SKIP_FOR_17028.contains(filename) && logKnownIssue("ICU-17028", errorMsg))) {
+            if (shouldSkipTest(filename, errorMsg)) {
                   System.out.println("Test failure on " + filename + ": " + errorMsg);
                   return;
             }
@@ -178,15 +184,19 @@ public class PersonNameConsistencyTest extends TestFmwk {
         private void processParametersLine(String[] parameters, int lineNumber) {
             if (checkState(name != null && expectedResult != null, "parameters", lineNumber)
                     && checkNumParams(parameters, 4, "parameters", lineNumber)) {
-                String optionsStr = parameters[0].trim();
+                String orderStr = parameters[0].trim();
                 String lengthStr = parameters[1].trim();
                 String usageStr = parameters[2].trim();
                 String formalityStr = parameters[3].trim();
 
                 PersonNameFormatter.Builder builder = PersonNameFormatter.builder();
                 builder.setLocale(formatterLocale);
-                if (optionsStr.equals("sorting")) {
+                if (orderStr.equals("sorting")) {
                     builder.setDisplayOrder(PersonNameFormatter.DisplayOrder.SORTING);
+                } else if (orderStr.equals("givenFirst")) {
+                    builder.setDisplayOrder(PersonNameFormatter.DisplayOrder.FORCE_GIVEN_FIRST);
+                } else if (orderStr.equals("surnameFirst")) {
+                    builder.setDisplayOrder(PersonNameFormatter.DisplayOrder.FORCE_SURNAME_FIRST);
                 }
                 builder.setLength(PersonNameFormatter.Length.valueOf(lengthStr.toUpperCase()));
                 builder.setUsage(PersonNameFormatter.Usage.valueOf(usageStr.toUpperCase()));
