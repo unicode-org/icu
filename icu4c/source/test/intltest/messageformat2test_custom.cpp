@@ -129,53 +129,26 @@ Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode
     return result;
 }
 
-const FullyFormatted* PersonNameFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options,  UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
+void PersonNameFormatter::format(State& context, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
+
+    if (!context.hasObjectInput()) {
+        return;
     }
 
-    // Argument must be present
-    if (arg.isNull()) {
-        errorCode = U_FORMATTING_WARNING;
-        return nullptr;
-    }
-
-    // Assumes what's being passed in is not-yet-formatted
-    const Formattable& toFormat = arg.getInput();
-/*
-  Note: this test diverges from the ICU4J version of it a bit by using variable options
-  to pass both "formality" and "length"
-*/
     UnicodeString formalityOpt, lengthOpt;
     bool hasFormality, hasLength;
-    hasFormality = options.getStringOption(UnicodeString("formality"), formalityOpt);
-    hasLength = options.getStringOption(UnicodeString("length"), lengthOpt);
+    hasFormality = context.getStringOption(UnicodeString("formality"), formalityOpt);
+    hasLength = context.getStringOption(UnicodeString("length"), lengthOpt);
 
     bool useFormal = hasFormality && formalityOpt == "formal";
     UnicodeString length = hasLength ? lengthOpt : "short";
 
-    Person* p;
-    switch (toFormat.getType()) {
-        case Formattable::Type::kObject: {
-            // Cast to "Person"
-            const UObject* asObject = toFormat.getObject();
-            if (asObject == nullptr) {
-                // Treat the result as empty for null
-                return FormattedString::create(arg, UnicodeString(), errorCode);;
-            }
-            p = (Person*) asObject;
-            break;
-        }
-        default: {
-            // If the input is not a person, return null
-            errorCode = U_FORMATTING_WARNING;
-            return nullptr;
-        }
-    }
+    const Person& p = static_cast<const Person&>(context.getObjectInput());
 
-    UnicodeString title = p->title;
-    UnicodeString firstName = p->firstName;
-    UnicodeString lastName = p->lastName;
+    UnicodeString title = p.title;
+    UnicodeString firstName = p.firstName;
+    UnicodeString lastName = p.lastName;
 
     UnicodeString result;
     if (length == "long") {
@@ -203,29 +176,7 @@ const FullyFormatted* PersonNameFormatter::format(const FormattingInput& arg, co
         result += firstName;
     }
 
-    return FormattedString::create(arg, result, errorCode);
-}
-
-// Utilities
-// Iterator for parts of a comma-separated string
-// Each part is assumed to be quoted
-/* static */ bool SplitString::nextPart(const UnicodeString& in, UnicodeString& out, uint32_t& pos) {
-    if (pos == SplitString::LAST) {
-        return false;
-    }
-    U_ASSERT(((int32_t) pos) < in.length());
-    int32_t nextComma = in.indexOf(",", pos);
-    if (nextComma == -1) {
-        // Assume this is the last piece and return it
-        in.extract(pos, (in.length() - pos), out);
-        out.trim();
-        pos = SplitString::LAST;
-        return true;
-    }
-    in.extract(pos, (nextComma - pos), out);
-    out.trim();
-    pos = nextComma + 1;
-    return true;
+    context.setOutput(result);
 }
 
 Person::~Person() {}
@@ -273,26 +224,24 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, UErrorCo
     result += postfix;
 }
 
-const FullyFormatted* GrammarCasesFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+void GrammarCasesFormatter::format(State& context, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
 
-    // Argument must be present
-    if (arg.isNull()) {
-        errorCode = U_FORMATTING_WARNING;
-        return nullptr;
+    // Argument must be     present
+    if (!context.hasFormattableInput()) {
+        context.setFormattingWarning("grammarBB", errorCode);
+        return;
     }
 
     // Assumes the argument is not-yet-formatted
-    const Formattable& toFormat = arg.getInput();
+    const Formattable& toFormat = context.getFormattableInput();
     UnicodeString result;
 
     switch (toFormat.getType()) {
         case Formattable::Type::kString: {
             const UnicodeString& in = toFormat.getString();
             UnicodeString grammarCase;
-            bool hasCase = options.getStringOption(UnicodeString("case"), grammarCase);
+            bool hasCase = context.getStringOption(UnicodeString("case"), grammarCase);
             if (hasCase && (grammarCase == "dative" || grammarCase == "genitive")) {
                 getDativeAndGenitive(in, result);
             } else {
@@ -306,7 +255,7 @@ const FullyFormatted* GrammarCasesFormatter::format(const FormattingInput& arg, 
         }
     }
 
-    return FormattedString::create(arg, result, errorCode);
+    context.setOutput(result);
 }
 
 /* static */ FunctionRegistry* GrammarCasesFormatter::customRegistry(UErrorCode& errorCode) {
@@ -402,21 +351,19 @@ Formatter* ListFormatterFactory::createFormatter(Locale locale, UErrorCode& erro
     return result;
 }
 
-const FullyFormatted* message2::ListFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+void message2::ListFormatter::format(State& context, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
 
     // Argument must be present
-    if (arg.isNull()) {
-        errorCode = U_FORMATTING_WARNING;
-        return nullptr;
+    if (!context.hasFormattableInput()) {
+        context.setFormattingWarning("listformat", errorCode);
+        return;
     }
     // Assumes arg is not-yet-formatted
-    const Formattable& toFormat = arg.getInput();
+    const Formattable& toFormat = context.getFormattableInput();
 
     UnicodeString optType;
-    bool hasType = options.getStringOption(UnicodeString("type"), optType);
+    bool hasType = context.getStringOption(UnicodeString("type"), optType);
     UListFormatterType type = UListFormatterType::ULISTFMT_TYPE_AND;
     if (hasType) {
         if (optType == "OR") {
@@ -426,7 +373,7 @@ const FullyFormatted* message2::ListFormatter::format(const FormattingInput& arg
         }
     }
     UnicodeString optWidth;
-    bool hasWidth = options.getStringOption(UnicodeString("width"), optWidth);
+    bool hasWidth = context.getStringOption(UnicodeString("width"), optWidth);
     UListFormatterWidth width = UListFormatterWidth::ULISTFMT_WIDTH_WIDE;
     if (hasWidth) {
         if (optWidth == "SHORT") {
@@ -436,7 +383,7 @@ const FullyFormatted* message2::ListFormatter::format(const FormattingInput& arg
         }
     }
     LocalPointer<icu::ListFormatter> lf(icu::ListFormatter::createInstance(locale, type, width, errorCode));
-    NULL_ON_ERROR(errorCode);
+    CHECK_ERROR(errorCode);
 
     UnicodeString result;
 
@@ -445,13 +392,13 @@ const FullyFormatted* message2::ListFormatter::format(const FormattingInput& arg
             int32_t n_items;
             const Formattable* objs = toFormat.getArray(n_items);
             if (objs == nullptr) {
-                errorCode = U_FORMATTING_WARNING;
-                return nullptr;
+                context.setFormattingWarning("listformatter", errorCode);
+                return;
             }
             LocalArray<UnicodeString> parts(new UnicodeString[n_items]);
             if (!parts.isValid()) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return nullptr;
+                return;
             }
             for (size_t i = 0; ((int32_t) i) < n_items; i++) {
                 parts[i] = objs[i].getString();
@@ -465,7 +412,7 @@ const FullyFormatted* message2::ListFormatter::format(const FormattingInput& arg
         }
     }
 
-    return FormattedString::create(arg, result, errorCode);
+    context.setOutput(result);
 }
 
 void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
@@ -659,97 +606,113 @@ using Arguments = MessageArguments;
 using Options = FunctionRegistry::Options;
 using Option = FunctionRegistry::Option;
 
-static Arguments* localToGlobal(const Options& options, UErrorCode& errorCode) {
+static Arguments* localToGlobal(const State& context, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     LocalPointer<Arguments::Builder> args(Arguments::builder(errorCode));
     NULL_ON_ERROR(errorCode);
 
-    int32_t pos = Options::FIRST;
+    int32_t pos = context.firstOption();
     UnicodeString optionName;
     while (true) {
-        const Option* optionValue = options.nextElement(pos, optionName);
+        const Formattable* optionValue = context.nextOption(pos, optionName);
         if (optionValue == nullptr) {
             break;
         }
         switch (optionValue->getType()) {
-            case Option::STRING: {
+            case Formattable::Type::kString: {
                 // add it as a string arg
                 args->add(optionName, optionValue->getString(), errorCode);
                 break;
             }
-            case Option::DOUBLE: {
+            case Formattable::Type::kDouble: {
                 args->addDouble(optionName, optionValue->getDouble(), errorCode);
                 break;
             }
-            case Option::INT64: {
+            case Formattable::Type::kInt64: {
                 args->addInt64(optionName, optionValue->getInt64(), errorCode);
                 break;
             }
-            case Option::LONG: {
+            case Formattable::Type::kLong: {
                 args->addLong(optionName, optionValue->getLong(), errorCode);
                 break;
             }
-            case Option::DATE: {
+            case Formattable::Type::kDate: {
                 args->addDate(optionName, optionValue->getDate(), errorCode);
                 break;
+            }
+            default: {
+                // Ignore other types
+                continue;
             }
             }
     }
     return args->build(errorCode);
 }
 
-const FullyFormatted* ResourceManager::format(const FormattingInput& arg, const Options& options, UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
+void ResourceManager::format(State& context, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
 
     // Argument must be present
-    if (arg.isNull()) {
-        errorCode = U_FORMATTING_WARNING;
-        return nullptr;
+    if (!context.hasFormattableInput()) {
+        context.setFormattingWarning("msgref", errorCode);
+        return;
     }
 
     // Assumes arg is not-yet-formatted
-    const UnicodeString& in = arg.getInput().getString();
+    const Formattable& toFormat = context.getFormattableInput();
+    UnicodeString in;
+    switch (toFormat.getType()) {
+        case Formattable::Type::kString: {
+            in = toFormat.getString();
+            break;
+        }
+        default: {
+            // Ignore non-strings
+            return;
+        }
+    }
 
     UnicodeString propsStr;
-    bool hasPropsStr = options.getStringOption(UnicodeString("resbundle"), propsStr);
+    bool hasPropsStr = context.getStringOption(UnicodeString("resbundle"), propsStr);
     // If properties were provided, look up the given string in the properties,
     // yielding a message
     if (hasPropsStr) {
         LocalPointer<Hashtable> props(parseProperties(propsStr, errorCode));
-        NULL_ON_ERROR(errorCode);
+        CHECK_ERROR(errorCode);
 
         UnicodeString* msg = (UnicodeString*) props->get(in);
         if (msg == nullptr) {
             // No message given for this key -- error out
-            errorCode = U_FORMATTING_WARNING;
-            return nullptr;
+            context.setFormattingWarning("msgref", errorCode);
+            return;
         }
         LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
-        NULL_ON_ERROR(errorCode);
+        CHECK_ERROR(errorCode);
         UParseError parseErr;
         // Any parse/data model errors will be propagated
         LocalPointer<MessageFormatter> mf(mfBuilder
                                           ->setPattern(*msg, errorCode)
                                           .build(parseErr, errorCode));
-        NULL_ON_ERROR(errorCode);
+        CHECK_ERROR(errorCode);
         UnicodeString result;
 
-        LocalPointer<Arguments> arguments(localToGlobal(options, errorCode));
-        NULL_ON_ERROR(errorCode);
+        LocalPointer<Arguments> arguments(localToGlobal(context, errorCode));
+        CHECK_ERROR(errorCode);
 
+        UErrorCode savedStatus = errorCode;
         // TODO: add formatToParts too, and use that here?
         mf->formatToString(*arguments, errorCode, result);
         // Here, we want to ignore errors (this matches the behavior in the ICU4J test).
         // For example: we want $gcase to default to "$gcase" if the gcase option was
         // omitted.
         if (U_FAILURE(errorCode)) {
-            errorCode = U_ZERO_ERROR;
+            errorCode = savedStatus;
         }
-        return FormattedString::create(arg, result, errorCode);
+       context.setOutput(result);
     }
     // Properties must be provided
-    errorCode = U_FORMATTING_WARNING;
-    return nullptr;
+    context.setFormattingWarning("msgref", errorCode);
+    return;
 }
 
 

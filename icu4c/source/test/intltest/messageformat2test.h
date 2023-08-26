@@ -136,7 +136,7 @@ class Person : public UObject {
 
 class PersonNameFormatter : public Formatter {
     public:
-    const FullyFormatted* format(const FormattingInput&, const FunctionRegistry::Options&, UErrorCode& errorCode) const;
+    void format(State&, UErrorCode& errorCode) const;
 };
 
 class GrammarCasesFormatterFactory : public FormatterFactory {
@@ -146,7 +146,7 @@ class GrammarCasesFormatterFactory : public FormatterFactory {
 
 class GrammarCasesFormatter : public Formatter {
     public:
-    const FullyFormatted* format(const FormattingInput&, const FunctionRegistry::Options&, UErrorCode& errorCode) const;
+    void format(State&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     private:
     void getDativeAndGenitive(const UnicodeString&, UnicodeString& result) const;
@@ -159,7 +159,7 @@ class ListFormatterFactory : public FormatterFactory {
 
 class ListFormatter : public Formatter {
     public:
-    const FullyFormatted* format(const FormattingInput&, const FunctionRegistry::Options&, UErrorCode& errorCode) const;
+    void format(State&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     private:
     friend class ListFormatterFactory;
@@ -174,7 +174,7 @@ class ResourceManagerFactory : public FormatterFactory {
 
 class ResourceManager : public Formatter {
     public:
-    const FullyFormatted* format(const FormattingInput&, const FunctionRegistry::Options&, UErrorCode& errorCode) const;
+    void format(State&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     static Hashtable* properties(UErrorCode&);
     static UnicodeString propertiesAsString(const Hashtable&);
@@ -199,7 +199,7 @@ class TemperatureFormatterFactory : public FormatterFactory {
 
 class TemperatureFormatter : public Formatter {
     public:
-    const FullyFormatted* format(const FormattingInput&, const FunctionRegistry::Options&, UErrorCode& errorCode) const;
+    void format(State&, UErrorCode& errorCode) const;
     static FunctionRegistry* customRegistry(UErrorCode&);
     ~TemperatureFormatter();
     private:

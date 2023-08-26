@@ -190,18 +190,6 @@ static bool isMessageFormatWarning(UErrorCode status) {
     }
 }
 
-static bool isSyntaxOrDataModelWarning(UErrorCode status) {
-    switch(status) {
-        case U_SYNTAX_WARNING:
-        case U_VARIANT_KEY_MISMATCH_WARNING: {
-            return true;
-        }
-        default: {
-            return false;
-        }
-    }
-}
-
 // ------------------------------------------------------
 // MessageArguments
 
@@ -568,7 +556,7 @@ void MessageFormatter::formatOperand(const Environment& env, const Operand& rand
             return;
         } else {
             // Unbound variable -- Resolution error
-            context.setUnresolvedVariable(var);
+            context.setUnresolvedVariable(var, status);
             return;
         }
     } else if (rand.isLiteral()) {
@@ -602,36 +590,43 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
         rhsContext.adoptInstead(context.create(status));
         CHECK_ERROR(status);
         formatOperand(env, *v, *rhsContext, status);
+// TODO
         CHECK_ERROR(status);
+/*
         // Try to fully format the result
-        UnicodeString formattedRhs;
-        context.formatToString(locale, formattedRhs);
+        context.formatToString(locale, status);
         CHECK_ERROR(status);
+*/
 
-        // If formatting succeeded, pass the strihg
-        if (context.hasStringOutput()) {
-            context.setStringOption(k, formattedRhs);
-        } else if (context.hasFormattableInput()) {
-            const Formattable& f = context.getFormattableInput();
+        // If formatting succeeded, pass the string
+        if (rhsContext->hasOutput()) {
+            if (rhsContext->hasNumberOutput()) {
+                rhsContext->formatToString(locale, status);
+                CHECK_ERROR(status);
+            }
+            U_ASSERT(rhsContext->hasStringOutput());
+            context.setStringOption(k, rhsContext->getStringOutput(), status);
+        } else if (rhsContext->hasFormattableInput()) {
+            const Formattable& f = rhsContext->getFormattableInput();
             switch (f.getType()) {
                 case Formattable::Type::kDate: {
-                    context.setDateOption(k, f.getDate());
+                    context.setDateOption(k, f.getDate(), status);
                     break;
                 }
                 case Formattable::Type::kDouble: {
-                    context.setNumericOption(k, f.getDouble());
+                    context.setNumericOption(k, f.getDouble(), status);
                     break;
                 }
                 case Formattable::Type::kLong: {
-                    context.setNumericOption(k, f.getLong());
+                    context.setNumericOption(k, f.getLong(), status);
                     break;
                 }
                 case Formattable::Type::kInt64: {
-                    context.setNumericOption(k, f.getInt64());
+                    context.setNumericOption(k, f.getInt64(), status);
                     break;
                 }
                 case Formattable::Type::kString: {
-                    context.setStringOption(k, f.getString());
+                    context.setStringOption(k, f.getString(), status);
                     break;
                 }
                 default: {
@@ -639,13 +634,13 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
                     continue;
                 }
             }
-        } else if (context.hasObjectInput()) {
+        } else if (rhsContext->hasObjectInput()) {
             // Ignore object values; don't pass them as options
         } else {
             // ignore fallbacks
-            U_ASSERT(context.isFallback());
+            U_ASSERT(rhsContext->isFallback());
         }
-        context.propagateErrors(*rhsContext);
+        context.propagateErrors(*rhsContext, status);
     }
 }
 
@@ -753,7 +748,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Expression
 
     // A `reserved` is an error
     if (expr.isReserved()) {
-        context.setReservedError();
+        context.setReservedError(status);
         U_ASSERT(context.isFallback());
         return;
     }
@@ -761,7 +756,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Expression
     // Function call -- resolve the operand and options
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
-        context.setFunctionName(rator.getFunctionName().name());
+        context.setFunctionName(rator.getFunctionName(), status);
         resolveOptions(env, rator.getOptions(), context, status);
     }
     // Operand may be the null argument, but resolveVariables() handles that
@@ -775,42 +770,24 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
 
     // Resolve expression to determine if it's a function call
     resolveVariables(globalEnv, expr, context, status);
-    const SelectorFactory* selectorFactory;
+
     if (context.hasSelector()) {
-        // Look up the selector for this function
-        selectorFactory = lookupSelectorFactory(context.getOperator(), status);
-        CHECK_ERROR(status);
-    } else {
-        if (context.hasFormatter()) {
-            // Evaluate the contents before calling the `text` selector
-            context.evalPendingFunctionCall();
-        }
-        // Plug in the "text" selector
-        selectorFactory = lookupSelectorFactory(TEXT_SELECTOR, status);
-        U_ASSERT(U_SUCCESS(status));
-    }
-    // If no error was set, the selector should be non-null
-    if (selectorFactory != nullptr) {
-        // Create a specific instance of the selector
-        LocalPointer<Selector> selector(selectorFactory->createSelector(getLocale(), status));
-        context.resolveSelector(selector.orphan());
         // Represent the function call with the given options, applied to the operand
         if (context.isFallback()) {
             // Use a null expression if it's a syntax or data model warning;
             // create a valid (non-fallback) formatted placeholder from the
             // fallback string otherwise
             if (context.hasParseError() || context.hasDataModelError()) {
-                U_ASSERT(!context.hasOperand());
+                U_ASSERT(!context.hasInput());
             } else {
                 context.promoteFallbackToInput();
             }
         }
-    } else {
-        // If the selector factory was null, there must have been
-        // an earlier unknown function warning
-        U_ASSERT(context.hasUnknownFunctionError());
-        U_ASSERT(context.isFallback());
     }
+    // If there's no selector, there there must have been
+    // an earlier unknown function warning
+    U_ASSERT(context.hasUnknownFunctionError() || context.hasMissingSelectorAnnotationError());
+    U_ASSERT(context.isFallback());
 }
 
 void MessageFormatter::formatExpression(const Environment& globalEnv, const Expression& expr, FormattedValueBuilder& context, UErrorCode &status) const {
@@ -818,7 +795,7 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
 
     // Formatting error
     if (expr.isReserved()) {
-        context.setReservedError();
+        context.setReservedError(status);
         U_ASSERT(context.isFallback());
         return;
     }
@@ -833,24 +810,22 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
         const OptionMap& options = rator.getOptions();
         // Resolve the options
         resolveOptions(globalEnv, options, context, status);
-        // Look up the function, which is expected to be a formatter
-        const Formatter* formatter = context.maybeCachedFormatter(functionName, status);
-        CHECK_ERROR(status);
 
         // Don't call the function on error values
         if (context.isFallback()) {
             return;
         }
 
-        if (U_SUCCESS(status) && formatter != nullptr) {
+        context.setFunctionName(functionName, status);
+        if (context.hasFormatter()) {
             // Format the call
-            formatter->format(context, status);
+            context.evalPendingFormatterCall(status);
             if (context.hasOutput() && U_SUCCESS(status)) {
                 return;
             } else if (!(context.hasError() || context.hasWarning())) {
                 // Set formatting warning if formatting function had no output
                 // but didn't set an error or warning
-                context.setFormattingWarning(functionName);
+                context.setFormattingWarning(functionName.name(), status);
             }
             return;
         }
@@ -876,14 +851,15 @@ void MessageFormatter::formatPattern(Context& globalContext, const Environment& 
         if (part->isText()) {
             result += part->asText();
         } else {
-            context.adoptInstead(FormattedValueBuilder::create(globalContext, status));
+            context.adoptInstead(FormattedValueBuilder::create(globalContext, *this, status));
             CHECK_ERROR(status);
             formatExpression(globalEnv, part->contents(), *context, status);
+            context->formatToString(locale, status);
             CHECK_ERROR(status);
-            context->checkErrors(status);
-            context->formatToString(locale, result);
+            result += context->getStringOutput();
         }
     }
+    context->checkErrors(status);
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-selectors
@@ -895,7 +871,7 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
     // 2. For each expression exp of the message's selectors
     LocalPointer<FormattedValueBuilder> rv;
     for (size_t i = 0; i < selectors.length(); i++) {
-        rv.adoptInstead(FormattedValueBuilder::create(context, status));
+        rv.adoptInstead(FormattedValueBuilder::create(context, *this, status));
         CHECK_ERROR(status);
         // 2i. Let rv be the resolved value of exp.
         formatSelectorExpression(env, *selectors.get(i), *rv, status);
@@ -947,9 +923,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys, FormattedValueBuil
         matches.removeAllElements();
         return;
     }
-
     U_ASSERT(rv.hasSelector());
-    const Selector& selectorImpl = rv.getSelector();
     
     // As input to selectKeys(), copy the `keys` vector into
     // an array of Formattables
@@ -965,7 +939,8 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys, FormattedValueBuil
     }
 
     size_t numberMatching = 0;
-    selectorImpl.selectKey(rv, keysIn.getAlias(), numKeys, keysOut.getAlias(), numberMatching, status);
+    rv.evalPendingSelectorCall(keysIn.getAlias(), numKeys, keysOut.getAlias(), numberMatching, status);
+    CHECK_ERROR(status);
     arrayToKeys(keysOut.getAlias(), numberMatching, matches, status);
 }
 

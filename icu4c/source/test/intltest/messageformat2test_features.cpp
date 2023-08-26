@@ -469,24 +469,24 @@ Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCod
     return result.orphan();
 }
 
-const FullyFormatted* TemperatureFormatter::format(const FormattingInput& arg, const FunctionRegistry::Options& options, UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
+void TemperatureFormatter::format(State& context, UErrorCode& errorCode) const {
+    CHECK_ERROR(errorCode);
 
     // Argument must be present
-    if (arg.isNull()) {
-        errorCode = U_FORMATTING_WARNING;
-        return nullptr;
+    if (!context.hasFormattableInput()) {
+        context.setFormattingWarning("temp", errorCode);
+        return;
     }
     // Assume arg is not-yet-formatted
-    const Formattable& toFormat = arg.getInput();
+    const Formattable& toFormat = context.getFormattableInput();
 
     counter.formatCount++;
 
     UnicodeString unit;
-    bool unitExists = options.getStringOption(UnicodeString("unit"), unit);
+    bool unitExists = context.getStringOption(UnicodeString("unit"), unit);
     U_ASSERT(unitExists);
     UnicodeString skeleton;
-    bool skeletonExists = options.getStringOption(UnicodeString("skeleton"), skeleton);
+    bool skeletonExists = context.getStringOption(UnicodeString("skeleton"), skeleton);
 
     number::LocalizedNumberFormatter* realNfCached = (number::LocalizedNumberFormatter*) cachedFormatters->get(unit);
     number::LocalizedNumberFormatter realNf;
@@ -507,7 +507,7 @@ const FullyFormatted* TemperatureFormatter::format(const FormattingInput& arg, c
         realNfCached = new number::LocalizedNumberFormatter(realNf);
         if (realNfCached == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
+            return;
         }
         cachedFormatters->put(unit, realNfCached, errorCode);
     } else {
@@ -532,10 +532,11 @@ const FullyFormatted* TemperatureFormatter::format(const FormattingInput& arg, c
             break;
         }
         default: {
-            return FormattedString::create(arg, UnicodeString(), errorCode);
+            context.setOutput(UnicodeString());
+            return;
         }
     }
-    return FormattedNumber::create(arg, std::move(result), errorCode);
+    context.setOutput(std::move(result));
 }
 
 TemperatureFormatter::~TemperatureFormatter() {}

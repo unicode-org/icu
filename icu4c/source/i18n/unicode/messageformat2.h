@@ -276,6 +276,7 @@ public:
   private:
     friend class Builder;
     friend class Context;
+    friend class FormattedValueBuilder;
 
     MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
