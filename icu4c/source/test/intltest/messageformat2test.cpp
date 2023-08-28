@@ -403,20 +403,6 @@ void TestMessageFormat2::testAPI() {
     TestUtils::runTestCase(*this, *test, errorCode);
 }
 
-static FunctionRegistry* personFunctionRegistry(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-
-    LocalPointer<FunctionRegistry::Builder> builder(FunctionRegistry::builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    // Note that this doesn't use `setDefaultFormatterNameForType()`; not implemented yet
-    return builder->setFormatter(FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
-        .build(errorCode);
-}
-
 // Custom functions example from the ICU4C API design doc
 // Note: error/null checks are omitted
 // (same comments as in testAPISimple() -- TODO)
@@ -426,55 +412,50 @@ void TestMessageFormat2::testAPICustomFunctions() {
     UParseError parseError;
     Locale locale = "en_US";
 
-// Set up custom function registry
-
-    LocalPointer<FunctionRegistry> functionRegistry(personFunctionRegistry(errorCode));
+    // Set up custom function registry
+    FunctionRegistry::Builder* builder = FunctionRegistry::builder(errorCode);
+    // Note that this doesn't use `setDefaultFormatterNameForType()`; not implemented yet
+    FunctionRegistry* functionRegistry =
+        builder->setFormatter(FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
+               .build(errorCode);
 
     Person* person = new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe"));
 
-    LocalPointer<MessageFormatter> mf;
+    MessageArguments::Builder* argsBuilder = MessageArguments::builder(errorCode);
+    argsBuilder->addObject("name", person, errorCode);
+    MessageArguments* arguments = argsBuilder->build(errorCode);
 
-    LocalPointer<MessageArguments::Builder> argumentsBuilder(MessageArguments::builder(errorCode));
-    argumentsBuilder->addObject("name", person, errorCode);
-    LocalPointer<MessageArguments> arguments(argumentsBuilder->build(errorCode));
-
+    MessageFormatter::Builder* mfBuilder = MessageFormatter::builder(errorCode);
     UnicodeString result;
-
-// This fails, because we did not provide a function registry:
-    mf.adoptInstead(MessageFormatter::builder(errorCode)
-                    ->setPattern("{Hello {$name :person formality=informal}}", errorCode)
-                    .setLocale(locale)
-                    .build(parseError, errorCode));
+    // This fails, because we did not provide a function registry:
+    MessageFormatter* mf = mfBuilder->setPattern("{Hello {$name :person formality=informal}}", errorCode)
+                                    .setLocale(locale)
+                                    .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
-    U_ASSERT(errorCode == U_UNKNOWN_FUNCTION_WARNING);
+    assertEquals("testAPICustomFunctions", U_UNKNOWN_FUNCTION_WARNING, errorCode);
 
     errorCode = U_ZERO_ERROR;
     result.remove();
-    MessageFormatter::Builder& mfBuilder = MessageFormatter::builder(errorCode)
-        ->setFunctionRegistry(personFunctionRegistry(errorCode))
-        .setLocale(locale);
+    mfBuilder = MessageFormatter::builder(errorCode);
+    mfBuilder->setFunctionRegistry(functionRegistry)
+              .setLocale(locale);
 
-    // Note that the function registry has to be recreated each time, because build()
-    // invalidates the builder
-    mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=informal}}", errorCode)
-                    .setFunctionRegistry(personFunctionRegistry(errorCode))
-                    .build(parseError, errorCode));
+    mf = mfBuilder->setPattern("{Hello {$name :person formality=informal}}", errorCode)
+                    .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
-    U_ASSERT(result == "Hello John");
-
+    assertEquals("testAPICustomFunctions", "Hello John", result);
     result.remove();
-    mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=formal}}", errorCode)
-                    .setFunctionRegistry(personFunctionRegistry(errorCode))
-                    .build(parseError, errorCode));
-    mf->formatToString(*arguments, errorCode, result);
-    U_ASSERT(result == "Hello Mr. Doe");
 
-    result.remove();
-    mf.adoptInstead(mfBuilder.setPattern("{Hello {$name :person formality=formal length=long}}", errorCode)
-                    .setFunctionRegistry(personFunctionRegistry(errorCode))
-                    .build(parseError, errorCode));
+    mf = mfBuilder->setPattern("{Hello {$name :person formality=formal}}", errorCode)
+                    .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
-    U_ASSERT(result == "Hello Mr. John Doe");
+    assertEquals("testAPICustomFunctions", "Hello Mr. Doe", result);
+    result.remove();
+
+    mf = mfBuilder->setPattern("{Hello {$name :person formality=formal length=long}}", errorCode)
+                    .build(parseError, errorCode);
+    mf->formatToString(*arguments, errorCode, result);
+    assertEquals("testAPICustomFunctions", "Hello Mr. John Doe", result);
 }
 
 void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {

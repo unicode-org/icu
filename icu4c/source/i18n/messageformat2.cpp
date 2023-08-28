@@ -68,7 +68,7 @@ MessageFormatter::Builder& MessageFormatter::Builder::setFunctionRegistry(const 
     return *this;
 }
 
-MessageFormatter::Builder& MessageFormatter::Builder::setLocale(Locale loc) {
+MessageFormatter::Builder& MessageFormatter::Builder::setLocale(const Locale& loc) {
     locale = loc;
     return *this;
 }

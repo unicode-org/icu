@@ -241,7 +241,7 @@ public:
 //       LocalPointer<FunctionRegistry> customFunctionRegistry;
 
     public:
-        Builder& setLocale(Locale locale);
+        Builder& setLocale(const Locale& locale);
         Builder& setPattern(const UnicodeString& pattern, UErrorCode& errorCode);
         // Takes ownership of the FunctionRegistry
         // Builder& setFunctionRegistry(FunctionRegistry* functionRegistry);
