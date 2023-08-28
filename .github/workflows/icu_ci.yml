@@ -12,6 +12,12 @@ on:
       - 'maint/maint*'
   pull_request:
     branches: '**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+env:
+  MAVEN_ARGS: '--show-version --no-transfer-progress'
 
 permissions:
   contents: read
@@ -33,8 +39,8 @@ jobs:
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
           set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
-  # ICU4J build and unit test using Ant
-  icu4j-ant-build-and-test:
+  # ICU4J build and unit test using Maven
+  icu4j-mvn-build-and-test:
     strategy:
       fail-fast: false
       matrix:
@@ -54,12 +60,10 @@ jobs:
       - name: ICU4J
         run: |
           cd icu4j;
-          ant init;
-          ant check;
-          ant localespiCheck
+          mvn install
       - name: List failures (if any)
         run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
   # ICU4J build and unit tests using Maven
@@ -92,7 +96,7 @@ jobs:
           cache: maven
       - name: Run Maven test
         run: |
-          cd icu4j/maven-build;
+          cd icu4j;
           mvn --batch-mode test
 
   # Run `verify` to ensure that `package` (creating .jar files) and `integration-test` (special setup for localespi tests) work
@@ -120,7 +124,7 @@ jobs:
       # integration tests, if any (`integration-test`)
       - name: Run Maven verify
         run: |
-          cd icu4j/maven-build;
+          cd icu4j;
           mvn --batch-mode verify
 
   # ICU4J build and unit test under lstm
@@ -147,16 +151,15 @@ jobs:
       - name: ICU4J
         run: |
           cd icu4j;
-          ant init;
-          ant check;
-          ant localespiCheck
+          mvn install
       - name: List failures (if any)
         run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
   # ICU4J build and unit test under adaboost
   adaboost-icu4j-build-and-test:
+    if: false # Temporary disable, until we disable the .jar creation from C and distribute the individual files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -179,12 +182,10 @@ jobs:
       - name: ICU4J
         run: |
           cd icu4j;
-          ant init;
-          ant -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true check;
-          ant localespiCheck
+          mvn -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true install
       - name: List failures (if any)
         run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
   # gcc debug build.

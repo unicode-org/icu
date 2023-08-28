@@ -2,6 +2,12 @@ name: Publish icu4j.jar/utilities.jar to GH Maven
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+env:
+  MAVEN_ARGS: '--show-version --no-transfer-progress'
 
 permissions:
   contents: read
