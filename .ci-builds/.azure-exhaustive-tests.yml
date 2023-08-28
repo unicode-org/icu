@@ -41,7 +41,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        echo "Building ICU4J" && cd icu4j && ant init && ant exhaustiveCheck
+        echo "Building ICU4J" && cd icu4j && mvn install -DICU.exhaustive=10
       displayName: 'Build and Exhaustive Tests'
       env:
         BUILD: ICU4J
