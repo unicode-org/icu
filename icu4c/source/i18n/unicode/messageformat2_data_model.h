@@ -434,9 +434,10 @@ public:
     // `Expression` interface defined in
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
     class Expression : public UObject {
-        // TODO: update this. Operand is always present but may be the NullOperand
         /*
-          An expression is represented as the application of an optional operator to an optional operand.
+          An expression is represented as the application of an optional operator to an operand.
+          The operand is always present; for function calls with no operand, it's represented
+          as an operand for which `isNull()` is true.
 
                                       Operator               | Operand
                                       --------------------------------
@@ -444,10 +445,7 @@ public:
                                       options={opt: value})
           { abcd }                =>  null                   | Literal(quoted=false, contents="abcd")
           { : fun opt=value }     =>  (FunctionName=fun,
-                                      options={opt: value})  | null
-
-          An expression where both operand and operator are null can't be constructed using
-          the builder interface.
+                                      options={opt: value})  | NullOperand()
         */
     public:
 
