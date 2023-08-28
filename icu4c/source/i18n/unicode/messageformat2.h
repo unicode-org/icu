@@ -238,7 +238,6 @@ public:
        LocalPointer<FunctionRegistry> standardFunctionRegistry;
        // *Not* owned
        const FunctionRegistry* customFunctionRegistry;
-//       LocalPointer<FunctionRegistry> customFunctionRegistry;
 
     public:
         Builder& setLocale(const Locale& locale);

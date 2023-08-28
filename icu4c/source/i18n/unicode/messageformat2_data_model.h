@@ -147,9 +147,9 @@ public:
     class SelectorKeys;
     class VariantMap;
 
-    using Bindings = List<Binding>;
-    using ExpressionList = List<Expression>;
-    using KeyList = List<Key>;
+    using Bindings = ImmutableVector<Binding>;
+    using ExpressionList = ImmutableVector<Expression>;
+    using KeyList = ImmutableVector<Key>;
     using OptionMap = OrderedMap<Operand>;
 
     // Corresponds to the `Literal` interface defined in
@@ -176,7 +176,7 @@ public:
 
     private:
         friend class Key;
-        friend class List<Literal>;
+        friend class ImmutableVector<Literal>;
         friend class LiteralOperand;
         friend class Operand;
         friend class Reserved;
@@ -204,37 +204,8 @@ public:
         virtual const VariableName* asVariable() const = 0;
         virtual const Literal* asLiteral() const = 0;
         static Operand* create(const Operand&);
-/*
-        bool isVariable() const { return isVariableReference; }
-        bool isLiteral() const { return !isVariable(); }
-        VariableName asVariable() const;
-        const Literal& asLiteral() const;
 
-        // Copy constructor
-        Operand(const Operand& other) : isVariableReference(other.isVariableReference) {
-            if (other.isVariableReference) {
-                lit = other.lit;
-            } else {
-                var = other.var;
-            }
-        }
-*/
         virtual ~Operand();
-
-    private:
-/*
-        // Represent variable names as unquoted literals
-        Operand(const VariableName& var) : isVariableReference(true), string(Literal(false, var.name())) {}
-        Operand(const Literal& l) : isVariableReference(false), string(l) {}
-
-        const bool isVariableReference;
-        const UnicodeString contents;
-
-        union {
-            Literal lit;
-            VariableName var;
-        };
-*/
     }; // class Operand
 
     // Corresponds to the `Literal | CatchallKey` that is the
@@ -251,7 +222,7 @@ public:
         static Key* create(const Literal& lit, UErrorCode& errorCode);
 
     private:
-        friend class List<Key>;
+        friend class ImmutableVector<Key>;
         friend class VariantMap;
 
         Key(const Key& other) : wildcard(other.wildcard), contents(other.contents) {};
@@ -274,7 +245,7 @@ public:
         private:
             friend class SelectorKeys;
             Builder(UErrorCode& errorCode);
-            LocalPointer<List<Key>::Builder> keys;
+            LocalPointer<ImmutableVector<Key>::Builder> keys;
         public:
             Builder& add(Key* key, UErrorCode& errorCode);
             // Note: ICU4J has an `addAll()` method, which is omitted here.
@@ -283,7 +254,7 @@ public:
         static Builder* builder(UErrorCode& errorCode);
 
     private:
-        friend class List<SelectorKeys>;
+        friend class ImmutableVector<SelectorKeys>;
         friend class VariantMap;
 
         SelectorKeys(const SelectorKeys& other) : keys(new KeyList(*(other.keys))) {
@@ -319,7 +290,7 @@ public:
     class VariantMap : public UMemory {
     public:
         static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
-        // Because List::get() returns a T*,
+        // Because ImmutableVector::get() returns a T*,
         // the out-parameters for `next()` are references to pointers
         // rather than references to a `SelectorKeys` or a `Pattern`,
         // in order to avoid either copying or creating a reference to
@@ -335,20 +306,20 @@ public:
             static void concatenateKeys(const SelectorKeys& keys, UnicodeString& result);
             Builder(UErrorCode& errorCode);
             LocalPointer<OrderedMap<Pattern>::Builder> contents;
-            LocalPointer<List<SelectorKeys>::Builder> keyLists;
+            LocalPointer<ImmutableVector<SelectorKeys>::Builder> keyLists;
         }; // class VariantMap::Builder
 
         static Builder* builder(UErrorCode& errorCode);
     private:
         friend class Builder;
-        VariantMap(OrderedMap<Pattern>* vs, List<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
+        VariantMap(OrderedMap<Pattern>* vs, ImmutableVector<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
             // Check invariant: `vs` and `ks` have the same size
             U_ASSERT(vs->size() == ks->length());
         }
         const LocalPointer<OrderedMap<Pattern>> contents;
         // See the method implementations for comments on
         // how `keyLists` is used.
-        const LocalPointer<List<SelectorKeys>> keyLists;
+        const LocalPointer<ImmutableVector<SelectorKeys>> keyLists;
     }; // class VariantMap
 
     // Corresponds to the `Reserved` interface
@@ -364,7 +335,7 @@ public:
             friend class Reserved;
           
             Builder(UErrorCode &errorCode);
-            LocalPointer<List<Literal>::Builder> parts;
+            LocalPointer<ImmutableVector<Literal>::Builder> parts;
           
         public:
             Builder& add(Literal& part, UErrorCode &errorCode);
@@ -380,18 +351,18 @@ public:
         bool isBogus() const { return !parts.isValid(); }
       
         // Reserved needs a copy constructor in order to make Expression deeply copyable
-        Reserved(const Reserved& other) : fallback(DefaultString()), parts(new List<Literal>(*other.parts)) {
+        Reserved(const Reserved& other) : fallback(DefaultString()), parts(new ImmutableVector<Literal>(*other.parts)) {
             U_ASSERT(!other.isBogus());
         }
 
         // Possibly-empty list of parts
         // `literal` reserved as a quoted literal; `reserved-char` / `reserved-escape`
         // strings represented as unquoted literals
-        const LocalPointer<List<Literal>> parts;
+        const LocalPointer<ImmutableVector<Literal>> parts;
       
         // Can only be called by Builder
         // Takes ownership of `ps`
-        Reserved(List<Literal> *ps) : fallback(DefaultString()), parts(ps) { U_ASSERT(ps != nullptr); }
+        Reserved(ImmutableVector<Literal> *ps) : fallback(DefaultString()), parts(ps) { U_ASSERT(ps != nullptr); }
     };
 
     // Corresponds to the `FunctionRef | Reserved` type in the
@@ -546,7 +517,7 @@ public:
         const UnicodeString& asText() const;
 
     private:
-        friend class List<PatternPart>;
+        friend class ImmutableVector<PatternPart>;
         friend class Pattern;
         // Text
         PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
@@ -585,7 +556,7 @@ public:
             // Note this is why PatternPart and all its enclosed classes need
             // copy constructors: when the build() method is called on `parts`,
             // it should copy `parts` rather than moving it
-            LocalPointer<List<PatternPart>::Builder> parts;
+            LocalPointer<ImmutableVector<PatternPart>::Builder> parts;
           
         public:
             // Takes ownership of `part`
@@ -600,19 +571,19 @@ public:
         // then isBogus() will be true for this Pattern
         // Pattern needs a copy constructor in order to make MessageFormatDataModel::build() be a copying rather than
         // moving build
-        Pattern(const Pattern& other) : parts(new List<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
+        Pattern(const Pattern& other) : parts(new ImmutableVector<PatternPart>(*(other.parts))) { U_ASSERT(!other.isBogus()); }
         static Pattern* create(const Pattern& other);
       
     private:
         friend class MessageFormatDataModel;
 
         // Possibly-empty list of parts
-        const LocalPointer<List<PatternPart>> parts;
+        const LocalPointer<ImmutableVector<PatternPart>> parts;
       
         bool isBogus() const { return !parts.isValid(); }
         // Can only be called by Builder
         // Takes ownership of `ps`
-        Pattern(List<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
+        Pattern(ImmutableVector<PatternPart> *ps) : parts(ps) { U_ASSERT(ps != nullptr); }
 
     }; // class Pattern
 
@@ -628,7 +599,7 @@ public:
             return value.getAlias();
         }
     private:
-        friend class List<Binding>;
+        friend class ImmutableVector<Binding>;
 
         Binding(const VariableName& v, Expression* e) : var(v), value(e) {}
         // This needs a copy constructor so that `Bindings` is deeply-copyable,

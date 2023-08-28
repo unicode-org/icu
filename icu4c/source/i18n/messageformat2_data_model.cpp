@@ -145,7 +145,7 @@ VariantMap* VariantMap::Builder::build(UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    LocalPointer<List<SelectorKeys>> adoptedKeyLists(keyLists->build(errorCode));
+    LocalPointer<ImmutableVector<SelectorKeys>> adoptedKeyLists(keyLists->build(errorCode));
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -172,7 +172,7 @@ VariantMap::Builder::Builder(UErrorCode& errorCode) {
     // No value comparator needed
     contents.adoptInstead(OrderedMap<Pattern>::builder(errorCode));
     // initialize `keyLists`
-    keyLists.adoptInstead(List<SelectorKeys>::builder(errorCode));
+    keyLists.adoptInstead(ImmutableVector<SelectorKeys>::builder(errorCode));
     // `keyLists` does not adopt its elements
 }
 
@@ -204,7 +204,7 @@ Reserved::Builder::Builder(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
-    parts.adoptInstead(List<Literal>::builder(errorCode));
+    parts.adoptInstead(ImmutableVector<Literal>::builder(errorCode));
 }
 
 Reserved::Builder* Reserved::builder(UErrorCode &errorCode) {
@@ -216,7 +216,7 @@ Reserved::Builder* Reserved::builder(UErrorCode &errorCode) {
 
 Reserved* Reserved::Builder::build(UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<List<Literal>> reservedParts(parts->build(errorCode));
+    LocalPointer<ImmutableVector<Literal>> reservedParts(parts->build(errorCode));
     NULL_ON_ERROR(errorCode);
     Reserved* result = new Reserved(reservedParts.orphan());
     if (result == nullptr) {
@@ -590,7 +590,7 @@ Pattern::Builder::Builder(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
-    parts.adoptInstead(List<PatternPart>::builder(errorCode));
+    parts.adoptInstead(ImmutableVector<PatternPart>::builder(errorCode));
 }
 
 Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
@@ -602,7 +602,7 @@ Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
 
 Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
-    LocalPointer<List<PatternPart>> patternParts(parts->build(errorCode));
+    LocalPointer<ImmutableVector<PatternPart>> patternParts(parts->build(errorCode));
     NULL_ON_ERROR(errorCode);
     Pattern* result = new Pattern(patternParts.orphan());
     if (result == nullptr) {

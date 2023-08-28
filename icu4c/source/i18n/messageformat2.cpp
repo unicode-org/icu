@@ -27,7 +27,7 @@ using Reserved        = MessageFormatDataModel::Reserved;
 using SelectorKeys    = MessageFormatDataModel::SelectorKeys;
 using VariantMap      = MessageFormatDataModel::VariantMap;
 
-using PrioritizedVariantList = List<PrioritizedVariant>;
+using PrioritizedVariantList = ImmutableVector<PrioritizedVariant>;
 
 #define TEXT_SELECTOR UnicodeString("select")
 

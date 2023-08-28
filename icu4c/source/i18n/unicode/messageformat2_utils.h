@@ -60,7 +60,7 @@ static Hashtable* copyHashtable(const Hashtable& other) {
 // Polymorphic immutable list class (constructed using the builder pattern),
 // that uses a UVector as its underlying representation
 template<typename T>
-class List : public UMemory {
+class ImmutableVector : public UMemory {
 
 private:
     // If a copy constructor fails, the list is left in an inconsistent state,
@@ -69,8 +69,8 @@ private:
     // resort to this, and all methods must check the invariant and signal an
     // error if it's false. The error should be U_MEMORY_ALLOCATION_ERROR,
     // since isBogus iff an allocation failed.
-    // For classes that contain a List member, there is no guarantee that
-    // the list will be non-bogus. List operations use assertions to detect
+    // For classes that contain a ImmutableVector member, there is no guarantee that
+    // the list will be non-bogus. ImmutableVector operations use assertions to detect
     // this condition as early as possible.
     bool isBogus() const { return !contents.isValid(); }
 
@@ -113,7 +113,7 @@ public:
     }
 
     // Copy constructor
-    List(const List<T>& other) {
+    ImmutableVector(const ImmutableVector<T>& other) {
         UErrorCode errorCode = U_ZERO_ERROR;
         U_ASSERT(!other.isBogus());
         contents.adoptInstead(new UVector(other.length(), errorCode));
@@ -139,11 +139,11 @@ public:
             return *this;
         }
         // Postcondition: U_FAILURE(errorCode) or returns a list such that isBogus() = false
-        List<T>* build(UErrorCode &errorCode) const {
+        ImmutableVector<T>* build(UErrorCode &errorCode) const {
             if (U_FAILURE(errorCode)) {
                 return nullptr;
             }
-            LocalPointer<List<T>> adopted(buildList(*this, errorCode));
+            LocalPointer<ImmutableVector<T>> adopted(buildList(*this, errorCode));
             if (!adopted.isValid() || adopted->isBogus()) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
                 return nullptr;
@@ -152,7 +152,7 @@ public:
         }
 
     private:
-        friend class List;
+        friend class ImmutableVector;
         LocalPointer<UVector> contents;
         Builder(UErrorCode& errorCode) {
             if (U_FAILURE(errorCode)) {
@@ -165,7 +165,7 @@ public:
             }
             contents->setDeleter(uprv_deleteUObject);
         }
-    }; // class List::Builder
+    }; // class ImmutableVector::Builder
 
     static Builder* builder(UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) {
@@ -191,11 +191,11 @@ private:
 
     // Copies the contents of `builder`
     // This won't compile unless T is a type that has a copy assignment operator
-    static List<T>* buildList(const Builder &builder, UErrorCode &errorCode) {
+    static ImmutableVector<T>* buildList(const Builder &builder, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
-        List<T>* result;
+        ImmutableVector<T>* result;
         U_ASSERT(builder.contents != nullptr);
 
         LocalPointer<UVector> adoptedContents(new UVector(builder.contents->size(), errorCode));
@@ -203,7 +203,7 @@ private:
         if (U_FAILURE(errorCode)) {
             return nullptr;
         }
-        result = new List<T>(adoptedContents.orphan());
+        result = new ImmutableVector<T>(adoptedContents.orphan());
 
         // Finally, check for null
         if (result == nullptr) {
@@ -213,12 +213,12 @@ private:
     } 
 
     // Adopts `contents`
-    List(UVector* things) : contents(things) {
+    ImmutableVector(UVector* things) : contents(things) {
         U_ASSERT(things != nullptr);
     }
 
     /* const */ LocalPointer<UVector> contents;
-}; // class List
+}; // class ImmutableVector
 
 // Immutable polymorphic ordered map from strings to V*
 // Preserves the order in which keys are added.
@@ -230,7 +230,7 @@ class MessageFormatDataModel {
 };
 
 private:
-    // See comments under `List::isBogus()`
+    // See comments under `ImmutableVector::isBogus()`
     bool isBogus() const { return (!contents.isValid() || !keys.isValid()); }
 
 public:
