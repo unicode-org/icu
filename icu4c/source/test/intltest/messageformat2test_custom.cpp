@@ -709,9 +709,10 @@ void ResourceManager::format(State& context, UErrorCode& errorCode) const {
             errorCode = savedStatus;
         }
        context.setOutput(result);
+    } else {
+        // Properties must be provided
+        context.setFormattingWarning("msgref", errorCode);
     }
-    // Properties must be provided
-    context.setFormattingWarning("msgref", errorCode);
     return;
 }
 

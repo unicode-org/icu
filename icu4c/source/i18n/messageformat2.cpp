@@ -529,6 +529,7 @@ void MessageFormatter::formatLiteral(const Literal& lit, FormattedValueBuilder& 
 void MessageFormatter::formatOperand(const Environment& env, const Operand& rand, FormattedValueBuilder& context, UErrorCode &status) const {
     CHECK_ERROR(status);
     if (rand.isNull()) {
+        context.setNoOperand();
         return;
     }
     if (rand.isVariable()) {
@@ -599,14 +600,10 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
 */
 
         // If formatting succeeded, pass the string
-        if (rhsContext->hasOutput()) {
-            if (rhsContext->hasNumberOutput()) {
-                rhsContext->formatToString(locale, status);
-                CHECK_ERROR(status);
-            }
-            U_ASSERT(rhsContext->hasStringOutput());
+        if (rhsContext->hasStringOutput()) {
             context.setStringOption(k, rhsContext->getStringOutput(), status);
         } else if (rhsContext->hasFormattableInput()) {
+            // (Fall back to the input if the result was a formatted number)
             const Formattable& f = rhsContext->getFormattableInput();
             switch (f.getType()) {
                 case Formattable::Type::kDate: {
@@ -758,9 +755,11 @@ void MessageFormatter::resolveVariables(const Environment& env, const Expression
         const Operator& rator = expr.getOperator();
         context.setFunctionName(rator.getFunctionName(), status);
         resolveOptions(env, rator.getOptions(), context, status);
+        // Operand may be the null argument, but resolveVariables() handles that
+        formatOperand(env, expr.getAnyOperand(), context, status);
+    } else {
+        resolveVariables(env, expr.getAnyOperand(), context, status);
     }
-    // Operand may be the null argument, but resolveVariables() handles that
-    resolveVariables(env, expr.getAnyOperand(), context, status);
 }
 
 // Leaves `context` either as a fallback with errors,
@@ -783,11 +782,24 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
                 context.promoteFallbackToInput();
             }
         }
+    } else {
+        if (context.hasFunctionName()) {
+            const FunctionName& fn = context.getFunctionName();
+            // If it's a formatter, then signal a selector error.
+            if (context.hasFormatter()) {
+                context.setSelectorError(fn, status);
+            } else {
+                // Otherwise, the function must be unknown
+                context.setUnknownFunction(fn, status);
+            }
+        } else {
+            // No function name -- this is a missing selector annotation error
+            context.setMissingSelectorAnnotation(status);
+        }
+        context.clearFunctionName();
+        context.clearFunctionOptions();
+        context.setFallback();
     }
-    // If there's no selector, there there must have been
-    // an earlier unknown function warning
-    U_ASSERT(context.hasUnknownFunctionError() || context.hasMissingSelectorAnnotationError());
-    U_ASSERT(context.isFallback());
 }
 
 void MessageFormatter::formatExpression(const Environment& globalEnv, const Expression& expr, FormattedValueBuilder& context, UErrorCode &status) const {
@@ -816,27 +828,22 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
             return;
         }
 
-        context.setFunctionName(functionName, status);
-        if (context.hasFormatter()) {
-            // Format the call
-            context.evalPendingFormatterCall(status);
-            if (context.hasOutput() && U_SUCCESS(status)) {
-                return;
-            } else if (!(context.hasError() || context.hasWarning())) {
-                // Set formatting warning if formatting function had no output
-                // but didn't set an error or warning
-                context.setFormattingWarning(functionName.name(), status);
-            }
+        context.evalFormatterCall(functionName, status);
+        // Call was successful
+        if (context.hasOutput() && U_SUCCESS(status)) {
             return;
+        } else if (!(context.hasError() || context.hasWarning())) {
+            // Set formatting warning if formatting function had no output
+            // but didn't set an error or warning
+            context.setFormattingWarning(functionName.name(), status);
         }
 
         // If we reached this point, the formatter is null --
         // Must have been a previous unknown function warning
         if (rand.isNull()) {
             context.setFallback(functionName);
-        } else {
-            context.setFallback();
         }
+        context.setFallback();
         return;
     }
 }
@@ -857,9 +864,10 @@ void MessageFormatter::formatPattern(Context& globalContext, const Environment& 
             context->formatToString(locale, status);
             CHECK_ERROR(status);
             result += context->getStringOutput();
+            // TODO -- not quite right -- not all errors will be reported
+            context->checkErrors(status);
         }
     }
-    context->checkErrors(status);
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-selectors
@@ -876,9 +884,12 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
         // 2i. Let rv be the resolved value of exp.
         formatSelectorExpression(env, *selectors.get(i), *rv, status);
         if (!rv->hasSelector()) {
-            U_ASSERT(rv->hasSelectorError());
+            U_ASSERT(rv->hasUnknownFunctionError() || rv->hasSelectorError());
             U_ASSERT(rv->isFallback());
         }
+        // TODO -- not quite right -- not all errors will be reported
+        rv->checkErrors(status);
+      
         // TODO: update this comment
         // 2ii. If selection is supported for rv:
         // (Always true, since here, selector functions are strings)
@@ -941,6 +952,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys, FormattedValueBuil
     size_t numberMatching = 0;
     rv.evalPendingSelectorCall(keysIn.getAlias(), numKeys, keysOut.getAlias(), numberMatching, status);
     CHECK_ERROR(status);
+    rv.checkErrors(status);
     arrayToKeys(keysOut.getAlias(), numberMatching, matches, status);
 }
 

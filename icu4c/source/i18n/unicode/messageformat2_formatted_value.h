@@ -56,15 +56,20 @@ class Error : public UMemory {
     enum Type {
         UnresolvedVariable,
         FormattingWarning,
+        MissingSelectorAnnotation,
         ReservedError,
-        SelectorError
+        SelectorError,
+        UnknownFunction
     };
     Error(Type ty) : type(ty) {
         U_ASSERT(ty == ReservedError);
     }
     Error(Type ty, const Text& t) : type(ty), contents(t.toString()) {} 
     Error(Type ty, const UnicodeString& s) : type(ty), contents(s) {}
+    virtual ~Error();
     private:
+    friend class Errors;
+
     Type type;
     UnicodeString contents;
 }; // class Error
@@ -73,6 +78,7 @@ class Errors : public UMemory {
     private:
     LocalPointer<UVector> errors;
     bool dataModelError;
+    bool formattingWarning;
     bool missingSelectorAnnotationError;
     bool selectorError;
     bool syntaxError;
@@ -94,6 +100,7 @@ class Errors : public UMemory {
     void addVariantKeyMismatch();
     void addFormattingError();
     bool hasDataModelError() const { return dataModelError; }
+    bool hasFormattingWarning() const { return formattingWarning; }
     bool hasSelectorError() const { return selectorError; }
     bool hasSyntaxError() const { return syntaxError; }
     bool hasUnknownFunctionError() const { return unknownFunctionError; }
@@ -101,6 +108,9 @@ class Errors : public UMemory {
     bool hasWarning() const { return warning; }
     void addError(Error, UErrorCode&);
     void include(const Errors&, UErrorCode&);
+    void checkErrors(UErrorCode&);
+
+    virtual ~Errors();
 }; // class Errors
 
 // Interface that functions have access to
@@ -142,6 +152,7 @@ class FormattedValueBuilder : public State {
 
     enum InputState {
         FALLBACK,
+        NO_OPERAND, // Used when the argument is absent, but there are no errors
         OBJECT_INPUT,
         FORMATTABLE_INPUT
     };
@@ -160,6 +171,7 @@ class FormattedValueBuilder : public State {
     bool isCustomSelector(const FunctionName&) const;
     void doFormattingCall();
     bool hasFunctionName() const;
+    const FunctionName& getFunctionName();
     void clearFunctionName();
     void clearFunctionOptions();
     // Precondition: hasSelector()
@@ -169,6 +181,7 @@ class FormattedValueBuilder : public State {
     void doSelectorCall(const UnicodeString[], size_t, UnicodeString[], size_t&, UErrorCode&);
     void returnFromFunction();
     const FunctionRegistry& customRegistry() const;
+    bool hasCustomRegistry() const;
     void enterState(InputState s);
     void enterState(OutputState s);
     Builder& promoteFallbackToOutput();
@@ -176,6 +189,10 @@ class FormattedValueBuilder : public State {
     void initFunctionOptions(UErrorCode&);
     void initErrors(UErrorCode&);
     Formattable* getOption(const UnicodeString&, Formattable::Type) const;
+    void replaceFunctionName(const FunctionName&, UErrorCode&);
+    bool tryStringAsNumberOption(const UnicodeString&, double&) const;
+    Formattable* getNumericOption(const UnicodeString&) const;
+    bool isSelector(const FunctionName&) const;
 
     private:
     friend class MessageFormatter;
@@ -204,24 +221,27 @@ class FormattedValueBuilder : public State {
 
     Builder& setParseError(uint32_t line, uint32_t offset);
     Builder& setUnresolvedVariable(const VariableName&, UErrorCode&);
-    Builder& setUnknownFunction(const FunctionName&);
+    Builder& setUnknownFunction(const FunctionName&, UErrorCode&);
+    Builder& setSelectorError(const FunctionName&, UErrorCode&);
     Builder& setVariantKeyMismatch();
     Builder& setFormattingWarning(const UnicodeString&, UErrorCode&);
     Builder& setNonexhaustivePattern();
     Builder& setDuplicateOptionName();
     Builder& setReservedError(UErrorCode&);
     Builder& setSelectorError(const UnicodeString&, UErrorCode&);
-    Builder& setMissingSelectorAnnotation();
+    Builder& setMissingSelectorAnnotation(UErrorCode&);
     // Resets input and output and uses existing fallback
     Builder& setFallback();
     // Sets fallback string
     Builder& setFallback(const Text&);
     Builder& setFunctionName(const FunctionName&, UErrorCode&);
+
     // Function name must be set; clears it
     Builder& resolveSelector(Selector*);
     Builder& setStringOption(const UnicodeString&, const UnicodeString&, UErrorCode&);
     Builder& setDateOption(const UnicodeString&, UDate, UErrorCode&);
     Builder& setNumericOption(const UnicodeString&, double, UErrorCode&);
+    Builder& setNoOperand();
     Builder& setInput(const UObject*);
     Builder& setInput(const Formattable&);
     Builder& setInput(const UnicodeString&);
@@ -237,10 +257,10 @@ class FormattedValueBuilder : public State {
     //void formatToString(const Locale& locale, UnicodeString& result, UErrorCode&) const;
 
     bool buildToFunctionCall();
-    // If there is a formatter name, clear it and
+    void evalFormatterCall(const FunctionName&, UErrorCode&);
+    // If there is a functionName name, clear it and
     // call the function, setting the input and/or output appropriately
-    // Precondition: hasFormatter()
-    void evalPendingFormatterCall(UErrorCode&);
+    // Precondition: hasSelector()
     void evalPendingSelectorCall(const UnicodeString[], size_t, UnicodeString[], size_t&, UErrorCode&);
 
     public:
@@ -282,6 +302,7 @@ class FormattedValueBuilder : public State {
     bool hasDataModelError() const;
     bool hasMissingSelectorAnnotationError() const;
     bool hasUnknownFunctionError() const;
+    bool hasFormattingWarning() const;
     bool hasSelectorError() const;
     bool hasError() const;
     bool hasWarning() const;

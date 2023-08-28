@@ -592,8 +592,10 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, UE
 void StandardFunctions::DateTime::format(State& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
-    // Argument must be present
-    if (!context.hasFormattableInput()) {
+    // Argument must be present;
+    // also, if there is existing string output, that's
+    // like passing in a string, so we return
+    if (!context.hasFormattableInput() || context.hasStringOutput()) {
         context.setFormattingWarning(UnicodeString("datetime"), errorCode);
         return;
     }
@@ -634,7 +636,6 @@ void StandardFunctions::DateTime::format(State& context, UErrorCode& errorCode) 
     CHECK_ERROR(errorCode);
 
     UnicodeString result;
-
     df->format(context.getFormattableInput(), result, 0, errorCode);
     context.setOutput(result);
 }

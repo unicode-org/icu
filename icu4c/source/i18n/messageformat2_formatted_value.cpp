@@ -59,18 +59,25 @@ Errors::Errors(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     errors->setDeleter(uprv_deleteUObject);
     dataModelError = false;
+    formattingWarning = false;
     missingSelectorAnnotationError = false;
     selectorError = false;
+    syntaxError = false;
     unknownFunctionError = false;
     warning = false;
 }
 
+Errors::~Errors() {}
+Error::~Error() {}
 // State
 // ---------
 
 void Builder::enterState(InputState s) {
-    U_ASSERT(outState == OutputState::NONE);
+    if (s == InputState::FALLBACK) {
+        enterState(OutputState::NONE);
+    }
     inState = s;
+    
 }
 
 void Builder::enterState(OutputState s) {
@@ -89,8 +96,15 @@ Builder& Builder::setFallback() {
     return *this;
 }
 
+void fallbackToString(const Text& t, UnicodeString& result) {
+    result += LEFT_CURLY_BRACE;
+    result += t.toString();
+    result += RIGHT_CURLY_BRACE;
+}
+
 Builder& Builder::setFallback(const Text& t) {
-    fallback = t.toString();
+    fallback.remove();
+    fallbackToString(t, fallback);
     return *this;
 }
 
@@ -137,8 +151,14 @@ Builder& Builder::promoteFallbackToOutput() {
     return setOutput(fallback);
 }
 
-Builder& Builder::setInput(const UnicodeString& s) {
+Builder& Builder::setNoOperand() {
     U_ASSERT(isFallback());
+    enterState(NO_OPERAND);
+    return *this;
+}
+
+Builder& Builder::setInput(const UnicodeString& s) {
+    U_ASSERT(inState <= NO_OPERAND);
     enterState(FORMATTABLE_INPUT);
     input = Formattable(s);
     return *this;
@@ -197,6 +217,11 @@ Builder& Builder::setInput(const UObject* obj) {
 }
 
 Builder& Builder::setOutput(const UnicodeString& s) {
+    if (inState == InputState::NO_OPERAND) {
+        // Set the input to the same string
+        // TODO: not sure if that's good
+        setInput(s);
+    }
     U_ASSERT(hasInput());
     enterState(OutputState::STRING);
     stringOutput = s;
@@ -210,6 +235,11 @@ Builder& Builder::setOutput(number::FormattedNumber&& num) {
     return *this;
 }
 
+void Builder::clearOutput() {
+    stringOutput.remove();
+    enterState(OutputState::NONE);
+}
+
 void Builder::formatInputWithDefaults(const Locale& locale, UErrorCode& status) {
     CHECK_ERROR(status);
 
@@ -219,6 +249,7 @@ void Builder::formatInputWithDefaults(const Locale& locale, UErrorCode& status) 
     switch (input.getType()) {
     case Formattable::Type::kDate: {
         formatDateWithDefaults(locale, input.getDate(), stringOutput, status);
+        enterState(OutputState::STRING);
         break;
     }
     case Formattable::Type::kDouble: {
@@ -266,14 +297,18 @@ void Builder::formatToString(const Locale& locale, UErrorCode& status) {
             setOutput(fallback);
             break;
         }
+        case InputState::NO_OPERAND:
+            // No operand and a function call hasn't cleared the state --
+            // use fallback
         case InputState::OBJECT_INPUT: {
-            // No default formatter -- use fallback
             setFallback();
             promoteFallbackToOutput();
             break;
         }
         case InputState::FORMATTABLE_INPUT: {
             formatInputWithDefaults(locale, status);
+            // Force number to string, in case the result was a number
+            formatToString(locale, status);
             break;
         }
     }
@@ -282,9 +317,13 @@ void Builder::formatToString(const Locale& locale, UErrorCode& status) {
 }
 
 void Builder::clearFunctionName() {
-    U_ASSERT(hasOutput());
     U_ASSERT(pendingFunctionName.isValid());
     pendingFunctionName.adoptInstead(nullptr);
+}            
+
+const FunctionName& Builder::getFunctionName() {
+    U_ASSERT(pendingFunctionName.isValid());
+    return *pendingFunctionName;
 }            
 
 // Message arguments
@@ -397,6 +436,15 @@ Formattable* Builder::getOption(const UnicodeString& key, Formattable::Type type
     return result;
 }
 
+Formattable* Builder::getNumericOption(const UnicodeString& key) const {
+    U_ASSERT(functionOptions.isValid());
+    Formattable* result = (Formattable*) functionOptions->get(key);
+    if (result == nullptr || !result->isNumeric()) {
+        return nullptr;
+    }
+    return result;
+}
+
 bool Builder::getStringOption(const UnicodeString& key, UnicodeString& value) const {
     Formattable* result = getOption(key, Formattable::Type::kString);
     if (result == nullptr) {
@@ -406,21 +454,57 @@ bool Builder::getStringOption(const UnicodeString& key, UnicodeString& value) co
     return true;
 }
 
-bool Builder::getInt64Option(const UnicodeString& key, int64_t& value) const {
-    Formattable* result = getOption(key, Formattable::Type::kInt64);
-    if (result == nullptr) {
+bool Builder::tryStringAsNumberOption(const UnicodeString& key, double& value) const {
+    // Check for a string option, try to parse it as a number if present
+    UnicodeString tempValue;
+    if (!getStringOption(key, tempValue)) {
         return false;
     }
-    value = result->getInt64();
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(parent.getLocale(), localErrorCode));
+    if (U_FAILURE(localErrorCode)) {
+        return false;
+    }
+    Formattable asNumber;
+    numberFormat->parse(tempValue, asNumber, localErrorCode);
+    if (U_FAILURE(localErrorCode)) {
+        return false;
+    }
+    value = asNumber.getDouble(localErrorCode);
+    if (U_FAILURE(localErrorCode)) {
+        return false;
+    }
     return true;
 }
 
-bool Builder::getDoubleOption(const UnicodeString& key, double& value) const {
-    Formattable* result = getOption(key, Formattable::Type::kDouble);
+bool Builder::getInt64Option(const UnicodeString& key, int64_t& value) const {
+    Formattable* result = getNumericOption(key);
     if (result == nullptr) {
+        double doubleResult;
+        if (tryStringAsNumberOption(key, doubleResult)) {
+            value = (int64_t) doubleResult;
+            return true;
+        }
         return false;
     }
-    value = result->getDouble();
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    value = result->getInt64(localErrorCode);
+    if (U_SUCCESS(localErrorCode)) {
+        return true;
+    }
+    // Option was numeric but couldn't be converted to int64_t -- could be overflow
+    return false;
+}
+
+bool Builder::getDoubleOption(const UnicodeString& key, double& value) const {
+    Formattable* result = getNumericOption(key);
+    if (result == nullptr) {
+        return tryStringAsNumberOption(key, value);
+    }
+    UErrorCode localErrorCode = U_ZERO_ERROR;
+    value = result->getDouble(localErrorCode);
+    // The conversion must succeed, since the result is numeric
+    U_ASSERT(U_SUCCESS(localErrorCode));
     return true;
 }
 
@@ -454,14 +538,21 @@ void Builder::clearFunctionOptions() {
     functionOptions->removeAll();
 }
 
-const FunctionRegistry& Builder::customRegistry() const { return parent.getCustomFunctionRegistry(); }
+const FunctionRegistry& Builder::customRegistry() const {
+    U_ASSERT(hasCustomRegistry());
+    return parent.getCustomFunctionRegistry();
+}
+
+bool Builder::hasCustomRegistry() const {
+    return parent.hasCustomFunctionRegistry();
+}
 
 bool Builder::isBuiltInFormatter(const FunctionName& fn) const {
     return parent.isBuiltInFormatter(fn);
 }
 
 bool Builder::isCustomFormatter(const FunctionName& fn) const {
-    return customRegistry().getFormatter(fn) != nullptr;
+    return hasCustomRegistry() && customRegistry().getFormatter(fn) != nullptr;
 }
 
 bool Builder::isBuiltInSelector(const FunctionName& fn) const {
@@ -469,7 +560,7 @@ bool Builder::isBuiltInSelector(const FunctionName& fn) const {
 }
 
 bool Builder::isCustomSelector(const FunctionName& fn) const {
-    return customRegistry().getSelector(fn) != nullptr;
+    return hasCustomRegistry() && customRegistry().getSelector(fn) != nullptr;
 }
 
 // Precondition: pending function name is set and selector is defined
@@ -503,10 +594,15 @@ bool Builder::hasFormatter() const {
     return isBuiltInFormatter(fn) || isCustomFormatter(fn);
 }
 
-bool Builder::hasSelector() const {
-    U_ASSERT(pendingFunctionName.isValid());
-    const FunctionName& fn = *pendingFunctionName;
+bool Builder::isSelector(const FunctionName& fn) const {
     return isBuiltInSelector(fn) || isCustomSelector(fn);
+}
+
+bool Builder::hasSelector() const {
+    if (!pendingFunctionName.isValid()) {
+        return false;
+    }
+    return isSelector(*pendingFunctionName);
 }
 
 void Builder::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys, UnicodeString keysOut[], size_t& numberMatching, UErrorCode& status) {
@@ -516,19 +612,66 @@ void Builder::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys
     U_ASSERT(hasSelector());
     LocalPointer<Selector> selectorImpl(getSelector(status));
     CHECK_ERROR(status);
+    UErrorCode savedStatus = status;
     selectorImpl->selectKey(*this, keys, numKeys, keysOut, numberMatching, status);
+    // Update errors
+    if (savedStatus != status) {
+        if (U_FAILURE(status)) {
+            setFallback();
+            status = U_ZERO_ERROR;
+            setSelectorError(pendingFunctionName->name(), status);
+            if (U_SUCCESS(status)) {
+                status = U_SELECTOR_ERROR;
+            }
+        } else {
+            // Ignore warnings
+            status = savedStatus;
+        }
+    }
     returnFromFunction();
 }
 
-void Builder::evalPendingFormatterCall(UErrorCode& status) {
+void Builder::evalFormatterCall(const FunctionName& functionName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    U_ASSERT(pendingFunctionName.isValid());
-    U_ASSERT(hasFormatter());
-    const Formatter* formatterImpl = getFormatter(status);
+    FunctionName* savedFunctionName = pendingFunctionName.isValid() ? pendingFunctionName.orphan() : nullptr;
+    setFunctionName(functionName, status);
     CHECK_ERROR(status);
-    formatterImpl->format(*this, status);
-    returnFromFunction();
+    if (hasFormatter()) {
+        const Formatter* formatterImpl = getFormatter(status);
+        CHECK_ERROR(status);
+        UErrorCode savedStatus = status;
+        formatterImpl->format(*this, status);
+        // Update errors
+        if (savedStatus != status) {
+            if (U_FAILURE(status)) {
+                setFallback();
+                status = U_ZERO_ERROR;
+                setFormattingWarning(functionName.name(), status);
+                if (U_SUCCESS(status)) {
+                    status = U_FORMATTING_WARNING;
+                }
+            } else {
+                // Ignore warnings
+                status = savedStatus;
+            }
+        }
+        if (hasFormattingWarning()) {
+            clearOutput();
+        }
+        returnFromFunction();
+        if (savedFunctionName != nullptr) {
+            setFunctionName(*savedFunctionName, status);
+        }
+        return;
+    }
+    // No formatter with this name -- set error
+    if (isSelector(functionName)) {
+        setFormattingWarning(functionName.name(), status);
+    } else {
+        setUnknownFunction(functionName, status);
+    }
+    setFallback();
 }
 
 // Errors
@@ -547,7 +690,49 @@ Builder& Builder::checkErrors(UErrorCode& status) {
 
     // TODO: figure out how to return a representation of the errors
 
+    U_ASSERT(errors.isValid());
+    errors->checkErrors(status);
     return *this;
+}
+
+void Errors::checkErrors(UErrorCode& status) {
+    if (status != U_ZERO_ERROR) {
+        return;
+    }
+
+    // Just handle the first error
+    // TODO
+    if (count() == 0) {
+        return;
+    }
+    Error* err = (Error*) (*errors)[0];
+    switch (err->type) {
+        case Error::Type::UnknownFunction: {
+            status = U_UNKNOWN_FUNCTION_WARNING;
+            break;
+        }
+        case Error::Type::UnresolvedVariable: {
+            status = U_UNRESOLVED_VARIABLE_WARNING;
+            break;
+        }
+        case Error::Type::FormattingWarning: {
+            status = U_FORMATTING_WARNING;
+            break;
+        }
+        case Error::Type::MissingSelectorAnnotation: {
+            status = U_MISSING_SELECTOR_ANNOTATION;
+            break;
+        }
+
+        case Error::Type::ReservedError: {
+            status = U_UNSUPPORTED_PROPERTY;
+            break;
+        }
+        case Error::Type::SelectorError: {
+            status = U_SELECTOR_ERROR;
+            break;
+        }
+    }
 }
 
 bool Builder::hasDataModelError() const {
@@ -575,6 +760,11 @@ bool Builder::hasMissingSelectorAnnotationError() const {
     return errors->hasMissingSelectorAnnotationError();
 }
 
+bool Builder::hasFormattingWarning() const {
+    U_ASSERT(errors.isValid());
+    return errors->hasFormattingWarning();
+}
+
 bool Builder::hasError() const {
     U_ASSERT(errors.isValid());
     return errors->count() > 0;
@@ -594,6 +784,24 @@ Builder& Builder::setUnresolvedVariable(const VariableName& v, UErrorCode& statu
     return *this;
 }
 
+Builder& Builder::setUnknownFunction(const FunctionName& fn, UErrorCode& status) {
+    THIS_ON_ERROR(status);
+
+    U_ASSERT(errors.isValid());
+    Error err(Error::Type::UnknownFunction, fn);
+    errors->addError(err, status);
+    return *this;
+}
+
+Builder& Builder::setMissingSelectorAnnotation(UErrorCode& status) {
+    THIS_ON_ERROR(status);
+
+    U_ASSERT(errors.isValid());
+    Error err(Error::Type::MissingSelectorAnnotation);
+    errors->addError(err, status);
+    return *this;
+}
+
 Builder& Builder::setFormattingWarning(const UnicodeString& formatterName, UErrorCode& status) {
     THIS_ON_ERROR(status);
     
@@ -608,6 +816,15 @@ Builder& Builder::setSelectorError(const UnicodeString& selectorName, UErrorCode
     
     U_ASSERT(errors.isValid());
     Error err(Error::Type::SelectorError, selectorName);
+    errors->addError(err, status);
+    return *this;
+}
+
+Builder& Builder::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
+    THIS_ON_ERROR(status);
+    
+    U_ASSERT(errors.isValid());
+    Error err(Error::Type::SelectorError, selectorName.toString());
     errors->addError(err, status);
     return *this;
 }
@@ -663,6 +880,35 @@ void Errors::addError(Error e, UErrorCode& status) {
         return;
     }
     errors->adoptElement(eP, status);
+    switch (e.type) {
+        case Error::Type::UnresolvedVariable: {
+            warning = true;
+            break;
+        }
+        case Error::Type::FormattingWarning: {
+            warning = true;
+            formattingWarning = true;
+            break;
+        }
+        case Error::Type::MissingSelectorAnnotation: {
+            missingSelectorAnnotationError = true;
+            break;
+        }
+        case Error::Type::ReservedError: {
+            dataModelError = true;
+            break;
+        }
+        case Error::Type::SelectorError: {
+            selectorError = true;
+            break;
+        }
+        case Error::Type::UnknownFunction: {
+            warning = true;
+            dataModelError = true;
+            unknownFunctionError = true;
+            break;
+        }
+    }
 }
 
 Builder::~Builder() {}
@@ -697,22 +943,6 @@ void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& res
     CHECK_ERROR(errorCode);
     df->format(date, result, 0, errorCode);
 }
-
-/*
-UnicodeString Fallback::toString() const {
-    UnicodeString result;
-    result += LEFT_CURLY_BRACE;
-    result += fallback.toString();
-    result += RIGHT_CURLY_BRACE;
-    return result;
-}
-
-UnicodeString Fallback::toString(Locale l, UErrorCode& s) const {
-    (void) l;
-    (void) s;
-    return toString();
-}
-*/
 
 } // namespace message2
 U_NAMESPACE_END

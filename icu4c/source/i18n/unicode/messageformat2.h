@@ -629,9 +629,13 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      const SelectorFactory* lookupSelectorFactory(const FunctionName&, UErrorCode& status) const;
      FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode& status) const;
 
+     bool hasCustomFunctionRegistry() const {
+         return (customFunctionRegistry != nullptr);
+     }
+
      // Precondition: custom function registry exists
      const FunctionRegistry& getCustomFunctionRegistry() const {
-         U_ASSERT(customFunctionRegistry != nullptr);
+         U_ASSERT(hasCustomFunctionRegistry());
          return *customFunctionRegistry;
      }
 
