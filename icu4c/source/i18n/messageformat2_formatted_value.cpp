@@ -461,7 +461,7 @@ bool Builder::tryStringAsNumberOption(const UnicodeString& key, double& value) c
         return false;
     }
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(parent.getLocale(), localErrorCode));
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(parent.locale, localErrorCode));
     if (U_FAILURE(localErrorCode)) {
         return false;
     }
@@ -573,7 +573,7 @@ Selector* Builder::getSelector(UErrorCode& status) const {
     const SelectorFactory* selectorFactory = parent.lookupSelectorFactory(functionName, status);
     NULL_ON_ERROR(status);
     // Create a specific instance of the selector
-    LocalPointer<Selector> result(selectorFactory->createSelector(parent.getLocale(), status));
+    LocalPointer<Selector> result(selectorFactory->createSelector(parent.locale, status));
     NULL_ON_ERROR(status);
     return result.orphan();
 }

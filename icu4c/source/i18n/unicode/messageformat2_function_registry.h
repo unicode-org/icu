@@ -37,14 +37,14 @@ class U_COMMON_API FormatterFactory : public UMemory {
     // it returns a Formatter* (not a Formatter&)
     // TODO
     // Note: this method is not const, as formatter factories can have local state
-    virtual Formatter* createFormatter(Locale locale, UErrorCode& errorCode) = 0;
+    virtual Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode) = 0;
     virtual ~FormatterFactory();
 };
 
 class U_COMMON_API SelectorFactory : public UMemory {
   public:
     // Same comment as FormatterFactory::createFormatter
-    virtual Selector* createSelector(Locale locale, UErrorCode& errorCode) const = 0;
+    virtual Selector* createSelector(const Locale& locale, UErrorCode& errorCode) const = 0;
     virtual ~SelectorFactory();
 };
 
@@ -224,7 +224,7 @@ class StandardFunctions {
 
     class DateTimeFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(Locale locale, UErrorCode& errorCode);
+        Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode);
     };
 
     class DateTime : public Formatter {
@@ -232,15 +232,15 @@ class StandardFunctions {
         void format(State& context, UErrorCode& errorCode) const;
 
         private:
-        Locale locale;
+        const Locale& locale;
         friend class DateTimeFactory;
-        DateTime(Locale l) : locale(l) {}
+        DateTime(const Locale& l) : locale(l) {}
         const LocalPointer<icu::DateFormat> icuFormatter;
     };
 
     class NumberFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(Locale locale, UErrorCode& errorCode);
+        Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode);
     };
         
     class Number : public Formatter {
@@ -250,15 +250,15 @@ class StandardFunctions {
         private:
         friend class NumberFactory;
 
-        Number(Locale loc) : locale(loc), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
+        Number(const Locale& loc) : locale(loc), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
 
-        const Locale locale;
+        const Locale& locale;
         const number::LocalizedNumberFormatter icuFormatter;
     };
 
     class IdentityFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(Locale locale, UErrorCode& errorCode);
+        Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode);
     };
 
     class Identity : public Formatter {
@@ -276,7 +276,7 @@ class StandardFunctions {
     class PluralFactory : public SelectorFactory {
     public:
         virtual ~PluralFactory();
-        Selector* createSelector(Locale locale, UErrorCode& errorCode) const;
+        Selector* createSelector(const Locale& locale, UErrorCode& errorCode) const;
 
     private:
         friend class MessageFormatter;
@@ -293,17 +293,17 @@ class StandardFunctions {
         friend class PluralFactory;
 
         // Adopts `r`
-        Plural(Locale loc, UPluralType t, PluralRules* r) : locale(loc), type(t), rules(r) {}
+        Plural(const Locale& loc, UPluralType t, PluralRules* r) : locale(loc), type(t), rules(r) {}
         ~Plural();
 
-        const Locale locale;
+        const Locale& locale;
         const UPluralType type;
         LocalPointer<PluralRules> rules;
     };
 
     class TextFactory : public SelectorFactory {
         public:
-        Selector* createSelector(Locale locale, UErrorCode& errorCode) const;
+        Selector* createSelector(const Locale& locale, UErrorCode& errorCode) const;
     };
 
     class TextSelector : public Selector {
@@ -314,7 +314,7 @@ class StandardFunctions {
         friend class TextFactory;
 
         // Formatting `value` to a string might require the locale 
-        const Locale locale;
+        const Locale& locale;
 
         TextSelector(Locale l) : locale(l) {}
         ~TextSelector();

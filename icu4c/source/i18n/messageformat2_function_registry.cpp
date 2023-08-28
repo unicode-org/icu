@@ -326,7 +326,7 @@ number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const State
     return result.orphan();
 }
 
-Formatter* StandardFunctions::NumberFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* StandardFunctions::NumberFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     Formatter* result = new Number(locale);
@@ -425,7 +425,7 @@ void StandardFunctions::Number::format(State& context, UErrorCode& errorCode) co
 
 // --------- PluralFactory
 
-Selector* StandardFunctions::PluralFactory::createSelector(Locale locale, UErrorCode& errorCode) const {
+Selector* StandardFunctions::PluralFactory::createSelector(const Locale& locale, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     // Look up plural rules by locale
@@ -578,7 +578,7 @@ static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorC
     return DateFormat::EStyle::kNone;
 }
 
-Formatter* StandardFunctions::DateTimeFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     Formatter* result = new DateTime(locale);
@@ -642,7 +642,7 @@ void StandardFunctions::DateTime::format(State& context, UErrorCode& errorCode) 
 
 // --------- TextFactory
 
-Selector* StandardFunctions::TextFactory::createSelector(Locale locale, UErrorCode& errorCode) const {
+Selector* StandardFunctions::TextFactory::createSelector(const Locale& locale, UErrorCode& errorCode) const {
     Selector* result = new TextSelector(locale);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -688,7 +688,7 @@ StandardFunctions::TextSelector::~TextSelector() {}
 
 // --------- IdentityFactory
 
-Formatter* StandardFunctions::IdentityFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* StandardFunctions::IdentityFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     Formatter* result = new Identity(locale);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;

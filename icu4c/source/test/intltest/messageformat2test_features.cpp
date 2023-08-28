@@ -448,7 +448,7 @@ void TestMessageFormat2::testPluralOrdinal(TestCase::Builder& testBuilder, IcuTe
     TestUtils::runTestCase(*this, *test, errorCode);
 }
 
-TemperatureFormatter::TemperatureFormatter(Locale l, TemperatureFormatterFactory& c, UErrorCode& errorCode) : locale(l), counter(c) {
+TemperatureFormatter::TemperatureFormatter(const Locale& l, TemperatureFormatterFactory& c, UErrorCode& errorCode) : locale(l), counter(c) {
     CHECK_ERROR(errorCode);
 
     cachedFormatters.adoptInstead(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
@@ -461,7 +461,7 @@ TemperatureFormatter::TemperatureFormatter(Locale l, TemperatureFormatterFactory
     counter.constructCount++;
 }
  
-Formatter* TemperatureFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* TemperatureFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     LocalPointer<Formatter> result(new TemperatureFormatter(locale, *this, errorCode));

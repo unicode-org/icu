@@ -491,7 +491,7 @@ const Formatter* Context::maybeCachedFormatter(const FunctionName& f, UErrorCode
         NULL_ON_ERROR(errorCode);
 
         // Create a specific instance of the formatter
-        Formatter* formatter = formatterFactory->createFormatter(parent.getLocale(), errorCode);
+        Formatter* formatter = formatterFactory->createFormatter(parent.locale, errorCode);
         NULL_ON_ERROR(errorCode);
         if (formatter == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;

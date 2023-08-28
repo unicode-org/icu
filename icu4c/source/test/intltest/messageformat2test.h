@@ -122,7 +122,7 @@ private:
 class PersonNameFormatterFactory : public FormatterFactory {
     
     public:
-    Formatter* createFormatter(Locale, UErrorCode&);
+    Formatter* createFormatter(const Locale&, UErrorCode&);
 };
 
 class Person : public UObject {
@@ -141,7 +141,7 @@ class PersonNameFormatter : public Formatter {
 
 class GrammarCasesFormatterFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, UErrorCode&);
+    Formatter* createFormatter(const Locale&, UErrorCode&);
 };
 
 class GrammarCasesFormatter : public Formatter {
@@ -154,7 +154,7 @@ class GrammarCasesFormatter : public Formatter {
 
 class ListFormatterFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, UErrorCode&);
+    Formatter* createFormatter(const Locale&, UErrorCode&);
 };
 
 class ListFormatter : public Formatter {
@@ -163,13 +163,13 @@ class ListFormatter : public Formatter {
     static FunctionRegistry* customRegistry(UErrorCode&);
     private:
     friend class ListFormatterFactory;
-    Locale locale;
-    ListFormatter(Locale loc) : locale(loc) {}
+    const Locale& locale;
+    ListFormatter(const Locale& loc) : locale(loc) {}
 };
 
 class ResourceManagerFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, UErrorCode&);
+    Formatter* createFormatter(const Locale&, UErrorCode&);
 };
 
 class ResourceManager : public Formatter {
@@ -182,13 +182,13 @@ class ResourceManager : public Formatter {
 
     private:
     friend class ResourceManagerFactory;
-    ResourceManager(Locale loc) : locale(loc) {}
-    Locale locale;
+    ResourceManager(const Locale& loc) : locale(loc) {}
+    const Locale& locale;
 };
 
 class TemperatureFormatterFactory : public FormatterFactory {
     public:
-    Formatter* createFormatter(Locale, UErrorCode&);
+    Formatter* createFormatter(const Locale&, UErrorCode&);
     TemperatureFormatterFactory() {}
 
     size_t constructCount;
@@ -204,11 +204,11 @@ class TemperatureFormatter : public Formatter {
     ~TemperatureFormatter();
     private:
     friend class TemperatureFormatterFactory;
-    const Locale locale;
+    const Locale& locale;
     TemperatureFormatterFactory& counter;
     LocalPointer<Hashtable> cachedFormatters;
 
-    TemperatureFormatter(Locale, TemperatureFormatterFactory&, UErrorCode&);
+    TemperatureFormatter(const Locale&, TemperatureFormatterFactory&, UErrorCode&);
 };
 
 // Custom function test utilities

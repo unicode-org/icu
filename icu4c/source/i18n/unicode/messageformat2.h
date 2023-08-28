@@ -205,7 +205,10 @@ public:
 
     virtual void formatToString(const MessageArguments& arguments, UErrorCode &status, UnicodeString &result) const;
  
-    Locale getLocale() const { return locale; }
+    // The locale this MessageFormatter was created with
+    const Locale locale;
+
+//    Locale getLocale() const { return locale; }
     void getPattern(UnicodeString& result) const {
         // Converts the current data model back to a string
         U_ASSERT(dataModel.isValid());
@@ -644,9 +647,6 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      void check(const MessageArguments&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
      void check(const MessageArguments&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
      void check(const MessageArguments&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
-
-     // The locale this MessageFormatter was created with
-     const Locale locale;
 
      // Registry for built-in functions
      LocalPointer<FunctionRegistry> standardFunctionRegistry;

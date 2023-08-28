@@ -114,7 +114,7 @@ void TestMessageFormat2::testCustomFunctions() {
 
 // -------------- Custom function implementations
 
-Formatter* PersonNameFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* PersonNameFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -184,7 +184,7 @@ Person::~Person() {}
 /*
   See ICU4J: CustomFormatterGrammarCaseTest.java
 */
-Formatter* GrammarCasesFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* GrammarCasesFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -339,7 +339,7 @@ void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) 
 /*
   See ICU4J: CustomFormatterListTest.java
 */
-Formatter* ListFormatterFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* ListFormatterFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -590,7 +590,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     return result.orphan();
 }
 
-Formatter* ResourceManagerFactory::createFormatter(Locale locale, UErrorCode& errorCode) {
+Formatter* ResourceManagerFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
