@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692904522451,
+  "lastUpdate": 1693245466915,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27178,6 +27178,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 34.8207,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "8817c25c1eac3a0a1b66ac7437e24977e2b93887",
+          "message": "ICU-22449 Fixed SimpleDateFormat (in C++ and Java) to correctly honor the rg and hc subtags in the locale when choosing the hour cycle.",
+          "timestamp": "2023-08-28T13:30:45-04:00",
+          "tree_id": "d259744fa5ac21eacdd19f424a44dc2ec95eb1d6",
+          "url": "https://github.com/unicode-org/icu/commit/8817c25c1eac3a0a1b66ac7437e24977e2b93887"
+        },
+        "date": 1693245411768,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 22.8594,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 23.324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 24.9035,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 24.0869,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 24.6838,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 29.6567,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
