@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693245021179,
+  "lastUpdate": 1693262849576,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -10828,6 +10828,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 434.47707037039396,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "29a6ffc350c7d3a16420e4da375ddb2d618b7637",
+          "message": "ICU-22365 call u_terminateChars in ULocale(Builder)?",
+          "timestamp": "2023-08-28T15:35:36-07:00",
+          "tree_id": "3dc109a223c722afabebf0787f9890671dfc8f9a",
+          "url": "https://github.com/unicode-org/icu/commit/29a6ffc350c7d3a16420e4da375ddb2d618b7637"
+        },
+        "date": 1693262800131,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 451.67292344369787,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
