@@ -276,24 +276,48 @@ void TestMessageFormat2::testAPISimple() {
     // design doc, it elides null checks and error checks.
     // To be used in the test suite, it should include those checks
     // Null checks and error checks elided
-    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
-    /* LocalPointer<MessageFormatter> mf( */ builder
-        ->setPattern(u"{Hello, {$userName}!}", errorCode)
+    MessageFormatter::Builder* builder = MessageFormatter::builder(errorCode);
+    MessageFormatter* mf = builder->setPattern(u"{Hello, {$userName}!}", errorCode)
         .build(parseError, errorCode);
 
-    // Recreate the builder
-    builder.adoptInstead(MessageFormatter::builder(errorCode));
+    MessageArguments::Builder* argsBuilder = MessageArguments::builder(errorCode);
+    argsBuilder->add("userName", "John", errorCode);
+    MessageArguments* args = argsBuilder->build(errorCode);
 
-    /* mf.adoptInstead( */ builder
-        ->setPattern("{Today is {$today :date skeleton=yMMMdEEE}.}", errorCode)
+    UnicodeString result;
+    mf->formatToString(*args, errorCode, result);
+    assertEquals("testAPI", result, "Hello, John!");
+    result.remove();
+
+    // Recreate the builder
+    builder = MessageFormatter::builder(errorCode);
+
+    mf = builder->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}", errorCode)
         .setLocale(locale)
         .build(parseError, errorCode);
 
-    // Recreate the builder
-    builder.adoptInstead(MessageFormatter::builder(errorCode));
+    argsBuilder = MessageArguments::builder(errorCode);
+    Calendar* cal(Calendar::createInstance(errorCode));
+    // Sunday, October 28, 2136 8:39:12 AM PST
+    cal->set(2136, Calendar::OCTOBER, 28, 8, 39, 12);
+    UDate date = cal->getTime(errorCode);
 
-    /* mf.adoptInstead( */ builder
-        ->setPattern("match {$photoCount :plural} {$userGender :select}\n\
+    argsBuilder->addDate("today", date, errorCode);
+    args = argsBuilder->build(errorCode);
+    mf->formatToString(*args, errorCode, result);
+    assertEquals("testAPI", "Today is Sun, Oct 28, 2136.", result);
+    result.remove();
+
+    // Recreate the builder
+    builder = MessageFormatter::builder(errorCode);
+    argsBuilder = MessageArguments::builder(errorCode);
+
+    argsBuilder->addLong("photoCount", 12, errorCode);
+    argsBuilder->add("userGender", "feminine", errorCode);
+    argsBuilder->add("userName", "Maria", errorCode);
+    args = argsBuilder->build(errorCode);
+
+    mf = builder->setPattern("match {$photoCount :plural} {$userGender :select}\n\
                      when 1 masculine {{$userName} added a new photo to his album.}\n \
                      when 1 feminine {{$userName} added a new photo to her album.}\n \
                      when 1 * {{$userName} added a new photo to their album.}\n \
@@ -303,6 +327,8 @@ void TestMessageFormat2::testAPISimple() {
                      errorCode)
         .setLocale(locale)
         .build(parseError, errorCode);
+    mf->formatToString(*args, errorCode, result);
+    assertEquals("testAPI", "Maria added 12 photos to her album.", result);
 }
 
 // Design doc example, with more details

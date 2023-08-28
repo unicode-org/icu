@@ -70,7 +70,7 @@ public:
     const UnicodeString& name() const { return functionName; }
     FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
     FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
-    FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}    
+    FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}
     virtual ~FunctionName();
 
 private:

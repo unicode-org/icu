@@ -133,7 +133,7 @@ class FormattingContext : public UMemory {
     virtual int32_t firstOption() const = 0;
     virtual size_t optionsCount() const = 0;
     // sets output to string, even if current output is a number
-    virtual void formatToString(const Locale&, UErrorCode&) = 0;
+//    virtual void formatToString(const Locale&, UErrorCode&) = 0;
     static DateFormat* defaultDateTimeInstance(const Locale&, UErrorCode&);
 
     virtual ~FormattingContext();
