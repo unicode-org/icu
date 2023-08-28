@@ -129,7 +129,7 @@ Formatter* PersonNameFormatterFactory::createFormatter(const Locale& locale, UEr
     return result;
 }
 
-void PersonNameFormatter::format(State& context, UErrorCode& errorCode) const {
+void PersonNameFormatter::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     if (!context.hasObjectInput()) {
@@ -224,7 +224,7 @@ Formatter* GrammarCasesFormatterFactory::createFormatter(const Locale& locale, U
     result += postfix;
 }
 
-void GrammarCasesFormatter::format(State& context, UErrorCode& errorCode) const {
+void GrammarCasesFormatter::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be     present
@@ -351,7 +351,7 @@ Formatter* ListFormatterFactory::createFormatter(const Locale& locale, UErrorCod
     return result;
 }
 
-void message2::ListFormatter::format(State& context, UErrorCode& errorCode) const {
+void message2::ListFormatter::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present
@@ -606,7 +606,7 @@ using Arguments = MessageArguments;
 using Options = FunctionRegistry::Options;
 using Option = FunctionRegistry::Option;
 
-static Arguments* localToGlobal(const State& context, UErrorCode& errorCode) {
+static Arguments* localToGlobal(const FormattingContext& context, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     LocalPointer<Arguments::Builder> args(Arguments::builder(errorCode));
     NULL_ON_ERROR(errorCode);
@@ -649,7 +649,7 @@ static Arguments* localToGlobal(const State& context, UErrorCode& errorCode) {
     return args->build(errorCode);
 }
 
-void ResourceManager::format(State& context, UErrorCode& errorCode) const {
+void ResourceManager::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present

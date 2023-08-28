@@ -305,7 +305,7 @@ Option::~Option() {}
 
 // --------- Number
 
-number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const State& context, UErrorCode& status) {
+number::LocalizedNumberFormatter* formatterForOptions(Locale locale, const FormattingContext& context, UErrorCode& status) {
     NULL_ON_ERROR(status);
 
     number::UnlocalizedNumberFormatter nf;
@@ -337,11 +337,11 @@ Formatter* StandardFunctions::NumberFactory::createFormatter(const Locale& local
     return result;
 }
 
-static void notANumber(State& context) {
+static void notANumber(FormattingContext& context) {
     context.setOutput(UnicodeString("NaN"));
 }
 
-static void stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, State& context, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
+static void stringAsNumber(Locale locale, const number::LocalizedNumberFormatter nf, FormattingContext& context, UnicodeString s, int64_t offset, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
     double numberValue;
@@ -360,7 +360,7 @@ static void stringAsNumber(Locale locale, const number::LocalizedNumberFormatter
     context.setOutput(std::move(result));
 }
 
-void StandardFunctions::Number::format(State& context, UErrorCode& errorCode) const {
+void StandardFunctions::Number::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // No argument => return "NaN"
@@ -477,7 +477,7 @@ static void tryWithFormattable(const Locale& locale, const Formattable& value, d
     noMatch = false;
 }
 
-void StandardFunctions::Plural::selectKey(State& context, const UnicodeString* keys/*[]*/, size_t numKeys,  UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys,  UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // No argument => return "NaN"
@@ -589,7 +589,7 @@ Formatter* StandardFunctions::DateTimeFactory::createFormatter(const Locale& loc
     return result;
 }
 
-void StandardFunctions::DateTime::format(State& context, UErrorCode& errorCode) const {
+void StandardFunctions::DateTime::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present;
@@ -622,7 +622,7 @@ void StandardFunctions::DateTime::format(State& context, UErrorCode& errorCode) 
                 timeStyle = stringToStyle(opt, errorCode);
             }
             if (dateStyle == DateFormat::NONE && timeStyle == DateFormat::NONE) {
-                df.adoptInstead(State::defaultDateTimeInstance(locale, errorCode));
+                df.adoptInstead(FormattingContext::defaultDateTimeInstance(locale, errorCode));
             } else {
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
                 if (!df.isValid()) {
@@ -651,7 +651,7 @@ Selector* StandardFunctions::TextFactory::createSelector(const Locale& locale, U
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(State& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
@@ -698,7 +698,7 @@ Formatter* StandardFunctions::IdentityFactory::createFormatter(const Locale& loc
 
 }
 
-void StandardFunctions::Identity::format(State& context, UErrorCode& errorCode) const {
+void StandardFunctions::Identity::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present

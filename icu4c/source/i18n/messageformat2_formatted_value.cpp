@@ -912,7 +912,7 @@ void Errors::addError(Error e, UErrorCode& status) {
 }
 
 Builder::~Builder() {}
-State::~State() {}
+FormattingContext::~FormattingContext() {}
 
 number::FormattedNumber formatNumberWithDefaults(const Locale& locale, double toFormat, UErrorCode& errorCode) {
     return number::NumberFormatter::withLocale(locale).formatDouble(toFormat, errorCode);
@@ -926,7 +926,7 @@ number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t t
     return number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode);
 }
 
-/* static */ DateFormat* State::defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
+/* static */ DateFormat* FormattingContext::defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
     if (!df.isValid()) {
@@ -939,7 +939,7 @@ number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t t
 void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& result, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
-    LocalPointer<DateFormat> df(State::defaultDateTimeInstance(locale, errorCode));
+    LocalPointer<DateFormat> df(FormattingContext::defaultDateTimeInstance(locale, errorCode));
     CHECK_ERROR(errorCode);
     df->format(date, result, 0, errorCode);
 }

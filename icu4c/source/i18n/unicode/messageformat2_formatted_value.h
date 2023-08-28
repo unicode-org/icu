@@ -35,12 +35,7 @@ extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, in
 extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t toFormat, UErrorCode& errorCode);
 
 /*
-  TODO
-
-  A FormattedPlaceholder can either be a fully formatted value,
-  or a "Formattable" that could be formatted with a default formatter,
-  but is available to be manipulated by formatting functions or deconstructed
-  by selector functions.
+  TODO: docs
 */
 
 
@@ -114,13 +109,13 @@ class Errors : public UMemory {
 }; // class Errors
 
 // Interface that functions have access to
-class State : public UMemory {
+class FormattingContext : public UMemory {
     public:
 
-    virtual State& setOutput(const UnicodeString&) = 0;
-    virtual State& setOutput(number::FormattedNumber&&) = 0;
-    virtual State& setSelectorError(const UnicodeString&, UErrorCode&) = 0;
-    virtual State& setFormattingWarning(const UnicodeString&, UErrorCode&) = 0;
+    virtual FormattingContext& setOutput(const UnicodeString&) = 0;
+    virtual FormattingContext& setOutput(number::FormattedNumber&&) = 0;
+    virtual FormattingContext& setSelectorError(const UnicodeString&, UErrorCode&) = 0;
+    virtual FormattingContext& setFormattingWarning(const UnicodeString&, UErrorCode&) = 0;
 
     virtual bool hasFormattableInput() const = 0;
     virtual bool hasObjectInput() const = 0;
@@ -141,12 +136,12 @@ class State : public UMemory {
     virtual void formatToString(const Locale&, UErrorCode&) = 0;
     static DateFormat* defaultDateTimeInstance(const Locale&, UErrorCode&);
 
-    virtual ~State();
+    virtual ~FormattingContext();
 };
 
 // This is per-operand/expression being formatted,
 // so it's not part of the MessageFormatter object
-class FormattedValueBuilder : public State {
+class FormattedValueBuilder : public FormattingContext {
     private:
     using Builder = FormattedValueBuilder;
 

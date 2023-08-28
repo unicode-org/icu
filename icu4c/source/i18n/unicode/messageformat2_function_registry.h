@@ -193,7 +193,7 @@ class U_COMMON_API Formatter : public UMemory {
     // (e.g. parsing a string as a number, for Number)
 
     // Operand can be null (call context.hasOperand())
-    virtual void format(State& context, UErrorCode& errorCode) const = 0;
+    virtual void format(FormattingContext& context, UErrorCode& errorCode) const = 0;
     virtual ~Formatter();
 };
 
@@ -209,7 +209,7 @@ class U_COMMON_API Selector : public UMemory {
       See selectKey() in message-value.ts
      */
     // `value` may be null, because the selector might be nullary
-    virtual void selectKey(State& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
 
@@ -229,7 +229,7 @@ class StandardFunctions {
 
     class DateTime : public Formatter {
         public:
-        void format(State& context, UErrorCode& errorCode) const;
+        void format(FormattingContext& context, UErrorCode& errorCode) const;
 
         private:
         const Locale& locale;
@@ -245,7 +245,7 @@ class StandardFunctions {
         
     class Number : public Formatter {
         public:
-        void format(State& context, UErrorCode& errorCode) const;
+        void format(FormattingContext& context, UErrorCode& errorCode) const;
 
         private:
         friend class NumberFactory;
@@ -263,7 +263,7 @@ class StandardFunctions {
 
     class Identity : public Formatter {
     public:
-        void format(State& context, UErrorCode& errorCode) const;
+        void format(FormattingContext& context, UErrorCode& errorCode) const;
         
     private:
         friend class IdentityFactory;
@@ -287,7 +287,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(State& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -308,7 +308,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        void selectKey(State& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

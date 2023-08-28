@@ -469,7 +469,7 @@ Formatter* TemperatureFormatterFactory::createFormatter(const Locale& locale, UE
     return result.orphan();
 }
 
-void TemperatureFormatter::format(State& context, UErrorCode& errorCode) const {
+void TemperatureFormatter::format(FormattingContext& context, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Argument must be present
