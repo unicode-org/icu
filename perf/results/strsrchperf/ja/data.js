@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692904450773,
+  "lastUpdate": 1693245149349,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13750,6 +13750,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 52.7333,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "8817c25c1eac3a0a1b66ac7437e24977e2b93887",
+          "message": "ICU-22449 Fixed SimpleDateFormat (in C++ and Java) to correctly honor the rg and hc subtags in the locale when choosing the hour cycle.",
+          "timestamp": "2023-08-28T13:30:45-04:00",
+          "tree_id": "d259744fa5ac21eacdd19f424a44dc2ec95eb1d6",
+          "url": "https://github.com/unicode-org/icu/commit/8817c25c1eac3a0a1b66ac7437e24977e2b93887"
+        },
+        "date": 1693245098504,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 36.6632,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 68.1604,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
