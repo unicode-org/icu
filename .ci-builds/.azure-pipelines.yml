@@ -1,5 +1,8 @@
 # Azure Pipelines (VSTS) configuration for CI builds for ICU.
 
+env:
+  MAVEN_ARGS: '--show-version --no-transfer-progress'
+
 jobs:
 #-------------------------------------------------------------------------
 - job: ICU4J_OpenJDK_Ubuntu_2204
