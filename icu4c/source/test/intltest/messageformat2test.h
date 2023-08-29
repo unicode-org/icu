@@ -189,7 +189,7 @@ class ResourceManager : public Formatter {
 class TemperatureFormatterFactory : public FormatterFactory {
     public:
     Formatter* createFormatter(const Locale&, UErrorCode&);
-    TemperatureFormatterFactory() {}
+    TemperatureFormatterFactory() : constructCount(0), formatCount(0), fFormatterCount(0), cFormatterCount(0) {}
 
     size_t constructCount;
     size_t formatCount;

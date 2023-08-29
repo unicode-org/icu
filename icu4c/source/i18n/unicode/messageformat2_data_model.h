@@ -296,6 +296,7 @@ public:
         // in order to avoid either copying or creating a reference to
         // a temporary value.
         bool next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
+        size_t size() const;
         class Builder : public UMemory {
         public:
             Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);

@@ -367,9 +367,9 @@ public:
      void resolveVariables(const Environment& env, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode &) const;
 
      // Selection methods
-     void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, UVector&) const;
-     void matchSelectorKeys(const UVector&, FormattedValueBuilder&, UErrorCode&, UVector&) const;
-     void resolvePreferences(const UVector&, const MessageFormatDataModel::VariantMap&, UErrorCode&, UVector& pref) const;
+     void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, FormattedValueBuilder**) const;
+     void matchSelectorKeys(UnicodeString*/*[]*/, size_t, FormattedValueBuilder&, UErrorCode&, UnicodeString*, size_t&) const;
+     void resolvePreferences(FormattedValueBuilder**, size_t, const MessageFormatDataModel::VariantMap&, UErrorCode&, UnicodeString**, size_t*) const;
 
      // Formatting methods
      void formatLiteral(const MessageFormatDataModel::Literal&, FormattedValueBuilder&) const;

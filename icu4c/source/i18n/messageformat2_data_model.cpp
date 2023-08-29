@@ -115,6 +115,10 @@ const Literal& Key::asLiteral() const {
 
 //---------------- VariantMap
 
+size_t VariantMap::size() const {
+    return contents->size();
+}
+
 bool VariantMap::next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
     UnicodeString unused;
     if (!contents->next(pos, unused, v)) {
