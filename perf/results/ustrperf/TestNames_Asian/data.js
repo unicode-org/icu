@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693264022023,
+  "lastUpdate": 1693330211882,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43678,6 +43678,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 44.896,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "0cc2d9ed4c98ae34fc4f572f874a75e5ad298623",
+          "message": "ICU-22471 Bring ICU4J PersonNameFormatter up to date\n\n- Bring in the latest version of the CLDR PersonNameFormatter test data.\n- Fix PersonNameConsistencyTest to recognize the new “givenFirst” and “surnameFirst” keywords used in the test data files.\n- Fix tokenization code in InitialModifier to use a BreakIterator.  Add unit test.\n- Add support for the “retain” modifier.  Add unit test.\n- Remove the “log known failure” logic for all of the PersonNameConsistencyTest data files that pass now.",
+          "timestamp": "2023-08-29T12:54:56-04:00",
+          "tree_id": "e70f6cb762bddfbb0016cf2e1e7f93bec7610c66",
+          "url": "https://github.com/unicode-org/icu/commit/0cc2d9ed4c98ae34fc4f572f874a75e5ad298623"
+        },
+        "date": 1693330157629,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 17.6533,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 19.0047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 22.8909,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 31.5097,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.309,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 40.2228,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.8937,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.9662,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 135.5073,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.8833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 53.8509,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.9012,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
