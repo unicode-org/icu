@@ -49,10 +49,10 @@ class MessageFormatter;
 class FormattingContext : public UMemory {
     public:
 
-    virtual FormattingContext& setOutput(const UnicodeString&) = 0;
-    virtual FormattingContext& setOutput(number::FormattedNumber&&) = 0;
-    virtual FormattingContext& setSelectorError(const UnicodeString&, UErrorCode&) = 0;
-    virtual FormattingContext& setFormattingWarning(const UnicodeString&, UErrorCode&) = 0;
+    virtual void setOutput(const UnicodeString&) = 0;
+    virtual void setOutput(number::FormattedNumber&&) = 0;
+    virtual void setSelectorError(const UnicodeString&, UErrorCode&) = 0;
+    virtual void setFormattingWarning(const UnicodeString&, UErrorCode&) = 0;
 
     virtual bool hasFormattableInput() const = 0;
     virtual bool hasObjectInput() const = 0;
@@ -78,9 +78,8 @@ class FormattingContext : public UMemory {
 
 // This is per-operand/expression being formatted,
 // so it's not part of the MessageFormatter object
-class FormattedValueBuilder : public FormattingContext {
+class ExpressionContext : public FormattingContext {
     private:
-    using Builder = FormattedValueBuilder;
 
     enum InputState {
         FALLBACK,
@@ -116,7 +115,7 @@ class FormattedValueBuilder : public FormattingContext {
     bool hasCustomRegistry() const;
     void enterState(InputState s);
     void enterState(OutputState s);
-    Builder& promoteFallbackToOutput();
+    void promoteFallbackToOutput();
     void formatInputWithDefaults(const Locale&, UErrorCode&);
     void initFunctionOptions(UErrorCode&);
     Formattable* getOption(const UnicodeString&, Formattable::Type) const;
@@ -128,7 +127,7 @@ class FormattedValueBuilder : public FormattingContext {
     private:
     friend class MessageFormatter;
 
-    FormattedValueBuilder(Context&, const MessageFormatter&, UErrorCode&);
+    ExpressionContext(Context&, const MessageFormatter&, UErrorCode&);
 
     Context& context;
     const MessageFormatter& parent;
@@ -145,40 +144,40 @@ class FormattedValueBuilder : public FormattingContext {
 
     LocalPointer<Hashtable> functionOptions;
 
-    static FormattedValueBuilder* create(Context&, const MessageFormatter&, UErrorCode&);
+    static ExpressionContext* create(Context&, const MessageFormatter&, UErrorCode&);
     // Creates a new builder sharing this's context and parent
-    FormattedValueBuilder* create(UErrorCode&);
+    ExpressionContext* create(UErrorCode&);
 
-    Builder& setParseError(uint32_t line, uint32_t offset);
-    Builder& setUnresolvedVariable(const VariableName&, UErrorCode&);
-    Builder& setUnknownFunction(const FunctionName&, UErrorCode&);
-    Builder& setSelectorError(const FunctionName&, UErrorCode&);
-    Builder& setVariantKeyMismatch();
-    Builder& setFormattingWarning(const UnicodeString&, UErrorCode&);
-    Builder& setNonexhaustivePattern();
-    Builder& setDuplicateOptionName();
-    Builder& setReservedError(UErrorCode&);
-    Builder& setSelectorError(const UnicodeString&, UErrorCode&);
-    Builder& setMissingSelectorAnnotation(UErrorCode&);
+    void setParseError(uint32_t line, uint32_t offset);
+    void setUnresolvedVariable(const VariableName&, UErrorCode&);
+    void setUnknownFunction(const FunctionName&, UErrorCode&);
+    void setSelectorError(const FunctionName&, UErrorCode&);
+    void setVariantKeyMismatch();
+    void setFormattingWarning(const UnicodeString&, UErrorCode&);
+    void setNonexhaustivePattern();
+    void setDuplicateOptionName();
+    void setReservedError(UErrorCode&);
+    void setSelectorError(const UnicodeString&, UErrorCode&);
+    void setMissingSelectorAnnotation(UErrorCode&);
     // Resets input and output and uses existing fallback
-    Builder& setFallback();
+    void setFallback();
     // Sets fallback string
-    Builder& setFallback(const Text&);
-    Builder& setFunctionName(const FunctionName&, UErrorCode&);
+    void setFallback(const Text&);
+    void setFunctionName(const FunctionName&, UErrorCode&);
 
     // Function name must be set; clears it
-    Builder& resolveSelector(Selector*);
-    Builder& setStringOption(const UnicodeString&, const UnicodeString&, UErrorCode&);
-    Builder& setDateOption(const UnicodeString&, UDate, UErrorCode&);
-    Builder& setNumericOption(const UnicodeString&, double, UErrorCode&);
-    Builder& setNoOperand();
-    Builder& setInput(const UObject*);
-    Builder& setInput(const Formattable&);
-    Builder& setInput(const UnicodeString&);
-    Builder& setObjectInput(UObject*);
-    Builder& setOutput(const UnicodeString&);
-    Builder& setOutput(number::FormattedNumber&&);
-    Builder& promoteFallbackToInput();
+    void resolveSelector(Selector*);
+    void setStringOption(const UnicodeString&, const UnicodeString&, UErrorCode&);
+    void setDateOption(const UnicodeString&, UDate, UErrorCode&);
+    void setNumericOption(const UnicodeString&, double, UErrorCode&);
+    void setNoOperand();
+    void setInput(const UObject*);
+    void setInput(const Formattable&);
+    void setInput(const UnicodeString&);
+    void setObjectInput(UObject*);
+    void setOutput(const UnicodeString&);
+    void setOutput(number::FormattedNumber&&);
+    void promoteFallbackToInput();
     // Doesn't change output if it already exists
     // Appends to `result`
     //void formatToString(const Locale& locale, UnicodeString& result, UErrorCode&) const;
@@ -233,7 +232,7 @@ class FormattedValueBuilder : public FormattingContext {
     bool hasSelectorError() const;
     bool hasError() const;
 
-    virtual ~FormattedValueBuilder();
+    virtual ~ExpressionContext();
 };
 
 } // namespace message2

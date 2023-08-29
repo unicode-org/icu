@@ -484,7 +484,7 @@ static const Formattable& evalLiteral(const Literal& lit) {
     return lit.getContents();
 }
 
-void MessageFormatter::evalArgument(const VariableName& var, FormattedValueBuilder& context) const {
+void MessageFormatter::evalArgument(const VariableName& var, ExpressionContext& context) const {
     U_ASSERT(context.hasGlobal(var));
     context.setFallback(var);
     if (context.hasGlobalAsFormattable(var)) {
@@ -494,12 +494,12 @@ void MessageFormatter::evalArgument(const VariableName& var, FormattedValueBuild
     }
 }
 
-void MessageFormatter::formatLiteral(const Literal& lit, FormattedValueBuilder& context) const {
+void MessageFormatter::formatLiteral(const Literal& lit, ExpressionContext& context) const {
     context.setFallback(lit);
     context.setInput(evalLiteral(lit));
 }
 
-void MessageFormatter::formatOperand(const Environment& env, const Operand& rand, FormattedValueBuilder& context, UErrorCode &status) const {
+void MessageFormatter::formatOperand(const Environment& env, const Operand& rand, ExpressionContext& context, UErrorCode &status) const {
     CHECK_ERROR(status);
     if (rand.isNull()) {
         context.setNoOperand();
@@ -547,11 +547,11 @@ bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const
     return (standardFunctionRegistry->hasSelector(functionName));
 }
 
-void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& options, FormattedValueBuilder& context, UErrorCode& status) const {
+void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& options, ExpressionContext& context, UErrorCode& status) const {
     CHECK_ERROR(status);
 
     size_t pos = OptionMap::FIRST;
-    LocalPointer<FormattedValueBuilder> rhsContext;
+    LocalPointer<ExpressionContext> rhsContext;
     while (true) {
         UnicodeString k;
         const Operand* v;
@@ -642,7 +642,7 @@ const SelectorFactory* MessageFormatter::lookupSelectorFactory(Context& context,
 // hasOperand set to true if `rand` resolves to an expression that's a unary function call
 // for example $foo => {$bar :plural} => hasOperand set to true
 //             $foo => {:func} => hasOperand set to false
-void MessageFormatter::resolveVariables(const Environment& env, const Operand& rand, FormattedValueBuilder& context, UErrorCode &status) const {
+void MessageFormatter::resolveVariables(const Environment& env, const Operand& rand, ExpressionContext& context, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     if (rand.isNull()) {
@@ -676,7 +676,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Operand& r
 
 // Resolves the expression just enough to expose a function call
 // (or until a literal is reached)
-void MessageFormatter::resolveVariables(const Environment& env, const Expression& expr, FormattedValueBuilder& context, UErrorCode &status) const {
+void MessageFormatter::resolveVariables(const Environment& env, const Expression& expr, ExpressionContext& context, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // A `reserved` is an error
@@ -700,7 +700,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Expression
 
 // Leaves `context` either as a fallback with errors,
 // or in a state with a pending call to a selector that has been set
-void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, const Expression& expr, FormattedValueBuilder& context, UErrorCode &status) const {
+void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, const Expression& expr, ExpressionContext& context, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Resolve expression to determine if it's a function call
@@ -738,7 +738,7 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
     }
 }
 
-void MessageFormatter::formatExpression(const Environment& globalEnv, const Expression& expr, FormattedValueBuilder& context, UErrorCode &status) const {
+void MessageFormatter::formatExpression(const Environment& globalEnv, const Expression& expr, ExpressionContext& context, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Formatting error
@@ -787,14 +787,14 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
 void MessageFormatter::formatPattern(Context& globalContext, const Environment& globalEnv, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
-    LocalPointer<FormattedValueBuilder> context;
+    LocalPointer<ExpressionContext> context;
     for (size_t i = 0; i < pat.numParts(); i++) {
         const PatternPart* part = pat.getPart(i);
         U_ASSERT(part != nullptr);
         if (part->isText()) {
             result += part->asText();
         } else {
-            context.adoptInstead(FormattedValueBuilder::create(globalContext, *this, status));
+            context.adoptInstead(ExpressionContext::create(globalContext, *this, status));
             CHECK_ERROR(status);
             formatExpression(globalEnv, part->contents(), *context, status);
             context->formatToString(locale, status);
@@ -805,15 +805,15 @@ void MessageFormatter::formatPattern(Context& globalContext, const Environment& 
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-selectors
-void MessageFormatter::resolveSelectors(Context& context, const Environment& env, const ExpressionList& selectors, UErrorCode &status, FormattedValueBuilder** res/*[]*/) const {
+void MessageFormatter::resolveSelectors(Context& context, const Environment& env, const ExpressionList& selectors, UErrorCode &status, ExpressionContext** res/*[]*/) const {
     CHECK_ERROR(status);
 
     // 1. Let res be a new empty list of resolved values that support selection.
     // (Implicit, since `res` is an out-parameter)
     // 2. For each expression exp of the message's selectors
-    LocalPointer<FormattedValueBuilder> rv;
+    LocalPointer<ExpressionContext> rv;
     for (size_t i = 0; i < selectors.length(); i++) {
-        rv.adoptInstead(FormattedValueBuilder::create(context, *this, status));
+        rv.adoptInstead(ExpressionContext::create(context, *this, status));
         CHECK_ERROR(status);
         // 2i. Let rv be the resolved value of exp.
         formatSelectorExpression(env, *selectors.get(i), *rv, status);
@@ -837,7 +837,7 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `keys` and `matches` are both vectors of strings
-void MessageFormatter::matchSelectorKeys(UnicodeString* keys/*[]*/, size_t numKeys, FormattedValueBuilder& rv, UErrorCode& status, UnicodeString* matches/*[]*/, size_t& numberMatching) const {
+void MessageFormatter::matchSelectorKeys(UnicodeString* keys/*[]*/, size_t numKeys, ExpressionContext& rv, UErrorCode& status, UnicodeString* matches/*[]*/, size_t& numberMatching) const {
     CHECK_ERROR(status);
 
     numberMatching = 0;
@@ -851,9 +851,9 @@ void MessageFormatter::matchSelectorKeys(UnicodeString* keys/*[]*/, size_t numKe
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
-// `res` is an array of arrays of FormattedValueBuilders, with length `numSelectors;
+// `res` is an array of arrays of ExpressionContexts, with length `numSelectors;
 // `pref` is an array of arrays of strings; `prefsLengths` is an array of the length of each element of `pref`
-void MessageFormatter::resolvePreferences(FormattedValueBuilder** res/*[]*/, size_t numSelectors, const VariantMap& variants, UErrorCode &status, UnicodeString** pref/*[]*/, size_t* prefsLengths/*[]*/) const {
+void MessageFormatter::resolvePreferences(ExpressionContext** res/*[]*/, size_t numSelectors, const VariantMap& variants, UErrorCode &status, UnicodeString** pref/*[]*/, size_t* prefsLengths/*[]*/) const {
     CHECK_ERROR(status);
 
     // 1. Let pref be a new empty list of lists of strings.
@@ -894,7 +894,7 @@ void MessageFormatter::resolvePreferences(FormattedValueBuilder** res/*[]*/, siz
             }
         }
         // 2iii. Let `rv` be the resolved value at index `i` of `res`.
-        FormattedValueBuilder* rv = res[i];
+        ExpressionContext* rv = res[i];
         U_ASSERT(rv != nullptr);
         // 2iv. Let matches be the result of calling the method MatchSelectorKeys(rv, keys)
         size_t numMatches;
@@ -1064,7 +1064,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
     // Resolve Selectors
     // res is a vector of ResolvedExpressions
     size_t numSelectors = selectors.length();
-    LocalArray<FormattedValueBuilder*> res(new FormattedValueBuilder*[numSelectors]);
+    LocalArray<ExpressionContext*> res(new ExpressionContext*[numSelectors]);
     if (!res.isValid()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

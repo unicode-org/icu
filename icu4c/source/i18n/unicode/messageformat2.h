@@ -40,7 +40,7 @@ U_NAMESPACE_BEGIN namespace message2 {
  */
 
 // Intermediate classes used internally in the formatter
-// TODO: these should be private to MessageFormatter, but are used by the FormattedValueBuilder so they aren't
+// TODO: these should be private to MessageFormatter, but are used by the ExpressionContext so they aren't
 class Environment;
 // A closure represents the right-hand side of a variable
 // declaration, along with an environment giving values
@@ -197,7 +197,7 @@ public:
   private:
     friend class Builder;
     friend class Context;
-    friend class FormattedValueBuilder;
+    friend class ExpressionContext;
 
     MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
@@ -363,24 +363,24 @@ public:
         Errors& errors;
     };
 
-     void resolveVariables(const Environment& env, const MessageFormatDataModel::Operand&, FormattedValueBuilder&, UErrorCode &) const;
-     void resolveVariables(const Environment& env, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode &) const;
+     void resolveVariables(const Environment& env, const MessageFormatDataModel::Operand&, ExpressionContext&, UErrorCode &) const;
+     void resolveVariables(const Environment& env, const MessageFormatDataModel::Expression&, ExpressionContext&, UErrorCode &) const;
 
      // Selection methods
-     void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, FormattedValueBuilder**) const;
-     void matchSelectorKeys(UnicodeString*/*[]*/, size_t, FormattedValueBuilder&, UErrorCode&, UnicodeString*, size_t&) const;
-     void resolvePreferences(FormattedValueBuilder**, size_t, const MessageFormatDataModel::VariantMap&, UErrorCode&, UnicodeString**, size_t*) const;
+     void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, ExpressionContext**) const;
+     void matchSelectorKeys(UnicodeString*/*[]*/, size_t, ExpressionContext&, UErrorCode&, UnicodeString*, size_t&) const;
+     void resolvePreferences(ExpressionContext**, size_t, const MessageFormatDataModel::VariantMap&, UErrorCode&, UnicodeString**, size_t*) const;
 
      // Formatting methods
-     void formatLiteral(const MessageFormatDataModel::Literal&, FormattedValueBuilder&) const;
+     void formatLiteral(const MessageFormatDataModel::Literal&, ExpressionContext&) const;
      void formatPattern(Context&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats an expression that appears as a selector
-     void formatSelectorExpression(const Environment& env, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode&) const;
+     void formatSelectorExpression(const Environment& env, const MessageFormatDataModel::Expression&, ExpressionContext&, UErrorCode&) const;
      // Formats an expression that appears in a pattern or as the definition of a local variable
-     void formatExpression(const Environment&, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode&) const;
-     void resolveOptions(const Environment& env, const MessageFormatDataModel::OptionMap&, FormattedValueBuilder&, UErrorCode&) const;
-     void formatOperand(const Environment&, const MessageFormatDataModel::Operand&, FormattedValueBuilder&, UErrorCode&) const;
-     void evalArgument(const VariableName&, FormattedValueBuilder&) const;
+     void formatExpression(const Environment&, const MessageFormatDataModel::Expression&, ExpressionContext&, UErrorCode&) const;
+     void resolveOptions(const Environment& env, const MessageFormatDataModel::OptionMap&, ExpressionContext&, UErrorCode&) const;
+     void formatOperand(const Environment&, const MessageFormatDataModel::Operand&, ExpressionContext&, UErrorCode&) const;
+     void evalArgument(const VariableName&, ExpressionContext&) const;
      void formatSelectors(Context& context, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods

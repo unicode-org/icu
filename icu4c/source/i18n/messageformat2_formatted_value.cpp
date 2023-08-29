@@ -13,35 +13,32 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-using Builder = FormattedValueBuilder;
-
 // Constructors
 // ------------
 
-/* static */ Builder* Builder::create(Context& context, const MessageFormatter& parent, UErrorCode& errorCode) {
+/* static */ ExpressionContext* ExpressionContext::create(Context& globalContext, const MessageFormatter& parent, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Builder> result(new
- FormattedValueBuilder(context, parent, errorCode));
-    NULL_ON_ERROR(errorCode);
-    return result.orphan();
-}
-
-Builder* Builder::create(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    LocalPointer<Builder> result(new FormattedValueBuilder(context, parent, errorCode));
+    LocalPointer<ExpressionContext> result(new ExpressionContext(globalContext, parent, errorCode));
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
 
-Builder::FormattedValueBuilder(Context& c, const MessageFormatter& mf, UErrorCode& errorCode) : context(c), parent(mf), inState(FALLBACK), outState(NONE) {
+ExpressionContext* ExpressionContext::create(UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalPointer<ExpressionContext> result(new ExpressionContext(context, parent, errorCode));
+    NULL_ON_ERROR(errorCode);
+    return result.orphan();
+}
+
+ExpressionContext::ExpressionContext(Context& c, const MessageFormatter& mf, UErrorCode& errorCode) : context(c), parent(mf), inState(FALLBACK), outState(NONE) {
     CHECK_ERROR(errorCode);
 
     initFunctionOptions(errorCode);
 }
 
-void Builder::initFunctionOptions(UErrorCode& errorCode) {
+void ExpressionContext::initFunctionOptions(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     functionOptions.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
     CHECK_ERROR(errorCode);
@@ -68,7 +65,7 @@ Error::~Error() {}
 // State
 // ---------
 
-void Builder::enterState(InputState s) {
+void ExpressionContext::enterState(InputState s) {
     if (s == InputState::FALLBACK) {
         enterState(OutputState::NONE);
     }
@@ -76,20 +73,19 @@ void Builder::enterState(InputState s) {
     
 }
 
-void Builder::enterState(OutputState s) {
+void ExpressionContext::enterState(OutputState s) {
     if (s > OutputState::NONE) {
         U_ASSERT(hasInput());
     }
     outState = s;
 }
 
-bool Builder::isFallback() const {
+bool ExpressionContext::isFallback() const {
     return (inState == InputState::FALLBACK);
 }
 
-Builder& Builder::setFallback() {
+void ExpressionContext::setFallback() {
     enterState(FALLBACK);
-    return *this;
 }
 
 void fallbackToString(const Text& t, UnicodeString& result) {
@@ -98,10 +94,9 @@ void fallbackToString(const Text& t, UnicodeString& result) {
     result += RIGHT_CURLY_BRACE;
 }
 
-Builder& Builder::setFallback(const Text& t) {
+void ExpressionContext::setFallback(const Text& t) {
     fallback.remove();
     fallbackToString(t, fallback);
-    return *this;
 }
 
 static Formattable* createFormattable(const UnicodeString& v, UErrorCode& errorCode) {
@@ -136,107 +131,102 @@ static Formattable* createFormattableDate(UDate v, UErrorCode& errorCode) {
 
 // Add the fallback string as the input string, and
 // unset this as a fallback
-Builder& Builder::promoteFallbackToInput() {
+void ExpressionContext::promoteFallbackToInput() {
     U_ASSERT(isFallback());
     return setInput(fallback);
 }
 
 // Add the fallback string as the output string
-Builder& Builder::promoteFallbackToOutput() {
+void ExpressionContext::promoteFallbackToOutput() {
     U_ASSERT(isFallback());
     return setOutput(fallback);
 }
 
-Builder& Builder::setNoOperand() {
+void ExpressionContext::setNoOperand() {
     U_ASSERT(isFallback());
     enterState(NO_OPERAND);
-    return *this;
 }
 
-Builder& Builder::setInput(const UnicodeString& s) {
+void ExpressionContext::setInput(const UnicodeString& s) {
     U_ASSERT(inState <= NO_OPERAND);
     enterState(FORMATTABLE_INPUT);
     input = Formattable(s);
-    return *this;
 }
 
-Builder& Builder::setInput(const Formattable& s) {
+void ExpressionContext::setInput(const Formattable& s) {
     U_ASSERT(isFallback());
     enterState(FORMATTABLE_INPUT);
     U_ASSERT(s.getType() != Formattable::Type::kObject);
     input = s;
-    return *this;
 }
 
-bool Builder::hasFormattableInput() const {
+bool ExpressionContext::hasFormattableInput() const {
     return (inState == InputState::FORMATTABLE_INPUT);
 }
 
-bool Builder::hasObjectInput() const {
+bool ExpressionContext::hasObjectInput() const {
     return (inState == InputState::OBJECT_INPUT);
 }
 
-const UObject& Builder::getObjectInput() const {
+const UObject& ExpressionContext::getObjectInput() const {
     U_ASSERT(hasObjectInput());
     return *objectInput;
 }
 
-const Formattable& Builder::getFormattableInput() const {
+const Formattable& ExpressionContext::getFormattableInput() const {
     U_ASSERT(hasFormattableInput());
     return input;
 }
 
-const number::FormattedNumber& Builder::getNumberOutput() const {
+const number::FormattedNumber& ExpressionContext::getNumberOutput() const {
     U_ASSERT(hasNumberOutput());
     return numberOutput;
 }
 
-bool Builder::hasStringOutput() const {
+bool ExpressionContext::hasStringOutput() const {
     return (inState > FALLBACK && outState == OutputState::STRING);
 }
 
-bool Builder::hasNumberOutput() const {
+bool ExpressionContext::hasNumberOutput() const {
     return (inState > FALLBACK && outState == OutputState::NUMBER);
 }
 
-const UnicodeString& Builder::getStringOutput() const {
+const UnicodeString& ExpressionContext::getStringOutput() const {
     U_ASSERT(hasStringOutput());
     return stringOutput;
 }
 
-Builder& Builder::setInput(const UObject* obj) {
+void ExpressionContext::setInput(const UObject* obj) {
     U_ASSERT(isFallback());
     U_ASSERT(obj != nullptr);
     enterState(OBJECT_INPUT);
     objectInput = obj;
-    return *this;
 }
 
-Builder& Builder::setOutput(const UnicodeString& s) {
+void ExpressionContext::setOutput(const UnicodeString& s) {
     if (inState == InputState::NO_OPERAND) {
-        // Set the input to the same string
-        // TODO: not sure if that's good
+        // If setOutput() is called while the
+        // operand is null, set the input to the
+        // output string
         setInput(s);
     }
     U_ASSERT(hasInput());
     enterState(OutputState::STRING);
     stringOutput = s;
-    return *this;
 }
 
-Builder& Builder::setOutput(number::FormattedNumber&& num) {
+void ExpressionContext::setOutput(number::FormattedNumber&& num) {
     U_ASSERT(hasInput());
     enterState(OutputState::NUMBER);
     numberOutput = std::move(num);
-    return *this;
 }
 
-void Builder::clearOutput() {
+void ExpressionContext::clearOutput() {
     stringOutput.remove();
     enterState(OutputState::NONE);
 }
 
-void Builder::formatInputWithDefaults(const Locale& locale, UErrorCode& status) {
+void ExpressionContext::formatInputWithDefaults(const Locale& locale, UErrorCode& status) {
     CHECK_ERROR(status);
 
     U_ASSERT(hasFormattableInput());
@@ -265,14 +255,14 @@ void Builder::formatInputWithDefaults(const Locale& locale, UErrorCode& status) 
         break;
     }
     default: {
-        // TODO: no default formatters for these. use fallback
+        // No default formatters for other types; use fallback
         promoteFallbackToOutput();
     }
     }
 }
 
 // Forces evaluation
-void Builder::formatToString(const Locale& locale, UErrorCode& status) {
+void ExpressionContext::formatToString(const Locale& locale, UErrorCode& status) {
     CHECK_ERROR(status);
 
     switch (outState) {
@@ -312,12 +302,12 @@ void Builder::formatToString(const Locale& locale, UErrorCode& status) {
     U_ASSERT(hasStringOutput());
 }
 
-void Builder::clearFunctionName() {
+void ExpressionContext::clearFunctionName() {
     U_ASSERT(pendingFunctionName.isValid());
     pendingFunctionName.adoptInstead(nullptr);
 }            
 
-const FunctionName& Builder::getFunctionName() {
+const FunctionName& ExpressionContext::getFunctionName() {
     U_ASSERT(pendingFunctionName.isValid());
     return *pendingFunctionName;
 }            
@@ -325,7 +315,7 @@ const FunctionName& Builder::getFunctionName() {
 // Message arguments
 // -----------------
 
-bool Builder::hasGlobalAsObject(const VariableName& v) const {
+bool ExpressionContext::hasGlobalAsObject(const VariableName& v) const {
     if (!context.hasVar(v)) {
         return false;
     }
@@ -339,7 +329,7 @@ bool Builder::hasGlobalAsObject(const VariableName& v) const {
     }
 }
 
-bool Builder::hasGlobalAsFormattable(const VariableName& v) const {
+bool ExpressionContext::hasGlobalAsFormattable(const VariableName& v) const {
     if (!context.hasVar(v)) {
         return false;
     }
@@ -353,14 +343,14 @@ bool Builder::hasGlobalAsFormattable(const VariableName& v) const {
     }
 }
 
-const UObject* Builder::getGlobalAsObject(const VariableName& v) const {
+const UObject* ExpressionContext::getGlobalAsObject(const VariableName& v) const {
     U_ASSERT(hasGlobalAsObject(v));
     const Formattable& argValue = context.getVar(v);
     U_ASSERT(argValue.getType() == Formattable::Type::kObject);
     return argValue.getObject();
 }
 
-const Formattable& Builder::getGlobalAsFormattable(const VariableName& v) const {
+const Formattable& ExpressionContext::getGlobalAsFormattable(const VariableName& v) const {
     U_ASSERT(hasGlobalAsFormattable(v));
     const Formattable& argValue = context.getVar(v);
     U_ASSERT(argValue.getType() != Formattable::Type::kObject);
@@ -372,9 +362,9 @@ const Formattable& Builder::getGlobalAsFormattable(const VariableName& v) const 
 // ----------------
 
 // Iterator
-int32_t Builder::firstOption() const { return UHASH_FIRST; }
+int32_t ExpressionContext::firstOption() const { return UHASH_FIRST; }
 
-const Formattable* Builder::nextOption(int32_t& pos, UnicodeString& key) const {
+const Formattable* ExpressionContext::nextOption(int32_t& pos, UnicodeString& key) const {
     U_ASSERT(functionOptions.isValid());
     const UHashElement* next = functionOptions->nextElement(pos);
     if (next == nullptr) {
@@ -384,46 +374,43 @@ const Formattable* Builder::nextOption(int32_t& pos, UnicodeString& key) const {
     return (const Formattable*) next->value.pointer;
 }
 
-size_t Builder::optionsCount() const {
+size_t ExpressionContext::optionsCount() const {
     U_ASSERT(functionOptions.isValid());
     return functionOptions->count();
 }
 
 // Adopts `val`
-void Builder::addFunctionOption(const UnicodeString& k, Formattable* val, UErrorCode& errorCode) {
+void ExpressionContext::addFunctionOption(const UnicodeString& k, Formattable* val, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     U_ASSERT(functionOptions.isValid());
     functionOptions->put(k, val, errorCode);
 }
 
-Builder& Builder::setStringOption(const UnicodeString& key, const UnicodeString& value, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
+void ExpressionContext::setStringOption(const UnicodeString& key, const UnicodeString& value, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
 
     LocalPointer<Formattable> valuePtr(createFormattable(value, errorCode));
-    THIS_ON_ERROR(errorCode);
+    CHECK_ERROR(errorCode);
     addFunctionOption(key, valuePtr.orphan(), errorCode);
-    return *this;
 }
 
-Builder& Builder::setDateOption(const UnicodeString& key, UDate date, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
+void ExpressionContext::setDateOption(const UnicodeString& key, UDate date, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
 
     LocalPointer<Formattable> valuePtr(createFormattableDate(date, errorCode));
-    THIS_ON_ERROR(errorCode);
+    CHECK_ERROR(errorCode);
     addFunctionOption(key, valuePtr.orphan(), errorCode);
-    return *this;
 }
 
-Builder& Builder::setNumericOption(const UnicodeString& key, double value, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
+void ExpressionContext::setNumericOption(const UnicodeString& key, double value, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
 
     LocalPointer<Formattable> valuePtr(createFormattable(value, errorCode));
-    THIS_ON_ERROR(errorCode);
+    CHECK_ERROR(errorCode);
     addFunctionOption(key, valuePtr.orphan(), errorCode);
-    return *this;
 }
 
-Formattable* Builder::getOption(const UnicodeString& key, Formattable::Type type) const {
+Formattable* ExpressionContext::getOption(const UnicodeString& key, Formattable::Type type) const {
     U_ASSERT(functionOptions.isValid());
     Formattable* result = (Formattable*) functionOptions->get(key);
     if (result == nullptr || result->getType() != type) {
@@ -432,7 +419,7 @@ Formattable* Builder::getOption(const UnicodeString& key, Formattable::Type type
     return result;
 }
 
-Formattable* Builder::getNumericOption(const UnicodeString& key) const {
+Formattable* ExpressionContext::getNumericOption(const UnicodeString& key) const {
     U_ASSERT(functionOptions.isValid());
     Formattable* result = (Formattable*) functionOptions->get(key);
     if (result == nullptr || !result->isNumeric()) {
@@ -441,7 +428,7 @@ Formattable* Builder::getNumericOption(const UnicodeString& key) const {
     return result;
 }
 
-bool Builder::getStringOption(const UnicodeString& key, UnicodeString& value) const {
+bool ExpressionContext::getStringOption(const UnicodeString& key, UnicodeString& value) const {
     Formattable* result = getOption(key, Formattable::Type::kString);
     if (result == nullptr) {
         return false;
@@ -450,7 +437,7 @@ bool Builder::getStringOption(const UnicodeString& key, UnicodeString& value) co
     return true;
 }
 
-bool Builder::tryStringAsNumberOption(const UnicodeString& key, double& value) const {
+bool ExpressionContext::tryStringAsNumberOption(const UnicodeString& key, double& value) const {
     // Check for a string option, try to parse it as a number if present
     UnicodeString tempValue;
     if (!getStringOption(key, tempValue)) {
@@ -473,7 +460,7 @@ bool Builder::tryStringAsNumberOption(const UnicodeString& key, double& value) c
     return true;
 }
 
-bool Builder::getInt64Option(const UnicodeString& key, int64_t& value) const {
+bool ExpressionContext::getInt64Option(const UnicodeString& key, int64_t& value) const {
     Formattable* result = getNumericOption(key);
     if (result == nullptr) {
         double doubleResult;
@@ -492,7 +479,7 @@ bool Builder::getInt64Option(const UnicodeString& key, int64_t& value) const {
     return false;
 }
 
-bool Builder::getDoubleOption(const UnicodeString& key, double& value) const {
+bool ExpressionContext::getDoubleOption(const UnicodeString& key, double& value) const {
     Formattable* result = getNumericOption(key);
     if (result == nullptr) {
         return tryStringAsNumberOption(key, value);
@@ -508,60 +495,59 @@ bool Builder::getDoubleOption(const UnicodeString& key, double& value) const {
 // Functions
 // -------------
 
-Builder& Builder::setFunctionName(const FunctionName& fn, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
+void ExpressionContext::setFunctionName(const FunctionName& fn, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
 
     U_ASSERT(!hasFunctionName());
     pendingFunctionName.adoptInstead(new FunctionName(fn));
     if (!pendingFunctionName.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-    return *this;
 }
 
-bool Builder::hasFunctionName() const {
+bool ExpressionContext::hasFunctionName() const {
     return pendingFunctionName.isValid();
 }
 
-void Builder::returnFromFunction() {
+void ExpressionContext::returnFromFunction() {
     U_ASSERT(hasFunctionName());
     clearFunctionName();
     clearFunctionOptions();
 }
 
-void Builder::clearFunctionOptions() {
+void ExpressionContext::clearFunctionOptions() {
     U_ASSERT(functionOptions.isValid());
     functionOptions->removeAll();
 }
 
-const FunctionRegistry& Builder::customRegistry() const {
+const FunctionRegistry& ExpressionContext::customRegistry() const {
     U_ASSERT(hasCustomRegistry());
     return parent.getCustomFunctionRegistry();
 }
 
-bool Builder::hasCustomRegistry() const {
+bool ExpressionContext::hasCustomRegistry() const {
     return parent.hasCustomFunctionRegistry();
 }
 
-bool Builder::isBuiltInFormatter(const FunctionName& fn) const {
+bool ExpressionContext::isBuiltInFormatter(const FunctionName& fn) const {
     return parent.isBuiltInFormatter(fn);
 }
 
-bool Builder::isCustomFormatter(const FunctionName& fn) const {
+bool ExpressionContext::isCustomFormatter(const FunctionName& fn) const {
     return hasCustomRegistry() && customRegistry().getFormatter(fn) != nullptr;
 }
 
-bool Builder::isBuiltInSelector(const FunctionName& fn) const {
+bool ExpressionContext::isBuiltInSelector(const FunctionName& fn) const {
     return parent.isBuiltInSelector(fn);
 }
 
-bool Builder::isCustomSelector(const FunctionName& fn) const {
+bool ExpressionContext::isCustomSelector(const FunctionName& fn) const {
     return hasCustomRegistry() && customRegistry().getSelector(fn) != nullptr;
 }
 
 // Precondition: pending function name is set and selector is defined
 // Postcondition: selector != nullptr
-Selector* Builder::getSelector(UErrorCode& status) const {
+Selector* ExpressionContext::getSelector(UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
     U_ASSERT(pendingFunctionName.isValid());
@@ -576,7 +562,7 @@ Selector* Builder::getSelector(UErrorCode& status) const {
 
 // Precondition: pending function name is set and formatter is defined
 // Postcondition: formatter != nullptr
-const Formatter* Builder::getFormatter(UErrorCode& status) {
+const Formatter* ExpressionContext::getFormatter(UErrorCode& status) {
     NULL_ON_ERROR(status);
 
     U_ASSERT(pendingFunctionName.isValid());
@@ -584,24 +570,24 @@ const Formatter* Builder::getFormatter(UErrorCode& status) {
     return parent.maybeCachedFormatter(context, *pendingFunctionName, status);
 }
 
-bool Builder::hasFormatter() const {
+bool ExpressionContext::hasFormatter() const {
     U_ASSERT(pendingFunctionName.isValid());
     const FunctionName& fn = *pendingFunctionName;
     return isBuiltInFormatter(fn) || isCustomFormatter(fn);
 }
 
-bool Builder::isSelector(const FunctionName& fn) const {
+bool ExpressionContext::isSelector(const FunctionName& fn) const {
     return isBuiltInSelector(fn) || isCustomSelector(fn);
 }
 
-bool Builder::hasSelector() const {
+bool ExpressionContext::hasSelector() const {
     if (!pendingFunctionName.isValid()) {
         return false;
     }
     return isSelector(*pendingFunctionName);
 }
 
-void Builder::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys, UnicodeString keysOut[], size_t& numberMatching, UErrorCode& status) {
+void ExpressionContext::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys, UnicodeString keysOut[], size_t& numberMatching, UErrorCode& status) {
     CHECK_ERROR(status);
 
     U_ASSERT(pendingFunctionName.isValid());
@@ -624,7 +610,7 @@ void Builder::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys
     returnFromFunction();
 }
 
-void Builder::evalFormatterCall(const FunctionName& functionName, UErrorCode& status) {
+void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     FunctionName* savedFunctionName = pendingFunctionName.isValid() ? pendingFunctionName.orphan() : nullptr;
@@ -671,91 +657,84 @@ void Builder::evalFormatterCall(const FunctionName& functionName, UErrorCode& st
 // -------
 
 
-bool Builder::hasDataModelError() const {
+bool ExpressionContext::hasDataModelError() const {
     return context.hasDataModelError();
 }
 
-bool Builder::hasParseError() const {
+bool ExpressionContext::hasParseError() const {
     return context.hasParseError();
 }
 
-bool Builder::hasSelectorError() const {
+bool ExpressionContext::hasSelectorError() const {
     return context.hasSelectorError();
 }
 
-bool Builder::hasUnknownFunctionError() const {
+bool ExpressionContext::hasUnknownFunctionError() const {
     return context.hasUnknownFunctionError();
 }
 
-bool Builder::hasMissingSelectorAnnotationError() const {
+bool ExpressionContext::hasMissingSelectorAnnotationError() const {
     return context.hasMissingSelectorAnnotationError();
 }
 
-bool Builder::hasFormattingWarning() const {
+bool ExpressionContext::hasFormattingWarning() const {
     return context.hasFormattingWarning();
 }
 
-bool Builder::hasError() const {
+bool ExpressionContext::hasError() const {
     return context.hasError();
 }
 
-Builder& Builder::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
+    CHECK_ERROR(status);
 
     Error err(Error::Type::UnresolvedVariable, v);
     context.addError(err, status);
-    return *this;
 }
 
-Builder& Builder::setUnknownFunction(const FunctionName& fn, UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setUnknownFunction(const FunctionName& fn, UErrorCode& status) {
+    CHECK_ERROR(status);
 
     Error err(Error::Type::UnknownFunction, fn);
     context.addError(err, status);
 
-    return *this;
 }
 
-Builder& Builder::setMissingSelectorAnnotation(UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setMissingSelectorAnnotation(UErrorCode& status) {
+    CHECK_ERROR(status);
 
     Error err(Error::Type::MissingSelectorAnnotation);
     context.addError(err, status);
-    return *this;
 }
 
-Builder& Builder::setFormattingWarning(const UnicodeString& formatterName, UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setFormattingWarning(const UnicodeString& formatterName, UErrorCode& status) {
+    CHECK_ERROR(status);
 
     context.setFormattingWarning(formatterName, status);
-    return *this;
 }
 
-Builder& Builder::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {
+    CHECK_ERROR(status);
     
     Error err(Error::Type::SelectorError, selectorName);
     context.addError(err, status);
-    return *this;
 }
 
-Builder& Builder::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
+    CHECK_ERROR(status);
     
     Error err(Error::Type::SelectorError, selectorName.toString());
     context.addError(err, status);
-    return *this;
 }
 
-Builder& Builder::setReservedError(UErrorCode& status) {
-    THIS_ON_ERROR(status);
+void ExpressionContext::setReservedError(UErrorCode& status) {
+    CHECK_ERROR(status);
     
     Error err(Error::Type::ReservedError);
     context.addError(err, status);
-    return *this;
 }
 
-Builder::~Builder() {}
+ExpressionContext::~ExpressionContext() {}
 FormattingContext::~FormattingContext() {}
 
 number::FormattedNumber formatNumberWithDefaults(const Locale& locale, double toFormat, UErrorCode& errorCode) {
