@@ -15,14 +15,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-/*
-#include "unicode/format.h"
-#include "unicode/messageformat2_checker.h"
-#include "unicode/messageformat2_formatted_value.h"
-#include "unicode/messageformat2_macros.h"
-#include "unicode/unistr.h"
-*/
-
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/utypes.h"
 
@@ -30,6 +22,77 @@ U_NAMESPACE_BEGIN namespace message2 {
 
 class Formatter;
 class FormatterFactory;
+
+// Intermediate classes used internally in the formatter
+class Environment;
+
+// A closure represents the right-hand side of a variable
+// declaration, along with an environment giving values
+// to its free variables
+class Closure : public UMemory {
+    using Expression = MessageFormatDataModel::Expression;
+public:
+    static Closure* create(const Expression&, const Environment&, UErrorCode&);
+    const Expression& getExpr() const {
+        return expr;
+    }
+    const Environment& getEnv() const {
+        return env;
+    }
+    virtual ~Closure();
+private:
+    Closure(const Expression& expression, const Environment& environment) : expr(expression), env(environment) {}
+
+    // An unevaluated expression
+    const Expression& expr;
+    // The environment mapping names used in this
+    // expression to other expressions
+    const Environment& env;
+};
+
+// An environment is represented as a linked chain of
+// non-empty environments, terminating at an empty environment.
+// It's searched using linear search.
+class Environment : public UMemory {
+public:
+    virtual const Closure* lookup(const VariableName&) const = 0;
+    static Environment* create(UErrorCode&);
+    static Environment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+    virtual ~Environment();
+};
+
+class NonEmptyEnvironment;
+class EmptyEnvironment : public Environment {
+private:
+    friend class Environment;
+
+    const Closure* lookup(const VariableName&) const;
+    static EmptyEnvironment* create(UErrorCode&);
+    virtual ~EmptyEnvironment();
+    // Adopts its closure argument
+    static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+
+    EmptyEnvironment() {}
+};
+
+class NonEmptyEnvironment : public Environment {
+private:
+    friend class Environment;
+    const Closure* lookup(const VariableName&) const;
+    // Adopts its closure argument
+    static NonEmptyEnvironment* create(const VariableName&, Closure*, const Environment&, UErrorCode&);
+    virtual ~NonEmptyEnvironment();
+private:
+    friend class Environment;
+
+    NonEmptyEnvironment(const VariableName& v, Closure* c, const Environment& e) : var(v), rhs(c), parent(e) {}
+
+    // Maps VariableName onto Closure*
+    // Chain of linked environments
+    VariableName var;
+    const LocalPointer<Closure> rhs; // should be valid
+    const Environment& parent;
+};
 
 class Error : public UMemory {
     public:
