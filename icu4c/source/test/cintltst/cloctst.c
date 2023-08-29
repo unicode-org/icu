@@ -2508,6 +2508,10 @@ static void TestCanonicalization21749StackUseAfterScope(void)
                 input, u_errorName(status));
         return;
     }
+
+    // ICU-22475 test that we don't free an internal buffer twice.
+    status = U_ZERO_ERROR;
+    uloc_canonicalize("ti-defaultgR-lS-z-UK-0P", buffer, UPRV_LENGTHOF(buffer), &status);
 }
 
 static void TestDisplayKeywords(void)
