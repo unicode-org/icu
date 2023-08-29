@@ -564,14 +564,6 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
         rhsContext.adoptInstead(context.create(status));
         CHECK_ERROR(status);
         formatOperand(env, *v, *rhsContext, status);
-// TODO
-        CHECK_ERROR(status);
-/*
-        // Try to fully format the result
-        context.formatToString(locale, status);
-        CHECK_ERROR(status);
-*/
-
         // If formatting succeeded, pass the string
         if (rhsContext->hasStringOutput()) {
             context.setStringOption(k, rhsContext->getStringOutput(), status);
@@ -825,14 +817,20 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
         CHECK_ERROR(status);
         // 2i. Let rv be the resolved value of exp.
         formatSelectorExpression(env, *selectors.get(i), *rv, status);
-        if (!rv->hasSelector()) {
+        if (rv->hasSelector()) {
+            // 2ii. If selection is supported for rv:
+            // (True if this code has been reached)
+        } else {
+            // 2iii. Else:
+            // Let nomatch be a resolved value for which selection always fails.
+            // Append nomatch as the last element of the list res.
+            // Emit a Selection Error.
+            // (Note: in this case, rv, being a fallback, serves as `nomatch`)
             U_ASSERT(rv->hasUnknownFunctionError() || rv->hasSelectorError());
             U_ASSERT(rv->isFallback());
         }
-        // TODO: update this comment
-        // 2ii. If selection is supported for rv:
-        // (Always true, since here, selector functions are strings)
         // 2ii(a). Append rv as the last element of the list res.
+        // (Also fulfills 2iii)
         res.addElement(rv.orphan(), status);
     }
 }
