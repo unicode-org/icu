@@ -57,7 +57,7 @@ jobs:
           mvn install
       - name: List failures (if any)
         run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
   # ICU4J build and unit tests using Maven
@@ -90,7 +90,7 @@ jobs:
           cache: maven
       - name: Run Maven test
         run: |
-          cd icu4j/maven-build;
+          cd icu4j;
           mvn --batch-mode test
 
   # Run `verify` to ensure that `package` (creating .jar files) and `integration-test` (special setup for localespi tests) work
@@ -118,7 +118,7 @@ jobs:
       # integration tests, if any (`integration-test`)
       - name: Run Maven verify
         run: |
-          cd icu4j/maven-build;
+          cd icu4j;
           mvn --batch-mode verify
 
   # ICU4J build and unit test under lstm
@@ -148,7 +148,7 @@ jobs:
           mvn install
       - name: List failures (if any)
         run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
   # ICU4J build and unit test under adaboost
@@ -178,7 +178,7 @@ jobs:
           mvn -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true install
       - name: List failures (if any)
         run: |
-          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
   # gcc debug build.
