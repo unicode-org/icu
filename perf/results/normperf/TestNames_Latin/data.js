@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693263639813,
+  "lastUpdate": 1693329775312,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27358,6 +27358,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 7.4311,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "0cc2d9ed4c98ae34fc4f572f874a75e5ad298623",
+          "message": "ICU-22471 Bring ICU4J PersonNameFormatter up to date\n\n- Bring in the latest version of the CLDR PersonNameFormatter test data.\n- Fix PersonNameConsistencyTest to recognize the new “givenFirst” and “surnameFirst” keywords used in the test data files.\n- Fix tokenization code in InitialModifier to use a BreakIterator.  Add unit test.\n- Add support for the “retain” modifier.  Add unit test.\n- Remove the “log known failure” logic for all of the PersonNameConsistencyTest data files that pass now.",
+          "timestamp": "2023-08-29T12:54:56-04:00",
+          "tree_id": "e70f6cb762bddfbb0016cf2e1e7f93bec7610c66",
+          "url": "https://github.com/unicode-org/icu/commit/0cc2d9ed4c98ae34fc4f572f874a75e5ad298623"
+        },
+        "date": 1693329718486,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.0835,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 5.3578,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 5.4262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 5.368,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 5.4647,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 5.4698,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
