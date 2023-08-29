@@ -10,6 +10,9 @@ on:
     branches:
       - main	
       - 'maint/maint*'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
 
 permissions:
   contents: read
