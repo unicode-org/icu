@@ -24,7 +24,6 @@
     <module>main</module>
     <module>demos</module>
     <module>samples</module>
-    <module>tools/build</module>
     <module>tools/misc</module>
   </modules>
 
@@ -328,6 +327,20 @@
       </build>
     </profile>
 
+    <!-- The tools/build module depends on the old tools.jar (jdk 1.8)
+      The com.sun.javadoc package was deprecated in Java 11, and has been removed for Java 17.
+      JDK 11 does not include tools.jar anymore. The code must be updated, see migration guide at
+      https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
+    -->
+    <profile>
+      <id>old_jdk_taglet</id>
+      <activation>
+        <jdk>[1.7,1.8]</jdk>
+      </activation>
+      <modules>
+         <module>tools/build</module>
+      </modules>
+    </profile>
   </profiles>
 
 </project>
