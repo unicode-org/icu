@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693263092916,
+  "lastUpdate": 1693328791941,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11008,6 +11008,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.518840913293856,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "0cc2d9ed4c98ae34fc4f572f874a75e5ad298623",
+          "message": "ICU-22471 Bring ICU4J PersonNameFormatter up to date\n\n- Bring in the latest version of the CLDR PersonNameFormatter test data.\n- Fix PersonNameConsistencyTest to recognize the new “givenFirst” and “surnameFirst” keywords used in the test data files.\n- Fix tokenization code in InitialModifier to use a BreakIterator.  Add unit test.\n- Add support for the “retain” modifier.  Add unit test.\n- Remove the “log known failure” logic for all of the PersonNameConsistencyTest data files that pass now.",
+          "timestamp": "2023-08-29T12:54:56-04:00",
+          "tree_id": "e70f6cb762bddfbb0016cf2e1e7f93bec7610c66",
+          "url": "https://github.com/unicode-org/icu/commit/0cc2d9ed4c98ae34fc4f572f874a75e5ad298623"
+        },
+        "date": 1693328741029,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 5.006786738754274,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
