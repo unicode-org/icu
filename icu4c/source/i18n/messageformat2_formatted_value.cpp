@@ -21,7 +21,8 @@ using Builder = FormattedValueBuilder;
 /* static */ Builder* Builder::create(Context& context, const MessageFormatter& parent, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Builder> result(new FormattedValueBuilder(context, parent, errorCode));
+    LocalPointer<Builder> result(new
+ FormattedValueBuilder(context, parent, errorCode));
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
@@ -38,7 +39,6 @@ Builder::FormattedValueBuilder(Context& c, const MessageFormatter& mf, UErrorCod
     CHECK_ERROR(errorCode);
 
     initFunctionOptions(errorCode);
-    initErrors(errorCode);
 }
 
 void Builder::initFunctionOptions(UErrorCode& errorCode) {
@@ -46,11 +46,6 @@ void Builder::initFunctionOptions(UErrorCode& errorCode) {
     functionOptions.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
     CHECK_ERROR(errorCode);
     functionOptions->setValueDeleter(uprv_deleteUObject);
-}
-
-void Builder::initErrors(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    errors.adoptInstead(Errors::create(errorCode));
 }
 
 Errors::Errors(UErrorCode& errorCode) {
@@ -580,12 +575,12 @@ Selector* Builder::getSelector(UErrorCode& status) const {
 
 // Precondition: pending function name is set and formatter is defined
 // Postcondition: formatter != nullptr
-const Formatter* Builder::getFormatter(UErrorCode& status) const {
+const Formatter* Builder::getFormatter(UErrorCode& status) {
     NULL_ON_ERROR(status);
 
     U_ASSERT(pendingFunctionName.isValid());
     U_ASSERT(hasFormatter());
-    return context.maybeCachedFormatter(*pendingFunctionName, status);
+    return parent.maybeCachedFormatter(context, *pendingFunctionName, status);
 }
 
 bool Builder::hasFormatter() const {
@@ -677,238 +672,93 @@ void Builder::evalFormatterCall(const FunctionName& functionName, UErrorCode& st
 // Errors
 // -------
 
-Builder& Builder::propagateErrors(const FormattedValueBuilder& other, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    U_ASSERT(errors.isValid() && other.errors.isValid());
-    errors->include(*other.errors, errorCode);
-    return *this;
-}
-
-Builder& Builder::checkErrors(UErrorCode& status) {
-    THIS_ON_ERROR(status);
-
-    // TODO: figure out how to return a representation of the errors
-
-    U_ASSERT(errors.isValid());
-    errors->checkErrors(status);
-    return *this;
-}
-
-void Errors::checkErrors(UErrorCode& status) {
-    if (status != U_ZERO_ERROR) {
-        return;
-    }
-
-    // Just handle the first error
-    // TODO
-    if (count() == 0) {
-        return;
-    }
-    Error* err = (Error*) (*errors)[0];
-    switch (err->type) {
-        case Error::Type::UnknownFunction: {
-            status = U_UNKNOWN_FUNCTION_WARNING;
-            break;
-        }
-        case Error::Type::UnresolvedVariable: {
-            status = U_UNRESOLVED_VARIABLE_WARNING;
-            break;
-        }
-        case Error::Type::FormattingWarning: {
-            status = U_FORMATTING_WARNING;
-            break;
-        }
-        case Error::Type::MissingSelectorAnnotation: {
-            status = U_MISSING_SELECTOR_ANNOTATION;
-            break;
-        }
-
-        case Error::Type::ReservedError: {
-            status = U_UNSUPPORTED_PROPERTY;
-            break;
-        }
-        case Error::Type::SelectorError: {
-            status = U_SELECTOR_ERROR;
-            break;
-        }
-    }
-}
 
 bool Builder::hasDataModelError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasDataModelError();
+    return context.hasDataModelError();
 }
 
 bool Builder::hasParseError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasSyntaxError();
+    return context.hasParseError();
 }
 
 bool Builder::hasSelectorError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasSelectorError();
+    return context.hasSelectorError();
 }
 
 bool Builder::hasUnknownFunctionError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasUnknownFunctionError();
+    return context.hasUnknownFunctionError();
 }
 
 bool Builder::hasMissingSelectorAnnotationError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasMissingSelectorAnnotationError();
+    return context.hasMissingSelectorAnnotationError();
 }
 
 bool Builder::hasFormattingWarning() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasFormattingWarning();
+    return context.hasFormattingWarning();
 }
 
 bool Builder::hasError() const {
-    U_ASSERT(errors.isValid());
-    return errors->count() > 0;
+    return context.hasError();
 }
 
 bool Builder::hasWarning() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasWarning();
+    return context.hasWarning();
 }
 
 Builder& Builder::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
     THIS_ON_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::UnresolvedVariable, v);
-    errors->addError(err, status);
+    context.addError(err, status);
     return *this;
 }
 
 Builder& Builder::setUnknownFunction(const FunctionName& fn, UErrorCode& status) {
     THIS_ON_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::UnknownFunction, fn);
-    errors->addError(err, status);
+    context.addError(err, status);
+
     return *this;
 }
 
 Builder& Builder::setMissingSelectorAnnotation(UErrorCode& status) {
     THIS_ON_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::MissingSelectorAnnotation);
-    errors->addError(err, status);
+    context.addError(err, status);
     return *this;
 }
 
 Builder& Builder::setFormattingWarning(const UnicodeString& formatterName, UErrorCode& status) {
     THIS_ON_ERROR(status);
-    
-    U_ASSERT(errors.isValid());
-    Error err(Error::Type::FormattingWarning, formatterName);
-    errors->addError(err, status);
+
+    context.setFormattingWarning(formatterName, status);
     return *this;
 }
 
 Builder& Builder::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {
     THIS_ON_ERROR(status);
     
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::SelectorError, selectorName);
-    errors->addError(err, status);
+    context.addError(err, status);
     return *this;
 }
 
 Builder& Builder::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
     THIS_ON_ERROR(status);
     
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::SelectorError, selectorName.toString());
-    errors->addError(err, status);
+    context.addError(err, status);
     return *this;
 }
 
 Builder& Builder::setReservedError(UErrorCode& status) {
     THIS_ON_ERROR(status);
     
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::ReservedError);
-    errors->addError(err, status);
+    context.addError(err, status);
     return *this;
-}
-
-Errors* Errors::create(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    return new Errors(errorCode);
-}
-
-size_t Errors::count() const {
-    U_ASSERT(errors.isValid());
-    return ((size_t) errors->size());
-}
-
-void Errors::include(const Errors& other, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    dataModelError |= other.dataModelError;
-    missingSelectorAnnotationError |= other.missingSelectorAnnotationError;
-    selectorError |= other.selectorError;
-    syntaxError |= other.syntaxError;
-    unknownFunctionError |= other.unknownFunctionError;
-    warning |= other.warning;
-
-    LocalPointer<Error> err;
-    for (size_t i = 0; ((int32_t) i) < other.errors->size(); i++) {
-        const Error& otherErr = *((Error*) (*other.errors)[i]);
-        err.adoptInstead(new Error(otherErr));
-        if (!err.isValid()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        errors->adoptElement(err.orphan(), status);
-    }
-}
-
-void Errors::addError(Error e, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    U_ASSERT(errors.isValid());
-    Error* eP = new Error(e);
-    if (eP == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    errors->adoptElement(eP, status);
-    switch (e.type) {
-        case Error::Type::UnresolvedVariable: {
-            warning = true;
-            break;
-        }
-        case Error::Type::FormattingWarning: {
-            warning = true;
-            formattingWarning = true;
-            break;
-        }
-        case Error::Type::MissingSelectorAnnotation: {
-            missingSelectorAnnotationError = true;
-            break;
-        }
-        case Error::Type::ReservedError: {
-            dataModelError = true;
-            break;
-        }
-        case Error::Type::SelectorError: {
-            selectorError = true;
-            break;
-        }
-        case Error::Type::UnknownFunction: {
-            warning = true;
-            dataModelError = true;
-            unknownFunctionError = true;
-            break;
-        }
-    }
 }
 
 Builder::~Builder() {}

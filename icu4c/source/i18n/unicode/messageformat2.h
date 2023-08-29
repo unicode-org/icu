@@ -17,6 +17,7 @@
 
 #include "unicode/format.h"
 #include "unicode/messageformat2_checker.h"
+#include "unicode/messageformat2_context.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2_formatted_value.h"
 #include "unicode/messageformat2_function_registry.h"
@@ -37,88 +38,6 @@ U_NAMESPACE_BEGIN namespace message2 {
  * @internal ICU 74.0 technology preview
  * @deprecated This API is for technology preview only.
  */
-
-
-// TODO: doc comments
-// Represents the arguments to a message
-class U_I18N_API MessageArguments : public UMemory {
-  public:
-    class Builder {
-    public:
-        Builder& add(const UnicodeString&, const UnicodeString&, UErrorCode&);
-        Builder& addDouble(const UnicodeString&, double, UErrorCode&);
-        Builder& addInt64(const UnicodeString&, int64_t, UErrorCode&);
-        Builder& addLong(const UnicodeString&, long, UErrorCode&);
-        Builder& addDate(const UnicodeString&, UDate, UErrorCode&);
-        // Adds an array of strings
-        // Adopts its argument
-        Builder& add(const UnicodeString&, const UnicodeString*, size_t, UErrorCode&);
-        // Does not adopt its UObject argument. Argument must be non-null
-        Builder& addObject(const UnicodeString&, UObject*, UErrorCode&);
-        // Does not invalidate the builder
-        MessageArguments* build(UErrorCode&) const;
-    private:
-        friend class MessageArguments;
-        Builder(UErrorCode&);
-        Builder& add(const UnicodeString&, Formattable*, UErrorCode&);
-        LocalPointer<Hashtable> contents;
-        // Keep a separate hash table for objects, which does not
-        // own the values
-        // This is because a Formattable that wraps an object can't
-        // be copied
-        LocalPointer<Hashtable> objectContents;
-    }; // class MessageArguments::Builder
-    static Builder* builder(UErrorCode&);
-  private:
-    friend class Context;
-    friend class MessageFormatter;
-
-    bool has(const VariableName&) const;
-    const Formattable& get(const VariableName&) const;
-
-    MessageArguments& add(const UnicodeString&, Formattable*, UErrorCode&);
-    MessageArguments(Hashtable* c, Hashtable* o) : contents(c), objectContents(o) {}
-    LocalPointer<Hashtable> contents;
-    // Keep a separate hash table for objects, which does not
-    // own the values
-    LocalPointer<Hashtable> objectContents;
-}; // class MessageArguments
-
-
-// TODO: internal classes, should be private
-// TODO: maybe move to a different header file?
-
-    class Context;
-
-    // Map from expression pointers to Formatters
-    class CachedFormatters : public UMemory {
-        private:
-        friend class Context;
-        friend class MessageFormatter;
-
-        LocalPointer<Hashtable> cache;
-
-        const Formatter* getFormatter(const FunctionName&);
-        void setFormatter(const FunctionName&, Formatter*, UErrorCode& errorCode);
-        CachedFormatters(UErrorCode&);
-    };
-    // Context needed for formatting an expression
-
-    class Context : public UMemory {
-        public:
-        const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode& errorCode);
-
-        bool hasVar(const VariableName&) const;
-        const Formattable& getVar(const VariableName& var) const;
-
-        static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
-        private:
-        Context(const MessageFormatter& mf, const MessageArguments& args) : parent(mf), arguments(args) {}
-
-        const MessageFormatter& parent;
-        const MessageArguments& arguments; // External message arguments
-    };
-
 
 // Intermediate classes used internally in the formatter
 // TODO: these should be private to MessageFormatter, but are used by the FormattedValueBuilder so they aren't
@@ -427,8 +346,9 @@ public:
     class Checker {
     public:
         void check(UErrorCode& error);
-        Checker(const MessageFormatDataModel& m) : dataModel(m) {}
+        Checker(const MessageFormatDataModel& m, Errors& e) : dataModel(m), errors(e) {}
     private:
+        void requireAnnotated(const TypeEnvironment&, const MessageFormatDataModel::Expression&, UErrorCode&);
         void checkDeclarations(TypeEnvironment&, UErrorCode&);
         void checkSelectors(const TypeEnvironment&, UErrorCode&);
         void checkVariants(UErrorCode&);
@@ -437,173 +357,8 @@ public:
         void check(const MessageFormatDataModel::Expression&, UErrorCode&);
         void check(const MessageFormatDataModel::Pattern&, UErrorCode&);
         const MessageFormatDataModel& dataModel;
+        Errors& errors;
     };
-
-
-/*
-    // Represents a FormattedPlaceholder together with its fallback string
-    // (a representation of the source that will be used if a function call
-    // errors out on this operand).
-    // This is a separate class so that custom function implementations don't
-    // need to track fallback strings.
-    class FormattedPlaceholderWithFallback : public UMemory {
-        public:
-        // Annotate an existing FormattedPlaceholder with a fallback string
-        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const FormattedPlaceholder* fp, UErrorCode& status) {
-            NULL_ON_ERROR(status);
-            U_ASSERT(fp != nullptr);
-            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(fallbackString, fp);
-            if (result == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-        // STRING constructor
-        // Example: evaluating a literal would give:
-        // The fallback string is different: for example: fallbackString=|42|, fp={ input=Formattable("42"), s="42"}
-        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const UnicodeString& s, UErrorCode& status) {
-            NULL_ON_ERROR(status);
-     
-            LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(s, status));
-            NULL_ON_ERROR(status);
-            LocalPointer<FormattedPlaceholderWithFallback> result(new FormattedPlaceholderWithFallback(fallbackString, fp.orphan()));
-            if (!result.isValid()) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return nullptr;
-            }
-            return result.orphan();
-        }
-        // DYNAMIC constructor
-        static FormattedPlaceholderWithFallback* create(UnicodeString fallbackString, const Formattable& f, UErrorCode& status) {
-            NULL_ON_ERROR(status);
-     
-            LocalPointer<FormattedPlaceholder> fp(FormattedPlaceholder::create(f, status));
-            NULL_ON_ERROR(status);
-            LocalPointer<FormattedPlaceholderWithFallback> result(new FormattedPlaceholderWithFallback(fallbackString, fp.orphan()));
-            if (!result.isValid()) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return nullptr;
-            }
-            return result.orphan();
-        }
-        // FALLBACK constructor with specific fallback string
-        static FormattedPlaceholderWithFallback* createFallback(UnicodeString fallbackString, UErrorCode& status) {
-            NULL_ON_ERROR(status);
-     
-            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(fallbackString);
-            if (result == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-        // FALLBACK constructor with default fallback string
-        static FormattedPlaceholderWithFallback* createFallback(UErrorCode& status) {
-            NULL_ON_ERROR(status);
-     
-            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(UnicodeString(REPLACEMENT));
-            if (result == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-        // Extract the fallback string and use that to create a new FormattedPlaceholderWithFallback
-        FormattedPlaceholderWithFallback* fallbackToSource(UErrorCode& status) const {
-            NULL_ON_ERROR(status);
-            FormattedPlaceholderWithFallback* result = new FormattedPlaceholderWithFallback(fallbackString);
-            if (result == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }
-            return result;
-        }
-        bool isFallback() const {
-            return fp == nullptr;
-        }
-        // Invalidates `this` -- used when resolving options and we
-        // need to insert this into a hash table
-        const FormattedPlaceholder* getFormattedPlaceholderAlias() const {
-            U_ASSERT(!isFallback());
-   //         return fp.getAlias();
-            return fp;
-        }
-        const FormattedPlaceholder& getFormattedPlaceholder() const {
-            U_ASSERT(!isFallback());
-            return *fp;
-        }
-        // Creates a new STRING-typed FormattedPlaceholder with this
-        // fallback string. See `MessageFormatter:formatSelectorExpression()` for
-        // how this is used
-        FormattedPlaceholder* promoteFallback(UErrorCode& status) const {
-            U_ASSERT(isFallback());
-            return FormattedPlaceholder::create(fallbackString, status);
-        }
-        UnicodeString toString(const Locale& loc, UErrorCode& status) const {
-            if (U_FAILURE(status)) {
-                return UnicodeString();
-            }
-            // If it's a fallback, just return the fallback string
-            if (fp == nullptr) {
-                return bracesFallbackString();
-            }
-            return fp->toString(loc, status);
-        }
-        const UnicodeString& getFallbackString() const {
-            return fallbackString;
-        }
-        private:
-        FormattedPlaceholderWithFallback(UnicodeString fb, const FormattedPlaceholder* fph) : fallbackString(fb), fp(fph) { U_ASSERT(fph != nullptr); } 
-        FormattedPlaceholderWithFallback(UnicodeString fb) : fallbackString(fb), fp(nullptr) {}
-        
-       UnicodeString bracesFallbackString() const {
-"If the resolved pattern includes any fallback values and the formatting result is a concatenated string or a sequence of strings, the string representation of each fallback value MUST be the concatenation of a U+007B LEFT CURLY BRACKET {, the fallback value as a string, and a U+007D RIGHT CURLY BRACKET }."
-
-See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
-            UnicodeString result;
-            result += LEFT_CURLY_BRACE;
-            result += fallbackString;
-            result += RIGHT_CURLY_BRACE;
-            return result;
-       }
-
-        // This is used in examples like the following:
-           
-           let $var = {|42| :number}
-           {{$var :datetime}}
-           
-           The :datetime function errors, so we need to use
-           |42| as the fallback. This is neither the string "$var"
-           nor $var's value (42) nor the static representation
-           of var's RHS ("{|42| :number}"). Thus it needs to be
-           dynamically determined.
-        
-        const UnicodeString fallbackString;
-
-        // Null if this is a fallback
-        const FormattedPlaceholder* fp;
-    }; // class FormattedPlaceholderWithFallback
-*/
-
-    // `ResolvedExpression`
-    // represents the result of resolving an expression in a selector
-    // context.
-    // The selector function is `:identity` for a simple expression,
-    // and the looked-up selector function otherwise.
-    // The `FunctionRegistry::Options` is the result of resolving the options
-    // in the annotation.
-    // The `operand` is the result of resolving the operand.
-/*
-    class ResolvedExpression : public UMemory {
-    public:
-        virtual ~ResolvedExpression();
-        const bool isFallback; // if isFallback is true, this expression will be matched to the catchall variant
-        const LocalPointer<Selector> selectorFunction;
-        const LocalPointer<FunctionRegistry::Options> resolvedOptions;
-        const FormattedPlaceholder* resolvedOperand;
-        // Adopts all its arguments
-        ResolvedExpression(Selector* s, FunctionRegistry::Options* o, const FormattedPlaceholder* r) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(r) {}
-        ResolvedExpression(Selector* s, FunctionRegistry::Options* o) : isFallback(false), selectorFunction(s), resolvedOptions(o), resolvedOperand(nullptr) {}
-        ResolvedExpression() : isFallback(true), resolvedOperand(nullptr) {}
-    }; // class ResolvedExpression
-*/
 
      void resolveVariables(const Environment& env, const MessageFormatDataModel::Operand&, FormattedValueBuilder&, UErrorCode &) const;
      void resolveVariables(const Environment& env, const MessageFormatDataModel::Expression&, FormattedValueBuilder&, UErrorCode &) const;
@@ -626,10 +381,12 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      void formatSelectors(Context& context, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods
+     const Formatter* maybeCachedFormatter(Context&, const FunctionName&, UErrorCode& errorCode) const;
+
      bool isBuiltInSelector(const FunctionName&) const;
      bool isBuiltInFormatter(const FunctionName&) const;
      const SelectorFactory* lookupSelectorFactory(const FunctionName&, UErrorCode& status) const;
-     FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode& status) const;
+     FormatterFactory* lookupFormatterFactory(Context&, const FunctionName&, UErrorCode& status) const;
 
      bool hasCustomFunctionRegistry() const {
          return (customFunctionRegistry != nullptr);
@@ -659,8 +416,8 @@ See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.m
      // Normalized version of the input string (optional whitespace removed)
      LocalPointer<UnicodeString> normalizedInput;
 
-     // Formatter cache -- note: this is the only mutable part of the MessageFormatter
-     LocalPointer<CachedFormatters> cachedFormatters;
+    // Formatter cache
+    LocalPointer<CachedFormatters> cachedFormatters;
 }; // class MessageFormatter
 
 // For how this class is used, see the references to (integer, variant) tuples

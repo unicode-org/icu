@@ -16,6 +16,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/formattedvalue.h"
+#include "unicode/messageformat2_context.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2_macros.h"
 #include "unicode/numberformatter.h"
@@ -38,75 +39,11 @@ extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, in
   TODO: docs
 */
 
+using Literal = MessageFormatDataModel::Literal;
 
-using Literal         = MessageFormatDataModel::Literal;
-
-class Context;
 class Formatter;
 class FunctionRegistry;
 class MessageFormatter;
-
-class Error : public UMemory {
-    public:
-    enum Type {
-        UnresolvedVariable,
-        FormattingWarning,
-        MissingSelectorAnnotation,
-        ReservedError,
-        SelectorError,
-        UnknownFunction
-    };
-    Error(Type ty) : type(ty) {
-        U_ASSERT(ty == ReservedError);
-    }
-    Error(Type ty, const Text& t) : type(ty), contents(t.toString()) {} 
-    Error(Type ty, const UnicodeString& s) : type(ty), contents(s) {}
-    virtual ~Error();
-    private:
-    friend class Errors;
-
-    Type type;
-    UnicodeString contents;
-}; // class Error
-
-class Errors : public UMemory {
-    private:
-    LocalPointer<UVector> errors;
-    bool dataModelError;
-    bool formattingWarning;
-    bool missingSelectorAnnotationError;
-    bool selectorError;
-    bool syntaxError;
-    bool unknownFunctionError;
-    bool warning;
-    Errors(UErrorCode& errorCode);
-
-    public:
-    static Errors* create(UErrorCode&);
-
-    size_t count() const;
-    void addNonexhaustivePattern();
-    void addDuplicateOption();
-    void addSelectorError();
-    void addMissingSelectorAnnotation();
-    void addUnresolvedVariable(const VariableName&);
-    void addSyntaxError();
-    void addUnknownFunction(const FunctionName&);
-    void addVariantKeyMismatch();
-    void addFormattingError();
-    bool hasDataModelError() const { return dataModelError; }
-    bool hasFormattingWarning() const { return formattingWarning; }
-    bool hasSelectorError() const { return selectorError; }
-    bool hasSyntaxError() const { return syntaxError; }
-    bool hasUnknownFunctionError() const { return unknownFunctionError; }
-    bool hasMissingSelectorAnnotationError() const { return missingSelectorAnnotationError; }
-    bool hasWarning() const { return warning; }
-    void addError(Error, UErrorCode&);
-    void include(const Errors&, UErrorCode&);
-    void checkErrors(UErrorCode&);
-
-    virtual ~Errors();
-}; // class Errors
 
 // Interface that functions have access to
 class FormattingContext : public UMemory {
@@ -172,7 +109,7 @@ class FormattedValueBuilder : public FormattingContext {
     // Precondition: hasSelector()
     Selector* getSelector(UErrorCode&) const;
     // Precondition: hasFormatter()
-    const Formatter* getFormatter(UErrorCode&) const;
+    const Formatter* getFormatter(UErrorCode&);
     void doSelectorCall(const UnicodeString[], size_t, UnicodeString[], size_t&, UErrorCode&);
     void returnFromFunction();
     const FunctionRegistry& customRegistry() const;
@@ -182,7 +119,6 @@ class FormattedValueBuilder : public FormattingContext {
     Builder& promoteFallbackToOutput();
     void formatInputWithDefaults(const Locale&, UErrorCode&);
     void initFunctionOptions(UErrorCode&);
-    void initErrors(UErrorCode&);
     Formattable* getOption(const UnicodeString&, Formattable::Type) const;
     void replaceFunctionName(const FunctionName&, UErrorCode&);
     bool tryStringAsNumberOption(const UnicodeString&, double&) const;
@@ -208,7 +144,6 @@ class FormattedValueBuilder : public FormattingContext {
     number::FormattedNumber numberOutput;
 
     LocalPointer<Hashtable> functionOptions;
-    LocalPointer<Errors> errors;
 
     static FormattedValueBuilder* create(Context&, const MessageFormatter&, UErrorCode&);
     // Creates a new builder sharing this's context and parent
@@ -243,9 +178,6 @@ class FormattedValueBuilder : public FormattingContext {
     Builder& setObjectInput(UObject*);
     Builder& setOutput(const UnicodeString&);
     Builder& setOutput(number::FormattedNumber&&);
-    Builder& propagateErrors(const FormattedValueBuilder& localContext, UErrorCode&);
-    // If any errors were set, update `status` accordingly
-    Builder& checkErrors(UErrorCode& status);
     Builder& promoteFallbackToInput();
     // Doesn't change output if it already exists
     // Appends to `result`

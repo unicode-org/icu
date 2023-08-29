@@ -120,10 +120,6 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     CHECK_ERROR(success);
     standardFunctionRegistry->checkStandard();
 
-    // Initialize formatter cache
-    cachedFormatters.adoptInstead(new CachedFormatters(success));
-    CHECK_ERROR(success);
-
     // Validate pattern and build data model
     // First, check that exactly one of the pattern and data model are set, but not both
 
@@ -147,6 +143,9 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
       return;
     }
 
+    // Initialize formatter cache
+    cachedFormatters.adoptInstead(new CachedFormatters(success));
+
     // Parse the pattern
     normalizedInput.adoptInstead(new UnicodeString(u""));
     if (!normalizedInput.isValid()) {
@@ -167,28 +166,10 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     if (U_SUCCESS(success)) {
       dataModel.adoptInstead(dataModelPtr.orphan());
     }
-
-    // Check for data model errors
-    Checker(*dataModel).check(success);
 }
 
 MessageFormatDataModel::~MessageFormatDataModel() {}
 MessageFormatter::~MessageFormatter() {}
-
-static bool isMessageFormatWarning(UErrorCode status) {
-    switch(status) {
-        case U_FORMATTING_WARNING:
-        case U_UNRESOLVED_VARIABLE_WARNING:
-        case U_SYNTAX_WARNING:
-        case U_UNKNOWN_FUNCTION_WARNING:
-        case U_VARIANT_KEY_MISMATCH_WARNING: {
-            return true;
-        }
-        default: {
-            return false;
-        }
-    }
-}
 
 // ------------------------------------------------------
 // MessageArguments
@@ -431,81 +412,70 @@ MessageArguments* MessageArguments::Builder::build(UErrorCode& errorCode) const 
 }
 
 // ------------------------------------------------------
-// Context
+// Formatting
 
-const Formatter* CachedFormatters::getFormatter(const FunctionName& f) {
-    U_ASSERT(cache.isValid());
-    return ((Formatter*) cache->get(f.toString()));
-}
+FormatterFactory* MessageFormatter::lookupFormatterFactory(Context& context, const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
 
-void CachedFormatters::setFormatter(const FunctionName& f, Formatter* val, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    U_ASSERT(cache.isValid());
-    cache->put(f.toString(), val, errorCode);
-}
-
-CachedFormatters::CachedFormatters(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    cache.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
-    CHECK_ERROR(errorCode);
-    // The cache owns the values
-    cache->setValueDeleter(uprv_deleteUObject);
-}
-
-bool Context::hasVar(const VariableName& v) const {
-    return arguments.has(v);
-} 
-
-const Formattable& Context::getVar(const VariableName& f) const {
-    U_ASSERT(hasVar(f));
-    return arguments.get(f);
-} 
-
-/* static */ Context* Context::create(const MessageFormatter& mf, const Arguments& args, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Context* result = new Context(mf, args);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    if (isBuiltInFormatter(functionName)) {
+        return standardFunctionRegistry->getFormatter(functionName);
     }
-    return result;
+    if (isBuiltInSelector(functionName)) {
+        context.setFormattingWarning(functionName, status);
+        return nullptr;
+    }
+    if (hasCustomFunctionRegistry()) {
+        const FunctionRegistry& customFunctionRegistry = getCustomFunctionRegistry();
+        FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
+        if (customFormatter != nullptr) {
+            return customFormatter;
+        }
+        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
+            status = U_FORMATTING_WARNING;
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    setError(U_UNKNOWN_FUNCTION_WARNING, status);
+    return nullptr;
 }
 
-const Formatter* Context::maybeCachedFormatter(const FunctionName& f, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    U_ASSERT(parent.cachedFormatters.isValid());
 
-    const Formatter* result = parent.cachedFormatters->getFormatter(f);
+const Formatter* MessageFormatter::maybeCachedFormatter(Context& context, const FunctionName& f, UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+    U_ASSERT(cachedFormatters.isValid());
+
+    const Formatter* result = cachedFormatters->getFormatter(f);
     if (result == nullptr) {
         // Create the formatter
 
         // First, look up the formatter factory for this function
-        FormatterFactory* formatterFactory = parent.lookupFormatterFactory(f, errorCode);
+        FormatterFactory* formatterFactory = lookupFormatterFactory(context, f, errorCode);
         NULL_ON_ERROR(errorCode);
         // If the formatter factory was null, there must have been
         // an earlier error/warning
         if (formatterFactory == nullptr) {
-            U_ASSERT(isMessageFormatWarning(errorCode));
+            U_ASSERT(context.hasWarning());
             return nullptr;
         }
         NULL_ON_ERROR(errorCode);
 
         // Create a specific instance of the formatter
-        Formatter* formatter = formatterFactory->createFormatter(parent.locale, errorCode);
+        Formatter* formatter = formatterFactory->createFormatter(locale, errorCode);
         NULL_ON_ERROR(errorCode);
         if (formatter == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
-        parent.cachedFormatters->setFormatter(f, formatter, errorCode);
+        cachedFormatters->setFormatter(f, formatter, errorCode);
         return formatter;
     } else {
         return result;
     }
 }
-
-// ------------------------------------------------------
-// Formatting
 
 static const Formattable& evalLiteral(const Literal& lit) {
     return lit.getContents();
@@ -637,7 +607,6 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
             // ignore fallbacks
             U_ASSERT(rhsContext->isFallback());
         }
-        context.propagateErrors(*rhsContext, status);
     }
 }
 
@@ -663,35 +632,6 @@ const SelectorFactory* MessageFormatter::lookupSelectorFactory(const FunctionNam
         }
         if (customFunctionRegistry.getFormatter(functionName) != nullptr) {
             status = U_SELECTOR_ERROR;
-            return nullptr;
-        }
-    }
-    // Either there is no custom function registry and the function
-    // isn't built-in, or the function doesn't exist in either the built-in
-    // or custom registry.
-    // Unknown function error
-    setError(U_UNKNOWN_FUNCTION_WARNING, status);
-    return nullptr;
-}
-
-FormatterFactory* MessageFormatter::lookupFormatterFactory(const FunctionName& functionName, UErrorCode& status) const {
-    NULL_ON_ERROR(status);
-
-    if (isBuiltInFormatter(functionName)) {
-        return standardFunctionRegistry->getFormatter(functionName);
-    }
-    if (isBuiltInSelector(functionName)) {
-        status = U_FORMATTING_WARNING;
-        return nullptr;
-    }
-    if (customFunctionRegistry != nullptr) {
-        const FunctionRegistry& customFunctionRegistry = getCustomFunctionRegistry();
-        FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
-        if (customFormatter != nullptr) {
-            return customFormatter;
-        }
-        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
-            status = U_FORMATTING_WARNING;
             return nullptr;
         }
     }
@@ -864,8 +804,6 @@ void MessageFormatter::formatPattern(Context& globalContext, const Environment& 
             context->formatToString(locale, status);
             CHECK_ERROR(status);
             result += context->getStringOutput();
-            // TODO -- not quite right -- not all errors will be reported
-            context->checkErrors(status);
         }
     }
 }
@@ -887,9 +825,6 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
             U_ASSERT(rv->hasUnknownFunctionError() || rv->hasSelectorError());
             U_ASSERT(rv->isFallback());
         }
-        // TODO -- not quite right -- not all errors will be reported
-        rv->checkErrors(status);
-      
         // TODO: update this comment
         // 2ii. If selection is supported for rv:
         // (Always true, since here, selector functions are strings)
@@ -952,7 +887,6 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys, FormattedValueBuil
     size_t numberMatching = 0;
     rv.evalPendingSelectorCall(keysIn.getAlias(), numKeys, keysOut.getAlias(), numberMatching, status);
     CHECK_ERROR(status);
-    rv.checkErrors(status);
     arrayToKeys(keysOut.getAlias(), numberMatching, matches, status);
 }
 
@@ -1285,6 +1219,10 @@ void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &st
     // only be checked when arguments are known)
 
     LocalPointer<Context> context(Context::create(*this, arguments, status));
+    CHECK_ERROR(status);
+
+    // Check for data model errors
+    Checker(*dataModel, context->getErrors()).check(status);
 
     Environment* env = Environment::create(status);
     CHECK_ERROR(status);
@@ -1297,12 +1235,14 @@ void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &st
     } else {
         // Check for errors/warnings -- if so, then the result is the fallback value
         // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
-        if (isMessageFormatWarning(status)) {
+        if (context->hasWarning() || context->hasDataModelError()) {
             result += REPLACEMENT;
-            return;
+        } else {
+            formatSelectors(*context, *globalEnv, dataModel->getSelectors(), dataModel->getVariants(), status, result);
         }
-        formatSelectors(*context, *globalEnv, dataModel->getSelectors(), dataModel->getVariants(), status, result);
     }
+    // Update status according to all errors seen while formatting
+    context->checkErrors(status);
     return;
 }
 

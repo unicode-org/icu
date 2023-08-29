@@ -111,18 +111,18 @@ void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
         const KeyList& keys = selectorKeys->getKeys();
         if (keys.length() != numSelectors) {
             // Variant key mismatch
-            setError(U_VARIANT_KEY_MISMATCH_WARNING, error);
+            errors.addError(Error::Type::VariantKeyMismatchWarning, error);
             return;
         }
         defaultExists |= areDefaultKeys(keys);
     }
     if (!defaultExists) {
-        setError(U_NONEXHAUSTIVE_PATTERN, error);
+        errors.addError(Error::Type::NonexhaustivePattern, error);
         return;
     }
 }
 
-void requireAnnotated(const TypeEnvironment& t, const Expression& selectorExpr, UErrorCode& error) {
+void MessageFormatter::Checker::requireAnnotated(const TypeEnvironment& t, const Expression& selectorExpr, UErrorCode& error) {
     CHECK_ERROR(error);
 
     if (selectorExpr.isFunctionCall()) {
@@ -137,7 +137,7 @@ void requireAnnotated(const TypeEnvironment& t, const Expression& selectorExpr, 
         }
     }
     // If this code is reached, an error was detected
-    setError(U_MISSING_SELECTOR_ANNOTATION, error);
+    errors.addError(Error::Type::MissingSelectorAnnotation, error);
 }
 
 void MessageFormatter::Checker::checkSelectors(const TypeEnvironment& t, UErrorCode& error) {
@@ -186,7 +186,6 @@ void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode
     }
 }
 
-// Currently, this only reports the first data model error
 void MessageFormatter::Checker::check(UErrorCode& error) {
     CHECK_ERROR(error);
 
