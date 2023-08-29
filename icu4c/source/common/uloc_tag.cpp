@@ -2092,12 +2092,13 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             int32_t oldTagLength = tagLen;
             if (tagLen < newTagLength) {
                 uprv_free(tagBuf);
-                tagBuf = (char*)uprv_malloc(newTagLength + 1);
+                // Change t->buf after the free and before return to avoid the second double free in
+                // the destructor of t when t is out of scope.
+                t->buf = tagBuf = (char*)uprv_malloc(newTagLength + 1);
                 if (tagBuf == nullptr) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     return nullptr;
                 }
-                t->buf = tagBuf;
                 tagLen = newTagLength;
             }
             parsedLenDelta = checkLegacyLen - replacementLen;
