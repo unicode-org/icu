@@ -156,6 +156,7 @@ jobs:
 
   # ICU4J build and unit test under adaboost
   adaboost-icu4j-build-and-test:
+    if: false # Temporary disable, until we disable the .jar creation from C and distribute the individual files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
