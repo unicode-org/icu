@@ -387,6 +387,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("no braces")
+                      .clearIgnoreError()
                       .setExpected("{no braces}")
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
@@ -423,8 +424,8 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     // where the expected output contains '{'/'}' enclosing the contents of the bad expression
     // changed the expected output to { } here
     test.adoptInstead(testBuilder->setPattern("{empty { }}")
-                      .setExpected("empty { }")
                       .setExpectedWarning(U_SYNTAX_WARNING)
+                      .clearExpected()
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -441,7 +442,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {\\u0000placeholder}}")
-                      .setExpected("bad {\\u0000placeholder}")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -471,13 +472,13 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {$placeholder option}}")
-                      .setExpected("bad {$placeholder}")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{no {$placeholder end}")
-                      .setExpected("no {$placeholder}")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);

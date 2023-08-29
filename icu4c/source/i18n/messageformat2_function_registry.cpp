@@ -407,8 +407,7 @@ void StandardFunctions::Number::format(FormattingContext& context, UErrorCode& e
         break;
     }
     case Formattable::Type::kString: {
-        // Try to parse the string as a number, as in the `else` case there
-        // TODO: see if the behavior here matches the function registry spec
+        // Try to parse the string as a number
         stringAsNumber(locale, *realFormatter, context, toFormat.getString(), offset, errorCode);
         return;
     }

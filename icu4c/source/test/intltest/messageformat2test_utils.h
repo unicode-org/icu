@@ -131,6 +131,10 @@ class TestCase : public UMemory {
             expected = e;
             return *this;
         }
+        Builder& clearExpected() {
+            hasExpectedOutput = false;
+            return *this;
+        }
         Builder& setExpectedError(UErrorCode errorCode) {
             expectedError = U_SUCCESS(errorCode) ? U_ZERO_ERROR : errorCode;
             return *this;
@@ -168,6 +172,10 @@ class TestCase : public UMemory {
         }
         Builder& setIgnoreError() {
             ignoreError = true;
+            return *this;
+        }
+        Builder& clearIgnoreError() {
+            ignoreError = false;
             return *this;
         }
         Builder& setFunctionRegistry(FunctionRegistry* reg) {
