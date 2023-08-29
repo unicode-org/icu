@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693328776770,
+  "lastUpdate": 1693345256283,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11068,6 +11068,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.5579502341056606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "2207e2c3dfc4142fecba922c7818a36924ece782",
+          "message": "ICU-22324 Exclude tools/build from jdk > 8",
+          "timestamp": "2023-08-29T14:35:47-07:00",
+          "tree_id": "849fc901661cf510cb8f057045c3b78ada4a5fc5",
+          "url": "https://github.com/unicode-org/icu/commit/2207e2c3dfc4142fecba922c7818a36924ece782"
+        },
+        "date": 1693345191592,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.202053282544859,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
