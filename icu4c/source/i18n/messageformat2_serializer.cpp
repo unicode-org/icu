@@ -107,6 +107,8 @@ void SERIALIZER::emit(const SelectorKeys& k) {
 }
 
 void SERIALIZER::emit(const Operand& rand) {
+    U_ASSERT(!rand.isNull());
+
     if (rand.isVariable()) {
         emit(*rand.asVariable());
     } else {

@@ -565,7 +565,7 @@ Selector* Builder::getSelector(UErrorCode& status) const {
 
     U_ASSERT(pendingFunctionName.isValid());
     const FunctionName& functionName = *pendingFunctionName;
-    const SelectorFactory* selectorFactory = parent.lookupSelectorFactory(functionName, status);
+    const SelectorFactory* selectorFactory = parent.lookupSelectorFactory(context, functionName, status);
     NULL_ON_ERROR(status);
     // Create a specific instance of the selector
     LocalPointer<Selector> result(selectorFactory->createSelector(parent.locale, status));
@@ -615,9 +615,6 @@ void Builder::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys
             setFallback();
             status = U_ZERO_ERROR;
             setSelectorError(pendingFunctionName->name(), status);
-            if (U_SUCCESS(status)) {
-                status = U_SELECTOR_ERROR;
-            }
         } else {
             // Ignore warnings
             status = savedStatus;

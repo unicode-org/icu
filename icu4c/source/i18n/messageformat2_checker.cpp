@@ -162,6 +162,7 @@ Type typeOf(TypeEnvironment& t, const Expression& expr) {
         return Type::Unannotated;
     }
     const Operand& rand = expr.getOperand();
+    U_ASSERT(!rand.isNull());
     if (rand.isLiteral()) {
         return Type::Unannotated;
     }

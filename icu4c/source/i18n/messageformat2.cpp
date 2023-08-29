@@ -160,10 +160,17 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     if (U_FAILURE(success)) {
       return;
     }
+    // TODO: this should really just pass around the Errors data structure
+    UErrorCode savedStatus = success;
     
     // Build the data model based on what was parsed
     LocalPointer<MessageFormatDataModel> dataModelPtr(tree->build(success));
     if (U_SUCCESS(success)) {
+        // TODO: Don't overwrite the error, but it would be better to just have
+        // everything take the Errors data structure
+        if (savedStatus == U_SYNTAX_WARNING) {
+            success = savedStatus;
+        }
       dataModel.adoptInstead(dataModelPtr.orphan());
     }
 }
@@ -439,7 +446,7 @@ FormatterFactory* MessageFormatter::lookupFormatterFactory(Context& context, con
     // isn't built-in, or the function doesn't exist in either the built-in
     // or custom registry.
     // Unknown function error
-    setError(U_UNKNOWN_FUNCTION_WARNING, status);
+    context.setUnknownFunctionWarning(functionName, status);
     return nullptr;
 }
 
@@ -614,14 +621,14 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
 // Unknown function = unknown function error
 // Formatter used as selector  = selector error
 // Selector used as formatter = formatting error
-const SelectorFactory* MessageFormatter::lookupSelectorFactory(const FunctionName& functionName, UErrorCode& status) const {
+const SelectorFactory* MessageFormatter::lookupSelectorFactory(Context& context, const FunctionName& functionName, UErrorCode& status) const {
     NULL_ON_ERROR(status);
 
     if (isBuiltInSelector(functionName)) {
         return standardFunctionRegistry->getSelector(functionName);
     }
     if (isBuiltInFormatter(functionName)) {
-        status = U_SELECTOR_ERROR;
+        context.setSelectorError(functionName, status);
         return nullptr;
     }
     if (customFunctionRegistry != nullptr) {
@@ -631,7 +638,7 @@ const SelectorFactory* MessageFormatter::lookupSelectorFactory(const FunctionNam
             return customSelector;
         }
         if (customFunctionRegistry.getFormatter(functionName) != nullptr) {
-            status = U_SELECTOR_ERROR;
+            context.setSelectorError(functionName, status);
             return nullptr;
         }
     }
@@ -639,9 +646,10 @@ const SelectorFactory* MessageFormatter::lookupSelectorFactory(const FunctionNam
     // isn't built-in, or the function doesn't exist in either the built-in
     // or custom registry.
     // Unknown function error
-    setError(U_UNKNOWN_FUNCTION_WARNING, status);
+    context.setUnknownFunctionWarning(functionName, status);
     return nullptr;
 }
+
 
 // hasOperand set to true if `rand` resolves to an expression that's a unary function call
 // for example $foo => {$bar :plural} => hasOperand set to true
@@ -696,9 +704,9 @@ void MessageFormatter::resolveVariables(const Environment& env, const Expression
         context.setFunctionName(rator.getFunctionName(), status);
         resolveOptions(env, rator.getOptions(), context, status);
         // Operand may be the null argument, but resolveVariables() handles that
-        formatOperand(env, expr.getAnyOperand(), context, status);
+        formatOperand(env, expr.getOperand(), context, status);
     } else {
-        resolveVariables(env, expr.getAnyOperand(), context, status);
+        resolveVariables(env, expr.getOperand(), context, status);
     }
 }
 
@@ -752,7 +760,7 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
         return;
     }
 
-    const Operand& rand = expr.getAnyOperand();
+    const Operand& rand = expr.getOperand();
     // Format the argument, which may be null (formatOperand handles that)
     formatOperand(globalEnv, rand, context, status);
 
@@ -1134,7 +1142,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
     formatPattern(context, env, pat, status, result);
 }
 
-void MessageFormatter::check(const Arguments& globalEnv, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
+void MessageFormatter::check(Context& context, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check the RHS of each option
@@ -1146,15 +1154,15 @@ void MessageFormatter::check(const Arguments& globalEnv, const Environment& loca
             break;
         }
         U_ASSERT(rhs != nullptr);
-        check(globalEnv, localEnv, *rhs, status);
+        check(context, localEnv, *rhs, status);
     }
 }
 
-void MessageFormatter::check(const Arguments& globalEnv, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
+void MessageFormatter::check(Context& context, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Nothing to check for literals
-    if (rand.isLiteral()) {
+    if (rand.isLiteral() || rand.isNull()) {
         return;
     }
 
@@ -1165,28 +1173,26 @@ void MessageFormatter::check(const Arguments& globalEnv, const Environment& loca
         return;
     }
     // Check global scope
-    if (globalEnv.has(var)) {
+    if (context.hasVar(var)) {
         return;
     }
-    setError(U_UNRESOLVED_VARIABLE_WARNING, status);
+    context.setUnresolvedVariableWarning(var, status);
 }
 
-void MessageFormatter::check(const Arguments& globalEnv, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
+void MessageFormatter::check(Context& context, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check for unresolved variable errors
     if (expr.isFunctionCall()) {
         const Operator& rator = expr.getOperator();
-        if (!expr.isStandaloneAnnotation()) {
-            const Operand& rand = expr.getOperand();
-            check(globalEnv, localEnv, rand, status);
-        }
-        check(globalEnv, localEnv, rator.getOptions(), status);
+        const Operand& rand = expr.getOperand();
+        check(context, localEnv, rand, status);
+        check(context, localEnv, rator.getOptions(), status);
     }
 }
 
 // Check for resolution errors
-void MessageFormatter::checkDeclarations(const Arguments& arguments, Environment*& env, UErrorCode &status) const {
+void MessageFormatter::checkDeclarations(Context& context, Environment*& env, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     const Bindings& decls = dataModel->getLocalVariables();
@@ -1196,7 +1202,7 @@ void MessageFormatter::checkDeclarations(const Arguments& arguments, Environment
         const Binding* decl = decls.get(i);
         U_ASSERT(decl != nullptr);
         const Expression* rhs = decl->getValue();
-        check(arguments, *env, *rhs, status);
+        check(context, *env, *rhs, status);
 
         // Add a closure to the global environment,
         // memoizing the value of localEnv up to this point
@@ -1226,7 +1232,7 @@ void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &st
 
     Environment* env = Environment::create(status);
     CHECK_ERROR(status);
-    checkDeclarations(arguments, env, status);
+    checkDeclarations(*context, env, status);
     CHECK_ERROR(status);
     LocalPointer<Environment> globalEnv(env);
 

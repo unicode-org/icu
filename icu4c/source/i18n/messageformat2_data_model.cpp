@@ -296,7 +296,7 @@ Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operan
     }
     // If the option name is already in the map, emit a data model error
     if (options->has(key)) {
-        errorCode = U_DUPLICATE_OPTION_NAME;
+        errorCode = U_DUPLICATE_OPTION_NAME_WARNING;
     } else {
         options->add(key, value, errorCode);
     }
@@ -426,13 +426,8 @@ const Operator& Expression::getOperator() const {
     return *rator;
 }
 
-const Operand& Expression::getOperand() const {
-    U_ASSERT(!isStandaloneAnnotation());
-    return *rand;
-}
-
 // May return null operand
-const Operand& Expression::getAnyOperand() const {
+const Operand& Expression::getOperand() const {
     return *rand;
 }
 

@@ -97,6 +97,30 @@ void Context::setFormattingWarning(const FunctionName& formatterName, UErrorCode
     errors->addError(err, status);
  }
 
+void Context::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    U_ASSERT(errors.isValid());
+    Error err(Error::Type::SelectorError, selectorName);
+    errors->addError(err, status);
+ }
+
+void Context::setUnknownFunctionWarning(const FunctionName& formatterName, UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    U_ASSERT(errors.isValid());
+    Error err(Error::Type::UnknownFunction, formatterName);
+    errors->addError(err, status);
+ }
+
+void Context::setUnresolvedVariableWarning(const VariableName& v, UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    U_ASSERT(errors.isValid());
+    Error err(Error::Type::UnresolvedVariable, v);
+    errors->addError(err, status);
+ }
+
 bool Context::hasParseError() const {
     U_ASSERT(errors.isValid());
     return errors->hasSyntaxError();
@@ -125,6 +149,17 @@ bool Context::hasWarning() const {
 void Context::initErrors(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     errors.adoptInstead(Errors::create(errorCode));
+    CHECK_ERROR(errorCode);
+    // This is annoying, but avoids having to pass an Errors data structure
+    // to the parser
+    if (errorCode == U_SYNTAX_WARNING) {
+        errors->addError(Error::Type::SyntaxError, errorCode);
+        errorCode = U_ZERO_ERROR;
+    }
+    if (errorCode == U_DUPLICATE_OPTION_NAME_WARNING) {
+        errors->addError(Error::Type::DuplicateOptionName, errorCode);
+        errorCode = U_ZERO_ERROR;
+    }
 }
 
 Errors* Errors::create(UErrorCode& errorCode) {
@@ -149,12 +184,16 @@ void Errors::checkErrors(UErrorCode& status) {
     }
     Error* err = (Error*) (*errors)[0];
     switch (err->type) {
+        case Error::Type::DuplicateOptionName: {
+            status = U_DUPLICATE_OPTION_NAME_WARNING;
+            break;
+        }
         case Error::Type::VariantKeyMismatchWarning: {
             status = U_VARIANT_KEY_MISMATCH_WARNING;
             break;
         }
         case Error::Type::NonexhaustivePattern: {
-            status = U_NONEXHAUSTIVE_PATTERN;
+            status = U_NONEXHAUSTIVE_PATTERN_WARNING;
             break;
         }
         case Error::Type::UnknownFunction: {
@@ -170,7 +209,7 @@ void Errors::checkErrors(UErrorCode& status) {
             break;
         }
         case Error::Type::MissingSelectorAnnotation: {
-            status = U_MISSING_SELECTOR_ANNOTATION;
+            status = U_MISSING_SELECTOR_ANNOTATION_WARNING;
             break;
         }
 
@@ -178,8 +217,12 @@ void Errors::checkErrors(UErrorCode& status) {
             status = U_UNSUPPORTED_PROPERTY;
             break;
         }
+        case Error::Type::SyntaxError: {
+            status = U_SYNTAX_WARNING;
+            break;
+        }
         case Error::Type::SelectorError: {
-            status = U_SELECTOR_ERROR;
+            status = U_SELECTOR_WARNING;
             break;
         }
     }
@@ -196,6 +239,14 @@ void Errors::addError(Error e, UErrorCode& status) {
     }
     errors->adoptElement(eP, status);
     switch (e.type) {
+        case Error::Type::SyntaxError: {
+            syntaxError = true;
+            break;
+        }
+        case Error::Type::DuplicateOptionName: {
+            dataModelError = true;
+            break;
+        }
         case Error::Type::VariantKeyMismatchWarning: {
             dataModelError = true;
             warning = true;

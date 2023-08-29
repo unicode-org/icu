@@ -682,32 +682,32 @@ void TestMessageFormat2::testDataModelErrors() {
     // Non-exhaustive patterns
     testSemanticallyInvalidPattern(++i, "match {$one :plural}\n\
                                          when 1 {Value is one}\n\
-                                         when 2 {Value is two}\n", U_NONEXHAUSTIVE_PATTERN);
+                                         when 2 {Value is two}\n", U_NONEXHAUSTIVE_PATTERN_WARNING);
     testSemanticallyInvalidPattern(++i, "match {$one :plural} {$two :plural}\n\
                                          when 1 * {First is one}\n\
-                                         when * 1 {Second is one}\n", U_NONEXHAUSTIVE_PATTERN);
+                                         when * 1 {Second is one}\n", U_NONEXHAUSTIVE_PATTERN_WARNING);
 
     // Duplicate option names
-    testSemanticallyInvalidPattern(++i, "{{:foo a=1 b=2 a=1}}", U_DUPLICATE_OPTION_NAME);
-    testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=1}}", U_DUPLICATE_OPTION_NAME);
-    testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
-    testSemanticallyInvalidPattern(++i, "{{|x| :foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME);
+    testSemanticallyInvalidPattern(++i, "{{:foo a=1 b=2 a=1}}", U_DUPLICATE_OPTION_NAME_WARNING);
+    testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=1}}", U_DUPLICATE_OPTION_NAME_WARNING);
+    testSemanticallyInvalidPattern(++i, "{{:foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME_WARNING);
+    testSemanticallyInvalidPattern(++i, "{{|x| :foo a=1 a=2}}", U_DUPLICATE_OPTION_NAME_WARNING);
 
     // Missing selector annotation
     testSemanticallyInvalidPattern(++i, "match {$one}\n\
                                          when 1 {Value is one}\n\
-                                         when * {Value is not one}\n", U_MISSING_SELECTOR_ANNOTATION);
+                                         when * {Value is not one}\n", U_MISSING_SELECTOR_ANNOTATION_WARNING);
     testSemanticallyInvalidPattern(++i, "let $one = {|The one|}\n\
                                          match {$one}\n\
                                          when 1 {Value is one}\n\
-                                         when * {Value is not one}\n", U_MISSING_SELECTOR_ANNOTATION);
+                                         when * {Value is not one}\n", U_MISSING_SELECTOR_ANNOTATION_WARNING);
     testSemanticallyInvalidPattern(++i, "match {|horse| ^private}\n\
                                          when 1 {The value is one.}\n          \
-                                         when * {The value is not one.}\n", U_MISSING_SELECTOR_ANNOTATION);
+                                         when * {The value is not one.}\n", U_MISSING_SELECTOR_ANNOTATION_WARNING);
     testSemanticallyInvalidPattern(++i, "match {$foo !select} when |1| {one} when * {other}",
-                                   U_MISSING_SELECTOR_ANNOTATION);
+                                   U_MISSING_SELECTOR_ANNOTATION_WARNING);
     testSemanticallyInvalidPattern(++i, "match {$foo ^select} when |1| {one} when * {other}",
-                                   U_MISSING_SELECTOR_ANNOTATION);
+                                   U_MISSING_SELECTOR_ANNOTATION_WARNING);
 
     // This should *not* trigger a "missing selector annotation" error
     testPattern("let $one = {|The one| :select}\n\
@@ -740,9 +740,10 @@ void TestMessageFormat2::testResolutionErrors() {
                                          when * {The value is not one.}\n",
                               "The value is not one.", U_UNKNOWN_FUNCTION_WARNING);
     // Using formatter as selector
-    testRuntimeErrorPattern(++i, "match {|horse| :number}\n\
+    // The fallback string will match the '*' variant
+    testRuntimeWarningPattern(++i, "match {|horse| :number}\n\
                                          when 1 {The value is one.}\n\
-                                         when * {The value is not one.}\n", U_SELECTOR_ERROR);
+                                         when * {The value is not one.}\n", "The value is not one.", U_SELECTOR_WARNING);
 
     // Using selector as formatter
     testRuntimeWarningPattern(++i, "match {|horse| :select}\n\
@@ -758,13 +759,14 @@ void TestMessageFormat2::testResolutionErrors() {
                             U_UNSUPPORTED_PROPERTY);
 
     // Selector error
-    testRuntimeErrorPattern(++i, "match {|horse| :plural}\n\
+    // Here, the plural selector returns "no match" so the * variant matches
+    testRuntimeWarningPattern(++i, "match {|horse| :plural}\n\
                                   when 1 {The value is one.}\n\
-                                  when * {The value is not one.}\n", U_SELECTOR_ERROR);
-    testRuntimeErrorPattern(++i, "let $sel = {|horse| :plural}\n\
+                                  when * {The value is not one.}\n", "The value is not one.", U_SELECTOR_WARNING);
+    testRuntimeWarningPattern(++i, "let $sel = {|horse| :plural}\n\
                                   match {$sel}\n\
                                   when 1 {The value is one.}\n\
-                                  when * {The value is not one.}\n", U_SELECTOR_ERROR);
+                                  when * {The value is not one.}\n", "The value is not one.", U_SELECTOR_WARNING);
     /* TODO:
        Formatting errors
           e.g. calls to custom functions with constraints on their arguments;

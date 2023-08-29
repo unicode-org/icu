@@ -34,12 +34,14 @@ class FormatterFactory;
 class Error : public UMemory {
     public:
     enum Type {
+        DuplicateOptionName,
         UnresolvedVariable,
         FormattingWarning,
         MissingSelectorAnnotation,
         NonexhaustivePattern,
         ReservedError,
         SelectorError,
+        SyntaxError,
         UnknownFunction,
         VariantKeyMismatchWarning
     };
@@ -163,6 +165,9 @@ public:
     static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
 
     void setFormattingWarning(const FunctionName&, UErrorCode&);
+    void setSelectorError(const FunctionName&, UErrorCode&);
+    void setUnresolvedVariableWarning(const VariableName&, UErrorCode&);
+    void setUnknownFunctionWarning(const FunctionName&, UErrorCode&);
     bool hasWarning() const;
     // If any errors were set, update `status` accordingly
     void checkErrors(UErrorCode& status) const;

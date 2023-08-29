@@ -461,10 +461,8 @@ public:
         bool isReserved() const;
         // Precondition: (isFunctionCall() || isReserved())
         const Operator& getOperator() const;
-        // Precondition: !isStandaloneAnnotation()
-        const Operand& getOperand() const;
         // May return null operand
-        const Operand& getAnyOperand() const;
+        const Operand& getOperand() const;
 
         // Expression needs a copy constructor in order to make Pattern deeply copyable
         // (and for closures)
