@@ -232,7 +232,6 @@ class FormattedValueBuilder : public FormattingContext {
     bool hasFormattingWarning() const;
     bool hasSelectorError() const;
     bool hasError() const;
-    bool hasWarning() const;
 
     virtual ~FormattedValueBuilder();
 };

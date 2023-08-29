@@ -210,11 +210,11 @@ public:
     class Parser : public UMemory {
     public:
         virtual ~Parser();
-        static Parser* create(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInput, UErrorCode& errorCode) {
+        static Parser* create(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInput, Errors& errors, UErrorCode& errorCode) {
             if (U_FAILURE(errorCode)) {
                 return nullptr;
             }
-            Parser* p = new Parser(input, dataModelBuilder, normalizedInput);
+            Parser* p = new Parser(input, dataModelBuilder, errors, normalizedInput);
             if (p == nullptr) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
             }
@@ -245,8 +245,8 @@ public:
             UChar   postContext[U_PARSE_CONTEXT_LEN];
         } MessageParseError;
 
-        Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, UnicodeString& normalizedInputRef)
-            : source(input), index(0), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
+        Parser(const UnicodeString &input, MessageFormatDataModel::Builder& dataModelBuilder, Errors& e, UnicodeString& normalizedInputRef)
+            : source(input), index(0), errors(e), normalizedInput(normalizedInputRef), dataModel(dataModelBuilder) {
             parseError.line = 0;
             parseError.offset = 0;
             parseError.lengthBeforeCurrentLine = 0;
@@ -302,6 +302,9 @@ public:
         // Represents the current line (and when an error is indicated),
         // character offset within the line of the parse error
         MessageParseError parseError;
+
+        // The structure to use for recording errors
+        Errors& errors;
 
         // Normalized version of the input string (optional whitespace removed)
         UnicodeString& normalizedInput;
@@ -404,6 +407,9 @@ public:
      void check(Context&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
      void check(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
 
+     void initErrors(UErrorCode&);
+     void clearErrors() const;
+
      // Registry for built-in functions
      LocalPointer<FunctionRegistry> standardFunctionRegistry;
      // Registry for custom functions; may be null if no custom registry supplied
@@ -416,8 +422,12 @@ public:
      // Normalized version of the input string (optional whitespace removed)
      LocalPointer<UnicodeString> normalizedInput;
 
-    // Formatter cache
-    LocalPointer<CachedFormatters> cachedFormatters;
+     // Formatter cache
+     LocalPointer<CachedFormatters> cachedFormatters;
+
+     // Errors -- only used while parsing and checking for data model errors; then
+     // the Context keeps track of errors
+     LocalPointer<Errors> errors;
 }; // class MessageFormatter
 
 // For how this class is used, see the references to (integer, variant) tuples

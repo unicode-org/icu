@@ -50,16 +50,17 @@ void Builder::initFunctionOptions(UErrorCode& errorCode) {
 
 Errors::Errors(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
-    errors.adoptInstead(new UVector(errorCode));
+    syntaxAndDataModelErrors.adoptInstead(new UVector(errorCode));
+    resolutionAndFormattingErrors.adoptInstead(new UVector(errorCode));
     CHECK_ERROR(errorCode);
-    errors->setDeleter(uprv_deleteUObject);
+    syntaxAndDataModelErrors->setDeleter(uprv_deleteUObject);
+    resolutionAndFormattingErrors->setDeleter(uprv_deleteUObject);
     dataModelError = false;
     formattingWarning = false;
     missingSelectorAnnotationError = false;
     selectorError = false;
     syntaxError = false;
     unknownFunctionError = false;
-    warning = false;
 }
 
 Errors::~Errors() {}
@@ -696,10 +697,6 @@ bool Builder::hasFormattingWarning() const {
 
 bool Builder::hasError() const {
     return context.hasError();
-}
-
-bool Builder::hasWarning() const {
-    return context.hasWarning();
 }
 
 Builder& Builder::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {

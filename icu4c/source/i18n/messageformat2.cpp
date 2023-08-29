@@ -101,6 +101,11 @@ MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErr
     return mf.orphan();
 }
 
+void MessageFormatter::initErrors(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    errors.adoptInstead(Errors::create(errorCode));
+}
+
 MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError,
                                    UErrorCode &success) : locale(builder.locale), customFunctionRegistry(builder.customFunctionRegistry) {
     CHECK_ERROR(success);
@@ -119,6 +124,9 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     standardFunctionRegistry.adoptInstead(standardFunctionsBuilder->build(success));
     CHECK_ERROR(success);
     standardFunctionRegistry->checkStandard();
+
+    initErrors(success);
+    CHECK_ERROR(success);
 
     // Validate pattern and build data model
     // First, check that exactly one of the pattern and data model are set, but not both
@@ -152,25 +160,13 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
       success = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    LocalPointer<Parser> parser(Parser::create(*builder.pattern, *tree, *normalizedInput, success));
-    if (U_FAILURE(success)) {
-      return;
-    }
+    LocalPointer<Parser> parser(Parser::create(*builder.pattern, *tree, *normalizedInput, *errors, success));
+    CHECK_ERROR(success);
     parser->parse(parseError, success);
-    if (U_FAILURE(success)) {
-      return;
-    }
-    // TODO: this should really just pass around the Errors data structure
-    UErrorCode savedStatus = success;
-    
+
     // Build the data model based on what was parsed
     LocalPointer<MessageFormatDataModel> dataModelPtr(tree->build(success));
     if (U_SUCCESS(success)) {
-        // TODO: Don't overwrite the error, but it would be better to just have
-        // everything take the Errors data structure
-        if (savedStatus == U_SYNTAX_WARNING) {
-            success = savedStatus;
-        }
       dataModel.adoptInstead(dataModelPtr.orphan());
     }
 }
@@ -465,7 +461,7 @@ const Formatter* MessageFormatter::maybeCachedFormatter(Context& context, const 
         // If the formatter factory was null, there must have been
         // an earlier error/warning
         if (formatterFactory == nullptr) {
-            U_ASSERT(context.hasWarning());
+            U_ASSERT(context.hasUnknownFunctionError() || context.hasFormattingWarning());
             return nullptr;
         }
         NULL_ON_ERROR(errorCode);
@@ -780,7 +776,7 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
         // Call was successful
         if (context.hasOutput() && U_SUCCESS(status)) {
             return;
-        } else if (!(context.hasError() || context.hasWarning())) {
+        } else if (!(context.hasError())) {
             // Set formatting warning if formatting function had no output
             // but didn't set an error or warning
             context.setFormattingWarning(functionName.name(), status);
@@ -1224,7 +1220,7 @@ void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &st
     // right-hand sides (unresolved variable errors can
     // only be checked when arguments are known)
 
-    LocalPointer<Context> context(Context::create(*this, arguments, status));
+    LocalPointer<Context> context(Context::create(*this, arguments, *errors, status));
     CHECK_ERROR(status);
 
     // Check for data model errors
@@ -1241,7 +1237,7 @@ void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &st
     } else {
         // Check for errors/warnings -- if so, then the result is the fallback value
         // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
-        if (context->hasWarning() || context->hasDataModelError()) {
+        if (context->hasParseError() || context->hasDataModelError()) {
             result += REPLACEMENT;
         } else {
             formatSelectors(*context, *globalEnv, dataModel->getSelectors(), dataModel->getVariants(), status, result);
@@ -1249,7 +1245,12 @@ void MessageFormatter::formatToString(const Arguments& arguments, UErrorCode &st
     }
     // Update status according to all errors seen while formatting
     context->checkErrors(status);
+    clearErrors();
     return;
+}
+
+void MessageFormatter::clearErrors() const {
+    errors->clearResolutionAndFormattingErrors();
 }
 
 // ---------------- Environments and closures

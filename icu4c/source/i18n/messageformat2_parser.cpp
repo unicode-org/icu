@@ -42,9 +42,9 @@ using VariantMap      = MessageFormatDataModel::VariantMap;
     with a fallback string.
 */
 #define ERROR(parseError, errorCode, index)                                                             \
-    if (errorCode == U_ZERO_ERROR) {                                                                    \
+    if (!errors.hasSyntaxError()) {                                                                     \
         setParseError(parseError, index);                                                               \
-        errorCode = U_SYNTAX_WARNING;                                                                   \
+        errors.addSyntaxError(errorCode);                                                               \
     }
 
 // Returns true iff `index` is a valid index for the string `source`
@@ -1576,7 +1576,7 @@ void PARSER::parseSelectors(UErrorCode &errorCode) {
 
 void PARSER::errorPattern(UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
-    setError(U_SYNTAX_WARNING, errorCode);
+    errors.addSyntaxError(errorCode);
     // Set to empty pattern
     LocalPointer<Pattern::Builder> result(Pattern::builder(errorCode));
     CHECK_ERROR(errorCode);

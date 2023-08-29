@@ -44,16 +44,12 @@ const Formattable& Context::getVar(const VariableName& f) const {
     return arguments.get(f);
 } 
 
-Context::Context(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode) : parent(mf), arguments(args) {
-    CHECK_ERROR(errorCode);
-    // Initialize errors
-    initErrors(errorCode);
-}
+Context::Context(const MessageFormatter& mf, const MessageArguments& args, Errors& e) : parent(mf), arguments(args), errors(e) {}
 
-/* static */ Context* Context::create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode) {
+/* static */ Context* Context::create(const MessageFormatter& mf, const MessageArguments& args, Errors& e, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Context> result(new Context(mf, args, errorCode));
+    LocalPointer<Context> result(new Context(mf, args, e));
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
@@ -63,103 +59,69 @@ Context::Context(const MessageFormatter& mf, const MessageArguments& args, UErro
 
 void Context::addError(Error e, UErrorCode& status) {
     CHECK_ERROR(status);
-    U_ASSERT(errors.isValid());
-    errors->addError(e, status);
+    errors.addError(e, status);
 }
 
 void Context::checkErrors(UErrorCode& status) const {
     CHECK_ERROR(status);
-    U_ASSERT(errors.isValid());
-    errors->checkErrors(status);
+    errors.checkErrors(status);
 }
 
 
 bool Context::hasDataModelError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasDataModelError();
+    return errors.hasDataModelError();
 }
 
 bool Context::hasError() const {
-    U_ASSERT(errors.isValid());
-    return errors->count() > 0;
+    return errors.count() > 0;
 }
 
 bool Context::hasFormattingWarning() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasFormattingWarning();
+    return errors.hasFormattingWarning();
 }
 
 void Context::setFormattingWarning(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::FormattingWarning, formatterName);
-    errors->addError(err, status);
+    errors.addError(err, status);
  }
 
 void Context::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::SelectorError, selectorName);
-    errors->addError(err, status);
+    errors.addError(err, status);
  }
 
 void Context::setUnknownFunctionWarning(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::UnknownFunction, formatterName);
-    errors->addError(err, status);
+    errors.addError(err, status);
  }
 
 void Context::setUnresolvedVariableWarning(const VariableName& v, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error err(Error::Type::UnresolvedVariable, v);
-    errors->addError(err, status);
+    errors.addError(err, status);
  }
 
 bool Context::hasParseError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasSyntaxError();
+    return errors.hasSyntaxError();
 }
 
 bool Context::hasUnknownFunctionError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasUnknownFunctionError();
+    return errors.hasUnknownFunctionError();
 }
 
 bool Context::hasMissingSelectorAnnotationError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasMissingSelectorAnnotationError();
+    return errors.hasMissingSelectorAnnotationError();
 }
 
 bool Context::hasSelectorError() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasSelectorError();
-}
-
-bool Context::hasWarning() const {
-    U_ASSERT(errors.isValid());
-    return errors->hasWarning();
-}
-
-void Context::initErrors(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    errors.adoptInstead(Errors::create(errorCode));
-    CHECK_ERROR(errorCode);
-    // This is annoying, but avoids having to pass an Errors data structure
-    // to the parser
-    if (errorCode == U_SYNTAX_WARNING) {
-        errors->addError(Error::Type::SyntaxError, errorCode);
-        errorCode = U_ZERO_ERROR;
-    }
-    if (errorCode == U_DUPLICATE_OPTION_NAME_WARNING) {
-        errors->addError(Error::Type::DuplicateOptionName, errorCode);
-        errorCode = U_ZERO_ERROR;
-    }
+    return errors.hasSelectorError();
 }
 
 Errors* Errors::create(UErrorCode& errorCode) {
@@ -168,8 +130,14 @@ Errors* Errors::create(UErrorCode& errorCode) {
 }
 
 size_t Errors::count() const {
-    U_ASSERT(errors.isValid());
-    return ((size_t) errors->size());
+    return ((size_t) syntaxAndDataModelErrors->size()) + ((size_t) resolutionAndFormattingErrors->size());
+}
+
+void Errors::clearResolutionAndFormattingErrors() {
+    U_ASSERT(resolutionAndFormattingErrors.isValid());
+    resolutionAndFormattingErrors->removeAllElements();
+    formattingWarning = false;
+    selectorError = false;    
 }
 
 void Errors::checkErrors(UErrorCode& status) {
@@ -182,7 +150,13 @@ void Errors::checkErrors(UErrorCode& status) {
     if (count() == 0) {
         return;
     }
-    Error* err = (Error*) (*errors)[0];
+    Error* err;
+    if (syntaxAndDataModelErrors->size() > 0) {
+        err = (Error*) (*syntaxAndDataModelErrors)[0];
+    } else {
+        U_ASSERT(resolutionAndFormattingErrors->size() > 0);
+        err = (Error*) (*resolutionAndFormattingErrors)[0];
+    }
     switch (err->type) {
         case Error::Type::DuplicateOptionName: {
             status = U_DUPLICATE_OPTION_NAME_WARNING;
@@ -228,60 +202,68 @@ void Errors::checkErrors(UErrorCode& status) {
     }
 }
 
+void Errors::addSyntaxError(UErrorCode& status) {
+    CHECK_ERROR(status);
+    addError(Error(Error::Type::SyntaxError), status);
+}
+
 void Errors::addError(Error e, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    U_ASSERT(errors.isValid());
     Error* eP = new Error(e);
     if (eP == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    errors->adoptElement(eP, status);
     switch (e.type) {
         case Error::Type::SyntaxError: {
             syntaxError = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::DuplicateOptionName: {
             dataModelError = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::VariantKeyMismatchWarning: {
             dataModelError = true;
-            warning = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::NonexhaustivePattern: {
             dataModelError = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::UnresolvedVariable: {
-            warning = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::FormattingWarning: {
-            warning = true;
             formattingWarning = true;
+            resolutionAndFormattingErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::MissingSelectorAnnotation: {
             missingSelectorAnnotationError = true;
             dataModelError = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::ReservedError: {
             dataModelError = true;
+            syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::SelectorError: {
             selectorError = true;
+            resolutionAndFormattingErrors->adoptElement(eP, status);
             break;
         }
         case Error::Type::UnknownFunction: {
-            warning = true;
-            dataModelError = true;
             unknownFunctionError = true;
+            resolutionAndFormattingErrors->adoptElement(eP, status);
             break;
         }
     }

@@ -58,14 +58,14 @@ class Error : public UMemory {
 
 class Errors : public UMemory {
     private:
-    LocalPointer<UVector> errors;
+    LocalPointer<UVector> syntaxAndDataModelErrors;
+    LocalPointer<UVector> resolutionAndFormattingErrors;
     bool dataModelError;
     bool formattingWarning;
     bool missingSelectorAnnotationError;
     bool selectorError;
     bool syntaxError;
     bool unknownFunctionError;
-    bool warning;
     Errors(UErrorCode& errorCode);
 
     public:
@@ -78,7 +78,7 @@ class Errors : public UMemory {
     void addMissingSelectorAnnotation();
     void addUnresolvedVariable(const VariableName&);
     void addVariantKeyMismatchWarning();
-    void addSyntaxError();
+    void addSyntaxError(UErrorCode&);
     void addUnknownFunction(const FunctionName&);
     void addVariantKeyMismatch();
     void addFormattingError();
@@ -88,9 +88,9 @@ class Errors : public UMemory {
     bool hasSyntaxError() const { return syntaxError; }
     bool hasUnknownFunctionError() const { return unknownFunctionError; }
     bool hasMissingSelectorAnnotationError() const { return missingSelectorAnnotationError; }
-    bool hasWarning() const { return warning; }
     void addError(Error, UErrorCode&);
     void checkErrors(UErrorCode&);
+    void clearResolutionAndFormattingErrors();
 
     virtual ~Errors();
 }; // class Errors
@@ -162,16 +162,15 @@ public:
     bool hasVar(const VariableName&) const;
     const Formattable& getVar(const VariableName& var) const;
     
-    static Context* create(const MessageFormatter& mf, const MessageArguments& args, UErrorCode& errorCode);
+    static Context* create(const MessageFormatter& mf, const MessageArguments& args, Errors& errors, UErrorCode& errorCode);
 
     void setFormattingWarning(const FunctionName&, UErrorCode&);
     void setSelectorError(const FunctionName&, UErrorCode&);
     void setUnresolvedVariableWarning(const VariableName&, UErrorCode&);
     void setUnknownFunctionWarning(const FunctionName&, UErrorCode&);
-    bool hasWarning() const;
     // If any errors were set, update `status` accordingly
     void checkErrors(UErrorCode& status) const;
-    Errors& getErrors() { U_ASSERT(errors.isValid()); return *errors; }
+    Errors& getErrors() { return errors; }
     bool hasParseError() const;
     bool hasDataModelError() const;
     bool hasMissingSelectorAnnotationError() const;
@@ -184,15 +183,13 @@ public:
     virtual ~Context();
     
 private:
-    Context(const MessageFormatter&, const MessageArguments&, UErrorCode&);
+    Context(const MessageFormatter&, const MessageArguments&, Errors&);
     FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&);
-    void initErrors(UErrorCode&);
 
     const MessageFormatter& parent;
     const MessageArguments& arguments; // External message arguments
     // Errors accumulated during parsing/formatting
-    LocalPointer<Errors> errors;
-    
+    Errors& errors;
 }; // class Context
 
 } // namespace message2
