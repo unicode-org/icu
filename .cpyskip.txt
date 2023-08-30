@@ -92,10 +92,9 @@ icu4c/source/tools/tzcode/zic.c
 #
 icu4j/eclipse-build/pdebuild/allElements.xml
 icu4j/eclipse-build/pdebuild/customTargets.xml
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/*
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/IDNATestInput.txt
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/UnicodeData.txt
 icu4j/perf-tests/data/conversion/*
 icu4j/perf-tests/data/udhr/*
 icu4j/perf-tests/data/collation/thesis.txt
