@@ -513,7 +513,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 // Test the behaviour of the `rg` tag
                 {"Test the locale with rg = UK and without usage", "en-US-u-rg-ukzzzz", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
                 {"Test the locale with rg = UK and with usage", "en-US-u-rg-ukzzzz", "fahrenheit", "0", "default", "celsius", "-18", "-18 degrees Celsius"},
-                {"Test the locale with rg = UKOI and with usage", "en-US-u-rg-ukoizzzz", "fahrenheit", "0", "default", "celsius", "-18" , "-18 degrees Celsius"},
+                {"Test the locale with rg = UKOI and with usage", "en-US-u-rg-ukoi", "fahrenheit", "0", "default", "celsius", "-18" , "-18 degrees Celsius"},
 
                 // Test the priorities
                 {"Test the locale with mu,ms,rg --> mu tag wins", "en-US-u-mu-celsius-ms-ussystem-rg-uszzzz", "celsius", "0", "default", "celsius", "0.0", "0 degrees Celsius"},

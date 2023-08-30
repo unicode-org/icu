@@ -7,7 +7,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.math.RoundingMode;
+import java.util.Locale;
 
+import com.ibm.icu.number.LocalizedNumberFormatter;
 import org.junit.Test;
 
 import com.ibm.icu.number.NumberFormatter;
@@ -457,6 +459,48 @@ public class NumberSkeletonTest {
                     assertTrue(msg, toSkeleton.indexOf(cas2[1]) >= 0);
                 }
             }
+        }
+    }
+
+    @Test
+    public void measurementSystemOverride() {
+        // NOTE TO REVIEWERS: When the appropriate changes are made on the CLDR side, do we want to keep this
+        // test or rely on additions the CLDR project makes to unitPreferencesTest.txt? --rtg 8/29/23
+        String[][] testCases = {
+            // Norway uses m/s for wind speed and should with or without the "ms-metric" subtag in the locale,
+            // but it uses km/h for other speeds.  France uses km/h for all speeds.  And in both places, if
+            // you say "ms-ussystem", you should get mph.  In the US, we use mph for all speeds, but should
+            // use km/h if the locale has "ms-metric" in it.
+            { "nn-NO",               "unit/kilometer-per-hour usage/wind",    "0,34 m/s" },
+            { "nn-NO-u-ms-metric",   "unit/kilometer-per-hour usage/wind",    "0,34 m/s" },
+            { "nn-NO-u-ms-ussystem", "unit/kilometer-per-hour usage/wind",    "0,76 mile/t" },
+            { "fr-FR",               "unit/kilometer-per-hour usage/wind",    "1,2\u202Fkm/h" },
+            { "fr-FR-u-ms-metric",   "unit/kilometer-per-hour usage/wind",    "1,2\u202Fkm/h" },
+            { "fr-FR-u-ms-ussystem", "unit/kilometer-per-hour usage/wind",    "0,76\u202Fmi/h" },
+            { "en-US",               "unit/kilometer-per-hour usage/wind",    "0.76 mph" },
+            { "en-US-u-ms-metric",   "unit/kilometer-per-hour usage/wind",    "1.2 km/h" },
+            { "en-US-u-ms-ussystem", "unit/kilometer-per-hour usage/wind",    "0.76 mph" },
+
+            { "nn-NO",               "unit/kilometer-per-hour usage/default", "1,2 km/t" },
+            { "nn-NO-u-ms-metric",   "unit/kilometer-per-hour usage/default", "1,2 km/t" },
+            { "nn-NO-u-ms-ussystem", "unit/kilometer-per-hour usage/default", "0,76 mile/t" },
+            { "fr-FR",               "unit/kilometer-per-hour usage/default", "1,2\u202Fkm/h" },
+            { "fr-FR-u-ms-metric",   "unit/kilometer-per-hour usage/default", "1,2\u202Fkm/h" },
+            { "fr-FR-u-ms-ussystem", "unit/kilometer-per-hour usage/default", "0,76\u202Fmi/h" },
+            { "en-US",               "unit/kilometer-per-hour usage/default", "0.76 mph" },
+            { "en-US-u-ms-metric",   "unit/kilometer-per-hour usage/default", "1.2 km/h" },
+            { "en-US-u-ms-ussystem", "unit/kilometer-per-hour usage/default", "0.76 mph" },
+        };
+
+        for (String[] testCase : testCases) {
+            String languageTag = testCase[0];
+            String skeleton = testCase[1];
+            String expectedResult = testCase[2];
+
+            LocalizedNumberFormatter nf = NumberFormatter.forSkeleton(skeleton).locale(Locale.forLanguageTag(languageTag));
+            String actualResult = nf.format(1.23).toString();
+
+            assertEquals("Wrong result: " + languageTag + ":" + skeleton, expectedResult, actualResult);
         }
     }
 }

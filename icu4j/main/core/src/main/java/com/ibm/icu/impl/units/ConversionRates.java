@@ -120,6 +120,13 @@ public class ConversionRates {
     }
 
     /**
+     * @return The measurement systems for the specified unit.
+     */
+    public String extractSystems(SingleUnitImpl singleUnit) {
+        return mapToConversionRate.get(singleUnit.getSimpleUnitID()).getSystems();
+    }
+
+    /**
      * Checks if the {@code MeasureUnitImpl} is simple or not.
      *
      * @param measureUnitImpl
@@ -155,6 +162,7 @@ public class ConversionRates {
                 String target = null;
                 String factor = null;
                 String offset = "0";
+                String systems = null;
                 for (int j = 0; simpleUnitConversionInfo.getKeyAndValue(j, key, value); j++) {
                     assert (value.getType() == UResourceBundle.STRING);
 
@@ -168,7 +176,7 @@ public class ConversionRates {
                     } else if ("offset".equals(keyString)) {
                         offset = valueString;
                     } else if ("systems".equals(keyString)) {
-                        // just ignore for time being
+                        systems = value.toString(); // still want the spaces here
                     } else {
                         assert false : "The key must be target, factor, systems or offset";
                     }
@@ -178,7 +186,7 @@ public class ConversionRates {
                 assert (target != null);
                 assert (factor != null);
 
-                mapToConversionRate.put(simpleUnit, new ConversionRateInfo(simpleUnit, target, factor, offset));
+                mapToConversionRate.put(simpleUnit, new ConversionRateInfo(simpleUnit, target, factor, offset, systems));
             }
 
 
@@ -196,12 +204,14 @@ public class ConversionRates {
         private final String target;
         private final String conversionRate;
         private final BigDecimal offset;
+        private final String systems;
 
-        public ConversionRateInfo(String simpleUnit, String target, String conversionRate, String offset) {
+        public ConversionRateInfo(String simpleUnit, String target, String conversionRate, String offset, String systems) {
             this.simpleUnit = simpleUnit;
             this.target = target;
             this.conversionRate = conversionRate;
             this.offset = forNumberWithDivision(offset);
+            this.systems = systems;
         }
 
         private static BigDecimal forNumberWithDivision(String numberWithDivision) {
@@ -238,5 +248,10 @@ public class ConversionRates {
         public String getConversionRate() {
             return conversionRate;
         }
+
+        /**
+         * @return The measurement systems this unit belongs to.
+         */
+        public String getSystems() { return systems; }
     }
 }
