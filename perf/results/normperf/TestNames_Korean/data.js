@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693426664799,
+  "lastUpdate": 1693434965574,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27538,6 +27538,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 34.4427,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pnacht@google.com",
+            "name": "Pedro Kaj Kjellerup Nacht",
+            "username": "pnacht"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "95f25839f4b4bd25ceb779f885b0158b8a8ab685",
+          "message": "ICU-22423 Add scorecard.yml\n\nSigned-off-by: Pedro Kaj Kjellerup Nacht <pnacht@google.com>",
+          "timestamp": "2023-08-30T15:11:50-07:00",
+          "tree_id": "679112f772059518c90ed00309b6fbb9695c592b",
+          "url": "https://github.com/unicode-org/icu/commit/95f25839f4b4bd25ceb779f885b0158b8a8ab685"
+        },
+        "date": 1693434895519,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 18.469,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 27.7324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 27.6902,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 15.3376,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 43.7256,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 43.7098,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
