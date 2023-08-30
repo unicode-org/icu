@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693422726734,
+  "lastUpdate": 1693425930822,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22318,6 +22318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 15.447898684950378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "35bae683a5d35b330a2f9ac5ab244db8c1d281fd",
+          "message": "ICU-22475 Fix double free in Locale under OOM\n\nSee #2567",
+          "timestamp": "2023-08-30T12:35:15-07:00",
+          "tree_id": "2cbec7424603be004316857a509d82ae609ed9ef",
+          "url": "https://github.com/unicode-org/icu/commit/35bae683a5d35b330a2f9ac5ab244db8c1d281fd"
+        },
+        "date": 1693425877696,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 16.935221834775533,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
