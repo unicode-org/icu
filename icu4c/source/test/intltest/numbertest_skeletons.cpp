@@ -32,6 +32,7 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
         TESTCASE_AUTO(wildcardCharacters);
         TESTCASE_AUTO(perUnitInArabic);
         TESTCASE_AUTO(perUnitToSkeleton);
+        TESTCASE_AUTO(measurementSystemOverride);
     TESTCASE_AUTO_END;
 }
 
@@ -503,6 +504,55 @@ void NumberSkeletonTest::perUnitToSkeleton() {
                     .append(skeleton);
                 assertTrue(msg, toSkeleton.indexOf(cas2.subtype) >= 0);
             }
+        }
+    }
+}
+
+void NumberSkeletonTest::measurementSystemOverride() {
+    // NOTE TO REVIEWERS: When the appropriate changes are made on the CLDR side, do we want to keep this
+    // test or rely on additions the CLDR project makes to unitPreferencesTest.txt? --rtg 8/29/23
+    IcuTestErrorCode status(*this, "measurementSystemOverride");
+    struct TestCase {
+        const char* locale;
+        const char16_t* skeleton;
+        const char16_t* expectedResult;
+    } testCases[] = {
+        // Norway uses m/s for wind speed and should with or without the "ms-metric" subtag in the locale,
+        // but it uses km/h for other speeds.  France uses km/h for all speeds.  And in both places, if
+        // you say "ms-ussystem", you should get mph.  In the US, we use mph for all speeds, but should
+        // use km/h if the locale has "ms-metric" in it.
+        { "nn_NO",                  u"unit/kilometer-per-hour usage/wind",    u"0,34 m/s" },
+        { "nn_NO@measure=metric",   u"unit/kilometer-per-hour usage/wind",    u"0,34 m/s" },
+        { "nn_NO@measure=ussystem", u"unit/kilometer-per-hour usage/wind",    u"0,76 mile/t" },
+        { "fr_FR",                  u"unit/kilometer-per-hour usage/wind",    u"1,2\u202Fkm/h" },
+        { "fr_FR@measure=metric",   u"unit/kilometer-per-hour usage/wind",    u"1,2\u202Fkm/h" },
+        { "fr_FR@measure=ussystem", u"unit/kilometer-per-hour usage/wind",    u"0,76\u202Fmi/h" },
+        { "en_US",                  u"unit/kilometer-per-hour usage/wind",    u"0.76 mph" },
+        { "en_US@measure=metric",   u"unit/kilometer-per-hour usage/wind",    u"1.2 km/h" },
+        { "en_US@measure=ussystem", u"unit/kilometer-per-hour usage/wind",    u"0.76 mph" },
+
+        { "nn_NO",                  u"unit/kilometer-per-hour usage/default", u"1,2 km/t" },
+        { "nn_NO@measure=metric",   u"unit/kilometer-per-hour usage/default", u"1,2 km/t" },
+        { "nn_NO@measure=ussystem", u"unit/kilometer-per-hour usage/default", u"0,76 mile/t" },
+        { "fr_FR",                  u"unit/kilometer-per-hour usage/default", u"1,2\u202Fkm/h" },
+        { "fr_FR@measure=metric",   u"unit/kilometer-per-hour usage/default", u"1,2\u202Fkm/h" },
+        { "fr_FR@measure=ussystem", u"unit/kilometer-per-hour usage/default", u"0,76\u202Fmi/h" },
+        { "en_US",                  u"unit/kilometer-per-hour usage/default", u"0.76 mph" },
+        { "en_US@measure=metric",   u"unit/kilometer-per-hour usage/default", u"1.2 km/h" },
+        { "en_US@measure=ussystem", u"unit/kilometer-per-hour usage/default", u"0.76 mph" },
+    };
+    
+    for (const auto& testCase : testCases) {
+        UErrorCode err = U_ZERO_ERROR;
+        LocalizedNumberFormatter nf = NumberFormatter::forSkeleton(testCase.skeleton, err).locale(testCase.locale);
+        UnicodeString actualResult = nf.formatDouble(1.23, err).toString(err);
+        
+        UnicodeString errorMessage = ": ";
+        errorMessage += testCase.locale;
+        errorMessage += "/";
+        errorMessage += testCase.skeleton;
+        if (assertSuccess(u"Formatting error" + errorMessage, err)) {
+            assertEquals(u"Wrong result" + errorMessage, testCase.expectedResult, actualResult);
         }
     }
 }

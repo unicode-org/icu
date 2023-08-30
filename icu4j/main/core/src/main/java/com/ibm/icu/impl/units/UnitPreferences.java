@@ -3,15 +3,12 @@
 package com.ibm.icu.impl.units;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -92,36 +89,39 @@ public class UnitPreferences {
             }
         }
 
-        String region = locale.getCountry();
+        String region = ULocale.getRegionForSupplementalData(locale, false);
 
         // Check the locale system tag, e.g `ms=metric`.
         String localeSystem = locale.getKeywordValue("measure");
-        boolean isLocaleSystem = false;
-        if (measurementSystem.containsKey(localeSystem)) {
-            isLocaleSystem = true;
-            region = measurementSystem.get(localeSystem);
-        }
-
-        // Check the region tag, e.g. `rg=uszzz`.
-        if (!isLocaleSystem) {
-            String localeRegion = locale.getKeywordValue("rg");
-            if (localeRegion != null && localeRegion.length() >= 3) {
-                if (localeRegion.equals("default")) {
-                    region = localeRegion;
-                } else if (Character.isDigit(localeRegion.charAt(0))) {
-                    region = localeRegion.substring(0, 3); // e.g. 001
-                } else {
-                    // Capitalize the first two character of the region, e.g. ukzzzz or usca
-                    region = localeRegion.substring(0, 2).toUpperCase(Locale.ROOT);
-                }
-            }
-        }
+        boolean isLocaleSystem = measurementSystem.containsKey(localeSystem);
 
         String[] subUsages = getAllUsages(usage);
         UnitPreference[] result = null;
         for (String subUsage :
                 subUsages) {
             result = getUnitPreferences(category, subUsage, region);
+
+            if (result != null && isLocaleSystem) {
+                ConversionRates rates = new ConversionRates();
+                boolean unitsMatchSystem = true;
+                for (UnitPreference unitPref : result) {
+                    MeasureUnitImpl measureUnit = MeasureUnitImpl.forIdentifier(unitPref.getUnit());
+                    List<SingleUnitImpl> singleUnits = new ArrayList<>(measureUnit.getSingleUnits());
+                    for (SingleUnitImpl singleUnit : singleUnits) {
+                        String systems = rates.extractSystems(singleUnit);
+                        if (!systems.contains("metric_adjacent")) {
+                            if (!systems.contains(localeSystem)) {
+                                unitsMatchSystem = false;
+                            }
+                        }
+                    }
+                }
+                if (!unitsMatchSystem) {
+                    String newRegion = measurementSystem.get(localeSystem);
+                    result = getUnitPreferences(category, subUsage, newRegion);
+                }
+            }
+
             if (result != null) break;
         }
 
