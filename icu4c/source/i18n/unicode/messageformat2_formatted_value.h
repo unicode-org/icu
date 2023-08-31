@@ -68,7 +68,7 @@ class FormattingContext : public UMemory {
     // Arguments iterator
     virtual const Formattable* nextOption(int32_t&, UnicodeString&) const = 0;
     virtual int32_t firstOption() const = 0;
-    virtual size_t optionsCount() const = 0;
+    virtual int32_t optionsCount() const = 0;
     // sets output to string, even if current output is a number
     virtual void formatToString(const Locale&, UErrorCode&) = 0;
     static DateFormat* defaultDateTimeInstance(const Locale&, UErrorCode&);
@@ -109,7 +109,7 @@ class ExpressionContext : public FormattingContext {
     Selector* getSelector(UErrorCode&) const;
     // Precondition: hasFormatter()
     const Formatter* getFormatter(UErrorCode&);
-    void doSelectorCall(const UnicodeString[], size_t, UnicodeString[], size_t&, UErrorCode&);
+    void doSelectorCall(const UnicodeString[], int32_t, UnicodeString[], int32_t&, UErrorCode&);
     void returnFromFunction();
     const FunctionRegistry& customRegistry() const;
     bool hasCustomRegistry() const;
@@ -187,7 +187,7 @@ class ExpressionContext : public FormattingContext {
     // If there is a functionName name, clear it and
     // call the function, setting the input and/or output appropriately
     // Precondition: hasSelector()
-    void evalPendingSelectorCall(const UnicodeString[], size_t, UnicodeString[], size_t&, UErrorCode&);
+    void evalPendingSelectorCall(const UnicodeString[], int32_t, UnicodeString[], int32_t&, UErrorCode&);
 
     public:
     void formatWithDefaults(UErrorCode& errorCode);
@@ -221,7 +221,7 @@ class ExpressionContext : public FormattingContext {
     bool getInt64Option(const UnicodeString&, int64_t&) const;
     // Arguments iterator
     int32_t firstOption() const;
-    size_t optionsCount() const;
+    int32_t optionsCount() const;
     const Formattable* nextOption(int32_t&, UnicodeString&) const;
     bool isFallback() const;
     bool hasParseError() const;

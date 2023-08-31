@@ -129,8 +129,8 @@ Errors* Errors::create(UErrorCode& errorCode) {
     return new Errors(errorCode);
 }
 
-size_t Errors::count() const {
-    return ((size_t) syntaxAndDataModelErrors->size()) + ((size_t) resolutionAndFormattingErrors->size());
+int32_t Errors::count() const {
+    return syntaxAndDataModelErrors->size() + resolutionAndFormattingErrors->size();
 }
 
 void Errors::clearResolutionAndFormattingErrors() {

@@ -46,7 +46,7 @@ void TestMessageFormat2::testStaticFormat(TestCase::Builder& testBuilder, IcuTes
 
     LocalPointer<TestCase> test(testBuilder.setPattern("{At {$when :datetime timestyle=default} on {$when :datetime datestyle=default}, \
 there was {$what} on planet {$planet :number kind=integer}.}")
-                                .setArgument("planet", (long) 7, errorCode)
+                                .setArgument("planet", (int64_t) 7, errorCode)
                                 .setArgument("when", (UDate) 871068000000, errorCode)
                                 .setArgument("what", "a disturbance in the Force", errorCode)
                                 .setExpected("At 12:20:00\u202FPM on Aug 8, 1997, there was a disturbance in the Force on planet 7.")
@@ -60,17 +60,17 @@ void TestMessageFormat2::testSimpleFormat(TestCase::Builder& testBuilder, IcuTes
     testBuilder.setPattern("{The disk \"{$diskName}\" contains {$fileCount} file(s).}");
     testBuilder.setArgument("diskName", "MyDisk", errorCode);
 
-    LocalPointer<TestCase> test(testBuilder.setArgument("fileCount", (long) 0, errorCode)
+    LocalPointer<TestCase> test(testBuilder.setArgument("fileCount", (int64_t) 0, errorCode)
                                 .setExpected("The disk \"MyDisk\" contains 0 file(s).")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    test.adoptInstead(testBuilder.setArgument("fileCount", (long) 1, errorCode)
+    test.adoptInstead(testBuilder.setArgument("fileCount", (int64_t) 1, errorCode)
                       .setExpected("The disk \"MyDisk\" contains 1 file(s).")
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    test.adoptInstead(testBuilder.setArgument("fileCount", (long) 12, errorCode)
+    test.adoptInstead(testBuilder.setArgument("fileCount", (int64_t) 12, errorCode)
                       .setExpected("The disk \"MyDisk\" contains 12 file(s).")
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);

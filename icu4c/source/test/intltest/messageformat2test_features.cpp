@@ -157,7 +157,7 @@ void TestMessageFormat2::testSpecialPluralWithDecimals(TestCase::Builder& testBu
 
     test.adoptInstead(testBuilder.setPattern(message)
                                 .clearArguments(errorCode)
-                                .setArgument("count", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
                                 .setExpected("I have 1 dollar.")
                                 .setLocale(Locale("en", "US"), errorCode)
                                 .build(errorCode));
@@ -220,7 +220,7 @@ void TestMessageFormat2::testComplexSelection(TestCase::Builder& testBuilder, Ic
                  when * * {{$userName} added {$photoCount} photos to their album.}";
     testBuilder.setPattern(message);
 
-    long count = 1;
+    int64_t count = 1;
     test.adoptInstead(testBuilder.setArgument("photoCount", count, errorCode)
                                 .setArgument("userGender", "masculine", errorCode)
                                 .setArgument("userName", "John", errorCode)
@@ -271,7 +271,7 @@ void TestMessageFormat2::testSimpleLocalVariable(TestCase::Builder& testBuilder,
     testBuilder.setPattern("let $expDate = {$expDate :datetime skeleton=yMMMdE}\n\
                             {Your tickets expire on {$expDate}.}");
 
-    long count = 1;
+    int64_t count = 1;
     test.adoptInstead(testBuilder.setArgument("count", count, errorCode)
                       .setLocale(Locale("en"), errorCode)
                       .setDateArgument("expDate", TEST_DATE, errorCode)
@@ -296,7 +296,7 @@ void TestMessageFormat2::testLocalVariableWithSelect(TestCase::Builder& testBuil
                 when 1 {Your ticket expires on {$expDate}.}\n\
                 when * {Your {$count} tickets expire on {$expDate}.}\n");
 
-    long count = 1;
+    int64_t count = 1;
     test.adoptInstead(testBuilder.setArgument("count", count, errorCode)
                       .setLocale(Locale("en"), errorCode)
                       .setDateArgument("expDate", TEST_DATE, errorCode)
@@ -374,7 +374,7 @@ void TestMessageFormat2::testPlural(TestCase::Builder& testBuilder, IcuTestError
                 when 1 {You have one notification.}\n           \
                 when * {You have {$count} notifications.}\n";
 
-    long count = 1;
+    int64_t count = 1;
     LocalPointer<TestCase> test(testBuilder.setPattern(message)
                                 .setExpected("You have one notification.")
                                 .setArgument("count", count, errorCode)
@@ -551,7 +551,7 @@ void putFormattableArg(Hashtable& arguments, const UnicodeString& k, const Unico
     }
 }
 
-void putFormattableArg(Hashtable& arguments, const UnicodeString& k, long arg, UErrorCode& errorCode) {
+void putFormattableArg(Hashtable& arguments, const UnicodeString& k, int64_t arg, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     Formattable* valPtr(new Formattable(arg));
     if (valPtr == nullptr) {
@@ -598,16 +598,15 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
     UnicodeString countKey("count");
     UnicodeString unitKey("unit");
 
-    const size_t maxCount = 10;
+    const int64_t maxCount = 10;
     char expected[20];
     LocalPointer<MessageArguments::Builder> argumentsBuilder(MessageArguments::builder(errorCode));
     LocalPointer<MessageArguments> arguments;
     CHECK_ERROR(errorCode);
-    for (size_t count = 0; count < maxCount; count++) {
-        long arg = (long) count;
-        snprintf(expected, sizeof(expected), "Testing %zu°C.", count);
+    for (int64_t count = 0; count < maxCount; count++) {
+        snprintf(expected, sizeof(expected), "Testing %ld°C.", count);
 
-        argumentsBuilder->addLong(countKey, arg, errorCode);
+        argumentsBuilder->addInt64(countKey, count, errorCode);
         argumentsBuilder->add(unitKey, "C", errorCode);
         arguments.adoptInstead(argumentsBuilder->build(errorCode));
         CHECK_ERROR(errorCode);
@@ -616,8 +615,8 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
         assertEquals("temperature formatter", expected, result);
         result.remove();
 
-        snprintf(expected, sizeof(expected), "Testing %zu°F.", count);
-        argumentsBuilder->addLong(countKey, arg, errorCode);
+        snprintf(expected, sizeof(expected), "Testing %ld°F.", count);
+        argumentsBuilder->addInt64(countKey, count, errorCode);
         argumentsBuilder->add(unitKey, "F", errorCode);
         arguments.adoptInstead(argumentsBuilder->build(errorCode));
         CHECK_ERROR(errorCode);
@@ -628,7 +627,7 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
     }
 
     assertEquals("cached formatter", 1, counter->constructCount);
-    assertEquals("cached formatter", ((int32_t) (maxCount * 2)), counter->formatCount);
+    assertEquals("cached formatter", (int64_t) maxCount * 2, (int64_t) counter->formatCount);
     assertEquals("cached formatter", 1, counter->fFormatterCount);
     assertEquals("cached formatter", 1, counter->cFormatterCount);
 
@@ -718,27 +717,27 @@ void TestMessageFormat2::testPluralWithOffset(TestCase::Builder& testBuilder, Ic
     testBuilder.setName("plural with offset");
 
     LocalPointer<TestCase> test(testBuilder.setExpected("Anna")
-                                .setArgument("count", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna and Bob")
-                          .setArgument("count", (long) 2, errorCode)
+                          .setArgument("count", (int64_t) 2, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 1 other guest")
-                          .setArgument("count", (long) 3, errorCode)
+                          .setArgument("count", (int64_t) 3, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 2 other guests")
-                          .setArgument("count", (long) 4, errorCode)
+                          .setArgument("count", (int64_t) 4, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 10 other guests")
-                          .setArgument("count", (long) 12, errorCode)
+                          .setArgument("count", (int64_t) 12, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }
@@ -757,27 +756,27 @@ void TestMessageFormat2::testPluralWithOffsetAndLocalVar(TestCase::Builder& test
     testBuilder.setName("plural with offset and local var");
 
     LocalPointer<TestCase> test(testBuilder.setExpected("Anna")
-                                .setArgument("count", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna and Bob")
-                          .setArgument("count", (long) 2, errorCode)
+                          .setArgument("count", (int64_t) 2, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 1 other guest")
-                          .setArgument("count", (long) 3, errorCode)
+                          .setArgument("count", (int64_t) 3, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 2 other guests")
-                          .setArgument("count", (long) 4, errorCode)
+                          .setArgument("count", (int64_t) 4, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Anna, Bob, and 10 other guests")
-                          .setArgument("count", (long) 12, errorCode)
+                          .setArgument("count", (int64_t) 12, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
   
@@ -788,15 +787,15 @@ void TestMessageFormat2::testPluralWithOffsetAndLocalVar(TestCase::Builder& test
                 when * {{$foo} dollars}\n";
     testBuilder.setPattern(message);
     test.adoptInstead(testBuilder.setExpected("Last dollar")
-                          .setArgument("amount", (long) 1, errorCode)
+                          .setArgument("amount", (int64_t) 1, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("2 dollars")
-                          .setArgument("amount", (long) 2, errorCode)
+                          .setArgument("amount", (int64_t) 2, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("3 dollars")
-                          .setArgument("amount", (long) 3, errorCode)
+                          .setArgument("amount", (int64_t) 3, errorCode)
                           .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }
@@ -828,23 +827,23 @@ void TestMessageFormat2::testVariableOptionsInSelector(TestCase::Builder& testBu
     testBuilder.setExpectSuccess();
 
     LocalPointer<TestCase> test(testBuilder.setExpected("A")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A and B")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A, B, and 1 more character")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A, B, and 5 more characters")
-                                .setArgument("count", (long) 7, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 7, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -855,63 +854,63 @@ void TestMessageFormat2::testVariableOptionsInSelector(TestCase::Builder& testBu
     testBuilder.setPattern(message);
 
     test.adoptInstead(testBuilder.setExpected("Exactly 1")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 1")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 1")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 2")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 2")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 2")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 3 and delta=0.")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 2 and delta=1.")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 1 and delta=2.")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 23 and delta=0.")
-                                .setArgument("count", (long) 23, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 23, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 22 and delta=1.")
-                                .setArgument("count", (long) 23, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 23, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 21 and delta=2.")
-                                .setArgument("count", (long) 23, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 23, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }
@@ -931,19 +930,19 @@ void TestMessageFormat2::testVariableOptionsInSelectorWithLocalVar(TestCase::Bui
     testBuilder.setExpectSuccess();
 
     LocalPointer<TestCase> test(testBuilder.setExpected("A")
-                                .setArgument("count", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A and B")
-                                .setArgument("count", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A, B, and 1 more character")
-                                .setArgument("count", (long) 3, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A, B, and 5 more characters")
-                                .setArgument("count", (long) 7, errorCode)
+                                .setArgument("count", (int64_t) 7, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -956,23 +955,23 @@ void TestMessageFormat2::testVariableOptionsInSelectorWithLocalVar(TestCase::Bui
     testBuilder.setPattern(messageVar);
 
     test.adoptInstead(testBuilder.setExpected("A")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A and B")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A, B, and 1 more character")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("A, B, and 5 more characters")
-                                .setArgument("count", (long) 7, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 7, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -983,65 +982,65 @@ void TestMessageFormat2::testVariableOptionsInSelectorWithLocalVar(TestCase::Bui
                 when * {Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}\n";
     testBuilder.setPattern(messageVar2);
     test.adoptInstead(testBuilder.setExpected("Exactly 1")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 1")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 1")
-                                .setArgument("count", (long) 1, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 1, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Exactly 2")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 2")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Exactly 2")
-                                .setArgument("count", (long) 2, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 2, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 3, OffCount = 3, and delta=0.")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 3, OffCount = 2, and delta=1.")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 3, OffCount = 1, and delta=2.")
-                                .setArgument("count", (long) 3, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 3, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder.setExpected("Count = 23, OffCount = 23, and delta=0.")
-                                .setArgument("count", (long) 23, errorCode)
-                                .setArgument("delta", (long) 0, errorCode)
+                                .setArgument("count", (int64_t) 23, errorCode)
+                                .setArgument("delta", (int64_t) 0, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 23, OffCount = 22, and delta=1.")
-                                .setArgument("count", (long) 23, errorCode)
-                                .setArgument("delta", (long) 1, errorCode)
+                                .setArgument("count", (int64_t) 23, errorCode)
+                                .setArgument("delta", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected("Count = 23, OffCount = 21, and delta=2.")
-                                .setArgument("count", (long) 23, errorCode)
-                                .setArgument("delta", (long) 2, errorCode)
+                                .setArgument("count", (int64_t) 23, errorCode)
+                                .setArgument("delta", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }

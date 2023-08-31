@@ -134,7 +134,7 @@ class Errors : public UMemory {
     public:
     static Errors* create(UErrorCode&);
 
-    size_t count() const;
+    int32_t count() const;
     void addNonexhaustivePattern();
     void addDuplicateOption();
     void addSelectorError();
@@ -201,8 +201,17 @@ class U_I18N_API MessageArguments : public UMemory {
          * @deprecated This API is for technology preview only.
          */
         Builder& addDouble(const UnicodeString&, double, UErrorCode&);
+        /**
+         * Adds an argument of type `int64_t`.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument.
+         * @param status    Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         Builder& addInt64(const UnicodeString&, int64_t, UErrorCode&);
-        Builder& addLong(const UnicodeString&, long, UErrorCode&);
         /**
          * Adds an argument of type `UDate`.
          *
@@ -225,7 +234,7 @@ class U_I18N_API MessageArguments : public UMemory {
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Builder& add(const UnicodeString& key, const UnicodeString* value, size_t length, UErrorCode& status);
+        Builder& add(const UnicodeString& key, const UnicodeString* value, int32_t length, UErrorCode& status);
         /**
          * Adds an argument of type UObject*, which must be non-null. Does not
          * adopt this argument. `value` is not declared as const, but is treated

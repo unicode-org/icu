@@ -92,7 +92,7 @@ void PARSER::maybeAdvanceLine() {
 // Helper functions
 
 static void copyContext(const UChar in[U_PARSE_CONTEXT_LEN], UChar out[U_PARSE_CONTEXT_LEN]) {
-    for (size_t i = 0; i < U_PARSE_CONTEXT_LEN; i++) {
+    for (int32_t i = 0; i < U_PARSE_CONTEXT_LEN; i++) {
         out[i] = in[i];
         if (in[i] == '\0') {
             break;
@@ -375,13 +375,13 @@ void PARSER::parseToken(UChar32 c, UErrorCode &errorCode) {
    Consumes a fixed-length token, signaling an error if the token isn't a prefix of
    the string beginning at `source[index]`
 */
-template <size_t N>
+template <int32_t N>
 void PARSER::parseToken(const UChar32 (&token)[N], UErrorCode &errorCode) {
     CHECK_ERROR(errorCode);
 
     U_ASSERT(inBounds(source, index));
 
-    size_t tokenPos = 0;
+    int32_t tokenPos = 0;
     while (tokenPos < N - 1) {
         if (source[index] != token[tokenPos]) {
             ERROR(parseError, errorCode, index);
@@ -402,7 +402,7 @@ void PARSER::parseToken(const UChar32 (&token)[N], UErrorCode &errorCode) {
    the string beginning at `source[index']`),
    then consumes optional whitespace again
 */
-template <size_t N>
+template <int32_t N>
 void PARSER::parseTokenWithWhitespace(const UChar32 (&token)[N],
                                       UErrorCode &errorCode) {
     // No need for error check or bounds check before parseOptionalWhitespace

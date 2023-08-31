@@ -84,23 +84,22 @@ class TestCase : public UMemory {
             arguments->add(k, val, errorCode);
             return *this;
         }
-        Builder& setArgument(const UnicodeString& k, const UnicodeString* val, size_t count, UErrorCode& errorCode) {
+        Builder& setArgument(const UnicodeString& k, const UnicodeString* val, int32_t count, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
             U_ASSERT(val != nullptr);
             arguments->add(k, val, count, errorCode);
             return *this;
         }
-
         Builder& setArgument(const UnicodeString& k, double val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
             arguments->addDouble(k, val, errorCode);
             return *this;
         }
-        Builder& setArgument(const UnicodeString& k, long val, UErrorCode& errorCode) {
+        Builder& setArgument(const UnicodeString& k, int64_t val, UErrorCode& errorCode) {
             THIS_ON_ERROR(errorCode);
 
-            arguments->addLong(k, val, errorCode);
+            arguments->addInt64(k, val, errorCode);
             return *this;
         }
         Builder& setDateArgument(const UnicodeString& k, UDate date, UErrorCode& errorCode) {

@@ -75,7 +75,7 @@ private:
     bool isBogus() const { return !contents.isValid(); }
 
 public:
-    size_t length() const {
+    int32_t length() const {
         U_ASSERT(!isBogus());
         return contents->size();
     }
@@ -84,7 +84,7 @@ public:
     // Because UVector::element() returns a void*,
     // to avoid either copying the result or returning a reference
     // to a temporary value, get() returns a T* 
-    const T* get(size_t i) const {
+    const T* get(int32_t i) const {
         U_ASSERT(!isBogus());
         U_ASSERT(i < length());
         return static_cast<const T *>(contents->elementAt(i));
@@ -94,16 +94,16 @@ public:
     bool contains(const T& element) const {
         U_ASSERT(!isBogus());
 
-        size_t index;
+        int32_t index;
         return find(element, index);
     }
 
     // Returns true iff this contains `element` and returns
     // its first index in `index`. Returns false otherwise
-    bool find(const T& element, size_t& index) const {
+    bool find(const T& element, int32_t& index) const {
         U_ASSERT(!isBogus());
 
-        for (size_t i = 0; i < length(); i++) {
+        for (int32_t i = 0; i < length(); i++) {
             if (*(get(i)) == element) {
                 index = i;
                 return true;
@@ -234,11 +234,11 @@ private:
     bool isBogus() const { return (!contents.isValid() || !keys.isValid()); }
 
 public:
-    static constexpr size_t FIRST = 0;
+    static constexpr int32_t FIRST = 0;
     // Iterates over keys in the order in which they were added.
     // Returns true iff `pos` indicates that there are elements
     // remaining
-    bool next(size_t &pos, UnicodeString& k, const V*& v) const {
+    bool next(int32_t &pos, UnicodeString& k, const V*& v) const {
         U_ASSERT(!isBogus());
         U_ASSERT(pos >= FIRST);
         if (pos >= size()) {
@@ -250,7 +250,7 @@ public:
         return true;
     }
 
-    size_t size() const {
+    int32_t size() const {
         U_ASSERT(!isBogus());
         return keys->size();
     }

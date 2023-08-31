@@ -69,7 +69,6 @@ class U_I18N_API FunctionRegistry : UMemory {
             STRING,
             DOUBLE,
             INT64,
-            LONG,
             DATE          
         };
         Type getType() const { return type; }
@@ -80,10 +79,6 @@ class U_I18N_API FunctionRegistry : UMemory {
         int64_t getInt64() const {
             U_ASSERT(type == INT64);
             return static_cast<int64_t>(num);
-        }
-        int64_t getLong() const {
-            U_ASSERT(type == LONG);
-            return static_cast<long>(num);
         }
         UDate getDate() const {
             U_ASSERT(type == DATE);
@@ -99,7 +94,6 @@ class U_I18N_API FunctionRegistry : UMemory {
 
         static Option* createDate(UDate, UErrorCode&);
         static Option* createDouble(double, UErrorCode&);
-        static Option* createLong(long, UErrorCode&);
         static Option* createInt64(int64_t, UErrorCode&);
         static Option* createString(const UnicodeString&, UErrorCode&);
         Type type;
@@ -108,7 +102,6 @@ class U_I18N_API FunctionRegistry : UMemory {
             double num;
         };
         Option(double val) : type(Type::DOUBLE), num(val) {}
-        Option(long val) : type(Type::LONG), num(val) {}
         Option(int64_t val, Type t) : type(t), num(val) {}
         Option(UDate val, Type t) : type(t), num(val) {}
         Option(const UnicodeString val) : type(Type::STRING), string(val) {}
@@ -209,7 +202,7 @@ class U_COMMON_API Selector : public UMemory {
       See selectKey() in message-value.ts
      */
     // `value` may be null, because the selector might be nullary
-    virtual void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const = 0;
     virtual ~Selector();
 };
 
@@ -287,7 +280,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const;
 
         private:
         friend class PluralFactory;
@@ -308,7 +301,7 @@ class StandardFunctions {
 
     class TextSelector : public Selector {
     public:
-        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const;
         
     private:
         friend class TextFactory;

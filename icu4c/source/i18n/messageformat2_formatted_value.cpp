@@ -374,7 +374,7 @@ const Formattable* ExpressionContext::nextOption(int32_t& pos, UnicodeString& ke
     return (const Formattable*) next->value.pointer;
 }
 
-size_t ExpressionContext::optionsCount() const {
+int32_t ExpressionContext::optionsCount() const {
     U_ASSERT(functionOptions.isValid());
     return functionOptions->count();
 }
@@ -587,7 +587,7 @@ bool ExpressionContext::hasSelector() const {
     return isSelector(*pendingFunctionName);
 }
 
-void ExpressionContext::evalPendingSelectorCall(const UnicodeString keys[], size_t numKeys, UnicodeString keysOut[], size_t& numberMatching, UErrorCode& status) {
+void ExpressionContext::evalPendingSelectorCall(const UnicodeString keys[], int32_t numKeys, UnicodeString keysOut[], int32_t& numberMatching, UErrorCode& status) {
     CHECK_ERROR(status);
 
     U_ASSERT(pendingFunctionName.isValid());

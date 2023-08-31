@@ -49,7 +49,7 @@ TypeEnvironment::TypeEnvironment(UErrorCode& errorCode) {
 }
 
 Type TypeEnvironment::get(const VariableName& var) const {
-    for (size_t i = 0; ((int32_t) i) < annotated->size(); i++) {
+    for (int32_t i = 0; ((int32_t) i) < annotated->size(); i++) {
         UnicodeString* lhs = (UnicodeString*) (*annotated)[i];
         U_ASSERT(lhs != nullptr);
         if (*lhs == var.name()) {
@@ -82,7 +82,7 @@ TypeEnvironment::~TypeEnvironment() {}
 
 static bool areDefaultKeys(const KeyList& keys) {
     U_ASSERT(keys.length() > 0);
-    for (size_t i = 0; i < keys.length(); i++) {
+    for (int32_t i = 0; i < keys.length(); i++) {
         if (!keys.get(i)->isWildcard()) {
             return false;
         }
@@ -95,12 +95,12 @@ void MessageFormatter::Checker::checkVariants(UErrorCode& error) {
     U_ASSERT(dataModel.hasSelectors());
 
     // Determine the number of selectors
-    size_t numSelectors = dataModel.getSelectors().length();
+    int32_t numSelectors = dataModel.getSelectors().length();
 
     // Check that each variant has a key list with length
     // equal to the number of selectors
     const VariantMap& variants = dataModel.getVariants();
-    size_t pos = VariantMap::FIRST;
+    int32_t pos = VariantMap::FIRST;
     const SelectorKeys* selectorKeys;
     const Pattern* pattern;
 
@@ -147,7 +147,7 @@ void MessageFormatter::Checker::checkSelectors(const TypeEnvironment& t, UErrorC
     // Check each selector; if it's not annotated, emit a
     // "missing selector annotation" error
     const ExpressionList& selectors = dataModel.getSelectors();
-    for (size_t i = 0; i < selectors.length(); i++) {
+    for (int32_t i = 0; i < selectors.length(); i++) {
         const Expression* expr = selectors.get(i);
         U_ASSERT(expr != nullptr);
         requireAnnotated(t, *expr, error);
@@ -178,7 +178,7 @@ void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode
     // have the type "annotated" or "unannotated".
     // Free variables (message arguments) are treated as unannotated.
     const MessageFormatDataModel::Bindings& env = dataModel.getLocalVariables();
-    for (size_t i = 0; i < env.length(); i++) {
+    for (int32_t i = 0; i < env.length(); i++) {
         const Binding* b = env.get(i);
         U_ASSERT(b != nullptr);
         const Expression* rhs = b->getValue();

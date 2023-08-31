@@ -199,9 +199,9 @@ public:
         void parseOptionalWhitespace(UErrorCode &);
         void parseToken(UChar32, UErrorCode &);
         void parseTokenWithWhitespace(UChar32, UErrorCode &);
-        template <size_t N>
+        template <int32_t N>
         void parseToken(const UChar32 (&)[N], UErrorCode &);
-        template <size_t N>
+        template <int32_t N>
         void parseTokenWithWhitespace(const UChar32 (&)[N], UErrorCode &);
         void parseName(UErrorCode&, UnicodeString&);
         void parseVariableName(UErrorCode&, UnicodeString&);
@@ -255,7 +255,7 @@ public:
     private:
         void whitespace();
         void emit(UChar32);
-        template <size_t N>
+        template <int32_t N>
         void emit(const UChar32 (&)[N]);
         void emit(const UnicodeString&);
         void emit(const Name&);
@@ -297,8 +297,8 @@ public:
 
      // Selection methods
      void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, ExpressionContext**) const;
-     void matchSelectorKeys(UnicodeString*/*[]*/, size_t, ExpressionContext&, UErrorCode&, UnicodeString*, size_t&) const;
-     void resolvePreferences(ExpressionContext**, size_t, const MessageFormatDataModel::VariantMap&, UErrorCode&, UnicodeString**, size_t*) const;
+     void matchSelectorKeys(UnicodeString*/*[]*/, int32_t, ExpressionContext&, UErrorCode&, UnicodeString*, int32_t&) const;
+     void resolvePreferences(ExpressionContext**, int32_t, const MessageFormatDataModel::VariantMap&, UErrorCode&, UnicodeString**, int32_t*) const;
 
      // Formatting methods
      void formatLiteral(const MessageFormatDataModel::Literal&, ExpressionContext&) const;

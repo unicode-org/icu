@@ -289,14 +289,14 @@ public:
     */
     class VariantMap : public UMemory {
     public:
-        static constexpr size_t FIRST = OrderedMap<Pattern>::FIRST;
+        static constexpr int32_t FIRST = OrderedMap<Pattern>::FIRST;
         // Because ImmutableVector::get() returns a T*,
         // the out-parameters for `next()` are references to pointers
         // rather than references to a `SelectorKeys` or a `Pattern`,
         // in order to avoid either copying or creating a reference to
         // a temporary value.
-        bool next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
-        size_t size() const;
+        bool next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
+        int32_t size() const;
         class Builder : public UMemory {
         public:
             Builder& add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode);
@@ -328,9 +328,9 @@ public:
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions 
     class Reserved : public UMemory {
     public:
-        size_t numParts() const;
+        int32_t numParts() const;
         // Precondition: i < numParts()
-        const Literal* getPart(size_t i) const;
+        const Literal* getPart(int32_t i) const;
         class Builder {
         private:
             friend class Reserved;
@@ -541,9 +541,9 @@ public:
     // defined in https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#patterns
     class Pattern : public UObject {
     public:
-        size_t numParts() const { return parts->length(); }
+        int32_t numParts() const { return parts->length(); }
         // Precondition: i < numParts()
-        const PatternPart* getPart(size_t i) const;
+        const PatternPart* getPart(int32_t i) const;
 
         class Builder {
         private:

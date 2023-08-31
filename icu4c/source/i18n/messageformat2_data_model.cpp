@@ -115,11 +115,11 @@ const Literal& Key::asLiteral() const {
 
 //---------------- VariantMap
 
-size_t VariantMap::size() const {
+int32_t VariantMap::size() const {
     return contents->size();
 }
 
-bool VariantMap::next(size_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
+bool VariantMap::next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
     UnicodeString unused;
     if (!contents->next(pos, unused, v)) {
         return false;
@@ -162,8 +162,8 @@ VariantMap* VariantMap::Builder::build(UErrorCode& errorCode) const {
 
 /* static */ void VariantMap::Builder::concatenateKeys(const SelectorKeys& keys, UnicodeString& result) {
     const KeyList& ks = keys.getKeys();
-    size_t len = ks.length();
-    for (size_t i = 0; i < len; i++) {
+    int32_t len = ks.length();
+    for (int32_t i = 0; i < len; i++) {
         ks.get(i)->toString(result);
         if (i != len - 1) {
             result += SPACE;
@@ -193,12 +193,12 @@ VariantMap::Builder::Builder(UErrorCode& errorCode) {
 
 // ------------ Reserved
 
-size_t Reserved::numParts() const {
+int32_t Reserved::numParts() const {
     U_ASSERT(!isBogus());
     return parts->length();
 }
 
-const Literal* Reserved::getPart(size_t i) const {
+const Literal* Reserved::getPart(int32_t i) const {
     U_ASSERT(!isBogus());
     U_ASSERT(i < numParts());
     return parts->get(i);
@@ -580,7 +580,7 @@ const UnicodeString& PatternPart::asText() const {
     return new Pattern(p);
 }
 
-const PatternPart* Pattern::getPart(size_t i) const {
+const PatternPart* Pattern::getPart(int32_t i) const {
     U_ASSERT(!isBogus() && i < numParts());
     return parts->get(i);
 }

@@ -400,7 +400,7 @@ void message2::ListFormatter::format(FormattingContext& context, UErrorCode& err
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-            for (size_t i = 0; ((int32_t) i) < n_items; i++) {
+            for (int32_t i = 0; i < n_items; i++) {
                 parts[i] = objs[i].getString();
             }
             lf->format(parts.orphan(), n_items, result, errorCode);
@@ -520,8 +520,8 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     if (properties.length() < 1) {
         error = true;
     }
-    size_t i = 0;
-    while (((int32_t) i) < properties.length()) {
+    int32_t i = 0;
+    while (i < properties.length()) {
         if (properties[i] != '/') {
             error = true;
             break;
@@ -562,7 +562,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
         }
         i++; // Consume closing '/' for value
         // Value may be empty
-        if (((int32_t) i) < (properties.length() - 1)) {
+        if (i < (properties.length() - 1)) {
             // Consume comma and space
             if (properties[i] != COMMA) {
                 error = true;
@@ -633,7 +633,7 @@ static Arguments* localToGlobal(const FormattingContext& context, UErrorCode& er
                 break;
             }
             case Formattable::Type::kLong: {
-                args->addLong(optionName, optionValue->getLong(), errorCode);
+                args->addInt64(optionName, (int64_t) optionValue->getLong(), errorCode);
                 break;
             }
             case Formattable::Type::kDate: {

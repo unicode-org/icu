@@ -190,10 +190,6 @@ int64_t Options::getIntOption(const UnicodeString& key, int64_t defaultVal) cons
                 return optionValue->getDouble();
                 break;
             }
-            case Option::Type::LONG: {
-                return optionValue->getLong();
-                break;
-            }
             case Option::Type::INT64: {
                 return optionValue->getInt64();
                 break;
@@ -239,15 +235,6 @@ void Options::add(const UnicodeString& name, Option* value, UErrorCode& errorCod
 /* static */ Option* Option::createInt64(int64_t val, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     Option* result = new Option(val, Option::Type::INT64);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Option* Option::createLong(long val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Option* result = new Option(val);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -476,7 +463,7 @@ static void tryWithFormattable(const Locale& locale, const Formattable& value, d
     noMatch = false;
 }
 
-void StandardFunctions::Plural::selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys,  UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::Plural::selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys,  UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // No argument => return "NaN"
@@ -517,7 +504,7 @@ void StandardFunctions::Plural::selectKey(FormattingContext& context, const Unic
     // First, check for an exact match
     numMatching = 0;
     double keyAsDouble = 0;
-    for (size_t i = 0; i < numKeys; i++) {
+    for (int32_t i = 0; i < numKeys; i++) {
         // Try parsing the key as a double
         UErrorCode localErrorCode = U_ZERO_ERROR;
         strToDouble(keys[i], locale, keyAsDouble, localErrorCode);
@@ -541,7 +528,7 @@ void StandardFunctions::Plural::selectKey(FormattingContext& context, const Unic
     }
     CHECK_ERROR(errorCode);
 
-    for (size_t i = 0; i < numKeys; i ++) {
+    for (int32_t i = 0; i < numKeys; i ++) {
         if (match == keys[i]) {
             prefs[numMatching++] = keys[i];
             break;
@@ -650,7 +637,7 @@ Selector* StandardFunctions::TextFactory::createSelector(const Locale& locale, U
     return result;
 }
 
-void StandardFunctions::TextSelector::selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, size_t numKeys, UnicodeString* prefs/*[]*/, size_t& numMatching, UErrorCode& errorCode) const {
+void StandardFunctions::TextSelector::selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const {
     CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
@@ -674,7 +661,7 @@ void StandardFunctions::TextSelector::selectKey(FormattingContext& context, cons
 
     const UnicodeString& formattedValue = context.getStringOutput();
 
-    for (size_t i = 0; i < numKeys; i++) {
+    for (int32_t i = 0; i < numKeys; i++) {
         if (keys[i] == formattedValue) {
             numMatching++;
             prefs[0] = keys[i];

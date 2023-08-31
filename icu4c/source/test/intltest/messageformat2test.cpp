@@ -312,7 +312,7 @@ void TestMessageFormat2::testAPISimple() {
     builder = MessageFormatter::builder(errorCode);
     argsBuilder = MessageArguments::builder(errorCode);
 
-    argsBuilder->addLong("photoCount", 12, errorCode);
+    argsBuilder->addInt64("photoCount", 12, errorCode);
     argsBuilder->add("userGender", "feminine", errorCode);
     argsBuilder->add("userName", "Maria", errorCode);
     args = argsBuilder->build(errorCode);
@@ -371,7 +371,7 @@ void TestMessageFormat2::testAPI() {
                      when * * {{$userName} added {$photoCount} photos to their album.}";
 
 
-    long photoCount = 12;
+    int64_t photoCount = 12;
     test.adoptInstead(testBuilder->setName("testAPI")
                       .setPattern(pattern)
                       .setArgument("photoCount", photoCount, errorCode)
@@ -505,7 +505,7 @@ TestMessageFormat2::testPattern(const UnicodeString& s, uint32_t i, const char* 
  `patterns`: The patterns.
  `testName`: String describing the test (only used for diagnostic output)
 */
-template<size_t N>
+template<int32_t N>
 void TestMessageFormat2::testPatterns(const UnicodeString (&patterns)[N], const char* testName) {
     for (uint32_t i = 0; i < N - 1; i++) {
         testPattern(patterns[i], i, testName);

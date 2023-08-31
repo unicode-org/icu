@@ -214,15 +214,6 @@ static Formattable* createFormattableDouble(double val, UErrorCode& errorCode) {
     return result;
 }
 
-static Formattable* createFormattableLong(long val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(val);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
 static Formattable* createFormattableInt64(int64_t val, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     Formattable* result = new Formattable(val);
@@ -250,7 +241,7 @@ static Formattable* createFormattableObject(UObject* val, UErrorCode& errorCode)
     return result;
 }
 
-static Formattable* createFormattableArray(const UnicodeString* in, size_t count, UErrorCode& errorCode) {
+static Formattable* createFormattableArray(const UnicodeString* in, int32_t count, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     LocalArray<Formattable> arr(new Formattable[count]);
@@ -260,7 +251,7 @@ static Formattable* createFormattableArray(const UnicodeString* in, size_t count
     }
 
     LocalPointer<Formattable> val;
-    for (size_t i = 0; i < count; i++) {
+    for (int32_t i = 0; i < count; i++) {
         // TODO
         // Without this explicit cast, `val` is treated as if it's
         // an object when it's assigned into `arr[i]`. I don't know why.
@@ -314,14 +305,6 @@ Arguments::Builder& Arguments::Builder::addInt64(const UnicodeString& name, int6
     return add(name, valPtr, errorCode);
 }
 
-Arguments::Builder& Arguments::Builder::addLong(const UnicodeString& name, long val, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
-
-    Formattable* valPtr(createFormattableLong(val, errorCode));
-    THIS_ON_ERROR(errorCode);
-    return add(name, valPtr, errorCode);
-}
-
 Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate val, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
@@ -330,7 +313,7 @@ Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate
     return add(name, valPtr, errorCode);
 }
 
-Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString* arr, size_t count, UErrorCode& errorCode) {
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString* arr, int32_t count, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
     Formattable* valPtr(createFormattableArray(arr, count, errorCode));
@@ -552,7 +535,7 @@ bool MessageFormatter::isBuiltInSelector(const FunctionName& functionName) const
 void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& options, ExpressionContext& context, UErrorCode& status) const {
     CHECK_ERROR(status);
 
-    size_t pos = OptionMap::FIRST;
+    int32_t pos = OptionMap::FIRST;
     LocalPointer<ExpressionContext> rhsContext;
     while (true) {
         UnicodeString k;
@@ -790,7 +773,7 @@ void MessageFormatter::formatPattern(Context& globalContext, const Environment& 
     CHECK_ERROR(status);
 
     LocalPointer<ExpressionContext> context;
-    for (size_t i = 0; i < pat.numParts(); i++) {
+    for (int32_t i = 0; i < pat.numParts(); i++) {
         const PatternPart* part = pat.getPart(i);
         U_ASSERT(part != nullptr);
         if (part->isText()) {
@@ -814,7 +797,7 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
     // (Implicit, since `res` is an out-parameter)
     // 2. For each expression exp of the message's selectors
     LocalPointer<ExpressionContext> rv;
-    for (size_t i = 0; i < selectors.length(); i++) {
+    for (int32_t i = 0; i < selectors.length(); i++) {
         rv.adoptInstead(ExpressionContext::create(context, *this, status));
         CHECK_ERROR(status);
         // 2i. Let rv be the resolved value of exp.
@@ -839,7 +822,7 @@ void MessageFormatter::resolveSelectors(Context& context, const Environment& env
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `keys` and `matches` are both vectors of strings
-void MessageFormatter::matchSelectorKeys(UnicodeString* keys/*[]*/, size_t numKeys, ExpressionContext& rv, UErrorCode& status, UnicodeString* matches/*[]*/, size_t& numberMatching) const {
+void MessageFormatter::matchSelectorKeys(UnicodeString* keys/*[]*/, int32_t numKeys, ExpressionContext& rv, UErrorCode& status, UnicodeString* matches/*[]*/, int32_t& numberMatching) const {
     CHECK_ERROR(status);
 
     numberMatching = 0;
@@ -855,22 +838,22 @@ void MessageFormatter::matchSelectorKeys(UnicodeString* keys/*[]*/, size_t numKe
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
 // `res` is an array of arrays of ExpressionContexts, with length `numSelectors;
 // `pref` is an array of arrays of strings; `prefsLengths` is an array of the length of each element of `pref`
-void MessageFormatter::resolvePreferences(ExpressionContext** res/*[]*/, size_t numSelectors, const VariantMap& variants, UErrorCode &status, UnicodeString** pref/*[]*/, size_t* prefsLengths/*[]*/) const {
+void MessageFormatter::resolvePreferences(ExpressionContext** res/*[]*/, int32_t numSelectors, const VariantMap& variants, UErrorCode &status, UnicodeString** pref/*[]*/, int32_t* prefsLengths/*[]*/) const {
     CHECK_ERROR(status);
 
     // 1. Let pref be a new empty list of lists of strings.
     // (Implicit, since `pref` is an out-parameter)
     LocalArray<UnicodeString> keys;
     LocalArray<UnicodeString> matches(new UnicodeString[variants.size()]);
-    size_t numVariants = variants.size();
+    int32_t numVariants = variants.size();
     // 2. For each index i in res
-    for (size_t i = 0; i < numSelectors; i++) {
+    for (int32_t i = 0; i < numSelectors; i++) {
         // 2i. Let keys be a new empty list of strings.
         keys.adoptInstead(new UnicodeString[numVariants]);
-        size_t keysLen = 0;
+        int32_t keysLen = 0;
         CHECK_ERROR(status);
         // 2ii. For each variant `var` of the message
-        size_t pos = VariantMap::FIRST;
+        int32_t pos = VariantMap::FIRST;
         while (true) {
             const SelectorKeys* selectorKeys;
             const Pattern* p; // Not used
@@ -899,7 +882,7 @@ void MessageFormatter::resolvePreferences(ExpressionContext** res/*[]*/, size_t 
         ExpressionContext* rv = res[i];
         U_ASSERT(rv != nullptr);
         // 2iv. Let matches be the result of calling the method MatchSelectorKeys(rv, keys)
-        size_t numMatches;
+        int32_t numMatches;
         matchSelectorKeys(keys.getAlias(), keysLen, *rv, status, matches.getAlias(), numMatches);
         // 2v. Append `matches` as the last element of the list `pref`
         pref[i] = matches.orphan();
@@ -908,8 +891,8 @@ void MessageFormatter::resolvePreferences(ExpressionContext** res/*[]*/, size_t 
     }
 }
 
-static int32_t indexOf(const UnicodeString* matches/*[]*/, size_t matchesLen, const UnicodeString& k) {
-    for (size_t i = 0; i < matchesLen; i++) {
+static int32_t indexOf(const UnicodeString* matches/*[]*/, int32_t matchesLen, const UnicodeString& k) {
+    for (int32_t i = 0; i < matchesLen; i++) {
         if (matches[i] == k) {
             return i;
         }
@@ -917,20 +900,20 @@ static int32_t indexOf(const UnicodeString* matches/*[]*/, size_t matchesLen, co
     return -1;
 }
 
-static bool contains(const UnicodeString* matches/*[]*/, size_t matchesLen, const UnicodeString& k) {
+static bool contains(const UnicodeString* matches/*[]*/, int32_t matchesLen, const UnicodeString& k) {
     return (indexOf(matches, matchesLen, k) != -1);
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#filter-variants
 // `pref` is a vector of vectors of strings; `vars` is a vector of PrioritizedVariants
-void filterVariants(const VariantMap& variants, /* const */ UnicodeString** pref/*[]*/, size_t prefLen, const size_t* prefsLengths, UErrorCode &status, PrioritizedVariant** vars/*[]*/, size_t& varsLen) {
+void filterVariants(const VariantMap& variants, /* const */ UnicodeString** pref/*[]*/, int32_t prefLen, const int32_t* prefsLengths, UErrorCode &status, PrioritizedVariant** vars/*[]*/, int32_t& varsLen) {
     CHECK_ERROR(status);
 
     varsLen = 0;
     // 1. Let `vars` be a new empty list of variants.
     // (Not needed since `vars` is an out-parameter)
     // 2. For each variant `var` of the message:
-    size_t pos = VariantMap::FIRST;
+    int32_t pos = VariantMap::FIRST;
     while (true) {
         const SelectorKeys* selectorKeys;
         const Pattern* p;
@@ -942,7 +925,7 @@ void filterVariants(const VariantMap& variants, /* const */ UnicodeString** pref
         const KeyList& var = selectorKeys->getKeys();
         // 2i. For each index `i` in `pref`:
         bool noMatch = false;
-        for (size_t i = 0; i < prefLen; i++) {
+        for (int32_t i = 0; i < prefLen; i++) {
             // 2i(a). Let `key` be the `var` key at position `i`.
             U_ASSERT(i < var.length());
             const Key& key = *var.get(i);
@@ -996,7 +979,7 @@ int32_t comparePrioritizedVariants(const void* context, const void *left, const 
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#sort-variants
-static void sortVariantTuples(PrioritizedVariant** sortable/*[]*/, size_t count, UErrorCode& errorCode) {
+static void sortVariantTuples(PrioritizedVariant** sortable/*[]*/, int32_t count, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
     uprv_sortArray(sortable, count, sizeof(PrioritizedVariant*), comparePrioritizedVariants, nullptr, true, &errorCode);
@@ -1006,7 +989,7 @@ static void sortVariantTuples(PrioritizedVariant** sortable/*[]*/, size_t count,
 // Leaves the preferred variant as element 0 in `sortable`
 // Note: this sorts in-place, so `sortable` is just `vars`
 // `pref` is a vector of vectors of strings; `vars` is a vector of PrioritizedVariants
-void sortVariants(/* const */ UnicodeString** pref, size_t prefsLen, size_t* prefsLengths, UErrorCode& status, PrioritizedVariant** vars/*[]*/, size_t varsLen) {
+void sortVariants(/* const */ UnicodeString** pref, int32_t prefsLen, int32_t* prefsLengths, UErrorCode& status, PrioritizedVariant** vars/*[]*/, int32_t varsLen) {
     CHECK_ERROR(status);
 
 // Note: steps 1 and 2 are omitted since we use `vars` as `sortable` (we sort in-place)
@@ -1017,7 +1000,7 @@ void sortVariants(/* const */ UnicodeString** pref, size_t prefsLen, size_t* pre
     // 2ii. Append `tuple` as the last element of the list `sortable`.
 
     // 3. Let `len` be the integer count of items in `pref`.
-    size_t len = prefsLen;
+    int32_t len = prefsLen;
     // 4. Let `i` be `len` - 1.
     int32_t i = len - 1;
     // 5. While i >= 0:
@@ -1025,16 +1008,16 @@ void sortVariants(/* const */ UnicodeString** pref, size_t prefsLen, size_t* pre
         // 5i. Let `matches` be the list of strings at index `i` of `pref`.
         const UnicodeString* matches = pref[i];
         // 5ii. Let `minpref` be the integer count of items in `matches`.
-        size_t minpref = prefsLengths[i];
+        int32_t minpref = prefsLengths[i];
         // 5iii. For each tuple `tuple` of `sortable`:
-        for (size_t j = 0; j < varsLen; j++) {
+        for (int32_t j = 0; j < varsLen; j++) {
             PrioritizedVariant* tuple = vars[j];
             // 5iii(a). Let matchpref be an integer with the value minpref.
             int32_t matchpref = minpref;
             // 5iii(b). Let `key` be the tuple variant key at position `i`.
             const KeyList& tupleVariantKeys = tuple->keys.getKeys();
             U_ASSERT(i < ((int32_t) tupleVariantKeys.length())); // Given by earlier semantic checking
-            const Key& key = *tupleVariantKeys.get(((size_t) i));
+            const Key& key = *tupleVariantKeys.get(((int32_t) i));
             // 5iii(c) If `key` is not the catch-all key '*':
             if (!key.isWildcard()) {
                 // 5iii(c)(a). Assert that `key` is a literal.
@@ -1065,7 +1048,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
 
     // Resolve Selectors
     // res is a vector of ResolvedExpressions
-    size_t numSelectors = selectors.length();
+    int32_t numSelectors = selectors.length();
     LocalArray<ExpressionContext*> res(new ExpressionContext*[numSelectors]);
     if (!res.isValid()) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -1076,7 +1059,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
     // Resolve Preferences
     // pref is an array of arrays of strings
     LocalArray<UnicodeString*> pref(new UnicodeString*[numSelectors]);
-    LocalArray<size_t> prefsLengths(new size_t[numSelectors]);
+    LocalArray<int32_t> prefsLengths(new int32_t[numSelectors]);
     CHECK_ERROR(status);
     resolvePreferences(res.getAlias(), numSelectors, variants, status, pref.getAlias(), prefsLengths.getAlias());
    
@@ -1087,7 +1070,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    size_t varsLen;
+    int32_t varsLen;
     filterVariants(variants, pref.getAlias(), numSelectors, prefsLengths.getAlias(), status, vars.getAlias(), varsLen);
 
     // Sort Variants and select the final pattern
@@ -1110,7 +1093,7 @@ void MessageFormatter::check(Context& context, const Environment& localEnv, cons
     CHECK_ERROR(status);
 
     // Check the RHS of each option
-    size_t pos = OptionMap::FIRST;
+    int32_t pos = OptionMap::FIRST;
     UnicodeString k; // not used
     const Operand* rhs;
     while(true) {
@@ -1162,7 +1145,7 @@ void MessageFormatter::checkDeclarations(Context& context, Environment*& env, UE
     const Bindings& decls = dataModel->getLocalVariables();
     U_ASSERT(env != nullptr);
 
-    for (size_t i = 0; i < decls.length(); i++) {
+    for (int32_t i = 0; i < decls.length(); i++) {
         const Binding* decl = decls.get(i);
         U_ASSERT(decl != nullptr);
         const Expression* rhs = decl->getValue();

@@ -53,7 +53,7 @@ private:
     void testMessageFormatting(const UnicodeString&, UParseError&, UErrorCode&);
     void testMessageFormatting(const UnicodeString&, UParseError&, UnicodeString&, UErrorCode&);
     void testPattern(const UnicodeString&, uint32_t, const char*);
-    template<size_t N>
+    template<int32_t N>
     void testPatterns(const UnicodeString(&) [N], const char*);
     void testSemanticallyInvalidPattern(uint32_t, const UnicodeString&, UErrorCode);
     void testRuntimeErrorPattern(uint32_t, const UnicodeString&, UErrorCode);
@@ -191,10 +191,10 @@ class TemperatureFormatterFactory : public FormatterFactory {
     Formatter* createFormatter(const Locale&, UErrorCode&);
     TemperatureFormatterFactory() : constructCount(0), formatCount(0), fFormatterCount(0), cFormatterCount(0) {}
 
-    size_t constructCount;
-    size_t formatCount;
-    size_t fFormatterCount;
-    size_t cFormatterCount;
+    int32_t constructCount;
+    int32_t formatCount;
+    int32_t fFormatterCount;
+    int32_t cFormatterCount;
 };
 
 class TemperatureFormatter : public Formatter {
