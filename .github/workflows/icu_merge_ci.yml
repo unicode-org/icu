@@ -8,7 +8,7 @@ name: GHA ICU Merge CI
 on:
   push:
     branches:
-      - main	
+      - main
       - 'maint/maint*'
   workflow_dispatch:
     # To trigger the Env Test workflow manually, follow the instructions in
@@ -304,7 +304,7 @@ jobs:
           git status
           cd perf-tests;
           mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
-          java -cp ../tools/misc/target/:../../icu4j/main/icu4j/target/ com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -356,7 +356,7 @@ jobs:
           mvn install -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_ucharacterperf;
-          java -cp ../tools/misc/target/:../../icu4j/main/icu4j/target/ com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -415,7 +415,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ../tools/misc/target/:../../icu4j/main/icu4j/target/ com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -477,7 +477,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ../tools/misc/target/:../../icu4j/main/icu4j/target/ com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
           cat perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -607,7 +607,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ../tools/misc/target/:../../icu4j/main/icu4j/target/:../../icu4j/main/charset/target/ com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/*:../main/charset/target/* com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -684,7 +684,7 @@ jobs:
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ../tools/misc/target/:../../icu4j/main/icu4j/target/ com.ibm.icu.dev.test.perf.DateFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} ${{ env.PARM }} -r 1 | tee perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.DateFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} ${{ env.PARM }} -r 1 | tee perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12

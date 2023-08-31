@@ -25,6 +25,7 @@
     <module>demos</module>
     <module>samples</module>
     <module>tools/misc</module>
+    <module>perf-tests</module>
   </modules>
 
   <properties>
