@@ -9,6 +9,7 @@
 package com.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
+import com.ibm.icu.util.ULocale;
 
 /**
  * The LanguageBreakEngine interface is to be used to implement any
@@ -17,9 +18,10 @@ import java.text.CharacterIterator;
 public interface LanguageBreakEngine {
     /**
      * @param c A Unicode codepoint value
+     * @param locale A locale
      * @return true if the engine can handle this character, false otherwise
      */
-    boolean handles(int c);
+    boolean handles(int c, ULocale locale);
 
     /**
      * Implements the actual breaking logic. Find any breaks within a run in the supplied text.

@@ -1014,6 +1014,10 @@ public abstract class BreakIterator implements Cloneable
             this.actualLocale : this.validLocale;
     }
 
+    protected final ULocale getRequestedLocale() {
+        return this.requestedLocale;
+    }
+
     /**
      * Set information about the locales that were used to create this
      * object.  If the object was not constructed from locale data,
@@ -1044,6 +1048,15 @@ public abstract class BreakIterator implements Cloneable
     }
 
     /**
+     * Set the requested locale.
+     * @param requested the locale requested to construct.
+     * @see com.ibm.icu.util.ULocale
+     */
+    final void setRequestedLocale(ULocale requested) {
+        this.requestedLocale = requested;
+    }
+
+    /**
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
      */
@@ -1055,6 +1068,12 @@ public abstract class BreakIterator implements Cloneable
      * @see com.ibm.icu.util.ULocale
      */
     private ULocale actualLocale;
+
+    /**
+     * The locale requsted in the constructor.
+     * @see com.ibm.icu.util.ULocale
+     */
+    private ULocale requestedLocale;
 
     // -------- END ULocale boilerplate --------
 }

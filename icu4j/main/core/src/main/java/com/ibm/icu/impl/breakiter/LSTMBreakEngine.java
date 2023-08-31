@@ -22,6 +22,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -237,7 +238,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public boolean handles(int c) {
+    public boolean handles(int c, ULocale locale) {
         return fScript == UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
     }
 

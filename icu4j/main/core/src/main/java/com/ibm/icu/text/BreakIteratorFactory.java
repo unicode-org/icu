@@ -171,6 +171,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         // TODO: Determine valid and actual locale correctly.
         ULocale uloc = ULocale.forLocale(rb.getLocale());
         iter.setLocale(uloc, uloc);
+        iter.setRequestedLocale(locale);
 
         // filtered break
         if (kind == BreakIterator.KIND_SENTENCE) {

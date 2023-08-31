@@ -15,6 +15,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 
 public class ThaiBreakEngine extends DictionaryBreakEngine {
 
@@ -89,7 +90,7 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public boolean handles(int c) {
+    public boolean handles(int c, ULocale locale) {
         int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
         return (script == UScript.THAI);
     }

@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.rbbi;
 
 import java.text.CharacterIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,9 +30,9 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.RBBIDataWrapper;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.ULocale;
-
 
 @RunWith(JUnit4.class)
 public class RBBITest extends CoreTestFmwk {
@@ -1002,5 +1003,111 @@ public class RBBITest extends CoreTestFmwk {
             idx = fns.randomStringIndex();
             assertEquals("preceding" + idx, fns.expectedPreceding(idx), bi.preceding(idx));
         }
+    }
+
+    @Test
+    public void TestExternalBreakEngineWithFakeYue() {
+        String text = "a bc def一兩年前佢真係唔鍾意畀我影相i jk lmn";
+        List<Integer> actual1 = new ArrayList<Integer>();
+        BreakIterator bi1 = BreakIterator.getWordInstance(ULocale.ROOT);
+
+        bi1.setText(text);
+        do {
+            actual1.add(bi1.current());
+        } while(bi1.next() != BreakIterator.DONE);
+        List<Integer> expected1 = new ArrayList<Integer>(Arrays.asList(
+            0, 1, 2, 4, 5, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 26, 27, 30));
+        assertEquals("root break Yue as Chinese", actual1, expected1);
+
+        RuleBasedBreakIterator.registerExternalBreakEngine(
+            new RuleBasedBreakIterator.ExternalBreakEngine() {
+                UnicodeSet block = new UnicodeSet(0x4e00, 0x9FFF);
+                public boolean isFor(int c, ULocale locale) {
+                    // We implmement this for any locale with "yue" such as
+                    // "yue", "yue-CN", "yue-Hant-CN", etc.
+                    return handles(c) && locale.getLanguage().equals("yue");
+                }
+                public boolean handles(int c) {
+                    return block.contains(c);
+                }
+                public int fillBreaks(CharacterIterator text, int start, int end,
+                                      List<Integer> foundBreaks) {
+                    int current = start;
+                    int i = 0;
+                    while (current++ < end) {
+                        if ((current - start) % 2 == 0) {
+                            foundBreaks.add(current);
+                            i++;
+                        }
+                    }
+                    text.setIndex(end);
+                    return i;
+                }
+            });
+
+        List<Integer> actual2 = new ArrayList<Integer>();
+        BreakIterator bi2 = BreakIterator.getWordInstance(new ULocale("yue"));
+        bi2.setText(text);
+        do {
+            actual2.add(bi2.current());
+        } while(bi2.next() != BreakIterator.DONE);
+        List<Integer> expected2 = new ArrayList<Integer>(Arrays.asList(
+            0, 1, 2, 4, 5, 8, 10, 12, 14, 16, 18, 20, 22, 23, 24, 26, 27, 30));
+        assertEquals("break Yue by Fake external breaker", actual2, expected2);
+    }
+
+    @Test
+    public void TestExternalBreakEngineWithFakeTaiLe() {
+        String text = "a bc defᥛᥫᥒᥰᥖᥭᥰᥞᥝᥰᥙᥥᥢᥛᥫᥒᥰᥑᥩᥢᥲᥔᥣᥝᥴᥓᥬᥖᥩᥢᥲᥛᥣᥝᥱᥙᥝᥱᥙᥤᥱᥓᥣᥒᥛᥣᥰᥓᥧ" +
+        "ᥰᥘᥩᥰᥗᥪᥒᥴᥛᥣᥰᥘᥬᥰᥝᥣᥱᥘᥒᥱᥔᥣᥛᥴᥘᥫᥢi jk lmn";
+
+        List<Integer> actual1 = new ArrayList<Integer>();
+        BreakIterator bi1 = BreakIterator.getLineInstance(ULocale.ROOT);
+
+        bi1.setText(text);
+        do {
+            actual1.add(bi1.current());
+        } while(bi1.next() != BreakIterator.DONE);
+        List<Integer> expected1 = new ArrayList<Integer>(Arrays.asList(0, 2, 5, 86, 89, 92));
+        assertEquals("root break Tai Le", actual1, expected1);
+
+        RuleBasedBreakIterator.registerExternalBreakEngine(
+            new RuleBasedBreakIterator.ExternalBreakEngine() {
+                UnicodeSet block = new UnicodeSet(0x1950, 0x197f);
+                UnicodeSet tones = new UnicodeSet(0x1970, 0x1974);
+                public boolean isFor(int c, ULocale locale) {
+                    return handles(c);
+                }
+                public boolean handles(int c) {
+                    return block.contains(c);
+                }
+                public int fillBreaks(CharacterIterator text, int rangeStart, int rangeEnd,
+                                      List<Integer> foundBreaks) {
+                    int i = 0;
+                    int c = text.setIndex(rangeStart);
+                    int current;
+                    while ((current = text.getIndex()) < rangeEnd) {
+                        if (tones.contains(c)) {
+                            i++;
+                            foundBreaks.add(current);
+                        }
+                        c = text.next();
+                    }
+                    return i;
+                }
+            });
+
+
+        List<Integer> actual2 = new ArrayList<Integer>();
+        BreakIterator bi2 = BreakIterator.getLineInstance(new ULocale("tdd"));
+        bi2.setText(text);
+        do {
+            actual2.add(bi2.current());
+        } while(bi2.next() != BreakIterator.DONE);
+        List<Integer> expected2 = new ArrayList<Integer>(Arrays.asList(
+            0, 2, 5, 11, 14, 17, 24, 28, 32, 38, 42, 45, 48, 54, 57, 60, 64, 67,
+            70, 73, 76, 80, 86, 89, 92));
+        assertEquals("break Tai Le by Fake external breaker", actual2, expected2);
     }
 }

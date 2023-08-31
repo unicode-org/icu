@@ -40,6 +40,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.CodePointTrie;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Rule Based Break Iterator
@@ -727,7 +728,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         // We have a dictionary character.
         // Does an already instantiated break engine handle it?
         for (LanguageBreakEngine candidate : fBreakEngines) {
-            if (candidate.handles(c)) {
+            if (candidate.handles(c, getRequestedLocale())) {
                 return candidate;
             }
         }
@@ -737,7 +738,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // Check the global list, another break iterator may have instantiated the
             // desired engine.
             for (LanguageBreakEngine candidate : gAllBreakEngines) {
-                if (candidate.handles(c)) {
+                if (candidate.handles(c, getRequestedLocale())) {
                     fBreakEngines.add(candidate);
                     return candidate;
                 }
@@ -1079,6 +1080,35 @@ public class RuleBasedBreakIterator extends BreakIterator {
             }
         }
         return ci.getIndex();
+    }
+
+    /**
+     * Register a new external break engine. The external break engine will be adopted.
+     * Because ICU may choose to cache break engine internally, this must
+     * be called at application startup, prior to any calls to
+     * object methods of RuleBasedBreakIterator to avoid undefined behavior.
+     * @param engine the ExternalBreakEngine instance to be adopted
+     * @internal ICU 75 technology preview
+     */
+    public static void registerExternalBreakEngine(ExternalBreakEngine engine) {
+        synchronized(gAllBreakEngines) {
+            gAllBreakEngines.add(0, new LanguageBreakEngine() {
+                @Override
+                public boolean handles(int c, ULocale locale) {
+                   return engine.isFor(c, locale);
+                }
+                @Override
+                public int findBreaks(CharacterIterator text, int startPos, int endPos,
+                        DictionaryBreakEngine.DequeI foundBreaks, boolean isPhraseBreaking) {
+                    List<Integer> found = new ArrayList<Integer>();
+                    int result = engine.fillBreaks(text, startPos, endPos, found);
+                    for (Integer f : found) {
+                      foundBreaks.push(f);
+                    }
+                    return result;
+                }
+            });
+        }
     }
 
     /** DictionaryCache  stores the boundaries obtained from a run of dictionary characters.
@@ -1885,7 +1915,43 @@ class BreakCache {
 };
 
 
+    public interface ExternalBreakEngine {
+        /**
+         * <p>Indicate whether this engine handles a particular character when
+         * the RuleBasedBreakIterator is used for a particular locale. This method is used
+         * by the RuleBasedBreakIterator to find a break engine.</p>
+         * @param c A character which begins a run that the engine might handle.
+         * @param locale    The locale.
+         * @return true if this engine handles the particular character for that locale.
+         * @internal ICU 75 technology preview
+         */
+        public boolean isFor(int c, ULocale locale);
 
+        /**
+         * <p>Indicate whether this engine handles a particular character.This method is
+         * used by the RuleBasedBreakIterator after it already find a break engine to see which
+         * characters after the first one can be handled by this break engine.</p>
+         * @param c A character that the engine might handle.
+         * @return true if this engine handles the particular character.
+         * @internal ICU 75 technology preview
+         */
+        public boolean handles(int c);
+
+        /**
+         * <p>Divide up a range of text handled by this break engine.</p>
+         *
+         * @param text A CharacterIterator representing the text
+         * @param rangeStart The start of the range of known characters
+         * @param rangeEnd The end of the range of known characters
+         * @param foundBreaks Output of a list of Integer to denote break positions.
+         * @return The number of breaks found
+         * @internal ICU 75 technology preview
+         */
+         public int fillBreaks(CharacterIterator text,
+                               int               rangeStart,
+                               int               rangeEnd,
+                               List<Integer>     foundBreaks);
+    }
 
 }
 
