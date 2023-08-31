@@ -164,8 +164,10 @@ public interface PersonName {
          * When used in conjunction with "initial", preserves the punctuation between the initials
          * as it existed in the original name field (e.g., "Jean-Claude" initializes into "J-C"
          * instead of "J.C.")  Has no effect if "initial" isn't also present in the list of modifiers.
-         * @draft ICU 74
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         RETAIN("retain"),
 
         /**
