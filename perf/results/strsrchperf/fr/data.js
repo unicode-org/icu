@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693435870612,
+  "lastUpdate": 1693495799922,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14038,6 +14038,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 72.4677,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "af8dc57a1ded609b488657afa68c578835b630ac",
+          "message": "ICU-22423 Use hashes instead of version tags for GH Actions",
+          "timestamp": "2023-08-31T08:13:43-07:00",
+          "tree_id": "d9ac197ba01034bc825179cf1bc218a0c45c0422",
+          "url": "https://github.com/unicode-org/icu/commit/af8dc57a1ded609b488657afa68c578835b630ac"
+        },
+        "date": 1693495737915,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 37.1227,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 70.0882,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
