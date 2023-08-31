@@ -158,23 +158,97 @@ class Errors : public UMemory {
     virtual ~Errors();
 }; // class Errors
 
-// TODO: doc comments
-// Represents the arguments to a message
+/**
+ * <p>MessageFormatter is a Technical Preview API implementing MessageFormat 2.0.
+ * Since it is not final, documentation has not yet been added everywhere.
+ *
+ * The following class represents the named arguments to a message.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
+
 class U_I18N_API MessageArguments : public UMemory {
   public:
+    /**
+     * The mutable Builder class allows each message argument to be initialized
+     * separately; calling its `build()` method yields an immutable MessageArguments.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     class Builder {
     public:
-        Builder& add(const UnicodeString&, const UnicodeString&, UErrorCode&);
+        /**
+         * Adds an argument of type `UnicodeString`.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument.
+         * @param status    Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& add(const UnicodeString& key, const UnicodeString& value, UErrorCode& status);
+        /**
+         * Adds an argument of type `double`.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument.
+         * @param status    Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         Builder& addDouble(const UnicodeString&, double, UErrorCode&);
         Builder& addInt64(const UnicodeString&, int64_t, UErrorCode&);
         Builder& addLong(const UnicodeString&, long, UErrorCode&);
+        /**
+         * Adds an argument of type `UDate`.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument.
+         * @param status    Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         Builder& addDate(const UnicodeString&, UDate, UErrorCode&);
-        // Adds an array of strings
-        // Adopts its argument
-        Builder& add(const UnicodeString&, const UnicodeString*, size_t, UErrorCode&);
-        // Does not adopt its UObject argument. Argument must be non-null
-        Builder& addObject(const UnicodeString&, UObject*, UErrorCode&);
-        // Does not invalidate the builder
+        /**
+         * Adds an argument of type UnicodeString[]. Adopts `value`.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument, interpreted as an array of strings.
+         * @param length The length of the array.
+         * @param status  Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& add(const UnicodeString& key, const UnicodeString* value, size_t length, UErrorCode& status);
+        /**
+         * Adds an argument of type UObject*, which must be non-null. Does not
+         * adopt this argument. `value` is not declared as const, but is treated
+         * as if it was const.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument.
+         * @param status  Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& addObject(const UnicodeString& key, UObject* value, UErrorCode& status);
+        /**
+         * Creates an immutable `MessageArguments` object with the argument names
+         * and values that were added by previous calls. The builder can still be used
+         * after this call.
+         *
+         * @param status  Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         MessageArguments* build(UErrorCode&) const;
     private:
         friend class MessageArguments;
@@ -217,7 +291,6 @@ private:
 };
 
 // Context needed for formatting an expression
-
 class MessageFormatter;
 
 class Context : public UMemory {

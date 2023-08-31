@@ -241,6 +241,15 @@ static Formattable* createFormattableDate(UDate val, UErrorCode& errorCode) {
     return result;
 }
 
+static Formattable* createFormattableObject(UObject* val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(val);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
 static Formattable* createFormattableArray(const UnicodeString* in, size_t count, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
@@ -264,16 +273,6 @@ static Formattable* createFormattableArray(const UnicodeString* in, size_t count
     }
 
     Formattable* result(new Formattable(arr.orphan(), count));
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableObject(UObject* obj, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formattable* result(new Formattable(obj));
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -340,13 +339,16 @@ Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const Uni
 }
 
 // Does not adopt the object
+// Note: `obj` can't be declared as const because it is stored as a Formattable,
+// and the Formattable constructor takes a UObject* (not const);
+// in addition, it will be stored as a value in a hashtable, so even if the hashtable
+// represented the argument value as a UObject*, it would need to be declared as non-const
 Arguments::Builder& Arguments::Builder::addObject(const UnicodeString& name, UObject* obj, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* value(createFormattableObject(obj, errorCode));
+    Formattable* valPtr(createFormattableObject(obj, errorCode));
     THIS_ON_ERROR(errorCode);
-
-    objectContents->put(name, value, errorCode);
+    objectContents->put(name, valPtr, errorCode);
     return *this;
 }
 
