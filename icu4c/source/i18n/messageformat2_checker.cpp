@@ -176,7 +176,7 @@ Type typeOf(TypeEnvironment& t, const Expression& expr) {
 
 void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode& error) {
     CHECK_ERROR(error);
-    
+
     // For each declaration, extend the type environment with its type
     // Only a very simple type system is necessary: local variables
     // have the type "annotated" or "unannotated".

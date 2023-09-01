@@ -211,7 +211,7 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
 }
 
 // Formats each text and expression part of a pattern, appending the results to `result`
-void MessageFormatter::formatPattern(Context& globalContext, const Environment& globalEnv, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatPattern(MessageContext& globalContext, const Environment& globalEnv, const Pattern& pat, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     LocalPointer<ExpressionContext> context;
@@ -239,7 +239,7 @@ void MessageFormatter::formatPattern(Context& globalContext, const Environment& 
 // Selection
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-selectors
-void MessageFormatter::resolveSelectors(Context& context, const Environment& env, const ExpressionList& selectors, UErrorCode &status, ExpressionContext** res/*[]*/) const {
+void MessageFormatter::resolveSelectors(MessageContext& context, const Environment& env, const ExpressionList& selectors, UErrorCode &status, ExpressionContext** res/*[]*/) const {
     CHECK_ERROR(status);
 
     // 1. Let res be a new empty list of resolved values that support selection.
@@ -590,7 +590,7 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
     }
 }
 
-void MessageFormatter::formatSelectors(Context& context, const Environment& env, const ExpressionList& selectors, const VariantMap& variants, UErrorCode &status, UnicodeString& result) const {
+void MessageFormatter::formatSelectors(MessageContext& context, const Environment& env, const ExpressionList& selectors, const VariantMap& variants, UErrorCode &status, UnicodeString& result) const {
     CHECK_ERROR(status);
 
     // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
@@ -643,7 +643,7 @@ void MessageFormatter::formatToString(const MessageArguments& arguments, UErrorC
     CHECK_ERROR(status);
 
     // Create a new context with the given arguments and the `errors` structure
-    LocalPointer<Context> context(Context::create(*this, arguments, *errors, status));
+    LocalPointer<MessageContext> context(MessageContext::create(*this, arguments, *errors, status));
     CHECK_ERROR(status);
 
     const MessageFormatDataModel& dataModel = getDataModel();
@@ -692,7 +692,7 @@ void MessageFormatter::clearErrors() const {
 // ----------------------------------------
 // Checking for resolution errors
 
-void MessageFormatter::check(Context& context, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
+void MessageFormatter::check(MessageContext& context, const Environment& localEnv, const OptionMap& options, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check the RHS of each option
@@ -708,7 +708,7 @@ void MessageFormatter::check(Context& context, const Environment& localEnv, cons
     }
 }
 
-void MessageFormatter::check(Context& context, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
+void MessageFormatter::check(MessageContext& context, const Environment& localEnv, const Operand& rand, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Nothing to check for literals
@@ -729,7 +729,7 @@ void MessageFormatter::check(Context& context, const Environment& localEnv, cons
     context.setUnresolvedVariableError(var, status);
 }
 
-void MessageFormatter::check(Context& context, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
+void MessageFormatter::check(MessageContext& context, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     // Check for unresolved variable errors
@@ -742,7 +742,7 @@ void MessageFormatter::check(Context& context, const Environment& localEnv, cons
 }
 
 // Check for resolution errors
-void MessageFormatter::checkDeclarations(Context& context, Environment*& env, UErrorCode &status) const {
+void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& env, UErrorCode &status) const {
     CHECK_ERROR(status);
 
     const Bindings& decls = getDataModel().getLocalVariables();

@@ -294,7 +294,7 @@ class U_I18N_API MessageArguments : public UMemory {
      */
     static Builder* builder(UErrorCode&);
   private:
-    friend class Context;
+    friend class MessageContext;
     friend class MessageFormatter;
 
     bool has(const VariableName&) const;
@@ -311,7 +311,7 @@ class U_I18N_API MessageArguments : public UMemory {
 // Map from expression pointers to Formatters
 class CachedFormatters : public UMemory {
 private:
-    friend class Context;
+    friend class MessageContext;
     friend class ExpressionContext;
     friend class MessageFormatter;
     
@@ -322,15 +322,17 @@ private:
     CachedFormatters(UErrorCode&);
 };
 
-// Context needed for formatting a message
+// The context contains all the information needed to process
+// an entire message: arguments, formatter cache, and error list
+
 class MessageFormatter;
 
-class Context : public UMemory {
+class MessageContext : public UMemory {
 public:
     bool hasVar(const VariableName&) const;
     const Formattable& getVar(const VariableName& var) const;
     
-    static Context* create(const MessageFormatter& mf, const MessageArguments& args, Errors& errors, UErrorCode& errorCode);
+    static MessageContext* create(const MessageFormatter& mf, const MessageArguments& args, Errors& errors, UErrorCode& errorCode);
 
     void setFormattingError(const FunctionName&, UErrorCode&);
     void setSelectorError(const FunctionName&, UErrorCode&);
@@ -349,17 +351,17 @@ public:
     bool hasError() const;
     void addError(Error, UErrorCode&);
 
-    virtual ~Context();
+    virtual ~MessageContext();
     
 private:
-    Context(const MessageFormatter&, const MessageArguments&, Errors&);
+    MessageContext(const MessageFormatter&, const MessageArguments&, Errors&);
     FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&);
 
     const MessageFormatter& parent;
     const MessageArguments& arguments; // External message arguments
     // Errors accumulated during parsing/formatting
     Errors& errors;
-}; // class Context
+}; // class MessageContext
 
 } // namespace message2
 U_NAMESPACE_END

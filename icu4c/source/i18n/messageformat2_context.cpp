@@ -12,6 +12,8 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+// The context contains all the information needed to process
+// an entire message: arguments, formatter cache, and error list
 
 // ------------------------------------------------------
 // MessageArguments
@@ -169,7 +171,7 @@ MessageArguments* MessageArguments::Builder::build(UErrorCode& errorCode) const 
 }
 
 // ------------------------------------------------------
-// Context
+// Formatter cache
 
 const Formatter* CachedFormatters::getFormatter(const FunctionName& f) {
     U_ASSERT(cache.isValid());
@@ -190,21 +192,24 @@ CachedFormatters::CachedFormatters(UErrorCode& errorCode) {
     cache->setValueDeleter(uprv_deleteUObject);
 }
 
-bool Context::hasVar(const VariableName& v) const {
+// -------------------------------------------------------
+// MessageContext accessors and constructors
+
+bool MessageContext::hasVar(const VariableName& v) const {
     return arguments.has(v);
 } 
 
-const Formattable& Context::getVar(const VariableName& f) const {
+const Formattable& MessageContext::getVar(const VariableName& f) const {
     U_ASSERT(hasVar(f));
     return arguments.get(f);
 } 
 
-Context::Context(const MessageFormatter& mf, const MessageArguments& args, Errors& e) : parent(mf), arguments(args), errors(e) {}
+MessageContext::MessageContext(const MessageFormatter& mf, const MessageArguments& args, Errors& e) : parent(mf), arguments(args), errors(e) {}
 
-/* static */ Context* Context::create(const MessageFormatter& mf, const MessageArguments& args, Errors& e, UErrorCode& errorCode) {
+/* static */ MessageContext* MessageContext::create(const MessageFormatter& mf, const MessageArguments& args, Errors& e, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Context> result(new Context(mf, args, e));
+    LocalPointer<MessageContext> result(new MessageContext(mf, args, e));
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
@@ -212,74 +217,74 @@ Context::Context(const MessageFormatter& mf, const MessageArguments& args, Error
 // Errors
 // -----------
 
-void Context::addError(Error e, UErrorCode& status) {
+void MessageContext::addError(Error e, UErrorCode& status) {
     CHECK_ERROR(status);
     errors.addError(e, status);
 }
 
-void Context::checkErrors(UErrorCode& status) const {
+void MessageContext::checkErrors(UErrorCode& status) const {
     CHECK_ERROR(status);
     errors.checkErrors(status);
 }
 
 
-bool Context::hasDataModelError() const {
+bool MessageContext::hasDataModelError() const {
     return errors.hasDataModelError();
 }
 
-bool Context::hasError() const {
+bool MessageContext::hasError() const {
     return errors.count() > 0;
 }
 
-bool Context::hasFormattingError() const {
+bool MessageContext::hasFormattingError() const {
     return errors.hasFormattingError();
 }
 
-bool Context::hasUnresolvedVariableError() const {
+bool MessageContext::hasUnresolvedVariableError() const {
     return errors.hasUnresolvedVariableError();
 }
 
-void Context::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
+void MessageContext::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::FormattingError, formatterName);
     errors.addError(err, status);
  }
 
-void Context::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
+void MessageContext::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::SelectorError, selectorName);
     errors.addError(err, status);
  }
 
-void Context::setUnknownFunctionError(const FunctionName& formatterName, UErrorCode& status) {
+void MessageContext::setUnknownFunctionError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::UnknownFunction, formatterName);
     errors.addError(err, status);
  }
 
-void Context::setUnresolvedVariableError(const VariableName& v, UErrorCode& status) {
+void MessageContext::setUnresolvedVariableError(const VariableName& v, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::UnresolvedVariable, v);
     errors.addError(err, status);
  }
 
-bool Context::hasParseError() const {
+bool MessageContext::hasParseError() const {
     return errors.hasSyntaxError();
 }
 
-bool Context::hasUnknownFunctionError() const {
+bool MessageContext::hasUnknownFunctionError() const {
     return errors.hasUnknownFunctionError();
 }
 
-bool Context::hasMissingSelectorAnnotationError() const {
+bool MessageContext::hasMissingSelectorAnnotationError() const {
     return errors.hasMissingSelectorAnnotationError();
 }
 
-bool Context::hasSelectorError() const {
+bool MessageContext::hasSelectorError() const {
     return errors.hasSelectorError();
 }
 
@@ -429,7 +434,7 @@ void Errors::addError(Error e, UErrorCode& status) {
     }
 }
 
-Context::~Context() {}
+MessageContext::~MessageContext() {}
 
 } // namespace message2
 U_NAMESPACE_END

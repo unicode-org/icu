@@ -24,12 +24,6 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-/*
-class FormattedString;
-class FormattedNumber;
-class FormattingInput;
-class FullyFormatted;
-*/
 class Selector;
 class SelectorFactory;
 
@@ -336,9 +330,9 @@ class ExpressionContext : public FormattingContext {
     friend class MessageArguments;
     friend class MessageFormatter;
 
-    ExpressionContext(Context&, const MessageFormatter&, UErrorCode&);
+    ExpressionContext(MessageContext&, const MessageFormatter&, UErrorCode&);
 
-    Context& context;
+    MessageContext& context;
     const MessageFormatter& parent;
 
     InputState inState;
@@ -353,7 +347,7 @@ class ExpressionContext : public FormattingContext {
 
     LocalPointer<Hashtable> functionOptions;
 
-    static ExpressionContext* create(Context&, const MessageFormatter&, UErrorCode&);
+    static ExpressionContext* create(MessageContext&, const MessageFormatter&, UErrorCode&);
     // Creates a new builder sharing this's context and parent
     ExpressionContext* create(UErrorCode&);
 

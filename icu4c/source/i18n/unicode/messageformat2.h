@@ -127,7 +127,7 @@ public:
 
   private:
     friend class Builder;
-    friend class Context;
+    friend class MessageContext;
     friend class ExpressionContext;
 
     MessageFormatter(const MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
@@ -298,13 +298,13 @@ public:
      void resolveVariables(const Environment& env, const MessageFormatDataModel::Expression&, ExpressionContext&, UErrorCode &) const;
 
      // Selection methods
-     void resolveSelectors(Context&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, ExpressionContext**) const;
+     void resolveSelectors(MessageContext&, const Environment& env, const MessageFormatDataModel::ExpressionList&, UErrorCode&, ExpressionContext**) const;
      void matchSelectorKeys(UnicodeString*/*[]*/, int32_t, ExpressionContext&, UErrorCode&, UnicodeString*, int32_t&) const;
      void resolvePreferences(ExpressionContext**, int32_t, const MessageFormatDataModel::VariantMap&, UErrorCode&, UnicodeString**, int32_t*) const;
 
      // Formatting methods
      void formatLiteral(const MessageFormatDataModel::Literal&, ExpressionContext&) const;
-     void formatPattern(Context&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
+     void formatPattern(MessageContext&, const Environment&, const MessageFormatDataModel::Pattern&, UErrorCode&, UnicodeString&) const;
      // Formats an expression that appears as a selector
      void formatSelectorExpression(const Environment& env, const MessageFormatDataModel::Expression&, ExpressionContext&, UErrorCode&) const;
      // Formats an expression that appears in a pattern or as the definition of a local variable
@@ -312,10 +312,10 @@ public:
      void resolveOptions(const Environment& env, const MessageFormatDataModel::OptionMap&, ExpressionContext&, UErrorCode&) const;
      void formatOperand(const Environment&, const MessageFormatDataModel::Operand&, ExpressionContext&, UErrorCode&) const;
      void evalArgument(const VariableName&, ExpressionContext&) const;
-     void formatSelectors(Context& context, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
+     void formatSelectors(MessageContext& context, const Environment& env, const MessageFormatDataModel::ExpressionList& selectors, const MessageFormatDataModel::VariantMap& variants, UErrorCode &status, UnicodeString& result) const;
 
      // Function registry methods
-     const Formatter* maybeCachedFormatter(Context&, const FunctionName&, UErrorCode& errorCode) const;
+     const Formatter* maybeCachedFormatter(MessageContext&, const FunctionName&, UErrorCode& errorCode) const;
 
      bool hasCustomFunctionRegistry() const {
          return (customFunctionRegistry != nullptr);
@@ -328,10 +328,10 @@ public:
      }
 
      // Checking for resolution errors
-     void checkDeclarations(Context&, Environment*&, UErrorCode&) const;
-     void check(Context&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
-     void check(Context&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
-     void check(Context&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
+     void checkDeclarations(MessageContext&, Environment*&, UErrorCode&) const;
+     void check(MessageContext&, const Environment&, const MessageFormatDataModel::Expression&, UErrorCode&) const;
+     void check(MessageContext&, const Environment&, const MessageFormatDataModel::Operand&, UErrorCode&) const;
+     void check(MessageContext&, const Environment&, const MessageFormatDataModel::OptionMap&, UErrorCode&) const;
 
      void initErrors(UErrorCode&);
      void clearErrors() const;
@@ -361,7 +361,7 @@ public:
      LocalPointer<CachedFormatters> cachedFormatters;
 
      // Errors -- only used while parsing and checking for data model errors; then
-     // the Context keeps track of errors
+     // the MessageContext keeps track of errors
      LocalPointer<Errors> errors;
 }; // class MessageFormatter
 

@@ -16,7 +16,7 @@ U_NAMESPACE_BEGIN namespace message2 {
 // Constructors
 // ------------
 
-/* static */ ExpressionContext* ExpressionContext::create(Context& globalContext, const MessageFormatter& parent, UErrorCode& errorCode) {
+/* static */ ExpressionContext* ExpressionContext::create(MessageContext& globalContext, const MessageFormatter& parent, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
     LocalPointer<ExpressionContext> result(new ExpressionContext(globalContext, parent, errorCode));
@@ -32,7 +32,7 @@ ExpressionContext* ExpressionContext::create(UErrorCode& errorCode) {
     return result.orphan();
 }
 
-ExpressionContext::ExpressionContext(Context& c, const MessageFormatter& mf, UErrorCode& errorCode) : context(c), parent(mf), inState(FALLBACK), outState(NONE) {
+ExpressionContext::ExpressionContext(MessageContext& c, const MessageFormatter& mf, UErrorCode& errorCode) : context(c), parent(mf), inState(FALLBACK), outState(NONE) {
     CHECK_ERROR(errorCode);
 
     initFunctionOptions(errorCode);
