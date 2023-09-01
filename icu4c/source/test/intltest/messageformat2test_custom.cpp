@@ -573,109 +573,6 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     return result.orphan();
 }
 
-/* static */ UnicodeString ResourceManager::propertiesAsString(const Hashtable& properties) {
-    UnicodeString result;
-    int32_t pos = UHASH_FIRST;
-    while(true) {
-        bool leadingComma = true;
-        if (pos == UHASH_FIRST) {
-            leadingComma = false;
-        }
-        const UHashElement* element = properties.nextElement(pos);
-        if (element == nullptr) {
-            break;
-        }
-        if (leadingComma) {
-            result += COMMA;
-            result += SPACE;
-        }
-        result += '/' + *((UnicodeString*) element->key.pointer) + "/ : /" + *((UnicodeString*) element->value.pointer) + '/';
-    }
-    return result;
-}
-
-/* static */ Hashtable* ResourceManager::parseProperties(const UnicodeString& properties, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    LocalPointer<Hashtable> result(new Hashtable(uhash_compareUnicodeString, nullptr, errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    bool error = false;
-    if (properties.length() < 1) {
-        error = true;
-    }
-    int32_t i = 0;
-    while (i < properties.length()) {
-        if (properties[i] != '/') {
-            error = true;
-            break;
-        }
-        i++;
-        UnicodeString key;
-        while (properties[i] != '/') {
-            key += properties[i++];
-        }
-        if (key.length() == 0) {
-            error = true;
-            break;
-        }
-        i++; // Consume closing '/'
-        if (properties[i] != SPACE) {
-            error = true;
-            break;
-        }
-        i++; // Consume space
-        if (properties[i] != COLON) {
-            error = true;
-            break;
-        }
-        i++; // Consume colon
-        if (properties[i] != SPACE) {
-            error = true;
-            break;
-        }
-        i++; // Consume space
-        if (properties[i] != '/') {
-            error = true;
-            break;
-        }
-        i++; // Consume opening '/' for value
-        UnicodeString value;
-        while (properties[i] != '/') {
-            value += properties[i++];
-        }
-        i++; // Consume closing '/' for value
-        // Value may be empty
-        if (i < (properties.length() - 1)) {
-            // Consume comma and space
-            if (properties[i] != COMMA) {
-                error = true;
-                break;
-            }
-            i++;
-            if (properties[i] != SPACE) {
-                error = true;
-                break;
-            }
-            i++;
-        }
-        // Add key/value pair to the hash table
-        LocalPointer<UnicodeString> valuePtr(new UnicodeString(value));
-        if (!valuePtr.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        result->put(key, valuePtr.orphan(), errorCode);
-    }
-    if (error) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-    return result.orphan();
-}
-
 Formatter* ResourceManagerFactory::createFormatter(const Locale& locale, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
@@ -756,15 +653,13 @@ void ResourceManager::format(FormattingContext& context, UErrorCode& errorCode) 
         }
     }
 
-    UnicodeString propsStr;
-    bool hasPropsStr = context.getStringOption(UnicodeString("resbundle"), propsStr);
+    UnicodeString resbundle("resbundle");
+    bool hasProperties = context.hasObjectOption(resbundle);
     // If properties were provided, look up the given string in the properties,
     // yielding a message
-    if (hasPropsStr) {
-        LocalPointer<Hashtable> props(parseProperties(propsStr, errorCode));
-        CHECK_ERROR(errorCode);
-
-        UnicodeString* msg = (UnicodeString*) props->get(in);
+    if (hasProperties) {
+        const Hashtable& properties = reinterpret_cast<const Hashtable&>(context.getObjectOption(resbundle));
+        UnicodeString* msg = (UnicodeString*) properties.get(in);
         if (msg == nullptr) {
             // No message given for this key -- error out
             context.setFormattingWarning("msgref", errorCode);
@@ -784,7 +679,6 @@ void ResourceManager::format(FormattingContext& context, UErrorCode& errorCode) 
         CHECK_ERROR(errorCode);
 
         UErrorCode savedStatus = errorCode;
-        // TODO: add formatToParts too, and use that here?
         mf->formatToString(*arguments, errorCode, result);
         // Here, we want to ignore errors (this matches the behavior in the ICU4J test).
         // For example: we want $gcase to default to "$gcase" if the gcase option was
@@ -833,39 +727,32 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: fix this to pass properties as a hash table
-    UnicodeString propertiesStr = ResourceManager::propertiesAsString(*properties);
+    testBuilder->setArgument("res", (UObject*) properties.orphan(), errorCode);
 
     testBuilder->setPattern("{Please start {$browser :msgRef gcase=genitive resbundle=$res}}");
     test.adoptInstead(testBuilder->setArgument("browser", "firefox", errorCode)
-                                .setArgument("res", propertiesStr, errorCode)
                                 .setExpected("Please start Firefoxin")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder->setArgument("browser", "chrome", errorCode)
-                                .setArgument("res", propertiesStr, errorCode)
                                 .setExpected("Please start Chromen")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder->setArgument("browser", "safari", errorCode)
-                                .setArgument("res", propertiesStr, errorCode)
                                 .setExpected("Please start Safarin")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     testBuilder->setPattern("{Please start {$browser :msgRef resbundle=$res}}");
     test.adoptInstead(testBuilder->setArgument("browser", "firefox", errorCode)
-                                .setArgument("res", propertiesStr, errorCode)
                                 .setExpected("Please start Firefox")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder->setArgument("browser", "chrome", errorCode)
-                                .setArgument("res", propertiesStr, errorCode)
                                 .setExpected("Please start Chrome")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
    test.adoptInstead(testBuilder->setArgument("browser", "safari", errorCode)
-                                .setArgument("res", propertiesStr, errorCode)
                                 .setExpected("Please start Safari")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);

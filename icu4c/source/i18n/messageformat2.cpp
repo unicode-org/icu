@@ -194,92 +194,6 @@ const Formattable& Arguments::get(const VariableName& arg) const {
     return *result;
 }
 
-static Formattable* createFormattable(const UnicodeString& s, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(s);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableDouble(double val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(val);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableInt64(int64_t val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(val);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableDate(UDate val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(val, Formattable::kIsDate);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableDecimal(StringPiece val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(val, errorCode);
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableObject(UObject* val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Formattable* result = new Formattable(val);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableArray(const UnicodeString* in, int32_t count, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    LocalArray<Formattable> arr(new Formattable[count]);
-    if (!arr.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-
-    LocalPointer<Formattable> val;
-    for (int32_t i = 0; i < count; i++) {
-        // TODO
-        // Without this explicit cast, `val` is treated as if it's
-        // an object when it's assigned into `arr[i]`. I don't know why.
-        val.adoptInstead(new Formattable((const UnicodeString&) in[i]));
-        if (!val.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        arr[i] = *val;
-    }
-
-    Formattable* result(new Formattable(arr.orphan(), count));
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
 Arguments::Builder::Builder(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
@@ -294,7 +208,7 @@ Arguments::Builder::Builder(UErrorCode& errorCode) {
 Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString& val, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattable(val, errorCode));
+    Formattable* valPtr(ExpressionContext::createFormattable(val, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }
@@ -302,7 +216,7 @@ Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const Uni
 Arguments::Builder& Arguments::Builder::addDouble(const UnicodeString& name, double val, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattableDouble(val, errorCode));
+    Formattable* valPtr(ExpressionContext::createFormattable(val, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }
@@ -310,7 +224,7 @@ Arguments::Builder& Arguments::Builder::addDouble(const UnicodeString& name, dou
 Arguments::Builder& Arguments::Builder::addInt64(const UnicodeString& name, int64_t val, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattableInt64(val, errorCode));
+    Formattable* valPtr(ExpressionContext::createFormattable(val, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }
@@ -318,7 +232,7 @@ Arguments::Builder& Arguments::Builder::addInt64(const UnicodeString& name, int6
 Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate val, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattableDate(val, errorCode));
+    Formattable* valPtr(ExpressionContext::createFormattableDate(val, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }
@@ -326,7 +240,7 @@ Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate
 Arguments::Builder& Arguments::Builder::addDecimal(const UnicodeString& name, StringPiece val, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattableDecimal(val, errorCode));
+    Formattable* valPtr(ExpressionContext::createFormattableDecimal(val, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }
@@ -334,20 +248,18 @@ Arguments::Builder& Arguments::Builder::addDecimal(const UnicodeString& name, St
 Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString* arr, int32_t count, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattableArray(arr, count, errorCode));
+    Formattable* valPtr(ExpressionContext::createFormattable(arr, count, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }
 
 // Does not adopt the object
-// Note: `obj` can't be declared as const because it is stored as a Formattable,
-// and the Formattable constructor takes a UObject* (not const);
-// in addition, it will be stored as a value in a hashtable, so even if the hashtable
-// represented the argument value as a UObject*, it would need to be declared as non-const
-Arguments::Builder& Arguments::Builder::addObject(const UnicodeString& name, UObject* obj, UErrorCode& errorCode) {
+Arguments::Builder& Arguments::Builder::addObject(const UnicodeString& name, const UObject* obj, UErrorCode& errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    Formattable* valPtr(createFormattableObject(obj, errorCode));
+    // The const_cast is valid because the object will only be accessed via
+    // getObjectInput(), which returns a const reference
+    Formattable* valPtr(ExpressionContext::createFormattable(const_cast<UObject*>(obj), errorCode));
     THIS_ON_ERROR(errorCode);
     objectContents->put(name, valPtr, errorCode);
     return *this;
@@ -600,7 +512,7 @@ void MessageFormatter::resolveOptions(const Environment& env, const OptionMap& o
                 }
             }
         } else if (rhsContext->hasObjectInput()) {
-            // Ignore object values; don't pass them as options
+            context.setObjectOption(k, rhsContext->getObjectInputPointer(), status);
         } else {
             // ignore fallbacks
             U_ASSERT(rhsContext->isFallback());

@@ -249,8 +249,7 @@ class U_I18N_API MessageArguments : public UMemory {
         Builder& add(const UnicodeString& key, const UnicodeString* value, int32_t length, UErrorCode& status);
         /**
          * Adds an argument of type UObject*, which must be non-null. Does not
-         * adopt this argument. `value` is not declared as const, but is treated
-         * as if it was const.
+         * adopt this argument.
          *
          * @param key The name of the argument.
          * @param value The value of the argument.
@@ -259,7 +258,7 @@ class U_I18N_API MessageArguments : public UMemory {
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Builder& addObject(const UnicodeString& key, UObject* value, UErrorCode& status);
+        Builder& addObject(const UnicodeString& key, const UObject* value, UErrorCode& status);
         /**
          * Creates an immutable `MessageArguments` object with the argument names
          * and values that were added by previous calls. The builder can still be used

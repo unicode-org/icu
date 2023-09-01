@@ -130,7 +130,7 @@ class U_I18N_API FormattingContext : public UMemory {
      *     *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
-     */ 
+     */
     virtual const UObject& getObjectInput() const = 0;
     /**
      * Returns true if and only if the argument being passed in already has a formatted
@@ -206,6 +206,26 @@ class U_I18N_API FormattingContext : public UMemory {
      * @deprecated This API is for technology preview only.
      */
     virtual bool getInt64Option(const UnicodeString& optionName, int64_t& optionValue) const = 0;
+    /**
+     * Returns true if and only if there is a named object option named `optionName`.
+     *
+     * @param optionName The name of the option.
+        *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual bool hasObjectOption(const UnicodeString& optionName) const = 0;
+    /**
+     * Returns a reference to the named object option `optionName`.
+     * Precondition: the option must exist.
+     *
+     * @param optionName The name of the option.
+        *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual const UObject& getObjectOption(const UnicodeString& optionName) const = 0;
+
     /**
      * Iterates over all options. The order in which the options are returned is unspecified.
      * The return value is null if there are no further options after `pos`, and is a pointer
@@ -307,6 +327,7 @@ class ExpressionContext : public FormattingContext {
     bool isSelector(const FunctionName&) const;
 
     private:
+    friend class MessageArguments;
     friend class MessageFormatter;
 
     ExpressionContext(Context&, const MessageFormatter&, UErrorCode&);
@@ -346,12 +367,14 @@ class ExpressionContext : public FormattingContext {
     // Sets fallback string
     void setFallback(const Text&);
     void setFunctionName(const FunctionName&, UErrorCode&);
+    const UObject* getObjectInputPointer() const;
 
     // Function name must be set; clears it
     void resolveSelector(Selector*);
     void setStringOption(const UnicodeString&, const UnicodeString&, UErrorCode&);
     void setDateOption(const UnicodeString&, UDate, UErrorCode&);
     void setNumericOption(const UnicodeString&, double, UErrorCode&);
+    void setObjectOption(const UnicodeString&, const UObject*, UErrorCode&);
     void setNoOperand();
     void setInput(const UObject*);
     void setInput(const Formattable&);
@@ -367,6 +390,14 @@ class ExpressionContext : public FormattingContext {
     // call the function, setting the input and/or output appropriately
     // Precondition: hasSelector()
     void evalPendingSelectorCall(const UnicodeString[], int32_t, UnicodeString[], int32_t&, UErrorCode&);
+
+    static Formattable* createFormattable(const UnicodeString&, UErrorCode&);
+    static Formattable* createFormattable(double, UErrorCode&);
+    static Formattable* createFormattable(int64_t, UErrorCode&);
+    static Formattable* createFormattableDate(UDate, UErrorCode&);
+    static Formattable* createFormattableDecimal(StringPiece, UErrorCode&);
+    static Formattable* createFormattable(const UnicodeString*, int32_t, UErrorCode&);
+    static Formattable* createFormattable(const UObject*, UErrorCode&);
 
     public:
     void formatWithDefaults(UErrorCode& errorCode);
@@ -387,6 +418,7 @@ class ExpressionContext : public FormattingContext {
     bool hasObjectInput() const;
     const Formattable& getFormattableInput() const;
     const UObject& getObjectInput() const;
+
     bool hasStringOutput() const;
     bool hasNumberOutput() const;
     bool hasOutput() { return (hasStringOutput() || hasNumberOutput()); }
@@ -398,6 +430,8 @@ class ExpressionContext : public FormattingContext {
     bool getStringOption(const UnicodeString&, UnicodeString&) const;
     bool getDoubleOption(const UnicodeString&, double&) const;
     bool getInt64Option(const UnicodeString&, int64_t&) const;
+    bool hasObjectOption(const UnicodeString&) const;
+    const UObject& getObjectOption(const UnicodeString&) const;
     // Arguments iterator
     int32_t firstOption() const;
     int32_t optionsCount() const;

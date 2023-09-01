@@ -62,6 +62,101 @@ Errors::Errors(UErrorCode& errorCode) {
 
 Errors::~Errors() {}
 Error::~Error() {}
+
+/* static */ Formattable* ExpressionContext::createFormattable(const UnicodeString& v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */  Formattable* ExpressionContext::createFormattable(double v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */  Formattable* ExpressionContext::createFormattable(int64_t v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattable(const UObject* v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    // This object will only be accessed through getObjectOption(), which returns
+    // a const reference
+    Formattable* result = new Formattable(const_cast<UObject*>(v));
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattable(const UnicodeString* in, int32_t count, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalArray<Formattable> arr(new Formattable[count]);
+    if (!arr.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+
+    LocalPointer<Formattable> val;
+    for (int32_t i = 0; i < count; i++) {
+        // TODO
+        // Without this explicit cast, `val` is treated as if it's
+        // an object when it's assigned into `arr[i]`. I don't know why.
+        val.adoptInstead(new Formattable((const UnicodeString&) in[i]));
+        if (!val.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        arr[i] = *val;
+    }
+
+    Formattable* result(new Formattable(arr.orphan(), count));
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattableDate(UDate v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v, Formattable::kIsDate);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattableDecimal(StringPiece val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(val, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
 // State
 // ---------
 
@@ -97,36 +192,6 @@ void fallbackToString(const Text& t, UnicodeString& result) {
 void ExpressionContext::setFallback(const Text& t) {
     fallback.remove();
     fallbackToString(t, fallback);
-}
-
-static Formattable* createFormattable(const UnicodeString& v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    
-    Formattable* result = new Formattable(v);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattable(double v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    
-    Formattable* result = new Formattable(v);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-static Formattable* createFormattableDate(UDate v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    
-    Formattable* result = new Formattable(v, Formattable::kIsDate);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
 }
 
 // Add the fallback string as the input string, and
@@ -171,6 +236,11 @@ bool ExpressionContext::hasObjectInput() const {
 const UObject& ExpressionContext::getObjectInput() const {
     U_ASSERT(hasObjectInput());
     return *objectInput;
+}
+
+const UObject* ExpressionContext::getObjectInputPointer() const {
+    U_ASSERT(hasObjectInput());
+    return objectInput;
 }
 
 const Formattable& ExpressionContext::getFormattableInput() const {
@@ -420,6 +490,14 @@ void ExpressionContext::setNumericOption(const UnicodeString& key, double value,
     addFunctionOption(key, valuePtr.orphan(), errorCode);
 }
 
+void ExpressionContext::setObjectOption(const UnicodeString& key, const UObject* value, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<Formattable> valuePtr(createFormattable(value, errorCode));
+    CHECK_ERROR(errorCode);
+    addFunctionOption(key, valuePtr.orphan(), errorCode);
+}
+
 Formattable* ExpressionContext::getOption(const UnicodeString& key, Formattable::Type type) const {
     U_ASSERT(functionOptions.isValid());
     Formattable* result = (Formattable*) functionOptions->get(key);
@@ -445,6 +523,19 @@ bool ExpressionContext::getStringOption(const UnicodeString& key, UnicodeString&
     }
     value = result->getString();
     return true;
+}
+
+const UObject& ExpressionContext::getObjectOption(const UnicodeString& key) const {
+    Formattable* result = getOption(key, Formattable::Type::kObject);
+    U_ASSERT(result != nullptr);
+    const UObject* value = result->getObject();
+    U_ASSERT(value != nullptr);
+    return *value;
+}
+
+bool ExpressionContext::hasObjectOption(const UnicodeString& key) const {
+    Formattable* result = getOption(key, Formattable::Type::kObject);
+    return (result != nullptr);
 }
 
 bool ExpressionContext::tryStringAsNumberOption(const UnicodeString& key, double& value) const {
