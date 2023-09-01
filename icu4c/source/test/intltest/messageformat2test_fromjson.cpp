@@ -38,10 +38,6 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
     testBuilder->setName("jsonTests");
 
-/*
-  TODO: go through tests with arguments, change to be typed if possible
-*/
-
     LocalPointer<TestCase> test(testBuilder->setPattern("{hello}")
                                 .setExpected("hello")
                                 .build(errorCode));
@@ -79,16 +75,19 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
     test.adoptInstead(testBuilder->setPattern("{{$one} and {$two}}")
                                 .setExpected("1.3 and 4.2")
                                 .setExpectSuccess()
-                                .setArgument("one", "1.3", errorCode)
-                                .setArgument("two", "4.2", errorCode)
+                                .setArgument("one", 1.3, errorCode)
+                                .setArgument("two", 4.2, errorCode)
                                 .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+    testBuilder->setArgument("one", "1.3", errorCode).setArgument("two", "4.2", errorCode);
+    test.adoptInstead(testBuilder->build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{{$one} et {$two}}")
                                 .setExpected("1,3 et 4,2")
                                 .setLocale(Locale("fr"), errorCode)
-                                .setArgument("one", "1,3", errorCode)
-                                .setArgument("two", "4,2", errorCode)
+                                .setArgument("one", 1.3, errorCode)
+                                .setArgument("two", 4.2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -121,7 +120,7 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
 
     test.adoptInstead(testBuilder->setPattern("{hello {|4.2| :number minimumFractionDigits=$foo}}")
                                 .setExpected("hello 4.20")
-                                .setArgument("foo", "2", errorCode)
+                                .setArgument("foo", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -149,19 +148,19 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
 
     test.adoptInstead(testBuilder->setPattern("let $foo = {$bar :number} {bar {$foo}}")
                                 .setExpected("bar 4.2")
-                                .setArgument("bar", "4.2", errorCode)
+                                .setArgument("bar", 4.2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("let $foo = {$bar :number minimumFractionDigits=2} {bar {$foo}}")
                                 .setExpected("bar 4.20")
-                                .setArgument("bar", "4.2", errorCode)
+                                .setArgument("bar", 4.2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("let $foo = {$bar :number minimumFractionDigits=foo} {bar {$foo}}")
                                 .setExpected("bar 4.2")
-                                .setArgument("bar", "4.2", errorCode)
+                                .setArgument("bar", 4.2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -222,13 +221,13 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :select} when |1| {one} when * {other}")
                                 .setExpected("one")
-                                .setArgument("foo", "1", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when 1 {one} when * {other}")
                                 .setExpected("one")
-                                .setArgument("foo", "1", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -245,7 +244,7 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when one {one} when * {other}")
                                 .setExpected("one")
-                                .setArgument("foo", "1", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -255,48 +254,54 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
+    test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when 1 {=1} when one {one} when * {other}")
+                                .setExpected("=1")
+                                .setArgument("foo", (int64_t) 1, errorCode)
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when one {one} when 1 {=1} when * {other}")
                                 .setExpected("=1")
-                                .setArgument("foo", "1", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} {$bar :plural} when one one {one one} when one * {one other} when * * {other}")
                                 .setExpected("one one")
-                                .setArgument("foo", "1", errorCode)
-                                .setArgument("bar", "1", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
+                                .setArgument("bar", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} {$bar :plural} when one one {one one} when one * {one other} when * * {other}")
                                 .setExpected("one other")
-                                .setArgument("foo", "1", errorCode)
-                                .setArgument("bar", "2", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
+                                .setArgument("bar", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} {$bar :plural} when one one {one one} when one * {one other} when * * {other}")
                                 .setExpected("other")
-                                .setArgument("foo", "2", errorCode)
-                                .setArgument("bar", "2", errorCode)
+                                .setArgument("foo", (int64_t) 2, errorCode)
+                                .setArgument("bar", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("let $foo = {$bar :plural} match {$foo} when one {one} when * {other}")
                                 .setExpected("one")
-                                .setArgument("bar", "1", errorCode)
+                                .setArgument("bar", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("let $foo = {$bar :plural} match {$foo} when one {one} when * {other}")
                                 .setExpected("other")
-                                .setArgument("bar", "2", errorCode)
+                                .setArgument("bar", (int64_t) 2, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("let $bar = {$none} match {$foo :plural} when one {one} when * {{$bar}}")
                                 .setExpected("one")
-                                .setArgument("foo", "1", errorCode)
+                                .setArgument("foo", (int64_t) 1, errorCode)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -310,7 +315,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
 */
     test.adoptInstead(testBuilder->setPattern("let $bar = {$none} match {$foo :plural} when one {one} when * {{$bar}}")
                                 .setExpected("{$none}")
-                                .setArgument("foo", "2", errorCode)
+                                .setArgument("foo", (int64_t) 2, errorCode)
                                 .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -395,7 +400,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
 
     test.adoptInstead(testBuilder->setPattern("no braces {$foo}")
                       .setExpected("{no braces {$foo}}")
-                      .setArgument("foo", "2", errorCode)
+                      .setArgument("foo", (int64_t) 2, errorCode)
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
