@@ -27,93 +27,55 @@ Tests reflect the syntax specified in
 as of the following commit from 2023-05-09:
   https://github.com/unicode-org/message-format-wg/commit/194f6efcec5bf396df36a19bd6fa78d1fa2e0867
 
-   The following tests only verify that valid messages are validated by the parser
-   and that invalid messages are rejected with an error reflecting the correct line number
-   and offset for the unexpected character.
-
-   TODO: check formatting output as well
 */
-// These tests are from the icu4j test suite under icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2/
-UnicodeString validTestCases[] = {
-    // From Mf2IcuTest.java
-    "{There are {$count} files on {$where}}",
-    "{At {$when :datetime timestyle=default} on {$when :datetime datestyle=default}, \
-      there was {$what} on planet {$planet :number kind=integer}.}",
-    "{The disk \"{$diskName}\" contains {$fileCount} file(s).}",
-    "match {$userGender :select}\n\
-     when female {{$userName} est all\u00E9e \u00E0 Paris.} \
-     when  *     {{$userName} est all\u00E9 \u00E0 Paris.}",
-    "{{$when :datetime skeleton=MMMMd}}",
-    // Edited this from testMessageFormatDateTimeSkeleton() -- unquoted literals can't contain spaces
-    "{{$when :datetime skeleton=|(   yMMMMd   )|}}",
-    "{Expiration: {$when :datetime skeleton=yMMM}!}",
-    "{Hello {$user}, today is {$today :datetime datestyle=long}.}",
-    // Edited this from testMessageFormatDateTimeSkeleton() -- unquoted literals can't contain parentheses or single quotation marks
-    "{{$when :datetime pattern=|('::'yMMMMd)|}}",
-    // From CustomFormatterMessageRefTest.java
-    "match {$gcase :select} when genitive {Firefoxin} when * {Firefox}",
-    // From CustomFormatterPersonTest.java
-    "{Hello {$name :person formality=formal length=medium}}",
-    0
+
+static const int32_t numValidTestCases = 25;
+TestResult validTestCases[] = {
+    {"{hello {|4.2| :number}}", "hello 4.2"},
+    {"{hello {|4.2| :number minimumFractionDigits=2}}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits = 2}}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits= 2}}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits =2}}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits=2  }}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits=2 bar=3}}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits=2 bar=3  }}", "hello 4.20"},
+    {"{hello {|4.2| :number minimumFractionDigits=|2|}}", "hello 4.20"},
+    {"{content -tag}", "content -tag"},
+    {"{}", ""},
+    // tests for escape sequences in literals
+    {"{{|hel\\\\lo|}}", "hel\\lo"},
+    {"{{|hel\\|lo|}}", "hel|lo"},
+    {"{{|hel\\|\\\\lo|}}", "hel|\\lo"},
+    // tests for text escape sequences
+    {"{hel\\{lo}", "hel{lo"},
+    {"{hel\\}lo}", "hel}lo"},
+    {"{hel\\\\lo}", "hel\\lo"},
+    {"{hel\\{\\\\lo}", "hel{\\lo"},
+    {"{hel\\{\\}lo}", "hel{}lo"},
+    // tests for ':' in unquoted literals
+    {"match {|foo| :select} when o:ne {one} when * {other}", "other"},
+    {"match {|foo| :select} when one: {one} when * {other}", "other"},
+    {"let $foo = {|42| :number option=a:b} {bar {$foo}}", "bar 42"},
+    {"let $foo = {|42| :number option=a:b:c} {bar {$foo}}", "bar 42"},
+    // tests for newlines in literals and text
+    {"{hello {|wo\nrld|}}", "hello wo\nrld"},
+    {"{hello wo\nrld}", "hello wo\nrld"}
 };
 
-/*
-  These tests are mostly from the test suite created for the JavaScript implementation of MessageFormat v2:
-  <p>Original JSON file
-  <a href="https://github.com/messageformat/messageformat/blob/master/packages/mf2-messageformat/src/__fixtures/test-messages.json">here</a>.</p>
-  Some have been modified or added to reflect syntax changes that post-date the JSON file.
- */
-UnicodeString jsonTestCasesValid[] = {
-    "{hello}",
-    "{hello {|world|}}",
-    "{hello {||}}",
-    "{hello {$place}}",
-    "{{$one} and {$two}}",
-    "{{$one} et {$two}}",
-    "{hello {|4.2| :number}}",
-    "{hello {|foo| :number}}",
-    "{hello {|foo| :number   }}",
-    "{hello {:number}}",
-    "{hello {|4.2| :number minimumFractionDigits=2}}",
-    "{hello {|4.2| :number minimumFractionDigits = 2}}",
-    "{hello {|4.2| :number minimumFractionDigits= 2}}",
-    "{hello {|4.2| :number minimumFractionDigits =2}}",
-    "{hello {|4.2| :number minimumFractionDigits=2  }}",
-    "{hello {|4.2| :number minimumFractionDigits=2 bar=3}}",
-    "{hello {|4.2| :number minimumFractionDigits=2 bar=3  }}",
-    "{hello {|4.2| :number minimumFractionDigits=|2|}}",
-    "{hello {|4.2| :number minimumFractionDigits=$foo}}",
-    "let $foo = {|bar|} {bar {$foo}}",
-    "let $foo = {$bar} {bar {$foo}}",
-    "let $foo = {$bar :number} {bar {$foo}}",
-    "let $foo = {$bar :number minimumFractionDigits=2} {bar {$foo}}",
-    "let $foo = {$bar :number minimumFractionDigits=foo} {bar {$foo}}",
-    "let $foo = {$bar :number} {bar {$foo}}",
-    "let $foo = {$bar} let $bar = {$baz} {bar {$foo}}",
-    "match {$foo :select} when |1| {one} when * {other}",
-    "match {$foo :plural} when 1 {one} when * {other}",
-    "match {$foo :plural} when 1 {one} when * {other}",
-    "match {$foo :plural} when one {one} when * {other}",
-    "match {$foo :plural} when 1 {=1} when one {one} when * {other}",
-    "match {$foo :plural} when one {one} when 1 {=1} when * {other}",
-    "match {$foo :plural} {$bar :plural} when one one {one one} when one * {one other} when * * {other}",
-    "let $foo = {$bar} match {$foo :plural} when one {one} when * {other}",
-    "let $foo = {$bar} match {$foo :plural} when one {one} when * {other}",
-    "let $bar = {$none} match {$foo :plural} when one {one} when * {{$bar}}",
-    "let $bar = {$none :plural} match {$foo :select} when one {one} when * {{$bar}}",
-    "{{+tag}}", // Modified next few patterns to reflect lack of special markup syntax
-    "{{-tag}}",
-    // Modified next few patterns to reflect lack of special markup syntax
-    "match {+foo} when * {foo}",
-    "{{|content| +tag}}",
-    "{{|content| -tag}}",
-    "{{|content| +tag} {|content| -tag}}",
-    "{content -tag}",
-    "{{+tag foo=bar}}",
-    "{{+tag foo=|foo| bar=$bar}}",
-    "{{-tag foo=bar}}",
-    "{content {|foo| +markup}}",
-    "{}",
+
+static const int32_t numResolutionErrors = 6;
+TestResultError jsonTestCasesResolutionError[] = {
+    {"let $foo = {$bar} match {$foo :plural} when one {one} when * {other}", "other", U_UNRESOLVED_VARIABLE_WARNING},
+    {"let $foo = {$bar} match {$foo :plural} when one {one} when * {other}", "other", U_UNRESOLVED_VARIABLE_WARNING},
+    {"let $bar = {$none :plural} match {$foo :select} when one {one} when * {{$bar}}", "{$none}", U_UNRESOLVED_VARIABLE_WARNING},
+    {"{{|content| +tag}}", "{|content|}", U_UNKNOWN_FUNCTION_WARNING},
+    {"{{|content| -tag}}", "{|content|}", U_UNKNOWN_FUNCTION_WARNING},
+    {"{{|content| +tag} {|content| -tag}}", "{|content|} {|content|}", U_UNKNOWN_FUNCTION_WARNING},
+    {"{content {|foo| +markup}}", "content {|foo|}", U_UNKNOWN_FUNCTION_WARNING}
+};
+
+static const int32_t numReservedErrors = 34;
+UnicodeString reservedErrors[] = {
     // tests for reserved syntax
     "{hello {|4.2| @number}}",
     "{hello {|4.2| @n|um|ber}}",
@@ -153,24 +115,11 @@ UnicodeString jsonTestCasesValid[] = {
     "{hello {$foo    #num x \\\\ abcde |3.14| r  }}",
     "{hello {$foo    >num x \\\\ abcde |aaa||3.14||42| r  }}",
     "{hello {$foo    >num x \\\\ abcde |aaa||3.14| |42| r  }}",
-    // tests for escape sequences in literals
-    "{{|hel\\\\lo|}}",
-    "{{|hel\\|lo|}}",
-    "{{|hel\\|\\\\lo|}}",
-    // tests for text escape sequences
-    "{hel\\{lo}",
-    "{hel\\}lo}",
-    "{hel\\\\lo}",
-    "{hel\\{\\\\lo}",
-    "{hel\\{\\}lo}",
-    // tests for ':' in unquoted literals
-    "match {$foo :select} when o:ne {one} when * {other}",
-    "match {$foo :select} when one: {one} when * {other}",
-    "let $foo = {$bar :fun option=a:b} {bar {$foo}}",
-    "let $foo = {$bar :fun option=a:b:c} {bar {$foo}}",
-    // tests for newlines in literals and text
-    "{hello {|wo\nrld|}}",
-    "{hello wo\nrld}",
+    0
+};
+
+static const int32_t numMatches = 15;
+UnicodeString matches[] = {
     // multiple scrutinees, with or without whitespace
     "match {$foo :select} {$bar :select} when one * {one} when * * {other}",
     "match {$foo :select} {$bar :select}when one * {one} when * * {other}",
@@ -188,7 +137,13 @@ UnicodeString jsonTestCasesValid[] = {
     // one or multiple keys, with or without whitespace before pattern
     "match {$foo :select} {$bar :select} when one *{one} when * * {foo}",
     "match {$foo :select} {$bar :select} when one * {one} when * * {foo}",
-    "match {$foo :select} {$bar :select} when one *  {one} when * * {foo}",
+    "match {$foo :select} {$bar :select} when one *  {one} when * * {foo}"
+};
+
+static const int32_t numSyntaxTests = 22;
+// These patterns are tested to ensure they parse without a syntax error
+UnicodeString syntaxTests[] = {
+    "{hello {|foo| :number   }}",
     // zero, one or multiple options, with or without whitespace before '}'
     "{{:foo}}",
     "{{:foo }}",
@@ -219,28 +174,6 @@ UnicodeString jsonTestCasesValid[] = {
     0
 };
 
-// From CustomFormatterPersonTest.java
-UnicodeString complexMessage = "\
-    let $hostName = {$host :person length=long}\n\
-    let $guestName = {$guest :person length=long}\n\
-    let $guestsOther = {$guestCount :number offset=1}\n\
-    \n\
-    match {$hostGender :gender} {$guestCount :plural}\n\
-    when female 0 {{$hostName} does not give a party.}\n\
-    when female 1 {{$hostName} invites {$guestName} to her party.}\n\
-    when female 2 {{$hostName} invites {$guestName} and one other person to her party.}\n\
-    when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}\n\
-    \n\
-    when male 0 {{$hostName} does not give a party.}\n\
-    when male 1 {{$hostName} invites {$guestName} to his party.}\n\
-    when male 2 {{$hostName} invites {$guestName} and one other person to his party.}\n\
-    when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}\n\
-    \n\
-    when * 0 {{$hostName} does not give a party.}\n\
-    when * 1 {{$hostName} invites {$guestName} to their party.}\n\
-    when * 2 {{$hostName} invites {$guestName} and one other person to their party.}\n\
-    when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}\n";
-
 void
 TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
@@ -255,17 +188,13 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testResolutionErrors);
     TESTCASE_AUTO(testAPI);
     TESTCASE_AUTO(testAPISimple);
-    TESTCASE_AUTO(testValidJsonPatterns);
-    TESTCASE_AUTO(testValidPatterns);
-    TESTCASE_AUTO(testComplexMessage);
+    TESTCASE_AUTO(testVariousPatterns);
 
     TESTCASE_AUTO(testInvalidPatterns);
     TESTCASE_AUTO_END;
 }
 
 // Example for design doc
-// TODO: This doesn't currently check the formatting
-// results, just exercises the API
 void TestMessageFormat2::testAPISimple() {
     IcuTestErrorCode errorCode1(*this, "testAPI");
     UErrorCode errorCode = (UErrorCode) errorCode1;
@@ -405,7 +334,6 @@ void TestMessageFormat2::testAPI() {
 
 // Custom functions example from the ICU4C API design doc
 // Note: error/null checks are omitted
-// (same comments as in testAPISimple() -- TODO)
 void TestMessageFormat2::testAPICustomFunctions() {
     IcuTestErrorCode errorCode1(*this, "testAPICustomFunctions");
     UErrorCode errorCode = (UErrorCode) errorCode1;
@@ -458,70 +386,59 @@ void TestMessageFormat2::testAPICustomFunctions() {
     assertEquals("testAPICustomFunctions", "Hello Mr. John Doe", result);
 }
 
-void TestMessageFormat2::testMessageFormatter(const UnicodeString& s, UParseError& parseError, UErrorCode& errorCode) {
-    LocalPointer<MessageFormatter::Builder> builder(MessageFormatter::builder(errorCode));
-    if (U_SUCCESS(errorCode)) {
-      builder->setPattern(s, errorCode);
-      LocalPointer<MessageFormatter> mf(builder->build(parseError, errorCode));
-      if (U_SUCCESS(errorCode)) {
-        // Roundtrip test
-        const UnicodeString& normalized = mf->getNormalizedPattern();
-        UnicodeString serialized;
-        mf->getPattern(serialized);
-        if (normalized != serialized) {
-          logln("Expected output: " + normalized + "\nGot output: " + serialized);
-          // TODO: ???
-          errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-      }
+void TestMessageFormat2::testValidPatterns(const TestResult* patterns, int32_t len, IcuTestErrorCode& errorCode) {
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    testBuilder->setName("testOtherJsonPatterns");
+
+    LocalPointer<TestCase> test;
+
+    for (int32_t i = 0; i < len - 1; i++) {
+        test.adoptInstead(testBuilder->setPattern(patterns[i].pattern)
+                          .setExpected(patterns[i].output)
+                          .setExpectSuccess()
+                          .build(errorCode));
+        TestUtils::runTestCase(*this, *test, errorCode);
     }
 }
 
-/*
- Tests a single pattern, which is expected to be valid.
+void TestMessageFormat2::testResolutionErrors(IcuTestErrorCode& errorCode) {
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    testBuilder->setName("testResolutionErrorPattern");
 
- `s`: The pattern string.
- `i`: Test number (only used for diagnostic output)
- `testName`: String describing the test (only used for diagnostic output)
-*/
-void
-TestMessageFormat2::testPattern(const UnicodeString& s, uint32_t i, const char* testName) {
-    UParseError parseError;
-    IcuTestErrorCode errorCode(*this, testName);
+    LocalPointer<TestCase> test;
 
-    testMessageFormatter(s, parseError, errorCode);
-
-    if (U_FAILURE(errorCode)) {
-        dataerrln(s);
-        dataerrln("TestMessageFormat2::%s #%d - %s", testName, i, u_errorName(errorCode));
-        dataerrln("TestMessageFormat2::%s #%d - %d %d", testName, i, parseError.line, parseError.offset);
-        logln(UnicodeString("TestMessageFormat2::" + UnicodeString(testName) + " failed test #") + ((int32_t) i) + UnicodeString(" with error code ")+(int32_t)errorCode);
+    for (int32_t i = 0; i < numResolutionErrors - 1; i++) {
+        test.adoptInstead(testBuilder->setPattern(jsonTestCasesResolutionError[i].pattern)
+                          .setExpected(jsonTestCasesResolutionError[i].output)
+                          .setExpectedWarning(jsonTestCasesResolutionError[i].expected)
+                          .build(errorCode));
+        TestUtils::runTestCase(*this, *test, errorCode);
     }
 }
 
-/*
- Tests a fixed-size array of patterns, which are expected to be valid.
+void TestMessageFormat2::testNoSyntaxErrors(const UnicodeString* patterns, int32_t len, IcuTestErrorCode& errorCode) {
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    testBuilder->setName("testReservedErrorPattern");
 
- `patterns`: The patterns.
- `testName`: String describing the test (only used for diagnostic output)
-*/
-template<int32_t N>
-void TestMessageFormat2::testPatterns(const UnicodeString (&patterns)[N], const char* testName) {
-    for (uint32_t i = 0; i < N - 1; i++) {
-        testPattern(patterns[i], i, testName);
-    }
+    LocalPointer<TestCase> test;
+
+    for (int32_t i = 0; i < len - 1; i++) {
+        test.adoptInstead(testBuilder->setPattern(patterns[i])
+                          .setNoSyntaxError()
+                          .build(errorCode));
+        TestUtils::runTestCase(*this, *test, errorCode);
+    } 
 }
 
-void TestMessageFormat2::testValidPatterns() {
-    testPatterns(validTestCases, "testValidPatterns");
-}
-
-
-void TestMessageFormat2::testValidJsonPatterns() {
-//    testPatterns(jsonTestCasesValid, "testValidJsonPatterns");
+void TestMessageFormat2::testVariousPatterns() {
     IcuTestErrorCode errorCode(*this, "jsonTests");
 
     jsonTests(errorCode);
+    testValidPatterns(validTestCases, numValidTestCases, errorCode);
+    testResolutionErrors(errorCode);
+    testNoSyntaxErrors(reservedErrors, numReservedErrors, errorCode);
+    testNoSyntaxErrors(matches, numMatches, errorCode);
+    testNoSyntaxErrors(syntaxTests, numSyntaxTests, errorCode);
 }
 
 /*
@@ -570,7 +487,7 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
 
     LocalPointer<TestCase> test(testBuilder->setPattern(s)
                                 .setExpectedWarning(U_SYNTAX_WARNING)
-                                .setExpectedLineNumberAndOffset(expectedErrorLine ,expectedErrorOffset)
+                                .setExpectedLineNumberAndOffset(expectedErrorLine, expectedErrorOffset)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }
@@ -592,12 +509,11 @@ static bool isWarning(UErrorCode errorCode) {
 void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
 
-    // TODO
-    (void) testNum;
+    char testName[50];
+    snprintf(testName, sizeof(testName), "testSemanticallyInvalidPattern: %d", testNum);
 
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
-    testBuilder->setName("testDataModelErrors")
-                .setPattern(s);
+    testBuilder->setName("testName").setPattern(s);
                 
     if (isWarning(expectedErrorCode)) {
         testBuilder->setExpectedWarning(expectedErrorCode);
@@ -660,6 +576,7 @@ void TestMessageFormat2::testRuntimeWarningPattern(uint32_t testNum, const Unico
 
 void TestMessageFormat2::testDataModelErrors() {
     uint32_t i = 0;
+    IcuTestErrorCode errorCode(*this, "testDataModelErrors");
 
     // The following tests are syntactically valid but should trigger a data model error
     
@@ -709,17 +626,29 @@ void TestMessageFormat2::testDataModelErrors() {
     testSemanticallyInvalidPattern(++i, "match {$foo ^select} when |1| {one} when * {other}",
                                    U_MISSING_SELECTOR_ANNOTATION_WARNING);
 
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    testBuilder->setName("testDataModelErrors");
+
     // This should *not* trigger a "missing selector annotation" error
-    testPattern("let $one = {|The one| :select}\n\
+    LocalPointer<TestCase> test;
+    test.adoptInstead(testBuilder->setPattern("let $one = {|The one| :select}\n\
                  match {$one}\n\
                  when 1 {Value is one}\n\
-                 when * {Value is not one}", ++i, "testDataModelErrors");
-    // Neither should this
-    testPattern("let $one = {|The one| :select}\n\
+                 when * {Value is not one}")
+                          .setExpected("Value is not one")
+                          .setExpectSuccess()
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setPattern("let $one = {|The one| :select}\n\
                  let $two = {$one}\n\
                  match {$two}\n\
                  when 1 {Value is one}\n\
-                 when * {Value is not one}", ++i, "testDataModelErrors");
+                 when * {Value is not one}")
+                          .setExpected("Value is not one")
+                          .setExpectSuccess()
+                          .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 void TestMessageFormat2::testResolutionErrors() {
@@ -982,8 +911,5 @@ void TestMessageFormat2::testInvalidPatterns() {
 
 }
 
-void TestMessageFormat2::testComplexMessage() {
-    testPattern(complexMessage, 0, "testComplexMessage");
-}
-
 #endif /* #if !UCONFIG_NO_FORMATTING */
+

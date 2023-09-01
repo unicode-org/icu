@@ -23,6 +23,17 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+struct TestResult {
+    const UnicodeString pattern;
+    const UnicodeString output;
+};
+
+struct TestResultError {
+    const UnicodeString pattern;
+    const UnicodeString output;
+    UErrorCode expected;
+};
+
 class TestMessageFormat2: public IntlTest {
 public:
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
@@ -30,41 +41,31 @@ public:
     /** 
      * test MessageFormat2 with various given patterns
      **/
-    void testStaticFormat2(void);
-    void testComplexMessage(void);
-    void testValidPatterns(void);
-    void testValidJsonPatterns(void);
+    void testVariousPatterns(void);
     void featureTests(void);
     void messageFormat1Tests(void);
-    void testInvalidPatterns(void);
+    void testAPICustomFunctions(void);
+    // Test custom functions
+    void testCustomFunctions(void);
+    // Test standard functions
+    void testBuiltInFunctions(void);
     void testDataModelErrors(void);
     void testResolutionErrors(void);
     // Test the data model API
     void testAPI(void);
+    void testInvalidPatterns(void);
     void testAPISimple(void);
-    void testAPICustomFunctions(void);
-    // Test standard functions
-    void testBuiltInFunctions(void);
-    // Test custom functions
-    void testCustomFunctions(void);
 
 private:
-    void testMessageFormatter(const UnicodeString&, UParseError&, UErrorCode&);
-    void testMessageFormatting(const UnicodeString&, UParseError&, UErrorCode&);
-    void testMessageFormatting(const UnicodeString&, UParseError&, UnicodeString&, UErrorCode&);
-    void testPattern(const UnicodeString&, uint32_t, const char*);
-    template<int32_t N>
-    void testPatterns(const UnicodeString(&) [N], const char*);
     void testSemanticallyInvalidPattern(uint32_t, const UnicodeString&, UErrorCode);
     void testRuntimeErrorPattern(uint32_t, const UnicodeString&, UErrorCode);
     void testRuntimeWarningPattern(uint32_t, const UnicodeString&, const UnicodeString&, UErrorCode);
     void testInvalidPattern(uint32_t, const UnicodeString&);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t);
     void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t, uint32_t);
-    void runTest(const MessageFormatter&, const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, UErrorCode&);
-    void runTest(const MessageFormatter&, const UnicodeString& testName, const UnicodeString& expected, const UnicodeString& name1, const UnicodeString& value1, const UnicodeString& name2, const UnicodeString& value2, UErrorCode&);
-    void runTest(const MessageFormatter&, const UnicodeString& testName, const UnicodeString& expected, const Hashtable& args, UErrorCode&);
-
+    void testValidPatterns(const TestResult*, int32_t, IcuTestErrorCode&);
+    void testResolutionErrors(IcuTestErrorCode&);
+    void testNoSyntaxErrors(const UnicodeString*, int32_t, IcuTestErrorCode&);
     void jsonTests(IcuTestErrorCode&);
  
     // Built-in function testing
@@ -72,13 +73,6 @@ private:
     void testNumbers(IcuTestErrorCode&);
 
     // Custom function testing
-    void checkResult(const UnicodeString&, const UnicodeString&, const UnicodeString&, const UnicodeString&, IcuTestErrorCode&, UErrorCode);
-    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, const UnicodeString& argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
-    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, Formattable* argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
-    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, Formattable* argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&);
-    void testWithPatternAndArguments(const UnicodeString& testName, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName, double argValue, const UnicodeString& expected, Locale, IcuTestErrorCode&);
-    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const UnicodeString& argName1, Formattable* argValue1, const UnicodeString& argName2, Formattable* argValue2, const UnicodeString& expected, Locale, IcuTestErrorCode&);
-    void testWithPatternAndArguments(const UnicodeString&, FunctionRegistry*, const UnicodeString& pattern, const Hashtable&, const UnicodeString& expected, Locale, IcuTestErrorCode&, UErrorCode);
     void testPersonFormatter(IcuTestErrorCode&);
     void testGrammarCasesFormatter(IcuTestErrorCode&);
     void testListFormatter(IcuTestErrorCode&);
