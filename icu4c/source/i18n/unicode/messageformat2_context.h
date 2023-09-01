@@ -25,6 +25,11 @@ class FormatterFactory;
 class SelectorFactory;
 
 // Intermediate classes used internally in the formatter
+
+
+// Closures and environments
+// -------------------------
+
 class Environment;
 
 // A closure represents the right-hand side of a variable
@@ -95,6 +100,9 @@ private:
     const Environment& parent;
 };
 
+// Errors
+// ----------
+
 class Error : public UMemory {
     public:
     enum Type {
@@ -158,6 +166,9 @@ class Errors : public UMemory {
 
     virtual ~Errors();
 }; // class Errors
+
+// Arguments
+// ----------
 
 /**
  * <p>MessageFormatter is a Technical Preview API implementing MessageFormat 2.0.
@@ -294,7 +305,6 @@ class U_I18N_API MessageArguments : public UMemory {
     static Builder* builder(UErrorCode&);
   private:
     friend class MessageContext;
-    friend class MessageFormatter;
 
     bool has(const VariableName&) const;
     const Formattable& get(const VariableName&) const;
@@ -307,18 +317,20 @@ class U_I18N_API MessageArguments : public UMemory {
     LocalPointer<Hashtable> objectContents;
 }; // class MessageArguments
 
+// Formatter cache
+// --------------
+
 // Map from expression pointers to Formatters
 class CachedFormatters : public UMemory {
 private:
-    friend class MessageContext;
-    friend class ExpressionContext;
     friend class MessageFormatter;
     
     LocalPointer<Hashtable> cache;
-    
+    CachedFormatters(UErrorCode&);
+
+public:
     const Formatter* getFormatter(const FunctionName&);
     void setFormatter(const FunctionName&, Formatter*, UErrorCode& errorCode);
-    CachedFormatters(UErrorCode&);
 };
 
 // The context contains all the information needed to process

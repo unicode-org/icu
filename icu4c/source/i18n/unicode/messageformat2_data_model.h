@@ -177,9 +177,6 @@ public:
     private:
         friend class Key;
         friend class ImmutableVector<Literal>;
-        friend class LiteralOperand;
-        friend class Operand;
-        friend class Reserved;
 
         // Contents is stored as a Formattable to avoid allocating
         // new Formattables during formatting, but it's guaranteed
@@ -534,6 +531,7 @@ public:
     private:
         friend class ImmutableVector<PatternPart>;
         friend class Pattern;
+
         // Text
         PatternPart(const UnicodeString& t) : isRawText(true), text(t), expression(nullptr) {}
         // Expression
@@ -645,6 +643,7 @@ public:
     class Builder {
     private:
         friend class MessageFormatDataModel;
+
         Builder(UErrorCode& errorCode);
         void buildSelectorsMessage(UErrorCode& errorCode);
         LocalPointer<Pattern> pattern;

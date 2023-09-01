@@ -127,7 +127,6 @@ public:
   private:
     friend class Builder;
     friend class MessageContext;
-    friend class ExpressionContext;
 
     MessageFormatter(const MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
