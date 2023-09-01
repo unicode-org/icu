@@ -131,7 +131,7 @@ plural selectors (`plural` and `selectordinal`),
 and general selector (`select`), 
 very similar to what MessageFormat offers.
 
-The [ICU test code](https://github.com/unicode-org/icu/tree/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2)
+The [ICU test code](https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2)
 covers most features, and has examples of how to make custom placeholder formatters;
 you can look for classes that implement `com.ibm.icu.message2.FormatterFactory`
 (they are named `Custom*Test.java`).
@@ -272,7 +272,7 @@ You can experiment with more messages using as inspiration:
 
 - the [syntax document](https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md)
 - the official [ICU4J javadoc](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j//index.html?com/ibm/icu/message2/)
-- the [ICU4J unit tests](https://github.com/unicode-org/icu/tree/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2)
+- the [ICU4J unit tests](https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2)
 
 You should be able to use your preferred IDE (Eclipse, IntelliJ, Visual Studio Code, more), use a different build system, etc.
 

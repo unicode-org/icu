@@ -44,7 +44,7 @@ After syncing CLDR data with ICU do the following. This documentation assumes
 that you are updating the MeasureUnit clases for ICU 68.
 
 * Check out
-  $GIT_ROOT/icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/MeasureUnitTest.java
+  $GIT_ROOT/icu4j/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/MeasureUnitTest.java
 * Open MeasureUnitTest.java.
 * Find the `testZZZ` test, its code should all be commented out. This test will
   execute last and will run the desired code.
@@ -57,7 +57,7 @@ that you are updating the MeasureUnit clases for ICU 68.
 * Change `testZZZ` to run `generateConstants(“68”); // ICU 68.`
 * Run MeasureUnitTest.java, copy the generated code (see instructions above).
 * Open MeasureUnit.java:
-  $GIT_ROOT/icu4j/main/classes/core/src/com/ibm/icu/util/MeasureUnit.java
+  $GIT_ROOT/icu4j/main/core/src/main/java/com/ibm/icu/util/MeasureUnit.java
 * Look for line containing:
 
   `// Start generated MeasureUnit constants`

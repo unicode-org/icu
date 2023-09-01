@@ -383,7 +383,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * also match "Smithsonian" and similar.
      * <p>
      * For more on usage, see example in test procedure
-     * <a href="https://github.com/unicode-org/icu/blob/main/icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
+     * <a href="https://github.com/unicode-org/icu/blob/main/icu4j/main/collate/src/test/java/com/ibm/icu/dev/test/collator/CollationAPITest.java">
      * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
      * </a>
      * <p>

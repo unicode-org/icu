@@ -362,7 +362,7 @@ generate-data: GODATA "$(ICUOUT)\$(ICUPKG).dat" uni-core-data
 
 ## Compare to:  source\data\Makefile.in and source\test\testdata\Makefile.in
 
-DEBUGUTILITIESDATA_DIR=main\tests\core\src\com\ibm\icu\dev\test\util
+DEBUGUTILITIESDATA_DIR=main\core\src\test\java\com\ibm\icu\dev\test\util
 DEBUGUTILITIESDATA_SRC=DebugUtilitiesData.java
 
 # Build DebugUtilitiesData.java

@@ -1,4 +1,4 @@
-﻿file: main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/readme.txt
+﻿file: main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/break_rules/readme.txt
 Copyright (C) 2016 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 
