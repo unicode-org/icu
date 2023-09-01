@@ -166,8 +166,9 @@ class U_I18N_API FunctionRegistry : UMemory {
     static Builder* builder(UErrorCode& status);
 
  private:
-    friend class MessageFormatter;
     friend class Builder;
+    friend class ExpressionContext;
+    friend class MessageFormatter;
 
     // Adopts `f` and `s`
     FunctionRegistry(Hashtable* f, Hashtable* s) : formatters(f), selectors(s) {}

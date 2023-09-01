@@ -24,11 +24,14 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+/*
 class FormattedString;
 class FormattedNumber;
 class FormattingInput;
 class FullyFormatted;
+*/
 class Selector;
+class SelectorFactory;
 
 extern void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString&, UErrorCode& errorCode);
 extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, double toFormat, UErrorCode& errorCode);
@@ -302,6 +305,7 @@ class ExpressionContext : public FormattingContext {
     bool isCustomFormatter(const FunctionName&) const;
     bool isBuiltInSelector(const FunctionName&) const;
     FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&) const;
+    const SelectorFactory* lookupSelectorFactory(const FunctionName&, UErrorCode& status) const;
     const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode&);
     bool isCustomSelector(const FunctionName&) const;
     void doFormattingCall();
@@ -413,8 +417,7 @@ class ExpressionContext : public FormattingContext {
     bool hasSelector() const;
     // Precondition: pending function name is set
     bool hasFormatter() const;
-    bool hasOperator() const { return (hasSelector() || hasFormatter()); }
-    const FunctionName& getOperator() const;
+    const FunctionName& getFunctionName() const;
     bool hasInput() const { return hasFormattableInput() || hasObjectInput(); }
     bool hasFormattableInput() const;
     bool hasObjectInput() const;
@@ -441,6 +444,7 @@ class ExpressionContext : public FormattingContext {
     bool isFallback() const;
     bool hasParseError() const;
     bool hasDataModelError() const;
+    bool hasUnresolvedVariableError() const;
     bool hasMissingSelectorAnnotationError() const;
     bool hasUnknownFunctionError() const;
     bool hasFormattingError() const;

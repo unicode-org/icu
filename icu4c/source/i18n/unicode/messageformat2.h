@@ -315,11 +315,6 @@ public:
      // Function registry methods
      const Formatter* maybeCachedFormatter(Context&, const FunctionName&, UErrorCode& errorCode) const;
 
-     bool isBuiltInSelector(const FunctionName&) const;
-     bool isBuiltInFormatter(const FunctionName&) const;
-     const SelectorFactory* lookupSelectorFactory(Context&, const FunctionName&, UErrorCode& status) const;
-   //  FormatterFactory* lookupFormatterFactory(Context&, const FunctionName&, UErrorCode& status) const;
-
      bool hasCustomFunctionRegistry() const {
          return (customFunctionRegistry != nullptr);
      }

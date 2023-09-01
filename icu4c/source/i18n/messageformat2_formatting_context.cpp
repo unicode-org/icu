@@ -630,16 +630,8 @@ bool ExpressionContext::hasCustomRegistry() const {
     return parent.hasCustomFunctionRegistry();
 }
 
-bool ExpressionContext::isBuiltInFormatter(const FunctionName& fn) const {
-    return parent.isBuiltInFormatter(fn);
-}
-
 bool ExpressionContext::isCustomFormatter(const FunctionName& fn) const {
     return hasCustomRegistry() && customRegistry().getFormatter(fn) != nullptr;
-}
-
-bool ExpressionContext::isBuiltInSelector(const FunctionName& fn) const {
-    return parent.isBuiltInSelector(fn);
 }
 
 bool ExpressionContext::isCustomSelector(const FunctionName& fn) const {
@@ -653,12 +645,54 @@ Selector* ExpressionContext::getSelector(UErrorCode& status) const {
 
     U_ASSERT(pendingFunctionName.isValid());
     const FunctionName& functionName = *pendingFunctionName;
-    const SelectorFactory* selectorFactory = parent.lookupSelectorFactory(context, functionName, status);
+    const SelectorFactory* selectorFactory = lookupSelectorFactory(functionName, status);
     NULL_ON_ERROR(status);
     // Create a specific instance of the selector
     LocalPointer<Selector> result(selectorFactory->createSelector(parent.locale, status));
     NULL_ON_ERROR(status);
     return result.orphan();
+}
+
+
+bool ExpressionContext::isBuiltInFormatter(const FunctionName& functionName) const {
+    return parent.standardFunctionRegistry->hasFormatter(functionName);
+}
+
+bool ExpressionContext::isBuiltInSelector(const FunctionName& functionName) const {
+    return parent.standardFunctionRegistry->hasSelector(functionName);
+}
+
+// https://github.com/unicode-org/message-format-wg/issues/409
+// Unknown function = unknown function error
+// Formatter used as selector  = selector error
+// Selector used as formatter = formatting error
+const SelectorFactory* ExpressionContext::lookupSelectorFactory(const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    if (isBuiltInSelector(functionName)) {
+        return parent.standardFunctionRegistry->getSelector(functionName);
+    }
+    if (isBuiltInFormatter(functionName)) {
+        context.setSelectorError(functionName, status);
+        return nullptr;
+    }
+    if (parent.hasCustomFunctionRegistry()) {
+        const FunctionRegistry& customFunctionRegistry = parent.getCustomFunctionRegistry();
+        const SelectorFactory* customSelector = customFunctionRegistry.getSelector(functionName);
+        if (customSelector != nullptr) {
+            return customSelector;
+        }
+        if (customFunctionRegistry.getFormatter(functionName) != nullptr) {
+            context.setSelectorError(functionName, status);
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    context.setUnknownFunctionError(functionName, status);
+    return nullptr;
 }
 
 FormatterFactory* ExpressionContext::lookupFormatterFactory(const FunctionName& functionName, UErrorCode& status) const {
@@ -840,6 +874,10 @@ bool ExpressionContext::hasMissingSelectorAnnotationError() const {
 
 bool ExpressionContext::hasFormattingError() const {
     return context.hasFormattingError();
+}
+
+bool ExpressionContext::hasUnresolvedVariableError() const {
+    return context.hasUnresolvedVariableError();
 }
 
 bool ExpressionContext::hasError() const {

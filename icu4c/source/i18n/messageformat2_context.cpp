@@ -235,6 +235,10 @@ bool Context::hasFormattingError() const {
     return errors.hasFormattingError();
 }
 
+bool Context::hasUnresolvedVariableError() const {
+    return errors.hasUnresolvedVariableError();
+}
+
 void Context::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
@@ -392,6 +396,7 @@ void Errors::addError(Error e, UErrorCode& status) {
             break;
         }
         case Error::Type::UnresolvedVariable: {
+            unresolvedVariableError = true;
             syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }

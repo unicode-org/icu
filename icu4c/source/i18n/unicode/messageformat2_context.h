@@ -129,6 +129,7 @@ class Errors : public UMemory {
     bool selectorError;
     bool syntaxError;
     bool unknownFunctionError;
+    bool unresolvedVariableError;
     Errors(UErrorCode& errorCode);
 
     public:
@@ -151,6 +152,7 @@ class Errors : public UMemory {
     bool hasSyntaxError() const { return syntaxError; }
     bool hasUnknownFunctionError() const { return unknownFunctionError; }
     bool hasMissingSelectorAnnotationError() const { return missingSelectorAnnotationError; }
+    bool hasUnresolvedVariableError() const { return unresolvedVariableError; }
     void addError(Error, UErrorCode&);
     void checkErrors(UErrorCode&);
     void clearResolutionAndFormattingErrors();
@@ -320,7 +322,7 @@ private:
     CachedFormatters(UErrorCode&);
 };
 
-// Context needed for formatting an expression
+// Context needed for formatting a message
 class MessageFormatter;
 
 class Context : public UMemory {
@@ -340,6 +342,7 @@ public:
     bool hasParseError() const;
     bool hasDataModelError() const;
     bool hasMissingSelectorAnnotationError() const;
+    bool hasUnresolvedVariableError() const;
     bool hasUnknownFunctionError() const;
     bool hasFormattingError() const;
     bool hasSelectorError() const;
