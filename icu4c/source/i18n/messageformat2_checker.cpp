@@ -12,25 +12,29 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-// Checks semantic properties for data models
+/*
+Checks data model errors
+(see https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#error-handling )
+
+The following are checked here:
+Variant Key Mismatch
+Missing Fallback Variant (called NonexhaustivePattern here)
+Missing Selector Annotation
+
+(Duplicate option names are checked by the parser)
+*/
+
 // ------------------------------------------------
 
 using Type = TypeEnvironment::Type;
 
 using Binding     = MessageFormatDataModel::Binding;
-using Bindings    = MessageFormatDataModel::Bindings;
-using Key         = MessageFormatDataModel::Key;
-using SelectorKeys = MessageFormatDataModel::SelectorKeys;
-using KeyList     = MessageFormatDataModel::KeyList;
-using Literal     = MessageFormatDataModel::Literal;
-using OptionMap   = MessageFormatDataModel::OptionMap;
 using Expression  = MessageFormatDataModel::Expression;
 using ExpressionList  = MessageFormatDataModel::ExpressionList;
+using KeyList     = MessageFormatDataModel::KeyList;
 using Operand     = MessageFormatDataModel::Operand;
-using Operator    = MessageFormatDataModel::Operator;
 using Pattern     = MessageFormatDataModel::Pattern;
-using PatternPart = MessageFormatDataModel::PatternPart;
-using Reserved    = MessageFormatDataModel::Reserved;
+using SelectorKeys = MessageFormatDataModel::SelectorKeys;
 using VariantMap    = MessageFormatDataModel::VariantMap;
 
 // Type environments
