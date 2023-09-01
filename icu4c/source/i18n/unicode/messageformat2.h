@@ -56,7 +56,6 @@ public:
     // The locale this MessageFormatter was created with
     const Locale locale;
 
-//    Locale getLocale() const { return locale; }
     void getPattern(UnicodeString& result) const {
         // Converts the current data model back to a string
         U_ASSERT(dataModelOK());
@@ -85,7 +84,7 @@ public:
        const MessageFormatDataModel* dataModel;
        Locale locale;
        LocalPointer<FunctionRegistry> standardFunctionRegistry;
-       // *Not* owned
+       // Not owned
        const FunctionRegistry* customFunctionRegistry;
 
     public:
