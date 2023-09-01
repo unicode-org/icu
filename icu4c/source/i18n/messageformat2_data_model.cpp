@@ -55,9 +55,7 @@ Literal::~Literal() {}
 //------------------ Operand
 
 /* static */ Operand* Operand::create(const VariableName& s, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     Operand* result = new Operand(s);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -67,9 +65,7 @@ Literal::~Literal() {}
  
 // Literal
 /* static */ Operand* Operand::create(const Literal& lit, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     Operand* result = new Operand(lit);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -94,9 +90,7 @@ const VariableName& Operand::asVariable() const {
 //---------------- Key
 
 /* static */ Key* Key::create(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     Key* k = new Key();
     if (k == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -105,9 +99,7 @@ const VariableName& Operand::asVariable() const {
 }
 
 /* static */ Key* Key::create(const Literal& lit, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     Key* k = new Key(lit);
     if (k == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -145,9 +137,7 @@ bool VariantMap::next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) c
 }
 
 VariantMap::Builder& VariantMap::Builder::add(SelectorKeys* key, Pattern* value, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return *this;
-    }
+    THIS_ON_ERROR(errorCode);
     // Stringify `key`
     UnicodeString keyResult;
     concatenateKeys(*key, keyResult);
@@ -157,18 +147,11 @@ VariantMap::Builder& VariantMap::Builder::add(SelectorKeys* key, Pattern* value,
 }
 
 VariantMap* VariantMap::Builder::build(UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    
+    NULL_ON_ERROR(errorCode);
+
     LocalPointer<OrderedMap<Pattern>> adoptedContents(contents->build(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
     LocalPointer<ImmutableVector<SelectorKeys>> adoptedKeyLists(keyLists->build(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     VariantMap* result = new VariantMap(adoptedContents.orphan(), adoptedKeyLists.orphan());
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -197,13 +180,9 @@ VariantMap::Builder::Builder(UErrorCode& errorCode) {
 }
 
 /* static */ VariantMap::Builder* VariantMap::builder(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     LocalPointer<VariantMap::Builder> result(new VariantMap::Builder(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
 
@@ -221,9 +200,7 @@ const Literal* Reserved::getPart(int32_t i) const {
 }
 
 Reserved::Builder::Builder(UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    CHECK_ERROR(errorCode);
     parts.adoptInstead(ImmutableVector<Literal>::builder(errorCode));
 }
 
@@ -303,16 +280,13 @@ Operator::Builder& Operator::Builder::setFunctionName(FunctionName* func) {
 }
 
 Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operand* value, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return *this;
-    }
+    THIS_ON_ERROR(errorCode);
+
     U_ASSERT(value != nullptr);
     asReserved.adoptInstead(nullptr);
     if (!options.isValid()) {
         options.adoptInstead(OptionMap::builder(errorCode));
-        if (U_FAILURE(errorCode)) {
-            return *this;
-        }
+        THIS_ON_ERROR(errorCode);
     }
     // If the option name is already in the map, emit a data model error
     if (options->has(key)) {
@@ -324,9 +298,8 @@ Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operan
 }
 
 Operator* Operator::Builder::build(UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     LocalPointer<Operator> result;
     // Must be either reserved or function, not both; enforced by methods
     if (asReserved.isValid()) {
@@ -340,24 +313,19 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
         }
         if (options.isValid()) {
             LocalPointer<OptionMap> opts(options->build(errorCode));
-                  if (U_FAILURE(errorCode)) {
-                      return nullptr;
-                  }
-                  result.adoptInstead(Operator::create(*functionName, opts.orphan(), errorCode));
+            NULL_ON_ERROR(errorCode);
+            result.adoptInstead(Operator::create(*functionName, opts.orphan(), errorCode));
         } else {
             result.adoptInstead(Operator::create(*functionName, nullptr, errorCode));
         }
     }
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
  
 /* static */ Operator::Builder* Operator::builder(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     LocalPointer<Operator::Builder> result(new Operator::Builder());
     if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -367,13 +335,10 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
 }
 
 /* static */ Operator* Operator::create(const Reserved& r, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     LocalPointer<Operator> result(new Operator(r));
-    if (!result.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else if (result->isBogus()) {
+    if (!result.isValid() || result->isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
@@ -381,9 +346,8 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
 }
 
 /* static */ Operator* Operator::create(const FunctionName& f, OptionMap* opts, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     // opts may be null -- in that case, we create an empty OptionMap
     // for simplicity
     LocalPointer<OptionMap> adoptedOpts;
@@ -393,16 +357,11 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
     } else {
         adoptedOpts.adoptInstead(opts);
     }
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     LocalPointer<Operator> result(new Operator(f, adoptedOpts.orphan()));
-    if (!result.isValid()) {
+    if (!result.isValid() || result->isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else if (result->isBogus()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    if (U_FAILURE(errorCode)) {
         return nullptr;
     }
     return result.orphan();
@@ -478,9 +437,8 @@ Expression::Builder& Expression::Builder::setOperator(Operator* rAtor) {
 
 // Postcondition: U_FAILURE(errorCode) || (result != nullptr && !isBogus(result))
 Expression* Expression::Builder::build(UErrorCode& errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     if ((!rand.isValid() || rand->isNull()) && !rator.isValid()) {
         errorCode = U_INVALID_STATE_ERROR;
         return nullptr;
@@ -511,9 +469,8 @@ Expression* Expression::Builder::build(UErrorCode& errorCode) const {
 }
 
 /* static */ Expression::Builder* Expression::builder(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     LocalPointer<Builder> result(new Builder());
     if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -556,9 +513,8 @@ bool Expression::isBogus() const {
 // ----------- PatternPart
 
 /* static */ PatternPart* PatternPart::create(const UnicodeString& t, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     PatternPart* result = new PatternPart(t);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -567,9 +523,8 @@ bool Expression::isBogus() const {
 }
 
 /* static */ PatternPart* PatternPart::create(Expression* e, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     U_ASSERT(e != nullptr);
     LocalPointer<Expression> adoptedExpr(e);
     PatternPart* result = new PatternPart(adoptedExpr.orphan());
@@ -602,9 +557,7 @@ const PatternPart* Pattern::getPart(int32_t i) const {
 }
 
 Pattern::Builder::Builder(UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    CHECK_ERROR(errorCode);
     parts.adoptInstead(ImmutableVector<PatternPart>::builder(errorCode));
 }
 
@@ -636,9 +589,8 @@ Pattern::Builder& Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode
 // ---------------- Binding
 
 /* static */ Binding* Binding::create(const VariableName& var, Expression* e, UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
+    NULL_ON_ERROR(errorCode);
+
     Binding *b = new Binding(var, e);
     if (b == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -675,9 +627,8 @@ const Pattern& MessageFormatDataModel::getPattern() const {
 }
 
 MessageFormatDataModel::Builder::Builder(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    CHECK_ERROR(errorCode);
+
     selectors.adoptInstead(ExpressionList::builder(errorCode));
     variants.adoptInstead(VariantMap::builder(errorCode));
     locals.adoptInstead(Bindings::builder(errorCode));
@@ -685,9 +636,8 @@ MessageFormatDataModel::Builder::Builder(UErrorCode& errorCode) {
 
 // Invalidate pattern and create selectors/variants if necessary
 void MessageFormatDataModel::Builder::buildSelectorsMessage(UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
+    CHECK_ERROR(errorCode);
+
     if (pattern.isValid()) {
         pattern.adoptInstead(nullptr);
     }
