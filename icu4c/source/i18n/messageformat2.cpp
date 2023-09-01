@@ -178,8 +178,6 @@ MessageFormatter::~MessageFormatter() {}
 // MessageArguments
 
 using Arguments = MessageArguments;
-using Options = FunctionRegistry::Options;
-using Option = FunctionRegistry::Option;
 
 bool Arguments::has(const VariableName& arg) const {
     U_ASSERT(contents.isValid() && objectContents.isValid());

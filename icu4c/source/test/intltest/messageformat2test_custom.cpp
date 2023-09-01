@@ -603,8 +603,6 @@ Formatter* ResourceManagerFactory::createFormatter(const Locale& locale, UErrorC
 }
 
 using Arguments = MessageArguments;
-using Options = FunctionRegistry::Options;
-using Option = FunctionRegistry::Option;
 
 static Arguments* localToGlobal(const FormattingContext& context, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);

@@ -22,29 +22,53 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-// TODO: can we use lambdas instead, as in icu4j?
-
 class Formatter;
 class Selector;
 
-// TODO: This differs from ICU4J, where a separate `fixedOptions` map is passed in
-// We evaluate options eagerly, so all options are resolved and are per-expression
-
-// Interface/mixin classes
+/**
+ * Interface that factory classes for creating formatters must implement.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
 class U_COMMON_API FormatterFactory : public UMemory {
   public:
-    // Since this allocates a new Formatter and has to indicate failure,
-    // it returns a Formatter* (not a Formatter&)
-    // TODO
-    // Note: this method is not const, as formatter factories can have local state
-    virtual Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode) = 0;
+    /**
+     * Constructs a new formatter object. May return null if a memory
+     * allocation error or other error occurs; must return a non-null result
+     * if `U_SUCCESS(status)` at the end of the call. This method is not const;
+     * formatter factories with local state may be defined.
+     *
+     * @param locale Locale to be used by the formatter.
+     * @param status    Input/output error code.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual Formatter* createFormatter(const Locale& locale, UErrorCode& status) = 0;
     virtual ~FormatterFactory();
 };
 
+/**
+ * Interface that factory classes for creating selectors must implement.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
 class U_COMMON_API SelectorFactory : public UMemory {
   public:
-    // Same comment as FormatterFactory::createFormatter
-    virtual Selector* createSelector(const Locale& locale, UErrorCode& errorCode) const = 0;
+    /**
+     * Constructs a new selector object. May return null if a memory allocation
+     * error or other error occurs; must return a non-null result if
+     *`U_SUCCESS(status)` at the end of the call.
+     *
+     * @param locale Locale to be used by the selector.
+     * @param status    Input/output error code.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual Selector* createSelector(const Locale& locale, UErrorCode& status) const = 0;
     virtual ~SelectorFactory();
 };
 
@@ -58,92 +82,88 @@ class U_COMMON_API SelectorFactory : public UMemory {
  */
 class U_I18N_API FunctionRegistry : UMemory {
  public:
-    // Returns null on failure
+    /**
+     * Looks up a formatter factory by the name of the formatter. Returns null
+     * if the given formatter factory has not been registered. The result is non-const,
+     * since formatter factories may have local state.
+     *
+     * @param formatterName Name of the desired formatter.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     FormatterFactory* getFormatter(const FunctionName& formatterName) const;
+    /**
+     * Looks up a selector factory by the name of the selector. Returns null
+     * if the given selector factory has not been registered.
+     *
+     * @param selectorName Name of the desired selector.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     const SelectorFactory* getSelector(const FunctionName& selectorName) const;
-    // Not sure yet about the others from icu4j
 
-    class U_COMMON_API Option : public UMemory {
-        public:
-        enum Type {
-            STRING,
-            DOUBLE,
-            INT64,
-            DATE          
-        };
-        Type getType() const { return type; }
-        const UnicodeString& getString() const {
-            U_ASSERT(type == STRING);
-            return string;
-        }
-        int64_t getInt64() const {
-            U_ASSERT(type == INT64);
-            return static_cast<int64_t>(num);
-        }
-        UDate getDate() const {
-            U_ASSERT(type == DATE);
-            return ((UDate) num);
-        }
-        double getDouble() const {
-            U_ASSERT(type == DOUBLE);
-            return num;
-        }
-        virtual ~Option();
-        private:
-        friend class MessageFormatter;
-
-        static Option* createDate(UDate, UErrorCode&);
-        static Option* createDouble(double, UErrorCode&);
-        static Option* createInt64(int64_t, UErrorCode&);
-        static Option* createString(const UnicodeString&, UErrorCode&);
-        Type type;
-        union {
-            UnicodeString string;
-            double num;
-        };
-        Option(double val) : type(Type::DOUBLE), num(val) {}
-        Option(int64_t val, Type t) : type(t), num(val) {}
-        Option(UDate val, Type t) : type(t), num(val) {}
-        Option(const UnicodeString val) : type(Type::STRING), string(val) {}
-    }; // class FunctionOption
-
-    class U_COMMON_API Options : public UMemory {
-        // Represents the options for a function
-        public:
-        bool getDateOption(const UnicodeString&, UDate&) const;
-        double getDoubleOption(const UnicodeString&, double) const;
-        int64_t getIntOption(const UnicodeString&, int64_t) const;
-        bool getStringOption(const UnicodeString&, UnicodeString&) const;
-        bool empty() const;
-        static const int32_t FIRST = UHASH_FIRST;
-        const Option* nextElement(int32_t&, UnicodeString&) const;
-
-        private:
-        friend class MessageFormatter;
-        Options(UErrorCode&);
-        void add(const UnicodeString&, Option*, UErrorCode&);
-
-        // Values are FunctionOption*
-        LocalPointer<Hashtable> contents;
-    }; // class Option
-
+    /**
+     * The mutable Builder class allows each formatter and selector factory
+     * to be initialized separately; calling its `build()` method yields an
+     * immutable FunctionRegistry object.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     class Builder {
       private:
         friend class FunctionRegistry;
 
-        Builder(UErrorCode& errorCode);
+        Builder(UErrorCode& status);
         LocalPointer<Hashtable> formatters;
         LocalPointer<Hashtable> selectors;
       public:
-        // Adopts `formatterFunction`
-        Builder& setFormatter(const FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& errorCode);
-        // Adopts `selectorFunction`
-        Builder& setSelector(const FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& errorCode);
-
-        FunctionRegistry* build(UErrorCode& errorCode);
-        // Not sure yet about the others from icu4j
+        /**
+         * Registers a formatter factory to a given formatter name. Adopts `formatterFactory`.
+         *
+         * @param formatterName Name of the formatter being registered.
+         * @param formatterFactory A FormatterFactory object to use for creating `formatterName`
+         *        formatters.
+         * @param status Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& setFormatter(const FunctionName& formatterName, FormatterFactory* formatterFactory, UErrorCode& status);
+        /**
+         * Registers a selector factory to a given selector name. Adopts `selectorFactory`.
+         *
+         * @param selectorName Name of the selector being registered.
+         * @param selectorFactory A SelectorFactory object to use for creating `selectorName`
+         *        selectors.
+         * @param status Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& setSelector(const FunctionName& selectorName, SelectorFactory* selectorFactory, UErrorCode& status);
+        /**
+         * Creates an immutable `FunctionRegistry` object with the selectors and formatters
+         * that were previously registered. The builder cannot be used after this call.
+         *
+         * @param status  Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        FunctionRegistry* build(UErrorCode& status);
     };
-    static Builder* builder(UErrorCode& errorCode);
+   /**
+     * Returns a new `FunctionRegistry::Builder` object.
+     *
+     * @param status  Input/output error code.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    static Builder* builder(UErrorCode& status);
 
  private:
     friend class MessageFormatter;
@@ -151,7 +171,6 @@ class U_I18N_API FunctionRegistry : UMemory {
 
     // Adopts `f` and `s`
     FunctionRegistry(Hashtable* f, Hashtable* s) : formatters(f), selectors(s) {}
-//    FunctionRegistry(const FunctionRegistry& other);
 
     // Debugging; should only be called on a function registry with
     // all the standard functions registered
@@ -177,52 +196,83 @@ class U_I18N_API FunctionRegistry : UMemory {
     const LocalPointer<Hashtable> selectors;
  };
 
+/**
+ * Interface that formatter classes must implement.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
 class U_COMMON_API Formatter : public UMemory {
  public:
-    // TODO: Java uses `Object` for the argument type.
-    // In our case, `State` covers all the possible argument types
-    // that may be needed
-    // Needs an error code because internal details may require calling functions that can fail
-    // (e.g. parsing a string as a number, for Number)
-
-    // Operand can be null (call context.hasOperand())
-    virtual void format(FormattingContext& context, UErrorCode& errorCode) const = 0;
+    /**
+     * Formats the input passed in `context` by setting an output using one of the
+     * `FormattingContext` methods or indicating an error.
+     *
+     * @param context Formatting context; captures the unnamed function argument,
+     *        current output, named options, and output. See the `FormattingContext`
+     *        documentation for more details.
+     * @param status    Input/output error code. Should not be set directly by the
+     *        custom formatter, which should use `FormattingContext::setFormattingWarning()`
+     *        to signal errors. The custom formatter may pass `status` to other ICU functions
+     *        that can signal errors using this mechanism.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual void format(FormattingContext& context, UErrorCode& status) const = 0;
     virtual ~Formatter();
 };
 
-// Interface/mixin class
+
+/**
+ * Interface that selector classes must implement.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
 class U_COMMON_API Selector : public UMemory {
  public:
-    // TODO: Same comment about the `value` argument as in Formatter
-    // TODO: Needs an error code because parsing `value` as a number can error
-    // Takes an array of keys and returns a sub-array (through the out-param `prefs`)
-    // containing all matching keys, sorted in order of preference (best first).
-    /*
-      TODO: Needed to change this in order to support best-match.
-      See selectKey() in message-value.ts
+    /**
+     * Compares the input passed in `context` to an array of keys, and returns an array of matching
+     * keys sorted by preference.
+     *
+     * @param context Formatting context; captures the unnamed function argument and named options.
+     *        See the `FormattingContext` documentation for more details.
+     * @param keys An array of strings that are compared to the input (`context.getFormattableInput()`)
+     *        in an implementation-specific way.
+     * @param numKeys The length of the `keys` array.
+     * @param prefs A mutable reference to an array of strings. `selectKey()` should set the contents
+     *        of `prefs` to a subset of `keys`, with the best match placed at the lowest index.
+     * @param numMatching A mutable reference that should be set to the length of the `prefs` array.
+     * @param status    Input/output error code. Should not be set directly by the
+     *        custom selector, which should use `FormattingContext::setSelectorError()`
+     *        to signal errors. The custom selector may pass `status` to other ICU functions
+     *        that can signal errors using this mechanism.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
      */
-    // `value` may be null, because the selector might be nullary
-    virtual void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const = 0;
+    virtual void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& status) const = 0;
     virtual ~Selector();
 };
 
 // Built-in functions
 /*
-      Following icu4j, the standard functions are :datetime, :number,
+      The standard functions are :datetime, :number,
       :identity, :plural, :selectordinal, :select, and :gender.
-      TODO: Subject to change
+      Subject to change
 */
 class StandardFunctions {
     friend class MessageFormatter;
 
     class DateTimeFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode);
+        Formatter* createFormatter(const Locale& locale, UErrorCode& status);
     };
 
     class DateTime : public Formatter {
         public:
-        void format(FormattingContext& context, UErrorCode& errorCode) const;
+        void format(FormattingContext& context, UErrorCode& status) const;
 
         private:
         const Locale& locale;
@@ -233,12 +283,12 @@ class StandardFunctions {
 
     class NumberFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode);
+        Formatter* createFormatter(const Locale& locale, UErrorCode& status);
     };
         
     class Number : public Formatter {
         public:
-        void format(FormattingContext& context, UErrorCode& errorCode) const;
+        void format(FormattingContext& context, UErrorCode& status) const;
 
         private:
         friend class NumberFactory;
@@ -251,12 +301,12 @@ class StandardFunctions {
 
     class IdentityFactory : public FormatterFactory {
     public:
-        Formatter* createFormatter(const Locale& locale, UErrorCode& errorCode);
+        Formatter* createFormatter(const Locale& locale, UErrorCode& status);
     };
 
     class Identity : public Formatter {
     public:
-        void format(FormattingContext& context, UErrorCode& errorCode) const;
+        void format(FormattingContext& context, UErrorCode& status) const;
         
     private:
         friend class IdentityFactory;
@@ -269,7 +319,7 @@ class StandardFunctions {
     class PluralFactory : public SelectorFactory {
     public:
         virtual ~PluralFactory();
-        Selector* createSelector(const Locale& locale, UErrorCode& errorCode) const;
+        Selector* createSelector(const Locale& locale, UErrorCode& status) const;
 
     private:
         friend class MessageFormatter;
@@ -280,7 +330,7 @@ class StandardFunctions {
 
     class Plural : public Selector {
         public:
-        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& status) const;
 
         private:
         friend class PluralFactory;
@@ -296,12 +346,12 @@ class StandardFunctions {
 
     class TextFactory : public SelectorFactory {
         public:
-        Selector* createSelector(const Locale& locale, UErrorCode& errorCode) const;
+        Selector* createSelector(const Locale& locale, UErrorCode& status) const;
     };
 
     class TextSelector : public Selector {
     public:
-        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& errorCode) const;
+        void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& status) const;
         
     private:
         friend class TextFactory;

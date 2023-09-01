@@ -108,31 +108,6 @@ void FunctionRegistry::checkStandard() const {
     checkSelector("gender");
 }
 
-// ------------------------------------------------------
-// Options
-
-using Option = FunctionRegistry::Option;
-using Options = FunctionRegistry::Options;
-
-bool Options::getStringOption(const UnicodeString& key, UnicodeString& value) const {
-    U_ASSERT(contents.isValid());
-
-    const Option* optionValue = static_cast<const Option*>(contents->get(key));
-    if (optionValue != nullptr) {
-        switch (optionValue->getType()) {
-            case Option::Type::STRING: {
-                value = optionValue->getString();
-                return true;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-    // In all other cases, there is no string option with this name
-    return false;
-}
-
 static bool tryStringToNumber(const UnicodeString& s, int64_t& result) {
     UErrorCode localErrorCode = U_ZERO_ERROR;
     // Try to parse string as int
@@ -168,111 +143,6 @@ bool tryFormattableAsNumber(const Formattable& optionValue, int64_t& result) {
     return false;
 }
 
-int64_t Options::getIntOption(const UnicodeString& key, int64_t defaultVal) const {
-    U_ASSERT(contents.isValid());
-
-    const Option* optionValue = static_cast<const Option*>(contents->get(key));
-    int64_t result = defaultVal;
-    if (optionValue != nullptr) {
-        switch (optionValue->getType()) {
-            case Option::Type::STRING: {
-                // Try to parse string as int
-                if (tryStringToNumber(optionValue->getString(), result)) {
-                    return result;
-                }
-                // Try input
-                if (tryFormattableAsNumber(optionValue->getString(), result)) {
-                    return result;
-                }
-                break;
-            }
-            case Option::Type::DOUBLE: {
-                return optionValue->getDouble();
-                break;
-            }
-            case Option::Type::INT64: {
-                return optionValue->getInt64();
-                break;
-            }
-            case Option::Type::DATE: {
-                // Not a number
-                break;
-            }
-        }
-    }
-    // Value was either not in the options, or was a string not parsable as a number,
-    // or overflow occurred while parsing the string,
-    // or it was a date, Return the default value that was provided
-    return defaultVal;
-}
-
-const Option* Options::nextElement(int32_t& pos, UnicodeString& key) const {
-    U_ASSERT(contents.isValid());
-
-    const UHashElement* e = contents->nextElement(pos);
-    if (e == nullptr) {
-        return nullptr;
-    }
-    key = *(static_cast<UnicodeString*> (e->key.pointer));
-    return static_cast<const Option*> (e->value.pointer);
-}
-
-// Adopts its argument
-void Options::add(const UnicodeString& name, Option* value, UErrorCode& errorCode) {
-    U_ASSERT(contents.isValid());
-    contents->put(name, value, errorCode);
-}
-
-/* static */ Option* Option::createDouble(double val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Option* result = new Option(val);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Option* Option::createInt64(int64_t val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Option* result = new Option(val, Option::Type::INT64);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Option* Option::createDate(UDate val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Option* result = new Option(val, Option::Type::DATE);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Option* Option::createString(const UnicodeString& val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Option* result = new Option(val);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-bool Options::empty() const {
-    U_ASSERT(contents.isValid());
-    return contents->count() == 0;
-}
-
-Options::Options(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-
-    contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
-    CHECK_ERROR(errorCode);
-    // The `contents` hashtable owns the values, but does not own the keys
-    contents->setValueDeleter(uprv_deleteUObject);
-}
-
 // Formatter/selector helpers
 
 static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErrorCode& errorCode) {
@@ -286,7 +156,6 @@ static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErr
     result = asNumber.getDouble(errorCode);
 }
 
-Option::~Option() {}
 
 // Specific formatter implementations
 

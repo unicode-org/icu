@@ -270,6 +270,15 @@ class U_I18N_API MessageArguments : public UMemory {
         // be copied
         LocalPointer<Hashtable> objectContents;
     }; // class MessageArguments::Builder
+
+    /**
+     * Returns a new `MessageArguments::Builder` object.
+     *
+     * @param status  Input/output error code.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     static Builder* builder(UErrorCode&);
   private:
     friend class Context;
