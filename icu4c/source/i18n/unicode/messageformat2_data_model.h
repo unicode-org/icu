@@ -156,7 +156,6 @@ public:
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
     class Literal : public Text {
     public:
-        const bool isQuoted = false;
         UnicodeString toString() const {
             UnicodeString result = UnicodeString(PIPE);
             result += stringContents();
@@ -170,6 +169,7 @@ public:
             U_ASSERT(contents.getType() == Formattable::Type::kString);
             return contents.getString();
         }
+        UBool quoted() const { return isQuoted; }
         Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
         Literal(const Literal& other) : isQuoted(other.isQuoted), contents(other.contents) {}
         virtual ~Literal();
@@ -178,6 +178,7 @@ public:
         friend class Key;
         friend class ImmutableVector<Literal>;
 
+        const bool isQuoted = false;
         // Contents is stored as a Formattable to avoid allocating
         // new Formattables during formatting, but it's guaranteed
         // to be a string
@@ -198,9 +199,9 @@ public:
         static Operand* create(const Literal& lit, UErrorCode& errorCode);
         // Null argument (represents the absence of an operand)
         static Operand* create(UErrorCode& errorCode);
-        bool isVariable() const;
-        bool isLiteral() const;
-        bool isNull() const;
+        UBool isVariable() const;
+        UBool isLiteral() const;
+        UBool isNull() const;
         const VariableName& asVariable() const;
         const Literal& asLiteral() const;
         static Operand* create(const Operand&);
@@ -230,7 +231,7 @@ public:
     public:
         // A key is either a literal or the "wildcard" symbol.
 
-        bool isWildcard() const { return wildcard; }
+        UBool isWildcard() const { return wildcard; }
         // Precondition: !isWildcard()
         const Literal& asLiteral() const;
         static Key* create(UErrorCode& errorCode);
@@ -310,7 +311,7 @@ public:
         // rather than references to a `SelectorKeys` or a `Pattern`,
         // in order to avoid either copying or creating a reference to
         // a temporary value.
-        bool next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
+        UBool next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const;
         int32_t size() const;
         class Builder : public UMemory {
         public:
@@ -392,7 +393,7 @@ public:
           in a formatting error.
         */
     public:
-        bool isReserved() const { return isReservedSequence; }
+        UBool isReserved() const { return isReservedSequence; }
         // Precondition: !isReserved()
         const FunctionName& getFunctionName() const;
         // Precondition: isReserved()
@@ -467,14 +468,14 @@ public:
 
         // Returns true iff the `Operator` of `this`
         // is a function call with no argument.
-        bool isStandaloneAnnotation() const;
+        UBool isStandaloneAnnotation() const;
         // Returns true iff the `Operator` of `this`
         // is a function call (with or without an operand).
         // Reserved sequences are not function calls
-        bool isFunctionCall() const;
+        UBool isFunctionCall() const;
         // Returns true iff the `Operator` of `this`
         // is a reserved sequence
-        bool isReserved() const;
+        UBool isReserved() const;
         // Precondition: (isFunctionCall() || isReserved())
         const Operator& getOperator() const;
         // May return null operand
@@ -522,7 +523,7 @@ public:
         static PatternPart* create(const UnicodeString& t, UErrorCode& errorCode);
         // Takes ownership of `e`
         static PatternPart* create(Expression* e, UErrorCode& errorCode);
-        bool isText() const { return isRawText; }
+        UBool isText() const { return isRawText; }
         // Precondition: !isText()
         const Expression& contents() const;
         // Precondition: isText();
@@ -632,7 +633,7 @@ public:
     // The `hasSelectors()` method is provided so that `getSelectors()`,
     // `getVariants()` and `getPattern()` can rely on preconditions
     // rather than taking error codes as arguments.
-    bool hasSelectors() const;
+    UBool hasSelectors() const;
     // Precondition: hasSelectors()
     const ExpressionList& getSelectors() const;
     // Precondition: hasSelectors()

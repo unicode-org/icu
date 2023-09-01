@@ -73,9 +73,9 @@ Literal::~Literal() {}
     return result;
 }
 
-bool Operand::isVariable() const { return type == Type::VARIABLE; }
-bool Operand::isLiteral() const { return type == Type::LITERAL; }
-bool Operand::isNull() const { return type == Type::NULL_OPERAND; }
+UBool Operand::isVariable() const { return type == Type::VARIABLE; }
+UBool Operand::isLiteral() const { return type == Type::LITERAL; }
+UBool Operand::isNull() const { return type == Type::NULL_OPERAND; }
 
 const Literal& Operand::asLiteral() const {
     U_ASSERT(isLiteral());
@@ -127,7 +127,7 @@ int32_t VariantMap::size() const {
     return contents->size();
 }
 
-bool VariantMap::next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
+UBool VariantMap::next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
     UnicodeString unused;
     if (!contents->next(pos, unused, v)) {
         return false;
@@ -382,7 +382,7 @@ Operator::Operator(const Operator& other) : isReservedSequence(other.isReservedS
 // ------------ Expression
 
 
-bool Expression::isStandaloneAnnotation() const {
+UBool Expression::isStandaloneAnnotation() const {
     U_ASSERT(!isBogus());
     return rand->isNull();
 }
@@ -390,12 +390,12 @@ bool Expression::isStandaloneAnnotation() const {
 // Returns true for function calls with operands as well as
 // standalone annotations.
 // Reserved sequences are not function calls
-bool Expression::isFunctionCall() const {
+UBool Expression::isFunctionCall() const {
     U_ASSERT(!isBogus());
     return (rator.isValid() && !rator->isReserved());
 }
 
-bool Expression::isReserved() const {
+UBool Expression::isReserved() const {
     U_ASSERT(!isBogus());
     return (rator.isValid() && rator->isReserved());
 }
@@ -600,7 +600,7 @@ Pattern::Builder& Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode
 
 // --------------- MessageFormatDataModel
 
-bool MessageFormatDataModel::hasSelectors() const {
+UBool MessageFormatDataModel::hasSelectors() const {
     if (pattern.isValid()) {
         U_ASSERT(!selectors.isValid());
          U_ASSERT(!variants.isValid());

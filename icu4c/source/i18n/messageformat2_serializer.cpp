@@ -60,7 +60,7 @@ void SERIALIZER::emit(const UChar32 (&token)[N]) {
 }
 
 void SERIALIZER::emit(const Literal& l) {
-    if (l.isQuoted) {
+    if (l.quoted()) {
       emit(PIPE);
       const UnicodeString& contents = l.stringContents();
       for (int32_t i = 0; ((int32_t) i) < contents.length(); i++) {
@@ -148,7 +148,7 @@ void SERIALIZER::emit(const Expression& expr) {
           // Re-escape '\' / '{' / '|' / '}'
           for (int32_t i = 0; i < reserved.numParts(); i++) {
             const Literal& l = *reserved.getPart(i);
-            if (l.isQuoted) {
+            if (l.quoted()) {
               emit(l);
             } else {
               const UnicodeString& s = l.stringContents();
@@ -227,8 +227,8 @@ void SERIALIZER::serializeDeclarations() {
         emit(EQUALS);
         // No whitespace needed here -- see `declaration` in the grammar
         // getValue() is guaranteed to return a non-null pointer
-        emit(*(b.getValue()));
-    }
+        emit(*(b.getValue())); 
+   }
 }
 
 void SERIALIZER::serializeSelectors() {

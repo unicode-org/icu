@@ -121,11 +121,11 @@ void ExpressionContext::setInput(const Formattable& s) {
     input = s;
 }
 
-bool ExpressionContext::hasFormattableInput() const {
+UBool ExpressionContext::hasFormattableInput() const {
     return (inState == InputState::FORMATTABLE_INPUT);
 }
 
-bool ExpressionContext::hasObjectInput() const {
+UBool ExpressionContext::hasObjectInput() const {
     return (inState == InputState::OBJECT_INPUT);
 }
 
@@ -149,11 +149,11 @@ const number::FormattedNumber& ExpressionContext::getNumberOutput() const {
     return numberOutput;
 }
 
-bool ExpressionContext::hasStringOutput() const {
+UBool ExpressionContext::hasStringOutput() const {
     return (inState > FALLBACK && outState == OutputState::STRING);
 }
 
-bool ExpressionContext::hasNumberOutput() const {
+UBool ExpressionContext::hasNumberOutput() const {
     return (inState > FALLBACK && outState == OutputState::NUMBER);
 }
 
@@ -468,7 +468,7 @@ Formattable* ExpressionContext::getNumericOption(const UnicodeString& key) const
     return result;
 }
 
-bool ExpressionContext::getStringOption(const UnicodeString& key, UnicodeString& value) const {
+UBool ExpressionContext::getStringOption(const UnicodeString& key, UnicodeString& value) const {
     Formattable* result = getOption(key, Formattable::Type::kString);
     if (result == nullptr) {
         return false;
@@ -485,7 +485,7 @@ const UObject& ExpressionContext::getObjectOption(const UnicodeString& key) cons
     return *value;
 }
 
-bool ExpressionContext::hasObjectOption(const UnicodeString& key) const {
+UBool ExpressionContext::hasObjectOption(const UnicodeString& key) const {
     Formattable* result = getOption(key, Formattable::Type::kObject);
     return (result != nullptr);
 }
@@ -513,7 +513,7 @@ bool ExpressionContext::tryStringAsNumberOption(const UnicodeString& key, double
     return true;
 }
 
-bool ExpressionContext::getInt64Option(const UnicodeString& key, int64_t& value) const {
+UBool ExpressionContext::getInt64Option(const UnicodeString& key, int64_t& value) const {
     Formattable* result = getNumericOption(key);
     if (result == nullptr) {
         double doubleResult;
@@ -532,7 +532,7 @@ bool ExpressionContext::getInt64Option(const UnicodeString& key, int64_t& value)
     return false;
 }
 
-bool ExpressionContext::getDoubleOption(const UnicodeString& key, double& value) const {
+UBool ExpressionContext::getDoubleOption(const UnicodeString& key, double& value) const {
     Formattable* result = getNumericOption(key);
     if (result == nullptr) {
         return tryStringAsNumberOption(key, value);

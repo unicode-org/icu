@@ -102,7 +102,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool hasFormattableInput() const = 0;
+    virtual UBool hasFormattableInput() const = 0;
     /**
      * Returns a reference to this function's argument as a `Formattable`.
      * It is an internal error to call this method if `!hasFormattableInput()`.
@@ -120,7 +120,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool hasObjectInput() const = 0;
+    virtual UBool hasObjectInput() const = 0;
     /**
      * Returns a reference to this function's `UObject*` argument.
      * It is an internal error to call this method if `!hasObjectInput()`.
@@ -138,7 +138,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool hasStringOutput() const = 0;
+    virtual UBool hasStringOutput() const = 0;
     /**
      * Returns true if and only if the argument being passed in already has a formatted
      * result that is a number. This formatted result may be treated as the input
@@ -148,7 +148,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool hasNumberOutput() const = 0;
+    virtual UBool hasNumberOutput() const = 0;
     /**
      * Returns a reference to the existing formatted output of this argument as a string.
      * It is an internal error to call this method if `!hasStringOutput()`.
@@ -176,7 +176,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool getStringOption(const UnicodeString& optionName, UnicodeString& optionValue) const = 0;
+    virtual UBool getStringOption(const UnicodeString& optionName, UnicodeString& optionValue) const = 0;
     /**
      * Looks up the value of a named numeric option of type `double`.
      * The return value is true if and only if there is a `double`-typed option
@@ -189,7 +189,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool getDoubleOption(const UnicodeString& optionName, double& optionValue) const = 0;
+    virtual UBool getDoubleOption(const UnicodeString& optionName, double& optionValue) const = 0;
     /**
      * Looks up the value of a named numeric option of type `int64_t`.
      * The return value is true if and only if there is a `int64_t`-typed option
@@ -202,7 +202,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool getInt64Option(const UnicodeString& optionName, int64_t& optionValue) const = 0;
+    virtual UBool getInt64Option(const UnicodeString& optionName, int64_t& optionValue) const = 0;
     /**
      * Returns true if and only if there is a named object option named `optionName`.
      *
@@ -211,7 +211,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual bool hasObjectOption(const UnicodeString& optionName) const = 0;
+    virtual UBool hasObjectOption(const UnicodeString& optionName) const = 0;
     /**
      * Returns a reference to the named object option `optionName`.
      * Precondition: the option must exist.
@@ -413,13 +413,13 @@ class ExpressionContext : public FormattingContext {
     bool isFallback() const;
 
     bool hasInput() const { return hasFormattableInput() || hasObjectInput(); }
-    bool hasFormattableInput() const;
-    bool hasObjectInput() const;
+    UBool hasFormattableInput() const;
+    UBool hasObjectInput() const;
     const Formattable& getFormattableInput() const;
     const UObject& getObjectInput() const;
 
-    bool hasStringOutput() const;
-    bool hasNumberOutput() const;
+    UBool hasStringOutput() const;
+    UBool hasNumberOutput() const;
     bool hasOutput() { return (hasStringOutput() || hasNumberOutput()); }
     // Just gets existing output, doesn't force evaluation
     const UnicodeString& getStringOutput() const;
@@ -427,10 +427,10 @@ class ExpressionContext : public FormattingContext {
     // Forces evaluation
     void formatToString(const Locale&, UErrorCode&);
 
-    bool getStringOption(const UnicodeString&, UnicodeString&) const;
-    bool getDoubleOption(const UnicodeString&, double&) const;
-    bool getInt64Option(const UnicodeString&, int64_t&) const;
-    bool hasObjectOption(const UnicodeString&) const;
+    UBool getStringOption(const UnicodeString&, UnicodeString&) const;
+    UBool getDoubleOption(const UnicodeString&, double&) const;
+    UBool getInt64Option(const UnicodeString&, int64_t&) const;
+    UBool hasObjectOption(const UnicodeString&) const;
     const UObject& getObjectOption(const UnicodeString&) const;
     // Function options iterator
     int32_t firstOption() const;
