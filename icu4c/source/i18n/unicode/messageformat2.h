@@ -19,7 +19,7 @@
 #include "unicode/messageformat2_checker.h"
 #include "unicode/messageformat2_context.h"
 #include "unicode/messageformat2_data_model.h"
-#include "unicode/messageformat2_formatted_value.h"
+#include "unicode/messageformat2_formatting_context.h"
 #include "unicode/messageformat2_function_registry.h"
 #include "unicode/messageformat2_macros.h"
 #include "unicode/unistr.h"

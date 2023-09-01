@@ -5,7 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/messageformat2_formatted_value.h"
+#include "unicode/messageformat2_formatting_context.h"
 #include "unicode/messageformat2_function_registry.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2.h"
@@ -749,7 +749,7 @@ number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t t
     return number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode);
 }
 
-/* static */ DateFormat* FormattingContext::defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
+DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
     if (!df.isValid()) {
@@ -762,7 +762,7 @@ number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t t
 void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& result, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
 
-    LocalPointer<DateFormat> df(FormattingContext::defaultDateTimeInstance(locale, errorCode));
+    LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
     CHECK_ERROR(errorCode);
     df->format(date, result, 0, errorCode);
 }

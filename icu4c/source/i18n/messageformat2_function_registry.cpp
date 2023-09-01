@@ -7,7 +7,7 @@
 
 #include "unicode/dtptngen.h"
 #include "unicode/messageformat2.h"
-#include "unicode/messageformat2_formatted_value.h"
+#include "unicode/messageformat2_formatting_context.h"
 #include "unicode/numberformatter.h"
 #include "unicode/smpdtfmt.h"
 #include "uvector.h" // U_ASSERT
@@ -608,7 +608,7 @@ void StandardFunctions::DateTime::format(FormattingContext& context, UErrorCode&
                 timeStyle = stringToStyle(opt, errorCode);
             }
             if (dateStyle == DateFormat::NONE && timeStyle == DateFormat::NONE) {
-                df.adoptInstead(FormattingContext::defaultDateTimeInstance(locale, errorCode));
+                df.adoptInstead(defaultDateTimeInstance(locale, errorCode));
             } else {
                 df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
                 if (!df.isValid()) {
