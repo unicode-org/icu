@@ -232,6 +232,16 @@ void ExpressionContext::formatInputWithDefaults(const Locale& locale, UErrorCode
     U_ASSERT(hasFormattableInput());
     U_ASSERT(!hasOutput());
 
+    // Try as decimal number first
+    if (input.isNumeric()) {
+        StringPiece asDecimal = input.getDecimalNumber(status);
+        CHECK_ERROR(status);
+        if (asDecimal != nullptr) {
+            setOutput(formatNumberWithDefaults(locale, asDecimal, status));
+            return;
+        }
+    }
+
     switch (input.getType()) {
     case Formattable::Type::kDate: {
         formatDateWithDefaults(locale, input.getDate(), stringOutput, status);
@@ -747,6 +757,10 @@ number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int32_t t
 
 number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t toFormat, UErrorCode& errorCode) {
     return number::NumberFormatter::withLocale(locale).formatInt(toFormat, errorCode);
+}
+
+number::FormattedNumber formatNumberWithDefaults(const Locale& locale, StringPiece toFormat, UErrorCode& errorCode) {
+    return number::NumberFormatter::withLocale(locale).formatDecimal(toFormat, errorCode);
 }
 
 DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {

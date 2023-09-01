@@ -112,7 +112,12 @@ class TestCase : public UMemory {
             arguments->addDate(k, date, errorCode);
             return *this;
         }
+        Builder& setDecimalArgument(const UnicodeString& k, StringPiece decimal, UErrorCode& errorCode) {
+            THIS_ON_ERROR(errorCode);
 
+            arguments->addDecimal(k, decimal, errorCode);
+            return *this;
+        }
         // val has to be uniquely owned because the copy constructor for
         // a Formattable of an object doesn't work
         Builder& setArgument(const UnicodeString& k, UObject* val, UErrorCode& errorCode) {

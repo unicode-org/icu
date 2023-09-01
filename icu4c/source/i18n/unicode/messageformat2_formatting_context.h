@@ -34,6 +34,7 @@ extern void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeStri
 extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, double toFormat, UErrorCode& errorCode);
 extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int32_t toFormat, UErrorCode& errorCode);
 extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, int64_t toFormat, UErrorCode& errorCode);
+extern number::FormattedNumber formatNumberWithDefaults(const Locale& locale, StringPiece toFormat, UErrorCode& errorCode);
 extern DateFormat* defaultDateTimeInstance(const Locale&, UErrorCode&);
 
 /**

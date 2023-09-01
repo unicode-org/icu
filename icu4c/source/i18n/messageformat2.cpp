@@ -230,6 +230,18 @@ static Formattable* createFormattableDate(UDate val, UErrorCode& errorCode) {
     return result;
 }
 
+static Formattable* createFormattableDecimal(StringPiece val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    Formattable* result = new Formattable(val, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
 static Formattable* createFormattableObject(UObject* val, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
     Formattable* result = new Formattable(val);
@@ -307,6 +319,14 @@ Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate
     THIS_ON_ERROR(errorCode);
 
     Formattable* valPtr(createFormattableDate(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addDecimal(const UnicodeString& name, StringPiece val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(createFormattableDecimal(val, errorCode));
     THIS_ON_ERROR(errorCode);
     return add(name, valPtr, errorCode);
 }

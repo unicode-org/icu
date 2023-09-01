@@ -224,6 +224,18 @@ class U_I18N_API MessageArguments : public UMemory {
          */
         Builder& addDate(const UnicodeString&, UDate, UErrorCode&);
         /**
+         * Adds an argument of type `StringPiece`, representing a
+         * decimal number.
+         *
+         * @param key The name of the argument.
+         * @param value The value of the argument.
+         * @param status    Input/output error code.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& addDecimal(const UnicodeString&, StringPiece, UErrorCode&);
+        /**
          * Adds an argument of type UnicodeString[]. Adopts `value`.
          *
          * @param key The name of the argument.

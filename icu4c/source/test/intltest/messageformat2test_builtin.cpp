@@ -139,20 +139,6 @@ void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
                                 .setExpectedWarning(U_FORMATTING_WARNING)
                                 .setDateArgument(date, TEST_DATE, errorCode)
                                 .build(errorCode));
-    // Null as argument
-    // NOTE: this currently treats $date as an unresolved variable,
-    // because calling put() with a null value on a Hashtable unsets the variable.
-    // However, we might change the representation for arguments and have to
-    // change this test. TODO
-
-// TODO: now with MessageArguments we just forbid null. is that good?
-/*
-    test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {$date :datetime}}")
-                                .setExpected("Testing date formatting: {$date}")
-                                .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
-                                .setNullArgument(date, errorCode)
-                                .build(errorCode));
-*/
 
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -191,79 +177,38 @@ void TestMessageFormat2::testNumbers(IcuTestErrorCode& errorCode) {
 
 
     // Testing that the detection works for various types (without specifying :number)
-/*
-        TestUtils.runTestCase(new TestCase.Builder()
-                .pattern("{Default double: {$val}!}")
-                .locale("en-IN")
-                .arguments(Args.of("val", value))
-                .expected("Default double: 1,23,45,67,890.97531!")
-                .build());
-        TestUtils.runTestCase(new TestCase.Builder()
-                .pattern("{Default double: {$val}!}")
-                .locale("ro")
-                .arguments(Args.of("val", value))
-                .expected("Default double: 1.234.567.890,97531!")
-                .build());
-        TestUtils.runTestCase(new TestCase.Builder()
-                .pattern("{Default float: {$val}!}")
-                .locale("ro")
-                .arguments(Args.of("val", 3.1415926535))
-                .expected("Default float: 3,141593!")
-                .build());
-        TestUtils.runTestCase(new TestCase.Builder()
-                .pattern("{Default long: {$val}!}")
-                .locale("ro")
-                .arguments(Args.of("val", 1234567890123456789L))
-                .expected("Default long: 1.234.567.890.123.456.789!")
-                .build());
-        TestUtils.runTestCase(new TestCase.Builder()
-                .pattern("{Default number: {$val}!}")
-                .locale("ro")
-                .arguments(Args.of("val", new BigDecimal("1234567890123456789.987654321")))
-                .expected("Default number: 1.234.567.890.123.456.789,987654!")
-                .build());
-        TestUtils.runTestCase(new TestCase.Builder()
-                .pattern("{Price: {$val}}")
-                .locale("de")
-                .arguments(Args.of("val", new CurrencyAmount(1234.56, Currency.getInstance("EUR"))))
-                .expected("Price: 1.234,56\u00A0\u20AC")
-                .build());
-
-*/
-
-/* TODO: uncomment these
     test.adoptInstead(testBuilder->setPattern("{Default double: {$val}!}")
-                                .setLocale(Locale("en", "IN"))
+                                .setLocale(Locale("en", "IN"), errorCode)
                                 .setArgument(val, value, errorCode)
                                 .setExpected("Default double: 1,23,45,67,890.97531!")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder->setPattern("{Default double: {$val}!}")
-                                .setLocale(Locale("ro"))
+                                .setLocale(Locale("ro"), errorCode)
                                 .setArgument(val, value, errorCode)
                                 .setExpected("Default double: 1.234.567.890,97531!")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder->setPattern("{Default float: {$val}!}")
-                                .setLocale(Locale("ro"))
+                                .setLocale(Locale("ro"), errorCode)
                                 .setArgument(val, 3.1415926535, errorCode)
                                 .setExpected("Default float: 3,141593!")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
-    test.adoptInstead(testBuilder->setPattern("{Default long: {$val}!}")
-                                .setLocale(Locale("ro"))
-                                .setArgument(val, (long) 1234567890123456789, errorCode)
-                                .setExpected("Default long: 1.234.567.890.123.456.789!")
+    test.adoptInstead(testBuilder->setPattern("{Default int64: {$val}!}")
+                                .setLocale(Locale("ro"), errorCode)
+                                .setArgument(val, (int64_t) 1234567890123456789, errorCode)
+                                .setExpected("Default int64: 1.234.567.890.123.456.789!")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder->setPattern("{Default number: {$val}!}")
-                                .setLocale(Locale("ro"))
-                                .setArgument(val, BigDecimal("1234567890123456789.987654321", errorCode)
+                                .setLocale(Locale("ro"), errorCode)
+                                .setDecimalArgument(val, StringPiece("1234567890123456789.987654321"), errorCode)
                                 .setExpected("Default number: 1.234.567.890.123.456.789,987654!")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
-*/
-    // Omitted CurrencyAmount test since it's not supported by Formattable
+
+    // Omitted CurrencyAmount test from ICU4J since it's not supported by Formattable
  
    // Skeletons
     value = 1234567890.97531;
