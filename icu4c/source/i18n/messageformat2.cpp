@@ -93,7 +93,7 @@ void MessageFormatter::formatOperand(const Environment& env, const Operand& rand
             return;
         } else {
             // Unbound variable -- set a resolution error
-            context.setUnresolvedVariable(var, status);
+            context.messageContext().getErrors().setUnresolvedVariable(var, status);
             return;
         }
     } else if (rand.isLiteral()) {
@@ -168,7 +168,7 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
 
     // Formatting error
     if (expr.isReserved()) {
-        context.setReservedError(status);
+        context.messageContext().getErrors().setReservedError(status);
         U_ASSERT(context.isFallback());
         return;
     }
@@ -194,10 +194,10 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
         // If the call was successful, nothing more to do
         if (context.hasOutput() && U_SUCCESS(status)) {
             return;
-        } else if (!(context.hasError())) {
+        } else if (!(context.messageContext().getErrors().hasError())) {
             // Set formatting warning if formatting function had no output
             // but didn't set an error or warning
-            context.setFormattingError(functionName.name(), status);
+            context.messageContext().getErrors().setFormattingError(functionName.name(), status);
         }
 
         // If we reached this point, the formatter is null --
@@ -222,7 +222,7 @@ void MessageFormatter::formatPattern(MessageContext& globalContext, const Enviro
             result += part->asText();
         } else {
             // Create a new context to evaluate the expression part
-            context.adoptInstead(ExpressionContext::create(globalContext, *this, status));
+            context.adoptInstead(ExpressionContext::create(globalContext, status));
             CHECK_ERROR(status);
             // Format the expression
             formatExpression(globalEnv, part->contents(), *context, status);
@@ -247,7 +247,7 @@ void MessageFormatter::resolveSelectors(MessageContext& context, const Environme
     // 2. For each expression exp of the message's selectors
     LocalPointer<ExpressionContext> rv;
     for (int32_t i = 0; i < selectors.length(); i++) {
-        rv.adoptInstead(ExpressionContext::create(context, *this, status));
+        rv.adoptInstead(ExpressionContext::create(context, status));
         CHECK_ERROR(status);
         // 2i. Let rv be the resolved value of exp.
         formatSelectorExpression(env, *selectors.get(i), *rv, status);
@@ -260,7 +260,8 @@ void MessageFormatter::resolveSelectors(MessageContext& context, const Environme
             // Append nomatch as the last element of the list res.
             // Emit a Selection Error.
             // (Note: in this case, rv, being a fallback, serves as `nomatch`)
-            U_ASSERT(rv->hasUnknownFunctionError() || rv->hasSelectorError());
+            const Errors& err = rv->messageContext().getErrors();
+            U_ASSERT(err.hasUnknownFunctionError() || err.hasSelectorError());
             U_ASSERT(rv->isFallback());
         }
         // 2ii(a). Append rv as the last element of the list res.
@@ -519,7 +520,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Operand& r
             evalArgument(var, context);
         } else {
             // Unresolved variable -- could be a previous warning. Nothing to resolve
-            U_ASSERT(context.hasUnresolvedVariableError());
+            U_ASSERT(context.messageContext().getErrors().hasUnresolvedVariableError());
         }
     }
 }
@@ -531,7 +532,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Expression
 
     // A `reserved` is an error
     if (expr.isReserved()) {
-        context.setReservedError(status);
+        context.messageContext().getErrors().setReservedError(status);
         U_ASSERT(context.isFallback());
         return;
     }
@@ -556,6 +557,8 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
     // Resolve expression to determine if it's a function call
     resolveVariables(globalEnv, expr, context, status);
 
+    Errors& err = context.messageContext().getErrors();
+
     // If there is a selector, then `resolveVariables()` recorded it in the context
     if (context.hasSelector()) {
         // Check if there was an error
@@ -563,7 +566,7 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
             // Use a null expression if it's a syntax or data model warning;
             // create a valid (non-fallback) formatted placeholder from the
             // fallback string otherwise
-            if (context.hasParseError() || context.hasDataModelError()) {
+            if (err.hasSyntaxError() || err.hasDataModelError()) {
                 U_ASSERT(!context.hasInput());
             } else {
                 context.promoteFallbackToInput();
@@ -575,14 +578,14 @@ void MessageFormatter::formatSelectorExpression(const Environment& globalEnv, co
             const FunctionName& fn = context.getFunctionName();
             // A selector used as a formatter is a selector error
             if (context.hasFormatter()) {
-                context.setSelectorError(fn, status);
+                err.setSelectorError(fn, status);
             } else {
                 // Otherwise, the error is an unknown function error
-                context.setUnknownFunction(fn, status);
+                err.setUnknownFunction(fn, status);
             }
         } else {
             // No function name -- this is a missing selector annotation error
-            context.setMissingSelectorAnnotation(status);
+            err.setMissingSelectorAnnotation(status);
         }
         context.clearFunctionName();
         context.clearFunctionOptions();
@@ -671,7 +674,8 @@ void MessageFormatter::formatToString(const MessageArguments& arguments, UErrorC
     } else {
         // Check for errors/warnings -- if so, then the result of pattern selection is the fallback value
         // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
-        if (context->hasParseError() || context->hasDataModelError()) {
+        Errors& err = context->getErrors();
+        if (err.hasSyntaxError() || err.hasDataModelError()) {
             result += REPLACEMENT;
         } else {
             formatSelectors(*context, *globalEnv, dataModel.getSelectors(), dataModel.getVariants(), status, result);
@@ -726,7 +730,7 @@ void MessageFormatter::check(MessageContext& context, const Environment& localEn
     if (context.hasVar(var)) {
         return;
     }
-    context.setUnresolvedVariableError(var, status);
+    context.getErrors().setUnresolvedVariable(var, status);
 }
 
 void MessageFormatter::check(MessageContext& context, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {

@@ -295,13 +295,6 @@ class ExpressionContext : public FormattingContext {
     void clearInput();
     void clearOutput();
     void addFunctionOption(const UnicodeString&, Formattable*, UErrorCode&);
-    bool isBuiltInFormatter(const FunctionName&) const;
-    bool isCustomFormatter(const FunctionName&) const;
-    bool isBuiltInSelector(const FunctionName&) const;
-    FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&) const;
-    const SelectorFactory* lookupSelectorFactory(const FunctionName&, UErrorCode& status) const;
-    const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode&);
-    bool isCustomSelector(const FunctionName&) const;
     void doFormattingCall();
     bool hasFunctionName() const;
     const FunctionName& getFunctionName();
@@ -324,16 +317,14 @@ class ExpressionContext : public FormattingContext {
     void replaceFunctionName(const FunctionName&, UErrorCode&);
     bool tryStringAsNumberOption(const UnicodeString&, double&) const;
     Formattable* getNumericOption(const UnicodeString&) const;
-    bool isSelector(const FunctionName&) const;
 
     private:
     friend class MessageArguments;
     friend class MessageFormatter;
 
-    ExpressionContext(MessageContext&, const MessageFormatter&, UErrorCode&);
+    ExpressionContext(MessageContext&, UErrorCode&);
 
     MessageContext& context;
-    const MessageFormatter& parent;
 
     InputState inState;
     OutputState outState;
@@ -347,21 +338,12 @@ class ExpressionContext : public FormattingContext {
 
     LocalPointer<Hashtable> functionOptions;
 
-    static ExpressionContext* create(MessageContext&, const MessageFormatter&, UErrorCode&);
+    static ExpressionContext* create(MessageContext&, UErrorCode&);
     // Creates a new builder sharing this's context and parent
     ExpressionContext* create(UErrorCode&);
 
-    void setParseError(uint32_t line, uint32_t offset);
-    void setUnresolvedVariable(const VariableName&, UErrorCode&);
-    void setUnknownFunction(const FunctionName&, UErrorCode&);
-    void setSelectorError(const FunctionName&, UErrorCode&);
-    void setVariantKeyMismatch();
-    void setFormattingError(const UnicodeString&, UErrorCode&);
-    void setNonexhaustivePattern();
-    void setDuplicateOptionName();
-    void setReservedError(UErrorCode&);
-    void setSelectorError(const UnicodeString&, UErrorCode&);
-    void setMissingSelectorAnnotation(UErrorCode&);
+    const MessageContext& messageContext() const { return context; }
+
     // Resets input and output and uses existing fallback
     void setFallback();
     // Sets fallback string
@@ -436,14 +418,9 @@ class ExpressionContext : public FormattingContext {
     int32_t optionsCount() const;
     const Formattable* nextOption(int32_t&, UnicodeString&) const;
     bool isFallback() const;
-    bool hasParseError() const;
-    bool hasDataModelError() const;
-    bool hasUnresolvedVariableError() const;
-    bool hasMissingSelectorAnnotationError() const;
-    bool hasUnknownFunctionError() const;
-    bool hasFormattingError() const;
-    bool hasSelectorError() const;
-    bool hasError() const;
+
+    void setSelectorError(const UnicodeString&, UErrorCode&);
+    void setFormattingError(const UnicodeString&, UErrorCode&);
 
     virtual ~ExpressionContext();
 };

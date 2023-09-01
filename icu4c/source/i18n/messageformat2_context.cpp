@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/messageformat2_context.h"
+#include "unicode/messageformat2_function_registry.h"
 #include "unicode/messageformat2_macros.h"
 #include "unicode/messageformat2.h"
 #include "uvector.h" // U_ASSERT
@@ -192,6 +193,123 @@ CachedFormatters::CachedFormatters(UErrorCode& errorCode) {
     cache->setValueDeleter(uprv_deleteUObject);
 }
 
+// ---------------------------------------------------
+// Function registry
+
+
+bool MessageContext::isBuiltInSelector(const FunctionName& functionName) const {
+    return parent.standardFunctionRegistry->hasSelector(functionName);
+}
+
+bool MessageContext::isBuiltInFormatter(const FunctionName& functionName) const {
+    return parent.standardFunctionRegistry->hasFormatter(functionName);
+}
+
+// https://github.com/unicode-org/message-format-wg/issues/409
+// Unknown function = unknown function error
+// Formatter used as selector  = selector error
+// Selector used as formatter = formatting error
+const SelectorFactory* MessageContext::lookupSelectorFactory(const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    if (isBuiltInSelector(functionName)) {
+        return parent.standardFunctionRegistry->getSelector(functionName);
+    }
+    if (isBuiltInFormatter(functionName)) {
+        errors.setSelectorError(functionName, status);
+        return nullptr;
+    }
+    if (parent.hasCustomFunctionRegistry()) {
+        const FunctionRegistry& customFunctionRegistry = parent.getCustomFunctionRegistry();
+        const SelectorFactory* customSelector = customFunctionRegistry.getSelector(functionName);
+        if (customSelector != nullptr) {
+            return customSelector;
+        }
+        if (customFunctionRegistry.getFormatter(functionName) != nullptr) {
+            errors.setSelectorError(functionName, status);
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    errors.setUnknownFunction(functionName, status);
+    return nullptr;
+}
+
+FormatterFactory* MessageContext::lookupFormatterFactory(const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    if (isBuiltInFormatter(functionName)) {
+        return parent.standardFunctionRegistry->getFormatter(functionName);
+    }
+    if (isBuiltInSelector(functionName)) {
+        errors.setFormattingError(functionName, status);
+        return nullptr;
+    }
+    if (parent.hasCustomFunctionRegistry()) {
+        const FunctionRegistry& customFunctionRegistry = parent.getCustomFunctionRegistry();
+        FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
+        if (customFormatter != nullptr) {
+            return customFormatter;
+        }
+        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
+            errors.setFormattingError(functionName, status);
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    errors.setUnknownFunction(functionName, status);
+    return nullptr;
+}
+
+bool MessageContext::isCustomFormatter(const FunctionName& fn) const {
+    return parent.hasCustomFunctionRegistry() && parent.getCustomFunctionRegistry().getFormatter(fn) != nullptr;
+}
+
+
+bool MessageContext::isCustomSelector(const FunctionName& fn) const {
+    return parent.hasCustomFunctionRegistry() && parent.getCustomFunctionRegistry().getSelector(fn) != nullptr;
+}
+
+const Formatter* MessageContext::maybeCachedFormatter(const FunctionName& f, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    U_ASSERT(parent.cachedFormatters.isValid());
+
+    const Formatter* result = parent.cachedFormatters->getFormatter(f);
+    if (result == nullptr) {
+        // Create the formatter
+
+        // First, look up the formatter factory for this function
+        FormatterFactory* formatterFactory = lookupFormatterFactory(f, errorCode);
+        NULL_ON_ERROR(errorCode);
+        // If the formatter factory was null, there must have been
+        // an earlier error/warning
+        if (formatterFactory == nullptr) {
+            U_ASSERT(errors.hasUnknownFunctionError() || errors.hasFormattingError());
+            return nullptr;
+        }
+        NULL_ON_ERROR(errorCode);
+
+        // Create a specific instance of the formatter
+        Formatter* formatter = formatterFactory->createFormatter(parent.locale, errorCode);
+        NULL_ON_ERROR(errorCode);
+        if (formatter == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        parent.cachedFormatters->setFormatter(f, formatter, errorCode);
+        return formatter;
+    } else {
+        return result;
+    }
+}
+
+
 // -------------------------------------------------------
 // MessageContext accessors and constructors
 
@@ -217,75 +335,52 @@ MessageContext::MessageContext(const MessageFormatter& mf, const MessageArgument
 // Errors
 // -----------
 
-void MessageContext::addError(Error e, UErrorCode& status) {
-    CHECK_ERROR(status);
-    errors.addError(e, status);
-}
-
 void MessageContext::checkErrors(UErrorCode& status) const {
     CHECK_ERROR(status);
     errors.checkErrors(status);
 }
 
+void Errors::setReservedError(UErrorCode& status) {
+    CHECK_ERROR(status);
 
-bool MessageContext::hasDataModelError() const {
-    return errors.hasDataModelError();
+    Error err(Error::Type::ReservedError);
+    addError(err, status);
 }
 
-bool MessageContext::hasError() const {
-    return errors.count() > 0;
-}
-
-bool MessageContext::hasFormattingError() const {
-    return errors.hasFormattingError();
-}
-
-bool MessageContext::hasUnresolvedVariableError() const {
-    return errors.hasUnresolvedVariableError();
-}
-
-void MessageContext::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
+void Errors::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::FormattingError, formatterName);
-    errors.addError(err, status);
- }
+    addError(err, status);
+}
 
-void MessageContext::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
+
+void Errors::setMissingSelectorAnnotation(UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    Error err(Error::Type::MissingSelectorAnnotation);
+    addError(err, status);
+}
+
+void Errors::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::SelectorError, selectorName);
-    errors.addError(err, status);
- }
+    addError(err, status);
+}
 
-void MessageContext::setUnknownFunctionError(const FunctionName& formatterName, UErrorCode& status) {
+void Errors::setUnknownFunction(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::UnknownFunction, formatterName);
-    errors.addError(err, status);
- }
+    addError(err, status);
+}
 
-void MessageContext::setUnresolvedVariableError(const VariableName& v, UErrorCode& status) {
+void Errors::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::UnresolvedVariable, v);
-    errors.addError(err, status);
- }
-
-bool MessageContext::hasParseError() const {
-    return errors.hasSyntaxError();
-}
-
-bool MessageContext::hasUnknownFunctionError() const {
-    return errors.hasUnknownFunctionError();
-}
-
-bool MessageContext::hasMissingSelectorAnnotationError() const {
-    return errors.hasMissingSelectorAnnotationError();
-}
-
-bool MessageContext::hasSelectorError() const {
-    return errors.hasSelectorError();
+    addError(err, status);
 }
 
 Errors* Errors::create(UErrorCode& errorCode) {
@@ -293,8 +388,27 @@ Errors* Errors::create(UErrorCode& errorCode) {
     return new Errors(errorCode);
 }
 
+Errors::Errors(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+    syntaxAndDataModelErrors.adoptInstead(new UVector(errorCode));
+    resolutionAndFormattingErrors.adoptInstead(new UVector(errorCode));
+    CHECK_ERROR(errorCode);
+    syntaxAndDataModelErrors->setDeleter(uprv_deleteUObject);
+    resolutionAndFormattingErrors->setDeleter(uprv_deleteUObject);
+    dataModelError = false;
+    formattingError = false;
+    missingSelectorAnnotationError = false;
+    selectorError = false;
+    syntaxError = false;
+    unknownFunctionError = false;
+}
+
 int32_t Errors::count() const {
     return syntaxAndDataModelErrors->size() + resolutionAndFormattingErrors->size();
+}
+
+bool Errors::hasError() const {
+    return count() > 0;
 }
 
 void Errors::clearResolutionAndFormattingErrors() {
@@ -433,6 +547,9 @@ void Errors::addError(Error e, UErrorCode& status) {
         }
     }
 }
+
+Errors::~Errors() {}
+Error::~Error() {}
 
 MessageContext::~MessageContext() {}
 

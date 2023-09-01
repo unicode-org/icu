@@ -13,13 +13,15 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
+// Context that's specific to formatting a single expression
+
 // Constructors
 // ------------
 
-/* static */ ExpressionContext* ExpressionContext::create(MessageContext& globalContext, const MessageFormatter& parent, UErrorCode& errorCode) {
+/* static */ ExpressionContext* ExpressionContext::create(MessageContext& globalContext, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<ExpressionContext> result(new ExpressionContext(globalContext, parent, errorCode));
+    LocalPointer<ExpressionContext> result(new ExpressionContext(globalContext, errorCode));
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
@@ -27,12 +29,12 @@ U_NAMESPACE_BEGIN namespace message2 {
 ExpressionContext* ExpressionContext::create(UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<ExpressionContext> result(new ExpressionContext(context, parent, errorCode));
+    LocalPointer<ExpressionContext> result(new ExpressionContext(context, errorCode));
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
 
-ExpressionContext::ExpressionContext(MessageContext& c, const MessageFormatter& mf, UErrorCode& errorCode) : context(c), parent(mf), inState(FALLBACK), outState(NONE) {
+ExpressionContext::ExpressionContext(MessageContext& c, UErrorCode& errorCode) : context(c), inState(FALLBACK), outState(NONE) {
     CHECK_ERROR(errorCode);
 
     initFunctionOptions(errorCode);
@@ -42,125 +44,15 @@ void ExpressionContext::initFunctionOptions(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
     functionOptions.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
     CHECK_ERROR(errorCode);
+    // `functionOptions` owns its values
     functionOptions->setValueDeleter(uprv_deleteUObject);
-}
-
-Errors::Errors(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-    syntaxAndDataModelErrors.adoptInstead(new UVector(errorCode));
-    resolutionAndFormattingErrors.adoptInstead(new UVector(errorCode));
-    CHECK_ERROR(errorCode);
-    syntaxAndDataModelErrors->setDeleter(uprv_deleteUObject);
-    resolutionAndFormattingErrors->setDeleter(uprv_deleteUObject);
-    dataModelError = false;
-    formattingError = false;
-    missingSelectorAnnotationError = false;
-    selectorError = false;
-    syntaxError = false;
-    unknownFunctionError = false;
-}
-
-Errors::~Errors() {}
-Error::~Error() {}
-
-/* static */ Formattable* ExpressionContext::createFormattable(const UnicodeString& v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formattable* result = new Formattable(v);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */  Formattable* ExpressionContext::createFormattable(double v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formattable* result = new Formattable(v);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */  Formattable* ExpressionContext::createFormattable(int64_t v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formattable* result = new Formattable(v);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Formattable* ExpressionContext::createFormattable(const UObject* v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    // This object will only be accessed through getObjectOption(), which returns
-    // a const reference
-    Formattable* result = new Formattable(const_cast<UObject*>(v));
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Formattable* ExpressionContext::createFormattable(const UnicodeString* in, int32_t count, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    LocalArray<Formattable> arr(new Formattable[count]);
-    if (!arr.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-
-    LocalPointer<Formattable> val;
-    for (int32_t i = 0; i < count; i++) {
-        // TODO
-        // Without this explicit cast, `val` is treated as if it's
-        // an object when it's assigned into `arr[i]`. I don't know why.
-        val.adoptInstead(new Formattable((const UnicodeString&) in[i]));
-        if (!val.isValid()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        arr[i] = *val;
-    }
-
-    Formattable* result(new Formattable(arr.orphan(), count));
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Formattable* ExpressionContext::createFormattableDate(UDate v, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formattable* result = new Formattable(v, Formattable::kIsDate);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
-/* static */ Formattable* ExpressionContext::createFormattableDecimal(StringPiece val, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    Formattable* result = new Formattable(val, errorCode);
-    if (U_FAILURE(errorCode)) {
-        return nullptr;
-    }
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
 }
 
 // State
 // ---------
 
 void ExpressionContext::enterState(InputState s) {
+    // If we're entering an error state, clear the output
     if (s == InputState::FALLBACK) {
         enterState(OutputState::NONE);
     }
@@ -169,6 +61,7 @@ void ExpressionContext::enterState(InputState s) {
 }
 
 void ExpressionContext::enterState(OutputState s) {
+    // Input must exist if output exists
     if (s > OutputState::NONE) {
         U_ASSERT(hasInput());
     }
@@ -183,6 +76,8 @@ void ExpressionContext::setFallback() {
     enterState(FALLBACK);
 }
 
+// Fallback values are enclosed in curly braces;
+// see https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
 void fallbackToString(const Text& t, UnicodeString& result) {
     result += LEFT_CURLY_BRACE;
     result += t.toString();
@@ -207,6 +102,7 @@ void ExpressionContext::promoteFallbackToOutput() {
     return setOutput(fallback);
 }
 
+// Used when handling function calls with no argument
 void ExpressionContext::setNoOperand() {
     U_ASSERT(isFallback());
     enterState(NO_OPERAND);
@@ -296,6 +192,9 @@ void ExpressionContext::clearOutput() {
     enterState(OutputState::NONE);
 }
 
+// Called when output is required and no output is present;
+// formats the input to a string with defaults, for inputs that can be
+// formatted with a default formatter
 void ExpressionContext::formatInputWithDefaults(const Locale& locale, UErrorCode& status) {
     CHECK_ERROR(status);
 
@@ -341,7 +240,8 @@ void ExpressionContext::formatInputWithDefaults(const Locale& locale, UErrorCode
     }
 }
 
-// Forces evaluation
+// Called when string output is required; forces output to be produced
+// if none is present (including formatting number output as a string)
 void ExpressionContext::formatToString(const Locale& locale, UErrorCode& status) {
     CHECK_ERROR(status);
 
@@ -440,6 +340,104 @@ const Formattable& ExpressionContext::getGlobalAsFormattable(const VariableName&
 
 // Function options
 // ----------------
+
+
+// Helper functions for function options
+// -------------------------------------
+
+/* static */ Formattable* ExpressionContext::createFormattable(const UnicodeString& v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */  Formattable* ExpressionContext::createFormattable(double v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */  Formattable* ExpressionContext::createFormattable(int64_t v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattable(const UObject* v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    // This object will only be accessed through getObjectOption(), which returns
+    // a const reference
+    Formattable* result = new Formattable(const_cast<UObject*>(v));
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattable(const UnicodeString* in, int32_t count, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalArray<Formattable> arr(new Formattable[count]);
+    if (!arr.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+
+    LocalPointer<Formattable> val;
+    for (int32_t i = 0; i < count; i++) {
+        // TODO
+        // Without this explicit cast, `val` is treated as if it's
+        // an object when it's assigned into `arr[i]`. I don't know why.
+        val.adoptInstead(new Formattable((const UnicodeString&) in[i]));
+        if (!val.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        arr[i] = *val;
+    }
+
+    Formattable* result(new Formattable(arr.orphan(), count));
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattableDate(UDate v, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(v, Formattable::kIsDate);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Formattable* ExpressionContext::createFormattableDecimal(StringPiece val, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    Formattable* result = new Formattable(val, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
 
 // Iterator
 int32_t ExpressionContext::firstOption() const { return UHASH_FIRST; }
@@ -545,7 +543,7 @@ bool ExpressionContext::tryStringAsNumberOption(const UnicodeString& key, double
         return false;
     }
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(parent.locale, localErrorCode));
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(context.messageFormatter().locale, localErrorCode));
     if (U_FAILURE(localErrorCode)) {
         return false;
     }
@@ -621,23 +619,6 @@ void ExpressionContext::clearFunctionOptions() {
     functionOptions->removeAll();
 }
 
-const FunctionRegistry& ExpressionContext::customRegistry() const {
-    U_ASSERT(hasCustomRegistry());
-    return parent.getCustomFunctionRegistry();
-}
-
-bool ExpressionContext::hasCustomRegistry() const {
-    return parent.hasCustomFunctionRegistry();
-}
-
-bool ExpressionContext::isCustomFormatter(const FunctionName& fn) const {
-    return hasCustomRegistry() && customRegistry().getFormatter(fn) != nullptr;
-}
-
-bool ExpressionContext::isCustomSelector(const FunctionName& fn) const {
-    return hasCustomRegistry() && customRegistry().getSelector(fn) != nullptr;
-}
-
 // Precondition: pending function name is set and selector is defined
 // Postcondition: selector != nullptr
 Selector* ExpressionContext::getSelector(UErrorCode& status) const {
@@ -645,117 +626,12 @@ Selector* ExpressionContext::getSelector(UErrorCode& status) const {
 
     U_ASSERT(pendingFunctionName.isValid());
     const FunctionName& functionName = *pendingFunctionName;
-    const SelectorFactory* selectorFactory = lookupSelectorFactory(functionName, status);
+    const SelectorFactory* selectorFactory = context.lookupSelectorFactory(functionName, status);
     NULL_ON_ERROR(status);
     // Create a specific instance of the selector
-    LocalPointer<Selector> result(selectorFactory->createSelector(parent.locale, status));
+    LocalPointer<Selector> result(selectorFactory->createSelector(context.messageFormatter().locale, status));
     NULL_ON_ERROR(status);
     return result.orphan();
-}
-
-
-bool ExpressionContext::isBuiltInFormatter(const FunctionName& functionName) const {
-    return parent.standardFunctionRegistry->hasFormatter(functionName);
-}
-
-bool ExpressionContext::isBuiltInSelector(const FunctionName& functionName) const {
-    return parent.standardFunctionRegistry->hasSelector(functionName);
-}
-
-// https://github.com/unicode-org/message-format-wg/issues/409
-// Unknown function = unknown function error
-// Formatter used as selector  = selector error
-// Selector used as formatter = formatting error
-const SelectorFactory* ExpressionContext::lookupSelectorFactory(const FunctionName& functionName, UErrorCode& status) const {
-    NULL_ON_ERROR(status);
-
-    if (isBuiltInSelector(functionName)) {
-        return parent.standardFunctionRegistry->getSelector(functionName);
-    }
-    if (isBuiltInFormatter(functionName)) {
-        context.setSelectorError(functionName, status);
-        return nullptr;
-    }
-    if (parent.hasCustomFunctionRegistry()) {
-        const FunctionRegistry& customFunctionRegistry = parent.getCustomFunctionRegistry();
-        const SelectorFactory* customSelector = customFunctionRegistry.getSelector(functionName);
-        if (customSelector != nullptr) {
-            return customSelector;
-        }
-        if (customFunctionRegistry.getFormatter(functionName) != nullptr) {
-            context.setSelectorError(functionName, status);
-            return nullptr;
-        }
-    }
-    // Either there is no custom function registry and the function
-    // isn't built-in, or the function doesn't exist in either the built-in
-    // or custom registry.
-    // Unknown function error
-    context.setUnknownFunctionError(functionName, status);
-    return nullptr;
-}
-
-FormatterFactory* ExpressionContext::lookupFormatterFactory(const FunctionName& functionName, UErrorCode& status) const {
-    NULL_ON_ERROR(status);
-
-    if (isBuiltInFormatter(functionName)) {
-        return parent.standardFunctionRegistry->getFormatter(functionName);
-    }
-    if (isBuiltInSelector(functionName)) {
-        context.setFormattingError(functionName, status);
-        return nullptr;
-    }
-    if (parent.hasCustomFunctionRegistry()) {
-        const FunctionRegistry& customFunctionRegistry = parent.getCustomFunctionRegistry();
-        FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
-        if (customFormatter != nullptr) {
-            return customFormatter;
-        }
-        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
-            context.setFormattingError(functionName, status);
-            return nullptr;
-        }
-    }
-    // Either there is no custom function registry and the function
-    // isn't built-in, or the function doesn't exist in either the built-in
-    // or custom registry.
-    // Unknown function error
-    context.setUnknownFunctionError(functionName, status);
-    return nullptr;
-}
-
-
-const Formatter* ExpressionContext::maybeCachedFormatter(const FunctionName& f, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    U_ASSERT(parent.cachedFormatters.isValid());
-
-    const Formatter* result = parent.cachedFormatters->getFormatter(f);
-    if (result == nullptr) {
-        // Create the formatter
-
-        // First, look up the formatter factory for this function
-        FormatterFactory* formatterFactory = lookupFormatterFactory(f, errorCode);
-        NULL_ON_ERROR(errorCode);
-        // If the formatter factory was null, there must have been
-        // an earlier error/warning
-        if (formatterFactory == nullptr) {
-            U_ASSERT(context.hasUnknownFunctionError() || context.hasFormattingError());
-            return nullptr;
-        }
-        NULL_ON_ERROR(errorCode);
-
-        // Create a specific instance of the formatter
-        Formatter* formatter = formatterFactory->createFormatter(parent.locale, errorCode);
-        NULL_ON_ERROR(errorCode);
-        if (formatter == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        parent.cachedFormatters->setFormatter(f, formatter, errorCode);
-        return formatter;
-    } else {
-        return result;
-    }
 }
 
 // Precondition: pending function name is set and formatter is defined
@@ -765,26 +641,22 @@ const Formatter* ExpressionContext::getFormatter(UErrorCode& status) {
 
     U_ASSERT(pendingFunctionName.isValid());
     U_ASSERT(hasFormatter());
-    return maybeCachedFormatter(*pendingFunctionName, status);
+    return context.maybeCachedFormatter(*pendingFunctionName, status);
 }
 
 bool ExpressionContext::hasFormatter() const {
     U_ASSERT(pendingFunctionName.isValid());
-    const FunctionName& fn = *pendingFunctionName;
-    return isBuiltInFormatter(fn) || isCustomFormatter(fn);
-}
-
-bool ExpressionContext::isSelector(const FunctionName& fn) const {
-    return isBuiltInSelector(fn) || isCustomSelector(fn);
+    return context.isFormatter(*pendingFunctionName);
 }
 
 bool ExpressionContext::hasSelector() const {
     if (!pendingFunctionName.isValid()) {
         return false;
     }
-    return isSelector(*pendingFunctionName);
+    return context.isSelector(*pendingFunctionName);
 }
 
+// Calls the pending selector
 void ExpressionContext::evalPendingSelectorCall(const UnicodeString keys[], int32_t numKeys, UnicodeString keysOut[], int32_t& numberMatching, UErrorCode& status) {
     CHECK_ERROR(status);
 
@@ -808,6 +680,7 @@ void ExpressionContext::evalPendingSelectorCall(const UnicodeString keys[], int3
     returnFromFunction();
 }
 
+// Calls the pending formatter
 void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErrorCode& status) {
     CHECK_ERROR(status);
 
@@ -822,6 +695,8 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
         // Update errors
         if (savedStatus != status) {
             if (U_FAILURE(status)) {
+                // Convey any error generated by the formatter
+                // as a formatting error
                 setFallback();
                 status = U_ZERO_ERROR;
                 setFormattingError(functionName.name(), status);
@@ -830,7 +705,8 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
                 status = savedStatus;
             }
         }
-        if (hasFormattingError()) {
+        // Ignore the output if any errors occurred
+        if (context.getErrors().hasFormattingError()) {
             clearOutput();
         }
         returnFromFunction();
@@ -840,97 +716,28 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
         return;
     }
     // No formatter with this name -- set error
-    if (isSelector(functionName)) {
+    if (context.isSelector(functionName)) {
         setFormattingError(functionName.name(), status);
     } else {
-        setUnknownFunction(functionName, status);
+        context.getErrors().setUnknownFunction(functionName, status);
     }
     setFallback();
 }
 
+
 // Errors
 // -------
-
-
-bool ExpressionContext::hasDataModelError() const {
-    return context.hasDataModelError();
-}
-
-bool ExpressionContext::hasParseError() const {
-    return context.hasParseError();
-}
-
-bool ExpressionContext::hasSelectorError() const {
-    return context.hasSelectorError();
-}
-
-bool ExpressionContext::hasUnknownFunctionError() const {
-    return context.hasUnknownFunctionError();
-}
-
-bool ExpressionContext::hasMissingSelectorAnnotationError() const {
-    return context.hasMissingSelectorAnnotationError();
-}
-
-bool ExpressionContext::hasFormattingError() const {
-    return context.hasFormattingError();
-}
-
-bool ExpressionContext::hasUnresolvedVariableError() const {
-    return context.hasUnresolvedVariableError();
-}
-
-bool ExpressionContext::hasError() const {
-    return context.hasError();
-}
-
-void ExpressionContext::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    Error err(Error::Type::UnresolvedVariable, v);
-    context.addError(err, status);
-}
-
-void ExpressionContext::setUnknownFunction(const FunctionName& fn, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    Error err(Error::Type::UnknownFunction, fn);
-    context.addError(err, status);
-
-}
-
-void ExpressionContext::setMissingSelectorAnnotation(UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    Error err(Error::Type::MissingSelectorAnnotation);
-    context.addError(err, status);
-}
 
 void ExpressionContext::setFormattingError(const UnicodeString& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    context.setFormattingError(formatterName, status);
+    context.getErrors().setFormattingError(formatterName, status);
 }
 
 void ExpressionContext::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {
     CHECK_ERROR(status);
-    
-    Error err(Error::Type::SelectorError, selectorName);
-    context.addError(err, status);
-}
 
-void ExpressionContext::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
-    CHECK_ERROR(status);
-    
-    Error err(Error::Type::SelectorError, selectorName.toString());
-    context.addError(err, status);
-}
-
-void ExpressionContext::setReservedError(UErrorCode& status) {
-    CHECK_ERROR(status);
-    
-    Error err(Error::Type::ReservedError);
-    context.addError(err, status);
+    context.getErrors().setSelectorError(selectorName, status);
 }
 
 ExpressionContext::~ExpressionContext() {}

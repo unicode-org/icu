@@ -167,7 +167,7 @@ class U_I18N_API FunctionRegistry : UMemory {
 
  private:
     friend class Builder;
-    friend class ExpressionContext;
+    friend class MessageContext;
     friend class MessageFormatter;
 
     // Adopts `f` and `s`

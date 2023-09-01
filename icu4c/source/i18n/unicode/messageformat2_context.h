@@ -22,6 +22,7 @@ U_NAMESPACE_BEGIN namespace message2 {
 
 class Formatter;
 class FormatterFactory;
+class SelectorFactory;
 
 // Intermediate classes used internally in the formatter
 class Environment;
@@ -136,16 +137,13 @@ class Errors : public UMemory {
     static Errors* create(UErrorCode&);
 
     int32_t count() const;
-    void addNonexhaustivePattern();
-    void addDuplicateOption();
-    void addSelectorError();
-    void addMissingSelectorAnnotation();
-    void addUnresolvedVariable(const VariableName&);
-    void addVariantKeyMismatchError();
+    void setSelectorError(const FunctionName&, UErrorCode&);
+    void setReservedError(UErrorCode&);
+    void setMissingSelectorAnnotation(UErrorCode&);
+    void setUnresolvedVariable(const VariableName&, UErrorCode&);
     void addSyntaxError(UErrorCode&);
-    void addUnknownFunction(const FunctionName&);
-    void addVariantKeyMismatch();
-    void addFormattingError();
+    void setUnknownFunction(const FunctionName&, UErrorCode&);
+    void setFormattingError(const FunctionName&, UErrorCode&);
     bool hasDataModelError() const { return dataModelError; }
     bool hasFormattingError() const { return formattingError; }
     bool hasSelectorError() const { return selectorError; }
@@ -156,6 +154,7 @@ class Errors : public UMemory {
     void addError(Error, UErrorCode&);
     void checkErrors(UErrorCode&);
     void clearResolutionAndFormattingErrors();
+    bool hasError() const;
 
     virtual ~Errors();
 }; // class Errors
@@ -334,28 +333,27 @@ public:
     
     static MessageContext* create(const MessageFormatter& mf, const MessageArguments& args, Errors& errors, UErrorCode& errorCode);
 
-    void setFormattingError(const FunctionName&, UErrorCode&);
-    void setSelectorError(const FunctionName&, UErrorCode&);
-    void setUnresolvedVariableError(const VariableName&, UErrorCode&);
-    void setUnknownFunctionError(const FunctionName&, UErrorCode&);
+    bool isCustomFormatter(const FunctionName&) const;
+    const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode&);
+    const SelectorFactory* lookupSelectorFactory(const FunctionName&, UErrorCode& status) const;
+    bool isSelector(const FunctionName& fn) const { return isBuiltInSelector(fn) || isCustomSelector(fn); }
+    bool isFormatter(const FunctionName& fn) const { return isBuiltInFormatter(fn) || isCustomFormatter(fn); }
+
     // If any errors were set, update `status` accordingly
     void checkErrors(UErrorCode& status) const;
-    Errors& getErrors() { return errors; }
-    bool hasParseError() const;
-    bool hasDataModelError() const;
-    bool hasMissingSelectorAnnotationError() const;
-    bool hasUnresolvedVariableError() const;
-    bool hasUnknownFunctionError() const;
-    bool hasFormattingError() const;
-    bool hasSelectorError() const;
-    bool hasError() const;
-    void addError(Error, UErrorCode&);
+    Errors& getErrors() const { return errors; }
+
+    const MessageFormatter& messageFormatter() const { return parent; }
 
     virtual ~MessageContext();
     
 private:
     MessageContext(const MessageFormatter&, const MessageArguments&, Errors&);
-    FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&);
+
+    FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&) const;
+    bool isBuiltInSelector(const FunctionName&) const;
+    bool isBuiltInFormatter(const FunctionName&) const;
+    bool isCustomSelector(const FunctionName&) const;
 
     const MessageFormatter& parent;
     const MessageArguments& arguments; // External message arguments
