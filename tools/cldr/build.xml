@@ -31,7 +31,7 @@
         <fail unless="cldrDir"
              message="Set the CLDR_DIR environment variable (or cldrDir property) to the top level CLDR source directory (containing 'common')."/>
         <property name="testDataDir4C" value="${basedir}/../../icu4c/source/test/testdata/cldr"/>
-        <property name="testDataDir4J" value="${basedir}/../../icu4j/main/tests/core/src/com/ibm/icu/dev/data/cldr"/>
+        <property name="testDataDir4J" value="${basedir}/../../icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr"/>
     </target>
 
     <!-- Copies CLDR test data directories, after deleting previous

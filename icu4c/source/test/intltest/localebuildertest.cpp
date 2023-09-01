@@ -83,7 +83,7 @@ void LocaleBuilderTest::Verify(LocaleBuilder& bld, const char* expected, const c
 
 void LocaleBuilderTest::TestLocaleBuilder() {
     // The following test data are copy from
-    // icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleBuilderTest.java
+    // icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/LocaleBuilderTest.java
     // "L": +1 = language
     // "S": +1 = script
     // "R": +1 = region

@@ -86,7 +86,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>
  * Further detail on differences can be determined using the program
  *        <a href=
- * "https://github.com/unicode-org/icu/blob/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
+ * "https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * <p>
  * In addition to Java compatibility functions, which calculate derived properties,

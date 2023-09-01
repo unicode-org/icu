@@ -39,7 +39,7 @@ and use it for future testing.
 2.  The target generates test data and runs some serialization test cases.
 3.  Once you confirm the test runs clean, copy
     `out/serialTestData/ICU_<version>` to
-    `main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_<version>`.
+    `main/core/src/test/resources/com/ibm/icu/dev/test/serializable/data/ICU_<version>`.
 
 ---
 

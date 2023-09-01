@@ -37,7 +37,7 @@ public final class GenerateCodeTask extends Task {
     }
 
     private GeneratedFileDef[] generatedFileDefs = {
-        new GeneratedFileDef("common/localefallback_data.h", "src/com/ibm/icu/impl/LocaleFallbackData.java", new ResourceFallbackCodeGenerator()),
+        new GeneratedFileDef("common/localefallback_data.h", "src/main/java/com/ibm/icu/impl/LocaleFallbackData.java", new ResourceFallbackCodeGenerator()),
     };
 
     @SuppressWarnings("unused")

@@ -105,7 +105,7 @@ The project is released under [LICENSE](./LICENSE).
 [bugs]: https://icu.unicode.org/bugs
 [cintltst]: ./icu4c/source/test/cintltst/
 [coding-guidelines]: docs/userguide/dev/codingguidelines.md
-[com.ibm.icu.dev.test]: ./icu4j/main/tests/framework/src/com/ibm/icu/dev/test/
+[com.ibm.icu.dev.test]: ./icu4j/main/framework/src/test/java/com/ibm/icu/dev/test/
 [contacts]: https://icu.unicode.org/contacts
 [copyright]: http://www.unicode.org/copyright.html
 [design]: docs/userguide/icu/design.md

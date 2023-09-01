@@ -75,7 +75,7 @@ static const double kNumbersToTest[]{0, 91827.3645, -0.22222};
  * On Linux, from icu4c/source:
  *     make -j -l2.5 tests && (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest -e -G format/NumberTest/NumberPermutationTest)
  * After re-generating the file, copy it into icu4j:
- *     cp test/testdata/numberpermutationtest.txt ../../icu4j/main/tests/core/src/com/ibm/icu/dev/data/numberpermutationtest.txt
+ *     cp test/testdata/numberpermutationtest.txt ../../icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/numberpermutationtest.txt
  */
 void NumberPermutationTest::testPermutations() {
     IcuTestErrorCode status(*this, "testPermutations");

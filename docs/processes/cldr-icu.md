@@ -87,13 +87,16 @@ considerations:
 
 There are several environment variables that need to be defined.
 
-1. Java- and ant-related variables
+1. Java-, ant-, and maven-related variables
 
    * `JAVA_HOME`: Path to JDK (a directory, containing e.g. `bin/java`, `bin/javac`,
      etc.); on many systems this can be set using the output of `/usr/libexec/java_home`.
 
    * `ANT_OPTS`: You may want to set `-Xmx8192m` to give Java more memory; otherwise
      it may run out of heap.
+
+   * `MAVEN_ARGS`: You may want to set `--no-transfer-progress` to reduce the noise
+     from the download progress.
 
 2. CLDR-related variables
 
@@ -123,10 +126,11 @@ There are several environment variables that need to be defined.
  
 ## 1 Environment variables
 
-1a. Java and ant variables, adjust for your system
+1a. Java, ant, and maven variables, adjust for your system
 ```
-export JAVA_HOME=`/usr/libexec/java_home`
+export JAVA_HOME=/usr/libexec/java_home
 export ANT_OPTS="-Xmx8192m"
+export MAVEN_ARGS="--no-transfer-progress"
 ```
 
 1b. CLDR variables, adjust for your setup; with cygwin it might be e.g.
@@ -154,6 +158,11 @@ export NOTES=...(some directory)...
 mkdir -p $NOTES
 ```
 
+1e. The name of the icu data directory for Java (for example `icudt74b`)
+```
+export ICU_DATA_VER=icudt(version)b
+```
+
 ## 2 Initial builds of ICU4C and ICU4J
 
 2a. Configure ICU4C, build and test without new data first, to verify that
@@ -173,16 +182,8 @@ there are no pre-existing errors (or at least to have the pre-existing errors
 as a base for comparison):
 ```
 cd $ICU4J_ROOT
-ant clean
-ant check 2>&1 | tee $NOTES/icu4j-oldData-antCheck.txt
-```
-
-2c. Additionally for ICU4J, repeat the same as 2b, but for building with
-Maven instead of with Ant.
-```
-cd $ICU4J_ROOT/maven-build
 mvn clean
-mvn verify 2>&1 | tee $NOTES/icu4j-oldData-mvnVerify.txt
+mvn verify 2>&1 | tee $NOTES/icu4j-oldData-mvnCheck.txt
 ```
 
 ## 3 Make pre-adjustments
@@ -272,9 +273,9 @@ ant copy-cldr-testdata
 5d. Copy localeCanonicalization.txt from CLDR testData and add a source reference line:
 ```
 cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4C_DIR/source/test/testdata/
-cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/
+cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4J_ROOT/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/
 open $ICU4C_DIR/source/test/testdata/localeCanonicalization.txt
-open $ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/data/unicode/localeCanonicalization.txt
+open $ICU4J_ROOT/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/localeCanonicalization.txt
 ```
 At the beginning of each file add the following line:\
 ```
@@ -283,7 +284,7 @@ At the beginning of each file add the following line:\
 
 5e. For now, manually re-add the `lstm` entries in `data/brkitr/root.txt`
 ```
-open $ICU4C_DIR/source/data/brkitr/root.txt 
+open $ICU4C_DIR/source/data/brkitr/root.txt
 ```
 Paste the following block after the dictionaries block and before the final closing '}':
 ```
@@ -340,7 +341,7 @@ cd test/intltest
 DYLD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$DYLD_LIBRARY_PATH ./intltest -e -G format/NumberTest/NumberPermutationTest
 cd ../..
 
-cd build/test/cintltst
+cd test/cintltst
 DYLD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$DYLD_LIBRARY_PATH ./cintltst /tsformat/ccaltst
 cd ../../..
 ```
@@ -411,22 +412,28 @@ make icu4j-data-install
 
 12d. Update the extracted {main, test} data files in the Maven build
 ```
-cd $ICU4J_ROOT/maven-build
-sh ./extract-data-files.sh
+cd $ICU4J_ROOT
+./extract-data-files.sh
 ```
 
 ## 13 Rebuild ICU4J with new data, run tests
 
-13a. Run the tests using the ant build
+13a. Run the tests using the maven build
 ```
 cd $ICU4J_ROOT
-ant clean
-ant check 2>&1 | tee $NOTES/icu4j-newData-antCheck.txt
+mvn clean
+mvn verify 2>&1 | tee $NOTES/icu4j-newData-mvnCheck.txt
 ```
 
-To re-run a specific test if necessary when fixing bugs; for example:
+It is possible to re-run a specific test class or method if necessary when fixing bugs.
+
+For example (using artifactId, full class name, test all methods):
 ```
-ant checkTest -Dtestclass='com.ibm.icu.dev.test.format.MeasureUnitTest'
+mvn test -pl :core -Dtest=com.ibm.icu.dev.test.util.LocaleBuilderTest
+```
+or (example of using module path, class name, one method):
+```
+mvn test -pl main/common_tests -Dtest=MeasureUnitTest#TestGreek
 ```
 
 13b. Optionally run the tests in exhautive mode
@@ -435,22 +442,15 @@ Optionally run before committing changes, or run to diagnose failures from
 running exhastive CI tests in the PR using `/azp run CI-Exhaustive`: 
 ```
 cd $ICU4J_ROOT
-ant exhaustiveCheck 2>&1 | tee $NOTES/icu4j-newData-antCheckEx.txt
+mvn verify -DICU.exhaustive=10 2>&1 | tee $NOTES/icu4j-newData-mvnCheckEx.txt
 ```
-(Not sure there is a way to re-run a specific test in exhaustive mode)
 
-13c. Run the tests using the Maven build
+Running a specific test is the same as above:
 ```
-cd $ICU4J_ROOT/maven-build
-mvn verify 2>&1 | tee $NOTES/icu4j-newData-mavenVerify.txt
+mvn test --pl :core -DICU.exhaustive=10 -Dtest=ExhaustiveNumberTest
 ```
-Currently (due to maven sync issues?) there may be errors in these
-local maven tests even if there are no errors in the ant check tests.
-Such maven errors should not be blockers for a commit and push; they
-may not show up in the CI maven tests (but if they do and do not go
-away after re-running the CI test, then they need investigation).
 
-## 14 Investigate and fix ant check test failures
+## 14 Investigate and fix maven check test failures
 
 Fix test cases and repeat from step 13, or fix CLDR data and repeat from
 step 4, as appropriate, until there are no more failures in ICU4C or ICU4J.
@@ -477,7 +477,7 @@ com.ibm.icu.dev.test.format.PluralRulesTest (TestLocales)
 
 To address these requires updating the LOCALE_SNAPSHOT data in
 ```
-$ICU4J_ROOT/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesTest.java
+$ICU4J_ROOT/main/common_tests/src/test/java/com/ibm/icu/dev/test/format/PluralRulesTest.java
 ```
 by modifying the TestLocales() test there to run `generateLOCALE_SNAPSHOT()` and
 then copying in the updated data.
@@ -488,7 +488,7 @@ then copying in the updated data.
 cd $ICU4C_DIR/source
 make clean
 cd $ICU4J_ROOT
-ant clean
+mvn clean
 cd ..
 git status
 ```

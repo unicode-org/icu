@@ -30,7 +30,7 @@
 #
 # There are two copies of this file in the source repository,
 #   [ICU4C]   source/test/testdata/rbbitst.txt
-#   [ICU4J]   main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt
+#   [ICU4J]   main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/rbbitst.txt
 #
 # ICU4C's copy is the primary one.  If any changes are made to ICU4J's copy, make sure they
 #  are merged back into ICU4C's copy of the file, lest they get overwritten later.

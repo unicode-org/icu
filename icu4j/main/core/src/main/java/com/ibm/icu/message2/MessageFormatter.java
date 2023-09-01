@@ -127,7 +127,7 @@ import java.util.Map;
  * and general selector ({@code select}), 
  * very similar to what MessageFormat offers.</p>
  * 
- * <p>The <a target="github" href="https://github.com/unicode-org/icu/tree/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2">ICU test code</a>
+ * <p>The <a target="github" href="https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2">ICU test code</a>
  * covers most features, and has examples of how to make custom placeholder formatters;
  * you can look for classes that implement {@code com.ibm.icu.message2.FormatterFactory}
  * (they are named {@code Custom*Test.java}).</p>

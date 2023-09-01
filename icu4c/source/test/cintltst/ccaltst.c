@@ -1728,7 +1728,7 @@ static void TestGetKeywordValuesForLocale() {
 
 /*
  * Weekend tests, ported from
- * icu4j/trunk/main/tests/core/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java
+ * icu4j/main/core/src/test/java/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java
  * and extended a bit. Notes below from IBMCalendarTest.java ...
  * This test tests for specific locale data. This is probably okay
  * as far as US data is concerned, but if the Arabic/Yemen data

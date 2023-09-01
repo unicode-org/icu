@@ -50,9 +50,9 @@ Often ICU will implement draft versions of proposed specification updates, to ch
 |||
 | icu/icu4j/...
 | .../main/shared/data/icudata.jar        | Data jar, includes break rules. Derived from ICU4C.
-| .../main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt         | Test data, copied from ICU4C.
-| .../main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/*       | Monkey test rules, copied from ICU4C.
-| .../main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java | Monkey test w rules as code. Port from ICU4C.
+| .../main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/rbbitst.txt         | Test data, copied from ICU4C.
+| .../main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/break_rules/*       | Monkey test rules, copied from ICU4C.
+| .../main/core/src/test/java/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java | Monkey test w rules as code. Port from ICU4C.
 
 
 ## ICU4C
@@ -90,7 +90,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
     probably means that some earlier change to ICU4C was not fully ported to ICU4J, and this
     needs to be resolved before proceeding.
 
-        diff icu4c/source/test/testdata/rbbitst.txt icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt
+        diff icu4c/source/test/testdata/rbbitst.txt icu4j/main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/rbbitst.txt
 
     Should show no difference.
 
@@ -250,7 +250,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
     Copy the file `rbbitst.txt` from ICU4C to ICU4J, and run the Java test. It should fail until the rules are updated.
 
             cd <top level icu directory>
-            cp icu4c/source/test/testdata/rbbitst.txt icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt
+            cp icu4c/source/test/testdata/rbbitst.txt icu4j/main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/rbbitst.txt
 
     Run the test from Eclipse.
 
@@ -272,7 +272,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
 
     ICU4C file to port from: `source/test/intltest/rbbitst.cpp`
 
-    ICU4J file to port to: `main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java`
+    ICU4J file to port to: `main/core/src/test/java/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java`
 
     To conveniently run the individual tests, look for the test functions `TestCharMonkey()`, `TestWordMonkey()`, etc. in `RBBITestMonkey.java`.
 
@@ -288,9 +288,9 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
 
     ICU4C directory, to copy from: `source/test/testdata/break_rules/`
 
-    ICU4J directory, to copy to: `main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/`
+    ICU4J directory, to copy to: `main/core/src/test/resources/com/ibm/icu/dev/test/rbbi/break_rules/`
 
-    Then rerun the rule based monkey test, in the file `main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBIMonkeyTest.java`. Find the test function `TestMonkey()`; it include comments describing how to run it with parameters from Eclipse.
+    Then rerun the rule based monkey test, in the file `main/core/src/test/java/com/ibm/icu/dev/test/rbbi/RBBIMonkeyTest.java`. Find the test function `TestMonkey()`; it include comments describing how to run it with parameters from Eclipse.
 
     Run the test(s) for the changed rules for an extended amount of time (with Dloop=-1).
 

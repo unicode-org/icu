@@ -51,7 +51,7 @@
         <!-- The output directory into which to write generated Java code.  By default
              this will overwrite (without deletion) the generated Java files in this
              ICU release, so it is recommended that for testing, it be set to another value. -->
-        <property name="genJavaCodeDir" value="${basedir}/../../../icu4j/main/classes/core"/>
+        <property name="genJavaCodeDir" value="${basedir}/../../../icu4j/main/core"/>
         
         <!-- Set this to true to prevent build-icu-data.xml from generating the generated
              ICU source files -->
