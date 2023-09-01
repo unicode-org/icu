@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693434283434,
+  "lastUpdate": 1693536204095,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11308,6 +11308,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.049540677756695906,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "d501225db2bfed4fee3049827d6e9076dae2d1ad",
+          "message": "ICU-22477 Fix the performance tests after the maven folder changes",
+          "timestamp": "2023-08-31T19:38:20-07:00",
+          "tree_id": "5f82cab6498d273366e12d6fbe2623b6776e97d0",
+          "url": "https://github.com/unicode-org/icu/commit/d501225db2bfed4fee3049827d6e9076dae2d1ad"
+        },
+        "date": 1693536152895,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.04040550510942472,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
