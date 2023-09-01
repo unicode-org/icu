@@ -94,7 +94,7 @@ class U_I18N_API FormattingContext : public UMemory {
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    virtual void setFormattingWarning(const UnicodeString&, UErrorCode&) = 0;
+    virtual void setFormattingError(const UnicodeString&, UErrorCode&) = 0;
     /**
      * Returns true if and only if a `Formattable` argument was supplied to this
      * function. (Object arguments must be checked for using `hasObjectinput()` and
@@ -301,6 +301,8 @@ class ExpressionContext : public FormattingContext {
     bool isBuiltInFormatter(const FunctionName&) const;
     bool isCustomFormatter(const FunctionName&) const;
     bool isBuiltInSelector(const FunctionName&) const;
+    FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode&) const;
+    const Formatter* maybeCachedFormatter(const FunctionName&, UErrorCode&);
     bool isCustomSelector(const FunctionName&) const;
     void doFormattingCall();
     bool hasFunctionName() const;
@@ -356,7 +358,7 @@ class ExpressionContext : public FormattingContext {
     void setUnknownFunction(const FunctionName&, UErrorCode&);
     void setSelectorError(const FunctionName&, UErrorCode&);
     void setVariantKeyMismatch();
-    void setFormattingWarning(const UnicodeString&, UErrorCode&);
+    void setFormattingError(const UnicodeString&, UErrorCode&);
     void setNonexhaustivePattern();
     void setDuplicateOptionName();
     void setReservedError(UErrorCode&);
@@ -441,7 +443,7 @@ class ExpressionContext : public FormattingContext {
     bool hasDataModelError() const;
     bool hasMissingSelectorAnnotationError() const;
     bool hasUnknownFunctionError() const;
-    bool hasFormattingWarning() const;
+    bool hasFormattingError() const;
     bool hasSelectorError() const;
     bool hasError() const;
 

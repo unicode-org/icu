@@ -82,11 +82,13 @@ void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, Icu
                                 .clearArguments(errorCode)
                                 .setArgument("name", "John", errorCode)
                                 .setExpected("Hello John, today is {$today}.")
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setPattern(message)
                                 .clearArguments(errorCode)
                                 .setDateArgument("today", TEST_DATE, errorCode)
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .setExpected("Hello {$name}, today is Wednesday, November 23, 2022.")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -94,6 +96,7 @@ void TestMessageFormat2::testArgumentMissing(TestCase::Builder& testBuilder, Icu
     // Both arguments missing
     test.adoptInstead(testBuilder.setPattern(message)
                                 .clearArguments(errorCode)
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .setExpected("Hello {$name}, today is {$today}.")
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
@@ -119,6 +122,7 @@ void TestMessageFormat2::testDefaultLocale(TestCase::Builder& testBuilder, IcuTe
     test.adoptInstead(testBuilder.clearArguments(errorCode)
                                 .setDateArgument("date", TEST_DATE, errorCode)
                                 .setExpected(expectedEn)
+                                .setExpectSuccess()
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     test.adoptInstead(testBuilder.setExpected(expectedRo)
@@ -477,7 +481,7 @@ void TemperatureFormatter::format(FormattingContext& context, UErrorCode& errorC
 
     // Argument must be present
     if (!context.hasFormattableInput()) {
-        context.setFormattingWarning("temp", errorCode);
+        context.setFormattingError("temp", errorCode);
         return;
     }
     // Assume arg is not-yet-formatted
@@ -813,7 +817,7 @@ void TestMessageFormat2::testDeclareBeforeUse(TestCase::Builder& testBuilder, Ic
     testBuilder.setName("declare-before-use");
 
     LocalPointer<TestCase> test(testBuilder.setExpected("The message uses {$baz} and works")
-                                .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 }

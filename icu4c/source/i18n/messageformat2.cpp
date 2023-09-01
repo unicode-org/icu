@@ -332,69 +332,6 @@ MessageArguments* MessageArguments::Builder::build(UErrorCode& errorCode) const 
 // ------------------------------------------------------
 // Formatting
 
-FormatterFactory* MessageFormatter::lookupFormatterFactory(Context& context, const FunctionName& functionName, UErrorCode& status) const {
-    NULL_ON_ERROR(status);
-
-    if (isBuiltInFormatter(functionName)) {
-        return standardFunctionRegistry->getFormatter(functionName);
-    }
-    if (isBuiltInSelector(functionName)) {
-        context.setFormattingWarning(functionName, status);
-        return nullptr;
-    }
-    if (hasCustomFunctionRegistry()) {
-        const FunctionRegistry& customFunctionRegistry = getCustomFunctionRegistry();
-        FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
-        if (customFormatter != nullptr) {
-            return customFormatter;
-        }
-        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
-            status = U_FORMATTING_WARNING;
-            return nullptr;
-        }
-    }
-    // Either there is no custom function registry and the function
-    // isn't built-in, or the function doesn't exist in either the built-in
-    // or custom registry.
-    // Unknown function error
-    context.setUnknownFunctionWarning(functionName, status);
-    return nullptr;
-}
-
-
-const Formatter* MessageFormatter::maybeCachedFormatter(Context& context, const FunctionName& f, UErrorCode& errorCode) const {
-    NULL_ON_ERROR(errorCode);
-    U_ASSERT(cachedFormatters.isValid());
-
-    const Formatter* result = cachedFormatters->getFormatter(f);
-    if (result == nullptr) {
-        // Create the formatter
-
-        // First, look up the formatter factory for this function
-        FormatterFactory* formatterFactory = lookupFormatterFactory(context, f, errorCode);
-        NULL_ON_ERROR(errorCode);
-        // If the formatter factory was null, there must have been
-        // an earlier error/warning
-        if (formatterFactory == nullptr) {
-            U_ASSERT(context.hasUnknownFunctionError() || context.hasFormattingWarning());
-            return nullptr;
-        }
-        NULL_ON_ERROR(errorCode);
-
-        // Create a specific instance of the formatter
-        Formatter* formatter = formatterFactory->createFormatter(locale, errorCode);
-        NULL_ON_ERROR(errorCode);
-        if (formatter == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        cachedFormatters->setFormatter(f, formatter, errorCode);
-        return formatter;
-    } else {
-        return result;
-    }
-}
-
 static const Formattable& evalLiteral(const Literal& lit) {
     return lit.getContents();
 }
@@ -549,7 +486,7 @@ const SelectorFactory* MessageFormatter::lookupSelectorFactory(Context& context,
     // isn't built-in, or the function doesn't exist in either the built-in
     // or custom registry.
     // Unknown function error
-    context.setUnknownFunctionWarning(functionName, status);
+    context.setUnknownFunctionError(functionName, status);
     return nullptr;
 }
 
@@ -686,7 +623,7 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
         } else if (!(context.hasError())) {
             // Set formatting warning if formatting function had no output
             // but didn't set an error or warning
-            context.setFormattingWarning(functionName.name(), status);
+            context.setFormattingError(functionName.name(), status);
         }
 
         // If we reached this point, the formatter is null --
@@ -1053,7 +990,7 @@ void MessageFormatter::check(Context& context, const Environment& localEnv, cons
     if (context.hasVar(var)) {
         return;
     }
-    context.setUnresolvedVariableWarning(var, status);
+    context.setUnresolvedVariableError(var, status);
 }
 
 void MessageFormatter::check(Context& context, const Environment& localEnv, const Expression& expr, UErrorCode &status) const {

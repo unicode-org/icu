@@ -124,19 +124,19 @@ void TestMessageFormat2::testDateTime(IcuTestErrorCode& errorCode) {
                                               {Testing date formatting: {$num :datetime}}")
                                 .clearArguments(errorCode)
                                 .setExpected("Testing date formatting: {|42|}")
-                                .setExpectedWarning(U_FORMATTING_WARNING)
+                                .setExpectedError(U_FORMATTING_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
     // Literal string as argument
     test.adoptInstead(testBuilder->setPattern("{Testing date formatting: {|horse| :datetime}}")
                                 .setExpected("Testing date formatting: |horse|")
-                                .setExpectedWarning(U_FORMATTING_WARNING)
+                                .setExpectedError(U_FORMATTING_ERROR)
                                 .build(errorCode));
     // Formatted string as argument
     test.adoptInstead(testBuilder->setPattern("let $dateStr = {$date :datetime}\n\
                                                {Testing date formatting: {$dateStr :datetime}}")
                                 .setExpected("Testing date formatting: {$date}")
-                                .setExpectedWarning(U_FORMATTING_WARNING)
+                                .setExpectedError(U_FORMATTING_ERROR)
                                 .setDateArgument(date, TEST_DATE, errorCode)
                                 .build(errorCode));
 

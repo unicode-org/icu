@@ -53,7 +53,7 @@ Errors::Errors(UErrorCode& errorCode) {
     syntaxAndDataModelErrors->setDeleter(uprv_deleteUObject);
     resolutionAndFormattingErrors->setDeleter(uprv_deleteUObject);
     dataModelError = false;
-    formattingWarning = false;
+    formattingError = false;
     missingSelectorAnnotationError = false;
     selectorError = false;
     syntaxError = false;
@@ -661,6 +661,69 @@ Selector* ExpressionContext::getSelector(UErrorCode& status) const {
     return result.orphan();
 }
 
+FormatterFactory* ExpressionContext::lookupFormatterFactory(const FunctionName& functionName, UErrorCode& status) const {
+    NULL_ON_ERROR(status);
+
+    if (isBuiltInFormatter(functionName)) {
+        return parent.standardFunctionRegistry->getFormatter(functionName);
+    }
+    if (isBuiltInSelector(functionName)) {
+        context.setFormattingError(functionName, status);
+        return nullptr;
+    }
+    if (parent.hasCustomFunctionRegistry()) {
+        const FunctionRegistry& customFunctionRegistry = parent.getCustomFunctionRegistry();
+        FormatterFactory* customFormatter = customFunctionRegistry.getFormatter(functionName);
+        if (customFormatter != nullptr) {
+            return customFormatter;
+        }
+        if (customFunctionRegistry.getSelector(functionName) != nullptr) {
+            context.setFormattingError(functionName, status);
+            return nullptr;
+        }
+    }
+    // Either there is no custom function registry and the function
+    // isn't built-in, or the function doesn't exist in either the built-in
+    // or custom registry.
+    // Unknown function error
+    context.setUnknownFunctionError(functionName, status);
+    return nullptr;
+}
+
+
+const Formatter* ExpressionContext::maybeCachedFormatter(const FunctionName& f, UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    U_ASSERT(parent.cachedFormatters.isValid());
+
+    const Formatter* result = parent.cachedFormatters->getFormatter(f);
+    if (result == nullptr) {
+        // Create the formatter
+
+        // First, look up the formatter factory for this function
+        FormatterFactory* formatterFactory = lookupFormatterFactory(f, errorCode);
+        NULL_ON_ERROR(errorCode);
+        // If the formatter factory was null, there must have been
+        // an earlier error/warning
+        if (formatterFactory == nullptr) {
+            U_ASSERT(context.hasUnknownFunctionError() || context.hasFormattingError());
+            return nullptr;
+        }
+        NULL_ON_ERROR(errorCode);
+
+        // Create a specific instance of the formatter
+        Formatter* formatter = formatterFactory->createFormatter(parent.locale, errorCode);
+        NULL_ON_ERROR(errorCode);
+        if (formatter == nullptr) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        parent.cachedFormatters->setFormatter(f, formatter, errorCode);
+        return formatter;
+    } else {
+        return result;
+    }
+}
+
 // Precondition: pending function name is set and formatter is defined
 // Postcondition: formatter != nullptr
 const Formatter* ExpressionContext::getFormatter(UErrorCode& status) {
@@ -668,7 +731,7 @@ const Formatter* ExpressionContext::getFormatter(UErrorCode& status) {
 
     U_ASSERT(pendingFunctionName.isValid());
     U_ASSERT(hasFormatter());
-    return parent.maybeCachedFormatter(context, *pendingFunctionName, status);
+    return maybeCachedFormatter(*pendingFunctionName, status);
 }
 
 bool ExpressionContext::hasFormatter() const {
@@ -727,16 +790,13 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
             if (U_FAILURE(status)) {
                 setFallback();
                 status = U_ZERO_ERROR;
-                setFormattingWarning(functionName.name(), status);
-                if (U_SUCCESS(status)) {
-                    status = U_FORMATTING_WARNING;
-                }
+                setFormattingError(functionName.name(), status);
             } else {
                 // Ignore warnings
                 status = savedStatus;
             }
         }
-        if (hasFormattingWarning()) {
+        if (hasFormattingError()) {
             clearOutput();
         }
         returnFromFunction();
@@ -747,7 +807,7 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
     }
     // No formatter with this name -- set error
     if (isSelector(functionName)) {
-        setFormattingWarning(functionName.name(), status);
+        setFormattingError(functionName.name(), status);
     } else {
         setUnknownFunction(functionName, status);
     }
@@ -778,8 +838,8 @@ bool ExpressionContext::hasMissingSelectorAnnotationError() const {
     return context.hasMissingSelectorAnnotationError();
 }
 
-bool ExpressionContext::hasFormattingWarning() const {
-    return context.hasFormattingWarning();
+bool ExpressionContext::hasFormattingError() const {
+    return context.hasFormattingError();
 }
 
 bool ExpressionContext::hasError() const {
@@ -808,10 +868,10 @@ void ExpressionContext::setMissingSelectorAnnotation(UErrorCode& status) {
     context.addError(err, status);
 }
 
-void ExpressionContext::setFormattingWarning(const UnicodeString& formatterName, UErrorCode& status) {
+void ExpressionContext::setFormattingError(const UnicodeString& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    context.setFormattingWarning(formatterName, status);
+    context.setFormattingError(formatterName, status);
 }
 
 void ExpressionContext::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {

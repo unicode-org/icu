@@ -300,7 +300,7 @@ Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operan
     }
     // If the option name is already in the map, emit a data model error
     if (options->has(key)) {
-        errorCode = U_DUPLICATE_OPTION_NAME_WARNING;
+        errorCode = U_DUPLICATE_OPTION_NAME_ERROR;
     } else {
         options->add(key, value, errorCode);
     }

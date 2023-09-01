@@ -99,14 +99,14 @@ class Error : public UMemory {
     enum Type {
         DuplicateOptionName,
         UnresolvedVariable,
-        FormattingWarning,
+        FormattingError,
         MissingSelectorAnnotation,
         NonexhaustivePattern,
         ReservedError,
         SelectorError,
         SyntaxError,
         UnknownFunction,
-        VariantKeyMismatchWarning
+        VariantKeyMismatchError
     };
     Error(Type ty) : type(ty) {}
     Error(Type ty, const Text& t) : type(ty), contents(t.toString()) {} 
@@ -124,7 +124,7 @@ class Errors : public UMemory {
     LocalPointer<UVector> syntaxAndDataModelErrors;
     LocalPointer<UVector> resolutionAndFormattingErrors;
     bool dataModelError;
-    bool formattingWarning;
+    bool formattingError;
     bool missingSelectorAnnotationError;
     bool selectorError;
     bool syntaxError;
@@ -140,13 +140,13 @@ class Errors : public UMemory {
     void addSelectorError();
     void addMissingSelectorAnnotation();
     void addUnresolvedVariable(const VariableName&);
-    void addVariantKeyMismatchWarning();
+    void addVariantKeyMismatchError();
     void addSyntaxError(UErrorCode&);
     void addUnknownFunction(const FunctionName&);
     void addVariantKeyMismatch();
     void addFormattingError();
     bool hasDataModelError() const { return dataModelError; }
-    bool hasFormattingWarning() const { return formattingWarning; }
+    bool hasFormattingError() const { return formattingError; }
     bool hasSelectorError() const { return selectorError; }
     bool hasSyntaxError() const { return syntaxError; }
     bool hasUnknownFunctionError() const { return unknownFunctionError; }
@@ -310,6 +310,7 @@ class U_I18N_API MessageArguments : public UMemory {
 class CachedFormatters : public UMemory {
 private:
     friend class Context;
+    friend class ExpressionContext;
     friend class MessageFormatter;
     
     LocalPointer<Hashtable> cache;
@@ -329,10 +330,10 @@ public:
     
     static Context* create(const MessageFormatter& mf, const MessageArguments& args, Errors& errors, UErrorCode& errorCode);
 
-    void setFormattingWarning(const FunctionName&, UErrorCode&);
+    void setFormattingError(const FunctionName&, UErrorCode&);
     void setSelectorError(const FunctionName&, UErrorCode&);
-    void setUnresolvedVariableWarning(const VariableName&, UErrorCode&);
-    void setUnknownFunctionWarning(const FunctionName&, UErrorCode&);
+    void setUnresolvedVariableError(const VariableName&, UErrorCode&);
+    void setUnknownFunctionError(const FunctionName&, UErrorCode&);
     // If any errors were set, update `status` accordingly
     void checkErrors(UErrorCode& status) const;
     Errors& getErrors() { return errors; }
@@ -340,7 +341,7 @@ public:
     bool hasDataModelError() const;
     bool hasMissingSelectorAnnotationError() const;
     bool hasUnknownFunctionError() const;
-    bool hasFormattingWarning() const;
+    bool hasFormattingError() const;
     bool hasSelectorError() const;
     bool hasError() const;
     void addError(Error, UErrorCode&);

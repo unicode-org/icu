@@ -20,7 +20,6 @@ class TestCase : public UMemory {
 
     private:
     const UErrorCode expectedError;
-    const UErrorCode expectedWarning;
     const bool expectedNoSyntaxError;
     const bool hasExpectedOutput;
     const UnicodeString& expected;
@@ -38,19 +37,12 @@ class TestCase : public UMemory {
     bool expectFailure() const {
         return (!ignoreError && U_FAILURE(expectedError));
     }
-    bool expectWarning() const {
-        return (!ignoreError && (expectedWarning != U_ZERO_ERROR));
-    }
     bool expectNoSyntaxError() const {
         return expectedNoSyntaxError;
     }
     UErrorCode expectedErrorCode() const {
         U_ASSERT(!expectSuccess());
         return expectedError;
-    }
-    UErrorCode expectedWarningCode() const {
-        U_ASSERT(expectWarning());
-        return expectedWarning;
     }
     bool lineNumberAndOffsetMatch(uint32_t actualLine, uint32_t actualOffset) const {
         return (!hasLineNumberAndOffset ||
@@ -147,17 +139,12 @@ class TestCase : public UMemory {
             expectedError = U_SUCCESS(errorCode) ? U_ZERO_ERROR : errorCode;
             return *this;
         }
-        Builder& setExpectedWarning(UErrorCode errorCode) {
-            expectedWarning = errorCode;
-            return *this;
-        }
         Builder& setNoSyntaxError() {
             expectNoSyntaxError = true;
             return *this;
         }
         Builder& setExpectSuccess() {
-            return setExpectedWarning(U_ZERO_ERROR)
-                  .setExpectedError(U_ZERO_ERROR);
+            return setExpectedError(U_ZERO_ERROR);
         }
         Builder& clearLocale() {
             if (locale.isValid()) {
@@ -210,7 +197,6 @@ class TestCase : public UMemory {
         bool hasExpectedOutput;
         UnicodeString expected;
         UErrorCode expectedError;
-        UErrorCode expectedWarning;
         bool expectNoSyntaxError;
         bool hasLineNumberAndOffset;
         uint32_t lineNumber;
@@ -218,7 +204,7 @@ class TestCase : public UMemory {
         bool ignoreError;
         LocalPointer<FunctionRegistry> functionRegistry;
 
-        Builder(UErrorCode& errorCode) : pattern(""), arguments(MessageArguments::builder(errorCode)), hasExpectedOutput(false), expected(""), expectedError(U_ZERO_ERROR), expectedWarning(U_ZERO_ERROR), expectNoSyntaxError(false), hasLineNumberAndOffset(false), ignoreError(false) {}
+        Builder(UErrorCode& errorCode) : pattern(""), arguments(MessageArguments::builder(errorCode)), hasExpectedOutput(false), expected(""), expectedError(U_ZERO_ERROR), expectNoSyntaxError(false), hasLineNumberAndOffset(false), ignoreError(false) {}
     };
 
     private:
@@ -228,7 +214,6 @@ class TestCase : public UMemory {
         locale(!builder.locale.isValid() ? Locale::getDefault() : *builder.locale),
         arguments(builder.arguments->build(errorCode)),
         expectedError(builder.expectedError),
-        expectedWarning(builder.expectedWarning),
         expectedNoSyntaxError(builder.expectNoSyntaxError),
         hasExpectedOutput(builder.hasExpectedOutput),
         expected(builder.expected),
@@ -240,7 +225,7 @@ class TestCase : public UMemory {
         U_ASSERT(builder.arguments.isValid());
         // If an error is not expected, then the expected
         // output should be present
-        U_ASSERT(expectFailure() || expectWarning() || expectNoSyntaxError() || hasExpectedOutput);
+        U_ASSERT(expectFailure() || expectNoSyntaxError() || hasExpectedOutput);
     }
     public:
     static TestCase::Builder* builder(UErrorCode& errorCode) {
@@ -275,18 +260,14 @@ class TestUtils {
         }
 
         if (testCase.expectNoSyntaxError()) {
-            if (errorCode == U_SYNTAX_WARNING) {
+            if (errorCode == U_SYNTAX_ERROR) {
                 failSyntaxError(tmsg, testCase);
             }
             errorCode.reset();
             return;
         }
-        if ((testCase.expectSuccess() || testCase.expectWarning()) && U_FAILURE(errorCode)) {
+        if (testCase.expectSuccess() && U_FAILURE(errorCode)) {
             failExpectedSuccess(tmsg, testCase, errorCode);
-            return;
-        }
-        if (testCase.expectWarning() && errorCode != testCase.expectedWarningCode()) {
-            failExpectedWarning(tmsg, testCase, errorCode);
             return;
         }
         if (testCase.expectFailure() && errorCode != testCase.expectedErrorCode()) {
@@ -318,12 +299,6 @@ class TestUtils {
         tmsg.logln(testCase.testName + " failed test with wrong error code; pattern: " + testCase.pattern + " and error code " + ((int32_t) errorCode) + "(expected error code: " + ((int32_t) testCase.expectedErrorCode()) + " )");
         errorCode.reset();
     }
-    static void failExpectedWarning(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
-        tmsg.dataerrln(testCase.testName);
-        tmsg.logln(testCase.testName + " was expected to pass with a warning; failed test with wrong error code; pattern: " + testCase.pattern + " and error code " + ((int32_t) errorCode) + "(expected warning code: " + ((int32_t) testCase.expectedWarningCode()) + " )");
-        errorCode.reset();
-    }
-
     static void failWrongOutput(IntlTest& tmsg, const TestCase& testCase, const UnicodeString& result) {
         tmsg.dataerrln(testCase.testName);
         tmsg.logln(testCase.testName + " failed test with wrong output; pattern: " + testCase.pattern + " and expected output = " + testCase.expectedOutput() + " and actual output = " + result);

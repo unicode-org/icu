@@ -76,14 +76,14 @@ bool Context::hasError() const {
     return errors.count() > 0;
 }
 
-bool Context::hasFormattingWarning() const {
-    return errors.hasFormattingWarning();
+bool Context::hasFormattingError() const {
+    return errors.hasFormattingError();
 }
 
-void Context::setFormattingWarning(const FunctionName& formatterName, UErrorCode& status) {
+void Context::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    Error err(Error::Type::FormattingWarning, formatterName);
+    Error err(Error::Type::FormattingError, formatterName);
     errors.addError(err, status);
  }
 
@@ -94,14 +94,14 @@ void Context::setSelectorError(const FunctionName& selectorName, UErrorCode& sta
     errors.addError(err, status);
  }
 
-void Context::setUnknownFunctionWarning(const FunctionName& formatterName, UErrorCode& status) {
+void Context::setUnknownFunctionError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::UnknownFunction, formatterName);
     errors.addError(err, status);
  }
 
-void Context::setUnresolvedVariableWarning(const VariableName& v, UErrorCode& status) {
+void Context::setUnresolvedVariableError(const VariableName& v, UErrorCode& status) {
     CHECK_ERROR(status);
 
     Error err(Error::Type::UnresolvedVariable, v);
@@ -136,7 +136,7 @@ int32_t Errors::count() const {
 void Errors::clearResolutionAndFormattingErrors() {
     U_ASSERT(resolutionAndFormattingErrors.isValid());
     resolutionAndFormattingErrors->removeAllElements();
-    formattingWarning = false;
+    formattingError = false;
     selectorError = false;    
 }
 
@@ -159,31 +159,31 @@ void Errors::checkErrors(UErrorCode& status) {
     }
     switch (err->type) {
         case Error::Type::DuplicateOptionName: {
-            status = U_DUPLICATE_OPTION_NAME_WARNING;
+            status = U_DUPLICATE_OPTION_NAME_ERROR;
             break;
         }
-        case Error::Type::VariantKeyMismatchWarning: {
-            status = U_VARIANT_KEY_MISMATCH_WARNING;
+        case Error::Type::VariantKeyMismatchError: {
+            status = U_VARIANT_KEY_MISMATCH_ERROR;
             break;
         }
         case Error::Type::NonexhaustivePattern: {
-            status = U_NONEXHAUSTIVE_PATTERN_WARNING;
+            status = U_NONEXHAUSTIVE_PATTERN_ERROR;
             break;
         }
         case Error::Type::UnknownFunction: {
-            status = U_UNKNOWN_FUNCTION_WARNING;
+            status = U_UNKNOWN_FUNCTION_ERROR;
             break;
         }
         case Error::Type::UnresolvedVariable: {
-            status = U_UNRESOLVED_VARIABLE_WARNING;
+            status = U_UNRESOLVED_VARIABLE_ERROR;
             break;
         }
-        case Error::Type::FormattingWarning: {
-            status = U_FORMATTING_WARNING;
+        case Error::Type::FormattingError: {
+            status = U_FORMATTING_ERROR;
             break;
         }
         case Error::Type::MissingSelectorAnnotation: {
-            status = U_MISSING_SELECTOR_ANNOTATION_WARNING;
+            status = U_MISSING_SELECTOR_ANNOTATION_ERROR;
             break;
         }
 
@@ -192,11 +192,11 @@ void Errors::checkErrors(UErrorCode& status) {
             break;
         }
         case Error::Type::SyntaxError: {
-            status = U_SYNTAX_WARNING;
+            status = U_SYNTAX_ERROR;
             break;
         }
         case Error::Type::SelectorError: {
-            status = U_SELECTOR_WARNING;
+            status = U_SELECTOR_ERROR;
             break;
         }
     }
@@ -226,7 +226,7 @@ void Errors::addError(Error e, UErrorCode& status) {
             syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
-        case Error::Type::VariantKeyMismatchWarning: {
+        case Error::Type::VariantKeyMismatchError: {
             dataModelError = true;
             syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
@@ -240,8 +240,8 @@ void Errors::addError(Error e, UErrorCode& status) {
             syntaxAndDataModelErrors->adoptElement(eP, status);
             break;
         }
-        case Error::Type::FormattingWarning: {
-            formattingWarning = true;
+        case Error::Type::FormattingError: {
+            formattingError = true;
             resolutionAndFormattingErrors->adoptElement(eP, status);
             break;
         }

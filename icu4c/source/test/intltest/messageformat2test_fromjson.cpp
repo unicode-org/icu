@@ -68,7 +68,7 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
     test.adoptInstead(testBuilder->setPattern("{hello {$place}}")
                                 .setExpected("hello {$place}")
                                 .clearArguments(errorCode)
-                                .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -237,7 +237,7 @@ void TestMessageFormat2::jsonTests(IcuTestErrorCode& errorCode) {
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when 1 {one} when * {other}")
                                 .setExpected("other")
                                 .setArgument("foo", "", errorCode)
-                                .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 */
@@ -316,7 +316,7 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     test.adoptInstead(testBuilder->setPattern("let $bar = {$none} match {$foo :plural} when one {one} when * {{$bar}}")
                                 .setExpected("{$none}")
                                 .setArgument("foo", (int64_t) 2, errorCode)
-                                .setExpectedWarning(U_UNRESOLVED_VARIABLE_WARNING)
+                                .setExpectedError(U_UNRESOLVED_VARIABLE_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -324,21 +324,21 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     test.adoptInstead(testBuilder->setPattern("let bar = {|foo|} {{$bar}}")
                                 .setExpected("{$bar}")
                                 .clearArguments(errorCode)
-                                .setExpectedWarning(U_SYNTAX_WARNING)
+                                .setExpectedError(U_SYNTAX_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     // Missing '=' after `bar`
     test.adoptInstead(testBuilder->setPattern("let $bar {|foo|} {{$bar}}")
                                 .setExpected("foo")
-                                .setExpectedWarning(U_SYNTAX_WARNING)
+                                .setExpectedError(U_SYNTAX_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     // Missing '{'/'}' around `foo`
     test.adoptInstead(testBuilder->setPattern("let bar = |foo| {{$bar}}")
                                 .setExpected("{$bar}")
-                                .setExpectedWarning(U_SYNTAX_WARNING)
+                                .setExpectedError(U_SYNTAX_ERROR)
                                 .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -394,44 +394,44 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
     test.adoptInstead(testBuilder->setPattern("no braces")
                       .clearIgnoreError()
                       .setExpected("{no braces}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("no braces {$foo}")
                       .setExpected("{no braces {$foo}}")
                       .setArgument("foo", (int64_t) 2, errorCode)
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{missing end brace")
                       .setExpected("missing end brace")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{missing end {$brace")
                       .setExpected("missing end {$brace}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{extra} content")
                       .setExpected("extra")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{empty { }}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .setExpected("empty \uFFFD")
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {:}}")
                       .setExpected("bad {:}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -443,97 +443,97 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
 
     test.adoptInstead(testBuilder->setPattern("{bad {\\u0000placeholder}}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{no-equal {|42| :number minimumFractionDigits 2}}")
                       .setExpected("no-equal 42.00")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {:placeholder option=}}")
                       .setExpected("bad {:placeholder}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {:placeholder option value}}")
                       .setExpected("bad {:placeholder}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {:placeholder option}}")
                       .setExpected("bad {:placeholder}")
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{bad {$placeholder option}}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("{no {$placeholder end}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {} when * {foo}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {+foo} when * {foo}")
                       .setExpected("foo")
-                      .setExpectedWarning(U_UNKNOWN_FUNCTION_WARNING)
+                      .setExpectedError(U_UNKNOWN_FUNCTION_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {|foo|} when*{foo}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match when * {foo}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {|x|} when * foo")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {|x|} when * {foo} extra")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match |x| when * {foo}")
                       .clearExpected()
-                      .setExpectedWarning(U_SYNTAX_WARNING)
+                      .setExpectedError(U_SYNTAX_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when * * {foo}")
                       .clearExpected()
-                      .setExpectedWarning(U_VARIANT_KEY_MISMATCH_WARNING)
+                      .setExpectedError(U_VARIANT_KEY_MISMATCH_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} {$bar :plural} when * {foo}")
                       .clearExpected()
-                      .setExpectedWarning(U_VARIANT_KEY_MISMATCH_WARNING)
+                      .setExpectedError(U_VARIANT_KEY_MISMATCH_ERROR)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);   
 }

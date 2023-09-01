@@ -451,7 +451,7 @@ void StandardFunctions::DateTime::format(FormattingContext& context, UErrorCode&
     // also, if there is existing string output, that's
     // like passing in a string, so we return
     if (!context.hasFormattableInput() || context.hasStringOutput()) {
-        context.setFormattingWarning(UnicodeString("datetime"), errorCode);
+        context.setFormattingError(UnicodeString("datetime"), errorCode);
         return;
     }
 
@@ -558,7 +558,7 @@ void StandardFunctions::Identity::format(FormattingContext& context, UErrorCode&
 
     // Argument must be present
     if (!context.hasFormattableInput()) {
-        context.setFormattingWarning(UnicodeString("text"), errorCode);
+        context.setFormattingError(UnicodeString("text"), errorCode);
         return;
     }
 
