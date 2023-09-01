@@ -339,6 +339,12 @@ public:
     bool isSelector(const FunctionName& fn) const { return isBuiltInSelector(fn) || isCustomSelector(fn); }
     bool isFormatter(const FunctionName& fn) const { return isBuiltInFormatter(fn) || isCustomFormatter(fn); }
 
+    bool hasGlobal(const VariableName& v) const { return hasGlobalAsFormattable(v) || hasGlobalAsObject(v); }
+    bool hasGlobalAsFormattable(const VariableName&) const;
+    bool hasGlobalAsObject(const VariableName&) const;
+    const Formattable& getGlobalAsFormattable(const VariableName&) const;
+    const UObject* getGlobalAsObject(const VariableName&) const;
+
     // If any errors were set, update `status` accordingly
     void checkErrors(UErrorCode& status) const;
     Errors& getErrors() const { return errors; }

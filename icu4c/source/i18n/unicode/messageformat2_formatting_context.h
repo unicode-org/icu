@@ -384,11 +384,6 @@ class ExpressionContext : public FormattingContext {
     public:
     void formatWithDefaults(UErrorCode& errorCode);
     
-    bool hasGlobal(const VariableName& v) const { return hasGlobalAsFormattable(v) || hasGlobalAsObject(v); }
-    bool hasGlobalAsFormattable(const VariableName&) const;
-    bool hasGlobalAsObject(const VariableName&) const;
-    const Formattable& getGlobalAsFormattable(const VariableName&) const;
-    const UObject* getGlobalAsObject(const VariableName&) const;
     bool hasOperand() const;
     bool hasSelector() const;
     // Precondition: pending function name is set

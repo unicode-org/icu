@@ -292,56 +292,6 @@ const FunctionName& ExpressionContext::getFunctionName() {
     return *pendingFunctionName;
 }            
 
-// Message arguments
-// -----------------
-
-bool ExpressionContext::hasGlobalAsObject(const VariableName& v) const {
-    if (!context.hasVar(v)) {
-        return false;
-    }
-    switch (context.getVar(v).getType()) {
-        case Formattable::Type::kObject: {
-            return true;
-        }
-        default: {
-            return false;
-        }
-    }
-}
-
-bool ExpressionContext::hasGlobalAsFormattable(const VariableName& v) const {
-    if (!context.hasVar(v)) {
-        return false;
-    }
-    switch (context.getVar(v).getType()) {
-        case Formattable::Type::kObject: {
-            return false;
-        }
-        default: {
-            return true;
-        }
-    }
-}
-
-const UObject* ExpressionContext::getGlobalAsObject(const VariableName& v) const {
-    U_ASSERT(hasGlobalAsObject(v));
-    const Formattable& argValue = context.getVar(v);
-    U_ASSERT(argValue.getType() == Formattable::Type::kObject);
-    return argValue.getObject();
-}
-
-const Formattable& ExpressionContext::getGlobalAsFormattable(const VariableName& v) const {
-    U_ASSERT(hasGlobalAsFormattable(v));
-    const Formattable& argValue = context.getVar(v);
-    U_ASSERT(argValue.getType() != Formattable::Type::kObject);
-    return argValue;
-}
-
-
-// Function options
-// ----------------
-
-
 // Helper functions for function options
 // -------------------------------------
 
@@ -439,7 +389,7 @@ const Formattable& ExpressionContext::getGlobalAsFormattable(const VariableName&
     return result;
 }
 
-// Iterator
+// Function options iterator
 int32_t ExpressionContext::firstOption() const { return UHASH_FIRST; }
 
 const Formattable* ExpressionContext::nextOption(int32_t& pos, UnicodeString& key) const {
@@ -456,6 +406,11 @@ int32_t ExpressionContext::optionsCount() const {
     U_ASSERT(functionOptions.isValid());
     return functionOptions->count();
 }
+
+
+// Function options
+// ----------------
+
 
 // Adopts `val`
 void ExpressionContext::addFunctionOption(const UnicodeString& k, Formattable* val, UErrorCode& errorCode) {

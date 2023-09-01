@@ -41,13 +41,15 @@ static const Formattable& evalLiteral(const Literal& lit) {
 // Assumes that `var` is a message argument; sets the input in the context
 // to the argument's value.
 void MessageFormatter::evalArgument(const VariableName& var, ExpressionContext& context) const {
-    U_ASSERT(context.hasGlobal(var));
+    const MessageContext& c = context.messageContext();
+
+    U_ASSERT(c.hasGlobal(var));
     // The fallback for a variable name is itself.
     context.setFallback(var);
-    if (context.hasGlobalAsFormattable(var)) {
-        context.setInput(context.getGlobalAsFormattable(var));
+    if (c.hasGlobalAsFormattable(var)) {
+        context.setInput(c.getGlobalAsFormattable(var));
     } else {
-        context.setInput(context.getGlobalAsObject(var));
+        context.setInput(c.getGlobalAsObject(var));
     }
 }
 
@@ -88,7 +90,7 @@ void MessageFormatter::formatOperand(const Environment& env, const Operand& rand
         // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
         context.setFallback(var);
         // Variable wasn't found in locals -- check if it's global
-        if (context.hasGlobal(var)) {
+        if (context.messageContext().hasGlobal(var)) {
             evalArgument(var, context);
             return;
         } else {
@@ -516,7 +518,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Operand& r
         // either way, it can't be bound to a function call.
         context.setFallback(var);
         // Check globals
-        if (context.hasGlobal(var)) {
+        if (context.messageContext().hasGlobal(var)) {
             evalArgument(var, context);
         } else {
             // Unresolved variable -- could be a previous warning. Nothing to resolve

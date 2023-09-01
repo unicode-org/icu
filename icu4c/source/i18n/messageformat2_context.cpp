@@ -171,6 +171,52 @@ MessageArguments* MessageArguments::Builder::build(UErrorCode& errorCode) const 
     return result;
 }
 
+
+// Message arguments
+// -----------------
+
+bool MessageContext::hasGlobalAsObject(const VariableName& v) const {
+    if (!hasVar(v)) {
+        return false;
+    }
+    switch (getVar(v).getType()) {
+        case Formattable::Type::kObject: {
+            return true;
+        }
+        default: {
+            return false;
+        }
+    }
+}
+
+bool MessageContext::hasGlobalAsFormattable(const VariableName& v) const {
+    if (!hasVar(v)) {
+        return false;
+    }
+    switch (getVar(v).getType()) {
+        case Formattable::Type::kObject: {
+            return false;
+        }
+        default: {
+            return true;
+        }
+    }
+}
+
+const UObject* MessageContext::getGlobalAsObject(const VariableName& v) const {
+    U_ASSERT(hasGlobalAsObject(v));
+    const Formattable& argValue = getVar(v);
+    U_ASSERT(argValue.getType() == Formattable::Type::kObject);
+    return argValue.getObject();
+}
+
+const Formattable& MessageContext::getGlobalAsFormattable(const VariableName& v) const {
+    U_ASSERT(hasGlobalAsFormattable(v));
+    const Formattable& argValue = getVar(v);
+    U_ASSERT(argValue.getType() != Formattable::Type::kObject);
+    return argValue;
+}
+
 // ------------------------------------------------------
 // Formatter cache
 
