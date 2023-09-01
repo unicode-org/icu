@@ -314,7 +314,7 @@ void TestMessageFormat2::testDateFormat(TestCase::Builder& testBuilder, IcuTestE
     LocalPointer<Calendar> cal(Calendar::createInstance(errorCode));
     CHECK_ERROR(errorCode);
 
-    cal->set(2022, Calendar::OCTOBER, 27);
+    cal->set(2022, Calendar::OCTOBER, 27, 0, 0, 0);
     UDate expiration = cal->getTime(errorCode);
     CHECK_ERROR(errorCode);
 
@@ -350,23 +350,26 @@ void TestMessageFormat2::testDateFormat(TestCase::Builder& testBuilder, IcuTestE
     TestUtils::runTestCase(*this, *test, errorCode);
 
 /*
-  TODO: for now, this doesn't work, because Formattable includes a date tag but not calendar
-
-  and I'm not sure how to use RTTI to pass it as an object and then chek the tag in DateTime::format...
-  if that's even allowed
+  This test would require the calendar to be passed as a UObject* with the datetime formatter
+  doing an RTTI check -- however, that would be awkward, since it would have to check the tag for each
+  possible subclass of `Calendar`. datetime currently has no support for formatting any object argument
 
     cal.adoptInstead(new GregorianCalendar(2022, Calendar::OCTOBER, 27, errorCode));
     if (cal.isValid()) {
-        Formattable calArg(cal.orphan());
         test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
                           .setExpected("Your card expires on Thu, Oct 27, 2022!")
-                          .setArgument("exp", calArg, errorCode)
+                          .setArgument("exp", cal.orphan(), errorCode)
                           .build(errorCode));
         TestUtils::runTestCase(*this, *test, errorCode);
     }
 */
-    // TODO: Last few test cases involve implicit formatters based on type of object --
-    // we haven't implemented that
+
+    // Implied function based on type of the object to format
+    test.adoptInstead(testBuilder.setPattern("{Your card expires on {$exp}!}")
+                      .setExpected("Your card expires on 10/27/22, 12:00\u202FAM!")
+                      .setDateArgument("exp", expiration, errorCode)
+                      .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
 }
 
 void TestMessageFormat2::testPlural(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
