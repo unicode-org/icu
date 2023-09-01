@@ -497,7 +497,7 @@ bool ExpressionContext::tryStringAsNumberOption(const UnicodeString& key, double
         return false;
     }
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(context.messageFormatter().locale, localErrorCode));
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(context.messageFormatter().getLocale(), localErrorCode));
     if (U_FAILURE(localErrorCode)) {
         return false;
     }
@@ -583,7 +583,7 @@ Selector* ExpressionContext::getSelector(UErrorCode& status) const {
     const SelectorFactory* selectorFactory = context.lookupSelectorFactory(functionName, status);
     NULL_ON_ERROR(status);
     // Create a specific instance of the selector
-    LocalPointer<Selector> result(selectorFactory->createSelector(context.messageFormatter().locale, status));
+    LocalPointer<Selector> result(selectorFactory->createSelector(context.messageFormatter().getLocale(), status));
     NULL_ON_ERROR(status);
     return result.orphan();
 }

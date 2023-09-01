@@ -89,7 +89,7 @@ public:
     }
 
     // Returns true iff this contains `element`
-    bool contains(const T& element) const {
+    UBool contains(const T& element) const {
         U_ASSERT(!isBogus());
 
         int32_t index;
@@ -98,7 +98,7 @@ public:
 
     // Returns true iff this contains `element` and returns
     // its first index in `index`. Returns false otherwise
-    bool find(const T& element, int32_t& index) const {
+    UBool find(const T& element, int32_t& index) const {
         U_ASSERT(!isBogus());
 
         for (int32_t i = 0; i < length(); i++) {
@@ -236,7 +236,7 @@ public:
     // Iterates over keys in the order in which they were added.
     // Returns true iff `pos` indicates that there are elements
     // remaining
-    bool next(int32_t &pos, UnicodeString& k, const V*& v) const {
+    UBool next(int32_t &pos, UnicodeString& k, const V*& v) const {
         U_ASSERT(!isBogus());
         U_ASSERT(pos >= FIRST);
         if (pos >= size()) {
@@ -283,7 +283,7 @@ public:
         }
         // This is provided so that builders can check for duplicate keys
         // (for example, adding duplicate options is an error)
-        bool has(const UnicodeString& key) const {
+        UBool has(const UnicodeString& key) const {
             return contents->containsKey(key);
         }
         // Copying `build()` (leaves `this` valid)

@@ -51,11 +51,38 @@ public:
      */
     virtual ~MessageFormatter();
 
-    virtual void formatToString(const MessageArguments& arguments, UErrorCode &status, UnicodeString &result) const;
- 
-    // The locale this MessageFormatter was created with
-    const Locale locale;
+    /**
+     * Formats the message to a string, using the data model that was previously set or parsed,
+     * and the given `arguments` object.
+     *
+     * @param arguments Reference to message arguments
+     * @param status    Input/output error code used to indicate syntax errors, data model
+     *                  errors, resolution errors, formatting errors, selection errors, as well
+     *                  as other errors (such as memory allocation failures). Partial output
+     *                  is still provided in the presence of most error types.
+     * @param result    Mutable reference to a string that the output will be appended to.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    void formatToString(const MessageArguments& arguments, UErrorCode &status, UnicodeString &result) const;
 
+    /**
+     * Returns the locale that this `MessageFormatter` object was created with.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    const Locale& getLocale() const { return locale; }
+
+    /**
+     * Serializes the data model as a string in MessageFormat 2.0 syntax.
+     *
+     * @param result    Mutable reference to a string that the output will be appended to.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     void getPattern(UnicodeString& result) const {
         // Converts the current data model back to a string
         U_ASSERT(dataModelOK());
@@ -63,6 +90,13 @@ public:
         serializer.serialize();
     }
 
+    /**
+     * Returns a reference to the data model that was either passed into this
+     * `MessageFormatter` object, or parsed from the given pattern.
+     *     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     // Give public access to the data model
     const MessageFormatDataModel& getDataModel() const;
 
@@ -88,15 +122,50 @@ public:
        const FunctionRegistry* customFunctionRegistry;
 
     public:
+       /**
+        * Sets the locale to use for formatting.
+        *
+        * @param locale The desired locale.
+        *
+        * @internal ICU 74.0 technology preview
+        * @deprecated This API is for technology preview only.
+        */
         Builder& setLocale(const Locale& locale);
+       /**
+        * Sets the pattern to be parsed into a data model. (Parsing is
+        * delayed until `build()` is called.) If a data model was
+        * previously set, the reference to it held by this builder
+        * is removed.
+        *
+        * @param pattern A string in MessageFormat 2.0 syntax.
+        *
+        * @internal ICU 74.0 technology preview
+        * @deprecated This API is for technology preview only.
+        */
         Builder& setPattern(const UnicodeString& pattern);
-        // Does not adopt its argument.
-        // The caller must ensure that the function registry is
-        // valid as long as the resulting MessageFormatter is valid.
+       /**
+        * Sets a custom function registry.
+        *
+        * @param functionRegistry Function registry to use; this argument is
+        *        not adopted, and the caller must ensure its lifetime contains
+        *        the lifetime of the `MessageFormatter` object built by this
+        *        builder.
+        *
+        * @internal ICU 74.0 technology preview
+        * @deprecated This API is for technology preview only.
+        */
         Builder& setFunctionRegistry(const FunctionRegistry* functionRegistry);
-        // Does not adopt its argument; if this method is called,
-        // the caller must ensure that the data model is valid as long
-        // as the resulting MessageFormatter is valid
+       /**
+        * Sets a data model. If a pattern was previously set, it is removed.
+        *
+        * @param dataModel Data model to format; this argument is
+        *        not adopted, and the caller must ensure its lifetime contains
+        *        the lifetime of the `MessageFormatter` object built by this
+        *        builder.
+        *
+        * @internal ICU 74.0 technology preview
+        * @deprecated This API is for technology preview only.
+        */
         Builder& setDataModel(const MessageFormatDataModel* dataModel);
 
         /**
@@ -119,6 +188,14 @@ public:
         MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode) const;
     }; // class MessageFormatter::Builder
 
+   /**
+     * Returns a new `MessageFormatter::Builder` object.
+     *
+     * @param status  Input/output error code.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     static Builder* builder(UErrorCode& errorCode);
 
     // TODO: Shouldn't be public; only used for testing
@@ -333,6 +410,9 @@ public:
 
      void initErrors(UErrorCode&);
      void clearErrors() const;
+
+     // The locale this MessageFormatter was created with
+     const Locale locale;
 
      // Registry for built-in functions
      LocalPointer<FunctionRegistry> standardFunctionRegistry;
