@@ -799,7 +799,8 @@ MessageFormatDataModel* MessageFormatDataModel::Builder::build(UErrorCode &error
     NULL_ON_ERROR(errorCode);
     return dataModel.orphan();
 }
- 
+
+MessageFormatDataModel::~MessageFormatDataModel() {}
 } // namespace message2
 U_NAMESPACE_END
 

@@ -245,8 +245,7 @@ class TestUtils {
 
         LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
         CHECK_ERROR(errorCode);
-        mfBuilder->setPattern(testCase.pattern, errorCode)
-            .setLocale(testCase.locale);
+        mfBuilder->setPattern(testCase.pattern).setLocale(testCase.locale);
 
         if (testCase.hasCustomRegistry()) {
             mfBuilder->setFunctionRegistry(testCase.getCustomRegistry());

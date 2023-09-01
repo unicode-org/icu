@@ -669,8 +669,7 @@ void ResourceManager::format(FormattingContext& context, UErrorCode& errorCode) 
         CHECK_ERROR(errorCode);
         UParseError parseErr;
         // Any parse/data model errors will be propagated
-        LocalPointer<MessageFormatter> mf(mfBuilder
-                                          ->setPattern(*msg, errorCode)
+        LocalPointer<MessageFormatter> mf(mfBuilder->setPattern(*msg)
                                           .build(parseErr, errorCode));
         CHECK_ERROR(errorCode);
         UnicodeString result;

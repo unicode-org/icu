@@ -611,7 +611,7 @@ void MessageFormatter::formatSelectors(Context& context, const Environment& env,
     LocalArray<int32_t> prefsLengths(new int32_t[numSelectors]);
     CHECK_ERROR(status);
     resolvePreferences(res.getAlias(), numSelectors, variants, status, pref.getAlias(), prefsLengths.getAlias());
-   
+
     // Filter Variants
     // vars is a vector of PrioritizedVariants
     LocalArray<PrioritizedVariant*> vars(new PrioritizedVariant*[variants.size()]);
@@ -646,6 +646,8 @@ void MessageFormatter::formatToString(const MessageArguments& arguments, UErrorC
     LocalPointer<Context> context(Context::create(*this, arguments, *errors, status));
     CHECK_ERROR(status);
 
+    const MessageFormatDataModel& dataModel = getDataModel();
+
     // Note: we currently evaluate variables lazily,
     // without memoization. This call is still necessary
     // to check out-of-scope uses of local variables in
@@ -653,7 +655,7 @@ void MessageFormatter::formatToString(const MessageArguments& arguments, UErrorC
     // only be checked when arguments are known)
 
     // Check for resolution errors
-    Checker(*dataModel, context->getErrors()).check(status);
+    Checker(dataModel, context->getErrors()).check(status);
 
     // Create a new environment that will store closures for all local variables
     Environment* env = Environment::create(status);
@@ -664,15 +666,15 @@ void MessageFormatter::formatToString(const MessageArguments& arguments, UErrorC
     CHECK_ERROR(status);
     LocalPointer<Environment> globalEnv(env);
 
-    if (!dataModel->hasSelectors()) {
-        formatPattern(*context, *globalEnv, dataModel->getPattern(), status, result);
+    if (!dataModel.hasSelectors()) {
+        formatPattern(*context, *globalEnv, dataModel.getPattern(), status, result);
     } else {
         // Check for errors/warnings -- if so, then the result of pattern selection is the fallback value
         // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
         if (context->hasParseError() || context->hasDataModelError()) {
             result += REPLACEMENT;
         } else {
-            formatSelectors(*context, *globalEnv, dataModel->getSelectors(), dataModel->getVariants(), status, result);
+            formatSelectors(*context, *globalEnv, dataModel.getSelectors(), dataModel.getVariants(), status, result);
         }
     }
     // Update status according to all errors seen while formatting
@@ -743,7 +745,7 @@ void MessageFormatter::check(Context& context, const Environment& localEnv, cons
 void MessageFormatter::checkDeclarations(Context& context, Environment*& env, UErrorCode &status) const {
     CHECK_ERROR(status);
 
-    const Bindings& decls = dataModel->getLocalVariables();
+    const Bindings& decls = getDataModel().getLocalVariables();
     U_ASSERT(env != nullptr);
 
     for (int32_t i = 0; i < decls.length(); i++) {

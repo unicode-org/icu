@@ -11,27 +11,6 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-/*
-using Binding         = MessageFormatDataModel::Binding;
-using Bindings        = MessageFormatDataModel::Bindings;
-using Expression      = MessageFormatDataModel::Expression;
-using ExpressionList  = MessageFormatDataModel::ExpressionList;
-using Key             = MessageFormatDataModel::Key;
-using KeyList         = MessageFormatDataModel::KeyList;
-using Literal         = MessageFormatDataModel::Literal;
-using OptionMap       = MessageFormatDataModel::OptionMap;
-using Operand         = MessageFormatDataModel::Operand;
-using Operator        = MessageFormatDataModel::Operator;
-using Pattern         = MessageFormatDataModel::Pattern;
-using PatternPart     = MessageFormatDataModel::PatternPart;
-using SelectorKeys    = MessageFormatDataModel::SelectorKeys;
-using VariantMap      = MessageFormatDataModel::VariantMap;
-
-using PrioritizedVariantList = ImmutableVector<PrioritizedVariant>;
-
-#define TEXT_SELECTOR UnicodeString("select")
-*/
-
 // -------------------------------------
 // Creates a MessageFormat instance based on the pattern.
 
@@ -48,21 +27,16 @@ MessageFormatter::Builder* MessageFormatter::builder(UErrorCode& errorCode) {
     return tree.orphan();
 }
 
-MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeString& pat, UErrorCode& errorCode) {
-    THIS_ON_ERROR(errorCode);
+MessageFormatter::Builder& MessageFormatter::Builder::setPattern(const UnicodeString& pat) {
+    hasPattern = true;
+    pattern = pat;
+    dataModel = nullptr;
 
-    pattern.adoptInstead(new UnicodeString(pat));
-    if (!pattern.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        // Invalidate the data model
-        dataModel.adoptInstead(nullptr);
-    }
     return *this;
 }
 
 // Precondition: `reg` is non-null
-// Does *not* adopt `reg`
+// Does not adopt `reg`
 MessageFormatter::Builder& MessageFormatter::Builder::setFunctionRegistry(const FunctionRegistry* reg) {
     U_ASSERT(reg != nullptr);
     customFunctionRegistry = reg;
@@ -74,25 +48,21 @@ MessageFormatter::Builder& MessageFormatter::Builder::setLocale(const Locale& lo
     return *this;
 }
 
-// Takes ownership of `dataModel`
-MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MessageFormatDataModel* newDataModel) {
+// Does not adopt `dataModel`
+MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(const MessageFormatDataModel* newDataModel) {
   U_ASSERT(newDataModel != nullptr);
-  dataModel.adoptInstead(newDataModel);
+  hasPattern = false;
+  dataModel = newDataModel;
 
-  // Invalidate the pattern
-  pattern.adoptInstead(nullptr);
   return *this;
 }
 
 /*
-  For now, this is a destructive build(); it invalidates the builder
-
-  It's probably better for this method to either copy the builder,
-  or use a reference to (e.g.) a function registry with the assumption that it
-  has the same lifetime as the formatter.
-  See the custom functions example in messageformat2test.cpp for motivation.
+  This build() method is non-destructive, which entails the risk that
+  its borrowed FunctionRegistry and (if the setDataModel() method was called)
+  MessageFormatDataModel pointers could become invalidated.
 */
-MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) {
+MessageFormatter* MessageFormatter::Builder::build(UParseError& parseError, UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
 
     LocalPointer<MessageFormatter> mf(new MessageFormatter(*this, parseError, errorCode));
@@ -107,7 +77,7 @@ void MessageFormatter::initErrors(UErrorCode& errorCode) {
     errors.adoptInstead(Errors::create(errorCode));
 }
 
-MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError,
+MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UParseError &parseError,
                                    UErrorCode &success) : locale(builder.locale), customFunctionRegistry(builder.customFunctionRegistry) {
     CHECK_ERROR(success);
 
@@ -132,20 +102,21 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     // Validate pattern and build data model
     // First, check that exactly one of the pattern and data model are set, but not both
 
-    bool patternSet = builder.pattern.isValid();
-    bool dataModelSet = builder.dataModel.isValid();
+    bool dataModelSet = builder.dataModel != nullptr;
 
-    if ((!patternSet && !dataModelSet)
-        || (patternSet && dataModelSet)) {
+    if ((!builder.hasPattern && !dataModelSet)
+        || (builder.hasPattern && dataModelSet)) {
       success = U_INVALID_STATE_ERROR;
       return;
     }
 
     // If data model was set, just assign it
     if (dataModelSet) {
-      dataModel.adoptInstead(builder.dataModel.orphan());
-      return;
+        ownedDataModel = false;
+        borrowedDataModel = builder.dataModel;
+        return;
     }
+    borrowedDataModel = nullptr;
 
     LocalPointer<MessageFormatDataModel::Builder> tree(MessageFormatDataModel::builder(success));
     if (U_FAILURE(success)) {
@@ -156,23 +127,33 @@ MessageFormatter::MessageFormatter(MessageFormatter::Builder& builder, UParseErr
     cachedFormatters.adoptInstead(new CachedFormatters(success));
 
     // Parse the pattern
-    normalizedInput.adoptInstead(new UnicodeString(u""));
-    if (!normalizedInput.isValid()) {
-      success = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    LocalPointer<Parser> parser(Parser::create(*builder.pattern, *tree, *normalizedInput, *errors, success));
+    LocalPointer<Parser> parser(Parser::create(builder.pattern, *tree, normalizedInput, *errors, success));
     CHECK_ERROR(success);
     parser->parse(parseError, success);
 
     // Build the data model based on what was parsed
     LocalPointer<MessageFormatDataModel> dataModelPtr(tree->build(success));
     if (U_SUCCESS(success)) {
-      dataModel.adoptInstead(dataModelPtr.orphan());
+        ownedDataModel = true;
+        dataModel.adoptInstead(dataModelPtr.orphan());
     }
 }
 
-MessageFormatDataModel::~MessageFormatDataModel() {}
+const MessageFormatDataModel& MessageFormatter::getDataModel() const {
+    U_ASSERT(dataModelOK());
+    if (ownedDataModel) {
+        return *dataModel;
+    }
+    return *borrowedDataModel;
+}
+
+bool MessageFormatter::dataModelOK() const {
+    if (ownedDataModel) {
+        return dataModel.isValid() && borrowedDataModel == nullptr;
+    }
+    return !dataModel.isValid() && borrowedDataModel != nullptr;
+}
+
 MessageFormatter::~MessageFormatter() {}
 
 } // namespace message2

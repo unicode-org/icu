@@ -59,13 +59,13 @@ public:
 //    Locale getLocale() const { return locale; }
     void getPattern(UnicodeString& result) const {
         // Converts the current data model back to a string
-        U_ASSERT(dataModel.isValid());
-        Serializer serializer(*dataModel, result);
+        U_ASSERT(dataModelOK());
+        Serializer serializer(getDataModel(), result);
         serializer.serialize();
     }
 
     // Give public access to the data model
-    const MessageFormatDataModel& getDataModel() const { return *dataModel; }
+    const MessageFormatDataModel& getDataModel() const;
 
     /**
      * The mutable Builder class allows each part of the MessageFormatter to be initialized
@@ -78,10 +78,11 @@ public:
        Builder() : locale(Locale::getDefault()), customFunctionRegistry(nullptr) {}
 
        // The pattern to be parsed to generate the formatted message
-       LocalPointer<UnicodeString> pattern;
+       UnicodeString pattern;
+       bool hasPattern;
        // The data model to be used to generate the formatted message
-       // Invariant: !(pattern.isValid() && dataModel.isValid())
-       LocalPointer<MessageFormatDataModel> dataModel;
+       // Invariant: !(hasPattern && dataModel != nullptr)
+       const MessageFormatDataModel* dataModel;
        Locale locale;
        LocalPointer<FunctionRegistry> standardFunctionRegistry;
        // *Not* owned
@@ -89,21 +90,22 @@ public:
 
     public:
         Builder& setLocale(const Locale& locale);
-        Builder& setPattern(const UnicodeString& pattern, UErrorCode& errorCode);
-        // Takes ownership of the FunctionRegistry
-        // Builder& setFunctionRegistry(FunctionRegistry* functionRegistry);
-        // Does not copy. The caller must guarantee that the function registry is
+        Builder& setPattern(const UnicodeString& pattern);
+        // Does not adopt its argument.
+        // The caller must ensure that the function registry is
         // valid as long as the resulting MessageFormatter is valid.
         Builder& setFunctionRegistry(const FunctionRegistry* functionRegistry);
-        // Takes ownership of the data model
-        Builder& setDataModel(MessageFormatDataModel* dataModel);
+        // Does not adopt its argument; if this method is called,
+        // the caller must ensure that the data model is valid as long
+        // as the resulting MessageFormatter is valid
+        Builder& setDataModel(const MessageFormatDataModel* dataModel);
 
         /**
          * Constructs a new immutable MessageFormatter using the pattern or data model
          * that was previously set, and the locale (if it was previously set)
          * or default locale (otherwise).
          *
-         * The builder object (`this`) cannot be used after calling `build()`.
+         * The builder object (`this`) can still be used after calling `build()`.
          *
          * @param parseError Struct to receive information on the position
          *                   of an error within the pattern (not used if
@@ -115,20 +117,20 @@ public:
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode);
+        MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode) const;
     }; // class MessageFormatter::Builder
 
     static Builder* builder(UErrorCode& errorCode);
 
     // TODO: Shouldn't be public; only used for testing
-    const UnicodeString& getNormalizedPattern() const { return *normalizedInput; }
+    const UnicodeString& getNormalizedPattern() const { return normalizedInput; }
 
   private:
     friend class Builder;
     friend class Context;
     friend class ExpressionContext;
 
-    MessageFormatter(MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
+    MessageFormatter(const MessageFormatter::Builder& builder, UParseError &parseError, UErrorCode &status);
 
     MessageFormatter() = delete; // default constructor not implemented
 
@@ -341,10 +343,19 @@ public:
      const FunctionRegistry* customFunctionRegistry;
 
      // Data model, representing the parsed message
+     // May be either owned (if created by parsing a pattern), or
+     // borrowed (if supplied by the builder's setDataModel() method) --
+     // the ownedDataModel flag determines which one
      LocalPointer<MessageFormatDataModel> dataModel;
+     const MessageFormatDataModel* borrowedDataModel;
+     bool ownedDataModel;
+
+     // Upholds the invariant that either the data model or borrowed data model is valid,
+     // but not both
+     bool dataModelOK() const;
 
      // Normalized version of the input string (optional whitespace removed)
-     LocalPointer<UnicodeString> normalizedInput;
+     UnicodeString normalizedInput;
 
      // Formatter cache
      LocalPointer<CachedFormatters> cachedFormatters;

@@ -597,8 +597,7 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
 
     LocalPointer<MessageFormatter::Builder> mfBuilder(MessageFormatter::builder(errorCode));
     CHECK_ERROR(errorCode);
-    mfBuilder->setPattern(message, errorCode);
-    mfBuilder->setFunctionRegistry(reg.getAlias());
+    mfBuilder->setPattern(message).setFunctionRegistry(reg.getAlias());
     UParseError parseError;
     LocalPointer<MessageFormatter> mf(mfBuilder->build(parseError, errorCode));
     UnicodeString result;
@@ -673,7 +672,7 @@ void TestMessageFormat2::testFormatterIsCreatedOnce(IcuTestErrorCode& errorCode)
 
     // Check skeleton
     message = "{Testing {$count :temp unit=$unit skeleton=|.0/w|}.}";
-    mfBuilder->setPattern(message, errorCode);
+    mfBuilder->setPattern(message);
     mf.adoptInstead(mfBuilder->build(parseError, errorCode));
 
     result.remove();

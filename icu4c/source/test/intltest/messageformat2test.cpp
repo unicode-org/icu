@@ -206,7 +206,7 @@ void TestMessageFormat2::testAPISimple() {
     // To be used in the test suite, it should include those checks
     // Null checks and error checks elided
     MessageFormatter::Builder* builder = MessageFormatter::builder(errorCode);
-    MessageFormatter* mf = builder->setPattern(u"{Hello, {$userName}!}", errorCode)
+    MessageFormatter* mf = builder->setPattern(u"{Hello, {$userName}!}")
         .build(parseError, errorCode);
 
     MessageArguments::Builder* argsBuilder = MessageArguments::builder(errorCode);
@@ -221,7 +221,7 @@ void TestMessageFormat2::testAPISimple() {
     // Recreate the builder
     builder = MessageFormatter::builder(errorCode);
 
-    mf = builder->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}", errorCode)
+    mf = builder->setPattern("{Today is {$today :datetime skeleton=yMMMdEEE}.}")
         .setLocale(locale)
         .build(parseError, errorCode);
 
@@ -252,8 +252,7 @@ void TestMessageFormat2::testAPISimple() {
                      when 1 * {{$userName} added a new photo to their album.}\n \
                      when * masculine {{$userName} added {$photoCount} photos to his album.}\n \
                      when * feminine {{$userName} added {$photoCount} photos to her album.}\n \
-                     when * * {{$userName} added {$photoCount} photos to their album.}",
-                     errorCode)
+                     when * * {{$userName} added {$photoCount} photos to their album.}")
         .setLocale(locale)
         .build(parseError, errorCode);
     mf->formatToString(*args, errorCode, result);
@@ -356,7 +355,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
     MessageFormatter::Builder* mfBuilder = MessageFormatter::builder(errorCode);
     UnicodeString result;
     // This fails, because we did not provide a function registry:
-    MessageFormatter* mf = mfBuilder->setPattern("{Hello {$name :person formality=informal}}", errorCode)
+    MessageFormatter* mf = mfBuilder->setPattern("{Hello {$name :person formality=informal}}")
                                     .setLocale(locale)
                                     .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
@@ -368,19 +367,19 @@ void TestMessageFormat2::testAPICustomFunctions() {
     mfBuilder->setFunctionRegistry(functionRegistry)
               .setLocale(locale);
 
-    mf = mfBuilder->setPattern("{Hello {$name :person formality=informal}}", errorCode)
+    mf = mfBuilder->setPattern("{Hello {$name :person formality=informal}}")
                     .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("testAPICustomFunctions", "Hello John", result);
     result.remove();
 
-    mf = mfBuilder->setPattern("{Hello {$name :person formality=formal}}", errorCode)
+    mf = mfBuilder->setPattern("{Hello {$name :person formality=formal}}")
                     .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("testAPICustomFunctions", "Hello Mr. Doe", result);
     result.remove();
 
-    mf = mfBuilder->setPattern("{Hello {$name :person formality=formal length=long}}", errorCode)
+    mf = mfBuilder->setPattern("{Hello {$name :person formality=formal length=long}}")
                     .build(parseError, errorCode);
     mf->formatToString(*arguments, errorCode, result);
     assertEquals("testAPICustomFunctions", "Hello Mr. John Doe", result);
