@@ -55,8 +55,6 @@ static Hashtable* copyHashtable(const Hashtable& other) {
     return adoptedContents.orphan();
 }
 
-
-
 // Polymorphic immutable list class (constructed using the builder pattern),
 // that uses a UVector as its underlying representation
 template<typename T>
