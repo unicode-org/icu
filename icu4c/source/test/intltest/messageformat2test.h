@@ -74,6 +74,7 @@ private:
 
     // Custom function testing
     void testPersonFormatter(IcuTestErrorCode&);
+    void testCustomFunctionsComplexMessage(IcuTestErrorCode&);
     void testGrammarCasesFormatter(IcuTestErrorCode&);
     void testListFormatter(IcuTestErrorCode&);
     void testMessageRefFormatter(IcuTestErrorCode&);

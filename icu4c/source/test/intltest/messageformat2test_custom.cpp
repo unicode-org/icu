@@ -99,13 +99,99 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
     TestUtils::runTestCase(*this, *test, errorCode);
 }
 
+void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<FunctionRegistry> customRegistry(personFunctionRegistry(errorCode));
+    UnicodeString host = "host";
+    UnicodeString hostGender = "hostGender";
+    UnicodeString guest = "guest";
+    UnicodeString guestCount = "guestCount";
+
+    LocalPointer<Person> jane(new Person(UnicodeString("Ms."), UnicodeString("Jane"), UnicodeString("Doe")));
+    LocalPointer<Person> john(new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe")));
+    LocalPointer<Person> anonymous(new Person(UnicodeString("Mx."), UnicodeString("Anonymous"), UnicodeString("Doe")));
+   if (!jane.isValid() || !john.isValid() || !anonymous.isValid()) {
+       ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
+       return;
+   }
+
+    UnicodeString message = "let $hostName = {$host :person length=long}\n\
+                let $guestName = {$guest :person length=long}\n\
+                let $guestsOther = {$guestCount :number offset=1}\n\
+                match {$hostGender :gender} {$guestCount :plural}\n\
+                when female 0 {{$hostName} does not give a party.}\n\
+                when female 1 {{$hostName} invites {$guestName} to her party.}\n\
+                when female 2 {{$hostName} invites {$guestName} and one other person to her party.}\n\
+                when female * {{$hostName} invites {$guestName} and {$guestsOther} other people to her party.}\n\
+                when male 0 {{$hostName} does not give a party.}\n\
+                when male 1 {{$hostName} invites {$guestName} to his party.}\n\
+                when male 2 {{$hostName} invites {$guestName} and one other person to his party.}\n\
+                when male * {{$hostName} invites {$guestName} and {$guestsOther} other people to his party.}\n\
+                when * 0 {{$hostName} does not give a party.}\n\
+                when * 1 {{$hostName} invites {$guestName} to their party.}\n\
+                when * 2 {{$hostName} invites {$guestName} and one other person to their party.}\n\
+                when * * {{$hostName} invites {$guestName} and {$guestsOther} other people to their party.}\n";
+
+
+    LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
+    CHECK_ERROR(errorCode);
+    testBuilder->setName("testCustomFunctionsComplexMessage");
+    testBuilder->setLocale(Locale("en"), errorCode);
+    testBuilder->setPattern(message);
+    testBuilder->setFunctionRegistry(customRegistry.orphan());
+
+    LocalPointer<TestCase> test(testBuilder->setArgument(host, jane.getAlias(), errorCode)
+                                .setArgument(hostGender, "female", errorCode)
+                                .setArgument(guest, john.getAlias(), errorCode)
+                                .setArgument(guestCount, (int64_t) 3, errorCode)
+                                .setExpected("Ms. Jane Doe invites Mr. John Doe and 2 other people to her party.")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument(host, jane.getAlias(), errorCode)
+                                .setArgument(hostGender, "female", errorCode)
+                                .setArgument(guest, john.getAlias(), errorCode)
+                                .setArgument(guestCount, (int64_t) 2, errorCode)
+                                .setExpected("Ms. Jane Doe invites Mr. John Doe and one other person to her party.")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument(host, jane.getAlias(), errorCode)
+                                .setArgument(hostGender, "female", errorCode)
+                                .setArgument(guest, john.getAlias(), errorCode)
+                                .setArgument(guestCount, (int64_t) 1, errorCode)
+                                .setExpected("Ms. Jane Doe invites Mr. John Doe to her party.")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument(host, john.getAlias(), errorCode)
+                                .setArgument(hostGender, "male", errorCode)
+                                .setArgument(guest, jane.getAlias(), errorCode)
+                                .setArgument(guestCount, (int64_t) 3, errorCode)
+                                .setExpected("Mr. John Doe invites Ms. Jane Doe and 2 other people to his party.")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+
+    test.adoptInstead(testBuilder->setArgument(host, anonymous.getAlias(), errorCode)
+                                .setArgument(hostGender, "unknown", errorCode)
+                                .setArgument(guest, jane.getAlias(), errorCode)
+                                .setArgument(guestCount, (int64_t) 2, errorCode)
+                                .setExpected("Mx. Anonymous Doe invites Ms. Jane Doe and one other person to their party.")
+                                .setExpectSuccess()
+                                .build(errorCode));
+    TestUtils::runTestCase(*this, *test, errorCode);
+}
 
 void TestMessageFormat2::testCustomFunctions() {
   IcuTestErrorCode errorCode(*this, "testCustomFunctions");
 
   testPersonFormatter(errorCode);
-  // TODO: add equivalent of testCustomFunctionsComplexMessage()
-
+  testCustomFunctionsComplexMessage(errorCode);
   testGrammarCasesFormatter(errorCode);
   testListFormatter(errorCode);
   testMessageRefFormatter(errorCode);
