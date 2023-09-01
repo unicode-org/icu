@@ -48,13 +48,17 @@ SelectorKeys::Builder::Builder(UErrorCode& errorCode) {
     keys.adoptInstead(KeyList::builder(errorCode));
 }
 
+//------------------ Literal
+
+Literal::~Literal() {}
+
 //------------------ Operand
 
 /* static */ Operand* Operand::create(const VariableName& s, UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    Operand* result = new VariableOperand(s);
+    Operand* result = new Operand(s);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -66,14 +70,26 @@ SelectorKeys::Builder::Builder(UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    Operand* result = new LiteralOperand(lit);
+    Operand* result = new Operand(lit);
     if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 }
 
-Literal::~Literal() {}
+bool Operand::isVariable() const { return type == Type::VARIABLE; }
+bool Operand::isLiteral() const { return type == Type::LITERAL; }
+bool Operand::isNull() const { return type == Type::NULL_OPERAND; }
+
+const Literal& Operand::asLiteral() const {
+    U_ASSERT(isLiteral());
+    return lit;
+}
+
+const VariableName& Operand::asVariable() const {
+    U_ASSERT(isVariable());
+    return var;
+}
 
 //---------------- Key
 
@@ -437,12 +453,12 @@ const Operand& Expression::getOperand() const {
 
 Operand* Operand::create(const Operand& other) {
     if (other.isNull()) {
-        return new NullOperand();
+        return new Operand();
     } else if (other.isVariable()) {
-        return new VariableOperand(*other.asVariable());
+        return new Operand(other.asVariable());
     } else {
         U_ASSERT(other.isLiteral());
-        return new LiteralOperand(*other.asLiteral());
+        return new Operand(other.asLiteral());
     }
 }
 
@@ -475,7 +491,7 @@ Expression* Expression::Builder::build(UErrorCode& errorCode) const {
         exprRand = rand.getAlias();
     } else {
         U_ASSERT(rator.isValid());
-        exprRand = new NullOperand();
+        exprRand = new Operand();
     }
     if (exprRand == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;

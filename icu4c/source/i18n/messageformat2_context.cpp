@@ -14,6 +14,161 @@ U_NAMESPACE_BEGIN namespace message2 {
 
 
 // ------------------------------------------------------
+// MessageArguments
+
+using Arguments = MessageArguments;
+
+bool Arguments::has(const VariableName& arg) const {
+    U_ASSERT(contents.isValid() && objectContents.isValid());
+    return contents->containsKey(arg.name()) || objectContents->containsKey(arg.name());
+}
+
+const Formattable& Arguments::get(const VariableName& arg) const {
+    U_ASSERT(has(arg));
+    const Formattable* result = static_cast<const Formattable*>(contents->get(arg.name()));
+    if (result == nullptr) {
+        result = static_cast<const Formattable*>(objectContents->get(arg.name()));
+    }
+    U_ASSERT(result != nullptr);
+    return *result;
+}
+
+Arguments::Builder::Builder(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    contents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    objectContents.adoptInstead(new Hashtable(compareVariableName, nullptr, errorCode));
+    CHECK_ERROR(errorCode);
+    // The `contents` hashtable owns the values, but does not own the keys
+    contents->setValueDeleter(uprv_deleteUObject);
+    // The `objectContents` hashtable does not own the values
+}
+
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString& val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(ExpressionContext::createFormattable(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addDouble(const UnicodeString& name, double val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(ExpressionContext::createFormattable(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addInt64(const UnicodeString& name, int64_t val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(ExpressionContext::createFormattable(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addDate(const UnicodeString& name, UDate val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(ExpressionContext::createFormattableDate(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::addDecimal(const UnicodeString& name, StringPiece val, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(ExpressionContext::createFormattableDecimal(val, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, const UnicodeString* arr, int32_t count, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    Formattable* valPtr(ExpressionContext::createFormattable(arr, count, errorCode));
+    THIS_ON_ERROR(errorCode);
+    return add(name, valPtr, errorCode);
+}
+
+// Does not adopt the object
+Arguments::Builder& Arguments::Builder::addObject(const UnicodeString& name, const UObject* obj, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    // The const_cast is valid because the object will only be accessed via
+    // getObjectInput(), which returns a const reference
+    Formattable* valPtr(ExpressionContext::createFormattable(const_cast<UObject*>(obj), errorCode));
+    THIS_ON_ERROR(errorCode);
+    objectContents->put(name, valPtr, errorCode);
+    return *this;
+}
+
+// Adopts its argument
+Arguments::Builder& Arguments::Builder::add(const UnicodeString& name, Formattable* value, UErrorCode& errorCode) {
+    THIS_ON_ERROR(errorCode);
+
+    U_ASSERT(value != nullptr);
+
+    contents->put(name, value, errorCode);
+    return *this;
+}
+
+/* static */ MessageArguments::Builder* MessageArguments::builder(UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+    MessageArguments::Builder* result = new MessageArguments::Builder(errorCode);
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+MessageArguments* MessageArguments::Builder::build(UErrorCode& errorCode) const {
+    NULL_ON_ERROR(errorCode);
+    U_ASSERT(contents.isValid() && objectContents.isValid());
+
+    LocalPointer<Hashtable> contentsCopied(new Hashtable(compareVariableName, nullptr, errorCode));
+    LocalPointer<Hashtable> objectContentsCopied(new Hashtable(compareVariableName, nullptr, errorCode));
+    NULL_ON_ERROR(errorCode);
+    // The `contents` hashtable owns the values, but does not own the keys
+    contents->setValueDeleter(uprv_deleteUObject);
+    // The `objectContents` hashtable does not own the values
+
+    int32_t pos = UHASH_FIRST;
+    LocalPointer<Formattable> optionValue;
+    // Copy the non-objects
+    while (true) {
+        const UHashElement* element = contents->nextElement(pos);
+        if (element == nullptr) {
+            break;
+        }
+        const Formattable& toCopy = *(static_cast<Formattable*>(element->value.pointer));
+        optionValue.adoptInstead(new Formattable(toCopy));
+        if (!optionValue.isValid()) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        UnicodeString* key = static_cast<UnicodeString*>(element->key.pointer);
+        contentsCopied->put(*key, optionValue.orphan(), errorCode);
+    }
+    // Copy the objects
+    pos = UHASH_FIRST;
+    while (true) {
+        const UHashElement* element = objectContents->nextElement(pos);
+        if (element == nullptr) {
+            break;
+        }
+        UnicodeString* key = static_cast<UnicodeString*>(element->key.pointer);
+        objectContentsCopied->put(*key, element->value.pointer, errorCode);
+    }
+    MessageArguments* result = new MessageArguments(contentsCopied.orphan(), objectContentsCopied.orphan());
+    if (result == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+// ------------------------------------------------------
 // Context
 
 const Formatter* CachedFormatters::getFormatter(const FunctionName& f) {

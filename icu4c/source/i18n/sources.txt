@@ -95,6 +95,7 @@ measunit_extra.cpp
 measure.cpp
 msgfmt.cpp
 messageformat2.cpp
+messageformat2_builder.cpp
 messageformat2_checker.cpp
 messageformat2_context.cpp
 messageformat2_data_model.cpp

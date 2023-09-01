@@ -181,7 +181,10 @@ public:
         friend class Operand;
         friend class Reserved;
 
-        const Formattable contents; // Guaranteed to be a string
+        // Contents is stored as a Formattable to avoid allocating
+        // new Formattables during formatting, but it's guaranteed
+        // to be a string
+        const Formattable contents;
         // Because Key uses `Literal` as its underlying representation,
         // this provides a default constructor for wildcard keys
         Literal() {}
@@ -198,14 +201,29 @@ public:
         static Operand* create(const Literal& lit, UErrorCode& errorCode);
         // Null argument (represents the absence of an operand)
         static Operand* create(UErrorCode& errorCode);
-        virtual bool isVariable() const = 0;
-        virtual bool isLiteral() const = 0;
-        bool isNull() const { return !(isVariable() || isLiteral()); } ;
-        virtual const VariableName* asVariable() const = 0;
-        virtual const Literal* asLiteral() const = 0;
+        bool isVariable() const;
+        bool isLiteral() const;
+        bool isNull() const;
+        const VariableName& asVariable() const;
+        const Literal& asLiteral() const;
         static Operand* create(const Operand&);
-
         virtual ~Operand();
+    private:
+        friend class Expression;
+
+        enum Type {
+            VARIABLE,
+            LITERAL,
+            NULL_OPERAND
+        };
+        union {
+            const VariableName var;
+            const Literal lit;
+        };
+        Type type;
+        Operand() : type(Type::NULL_OPERAND) {}
+        Operand(const VariableName& v) : var(v), type(Type::VARIABLE) {}
+        Operand(const Literal& l) : lit(l), type(Type::LITERAL) {}
     }; // class Operand
 
     // Corresponds to the `Literal | CatchallKey` that is the
@@ -495,7 +513,7 @@ public:
 
         Expression(const Operator &rAtor, const Operand &rAnd) : rator(new Operator(rAtor)), rand(Operand::create(rAnd)) {}
         Expression(const Operand &rAnd) : rator(nullptr), rand(Operand::create(rAnd)) {}
-        Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(new NullOperand()) {}
+        Expression(const Operator &rAtor) : rator(new Operator(rAtor)), rand(new Operand()) {}
         /* const */ LocalPointer<Operator> rator;
         /* const */ LocalPointer<Operand> rand;
     }; // class Expression
@@ -655,63 +673,6 @@ public:
   virtual ~MessageFormatDataModel();
 
   private:
-  
-     class VariableOperand : public Operand {
-         public:
-         bool isVariable() const { return true; }
-         bool isLiteral() const { return false; }
-         const VariableName* asVariable() const { return &var; }
-         const Literal* asLiteral() const {
-             U_ASSERT(false);
-             return nullptr;
-         }
-         VariableOperand(const VariableOperand&);
-         private:
-         friend class Operand;
-
-         const VariableName var;
-         VariableOperand(const VariableName& v) : var(v) {}
-     }; // class VariableOperand
-
-     class LiteralOperand : public Operand {
-         public:
-         bool isVariable() const { return false; }
-         bool isLiteral() const { return true; }
-         const VariableName* asVariable() const {
-             U_ASSERT(false);
-             return nullptr;
-         }
-         const Literal* asLiteral() const {
-             return &lit;
-         }
-         LiteralOperand(const LiteralOperand&);
-         private:
-         friend class Operand;
-
-         const Literal lit;
-         LiteralOperand(const Literal& l) : lit(l) {}
-     }; // class LiteralOperand
-
-     class NullOperand : public Operand {
-         public:
-         bool isVariable() const { return false; }
-         bool isLiteral() const { return false; }
-         const VariableName* asVariable() const {
-             U_ASSERT(false);
-             return nullptr;
-         }
-         const Literal* asLiteral() const {
-             U_ASSERT(false);
-             return nullptr;
-         }
-         private:
-         friend class Operand;
-         friend class Expression;
-
-         // Fallback string
-         const DefaultString fallback;
-         NullOperand() : fallback(DefaultString()) {}
-     }; // class NullOperand
 
      // The expressions that are being matched on.
      // Null iff this is a `pattern` message.

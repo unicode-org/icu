@@ -110,10 +110,10 @@ void SERIALIZER::emit(const Operand& rand) {
     U_ASSERT(!rand.isNull());
 
     if (rand.isVariable()) {
-        emit(*rand.asVariable());
+        emit(rand.asVariable());
     } else {
         // Literal: quoted or unquoted
-        emit(*rand.asLiteral());
+        emit(rand.asLiteral());
     }
 }
 

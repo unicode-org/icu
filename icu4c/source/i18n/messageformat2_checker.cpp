@@ -131,7 +131,7 @@ void MessageFormatter::Checker::requireAnnotated(const TypeEnvironment& t, const
     if (!selectorExpr.isReserved()) {
         const Operand& rand = selectorExpr.getOperand();
         if (rand.isVariable()) {
-            if (t.get(*rand.asVariable()) == Type::Annotated) {
+            if (t.get(rand.asVariable()) == Type::Annotated) {
                 return; // No error
             }
         }
@@ -167,7 +167,7 @@ Type typeOf(TypeEnvironment& t, const Expression& expr) {
         return Type::Unannotated;
     }
     U_ASSERT(rand.isVariable());
-    return t.get(*rand.asVariable());
+    return t.get(rand.asVariable());
 }
 
 void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode& error) {
