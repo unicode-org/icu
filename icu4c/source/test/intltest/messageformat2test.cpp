@@ -201,7 +201,7 @@ void TestMessageFormat2::testAPISimple() {
     UParseError parseError;
     Locale locale = "en_US";
 
-    // TODO: Since this is the example used in the
+    // Since this is the example used in the
     // design doc, it elides null checks and error checks.
     // To be used in the test suite, it should include those checks
     // Null checks and error checks elided
@@ -476,14 +476,14 @@ void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeStrin
 */
 void TestMessageFormat2::testInvalidPattern(uint32_t testNum, const UnicodeString& s, uint32_t expectedErrorOffset, uint32_t expectedErrorLine) {
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
-    // TODO
-    (void) testNum;
+    char testName[50];
+    snprintf(testName, sizeof(testName), "testInvalidPattern: %d", testNum);
 
     LocalPointer<TestCase::Builder> testBuilder(TestCase::builder(errorCode));
     if (U_FAILURE(errorCode)) {
         return;
     }
-    testBuilder->setName("testInvalidPattern");
+    testBuilder->setName("testName");
 
     LocalPointer<TestCase> test(testBuilder->setPattern(s)
                                 .setExpectedWarning(U_SYNTAX_WARNING)
@@ -504,7 +504,7 @@ static bool isWarning(UErrorCode errorCode) {
  `s`: The pattern string.
  `expectedErrorCode`: the error code expected to be returned by the formatter
 
- TODO: For now, the line and character numbers are not checked
+  For now, the line and character numbers are not checked
 */
 void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
@@ -533,7 +533,7 @@ void TestMessageFormat2::testSemanticallyInvalidPattern(uint32_t testNum, const 
  `s`: The pattern string.
  `expectedErrorCode`: the error code expected to be returned by the formatter
 
- TODO: For now, the line and character numbers are not checked
+ For now, the line and character numbers are not checked
 */
 void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const UnicodeString& s, UErrorCode expectedErrorCode) {
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
@@ -558,7 +558,7 @@ void TestMessageFormat2::testRuntimeErrorPattern(uint32_t testNum, const Unicode
  `s`: The pattern string.
  `expectedErrorCode`: the error code expected to be returned by the formatter
 
- TODO: For now, the line and character numbers are not checked
+ For now, the line and character numbers are not checked
 */
 void TestMessageFormat2::testRuntimeWarningPattern(uint32_t testNum, const UnicodeString& s, const UnicodeString& expectedResult, UErrorCode expectedErrorCode) {
     IcuTestErrorCode errorCode(*this, "testInvalidPattern");
@@ -662,7 +662,6 @@ void TestMessageFormat2::testResolutionErrors() {
     testRuntimeWarningPattern(++i, "let $x = {$forward} let $forward = {42} {{$x}}", "{$forward}", U_UNRESOLVED_VARIABLE_WARNING);
 
     // Unknown function
-    // TODO: Are there supposed to be braces around |horse|?
     testRuntimeWarningPattern(++i, "{The value is {horse :func}.}", "The value is {|horse|}.", U_UNKNOWN_FUNCTION_WARNING);
     testRuntimeWarningPattern(++i, "match {|horse| :func}\n\
                                          when 1 {The value is one.}\n\
@@ -696,18 +695,6 @@ void TestMessageFormat2::testResolutionErrors() {
                                   match {$sel}\n\
                                   when 1 {The value is one.}\n\
                                   when * {The value is not one.}\n", "The value is not one.", U_SELECTOR_WARNING);
-    /* TODO:
-       Formatting errors
-          e.g. calls to custom functions with constraints on their arguments;
-          handling these errors properly
-
-          - function checks condition on its arg, returns a formatting error
-          - function checks condition on its arg, returns a different error
-          - function checks condition on its options, returns a formatting error
-          - function checks condition on its options, returns a different error
-          - function returns an arbitrary warning code -- make sure that's caught and overridden
-          with a formatting warning
-     */
 }
 
 void TestMessageFormat2::testInvalidPatterns() {
