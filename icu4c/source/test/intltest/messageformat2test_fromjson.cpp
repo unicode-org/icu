@@ -423,14 +423,9 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L265
-    // where the expected output is "empty {}" --
-    // which is inconsistent with https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L280 ,
-    // where the expected output contains '{'/'}' enclosing the contents of the bad expression
-    // changed the expected output to { } here
     test.adoptInstead(testBuilder->setPattern("{empty { }}")
                       .setExpectedWarning(U_SYNTAX_WARNING)
-                      .clearExpected()
+                      .setExpected("empty \uFFFD")
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
@@ -488,75 +483,56 @@ https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fa
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-/*
-TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L326 , where the
-expected result is "foo"; but complies with the spec:
-
-  "If the message being formatted has any Syntax or Data Model errors, the result of pattern selection MUST be a pattern resolving to a single fallback value using the message's fallback string defined in the formatting context or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER �."
-*/
-
     test.adoptInstead(testBuilder->setPattern("match {} when * {foo}")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L335 ,
-    // where success is expected
     test.adoptInstead(testBuilder->setPattern("match {+foo} when * {foo}")
                       .setExpected("foo")
                       .setExpectedWarning(U_UNKNOWN_FUNCTION_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: this differs from https://github.com/messageformat/messageformat/blob/e0087bff312d759b67a9129eac135d318a1f0ce7/packages/mf2-messageformat/src/__fixtures/test-messages.json#L339 ,
-    // where the expected result is "foo";
-    // that contradicts https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection , which says:
-    // "If the message being formatted has any Syntax or Data Model errors, the result of pattern selection MUST be a pattern resolving to a single fallback value using the message's fallback string defined in the formatting context or if this is not available or empty, the U+FFFD REPLACEMENT CHARACTER �."
     test.adoptInstead(testBuilder->setPattern("match {|foo|} when*{foo}")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: Same comment as for "match {|foo|} when*{foo}"
     test.adoptInstead(testBuilder->setPattern("match when * {foo}")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: Same comment as for "match {|foo|} when*{foo}"
     test.adoptInstead(testBuilder->setPattern("match {|x|} when * foo")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: Same comment as for "match {|foo|} when*{foo}"
     test.adoptInstead(testBuilder->setPattern("match {|x|} when * {foo} extra")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: Same comment as for "match {|foo|} when*{foo}"
     test.adoptInstead(testBuilder->setPattern("match |x| when * {foo}")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_SYNTAX_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: same comment -- data model error in this case
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} when * * {foo}")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_VARIANT_KEY_MISMATCH_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);
 
-    // TODO: same comment -- data model error in this case
     test.adoptInstead(testBuilder->setPattern("match {$foo :plural} {$bar :plural} when * {foo}")
-                      .setExpected("\uFFFD")
+                      .clearExpected()
                       .setExpectedWarning(U_VARIANT_KEY_MISMATCH_WARNING)
                       .build(errorCode));
     TestUtils::runTestCase(*this, *test, errorCode);   
