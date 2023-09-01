@@ -411,7 +411,6 @@ int32_t ExpressionContext::optionsCount() const {
 // Function options
 // ----------------
 
-
 // Adopts `val`
 void ExpressionContext::addFunctionOption(const UnicodeString& k, Formattable* val, UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
@@ -679,24 +678,8 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
     setFallback();
 }
 
-
-// Errors
-// -------
-
-void ExpressionContext::setFormattingError(const UnicodeString& formatterName, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    context.getErrors().setFormattingError(formatterName, status);
-}
-
-void ExpressionContext::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {
-    CHECK_ERROR(status);
-
-    context.getErrors().setSelectorError(selectorName, status);
-}
-
-ExpressionContext::~ExpressionContext() {}
-FormattingContext::~FormattingContext() {}
+// Default formatters
+// ------------------
 
 number::FormattedNumber formatNumberWithDefaults(const Locale& locale, double toFormat, UErrorCode& errorCode) {
     return number::NumberFormatter::withLocale(locale).formatDouble(toFormat, errorCode);
@@ -731,6 +714,24 @@ void formatDateWithDefaults(const Locale& locale, UDate date, UnicodeString& res
     CHECK_ERROR(errorCode);
     df->format(date, result, 0, errorCode);
 }
+
+// Errors
+// -------
+
+void ExpressionContext::setFormattingError(const UnicodeString& formatterName, UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    context.getErrors().setFormattingError(formatterName, status);
+}
+
+void ExpressionContext::setSelectorError(const UnicodeString& selectorName, UErrorCode& status) {
+    CHECK_ERROR(status);
+
+    context.getErrors().setSelectorError(selectorName, status);
+}
+
+ExpressionContext::~ExpressionContext() {}
+FormattingContext::~FormattingContext() {}
 
 } // namespace message2
 U_NAMESPACE_END

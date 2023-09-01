@@ -108,6 +108,10 @@ void FunctionRegistry::checkStandard() const {
     checkSelector("gender");
 }
 
+// Formatter/selector helpers
+
+// Converts `s` to an int64 value if possible, returning false
+// if it can't be parsed
 static bool tryStringToNumber(const UnicodeString& s, int64_t& result) {
     UErrorCode localErrorCode = U_ZERO_ERROR;
     // Try to parse string as int
@@ -128,6 +132,20 @@ static bool tryStringToNumber(const UnicodeString& s, int64_t& result) {
     return false;
 }
 
+// Converts `s` to a double, indicating failure via `errorCode`
+static void strToDouble(const UnicodeString& s, const Locale& loc, double& result, UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(loc, errorCode));
+    CHECK_ERROR(errorCode);
+    Formattable asNumber;
+    numberFormat->parse(s, asNumber, errorCode);
+    CHECK_ERROR(errorCode);
+    result = asNumber.getDouble(errorCode);
+}
+
+// Converts `optionValue` to an int64 value if possible, returning false
+// if it can't be parsed
 bool tryFormattableAsNumber(const Formattable& optionValue, int64_t& result) {
     UErrorCode localErrorCode = U_ZERO_ERROR;
     if (optionValue.isNumeric()) {
@@ -142,20 +160,6 @@ bool tryFormattableAsNumber(const Formattable& optionValue, int64_t& result) {
     }
     return false;
 }
-
-// Formatter/selector helpers
-
-static void strToDouble(const UnicodeString& s, Locale loc, double& result, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
-
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(loc, errorCode));
-    CHECK_ERROR(errorCode);
-    Formattable asNumber;
-    numberFormat->parse(s, asNumber, errorCode);
-    CHECK_ERROR(errorCode);
-    result = asNumber.getDouble(errorCode);
-}
-
 
 // Specific formatter implementations
 
@@ -408,7 +412,6 @@ void StandardFunctions::Plural::selectKey(FormattingContext& context, const Unic
 StandardFunctions::Plural::~Plural() {}
 
 // --------- DateTimeFactory
-
 
 static DateFormat::EStyle stringToStyle(UnicodeString option, UErrorCode& errorCode) {
     if (U_SUCCESS(errorCode)) {
