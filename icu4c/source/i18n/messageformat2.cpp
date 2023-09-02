@@ -770,58 +770,6 @@ void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& 
         CHECK_ERROR(status);
     }
 }
-
-// ---------------- Environments and closures
-
-Environment* Environment::create(const VariableName& var, Closure* c, const Environment& parent, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Environment* result = new NonEmptyEnvironment(var, c, parent);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result;
-}
-
-Environment* Environment::create(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Environment* result = new EmptyEnvironment();
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result;
-}
-
-Closure* Closure::create(const Expression& expr, const Environment& env, UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-    Closure* result = new Closure(expr, env);
-    if (result == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result;
-}
-
-const Closure* EmptyEnvironment::lookup(const VariableName& v) const {
-    (void) v;
-    return nullptr;
-}
-
-const Closure* NonEmptyEnvironment::lookup(const VariableName& v) const {
-    if (v == var) {
-        U_ASSERT(rhs.isValid());
-        return rhs.getAlias();
-    }
-    return parent.lookup(v);
-}
-
-Environment::~Environment() {}
-NonEmptyEnvironment::~NonEmptyEnvironment() {}
-EmptyEnvironment::~EmptyEnvironment() {}
-
-Closure::~Closure() {}
-
 } // namespace message2
 U_NAMESPACE_END
 
