@@ -48,6 +48,10 @@ SelectorKeys::Builder::Builder(UErrorCode& errorCode) {
     keys.adoptInstead(KeyList::builder(errorCode));
 }
 
+SelectorKeys::SelectorKeys(const SelectorKeys& other) : keys(new KeyList(*(other.keys))) {
+    U_ASSERT(!other.isBogus());
+}
+
 //------------------ VariableName
 
 UnicodeString VariableName::declaration() const {

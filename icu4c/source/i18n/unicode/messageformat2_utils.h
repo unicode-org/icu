@@ -25,10 +25,18 @@ static UBool compareVariableName(const UElement e1, const UElement e2) {
     return uhash_compareUnicodeString(e1, e2);
 }
 
-// Polymorphic immutable list class (constructed using the builder pattern),
-// that uses a UVector as its underlying representation
+
+/**
+ * The `ImmutableVector` class represents a polymorphic immutable list,
+ * constructed using the builder pattern. It's used to represent
+ * various nodes in the MessageFormat data model that may have a
+ * variable number of components.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
 template<typename T>
-class ImmutableVector : public UMemory {
+class U_I18N_API ImmutableVector : public UMemory {
 
 private:
     // If a copy constructor fails, the list is left in an inconsistent state,
@@ -43,29 +51,95 @@ private:
     bool isBogus() const { return !contents.isValid(); }
 
 public:
+    /**
+     * Size accessor.
+     *
+     * @return   The number of elements in this list.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     int32_t length() const;
 
-    // Precondition: i < length()
-    // Because UVector::element() returns a void*,
-    // to avoid either copying the result or returning a reference
-    // to a temporary value, get() returns a T* 
+    /**
+     * Element accessor.
+     * Precondition: i < length()
+     *
+     * @param i The index to access.
+     * @return   The list element at `i`
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     const T* get(int32_t i) const;
 
-    // Returns true iff this contains `element`
+    /**
+     * Checks for the existence of an element.
+     *
+     * @param element The item to search for.
+     * @return        True if and only if `element` occurs in this list.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     UBool contains(const T& element) const;
 
-    // Returns true iff this contains `element` and returns
-    // its first index in `index`. Returns false otherwise
+    /**
+     * Finds the index of an element.
+     *
+     * @param element The item to search for.
+     * @param index   A mutable reference that is set to the first index
+     *                where `element` occurs in this list, if it occurs.
+     * @return        True if and only if `element` occurs in this list.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     UBool find(const T& element, int32_t& index) const;
 
-    // Copy constructor
+    /**
+     * Copy constructor. Performs a deep copy (`T` must have
+     * a copy constructor.)
+     *
+     * @param other   The ImmutableVector to copy.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     ImmutableVector(const ImmutableVector<T>& other);
 
-    class Builder : public UMemory {
+    /**
+     * The mutable `ImmutableVector::Builder` class allows the list to be constructed
+     * one element at a time.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API Builder : public UMemory {
     public:
-        // Adopts its argument
-        Builder& add(T *element, UErrorCode &errorCode);
-        // Postcondition: U_FAILURE(errorCode) or returns a list such that isBogus() = false
+        /**
+         * Adds to the list. Adopts `element`.
+         *
+         * @param element The element to be added.
+         * @param status Input/output error code.
+         * @return A reference to the builder.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& add(T *element, UErrorCode& status);
+        /**
+         * Constructs a new `ImmutableVector` using the list of elements
+         * set with previous `add()` calls.
+         *
+         * The builder object (`this`) can still be used after calling `build()`.
+         *
+         * @param status    Input/output error code.
+         * @return          The new ImmutableVector, which is non-null if U_SUCCESS(status).
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         ImmutableVector<T>* build(UErrorCode &errorCode) const;
 
     private:
@@ -74,6 +148,15 @@ public:
         Builder(UErrorCode& errorCode);
     }; // class ImmutableVector::Builder
 
+    /**
+     * Returns a new `ImmutableVector::Builder` object.
+     *
+     * @param status  Input/output error code.
+     * @return The new Builder object, which is non-null if U_SUCCESS(status).
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     static Builder* builder(UErrorCode &errorCode);
 
 private:
@@ -97,10 +180,19 @@ private:
     LocalPointer<UVector> contents;
 }; // class ImmutableVector
 
-// Immutable polymorphic ordered map from strings to V*
-// Preserves the order in which keys are added.
+
+/**
+ * The `OrderedMap` class represents a polymorphic hash table with string
+ * keys, constructed using the builder pattern. It's used to represent
+ * various nodes in the MessageFormat data model that may have a
+ * variable number of named components. The map records the order in which
+ * keys were added and iterates over its elements in that order.
+ *
+ * @internal ICU 74.0 technology preview
+ * @deprecated This API is for technology preview only.
+ */
 template<typename V>
-class OrderedMap : public UMemory {
+class U_I18N_API OrderedMap : public UMemory {
 class MessageFormatDataModel {
     class Operator;
     class VariantMap;
@@ -111,26 +203,96 @@ private:
     bool isBogus() const { return (!contents.isValid() || !keys.isValid()); }
 
 public:
+    /**
+     * Used with `next()`.
+     *
+     * The initial iterator position for `next()`.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     static constexpr int32_t FIRST = 0;
-    // Iterates over keys in the order in which they were added.
-    // Returns true iff `pos` indicates that there are elements
-    // remaining
+    /**
+     * Iterates over all keys in the order in which they were added.
+     *
+     * @param pos A mutable reference to the current iterator position. Should be set to
+     *            `FIRST` before the first call to `next()`.
+     * @param k   A mutable reference that is set to the name of the next key
+     *            if the return value is true.
+     * @param v   A mutable reference to a pointer to an element of the map's value type,
+     *            which is non-null if the return value is true.
+     * @return True if and only if there are elements starting at `pos`.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     UBool next(int32_t &pos, UnicodeString& k, const V*& v) const;
+    /**
+     * Size accessor.
+     *
+     * @return   The number of elements in this map.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     int32_t size() const;
 
-    // Copy constructor
+    /**
+     * Copy constructor. Performs a deep copy (`V` must have
+     * a copy constructor.)
+     *
+     * @param other   The OrderedMap to copy.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     OrderedMap<V>(const OrderedMap<V>& other);
 
-    class Builder : public UMemory {
+    /**
+     * The mutable `OrderedMap::Builder` class allows the map to be constructed
+     * one key/value pair at a time.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API Builder : public UMemory {
     public:
-        // Adopts `value`
-        // Precondition: `key` is not already in the map. (The caller must
-        // check this)
-        Builder& add(const UnicodeString& key, V* value, UErrorCode& errorCode);
-        // This is provided so that builders can check for duplicate keys
-        // (for example, adding duplicate options is an error)
+        /**
+         * Adds to the map. Adopts `value`.
+         * Precondition: !has(key)
+         *
+         * @param key    The name to be added. It is an internal error to
+         *               call `add()` with a key that has already been added.
+         * @param value  The value to be associated with the name.
+         * @param status Input/output error code.
+         * @return A reference to the builder.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        Builder& add(const UnicodeString& key, V* value, UErrorCode& status);
+        /**
+         * Checks if a key is in the map.
+         *
+         * @param key Reference to a (string) key.
+         * @return    True if and only if `key` is mapped to a value in the map.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UBool has(const UnicodeString& key) const;
-        // Copying `build()` (leaves `this` valid)
+        /**
+         * Constructs a new `OrderedMap` using the keys and values
+         * set with previous `add()` calls.
+         *
+         * The builder object (`this`) can still be used after calling `build()`.
+         *
+         * @param status    Input/output error code.
+         * @return          The new OrderedMap, which is non-null if U_SUCCESS(status).
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         OrderedMap<V>* build(UErrorCode& errorCode) const;
     private:
         friend class OrderedMap;

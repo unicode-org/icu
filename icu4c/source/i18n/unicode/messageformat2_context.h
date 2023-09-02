@@ -198,6 +198,7 @@ class U_I18N_API MessageArguments : public UMemory {
          * @param key The name of the argument.
          * @param value The value of the argument.
          * @param status    Input/output error code.
+         * @return          A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
@@ -209,33 +210,36 @@ class U_I18N_API MessageArguments : public UMemory {
          * @param key The name of the argument.
          * @param value The value of the argument.
          * @param status    Input/output error code.
+         * @return          A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Builder& addDouble(const UnicodeString&, double, UErrorCode&);
+        Builder& addDouble(const UnicodeString& key, double value, UErrorCode& status);
         /**
          * Adds an argument of type `int64_t`.
          *
          * @param key The name of the argument.
          * @param value The value of the argument.
          * @param status    Input/output error code.
+         * @return          A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Builder& addInt64(const UnicodeString&, int64_t, UErrorCode&);
+        Builder& addInt64(const UnicodeString& key, int64_t value, UErrorCode& status);
         /**
          * Adds an argument of type `UDate`.
          *
          * @param key The name of the argument.
          * @param value The value of the argument.
          * @param status    Input/output error code.
+         * @return          A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Builder& addDate(const UnicodeString&, UDate, UErrorCode&);
+        Builder& addDate(const UnicodeString& key, UDate value, UErrorCode& status);
         /**
          * Adds an argument of type `StringPiece`, representing a
          * decimal number.
@@ -243,11 +247,12 @@ class U_I18N_API MessageArguments : public UMemory {
          * @param key The name of the argument.
          * @param value The value of the argument.
          * @param status    Input/output error code.
+         * @return          A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        Builder& addDecimal(const UnicodeString&, StringPiece, UErrorCode&);
+        Builder& addDecimal(const UnicodeString& key, StringPiece value, UErrorCode& status);
         /**
          * Adds an argument of type UnicodeString[]. Adopts `value`.
          *
@@ -255,6 +260,7 @@ class U_I18N_API MessageArguments : public UMemory {
          * @param value The value of the argument, interpreted as an array of strings.
          * @param length The length of the array.
          * @param status  Input/output error code.
+         * @return        A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
@@ -267,6 +273,7 @@ class U_I18N_API MessageArguments : public UMemory {
          * @param key The name of the argument.
          * @param value The value of the argument.
          * @param status  Input/output error code.
+         * @return        A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
@@ -278,11 +285,12 @@ class U_I18N_API MessageArguments : public UMemory {
          * after this call.
          *
          * @param status  Input/output error code.
+         * @return        The new MessageArguments object, which is non-null if U_SUCCESS(status).
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        MessageArguments* build(UErrorCode&) const;
+        MessageArguments* build(UErrorCode& status) const;
     private:
         friend class MessageArguments;
         Builder(UErrorCode&);
@@ -299,11 +307,12 @@ class U_I18N_API MessageArguments : public UMemory {
      * Returns a new `MessageArguments::Builder` object.
      *
      * @param status  Input/output error code.
+     * @return        The new builder, which is non-null if U_SUCCESS(status).
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    static Builder* builder(UErrorCode&);
+    static Builder* builder(UErrorCode& status);
   private:
     friend class MessageContext;
 

@@ -18,6 +18,9 @@ int32_t ImmutableVector<T>::length() const {
 
 template<typename T>
 const T* ImmutableVector<T>::get(int32_t i) const {
+    // Because UVector::element() returns a void*,
+    // to avoid either copying the result or returning a reference
+    // to a temporary value, get() returns a T*
     U_ASSERT(!isBogus());
     U_ASSERT(i < length());
     return static_cast<const T *>(contents->elementAt(i));

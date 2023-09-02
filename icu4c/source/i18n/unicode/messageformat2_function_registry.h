@@ -34,13 +34,12 @@ class Selector;
 class U_COMMON_API FormatterFactory : public UMemory {
   public:
     /**
-     * Constructs a new formatter object. May return null if a memory
-     * allocation error or other error occurs; must return a non-null result
-     * if `U_SUCCESS(status)` at the end of the call. This method is not const;
+     * Constructs a new formatter object. This method is not const;
      * formatter factories with local state may be defined.
      *
      * @param locale Locale to be used by the formatter.
      * @param status    Input/output error code.
+     * @return The new Formatter, which is non-null if U_SUCCESS(status).
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
@@ -58,12 +57,11 @@ class U_COMMON_API FormatterFactory : public UMemory {
 class U_COMMON_API SelectorFactory : public UMemory {
   public:
     /**
-     * Constructs a new selector object. May return null if a memory allocation
-     * error or other error occurs; must return a non-null result if
-     *`U_SUCCESS(status)` at the end of the call.
+     * Constructs a new selector object.
      *
-     * @param locale Locale to be used by the selector.
+     * @param locale    Locale to be used by the selector.
      * @param status    Input/output error code.
+     * @return          The new selector, which is non-null if U_SUCCESS(status).
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
@@ -83,21 +81,23 @@ class U_COMMON_API SelectorFactory : public UMemory {
 class U_I18N_API FunctionRegistry : UMemory {
  public:
     /**
-     * Looks up a formatter factory by the name of the formatter. Returns null
-     * if the given formatter factory has not been registered. The result is non-const,
+     * Looks up a formatter factory by the name of the formatter. The result is non-const,
      * since formatter factories may have local state.
      *
      * @param formatterName Name of the desired formatter.
+     * @return The new FormatterFactory, or null if no formatter factory has
+     *         been registered under `formatterName`.
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
     FormatterFactory* getFormatter(const FunctionName& formatterName) const;
     /**
-     * Looks up a selector factory by the name of the selector. Returns null
-     * if the given selector factory has not been registered.
+     * Looks up a selector factory by the name of the selector.
      *
      * @param selectorName Name of the desired selector.
+     * @return The new SelectorFactory, or null if no selector factory has
+     *         been registered under `selectorName`.
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
@@ -127,6 +127,7 @@ class U_I18N_API FunctionRegistry : UMemory {
          * @param formatterFactory A FormatterFactory object to use for creating `formatterName`
          *        formatters.
          * @param status Input/output error code.
+         * @return A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
@@ -139,6 +140,7 @@ class U_I18N_API FunctionRegistry : UMemory {
          * @param selectorFactory A SelectorFactory object to use for creating `selectorName`
          *        selectors.
          * @param status Input/output error code.
+         * @return A reference to the builder.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
@@ -149,6 +151,7 @@ class U_I18N_API FunctionRegistry : UMemory {
          * that were previously registered. The builder cannot be used after this call.
          *
          * @param status  Input/output error code.
+         * @return A reference to the new FunctionRegistry, which is non-null if U_SUCCESS(status).
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
@@ -159,6 +162,7 @@ class U_I18N_API FunctionRegistry : UMemory {
      * Returns a new `FunctionRegistry::Builder` object.
      *
      * @param status  Input/output error code.
+     * @return A reference to the new Builder, which is non-null if U_SUCCESS(status).
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.

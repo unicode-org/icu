@@ -68,7 +68,9 @@ public:
     void formatToString(const MessageArguments& arguments, UErrorCode &status, UnicodeString &result) const;
 
     /**
-     * Returns the locale that this `MessageFormatter` object was created with.
+     * Accesses the locale that this `MessageFormatter` object was created with.
+     *
+     * @return A reference to the locale.
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
@@ -91,9 +93,11 @@ public:
     }
 
     /**
-     * Returns a reference to the data model that was either passed into this
-     * `MessageFormatter` object, or parsed from the given pattern.
-     *     *
+     * Accesses the data model referred to by this
+     * `MessageFormatter` object.
+     *
+     * @return A reference to the data model.
+     *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
@@ -126,6 +130,7 @@ public:
         * Sets the locale to use for formatting.
         *
         * @param locale The desired locale.
+        * @return       A reference to the builder.
         *
         * @internal ICU 74.0 technology preview
         * @deprecated This API is for technology preview only.
@@ -138,6 +143,7 @@ public:
         * is removed.
         *
         * @param pattern A string in MessageFormat 2.0 syntax.
+        * @return       A reference to the builder.
         *
         * @internal ICU 74.0 technology preview
         * @deprecated This API is for technology preview only.
@@ -150,6 +156,7 @@ public:
         *        not adopted, and the caller must ensure its lifetime contains
         *        the lifetime of the `MessageFormatter` object built by this
         *        builder.
+        * @return       A reference to the builder.
         *
         * @internal ICU 74.0 technology preview
         * @deprecated This API is for technology preview only.
@@ -162,6 +169,7 @@ public:
         *        not adopted, and the caller must ensure its lifetime contains
         *        the lifetime of the `MessageFormatter` object built by this
         *        builder.
+        * @return       A reference to the builder.
         *
         * @internal ICU 74.0 technology preview
         * @deprecated This API is for technology preview only.
@@ -180,22 +188,25 @@ public:
          * @param status    Input/output error code.  If the
          *                  pattern cannot be parsed, or if neither the pattern
          *                  nor the data model is set, set to failure code.
+         * @return          The new MessageFormatter object, which is non-null if
+         *                  U_SUCCESS(status).
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        MessageFormatter* build(UParseError& parseError, UErrorCode& errorCode) const;
+        MessageFormatter* build(UParseError& parseError, UErrorCode& status) const;
     }; // class MessageFormatter::Builder
 
    /**
      * Returns a new `MessageFormatter::Builder` object.
      *
      * @param status  Input/output error code.
+     * @return        The new Builder, which is non-null if U_SUCCESS(status).
      *
      * @internal ICU 74.0 technology preview
      * @deprecated This API is for technology preview only.
      */
-    static Builder* builder(UErrorCode& errorCode);
+    static Builder* builder(UErrorCode& status);
 
     // TODO: Shouldn't be public; only used for testing
     const UnicodeString& getNormalizedPattern() const { return normalizedInput; }
