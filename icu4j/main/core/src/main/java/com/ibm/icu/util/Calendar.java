@@ -2180,7 +2180,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         return (stamp[field] > UNSET) ? fields[field] : defaultValue;
     }
 
-    /*
+    /**
      * @internal
      * @deprecated This API is ICU internal only.
      * Use this function instead of internalGet(MONTH). The implementation
@@ -2189,6 +2189,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * to MONTH correctly if ORDINAL_MONTH has higher priority.
      * @return the value for the given time field.
      */
+    @Deprecated
     protected int internalGetMonth()
     {
         if (resolveFields(MONTH_PRECEDENCE) == MONTH) {

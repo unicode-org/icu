@@ -1,0 +1,20 @@
+# Copyright (C) 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+
+====
+
+Build all artifacts, with sources and javadoc, ready to deploy
+
+mvn site -DskipITs -DskipTests -P with_sources,with_javadoc
+
+====
+
+Build the unified javadoc (public site), combining the javadocs from all public artifacts.
+
+mvn site -DskipITs -DskipTests -P with_full_javadoc
+
+====
+
+Run API reports
+
+api_reports.sh
