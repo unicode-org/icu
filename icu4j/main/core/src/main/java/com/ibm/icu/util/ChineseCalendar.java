@@ -1140,7 +1140,9 @@ public class ChineseCalendar extends Calendar {
     /**
      * {@inheritDoc}
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int internalGetMonth()
     {
         if (resolveFields(MONTH_PRECEDENCE) == MONTH) {
@@ -1161,7 +1163,9 @@ public class ChineseCalendar extends Calendar {
     /**
      * {@inheritDoc}
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int internalGetMonth(int defaultValue)
     {
         if (resolveFields(MONTH_PRECEDENCE) == MONTH) {

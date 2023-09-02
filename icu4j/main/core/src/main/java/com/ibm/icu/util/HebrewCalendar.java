@@ -966,7 +966,9 @@ public class HebrewCalendar extends Calendar {
     /**
      * {@inheritDoc}
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected int internalGetMonth()
     {
         if (resolveFields(MONTH_PRECEDENCE) == ORDINAL_MONTH) {

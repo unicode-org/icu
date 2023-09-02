@@ -46,6 +46,7 @@
     <icu4j.api.doc.copyright.footer>&lt;font size=-1&gt;Copyright © 2016 Unicode, Inc. and others.&lt;/font&gt;</icu4j.api.doc.copyright.footer>
     <!-- Needs to be overriden in sub-modules -->
     <icu4j.api.doc.root.dir>${project.basedir}</icu4j.api.doc.root.dir>
+    <icu4j.api.report.version>74</icu4j.api.report.version>
 
     <!-- Used for the .jar Manifest files -->
 
@@ -170,15 +171,17 @@
             <taglets>
               <taglet>
                 <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
-                <!-- We can use `tagletArtifact` instead of `tagletpath`,
-                     but then we must `mvn install` the `tools_build` artifact. -->
-                <tagletpath>${icu4j.api.doc.root.dir}/tools/build/target/classes</tagletpath>
               </taglet>
               <taglet>
                 <tagletClass>ch.arrenbrecht.jcite.JCiteTaglet</tagletClass>
               </taglet>
             </taglets>
             <tagletArtifacts>
+              <tagletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </tagletArtifact>
               <tagletArtifact>
                 <groupId>org.mcraig</groupId>
                 <artifactId>jcite</artifactId>
@@ -323,6 +326,59 @@
                 </goals>
               </execution>
             </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- This is used to gather API data used to generate API reports
+      (regular, draft, deprecated, status consistency, etc.)
+      To run it:
+        mvn install -DskipITs -DskipTests
+        mvn site -DskipITs -DskipTests -P gatherapi
+    -->
+    <profile>
+      <id>gatherapi</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- For incomplete doc tags javadoc fails with:
+                  ```
+                  Error while creating javadoc report:
+                  Exit code: 1
+                  Command line was: ...
+                  Refer to the generated Javadoc files in '...' dir.
+                  ```
+                But in most cases these are not related to what we do here, which is API reporting.
+                We ignore them so that we can progess with what we really care.
+              -->
+              <failOnError>false</failOnError>
+              <useStandardDocletOptions>false</useStandardDocletOptions>
+              <doclet>com.ibm.icu.dev.tool.docs.GatherAPIData</doclet>
+              <docletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </docletArtifact>
+              <additionalOptions>
+                <additionalOption>-name 'ICU4J ${mf.Implementation-Version}'</additionalOption>
+                <additionalOption>-output ${project.build.directory}/icu4j${icu4j.api.report.version}.api3</additionalOption>
+                <additionalOption>-internal</additionalOption>
+                <additionalOption>-version</additionalOption>
+                <additionalOption>-gzip</additionalOption>
+              </additionalOptions>
+            </configuration>
           </plugin>
         </plugins>
       </build>
