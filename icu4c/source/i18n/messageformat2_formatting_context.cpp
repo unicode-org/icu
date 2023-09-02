@@ -78,15 +78,25 @@ void ExpressionContext::setFallback() {
 
 // Fallback values are enclosed in curly braces;
 // see https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#formatting-fallback-values
-void fallbackToString(const Text& t, UnicodeString& result) {
+static void fallbackToString(const UnicodeString& s, UnicodeString& result) {
     result += LEFT_CURLY_BRACE;
-    result += t.toString();
+    result += s;
     result += RIGHT_CURLY_BRACE;
 }
 
-void ExpressionContext::setFallback(const Text& t) {
+void ExpressionContext::setFallbackTo(const FunctionName& f) {
     fallback.remove();
-    fallbackToString(t, fallback);
+    fallbackToString(f.toString(), fallback);
+}
+
+void ExpressionContext::setFallbackTo(const VariableName& v) {
+    fallback.remove();
+    fallbackToString(v.declaration(), fallback);
+}
+
+void ExpressionContext::setFallbackTo(const MessageFormatDataModel::Literal& l) {
+    fallback.remove();
+    fallbackToString(l.quotedString(), fallback);
 }
 
 // Add the fallback string as the input string, and
@@ -625,7 +635,7 @@ void ExpressionContext::evalPendingSelectorCall(const UnicodeString keys[], int3
         if (U_FAILURE(status)) {
             setFallback();
             status = U_ZERO_ERROR;
-            setSelectorError(pendingFunctionName->name(), status);
+            setSelectorError(pendingFunctionName->toString(), status);
         } else {
             // Ignore warnings
             status = savedStatus;
@@ -653,7 +663,7 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
                 // as a formatting error
                 setFallback();
                 status = U_ZERO_ERROR;
-                setFormattingError(functionName.name(), status);
+                setFormattingError(functionName.toString(), status);
             } else {
                 // Ignore warnings
                 status = savedStatus;
@@ -671,7 +681,7 @@ void ExpressionContext::evalFormatterCall(const FunctionName& functionName, UErr
     }
     // No formatter with this name -- set error
     if (context.isSelector(functionName)) {
-        setFormattingError(functionName.name(), status);
+        setFormattingError(functionName.toString(), status);
     } else {
         context.getErrors().setUnknownFunction(functionName, status);
     }

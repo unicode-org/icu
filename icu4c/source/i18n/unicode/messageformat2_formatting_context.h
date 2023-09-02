@@ -365,7 +365,9 @@ class ExpressionContext : public FormattingContext {
     // Resets input and output and uses existing fallback
     void setFallback();
     // Sets fallback string
-    void setFallback(const Text&);
+    void setFallbackTo(const FunctionName&);
+    void setFallbackTo(const VariableName&);
+    void setFallbackTo(const MessageFormatDataModel::Literal&);
     // Sets the fallback string as input and exits the error state
     void promoteFallbackToInput();
 

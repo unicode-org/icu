@@ -46,17 +46,20 @@ void SERIALIZER::emit(const UnicodeString& s) {
     result += s;
 }
 
-void SERIALIZER::emit(const Name& s) {
-    result += s.sigil();
-    result += s.name();
-}
-
 template <int32_t N>
 void SERIALIZER::emit(const UChar32 (&token)[N]) {
     // Don't emit the terminator
     for (int32_t i = 0; i < N - 1; i++) {
         emit(token[i]);
     }
+}
+
+void SERIALIZER::emit(const FunctionName& f) {
+    emit(f.toString());
+}
+
+void SERIALIZER::emit(const VariableName& v) {
+    emit(v.declaration());
 }
 
 void SERIALIZER::emit(const Literal& l) {

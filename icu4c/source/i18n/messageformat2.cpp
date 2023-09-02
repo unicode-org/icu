@@ -45,7 +45,7 @@ void MessageFormatter::evalArgument(const VariableName& var, ExpressionContext& 
 
     U_ASSERT(c.hasGlobal(var));
     // The fallback for a variable name is itself.
-    context.setFallback(var);
+    context.setFallbackTo(var);
     if (c.hasGlobalAsFormattable(var)) {
         context.setInput(c.getGlobalAsFormattable(var));
     } else {
@@ -56,7 +56,7 @@ void MessageFormatter::evalArgument(const VariableName& var, ExpressionContext& 
 // Sets the input to the contents of the literal
 void MessageFormatter::formatLiteral(const Literal& lit, ExpressionContext& context) const {
     // The fallback for a literal is itself.
-    context.setFallback(lit);
+    context.setFallbackTo(lit);
     context.setInput(evalLiteral(lit));
 }
 
@@ -88,7 +88,7 @@ void MessageFormatter::formatOperand(const Environment& env, const Operand& rand
         }
         // Use fallback per
         // https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-        context.setFallback(var);
+        context.setFallbackTo(var);
         // Variable wasn't found in locals -- check if it's global
         if (context.messageContext().hasGlobal(var)) {
             evalArgument(var, context);
@@ -199,13 +199,13 @@ void MessageFormatter::formatExpression(const Environment& globalEnv, const Expr
         } else if (!(context.messageContext().getErrors().hasError())) {
             // Set formatting warning if formatting function had no output
             // but didn't set an error or warning
-            context.messageContext().getErrors().setFormattingError(functionName.name(), status);
+            context.messageContext().getErrors().setFormattingError(functionName.toString(), status);
         }
 
         // If we reached this point, the formatter is null --
         // must have been a previous unknown function warning
         if (rand.isNull()) {
-            context.setFallback(functionName);
+            context.setFallbackTo(functionName);
         }
         context.setFallback();
         return;
@@ -516,7 +516,7 @@ void MessageFormatter::resolveVariables(const Environment& env, const Operand& r
         }
         // Either this is a global var or an unbound var --
         // either way, it can't be bound to a function call.
-        context.setFallback(var);
+        context.setFallbackTo(var);
         // Check globals
         if (context.messageContext().hasGlobal(var)) {
             evalArgument(var, context);

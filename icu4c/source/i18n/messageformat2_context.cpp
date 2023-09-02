@@ -23,14 +23,14 @@ using Arguments = MessageArguments;
 
 bool Arguments::has(const VariableName& arg) const {
     U_ASSERT(contents.isValid() && objectContents.isValid());
-    return contents->containsKey(arg.name()) || objectContents->containsKey(arg.name());
+    return contents->containsKey(arg.identifier()) || objectContents->containsKey(arg.identifier());
 }
 
 const Formattable& Arguments::get(const VariableName& arg) const {
     U_ASSERT(has(arg));
-    const Formattable* result = static_cast<const Formattable*>(contents->get(arg.name()));
+    const Formattable* result = static_cast<const Formattable*>(contents->get(arg.identifier()));
     if (result == nullptr) {
-        result = static_cast<const Formattable*>(objectContents->get(arg.name()));
+        result = static_cast<const Formattable*>(objectContents->get(arg.identifier()));
     }
     U_ASSERT(result != nullptr);
     return *result;
@@ -396,7 +396,7 @@ void Errors::setReservedError(UErrorCode& status) {
 void Errors::setFormattingError(const FunctionName& formatterName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    Error err(Error::Type::FormattingError, formatterName);
+    Error err(Error::Type::FormattingError, formatterName.toString());
     addError(err, status);
 }
 
@@ -411,21 +411,21 @@ void Errors::setMissingSelectorAnnotation(UErrorCode& status) {
 void Errors::setSelectorError(const FunctionName& selectorName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    Error err(Error::Type::SelectorError, selectorName);
+    Error err(Error::Type::SelectorError, selectorName.toString());
     addError(err, status);
 }
 
-void Errors::setUnknownFunction(const FunctionName& formatterName, UErrorCode& status) {
+void Errors::setUnknownFunction(const FunctionName& functionName, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    Error err(Error::Type::UnknownFunction, formatterName);
+    Error err(Error::Type::UnknownFunction, functionName.toString());
     addError(err, status);
 }
 
 void Errors::setUnresolvedVariable(const VariableName& v, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    Error err(Error::Type::UnresolvedVariable, v);
+    Error err(Error::Type::UnresolvedVariable, v.identifier());
     addError(err, status);
 }
 

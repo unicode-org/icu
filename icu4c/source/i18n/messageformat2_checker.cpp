@@ -54,9 +54,9 @@ TypeEnvironment::TypeEnvironment(UErrorCode& errorCode) {
 
 Type TypeEnvironment::get(const VariableName& var) const {
     for (int32_t i = 0; ((int32_t) i) < annotated->size(); i++) {
-        UnicodeString* lhs = (UnicodeString*) (*annotated)[i];
+        VariableName* lhs = (VariableName*) (*annotated)[i];
         U_ASSERT(lhs != nullptr);
-        if (*lhs == var.name()) {
+        if (*lhs == var) {
             return Annotated;
         }
     }
@@ -72,12 +72,12 @@ void TypeEnvironment::extend(const VariableName& var, Type t, UErrorCode& errorC
         return;
     }
 
-    LocalPointer<UnicodeString> s(new UnicodeString(var.name()));
-    if (!s.isValid()) {
+    LocalPointer<VariableName> v(new VariableName(var));
+    if (!v.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    annotated->adoptElement(s.orphan(), errorCode);
+    annotated->adoptElement(v.orphan(), errorCode);
 }
 
 TypeEnvironment::~TypeEnvironment() {}

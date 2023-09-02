@@ -48,7 +48,22 @@ SelectorKeys::Builder::Builder(UErrorCode& errorCode) {
     keys.adoptInstead(KeyList::builder(errorCode));
 }
 
+//------------------ VariableName
+
+UnicodeString VariableName::declaration() const {
+    UnicodeString result(DOLLAR);
+    result += variableName;
+    return result;
+}
+
 //------------------ Literal
+
+UnicodeString Literal::quotedString() const {
+    UnicodeString result(PIPE);
+    result += stringContents();
+    result += PIPE;
+    return result;
+}
 
 Literal::~Literal() {}
 
@@ -240,6 +255,13 @@ Reserved::Builder& Reserved::Builder::add(Literal& part, UErrorCode &errorCode) 
 const FunctionName& Operator::getFunctionName() const {
     U_ASSERT(!isBogus() && !isReserved());
     return functionName;
+}
+
+UnicodeString FunctionName::toString() const {
+    UnicodeString result;
+    result += sigilChar();
+    result += functionName;
+    return result;
 }
 
 FunctionName::~FunctionName() {}

@@ -118,7 +118,6 @@ class Error : public UMemory {
         VariantKeyMismatchError
     };
     Error(Type ty) : type(ty) {}
-    Error(Type ty, const Text& t) : type(ty), contents(t.toString()) {} 
     Error(Type ty, const UnicodeString& s) : type(ty), contents(s) {}
     virtual ~Error();
     private:

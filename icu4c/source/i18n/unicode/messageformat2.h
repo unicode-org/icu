@@ -335,7 +335,8 @@ public:
         template <int32_t N>
         void emit(const UChar32 (&)[N]);
         void emit(const UnicodeString&);
-        void emit(const Name&);
+        void emit(const FunctionName&);
+        void emit(const VariableName&);
         void emit(const MessageFormatDataModel::Literal&);
         void emit(const MessageFormatDataModel::Key&);
         void emit(const MessageFormatDataModel::SelectorKeys&);

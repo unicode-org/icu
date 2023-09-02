@@ -17,57 +17,26 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-class Text : public UMemory {
+class VariableName {
     public:
-    virtual UnicodeString toString() const = 0;
-};
-
-class DefaultString : public Text {
-public:
-    DefaultString() {}
-    UnicodeString toString() const { return UnicodeString(REPLACEMENT); }
-};
-
-class Name : public Text {
-    public:
-    virtual UChar sigil() const = 0;
-    virtual const UnicodeString& name() const = 0;
-    UnicodeString toString() const {
-        UnicodeString result(sigil());
-        result += name();
-        return result;
-    }
-};
-
-class VariableName : public Name {
-    public:
-    UChar sigil() const { return DOLLAR; }
-    const UnicodeString& name() const { return variableName; }
-    inline bool operator== (const VariableName& other) const { return other.name() == name(); }
+    inline bool operator== (const VariableName& other) const { return other.variableName == variableName; }
     VariableName(const UnicodeString& s) : variableName(s) {}
-    VariableName() : variableName(UnicodeString("")) {}
+    const UnicodeString& identifier() const { return variableName; }
+    UnicodeString declaration() const;
     private:
     const UnicodeString variableName;
 };
 
 // Corresponds to the `FunctionRef` interface defined in
 // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
-class FunctionName : public Name {
+class FunctionName {
 public:
     enum Sigil {
         OPEN,
         CLOSE,
         DEFAULT
     };
-    UChar sigil() const {
-        switch (functionSigil) {
-        case Sigil::OPEN: { return PLUS; }
-        case Sigil::CLOSE: { return HYPHEN; }
-        case Sigil::DEFAULT: { return COLON; }
-        }
-        U_ASSERT(false);
-    }
-    const UnicodeString& name() const { return functionName; }
+    UnicodeString toString() const;
     FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
     FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
     FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}
@@ -76,6 +45,15 @@ public:
 private:
     const UnicodeString functionName;
     const Sigil functionSigil;
+
+    UChar sigilChar() const {
+        switch (functionSigil) {
+        case Sigil::OPEN: { return PLUS; }
+        case Sigil::CLOSE: { return HYPHEN; }
+        case Sigil::DEFAULT: { return COLON; }
+        }
+        U_ASSERT(false);
+    }
 };
 
 // -----------------------------------------------------------------------
@@ -154,14 +132,9 @@ public:
 
     // Corresponds to the `Literal` interface defined in
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
-    class Literal : public Text {
+    class Literal {
     public:
-        UnicodeString toString() const {
-            UnicodeString result = UnicodeString(PIPE);
-            result += stringContents();
-            result += PIPE;
-            return result;
-        }
+        UnicodeString quotedString() const;
         const Formattable& getContents() const {
             return contents;
         }
@@ -169,6 +142,7 @@ public:
             U_ASSERT(contents.getType() == Formattable::Type::kString);
             return contents.getString();
         }
+
         UBool quoted() const { return isQuoted; }
         Literal(bool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
         Literal(const Literal& other) : isQuoted(other.isQuoted), contents(other.contents) {}
@@ -358,8 +332,6 @@ public:
             Builder& add(Literal& part, UErrorCode &errorCode);
             Reserved *build(UErrorCode &errorCode) const;
         }; // class Reserved::Builder
-
-        const DefaultString fallback;
         static Builder *builder(UErrorCode &errorCode);
     private:
         friend class Operator;
@@ -368,7 +340,7 @@ public:
         bool isBogus() const { return !parts.isValid(); }
       
         // Reserved needs a copy constructor in order to make Expression deeply copyable
-        Reserved(const Reserved& other) : fallback(DefaultString()), parts(new ImmutableVector<Literal>(*other.parts)) {
+        Reserved(const Reserved& other) : parts(new ImmutableVector<Literal>(*other.parts)) {
             U_ASSERT(!other.isBogus());
         }
 
@@ -379,7 +351,7 @@ public:
       
         // Can only be called by Builder
         // Takes ownership of `ps`
-        Reserved(ImmutableVector<Literal> *ps) : fallback(DefaultString()), parts(ps) { U_ASSERT(ps != nullptr); }
+        Reserved(ImmutableVector<Literal> *ps) : /* fallback(DefaultString()), */ parts(ps) { U_ASSERT(ps != nullptr); }
     };
 
     // Corresponds to the `FunctionRef | Reserved` type in the
