@@ -65,6 +65,11 @@ UnicodeString Literal::quotedString() const {
     return result;
 }
 
+const UnicodeString& Literal::stringContents() const {
+    U_ASSERT(contents.getType() == Formattable::Type::kString);
+    return contents.getString();
+}
+
 Literal::~Literal() {}
 
 //------------------ Operand
@@ -88,6 +93,8 @@ Literal::~Literal() {}
     return result;
 }
 
+Operand::Operand(const Operand& other) : var(other.var), lit(other.lit), type(other.type) {}
+
 UBool Operand::isVariable() const { return type == Type::VARIABLE; }
 UBool Operand::isLiteral() const { return type == Type::LITERAL; }
 UBool Operand::isNull() const { return type == Type::NULL_OPERAND; }
@@ -101,6 +108,8 @@ const VariableName& Operand::asVariable() const {
     U_ASSERT(isVariable());
     return var;
 }
+
+Operand::~Operand() {}
 
 //---------------- Key
 
@@ -142,6 +151,11 @@ int32_t VariantMap::size() const {
     return contents->size();
 }
 
+// Because ImmutableVector::get() returns a T*,
+// the out-parameters for `next()` are references to pointers
+// rather than references to a `SelectorKeys` or a `Pattern`,
+// in order to avoid either copying or creating a reference to
+// a temporary value.
 UBool VariantMap::next(int32_t &pos, const SelectorKeys*& k, const Pattern*& v) const {
     UnicodeString unused;
     if (!contents->next(pos, unused, v)) {
@@ -201,6 +215,11 @@ VariantMap::Builder::Builder(UErrorCode& errorCode) {
     return result.orphan();
 }
 
+VariantMap::VariantMap(OrderedMap<Pattern>* vs, ImmutableVector<SelectorKeys>* ks) : contents(vs), keyLists(ks) {
+    // Check invariant: `vs` and `ks` have the same size
+    U_ASSERT(vs->size() == ks->length());
+}
+
 // ------------ Reserved
 
 int32_t Reserved::numParts() const {
@@ -208,6 +227,7 @@ int32_t Reserved::numParts() const {
     return parts->length();
 }
 
+// Returns a const Literal* because ImmutableVector::get() returns a pointer
 const Literal* Reserved::getPart(int32_t i) const {
     U_ASSERT(!isBogus());
     U_ASSERT(i < numParts());
@@ -237,7 +257,7 @@ Reserved* Reserved::Builder::build(UErrorCode& errorCode) const {
     return result;
 }
 
-Reserved::Builder& Reserved::Builder::add(Literal& part, UErrorCode &errorCode) {
+Reserved::Builder& Reserved::Builder::add(const Literal& part, UErrorCode &errorCode) {
     THIS_ON_ERROR(errorCode);
 
     LocalPointer<Literal> lit(new Literal(part));
@@ -294,10 +314,12 @@ Operator::Builder& Operator::Builder::setReserved(Reserved* reserved) {
     return *this;
 }
 
-Operator::Builder& Operator::Builder::setFunctionName(FunctionName* func) {
-    U_ASSERT(func != nullptr);
+Operator::Builder& Operator::Builder::setFunctionName(const FunctionName& func, UErrorCode& errorCode) {
     asReserved.adoptInstead(nullptr);
-    functionName.adoptInstead(func);
+    functionName.adoptInstead(new FunctionName(func));
+    if (!functionName.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
     return *this;
 }
 
@@ -325,11 +347,17 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
     LocalPointer<Operator> result;
     // Must be either reserved or function, not both; enforced by methods
     if (asReserved.isValid()) {
+        // Methods enforce that the function name and options are unset
+        // if `setReserved()` is called, so if they were valid, that
+        // would indicate a bug.
         U_ASSERT(!(functionName.isValid() || options.isValid()));
         result.adoptInstead(Operator::create(*asReserved, errorCode));
     } else {
         if (!functionName.isValid()) {
             // Neither function name nor reserved was set
+            // There is no default, so this case could occur if the
+            // caller creates a builder and doesn't make any calls
+            // before calling build().
             errorCode = U_INVALID_STATE_ERROR;
             return nullptr;
         }
@@ -344,27 +372,15 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
     return result.orphan();
 }
- 
-/* static */ Operator::Builder* Operator::builder(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
-
-    LocalPointer<Operator::Builder> result(new Operator::Builder());
-    if (!result.isValid()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    return result.orphan();
-}
 
 /* static */ Operator* Operator::create(const Reserved& r, UErrorCode& errorCode) {
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Operator> result(new Operator(r));
-    if (!result.isValid() || result->isBogus()) {
+    Operator* result = new Operator(r);
+    if (result == nullptr || result->isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
     }
-    return result.orphan();
+    return result;
 }
 
 /* static */ Operator* Operator::create(const FunctionName& f, OptionMap* opts, UErrorCode& errorCode) {
@@ -381,25 +397,37 @@ Operator* Operator::Builder::build(UErrorCode& errorCode) const {
     }
     NULL_ON_ERROR(errorCode);
 
-    LocalPointer<Operator> result(new Operator(f, adoptedOpts.orphan()));
-    if (!result.isValid() || result->isBogus()) {
+    Operator* result = new Operator(f, adoptedOpts.orphan());
+    if (result == nullptr || result->isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
+}
+
+/* static */ Operator::Builder* Operator::builder(UErrorCode& errorCode) {
+    NULL_ON_ERROR(errorCode);
+
+    LocalPointer<Operator::Builder> result(new Operator::Builder());
+    if (!result.isValid()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
     return result.orphan();
 }
 
-Operator::Operator(const Operator& other) : isReservedSequence(other.isReservedSequence), functionName(other.functionName) {
+Operator::Operator(const Operator& other) : isReservedSequence(other.isReservedSequence),
+                                            functionName(other.functionName),
+                                            options(isReservedSequence ? nullptr
+                                                    : new OptionMap(*other.options)),
+                                            reserved(isReservedSequence? new Reserved(*(other.reserved))
+                                                     : nullptr) {
     U_ASSERT(!other.isBogus());
-    if (isReservedSequence) {
-        reserved.adoptInstead(new Reserved(*(other.reserved)));
-        options.adoptInstead(nullptr);
-        return;
-    }
-    // Function call
-    reserved.adoptInstead(nullptr);
-    options.adoptInstead(new OptionMap(*other.options));
 }
+
+// Function call constructor; adopts `f` and `l`, which must be non-null
+Operator::Operator(const FunctionName& f, OptionMap *l) : isReservedSequence(false), functionName(f), options(l), reserved(nullptr) {
+    U_ASSERT(l != nullptr);
+ }
 
 // ------------ Expression
 
@@ -431,19 +459,6 @@ const Operator& Expression::getOperator() const {
 const Operand& Expression::getOperand() const {
     return *rand;
 }
-
-Operand* Operand::create(const Operand& other) {
-    if (other.isNull()) {
-        return new Operand();
-    } else if (other.isVariable()) {
-        return new Operand(other.asVariable());
-    } else {
-        U_ASSERT(other.isLiteral());
-        return new Operand(other.asLiteral());
-    }
-}
-
-Operand::~Operand() {}
 
 Expression::Builder& Expression::Builder::setOperand(Operand* rAnd) {
     U_ASSERT(rAnd != nullptr);
@@ -501,23 +516,18 @@ Expression* Expression::Builder::build(UErrorCode& errorCode) const {
     return result.orphan();
 }
 
-Expression::Expression(const Expression& other) {
+Expression::Expression(const Expression& other) : rator(other.rator.isValid() ? new Operator(*(other.rator)) : nullptr),
+                                                  rand(other.rand.isValid() ? new Operand(*(other.rand)) : nullptr) {
     U_ASSERT(!other.isBogus());
     if (other.rator.isValid() && other.rand.isValid()) {
-        rator.adoptInstead(new Operator(*(other.rator)));
-        rand.adoptInstead(Operand::create(*(other.rand)));
         bogus = !(rator.isValid() && rand.isValid());
         return;
     }
     if (other.rator.isValid()) {
-        rator.adoptInstead(new Operator(*(other.rator)));
-        rand.adoptInstead(nullptr);
         bogus = !rator.isValid();
         return;
     }
     U_ASSERT(other.rand.isValid());
-    rator.adoptInstead(nullptr);
-    rand.adoptInstead(Operand::create(*(other.rand)));
     bogus = !rand.isValid();
 }
 
@@ -569,10 +579,6 @@ const UnicodeString& PatternPart::asText() const {
 
 // ---------------- Pattern
 
-/* static */ Pattern* Pattern::create(const Pattern& p) {
-    return new Pattern(p);
-}
-
 const PatternPart* Pattern::getPart(int32_t i) const {
     U_ASSERT(!isBogus() && i < numParts());
     return parts->get(i);
@@ -590,7 +596,7 @@ Pattern::Builder* Pattern::builder(UErrorCode &errorCode) {
     return tree.orphan();
 }
 
-Pattern* Pattern::Builder::build(UErrorCode& errorCode) {
+Pattern* Pattern::Builder::build(UErrorCode& errorCode) const {
     NULL_ON_ERROR(errorCode);
     LocalPointer<ImmutableVector<PatternPart>> patternParts(parts->build(errorCode));
     NULL_ON_ERROR(errorCode);
@@ -620,8 +626,21 @@ Pattern::Builder& Pattern::Builder::add(PatternPart* part, UErrorCode &errorCode
     return b;
 }
 
+const Expression& Binding::getValue() const {
+    U_ASSERT(!isBogus());
+    return *value;
+}
+
+Binding::Binding(const Binding& other) : var(other.var), value(new Expression(*other.value)) {
+    U_ASSERT(!other.isBogus());
+}
+
 // --------------- MessageFormatDataModel
 
+
+// The `hasSelectors()` method is provided so that `getSelectors()`,
+// `getVariants()` and `getPattern()` can rely on preconditions
+// rather than taking error codes as arguments.
 UBool MessageFormatDataModel::hasSelectors() const {
     if (pattern.isValid()) {
         U_ASSERT(!selectors.isValid());
@@ -672,10 +691,10 @@ void MessageFormatDataModel::Builder::buildSelectorsMessage(UErrorCode& errorCod
     }
 }
 
-MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addLocalVariable(const UnicodeString &variableName, Expression *expression, UErrorCode &errorCode) {
+MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::addLocalVariable(const VariableName&variableName, Expression *expression, UErrorCode &errorCode) {
     THIS_ON_ERROR(errorCode);
 
-    LocalPointer<Binding> b(Binding::create(VariableName(variableName), expression, errorCode));
+    LocalPointer<Binding> b(Binding::create(variableName, expression, errorCode));
     THIS_ON_ERROR(errorCode);
     locals->add(b.orphan(), errorCode);
 
@@ -732,23 +751,23 @@ MessageFormatDataModel::Builder& MessageFormatDataModel::Builder::setPattern(Pat
     return *this;
 }
 
-MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode) {
+MessageFormatDataModel::MessageFormatDataModel(const MessageFormatDataModel::Builder& builder, UErrorCode &errorCode)
+    : selectors(builder.pattern.isValid() ? nullptr : builder.selectors->build(errorCode)),
+      variants(builder.pattern.isValid() ? nullptr : builder.variants->build(errorCode)),
+      pattern(builder.pattern.isValid() ? new Pattern(*(builder.pattern)) : nullptr),
+      bindings(builder.locals->build(errorCode))
+{
     CHECK_ERROR(errorCode);
-
-    bindings.adoptInstead(builder.locals->build(errorCode));
 
     if (builder.pattern.isValid()) {
         // If `pattern` has been set, then assume this is a Pattern message
         U_ASSERT(!builder.selectors.isValid());
         U_ASSERT(!builder.variants.isValid());
-        pattern.adoptInstead(new Pattern(*(builder.pattern)));
         U_ASSERT(!hasSelectors());
     } else {
         // Otherwise, this is a Selectors message
         U_ASSERT(builder.selectors.isValid());
         U_ASSERT(builder.variants.isValid());
-        selectors.adoptInstead(builder.selectors->build(errorCode));
-        variants.adoptInstead(builder.variants->build(errorCode));
         U_ASSERT(hasSelectors());
     }
 }

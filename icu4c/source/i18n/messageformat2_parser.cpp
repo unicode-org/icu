@@ -968,7 +968,7 @@ Operator* PARSER::parseAnnotation(UErrorCode &errorCode) {
         // Consume the function name
         LocalPointer<FunctionName> func(parseFunction(errorCode));
         NULL_ON_ERROR(errorCode);
-        ratorBuilder->setFunctionName(func.orphan());
+        ratorBuilder->setFunctionName(*func.orphan(), errorCode);
         // Consume the options (which may be empty)
         parseOptions(errorCode, *ratorBuilder);
     } else {

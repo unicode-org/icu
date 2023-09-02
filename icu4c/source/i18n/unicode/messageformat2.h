@@ -167,7 +167,6 @@ public:
         * @deprecated This API is for technology preview only.
         */
         Builder& setDataModel(const MessageFormatDataModel* dataModel);
-
         /**
          * Constructs a new immutable MessageFormatter using the pattern or data model
          * that was previously set, and the locale (if it was previously set)

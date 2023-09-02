@@ -757,16 +757,16 @@ void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& 
     for (int32_t i = 0; i < decls.length(); i++) {
         const Binding* decl = decls.get(i);
         U_ASSERT(decl != nullptr);
-        const Expression* rhs = decl->getValue();
-        check(context, *env, *rhs, status);
+        const Expression& rhs = decl->getValue();
+        check(context, *env, rhs, status);
 
         // Add a closure to the global environment,
         // memoizing the value of localEnv up to this point
-        Closure* closure = Closure::create(*rhs, *env, status);
+        Closure* closure = Closure::create(rhs, *env, status);
         CHECK_ERROR(status);
 
         // Add the LHS to the environment for checking the next declaration
-        env = Environment::create(decl->var, closure, *env, status);
+        env = Environment::create(decl->getVariable(), closure, *env, status);
         CHECK_ERROR(status);
     }
 }

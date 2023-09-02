@@ -185,9 +185,8 @@ void MessageFormatter::Checker::checkDeclarations(TypeEnvironment& t, UErrorCode
     for (int32_t i = 0; i < env.length(); i++) {
         const Binding* b = env.get(i);
         U_ASSERT(b != nullptr);
-        const Expression* rhs = b->getValue();
-        U_ASSERT(rhs != nullptr);
-        t.extend(b->var, typeOf(t, *rhs), error);
+        const Expression& rhs = b->getValue();
+        t.extend(b->getVariable(), typeOf(t, rhs), error);
     }
 }
 
