@@ -41,7 +41,7 @@ U_NAMESPACE_BEGIN namespace message2 {
 
 // Note: This class does not currently inherit from the existing
 // `Format` class.
-class U_I18N_API MessageFormatter : UMemory {
+class U_I18N_API MessageFormatter : public UMemory {
 public:
     /**
      * Destructor.
@@ -331,7 +331,7 @@ public:
 
     // Serializer class (private)
     // Converts a data model back to a string
-    class Serializer : UMemory {
+    class Serializer : public UMemory {
     public:
         Serializer(const MessageFormatDataModel& m, UnicodeString& s) : dataModel(m), result(s) {}
         void serialize();

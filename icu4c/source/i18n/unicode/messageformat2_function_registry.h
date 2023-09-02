@@ -78,7 +78,7 @@ public:
  * @internal ICU 74.0 technology preview
  * @deprecated This API is for technology preview only.
  */
-class U_I18N_API FunctionRegistry : UMemory {
+class U_I18N_API FunctionRegistry : public UMemory {
 public:
     /**
      * Looks up a formatter factory by the name of the formatter. The result is non-const,
@@ -363,7 +363,7 @@ class StandardFunctions {
         // Formatting `value` to a string might require the locale 
         const Locale& locale;
 
-        TextSelector(Locale l) : locale(l) {}
+        TextSelector(const Locale& l) : locale(l) {}
         ~TextSelector();
     };
 };
