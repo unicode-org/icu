@@ -50,11 +50,11 @@ MessageFormatter::Builder& MessageFormatter::Builder::setLocale(const Locale& lo
 
 // Does not adopt `dataModel`
 MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(const MessageFormatDataModel* newDataModel) {
-  U_ASSERT(newDataModel != nullptr);
-  hasPattern = false;
-  dataModel = newDataModel;
+    U_ASSERT(newDataModel != nullptr);
+    hasPattern = false;
+    dataModel = newDataModel;
 
-  return *this;
+    return *this;
 }
 
 /*

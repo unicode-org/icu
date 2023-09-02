@@ -97,15 +97,15 @@ public:
      */
     class U_I18N_API VariableName {
     public:
-      /**
-       * Equality comparison.
-       *
-       * @param other    the object to be compared with.
-       * @return        true if other is equal to this, false otherwise.
-       *
-       * @internal ICU 74.0 technology preview
-       * @deprecated This API is for technology preview only.
-       */
+        /**
+         * Equality comparison.
+         *
+         * @param other    the object to be compared with.
+         * @return        true if other is equal to this, false otherwise.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         inline bool operator== (const VariableName& other) const { return other.variableName == variableName; }
         /**
          * Constructor.
@@ -143,9 +143,7 @@ public:
          * @deprecated This API is for technology preview only.
          */
          UnicodeString declaration() const;
-
     private:
-
         const UnicodeString variableName;
     }; // class VariableName
 
@@ -160,147 +158,146 @@ public:
      * @deprecated This API is for technology preview only.
      */
     class U_I18N_API FunctionName {
-      public:
-    /**
-     * Type representing the function's kind, which is either ':' (the default)
-     * or "open" ('+')/"close" ('-'), usually used for markup functions.
-     *
-     * @internal ICU 74.0 technology preview
-     * @deprecated This API is for technology preview only.
-     */
-      enum Sigil {
-          OPEN,
-          CLOSE,
-          DEFAULT
-      };
-      /**
-       * Converts the function name to a string that includes the sigil.
-       *
-       * @return A string beginning with the sigil, followed by the function's name.
-       *
-       * @internal ICU 74.0 technology preview
-       * @deprecated This API is for technology preview only.
-       */
-      UnicodeString toString() const;
-      /**
-       * Constructor.
-       *
-       * @param s   The function name, as a string. Constructs a function name with the default sigil.
-       *
-       * @internal ICU 74.0 technology preview
-       * @deprecated This API is for technology preview only.
-       */
-      FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
-      /**
-       * Constructor.
-       *
-       * @param n   The function name, as a string.
-       * @param s   The function sigil to use.
-       *
-       * @internal ICU 74.0 technology preview
-       * @deprecated This API is for technology preview only.
-       */
-      FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
-      /**
-       * Copy constructor.
-       *
-       * @param other   The function name to copy.
-       *
-       * @internal ICU 74.0 technology preview
-       * @deprecated This API is for technology preview only.
-       */
-      FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}      
-      /**
-       * Destructor.
-       *
-       * @internal ICU 74.0 technology preview
-       * @deprecated This API is for technology preview only.
-       */
-      virtual ~FunctionName();
-
-      private:
-
-      const UnicodeString functionName;
-      const Sigil functionSigil;
-
-      UChar sigilChar() const {
-          switch (functionSigil) {
-          case Sigil::OPEN: { return PLUS; }
-          case Sigil::CLOSE: { return HYPHEN; }
-          case Sigil::DEFAULT: { return COLON; }
-          }
-          U_ASSERT(false);
-      }
-    }; // class FunctionName
-
-  /**
-   * The `Literal` class corresponds to the `literal` nonterminal in the MessageFormat 2 grammar,
-   * https://github.com/unicode-org/message-format-wg/blob/main/spec/message.abnf and the
-   * `Literal` interface defined in
-   *   // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
-   *
-   * @internal ICU 74.0 technology preview
-   * @deprecated This API is for technology preview only.
-   */
-    class U_I18N_API Literal {
     public:
-       /**
-        * Returns the quoted representation of this literal (enclosed in '|' characters)
-        *
-        * @return A string representation of the literal enclosed in quote characters.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
-        UnicodeString quotedString() const;
-       /**
-        * Returns the parsed string contents of this literal.
-        *
-        * @return A reference to a Formattable whose string contents are
-        *         the parsed string contents of this literal.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
-        const Formattable& getContents() const { return contents; }
         /**
-        * Returns the parsed string contents of this literal.
-        *
-        * @return A string representation of this literal.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
-        const UnicodeString& stringContents() const;
-        /**
-        * Determines if this literal appeared as a quoted literal in the message.
-        *
-        * @return true if and only if this literal appeared as a quoted literal in the
-        *         message.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
-        UBool quoted() const { return isQuoted; }
-        /**
-        * Literal constructor.
-        *
-        *  @param q True if and only if this literal was parsed with the `quoted` nonterminal
-        *           (appeared enclosed in '|' characters in the message text).
-        *  @param s The string contents of this literal; escape sequences are assumed to have
-        *           been interpreted already.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
-        Literal(UBool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
-        /**
-         * Destructor.
+         * Type representing the function's kind, which is either ':' (the default)
+         * or "open" ('+')/"close" ('-'), usually used for markup functions.
          *
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-        virtual ~Literal();
+         enum Sigil {
+             OPEN,
+             CLOSE,
+             DEFAULT
+         };
+         /**
+          * Converts the function name to a string that includes the sigil.
+          *
+          * @return A string beginning with the sigil, followed by the function's name.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         UnicodeString toString() const;
+         /**
+          * Constructor.
+          *
+          * @param s   The function name, as a string. Constructs a function name with the default sigil.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
+         /**
+          * Constructor.
+          *
+          * @param n   The function name, as a string.
+          * @param s   The function sigil to use.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
+         /**
+          * Copy constructor.
+          *
+          * @param other   The function name to copy.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}
+         /**
+          * Destructor.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         virtual ~FunctionName();
+
+    private:
+         const UnicodeString functionName;
+         const Sigil functionSigil;
+
+         UChar sigilChar() const {
+             switch (functionSigil) {
+             case Sigil::OPEN: { return PLUS; }
+             case Sigil::CLOSE: { return HYPHEN; }
+             case Sigil::DEFAULT: { return COLON; }
+             }
+             U_ASSERT(false);
+         }
+    }; // class FunctionName
+
+    /**
+     * The `Literal` class corresponds to the `literal` nonterminal in the MessageFormat 2 grammar,
+     * https://github.com/unicode-org/message-format-wg/blob/main/spec/message.abnf and the
+     * `Literal` interface defined in
+     *   // https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API Literal {
+    public:
+        /**
+         * Returns the quoted representation of this literal (enclosed in '|' characters)
+         *
+         * @return A string representation of the literal enclosed in quote characters.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+         UnicodeString quotedString() const;
+         /**
+          * Returns the parsed string contents of this literal.
+          *
+          * @return A reference to a Formattable whose string contents are
+          *         the parsed string contents of this literal.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         const Formattable& getContents() const { return contents; }
+         /**
+          * Returns the parsed string contents of this literal.
+          *
+          * @return A string representation of this literal.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         const UnicodeString& stringContents() const;
+         /**
+          * Determines if this literal appeared as a quoted literal in the message.
+          *
+          * @return true if and only if this literal appeared as a quoted literal in the
+          *         message.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         UBool quoted() const { return isQuoted; }
+         /**
+          * Literal constructor.
+          *
+          *  @param q True if and only if this literal was parsed with the `quoted` nonterminal
+          *           (appeared enclosed in '|' characters in the message text).
+          *  @param s The string contents of this literal; escape sequences are assumed to have
+          *           been interpreted already.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         Literal(UBool q, const UnicodeString& s) : isQuoted(q), contents(s) {}
+         /**
+          * Destructor.
+          *
+          * @internal ICU 74.0 technology preview
+          * @deprecated This API is for technology preview only.
+          */
+         virtual ~Literal();
 
     private:
         friend class Key;
@@ -458,7 +455,7 @@ public:
      */
     class U_I18N_API Key : public UObject {
     public:
-       /**
+        /**
         * Determines if this is a wildcard key
         *
         * @return True if and only if this is the wildcard key
@@ -467,15 +464,15 @@ public:
         * @deprecated This API is for technology preview only.
         */
         UBool isWildcard() const { return wildcard; }
-       /**
-        * Returns the contents of this key as a literal.
-        * Precondition: !isWildcard()
-        *
-        * @return The literal contents of the key
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Returns the contents of this key as a literal.
+         * Precondition: !isWildcard()
+         *
+         * @return The literal contents of the key
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         const Literal& asLiteral() const;
         /**
          * Creates a new wildcard key.
@@ -546,31 +543,31 @@ public:
             Builder(UErrorCode&);
             LocalPointer<ImmutableVector<Key>::Builder> keys;
         public:
-        /**
-         * Adds a single key to the list. Adopts `key`.
-         *
-         * @param key The key to be added.
-         * @param status Input/output error code.
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& add(Key* key, UErrorCode& status);
-        /**
-         * Constructs a new immutable `SelectorKeys` using the list of keys
-         * set with previous `add()` calls.
-         *
-         * The builder object (`this`) can still be used after calling `build()`.
-         *
-         * @param status    Input/output error code.
-         * @return          The new SelectorKeys object, which is non-null if
-         *                  U_SUCCESS(status).
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        SelectorKeys* build(UErrorCode& status) const;
+            /**
+             * Adds a single key to the list. Adopts `key`.
+             *
+             * @param key The key to be added.
+             * @param status Input/output error code.
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+             Builder& add(Key* key, UErrorCode& status);
+             /**
+              * Constructs a new immutable `SelectorKeys` using the list of keys
+              * set with previous `add()` calls.
+              *
+              * The builder object (`this`) can still be used after calling `build()`.
+              *
+              * @param status    Input/output error code.
+              * @return          The new SelectorKeys object, which is non-null if
+              *                  U_SUCCESS(status).
+              *
+              * @internal ICU 74.0 technology preview
+              * @deprecated This API is for technology preview only.
+              */
+             SelectorKeys* build(UErrorCode& status) const;
         }; // class SelectorKeys::Builder
         /**
          * Returns a new `SelectorKeys::Builder` object.
@@ -764,31 +761,31 @@ public:
             LocalPointer<ImmutableVector<Literal>::Builder> parts;
           
         public:
-        /**
-         * Adds a single literal to the reserved sequence.
-         *
-         * @param part The literal to be added
-         * @param status Input/output error code
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& add(const Literal& part, UErrorCode& status);
-        /**
-         * Constructs a new immutable `Reserved` using the list of parts
-         * set with previous `add()` calls.
-         *
-         * The builder object (`this`) can still be used after calling `build()`.
-         *
-         * @param status    Input/output error code.
-         * @return          The new Reserved object, which is non-null if
-         *                  U_SUCCESS(status).
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Reserved* build(UErrorCode& status) const;
+            /**
+             * Adds a single literal to the reserved sequence.
+             *
+             * @param part The literal to be added
+             * @param status Input/output error code
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& add(const Literal& part, UErrorCode& status);
+            /**
+             * Constructs a new immutable `Reserved` using the list of parts
+             * set with previous `add()` calls.
+             *
+             * The builder object (`this`) can still be used after calling `build()`.
+             *
+             * @param status    Input/output error code.
+             * @return          The new Reserved object, which is non-null if
+             *                  U_SUCCESS(status).
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Reserved* build(UErrorCode& status) const;
         }; // class Reserved::Builder
         /**
          * Returns a new `Reserved::Builder` object.
@@ -836,14 +833,14 @@ public:
      */
     class U_I18N_API Operator : public UMemory {
     public:
-       /**
-        * Determines if this operator is a reserved annotation.
-        *
-        * @return true if and only if this operator represents a reserved sequence.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Determines if this operator is a reserved annotation.
+         *
+         * @return true if and only if this operator represents a reserved sequence.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UBool isReserved() const { return isReservedSequence; }
         /**
          * Accesses the function name.
@@ -891,61 +888,61 @@ public:
             LocalPointer<FunctionName> functionName;
             LocalPointer<OptionMap::Builder> options;
         public:
-        /**
-         * Sets this operator to be a reserved sequence.
-         * If a function name and/or options were previously set,
-         * clears them. Adopts `reserved`.
-         *
-         * @param reserved The reserved sequence to set as the contents of this Operator.
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& setReserved(Reserved* reserved);
-        /**
-         * Sets this operator to be a function annotation and sets its name
-         * to `func`.
-         * If a reserved sequence was previously set, clears it.
-         *
-         * @param func The function name.
-         * @param status Input/output error code.
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& setFunctionName(const FunctionName& func, UErrorCode& status);
-        /**
-         * Sets this operator to be a function annotation and adds a
-         * single option.
-         * If a reserved sequence was previously set, clears it.
-         *
-         * @param key The name of the option.
-         * @param value The value (right-hand side) of the option.
-         * @param status Input/output error code.
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& addOption(const UnicodeString &key, Operand* value, UErrorCode& status);
-        /**
-         * Constructs a new immutable `Operator` using the `reserved` annotation
-         * or the function name and options that were previously set.
-         * If neither `setReserved()` nor `setFunctionName()` was previously
-         * called, then `status` is set to U_INVALID_STATE_ERROR.
-         *
-         * The builder object (`this`) can still be used after calling `build()`.
-         *
-         * @param status    Input/output error code.
-         * @return          The new Operator, which is non-null if U_SUCCESS(status).
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Operator* build(UErrorCode& status) const;
-        };
+            /**
+             * Sets this operator to be a reserved sequence.
+             * If a function name and/or options were previously set,
+             * clears them. Adopts `reserved`.
+             *
+             * @param reserved The reserved sequence to set as the contents of this Operator.
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& setReserved(Reserved* reserved);
+            /**
+             * Sets this operator to be a function annotation and sets its name
+             * to `func`.
+             * If a reserved sequence was previously set, clears it.
+             *
+             * @param func The function name.
+             * @param status Input/output error code.
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& setFunctionName(const FunctionName& func, UErrorCode& status);
+            /**
+             * Sets this operator to be a function annotation and adds a
+             * single option.
+             * If a reserved sequence was previously set, clears it.
+             *
+             * @param key The name of the option.
+             * @param value The value (right-hand side) of the option.
+             * @param status Input/output error code.
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& addOption(const UnicodeString &key, Operand* value, UErrorCode& status);
+            /**
+             * Constructs a new immutable `Operator` using the `reserved` annotation
+             * or the function name and options that were previously set.
+             * If neither `setReserved()` nor `setFunctionName()` was previously
+             * called, then `status` is set to U_INVALID_STATE_ERROR.
+             *
+             * The builder object (`this`) can still be used after calling `build()`.
+             *
+             * @param status    Input/output error code.
+             * @return          The new Operator, which is non-null if U_SUCCESS(status).
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Operator* build(UErrorCode& status) const;
+        }; // class Operator::Builder
         /**
          * Returns a new `Operator::Builder` object.
          *
@@ -994,60 +991,60 @@ public:
      */
     class U_I18N_API Expression : public UObject {
     public:
-       /**
-        * Checks if this expression is an annotation
-        * with no operand.
-        *
-        * @return True if and only if the expression has
-        *         an annotation and has no operand.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Checks if this expression is an annotation
+         * with no operand.
+         *
+         * @return True if and only if the expression has
+         *         an annotation and has no operand.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UBool isStandaloneAnnotation() const;
-       /**
-        * Checks if this expression has a function
-        * annotation (with or without an operand). A reserved
-        * sequence is not a function annotation.
-        *
-        * @return True if and only if the expression has an annotation
-        *         that is a function.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Checks if this expression has a function
+         * annotation (with or without an operand). A reserved
+         * sequence is not a function annotation.
+         *
+         * @return True if and only if the expression has an annotation
+         *         that is a function.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UBool isFunctionCall() const;
-       /**
-        * Returns true if and only if this expression is
-        * annotated with a reserved sequence.
-        *
-        * @return True if and only if the expression has an
-        *         annotation that is a reserved sequence,
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Returns true if and only if this expression is
+         * annotated with a reserved sequence.
+         *
+         * @return True if and only if the expression has an
+         *         annotation that is a reserved sequence,
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         UBool isReserved() const;
-       /**
-        * Accesses the function or reserved sequence
-        * annotating this expression.
-        * Precondition: isFunctionCall() || isReserved()
-        *
-        * @return A reference to the operator of this expression.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Accesses the function or reserved sequence
+         * annotating this expression.
+         * Precondition: isFunctionCall() || isReserved()
+         *
+         * @return A reference to the operator of this expression.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         const Operator& getOperator() const;
-       /**
-        * Accesses the operand of this expression.
-        *
-        * @return A reference to the operand of this expression,
-        *         which may be the null operand.
-        *
-        * @internal ICU 74.0 technology preview
-        * @deprecated This API is for technology preview only.
-        */
+        /**
+         * Accesses the operand of this expression.
+         *
+         * @return A reference to the operand of this expression,
+         *         which may be the null operand.
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         const Operand& getOperand() const;
 
         /**
@@ -1064,42 +1061,42 @@ public:
             LocalPointer<Operand> rand;
             LocalPointer<Operator> rator;
         public:
-        /**
-         * Sets the operand of this expression. Adopts `rAnd`.
-         *
-         * @param rAnd The operand to set. Must be non-null.
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& setOperand(Operand* rAnd);
-        /**
-         * Sets the operator of this expression. Adopts `rAtor`.
-         *
-         * @param rAtor The operator to set. Must be non-null.
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& setOperator(Operator* rAtor);
-        /**
-         * Constructs a new immutable `Expression` using the operand and operator that
-         * were previously set. If neither `setOperand()` nor `setOperator()` was
-         * previously called, or if `setOperand()` was called with the null operand
-         * and `setOperator()` was never called, then `status` is set to
-         * U_INVALID_STATE_ERROR.
-         *
-         * The builder object (`this`) can still be used after calling `build()`.
-         *
-         * @param status    Input/output error code.
-         * @return          The new Expression, which is non-null if U_SUCCESS(status).
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Expression* build(UErrorCode& status) const;
+            /**
+             * Sets the operand of this expression. Adopts `rAnd`.
+             *
+             * @param rAnd The operand to set. Must be non-null.
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+             Builder& setOperand(Operand* rAnd);
+             /**
+              * Sets the operator of this expression. Adopts `rAtor`.
+              *
+              * @param rAtor The operator to set. Must be non-null.
+              * @return A reference to the builder.
+              *
+              * @internal ICU 74.0 technology preview
+              * @deprecated This API is for technology preview only.
+              */
+             Builder& setOperator(Operator* rAtor);
+             /**
+              * Constructs a new immutable `Expression` using the operand and operator that
+              * were previously set. If neither `setOperand()` nor `setOperator()` was
+              * previously called, or if `setOperand()` was called with the null operand
+              * and `setOperator()` was never called, then `status` is set to
+              * U_INVALID_STATE_ERROR.
+              *
+              * The builder object (`this`) can still be used after calling `build()`.
+              *
+              * @param status    Input/output error code.
+              * @return          The new Expression, which is non-null if U_SUCCESS(status).
+              *
+              * @internal ICU 74.0 technology preview
+              * @deprecated This API is for technology preview only.
+              */
+             Expression* build(UErrorCode& status) const;
         }; // class Expression::Builder
         /**
          * Returns a new `Expression::Builder` object.
@@ -1286,30 +1283,30 @@ public:
             LocalPointer<ImmutableVector<PatternPart>::Builder> parts;
           
         public:
-        /**
-         * Adds a single part to the pattern. Adopts `part`.
-         *
-         * @param part The part to be added. Must be non-null.
-         * @param status Input/output error code
-         * @return A reference to the builder.
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Builder& add(PatternPart *part, UErrorCode& status);
-        /**
-         * Constructs a new immutable `Pattern` using the list of parts
-         * set with previous `add()` calls.
-         *
-         * The builder object (`this`) can still be used after calling `build()`.
-         *
-         * @param status    Input/output error code.
-         * @return          The new pattern, which is non-null if U_SUCCESS(status).
-         *
-         * @internal ICU 74.0 technology preview
-         * @deprecated This API is for technology preview only.
-         */
-        Pattern* build(UErrorCode &status) const;
+            /**
+             * Adds a single part to the pattern. Adopts `part`.
+             *
+             * @param part The part to be added. Must be non-null.
+             * @param status Input/output error code
+             * @return A reference to the builder.
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Builder& add(PatternPart *part, UErrorCode& status);
+            /**
+             * Constructs a new immutable `Pattern` using the list of parts
+             * set with previous `add()` calls.
+             *
+             * The builder object (`this`) can still be used after calling `build()`.
+             *
+             * @param status    Input/output error code.
+             * @return          The new pattern, which is non-null if U_SUCCESS(status).
+             *
+             * @internal ICU 74.0 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Pattern* build(UErrorCode &status) const;
         }; // class Pattern::Builder
 
         /**
@@ -1362,8 +1359,8 @@ public:
          * @internal ICU 74.0 technology preview
          * @deprecated This API is for technology preview only.
          */
-         static Binding* create(const VariableName& var, Expression* e, UErrorCode& status);
-         /**
+        static Binding* create(const VariableName& var, Expression* e, UErrorCode& status);
+        /**
           * Accesses the right-hand side of the binding.
           *
           * @return A reference to the expression.
@@ -1371,8 +1368,8 @@ public:
           * @internal ICU 74.0 technology preview
           * @deprecated This API is for technology preview only.
           */
-         const Expression& getValue() const;
-         /**
+        const Expression& getValue() const;
+        /**
           * Accesses the left-hand side of the binding.
           *
           * @return A reference to the variable name.
@@ -1380,7 +1377,7 @@ public:
           * @internal ICU 74.0 technology preview
           * @deprecated This API is for technology preview only.
           */
-         const VariableName& getVariable() const { return var; }
+        const VariableName& getVariable() const { return var; }
     private:
         friend class ImmutableVector<Binding>;
 
@@ -1468,7 +1465,7 @@ public:
         LocalPointer<Bindings::Builder> locals;
       
     public:
-       /**
+        /**
          * Adds a local variable declaration. Adopts `expression`, which must be non-null.
          *
          * @param variableName The variable name of the declaration.
@@ -1480,7 +1477,7 @@ public:
          * @deprecated This API is for technology preview only.
          */
         Builder& addLocalVariable(const VariableName& variableName, Expression* expression, UErrorCode &status);
-       /**
+        /**
          * Adds a selector expression. Adopts `expression`, which must be non-null.
          * If a pattern was previously set, clears the pattern.
          *
@@ -1492,7 +1489,7 @@ public:
          * @deprecated This API is for technology preview only.
          */
         Builder& addSelector(Expression* selector, UErrorCode& status);
-       /**
+        /**
          * Adds a single variant. Adopts `keys` and `pattern`, which must be non-null.
          * If a pattern was previously set using `setPattern()`, clears the pattern.
          *
@@ -1505,7 +1502,7 @@ public:
          * @deprecated This API is for technology preview only.
          */
         Builder& addVariant(SelectorKeys* keys, Pattern* pattern, UErrorCode& status);
-       /**
+        /**
          * Sets the body of the message as a pattern.
          * If selectors and/or variants were previously set, clears them.
          * Adopts `pattern`, which must be non-null.
@@ -1539,26 +1536,26 @@ public:
          */
         MessageFormatDataModel* build(UErrorCode& status) const;
     }; // class MessageFormatDataModel::Builder
-  /**
-   * Returns a new `MessageFormatDataModels::Builder` object.
-   *
-   * @param status  Input/output error code.
-   * @return        The new Builder object, which is non-null if U_SUCCESS(status).
-   *
-   * @internal ICU 74.0 technology preview
-   * @deprecated This API is for technology preview only.
-   */
-  static Builder* builder(UErrorCode& status);
+    /**
+     * Returns a new `MessageFormatDataModels::Builder` object.
+     *
+     * @param status  Input/output error code.
+     * @return        The new Builder object, which is non-null if U_SUCCESS(status).
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    static Builder* builder(UErrorCode& status);
 
-  /**
-   * Destructor.
-   *
-   * @internal ICU 74.0 technology preview
-   * @deprecated This API is for technology preview only.
-   */
-  virtual ~MessageFormatDataModel();
+    /**
+     * Destructor.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    virtual ~MessageFormatDataModel();
 
-  private:
+private:
 
      // The expressions that are being matched on.
      // Null iff this is a `pattern` message.

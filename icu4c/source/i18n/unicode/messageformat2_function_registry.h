@@ -32,7 +32,7 @@ class Selector;
  * @deprecated This API is for technology preview only.
  */
 class U_COMMON_API FormatterFactory : public UMemory {
-  public:
+public:
     /**
      * Constructs a new formatter object. This method is not const;
      * formatter factories with local state may be defined.
@@ -46,7 +46,7 @@ class U_COMMON_API FormatterFactory : public UMemory {
      */
     virtual Formatter* createFormatter(const Locale& locale, UErrorCode& status) = 0;
     virtual ~FormatterFactory();
-};
+}; // class FormatterFactory
 
 /**
  * Interface that factory classes for creating selectors must implement.
@@ -55,7 +55,7 @@ class U_COMMON_API FormatterFactory : public UMemory {
  * @deprecated This API is for technology preview only.
  */
 class U_COMMON_API SelectorFactory : public UMemory {
-  public:
+public:
     /**
      * Constructs a new selector object.
      *
@@ -68,7 +68,7 @@ class U_COMMON_API SelectorFactory : public UMemory {
      */
     virtual Selector* createSelector(const Locale& locale, UErrorCode& status) const = 0;
     virtual ~SelectorFactory();
-};
+}; // class SelectorFactory
 
 /**
  * Defines mappings from names of formatters and selectors to functions implementing them.
@@ -79,7 +79,7 @@ class U_COMMON_API SelectorFactory : public UMemory {
  * @deprecated This API is for technology preview only.
  */
 class U_I18N_API FunctionRegistry : UMemory {
- public:
+public:
     /**
      * Looks up a formatter factory by the name of the formatter. The result is non-const,
      * since formatter factories may have local state.
@@ -113,13 +113,13 @@ class U_I18N_API FunctionRegistry : UMemory {
      * @deprecated This API is for technology preview only.
      */
     class Builder {
-      private:
+    private:
         friend class FunctionRegistry;
 
         Builder(UErrorCode& status);
         LocalPointer<Hashtable> formatters;
         LocalPointer<Hashtable> selectors;
-      public:
+    public:
         /**
          * Registers a formatter factory to a given formatter name. Adopts `formatterFactory`.
          *
@@ -157,7 +157,7 @@ class U_I18N_API FunctionRegistry : UMemory {
          * @deprecated This API is for technology preview only.
          */
         FunctionRegistry* build(UErrorCode& status);
-    };
+    }; // class FunctionRegistry::Builder
    /**
      * Returns a new `FunctionRegistry::Builder` object.
      *
@@ -169,7 +169,7 @@ class U_I18N_API FunctionRegistry : UMemory {
      */
     static Builder* builder(UErrorCode& status);
 
- private:
+private:
     friend class Builder;
     friend class MessageContext;
     friend class MessageFormatter;
@@ -199,7 +199,7 @@ class U_I18N_API FunctionRegistry : UMemory {
     }
     const LocalPointer<Hashtable> formatters;
     const LocalPointer<Hashtable> selectors;
- };
+ }; // class FunctionRegistry
 
 /**
  * Interface that formatter classes must implement.
@@ -208,7 +208,7 @@ class U_I18N_API FunctionRegistry : UMemory {
  * @deprecated This API is for technology preview only.
  */
 class U_COMMON_API Formatter : public UMemory {
- public:
+public:
     /**
      * Formats the input passed in `context` by setting an output using one of the
      * `FormattingContext` methods or indicating an error.
@@ -226,8 +226,7 @@ class U_COMMON_API Formatter : public UMemory {
      */
     virtual void format(FormattingContext& context, UErrorCode& status) const = 0;
     virtual ~Formatter();
-};
-
+}; // class Formatter
 
 /**
  * Interface that selector classes must implement.
@@ -236,7 +235,7 @@ class U_COMMON_API Formatter : public UMemory {
  * @deprecated This API is for technology preview only.
  */
 class U_COMMON_API Selector : public UMemory {
- public:
+public:
     /**
      * Compares the input passed in `context` to an array of keys, and returns an array of matching
      * keys sorted by preference.
@@ -259,7 +258,7 @@ class U_COMMON_API Selector : public UMemory {
      */
     virtual void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& status) const = 0;
     virtual ~Selector();
-};
+}; // class Selector
 
 // Built-in functions
 /*
@@ -276,10 +275,10 @@ class StandardFunctions {
     };
 
     class DateTime : public Formatter {
-        public:
+    public:
         void format(FormattingContext& context, UErrorCode& status) const;
 
-        private:
+    private:
         const Locale& locale;
         friend class DateTimeFactory;
         DateTime(const Locale& l) : locale(l) {}
@@ -292,10 +291,10 @@ class StandardFunctions {
     };
         
     class Number : public Formatter {
-        public:
+    public:
         void format(FormattingContext& context, UErrorCode& status) const;
 
-        private:
+    private:
         friend class NumberFactory;
 
         Number(const Locale& loc) : locale(loc), icuFormatter(number::NumberFormatter::withLocale(loc)) {}
@@ -334,10 +333,10 @@ class StandardFunctions {
     };
 
     class Plural : public Selector {
-        public:
+    public:
         void selectKey(FormattingContext& context, const UnicodeString* keys/*[]*/, int32_t numKeys, UnicodeString* prefs/*[]*/, int32_t& numMatching, UErrorCode& status) const;
 
-        private:
+    private:
         friend class PluralFactory;
 
         // Adopts `r`
@@ -350,7 +349,7 @@ class StandardFunctions {
     };
 
     class TextFactory : public SelectorFactory {
-        public:
+    public:
         Selector* createSelector(const Locale& locale, UErrorCode& status) const;
     };
 

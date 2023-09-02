@@ -38,8 +38,9 @@ class Environment;
 // declaration, along with an environment giving values
 // to its free variables
 class Closure : public UMemory {
-    using Expression = MessageFormatDataModel::Expression;
 public:
+    using Expression = MessageFormatDataModel::Expression;
+
     static Closure* create(const Expression&, const Environment&, UErrorCode&);
     const Expression& getExpr() const {
         return expr;
@@ -182,7 +183,7 @@ class Errors : public UMemory {
  */
 
 class U_I18N_API MessageArguments : public UMemory {
-  public:
+public:
     /**
      * The mutable Builder class allows each message argument to be initialized
      * separately; calling its `build()` method yields an immutable MessageArguments.
@@ -313,7 +314,8 @@ class U_I18N_API MessageArguments : public UMemory {
      * @deprecated This API is for technology preview only.
      */
     static Builder* builder(UErrorCode& status);
-  private:
+
+private:
     friend class MessageContext;
 
     bool has(const VariableName&) const;
