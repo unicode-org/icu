@@ -24,8 +24,10 @@ class Formatter;
 class FormatterFactory;
 class SelectorFactory;
 
-// Intermediate classes used internally in the formatter
+using FunctionName = MessageFormatDataModel::FunctionName;
+using VariableName = MessageFormatDataModel::VariableName;
 
+// Intermediate classes used internally in the formatter
 
 // Closures and environments
 // -------------------------

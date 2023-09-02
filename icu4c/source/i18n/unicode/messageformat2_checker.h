@@ -18,6 +18,8 @@
 
 U_NAMESPACE_BEGIN  namespace message2 {
 
+using VariableName = MessageFormatDataModel::VariableName;
+
 // Used for checking missing selector annotation errors
 class TypeEnvironment : public UMemory {
     public:

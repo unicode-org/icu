@@ -17,47 +17,6 @@
 
 U_NAMESPACE_BEGIN namespace message2 {
 
-class VariableName {
-    public:
-    inline bool operator== (const VariableName& other) const { return other.variableName == variableName; }
-    VariableName(const UnicodeString& s) : variableName(s) {}
-    // For why this is needed, see the constructor for the null operand
-    VariableName() {}
-    const UnicodeString& identifier() const { return variableName; }
-    UnicodeString declaration() const;
-    private:
-    const UnicodeString variableName;
-};
-
-// Corresponds to the `FunctionRef` interface defined in
-// https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
-class FunctionName {
-public:
-    enum Sigil {
-        OPEN,
-        CLOSE,
-        DEFAULT
-    };
-    UnicodeString toString() const;
-    FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
-    FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
-    FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}
-    virtual ~FunctionName();
-
-private:
-    const UnicodeString functionName;
-    const Sigil functionSigil;
-
-    UChar sigilChar() const {
-        switch (functionSigil) {
-        case Sigil::OPEN: { return PLUS; }
-        case Sigil::CLOSE: { return HYPHEN; }
-        case Sigil::DEFAULT: { return COLON; }
-        }
-        U_ASSERT(false);
-    }
-};
-
 // -----------------------------------------------------------------------
 // Public MessageFormatDataModel class
 
@@ -129,6 +88,150 @@ public:
     using ExpressionList = ImmutableVector<Expression>;
     using KeyList = ImmutableVector<Key>;
     using OptionMap = OrderedMap<Operand>;
+
+    /**
+     * The `VariableName` class represents the name of a variable in a message.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API VariableName {
+    public:
+      /**
+       * Equality comparison.
+       *
+       * @param other    the object to be compared with.
+       * @return        true if other is equal to this, false otherwise.
+       *
+       * @internal ICU 74.0 technology preview
+       * @deprecated This API is for technology preview only.
+       */
+        inline bool operator== (const VariableName& other) const { return other.variableName == variableName; }
+        /**
+         * Constructor.
+         *
+         * @param s   The variable name, as a string
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        VariableName(const UnicodeString& s) : variableName(s) {}
+        /**
+         * Default constructor. (Needed for representing null operands)
+         *
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        VariableName() {}
+        /**
+         * Returns the name of this variable, as a string.
+         *
+         * @return        Reference to the variable's name
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        const UnicodeString& identifier() const { return variableName; }
+        /**
+         * Returns the name of this variable, as a string prefixed by the
+         * variable name sigil ('$')
+         *
+         * @return        String representation of the variable as it appears in a declaration
+         *
+         * @internal ICU 74.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+         UnicodeString declaration() const;
+
+    private:
+
+        const UnicodeString variableName;
+    }; // class VariableName
+
+    /**
+     * The `FunctionName` class represents the name of a function referred to
+     * in a message.
+     *
+     * It corresponds to the `FunctionRef` interface defined in
+     * https://github.com/unicode-org/message-format-wg/blob/main/spec/data-model.md#expressions
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    class U_I18N_API FunctionName {
+      public:
+    /**
+     * Type representing the function's kind, which is either ':' (the default)
+     * or "open" ('+')/"close" ('-'), usually used for markup functions.
+     *
+     * @internal ICU 74.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+      enum Sigil {
+          OPEN,
+          CLOSE,
+          DEFAULT
+      };
+      /**
+       * Converts the function name to a string that includes the sigil.
+       *
+       * @return A string beginning with the sigil, followed by the function's name.
+       *
+       * @internal ICU 74.0 technology preview
+       * @deprecated This API is for technology preview only.
+       */
+      UnicodeString toString() const;
+      /**
+       * Constructor.
+       *
+       * @param s   The function name, as a string. Constructs a function name with the default sigil.
+       *
+       * @internal ICU 74.0 technology preview
+       * @deprecated This API is for technology preview only.
+       */
+      FunctionName(UnicodeString s) : functionName(s), functionSigil(Sigil::DEFAULT) {}
+      /**
+       * Constructor.
+       *
+       * @param n   The function name, as a string.
+       * @param s   The function sigil to use.
+       *
+       * @internal ICU 74.0 technology preview
+       * @deprecated This API is for technology preview only.
+       */
+      FunctionName(UnicodeString n, Sigil s) : functionName(n), functionSigil(s) {}
+      /**
+       * Copy constructor.
+       *
+       * @param other   The function name to copy.
+       *
+       * @internal ICU 74.0 technology preview
+       * @deprecated This API is for technology preview only.
+       */
+      FunctionName(const FunctionName& other) : functionName(other.functionName), functionSigil(other.functionSigil) {}      
+      /**
+       * Destructor.
+       *
+       * @internal ICU 74.0 technology preview
+       * @deprecated This API is for technology preview only.
+       */
+      virtual ~FunctionName();
+
+      private:
+
+      const UnicodeString functionName;
+      const Sigil functionSigil;
+
+      UChar sigilChar() const {
+          switch (functionSigil) {
+          case Sigil::OPEN: { return PLUS; }
+          case Sigil::CLOSE: { return HYPHEN; }
+          case Sigil::DEFAULT: { return COLON; }
+          }
+          U_ASSERT(false);
+      }
+    }; // class FunctionName
 
   /**
    * The `Literal` class corresponds to the `literal` nonterminal in the MessageFormat 2 grammar,
