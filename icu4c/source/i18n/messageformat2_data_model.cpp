@@ -792,7 +792,9 @@ MessageFormatDataModel* MessageFormatDataModel::Builder::build(UErrorCode &error
 }
 
 MessageFormatDataModel::~MessageFormatDataModel() {}
+
 } // namespace message2
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
