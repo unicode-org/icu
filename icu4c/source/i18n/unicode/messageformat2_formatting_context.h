@@ -361,6 +361,14 @@ class ExpressionContext : public FormattingContext {
     // Fallback string to use in case of errors
     UnicodeString fallback;
 
+/*
+  Object and Formattable inputs are stored separately to avoid accidental copying
+  of a Formattable containing an object, which would occur if the Formattable
+  assignment operator was used. The copy constructor for Formattables assumes that
+  an object stored in a Formattable has type Measure. Since MessageFormat allows
+  custom functions to take object arguments of any type that inherits from UObject,
+  we have to ensure that a Formattable is never copied.
+*/
     // Input arises from literals or a message argument
     // Invariant: input.getType != kObject (object Formattables can't be copied)
     Formattable input;
