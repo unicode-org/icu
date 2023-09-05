@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693617302781,
+  "lastUpdate": 1693937209870,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14218,6 +14218,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 67.2687,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "5fb2a6ad06f5fbf621eb04b04687b9cf0f4986c0",
+          "message": "ICU-22324 Mavenization, updating the cldr-to-icu scripts and instructions",
+          "timestamp": "2023-09-05T10:24:23-07:00",
+          "tree_id": "25d6e51fdc281738220c92ef5e23ab5a3491faeb",
+          "url": "https://github.com/unicode-org/icu/commit/5fb2a6ad06f5fbf621eb04b04687b9cf0f4986c0"
+        },
+        "date": 1693937152592,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 24.3562,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 44.1289,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
