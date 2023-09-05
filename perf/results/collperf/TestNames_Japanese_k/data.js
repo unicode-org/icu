@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693950333472,
+  "lastUpdate": 1693958288765,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25270,6 +25270,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7577239.5624,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "c294c3272c9cb18e35e5827cf37f9f5c6e1c8b58",
+          "message": "ICU-22365 Add adoptULocale and buildULocale to ULocaleBuilder\n\nAdd two methods related to ULocale to ULocaleBuilder API\n\nvoid ulocbld_adoptULocale(ULocaleBuilder* builder, ULocale* locale);\nULocale* ulocbld_buildULocale(ULocaleBuilder* builder, UErrorCode* err);\n\nICU TC approved this in 2023-08-31",
+          "timestamp": "2023-09-05T16:37:39-07:00",
+          "tree_id": "f768296b9afca9c608ebcb559cea263d79e01451",
+          "url": "https://github.com/unicode-org/icu/commit/c294c3272c9cb18e35e5827cf37f9f5c6e1c8b58"
+        },
+        "date": 1693958235709,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 343.3432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 28108004.8193,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6440211.4118,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 28034840.3113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7495947.9126,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
