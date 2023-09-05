@@ -33,6 +33,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   icu::Collator::ECollationStrength strength = kStrength[rnd16 % kStrength.size()];
   const icu::Locale& locale = GetRandomLocale(rnd16 / kStrength.size());
 
+  // Limit the comparison size to 4096 to avoid unnecessary timeout
+  if (size > 4096) {
+      size = 4096;
+  }
   std::unique_ptr<char16_t> compbuff1(new char16_t[size/4]);
   std::memcpy(compbuff1.get(), data, (size/4)*2);
   data = data + size/2;
