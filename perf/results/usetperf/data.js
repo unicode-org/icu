@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693950528556,
+  "lastUpdate": 1693958491327,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36502,6 +36502,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2278.4891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "c294c3272c9cb18e35e5827cf37f9f5c6e1c8b58",
+          "message": "ICU-22365 Add adoptULocale and buildULocale to ULocaleBuilder\n\nAdd two methods related to ULocale to ULocaleBuilder API\n\nvoid ulocbld_adoptULocale(ULocaleBuilder* builder, ULocale* locale);\nULocale* ulocbld_buildULocale(ULocaleBuilder* builder, UErrorCode* err);\n\nICU TC approved this in 2023-08-31",
+          "timestamp": "2023-09-05T16:37:39-07:00",
+          "tree_id": "f768296b9afca9c608ebcb559cea263d79e01451",
+          "url": "https://github.com/unicode-org/icu/commit/c294c3272c9cb18e35e5827cf37f9f5c6e1c8b58"
+        },
+        "date": 1693958424344,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 114752.875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 124672.8294,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5263,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.9593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.7248,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 14666.473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 47539.772,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2661.3848,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
