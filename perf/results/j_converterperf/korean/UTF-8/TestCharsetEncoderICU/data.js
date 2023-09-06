@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1693957879953,
+  "lastUpdate": 1694034988602,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11638,6 +11638,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.8270490030259636,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "b6a4eb8a654148627a9d92d29489d509acec4675",
+          "message": "ICU-22325 Promoted all @draft ICU 72 APIs to @stable ICU 72.",
+          "timestamp": "2023-09-06T14:03:05-07:00",
+          "tree_id": "e710f1232c1b9ebdb534790ed4fb5d4321d0daaa",
+          "url": "https://github.com/unicode-org/icu/commit/b6a4eb8a654148627a9d92d29489d509acec4675"
+        },
+        "date": 1694034933958,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.94674858703988,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
