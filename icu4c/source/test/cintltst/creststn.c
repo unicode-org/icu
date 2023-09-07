@@ -2710,6 +2710,31 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "nl@collation=stroke",            "root",
         "f",    "nl_NL@collation=stroke",         "root",
         "f",    "nl_NL_EEXT@collation=stroke",    "root",
+        /* Additions to test aliased locales */
+        "f",    "yue_HK",                         "zh@collation=stroke",
+        "f",    "yue_Hant",                       "zh@collation=stroke",
+        "f",    "yue_Hant_HK",                    "zh@collation=stroke",
+        "f",    "yue@collation=stroke",           "zh@collation=stroke",
+        "f",    "yue@collation=pinyin",           "zh",
+        "f",    "yue_CN",                         "zh",
+        "f",    "yue_Hans",                       "zh",
+        "f",    "yue_Hans_CN",                    "zh",
+        "f",    "yue_Hans@collation=pinyin",      "zh",
+        "f",    "yue_Hans@collation=stroke",      "zh@collation=stroke",
+        "f",    "mo",                             "mo",
+        "t",    "no",                             "no",
+        "t",    "nb",                             "no",
+        "t",    "nn",                             "no",
+        "f",    "ars",                            "ar",
+        /* Additions to test locales without resources */
+        "f",    "en_CN",                          "root",
+        "f",    "zh_Hant_CN",                     "zh@collation=stroke",
+        "f",    "zh_Hant_US",                     "zh@collation=stroke",
+        "f",    "zh_Hans_US",                     "zh",
+        "f",    "yue_TW",                         "zh@collation=stroke",
+        "f",    "yue_US",                         "zh@collation=stroke",
+        "f",    "ja_CN",                          "ja",
+        "f",    "ja_US",                          "ja",
         NULL
     };
 #endif  /* !UCONFIG_NO_COLLATION */

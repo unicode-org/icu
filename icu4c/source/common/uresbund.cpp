@@ -2974,6 +2974,31 @@ static UBool isLocaleInList(UEnumeration *locEnum, const char *locToSearch, UErr
     return false;
 }
 
+static void getParentForFunctionalEquivalent(const char*      localeID,
+                                             UResourceBundle* res,
+                                             UResourceBundle* bund1,
+                                             char*            parent,
+                                             int32_t          parentCapacity) {
+    // Get parent.
+    // First check for a parent from %%Parent resource (Note that in resource trees
+    // such as collation, data may have different parents than in parentLocales).
+    UErrorCode subStatus = U_ZERO_ERROR;
+    parent[0] = '\0';
+    if (res != NULL) {
+        ures_getByKey(res, "%%Parent", bund1, &subStatus);
+        if (U_SUCCESS(subStatus)) {
+            int32_t parentLen = parentCapacity;
+            ures_getUTF8String(bund1, parent, &parentLen, true, &subStatus);
+        }
+    }
+    
+    // If none there, use normal truncation parent
+    if (U_FAILURE(subStatus) || parent[0] == 0) {
+        subStatus = U_ZERO_ERROR;
+        uloc_getParent(localeID, parent, parentCapacity, &subStatus);
+    }
+}
+
 U_CAPI int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                              const char *path, const char *resName, const char *keyword, const char *locid,
@@ -3071,7 +3096,11 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             uprv_strcpy(found, ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus));
         }
 
-        uloc_getParent(found,parent,sizeof(parent),&subStatus);
+        if (uprv_strcmp(found, parent) != 0) {
+            uprv_strcpy(parent, found);
+        } else {
+            getParentForFunctionalEquivalent(found,res,&bund1,parent,sizeof(parent));
+        }
         ures_close(res);
     } while(!defVal[0] && *found && uprv_strcmp(found, "root") != 0 && U_SUCCESS(*status));
     
@@ -3145,10 +3174,33 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             }
         }
         
-        subStatus = U_ZERO_ERROR;
-        
-        uprv_strcpy(found, parent);
-        uloc_getParent(found,parent,1023,&subStatus);
+        UBool haveFound = false;
+        // At least for collations which may be aliased, we need to use the VALID locale
+        // as the parent instead of just truncating, as long as the VALID locale is not
+        // root and has a different language than the parent. Use of the VALID locale
+        // here is similar to the procedure used at the end of the previous do-while loop
+        // for all resource types.
+        if (res != NULL && uprv_strcmp(resName, "collations") == 0) {
+            subStatus = U_ZERO_ERROR;
+            const char *validLoc = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus);
+            if (U_SUCCESS(subStatus) && validLoc != NULL && validLoc[0] != 0 && uprv_strcmp(validLoc, "root") != 0) {
+                char validLang[ULOC_LANG_CAPACITY];
+                char parentLang[ULOC_LANG_CAPACITY];
+                uloc_getLanguage(validLoc, validLang, ULOC_LANG_CAPACITY, &subStatus);
+                uloc_getLanguage(parent, parentLang, ULOC_LANG_CAPACITY, &subStatus);
+                if (U_SUCCESS(subStatus) && uprv_strcmp(validLang, parentLang) != 0) {
+                    // validLoc is not root and has a different language than parent, use it instead
+                    uprv_strcpy(found, validLoc);
+                    haveFound = true;
+                }
+            }
+            subStatus = U_ZERO_ERROR;
+        }
+        if (!haveFound) {
+            uprv_strcpy(found, parent);
+        }
+
+        getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
         ures_close(res);
     } while(!full[0] && *found && U_SUCCESS(*status));
     
@@ -3215,10 +3267,9 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                     }
                 }
             }
-            subStatus = U_ZERO_ERROR;
             
             uprv_strcpy(found, parent);
-            uloc_getParent(found,parent,1023,&subStatus);
+            getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
             ures_close(res);
         } while(!full[0] && *found && U_SUCCESS(*status));
     }
