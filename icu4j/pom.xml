@@ -93,6 +93,19 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.1.2</version>
+          <configuration>
+            <includes>
+              <!-- Some test files start with "IntlTest...". Many don't fit
+               the Surefire test file name default patterns. To be safe, use
+               a catchall pattern instead of the default patterns.
+
+               FYI, the default patterns are documented on the website of the
+               testing plugin:
+               https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html
+              -->
+              <include>**/*.java</include>
+            </includes>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
