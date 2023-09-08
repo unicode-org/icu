@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694037515918,
+  "lastUpdate": 1694138123186,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25540,6 +25540,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 30944272.2436,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ssb22@cam.ac.uk",
+            "name": "Silas S. Brown",
+            "username": "ssb22"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "7ae7b156983474a52d99bb5c579106a99d02efb1",
+          "message": "ICU-22323 update comment: it is now only two word lists, not three",
+          "timestamp": "2023-09-07T21:34:25-04:00",
+          "tree_id": "c7b2d23767d3ac3110c4458085fe8ebae6277611",
+          "url": "https://github.com/unicode-org/icu/commit/7ae7b156983474a52d99bb5c579106a99d02efb1"
+        },
+        "date": 1694138069692,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 458.2526,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 50452827.2032,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 18852450.6309,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 52974977.7125,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 21974799.7466,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
