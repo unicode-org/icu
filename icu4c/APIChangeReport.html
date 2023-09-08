@@ -5,31 +5,31 @@
 	-->
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4C API Comparison: ICU 72 with ICU 73</title>
+<title>ICU4C API Comparison: ICU 73 with ICU 74</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="#_top"></a>
-<h1>ICU4C API Comparison: ICU 72 with ICU 73</h1>
+<h1>ICU4C API Comparison: ICU 73 with ICU 74</h1>
 <div id="toc">
 <ul>
 <li>
-<a href="#removed">Removed from ICU 72</a>
+<a href="#removed">Removed from ICU 73</a>
 </li>
 <li>
-<a href="#deprecated">Deprecated or Obsoleted in ICU 73</a>
+<a href="#deprecated">Deprecated or Obsoleted in ICU 74</a>
 </li>
 <li>
-<a href="#changed">Changed in  ICU 73</a>
+<a href="#changed">Changed in  ICU 74</a>
 </li>
 <li>
-<a href="#promoted">Promoted to stable in ICU 73</a>
+<a href="#promoted">Promoted to stable in ICU 74</a>
 </li>
 <li>
-<a href="#added">Added in ICU 73</a>
+<a href="#added">Added in ICU 74</a>
 </li>
 <li>
-<a href="#other">Other existing drafts in ICU 73</a>
+<a href="#other">Other existing drafts in ICU 74</a>
 </li>
 <li>
 <a href="#simplifications">Signature Simplifications</a>
@@ -38,39 +38,23 @@
 <hr>
 </div>
 <a name="removed"></a>
-<h2>Removed from ICU 72</h2>
+<h2>Removed from ICU 73</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 72</th><th>ICU 73</th>
+<th>File</th><th>API</th><th>ICU 73</th><th>ICU 74</th>
 </tr>
 </THEAD>
-<tr class="row1">
-<td class="file">gregocal.h</td><td class="proto">bool icu::GregorianCalendar::inDaylightTime(UErrorCode&amp;) const</td><td class="stabchange">Stable<br>ICU 2.0</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_NOEXCEPT</td><td class="">Internal</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_FINAL</td><td class="">Internal</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_OVERRIDE</td><td class="">Internal</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="deprecated"></a>
-<h2>Deprecated or Obsoleted in ICU 73</h2>
+<h2>Deprecated or Obsoleted in ICU 74</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 72</th><th>ICU 73</th>
+<th>File</th><th>API</th><th>ICU 73</th><th>ICU 74</th>
 </tr>
 </THEAD>
 </table>
@@ -78,532 +62,910 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="changed"></a>
-<h2>Changed in  ICU 73 (old, new)</h2>
+<h2>Changed in  ICU 74 (old, new)</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 72</th><th>ICU 73</th>
+<th>File</th><th>API</th><th>ICU 73</th><th>ICU 74</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">dtptngen.h</td><td class="proto">const UnicodeString&amp; icu::DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder icu::DisplayOptions::copyToBuilder() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">dtptngen.h</td><td class="proto">void icu::DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setCapitalization(UDisplayOptionsCapitalization)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::incrementExact(uint64_t, int16_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setDisplayLength(UDisplayOptionsDisplayLength)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">udatpg.h</td><td class="proto">const UChar* udatpg_getDateTimeFormatForStyle(const UDateTimePatternGenerator*, UDateFormatStyle, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setGrammaticalCase(UDisplayOptionsGrammaticalCase)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row1">
-<td class="file">udatpg.h</td><td class="proto">void udatpg_setDateTimeFormatForStyle(UDateTimePatternGenerator*, UDateFormatStyle, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setNameStyle(UDisplayOptionsNameStyle)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatFields::UNUM_APPROXIMATELY_SIGN_FIELD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setNounClass(UDisplayOptionsNounClass)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setPluralCategory(UDisplayOptionsPluralCategory)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setSubstituteHandling(UDisplayOptionsSubstituteHandling)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions icu::DisplayOptions::Builder::build()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;)=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsCapitalization icu::DisplayOptions::getCapitalization() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsDisplayLength icu::DisplayOptions::getDisplayLength() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsGrammaticalCase icu::DisplayOptions::getGrammaticalCase() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsNameStyle icu::DisplayOptions::getNameStyle() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsNounClass icu::DisplayOptions::getNounClass() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsPluralCategory icu::DisplayOptions::getPluralCategory() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsSubstituteHandling icu::DisplayOptions::getSubstituteHandling() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">icu::DisplayOptions::DisplayOptions(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto"><tt>static</tt> Builder icu::DisplayOptions::builder()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">formattednumber.h</td><td class="proto">UDisplayOptionsNounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getQuarter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getTonne()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuarter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTonne(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;) const&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;)&amp;&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsGrammaticalCase udispopt_fromGrammaticalCaseIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsNounClass udispopt_fromNounClassIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsPluralCategory udispopt_fromPluralCategoryIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getGrammaticalCaseIdentifier(UDisplayOptionsGrammaticalCase)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getNounClassIdentifier(UDisplayOptionsNounClass)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getPluralCategoryIdentifier(UDisplayOptionsPluralCategory)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_BEGINNING_OF_SENTENCE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_MIDDLE_OF_SENTENCE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_STANDALONE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UI_LIST_OR_MENU</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_FULL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ABLATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ACCUSATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_COMITATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_DATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ERGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_GENITIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_INSTRUMENTAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE_COPULATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_NOMINATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_OBLIQUE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_PREPOSITIONAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_SOCIATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_VOCATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_DIALECT_NAMES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_STANDARD_NAMES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_ANIMATE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_COMMON</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_INANIMATE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_OTHER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_PERSONAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_FEW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_MANY</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ONE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_OTHER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_TWO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ZERO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_NO_SUBSTITUTE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_SUBSTITUTE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">bool unum_hasAttribute(const UNumberFormat*, UNumberFormatAttribute)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="promoted"></a>
-<h2>Promoted to stable in ICU 73</h2>
+<h2>Promoted to stable in ICU 74</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 72</th><th>ICU 73</th>
+<th>File</th><th>API</th><th>ICU 73</th><th>ICU 74</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">dtptngen.h</td><td class="proto">const UnicodeString&amp; icu::DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder icu::DisplayOptions::copyToBuilder() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">dtptngen.h</td><td class="proto">void icu::DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setCapitalization(UDisplayOptionsCapitalization)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::incrementExact(uint64_t, int16_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setDisplayLength(UDisplayOptionsDisplayLength)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">udatpg.h</td><td class="proto">const UChar* udatpg_getDateTimeFormatForStyle(const UDateTimePatternGenerator*, UDateFormatStyle, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setGrammaticalCase(UDisplayOptionsGrammaticalCase)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row1">
-<td class="file">udatpg.h</td><td class="proto">void udatpg_setDateTimeFormatForStyle(UDateTimePatternGenerator*, UDateFormatStyle, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setNameStyle(UDisplayOptionsNameStyle)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 <tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatFields::UNUM_APPROXIMATELY_SIGN_FIELD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 71</td>
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setNounClass(UDisplayOptionsNounClass)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setPluralCategory(UDisplayOptionsPluralCategory)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setSubstituteHandling(UDisplayOptionsSubstituteHandling)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions icu::DisplayOptions::Builder::build()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;)=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsCapitalization icu::DisplayOptions::getCapitalization() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsDisplayLength icu::DisplayOptions::getDisplayLength() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsGrammaticalCase icu::DisplayOptions::getGrammaticalCase() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsNameStyle icu::DisplayOptions::getNameStyle() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsNounClass icu::DisplayOptions::getNounClass() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsPluralCategory icu::DisplayOptions::getPluralCategory() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsSubstituteHandling icu::DisplayOptions::getSubstituteHandling() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">displayoptions.h</td><td class="proto">icu::DisplayOptions::DisplayOptions(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">displayoptions.h</td><td class="proto"><tt>static</tt> Builder icu::DisplayOptions::builder()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">formattednumber.h</td><td class="proto">UDisplayOptionsNounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getQuarter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getTonne()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuarter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTonne(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;) const&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;)&amp;&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_AKSARA_PREBASE</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_AKSARA_START</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_AKSARA</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_VIRAMA_FINAL</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_VIRAMA</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsGrammaticalCase udispopt_fromGrammaticalCaseIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsNounClass udispopt_fromNounClassIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsPluralCategory udispopt_fromPluralCategoryIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getGrammaticalCaseIdentifier(UDisplayOptionsGrammaticalCase)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getNounClassIdentifier(UDisplayOptionsNounClass)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getPluralCategoryIdentifier(UDisplayOptionsPluralCategory)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_BEGINNING_OF_SENTENCE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_MIDDLE_OF_SENTENCE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_STANDALONE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UI_LIST_OR_MENU</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_FULL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ABLATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ACCUSATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_COMITATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_DATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ERGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_GENITIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_INSTRUMENTAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE_COPULATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_NOMINATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_OBLIQUE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_PREPOSITIONAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_SOCIATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_VOCATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_DIALECT_NAMES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_STANDARD_NAMES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_ANIMATE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_COMMON</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_INANIMATE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_OTHER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_PERSONAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_FEW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_MANY</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ONE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_OTHER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_TWO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ZERO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_NO_SUBSTITUTE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_SUBSTITUTE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_UNDEFINED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">bool unum_hasAttribute(const UNumberFormat*, UNumberFormatAttribute)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 72</td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="added"></a>
-<h2>Added in ICU 73</h2>
+<h2>Added in ICU 74</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 72</th><th>ICU 73</th>
+<th>File</th><th>API</th><th>ICU 73</th><th>ICU 74</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">calendar.h</td><td class="proto">bool icu::Calendar::inTemporalLeapYear(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGasolineEquivalent()</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">calendar.h</td><td class="proto">const char* icu::Calendar::getTemporalMonthCode(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGasolineEquivalent(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">calendar.h</td><td class="proto">void icu::Calendar::setTemporalMonthCode(const char*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">rbbi.h</td><td class="proto">bool icu::ExternalBreakEngine::handles(UChar32) const</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">dcfmtsym.h</td><td class="proto">const char* icu::DecimalFormatSymbols::getNumberingSystemName() const</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
+<td class="file">rbbi.h</td><td class="proto">bool icu::ExternalBreakEngine::isFor(UChar32, const char*) const</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getBeaufort()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">rbbi.h</td><td class="proto">icu::ExternalBreakEngine::~ExternalBreakEngine()</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBeaufort(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">rbbi.h</td><td class="proto">int32_t icu::ExternalBreakEngine::fillBreak(UText*, int32_t, int32_t, int32_t*, int32_t, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfCeiling</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">rbbi.h</td><td class="proto"><tt>static</tt> void icu::RuleBasedBreakIterator::registerExternalBreakEngine(ExternalBreakEngine*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfFloor</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">timezone.h</td><td class="proto"><tt>static</tt> UnicodeString&amp; icu::TimeZone::getIanaID(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfOdd</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ucal.h</td><td class="proto">int32_t ucal_getIanaTimeZoneID(const UChar*, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">platform.h</td><td class="proto"><tt>#define</tt> UPRV_NO_SANITIZE_UNDEFINED</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::format(SimpleNumber, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_AKSARA_PREBASE</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::formatInt64(int64_t, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_AKSARA_START</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumber&amp; icu::number::SimpleNumber::operator=(SimpleNumber&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_AKSARA</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumberFormatter&amp; icu::number::SimpleNumberFormatter::operator=(SimpleNumberFormatter&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_VIRAMA_FINAL</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber()=default</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> ULineBreak::U_LB_VIRAMA</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber(SimpleNumber&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">UEnumeration* ulocale_getKeywords(const ULocale*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::~SimpleNumber()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">UEnumeration* ulocale_getUnicodeKeywords(const ULocale*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter()=default</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">ULocale* ulocale_openForLanguageTag(const char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter(SimpleNumberFormatter&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">ULocale* ulocale_openForLocaleID(const char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::~SimpleNumberFormatter()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">bool ulocale_isBogus(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumber icu::number::SimpleNumber::forInt64(int64_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getBaseName(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocale(const icu::Locale&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getLanguage(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndGroupingStrategy(const icu::Locale&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getLocaleID(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndSymbolsAndGroupingStrategy(const icu::Locale&amp;, const DecimalFormatSymbols&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getRegion(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::multiplyByPowerOfTen(int32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getScript(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::roundTo(int32_t, UNumberFormatRoundingMode, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getVariant(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setMinimumFractionDigits(uint32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">int32_t ulocale_getKeywordValue(const ULocale*, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setMinimumIntegerDigits(uint32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">int32_t ulocale_getUnicodeKeywordValue(const ULocale*, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setSign(USimpleNumberSign, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocale.h</td><td class="proto">void ulocale_close(ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::truncateStart(uint32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">ULocale* ulocbld_buildULocale(ULocaleBuilder*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumberFormatter::formatImpl(impl::UFormattedNumberData*, USimpleNumberSign, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">ULocaleBuilder* ulocbld_open()</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UCalendarDateFields::UCAL_ORDINAL_MONTH</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">bool ulocbld_copyErrorTo(const ULocaleBuilder*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">uconfig.h</td><td class="proto"><tt>#define</tt> UCONFIG_USE_ML_PHRASE_BREAKING</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">int32_t ulocbld_buildLanguageTag(ULocaleBuilder*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto"><tt>enum</tt> (anonymous)::USET_SIMPLE_CASE_INSENSITIVE</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">int32_t ulocbld_buildLocaleID(ULocaleBuilder*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumber* usnum_openForInt64(int64_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_addUnicodeLocaleAttribute(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocale(const char*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_adoptULocale(ULocaleBuilder*, ULocale*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocaleAndGroupingStrategy(const char*, UNumberGroupingStrategy, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_clear(ULocaleBuilder*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_MINUS_SIGN</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_clearExtensions(ULocaleBuilder*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_NO_SIGN</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_close(ULocaleBuilder*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_PLUS_SIGN</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_removeUnicodeLocaleAttribute(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_close(USimpleNumber*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setExtension(ULocaleBuilder*, char, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_multiplyByPowerOfTen(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLanguage(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_roundTo(USimpleNumber*, int32_t, UNumberFormatRoundingMode, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLanguageTag(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumFractionDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLocale(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumIntegerDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setRegion(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setSign(USimpleNumber*, USimpleNumberSign, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setScript(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setToInt64(USimpleNumber*, int64_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setUnicodeLocaleKeyword(ULocaleBuilder*, const char*, int32_t, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_truncateStart(USimpleNumber*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setVariant(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_close(USimpleNumberFormatter*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uspoof.h</td><td class="proto">icu::UnicodeString&amp; uspoof_getBidiSkeletonUnicodeString(const USpoofChecker*, UBiDiDirection, const icu::UnicodeString&amp;, icu::UnicodeString&amp;, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_format(const USimpleNumberFormatter*, USimpleNumber*, UFormattedNumber*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getBidiSkeleton(const USpoofChecker*, UBiDiDirection, const UChar*, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_formatInt64(const USimpleNumberFormatter*, int64_t, UFormattedNumber*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 73</span></span></td>
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getBidiSkeletonUTF8(const USpoofChecker*, UBiDiDirection, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">uint32_t uspoof_areBidiConfusable(const USpoofChecker*, UBiDiDirection, const UChar*, int32_t, const UChar*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">uint32_t uspoof_areBidiConfusableUTF8(const USpoofChecker*, UBiDiDirection, const char*, int32_t, const char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">uint32_t uspoof_areBidiConfusableUnicodeString(const USpoofChecker*, UBiDiDirection, const icu::UnicodeString&amp;, const icu::UnicodeString&amp;, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="other"></a>
-<h2>Other existing drafts in ICU 73</h2>
+<h2>Other existing drafts in ICU 74</h2>
 <div class="other">
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 72</th><th>ICU 73</th>
+<th>File</th><th>API</th><th>ICU 73</th><th>ICU 74</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">Builder icu::DisplayOptions::copyToBuilder() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">calendar.h</td><td class="proto">bool icu::Calendar::inTemporalLeapYear(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setCapitalization(UDisplayOptionsCapitalization)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">calendar.h</td><td class="proto">const char* icu::Calendar::getTemporalMonthCode(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setDisplayLength(UDisplayOptionsDisplayLength)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setGrammaticalCase(UDisplayOptionsGrammaticalCase)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setNameStyle(UDisplayOptionsNameStyle)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setNounClass(UDisplayOptionsNounClass)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setPluralCategory(UDisplayOptionsPluralCategory)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">Builder&amp; icu::DisplayOptions::Builder::setSubstituteHandling(UDisplayOptionsSubstituteHandling)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">DisplayOptions icu::DisplayOptions::Builder::build()</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;)=default</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">DisplayOptions&amp; icu::DisplayOptions::operator=(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsCapitalization icu::DisplayOptions::getCapitalization() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsDisplayLength icu::DisplayOptions::getDisplayLength() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsGrammaticalCase icu::DisplayOptions::getGrammaticalCase() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsNameStyle icu::DisplayOptions::getNameStyle() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsNounClass icu::DisplayOptions::getNounClass() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsPluralCategory icu::DisplayOptions::getPluralCategory() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto">UDisplayOptionsSubstituteHandling icu::DisplayOptions::getSubstituteHandling() const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">displayoptions.h</td><td class="proto">icu::DisplayOptions::DisplayOptions(const DisplayOptions&amp;)=default</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">displayoptions.h</td><td class="proto"><tt>static</tt> Builder icu::DisplayOptions::builder()</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">formattednumber.h</td><td class="proto">UDisplayOptionsNounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">calendar.h</td><td class="proto">void icu::Calendar::setTemporalMonthCode(const char*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
 <td class="file">measfmt.h</td><td class="proto">void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 53</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getQuarter()</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getBeaufort()</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getTonne()</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBeaufort(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuarter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfCeiling</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTonne(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfFloor</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;) const&amp;</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfOdd</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;)&amp;&amp;</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::format(SimpleNumber, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsGrammaticalCase udispopt_fromGrammaticalCaseIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::formatInt64(int64_t, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsNounClass udispopt_fromNounClassIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumber&amp; icu::number::SimpleNumber::operator=(SimpleNumber&amp;&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto">UDisplayOptionsPluralCategory udispopt_fromPluralCategoryIdentifier(const char*)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumberFormatter&amp; icu::number::SimpleNumberFormatter::operator=(SimpleNumberFormatter&amp;&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getGrammaticalCaseIdentifier(UDisplayOptionsGrammaticalCase)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber()=default</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getNounClassIdentifier(UDisplayOptionsNounClass)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber(SimpleNumber&amp;&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto">const char* udispopt_getPluralCategoryIdentifier(UDisplayOptionsPluralCategory)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::~SimpleNumber()</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_BEGINNING_OF_SENTENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter()=default</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_MIDDLE_OF_SENTENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter(SimpleNumberFormatter&amp;&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_STANDALONE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::~SimpleNumberFormatter()</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UI_LIST_OR_MENU</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumber icu::number::SimpleNumber::forInt64(int64_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocale(const icu::Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_FULL</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndGroupingStrategy(const icu::Locale&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_SHORT</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndSymbolsAndGroupingStrategy(const icu::Locale&amp;, const DecimalFormatSymbols&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::multiplyByPowerOfTen(int32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ABLATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::roundTo(int32_t, UNumberFormatRoundingMode, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ACCUSATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setMinimumFractionDigits(uint32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_COMITATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setMinimumIntegerDigits(uint32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_DATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setSign(USimpleNumberSign, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ERGATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::truncateStart(uint32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_GENITIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_INSTRUMENTAL</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE_COPULATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_NOMINATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_OBLIQUE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_PREPOSITIONAL</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_SOCIATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_VOCATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_DIALECT_NAMES</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_STANDARD_NAMES</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_ANIMATE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_COMMON</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_INANIMATE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_OTHER</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_PERSONAL</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_FEW</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_MANY</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ONE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_OTHER</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_TWO</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ZERO</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_NO_SUBSTITUTE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_SUBSTITUTE</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row1">
-<td class="file">udisplayoptions.h</td><td class="proto"><tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_UNDEFINED</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
-</tr>
-<tr class="row0">
-<td class="file">unum.h</td><td class="proto">bool unum_hasAttribute(const UNumberFormat*, UNumberFormatAttribute)</td><td class="" colspan="2" align="center">Draft<br>ICU 72</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UCalendarDateFields::UCAL_ORDINAL_MONTH</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
 <td class="file">uregex.h</td><td class="proto"><tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ</td><td class="" colspan="2" align="center">Draft<br>ICU 2.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uset.h</td><td class="proto"><tt>enum</tt> (anonymous)::USET_SIMPLE_CASE_INSENSITIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumber* usnum_openForInt64(int64_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocale(const char*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocaleAndGroupingStrategy(const char*, UNumberGroupingStrategy, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_MINUS_SIGN</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_NO_SIGN</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_PLUS_SIGN</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_close(USimpleNumber*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_multiplyByPowerOfTen(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_roundTo(USimpleNumber*, int32_t, UNumberFormatRoundingMode, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumFractionDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumIntegerDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setSign(USimpleNumber*, USimpleNumberSign, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setToInt64(USimpleNumber*, int64_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_truncateStart(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_close(USimpleNumberFormatter*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_format(const USimpleNumberFormatter*, USimpleNumber*, UFormattedNumber*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_formatInt64(const USimpleNumberFormatter*, int64_t, UFormattedNumber*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 </table>
 </div>
@@ -615,494 +977,13 @@
 <i>This section shows cases where the signature was "simplified" for the sake of comparison. The simplified form is in bold, followed by
     	all possible variations in "original" form.</i>
 <div class="other">
-<ul>
-<li>
-<b>Appendable&amp; icu::FormattedDateInterval::appendTo(Appendable&amp;, UErrorCode&amp;) const</b>
-<br>Appendable&amp; icu::FormattedDateInterval::appendTo(Appendable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>Appendable&amp; icu::FormattedDateInterval::appendTo(Appendable&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>Appendable&amp; icu::FormattedList::appendTo(Appendable&amp;, UErrorCode&amp;) const</b>
-<br>Appendable&amp; icu::FormattedList::appendTo(Appendable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>Appendable&amp; icu::FormattedList::appendTo(Appendable&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>Appendable&amp; icu::FormattedRelativeDateTime::appendTo(Appendable&amp;, UErrorCode&amp;) const</b>
-<br>Appendable&amp; icu::FormattedRelativeDateTime::appendTo(Appendable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>Appendable&amp; icu::FormattedRelativeDateTime::appendTo(Appendable&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;) const</b>
-<br>Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>Appendable&amp; icu::number::FormattedNumberRange::appendTo(Appendable&amp;, UErrorCode&amp;) const</b>
-<br>Appendable&amp; icu::number::FormattedNumberRange::appendTo(Appendable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>Appendable&amp; icu::number::FormattedNumberRange::appendTo(Appendable&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;)</b>
-<br>Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;) U_NOEXCEPT<br>Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const</b>
-<br>CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const U_OVERRIDE<br>CurrencyAmount* icu::CompactDecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const override<br>
-</li>
-<li>
-<b>CurrencyAmount* icu::DecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const</b>
-<br>CurrencyAmount* icu::DecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const U_OVERRIDE<br>CurrencyAmount* icu::DecimalFormat::parseCurrency(const UnicodeString&amp;, ParsePosition&amp;) const override<br>
-</li>
-<li>
-<b>ERoundingMode icu::DecimalFormat::getRoundingMode() const</b>
-<br>ERoundingMode icu::DecimalFormat::getRoundingMode() const U_OVERRIDE<br>ERoundingMode icu::DecimalFormat::getRoundingMode() const override<br>
-</li>
-<li>
-<b>Edits&amp; icu::Edits::operator=(Edits&amp;&amp;)</b>
-<br>Edits&amp; icu::Edits::operator=(Edits&amp;&amp;) U_NOEXCEPT<br>Edits&amp; icu::Edits::operator=(Edits&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>FormattedDateInterval&amp; icu::FormattedDateInterval::operator=(FormattedDateInterval&amp;&amp;)</b>
-<br>FormattedDateInterval&amp; icu::FormattedDateInterval::operator=(FormattedDateInterval&amp;&amp;) U_NOEXCEPT<br>FormattedDateInterval&amp; icu::FormattedDateInterval::operator=(FormattedDateInterval&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>FormattedList&amp; icu::FormattedList::operator=(FormattedList&amp;&amp;)</b>
-<br>FormattedList&amp; icu::FormattedList::operator=(FormattedList&amp;&amp;) U_NOEXCEPT<br>FormattedList&amp; icu::FormattedList::operator=(FormattedList&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;)</b>
-<br>FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;) U_NOEXCEPT<br>FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>FormattedNumberRange&amp; icu::number::FormattedNumberRange::operator=(FormattedNumberRange&amp;&amp;)</b>
-<br>FormattedNumberRange&amp; icu::number::FormattedNumberRange::operator=(FormattedNumberRange&amp;&amp;) U_NOEXCEPT<br>FormattedNumberRange&amp; icu::number::FormattedNumberRange::operator=(FormattedNumberRange&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>FormattedRelativeDateTime&amp; icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&amp;&amp;)</b>
-<br>FormattedRelativeDateTime&amp; icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&amp;&amp;) U_NOEXCEPT<br>FormattedRelativeDateTime&amp; icu::FormattedRelativeDateTime::operator=(FormattedRelativeDateTime&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(LocalArray&lt; T &gt;&amp;&amp;)</b>
-<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(LocalArray&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(LocalArray&lt; T &gt;&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(std::unique_ptr&lt; T[]&gt;&amp;&amp;)</b>
-<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(std::unique_ptr&lt; T[]&gt;&amp;&amp;) U_NOEXCEPT<br>LocalArray&lt; T &gt;&amp; icu::LocalArray&lt; T &gt;::operator=(std::unique_ptr&lt; T[]&gt;&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(LocalPointer&lt; T &gt;&amp;&amp;)</b>
-<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(LocalPointer&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(LocalPointer&lt; T &gt;&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(std::unique_ptr&lt; T &gt;&amp;&amp;)</b>
-<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(std::unique_ptr&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>LocalPointer&lt; T &gt;&amp; icu::LocalPointer&lt; T &gt;::operator=(std::unique_ptr&lt; T &gt;&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>Locale&amp; icu::Locale::operator=(Locale&amp;&amp;)</b>
-<br>Locale&amp; icu::Locale::operator=(Locale&amp;&amp;) U_NOEXCEPT<br>Locale&amp; icu::Locale::operator=(Locale&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;)</b>
-<br>LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;) U_NOEXCEPT<br>LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;)</b>
-<br>LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>LocalizedNumberRangeFormatter&amp; icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&amp;&amp;)</b>
-<br>LocalizedNumberRangeFormatter&amp; icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>LocalizedNumberRangeFormatter&amp; icu::number::LocalizedNumberRangeFormatter::operator=(LocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;)</b>
-<br>Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;) U_NOEXCEPT<br>Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;)</b>
-<br>Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;) U_NOEXCEPT<br>Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;)</b>
-<br>StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;) U_NOEXCEPT<br>StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;)</b>
-<br>SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;) U_NOEXCEPT<br>SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const</b>
-<br>UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const U_OVERRIDE<br>UChar32 icu::FilteredNormalizer2::composePair(UChar32, UChar32) const override<br>
-</li>
-<li>
-<b>UClassID icu::CompactDecimalFormat::getDynamicClassID() const</b>
-<br>UClassID icu::CompactDecimalFormat::getDynamicClassID() const U_OVERRIDE<br>UClassID icu::CompactDecimalFormat::getDynamicClassID() const override<br>
-</li>
-<li>
-<b>UClassID icu::DecimalFormat::getDynamicClassID() const</b>
-<br>UClassID icu::DecimalFormat::getDynamicClassID() const U_OVERRIDE<br>UClassID icu::DecimalFormat::getDynamicClassID() const override<br>
-</li>
-<li>
-<b>UNormalizationCheckResult icu::FilteredNormalizer2::quickCheck(const UnicodeString&amp;, UErrorCode&amp;) const</b>
-<br>UNormalizationCheckResult icu::FilteredNormalizer2::quickCheck(const UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UNormalizationCheckResult icu::FilteredNormalizer2::quickCheck(const UnicodeString&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::FormattedDateInterval::toString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::FormattedDateInterval::toString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::FormattedDateInterval::toString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::FormattedDateInterval::toTempString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::FormattedDateInterval::toTempString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::FormattedDateInterval::toTempString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::FormattedList::toString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::FormattedList::toString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::FormattedList::toString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::FormattedList::toTempString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::FormattedList::toTempString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::FormattedList::toTempString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::FormattedRelativeDateTime::toString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::FormattedRelativeDateTime::toString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::FormattedRelativeDateTime::toString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::FormattedRelativeDateTime::toTempString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::FormattedRelativeDateTime::toTempString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::FormattedRelativeDateTime::toTempString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::number::FormattedNumber::toString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::number::FormattedNumber::toString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::number::FormattedNumber::toString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::number::FormattedNumber::toTempString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::number::FormattedNumber::toTempString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::number::FormattedNumber::toTempString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::number::FormattedNumberRange::toString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::number::FormattedNumberRange::toString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::number::FormattedNumberRange::toString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString icu::number::FormattedNumberRange::toTempString(UErrorCode&amp;) const</b>
-<br>UnicodeString icu::number::FormattedNumberRange::toTempString(UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString icu::number::FormattedNumberRange::toTempString(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(StringPiece, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(StringPiece, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(StringPiece, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(const number::impl::DecimalQuantity&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(const number::impl::DecimalQuantity&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(const number::impl::DecimalQuantity&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(const number::impl::DecimalQuantity&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(const number::impl::DecimalQuantity&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(const number::impl::DecimalQuantity&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(double, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::FilteredNormalizer2::append(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::FilteredNormalizer2::append(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::FilteredNormalizer2::append(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::FilteredNormalizer2::normalize(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::FilteredNormalizer2::normalize(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::FilteredNormalizer2::normalize(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const</b>
-<br>UnicodeString&amp; icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UnicodeString&amp; icu::FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::UnicodeString::operator=(UnicodeString&amp;&amp;)</b>
-<br>UnicodeString&amp; icu::UnicodeString::operator=(UnicodeString&amp;&amp;) U_NOEXCEPT<br>UnicodeString&amp; icu::UnicodeString::operator=(UnicodeString&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;)</b>
-<br>UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>UnlocalizedNumberRangeFormatter&amp; icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&amp;&amp;)</b>
-<br>UnlocalizedNumberRangeFormatter&amp; icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>UnlocalizedNumberRangeFormatter&amp; icu::number::UnlocalizedNumberRangeFormatter::operator=(UnlocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>bool icu::Calendar::inDaylightTime(UErrorCode&amp;) const</b>
-<br>UBool icu::Calendar::inDaylightTime(UErrorCode&amp;) const<br>UBool icu::Calendar::inDaylightTime(UErrorCode&amp;) const=0<br>
-</li>
-<li>
-<b>bool icu::DecimalFormat::operator==(const Format&amp;) const</b>
-<br>bool icu::DecimalFormat::operator==(const Format&amp;) const U_OVERRIDE<br>bool icu::DecimalFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::getDecomposition(UChar32, UnicodeString&amp;) const</b>
-<br>UBool icu::FilteredNormalizer2::getDecomposition(UChar32, UnicodeString&amp;) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::getDecomposition(UChar32, UnicodeString&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::getRawDecomposition(UChar32, UnicodeString&amp;) const</b>
-<br>UBool icu::FilteredNormalizer2::getRawDecomposition(UChar32, UnicodeString&amp;) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::getRawDecomposition(UChar32, UnicodeString&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::hasBoundaryAfter(UChar32) const</b>
-<br>UBool icu::FilteredNormalizer2::hasBoundaryAfter(UChar32) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::hasBoundaryAfter(UChar32) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::hasBoundaryBefore(UChar32) const</b>
-<br>UBool icu::FilteredNormalizer2::hasBoundaryBefore(UChar32) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::hasBoundaryBefore(UChar32) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::isInert(UChar32) const</b>
-<br>UBool icu::FilteredNormalizer2::isInert(UChar32) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::isInert(UChar32) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::isNormalized(const UnicodeString&amp;, UErrorCode&amp;) const</b>
-<br>UBool icu::FilteredNormalizer2::isNormalized(const UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::isNormalized(const UnicodeString&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FilteredNormalizer2::isNormalizedUTF8(StringPiece, UErrorCode&amp;) const</b>
-<br>UBool icu::FilteredNormalizer2::isNormalizedUTF8(StringPiece, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::FilteredNormalizer2::isNormalizedUTF8(StringPiece, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FormattedDateInterval::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UBool icu::FormattedDateInterval::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::FormattedDateInterval::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FormattedList::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UBool icu::FormattedList::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::FormattedList::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::FormattedRelativeDateTime::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UBool icu::FormattedRelativeDateTime::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::FormattedRelativeDateTime::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::number::FormattedNumber::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UBool icu::number::FormattedNumber::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::number::FormattedNumber::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::number::FormattedNumberRange::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const</b>
-<br>UBool icu::number::FormattedNumberRange::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const U_OVERRIDE<br>UBool icu::number::FormattedNumberRange::nextPosition(ConstrainedFieldPosition&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>icu::CompactDecimalFormat::~CompactDecimalFormat()</b>
-<br>icu::CompactDecimalFormat::~CompactDecimalFormat() U_OVERRIDE<br>icu::CompactDecimalFormat::~CompactDecimalFormat() override<br>
-</li>
-<li>
-<b>icu::DecimalFormat::~DecimalFormat()</b>
-<br>icu::DecimalFormat::~DecimalFormat() U_OVERRIDE<br>icu::DecimalFormat::~DecimalFormat() override<br>
-</li>
-<li>
-<b>icu::Edits::Edits(Edits&amp;&amp;)</b>
-<br>icu::Edits::Edits(Edits&amp;&amp;) U_NOEXCEPT<br>icu::Edits::Edits(Edits&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&amp;&amp;)</b>
-<br>icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&amp;&amp;) U_NOEXCEPT<br>icu::FormattedDateInterval::FormattedDateInterval(FormattedDateInterval&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::FormattedDateInterval::~FormattedDateInterval()</b>
-<br>icu::FormattedDateInterval::~FormattedDateInterval() U_OVERRIDE<br>icu::FormattedDateInterval::~FormattedDateInterval() override<br>
-</li>
-<li>
-<b>icu::FormattedList::FormattedList(FormattedList&amp;&amp;)</b>
-<br>icu::FormattedList::FormattedList(FormattedList&amp;&amp;) U_NOEXCEPT<br>icu::FormattedList::FormattedList(FormattedList&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::FormattedList::~FormattedList()</b>
-<br>icu::FormattedList::~FormattedList() U_OVERRIDE<br>icu::FormattedList::~FormattedList() override<br>
-</li>
-<li>
-<b>icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&amp;&amp;)</b>
-<br>icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&amp;&amp;) U_NOEXCEPT<br>icu::FormattedRelativeDateTime::FormattedRelativeDateTime(FormattedRelativeDateTime&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::FormattedRelativeDateTime::~FormattedRelativeDateTime()</b>
-<br>icu::FormattedRelativeDateTime::~FormattedRelativeDateTime() U_OVERRIDE<br>icu::FormattedRelativeDateTime::~FormattedRelativeDateTime() override<br>
-</li>
-<li>
-<b>icu::LocalArray&lt; T &gt;::LocalArray(LocalArray&lt; T &gt;&amp;&amp;)</b>
-<br>icu::LocalArray&lt; T &gt;::LocalArray(LocalArray&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>icu::LocalArray&lt; T &gt;::LocalArray(LocalArray&lt; T &gt;&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::LocalPointer&lt; T &gt;::LocalPointer(LocalPointer&lt; T &gt;&amp;&amp;)</b>
-<br>icu::LocalPointer&lt; T &gt;::LocalPointer(LocalPointer&lt; T &gt;&amp;&amp;) U_NOEXCEPT<br>icu::LocalPointer&lt; T &gt;::LocalPointer(LocalPointer&lt; T &gt;&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::Locale::Locale(Locale&amp;&amp;)</b>
-<br>icu::Locale::Locale(Locale&amp;&amp;) U_NOEXCEPT<br>icu::Locale::Locale(Locale&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;)</b>
-<br>icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;) U_NOEXCEPT<br>icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;)</b>
-<br>icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;) U_NOEXCEPT<br>icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::LocaleMatcher::Result::Result(Result&amp;&amp;)</b>
-<br>icu::LocaleMatcher::Result::Result(Result&amp;&amp;) U_NOEXCEPT<br>icu::LocaleMatcher::Result::Result(Result&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::UnicodeString::UnicodeString(UnicodeString&amp;&amp;)</b>
-<br>icu::UnicodeString::UnicodeString(UnicodeString&amp;&amp;) U_NOEXCEPT<br>icu::UnicodeString::UnicodeString(UnicodeString&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;)</b>
-<br>icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;) U_NOEXCEPT<br>icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::FormattedNumber::~FormattedNumber()</b>
-<br>icu::number::FormattedNumber::~FormattedNumber() U_OVERRIDE<br>icu::number::FormattedNumber::~FormattedNumber() override<br>
-</li>
-<li>
-<b>icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&amp;&amp;)</b>
-<br>icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&amp;&amp;) U_NOEXCEPT<br>icu::number::FormattedNumberRange::FormattedNumberRange(FormattedNumberRange&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;)</b>
-<br>icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&amp;&amp;)</b>
-<br>icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::Scale::Scale(Scale&amp;&amp;)</b>
-<br>icu::number::Scale::Scale(Scale&amp;&amp;) U_NOEXCEPT<br>icu::number::Scale::Scale(Scale&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;)</b>
-<br>icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&amp;&amp;)</b>
-<br>icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&amp;&amp;) U_NOEXCEPT<br>icu::number::UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UnlocalizedNumberRangeFormatter&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;)</b>
-<br>icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;) U_NOEXCEPT<br>icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;)</b>
-<br>icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;) U_NOEXCEPT<br>icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;) noexcept<br>
-</li>
-<li>
-<b>int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&amp;, UErrorCode&amp;) const</b>
-<br>int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&amp;, UErrorCode&amp;) const U_OVERRIDE<br>int32_t icu::FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>uint8_t icu::FilteredNormalizer2::getCombiningClass(UChar32) const</b>
-<br>uint8_t icu::FilteredNormalizer2::getCombiningClass(UChar32) const U_OVERRIDE<br>uint8_t icu::FilteredNormalizer2::getCombiningClass(UChar32) const override<br>
-</li>
-<li>
-<b>void icu::CompactDecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</b>
-<br>void icu::CompactDecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const U_OVERRIDE<br>void icu::CompactDecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const override<br>
-</li>
-<li>
-<b>void icu::CompactDecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, UErrorCode&amp;) const</b>
-<br>void icu::CompactDecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, UErrorCode&amp;) const U_OVERRIDE<br>void icu::CompactDecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</b>
-<br>void icu::DecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const U_OVERRIDE<br>void icu::DecimalFormat::parse(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setCurrency(const char16_t*, UErrorCode&amp;)</b>
-<br>void icu::DecimalFormat::setCurrency(const char16_t*, UErrorCode&amp;) U_OVERRIDE<br>void icu::DecimalFormat::setCurrency(const char16_t*, UErrorCode&amp;) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setGroupingUsed(bool)</b>
-<br>void icu::DecimalFormat::setGroupingUsed(UBool) U_OVERRIDE<br>void icu::DecimalFormat::setGroupingUsed(UBool) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setLenient(bool)</b>
-<br>void icu::DecimalFormat::setLenient(UBool) U_OVERRIDE<br>void icu::DecimalFormat::setLenient(UBool) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setMaximumFractionDigits(int32_t)</b>
-<br>void icu::DecimalFormat::setMaximumFractionDigits(int32_t) U_OVERRIDE<br>void icu::DecimalFormat::setMaximumFractionDigits(int32_t) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setMaximumIntegerDigits(int32_t)</b>
-<br>void icu::DecimalFormat::setMaximumIntegerDigits(int32_t) U_OVERRIDE<br>void icu::DecimalFormat::setMaximumIntegerDigits(int32_t) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setMinimumFractionDigits(int32_t)</b>
-<br>void icu::DecimalFormat::setMinimumFractionDigits(int32_t) U_OVERRIDE<br>void icu::DecimalFormat::setMinimumFractionDigits(int32_t) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setMinimumIntegerDigits(int32_t)</b>
-<br>void icu::DecimalFormat::setMinimumIntegerDigits(int32_t) U_OVERRIDE<br>void icu::DecimalFormat::setMinimumIntegerDigits(int32_t) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setParseIntegerOnly(bool)</b>
-<br>void icu::DecimalFormat::setParseIntegerOnly(UBool) U_OVERRIDE<br>void icu::DecimalFormat::setParseIntegerOnly(UBool) override<br>
-</li>
-<li>
-<b>void icu::DecimalFormat::setRoundingMode(ERoundingMode)</b>
-<br>void icu::DecimalFormat::setRoundingMode(ERoundingMode) U_OVERRIDE<br>void icu::DecimalFormat::setRoundingMode(ERoundingMode) override<br>
-</li>
-<li>
-<b>void icu::Edits::reset()</b>
-<br>void icu::Edits::reset() U_NOEXCEPT<br>void icu::Edits::reset() noexcept<br>
-</li>
-<li>
-<b>void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const</b>
-<br>void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const U_OVERRIDE<br>void icu::FilteredNormalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;)</b>
-<br>void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;) U_NOEXCEPT<br>void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;) noexcept<br>
-</li>
-<li>
-<b>void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;)</b>
-<br>void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;) U_NOEXCEPT<br>void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;) noexcept<br>
-</li>
-<li>
-<b>void icu::UnicodeString::swap(UnicodeString&amp;)</b>
-<br>void icu::UnicodeString::swap(UnicodeString&amp;) U_NOEXCEPT<br>void icu::UnicodeString::swap(UnicodeString&amp;) noexcept<br>
-</li>
-<li>
-<b>void* icu::CompactDecimalFormat::clone() const</b>
-<br>CompactDecimalFormat* icu::CompactDecimalFormat::clone() const U_OVERRIDE<br>CompactDecimalFormat* icu::CompactDecimalFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::DecimalFormat::clone() const</b>
-<br>DecimalFormat* icu::DecimalFormat::clone() const U_OVERRIDE<br>DecimalFormat* icu::DecimalFormat::clone() const override<br>
-</li>
-</ul>
+<ul></ul>
 </div>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Fri Mar 17 10:36:07 PDT 2023<br>
+<i><font size="-1">Contents generated by StableAPI tool on Tue Sep 12 13:51:27 PDT 2023<br>
         Copyright &copy; 2017 and later: Unicode, Inc. and others.<br>
         License &amp; terms of use: http://www.unicode.org/copyright.html
     </font></i>

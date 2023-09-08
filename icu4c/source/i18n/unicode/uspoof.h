@@ -1775,7 +1775,7 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
  *                perform the check.
  * @return        A reference to the destination (skeleton) string.
  *
- * @draft ICU 74.0
+ * @draft ICU 74
  */
 U_I18N_API icu::UnicodeString &U_EXPORT2 uspoof_getBidiSkeletonUnicodeString(
     const USpoofChecker *sc, UBiDiDirection direction, const icu::UnicodeString &id,
