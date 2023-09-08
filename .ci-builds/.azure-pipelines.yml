@@ -217,13 +217,13 @@ jobs:
         CXX: clang++-14
         CXXFLAGS: '-std=c++20 -stdlib=libc++'
 #-------------------------------------------------------------------------
-# VS 2019 Builds
+# VS 2022 Builds
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_Distrelease
-  displayName: 'C: MSVC 64-bit Release (VS 2019) + Distrelease'
+  displayName: 'C: MSVC 64-bit Release (VS 2022) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands: 
       - msbuild
       - visualstudio
@@ -257,10 +257,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_DataFilter
-  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2019)'
+  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2022)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands: 
       - msbuild
       - visualstudio
@@ -279,10 +279,10 @@ jobs:
         msbuildArgs: '/p:SkipUWP=true'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Release_Distrelease
-  displayName: 'C: MSVC 32-bit Release (VS 2019) + Distrelease'
+  displayName: 'C: MSVC 32-bit Release (VS 2022) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands: 
       - msbuild
       - visualstudio
@@ -316,10 +316,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x86_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_ARM32_Release
-  displayName: 'C: MSVC x64 ARM32 Release (VS 2019)'
+  displayName: 'C: MSVC x64 ARM32 Release (VS 2022)'
   timeoutInMinutes: 35
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands:
       - msbuild
       - visualstudio
@@ -342,10 +342,10 @@ jobs:
         configuration: Release
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_ARM64_Release_Distrelease
-  displayName: 'C: MSVC x64 ARM64 Release (VS 2019) + Distrelease'
+  displayName: 'C: MSVC x64 ARM64 Release (VS 2022) + Distrelease'
   timeoutInMinutes: 35
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands:
       - msbuild
       - visualstudio
@@ -380,10 +380,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_ARM64_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Debug
-  displayName: 'C: MSVC x64 Debug (VS 2019)'
+  displayName: 'C: MSVC x64 Debug (VS 2022)'
   timeoutInMinutes: 35
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands: 
       - msbuild
       - visualstudio
@@ -405,10 +405,10 @@ jobs:
         arguments: 'x64 Debug'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_ARM64_Debug
-  displayName: 'C: MSVC ARM64 Debug (VS 2019)'
+  displayName: 'C: MSVC ARM64 Debug (VS 2022)'
   timeoutInMinutes: 35
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands: 
       - msbuild
       - visualstudio
@@ -433,10 +433,10 @@ jobs:
 # There is no /std:c++20 yet, so use c++latest as that includes many of
 # the C++20 compiler and library changes.
 - job: ICU4C_MSVC_x64_Release_CppLatest
-  displayName: 'C: MSVC 64-bit Release (VS 2019) /std:c++latest'
+  displayName: 'C: MSVC 64-bit Release (VS 2022) /std:c++latest'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
     demands: 
       - msbuild
       - visualstudio
@@ -457,6 +457,58 @@ jobs:
       inputs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
+#-------------------------------------------------------------------------
+# VS 2019 Builds
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_VS2019
+  displayName: 'C: MSVC 64-bit Release (VS 2019)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands:
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x86_Debug_VS2019
+  displayName: 'C: MSVC 32-bit Debug (VS 2019)'
+  timeoutInMinutes: 60
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: Win32
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x86 Debug'
 #-------------------------------------------------------------------------
 # VS2019 using the VS2017 toolset builds
 #-------------------------------------------------------------------------
@@ -485,32 +537,6 @@ jobs:
       inputs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
-#-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x86_Debug_VS2017
-  displayName: 'C: MSVC 32-bit Debug (VS 2017)'
-  timeoutInMinutes: 60
-  pool:
-    vmImage: 'windows-2019'
-    demands: 
-      - msbuild
-      - visualstudio
-      - Cmd
-  steps:
-    - checkout: self
-      lfs: true
-      fetchDepth: 10
-    - task: VSBuild@1
-      displayName: 'Build Solution'
-      inputs:
-        solution: icu4c/source/allinone/allinone.sln
-        platform: Win32
-        configuration: Debug
-        msbuildArgs: /p:DefaultPlatformToolset=v141
-    - task: BatchScript@1
-      displayName: 'Run Tests (icucheck.bat)'
-      inputs:
-        filename: icu4c/source/allinone/icucheck.bat
-        arguments: 'x86 Debug'
 #-------------------------------------------------------------------------
 # VS2019 using the VS2015 toolset
 #-------------------------------------------------------------------------
