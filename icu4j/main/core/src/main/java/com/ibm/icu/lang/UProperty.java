@@ -618,11 +618,35 @@ public interface UProperty
     public static final int RGI_EMOJI=71;
 
     /**
+     * Binary property IDS_Unary_Operator.
+     * For programmatic determination of Ideographic Description Sequences.
+     *
+     * @draft ICU 74
+     */
+    public static final int IDS_UNARY_OPERATOR = 72;
+
+    /**
+     * Binary property ID_Compat_Math_Start.
+     * <p>Used in mathematical identifier profile in UAX #31.
+     *
+     * @draft ICU 74
+     */
+    public static final int ID_COMPAT_MATH_START = 73;
+
+    /**
+     * Binary property ID_Compat_Math_Continue.
+     * <p>Used in mathematical identifier profile in UAX #31.
+     *
+     * @draft ICU 74
+     */
+    public static final int ID_COMPAT_MATH_CONTINUE = 74;
+
+    /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int BINARY_LIMIT = 72;
+    public static final int BINARY_LIMIT = 75;
 
     /**
      * Enumerated property Bidi_Class.

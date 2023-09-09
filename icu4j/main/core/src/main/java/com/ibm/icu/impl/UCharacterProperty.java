@@ -109,8 +109,10 @@ public final class UCharacterProperty
     public static final int SRC_INSC=13;
     public static final int SRC_VO=14;
     public static final int SRC_EMOJI=15;
+    public static final int SRC_IDSU=16;
+    public static final int SRC_ID_COMPAT_MATH=17;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=16;
+    public static final int SRC_COUNT=18;
 
     private static final class LayoutProps {
         private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -377,6 +379,54 @@ public final class UCharacterProperty
         }
     }
 
+    /** Ranges (start/limit pairs) of ID_Compat_Math_Continue (only), from UCD PropList.txt. */
+    private static final int[] ID_COMPAT_MATH_CONTINUE = {
+        0x00B2, 0x00B3 + 1,
+        0x00B9, 0x00B9 + 1,
+        0x2070, 0x2070 + 1,
+        0x2074, 0x207E + 1,
+        0x2080, 0x208E + 1
+    };
+
+    /** ID_Compat_Math_Start characters, from UCD PropList.txt. */
+    private static final int[] ID_COMPAT_MATH_START = {
+        0x2202,
+        0x2207,
+        0x221E,
+        0x1D6C1,
+        0x1D6DB,
+        0x1D6FB,
+        0x1D715,
+        0x1D735,
+        0x1D74F,
+        0x1D76F,
+        0x1D789,
+        0x1D7A9,
+        0x1D7C3
+    };
+
+    private class MathCompatBinaryProperty extends BinaryProperty {
+        int which;
+        MathCompatBinaryProperty(int which) {
+            super(SRC_ID_COMPAT_MATH);
+            this.which=which;
+        }
+        @Override
+        boolean contains(int c) {
+            if (which == UProperty.ID_COMPAT_MATH_CONTINUE) {
+                for (int i = 0; i < ID_COMPAT_MATH_CONTINUE.length; i += 2) {
+                    if (c < ID_COMPAT_MATH_CONTINUE[i]) { return false; }  // below range start
+                    if (c < ID_COMPAT_MATH_CONTINUE[i + 1]) { return true; }  // below range limit
+                }
+            }
+            if (c < ID_COMPAT_MATH_START[0]) { return false; }  // fastpath for common scripts
+            for (int startChar : ID_COMPAT_MATH_START) {
+                if (c == startChar) { return true; }
+            }
+            return false;
+        }
+    }
+
     BinaryProperty[] binProps={
         /*
          * Binary-property implementations must be in order of corresponding UProperty,
@@ -568,6 +618,15 @@ public final class UCharacterProperty
         new EmojiBinaryProperty(UProperty.RGI_EMOJI_TAG_SEQUENCE),
         new EmojiBinaryProperty(UProperty.RGI_EMOJI_ZWJ_SEQUENCE),
         new EmojiBinaryProperty(UProperty.RGI_EMOJI),
+        new BinaryProperty(SRC_IDSU) {  // IDS_UNARY_OPERATOR
+            // New in Unicode 15.1 for just two characters.
+            @Override
+            boolean contains(int c) {
+                return 0x2FFE<=c && c<=0x2FFF;
+            }
+        },
+        new MathCompatBinaryProperty(UProperty.ID_COMPAT_MATH_START),
+        new MathCompatBinaryProperty(UProperty.ID_COMPAT_MATH_CONTINUE),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1662,6 +1721,18 @@ public final class UCharacterProperty
 
     static UnicodeSet ulayout_addPropertyStarts(int src, UnicodeSet set) {
         return LayoutProps.INSTANCE.addPropertyStarts(src, set);
+    }
+
+    static void mathCompat_addPropertyStarts(UnicodeSet set) {
+        // range limits
+        for (int c : ID_COMPAT_MATH_CONTINUE) {
+            set.add(c);
+        }
+        // single characters
+        for (int c : ID_COMPAT_MATH_START) {
+            set.add(c);
+            set.add(c + 1);
+        }
     }
 
     // This static initializer block must be placed after

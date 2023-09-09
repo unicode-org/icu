@@ -78,6 +78,8 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestIntCharacterProperties);
 #endif
     TESTCASE_AUTO(TestPropertyNames);
+    TESTCASE_AUTO(TestIDSUnaryOperator);
+    TESTCASE_AUTO(TestIDCompatMath);
     TESTCASE_AUTO_END;
 }
 
@@ -949,4 +951,76 @@ void UnicodeTest::TestPropertyNames() {
     assertEquals("gc=P mask: long", "Punctuation", getValueName(prop, value, LONG));
     assertEquals("gc=P mask: index 2", "punct", getValueName(prop, value, 2));
     assertEquals("gc=P mask: index 3", "null", getValueName(prop, value, 3));
+}
+
+void UnicodeTest::TestIDSUnaryOperator() {
+    IcuTestErrorCode errorCode(*this, "TestIDSUnaryOperator()");
+    // New in Unicode 15.1 for just two characters.
+    assertFalse("U+2FFC IDSU", u_hasBinaryProperty(0x2ffc, UCHAR_IDS_UNARY_OPERATOR));
+    assertFalse("U+2FFD IDSU", u_hasBinaryProperty(0x2ffd, UCHAR_IDS_UNARY_OPERATOR));
+    assertTrue("U+2FFE IDSU", u_hasBinaryProperty(0x2ffe, UCHAR_IDS_UNARY_OPERATOR));
+    assertTrue("U+2FFF IDSU", u_hasBinaryProperty(0x2fff, UCHAR_IDS_UNARY_OPERATOR));
+    assertFalse("U+3000 IDSU", u_hasBinaryProperty(0x3000, UCHAR_IDS_UNARY_OPERATOR));
+    assertFalse("U+3001 IDSU", u_hasBinaryProperty(0x3001, UCHAR_IDS_UNARY_OPERATOR));
+
+    // Property name works and gets the correct set.
+    UnicodeSet idsu(u"[:IDS_Unary_Operator:]", errorCode);
+    assertEquals("IDSU set number of characters", 2, idsu.size());
+    assertFalse("idsu.contains(U+2FFD)", idsu.contains(0x2ffd));
+    assertTrue("idsu.contains(U+2FFE)", idsu.contains(0x2ffe));
+    assertTrue("idsu.contains(U+2FFF)", idsu.contains(0x2fff));
+    assertFalse("idsu.contains(U+3000)", idsu.contains(0x3000));
+}
+
+namespace {
+
+bool isMathStart(UChar32 c) {
+    return u_hasBinaryProperty(c, UCHAR_ID_COMPAT_MATH_START);
+}
+
+bool isMathContinue(UChar32 c) {
+    return u_hasBinaryProperty(c, UCHAR_ID_COMPAT_MATH_CONTINUE);
+}
+
+}  // namespace
+
+void UnicodeTest::TestIDCompatMath() {
+    IcuTestErrorCode errorCode(*this, "TestIDCompatMath()");
+    assertFalse("U+00B1 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb1));
+    assertTrue("U+00B2 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb2));
+    assertTrue("U+00B3 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb3));
+    assertFalse("U+00B4 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb4));
+    assertFalse("U+207F UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x207f));
+    assertTrue("U+2080 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x2080));
+    assertTrue("U+208E UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x208e));
+    assertFalse("U+208F UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x208f));
+    assertFalse("U+2201 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x2201));
+    assertTrue("U+2202 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x2202));
+    assertTrue("U+1D6C1 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x1D6C1));
+    assertTrue("U+1D7C3 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x1D7C3));
+    assertFalse("U+1D7C4 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x1D7C4));
+
+    assertFalse("U+00B2 UCHAR_ID_COMPAT_MATH_START", isMathStart(0xb2));
+    assertFalse("U+2080 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x2080));
+    assertFalse("U+2201 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x2201));
+    assertTrue("U+2202 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x2202));
+    assertTrue("U+1D6C1 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x1D6C1));
+    assertTrue("U+1D7C3 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x1D7C3));
+    assertFalse("U+1D7C4 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x1D7C4));
+
+    // Property names work and get the correct sets.
+    UnicodeSet idcmStart(u"[:ID_Compat_Math_Start:]", errorCode);
+    UnicodeSet idcmContinue(u"[:ID_Compat_Math_Continue:]", errorCode);
+    assertEquals("ID_Compat_Math_Start set number of characters", 13, idcmStart.size());
+    assertEquals("ID_Compat_Math_Continue set number of characters", 43, idcmContinue.size());
+    assertTrue("ID_Compat_Math_Start is a subset of ID_Compat_Math_Continue",
+               idcmContinue.containsAll(idcmStart));
+    assertFalse("idcmContinue.contains(U+207F)", idcmContinue.contains(0x207f));
+    assertTrue("idcmContinue.contains(U+2080)", idcmContinue.contains(0x2080));
+    assertTrue("idcmContinue.contains(U+208E)", idcmContinue.contains(0x208e));
+    assertFalse("idcmContinue.contains(U+208F)", idcmContinue.contains(0x208f));
+    assertFalse("idcmStart.contains(U+2201)", idcmStart.contains(0x2201));
+    assertTrue("idcmStart.contains(U+2202)", idcmStart.contains(0x2202));
+    assertTrue("idcmStart.contains(U+1D7C3)", idcmStart.contains(0x1D7C3));
+    assertFalse("idcmStart.contains(U+1D7C4)", idcmStart.contains(0x1D7C4));
 }

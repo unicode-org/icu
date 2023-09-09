@@ -2813,6 +2813,13 @@ public class BasicTest extends TestFmwk {
                 "getNFKCCasefoldInstance() did not return an NFKC_Casefold instance " +
                 "(normalizes to " + prettify(out) + ')',
                 " \u1E09", out);
+
+        n2=Normalizer2.getNFKCSimpleCasefoldInstance();
+        out=n2.normalize(in);
+        assertEquals(
+            "getNFKCSimpleCasefoldInstance() did not return an NFKC_Simple_Casefold instance " +
+                "(normalizes to " + prettify(out) + ')',
+            " \u1E09", out);
     }
 
     @Test
@@ -2890,6 +2897,16 @@ public class BasicTest extends TestFmwk {
         assertEquals("nfkc", expected, result);
         assertFalse("U+02DA boundary-after", nfkc.hasBoundaryAfter(0x2DA));
         assertFalse("U+FB2C boundary-after", nfkc.hasBoundaryAfter(0xFB2C));
+    }
+
+    @Test
+    public void TestNFKC_SCF() {
+        Normalizer2 nfkc_scf = Normalizer2.getNFKCSimpleCasefoldInstance();
+        // Uses only Simple_Casefolding mappings.
+        String s = "aA\u0308 ßẞ \u1F80\u1F88";
+        String expected = "aä ßß \u1F80\u1F80";
+        String result = nfkc_scf.normalize(s);
+        assertEquals("nfkc_scf", expected, result);
     }
 
     @Test
