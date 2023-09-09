@@ -62,6 +62,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestNormalizeIllFormedText);
     TESTCASE_AUTO(TestComposeJamoTBase);
     TESTCASE_AUTO(TestComposeBoundaryAfter);
+    TESTCASE_AUTO(TestNFKC_SCF);
     TESTCASE_AUTO_END;
 }
 
@@ -1871,6 +1872,22 @@ BasicNormalizerTest::TestComposeBoundaryAfter() {
     assertEquals("nfkc", expected, result);
     assertFalse("U+02DA boundary-after", nfkc->hasBoundaryAfter(0x2DA));
     assertFalse("U+FB2C boundary-after", nfkc->hasBoundaryAfter(0xFB2C));
+}
+
+void
+BasicNormalizerTest::TestNFKC_SCF() {
+    IcuTestErrorCode errorCode(*this, "TestNFKC_SCF");
+    const Normalizer2 *nfkc_scf = Normalizer2::getNFKCSimpleCasefoldInstance(errorCode);
+    if(errorCode.errDataIfFailureAndReset(
+            "Normalizer2::getNFKCSimpleCasefoldInstance() call failed")) {
+        return;
+    }
+    // Uses only Simple_Casefolding mappings.
+    UnicodeString s(u"aA\u0308 ßẞ \u1F80\u1F88");
+    UnicodeString expected(u"aä ßß \u1F80\u1F80");
+    UnicodeString result = nfkc_scf->normalize(s, errorCode);
+    assertSuccess("nfkc_scf", errorCode.get());
+    assertEquals("nfkc_scf", expected, result);
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

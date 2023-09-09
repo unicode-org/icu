@@ -74,6 +74,14 @@ public final class CharacterPropertiesImpl {
                 EmojiProps.INSTANCE.addPropertyStarts(incl);
                 break;
             }
+            case UCharacterProperty.SRC_IDSU:
+                // New in Unicode 15.1 for just two characters.
+                incl.add(0x2FFE);
+                incl.add(0x2FFF + 1);
+                break;
+            case UCharacterProperty.SRC_ID_COMPAT_MATH:
+                UCharacterProperty.mathCompat_addPropertyStarts(incl);
+                break;
             default:
                 throw new IllegalStateException("getInclusions(unknown src " + src + ")");
             }

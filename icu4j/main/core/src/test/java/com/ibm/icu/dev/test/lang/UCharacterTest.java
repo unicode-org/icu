@@ -3983,4 +3983,73 @@ public final class UCharacterTest extends TestFmwk
         assertEquals("gc=P mask: index 2", "punct", getValueName(prop, value, 2));
         assertEquals("gc=P mask: index 3", "null", getValueName(prop, value, 3));
     }
+
+    @Test
+    public void TestIDSUnaryOperator() {
+        // New in Unicode 15.1 for just two characters.
+        final int IDSU = UProperty.IDS_UNARY_OPERATOR;
+        assertFalse("U+2FFC IDSU", UCharacter.hasBinaryProperty(0x2ffc, IDSU));
+        assertFalse("U+2FFD IDSU", UCharacter.hasBinaryProperty(0x2ffd, IDSU));
+        assertTrue("U+2FFE IDSU", UCharacter.hasBinaryProperty(0x2ffe, IDSU));
+        assertTrue("U+2FFF IDSU", UCharacter.hasBinaryProperty(0x2fff, IDSU));
+        assertFalse("U+3000 IDSU", UCharacter.hasBinaryProperty(0x3000, IDSU));
+        assertFalse("U+3001 IDSU", UCharacter.hasBinaryProperty(0x3001, IDSU));
+
+        // Property name works and gets the correct set.
+        UnicodeSet idsu = new UnicodeSet("[:IDS_Unary_Operator:]");
+        assertEquals("IDSU set number of characters", 2, idsu.size());
+        assertFalse("idsu.contains(U+2FFD)", idsu.contains(0x2ffd));
+        assertTrue("idsu.contains(U+2FFE)", idsu.contains(0x2ffe));
+        assertTrue("idsu.contains(U+2FFF)", idsu.contains(0x2fff));
+        assertFalse("idsu.contains(U+3000)", idsu.contains(0x3000));
+    }
+
+    private static final boolean isMathStart(int c) {
+        return UCharacter.hasBinaryProperty(c, UProperty.ID_COMPAT_MATH_START);
+    }
+
+    private static final boolean isMathContinue(int c) {
+        return UCharacter.hasBinaryProperty(c, UProperty.ID_COMPAT_MATH_CONTINUE);
+    }
+
+    @Test
+    public void TestIDCompatMath() {
+        assertFalse("U+00B1 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb1));
+        assertTrue("U+00B2 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb2));
+        assertTrue("U+00B3 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb3));
+        assertFalse("U+00B4 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0xb4));
+        assertFalse("U+207F UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x207f));
+        assertTrue("U+2080 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x2080));
+        assertTrue("U+208E UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x208e));
+        assertFalse("U+208F UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x208f));
+        assertFalse("U+2201 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x2201));
+        assertTrue("U+2202 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x2202));
+        assertTrue("U+1D6C1 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x1D6C1));
+        assertTrue("U+1D7C3 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x1D7C3));
+        assertFalse("U+1D7C4 UCHAR_ID_COMPAT_MATH_CONTINUE", isMathContinue(0x1D7C4));
+
+        assertFalse("U+00B2 UCHAR_ID_COMPAT_MATH_START", isMathStart(0xb2));
+        assertFalse("U+2080 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x2080));
+        assertFalse("U+2201 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x2201));
+        assertTrue("U+2202 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x2202));
+        assertTrue("U+1D6C1 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x1D6C1));
+        assertTrue("U+1D7C3 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x1D7C3));
+        assertFalse("U+1D7C4 UCHAR_ID_COMPAT_MATH_START", isMathStart(0x1D7C4));
+
+        // Property names work and get the correct sets.
+        UnicodeSet idcmStart = new UnicodeSet("[:ID_Compat_Math_Start:]");
+        UnicodeSet idcmContinue = new UnicodeSet("[:ID_Compat_Math_Continue:]");
+        assertEquals("ID_Compat_Math_Start set number of characters", 13, idcmStart.size());
+        assertEquals("ID_Compat_Math_Continue set number of characters", 43, idcmContinue.size());
+        assertTrue("ID_Compat_Math_Start is a subset of ID_Compat_Math_Continue",
+            idcmContinue.containsAll(idcmStart));
+        assertFalse("idcmContinue.contains(U+207F)", idcmContinue.contains(0x207f));
+        assertTrue("idcmContinue.contains(U+2080)", idcmContinue.contains(0x2080));
+        assertTrue("idcmContinue.contains(U+208E)", idcmContinue.contains(0x208e));
+        assertFalse("idcmContinue.contains(U+208F)", idcmContinue.contains(0x208f));
+        assertFalse("idcmStart.contains(U+2201)", idcmStart.contains(0x2201));
+        assertTrue("idcmStart.contains(U+2202)", idcmStart.contains(0x2202));
+        assertTrue("idcmStart.contains(U+1D7C3)", idcmStart.contains(0x1D7C3));
+        assertFalse("idcmStart.contains(U+1D7C4)", idcmStart.contains(0x1D7C4));
+    }
 }

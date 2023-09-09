@@ -309,6 +309,9 @@ public final class Norm2AllModes {
     public static Norm2AllModes getNFKC_CFInstance() {
         return getInstanceFromSingleton(NFKC_CFSingleton.INSTANCE);
     }
+    public static Norm2AllModes getNFKC_SCFInstance() {
+        return getInstanceFromSingleton(NFKC_SCFSingleton.INSTANCE);
+    }
     // For use in properties APIs.
     public static Normalizer2WithImpl getN2WithImpl(int index) {
         switch(index) {
@@ -384,5 +387,8 @@ public final class Norm2AllModes {
     }
     private static final class NFKC_CFSingleton {
         private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton("nfkc_cf");
+    }
+    private static final class NFKC_SCFSingleton {
+        private static final Norm2AllModesSingleton INSTANCE=new Norm2AllModesSingleton("nfkc_scf");
     }
 }

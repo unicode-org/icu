@@ -50,6 +50,8 @@ public:
     void TestBinaryCharacterProperties();
     void TestIntCharacterProperties();
     void TestPropertyNames();
+    void TestIDSUnaryOperator();
+    void TestIDCompatMath();
 
 private:
 

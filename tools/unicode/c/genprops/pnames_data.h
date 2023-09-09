@@ -1203,7 +1203,7 @@ static const Value VALUES_gcm[38] = {
     Value((int32_t)U_GC_ZS_MASK, "Zs Space_Separator"),
 };
 
-static const Property PROPERTIES[114] = {
+static const Property PROPERTIES[117] = {
     Property(UCHAR_ALPHABETIC, "Alpha Alphabetic"),
     Property(UCHAR_ASCII_HEX_DIGIT, "AHex ASCII_Hex_Digit"),
     Property(UCHAR_BIDI_CONTROL, "Bidi_C Bidi_Control"),
@@ -1276,6 +1276,9 @@ static const Property PROPERTIES[114] = {
     Property(UCHAR_RGI_EMOJI_TAG_SEQUENCE, "RGI_Emoji_Tag_Sequence RGI_Emoji_Tag_Sequence"),
     Property(UCHAR_RGI_EMOJI_ZWJ_SEQUENCE, "RGI_Emoji_ZWJ_Sequence RGI_Emoji_ZWJ_Sequence"),
     Property(UCHAR_RGI_EMOJI, "RGI_Emoji RGI_Emoji"),
+    Property(UCHAR_IDS_UNARY_OPERATOR, "IDSU IDS_Unary_Operator"),
+    Property(UCHAR_ID_COMPAT_MATH_START, "ID_Compat_Math_Start ID_Compat_Math_Start"),
+    Property(UCHAR_ID_COMPAT_MATH_CONTINUE, "ID_Compat_Math_Continue ID_Compat_Math_Continue"),
     Property(UCHAR_BIDI_CLASS, "bc Bidi_Class", VALUES_bc, 23),
     Property(UCHAR_BLOCK, "blk Block", VALUES_blk, 329),
     Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, 58),

@@ -65,7 +65,7 @@ https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest ge
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni15.1/20230811
+export UNICODE_DATA=$UNIDATA_ROOT/uni15.1/final
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -216,6 +216,60 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
       -Dexec.args="" -am -pl unicodetools  -DCLDR_DIR=$(cd ../../../cldr/mine/src ; pwd) -DUNICODETOOLS_REPO_DIR=$(pwd)
 - copy & paste from the Console output into the .cpp & .java files
 
+* check hardcoded IDS_Unary_Operator
+- new in Unicode 15.1, hardcoded because trivial, and unlikely to change
+- check that it has not changed:
+    (cd $UNICODE_DATA && grep -r --include=PropList.txt IDS_Unary_Operator)
+  ->
+    ucd/PropList.txt:2FFE..2FFF    ; IDS_Unary_Operator # So   [2] IDEOGRAPHIC DESCRIPTION CHAR...
+- if it has changed, then update the implementation and the tests
+
+* check hardcoded ID_Compat_Math_Start & ID_Compat_Math_Continue
+- new in Unicode 15.1, hardcoded because trivial, and unlikely to change
+- check that they have not changed:
+    (cd $UNICODE_DATA && grep -r --include=PropList.txt ID_Compat_Math)
+  ->
+    ucd/PropList.txt:00B2..00B3    ; ID_Compat_Math_Continue # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
+    ucd/PropList.txt:00B9          ; ID_Compat_Math_Continue # No       SUPERSCRIPT ONE
+    ucd/PropList.txt:2070          ; ID_Compat_Math_Continue # No       SUPERSCRIPT ZERO
+    ucd/PropList.txt:2074..2079    ; ID_Compat_Math_Continue # No   [6] SUPERSCRIPT FOUR..SUPERSCRIPT NINE
+    ucd/PropList.txt:207A..207C    ; ID_Compat_Math_Continue # Sm   [3] SUPERSCRIPT PLUS SIGN..SUPERSCRIPT EQUALS SIGN
+    ucd/PropList.txt:207D          ; ID_Compat_Math_Continue # Ps       SUPERSCRIPT LEFT PARENTHESIS
+    ucd/PropList.txt:207E          ; ID_Compat_Math_Continue # Pe       SUPERSCRIPT RIGHT PARENTHESIS
+    ucd/PropList.txt:2080..2089    ; ID_Compat_Math_Continue # No  [10] SUBSCRIPT ZERO..SUBSCRIPT NINE
+    ucd/PropList.txt:208A..208C    ; ID_Compat_Math_Continue # Sm   [3] SUBSCRIPT PLUS SIGN..SUBSCRIPT EQUALS SIGN
+    ucd/PropList.txt:208D          ; ID_Compat_Math_Continue # Ps       SUBSCRIPT LEFT PARENTHESIS
+    ucd/PropList.txt:208E          ; ID_Compat_Math_Continue # Pe       SUBSCRIPT RIGHT PARENTHESIS
+    ucd/PropList.txt:2202          ; ID_Compat_Math_Continue # Sm       PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:2207          ; ID_Compat_Math_Continue # Sm       NABLA
+    ucd/PropList.txt:221E          ; ID_Compat_Math_Continue # Sm       INFINITY
+    ucd/PropList.txt:1D6C1         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL BOLD NABLA
+    ucd/PropList.txt:1D6DB         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL BOLD PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D6FB         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL ITALIC NABLA
+    ucd/PropList.txt:1D715         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL ITALIC PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D735         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL BOLD ITALIC NABLA
+    ucd/PropList.txt:1D74F         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL BOLD ITALIC PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D76F         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL SANS-SERIF BOLD NABLA
+    ucd/PropList.txt:1D789         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL SANS-SERIF BOLD PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D7A9         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL SANS-SERIF BOLD ITALIC NABLA
+    ucd/PropList.txt:1D7C3         ; ID_Compat_Math_Continue # Sm       MATHEMATICAL SANS-SERIF BOLD ITALIC PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:2202          ; ID_Compat_Math_Start # Sm       PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:2207          ; ID_Compat_Math_Start # Sm       NABLA
+    ucd/PropList.txt:221E          ; ID_Compat_Math_Start # Sm       INFINITY
+    ucd/PropList.txt:1D6C1         ; ID_Compat_Math_Start # Sm       MATHEMATICAL BOLD NABLA
+    ucd/PropList.txt:1D6DB         ; ID_Compat_Math_Start # Sm       MATHEMATICAL BOLD PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D6FB         ; ID_Compat_Math_Start # Sm       MATHEMATICAL ITALIC NABLA
+    ucd/PropList.txt:1D715         ; ID_Compat_Math_Start # Sm       MATHEMATICAL ITALIC PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D735         ; ID_Compat_Math_Start # Sm       MATHEMATICAL BOLD ITALIC NABLA
+    ucd/PropList.txt:1D74F         ; ID_Compat_Math_Start # Sm       MATHEMATICAL BOLD ITALIC PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D76F         ; ID_Compat_Math_Start # Sm       MATHEMATICAL SANS-SERIF BOLD NABLA
+    ucd/PropList.txt:1D789         ; ID_Compat_Math_Start # Sm       MATHEMATICAL SANS-SERIF BOLD PARTIAL DIFFERENTIAL
+    ucd/PropList.txt:1D7A9         ; ID_Compat_Math_Start # Sm       MATHEMATICAL SANS-SERIF BOLD ITALIC NABLA
+    ucd/PropList.txt:1D7C3         ; ID_Compat_Math_Start # Sm       MATHEMATICAL SANS-SERIF BOLD ITALIC PARTIAL DIFFERENTIAL
+- if they have changed, then update the implementation and the tests
+- TODO: There is a ticket for using ppucd.txt in test code.
+  Do that and check these hardcoded properties against that.
+
 * Bazel build process
 
 See https://unicode-org.github.io/icu/processes/unicode-update#bazel-build-process
@@ -348,46 +402,28 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
-- copy the big-endian Unicode data files to another location,
-  separate from the other data files,
-  and then refresh ICU4J
+- copy the binary data files into the ICU4J tree
     cd $ICU_OUT/icu4c/data/out/icu4j
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/brkitr
-    cp -v com/ibm/icu/impl/data/$ICUDT/confusables.cfu /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
-    cp -v com/ibm/icu/impl/data/$ICUDT/*.icu /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
-    rm /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/cnvalias.icu
-    cp -v com/ibm/icu/impl/data/$ICUDT/*.nrm /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
-    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/coll
-    cp -v com/ibm/icu/impl/data/$ICUDT/brkitr/* /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT/brkitr
-    jar uvf $ICU_SRC/icu4j/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/$ICUDT
-- new since ICU 73: also copy the binary data files directly into the ICU4J tree
-    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/$ICUDT/coll
-    cp -v com/ibm/icu/impl/data/$ICUDT/brkitr/* $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/$ICUDT/brkitr
-    cp -v com/ibm/icu/impl/data/$ICUDT/confusables.cfu $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/$ICUDT
-    cp -v com/ibm/icu/impl/data/$ICUDT/*.nrm $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/$ICUDT
+    cp -v com/ibm/icu/impl/data/$ICUDT/coll/* $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT/coll
+    cp -v com/ibm/icu/impl/data/$ICUDT/brkitr/* $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT/brkitr
+    cp -v com/ibm/icu/impl/data/$ICUDT/confusables.cfu $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT
+    cp -v com/ibm/icu/impl/data/$ICUDT/*.nrm $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT
     cd com/ibm/icu/impl/data/$ICUDT/
-    ls *.icu | egrep -v "cnvalias.icu" | awk '{print "cp " $0 " $ICU_SRC/icu4j/maven-build/maven-icu4j-datafiles/src/main/resources/com/ibm/icu/impl/data/$ICUDT";}' | sh
+    ls *.icu | egrep -v "cnvalias.icu" | awk '{print "cp " $0 " $ICU_SRC/icu4j/main/core/src/main/resources/com/ibm/icu/impl/data/$ICUDT";}' | sh
 - The procedure above is very conservative:
-  It refreshes only the parts of icudata.jar that we think are affected by a Unicode data update.
+  It refreshes only the parts of the ICU4J data that we think are affected by a Unicode data update.
   It avoids dealing with any other discrepancies
   between the source and generated data files.
   *If* instead we wanted to refresh *all* of the ICU4J data from ICU4C:
-  + still via /tmp:
-    ~ $ICU_OUT/icu4c$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
-    ~ cp /tmp/icu4j/main/shared/data/icudata.jar $ICU_SRC/icu4j/main/shared/data
-  + or directly:
-    ~ $ICU_OUT/icu4c$ make ICU4J_ROOT=$ICU_SRC/icu4j icu4j-data-install
-  + plus (new since ICU 73) also copy the binary data files directly into the ICU4J tree
-    ~ TODO
+      $ICU_OUT/icu4c$ make ICU4J_ROOT=$ICU_SRC/icu4j icu4j-data-install
 
 * refresh Java test .txt files
-- copy new .txt files into ICU4J's main/tests/core/src/com/ibm/icu/dev/data/unicode
+- copy new .txt files into ICU4J's main/core/src/test/resources/com/ibm/icu/dev/data/unicode
     cd $ICU_SRC/icu4c/source/data/unidata
-    cp -v confusables.txt confusablesWholeScript.txt NormalizationCorrections.txt NormalizationTest.txt SpecialCasing.txt UnicodeData.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
+    cp -v confusables.txt confusablesWholeScript.txt NormalizationCorrections.txt NormalizationTest.txt SpecialCasing.txt UnicodeData.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
     cd ../../test/testdata
-    cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
-    cp -v $UNICODE_DATA/UCD/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
+    cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
+    cp -v $UNICODE_DATA/UCD/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
 
 * run & fix ICU4J tests
 

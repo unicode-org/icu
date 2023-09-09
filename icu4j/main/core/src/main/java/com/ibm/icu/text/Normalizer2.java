@@ -157,14 +157,31 @@ public abstract class Normalizer2 {
     }
 
     /**
-     * Returns a Normalizer2 instance for Unicode NFKC_Casefold normalization.
-     * Same as getInstance(null, "nfkc_cf", Mode.COMPOSE).
+     * Returns a Normalizer2 instance for Unicode toNFKC_Casefold() normalization
+     * which is equivalent to applying the NFKC_Casefold mappings and then NFC.
+     * See https://www.unicode.org/reports/tr44/#NFKC_Casefold
+     *
+     * <p>Same as getInstance(null, "nfkc_cf", Mode.COMPOSE).
      * Returns an unmodifiable singleton instance.
      * @return the requested Normalizer2, if successful
      * @stable ICU 49
      */
     public static Normalizer2 getNFKCCasefoldInstance() {
         return Norm2AllModes.getNFKC_CFInstance().comp;
+    }
+
+    /**
+     * Returns a Normalizer2 instance for a variant of Unicode toNFKC_Casefold() normalization
+     * which is equivalent to applying the NFKC_Simple_Casefold mappings and then NFC.
+     * See https://www.unicode.org/reports/tr44/#NFKC_Simple_Casefold
+     *
+     * <p>Same as getInstance(null, "nfkc_scf", Mode.COMPOSE).
+     * Returns an unmodifiable singleton instance.
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 74
+     */
+    public static Normalizer2 getNFKCSimpleCasefoldInstance() {
+        return Norm2AllModes.getNFKC_SCFInstance().comp;
     }
 
     /**
@@ -184,7 +201,7 @@ public abstract class Normalizer2 {
      * for non-ICU data as well.
      * <p>Any {@link java.io.IOException} is wrapped into a {@link com.ibm.icu.util.ICUUncheckedIOException}.
      * @param data the binary, big-endian normalization (.nrm file) data, or null for ICU data
-     * @param name "nfc" or "nfkc" or "nfkc_cf" or name of custom data file
+     * @param name "nfc" or "nfkc" or "nfkc_cf" or "nfkc_scf" or name of custom data file
      * @param mode normalization mode (compose or decompose etc.)
      * @return the requested Normalizer2, if successful
      * @stable ICU 4.4

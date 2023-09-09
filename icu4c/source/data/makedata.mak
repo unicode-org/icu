@@ -515,6 +515,9 @@ CLEAN : GODATA
 "$(ICUBLD_PKG)\nfkc_cf.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\nfkc_cf.nrm
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
+"$(ICUBLD_PKG)\nfkc_scf.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\nfkc_scf.nrm
+	"$(ICUPBIN)\icupkg" -tl $? $@
+
 "$(ICUBLD_PKG)\uts46.nrm": $(ICUSRCDATA_RELATIVE_PATH)\in\uts46.nrm
 	"$(ICUPBIN)\icupkg" -tl $? $@
 
