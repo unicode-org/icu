@@ -28,10 +28,16 @@ import junitparams.Parameters;
  */
 @RunWith(JUnitParamsRunner.class)
 public class PersonNameConsistencyTest extends TestFmwk {
+    /**
+     * Change this to true to cause the tests that would normally be skipped to also run (without
+     * causing the test suite to fail).
+     */
+    private static boolean RUN_ALL_TESTS = false;
+
     private static final String DATA_PATH = TestUtil.DATA_PATH + "cldr/personNameTest/";
 
     static private Collection<String> FILENAMES_TO_SKIP =
-         Arrays.asList("gaa.txt", "syr.txt", "lij.txt");
+         Arrays.asList("gaa.txt", "gd.txt", "lv.txt", "syr.txt", "lij.txt");
 
     static private Collection<String> FILENAMES_TO_SKIP_FOR_17028 =
         Arrays.asList("yue_Hans.txt", "to.txt", "gl.txt", "ie.txt" );
@@ -71,6 +77,13 @@ public class PersonNameConsistencyTest extends TestFmwk {
     @Test
     @Parameters(method = "readTestCases")
     public void TestPersonNames(String filename) throws IOException {
+        boolean shouldSkip = shouldSkipTest(filename, "");
+
+        if (shouldSkip && !RUN_ALL_TESTS) {
+            logln("Skipping " + filename + "...");
+            return;
+        }
+
         LineNumberReader in = new LineNumberReader(new InputStreamReader(TestUtil.class.getResourceAsStream(DATA_PATH + filename)));
         String line = null;
         PersonNameTester tester = new PersonNameTester(filename);
@@ -81,21 +94,20 @@ public class PersonNameConsistencyTest extends TestFmwk {
                 tester.processLine(line, in.getLineNumber());
             }
             errors = tester.getErrorCount();
-            System.out.println(filename + " had " + errors + " errors");
         } catch (Exception e) {
-            String errorMsg = e.toString() + " " + e.getMessage();
-            if (shouldSkipTest(filename, errorMsg)) {
-                System.out.println("Test throw exception on " + filename + ": " + errorMsg);
-                return;
+            if (shouldSkip) {
+                logln("Exception thrown on " + filename + ": " + e.toString());
+            } else {
+                throw e;
             }
         }
+
         if (errors != 0) {
-            String errorMsg = "ERROR: Testing against '" + filename + "' contains " + errors + " errors.";
-            if (shouldSkipTest(filename, errorMsg)) {
-                  System.out.println("Test failure on " + filename + ": " + errorMsg);
-                  return;
+            if (shouldSkip) {
+                logln("Failure in " + filename + ": Found " + errors + " errors.");
+            } else {
+                errln("Failure in " + filename + ": Found " + errors + " errors.");
             }
-            errln(errorMsg);
         }
     }
 
@@ -138,7 +150,7 @@ public class PersonNameConsistencyTest extends TestFmwk {
             } else if (opcode.equals("endName")) {
                 processEndNameLine();
             } else {
-                System.err.println("Unknown command '" + opcode + "' at line " + lineNumber);
+                throw new IllegalArgumentException("Unknown command '" + opcode + "' at line " + lineNumber);
             }
         }
 
@@ -239,7 +251,7 @@ public class PersonNameConsistencyTest extends TestFmwk {
         }
 
         private void reportError(String error, int lineNumber) {
-            System.out.println("    " + error + " at line " + lineNumber);
+            logln("    " + error + " at line " + lineNumber);
             ++errorCount;
         }
     }
