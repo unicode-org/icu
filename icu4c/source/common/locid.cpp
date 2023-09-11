@@ -1067,7 +1067,13 @@ class AliasReplacer {
 public:
     AliasReplacer(UErrorCode status) :
             language(nullptr), script(nullptr), region(nullptr),
-            extensions(nullptr), variants(status),
+            extensions(nullptr),
+            // store value in variants only once
+            variants(nullptr,
+                     ([](UElement e1, UElement e2) -> UBool {
+                       return 0==uprv_strcmp((const char*)e1.pointer,
+                                             (const char*)e2.pointer);}),
+                     status),
             data(nullptr) {
     }
     ~AliasReplacer() {
@@ -1653,10 +1659,16 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
         while ((end = uprv_strchr(start, SEP_CHAR)) != nullptr &&
                U_SUCCESS(status)) {
             *end = NULL_CHAR;  // null terminate inside variantsBuff
-            variants.addElement(start, status);
+            // do not add "" or duplicate data to variants
+            if (*start && !variants.contains(start)) {
+                variants.addElement(start, status);
+            }
             start = end + 1;
         }
-        variants.addElement(start, status);
+        // do not add "" or duplicate data to variants
+        if (*start && !variants.contains(start)) {
+            variants.addElement(start, status);
+        }
     }
     if (U_FAILURE(status)) { return false; }
 
