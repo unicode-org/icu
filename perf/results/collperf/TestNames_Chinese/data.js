@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694151813413,
+  "lastUpdate": 1694463543075,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25594,6 +25594,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2804259.4592,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "916452befcc002c8fa7111ee889a7002d9a9148d",
+          "message": "ICU-22169 Fixed ures_getFunctionalEquivalent() to check the resource bundles' %%Parent resources when ascending\nthe parent tree.",
+          "timestamp": "2023-09-11T12:58:41-07:00",
+          "tree_id": "3a11a05ee832be1548b752afa833aecc65bef67a",
+          "url": "https://github.com/unicode-org/icu/commit/916452befcc002c8fa7111ee889a7002d9a9148d"
+        },
+        "date": 1694463481056,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 220.2741,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 11814601.0646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2822691.3121,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 10612527.982,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2990181.2936,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
