@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694463001636,
+  "lastUpdate": 1694465516996,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11338,6 +11338,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 3852.9586417557525,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "687feb1eaa9cf1dec0dbf780f37fad570c435d1a",
+          "message": "ICU-22478 Fix log spew in PersonNameConsistencyTest.",
+          "timestamp": "2023-09-11T13:34:31-07:00",
+          "tree_id": "b1c4d92d609077b333f6b03f4df7efa4038d6f4e",
+          "url": "https://github.com/unicode-org/icu/commit/687feb1eaa9cf1dec0dbf780f37fad570c435d1a"
+        },
+        "date": 1694465456357,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 3861.869279831616,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
