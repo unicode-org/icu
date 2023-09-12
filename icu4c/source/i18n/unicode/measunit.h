@@ -2882,20 +2882,20 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by pointer, unit of pressure: gasoline-equivalent.
+     * Returns by pointer, unit of pressure: gasoline-energy-density.
      * Caller owns returned value and must free it.
-     * Also see {@link #getGasolineEquivalent()}.
+     * Also see {@link #getGasolineEnergyDensity()}.
      * @param status ICU error code.
      * @draft ICU 74
      */
-    static MeasureUnit *createGasolineEquivalent(UErrorCode &status);
+    static MeasureUnit *createGasolineEnergyDensity(UErrorCode &status);
 
     /**
-     * Returns by value, unit of pressure: gasoline-equivalent.
-     * Also see {@link #createGasolineEquivalent()}.
+     * Returns by value, unit of pressure: gasoline-energy-density.
+     * Also see {@link #createGasolineEnergyDensity()}.
      * @draft ICU 74
      */
-    static MeasureUnit getGasolineEquivalent();
+    static MeasureUnit getGasolineEnergyDensity();
 #endif /* U_HIDE_DRAFT_API */
 
     /**

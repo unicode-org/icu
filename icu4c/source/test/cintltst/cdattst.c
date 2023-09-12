@@ -2087,24 +2087,24 @@ static void TestHourCycle(void) {
         // test some locales for which we have data
         u"en_US", u"Tuesday, March 16, 1943 at 3:45:32 PM",
         u"en_CA", u"Tuesday, March 16, 1943 at 3:45:32 p.m.",
-        u"en_GB", u"Tuesday, 16 March 1943 at 15:45:32",
-        u"en_AU", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        u"en_GB", u"Tuesday 16 March 1943 at 15:45:32",
+        u"en_AU", u"Tuesday 16 March 1943 at 3:45:32 pm",
         // test a couple locales for which we don't have specific locale files (we should still get the correct hour cycle)
         u"en_CO", u"Tuesday, March 16, 1943 at 3:45:32 PM",
-        u"en_MX", u"Tuesday, March 16, 1943 at 15:45:32",
+        u"en_MX", u"Tuesday, March 16, 1943 at 3:45:32 PM",
         // test that the rg subtag does the right thing
         u"en_US@rg=GBzzzz", u"Tuesday, March 16, 1943 at 15:45:32",
         u"en_US@rg=CAzzzz", u"Tuesday, March 16, 1943 at 3:45:32 PM",
         u"en_CA@rg=USzzzz", u"Tuesday, March 16, 1943 at 3:45:32 p.m.",
-        u"en_GB@rg=USzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm",
-        u"en_GB@rg=CAzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm",
-        u"en_GB@rg=AUzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        u"en_GB@rg=USzzzz", u"Tuesday 16 March 1943 at 3:45:32 pm",
+        u"en_GB@rg=CAzzzz", u"Tuesday 16 March 1943 at 3:45:32 pm",
+        u"en_GB@rg=AUzzzz", u"Tuesday 16 March 1943 at 3:45:32 pm",
         // test that the hc ("hours") subtag does the right thing
         u"en_US@hours=h23", u"Tuesday, March 16, 1943 at 15:45:32",
-        u"en_GB@hours=h12", u"Tuesday, 16 March 1943 at 3:45:32 pm",
+        u"en_GB@hours=h12", u"Tuesday 16 March 1943 at 3:45:32 pm",
         // test that the rg and hc subtags do the right thing when used together
         u"en_US@rg=GBzzzz;hours=h12", u"Tuesday, March 16, 1943 at 3:45:32 PM",
-        u"en_GB@rg=USzzzz;hours=h23", u"Tuesday, 16 March 1943 at 15:45:32",
+        u"en_GB@rg=USzzzz;hours=h23", u"Tuesday 16 March 1943 at 15:45:32",
     };
     
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 2) {

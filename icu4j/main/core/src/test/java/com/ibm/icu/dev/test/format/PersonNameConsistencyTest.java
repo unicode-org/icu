@@ -40,7 +40,7 @@ public class PersonNameConsistencyTest extends TestFmwk {
          Arrays.asList("gaa.txt", "gd.txt", "lv.txt", "syr.txt", "lij.txt");
 
     static private Collection<String> FILENAMES_TO_SKIP_FOR_17028 =
-        Arrays.asList("yue_Hans.txt", "to.txt", "gl.txt", "ie.txt" );
+        Arrays.asList("yue_Hans.txt", "to.txt", "gl.txt", "ie.txt", "fr.txt", "fr_CA.txt" );
 
     static List<String> readTestCases() throws Exception {
         List<String> tests = new ArrayList<>();

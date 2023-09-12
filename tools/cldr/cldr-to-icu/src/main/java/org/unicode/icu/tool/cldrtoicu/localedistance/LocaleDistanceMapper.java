@@ -422,7 +422,7 @@ public final class LocaleDistanceMapper {
 
         Set<LSR> paradigmLSRs = new LinkedHashSet<>();
         for (String paradigm : LIST_SPLITTER.split(localesList)) {
-            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(new ULocale(paradigm));
+            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(new ULocale(paradigm), false);
             // Clear the LSR flags to make the data equality test in LocaleDistanceTest happy.
             paradigmLSRs.add(new LSR(max.language, max.script, max.region, LSR.DONT_CARE_FLAGS));
         }

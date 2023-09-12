@@ -1222,7 +1222,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_NONE);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("EEEE, d MMMM y")) {
+        if (!pattern.equals("EEEE d MMMM y")) {
             errln("FAIL: FULL date pattern is " + pattern + " Expected: EEEE, d MMMM y");
         }
 
@@ -1278,7 +1278,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date/Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_FULL);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("EEEE, d MMMM y 'at' HH:mm:ss zzzz")) {
+        if (!pattern.equals("EEEE d MMMM y 'at' HH:mm:ss zzzz")) {
             errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y 'at' HH:mm:ss zzzz");
         }
 

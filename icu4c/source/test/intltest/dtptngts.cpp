@@ -140,7 +140,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
     UnicodeString patternResults_de_DE[] = {
         // de_DE                                              // 2 de_DE
-        UnicodeString("01/1999"),                             // 00: yM
+        UnicodeString("1/1999"),                             // 00: yM
         UnicodeString("Jan. 1999"),                           // 01: yMMM
         UnicodeString("13.1.1999"),                           // 02: yMd
         UnicodeString("13. Jan. 1999"),                       // 03: yMMMd

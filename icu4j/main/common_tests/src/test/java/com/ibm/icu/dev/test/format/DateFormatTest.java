@@ -5703,24 +5703,24 @@ public class DateFormatTest extends TestFmwk {
             // test some locales for which we have data
             { "en-us", "Tuesday, March 16, 1943 at 3:45:32\u202fPM" },
             { "en-ca", "Tuesday, March 16, 1943 at 3:45:32\u202fp.m." },
-            { "en-gb", "Tuesday, 16 March 1943 at 15:45:32" },
-            { "en-au", "Tuesday, 16 March 1943 at 3:45:32\u202fpm" },
+            { "en-gb", "Tuesday 16 March 1943 at 15:45:32" },
+            { "en-au", "Tuesday 16 March 1943 at 3:45:32\u202fpm" },
             // test a couple locales for which we don't have specific locale files (we should still get the correct hour cycle)
             { "en-co", "Tuesday, March 16, 1943 at 3:45:32\u202fPM" },
-            { "en-mx", "Tuesday, March 16, 1943 at 15:45:32" },
+            { "en-mx", "Tuesday, March 16, 1943 at 3:45:32 PM" },
             // test that the rg subtag does the right thing
             { "en-us-u-rg-gbzzzz", "Tuesday, March 16, 1943 at 15:45:32" },
             { "en-us-u-rg-cazzzz", "Tuesday, March 16, 1943 at 3:45:32\u202fPM" },
             { "en-ca-u-rg-uszzzz", "Tuesday, March 16, 1943 at 3:45:32\u202fp.m." },
-            { "en-gb-u-rg-uszzzz", "Tuesday, 16 March 1943 at 3:45:32\u202fpm" },
-            { "en-gb-u-rg-cazzzz", "Tuesday, 16 March 1943 at 3:45:32\u202fpm" },
-            { "en-gb-u-rg-auzzzz", "Tuesday, 16 March 1943 at 3:45:32\u202fpm" },
+            { "en-gb-u-rg-uszzzz", "Tuesday 16 March 1943 at 3:45:32\u202fpm" },
+            { "en-gb-u-rg-cazzzz", "Tuesday 16 March 1943 at 3:45:32\u202fpm" },
+            { "en-gb-u-rg-auzzzz", "Tuesday 16 March 1943 at 3:45:32\u202fpm" },
             // test that the hc ("hours") subtag does the right thing
             { "en-us-u-hc-h23", "Tuesday, March 16, 1943 at 15:45:32" },
-            { "en-gb-u-hc-h12", "Tuesday, 16 March 1943 at 3:45:32\u202fpm" },
+            { "en-gb-u-hc-h12", "Tuesday 16 March 1943 at 3:45:32\u202fpm" },
             // test that the rg and hc subtags do the right thing when used together
             { "en-us-u-rg-gbzzzz-hc-h12", "Tuesday, March 16, 1943 at 3:45:32\u202fPM" },
-            { "en-gb-u-rg-uszzzz-hc-h23", "Tuesday, 16 March 1943 at 15:45:32" },
+            { "en-gb-u-rg-uszzzz-hc-h23", "Tuesday 16 March 1943 at 15:45:32" },
         };
 
         for (String[] testCase : TEST_CASES) {

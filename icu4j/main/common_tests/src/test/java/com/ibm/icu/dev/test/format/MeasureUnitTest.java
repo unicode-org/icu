@@ -282,7 +282,7 @@ public class MeasureUnitTest extends TestFmwk {
         {"QUARTER", "72"},
         {"TONNE", "72"},
         {"BEAUFORT", "73"},
-        {"GASOLINE_EQUIVALENT", "74"},
+        {"GASOLINE_ENERGY_DENSITY", "74"},
     };
 
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<>();
@@ -2814,7 +2814,7 @@ public class MeasureUnitTest extends TestFmwk {
                 MeasureUnit.WATT,
                 MeasureUnit.ATMOSPHERE,
                 MeasureUnit.BAR,
-                MeasureUnit.GASOLINE_EQUIVALENT,
+                MeasureUnit.GASOLINE_ENERGY_DENSITY,
                 MeasureUnit.HECTOPASCAL,
                 MeasureUnit.INCH_HG,
                 MeasureUnit.KILOPASCAL,

@@ -8099,9 +8099,9 @@ void NumberFormatTest::TestAccountingCurrency() {
     expect(NumberFormat::createInstance("de_DE", style, status),
         (Formattable)(double)-23456.7, UnicodeString("-23.456,70\\u00A0\\u20AC").unescape(), true, status);
     expect(NumberFormat::createInstance("en_ID", style, status),
-        (Formattable)(double)0, UnicodeString("IDR\\u00A00.00").unescape(), true, status);
+        (Formattable)(double)0, UnicodeString("Rp\\u00A00,00").unescape(), true, status);
     expect(NumberFormat::createInstance("en_ID", style, status),
-        (Formattable)(double)-0.2, UnicodeString("(IDR\\u00A00.20)").unescape(), true, status);
+        (Formattable)(double)-0.2, UnicodeString("(Rp\\u00A00,20)").unescape(), true, status);
     expect(NumberFormat::createInstance("sh_ME", style, status),
         (Formattable)(double)0, UnicodeString("0,00\\u00A0\\u20AC").unescape(), true, status);
     expect(NumberFormat::createInstance("sh_ME", style, status),

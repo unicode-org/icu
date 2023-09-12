@@ -4117,8 +4117,8 @@ void MeasureFormatTest::TestCompatible74() {
     measureUnitValue = MeasureUnit::getAtmosphere();
     measureUnit.adoptInstead(MeasureUnit::createBar(status));
     measureUnitValue = MeasureUnit::getBar();
-    measureUnit.adoptInstead(MeasureUnit::createGasolineEquivalent(status));
-    measureUnitValue = MeasureUnit::getGasolineEquivalent();
+    measureUnit.adoptInstead(MeasureUnit::createGasolineEnergyDensity(status));
+    measureUnitValue = MeasureUnit::getGasolineEnergyDensity();
     measureUnit.adoptInstead(MeasureUnit::createHectopascal(status));
     measureUnitValue = MeasureUnit::getHectopascal();
     measureUnit.adoptInstead(MeasureUnit::createInchHg(status));
