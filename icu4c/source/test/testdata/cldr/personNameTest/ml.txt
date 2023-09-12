@@ -53,29 +53,42 @@
 # =====
 
 enum ; field ; title, given, given2, surname, surname2, generation, credentials
-enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
-enum ; options ; none, sorting
+enum ; modifiers ; informal, allCaps, initialCap, initial, retain, monogram, prefix, core, vocative, genitive
+enum ; order ; givenFirst, surnameFirst, sorting
 enum ; length ; long, medium, short
 enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
-name ; given; സെൻഡയ
+# nativeG
+name ; given; ദീപ
 name ; locale; ml_AQ
 
-expectedResult; സെൻഡയ
+expectedResult; ദീപ
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -83,22 +96,29 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; സെ
+expectedResult; ദീ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
-name ; given; ഐറീൻ
-name ; surname; ആഡ്‌ലർ
+# nativeGS
+name ; given; അശ്വതി
+name ; surname; നായർ
 name ; locale; ml_AQ
 
-expectedResult; ആഡ്‌ലർ, ഐറീൻ
+expectedResult; നായർ, അശ്വതി
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
@@ -106,54 +126,82 @@ parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ഐറീൻ ആഡ്‌ലർ
+expectedResult; അശ്വതി നായർ
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
 
-expectedResult; ആഡ്‌ലർ, ഐ.
+expectedResult; നായർ അശ്വതി
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; അശ്വതി നാ.
+
+parameters; givenFirst; short; referring; informal
+
+expectedResult; നായർ, അ.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; ഐ. ആഡ്‌ലർ
+expectedResult; അ. നായർ
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; ഐറീൻ ആ.
+expectedResult; നായർ അ.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
 
-expectedResult; ആഡ്‌ലർ
+expectedResult; അശ്വതി
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ഐറീൻ
+expectedResult; നായർ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
-expectedResult; ഐആ
+expectedResult; അനാ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
 
-expectedResult; ആ
+expectedResult; നാഅ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
-expectedResult; ഐ
+expectedResult; നാ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
+
+expectedResult; അ
+
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# nativeGGS
 name ; given; ജോൺ
 name ; given2; ചാണ്ടി
 name ; surname; പടവീട്ടിൽ
@@ -165,7 +213,11 @@ parameters; sorting; long; referring; formal
 
 expectedResult; ജോൺ ചാണ്ടി പടവീട്ടിൽ
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
+
+expectedResult; പടവീട്ടിൽ ജോൺ ചാണ്ടി
+
+parameters; surnameFirst; long; referring; formal
 
 expectedResult; പടവീട്ടിൽ, ജോ. ചാ.
 
@@ -177,11 +229,19 @@ parameters; sorting; medium; referring; formal
 
 expectedResult; ജോ. ചാ. പടവീട്ടിൽ
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; ജോൺ ചാ. പടവീട്ടിൽ
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; പടവീട്ടിൽ ജോ. ചാ.
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; പടവീട്ടിൽ ജോൺ ചാ.
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; പടവീട്ടിൽ, ജോൺ
 
@@ -191,317 +251,568 @@ parameters; sorting; short; referring; informal
 
 expectedResult; ജോൺ പടവീട്ടിൽ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; പടവീട്ടിൽ ജോ.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; പടവീട്ടിൽ ജോൺ
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; പടവീട്ടിൽ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; ജോൺ പ.
 
-parameters; none; short; referring; informal
+parameters; givenFirst; short; referring; informal
 
 expectedResult; ജോചാപ
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; പജോചാ
+
+parameters; surnameFirst; long; monogram; formal
 
 expectedResult; ജോൺ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; ജോപ
 
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; പജോ
+
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; ജോ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; പ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# nativeFull
 name ; title; ശ്രീ.
-name ; given; ബെർട്രാം വിൽബെർഫോഴ്‌സ്
-name ; given-informal; ബെർടീ
-name ; given2; ഹെൻറി റോബർട്ട്
-name ; surname-core; വൂസ്റ്റർ
+name ; given; തോമസ് കുരുവിള
+name ; given-informal; ടോമിച്ചൻ
+name ; given2; അന്തോണി
+name ; surname-core; കറുവാപ്പറമ്പിൽ
 name ; generation; ജൂനിയർ
 name ; credentials; എംപി
 name ; locale; ml_AQ
 
-expectedResult; ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെൻറി റോബർട്ട് വൂസ്റ്റർ എംപി
+expectedResult; കറുവാപ്പറമ്പിൽ ശ്രീ. തോമസ് കുരുവിള അന്തോണി ജൂനിയർ, എംപി
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
 
-expectedResult; വൂസ്റ്റർ, ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെൻറി റോബർട്ട്
+expectedResult; തോമസ് കുരുവിള അന്തോണി കറുവാപ്പറമ്പിൽ എംപി
+
+parameters; givenFirst; long; referring; formal
+
+expectedResult; കറുവാപ്പറമ്പിൽ, തോമസ് കുരുവിള അന്തോണി
 
 parameters; sorting; long; referring; formal
 
-expectedResult; ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെ. റോ. വൂസ്റ്റർ എംപി
+expectedResult; കറുവാപ്പറമ്പിൽ തോമസ് കുരുവിള അ. എംപി
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
 
-expectedResult; വൂസ്റ്റർ, ബെർട്രാം വിൽബെർഫോഴ്‌സ് ഹെ. റോ.
+expectedResult; തോമസ് കുരുവിള അ. കറുവാപ്പറമ്പിൽ എംപി
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; കറുവാപ്പറമ്പിൽ, തോമസ് കുരുവിള അ.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; വൂസ്റ്റർ, ബെ. വി. ഹെ. റോ.
+expectedResult; കറുവാപ്പറമ്പിൽ, തോ. കു. അ.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; ബെ. വി. ഹെ. റോ. വൂസ്റ്റർ
+expectedResult; കറുവാപ്പറമ്പിൽ തോ. കു. അ.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
-expectedResult; വൂസ്റ്റർ, ബെർടീ
+expectedResult; തോ. കു. അ. കറുവാപ്പറമ്പിൽ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; കറുവാപ്പറമ്പിൽ, ടോമിച്ചൻ
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ബെർടീ വൂസ്റ്റർ
+expectedResult; കറുവാപ്പറമ്പിൽ ടോമിച്ചൻ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
-expectedResult; ശ്രീ. വൂസ്റ്റർ
+expectedResult; ടോമിച്ചൻ കറുവാപ്പറമ്പിൽ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
-expectedResult; ബെർടീ വൂ.
+expectedResult; കറുവാപ്പറമ്പിൽ തോ. കു.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
 
-expectedResult; ബെഹെവൂ
+expectedResult; ശ്രീ. കറുവാപ്പറമ്പിൽ
 
-parameters; none; long; monogram; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
-expectedResult; ബെർടീ
+expectedResult; ടോമിച്ചൻ ക.
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; short; referring; informal
 
-expectedResult; ബെവൂ
+expectedResult; ടോമിച്ചൻ
 
-parameters; none; long; monogram; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ബെ
+expectedResult; കതോഅ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
 
-expectedResult; വൂ
+expectedResult; തോഅക
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; കടോ
+
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ടോക
+
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; ടോ
+
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
+
+expectedResult; ക
+
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# foreignG
 name ; given; സിൻബാദ്
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; സിൻബാദ്
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; സി
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGS
 name ; given; കാത്തി
 name ; surname; മുള്ളർ
-name ; locale; ko_AQ
+name ; locale; ja_AQ
+
+expectedResult; മുള്ളർ, കാത്തി
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; കാത്തി മുള്ളർ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; മുള്ളർ കാത്തി
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; മുള്ളർ, കാ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; കാ. മുള്ളർ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; കാത്തി മു.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; മുള്ളർ കാ.
 
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; കാത്തി
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; മുള്ളർ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; കാമു
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; മുകാ
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; കാ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; മു
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName
 
+# foreignGGS
 name ; given; സസിലിയ
 name ; given2; ഹാമിഷ്
 name ; surname; സ്‌റ്റോബർ
-name ; locale; ko_AQ
+name ; locale; ja_AQ
+
+expectedResult; സ്‌റ്റോബർ, സസിലിയ ഹാമിഷ്
+
+parameters; sorting; long; referring; formal
+
+expectedResult; സസിലിയ ഹാമിഷ് സ്‌റ്റോബർ
+
+parameters; givenFirst; long; referring; formal
 
 expectedResult; സ്‌റ്റോബർ സസിലിയ ഹാമിഷ്
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; സ്‌റ്റോബർ, സസിലിയ ഹാ.
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; സസിലിയ ഹാ. സ്‌റ്റോബർ
+
+parameters; givenFirst; medium; referring; formal
 
 expectedResult; സ്‌റ്റോബർ സസിലിയ ഹാ.
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; സ്‌റ്റോബർ, സ. ഹാ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; സ്‌റ്റോബർ, സസിലിയ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; സ. ഹാ. സ്‌റ്റോബർ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; സസിലിയ സ്‌റ്റോബർ
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; സ്‌റ്റോബർ സ. ഹാ.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; സ്‌റ്റോബർ സസിലിയ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
 
 expectedResult; സ്‌റ്റോബർ സ.
 
-parameters; none; short; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; സസിലിയ സ്‌.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; സ്‌റ്റോബർ
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; സസിലിയ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; സഹാസ്‌
+
+parameters; givenFirst; long; monogram; formal
 
 expectedResult; സ്‌സഹാ
 
-parameters; none; long; monogram; formal
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; സസ്‌
+
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; സ്‌സ
 
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; സ്‌
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; സ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignFull
 name ; title; പ്രൊഫ. ഡോ.
 name ; given; എയ്‌ഡ കോർണീലിയ
 name ; given-informal; നീൽ
-name ; given2; ഇവ സോഫിയ
-name ; surname-prefix; വാൻ ഡെൻ
+name ; given2; സീസ൪ മാ൪ട്ടിൻ
+name ; surname-prefix; വാൻ
 name ; surname-core; ബ്ര്യൂൾ
 name ; surname2; ഗോൺസാലെസ് ഡൊമിംഗോ
 name ; generation; ജൂനിയർ
-name ; credentials; എം.ഡി. പിഎച്ച്ഡി.
-name ; locale; ko_AQ
+name ; credentials; എം.ഡി. ഡി.ഡി.എസ്
+name ; locale; ja_AQ
 
-expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എയ്‌ഡ കോർണീലിയ ഇവ സോഫിയ എം.ഡി. പിഎച്ച്ഡി.
+expectedResult; വാൻ ബ്ര്യൂൾ പ്രൊഫ. ഡോ. എയ്‌ഡ കോർണീലിയ സീസ൪ മാ൪ട്ടിൻ ജൂനിയർ, എം.ഡി. ഡി.ഡി.എസ്
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
 
-expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എയ്‌ഡ കോർണീലിയ ഇ. സോ. എം.ഡി. പിഎച്ച്ഡി.
+expectedResult; എയ്‌ഡ കോർണീലിയ സീസ൪ മാ൪ട്ടിൻ വാൻ ബ്ര്യൂൾ എം.ഡി. ഡി.ഡി.എസ്
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; long; referring; formal
 
-expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എ. കോ. ഇ. സോ.
+expectedResult; എയ്‌ഡ കോർണീലിയ സീ. മാ. വാൻ ബ്ര്യൂൾ എം.ഡി. ഡി.ഡി.എസ്
 
-parameters; none; short; referring; formal
+parameters; givenFirst; medium; referring; formal
 
-expectedResult; പ്രൊഫ. ഡോ. വാൻ ഡെൻ ബ്ര്യൂൾ
+expectedResult; വാൻ ബ്ര്യൂൾ എയ്‌ഡ കോർണീലിയ സീ. മാ. എം.ഡി. ഡി.ഡി.എസ്
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; surnameFirst; medium; referring; formal
 
-expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ എ. കോ.
+expectedResult; ബ്ര്യൂൾ, എയ്‌ഡ കോർണീലിയ സീസ൪ മാ൪ട്ടിൻ വാൻ
 
-parameters; none; short; referring; informal
+parameters; sorting; long; referring; formal
 
-expectedResult; വാൻ ഡെൻ ബ്ര്യൂൾ നീൽ
+expectedResult; ബ്ര്യൂൾ, എയ്‌ഡ കോർണീലിയ സീ. മാ. വാൻ
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
+parameters; sorting; medium; referring; formal
 
-expectedResult; വാഎഇ
+expectedResult; ബ്ര്യൂൾ, എ. കോ. സീ. മാ. വാൻ
 
-parameters; none; long; monogram; formal
+parameters; sorting; short; referring; formal
+
+expectedResult; എ. കോ. സീ. മാ. വാൻ ബ്ര്യൂൾ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; വാൻ ബ്ര്യൂൾ എ. കോ. സീ. മാ.
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; പ്രൊഫ. ഡോ. വാൻ ബ്ര്യൂൾ
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; വാൻ ബ്ര്യൂൾ എ. കോ.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; വാൻ ബ്ര്യൂൾ, നീൽ
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; നീൽ വാ. ബ്ര്യൂ.
+
+parameters; givenFirst; short; referring; informal
+
+expectedResult; നീൽ വാൻ ബ്ര്യൂൾ
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; വാൻ ബ്ര്യൂൾ നീൽ
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; എസീവാ
+
+parameters; givenFirst; long; monogram; formal
+
+expectedResult; വാഎസീ
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; നീവാ
+
+parameters; givenFirst; long; monogram; informal
 
 expectedResult; വാനീ
 
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; നീൽ
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; നീ
 
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; വാ
 
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 endName

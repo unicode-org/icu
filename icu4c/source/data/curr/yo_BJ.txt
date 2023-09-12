@@ -412,22 +412,9 @@ yo_BJ{
             "Dɔla ti Orílɛ́ède Siibabuwe",
         }
     }
-    Currencies%narrow{
-        BYN{"BYN"}
-        KRW{"₩"}
-    }
     CurrencyPlurals{
-        AED{
-            other{"Diami ti Awon Orílɛ́ède Arabu"}
-        }
-        AFN{
-            other{"Afugánì Afuganísítàànì"}
-        }
         ALL{
             other{"lɛ́kè Àlìbéníà"}
-        }
-        AMD{
-            other{"Dírààmù Àmɛ́níà"}
         }
         ANG{
             other{"àwɔn gílídà Netherlands Antillean"}
@@ -438,14 +425,8 @@ yo_BJ{
         ARS{
             other{"àwɔn pɛ́sò Agɛntínà"}
         }
-        AUD{
-            other{"Dɔla ti Orílɛ́ède Ástràlìá"}
-        }
         AWG{
             other{"àwɔn fuloríìnì Àrúbà"}
-        }
-        AZN{
-            other{"Mánààtì Àsàbáíjáì"}
         }
         BAM{
             other{"àwɔn àmi Yíyípadà Bosnia-Herzegovina"}
@@ -453,23 +434,14 @@ yo_BJ{
         BBD{
             other{"àwɔn dɔ́là Bábádɔ̀ɔ̀sì"}
         }
-        BDT{
-            other{"Tákà Báńgíládɛ̀ɛ̀shì"}
-        }
         BGN{
             other{"Lɛ́fà Bɔ̀lìgéríà"}
-        }
-        BHD{
-            other{"Dina ti Orílɛ́ède Báránì"}
         }
         BIF{
             other{"àwɔn faransi Bùùrúndì"}
         }
         BMD{
             other{"àwɔ́n dɔ́là Bɛ̀múdà"}
-        }
-        BND{
-            other{"Dɔ́là Bùrùnéì"}
         }
         BOB{
             other{"àwɔn bɔlifiánò Bɔ̀lífíà"}
@@ -479,9 +451,6 @@ yo_BJ{
         }
         BSD{
             other{"àwɔn dɔ́là Bàhámà"}
-        }
-        BTN{
-            other{"Ìngɔ́tírɔ̀mù Bútàànì"}
         }
         BWP{
             other{"àwɔn pula Bɔ̀tìsúwánà"}
@@ -501,12 +470,6 @@ yo_BJ{
         CLP{
             other{"àwɔn pɛ́sò Shílè"}
         }
-        CNH{
-            other{"Yúànì Sháínà"}
-        }
-        CNY{
-            other{"Reminibi ti Orílɛ́ède sháínà"}
-        }
         COP{
             other{"àwɔn pɛ́sò Kòlóḿbíà"}
         }
@@ -515,9 +478,6 @@ yo_BJ{
         }
         CUC{
             other{"àwɔn pɛ́sò yíyípadà Kúbà"}
-        }
-        CUP{
-            other{"Pɛ́sò Kúbà"}
         }
         CVE{
             other{"àwɔn èsìkúdò Kapú Faadì"}
@@ -546,20 +506,11 @@ yo_BJ{
         ETB{
             other{"àwɔn báà Etópíà"}
         }
-        FJD{
-            other{"Dɔ́là Fíjì"}
-        }
         FKP{
             other{
                 "àwɔn Pɔ́n-ùn Erékùsù Falkland [ Pɔ́n-ùn Erékùsù Falkland ] 1.23 Pɔ́n"
                 "-ùn Erékùsù Falkland 0.00 pɔ́n-ùn Erékùsù Falkland"
             }
-        }
-        GBP{
-            other{"Pɔ́n-ùn ti Orilɛ̀-èdè Gɛ̀ɛ́sì"}
-        }
-        GEL{
-            other{"Lárì Jɔ́jíà"}
         }
         GHS{
             other{"àwɔn sídì Gana"}
@@ -579,9 +530,6 @@ yo_BJ{
         GYD{
             other{"àwɔn dɔ́là Gùyánà"}
         }
-        HKD{
-            other{"Dɔ́là Hong Kong"}
-        }
         HNL{
             other{"àwɔn Lɛmipírà Ɔ́ńdúrà"}
         }
@@ -594,68 +542,20 @@ yo_BJ{
         HUF{
             other{"àwɔn fɔ́ríǹtì Hɔ̀ngérí"}
         }
-        IDR{
-            other{"Rúpìyá Indonésíà"}
-        }
-        ILS{
-            other{"Shékélì Tuntun Ísírɛ̀ɛ̀lì"}
-        }
-        INR{
-            other{"Rupi ti Orílɛ́ède Indina"}
-        }
-        IQD{
-            other{"Dínárì Ìráákì"}
-        }
-        IRR{
-            other{"Rial Iranian"}
-        }
         ISK{
             other{"kórónɔ̀ Áílándíìkì"}
         }
         JMD{
             other{"àwɔn dɔ́là Jàmáíkà"}
         }
-        JOD{
-            other{"Dínárì Jɔ́dàànì"}
-        }
-        JPY{
-            other{"Yeni ti Orílɛ́ède Japani"}
-        }
         KES{
             other{"àwɔ́n shiili Kenya"}
-        }
-        KGS{
-            other{"Sómú Kirijísítàànì"}
-        }
-        KHR{
-            other{"Ráyò Kàm̀bɔ́díà"}
         }
         KMF{
             other{"àwɔn faransi Komori"}
         }
-        KPW{
-            other{"Wɔ́ɔ̀nù Àríwá Kòríà"}
-        }
-        KRW{
-            other{"Wɔ́ɔ̀nù Gúúsù Kòríà"}
-        }
-        KWD{
-            other{"Dínárì Kuwaiti"}
-        }
         KYD{
             other{"àwɔn dɔ́là Erékùsù Cayman"}
-        }
-        KZT{
-            other{"Tɛngé Kasakísítàànì"}
-        }
-        LAK{
-            other{"Kíììpù Làótì"}
-        }
-        LBP{
-            other{"Pɔ́n-ùn Lebanese"}
-        }
-        LKR{
-            other{"Rúpìì Siri Láńkà"}
         }
         LRD{
             other{"àwɔn dɔla Liberia"}
@@ -675,23 +575,8 @@ yo_BJ{
         MKD{
             other{"dɛ́nàrì Masidóníà"}
         }
-        MMK{
-            other{"Kíyàtì Myanmar"}
-        }
-        MNT{
-            other{"Túgúrììkì Mòǹgólíà"}
-        }
-        MOP{
-            other{"Pàtákà Màkáò"}
-        }
-        MRU{
-            other{"Ouguiya ti Orílɛ́ède Maritania"}
-        }
         MUR{
             other{"àwɔn rupi Maritusi"}
-        }
-        MVR{
-            other{"Rúfìyá Mɔ̀lìdífà"}
         }
         MWK{
             other{"àwɔn kásà Màláwì"}
@@ -699,17 +584,11 @@ yo_BJ{
         MXN{
             other{"àwɔn pɛ́sò Mɛ́síkò"}
         }
-        MYR{
-            other{"Ríngìtì Màléshíà"}
-        }
         MZN{
             other{"àwɔn mɛ́tíkààlì Mòsáḿbíìkì"}
         }
         NAD{
             other{"àwɔn dɔla Namibíà"}
-        }
-        NGN{
-            other{"Náírà Nàìjíríà"}
         }
         NIO{
             other{"àwɔn kɔ̀dóbà Naikarágúà"}
@@ -717,29 +596,11 @@ yo_BJ{
         NOK{
             other{"kórónà Nɔ́wè"}
         }
-        NPR{
-            other{"Rúpìì Nɛ̵́pààlì"}
-        }
-        NZD{
-            other{"Dɔ́là New Zealand"}
-        }
-        OMR{
-            other{"Ráyò Omani"}
-        }
         PAB{
             other{"àwɔn bálíbóà Pànámà"}
         }
         PEN{
             other{"àwɔn sólì Pèrúù"}
-        }
-        PGK{
-            other{"Kínà Papua Guinea Tuntun"}
-        }
-        PHP{
-            other{"Písò Fílípìnì"}
-        }
-        PKR{
-            other{"Rúpìì Pakisitánì"}
         }
         PLN{
             other{"àwɔn sílɔ̀tì Pɔ́líshì"}
@@ -747,23 +608,11 @@ yo_BJ{
         PYG{
             other{"àwɔn gúáránì Párágúwè"}
         }
-        QAR{
-            other{"Ráyò Kàtárì"}
-        }
         RSD{
             other{"àwɔn dínárì Sàbíà"}
         }
-        RUB{
-            other{"Owó ruble ti ilɛ̀ Rɔ́shíà"}
-        }
         RWF{
             other{"àwɔn faransi Ruwanda"}
-        }
-        SAR{
-            other{"Riya ti Orílɛ́ède Saudi"}
-        }
-        SBD{
-            other{"Dɔ́là Erékùsù Sɔ́lómɔ́nì"}
         }
         SCR{
             other{"àwɔ́n rúpì Sayiselesi"}
@@ -774,14 +623,14 @@ yo_BJ{
         SEK{
             other{"Kòrónɔ̀ Súwídìn"}
         }
-        SGD{
-            other{"Dɔ́là Síngápɔ̀"}
-        }
         SHP{
             other{"àwɔn pɔ́n-un Elena"}
         }
-        SLL{
+        SLE{
             other{"àwɔn líónì Sira Líonì"}
+        }
+        SLL{
+            other{"àwɔn líónì Sira Líonì (1964—2022)"}
         }
         SOS{
             other{"àwɔ́n shílè Somali"}
@@ -792,65 +641,23 @@ yo_BJ{
         SSP{
             other{"àwɔn pɔ́n-un Gúúsù Sùdáànì"}
         }
-        STN{
-            other{"Dɔbíra Sao tome àti Pirisipi"}
-        }
-        SYP{
-            other{"Pɔ́n-ùn Sírìà"}
-        }
-        THB{
-            other{"Báàtì Tháì"}
-        }
-        TJS{
-            other{"Sómónì Tajikístàànì"}
-        }
-        TMT{
-            other{"Mánààtì Tɔkimɛnístàànì"}
-        }
         TND{
             other{"àwɔn dínà Tunishíà"}
-        }
-        TOP{
-            other{"Pàángà Tóńgà"}
-        }
-        TRY{
-            other{"Lírà Tɔ́kì"}
         }
         TTD{
             other{"àwɔn dɔ́là Trinidad àti Tobago"}
         }
-        TWD{
-            other{"Dɔ́là Tàìwánì Tuntun"}
-        }
         TZS{
             other{"àwɔn shile Tansania"}
-        }
-        UAH{
-            other{"Ɔrifiníyà Yukiréníà"}
         }
         UGX{
             other{"àwɔn shile Uganda"}
         }
-        USD{
-            other{"Dɔ́là ti Orílɛ̀-Èdè Amɛ́ríkà"}
-        }
         UYU{
             other{"àwɔn pɛ́sò Úrúgúwè"}
         }
-        UZS{
-            other{"Sómú Usibɛkísítàànì"}
-        }
         VES{
             other{"àwɔn bɔ̀lífà Fɛnɛsuɛ́là"}
-        }
-        VND{
-            other{"Dáhùn Vietnamese"}
-        }
-        VUV{
-            other{"Fátù Vanuatu"}
-        }
-        WST{
-            other{"Tálà Sàmóà"}
         }
         XAF{
             other{"àwɔn firanki àárín Afíríkà"}
@@ -860,15 +667,6 @@ yo_BJ{
         }
         XOF{
             other{"àwɔn faransì ìwɔ̀-oorùn Afíríkà"}
-        }
-        XPF{
-            other{"Fírànkì CFP"}
-        }
-        XXX{
-            other{"owóníná àìmɔ̀"}
-        }
-        YER{
-            other{"Ráyò Yɛ́mɛ̀nì"}
         }
         ZMW{
             other{"àwɔn kàwasà Sámbíà"}

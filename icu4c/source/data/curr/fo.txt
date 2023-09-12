@@ -507,9 +507,13 @@ fo{
             "SHP",
             "St. Helena pund",
         }
+        SLE{
+            "SLE",
+            "Sierra Leona leone",
+        }
         SLL{
             "SLL",
-            "Sierra Leona leone",
+            "Sierra Leona leone (1964—2022)",
         }
         SOS{
             "SOS",

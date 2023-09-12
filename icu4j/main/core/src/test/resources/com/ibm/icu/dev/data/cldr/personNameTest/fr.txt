@@ -247,15 +247,15 @@ expectedResult; Marie-Agnès Gilot
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Gilot, M. A. S.
+expectedResult; Gilot, M.-A. S.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; Gilot M. A. S.
+expectedResult; Gilot M.-A. S.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; M. A. S. Gilot
+expectedResult; M.-A. S. Gilot
 
 parameters; givenFirst; short; referring; formal
 
@@ -263,7 +263,7 @@ expectedResult; Marie-Agnès G.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Gilot M. A.
+expectedResult; Gilot M.-A.
 
 parameters; surnameFirst; short; referring; informal
 
@@ -351,19 +351,19 @@ expectedResult; Jean-Nicolas L. M. de Bouchart
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Bouchart, J. N. L. M. de
+expectedResult; Bouchart, J.-N. L. M. de
 
 parameters; sorting; short; referring; formal
 
-expectedResult; de Bouchart J. N. L. M.
+expectedResult; de Bouchart J.-N. L. M.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; J. N. L. M. de Bouchart
+expectedResult; J.-N. L. M. de Bouchart
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; de Bouchart J. N.
+expectedResult; de Bouchart J.-N.
 
 parameters; surnameFirst; short; referring; informal
 

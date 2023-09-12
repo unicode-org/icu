@@ -174,7 +174,7 @@ pressure	;	pound-force-per-square-inch	;	kilogram-meter-per-square-meter-square-
 pressure	;	bar	;	kilogram-per-meter-square-second	;	100,000 * x	;	1.0E8
 pressure	;	atmosphere	;	kilogram-per-meter-square-second	;	101,325 * x	;	1.01325E8
 pressure	;	megapascal	;	kilogram-per-meter-square-second	;	1,000,000 * x	;	1.0E9
-pressure	;	gasoline-equivalent	;	kilogram-per-meter-square-second	;	722,250,000,000,000,000/22532213 * x	;	3.205411E13
+pressure	;	gasoline-energy-density	;	kilogram-per-meter-square-second	;	722,250,000,000,000,000/22532213 * x	;	3.205411E13
 pressure-per-length	;	ofhg	;	kilogram-per-square-meter-square-second	;	133,322.387415 * x	;	1.333224E8
 radioactivity	;	becquerel	;	per-second	;	1 * x	;	1000.0
 resolution	;	dot-per-inch	;	pixel-per-meter	;	5,000/127 * x	;	39370.08

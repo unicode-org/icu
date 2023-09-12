@@ -668,9 +668,13 @@ gl{
             "SHP",
             "libra de Santa Helena",
         }
+        SLE{
+            "SLE",
+            "leone de Serra Leoa",
+        }
         SLL{
             "SLL",
-            "leone de Serra Leoa",
+            "leone de Serra Leoa (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1444,9 +1448,13 @@ gl{
             one{"libra de Santa Helena"}
             other{"libras de Santa Helena"}
         }
-        SLL{
+        SLE{
             one{"leone de Serra Leoa"}
             other{"leones de Serra Leoa"}
+        }
+        SLL{
+            one{"leone de Serra Leoa (1964—2022)"}
+            other{"leones de Serra Leoa (1964—2022)"}
         }
         SOS{
             one{"xilin somalí"}

@@ -803,9 +803,13 @@ br{
             "SKK",
             "kurunenn Slovakia",
         }
+        SLE{
+            "SLE",
+            "leone Sierra Leone",
+        }
         SLL{
             "SLL",
-            "leone Sierra Leone",
+            "leone Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2435,12 +2439,19 @@ br{
             other{"kurunenn Slovakia"}
             two{"gurunenn Slovakia"}
         }
-        SLL{
+        SLE{
             few{"leone Sierra Leone"}
             many{"a leoneoù Sierra Leone"}
             one{"leone Sierra Leone"}
             other{"leone Sierra Leone"}
             two{"leone Sierra Leone"}
+        }
+        SLL{
+            few{"leone Sierra Leone (1964—2022)"}
+            many{"a leoneoù Sierra Leone (1964—2022)"}
+            one{"leone Sierra Leone (1964—2022)"}
+            other{"leone Sierra Leone (1964—2022)"}
+            two{"leone Sierra Leone (1964—2022)"}
         }
         SOS{
             few{"shilling Somalia"}

@@ -3811,7 +3811,7 @@ root:table(nofallback){
             alias{"Telu-Knda"}
         }
         und-Latn-t-s0-ascii{
-            alias{"Latin-ASCII"}
+            alias{"ASCII-Latin"}
         }
         und-Latn-t-und-arab{
             alias{"Arab-Latn"}
@@ -4068,9 +4068,6 @@ root:table(nofallback){
         und-t-d0-accents{
             alias{"Any-Accents"}
         }
-        und-t-d0-ascii{
-            alias{"Latin-ASCII"}
-        }
         und-t-d0-fwidth{
             alias{"Halfwidth-Fullwidth"}
         }
@@ -4085,6 +4082,9 @@ root:table(nofallback){
         }
         und-t-s0-publish{
             alias{"Publishing-Any"}
+        }
+        und-t-und-latn-d0-ascii{
+            alias{"Latin-ASCII"}
         }
         und_FONIPA-ar{
             file{

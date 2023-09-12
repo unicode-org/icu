@@ -895,9 +895,13 @@ yrl{
             "SKK",
             "Kuruwa Esirowaka",
         }
+        SLE{
+            "SLE",
+            "Rioni Iwitera Reuwa yara",
+        }
         SLL{
             "SLL",
-            "Rioni Iwitera Reuwa yara",
+            "Rioni Iwitera Reuwa yara (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2090,9 +2094,13 @@ yrl{
             one{"Kuruwa Esirowaka"}
             other{"Kuruwa-ita Esirowaka"}
         }
-        SLL{
+        SLE{
             one{"Rioni Iwitera Reuwa yara"}
             other{"Rioni-ita Iwitera Reuwa yara"}
+        }
+        SLL{
+            one{"Rioni Iwitera Reuwa yara (1964—2022)"}
+            other{"Rioni-ita Iwitera Reuwa yara (1964—2022)"}
         }
         SOS{
             one{"Xerĩ Sumariyawara"}

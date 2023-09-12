@@ -780,7 +780,7 @@ en{
                 one{"{0} bar"}
                 other{"{0} bars"}
             }
-            gasoline-equivalent{
+            gasoline-energy-density{
                 dnam{"of gasoline equivalent"}
                 one{"{0} of gasoline equivalent"}
                 other{"{0} of gasoline equivalent"}
@@ -1843,7 +1843,7 @@ en{
                 one{"{0}bar"}
                 other{"{0}bar"}
             }
-            gasoline-equivalent{
+            gasoline-energy-density{
                 dnam{"gas-equiv"}
                 one{"{0}gas-equiv"}
                 other{"{0}gas-equiv"}
@@ -2906,7 +2906,7 @@ en{
                 one{"{0} bar"}
                 other{"{0} bar"}
             }
-            gasoline-equivalent{
+            gasoline-energy-density{
                 dnam{"gas-equiv"}
                 one{"{0} gas-equiv"}
                 other{"{0} gas-equiv"}

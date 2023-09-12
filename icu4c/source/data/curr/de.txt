@@ -899,9 +899,13 @@ de{
             "SKK",
             "Slowakische Krone",
         }
+        SLE{
+            "SLE",
+            "Sierra-leonischer Leone",
+        }
         SLL{
             "SLL",
-            "Sierra-leonischer Leone",
+            "Sierra-leonischer Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1867,9 +1871,13 @@ de{
             one{"Slowakische Kronen"}
             other{"Slowakische Kronen"}
         }
-        SLL{
+        SLE{
             one{"Sierra-leonischer Leone"}
             other{"Sierra-leonische Leones"}
+        }
+        SLL{
+            one{"Sierra-leonischer Leone (1964—2022)"}
+            other{"Sierra-leonische Leones (1964—2022)"}
         }
         SRG{
             one{"Suriname-Gulden"}

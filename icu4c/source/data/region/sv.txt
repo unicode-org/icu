@@ -70,7 +70,7 @@ sv{
         BT{"Bhutan"}
         BV{"Bouvetön"}
         BW{"Botswana"}
-        BY{"Vitryssland"}
+        BY{"Belarus"}
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kokosöarna"}

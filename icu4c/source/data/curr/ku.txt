@@ -499,9 +499,13 @@ ku{
             "SHP",
             "lîreyê saînt helenayî",
         }
+        SLE{
+            "SLE",
+            "leoneyê sîera leoneyî",
+        }
         SLL{
             "SLL",
-            "leoneyê sîera leoneyî",
+            "leoneyê sîera leoneyî (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1121,9 +1125,13 @@ ku{
             one{"lîreyê saînt helenayî"}
             other{"lîreyên saînt helenayî"}
         }
-        SLL{
+        SLE{
             one{"leoneyê sîera leoneyî"}
             other{"leoneyên sîera leoneyî"}
+        }
+        SLL{
+            one{"leoneyê sîera leoneyî (1964—2022)"}
+            other{"leoneyên sîera leoneyî (1964—2022)"}
         }
         SOS{
             one{"şîlîngê somalî"}

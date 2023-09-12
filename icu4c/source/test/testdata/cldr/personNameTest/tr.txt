@@ -53,29 +53,42 @@
 # =====
 
 enum ; field ; title, given, given2, surname, surname2, generation, credentials
-enum ; modifiers ; informal, allCaps, initialCap, initial, monogram, prefix, core
-enum ; options ; none, sorting
+enum ; modifiers ; informal, allCaps, initialCap, initial, retain, monogram, prefix, core, vocative, genitive
+enum ; order ; givenFirst, surnameFirst, sorting
 enum ; length ; long, medium, short
 enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
-name ; given; Göksel
+# nativeG
+name ; given; Zeynep
 name ; locale; tr_AQ
 
-expectedResult; Göksel
+expectedResult; Zeynep
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; formal
@@ -83,68 +96,103 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; G
+expectedResult; Z
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
-name ; given; Mehmet
+# nativeGS
+name ; given; Irmak
 name ; surname; Yılmaz
 name ; locale; tr_AQ
 
-expectedResult; Yılmaz, Mehmet
+expectedResult; Yılmaz, Irmak
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Mehmet Yılmaz
+expectedResult; Irmak Yılmaz
 
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
 
-expectedResult; Yılmaz, M.
+expectedResult; Yılmaz Irmak
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; Yılmaz, I.
 
 parameters; sorting; medium; referring; formal
 parameters; sorting; short; referring; formal
 
-expectedResult; M. Yılmaz
+expectedResult; I. Yılmaz
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
-expectedResult; Mehmet
+expectedResult; Yılmaz I.
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Yılmaz
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
-expectedResult; MY
+expectedResult; Irmak
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; IY
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; YI
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# nativeGGS
 name ; given; Yağız
 name ; given2; Can
 name ; surname; Kaya
@@ -154,17 +202,25 @@ expectedResult; Kaya, Yağız Can
 
 parameters; sorting; long; referring; formal
 
+expectedResult; Kaya Yağız Can
+
+parameters; surnameFirst; long; referring; formal
+
 expectedResult; Yağız Can Kaya
 
-parameters; none; long; referring; formal
+parameters; givenFirst; long; referring; formal
 
 expectedResult; Yağız C. Kaya
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; medium; referring; formal
 
 expectedResult; Kaya, Y. Can
 
 parameters; sorting; medium; referring; formal
+
+expectedResult; Kaya Y. Can
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Kaya, Y. C.
 
@@ -176,42 +232,71 @@ parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
+expectedResult; Kaya Y. C.
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; Kaya Yağız
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+
 expectedResult; Y. C. Kaya
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Yağız Kaya
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
 
 expectedResult; Yağız
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; Kaya
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; KYC
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; YCK
 
-parameters; none; long; monogram; formal
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+
+expectedResult; KY
+
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 expectedResult; YK
 
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
 
 endName
 
+# nativeFull
 name ; title; Sn.
 name ; given; Fatma
 name ; given-informal; Fatoş
@@ -221,13 +306,21 @@ name ; surname2; Kaya
 name ; credentials; Dr.
 name ; locale; tr_AQ
 
-expectedResult; Sn. Fatma Su Yıldırım Kaya, Dr.
+expectedResult; Sn. Yıldırım Kaya Fatma Su, Dr.
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
 
-expectedResult; Fatma S. Yıldırım Dr.
+expectedResult; Sn. Dr. Fatma Su Yıldırım
 
-parameters; none; medium; referring; formal
+parameters; givenFirst; long; referring; formal
+
+expectedResult; Sn. Yıldırım F. Su, Dr.
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Dr. Fatma S. Yıldırım
+
+parameters; givenFirst; medium; referring; formal
 
 expectedResult; Yıldırım, Fatma Su
 
@@ -249,157 +342,306 @@ parameters; sorting; short; referring; informal
 
 expectedResult; F. S. Yıldırım
 
-parameters; none; short; referring; formal
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Fatma Yıldırım
 
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
+
+expectedResult; Yıldırım F. S.
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; Yıldırım Fatma
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
 
 expectedResult; Sn. Yıldırım
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Fatoş
 
-parameters; none; long; addressing; informal
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; FSY
 
-parameters; none; long; monogram; formal
-parameters; none; medium; monogram; formal
-parameters; none; short; monogram; formal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
+
+expectedResult; YFS
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
 expectedResult; FY
 
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; YF
+
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignG
 name ; given; Sinbad
 name ; locale; ko_AQ
 
 expectedResult; Sinbad
 
-parameters; none; long; addressing; formal
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; addressing; formal
-parameters; none; medium; addressing; informal
-parameters; none; medium; referring; formal
-parameters; none; medium; referring; informal
-parameters; none; short; addressing; formal
-parameters; none; short; addressing; informal
-parameters; none; short; referring; formal
-parameters; none; short; referring; informal
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; referring; formal
+parameters; givenFirst; short; referring; informal
+parameters; givenFirst; short; addressing; formal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
+parameters; surnameFirst; short; addressing; informal
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; formal
+parameters; sorting; short; referring; informal
 
 expectedResult; S
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
+# foreignGS
 name ; given; Yoshi
 name ; surname; Emomoto
 name ; locale; ko_AQ
 
+expectedResult; Emomoto, Yoshi
+
+parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
 expectedResult; Emomoto Yoshi
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; formal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; Yoshi Emomoto
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
+
+expectedResult; Emomoto, Y.
+
+parameters; sorting; medium; referring; formal
+parameters; sorting; short; referring; formal
 
 expectedResult; Emomoto Y.
 
-parameters; none; medium; referring; formal
-parameters; none; short; referring; formal
+parameters; surnameFirst; medium; referring; formal
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; Y. Emomoto
+
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Emomoto
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Yoshi
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; EY
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
+
+expectedResult; YE
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
 
 endName
 
+# foreignGGS
 name ; given; Wolfgang
 name ; given2; Amadeus
 name ; surname; Mozart
 name ; locale; ko_AQ
 
+expectedResult; Mozart, Wolfgang Amadeus
+
+parameters; sorting; long; referring; formal
+
 expectedResult; Mozart Wolfgang Amadeus
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Wolfgang Amadeus Mozart
+
+parameters; givenFirst; long; referring; formal
+
+expectedResult; Mozart, W. Amadeus
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; Wolfgang A. Mozart
+
+parameters; givenFirst; medium; referring; formal
 
 expectedResult; Mozart W. Amadeus
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Mozart, Wolfgang
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Mozart Wolfgang
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; Wolfgang Mozart
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
+
+expectedResult; Mozart, W. A.
+
+parameters; sorting; short; referring; formal
 
 expectedResult; Mozart W. A.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; W. A. Mozart
+
+parameters; givenFirst; short; referring; formal
 
 expectedResult; Wolfgang
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
 
 expectedResult; Mozart
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; MWA
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; WAM
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
 
 expectedResult; MW
 
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
+
+expectedResult; WM
+
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
 
 endName
 
+# foreignFull
 name ; title; Prof. Dr.
 name ; given; Ada Cornelia
 name ; given-informal; Neele
@@ -413,44 +655,98 @@ name ; locale; ko_AQ
 
 expectedResult; Prof. Dr. von Brühl Plácido Domingo Ada Cornelia César Martín, MD DDS
 
-parameters; none; long; referring; formal
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Prof. Dr. MD DDS Ada Cornelia César Martín von Brühl Jr
+
+parameters; givenFirst; long; referring; formal
 
 expectedResult; Prof. Dr. von Brühl A. C. César Martín, MD DDS
 
-parameters; none; medium; referring; formal
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; MD DDS Ada Cornelia C. M. von Brühl Jr
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; Brühl, Ada Cornelia César Martín von
+
+parameters; sorting; long; referring; formal
+
+expectedResult; Brühl, A. C. César Martín von
+
+parameters; sorting; medium; referring; formal
+
+expectedResult; von Brühl, Ada Cornelia
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
+
+expectedResult; Ada Cornelia von Brühl
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+parameters; givenFirst; short; referring; informal
+
+expectedResult; Brühl, A. C. C. M. von
+
+parameters; sorting; short; referring; formal
 
 expectedResult; von Brühl Ada Cornelia
 
-parameters; none; long; addressing; informal
-parameters; none; long; referring; informal
-parameters; none; medium; referring; informal
-parameters; none; short; referring; informal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; informal
+parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; A. C. C. M. von Brühl
+
+parameters; givenFirst; short; referring; formal
 
 expectedResult; von Brühl A. C. C. M.
 
-parameters; none; short; referring; formal
+parameters; surnameFirst; short; referring; formal
 
 expectedResult; Prof. Dr. von Brühl
 
-parameters; none; long; addressing; formal
-parameters; none; medium; addressing; formal
-parameters; none; short; addressing; formal
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; Neele
 
-parameters; none; medium; addressing; informal
-parameters; none; short; addressing; informal
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
+parameters; givenFirst; short; addressing; informal
+parameters; surnameFirst; medium; addressing; informal
+parameters; surnameFirst; short; addressing; informal
+
+expectedResult; ACV
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; short; monogram; formal
 
 expectedResult; VAC
 
-parameters; none; long; monogram; formal
-parameters; none; long; monogram; informal
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; AV
+
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; informal
 
 expectedResult; VA
 
-parameters; none; medium; monogram; formal
-parameters; none; medium; monogram; informal
-parameters; none; short; monogram; formal
-parameters; none; short; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; formal
+parameters; surnameFirst; short; monogram; informal
 
 endName

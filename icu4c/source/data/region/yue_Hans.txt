@@ -147,6 +147,7 @@ yue_Hans{
         IL{"以色列"}
         IM{"曼岛"}
         IN{"印度"}
+        IO{"英属印度洋领地"}
         IQ{"伊拉克"}
         IR{"伊朗"}
         IS{"冰岛"}
@@ -297,6 +298,9 @@ yue_Hans{
         ZM{"尚比亚"}
         ZW{"辛巴威"}
         ZZ{"未知区域"}
+    }
+    Countries%chagos{
+        IO{"查哥斯群岛"}
     }
     Countries%short{
         HK{"香港"}

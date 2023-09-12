@@ -9,6 +9,9 @@ eo{
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] \\{ \\} /]"}
     NumberElements{
         latn{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+            }
             symbols{
                 decimal{","}
                 group{" "}
@@ -18,11 +21,11 @@ eo{
     calendar{
         generic{
             DateTimePatterns{
-                "H-'a' 'horo' 'kaj' m:ss zzzz",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d-'a' 'de' MMMM y G",
+                "EEEE, 'la' d-'a' 'de' MMMM y G",
                 "G y-MMMM-dd",
                 "G y-MMM-dd",
                 "GGGGG y-MM-dd",
@@ -49,11 +52,11 @@ eo{
                 "ptm",
             }
             DateTimePatterns{
-                "H-'a' 'horo' 'kaj' m:ss zzzz",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d-'a' 'de' MMMM y",
+                "EEEE, 'la' d-'a' 'de' MMMM y",
                 "y-MMMM-dd",
                 "y-MMM-dd",
                 "yy-MM-dd",
@@ -72,6 +75,9 @@ eo{
                 "yMMMMdd",
                 "yMMMdd",
                 "yyMMdd",
+            }
+            availableFormats{
+                yMMMd{"d MMM y"}
             }
             dayNames{
                 format{
@@ -97,46 +103,59 @@ eo{
             }
             eras{
                 abbreviated{
-                    "aK",
-                    "pK",
+                    "a.n.e.",
+                    "n.e.",
                 }
-                narrow%variant{
-                    "aK",
-                    "pK",
+                abbreviated%variant{
+                    "a.K.",
+                    "p.K.",
+                }
+                wide{
+                    "antaŭ nia erao",
+                    "de nia erao",
+                }
+                wide%variant{
+                    "antaŭ Kristo",
+                    "post Kristo",
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "maj",
-                        "jun",
-                        "jul",
-                        "aŭg",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Maj",
+                        "Jun",
+                        "Jul",
+                        "Aŭg",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dec",
                     }
                     wide{
-                        "januaro",
-                        "februaro",
-                        "marto",
-                        "aprilo",
-                        "majo",
-                        "junio",
-                        "julio",
-                        "aŭgusto",
-                        "septembro",
-                        "oktobro",
-                        "novembro",
-                        "decembro",
+                        "Januaro",
+                        "Februaro",
+                        "Marto",
+                        "Aprilo",
+                        "Majo",
+                        "Junio",
+                        "Julio",
+                        "Aŭgusto",
+                        "Septembro",
+                        "Oktobro",
+                        "Novembro",
+                        "Decembro",
                     }
                 }
             }
         }
+    }
+    measurementSystemNames{
+        UK{"brita"}
+        US{"usona"}
+        metric{"metra"}
     }
 }

@@ -310,11 +310,11 @@ nn{
         }
         SLE{
             "SLE",
-            "sierraleonske leonar (1964—2022)",
+            "sierraleonske leonar",
         }
         SLL{
             "SLL",
-            "sierraleonske leonar",
+            "sierraleonske leonar (1964—2022)",
         }
         SUR{
             "SUR",
@@ -564,10 +564,6 @@ nn{
         SDP{
             one{"gammalt sudansk pund"}
             other{"gamle sudanske pund"}
-        }
-        SLE{
-            one{"sierraleonsk leone (1964—2022)"}
-            other{"sierraleonske leonar (1964—2022)"}
         }
         SUR{
             one{"sovjetisk rubel"}

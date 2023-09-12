@@ -33,13 +33,12 @@ yo_BJ{
         BL{"Ìlú Bátílɛ́mì"}
         BN{"Búrúnɛ́lì"}
         BO{"Bɔ̀lífíyà"}
-        BQ{"Káríbíánì ti Nɛ́dálándì"}
+        BQ{"Kàríbíánì ti Nɛ́dálándì"}
         BW{"Bɔ̀tìsúwánà"}
         BZ{"Bèlísɛ̀"}
         CH{"switishilandi"}
         CL{"Shílè"}
         CN{"Sháínà"}
-        CW{"Kúrásáò"}
         CZ{"Shɛ́ɛ́kì"}
         DG{"Diego Gashia"}
         DJ{"Díbɔ́ótì"}
@@ -62,7 +61,6 @@ yo_BJ{
         KZ{"Kashashatani"}
         LC{"Lushia"}
         LI{"Lɛshitɛnisiteni"}
-        MF{"Ìlú Mátíìnì"}
         MH{"Etikun Máshali"}
         MO{"Agbègbè Ìshàkóso Pàtàkì Macao"}
         MZ{"Moshamibiku"}
@@ -108,6 +106,12 @@ yo_BJ{
         ZM{"Shamibia"}
         ZW{"Shimibabe"}
         ZZ{"Àgbègbè àìmɔ̀"}
+    }
+    Countries%biot{
+        IO{"Àlà-ilɛ̀ Bírítéènì ní Etíkun Índíà"}
+    }
+    Countries%chagos{
+        IO{"Àkójɔpɔ̀ Àwɔn Erékùshù Shágòsì"}
     }
     Countries%short{
         PS{"Palɛsítínì"}

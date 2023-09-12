@@ -6,7 +6,7 @@ units:table(nofallback){
     convertUnits{
         100-kilometer{
             factor{"100000"}
-            systems{"metric"}
+            systems{"si metric"}
             target{"meter"}
         }
         acre{
@@ -21,12 +21,12 @@ units:table(nofallback){
         }
         arc-minute{
             factor{"1/360*60"}
-            systems{"si_acceptable metric_adjacent"}
+            systems{"si_acceptable metric_adjacent ussystem uksystem astronomical"}
             target{"revolution"}
         }
         arc-second{
             factor{"1/360*60*60"}
-            systems{"si_acceptable metric_adjacent"}
+            systems{"si_acceptable metric_adjacent ussystem uksystem astronomical"}
             target{"revolution"}
         }
         astronomical-unit{
@@ -36,7 +36,7 @@ units:table(nofallback){
         }
         atmosphere{
             factor{"101325"}
-            systems{"astronomical"}
+            systems{"ussystem uksystem"}
             target{"kilogram-per-meter-square-second"}
         }
         bar{
@@ -56,7 +56,7 @@ units:table(nofallback){
         }
         bit{
             factor{"1"}
-            systems{"metric prefixable"}
+            systems{"metric_adjacent prefixable ussystem uksystem"}
             target{"bit"}
         }
         british-thermal-unit{
@@ -81,7 +81,7 @@ units:table(nofallback){
         }
         byte{
             factor{"8"}
-            systems{"metric prefixable"}
+            systems{"metric_adjacent prefixable ussystem uksystem"}
             target{"bit"}
         }
         calorie{
@@ -101,7 +101,7 @@ units:table(nofallback){
         }
         carat{
             factor{"0.0002"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"kilogram"}
         }
         celsius{
@@ -112,7 +112,7 @@ units:table(nofallback){
         }
         century{
             factor{"100"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem astronomical"}
             target{"year"}
         }
         chain{
@@ -152,7 +152,10 @@ units:table(nofallback){
         }
         day{
             factor{"86400"}
-            systems{"si_acceptable metric_adjacent prefixable"}
+            systems{
+                "si_acceptable metric_adjacent prefixable ussystem uksystem astronomi"
+                "cal"
+            }
             target{"second"}
         }
         day-person{
@@ -162,12 +165,12 @@ units:table(nofallback){
         }
         decade{
             factor{"10"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem astronomical"}
             target{"year"}
         }
         degree{
             factor{"1/360"}
-            systems{"si_acceptable metric_adjacent"}
+            systems{"si_acceptable metric_adjacent ussystem uksystem astronomical"}
             target{"revolution"}
         }
         dessert-spoon{
@@ -182,7 +185,7 @@ units:table(nofallback){
         }
         dot{
             factor{"1"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"pixel"}
         }
         dram{
@@ -197,6 +200,7 @@ units:table(nofallback){
         }
         dunam{
             factor{"1000"}
+            systems{"metric_adjacent"}
             target{"square-meter"}
         }
         earth-mass{
@@ -216,7 +220,7 @@ units:table(nofallback){
         }
         em{
             factor{"1"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"em"}
         }
         fahrenheit{
@@ -272,7 +276,7 @@ units:table(nofallback){
         }
         g-force{
             factor{"gravity"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"meter-per-square-second"}
         }
         gallon{
@@ -285,9 +289,9 @@ units:table(nofallback){
             systems{"uksystem"}
             target{"cubic-meter"}
         }
-        gasoline-equivalent{
+        gasoline-energy-density{
             factor{"33.705 * 3600 * 1000/gal_to_m3"}
-            systems{"ussystem"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"kilogram-per-meter-square-second"}
         }
         grain{
@@ -327,7 +331,10 @@ units:table(nofallback){
         }
         hour{
             factor{"3600"}
-            systems{"si_acceptable metric_adjacent prefixable"}
+            systems{
+                "si_acceptable metric_adjacent prefixable ussystem uksystem astronomi"
+                "cal"
+            }
             target{"second"}
         }
         inch{
@@ -337,7 +344,7 @@ units:table(nofallback){
         }
         item{
             factor{"1"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"item"}
         }
         jigger{
@@ -357,7 +364,7 @@ units:table(nofallback){
         }
         karat{
             factor{"1/24"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"portion"}
         }
         katal{
@@ -437,7 +444,10 @@ units:table(nofallback){
         }
         minute{
             factor{"60"}
-            systems{"si_acceptable metric_adjacent prefixable"}
+            systems{
+                "si_acceptable metric_adjacent prefixable ussystem uksystem astronomi"
+                "cal"
+            }
             target{"second"}
         }
         mole{
@@ -447,7 +457,7 @@ units:table(nofallback){
         }
         month{
             factor{"1/12"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem astronomical"}
             target{"year"}
         }
         month-person{
@@ -472,6 +482,7 @@ units:table(nofallback){
         }
         ofhg{
             factor{"13595.1*gravity"}
+            systems{"metric_adjacent uksystem ussystem"}
             target{"kilogram-per-square-meter-square-second"}
         }
         ohm{
@@ -506,22 +517,22 @@ units:table(nofallback){
         }
         percent{
             factor{"1/100"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"portion"}
         }
         permille{
             factor{"1/1000"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"portion"}
         }
         permillion{
             factor{"1/1000000"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"portion"}
         }
         permyriad{
             factor{"1/10000"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"portion"}
         }
         pinch{
@@ -546,17 +557,17 @@ units:table(nofallback){
         }
         pixel{
             factor{"1"}
-            systems{"metric_adjacent prefixable"}
+            systems{"metric_adjacent ussystem uksystem prefixable"}
             target{"pixel"}
         }
         point{
             factor{"ft_to_m/864"}
-            systems{"ussystem uksystem"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"meter"}
         }
         portion{
             factor{"1"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"portion"}
         }
         pound{
@@ -596,7 +607,7 @@ units:table(nofallback){
         }
         revolution{
             factor{"1"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem"}
             target{"revolution"}
         }
         ri-jp{
@@ -626,7 +637,7 @@ units:table(nofallback){
         }
         second{
             factor{"1"}
-            systems{"si metric prefixable"}
+            systems{"si metric prefixable ussystem uksystem astronomical"}
             target{"second"}
         }
         shaku{
@@ -741,7 +752,7 @@ units:table(nofallback){
         }
         week{
             factor{"86400*7"}
-            systems{"metric_adjacent"}
+            systems{"metric_adjacent ussystem uksystem astronomical"}
             target{"second"}
         }
         week-person{
@@ -756,7 +767,7 @@ units:table(nofallback){
         }
         year{
             factor{"1"}
-            systems{"metric_adjacent prefixable"}
+            systems{"metric_adjacent prefixable ussystem uksystem astronomical"}
             target{"year"}
         }
         year-person{

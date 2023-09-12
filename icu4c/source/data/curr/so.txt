@@ -543,9 +543,13 @@ so{
             "SHP",
             "Bowndka St Helen",
         }
+        SLE{
+            "SLE",
+            "Leonka Sira Leon",
+        }
         SLL{
             "SLL",
-            "Leonka Sira Leon",
+            "Leonka Sira Leon (1964—2022)",
         }
         SOS{
             "S",
@@ -1124,9 +1128,13 @@ so{
             one{"bowndka St Helen"}
             other{"Bowndka St Helen"}
         }
-        SLL{
+        SLE{
             one{"leonka Sira Leon"}
             other{"leonka Sira Leon"}
+        }
+        SLL{
+            one{"leonka Sira Leon (1964—2022)"}
+            other{"leonka Sira Leon (1964—2022)"}
         }
         SRD{
             one{"Doolarka Surinamees"}

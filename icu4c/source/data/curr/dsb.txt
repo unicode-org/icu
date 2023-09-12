@@ -615,9 +615,13 @@ dsb{
             "SHP",
             "St. Helena punt",
         }
+        SLE{
+            "SLE",
+            "sierra-leoneski leone",
+        }
         SLL{
             "SLL",
-            "sierra-leoneski leone",
+            "sierra-leoneski leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1667,11 +1671,17 @@ dsb{
             other{"St. Helena puntow"}
             two{"St. Helena punta"}
         }
-        SLL{
+        SLE{
             few{"sierra-leoneske leone"}
             one{"sierra-leoneski leone"}
             other{"sierra-leoneskich leone"}
             two{"sierra-leoneskej leone"}
+        }
+        SLL{
+            few{"sierra-leoneske leone (1964—2022)"}
+            one{"sierra-leoneski leone (1964—2022)"}
+            other{"sierra-leoneskich leone (1964—2022)"}
+            two{"sierra-leoneskej leone (1964—2022)"}
         }
         SOS{
             few{"somaliske šilingi"}

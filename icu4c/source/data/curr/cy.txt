@@ -791,9 +791,13 @@ cy{
             "SHP",
             "Punt St Helena",
         }
+        SLE{
+            "SLE",
+            "Leone Sierra Leone",
+        }
         SLL{
             "SLL",
-            "Leone Sierra Leone",
+            "Leone Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2622,13 +2626,21 @@ cy{
             two{"bunt St. Helena"}
             zero{"punt St. Helena"}
         }
-        SLL{
+        SLE{
             few{"leone Sierra Leone"}
             many{"leone Sierra Leone"}
             one{"leone Sierra Leone"}
             other{"leone Sierra Leone"}
             two{"leone Sierra Leone"}
             zero{"leone Sierra Leone"}
+        }
+        SLL{
+            few{"leone Sierra Leone (1964—2022)"}
+            many{"leone Sierra Leone (1964—2022)"}
+            one{"leone Sierra Leone (1964—2022)"}
+            other{"leone Sierra Leone (1964—2022)"}
+            two{"leone Sierra Leone (1964—2022)"}
+            zero{"leone Sierra Leone (1964—2022)"}
         }
         SOS{
             few{"swllt Somalia"}

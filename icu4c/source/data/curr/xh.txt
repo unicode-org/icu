@@ -499,9 +499,13 @@ xh{
             "SHP",
             "IPonti yaseSt. Helena",
         }
+        SLE{
+            "SLE",
+            "I-Loeone yaseSierra Leone",
+        }
         SLL{
             "SLL",
-            "I-Loeone yaseSierra Leone",
+            "I-Loeone yaseSierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1129,9 +1133,13 @@ xh{
             one{"Iponti yaseSt. Helena"}
             other{"Iiponti zaseSt. Helena"}
         }
-        SLL{
+        SLE{
             one{"I-leone yaseSierra Leone"}
             other{"Ii-leones zaseSierra Leone"}
+        }
+        SLL{
+            one{"I-leone yaseSierra Leone (1964—2022)"}
+            other{"Ii-leones zaseSierra Leone (1964—2022)"}
         }
         SOS{
             one{"I-shilling yaseSomalia"}

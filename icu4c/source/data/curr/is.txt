@@ -695,9 +695,13 @@ is{
             "SKK",
             "Slóvakísk króna",
         }
+        SLE{
+            "SLE",
+            "síerraleónsk ljóna",
+        }
         SLL{
             "SLL",
-            "síerraleónsk ljóna",
+            "síerraleónsk ljóna (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1432,9 +1436,13 @@ is{
             one{"helenskt pund"}
             other{"helensk pund"}
         }
-        SLL{
+        SLE{
             one{"síerraleónsk ljóna"}
             other{"síerraleónskar ljónur"}
+        }
+        SLL{
+            one{"síerraleónsk ljóna (1964—2022)"}
+            other{"síerraleónskar ljónur (1964—2022)"}
         }
         SOS{
             one{"sómalískur skildingur"}

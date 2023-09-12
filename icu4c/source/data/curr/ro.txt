@@ -727,9 +727,13 @@ ro{
             "SKK",
             "coroană slovacă",
         }
+        SLE{
+            "SLE",
+            "leone din Sierra Leone",
+        }
         SLL{
             "SLL",
-            "leone din Sierra Leone",
+            "leone din Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1793,10 +1797,15 @@ ro{
             one{"coroană slovacă"}
             other{"coroane slovace"}
         }
-        SLL{
+        SLE{
             few{"leoni din Sierra Leone"}
             one{"leone din Sierra Leone"}
             other{"leoni din Sierra Leone"}
+        }
+        SLL{
+            few{"leoni din Sierra Leone (1964—2022)"}
+            one{"leone din Sierra Leone (1964—2022)"}
+            other{"leoni din Sierra Leone (1964—2022)"}
         }
         SOS{
             few{"șilingi somalezi"}

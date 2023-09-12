@@ -895,9 +895,13 @@ kgp{
             "SKK",
             "Enhrovakija Rãgre",
         }
+        SLE{
+            "SLE",
+            "Krĩ Mĩgkusũg-fi Re’onĩ",
+        }
         SLL{
             "SLL",
-            "Krĩ Mĩgkusũg-fi Re’onĩ",
+            "Krĩ Mĩgkusũg-fi Re’onĩ (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2099,9 +2103,13 @@ kgp{
             one{"Enhrovakija Rãgre"}
             other{"Enhrovakija Rãgre ag"}
         }
-        SLL{
+        SLE{
             one{"Krĩ Mĩgkusũg-fi Re’onĩ"}
             other{"Krĩ Mĩgkusũg-fi Re’onĩ ag"}
+        }
+        SLL{
+            one{"Krĩ Mĩgkusũg-fi Re’onĩ (1964—2022)"}
+            other{"Krĩ Mĩgkusũg-fi Re’onĩ ag (1964—2022)"}
         }
         SOS{
             one{"Somỹrija Serĩm"}

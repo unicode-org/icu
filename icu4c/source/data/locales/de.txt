@@ -448,8 +448,8 @@ de{
                     y{"y–y G"}
                 }
                 yM{
-                    M{"MM.y – MM.y G"}
-                    y{"MM.y – MM.y G"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
                     M{"E, dd.MM.y – E, dd.MM.y G"}
@@ -542,7 +542,7 @@ de{
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
                 hmv{"h:mm a v"}
-                yM{"MM/y"}
+                yM{"M/y"}
                 yMEd{"E, d.M.y"}
                 yMM{"MM.y"}
                 yMMM{"MMM y"}
@@ -760,8 +760,8 @@ de{
                     h{"h–h a v"}
                 }
                 yM{
-                    M{"MM/y – MM/y"}
-                    y{"MM/y – MM/y"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMEd{
                     M{"E, dd.MM. – E, dd.MM.y"}

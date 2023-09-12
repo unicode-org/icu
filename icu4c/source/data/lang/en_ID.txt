@@ -1,10 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
-ha_NE{
-    Countries{
-        053{"Tsibarai na Austraila da New Zealand da maƙota"}
-        054{"Tsibirai na New Guinea da Fiji da maƙota"}
-        061{"Tsibiri"}
-    }
+en_ID{
+    %%Parent{"en_001"}
 }

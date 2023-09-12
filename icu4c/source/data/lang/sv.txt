@@ -75,7 +75,7 @@ sv{
         bax{"bamunska"}
         bbc{"batak-toba"}
         bbj{"ghomala"}
-        be{"vitryska"}
+        be{"belarusiska"}
         bej{"beja"}
         bem{"bemba"}
         bew{"betawiska"}

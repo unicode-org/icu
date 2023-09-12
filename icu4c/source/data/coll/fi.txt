@@ -6,7 +6,7 @@ fi{
         search{
             Sequence{
                 "[import und-u-co-search]"
-                "[import fi-u-co-trad]"
+                "[import fi-u-co-standard]"
             }
             Version{"44"}
         }

@@ -242,8 +242,6 @@ yo_BJ{
         "meta:Yukon"{
             ls{"Àkókò Yúkɔ́nì"}
         }
-        fallbackFormat{"{1} ({0})"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormatDaylight{"{0} Àkókò ojúmɔmɔ"}
     }
 }

@@ -5505,7 +5505,7 @@ metadata:table(nofallback){
         "xnr_IN",
         "xog_UG",
         "yav_CM",
-        "yi_001",
+        "yi_UA",
         "yo_NG",
         "yrl_BR",
         "yue_Hans_CN",

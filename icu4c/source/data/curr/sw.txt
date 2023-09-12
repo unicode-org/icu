@@ -531,9 +531,13 @@ sw{
             "SHP",
             "Pauni ya St. Helena",
         }
+        SLE{
+            "SLE",
+            "Leone ya Siera Leoni",
+        }
         SLL{
             "SLL",
-            "Leone ya Siera Leoni",
+            "Leone ya Siera Leoni (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1205,9 +1209,13 @@ sw{
             one{"pauni ya St. Helena"}
             other{"pauni za St. Helena"}
         }
-        SLL{
+        SLE{
             one{"leone ya Siera Leoni"}
             other{"leone za Siera Leoni"}
+        }
+        SLL{
+            one{"leone ya Siera Leoni (1964—2022)"}
+            other{"leone za Siera Leoni (1964—2022)"}
         }
         SOS{
             one{"shilingi ya Somalia"}

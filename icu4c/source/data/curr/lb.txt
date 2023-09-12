@@ -823,9 +823,13 @@ lb{
             "SKK",
             "Slowakesch Kroun",
         }
+        SLE{
+            "SLE",
+            "Sierra-leonesche Leone",
+        }
         SLL{
             "SLL",
-            "Sierra-leonesche Leone",
+            "Sierra-leonesche Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1700,9 +1704,13 @@ lb{
             one{"Slowakesch Kroun"}
             other{"Slowakesch Krounen"}
         }
-        SLL{
+        SLE{
             one{"Sierra-leonesche Leone"}
             other{"Sierra-leonesch Leones"}
+        }
+        SLL{
+            one{"Sierra-leonesche Leone (1964—2022)"}
+            other{"Sierra-leonesch Leones (1964—2022)"}
         }
         SRD{
             one{"Surinameschen Dollar"}
