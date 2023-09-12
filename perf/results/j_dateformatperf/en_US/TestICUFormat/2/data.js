@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694558667068,
+  "lastUpdate": 1694561600359,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11488,6 +11488,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 224.31804336666372,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "6d178fd0026ea5c996d0621780412a16b8ee1780",
+          "message": "ICU-22325 Update ICU4C API Change Reports - frontload\nChange version on uspoof.h from \"74.0\" to \"74\"",
+          "timestamp": "2023-09-12T16:15:11-07:00",
+          "tree_id": "66dd53b09b29df73ae462426faf623b8e61885e0",
+          "url": "https://github.com/unicode-org/icu/commit/6d178fd0026ea5c996d0621780412a16b8ee1780"
+        },
+        "date": 1694561545194,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 249.25670101768006,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
