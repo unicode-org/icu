@@ -5980,6 +5980,8 @@ void LocaleTest::TestToLanguageTag() {
       {"und-Latn-x-private", "und-Latn-x-private"},
       {"und-1994-biske-rozaj", "und-1994-biske-rozaj"},
       {"und-1994-biske-rozaj-x-private", "und-1994-biske-rozaj-x-private"},
+      // ICU-22497
+      {"-ins0-ins17Rz-yqyq-UWLF-uRyq-UWLF-uRRyq-UWLF-uR-UWLF-uRns0-ins17Rz-yq-UWLF-uRyq-UWLF-uRRyq-LF-uRyq-UWLF-uRRyq-UWLF-uRq-UWLF-uRyq-UWLF-uRRyq-UWLF-uR", ""},
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
@@ -5993,6 +5995,12 @@ void LocaleTest::TestToLanguageTag() {
                        tag.c_str(),
                        u_errorName(status));
         }
+        // Test ICU-22497
+        status = U_ZERO_ERROR;
+        icu::Locale locale(otag.c_str());
+        char buf[245];
+        icu::CheckedArrayByteSink sink(buf, sizeof(buf));
+        locale.toLanguageTag(sink, status);
     }
 }
 

@@ -1952,8 +1952,8 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
                             len = (int32_t)uprv_strlen(PRIVUSE_VARIANT_PREFIX);
                             if (reslen < capacity) {
                                 uprv_memcpy(tmpAppend + reslen, PRIVUSE_VARIANT_PREFIX, uprv_min(len, capacity - reslen));
+                                reslen += uprv_min(len, capacity - reslen);
                             }
-                            reslen += len;
 
                             if (reslen < capacity) {
                                 tmpAppend[reslen++] = SEP;
@@ -1965,8 +1965,8 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
                         len = (int32_t)uprv_strlen(pPriv);
                         if (reslen < capacity) {
                             uprv_memcpy(tmpAppend + reslen, pPriv, uprv_min(len, capacity - reslen));
+                            reslen += uprv_min(len, capacity - reslen);
                         }
-                        reslen += len;
                     }
                 }
                 /* reset private use starting position */
@@ -1984,6 +1984,7 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
 
     if (U_SUCCESS(*status)) {
         len = reslen;
+        U_ASSERT(reslen <= capacity);
         sink.Append(tmpAppend, len);
     }
 }
