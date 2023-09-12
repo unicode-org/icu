@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694559119647,
+  "lastUpdate": 1694561941839,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25810,6 +25810,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2816424.6763,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "6d178fd0026ea5c996d0621780412a16b8ee1780",
+          "message": "ICU-22325 Update ICU4C API Change Reports - frontload\nChange version on uspoof.h from \"74.0\" to \"74\"",
+          "timestamp": "2023-09-12T16:15:11-07:00",
+          "tree_id": "66dd53b09b29df73ae462426faf623b8e61885e0",
+          "url": "https://github.com/unicode-org/icu/commit/6d178fd0026ea5c996d0621780412a16b8ee1780"
+        },
+        "date": 1694561885538,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 489.4158,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 16696856.2674,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2435212.5074,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 15713913.4962,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2726928.2696,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
