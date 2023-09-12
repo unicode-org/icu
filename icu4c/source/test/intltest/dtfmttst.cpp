@@ -4458,7 +4458,7 @@ void DateFormatTest::TestFormatsWithNumberSystems()
     const UDate date = 1451556000000.0; // for UTC: grego 31-Dec-2015 10 AM, hebrew 19 tevet 5776, chinese yi-wei 11mo 21day
     const TestFmtWithNumSysItem items[] = {
         { "haw@calendar=gregorian", DateFormat::kShort, UnicodeString("d/M/yy"),               UnicodeString("31/xii/15") },
-        { "he@calendar=hebrew",     DateFormat::kLong, CharsToUnicodeString("d \\u05D1MMMM y"), CharsToUnicodeString("\\u05D9\\u05F4\\u05D8 \\u05D1\\u05D8\\u05D1\\u05EA \\u05EA\\u05E9\\u05E2\\u05F4\\u05D5") }, 
+        { "he@calendar=hebrew",     DateFormat::kLong, CharsToUnicodeString("d \\u05D1MMMM y"), CharsToUnicodeString("\\u05D9\\u05F4\\u05D8 \\u05D1\\u05D8\\u05D1\\u05EA \\u05EA\\u05E9\\u05E2\\u05F4\\u05D5") },
         { "zh@calendar=chinese",      DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u5EFF\\u4E00") },
         { "zh_Hant@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u51AC\\u6708\\u5EFF\\u4E00") },
         { "ja@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("U\\u5E74MMMd\\u65E5"), CharsToUnicodeString("\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u4E8C\\u4E00\\u65E5") },
@@ -5838,24 +5838,24 @@ void DateFormatTest::TestHourCycle() {
         // test some locales for which we have data
         { "en-us", u"Tuesday, March 16, 1943 at 3:45:32 PM" },
         { "en-ca", u"Tuesday, March 16, 1943 at 3:45:32 p.m." },
-        { "en-gb", u"Tuesday, 16 March 1943 at 15:45:32" },
-        { "en-au", u"Tuesday, 16 March 1943 at 3:45:32 pm" },
+        { "en-gb", u"Tuesday 16 March 1943 at 15:45:32" },
+        { "en-au", u"Tuesday 16 March 1943 at 3:45:32 pm" },
         // test a couple locales for which we don't have specific locale files (we should still get the correct hour cycle)
         { "en-co", u"Tuesday, March 16, 1943 at 3:45:32 PM" },
-        { "en-mx", u"Tuesday, March 16, 1943 at 15:45:32" },
+        { "en-mx", u"Tuesday, March 16, 1943 at 3:45:32 PM" },
         // test that the rg subtag does the right thing
         { "en-us-u-rg-gbzzzz", u"Tuesday, March 16, 1943 at 15:45:32" },
         { "en-us-u-rg-cazzzz", u"Tuesday, March 16, 1943 at 3:45:32 PM" },
         { "en-ca-u-rg-uszzzz", u"Tuesday, March 16, 1943 at 3:45:32 p.m." },
-        { "en-gb-u-rg-uszzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm" },
-        { "en-gb-u-rg-cazzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm" },
-        { "en-gb-u-rg-auzzzz", u"Tuesday, 16 March 1943 at 3:45:32 pm" },
+        { "en-gb-u-rg-uszzzz", u"Tuesday 16 March 1943 at 3:45:32 pm" },
+        { "en-gb-u-rg-cazzzz", u"Tuesday 16 March 1943 at 3:45:32 pm" },
+        { "en-gb-u-rg-auzzzz", u"Tuesday 16 March 1943 at 3:45:32 pm" },
         // test that the hc ("hours") subtag does the right thing
         { "en-us-u-hc-h23", u"Tuesday, March 16, 1943 at 15:45:32" },
-        { "en-gb-u-hc-h12", u"Tuesday, 16 March 1943 at 3:45:32 pm" },
+        { "en-gb-u-hc-h12", u"Tuesday 16 March 1943 at 3:45:32 pm" },
         // test that the rg and hc subtags do the right thing when used together
         { "en-us-u-rg-gbzzzz-hc-h12", u"Tuesday, March 16, 1943 at 3:45:32 PM" },
-        { "en-gb-u-rg-uszzzz-hc-h23", u"Tuesday, 16 March 1943 at 15:45:32" },
+        { "en-gb-u-rg-uszzzz-hc-h23", u"Tuesday 16 March 1943 at 15:45:32" },
     };
     
     for (int32_t i = 0; i < UPRV_LENGTHOF(TEST_CASES); i++) {

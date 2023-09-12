@@ -407,7 +407,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"JJmm", "11:58"},
 
         new ULocale("de_DE"),
-        new String[] {"yM", "01/1999"},
+        new String[] {"yM", "1/1999"},
         new String[] {"yMMM", "Jan. 1999"},
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13. Jan. 1999"},

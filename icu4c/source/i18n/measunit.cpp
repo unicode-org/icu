@@ -532,7 +532,7 @@ static const char * const gSubTypes[] = {
     "watt",
     "atmosphere",
     "bar",
-    "gasoline-equivalent",
+    "gasoline-energy-density",
     "hectopascal",
     "inch-ofhg",
     "kilopascal",
@@ -1688,11 +1688,11 @@ MeasureUnit MeasureUnit::getBar() {
     return MeasureUnit(18, 1);
 }
 
-MeasureUnit *MeasureUnit::createGasolineEquivalent(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createGasolineEnergyDensity(UErrorCode &status) {
     return MeasureUnit::create(18, 2, status);
 }
 
-MeasureUnit MeasureUnit::getGasolineEquivalent() {
+MeasureUnit MeasureUnit::getGasolineEnergyDensity() {
     return MeasureUnit(18, 2);
 }
 

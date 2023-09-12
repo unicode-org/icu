@@ -1716,10 +1716,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit BAR = MeasureUnit.internalGetInstance("pressure", "bar");
 
     /**
-     * Constant for unit of pressure: gasoline-equivalent
+     * Constant for unit of pressure: gasoline-energy-density
      * @draft ICU 74
      */
-    public static final MeasureUnit GASOLINE_EQUIVALENT = MeasureUnit.internalGetInstance("pressure", "gasoline-equivalent");
+    public static final MeasureUnit GASOLINE_ENERGY_DENSITY = MeasureUnit.internalGetInstance("pressure", "gasoline-energy-density");
 
     /**
      * Constant for unit of pressure: hectopascal
