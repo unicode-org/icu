@@ -1092,6 +1092,7 @@ class LocaleFallbackData {
         t.put("en_GM", "en_001");
         t.put("en_GY", "en_001");
         t.put("en_HK", "en_001");
+        t.put("en_ID", "en_001");
         t.put("en_IE", "en_001");
         t.put("en_IL", "en_001");
         t.put("en_IM", "en_001");
@@ -1164,6 +1165,7 @@ class LocaleFallbackData {
         t.put("es_EC", "es_419");
         t.put("es_GT", "es_419");
         t.put("es_HN", "es_419");
+        t.put("es_JP", "es_419");
         t.put("es_MX", "es_419");
         t.put("es_NI", "es_419");
         t.put("es_PA", "es_419");
