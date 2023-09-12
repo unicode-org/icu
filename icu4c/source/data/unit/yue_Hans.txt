@@ -82,6 +82,9 @@ yue_Hans{
             calorie{
                 other{"{0} 卡路里"}
             }
+            foodcalorie{
+                dnam{"卡路里"}
+            }
             joule{
                 other{"{0} 焦耳"}
             }
@@ -393,7 +396,9 @@ yue_Hans{
             10p-2{"厘{0}"}
             10p-21{"仄{0}"}
             10p-24{"么{0}"}
+            10p-27{"ronto {0}"}
             10p-3{"毫{0}"}
+            10p-30{"quecto {0}"}
             10p-6{"微{0}"}
             10p-9{"纳{0}"}
             10p1{"十{0}"}
@@ -403,7 +408,9 @@ yue_Hans{
             10p2{"百{0}"}
             10p21{"泽{0}"}
             10p24{"尧{0}"}
+            10p27{"ronna {0}"}
             10p3{"千{0}"}
+            10p30{"quetta {0}"}
             10p6{"兆{0}"}
             10p9{"吉{0}"}
             power2{
@@ -569,6 +576,10 @@ yue_Hans{
                 dnam{"电子伏特"}
                 other{"{0} 电子伏特"}
             }
+            foodcalorie{
+                dnam{"大卡"}
+                other{"{0} 大卡"}
+            }
             joule{
                 dnam{"焦耳"}
                 other{"{0} 焦"}
@@ -623,6 +634,18 @@ yue_Hans{
             }
         }
         graphics{
+            dot{
+                dnam{"圆点"}
+                other{"{0} 个圆点"}
+            }
+            dot-per-centimeter{
+                dnam{"每厘米点数"}
+                other{"{0} 点/厘米"}
+            }
+            dot-per-inch{
+                dnam{"每吋点数"}
+                other{"{0} 点/吋"}
+            }
             megapixel{
                 dnam{"百万像素"}
                 other{"{0} 百万像素"}
@@ -881,6 +904,10 @@ yue_Hans{
             }
         }
         speed{
+            beaufort{
+                dnam{"蒲福氏风级"}
+                other{"蒲福氏风级 {0} 级"}
+            }
             kilometer-per-hour{
                 dnam{"公里/小时"}
                 other{"每小时{0}公里"}

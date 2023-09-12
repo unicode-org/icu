@@ -895,9 +895,13 @@ rm{
             "SKK",
             "cruna slovaca",
         }
+        SLE{
+            "SLE",
+            "leone da la Sierra Leone",
+        }
         SLL{
             "SLL",
-            "leone da la Sierra Leone",
+            "leone da la Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1937,9 +1941,13 @@ rm{
             one{"cruna slovaca"}
             other{"crunas slovacas"}
         }
-        SLL{
+        SLE{
             one{"leone da la Sierra Leone"}
             other{"leones da la Sierra Leone"}
+        }
+        SLL{
+            one{"leone da la Sierra Leone (1964—2022)"}
+            other{"leones da la Sierra Leone (1964—2022)"}
         }
         SOS{
             one{"schilling somalian"}

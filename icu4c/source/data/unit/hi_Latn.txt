@@ -70,7 +70,7 @@ hi_Latn{
             }
         }
         pressure{
-            gasoline-equivalent{
+            gasoline-energy-density{
                 dnam{"gasoline equivalent"}
             }
             inch-ofhg{

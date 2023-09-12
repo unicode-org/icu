@@ -515,9 +515,13 @@ sq{
             "SHP",
             "Sterlina e Ishullit të Shën-Helenës",
         }
+        SLE{
+            "SLE",
+            "Leoni i Sierra-Leones",
+        }
         SLL{
             "SLL",
-            "Leoni i Sierra-Leones",
+            "Leoni i Sierra-Leones (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1268,9 +1272,13 @@ sq{
             one{"sterlinë e Ishullit të Shën-Helenës"}
             other{"sterlina e Ishullit të Shën-Helenës"}
         }
-        SLL{
+        SLE{
             one{"leon i Sierra-Leones"}
             other{"leonë të Sierra-Leones"}
+        }
+        SLL{
+            one{"leon i Sierra-Leones (1964—2022)"}
+            other{"leonë të Sierra-Leones (1964—2022)"}
         }
         SOS{
             one{"shilingë somaleze"}

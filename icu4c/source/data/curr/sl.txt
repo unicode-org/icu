@@ -827,9 +827,13 @@ sl{
             "SKK",
             "slovaška krona",
         }
+        SLE{
+            "SLE",
+            "sieraleonski leone",
+        }
         SLL{
             "SLL",
-            "sieraleonski leone",
+            "sieraleonski leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1879,11 +1883,17 @@ sl{
             other{"funtov Sv. Helene"}
             two{"funta Sv. Helene"}
         }
-        SLL{
+        SLE{
             few{"sieraleonski leoni"}
             one{"sieraleonski leone"}
             other{"sieraleonskih leonov"}
             two{"sieraleonska leona"}
+        }
+        SLL{
+            few{"sieraleonski leoni (1964—2022)"}
+            one{"sieraleonski leone (1964—2022)"}
+            other{"sieraleonskih leonov (1964—2022)"}
+            two{"sieraleonska leona (1964—2022)"}
         }
         SOS{
             few{"somalski šilingi"}

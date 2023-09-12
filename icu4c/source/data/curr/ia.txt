@@ -527,9 +527,13 @@ ia{
             "SHP",
             "libra de St. Helena",
         }
+        SLE{
+            "SLE",
+            "leone sierraleonese",
+        }
         SLL{
             "SLL",
-            "leone sierraleonese",
+            "leone sierraleonese (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1161,9 +1165,13 @@ ia{
             one{"libra de St. Helena"}
             other{"libras de St. Helena"}
         }
-        SLL{
+        SLE{
             one{"leone sierraleonese"}
             other{"leones sierraleonese"}
+        }
+        SLL{
+            one{"leone sierraleonese (1964—2022)"}
+            other{"leones sierraleonese (1964—2022)"}
         }
         SOS{
             one{"shilling somali"}

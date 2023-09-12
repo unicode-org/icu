@@ -147,6 +147,7 @@ sr_Latn{
         IL{"Izrael"}
         IM{"Ostrvo Man"}
         IN{"Indija"}
+        IO{"Britanska teritorija Indijskog okeana"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
@@ -297,6 +298,9 @@ sr_Latn{
         ZM{"Zambija"}
         ZW{"Zimbabve"}
         ZZ{"Nepoznat region"}
+    }
+    Countries%chagos{
+        IO{"arhipelag Čagos"}
     }
     Countries%short{
         GB{"UK"}

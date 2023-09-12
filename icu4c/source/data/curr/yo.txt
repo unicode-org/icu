@@ -519,9 +519,13 @@ yo{
             "SHP",
             "Pọ́n-un Elena",
         }
+        SLE{
+            "SLE",
+            "Líónì Sira Líonì",
+        }
         SLL{
             "SLL",
-            "Líónì Sira Líonì",
+            "Líónì Sira Líonì (1964—2022)",
         }
         SOS{
             "SOS",
@@ -890,8 +894,11 @@ yo{
         SHP{
             other{"àwọn pọ́n-un Elena"}
         }
-        SLL{
+        SLE{
             other{"àwọn líónì Sira Líonì"}
+        }
+        SLL{
+            other{"àwọn líónì Sira Líonì (1964—2022)"}
         }
         SOS{
             other{"àwọ́n ṣílè Somali"}

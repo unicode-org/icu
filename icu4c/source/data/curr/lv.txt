@@ -615,9 +615,13 @@ lv{
             "SKK",
             "Slovakijas krona",
         }
+        SLE{
+            "SLE",
+            "Sjerraleones leone",
+        }
         SLL{
             "SLL",
-            "Sjerraleones leone",
+            "Sjerraleones leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1421,10 +1425,15 @@ lv{
             other{"Sv.Helēnas salas mārciņas"}
             zero{"Sv.Helēnas salas mārciņas"}
         }
-        SLL{
+        SLE{
             one{"Sjerraleones leone"}
             other{"Sjerraleones leones"}
             zero{"Sjerraleones leones"}
+        }
+        SLL{
+            one{"Sjerraleones leone (1964—2022)"}
+            other{"Sjerraleones leones (1964—2022)"}
+            zero{"Sjerraleones leones (1964—2022)"}
         }
         SOS{
             one{"Somālijas šiliņš"}

@@ -247,15 +247,15 @@ expectedResult; Marie-Agnès Gilot
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Gilot, M. A. S.
+expectedResult; Gilot, M.-A. S.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; Gilot M. A. S.
+expectedResult; Gilot M.-A. S.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; M. A. S. Gilot
+expectedResult; M.-A. S. Gilot
 
 parameters; givenFirst; short; referring; formal
 
@@ -263,7 +263,7 @@ expectedResult; Marie-Agnès G.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Gilot M. A.
+expectedResult; Gilot M.-A.
 
 parameters; surnameFirst; short; referring; informal
 
@@ -352,19 +352,19 @@ expectedResult; Jean-Nicolas L. M. de Larochellière
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Larochellière, J. N. L. M. de
+expectedResult; Larochellière, J.-N. L. M. de
 
 parameters; sorting; short; referring; formal
 
-expectedResult; de Larochellière J. N. L. M.
+expectedResult; de Larochellière J.-N. L. M.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; J. N. L. M. de Larochellière
+expectedResult; J.-N. L. M. de Larochellière
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; de Larochellière J. N.
+expectedResult; de Larochellière J.-N.
 
 parameters; surnameFirst; short; referring; informal
 

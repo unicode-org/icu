@@ -220,9 +220,13 @@ kea{
             "SHP",
             "Libra di Santa Ilena",
         }
+        SLE{
+            "SLE",
+            "Leone di Sera Leoa",
+        }
         SLL{
             "SLL",
-            "Leone di Sera Leoa",
+            "Leone di Sera Leoa (1964—2022)",
         }
         SOS{
             "SOS",

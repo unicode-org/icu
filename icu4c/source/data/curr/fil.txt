@@ -535,9 +535,13 @@ fil{
             "SKK",
             "Slovak Koruna",
         }
+        SLE{
+            "SLE",
+            "Sierra Leonean Leone",
+        }
         SLL{
             "SLL",
-            "Sierra Leonean Leone",
+            "Sierra Leonean Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1201,9 +1205,13 @@ fil{
             one{"Saint Helena pound"}
             other{"Saint Helena pounds"}
         }
-        SLL{
+        SLE{
             one{"Sierra Leonean leone"}
             other{"Sierra Leonean leones"}
+        }
+        SLL{
+            one{"Sierra Leonean leone (1964—2022)"}
+            other{"Sierra Leonean leones (1964—2022)"}
         }
         SOS{
             one{"Somali shilling"}

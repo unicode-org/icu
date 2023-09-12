@@ -121,6 +121,9 @@ yo_BJ{
             ethiopic{"Kàlɛ́ńdà Ɛtíópíìkì"}
             gregorian{"Kàlɛ́ńdà Gregory"}
             hebrew{"Kàlɛ́ńdà Hébérù"}
+            islamic{"Kàlɛ́ńdà Lárúbáwá"}
+            islamic-civil{"Kàlɛ́ńdà ti Musulumi"}
+            islamic-umalqura{"Kàlɛ́ńdà Musulumi"}
             iso8601{"Kàlɛ́ńdà ISO-8601"}
             japanese{"Kàlɛ́ńdà ti Jàpánù"}
             persian{"Kàlɛ́ńdà Pásíànù"}
@@ -183,14 +186,11 @@ yo_BJ{
         }
     }
     characterLabelPattern{
-        category-list{"{0}: {1}"}
+        facing-left{"{0} ìdojúkɔ òsì"}
+        facing-right{"{0} ìdojúkɔ ɔ̀tún"}
         scripts{"àwɔ́n ìwé - {0}"}
     }
     codePatterns{
         script{"Ìshɔwɔ́kɔ̀wé: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        separator{"{0}, {1}"}
     }
 }

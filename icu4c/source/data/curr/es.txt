@@ -827,9 +827,13 @@ es{
             "SKK",
             "corona eslovaca",
         }
+        SLE{
+            "SLE",
+            "leona",
+        }
         SLL{
             "SLL",
-            "leona",
+            "leona (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1899,9 +1903,13 @@ es{
             one{"corona eslovaca"}
             other{"coronas eslovacas"}
         }
-        SLL{
+        SLE{
             one{"leona"}
             other{"leonas"}
+        }
+        SLL{
+            one{"leona (1964—2022)"}
+            other{"leonas (1964—2022)"}
         }
         SOS{
             one{"chelín somalí"}

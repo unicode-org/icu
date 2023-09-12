@@ -803,9 +803,13 @@ pl{
             "SKK",
             "korona słowacka",
         }
+        SLE{
+            "SLE",
+            "leone sierraleoński",
+        }
         SLL{
             "SLL",
-            "leone sierraleoński",
+            "leone sierraleoński (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1965,11 +1969,17 @@ pl{
             one{"korona słowacka"}
             other{"korona słowacka"}
         }
-        SLL{
+        SLE{
             few{"leone sierraleońskie"}
             many{"leone sierraleońskich"}
             one{"leone sierraleoński"}
             other{"leone sierraleońskiego"}
+        }
+        SLL{
+            few{"leone sierraleońskie (1964—2022)"}
+            many{"leone sierraleońskich (1964—2022)"}
+            one{"leone sierraleoński (1964—2022)"}
+            other{"leone sierraleońskiego (1964—2022)"}
         }
         SOS{
             few{"szylingi somalijskie"}

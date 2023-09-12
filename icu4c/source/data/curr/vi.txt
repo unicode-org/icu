@@ -879,9 +879,13 @@ vi{
             "SKK",
             "Cuaron Xlôvác",
         }
+        SLE{
+            "SLE",
+            "Leone Sierra Leone",
+        }
         SLL{
             "SLL",
-            "Leone Sierra Leone",
+            "Leone Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1558,8 +1562,11 @@ vi{
         SHP{
             other{"bảng St. Helena"}
         }
-        SLL{
+        SLE{
             other{"leone Sierra Leone"}
+        }
+        SLL{
+            other{"leone Sierra Leone (1964—2022)"}
         }
         SOS{
             other{"shilling Somali"}

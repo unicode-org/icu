@@ -499,9 +499,13 @@ pcm{
             "SHP",
             "Sent Hẹlẹ́ná Paund",
         }
+        SLE{
+            "SLE",
+            "Siẹ́ra Líoniá Liọn",
+        }
         SLL{
             "SLL",
-            "Siẹ́ra Líoniá Liọn",
+            "Siẹ́ra Líoniá Liọn (1964—2022)",
         }
         SOS{
             "SOS",
@@ -932,9 +936,13 @@ pcm{
             one{"Sent Hẹlẹ́ná paund"}
             other{"Sent Hẹlẹ́ná paunds"}
         }
-        SLL{
+        SLE{
             one{"Siẹ́ra Líoniá liọn"}
             other{"Siẹ́ra Líoniá liọns"}
+        }
+        SLL{
+            one{"Siẹ́ra Líoniá liọn (1964—2022)"}
+            other{"Siẹ́ra Líoniá liọns (1964—2022)"}
         }
         SOS{
             one{"Sọmáliá shílin"}

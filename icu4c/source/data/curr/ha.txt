@@ -515,9 +515,13 @@ ha{
             "SHP",
             "Fam kin San Helena",
         }
+        SLE{
+            "SLE",
+            "Kuɗin Salewo",
+        }
         SLL{
             "SLL",
-            "Kuɗin Salewo",
+            "Kuɗin Salewo (1964—2022)",
         }
         SOS{
             "SOS",
@@ -961,9 +965,13 @@ ha{
             one{"Fam na San Helena"}
             other{"fam na San Helena"}
         }
-        SLL{
+        SLE{
             one{"Kuɗin Saliyo"}
             other{"Kuɗin Saliyo"}
+        }
+        SLL{
+            one{"Kuɗin Saliyo (1964—2022)"}
+            other{"Kuɗin Saliyo (1964—2022)"}
         }
         SRD{
             one{"dalar ƙasar Suriname"}

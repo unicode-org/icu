@@ -895,8 +895,8 @@ ast{
             "SKK",
             "Corona eslovaca",
         }
-        SLL{
-            "SLL",
+        SLE{
+            "SLE",
             "leone sierralleonés",
         }
         SOS{
@@ -2113,7 +2113,7 @@ ast{
             one{"corona eslovaca"}
             other{"corones eslovaques"}
         }
-        SLL{
+        SLE{
             one{"leone sierralleonés"}
             other{"leones sierralleoneses"}
         }

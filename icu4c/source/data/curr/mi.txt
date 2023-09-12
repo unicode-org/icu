@@ -499,9 +499,13 @@ mi{
             "SHP",
             "Pāuna Hato Herena",
         }
+        SLE{
+            "SLE",
+            "Leone Araone",
+        }
         SLL{
             "SLL",
-            "Leone Araone",
+            "Leone Araon (1964—2022)e",
         }
         SOS{
             "SOS",
@@ -993,8 +997,11 @@ mi{
         SHP{
             other{"pāuna Hato Herena"}
         }
-        SLL{
+        SLE{
             other{"leone Araone"}
+        }
+        SLL{
+            other{"leone Araone (1964—2022)"}
         }
         SOS{
             other{"hereni Hūmārie"}

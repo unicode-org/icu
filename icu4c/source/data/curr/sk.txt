@@ -899,9 +899,13 @@ sk{
             "SKK",
             "slovenská koruna",
         }
+        SLE{
+            "SLE",
+            "sierraleonský leone",
+        }
         SLL{
             "SLL",
-            "sierraleonský leone",
+            "sierraleonský leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2565,11 +2569,17 @@ sk{
             one{"slovenská koruna"}
             other{"slovenských korún"}
         }
-        SLL{
+        SLE{
             few{"sierraleonské leone"}
             many{"sierraleonského leone"}
             one{"sierraleonský leone"}
             other{"sierraleonských leone"}
+        }
+        SLL{
+            few{"sierraleonské leone (1964—2022)"}
+            many{"sierraleonského leone (1964—2022)"}
+            one{"sierraleonský leone (1964—2022)"}
+            other{"sierraleonských leone (1964—2022)"}
         }
         SOS{
             few{"somálske šilingy"}

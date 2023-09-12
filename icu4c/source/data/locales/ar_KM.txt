@@ -2,6 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ar_KM{
+    NumberElements{
+        default{"arab"}
+        default_latn{"latn"}
+    }
     calendar{
         gregorian{
             DateTimePatterns{

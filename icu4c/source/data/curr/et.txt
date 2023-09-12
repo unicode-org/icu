@@ -824,6 +824,10 @@ et{
             "SKK",
             "Slovaki kroon",
         }
+        SLE{
+            "SLE",
+            "Sierra Leone leoone",
+        }
         SLL{
             "SLL",
             "Sierra Leone leoone (1964–2022)",
@@ -1868,6 +1872,10 @@ et{
         SKK{
             one{"Slovaki kroon"}
             other{"Slovaki krooni"}
+        }
+        SLE{
+            one{"Sierra Leone leoone"}
+            other{"Sierra Leone leoonet"}
         }
         SLL{
             one{"Sierra Leone leoone (1964–2022)"}

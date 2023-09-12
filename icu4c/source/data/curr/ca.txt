@@ -896,9 +896,13 @@ ca{
             "SKK",
             "corona eslovaca",
         }
+        SLE{
+            "SLE",
+            "leone de Sierra Leone",
+        }
         SLL{
             "SLL",
-            "leone de Sierra Leone",
+            "leone de Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2090,9 +2094,13 @@ ca{
             one{"corona eslovaca"}
             other{"corones eslovaques"}
         }
-        SLL{
+        SLE{
             one{"leone de Sierra Leone"}
             other{"leones de Sierra Leone"}
+        }
+        SLL{
+            one{"leone de Sierra Leone (1964—2022)"}
+            other{"leones de Sierra Leone (1964—2022)"}
         }
         SOS{
             one{"xíling somali"}

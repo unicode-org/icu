@@ -507,9 +507,13 @@ tk{
             "SHP",
             "Keramatly Ýelena adasynyň funty",
         }
+        SLE{
+            "SLE",
+            "Sýerra-Leone leony",
+        }
         SLL{
             "SLL",
-            "Sýerra-Leone leony",
+            "Sýerra-Leone leony (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1148,9 +1152,13 @@ tk{
             one{"keramatly ýelena adasynyň funty"}
             other{"keramatly ýelena adasynyň funty"}
         }
-        SLL{
+        SLE{
             one{"sýerra-leone leony"}
             other{"sýerra-leone leony"}
+        }
+        SLL{
+            one{"sýerra-leone leony (1964—2022)"}
+            other{"sýerra-leone leony (1964—2022)"}
         }
         SOS{
             one{"somali şillingi"}

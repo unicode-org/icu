@@ -891,9 +891,13 @@ hr{
             "SKK",
             "slovačka kruna",
         }
+        SLE{
+            "SLE",
+            "sijeraleonski leone",
+        }
         SLL{
             "SLL",
-            "sijeraleonski leone",
+            "sijeraleonski leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2320,10 +2324,15 @@ hr{
             one{"slovačka kruna"}
             other{"slovačkih kruna"}
         }
-        SLL{
+        SLE{
             few{"sijeraleonske leone"}
             one{"sijeraleonski leon"}
             other{"sijeraleonskih leona"}
+        }
+        SLL{
+            few{"sijeraleonske leone (1964—2022)"}
+            one{"sijeraleonski leon (1964—2022)"}
+            other{"sijeraleonskih leona (1964—2022)"}
         }
         SOS{
             few{"somalijska šilinga"}

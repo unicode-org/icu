@@ -807,9 +807,13 @@ da{
             "SKK",
             "Slovakisk koruna",
         }
+        SLE{
+            "SLE",
+            "sierraleonsk leone",
+        }
         SLL{
             "SLL",
-            "sierraleonsk leone",
+            "sierraleonsk leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1866,9 +1870,13 @@ da{
             one{"Slovakisk koruna"}
             other{"Slovakiske koruna"}
         }
-        SLL{
+        SLE{
             one{"sierraleonsk leone"}
             other{"sierraleonske leone"}
+        }
+        SLL{
+            one{"sierraleonsk leone (1964—2022)"}
+            other{"sierraleonske leone (1964—2022)"}
         }
         SOS{
             one{"somalisk shilling"}

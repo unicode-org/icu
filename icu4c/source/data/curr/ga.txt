@@ -823,9 +823,13 @@ ga{
             "SKK",
             "Koruna na Slóvaice",
         }
+        SLE{
+            "SLE",
+            "Leone Shiarra Leon",
+        }
         SLL{
             "SLL",
-            "Leone Shiarra Leon",
+            "Leone Shiarra Leon (1964—2022)",
         }
         SOS{
             "SOS",
@@ -2320,12 +2324,19 @@ ga{
             other{"koruna na Slóvaice"}
             two{"koruna na Slóvaice"}
         }
-        SLL{
+        SLE{
             few{"leone Shiarra Leon"}
             many{"leone Shiarra Leon"}
             one{"leone Shiarra Leon"}
             other{"leone Shiarra Leon"}
             two{"leone Shiarra Leon"}
+        }
+        SLL{
+            few{"leone Shiarra Leon (1964—2022)"}
+            many{"leone Shiarra Leon (1964—2022)"}
+            one{"leone Shiarra Leon (1964—2022)"}
+            other{"leone Shiarra Leon (1964—2022)"}
+            two{"leone Shiarra Leon (1964—2022)"}
         }
         SOS{
             few{"scilling na Somáile"}

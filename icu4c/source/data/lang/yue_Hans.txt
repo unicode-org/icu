@@ -84,6 +84,7 @@ yue_Hans{
         bfd{"富特文"}
         bfq{"巴达加文"}
         bg{"保加利亚文"}
+        bgc{"哈里亚纳文"}
         bgn{"西俾路支文"}
         bho{"博杰普尔文"}
         bi{"比斯拉马文"}
@@ -857,6 +858,9 @@ yue_Hans{
             gregorian{"公历"}
             hebrew{"希伯来历"}
             indian{"印度国历"}
+            islamic{"伊斯兰历"}
+            islamic-civil{"伊斯兰民用历"}
+            islamic-umalqura{"乌姆库拉历"}
             iso8601{"国际标准 ISO 8601"}
             japanese{"日本历"}
             persian{"波斯历"}
@@ -1069,6 +1073,8 @@ yue_Hans{
         compatibility{"{0} — 相容性"}
         enclosed{"{0} — 包围"}
         extended{"{0} — 扩充"}
+        facing-left{"{0} 向左"}
+        facing-right{"{0} 向右"}
         historic{"{0} - 古代"}
         miscellaneous{"{0} — 其他"}
         other{"{0} — 其他"}

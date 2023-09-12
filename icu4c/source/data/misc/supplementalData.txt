@@ -11848,7 +11848,7 @@ supplementalData:table(nofallback){
                 "speed-beaufort",
                 "temperature-rankine",
                 "volume-pint-imperial",
-                "pressure-gasoline-equivalent",
+                "pressure-gasoline-energy-density",
                 "length-rin",
                 "length-sun",
                 "length-shaku-length",
@@ -20304,6 +20304,7 @@ supplementalData:table(nofallback){
             "en_GM",
             "en_GY",
             "en_HK",
+            "en_ID",
             "en_IE",
             "en_IL",
             "en_IM",
@@ -20386,6 +20387,7 @@ supplementalData:table(nofallback){
             "es_EC",
             "es_GT",
             "es_HN",
+            "es_JP",
             "es_MX",
             "es_NI",
             "es_PA",
@@ -27931,6 +27933,9 @@ supplementalData:table(nofallback){
                 49990000,
                 57376941,
             }
+            tok{
+                populationShareF:int{40100000}
+            }
             tr{
                 populationShareF:int{47100000}
             }
@@ -28578,6 +28583,9 @@ supplementalData:table(nofallback){
             vmf{
                 populationShareF:int{48600000}
             }
+            vo{
+                populationShareF:int{0}
+            }
         }
         DG{
             en{
@@ -28733,6 +28741,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49210000}
             }
             ie{
+                literacyShareF:int{49990000}
                 populationShareF:int{44100000}
             }
             ru{
@@ -33883,6 +33892,15 @@ supplementalData:table(nofallback){
             }
             preferred{"H"}
         }
+        419{
+            allowed{
+                "h",
+                "H",
+                "hB",
+                "hb",
+            }
+            preferred{"h"}
+        }
         AC{
             allowed{
                 "H",
@@ -33959,12 +33977,12 @@ supplementalData:table(nofallback){
         }
         AR{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         AS{
             allowed{
@@ -34105,12 +34123,12 @@ supplementalData:table(nofallback){
         }
         BO{
             allowed{
+                "h",
                 "H",
                 "hB",
-                "h",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         BQ{
             allowed{"H"}
@@ -34230,12 +34248,12 @@ supplementalData:table(nofallback){
         }
         CL{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         CM{
             allowed{
@@ -34269,21 +34287,21 @@ supplementalData:table(nofallback){
         }
         CR{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         CU{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         CV{
             allowed{
@@ -34386,12 +34404,12 @@ supplementalData:table(nofallback){
         }
         EC{
             allowed{
+                "h",
                 "H",
                 "hB",
-                "h",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         EE{
             allowed{
@@ -34603,12 +34621,12 @@ supplementalData:table(nofallback){
         }
         GT{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         GU{
             allowed{
@@ -34646,12 +34664,12 @@ supplementalData:table(nofallback){
         }
         HN{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         HR{
             allowed{
@@ -35135,12 +35153,12 @@ supplementalData:table(nofallback){
         }
         MX{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         MY{
             allowed{
@@ -35198,12 +35216,12 @@ supplementalData:table(nofallback){
         }
         NI{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         NL{
             allowed{
@@ -35274,12 +35292,12 @@ supplementalData:table(nofallback){
         }
         PE{
             allowed{
+                "h",
                 "H",
                 "hB",
-                "h",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         PF{
             allowed{
@@ -35370,12 +35388,12 @@ supplementalData:table(nofallback){
         }
         PY{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         QA{
             allowed{
@@ -35548,12 +35566,12 @@ supplementalData:table(nofallback){
         }
         SV{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         SX{
             allowed{
@@ -35740,12 +35758,12 @@ supplementalData:table(nofallback){
         }
         UY{
             allowed{
-                "H",
                 "h",
+                "H",
                 "hB",
                 "hb",
             }
-            preferred{"H"}
+            preferred{"h"}
         }
         UZ{
             allowed{
@@ -35911,25 +35929,7 @@ supplementalData:table(nofallback){
             }
             preferred{"h"}
         }
-        es_BO{
-            allowed{
-                "H",
-                "h",
-                "hB",
-                "hb",
-            }
-            preferred{"H"}
-        }
         es_BR{
-            allowed{
-                "H",
-                "h",
-                "hB",
-                "hb",
-            }
-            preferred{"H"}
-        }
-        es_EC{
             allowed{
                 "H",
                 "h",
@@ -35948,15 +35948,6 @@ supplementalData:table(nofallback){
             preferred{"H"}
         }
         es_GQ{
-            allowed{
-                "H",
-                "h",
-                "hB",
-                "hb",
-            }
-            preferred{"H"}
-        }
-        es_PE{
             allowed{
                 "H",
                 "h",

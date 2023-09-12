@@ -78,6 +78,7 @@ ml.txt
 mn.txt
 mr.txt
 ms.txt
+mt.txt
 my.txt
 ne.txt
 nl.txt
@@ -108,7 +109,6 @@ sr_Latn_BA.txt
 sv.txt
 sw.txt
 sw_KE.txt
-syr.txt
 ta.txt
 te.txt
 tg.txt

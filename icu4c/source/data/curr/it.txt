@@ -816,6 +816,10 @@ it{
             "SKK",
             "corona slovacca",
         }
+        SLE{
+            "SLE",
+            "leone della Sierra Leone",
+        }
         SLL{
             "SLL",
             "leone della Sierra Leone (1964–2022)",
@@ -1611,6 +1615,10 @@ it{
         SHP{
             one{"sterlina di Sant’Elena"}
             other{"sterline di Sant’Elena"}
+        }
+        SLE{
+            one{"leone della Sierra Leone"}
+            other{"leoni della Sierra Leone"}
         }
         SLL{
             one{"leone della Sierra Leone (1964–2022)"}

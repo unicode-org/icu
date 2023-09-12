@@ -531,9 +531,13 @@ ksh{
             "SKK",
             "ßlovaakesche Kruhne",
         }
+        SLE{
+            "SLE",
+            "ẞjärra-lejoneesesche Leone",
+        }
         SLL{
             "SLL",
-            "ẞjärra-lejoneesesche Leone",
+            "ẞjärra-lejoneesesche Leone (1964—2022)",
         }
         SOS{
             "SOS",

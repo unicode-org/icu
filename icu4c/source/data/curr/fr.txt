@@ -831,9 +831,13 @@ fr{
             "SKK",
             "couronne slovaque",
         }
+        SLE{
+            "SLE",
+            "leone sierra-léonais",
+        }
         SLL{
             "SLL",
-            "leone sierra-léonais",
+            "leone sierra-léonais (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1972,9 +1976,13 @@ fr{
             one{"couronne slovaque"}
             other{"couronnes slovaques"}
         }
-        SLL{
+        SLE{
             one{"leone sierra-léonais"}
             other{"leones sierra-léonais"}
+        }
+        SLL{
+            one{"leone sierra-léonais (1964—2022)"}
+            other{"leones sierra-léonais (1964—2022)"}
         }
         SOS{
             one{"shilling somalien"}

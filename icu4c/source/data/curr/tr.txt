@@ -899,6 +899,10 @@ tr{
             "SKK",
             "Slovak Korunası",
         }
+        SLE{
+            "SLE",
+            "Sierra Leone leonesi",
+        }
         SLL{
             "SLL",
             "Sierra Leone leonesi (1964–2022)",

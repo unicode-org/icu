@@ -499,9 +499,13 @@ qu{
             "SHP",
             "Libra de Santa Helena",
         }
+        SLE{
+            "SLE",
+            "Leone de Sierra Leona",
+        }
         SLL{
             "SLL",
-            "Leone de Sierra Leona",
+            "Leone de Sierra Leona (1964—2022)",
         }
         SOS{
             "SOS",
@@ -954,8 +958,11 @@ qu{
         SHP{
             other{"Libra de santa helena"}
         }
-        SLL{
+        SLE{
             other{"Leone de sierra leona"}
+        }
+        SLL{
+            other{"Leone de sierra leona (1964—2022)"}
         }
         SOS{
             other{"Chelín somalí"}
