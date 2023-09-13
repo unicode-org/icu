@@ -404,9 +404,11 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**
-     * Sets whether uppercase characters sort before lowercase characters or vice versa, in strength TERTIARY. The
-     * default mode is false, and so lowercase characters sort before uppercase characters. If true, sort upper case
-     * characters first.
+     * Sets whether uppercase characters sort before lowercase characters or vice versa, in strength TERTIARY.
+     * If false, lowercase characters sort before uppercase characters. If true, sort upper case
+     * characters first. The default setting in a Collator object depends on the
+     * locale data loaded from the resources. For most locales, the default is false,
+     * but for others, such as "da" or "mt", the default could be true.
      *
      * @param upperfirst
      *            true to sort uppercase characters before lowercase characters, false to sort lowercase characters
@@ -426,9 +428,11 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**
-     * Sets the orders of lower cased characters to sort before upper cased characters, in strength TERTIARY. The
-     * default mode is false. If true is set, the RuleBasedCollator will sort lower cased characters before the upper
+     * Sets the orders of lower cased characters to sort before upper cased characters, in strength TERTIARY.
+     * If true is set, the RuleBasedCollator will sort lower cased characters before the upper
      * cased ones. Otherwise, if false is set, the RuleBasedCollator will ignore case preferences.
+     * The default default setting in a Collator object depends on the locale data loaded from
+     * the resources.
      *
      * @param lowerfirst
      *            true for sorting lower cased characters before upper cased characters, false to ignore case
@@ -568,10 +572,11 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**
-     * Sets the mode for the direction of SECONDARY weights to be used in French collation. The default value is false,
+     * Sets the mode for the direction of SECONDARY weights to be used in French collation. If set to false,
      * which treats SECONDARY weights in the order they appear. If set to true, the SECONDARY weights will be sorted
      * backwards. See the section on <a href="https://unicode-org.github.io/icu/userguide/collation/architecture">
-     * French collation</a> for more information.
+     * French collation</a> for more information. The default setting in a Collator object depends on the
+     * locale data loaded from the resources. For example, for "fr_CA" locale, the default is true.
      *
      * @param flag
      *            true to set the French collation on, false to set it off
@@ -590,11 +595,14 @@ public final class RuleBasedCollator extends Collator {
     /**
      * Sets the alternate handling for QUATERNARY strength to be either shifted or non-ignorable. See the UCA definition
      * on <a href="https://www.unicode.org/reports/tr10/#Variable_Weighting">Variable Weighting</a>. This
-     * attribute will only be effective when QUATERNARY strength is set. The default value for this mode is false,
-     * corresponding to the NON_IGNORABLE mode in UCA. In the NON_IGNORABLE mode, the RuleBasedCollator treats all
+     * attribute will only be effective when QUATERNARY strength is set. If the mode is set to
+     * false, it corresponds to the NON_IGNORABLE mode in UCA. In the NON_IGNORABLE mode, the RuleBasedCollator treats all
      * the code points with non-ignorable primary weights in the same way. If the mode is set to true, the behavior
      * corresponds to SHIFTED defined in UCA, this causes code points with PRIMARY orders that are equal or below the
      * variable top value to be ignored in PRIMARY order and moved to the QUATERNARY order.
+     * The default setting in a Collator object depends on the locale data loaded from the
+     * resources. For most locales, the default is false, but for others, such as "th",
+      * the default could be true.
      *
      * @param shifted
      *            true if SHIFTED behavior for alternate handling is desired, false for the NON_IGNORABLE behavior.
@@ -614,10 +622,11 @@ public final class RuleBasedCollator extends Collator {
      * <p>
      * When case level is set to true, an additional weight is formed between the SECONDARY and TERTIARY weight, known
      * as the case level. The case level is used to distinguish large and small Japanese Kana characters. Case level
-     * could also be used in other situations. For example to distinguish certain Pinyin characters. The default value
-     * is false, which means the case level is not generated. The contents of the case level are affected by the case
+     * could also be used in other situations. For example to distinguish certain Pinyin characters. If the value
+     * is false, it means the case level is not generated. The contents of the case level are affected by the case
      * first mode. A simple way to ignore accent differences in a string is to set the strength to PRIMARY and enable
-     * case level.
+     * case level. The default setting in a Collator object depends
+     * on the locale data loaded from the resources.
      * <p>
      * See the section on <a href="https://unicode-org.github.io/icu/userguide/collation/architecture">case
      * level</a> for more information.
