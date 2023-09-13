@@ -17,6 +17,8 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <stdio.h>
+
 #include <memory>
 
 #include "intltest.h"
@@ -128,7 +130,7 @@ private:
      **/
 
     void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed,
-        int32_t loopCount, UBool useUText);
+        int32_t loopCount, UBool useUText, FILE *exportFile, UBool scalarsOnly);
 
     // Run one of the Unicode Consortium boundary test data files.
     void runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi);
