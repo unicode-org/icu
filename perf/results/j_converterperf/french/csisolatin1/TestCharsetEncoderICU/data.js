@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694561394741,
+  "lastUpdate": 1694628621134,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11788,6 +11788,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.8239207675304033,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "bb7352990e01fe6e484fe98a3edd1bdd3f3499b4",
+          "message": "ICU-22325 CLDR 44 alpha2 integration to ICU part three, source files changes",
+          "timestamp": "2023-09-13T11:06:53-07:00",
+          "tree_id": "c693fd6e9eab9ca8c36ccd1362c5dcb8bdca4f52",
+          "url": "https://github.com/unicode-org/icu/commit/bb7352990e01fe6e484fe98a3edd1bdd3f3499b4"
+        },
+        "date": 1694628568332,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.7653790293149659,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
