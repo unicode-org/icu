@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694713253733,
+  "lastUpdate": 1694714184500,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11728,6 +11728,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.013546975267585047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9e9bc3695fe4c1ad32d6d1d48ab878b2d5d4fde5",
+          "message": "ICU-22489 Clarify the default setting of Collator\n\nSee #2595",
+          "timestamp": "2023-09-14T10:05:36-07:00",
+          "tree_id": "57a0436eb589fe45f13a02b60eac8dbf960a587e",
+          "url": "https://github.com/unicode-org/icu/commit/9e9bc3695fe4c1ad32d6d1d48ab878b2d5d4fde5"
+        },
+        "date": 1694714130154,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.013525637321142588,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
