@@ -208,8 +208,6 @@ expectedResult; Caimbeul, Dòmhnall Iain Tormod
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Caimbeul Dòmhnall Iain Tormod
 
@@ -226,6 +224,8 @@ parameters; givenFirst; medium; referring; informal
 expectedResult; Caimbeul, Dòmhnall Iain T.
 
 parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Caimbeul Dòmhnall Iain T.
 
@@ -353,8 +353,6 @@ parameters; givenFirst; short; addressing; formal
 expectedResult; Mac a’ Ghobhainn, Donaidh Bàn
 
 parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Donaidh Bàn Mac a’ Ghobhainn
 
@@ -364,6 +362,11 @@ parameters; givenFirst; medium; referring; informal
 expectedResult; Mac a’ Ghobhainn Donaidh Bàn
 
 parameters; surnameFirst; medium; referring; informal
+
+expectedResult; Mac a’ Ghobhainn, Donaidh B.
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Mac a’ Ghobhainn, D. I. B.
 
@@ -583,8 +586,6 @@ expectedResult; Smith, Cecilia Angela
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Cecilia Angela Smith
 
@@ -601,6 +602,8 @@ parameters; surnameFirst; medium; referring; informal
 expectedResult; Smith, Cecilia A.
 
 parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Cecilia A. Smith
 
@@ -726,8 +729,6 @@ parameters; sorting; medium; referring; formal
 expectedResult; von Brühl, Neele César Martín
 
 parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Neele César Martín von Brühl
 
@@ -745,6 +746,11 @@ parameters; givenFirst; short; addressing; formal
 expectedResult; Brühl, A. C. C. M. von
 
 parameters; sorting; short; referring; formal
+
+expectedResult; von Brühl, Neele C. M.
+
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; A. C. C. M. von Brühl
 

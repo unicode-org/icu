@@ -12,8 +12,6 @@ az.txt
 be.txt
 bg.txt
 bn.txt
-br.txt
-brx.txt
 bs.txt
 ca.txt
 chr.txt
@@ -41,7 +39,6 @@ fil.txt
 fr.txt
 fr_CA.txt
 ga.txt
-gaa.txt
 gd.txt
 gl.txt
 gu.txt
@@ -55,7 +52,6 @@ hsb.txt
 hu.txt
 hy.txt
 id.txt
-ie.txt
 ig.txt
 is.txt
 it.txt
@@ -67,9 +63,7 @@ km.txt
 kn.txt
 ko.txt
 kok.txt
-ks_Deva.txt
 ky.txt
-lij.txt
 lo.txt
 lt.txt
 lv.txt
@@ -78,7 +72,6 @@ ml.txt
 mn.txt
 mr.txt
 ms.txt
-mt.txt
 my.txt
 ne.txt
 nl.txt
@@ -86,7 +79,6 @@ nn.txt
 no.txt
 or.txt
 pa.txt
-pcm.txt
 pl.txt
 ps.txt
 pt.txt
@@ -94,7 +86,6 @@ pt_PT.txt
 qu.txt
 ro.txt
 ru.txt
-sat.txt
 sc.txt
 sd.txt
 si.txt
@@ -115,15 +106,12 @@ tg.txt
 th.txt
 ti.txt
 tk.txt
-to.txt
 tr.txt
-tt.txt
 uk.txt
 ur.txt
 uz.txt
 vi.txt
 wo.txt
-xh.txt
 yo.txt
 yo_BJ.txt
 yue.txt

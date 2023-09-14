@@ -22,8 +22,8 @@ root{
         Mymr:process(dependency){"burmesedict.dict"}
         Thai:process(dependency){"thaidict.dict"}
     }
-   lstm{
+    lstm{
         Thai{"Thai_graphclust_model4_heavy.res"}
         Mymr{"Burmese_graphclust_model5_heavy.res"}
-    }    
+    }
 }

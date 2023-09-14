@@ -63,11 +63,6 @@ enum ; formality ; formal, informal
 name ; given; Jānis
 name ; locale; lv_AQ
 
-expectedResult; Jānisᵍ
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; Jānis
 
 parameters; givenFirst; long; referring; formal
@@ -84,9 +79,11 @@ parameters; givenFirst; short; addressing; formal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
@@ -157,11 +154,6 @@ expectedResult; Kalniņa A.
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; Kalniņaᵍ
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; Aina K.
 
 parameters; givenFirst; short; referring; informal
@@ -171,6 +163,8 @@ expectedResult; Kalniņa
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
 
 expectedResult; Aina
 
@@ -264,11 +258,6 @@ expectedResult; Bērziņa A.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; Bērziņaᵍ
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; Anna B.
 
 parameters; givenFirst; short; referring; informal
@@ -278,6 +267,8 @@ expectedResult; Bērziņa
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
 
 expectedResult; Anna
 
@@ -363,7 +354,7 @@ expectedResult; Ozoliņš, P. K.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; Ozoliņšᵍ kungs
+expectedResult; Ozoliņš kungs
 
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
@@ -432,11 +423,6 @@ endName
 name ; given; Sinbads
 name ; locale; ja_AQ
 
-expectedResult; Sinbadsᵍ
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; Sinbads
 
 parameters; givenFirst; long; referring; formal
@@ -453,9 +439,11 @@ parameters; givenFirst; short; addressing; formal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
@@ -530,16 +518,13 @@ expectedResult; Keita M.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Millereᵍ
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; Millere
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
 
 expectedResult; Keita
 
@@ -637,16 +622,13 @@ expectedResult; Pīters M.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; Millersᵍ
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; Millers
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
 
 expectedResult; Pīters
 
@@ -742,14 +724,14 @@ expectedResult; Laima Kristīne v. d. V.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; van den Volfaᵍ Prof.
-
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-
 expectedResult; van den Volfa L. K.
 
 parameters; surnameFirst; short; referring; informal
+
+expectedResult; van den Volfa Prof.
+
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
 
 expectedResult; Volfa, L. K. E. S.
 

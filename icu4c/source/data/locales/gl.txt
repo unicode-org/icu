@@ -1499,23 +1499,23 @@ gl{
             }
             sorting-long-referring-informal{
                 "{surname-core} {surname2}, {given-informal} {surname-prefix}",
-                "{surname-core}, {given} {given2} {surname-prefix}",
+                "{surname-core}, {given-informal} {surname-prefix}",
             }
             sorting-medium-referring-formal{
                 "{surname-core} {surname2}, {given} {given2-initial} {surname-prefix}",
-                "{surname-core} {surname2}, {given} {given2} {surname-prefix}",
+                "{surname-core}, {given} {given2-initial} {surname-prefix}",
             }
             sorting-medium-referring-informal{
                 "{surname-core} {surname2}, {given-informal} {surname-prefix}",
-                "{surname-core}, {given} {given2} {surname-prefix}",
+                "{surname-core}, {given-informal} {surname-prefix}",
             }
             sorting-short-referring-formal{
                 "{surname-core} {surname2}, {given-initial} {given2-initial} {surname-prefix}",
-                "{surname-core} {surname2}, {given-initial} {given2-initial} {surname-prefix}",
+                "{surname-core}, {given-initial} {given2-initial} {surname-prefix}",
             }
             sorting-short-referring-informal{
                 "{surname-core} {surname2}, {given-informal} {surname-prefix}",
-                "{surname-core}, {given} {given2} {surname-prefix}",
+                "{surname-core}, {given-informal} {surname-prefix}",
             }
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
