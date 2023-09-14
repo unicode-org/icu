@@ -356,8 +356,8 @@ int32_t BreakEngineWrapper::findBreaks(
     foundBreaks.ensureCapacity(beforeSize+additionalCapacity, status);
     if (U_FAILURE(status)) return 0;
     foundBreaks.setSize(beforeSize + beforeSize+additionalCapacity);
-    result = delegate->fillBreak(text, rangeStart, rangeEnd, foundBreaks.getBuffer()+beforeSize,
-                                 additionalCapacity, status);
+    result = delegate->fillBreaks(text, rangeStart, rangeEnd, foundBreaks.getBuffer()+beforeSize,
+                                  additionalCapacity, status);
     if (U_FAILURE(status)) return 0;
     foundBreaks.setSize(beforeSize + result);
     utext_setNativeIndex(text, current);
