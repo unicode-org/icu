@@ -5421,14 +5421,14 @@ public class ULocaleTest extends TestFmwk {
 
     }
 
-    boolean isKnownSourceFor20777(String s) {
-        return s.equals("und-001") ||
-            s.equals("und-AQ") ||
-            s.equals("und-CC") ||
-            s.equals("und-SL") ||
-            s.equals("und-SS") ||
-            s.equals("und-ZM") ||
-            s.startsWith("und-Latn-");
+    final List<String> regionsForCLDR17099 = Arrays.asList("AE", "CC", "ER", "HK", "IL", "IN", "MV", "PK", "RS", "SD", "SS");
+
+    boolean isKnownSourceForCLDR17099(String s) {
+        if (!s.startsWith("und-Latn-")) {
+            return false;
+        }
+        String tail = s.substring(9);
+        return regionsForCLDR17099.contains(tail);
     }
 
     private static final class TestCase implements Cloneable {
@@ -5484,18 +5484,7 @@ public class ULocaleTest extends TestFmwk {
     @Parameters(method = "readLikelySubtagsTestCases")
     public void likelySubtagsDataDriven(TestCase test) {
         ULocale l = ULocale.forLanguageTag(test.source);
-        if (isKnownSourceFor20777(test.source)) {
-            if (test.addLikely.equals(ULocale.addLikelySubtags(l).toLanguageTag())) {
-                logKnownIssue("ICU-20777", "addLikelySubtags(" + test.source + ")");
-            }
-            if (test.removeFavorRegion.equals(ULocale.minimizeSubtags(l).toLanguageTag())) {
-                logKnownIssue("ICU-20777", "minimizeSubtags(" + test.source + ")");
-            }
-            if (test.removeFavorScript.equals(ULocale.minimizeSubtags(
-                l, ULocale.Minimize.FAVOR_SCRIPT).toLanguageTag())) {
-                logKnownIssue("ICU-20777", "minimizeSubtags(" + test.source + ") - FAVOR_SCRIPT");
-            }
-        } else if (!test.source.equals("und-150") && !logKnownIssue("CLDR-17021", "Wrong mapping for und-150 in likelySubtags.txt test")) {
+        if (!isKnownSourceForCLDR17099(test.source) && !logKnownIssue("CLDR-17099", "likelySubtags.txt wrong for certain und-Latn-XX locales")) {
             if (test.addLikely.equals("FAIL")) {
                 assertEquals("addLikelySubtags(" + test.source + ") should be unchanged",
                     l, ULocale.addLikelySubtags(l));
