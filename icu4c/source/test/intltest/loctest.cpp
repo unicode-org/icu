@@ -5593,14 +5593,16 @@ public:
 };
 
 
-bool isKnownSourceFor20777(const std::string& s) {
-  return s == "und-001" ||
-      s == "und-AQ" ||
-      s == "und-CC" ||
-      s == "und-SL" ||
-      s == "und-SS" ||
-      s == "und-ZM" ||
-      s.find("und-Latn-") == 0;
+bool isKnownSourceForCLDR17099(const std::string& s) {
+    if (s.compare("qaa-Cyrl-CH") == 0) {
+        return true;
+    }
+    if (s.compare(0, 9, "und-Latn-") != 0) {
+        return false;
+    }
+    std::string tail(s.substr(9));
+    std::string regionsForCLDR17099("AE CC ER HK IL IN MV PK RS SD SS");
+    return (regionsForCLDR17099.find(tail) != std::string::npos);
 }
 
 void U_CALLCONV
@@ -5613,7 +5615,7 @@ testLikelySubtagsLineFn(void *context,
     (void)fieldCount;
     LocaleTest* THIS = (LocaleTest*)context;
     std::string source(trim(std::string(fields[0][0], fields[0][1]-fields[0][0])));
-    if (uprv_strcmp(source.c_str(), "und-150") == 0 && THIS->logKnownIssue("CLDR-17021", "Wrong mapping for und-150 in likelySubtags.txt test")) {
+    if (isKnownSourceForCLDR17099(source) && THIS->logKnownIssue("CLDR-17099", "likelySubtags.txt wrong for certain und-Latn-XX locales")) {
         return;
     }
     std::string addLikely(trim(std::string(fields[1][0], fields[1][1]-fields[1][0])));
@@ -5649,14 +5651,8 @@ testLikelySubtagsLineFn(void *context,
             *pErrorCode = U_ZERO_ERROR;
         } else {
             if (max != addLikely) {
-                if (isKnownSourceFor20777(source)) {
-                    THIS->logKnownIssue(
-                        "ICU-20777", "addLikelySubtags('%s') should return '%s' but got '%s'",
-                        source.c_str(), addLikely.c_str(), max.c_str());
-                } else {
-                    THIS->errln("addLikelySubtags('%s') should return '%s' but got '%s'",
-                                source.c_str(), addLikely.c_str(), max.c_str());
-                }
+                THIS->errln("addLikelySubtags('%s') should return '%s' but got '%s'",
+                            source.c_str(), addLikely.c_str(), max.c_str());
             }
         }
     }
@@ -5676,14 +5672,8 @@ testLikelySubtagsLineFn(void *context,
             *pErrorCode = U_ZERO_ERROR;
         } else {
             if (min != removeFavorRegion) {
-                if (isKnownSourceFor20777(source)) {
-                    THIS->logKnownIssue(
-                        "ICU-20777", "minimizeSubtags('%s') should return '%s' but got '%s'",
-                        source.c_str(), removeFavorRegion.c_str(), min.c_str());
-                } else {
-                    THIS->errln("minimizeSubtags('%s') should return '%s' but got '%s'",
-                                source.c_str(), removeFavorRegion.c_str(), min.c_str());
-                }
+                THIS->errln("minimizeSubtags('%s') should return '%s' but got '%s'",
+                            source.c_str(), removeFavorRegion.c_str(), min.c_str());
             }
         }
     }
@@ -5703,15 +5693,8 @@ testLikelySubtagsLineFn(void *context,
             *pErrorCode = U_ZERO_ERROR;
         } else {
             if (min != removeFavorScript) {
-                if (isKnownSourceFor20777(source)) {
-                    THIS->logKnownIssue(
-                    "ICU-20777",
-                        "minimizeSubtags('%s') favor script should return '%s' but got '%s'",
-                        source.c_str(), removeFavorScript.c_str(), min.c_str());
-                } else {
-                    THIS->errln("minimizeSubtags('%s') favor script should return '%s' but got '%s'",
-                                source.c_str(), removeFavorScript.c_str(), min.c_str());
-                }
+                THIS->errln("minimizeSubtags('%s') favor script should return '%s' but got '%s'",
+                            source.c_str(), removeFavorScript.c_str(), min.c_str());
             }
         }
     }
