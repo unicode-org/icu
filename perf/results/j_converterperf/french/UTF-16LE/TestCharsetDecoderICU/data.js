@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694628694796,
+  "lastUpdate": 1694713299883,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11848,6 +11848,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 4.8984810973083635,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9fb9bd4950091c518b76c6cbfe0120e7953f4956",
+          "message": "ICU-22342 Rename fillBreak to fillBreaks",
+          "timestamp": "2023-09-14T10:04:57-07:00",
+          "tree_id": "3fa630db6f9c23629fb2f2d93349b7f73affe757",
+          "url": "https://github.com/unicode-org/icu/commit/9fb9bd4950091c518b76c6cbfe0120e7953f4956"
+        },
+        "date": 1694713243945,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 4.898827794721112,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
