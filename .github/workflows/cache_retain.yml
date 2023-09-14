@@ -26,6 +26,9 @@ on:
     # this cron schedule is set to run every 6 days to ensure retention
     - cron: '0 12 */6 * *'
 
+env:
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+
 permissions:
   contents: read
 
@@ -44,8 +47,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-          cache: maven
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Run Maven unit & integration tests
         run: |
-          cd icu4j/maven-build;
-          mvn --batch-mode verify
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} verify

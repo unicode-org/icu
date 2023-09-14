@@ -17,7 +17,7 @@ on:
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
 
 env:
-  MAVEN_ARGS: '--show-version --no-transfer-progress'
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
 
 permissions:
   contents: read
@@ -39,8 +39,39 @@ jobs:
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
           set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
+  # Initialize the Maven artifact cache
+  #
+  # This job is created according to the cache strategy of reuse from a single job:
+  # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
+  icu4j-mvn-init-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Download all of the artifacts needed for the code and build plugins, but
+      # exclude any needed by profiles depending on system artifacts
+      - name: Download all artifacts
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} dependency:go-offline -P '!old_jdk_taglet'
+          
   # ICU4J build and unit test using Maven
+  # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
   icu4j-mvn-build-and-test:
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -53,6 +84,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -60,76 +99,16 @@ jobs:
       - name: ICU4J
         run: |
           cd icu4j;
-          mvn install
+          mvn ${SHARED_MVN_ARGS} verify
       - name: List failures (if any)
         run: |
           cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
         if: ${{ failure() }}
 
-  # ICU4J build and unit tests using Maven
-  # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-  # Run `test` to execute unit tests and ensure it is possible for tests to run even without packaging submodule
-  # dependencies as jar files
-  icu4j-test-maven:
-    name: Run unit tests with Maven for Java version
-    runs-on: ubuntu-latest
-    # Make this unit test target job depend on a later phase target job to prevent race condition when
-    # trying to persist the Maven cache to the Github cache, knowing that artifacts needed for
-    # the later phase `verify` are a superset of the artifacts needed for the earlier phase `test`.
-    needs: icu4j-verify-maven
-    strategy:
-      fail-fast: false
-      matrix:
-        java-version: [ '8', '11', '17' ]
-    steps:
-      - name: Checkout and setup
-        uses: actions/checkout@v3
-        with:
-          lfs: true
-      - name: Checkout lfs objects
-        run: git lfs pull
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java-version }}
-          cache: maven
-      - name: Run Maven test
-        run: |
-          cd icu4j;
-          mvn --batch-mode test
-
-  # Run `verify` to ensure that `package` (creating .jar files) and `integration-test` (special setup for localespi tests) work
-  icu4j-verify-maven:
-    name: Run integration tests with Maven for Java version
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        java-version: [ '8', '11', '17' ]
-    steps:
-      - name: Checkout and setup
-        uses: actions/checkout@v3
-        with:
-          lfs: true
-      - name: Checkout lfs objects
-        run: git lfs pull
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java-version }}
-          cache: maven
-      # The Maven `verify` phase causes the following to happen first, and in order:
-      # build/compile (`compile`), unit tests (`test`), Jar building (`package`),
-      # integration tests, if any (`integration-test`)
-      - name: Run Maven verify
-        run: |
-          cd icu4j;
-          mvn --batch-mode verify
-
   # ICU4J build and unit test under lstm
   lstm-icu4j-build-and-test:
     if: false  # TODO(ICU-22505)
+    needs: icu4j-mvn-init-cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -138,6 +117,15 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -152,7 +140,7 @@ jobs:
       - name: ICU4J
         run: |
           cd icu4j;
-          mvn install
+          mvn ${SHARED_MVN_ARGS} verify
       - name: List failures (if any)
         run: |
           cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
@@ -161,6 +149,7 @@ jobs:
   # ICU4J build and unit test under adaboost
   adaboost-icu4j-build-and-test:
     if: false # Temporary disable, until we disable the .jar creation from C and distribute the individual files
+    needs: icu4j-mvn-init-cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -169,6 +158,15 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -183,7 +181,7 @@ jobs:
       - name: ICU4J
         run: |
           cd icu4j;
-          mvn -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true install
+          mvn ${SHARED_MVN_ARGS} -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true verify
       - name: List failures (if any)
         run: |
           cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
@@ -499,10 +497,19 @@ jobs:
 
   # Verify icu4c release tools buildability.
   icu4c-release-tools:
+    needs: icu4j-mvn-init-cache
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: mvn -f tools/release/java/pom.xml package dependency:analyze
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - run: mvn ${SHARED_MVN_ARGS} -f tools/release/java/pom.xml package dependency:analyze
 
   # Run unit tests with UCONFIG_NO_XXX variations.
   uconfig-unit-tests:
