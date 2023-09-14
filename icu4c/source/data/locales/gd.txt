@@ -2352,12 +2352,9 @@ gd{
             sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
             sorting-long-referring-informal{"{surname}, {given-informal} {given2}"}
             sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
-            sorting-medium-referring-informal{"{surname}, {given-informal} {given2}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal} {given2-informal-initial}"}
             sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
-            sorting-short-referring-informal{
-                "{surname}, {given-informal} {given2}",
-                "{surname-core}, {given-informal} {given2} {surname-prefix}",
-            }
+            sorting-short-referring-informal{"{surname}, {given-informal} {given2-informal-initial}"}
             surnameFirst-long-addressing-formal{"{title-vocative} {surname-vocative}"}
             surnameFirst-long-addressing-informal{"{given-informal-vocative} {given2-vocative}"}
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}

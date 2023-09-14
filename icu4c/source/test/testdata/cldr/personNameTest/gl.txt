@@ -121,6 +121,10 @@ name ; locale; gl_AQ
 expectedResult; Freire, Xiana
 
 parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Freire Xiana
 
@@ -128,10 +132,6 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; formal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Xiana Freire
 
@@ -140,11 +140,14 @@ parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
 parameters; givenFirst; medium; referring; informal
 
+expectedResult; Freire, X.
+
+parameters; sorting; short; referring; formal
+
 expectedResult; Freire X.
 
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
-parameters; sorting; short; referring; formal
 
 expectedResult; X. Freire
 
@@ -207,9 +210,6 @@ name ; locale; gl_AQ
 expectedResult; Souto, Brais Manoel
 
 parameters; sorting; long; referring; formal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Brais Manoel Souto
 
@@ -219,6 +219,10 @@ expectedResult; Souto Brais Manoel
 
 parameters; surnameFirst; long; referring; formal
 
+expectedResult; Souto, Brais M.
+
+parameters; sorting; medium; referring; formal
+
 expectedResult; Brais M. Souto
 
 parameters; givenFirst; medium; referring; formal
@@ -226,7 +230,16 @@ parameters; givenFirst; medium; referring; formal
 expectedResult; Souto Brais M.
 
 parameters; surnameFirst; medium; referring; formal
-parameters; sorting; medium; referring; formal
+
+expectedResult; Souto, B. M.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Souto, Brais
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; B. M. Souto
 
@@ -240,7 +253,6 @@ parameters; givenFirst; medium; referring; informal
 expectedResult; Souto B. M.
 
 parameters; surnameFirst; short; referring; formal
-parameters; sorting; short; referring; formal
 
 expectedResult; Souto Brais
 
@@ -319,9 +331,6 @@ parameters; givenFirst; long; referring; formal
 expectedResult; Castro Sáez, Xosé Carlos Francisco Xavier de
 
 parameters; sorting; long; referring; formal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; de Castro Xosé Carlos Francisco Xavier
 
@@ -350,6 +359,12 @@ parameters; givenFirst; short; referring; formal
 expectedResult; de Castro X. C. F. X.
 
 parameters; surnameFirst; short; referring; formal
+
+expectedResult; Castro Sáez, Pepe de
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Pepe de Castro Sáez
 
@@ -487,6 +502,10 @@ name ; locale; ko_AQ
 expectedResult; Weber, Annelise
 
 parameters; sorting; long; referring; formal
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; formal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Annelise Weber
 
@@ -501,14 +520,14 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; formal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Annelise W.
 
 parameters; givenFirst; short; referring; informal
+
+expectedResult; Weber, A.
+
+parameters; sorting; short; referring; formal
 
 expectedResult; A. Weber
 
@@ -527,7 +546,6 @@ expectedResult; Weber A.
 
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
-parameters; sorting; short; referring; formal
 
 expectedResult; Weber
 
@@ -573,9 +591,6 @@ name ; locale; ko_AQ
 expectedResult; Meyer, Benno Hans
 
 parameters; sorting; long; referring; formal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Benno Hans Meyer
 
@@ -585,6 +600,10 @@ expectedResult; Meyer Benno Hans
 
 parameters; surnameFirst; long; referring; formal
 
+expectedResult; Meyer, Benno H.
+
+parameters; sorting; medium; referring; formal
+
 expectedResult; Benno H. Meyer
 
 parameters; givenFirst; medium; referring; formal
@@ -592,7 +611,16 @@ parameters; givenFirst; medium; referring; formal
 expectedResult; Meyer Benno H.
 
 parameters; surnameFirst; medium; referring; formal
-parameters; sorting; medium; referring; formal
+
+expectedResult; Meyer, B. H.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; Meyer, Benno
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; B. H. Meyer
 
@@ -606,7 +634,6 @@ parameters; givenFirst; medium; referring; informal
 expectedResult; Meyer B. H.
 
 parameters; surnameFirst; short; referring; formal
-parameters; sorting; short; referring; formal
 
 expectedResult; Meyer Benno
 
@@ -687,9 +714,6 @@ parameters; givenFirst; long; referring; formal
 expectedResult; Brül Cabral de Melo, Erika Cornelia Anna Isabelle von
 
 parameters; sorting; long; referring; formal
-parameters; sorting; long; referring; informal
-parameters; sorting; medium; referring; informal
-parameters; sorting; short; referring; informal
 
 expectedResult; Erika Cornelia A. I. von Brül Cabral de Melo II
 
@@ -714,6 +738,12 @@ parameters; givenFirst; short; referring; formal
 expectedResult; von Brül Erika Cornelia A. I. II
 
 parameters; surnameFirst; medium; referring; formal
+
+expectedResult; Brül Cabral de Melo, Neele von
+
+parameters; sorting; long; referring; informal
+parameters; sorting; medium; referring; informal
+parameters; sorting; short; referring; informal
 
 expectedResult; Neele von Brül Cabral de Melo
 
