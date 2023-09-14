@@ -5982,6 +5982,8 @@ void LocaleTest::TestToLanguageTag() {
       {"und-1994-biske-rozaj-x-private", "und-1994-biske-rozaj-x-private"},
       // ICU-22497
       {"-ins0-ins17Rz-yqyq-UWLF-uRyq-UWLF-uRRyq-UWLF-uR-UWLF-uRns0-ins17Rz-yq-UWLF-uRyq-UWLF-uRRyq-LF-uRyq-UWLF-uRRyq-UWLF-uRq-UWLF-uRyq-UWLF-uRRyq-UWLF-uR", ""},
+      // ICU-22504
+      {"@attribute=zzo9zzzzzzzs0zzzzzzzzzz55555555555555555555500000000000000000000fffffffffffffffffffffffffzzzzz2mfPAK", ""},
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {

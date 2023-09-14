@@ -1326,14 +1326,23 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                         attrBufLength = 0;
                         for (; i < len; i++) {
                             if (buf[i] != '-') {
-                                attrBuf[attrBufLength++] = buf[i];
+                                if (static_cast<size_t>(attrBufLength) < sizeof(attrBuf)) {
+                                    attrBuf[attrBufLength++] = buf[i];
+                                } else {
+                                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                                    return;
+                                }
                             } else {
                                 i++;
                                 break;
                             }
                         }
                         if (attrBufLength > 0) {
-                            attrBuf[attrBufLength] = 0;
+                            if (static_cast<size_t>(attrBufLength) < sizeof(attrBuf)) {
+                                attrBuf[attrBufLength] = 0;
+                            } else {
+                                *status = U_STRING_NOT_TERMINATED_WARNING;
+                            }
 
                         } else if (i >= len){
                             break;
