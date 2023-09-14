@@ -100,9 +100,9 @@ class ExternalBreakEngine : public UObject {
      * @return The number of breaks found
      * @internal ICU 74 technology preview
      */
-     virtual int32_t fillBreak(UText* text,  int32_t start, int32_t end,
-                              int32_t* foundBreaks, int32_t foundBreaksCapacity,
-                              UErrorCode& status) const = 0;
+     virtual int32_t fillBreaks(UText* text,  int32_t start, int32_t end,
+                               int32_t* foundBreaks, int32_t foundBreaksCapacity,
+                               UErrorCode& status) const = 0;
 };
 #endif  /* UCONFIG_NO_SERVICE */
 #endif  /* U_HIDE_DRAFT_API */

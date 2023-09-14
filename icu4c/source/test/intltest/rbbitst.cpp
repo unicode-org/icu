@@ -5686,9 +5686,9 @@ class FakeTaiLeBreakEngine : public ExternalBreakEngine {
   virtual bool handles(UChar32 c) const override {
       return block.contains(c);
   }
-  virtual int32_t fillBreak(UText* text,  int32_t start, int32_t end,
-                            int32_t* foundBreaks, int32_t foundBreaksCapacity,
-                            UErrorCode& status) const override {
+  virtual int32_t fillBreaks(UText* text,  int32_t start, int32_t end,
+                             int32_t* foundBreaks, int32_t foundBreaksCapacity,
+                             UErrorCode& status) const override {
        if (U_FAILURE(status)) return 0;
        int32_t i = 0;
        // Save the state of the utext
@@ -5739,9 +5739,9 @@ class FakeYueBreakEngine : public ExternalBreakEngine {
   virtual bool handles(UChar32 c) const override {
       return block.contains(c);
   }
-  virtual int32_t fillBreak(UText* text,  int32_t start, int32_t end,
-                            int32_t* foundBreaks, int32_t foundBreaksCapacity,
-                            UErrorCode& status) const override {
+  virtual int32_t fillBreaks(UText* text,  int32_t start, int32_t end,
+                             int32_t* foundBreaks, int32_t foundBreaksCapacity,
+                             UErrorCode& status) const override {
        (void)text;
        if (U_FAILURE(status)) return 0;
        int32_t i = 0;
