@@ -15,15 +15,20 @@ on:
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
 
 env:
-  MAVEN_ARGS: '--show-version --no-transfer-progress'
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
 
 permissions:
   contents: read
 
 jobs:
 
-  # Test ICU4J with little-endian ICU4C data only
-  icu4j-little-endian-data-test:
+  # Initialize the Maven artifact cache
+  # Uses Java 8 because Java version not deemed significant for downloading
+  # artifacts
+  #
+  # This job is created according to the cache strategy of reuse from a single job:
+  # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
+  icu4j-mvn-init-cache:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -32,6 +37,40 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Download all of the artifacts needed for the code and build plugins
+      - name: Download all artifacts
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} dependency:go-offline -P '!old_jdk_taglet'
+
+  # Test ICU4J with little-endian ICU4C data only
+  icu4j-little-endian-data-test:
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -44,8 +83,8 @@ jobs:
           mkdir /tmp/icu4j_data_test;
           cp -P data/out/tmp/icudt*l* /tmp/icu4j_data_test/
           cd ../../icu4j;
-          mvn clean;
-          mvn -Dicu4c.data.path=/tmp/icu4j_data_test install
+          mvn ${SHARED_MVN_ARGS} clean;
+          mvn ${SHARED_MVN_ARGS} -Dicu4c.data.path=/tmp/icu4j_data_test install
 
   # Compile libraries used by all ICU4C performance tests.
   icu4c-store-perf-libs:
@@ -270,6 +309,7 @@ jobs:
   icu4j-unicodesetperf:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -287,6 +327,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -300,7 +348,7 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          mvn install -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           git status
           cd perf-tests;
           mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
@@ -325,6 +373,7 @@ jobs:
   icu4j-ucharacterperf:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
 
@@ -340,6 +389,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -353,7 +410,7 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          mvn install -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_ucharacterperf;
           java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
@@ -377,6 +434,7 @@ jobs:
   icu4j-decimalformatperf:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -395,6 +453,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -408,7 +474,7 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          mvn install -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
@@ -436,6 +502,7 @@ jobs:
   icu4j-normperf:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -455,6 +522,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -470,7 +545,7 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          mvn install -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
@@ -499,6 +574,7 @@ jobs:
   icu4j-converterperf:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -585,6 +661,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -600,7 +684,7 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          mvn install -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
@@ -628,6 +712,7 @@ jobs:
   icu4j-dateformatperf:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -659,6 +744,14 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -677,7 +770,7 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2
           cd icu4j;
-          mvn install -DskipITs -DskipTests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }};
           # Delay execution by random number of seconds. Spreading execution of multiple
