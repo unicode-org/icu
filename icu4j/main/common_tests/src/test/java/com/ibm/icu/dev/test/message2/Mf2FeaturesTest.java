@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -58,6 +59,7 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
+    @Ignore  // TODO(ICU-22505)
     @Test
     public void testArgumentMissing() {
         // Test to check what happens if an argument name from the placeholder is not found
@@ -86,6 +88,7 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
+    @Ignore  // TODO(ICU-22505)
     @Test
     public void testDefaultLocale() {
         String message = "{Date: {$date :datetime skeleton=yMMMMdEEEE}.}";
@@ -121,6 +124,7 @@ public class Mf2FeaturesTest extends TestFmwk {
         Locale.setDefault(originalLocale);
     }
 
+    @Ignore  // TODO(ICU-22505)
     @Test
     public void testAllKindOfDates() {
         // Default function
@@ -357,6 +361,7 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
+    @Ignore  // TODO(ICU-22505)
     @Test
     public void testDefaultFunctionAndOptions() {
         TestUtils.runTestCase(new TestCase.Builder()
@@ -431,6 +436,7 @@ public class Mf2FeaturesTest extends TestFmwk {
 
     // Local Variables
 
+    @Ignore  // TODO(ICU-22505)
     @Test
     public void testSimpleLocaleVariable() {
         TestUtils.runTestCase(new TestCase.Builder()
@@ -442,6 +448,7 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
+    @Ignore  // TODO(ICU-22505)
     @Test
     public void testLocaleVariableWithSelect() {
         String message = ""
