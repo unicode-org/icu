@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694816676115,
+  "lastUpdate": 1694821852899,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26296,6 +26296,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 243670.1832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "14ca2b0e6da14ef45aadf5067deb562fc6c70a52",
+          "message": "ICU-22313 Various fixes for duration formatting:\n- Changed the C++ and Java interfaces to that the URBNF_DURATION ruleset is marked deprecated.\n- Fixed a bug in RuleBasedNumberFormat in both Java and C++ that caused the existing duration-formatting rules to produce bogus results when used on a non-integral value.\n\n(Earlier versions of this PR added code to use a MeasureFormat under the covers when a caller used\nunum_open(UNUM_DURATION).  I took that out because of backward compatibility concerns, so we're still using RBNF\nin the C API.  I'm hoping to add a \"real\" duration formatter in ICU 75.)",
+          "timestamp": "2023-09-15T16:27:58-07:00",
+          "tree_id": "49d55842d905b80745e303e46f0edca62c774223",
+          "url": "https://github.com/unicode-org/icu/commit/14ca2b0e6da14ef45aadf5067deb562fc6c70a52"
+        },
+        "date": 1694821789241,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 752.8597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 788982.266,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 207401.8726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 721341.3773,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 204655.3495,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
