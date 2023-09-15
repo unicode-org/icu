@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694802815133,
+  "lastUpdate": 1694812707538,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11818,6 +11818,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.5120253096867438,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "28572ab67eeedc6e49e15fdf7bb96e7392193e55",
+          "message": "ICU-22325 CLDR release-44-alpha3 to main part 3 (ICU sources: lib, tools, tests)",
+          "timestamp": "2023-09-15T14:02:20-07:00",
+          "tree_id": "6e3dba62b142d0816cffd49e48861e541ef10281",
+          "url": "https://github.com/unicode-org/icu/commit/28572ab67eeedc6e49e15fdf7bb96e7392193e55"
+        },
+        "date": 1694812649677,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.4761314492157915,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
