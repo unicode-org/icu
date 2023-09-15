@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694816763035,
+  "lastUpdate": 1694821983202,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37906,6 +37906,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2578.4381,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "14ca2b0e6da14ef45aadf5067deb562fc6c70a52",
+          "message": "ICU-22313 Various fixes for duration formatting:\n- Changed the C++ and Java interfaces to that the URBNF_DURATION ruleset is marked deprecated.\n- Fixed a bug in RuleBasedNumberFormat in both Java and C++ that caused the existing duration-formatting rules to produce bogus results when used on a non-integral value.\n\n(Earlier versions of this PR added code to use a MeasureFormat under the covers when a caller used\nunum_open(UNUM_DURATION).  I took that out because of backward compatibility concerns, so we're still using RBNF\nin the C API.  I'm hoping to add a \"real\" duration formatter in ICU 75.)",
+          "timestamp": "2023-09-15T16:27:58-07:00",
+          "tree_id": "49d55842d905b80745e303e46f0edca62c774223",
+          "url": "https://github.com/unicode-org/icu/commit/14ca2b0e6da14ef45aadf5067deb562fc6c70a52"
+        },
+        "date": 1694821920062,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 58005.7355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 115441.2381,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.4404,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 7.6764,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.3397,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 11451.3498,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 36891.2766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1973.0092,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
