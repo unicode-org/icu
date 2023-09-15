@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694817172316,
+  "lastUpdate": 1694822375082,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46654,6 +46654,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 48.2735,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "14ca2b0e6da14ef45aadf5067deb562fc6c70a52",
+          "message": "ICU-22313 Various fixes for duration formatting:\n- Changed the C++ and Java interfaces to that the URBNF_DURATION ruleset is marked deprecated.\n- Fixed a bug in RuleBasedNumberFormat in both Java and C++ that caused the existing duration-formatting rules to produce bogus results when used on a non-integral value.\n\n(Earlier versions of this PR added code to use a MeasureFormat under the covers when a caller used\nunum_open(UNUM_DURATION).  I took that out because of backward compatibility concerns, so we're still using RBNF\nin the C API.  I'm hoping to add a \"real\" duration formatter in ICU 75.)",
+          "timestamp": "2023-09-15T16:27:58-07:00",
+          "tree_id": "49d55842d905b80745e303e46f0edca62c774223",
+          "url": "https://github.com/unicode-org/icu/commit/14ca2b0e6da14ef45aadf5067deb562fc6c70a52"
+        },
+        "date": 1694822314505,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.2523,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.8607,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 25.2456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 34.1446,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 40.2546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 43.3411,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 24.7291,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.3233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 168.7097,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 26.3763,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 53.8613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 46.2984,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
