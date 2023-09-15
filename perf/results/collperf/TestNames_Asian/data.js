@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694812943640,
+  "lastUpdate": 1694816608972,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26134,6 +26134,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2822921.2705,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "71a483d174958a6a9102e8bef8382eae60c2f58b",
+          "message": "ICU-22495 Added support for \"genitive\" and \"vocative\" field modifiers; cleaned up PersonNameConsistencyTest. Fixed\nbug in implementation of \"retain\" keyword.",
+          "timestamp": "2023-09-15T15:04:01-07:00",
+          "tree_id": "1409b992a87ed5b75d90eb061e19e2bf159405c0",
+          "url": "https://github.com/unicode-org/icu/commit/71a483d174958a6a9102e8bef8382eae60c2f58b"
+        },
+        "date": 1694816546445,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 295.926,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 11678263.0553,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2644107.6262,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11089031.0337,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2827753.3633,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
