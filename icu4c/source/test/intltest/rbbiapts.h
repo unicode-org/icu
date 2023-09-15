@@ -90,6 +90,8 @@ public:
 
     void TestRefreshInputText();
 
+    void TestSuppressDictionary();
+
     /**
      *Internal subroutines
      **/
@@ -99,6 +101,8 @@ public:
     /*Internal subroutine used for comparison of expected and acquired results */
     void doTest(UnicodeString& testString, int32_t start, int32_t gotoffset, int32_t expectedOffset, const char* expected);
 
+    /** Helper: convert the language tag */
+    const char *forLangTag(char buf[ULOC_FULLNAME_CAPACITY], const char *locale);
 
 };
 
