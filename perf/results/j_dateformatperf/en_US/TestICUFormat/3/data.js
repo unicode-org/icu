@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694797029314,
+  "lastUpdate": 1694801828961,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11578,6 +11578,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 296.2579182284467,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "386e9a10db28af620658ca0c635e1d98915f6306",
+          "message": "ICU-22504 Fix buffer overflow write error",
+          "timestamp": "2023-09-15T11:01:37-07:00",
+          "tree_id": "dd8900ffcfa28b0b45dcf3243ee9c3512c13efdd",
+          "url": "https://github.com/unicode-org/icu/commit/386e9a10db28af620658ca0c635e1d98915f6306"
+        },
+        "date": 1694801764823,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 297.9509070919363,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
