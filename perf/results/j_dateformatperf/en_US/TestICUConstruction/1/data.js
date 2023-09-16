@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694821221452,
+  "lastUpdate": 1694827501051,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12028,6 +12028,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2437.3461397779674,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d082de574ff13873123c55212ad20cf258ffb283",
+          "message": "ICU-22479 Add Fuzzer for DateFormat",
+          "timestamp": "2023-09-15T17:47:17-07:00",
+          "tree_id": "7c0cf52cd0941fb7b95d52c57bcbf88b98b19c5f",
+          "url": "https://github.com/unicode-org/icu/commit/d082de574ff13873123c55212ad20cf258ffb283"
+        },
+        "date": 1694827437626,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2514.218718818599,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
