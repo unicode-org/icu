@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -69,7 +70,7 @@ public class PersonNameConsistencyTest extends TestFmwk {
     @Parameters(method = "readTestCases")
     public void TestPersonNames(String filename) throws IOException {
         String knownIssue = KNOWN_ISSUES.get(filename);
-        LineNumberReader in = new LineNumberReader(new InputStreamReader(TestUtil.class.getResourceAsStream(DATA_PATH + filename)));
+        LineNumberReader in = new LineNumberReader(new InputStreamReader(TestUtil.class.getResourceAsStream(DATA_PATH + filename), StandardCharsets.UTF_8));
         String line = null;
         PersonNameTester tester = new PersonNameTester(filename);
 
