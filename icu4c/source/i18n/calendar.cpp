@@ -1169,6 +1169,9 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     		status = U_ILLEGAL_ARGUMENT_ERROR;
 	    	return;
         }
+    } else if (uprv_isNaN(millis)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
 
     fTime = millis;
