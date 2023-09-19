@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695145533899,
+  "lastUpdate": 1695166991591,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15046,6 +15046,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 48.1017,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "6df1babae26f363d3140af7c50a9956e8f80a12c",
+          "message": "ICU-22479 Add Fuzzer for ListFormat",
+          "timestamp": "2023-09-19T15:52:42-07:00",
+          "tree_id": "6a18cb16063677dbf64588f91737bd90c4bde94a",
+          "url": "https://github.com/unicode-org/icu/commit/6df1babae26f363d3140af7c50a9956e8f80a12c"
+        },
+        "date": 1695166931070,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 29.7094,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 62.4207,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
