@@ -4028,6 +4028,7 @@ void CalendarTest::TestHebrewCalendarInTemporalLeapYear() {
     for (gc.set(startYear, UCAL_JANUARY, 1);
          gc.get(UCAL_YEAR, status) <= stopYear;
          gc.add(UCAL_DATE, incrementDays, status)) {
+        cal->setTime(gc.getTime(status), status);
         if (failure(status, "add/get/set/getTime/setTime incorrect")) return;
 
         int32_t cal_year = cal->get(UCAL_EXTENDED_YEAR, status);
@@ -4036,6 +4037,7 @@ void CalendarTest::TestHebrewCalendarInTemporalLeapYear() {
             leapTest->set(UCAL_MONTH, 0);
             leapTest->set(UCAL_DATE, 1);
             // If 10 months after TISHRI is TAMUZ, then it is a leap year.
+            leapTest->add(UCAL_MONTH, 10, status);
             hasLeapMonth = leapTest->get(UCAL_MONTH, status) == icu::HebrewCalendar::TAMUZ;
             yearForHasLeapMonth = cal_year;
         }
