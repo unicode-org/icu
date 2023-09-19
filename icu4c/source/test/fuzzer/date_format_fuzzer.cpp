@@ -12,20 +12,40 @@
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     uint16_t rnd;
+    uint8_t rnd2;
     UDate date;
-    icu::DateFormat::EStyle dateStyle;
-    icu::DateFormat::EStyle timeStyle;
-    if (size < sizeof(rnd) + sizeof(date) + sizeof(dateStyle) + sizeof(timeStyle)) return 0;
+    icu::DateFormat::EStyle styles[] = {
+        icu::DateFormat::EStyle::kNone,
+        icu::DateFormat::EStyle::kFull,
+        icu::DateFormat::EStyle::kLong,
+        icu::DateFormat::EStyle::kMedium,
+        icu::DateFormat::EStyle::kShort,
+        icu::DateFormat::EStyle::kDateOffset,
+        icu::DateFormat::EStyle::kDateTime,
+        icu::DateFormat::EStyle::kDateTimeOffset,
+        icu::DateFormat::EStyle::kRelative,
+        icu::DateFormat::EStyle::kFullRelative,
+        icu::DateFormat::EStyle::kLongRelative,
+        icu::DateFormat::EStyle::kMediumRelative,
+        icu::DateFormat::EStyle::kShortRelative,
+    };
+    int32_t numStyles = sizeof(styles) / sizeof(icu::DateFormat::EStyle);
+
+    if (size < sizeof(rnd) + sizeof(date) + 2*sizeof(rnd2)) return 0;
     icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
 
     std::memcpy(&rnd, fuzzData.data(), sizeof(rnd));
     fuzzData.remove_prefix(sizeof(rnd));
     icu::Locale locale = GetRandomLocale(rnd);
 
-    std::memcpy(&dateStyle, fuzzData.data(), sizeof(dateStyle));
-    fuzzData.remove_prefix(sizeof(dateStyle));
-    std::memcpy(&timeStyle, fuzzData.data(), sizeof(timeStyle));
-    fuzzData.remove_prefix(sizeof(timeStyle));
+    std::memcpy(&rnd2, fuzzData.data(), sizeof(rnd2));
+    icu::DateFormat::EStyle dateStyle = styles[rnd2 % numStyles];
+    fuzzData.remove_prefix(sizeof(rnd2));
+
+    std::memcpy(&rnd2, fuzzData.data(), sizeof(rnd2));
+    icu::DateFormat::EStyle timeStyle = styles[rnd2 % numStyles];
+    fuzzData.remove_prefix(sizeof(rnd2));
+
     std::memcpy(&date, fuzzData.data(), sizeof(date));
     fuzzData.remove_prefix(sizeof(date));
 
