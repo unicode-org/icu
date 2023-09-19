@@ -252,7 +252,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
   virtual void computeChineseFields(int32_t days, int32_t gyear,
                  int32_t gmonth, UBool setAllFields);
   virtual int32_t newYear(int32_t gyear) const;
-  virtual void offsetMonth(int32_t newMoon, int32_t dom, int32_t delta);
+  virtual void offsetMonth(int32_t newMoon, int32_t dom, int32_t delta, UErrorCode& status);
   const TimeZone* getChineseCalZoneAstroCalc() const;
 
   // UObject stuff
