@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695164660699,
+  "lastUpdate": 1695165863737,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12028,6 +12028,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 5.300552630218909,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "990779c4bf935d2741ef6514f4d070231c388d05",
+          "message": "ICU-22509 Limit the dateStyle and timeStyle in fuzzer to only valid enum",
+          "timestamp": "2023-09-19T15:54:04-07:00",
+          "tree_id": "e95a6e47e94ba513f1f90645a8b2da0058d6d92a",
+          "url": "https://github.com/unicode-org/icu/commit/990779c4bf935d2741ef6514f4d070231c388d05"
+        },
+        "date": 1695165793757,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 8.24093386366848,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
