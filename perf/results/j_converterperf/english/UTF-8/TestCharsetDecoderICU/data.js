@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695165860745,
+  "lastUpdate": 1695166775643,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12178,6 +12178,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.799690125865551,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "c4a596e18e008139e3be91043247ab8d01bd6b58",
+          "message": "ICU-22508 Reject NaN as input to Calendar::setTime\n\nFix DateFormat::format issue",
+          "timestamp": "2023-09-19T15:55:02-07:00",
+          "tree_id": "68c6ded527d29408fb82ffc68617dc45f1bf3170",
+          "url": "https://github.com/unicode-org/icu/commit/c4a596e18e008139e3be91043247ab8d01bd6b58"
+        },
+        "date": 1695166712018,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.4702774049835207,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
