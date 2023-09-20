@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695179223592,
+  "lastUpdate": 1695231771367,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12118,6 +12118,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 2.6230730683895143,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "9be9ed3231f6cf79190128af6eee6dfc2e6b573c",
+          "message": "ICU-22324 Mavenization, resolve some of the release tasks",
+          "timestamp": "2023-09-20T10:27:12-07:00",
+          "tree_id": "e38d8cf616c6007928b0021a3c414811f441cee8",
+          "url": "https://github.com/unicode-org/icu/commit/9be9ed3231f6cf79190128af6eee6dfc2e6b573c"
+        },
+        "date": 1695231706541,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 2.6654287734831907,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
