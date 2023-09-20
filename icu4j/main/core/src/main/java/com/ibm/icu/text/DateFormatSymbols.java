@@ -2004,12 +2004,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         standaloneShortQuarters = arrays.get("quarters/stand-alone/abbreviated");
         standaloneNarrowQuarters = arrays.get("quarters/stand-alone/narrow");
 
-        abbreviatedDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/abbreviated"));
-        wideDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/wide"));
-        narrowDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/narrow"));
-        standaloneAbbreviatedDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/abbreviated"));
-        standaloneWideDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/wide"));
-        standaloneNarrowDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/narrow"));
+        abbreviatedDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/abbreviated"), null);
+        wideDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/wide"), abbreviatedDayPeriods);
+        narrowDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/format/narrow"), abbreviatedDayPeriods);
+        standaloneAbbreviatedDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/abbreviated"), abbreviatedDayPeriods);
+        standaloneWideDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/wide"), standaloneAbbreviatedDayPeriods);
+        standaloneNarrowDayPeriods = loadDayPeriodStrings(maps.get("dayPeriod/stand-alone/narrow"), standaloneAbbreviatedDayPeriods);
 
         for (int i = 0; i < DT_MONTH_PATTERN_COUNT; i++) {
             String monthPatternPath = LEAP_MONTH_PATTERNS_PATHS[i];
@@ -2129,15 +2129,24 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Loads localized names for day periods in the requested format.
      * @param resourceMap Contains the dayPeriod resource to load
+     * @param copyFrom If non-null, any values in the result that would otherwise be null are copied
+     *                 from this array
      */
-    private String[] loadDayPeriodStrings(Map<String, String> resourceMap) {
-        String strings[] = new String[DAY_PERIOD_KEYS.length];
-        if (resourceMap != null) {
-            for (int i = 0; i < DAY_PERIOD_KEYS.length; ++i) {
-                strings[i] = resourceMap.get(DAY_PERIOD_KEYS[i]);  // Null if string doesn't exist.
+    private String[] loadDayPeriodStrings(Map<String, String> resourceMap, String[] copyFrom) {
+        if (resourceMap == null && copyFrom != null) {
+            return copyFrom;
+        } else {
+            String strings[] = new String[DAY_PERIOD_KEYS.length];
+            if (resourceMap != null) {
+                for (int i = 0; i < DAY_PERIOD_KEYS.length; ++i) {
+                    strings[i] = resourceMap.get(DAY_PERIOD_KEYS[i]);  // Null if string doesn't exist.
+                    if (strings[i] == null && copyFrom != null) {
+                        strings[i] = copyFrom[i];
+                    }
+                }
             }
+            return strings;
         }
-        return strings;
     }
 
     /*
