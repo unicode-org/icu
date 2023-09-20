@@ -5275,7 +5275,6 @@ public class DateFormatTest extends TestFmwk {
         assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 PM", sdf.format(k120000));
 
         // Locale ee has a rule that wraps around midnight (21h - 4h).
-        if (!logKnownIssue("ICU-22464", "Wide time format BBBB is not formatting with night time for ee")) {
         sdf = new SimpleDateFormat("", new ULocale("ee"));
         sdf.setTimeZone(TimeZone.GMT_ZONE);
 
@@ -5284,7 +5283,6 @@ public class DateFormatTest extends TestFmwk {
         assertEquals("hh:mm:ss BBBB | 22:00:00 | ee", "10:00:00 zã", sdf.format(k220000));
         assertEquals("hh:mm:ss BBBB | 00:00:00 | ee", "12:00:00 zã", sdf.format(k000000));
         assertEquals("hh:mm:ss BBBB | 01:00:00 | ee", "01:00:00 zã", sdf.format(k010000));
-        }
 
         // Locale root has rules for AM/PM only.
         sdf = new SimpleDateFormat("", new ULocale("root"));
@@ -5318,7 +5316,6 @@ public class DateFormatTest extends TestFmwk {
         // Locale es_CO should not fall back to es and should have a
         // different string for 1 in the morning.
         // (es_CO: "de la mañana" vs. es: "de la madrugada")
-        if (!logKnownIssue("ICU-22464", "Wide time format BBBB is not formatting with night time for es and es_CO")) {
         sdf = new SimpleDateFormat("", new ULocale("es_CO"));
         sdf.setTimeZone(TimeZone.GMT_ZONE);
 
@@ -5330,7 +5327,6 @@ public class DateFormatTest extends TestFmwk {
 
         sdf.applyPattern("hh:mm:ss BBBB");
         assertEquals("hh:mm:ss BBBB | 01:00:00 | es", "01:00:00 de la madrugada", sdf.format(k010000));
-        }
 
         // #13215: for locales with keywords, check hang in DayPeriodRules.getInstance(ULocale),
         // which is called in SimpleDateFormat.format for patterns that include 'B'.
