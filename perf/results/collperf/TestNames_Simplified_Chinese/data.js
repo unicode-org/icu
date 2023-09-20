@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695239710786,
+  "lastUpdate": 1695244630686,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26836,6 +26836,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2960751.1894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "2ca7c49662cfa0455c211f310998302a2e0d64d9",
+          "message": "ICU-22464 Fix Java DateFormatSymbols to copy abbreviated day period names to the other sizes when appropriate.",
+          "timestamp": "2023-09-20T13:46:00-07:00",
+          "tree_id": "4a794fa8d1c86e664b4256c938f9df1d394bb9a2",
+          "url": "https://github.com/unicode-org/icu/commit/2ca7c49662cfa0455c211f310998302a2e0d64d9"
+        },
+        "date": 1695244556600,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 280.1936,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 15164793.1054,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 3191605.2477,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 15239809.9038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 3392711.8247,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
