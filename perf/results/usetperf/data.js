@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695248133892,
+  "lastUpdate": 1695248494642,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38920,6 +38920,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2017.0831,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "1b980e5999f53ac562775f22a6f5072170072c43",
+          "message": "ICU-21877 Fixed it so that getAllChildrenWithFallback() correctly calls its sink with every possible resource the\none the user requested might be inheriting elements from.",
+          "timestamp": "2023-09-20T14:09:21-07:00",
+          "tree_id": "c3a2af18a4835b7385aa1983941221737bf89239",
+          "url": "https://github.com/unicode-org/icu/commit/1b980e5999f53ac562775f22a6f5072170072c43"
+        },
+        "date": 1695248435383,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 60271.5274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 108248.6588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.4319,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.8893,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.0694,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 13068.4892,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 42860.814,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2253.2965,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
