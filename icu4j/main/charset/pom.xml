@@ -22,7 +22,7 @@
   <dependencies>
     <dependency>
       <groupId>com.ibm.icu</groupId>
-      <artifactId>core</artifactId>
+      <artifactId>icu4j</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -66,6 +66,12 @@
               <Export-Package>com.ibm.icu.charset</Export-Package>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>

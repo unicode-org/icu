@@ -67,6 +67,15 @@
         <artifactId>maven-shade-plugin</artifactId>
         <executions>
           <execution>
+            <id>source-jar</id>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createSourcesJar>true</createSourcesJar>
+            </configuration>
+          </execution>
+          <execution>
             <goals>
               <goal>shade</goal>
             </goals>
@@ -75,22 +84,65 @@
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>com.ibm.icu.util.VersionInfo</Main-Class>
+                    <Export-Package>com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util</Export-Package>
+                  </manifestEntries>
+                </transformer>
+              </transformers>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
+        <artifactId>maven-clean-plugin</artifactId>
         <configuration>
-          <archive>
-            <manifestEntries>
-              <Main-Class>com.ibm.icu.util.VersionInfo</Main-Class>
-              <Export-Package>com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util</Export-Package>
-            </manifestEntries>
-          </archive>
+          <filesets>
+            <fileset>
+              <directory>.</directory>
+              <includes>
+                <include>**/dependency-reduced-pom.xml</include>
+              </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>with_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <!-- This is important. Since this is a shaded jar with no sources,
+                    there is no javadoc generated without this line.
+                  -->
+                  <includeDependencySources>true</includeDependencySources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

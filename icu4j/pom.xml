@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* © 2023 and later: Unicode, Inc. and others.
+* © 2016 and later: Unicode, Inc. and others.
 * License & terms of use: http://www.unicode.org/copyright.html
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -12,8 +12,10 @@
   <packaging>pom</packaging>
 
   <name>${proj-title} (${project.artifactId})</name>
-  <description>International Component for Unicode for Java (ICU4J) is a mature, widely used Java library
+  <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
     providing Unicode and Globalization support</description>
+  <url>https://icu.unicode.org/</url>
+  <inceptionYear>1995</inceptionYear>
 
   <organization>
     <name>Unicode, Inc.</name>
@@ -32,6 +34,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+
+    <maven_central_repo_url>https://oss.sonatype.org</maven_central_repo_url>
+    <maven-central-releases-repo-url>${maven-central-repo-url}/service/local/staging/deploy/maven2</maven-central-releases-repo-url>
+    <maven-central-snapshots-repo-url>${maven-central-repo-url}/content/repositories/snapshots</maven-central-snapshots-repo-url>
 
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
@@ -76,7 +82,98 @@
     <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
   </properties>
 
+  <licenses>
+    <license>
+      <name>Unicode/ICU License</name>
+      <url>https://raw.githubusercontent.com/unicode-org/icu/main/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>markusicu</id>
+      <name>Markus Scherer</name>
+      <organization>Google</organization>
+      <roles>
+        <role>Chair</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>yumaoka</id>
+      <name>Yoshito Umaoka</name>
+      <organization>IBM</organization>
+      <roles>
+        <role>Vice chair</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <mailingLists>
+    <mailingList>
+      <name>icu-support</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-support</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-support</unsubscribe>
+      <post>icu-support@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-support</archive>
+    </mailingList>
+    <mailingList>
+      <name>icu-announce</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-announce</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-announce</unsubscribe>
+      <post>icu-announce@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-announce</archive>
+    </mailingList>
+    <mailingList>
+      <name>icu-design</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-design</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-design</unsubscribe>
+      <post>icu-design@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-design</archive>
+    </mailingList>
+  </mailingLists>
+
+  <scm>
+    <connection>scm:git:git://github.com/unicode-org/icu.git</connection>
+    <developerConnection>scm:git:git@github.com:unicode-org/icu.git</developerConnection>
+    <url>https://github.com/unicode-org/icu</url>
+  </scm>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://unicode-org.atlassian.net/projects/ICU</url>
+  </issueManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>icu4j-releases</id>
+      <name>ICU4J Central Repository</name>
+      <url>${maven-central-releases-repo-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>icu4j-snapshots</id>
+      <name>ICU4J Central Development Repository</name>
+      <url>${maven-central-snapshots-repo-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <build>
+    <!-- Workaround for Windows symlink issue:
+      https://issues.apache.org/jira/browse/MRESOURCES-237
+      BUT FAILS ON LINUX :-(
+    -->
+    <!--
+    <resources>
+      <resource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>LICENSE</include>
+        </includes>
+      </resource>
+    </resources>
+    -->
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -97,16 +194,20 @@
           <configuration>
             <includes>
               <!-- Some test files start with "IntlTest...". Many don't fit
-               the Surefire test file name default patterns. To be safe, use
-               a catchall pattern instead of the default patterns.
+                the Surefire test file name default patterns. To be safe, use
+                a catchall pattern instead of the default patterns.
 
-               FYI, the default patterns are documented on the website of the
-               testing plugin:
-               https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html
+                FYI, the default patterns are documented on the website of the
+                testing plugin:
+                https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html
               -->
               <include>**/*.java</include>
             </includes>
           </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.1.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -115,6 +216,13 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.1</version>
+          <!-- We don't want to deploy all submodules to Maven, so we make it opt-in.
+            What we want to publish to Maven Central are the current 3 artifacts (icu4j, charset, and localespi).
+            And what we publish to the GitHub Maven repository is the specific-to-CLDR version of ICU4J.
+          -->
+          <configuration>
+            <skip>true</skip>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
@@ -184,22 +292,22 @@
             <taglets>
               <taglet>
                 <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
+                <tagletArtifact>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>tools_build</artifactId>
+                  <version>${project.version}</version>
+                </tagletArtifact>
               </taglet>
               <taglet>
                 <tagletClass>ch.arrenbrecht.jcite.JCiteTaglet</tagletClass>
+                <tagletArtifact>
+                  <groupId>org.mcraig</groupId>
+                  <artifactId>jcite</artifactId>
+                  <version>1.13.0</version>
+                </tagletArtifact>
               </taglet>
             </taglets>
             <tagletArtifacts>
-              <tagletArtifact>
-                <groupId>com.ibm.icu</groupId>
-                <artifactId>tools_build</artifactId>
-                <version>${project.version}</version>
-              </tagletArtifact>
-              <tagletArtifact>
-                <groupId>org.mcraig</groupId>
-                <artifactId>jcite</artifactId>
-                <version>1.13.0</version>
-              </tagletArtifact>
               <!-- Dependencies for org.mcraig:jcite -->
               <tagletArtifact>
                 <groupId>commons-discovery</groupId>
@@ -282,7 +390,6 @@
   <profiles>
 
     <!-- This is used to create the *-sources.jar for individual modules -->
-    <!-- TODO: the shaded equivalent. -->
     <profile>
       <id>with_sources</id>
       <build>
@@ -303,7 +410,6 @@
     </profile>
 
     <!-- This is used to create the *-javadoc.jar for individual modules -->
-    <!-- TODO: the shaded equivalent. -->
     <profile>
       <id>with_javadoc</id>
       <build>
