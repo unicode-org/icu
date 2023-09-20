@@ -81,10 +81,10 @@
         </configuration>
       </plugin>
 
-      <!-- 
+      <!--
         Mainly for running localespi tests in Java 8:
         The easiest way to get the integration tests to pass (in particular, to get the JVM that is
-        spawned with the `-Djava.ext.dirs` system property value to be interpreted properly in order 
+        spawned with the `-Djava.ext.dirs` system property value to be interpreted properly in order
         for the extensions jars therein to be loaded correctly) was to copy the jars needed to a
         separate directory. (The alternative of pointing to the build directories of the respective
         submodules didn't seem to work.)
@@ -142,7 +142,7 @@
             <include>**/*ITCase.java</include>
           </includes>
 
-          <!-- 
+          <!--
             For Java 8:
             Set up the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase
 
@@ -150,7 +150,7 @@
             Using the `java.ext.dirs` special Java system property on Java 9+ runtimes triggers an
              error that tells the user to place those jars on the classpath instead.
           -->
-          <!-- 
+          <!--
               Notes:
 
               https://stackoverflow.com/a/5039973/2077918
@@ -169,7 +169,7 @@
           -->
           <argLine>${localespi-tests.jvm.args}</argLine>
 
-          <!-- 
+          <!--
               For Java 9+:
               Configure to use the locale service provider using the .jar file of `icu4j-localespi` main code from the `package` phase
 
@@ -183,11 +183,18 @@
         </configuration>
       </plugin>
 
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
   <profiles>
-    <!-- 
+    <!--
       For testing localespi using the Java extensions feature, which last existed in Java 8.
       ICU4J currently has a minimum supported version of 8.
     -->
@@ -214,6 +221,33 @@
         <localespi-tests.jvm.args></localespi-tests.jvm.args>
         <localespi-tests.locale-providers>CLDR,COMPAT,SPI</localespi-tests.locale-providers>
       </properties>
+    </profile>
+    <profile>
+      <id>with_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <!-- All files in com/ibm/icu/impl folders are exluded from javadoc.
+                    So we need to bring back this one file, to match the previously published artifacts.
+                    Without this all java files are excluded and no javadoc is generated.
+                  -->
+                  <sourceFileIncludes>
+                    <include>ICULocaleServiceProvider.java</include>
+                  </sourceFileIncludes>
+                  <sourcepath>${basedir}/src/main/java/com/ibm/icu/impl/javaspi</sourcepath>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
