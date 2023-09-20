@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695166964921,
+  "lastUpdate": 1695179478274,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12058,6 +12058,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 5.498378581920995,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "2f7090256abe90d58c8d7c7f9533ea52f25bbe1a",
+          "message": "ICU-22502 Fix TestPersonNames failure on Windows",
+          "timestamp": "2023-09-19T22:54:46-04:00",
+          "tree_id": "15a6d3465f64a16f847b39d688ee9da85aa9cbfd",
+          "url": "https://github.com/unicode-org/icu/commit/2f7090256abe90d58c8d7c7f9533ea52f25bbe1a"
+        },
+        "date": 1695179413792,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.3577566978299456,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
