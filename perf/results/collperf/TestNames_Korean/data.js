@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695248565836,
+  "lastUpdate": 1695280636645,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26890,6 +26890,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 17164317.9634,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4fcf8d22b9e547a8ca115742c50e880440f599ba",
+          "message": "ICU-22507 Fix stack overflow in ChineseCalendar::isLeapMonthBetween\n\nRewrite the recursive call to while loop to avoid stack overflow\nwhen the two values have big gap.\nInclude tests to verify the problem in unit test.",
+          "timestamp": "2023-09-20T23:56:15-07:00",
+          "tree_id": "dc89729b42b8289f8b2b694145f0424471f1b300",
+          "url": "https://github.com/unicode-org/icu/commit/4fcf8d22b9e547a8ca115742c50e880440f599ba"
+        },
+        "date": 1695280570579,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 346.0254,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 87782805.4261,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 16000259.1727,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 84835796.0329,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 17488570.9624,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
