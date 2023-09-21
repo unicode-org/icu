@@ -1888,11 +1888,8 @@ static void
 _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool hadPosix, UErrorCode* status) {
     (void)hadPosix;
     char buf[ULOC_FULLNAME_CAPACITY];
-    char tmpAppend[ULOC_FULLNAME_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t len, i;
-    int32_t reslen = 0;
-    int32_t capacity = sizeof tmpAppend;
 
     if (U_FAILURE(*status)) {
         return;
@@ -1945,37 +1942,18 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
                     }
 
                     if (writeValue) {
-                        if (reslen < capacity) {
-                            tmpAppend[reslen++] = SEP;
-                        }
+                        sink.Append("-", 1);
 
                         if (firstValue) {
-                            if (reslen < capacity) {
-                                tmpAppend[reslen++] = *PRIVATEUSE_KEY;
-                            }
-
-                            if (reslen < capacity) {
-                                tmpAppend[reslen++] = SEP;
-                            }
-
-                            len = (int32_t)uprv_strlen(PRIVUSE_VARIANT_PREFIX);
-                            if (reslen < capacity) {
-                                uprv_memcpy(tmpAppend + reslen, PRIVUSE_VARIANT_PREFIX, uprv_min(len, capacity - reslen));
-                                reslen += uprv_min(len, capacity - reslen);
-                            }
-
-                            if (reslen < capacity) {
-                                tmpAppend[reslen++] = SEP;
-                            }
-
+                            sink.Append(PRIVATEUSE_KEY, UPRV_LENGTHOF(PRIVATEUSE_KEY) - 1);
+                            sink.Append("-", 1);
+                            sink.Append(PRIVUSE_VARIANT_PREFIX, UPRV_LENGTHOF(PRIVUSE_VARIANT_PREFIX) - 1);
+                            sink.Append("-", 1);
                             firstValue = false;
                         }
 
                         len = (int32_t)uprv_strlen(pPriv);
-                        if (reslen < capacity) {
-                            uprv_memcpy(tmpAppend + reslen, pPriv, uprv_min(len, capacity - reslen));
-                            reslen += uprv_min(len, capacity - reslen);
-                        }
+                        sink.Append(pPriv, len);
                     }
                 }
                 /* reset private use starting position */
@@ -1985,16 +1963,6 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
             }
             p++;
         }
-
-        if (U_FAILURE(*status)) {
-            return;
-        }
-    }
-
-    if (U_SUCCESS(*status)) {
-        len = reslen;
-        U_ASSERT(reslen <= capacity);
-        sink.Append(tmpAppend, len);
     }
 }
 
