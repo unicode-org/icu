@@ -559,7 +559,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * the desired case for a unit formatter's output (e.g. accusative, dative, genitive).
      *
      * @return The fluent chain.
-     * @draft ICU 72
+     * @stable ICU 72
      */
     public T displayOptions(DisplayOptions displayOptions) {
         // `displayCase` does not recognise the `undefined`

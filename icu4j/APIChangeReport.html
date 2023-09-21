@@ -4,119 +4,135 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2023 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html -->
-<title>ICU4J API Comparison: ICU4J 72 with ICU4J 73</title>
+<title>ICU4J API Comparison: ICU4J 73 with ICU4J 74</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 72 with ICU4J 73</h1>
+<h1>ICU4J API Comparison: ICU4J 73 with ICU4J 74</h1>
 
 <hr/>
-<h2>Removed from ICU4J 72</h2>
+<h2>Removed from ICU4J 73</h2>
 <p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 73</h2>
+<h2>Deprecated or Obsoleted in ICU4J 74</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-UnicodeSet
+RuleBasedNumberFormat
 <ul>
-<li><span style='color:gray'>(deprecated)</span> public static final int CASE</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int DURATION</li>
 </ul>
 </ul>
 
 
 <hr/>
-<h2>Changed in ICU4J 73 (old, new)</h2>
+<h2>Changed in ICU4J 74 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 73</h2>
+<h2>Promoted to stable in ICU4J 74</h2>
+
+<h3>Package com.ibm.icu.number</h3>
+<ul>
+FormattedNumber
+<ul>
+<li><span style='color:green'>(stable)</span> public DisplayOptions.NounClass <i>getNounClass</i>()</li>
+</ul>
+NumberFormatterSettings
+<ul>
+<li><span style='color:green'>(stable)</span> public T extends NumberFormatterSettings&lt;?&gt; <i>displayOptions</i>(DisplayOptions)</li>
+</ul>
+</ul>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-DateTimePatternGenerator
+<li><span style='color:green'>(stable)</span> public final class <i>DisplayOptions</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>DisplayOptions.Builder</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.Capitalization</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.DisplayLength</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.GrammaticalCase</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.NameStyle</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.NounClass</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.PluralCategory</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DisplayOptions.SubstituteHandling</i></li>
+DisplayOptions.Capitalization
 <ul>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>getDateTimeFormat</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public void <i>setDateTimeFormat</i>(int, java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.Capitalization&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.Capitalization BEGINNING_OF_SENTENCE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.Capitalization MIDDLE_OF_SENTENCE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.Capitalization STANDALONE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.Capitalization UI_LIST_OR_MENU</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.Capitalization UNDEFINED</li>
 </ul>
-NumberFormat.Field
+DisplayOptions.DisplayLength
 <ul>
-<li><span style='color:green'>(stable)</span> public static final NumberFormat.Field APPROXIMATELY_SIGN</li>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.DisplayLength&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.DisplayLength LENGTH_FULL</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.DisplayLength LENGTH_SHORT</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.DisplayLength UNDEFINED</li>
 </ul>
+DisplayOptions.GrammaticalCase
+<ul>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.GrammaticalCase&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase <i>fromIdentifier</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public final java.lang.String <i>getIdentifier</i>()</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase ABLATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase ACCUSATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase COMITATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase DATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase ERGATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase GENITIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase INSTRUMENTAL</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase LOCATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase LOCATIVE_COPULATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase NOMINATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase OBLIQUE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase PREPOSITIONAL</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase SOCIATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase UNDEFINED</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.GrammaticalCase VOCATIVE</li>
 </ul>
-
-
-<hr/>
-<h2>Added in ICU4J 73</h2>
-
-<h3>Package com.ibm.icu.text</h3>
+DisplayOptions.NameStyle
 <ul>
-<li><span style='color:orange'>(draft)</span> public interface <i>PersonName</i></li>
-<li><span style='color:orange'>(draft)</span> public class <i>PersonNameFormatter</i></li>
-<li><span style='color:orange'>(draft)</span> public static class <i>PersonNameFormatter.Builder</i></li>
-<li><span style='color:orange'>(draft)</span> public class <i>SimplePersonName</i></li>
-<li><span style='color:orange'>(draft)</span> public static class <i>SimplePersonName.Builder</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonName.FieldModifier</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonName.NameField</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonName.PreferredOrder</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.DisplayOrder</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.Formality</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.Length</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>PersonNameFormatter.Usage</i></li>
-PersonName.FieldModifier
-<ul>
-<li><span style='color:orange'>(draft)</span> public static PersonName.FieldModifier <i>forString</i>(java.lang.String)</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toString</i>()</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier ALL_CAPS</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier CORE</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier INFORMAL</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier INITIAL</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier INITIAL_CAP</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier MONOGRAM</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier PREFIX</li>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.NameStyle&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NameStyle DIALECT_NAMES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NameStyle STANDARD_NAMES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NameStyle UNDEFINED</li>
 </ul>
-PersonName.NameField
+DisplayOptions.NounClass
 <ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toString</i>()</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField CREDENTIALS</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField GENERATION</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField GIVEN</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField GIVEN2</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField SURNAME</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField SURNAME2</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.NameField TITLE</li>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.NounClass&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass <i>fromIdentifier</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public final java.lang.String <i>getIdentifier</i>()</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass ANIMATE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass COMMON</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass FEMININE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass INANIMATE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass MASCULINE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass NEUTER</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass OTHER</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass PERSONAL</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.NounClass UNDEFINED</li>
 </ul>
-PersonName.PreferredOrder
+DisplayOptions.PluralCategory
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.PreferredOrder DEFAULT</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.PreferredOrder GIVEN_FIRST</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonName.PreferredOrder SURNAME_FIRST</li>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.PluralCategory&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory <i>fromIdentifier</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public final java.lang.String <i>getIdentifier</i>()</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory FEW</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory MANY</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory ONE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory OTHER</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory TWO</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory UNDEFINED</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.PluralCategory ZERO</li>
 </ul>
-PersonNameFormatter.DisplayOrder
+DisplayOptions.SubstituteHandling
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.DisplayOrder DEFAULT</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.DisplayOrder SORTING</li>
-</ul>
-PersonNameFormatter.Formality
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Formality FORMAL</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Formality INFORMAL</li>
-</ul>
-PersonNameFormatter.Length
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length LONG</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length MEDIUM</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length SHORT</li>
-</ul>
-PersonNameFormatter.Usage
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Usage ADDRESSING</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Usage MONOGRAM</li>
-<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Usage REFERRING</li>
-</ul>
-UnicodeSet
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final int SIMPLE_CASE_INSENSITIVE</li>
+<li><span style='color:green'>(stable)</span> public static final java.util.List&lt;DisplayOptions.SubstituteHandling&gt; VALUES</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.SubstituteHandling NO_SUBSTITUTE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.SubstituteHandling SUBSTITUTE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayOptions.SubstituteHandling UNDEFINED</li>
 </ul>
 </ul>
 
@@ -124,11 +140,109 @@ UnicodeSet
 <ul>
 MeasureUnit
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit BEAUFORT</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit QUARTER</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit TONNE</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 74</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter.LineBreak
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int AKSARA</li>
+<li><span style='color:green'>(stable)</span> public static final int AKSARA_PREBASE</li>
+<li><span style='color:green'>(stable)</span> public static final int AKSARA_START</li>
+<li><span style='color:green'>(stable)</span> public static final int VIRAMA</li>
+<li><span style='color:green'>(stable)</span> public static final int VIRAMA_FINAL</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I</li>
+<li><span style='color:green'>(stable)</span> public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I_ID</li>
+</ul>
+UProperty
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int IDS_UNARY_OPERATOR</li>
+<li><span style='color:orange'>(draft)</span> public static final int ID_COMPAT_MATH_CONTINUE</li>
+<li><span style='color:orange'>(draft)</span> public static final int ID_COMPAT_MATH_START</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+Normalizer2
+<ul>
+<li><span style='color:orange'>(draft)</span> public static Normalizer2 <i>getNFKCSimpleCasefoldInstance</i>()</li>
+</ul>
+PersonName.FieldModifier
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier GENITIVE</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonName.FieldModifier VOCATIVE</li>
+</ul>
+PersonNameFormatter.DisplayOrder
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.DisplayOrder FORCE_GIVEN_FIRST</li>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.DisplayOrder FORCE_SURNAME_FIRST</li>
+</ul>
+PersonNameFormatter.Formality
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Formality DEFAULT</li>
+</ul>
+PersonNameFormatter.Length
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final PersonNameFormatter.Length DEFAULT</li>
+</ul>
+SpoofChecker
+<ul>
+<li><span style='color:orange'>(draft)</span> public int <i>areConfusable</i>(int, java.lang.CharSequence, java.lang.CharSequence)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getBidiSkeleton</i>(int, java.lang.CharSequence)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Calendar
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int ORDINAL_MONTH</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getTemporalMonthCode</i>()</li>
+<li><span style='color:orange'>(draft)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setTemporalMonthCode</i>(java.lang.String)</li>
+</ul>
+ChineseCalendar
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getTemporalMonthCode</i>()</li>
+<li><span style='color:orange'>(draft)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setTemporalMonthCode</i>(java.lang.String)</li>
+</ul>
+HebrewCalendar
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getTemporalMonthCode</i>()</li>
+<li><span style='color:orange'>(draft)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setTemporalMonthCode</i>(java.lang.String)</li>
+</ul>
+IslamicCalendar
+<ul>
+<li><span style='color:orange'>(draft)</span> public boolean <i>inTemporalLeapYear</i>()</li>
+</ul>
+MeasureUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit GASOLINE_ENERGY_DENSITY</li>
+</ul>
+TimeZone
+<ul>
+<li><span style='color:orange'>(draft)</span> public static java.lang.String <i>getIanaID</i>(java.lang.String)</li>
+</ul>
+VersionInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_15_1</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Fri Mar 17 10:40:39 PDT 2023<br/>© 2023 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Thu Sep 21 10:51:41 PDT 2023<br/>© 2023 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
 </body>
 </html>
