@@ -278,6 +278,32 @@ TEST(DoubleToShortest) {
   builder.Reset();
   CHECK(dc6.ToShortest(-Double::NaN(), &builder));
   CHECK_EQ("NaN", builder.Finalize());
+
+  // Test examples with one significant digit.
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT;
+  DoubleToStringConverter dc7(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc8(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc9(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+
+  builder.Reset();
+  CHECK(dc7.ToShortest(0.0009, &builder));
+  CHECK_EQ("9e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc8.ToShortest(0.0009, &builder));
+  CHECK_EQ("9.e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc9.ToShortest(0.0009, &builder));
+  CHECK_EQ("9.0e-4", builder.Finalize());
 }
 
 
@@ -1259,6 +1285,32 @@ TEST(DoubleToPrecision) {
   builder.Reset();
   CHECK(dc5.ToPrecision(2000080, 5, &builder));
   CHECK_EQ("2.0001e6", builder.Finalize());
+
+  // Test examples with one significant digit.
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT;
+  DoubleToStringConverter dc12(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc13(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc14(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+
+  builder.Reset();
+  CHECK(dc12.ToPrecision(0.0009, 1, &builder));
+  CHECK_EQ("9e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc13.ToPrecision(0.0009, 1, &builder));
+  CHECK_EQ("9.e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc14.ToPrecision(0.0009, 1, &builder));
+  CHECK_EQ("9.0e-4", builder.Finalize());
 }
 
 
