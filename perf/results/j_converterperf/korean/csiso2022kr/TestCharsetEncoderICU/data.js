@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695328591263,
+  "lastUpdate": 1695334290849,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12448,6 +12448,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 28.790679255401486,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "77bc51e03e6de0a92ef063da85903ddadce97043",
+          "message": "ICU-22479 Add fuzzer for RelativeTimeFormatFuzzer\n\nAnd also fix a bug by checking the unit",
+          "timestamp": "2023-09-21T14:50:35-07:00",
+          "tree_id": "fe32fa4aa78adcf2f9f1fd708a09f787b6098b61",
+          "url": "https://github.com/unicode-org/icu/commit/77bc51e03e6de0a92ef063da85903ddadce97043"
+        },
+        "date": 1695334226172,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 21.127735029320114,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
