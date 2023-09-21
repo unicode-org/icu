@@ -10,6 +10,16 @@
 #include "unicode/listformatter.h"
 #include "unicode/locid.h"
 
+
+void TestFormat(icu::ListFormatter* listFormat, const icu::UnicodeString* items) {
+    for (size_t i = 0; i <= 4; i++) {
+        icu::UnicodeString appendTo;
+        UErrorCode status = U_ZERO_ERROR;
+        listFormat->format(items, i, appendTo, status);
+        status = U_ZERO_ERROR;
+        icu::FormattedList formatted = listFormat->formatStringsToValue(items, i, status);
+    }
+}
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     uint16_t rnd;
     UListFormatterType type;
@@ -23,12 +33,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     std::memcpy(&type, fuzzData.data(), sizeof(type));
     fuzzData.remove_prefix(sizeof(type));
-    type = static_cast<UListFormatterType>(
-        static_cast<int>(type) % (static_cast<int>(ULISTFMT_TYPE_UNITS) + 1));
     std::memcpy(&width, fuzzData.data(), sizeof(width));
     fuzzData.remove_prefix(sizeof(width));
-    width = static_cast<UListFormatterWidth>(
-        static_cast<int>(width) % (static_cast<int>(ULISTFMT_WIDTH_NARROW) + 1));
 
     size_t len = fuzzData.size() / sizeof(char16_t);
     icu::UnicodeString text(false, reinterpret_cast<const char16_t*>(fuzzData.data()), len);
@@ -37,23 +43,26 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     UErrorCode status = U_ZERO_ERROR;
     std::unique_ptr<icu::ListFormatter> listFormat(
         icu::ListFormatter::createInstance(locale, status));
-
     if (U_SUCCESS(status)) {
-        for (size_t i = 0; i <= 4; i++) {
-            icu::UnicodeString appendTo;
-            status = U_ZERO_ERROR;
-            listFormat->format(items, i, appendTo, status);
-        }
+        TestFormat(listFormat.get(), items);
     }
+
     status = U_ZERO_ERROR;
     listFormat.reset(
         icu::ListFormatter::createInstance(locale, type, width, status));
     if (U_SUCCESS(status)) {
-        for (size_t i = 0; i <= 4; i++) {
-            icu::UnicodeString appendTo;
-            status = U_ZERO_ERROR;
-            listFormat->format(items, i, appendTo, status);
-        }
+        TestFormat(listFormat.get(), items);
+    }
+
+    status = U_ZERO_ERROR;
+    type = static_cast<UListFormatterType>(
+        static_cast<int>(type) % (static_cast<int>(ULISTFMT_TYPE_UNITS) + 1));
+    width = static_cast<UListFormatterWidth>(
+        static_cast<int>(width) % (static_cast<int>(ULISTFMT_WIDTH_NARROW) + 1));
+    listFormat.reset(
+        icu::ListFormatter::createInstance(locale, type, width, status));
+    if (U_SUCCESS(status)) {
+        TestFormat(listFormat.get(), items);
     }
 
     return EXIT_SUCCESS;
