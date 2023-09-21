@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695328882810,
+  "lastUpdate": 1695334635873,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27214,6 +27214,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2989414.5759,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "77bc51e03e6de0a92ef063da85903ddadce97043",
+          "message": "ICU-22479 Add fuzzer for RelativeTimeFormatFuzzer\n\nAnd also fix a bug by checking the unit",
+          "timestamp": "2023-09-21T14:50:35-07:00",
+          "tree_id": "fe32fa4aa78adcf2f9f1fd708a09f787b6098b61",
+          "url": "https://github.com/unicode-org/icu/commit/77bc51e03e6de0a92ef063da85903ddadce97043"
+        },
+        "date": 1695334567886,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 221.5033,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 11630832.3173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2800838.4784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 10477053.3244,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2992841.2341,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
