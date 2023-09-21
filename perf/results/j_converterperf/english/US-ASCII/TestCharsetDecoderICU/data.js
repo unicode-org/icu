@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695279593688,
+  "lastUpdate": 1695311778403,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12418,6 +12418,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.7707018638964845,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "f14b24a845f7ff36519bdee5f64181f7ee389091",
+          "message": "ICU-22324 Allow single Maven cache creation and multiple read-only usage",
+          "timestamp": "2023-09-21T08:39:05-07:00",
+          "tree_id": "d7e6f90de38a03010299d5dc678ac5f161bfb68a",
+          "url": "https://github.com/unicode-org/icu/commit/f14b24a845f7ff36519bdee5f64181f7ee389091"
+        },
+        "date": 1695311704584,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.9562719358156833,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
