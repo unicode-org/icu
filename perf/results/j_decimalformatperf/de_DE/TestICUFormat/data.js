@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695346883820,
+  "lastUpdate": 1695357437984,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12508,6 +12508,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 735.1314533218452,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cdcea0c3787dcb47fbc6741221145712ffeb07ac",
+          "message": "ICU-22479 Enahnce the fuzzer for ListFormatter\n\nAdd the testing for invalid type and width.\nAlso test formatStringsToValue",
+          "timestamp": "2023-09-21T21:21:21-07:00",
+          "tree_id": "f82d15eeec7a049a784c41dbc07ecda670564efb",
+          "url": "https://github.com/unicode-org/icu/commit/cdcea0c3787dcb47fbc6741221145712ffeb07ac"
+        },
+        "date": 1695357362396,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 813.5867633366327,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
