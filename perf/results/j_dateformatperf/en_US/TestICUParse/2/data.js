@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695345575360,
+  "lastUpdate": 1695347113948,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12298,6 +12298,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 226.1108141283731,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "501fe1b74a6027709cb72e6b58fba189db541fd6",
+          "message": "ICU-22324 Mavenization, preparing for maven central deployment",
+          "timestamp": "2023-09-21T18:21:06-07:00",
+          "tree_id": "b1e35c68e2dc4f7cab75f20b41f2c38a0f4edd8b",
+          "url": "https://github.com/unicode-org/icu/commit/501fe1b74a6027709cb72e6b58fba189db541fd6"
+        },
+        "date": 1695347024907,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 244.0505815059094,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
