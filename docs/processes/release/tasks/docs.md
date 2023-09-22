@@ -49,7 +49,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 5.  make doc
 6.  Follow instructions in
     [tools/release/java/readme.txt](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/tools/release/java/readme.txt)
-    to generate API status change report.
+    to generate the API status change report.
 7.  Make sure that ICU headers work with U_HIDE_DRAFT_API and other such
     switches.
 8.  Verify that U_DRAFT and U_STABLE match the @draft and @stable tags (same for
@@ -71,11 +71,11 @@ compatibility](https://unicode-org.github.io/icu/userguide/icu/design#icu-api-co
 
 On ICU4J, run
 [com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java)
-(see file for instructions). This requires a JDK with javadoc available. The
+(see file for instructions). This requires a JDK with javadoc available, i.e, JDK8. The
 tool will need to change to reflect the release number to search for.
 
-To check the API status changes, run the ant target "apireport" to generate the
-report since the previous official release.
+To check the API status changes, run the script `releases_tools/api_reports.sh` to generate the
+report of updates since the previous official release. The resulting file is found in target/icu4j_compare_XX_YY.html.
 
 Make sure **@internal APIs** are also marked as @deprecated:
 
@@ -116,28 +116,27 @@ Andy's method (from email 2019-sep-05):
 ### **ICU4J**
 
 1.  Create a new GitHub branch.
-2.  Run next ant target: `$ ant draftAPIsTSV`
-3.  This **ant** target generates a tab-separated values file at
-    icu4j/out/draftAPIs.tsv.
-4.  Import the TSV file to Google spread sheet - for example, [ICU4J 61 Draft
+2.  In directory icu/icu4j, run this script: `releases_tools/api_reports.sh`
+3.  This script generates a tab-separated values file at target/draftAPIs.tsv.
+4.  Import the TSV file to Google spread sheet - for example, [ICU4J 74 Draft
     API
     Promotion](https://docs.google.com/spreadsheets/d/135RDyY6cWKBBvNuVE9ne8HfsItZu_CvLh47hKjr3UqM/edit#gid=1384666589).
     *   Create the spreadsheet in the shared ***ICU Projects*** folder.
-5.  Review all APIs introduced in 2 releases ago or older. For example, 59 or
-    older for ICU 61 release.
+5.  Review all APIs introduced in 2 releases ago or older. For example, 72 or
+    older for ICU 74 release.
     *   Any API added 2 or more releases ago is a candidate for promotion.
     *   Newer APIs should be left in @draft state.
 6.  Check each API entry has a corresponding approved API proposal. For example,
-    [ICU 59 API proposal
+    [ICU 72 API proposal
     status](https://docs.google.com/document/d/12dHTG3e9WXb7C1Xdc2bcXE0BK8f6IoufoUAPcz4ZT2I/edit).
     Note: An API proposal might have been created before the API proposal doc
     version, so you may need to look at older version of API proposal status
     doc.
 7.  Mark APIs proposed for promotion, and add note in the spread sheet.
 8.  Update API comments in ICU4J source code. In this case, @draft is replaced
-    with @stable (do not change ICU version, for example, "@draft ICU 59" will
-    be changed to "@stable ICU 59").
-9.  Run next ant target to generate an API change report html: `$ ant apireport`
+    with @stable (do not change ICU version, for example, "@draft ICU 72" will
+    be changed to "@stable ICU 72").
+9.  Now, rerun target to generate an API change report html: `releases_tools/api_reports.sh`.
 10. Review the report, sent the report file and the link of the spread sheet to
     ICU technical committee members for review.
 11. Once ICU TC approves the proposed change, create a pull request (PR), wait
@@ -166,10 +165,12 @@ This work is done in the root of icu4j:
 1.  Make sure JAVA_HOME is set to JDK 8. This report creation fails with JDK 11.
     For example, in Linux:
     *   `export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64`
-2.  Then run ant task "clean" and "apireport" at `<icu4j_root>`:
-    *   `ant clean apireport`
+2.  Now in `<icu4j_root>`, create a change report:
+    *   `mvn clean`
+    *   `releases_tools/api_reports.sh`
+    *   # Note that some errors may be shown. This is normal.
 3.  Above will produce API change report file
-    `<icu4j_root>/<b>out</b>/icu4j_compare_xxx_yyy.html`
+    `<icu4j_root>/<b>target</b>/icu4j_compare_xxx_yyy.html`
 4.  Make sure there are any new doc tag errors are reported. (As of ICU 4.4,
     ArabicShaping constants do not have proper tags - otherwise, clean)
 5.  Copy generated report file to `<icu4j_root>/APIChangeReport.html` and check
@@ -187,7 +188,7 @@ Once APIs are frozen for a reference release, we should check in the API
 signature data file into the repository. The data file will be used for future
 API change report.
 
-1.  Run ant task "gatherapi" at `<icu4j_root>`
+1.  Run `releases_tools/api_reports.sh` at `<icu4j_root>`
 2.  Resolve any warnings before proceeding.
 3.  The output file `icu4j<ver>.api3.gz` is created in `<icu4j_root>/out` directory.
 4.  Copy the output .gz file to `<icu4j_root>/tools/build` directory and check in the
