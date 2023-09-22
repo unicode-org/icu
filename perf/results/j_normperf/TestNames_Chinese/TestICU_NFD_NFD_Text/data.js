@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695373261155,
+  "lastUpdate": 1695388374070,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12808,6 +12808,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 5.462392053538961,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6e0468d3bfa2f6b795eee09e286bf3cf2193495e",
+          "message": "ICU-22498 Write directly to sink (instead of into legacy buffers).",
+          "timestamp": "2023-09-22T15:01:42+02:00",
+          "tree_id": "e874aa4d7f505738a032ce26bc22e7ec74caa328",
+          "url": "https://github.com/unicode-org/icu/commit/6e0468d3bfa2f6b795eee09e286bf3cf2193495e"
+        },
+        "date": 1695388310660,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.547238855663882,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
