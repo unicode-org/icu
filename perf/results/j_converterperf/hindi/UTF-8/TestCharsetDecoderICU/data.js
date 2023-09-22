@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695388645647,
+  "lastUpdate": 1695414449946,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12568,6 +12568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 4.382862415506022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "8c4af504a0b36a21d098bc2dc3880c39c549c3db",
+          "message": "ICU-22324 Mavenization, minimize the places that need a version",
+          "timestamp": "2023-09-22T13:08:25-07:00",
+          "tree_id": "65ca19624039aae16f103c2f2fa8ecc1e7a12617",
+          "url": "https://github.com/unicode-org/icu/commit/8c4af504a0b36a21d098bc2dc3880c39c549c3db"
+        },
+        "date": 1695414380558,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.7287923934873954,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
