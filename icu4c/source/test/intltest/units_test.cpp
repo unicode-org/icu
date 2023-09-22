@@ -449,11 +449,6 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     StringPiece y = trimField(fields[2]);
     StringPiece commentConversionFormula = trimField(fields[3]);
     StringPiece utf8Expected = trimField(fields[4]);
-    StringPiece gasolineEnergyDensity("gasoline-energy-density");
-
-    if ( x.compare(gasolineEnergyDensity) == 0 && unitsTest->logKnownIssue("CLDR-17015", "Problem with gasoline-energy-density unit calculation")) {
-          return;
-    }
 
     UNumberFormat *nf = unum_open(UNUM_DEFAULT, nullptr, -1, "en_US", nullptr, status);
     if (status.errIfFailureAndReset("unum_open failed")) {

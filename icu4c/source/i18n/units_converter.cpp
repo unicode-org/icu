@@ -372,11 +372,11 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
         factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
     } else if (baseStr == "in3_to_m3") {
         factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
-        factor.factorDen *= 12 * 12 * 12;
+        factor.factorDen *= std::pow(12 * 12 * 12, power * signum);
     } else if (baseStr == "gal_to_m3") {
-        factor.factorNum *= 231;
         factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
-        factor.factorDen *= 12 * 12 * 12;
+        factor.factorNum *= std::pow(231, power * signum);
+        factor.factorDen *= std::pow(12 * 12 * 12, power * signum);
     } else if (baseStr == "gal_imp_to_m3") {
         factor.constantExponents[CONSTANT_GAL_IMP2M3] += power * signum;
     } else if (baseStr == "G") {
