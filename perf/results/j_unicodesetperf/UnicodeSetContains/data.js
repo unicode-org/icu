@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695333789809,
+  "lastUpdate": 1695345362529,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12538,6 +12538,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 2.4821328207746047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "c3544278cbecdc561d926cb0bd6b3a3cfa28a61d",
+          "message": "ICU-22325 BRS#13: urename.h",
+          "timestamp": "2023-09-21T16:45:25-07:00",
+          "tree_id": "cccde14430d2efeeb80421467a496cb712145417",
+          "url": "https://github.com/unicode-org/icu/commit/c3544278cbecdc561d926cb0bd6b3a3cfa28a61d"
+        },
+        "date": 1695345300812,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 3.3980141649179543,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
