@@ -45,21 +45,24 @@
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>
 
+    <!-- Version update! -->
+    <icu.major.version>74</icu.major.version>
+
     <!-- Variables used to generate the javadoc -->
-    <api.doc.version>74 Release Candidate</api.doc.version>
+    <!-- Version update! -->
+    <api.doc.version>${icu.major.version} Release Candidate</api.doc.version>
     <icu4j.api.doc.window.title>ICU4J ${api.doc.version}</icu4j.api.doc.window.title>
     <icu4j.api.doc.header>ICU4J ${api.doc.version}</icu4j.api.doc.header>
     <icu4j.api.doc.copyright.footer>&lt;font size=-1&gt;Copyright © 2016 Unicode, Inc. and others.&lt;/font&gt;</icu4j.api.doc.copyright.footer>
+
     <!-- Needs to be overriden in sub-modules -->
     <icu4j.api.doc.root.dir>${project.basedir}</icu4j.api.doc.root.dir>
-    <icu4j.api.report.version>74</icu4j.api.report.version>
+    <icu4j.api.report.version>${icu.major.version}</icu4j.api.report.version>
 
     <!-- Used for the .jar Manifest files -->
-
-    <mf.Specification-Version>74</mf.Specification-Version>
-    <mf.Implementation-Version>74.0.1</mf.Implementation-Version>
-    <mf.Bundle-Version>74.0.1</mf.Bundle-Version>
-
+    <mf.Specification-Version>${icu.major.version}</mf.Specification-Version>
+    <mf.Implementation-Version>${project.version}</mf.Implementation-Version>
+    <mf.Bundle-Version>${project.version}</mf.Bundle-Version>
     <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
 
     <!-- For most modules artifactId does not have an "icu4j" prefix, so this is a good default -->
@@ -187,6 +190,13 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.11.0</version>
+          <!-- Plugin bug, maven.compiler.* properties are not honored, see
+            https://issues.apache.org/jira/browse/MCOMPILER-545
+          -->
+          <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -506,7 +516,7 @@
     <!-- The tools/build module depends on the old tools.jar (jdk 1.8)
       The com.sun.javadoc package was deprecated in Java 11, and has been removed for Java 17.
       JDK 11 does not include tools.jar anymore. The code must be updated, see migration guide at
-      https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
+        https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
     -->
     <profile>
       <id>old_jdk_taglet</id>
@@ -517,6 +527,31 @@
          <module>tools/build</module>
       </modules>
     </profile>
+
+    <!-- Starting with JDK 9, the Java compiler supports the −−release version.
+      Unlike source (checking the language features) and target (the version of the classes generated),
+      this option also checks that newer APIs are not used.
+        https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-release.html
+      Would be nice if the maven-compiler-plugin would filter this out below JDK 9, but it does not.
+      So we must use an auto-activated profile for this option.
+    -->
+    <profile>
+      <id>newer_jdk</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <release>8</release>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
   </profiles>
 
 </project>
