@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695414392886,
+  "lastUpdate": 1695445303524,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12658,6 +12658,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.018402905866451946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "c4689841c001a0b98e5b59adaab34656bd2a998f",
+          "message": "ICU-22463 Fix the conversion from gasoline-equivalent units to kilograms-per-meter-squared-per-second\n\nSee #2616",
+          "timestamp": "2023-09-23T06:48:25+02:00",
+          "tree_id": "336d1d0d2a8eb26799aff8af2dd936b63e5ae43d",
+          "url": "https://github.com/unicode-org/icu/commit/c4689841c001a0b98e5b59adaab34656bd2a998f"
+        },
+        "date": 1695445240878,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.01838202658823904,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
