@@ -697,9 +697,12 @@ ucurr_getName(const char16_t* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    char loc[ULOC_FULLNAME_CAPACITY];
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+    CharString loc;
+    {
+        CharStringByteSink sink(&loc);
+        ulocimp_getName(locale, sink, &ec2);
+    }
+    if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -712,7 +715,7 @@ ucurr_getName(const char16_t* currency,
     
     const char16_t* s = nullptr;
     ec2 = U_ZERO_ERROR;
-    LocalUResourceBundlePointer rb(ures_open(U_ICUDATA_CURR, loc, &ec2));
+    LocalUResourceBundlePointer rb(ures_open(U_ICUDATA_CURR, loc.data(), &ec2));
 
     if (nameStyle == UCURR_NARROW_SYMBOL_NAME || nameStyle == UCURR_FORMAL_SYMBOL_NAME || nameStyle == UCURR_VARIANT_SYMBOL_NAME) {
         CharString key;
@@ -796,9 +799,12 @@ ucurr_getPluralName(const char16_t* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    char loc[ULOC_FULLNAME_CAPACITY];
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+    CharString loc;
+    {
+        CharStringByteSink sink(&loc);
+        ulocimp_getName(locale, sink, &ec2);
+    }
+    if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -808,7 +814,7 @@ ucurr_getPluralName(const char16_t* currency,
 
     const char16_t* s = nullptr;
     ec2 = U_ZERO_ERROR;
-    UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc, &ec2);
+    UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc.data(), &ec2);
 
     rb = ures_getByKey(rb, CURRENCYPLURALS, rb, &ec2);
 
@@ -984,14 +990,17 @@ collectCurrencyNames(const char* locale,
     // Look up the Currencies resource for the given locale.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    char loc[ULOC_FULLNAME_CAPACITY] = "";
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+    CharString loc;
+    {
+        CharStringByteSink sink(&loc);
+        ulocimp_getName(locale, sink, &ec2);
+    }
+    if (U_FAILURE(ec2)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
     // Get maximum currency name count first.
-    getCurrencyNameCount(loc, total_currency_name_count, total_currency_symbol_count);
+    getCurrencyNameCount(loc.data(), total_currency_name_count, total_currency_symbol_count);
 
     *currencyNames = (CurrencyNameStruct*)uprv_malloc
         (sizeof(CurrencyNameStruct) * (*total_currency_name_count));
@@ -1019,7 +1028,7 @@ collectCurrencyNames(const char* locale,
     for (int32_t localeLevel = 0; ; ++localeLevel) {
         ec2 = U_ZERO_ERROR;
         // TODO: ures_openDirect
-        UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc, &ec2);
+        UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc.data(), &ec2);
         UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, nullptr, &ec2);
         int32_t n = ures_getSize(curr);
         for (int32_t i=0; i<n; ++i) {
@@ -1113,7 +1122,7 @@ collectCurrencyNames(const char* locale,
         ures_close(curr);
         ures_close(rb);
 
-        if (!fallback(loc)) {
+        if (!fallback(loc.data())) {
             break;
         }
     }
