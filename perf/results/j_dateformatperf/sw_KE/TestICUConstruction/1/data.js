@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695662031453,
+  "lastUpdate": 1695682575815,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12448,6 +12448,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 3955.6921776461127,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "c1475f4bbdf230bd2ed277ad97d667869291e58b",
+          "message": "ICU-22516 Return error while the style is invalid\n\nTo avoid later unknown address in icu_74::UnicodeString::copyFrom",
+          "timestamp": "2023-09-25T15:43:49-07:00",
+          "tree_id": "0e1409de3b8bbf02ada2ac7210546d7a42cf04f8",
+          "url": "https://github.com/unicode-org/icu/commit/c1475f4bbdf230bd2ed277ad97d667869291e58b"
+        },
+        "date": 1695682483274,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 4590.523178754461,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
