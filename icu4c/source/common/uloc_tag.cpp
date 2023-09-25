@@ -2625,53 +2625,18 @@ ulocimp_toLanguageTag(const char* localeID,
                       UBool strict,
                       UErrorCode* status) {
     icu::CharString canonical;
-    int32_t reslen;
     UErrorCode tmpStatus = U_ZERO_ERROR;
     UBool hadPosix = false;
     const char* pKeywordStart;
 
     /* Note: uloc_canonicalize returns "en_US_POSIX" for input locale ID "".  See #6835 */
-    int32_t resultCapacity = static_cast<int32_t>(uprv_strlen(localeID));
-    if (resultCapacity > 0) {
-        char* buffer;
-
-        for (;;) {
-            buffer = canonical.getAppendBuffer(
-                    /*minCapacity=*/resultCapacity,
-                    /*desiredCapacityHint=*/resultCapacity,
-                    resultCapacity,
-                    tmpStatus);
-
-            if (U_FAILURE(tmpStatus)) {
-                *status = tmpStatus;
-                return;
-            }
-
-            reslen =
-                uloc_canonicalize(localeID, buffer, resultCapacity, &tmpStatus);
-
-            if (tmpStatus != U_BUFFER_OVERFLOW_ERROR) {
-                break;
-            }
-
-            resultCapacity = reslen;
-            tmpStatus = U_ZERO_ERROR;
-        }
-
-        if (U_FAILURE(tmpStatus)) {
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-
-        canonical.append(buffer, reslen, tmpStatus);
-        if (tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
-            tmpStatus = U_ZERO_ERROR;  // Terminators provided by CharString.
-        }
-
-        if (U_FAILURE(tmpStatus)) {
-            *status = tmpStatus;
-            return;
-        }
+    {
+        icu::CharStringByteSink canonicalSink(&canonical);
+        ulocimp_canonicalize(localeID, canonicalSink, &tmpStatus);
+    }
+    if (U_FAILURE(tmpStatus)) {
+        *status = tmpStatus;
+        return;
     }
 
     /* For handling special case - private use only tag */

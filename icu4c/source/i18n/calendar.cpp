@@ -255,23 +255,23 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     UErrorCode status = U_ZERO_ERROR;
     ECalType calType = CALTYPE_UNKNOWN;
 
-    //TODO: ULOC_FULL_NAME is out of date and too small..
-    char canonicalName[256];
-
     // Canonicalize, so that an old-style variant will be transformed to keywords.
     // e.g ja_JP_TRADITIONAL -> ja_JP@calendar=japanese
     // NOTE: Since ICU-20187, ja_JP_TRADITIONAL no longer canonicalizes, and
     // the Gregorian calendar is returned instead.
-    int32_t canonicalLen = uloc_canonicalize(locid, canonicalName, sizeof(canonicalName) - 1, &status);
+    CharString canonicalName;
+    {
+        CharStringByteSink sink(&canonicalName);
+        ulocimp_canonicalize(locid, sink, &status);
+    }
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;
     }
-    canonicalName[canonicalLen] = 0;    // terminate
 
     CharString calTypeBuf;
     {
         CharStringByteSink sink(&calTypeBuf);
-        ulocimp_getKeywordValue(canonicalName, "calendar", sink, &status);
+        ulocimp_getKeywordValue(canonicalName.data(), "calendar", sink, &status);
     }
     if (U_SUCCESS(status)) {
         calType = getCalendarType(calTypeBuf.data());
@@ -284,7 +284,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     // when calendar keyword is not available or not supported, read supplementalData
     // to get the default calendar type for the locale's region
     char region[ULOC_COUNTRY_CAPACITY];
-    (void)ulocimp_getRegionForSupplementalData(canonicalName, true, region, sizeof(region), &status);
+    (void)ulocimp_getRegionForSupplementalData(canonicalName.data(), true, region, sizeof(region), &status);
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;
     }
