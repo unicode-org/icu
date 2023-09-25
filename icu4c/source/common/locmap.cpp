@@ -1200,9 +1200,12 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
         }
     }
 
-    char asciiBCP47Tag[LOCALE_NAME_MAX_LENGTH] = {};
     // this will change it from de_DE@collation=phonebook to de-DE-u-co-phonebk form
-    (void)uloc_toLanguageTag(mylocaleID, asciiBCP47Tag, UPRV_LENGTHOF(asciiBCP47Tag), false, status);
+    icu::CharString asciiBCP47Tag;
+    {
+        icu::CharStringByteSink sink(&asciiBCP47Tag);
+        ulocimp_toLanguageTag(mylocaleID, sink, false, status);
+    }
 
     if (U_SUCCESS(*status))
     {
