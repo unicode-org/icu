@@ -2717,13 +2717,16 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
     UResourceDataEntry *entry;
     if(openType != URES_OPEN_DIRECT) {
         /* first "canonicalize" the locale ID */
-        char canonLocaleID[ULOC_FULLNAME_CAPACITY];
-        uloc_getBaseName(localeID, canonLocaleID, UPRV_LENGTHOF(canonLocaleID), status);
-        if(U_FAILURE(*status) || *status == U_STRING_NOT_TERMINATED_WARNING) {
+        CharString canonLocaleID;
+        {
+            CharStringByteSink sink(&canonLocaleID);
+            ulocimp_getBaseName(localeID, sink, status);
+        }
+        if(U_FAILURE(*status)) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return nullptr;
         }
-        entry = entryOpen(path, canonLocaleID, openType, status);
+        entry = entryOpen(path, canonLocaleID.data(), openType, status);
     } else {
         entry = entryOpenDirect(path, localeID, status);
     }
@@ -3066,7 +3069,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 {
     char defVal[1024] = ""; /* default value for given locale */
     char defLoc[1024] = ""; /* default value for given locale */
-    char base[1024] = ""; /* base locale */
+    CharString base; /* base locale */
     char found[1024] = "";
     char parent[1024] = "";
     char full[1024] = "";
@@ -3083,19 +3086,21 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     if(kwVal == DEFAULT_TAG) {
         kwVal.clear();
     }
-    uloc_getBaseName(locid, base, 1024-1,&subStatus);
+    {
+        CharStringByteSink sink(&base);
+        ulocimp_getBaseName(locid, sink, &subStatus);
+    }
 #if defined(URES_TREE_DEBUG)
     fprintf(stderr, "getFunctionalEquivalent: \"%s\" [%s=%s] in %s - %s\n", 
-            locid, keyword, kwVal.data(), base, u_errorName(subStatus));
+            locid, keyword, kwVal.data(), base.data(), u_errorName(subStatus));
 #endif
     ures_initStackObject(&bund1);
     ures_initStackObject(&bund2);
-    
-    
-    uprv_strcpy(parent, base);
-    uprv_strcpy(found, base);
 
-    if(isAvailable) { 
+    base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
+    base.extract(found, UPRV_LENGTHOF(found), subStatus);
+
+    if(isAvailable) {
         UEnumeration *locEnum = ures_openAvailableLocales(path, &subStatus);
         *isAvailable = true;
         if (U_SUCCESS(subStatus)) {
@@ -3168,11 +3173,10 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     } while(!defVal[0] && *found && uprv_strcmp(found, "root") != 0 && U_SUCCESS(*status));
     
     /* Now, see if we can find the kwVal collator.. start the search over.. */
-    uprv_strcpy(parent, base);
-    uprv_strcpy(found, base);
-    
+    base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
+    base.extract(found, UPRV_LENGTHOF(found), subStatus);
+
     do {
-        subStatus = U_ZERO_ERROR;
         res = ures_open(path, parent, &subStatus);
         if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
             *isAvailable = false;
@@ -3265,6 +3269,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 
         getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
         ures_close(res);
+        subStatus = U_ZERO_ERROR;
     } while(!full[0] && *found && U_SUCCESS(*status));
 
     if((full[0]==0) && kwVal != defVal) {
@@ -3272,11 +3277,10 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal.data(), defVal);
 #endif
         kwVal.clear().append(defVal, subStatus);
-        uprv_strcpy(parent, base);
-        uprv_strcpy(found, base);
-        
+        base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
+        base.extract(found, UPRV_LENGTHOF(found), subStatus);
+
         do { /* search for 'default' named item */
-            subStatus = U_ZERO_ERROR;
             res = ures_open(path, parent, &subStatus);
             if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
                 *isAvailable = false;
@@ -3334,6 +3338,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             uprv_strcpy(found, parent);
             getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
             ures_close(res);
+            subStatus = U_ZERO_ERROR;
         } while(!full[0] && *found && U_SUCCESS(*status));
     }
     
