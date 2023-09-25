@@ -9,6 +9,6 @@
 // ***************************************************************************
 icuver:table(nofallback){
     CLDRVersion{"44"}
-    DataVersion{"74.0.1.0"}
-    ICUVersion{"74.0.1.0"}
+    DataVersion{"74.1.0.0"}
+    ICUVersion{"74.1.0.0"}
 }
