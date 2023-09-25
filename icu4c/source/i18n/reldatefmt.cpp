@@ -805,6 +805,10 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
     if (U_FAILURE(status)) {
         return;
     }
+    if (styl < 0 || UDAT_STYLE_COUNT <= styl) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     if ((capitalizationContext >> 8) != UDISPCTX_TYPE_CAPITALIZATION) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
