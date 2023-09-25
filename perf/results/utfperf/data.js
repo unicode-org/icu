@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695682909406,
+  "lastUpdate": 1695684767638,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21460,6 +21460,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 2.9144,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "2df1ab724040dc9cb25a4df7f0244cfe79ffef62",
+          "message": "ICU-21289 Switch to using CharString for calling uloc_canonicalize().",
+          "timestamp": "2023-09-26T00:52:13+02:00",
+          "tree_id": "829501061a49bd823f23b5b1b63e368989891653",
+          "url": "https://github.com/unicode-org/icu/commit/2df1ab724040dc9cb25a4df7f0244cfe79ffef62"
+        },
+        "date": 1695684703797,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 14.6403,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 5.1671,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 2.4213,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
