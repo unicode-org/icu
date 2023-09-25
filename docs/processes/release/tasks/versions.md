@@ -92,6 +92,133 @@ Edit icuver.txt directly.
 
 ### ICU4J
 
+#### Since ICU 74
+
+Changing the version for Java starting with ICU 74 requires a few steps:
+
+1. [icu4j/main/core/src/main/java/com/ibm/icu/util/VersionInfo.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/main/java/com/ibm/icu/util/VersionInfo.java)
+
+    There is a static block starting at line 501 (as of 54.1) in the source file.
+
+    Update the `ICU_VERSION` value, where the first three arguments represent the
+    major, minor, and patch versions of a semantic version.
+    Use the `getInstance(<major>, 0, 1, 0)` as the version during pre-release development,
+    and use `getInstance(<major>, 1, 0, 0)` to indicate a GA release version.
+    See the section on "ICU Version Number" for the version numbers to use during the BRS tasks for
+    each phase of the release process.
+
+    <pre>
+    /**
+     * Initialize versions only after MAP_ has been created
+     */
+    static {
+        UNICODE_1_0 = getInstance(1, 0, 0, 0);
+        UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
+        UNICODE_1_1_0 = getInstance(1, 1, 0, 0);
+        UNICODE_1_1_5 = getInstance(1, 1, 5, 0);
+        UNICODE_2_0 = getInstance(2, 0, 0, 0);
+        UNICODE_2_1_2 = getInstance(2, 1, 2, 0);
+        UNICODE_2_1_5 = getInstance(2, 1, 5, 0);
+        UNICODE_2_1_8 = getInstance(2, 1, 8, 0);
+        UNICODE_2_1_9 = getInstance(2, 1, 9, 0);
+        UNICODE_3_0 = getInstance(3, 0, 0, 0);
+        UNICODE_3_0_1 = getInstance(3, 0, 1, 0);
+        UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
+        UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
+        UNICODE_3_2 = getInstance(3, 2, 0, 0);
+        UNICODE_4_0 = getInstance(4, 0, 0, 0);
+        UNICODE_4_0_1 = getInstance(4, 0, 1, 0);
+        UNICODE_4_1 = getInstance(4, 1, 0, 0);
+        UNICODE_5_0 = getInstance(5, 0, 0, 0);
+        UNICODE_5_1 = getInstance(5, 1, 0, 0);
+        UNICODE_5_2 = getInstance(5, 2, 0, 0);
+        UNICODE_6_0 = getInstance(6, 0, 0, 0);
+        UNICODE_6_1 = getInstance(6, 1, 0, 0);
+        UNICODE_6_2 = getInstance(6, 2, 0, 0);
+        UNICODE_6_3 = getInstance(6, 3, 0, 0);
+        UNICODE_7_0 = getInstance(7, 0, 0, 0);
+    <b>
+        ICU_VERSION = getInstance(74, 1, 0, 0);
+        ICU_DATA_VERSION = ICU_VERSION;</b>
+        UNICODE_VERSION = UNICODE_7_0;
+
+        UCOL_RUNTIME_VERSION = getInstance(8);
+        UCOL_BUILDER_VERSION = getInstance(9);
+        UCOL_TAILORINGS_VERSION = getInstance(1);
+    }
+    </pre>
+
+    In the same file, starting at line 164 (as of 54.1) -
+
+    <pre>
+    /**
+     * Data version string for ICU's internal data.
+     * Used for appending to data path (e.g. icudt43b)
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final String <b>ICU_DATA_VERSION_PATH = "74b";</b>
+    </pre>
+
+2. When creating the final release of a major ICU version, 
+or a point release (minor version update on a maintenance branch),
+update the Maven project version for ICU4J at the root (`icu4j/pom.xml`) and all of the submodules
+with the following Maven command.
+The command requires a version number string that follows the typical Java / Maven version number conventions.
+
+    The following examples illustrate the version numbers to use during and after the ICU 74 release:
+
+    * For an ICU major version change's final release, use: `74.1`
+    * On the `main` branch in the commit after the commit from which the release branch was cut,
+      use: `75.0.1-SNAPSHOT`
+    * For a point release (ICU minor version change), use: `74.2`
+    * On the maintenance branch (ex: `maint/maint-74`) in the commit after the commit creating the point release, use: `74.2.1-SNAPSHOT`
+
+    **Note:** for the public-facing Maven version number, we only use the major and minor versions of
+    the semantic version. In other words, we use version `74.1`, not `74.1.0`.
+
+    With the proper new version number, run the following Maven command to update the version numbers
+    throughout all of the ICU4J `pom.xml` build files.
+
+    ```
+    mvn versions:set -DnewVersion=74.1 -DgenerateBackupPoms=false
+    ```
+
+3. Immediately after creating the final release of a major ICU version, update the value that represents just the major version number of the semantic version. To do this, update the value of the ICU `icu.major.version` property in the root Maven pom.xml file at `icu4j/pom.xml`.
+
+    This can be done by running the following command:
+
+    ```
+    mvn versions:set-property -DnewVersion=74 -Dproperty=icu.major.version
+    ```
+
+    This should happen at the same time and along with the work in the previous step for the version number
+    when the version number is updated on `main` in the commit after the release/maintanence branch is cut.
+    In other words, the above `versions:set-property` step should be executed at the same time
+    `mvn versions:set -DnewVersion=74.0.1-SNAPSHOT` is executed.
+
+4. Update the `api.doc.version` property.
+Edit the root pom file at `icu4j/pom.xml` and manually make this change:
+
+    * Before the RC release, ensure that the property includes the phrase "Release Candidate".
+    ```
+    <api.doc.version>${icu.major.version} Release Candidate</api.doc.version>
+    ```
+    * For the final GA release, ensure that the property only includes the major version number.
+    ```
+    <api.doc.version>${icu.major.version}</api.doc.version>
+    ```
+
+5. Update the following variables in `icu4j/releases_tools/api_reports.sh`
+
+    * `artifact_version` - The version used in the Maven `pom.xml` files. You can alternatively produce this value by running `mvn help:evaluate -Dexpression=project.version -q -DforceStdout`.
+    * `api_report_version` - The major version of the new version. Change during RC BRS.
+    * `api_report_prev_version`  - The major version of the previous version. Change during RC BRS.
+
+
+#### Until ICU 73 (inclusive)
+
 Since ICU4J 4.6, you can quickly check the current version information by
 running jar main in icu4j.jar. For example,
 
@@ -148,7 +275,14 @@ For updating ICU version numbers, follow the steps below.
 
 3. [icu4j/main/core/src/main/java/com/ibm/icu/util/VersionInfo.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/main/java/com/ibm/icu/util/VersionInfo.java)
 
-    There is a static block starting at line 501 (as of 54.1) in the source file -
+    There is a static block starting at line 501 (as of 54.1) in the source file.
+    
+    Update the `ICU_VERSION` value, where the first three arguments represent the
+    major, minor, and patch versions of a semantic version.
+    Use the `getInstance(major, 0, 1, 0)` as the version during pre-release development,
+    and use `getInstance(major, 1, 0, 0)` to indicate a GA release version.
+    See the section on "ICU Version Number" for the version numbers to use during the BRS tasks for
+    each phase of the release process.
 
     <pre>
     /**
