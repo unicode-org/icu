@@ -625,31 +625,6 @@ error:
     }
 }
 
-static int32_t
-do_canonicalize(const char*    localeID,
-         char* buffer,
-         int32_t bufferCapacity,
-         UErrorCode* err)
-{
-    int32_t canonicalizedSize = uloc_canonicalize(
-        localeID,
-        buffer,
-        bufferCapacity,
-        err);
-
-    if (*err == U_STRING_NOT_TERMINATED_WARNING ||
-        *err == U_BUFFER_OVERFLOW_ERROR) {
-        return canonicalizedSize;
-    }
-    else if (U_FAILURE(*err)) {
-
-        return -1;
-    }
-    else {
-        return canonicalizedSize;
-    }
-}
-
 U_CAPI int32_t U_EXPORT2
 uloc_addLikelySubtags(const char* localeID,
                       char* maximizedLocaleID,
@@ -683,14 +658,13 @@ static UBool
 _ulocimp_addLikelySubtags(const char* localeID,
                           icu::ByteSink& sink,
                           UErrorCode* status) {
-    PreflightingLocaleIDBuffer localeBuffer;
-    do {
-        localeBuffer.requestedCapacity = do_canonicalize(localeID, localeBuffer.getBuffer(),
-            localeBuffer.getCapacity(), status);
-    } while (localeBuffer.needToTryAgain(status));
-    
+    icu::CharString localeBuffer;
+    {
+        icu::CharStringByteSink localeSink(&localeBuffer);
+        ulocimp_canonicalize(localeID, localeSink, status);
+    }
     if (U_SUCCESS(*status)) {
-        return _uloc_addLikelySubtags(localeBuffer.getBuffer(), sink, status);
+        return _uloc_addLikelySubtags(localeBuffer.data(), sink, status);
     } else {
         return false;
     }
@@ -737,13 +711,12 @@ ulocimp_minimizeSubtags(const char* localeID,
                         icu::ByteSink& sink,
                         bool favorScript,
                         UErrorCode* status) {
-    PreflightingLocaleIDBuffer localeBuffer;
-    do {
-        localeBuffer.requestedCapacity = do_canonicalize(localeID, localeBuffer.getBuffer(),
-            localeBuffer.getCapacity(), status);
-    } while (localeBuffer.needToTryAgain(status));
-    
-    _uloc_minimizeSubtags(localeBuffer.getBuffer(), sink, favorScript, status);
+    icu::CharString localeBuffer;
+    {
+        icu::CharStringByteSink localeSink(&localeBuffer);
+        ulocimp_canonicalize(localeID, localeSink, status);
+    }
+    _uloc_minimizeSubtags(localeBuffer.data(), sink, favorScript, status);
 }
 
 // Pairs of (language subtag, + or -) for finding out fast if common languages

@@ -88,7 +88,6 @@ static const char providerKeyword[]  = "@sp=";
 static const int32_t locElementCount = UCOL_SIT_LOCELEMENT_MAX+1;
 static const int32_t locElementCapacity = 32;
 static const int32_t loc3066Capacity = 256;
-static const int32_t internalBufferSize = 512;
 
 /* structure containing specification of a collator. Initialized
  * from a short string. Also used to construct a short string from a
@@ -452,11 +451,13 @@ ucol_prepareShortStringOpen( const char *definition,
     ucol_sit_readSpecs(&s, definition, parseError, status);
     ucol_sit_calculateWholeLocale(&s, *status);
 
-    char buffer[internalBufferSize];
-    uprv_memset(buffer, 0, internalBufferSize);
-    uloc_canonicalize(s.locale.data(), buffer, internalBufferSize, status);
+    CharString buffer;
+    {
+        CharStringByteSink sink(&buffer);
+        ulocimp_canonicalize(s.locale.data(), sink, status);
+    }
 
-    UResourceBundle *b = ures_open(U_ICUDATA_COLL, buffer, status);
+    UResourceBundle *b = ures_open(U_ICUDATA_COLL, buffer.data(), status);
     /* we try to find stuff from keyword */
     UResourceBundle *collations = ures_getByKey(b, "collations", nullptr, status);
     UResourceBundle *collElem = nullptr;
@@ -464,7 +465,7 @@ ucol_prepareShortStringOpen( const char *definition,
     {
         // if there is a keyword, we pick it up and try to get elements
         CharStringByteSink sink(&keyBuffer);
-        ulocimp_getKeywordValue(buffer, "collation", sink, status);
+        ulocimp_getKeywordValue(buffer.data(), "collation", sink, status);
     }
     if(keyBuffer.isEmpty()) {
       // no keyword
@@ -519,14 +520,16 @@ ucol_openFromShortString( const char *definition,
     string = ucol_sit_readSpecs(&s, definition, parseError, status);
     ucol_sit_calculateWholeLocale(&s, *status);
 
-    char buffer[internalBufferSize];
-    uprv_memset(buffer, 0, internalBufferSize);
 #ifdef UCOL_TRACE_SIT
     fprintf(stderr, "DEF %s, DATA %s, ERR %s\n", definition, s.locale.data(), u_errorName(*status));
 #endif
-    uloc_canonicalize(s.locale.data(), buffer, internalBufferSize, status);
+    CharString buffer;
+    {
+        CharStringByteSink sink(&buffer);
+        ulocimp_canonicalize(s.locale.data(), sink, status);
+    }
 
-    UCollator *result = ucol_open(buffer, status);
+    UCollator *result = ucol_open(buffer.data(), status);
     int32_t i = 0;
 
     for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
