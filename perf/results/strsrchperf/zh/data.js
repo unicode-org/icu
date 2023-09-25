@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695445569429,
+  "lastUpdate": 1695662532473,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15874,6 +15874,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 79.6273,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6d1999fbb9fd8dbca901b692cda6acb147982673",
+          "message": "ICU-21289 Switch to using CharString for calling uloc_getKeywordValue().",
+          "timestamp": "2023-09-25T19:02:41+02:00",
+          "tree_id": "0f4fa991e436494e54f2ee7cfa1a8f347f15d8c1",
+          "url": "https://github.com/unicode-org/icu/commit/6d1999fbb9fd8dbca901b692cda6acb147982673"
+        },
+        "date": 1695662467688,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 31.4517,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 64.9245,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
