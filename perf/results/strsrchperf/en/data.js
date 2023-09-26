@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695684716550,
+  "lastUpdate": 1695728813527,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15838,6 +15838,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 60.7974,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "9bce52f003496527b2e37e31ae08521cd35212ac",
+          "message": "ICU-21289 Switch to using CharString for calling uloc_toLanguageTag().",
+          "timestamp": "2023-09-26T13:26:11+02:00",
+          "tree_id": "6946ee770cbe8066d20610ca6cbfa72cf94cab1d",
+          "url": "https://github.com/unicode-org/icu/commit/9bce52f003496527b2e37e31ae08521cd35212ac"
+        },
+        "date": 1695728743329,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.5595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 43.4547,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
