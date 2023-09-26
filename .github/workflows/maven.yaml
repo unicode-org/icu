@@ -7,7 +7,7 @@ on:
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
 
 env:
-  MAVEN_ARGS: '--show-version --no-transfer-progress'
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
 
 permissions:
   contents: read
@@ -25,28 +25,22 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-      - name: icu4j ant releaseCLDR
-        run: ant -noinput releaseCLDR -f icu4j/build.xml
+      - name: icu4j and releaseCLDR
+        run: |
+          cd icu4j
+          mvn ${SHARED_MVN_ARGS} clean install -DskipTests -DskipIT -P with_sources
       - name: deploy it
         run: |
-          MYVERSION=$(sed -n -e 's%^\s*maven.pom.ver[ =]*%%p' < icu4j/build.properties)-$(echo ${GITHUB_REF} | cut -d/ -f3- | tr ./ _-)
-          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA}, version ${MYVERSION}
-          mvn deploy:deploy-file -DgroupId=com.ibm.icu \
-            -DartifactId=icu4j-for-cldr \
-            -Dversion=${MYVERSION} \
-            -Dpackaging=jar \
-            -Dfile=icu4j/release_cldr/icu4j.jar \
-            -Dsources=icu4j/release_cldr/icu4j-src.jar \
-            -DrepositoryId=github \
-            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY}
-          mvn deploy:deploy-file -DgroupId=com.ibm.icu \
-            -DartifactId=utilities-for-cldr \
-            -Dversion=${MYVERSION} \
-            -Dpackaging=jar \
-            -Dfile=icu4j/release_cldr/utilities.jar \
-            -Dsources=icu4j/release_cldr/utilities-src.jar \
-            -DrepositoryId=github \
-            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY}
+          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
+          cd icu4j
+          mvn deploy ${SHARED_MVN_ARGS} \
+            -pl main/icu4j \
+            -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
+            -P with_sources
+          mvn deploy ${SHARED_MVN_ARGS} \
+            -pl tools/utilities-for-cldr \
+            -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
+            -P cldr_tools,with_sources
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # Note: can use 0.0.0-${GITHUB_SHA} as the version for hash-based.

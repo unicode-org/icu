@@ -10,7 +10,7 @@
 * Since: ICU 2.4
 **********************************************************************
 */
-package com.ibm.icu.dev.tool;
+package com.ibm.icu.dev.tool.shared;
 
 /**
  * A command-line option.  A UOption specifies the name of an option

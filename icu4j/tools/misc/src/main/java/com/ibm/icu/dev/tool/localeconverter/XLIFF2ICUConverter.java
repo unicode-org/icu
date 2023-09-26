@@ -32,7 +32,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.ibm.icu.dev.tool.UOption;
+import com.ibm.icu.dev.tool.shared.UOption;
 
 public final class XLIFF2ICUConverter {
     

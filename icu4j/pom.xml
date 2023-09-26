@@ -27,6 +27,7 @@
     <module>demos</module>
     <module>samples</module>
     <module>tools/misc</module>
+    <module>tools/utilities-for-cldr</module>
     <module>perf-tests</module>
   </modules>
 
@@ -257,6 +258,11 @@
         <plugin>
           <artifactId>maven-dependency-plugin</artifactId>
           <version>3.6.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.4.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
