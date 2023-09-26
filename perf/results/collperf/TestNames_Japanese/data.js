@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695729038065,
+  "lastUpdate": 1695742922453,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -27808,6 +27808,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 8660263.8294,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "99026f01cc79bdd25f2ed7e5dabd44ce6026e427",
+          "message": "ICU-22325 BRS74RC: Update version number to 74.1\n\nSee #2613",
+          "timestamp": "2023-09-26T08:21:21-07:00",
+          "tree_id": "92ade653ecaf31bab4eda9eac23f2699a7ae2fc9",
+          "url": "https://github.com/unicode-org/icu/commit/99026f01cc79bdd25f2ed7e5dabd44ce6026e427"
+        },
+        "date": 1695742857633,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 314.4478,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 28304549.3109,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6421043.2986,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 28457041.3477,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7384594.9329,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
