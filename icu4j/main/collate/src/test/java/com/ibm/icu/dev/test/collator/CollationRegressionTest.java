@@ -1230,6 +1230,20 @@ public class CollationRegressionTest extends TestFmwk {
     }
 
     @Test
+    public void TestICU22517() {
+        boolean quick = TestFmwk.getExhaustiveness() <= 5;
+        String rule = "&a=b쫊쫊쫊쫊쫊쫊쫊쫊";
+        int length = quick ? (rule.length()-2) : rule.length();
+        for (int i = 4; i <= length; i++) {
+            try {
+                RuleBasedCollator coll = new RuleBasedCollator(rule.substring(0, i));
+            } catch (Exception e) {
+                // silence ignore.
+            }
+        }
+    }
+
+    @Test
     public void TestBeforeWithTooStrongAfter() {
         // ICU ticket #9959:
         // Forbid rules with a before-reset followed by a stronger relation.
