@@ -477,25 +477,6 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
 /* ### BCP47 Conversion *******************************************/
 /* Test if the locale id has BCP47 u extension and does not have '@' */
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == nullptr && getShortestSubtagLength(localeID) == 1)
-/* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
-static const char* _ConvertBCP47(
-        const char* id, char* buffer, int32_t length,
-        UErrorCode* err, int32_t* pLocaleIdSize) {
-    const char* finalID;
-    int32_t localeIDSize = uloc_forLanguageTag(id, buffer, length, nullptr, err);
-    if (localeIDSize <= 0 || U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) {
-        finalID=id;
-        if (*err == U_STRING_NOT_TERMINATED_WARNING) {
-            *err = U_BUFFER_OVERFLOW_ERROR;
-        }
-    } else {
-        finalID=buffer;
-    }
-    if (pLocaleIdSize != nullptr) {
-        *pLocaleIdSize = localeIDSize;
-    }
-    return finalID;
-}
 /* Gets the size of the shortest subtag in the given localeID. */
 static int32_t getShortestSubtagLength(const char *localeID) {
     int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));
@@ -762,7 +743,7 @@ ulocimp_getKeywordValue(const char* localeID,
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
 
     if(status && U_SUCCESS(*status) && localeID) {
-      char tempBuffer[ULOC_FULLNAME_CAPACITY];
+      CharString tempBuffer;
       const char* tmpLocaleID;
 
       if (keywordName == nullptr || keywordName[0] == 0) {
@@ -776,8 +757,9 @@ ulocimp_getKeywordValue(const char* localeID,
       }
 
       if (_hasBCP47Extension(localeID)) {
-          tmpLocaleID = _ConvertBCP47(localeID, tempBuffer,
-                                      sizeof(tempBuffer), status, nullptr);
+        CharStringByteSink sink(&tempBuffer);
+        ulocimp_forLanguageTag(localeID, -1, sink, nullptr, status);
+        tmpLocaleID = U_SUCCESS(*status) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
       } else {
           tmpLocaleID=localeID;
       }
@@ -1406,7 +1388,7 @@ U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywords(const char* localeID,
                         UErrorCode* status)
 {
-    char tempBuffer[ULOC_FULLNAME_CAPACITY];
+    CharString tempBuffer;
     const char* tmpLocaleID;
 
     if(status==nullptr || U_FAILURE(*status)) {
@@ -1414,8 +1396,9 @@ uloc_openKeywords(const char* localeID,
     }
 
     if (_hasBCP47Extension(localeID)) {
-        tmpLocaleID = _ConvertBCP47(localeID, tempBuffer,
-                                    sizeof(tempBuffer), status, nullptr);
+        CharStringByteSink sink(&tempBuffer);
+        ulocimp_forLanguageTag(localeID, -1, sink, nullptr, status);
+        tmpLocaleID = U_SUCCESS(*status) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
     } else {
         if (localeID==nullptr) {
             localeID=uloc_getDefault();
@@ -1489,7 +1472,7 @@ _canonicalize(const char* localeID,
     }
 
     int32_t j, fieldCount=0, scriptSize=0, variantSize=0;
-    PreflightingLocaleIDBuffer tempBuffer;  // if localeID has a BCP47 extension, tmpLocaleID points to this
+    CharString tempBuffer;  // if localeID has a BCP47 extension, tmpLocaleID points to this
     CharString localeIDWithHyphens;  // if localeID has a BPC47 extension and have _, tmpLocaleID points to this
     const char* origLocaleID;
     const char* tmpLocaleID;
@@ -1512,13 +1495,9 @@ _canonicalize(const char* localeID,
             }
         }
 
-        do {
-            // After this call tmpLocaleID may point to localeIDPtr which may
-            // point to either localeID or localeIDWithHyphens.data().
-            tmpLocaleID = _ConvertBCP47(localeIDPtr, tempBuffer.getBuffer(),
-                                        tempBuffer.getCapacity(), err,
-                                        &(tempBuffer.requestedCapacity));
-        } while (tempBuffer.needToTryAgain(err));
+        CharStringByteSink tempSink(&tempBuffer);
+        ulocimp_forLanguageTag(localeIDPtr, -1, tempSink, nullptr, err);
+        tmpLocaleID = U_SUCCESS(*err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeIDPtr;
     } else {
         if (localeID==nullptr) {
            localeID=uloc_getDefault();
@@ -1795,7 +1774,7 @@ uloc_getVariant(const char* localeID,
                 int32_t variantCapacity,
                 UErrorCode* err)
 {
-    char tempBuffer[ULOC_FULLNAME_CAPACITY];
+    CharString tempBuffer;
     const char* tmpLocaleID;
     int32_t i=0;
 
@@ -1804,7 +1783,9 @@ uloc_getVariant(const char* localeID,
     }
 
     if (_hasBCP47Extension(localeID)) {
-        tmpLocaleID =_ConvertBCP47(localeID, tempBuffer, sizeof(tempBuffer), err, nullptr);
+        CharStringByteSink sink(&tempBuffer);
+        ulocimp_forLanguageTag(localeID, -1, sink, nullptr, err);
+        tmpLocaleID = U_SUCCESS(*err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
     } else {
         if (localeID==nullptr) {
            localeID=uloc_getDefault();
