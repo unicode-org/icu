@@ -5,6 +5,12 @@
 
 # ICU codepage data for GB 18030-2022
 
+# This data file was originally generated from the mapping tables
+# published with the original (year 2000) GB18030 standard.
+# It has been updated for the 2005 version of GB18030 (ICU-8274 & ICU-8427)
+# and for the 2022 version (ICU-22357).
+# ICU-22420 then made minor mapping changes for GBK and web data/WHATWG compatibility.
+
 <code_set_name>               "gb18030-2022"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  4
@@ -23,7 +29,8 @@
 # The second <icu:state> line is commented out (and does not count)
 # because the state table is hand-optimized and does not use what would be
 # the natural path for the encoding scheme.
-<icu:state> 0-7f, 81:6, 82:7, 83:8, 84:9, 85-fe:3
+# ICU-22420 makes 0x80 valid for the GBK encoding of the Euro sign.
+<icu:state> 0-80, 81:6, 82:7, 83:8, 84:9, 85-fe:3
 # <icu:state> 30-39:2, 40-7e, 80-fe
 <icu:state> 81-fe:2
 <icu:state> 30-39
@@ -55,6 +62,18 @@
 # for more information.
 
 CHARMAP
+
+# ICU-22420 reverse fallbacks for compatibility with GBK and other web data as in WHATWG.
+# U+20AC = EURO SIGN (normally \xA2\xE3)
+# U+3000 = IDEOGRAPHIC SPACE (normally \xA1\xA1)
+#
+# PUA U+E5E5 used to round-trip to \xA3\xA0, as specified in GB18030.
+# Now that \xA3\xA0 maps to U+3000 (“reverse fallback” mapping),
+# we use a “good one-way” mapping from U+E5E5 to \xA3\xA0
+# for maximum compatibility with previous behavior.
+<U20AC> \x80 |3
+<U3000> \xA3\xA0 |3
+<UE5E5> \xA3\xA0 |4
 
 <U0000> \x00 |0
 <U0001> \x01 |0
@@ -29602,7 +29621,7 @@ CHARMAP
 <UE5E2> \xA3\x9D |0
 <UE5E3> \xA3\x9E |0
 <UE5E4> \xA3\x9F |0
-<UE5E5> \xA3\xA0 |0
+# <UE5E5> \xA3\xA0 |0
 <UE5E6> \xA4\x40 |0
 <UE5E7> \xA4\x41 |0
 <UE5E8> \xA4\x42 |0
