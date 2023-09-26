@@ -11,6 +11,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <utility>
+
 #include "unicode/ucurr.h"
 #include "unicode/locid.h"
 #include "unicode/ures.h"
@@ -602,11 +604,15 @@ ucurr_forLocale(const char* locale,
 
     if ((U_FAILURE(localStatus)) && strchr(id, '_') != 0) {
         // We don't know about it.  Check to see if we support the variant.
-        uloc_getParent(locale, id, UPRV_LENGTHOF(id), ec);
+        CharString parent;
+        {
+            CharStringByteSink sink(&parent);
+            ulocimp_getParent(locale, sink, ec);
+        }
         *ec = U_USING_FALLBACK_WARNING;
-        // TODO: Loop over the shortened id rather than recursing and
+        // TODO: Loop over the parent rather than recursing and
         // looking again for a currency keyword.
-        return ucurr_forLocale(id, buff, buffCapacity, ec);
+        return ucurr_forLocale(parent.data(), buff, buffCapacity, ec);
     }
     if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) {
         // There is nothing to fallback to. Report the failure/warning if possible.
@@ -629,20 +635,22 @@ ucurr_forLocale(const char* locale,
  * @return true if the fallback happened; false if locale is already
  * root ("").
  */
-static UBool fallback(char *loc) {
-    if (!*loc) {
+static UBool fallback(CharString& loc) {
+    if (loc.isEmpty()) {
         return false;
     }
     UErrorCode status = U_ZERO_ERROR;
-    if (uprv_strcmp(loc, "en_GB") == 0) {
+    if (loc == "en_GB") {
         // HACK: See #13368.  We need "en_GB" to fall back to "en_001" instead of "en"
         // in order to consume the correct data strings.  This hack will be removed
         // when proper data sink loading is implemented here.
-        // NOTE: "001" adds 1 char over "GB".  However, both call sites allocate
-        // arrays with length ULOC_FULLNAME_CAPACITY (plenty of room for en_001).
-        uprv_strcpy(loc + 3, "001");
+        loc.truncate(3);
+        loc.append("001", status);
     } else {
-        uloc_getParent(loc, loc, (int32_t)uprv_strlen(loc), &status);
+        CharString tmp;
+        CharStringByteSink sink(&tmp);
+        ulocimp_getParent(loc.data(), sink, &status);
+        loc = std::move(tmp);
     }
  /*
     char *i = uprv_strrchr(loc, '_');
@@ -915,13 +923,17 @@ getCurrencyNameCount(const char* loc, int32_t* total_currency_name_count, int32_
     *total_currency_name_count = 0;
     *total_currency_symbol_count = 0;
     const char16_t* s = nullptr;
-    char locale[ULOC_FULLNAME_CAPACITY] = "";
-    uprv_strcpy(locale, loc);
+    CharString locale;
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        locale.append(loc, status);
+        if (U_FAILURE(status)) { return; }
+    }
     const icu::Hashtable *currencySymbolsEquiv = getCurrSymbolsEquiv();
     for (;;) {
         UErrorCode ec2 = U_ZERO_ERROR;
         // TODO: ures_openDirect?
-        UResourceBundle* rb = ures_open(U_ICUDATA_CURR, locale, &ec2);
+        UResourceBundle* rb = ures_open(U_ICUDATA_CURR, locale.data(), &ec2);
         UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, nullptr, &ec2);
         int32_t n = ures_getSize(curr);
         for (int32_t i=0; i<n; ++i) {
@@ -1122,7 +1134,7 @@ collectCurrencyNames(const char* locale,
         ures_close(curr);
         ures_close(rb);
 
-        if (!fallback(loc.data())) {
+        if (!fallback(loc)) {
             break;
         }
     }

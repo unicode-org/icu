@@ -1656,11 +1656,38 @@ uloc_getParent(const char*    localeID,
                int32_t parentCapacity,
                UErrorCode* err)
 {
+    if (U_FAILURE(*err)) {
+        return 0;
+    }
+
+    CheckedArrayByteSink sink(parent, parentCapacity);
+    ulocimp_getParent(localeID, sink, err);
+
+    int32_t reslen = sink.NumberOfBytesAppended();
+
+    if (U_FAILURE(*err)) {
+        return reslen;
+    }
+
+    if (sink.Overflowed()) {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    } else {
+        u_terminateChars(parent, parentCapacity, reslen, err);
+    }
+
+    return reslen;
+}
+
+U_CAPI void U_EXPORT2
+ulocimp_getParent(const char* localeID,
+                  icu::ByteSink& sink,
+                  UErrorCode* err)
+{
     const char *lastUnderscore;
     int32_t i;
 
     if (U_FAILURE(*err))
-        return 0;
+        return;
 
     if (localeID == nullptr)
         localeID = uloc_getDefault();
@@ -1676,13 +1703,9 @@ uloc_getParent(const char*    localeID,
         if (uprv_strnicmp(localeID, "und_", 4) == 0) {
             localeID += 3;
             i -= 3;
-            uprv_memmove(parent, localeID, uprv_min(i, parentCapacity));
-        } else if (parent != localeID) {
-            uprv_memcpy(parent, localeID, uprv_min(i, parentCapacity));
         }
+        sink.Append(localeID, i);
     }
-
-    return u_terminateChars(parent, parentCapacity, i, err);
 }
 
 U_CAPI int32_t U_EXPORT2

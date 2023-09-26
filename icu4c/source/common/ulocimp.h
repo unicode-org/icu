@@ -92,6 +92,11 @@ ulocimp_getKeywordValue(const char* localeID,
                         icu::ByteSink& sink,
                         UErrorCode* status);
 
+U_CAPI void U_EXPORT2
+ulocimp_getParent(const char* localeID,
+                  icu::ByteSink& sink,
+                  UErrorCode* err);
+
 /**
  * Writes a well-formed language tag for this locale ID.
  *
