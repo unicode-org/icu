@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import com.ibm.icu.dev.tool.UOption;
+import com.ibm.icu.dev.tool.shared.UOption;
 import com.ibm.icu.impl.LocaleUtility;
 
 /**
