@@ -1249,6 +1249,18 @@ void CollationRegressionTest::TestBeforeWithTooStrongAfter() {
     }
 }
 
+void CollationRegressionTest::TestICU22517() {
+    IcuTestErrorCode errorCode(*this, "TestICU22517");
+    char16_t data[] = u"&a=b쫊쫊쫊쫊쫊쫊쫊쫊";
+    icu::UnicodeString rule(true, data, -1);
+    int length = quick ? rule.length()-2 : rule.length();
+    for (int i = 4; i <= length; i++) {
+      UErrorCode status = U_ZERO_ERROR;
+      icu::LocalPointer<icu::RuleBasedCollator> col1(
+          new icu::RuleBasedCollator(rule.tempSubString(0, i), status));
+    }
+}
+
 void CollationRegressionTest::TestICU22277() {
     IcuTestErrorCode errorCode(*this, "TestICU22277");
     UErrorCode status = U_ZERO_ERROR;
@@ -1408,6 +1420,7 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestTrailingComment);
     TESTCASE_AUTO(TestBeforeWithTooStrongAfter);
     TESTCASE_AUTO(TestICU22277);
+    TESTCASE_AUTO(TestICU22517);
     TESTCASE_AUTO_END;
 }
 

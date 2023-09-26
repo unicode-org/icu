@@ -240,6 +240,8 @@ public:
     // Test use-of-uninitialized-value
     void TestICU22277();
 
+    void TestICU22517();
+
 private:
     //------------------------------------------------------------------------
     // Internal utilities
