@@ -2,19 +2,16 @@
 # Copyright (C) 2023 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
-export MAVEN_ARGS='--no-transfer-progress'
-
-# Version update!
-export artifact_version='74.1-SNAPSHOT'
-export api_report_version='74'
-export api_report_prev_version='73'
-export out_dir=target
-
+if [ ! -f "releases_tools/shared.sh" ]; then
+  echo "ERROR: This script should be executed while being in the icu4j folder"
+  exit
+fi
+. releases_tools/shared.sh
 
 function checkThatJdk8IsDefault() {
   javac -version appPath 2>&1 | grep -E 'javac 1\.8\.' > /dev/null
   if [ $? -eq 0 ]; then
-    echo "The default JDK is JDK 8, all good!"
+    echo "The default JDK version is 8, all good!"
     javac -version
   else
     echo "This step can only be executed with JDK 8!"
@@ -23,40 +20,6 @@ function checkThatJdk8IsDefault() {
     exit
   fi
 
-}
-
-# Copy the icu artifacts from the local maven repo to the lib folder,
-# so that we can use it as classpath.
-function copyArtifacts() {
-  rm   -fr ${out_dir}/lib/
-  mkdir -p ${out_dir}/lib/
-
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:tools_build:${artifact_version}   -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:core:${artifact_version}          -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:collate:${artifact_version}       -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:icu4j-charset:${artifact_version} -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:currdata:${artifact_version}      -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:langdata:${artifact_version}      -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:regiondata:${artifact_version}    -DoutputDirectory=${out_dir}/lib/
-  mvn dependency:copy -q -Dartifact=com.ibm.icu:translit:${artifact_version}      -DoutputDirectory=${out_dir}/lib/
-}
-
-function checkFileCreated() {
-  local OUT_FILE=$1
-  if [ -f "$OUT_FILE" ]; then
-    echo "    Output file $OUT_FILE generated"
-  else
-    echo "    Error generating output file $OUT_FILE"
-    exit
-  fi
-}
-
-function reportTitle() {
-  echo ""
-  echo "=============================================="
-  echo $*
-  echo "=============================================="
-  echo ""
 }
 
 # ====================================================================================
@@ -78,8 +41,7 @@ mvn site -q  --batch-mode -DskipITs -DskipTests -P gatherapi > /dev/null
 checkFileCreated "${out_dir}/icu4j${api_report_version}.api3.gz"
 
 # Prepare classpath folder to run the tools
-copyArtifacts
-export toolcp="${out_dir}/lib/*"
+copyDependencyArtifacts
 
 # ====================================================================================
 
@@ -137,4 +99,3 @@ java -cp "$toolcp" \
         -t ${out_dir}/icu4j${api_report_version}.api3.gz
 
 checkFileCreated "${out_dir}/draftAPIs.tsv"
-

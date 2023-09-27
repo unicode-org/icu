@@ -210,7 +210,7 @@ Edit the root pom file at `icu4j/pom.xml` and manually make this change:
     <api.doc.version>${icu.major.version}</api.doc.version>
     ```
 
-5. Update the following variables in `icu4j/releases_tools/api_reports.sh`
+5. Update the following variables in `icu4j/releases_tools/shared.sh`
 
     * `artifact_version` - The version used in the Maven `pom.xml` files. You can alternatively produce this value by running `mvn help:evaluate -Dexpression=project.version -q -DforceStdout`.
     * `api_report_version` - The major version of the new version. Change during RC BRS.
