@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695830162864,
+  "lastUpdate": 1695838757734,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16234,6 +16234,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 108.7007,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mnita@google.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "7a0373411ea44e682565f91c6dfd1aa00135b6c0",
+          "message": "ICU-22324 Mavenization, building the CLDR utilities",
+          "timestamp": "2023-09-27T11:01:06-07:00",
+          "tree_id": "00c765052b5dc1249d0645baa37e7b3b9c8ea8df",
+          "url": "https://github.com/unicode-org/icu/commit/7a0373411ea44e682565f91c6dfd1aa00135b6c0"
+        },
+        "date": 1695838680090,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 50.169,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 106.2494,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
