@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695765561466,
+  "lastUpdate": 1695823504820,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21670,6 +21670,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 2.3088,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "87fe057838515e660be4cbdf5b735d5ecdd4c4e1",
+          "message": "ICU-22324 Mavenization, add -SNAPSHOT back to the maven version",
+          "timestamp": "2023-09-27T06:46:31-07:00",
+          "tree_id": "50a88d129978e323dcef0ba35a1ef7eba23022b2",
+          "url": "https://github.com/unicode-org/icu/commit/87fe057838515e660be4cbdf5b735d5ecdd4c4e1"
+        },
+        "date": 1695823431481,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 10.2167,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.7834,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 2.3098,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
