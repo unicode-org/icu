@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695823485548,
+  "lastUpdate": 1695830160656,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16054,6 +16054,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 73.4695,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "c670bbd5b099da2e24acb04a0a57704e158b5f96",
+          "message": "ICU-22420 GB18030 change 3 mappings for GBK/web compat",
+          "timestamp": "2023-09-27T08:37:24-07:00",
+          "tree_id": "dba05c65b2bd66fb02b4011fc2ecb084c4bb7e52",
+          "url": "https://github.com/unicode-org/icu/commit/c670bbd5b099da2e24acb04a0a57704e158b5f96"
+        },
+        "date": 1695830077343,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 37.6159,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 71.6999,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
