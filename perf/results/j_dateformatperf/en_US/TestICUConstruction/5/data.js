@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695858179510,
+  "lastUpdate": 1695861315891,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12808,6 +12808,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2305.0625841483084,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "9ed8532d2dd25afd15841a80aac010a6c3d0638e",
+          "message": "ICU-22332 document advanced usage of bidi confusability\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2023-09-28T02:22:05+02:00",
+          "tree_id": "4c87988086e4b6959a97f1346437736843dd2da9",
+          "url": "https://github.com/unicode-org/icu/commit/9ed8532d2dd25afd15841a80aac010a6c3d0638e"
+        },
+        "date": 1695861239635,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2456.218246311573,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
