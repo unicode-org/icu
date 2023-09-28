@@ -9,9 +9,9 @@ import static org.junit.Assert.fail;
 import java.math.RoundingMode;
 import java.util.Locale;
 
-import com.ibm.icu.number.LocalizedNumberFormatter;
 import org.junit.Test;
 
+import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.SkeletonSyntaxException;
 import com.ibm.icu.util.ULocale;

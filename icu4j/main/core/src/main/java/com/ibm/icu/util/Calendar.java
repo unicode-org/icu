@@ -12,11 +12,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.StringCharacterIterator;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.List;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CalType;

@@ -12,7 +12,6 @@ import com.ibm.icu.util.CopticCalendar;
 import com.ibm.icu.util.EthiopicCalendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
-import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
