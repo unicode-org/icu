@@ -7,7 +7,7 @@ on:
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
 
 env:
-  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+  SHARED_MVN_ARGS: '--show-version'
 
 permissions:
   contents: read
@@ -34,13 +34,9 @@ jobs:
           echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
           cd icu4j
           mvn deploy ${SHARED_MVN_ARGS} \
-            -pl main/icu4j \
+            -pl :icu4j,:utilities-for-cldr,:icu4j-root \
             -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
-            -P with_sources
-          mvn deploy ${SHARED_MVN_ARGS} \
-            -pl tools/utilities-for-cldr \
-            -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
-            -P cldr_tools,with_sources
+            -P cldr_utilities,with_sources
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # Note: can use 0.0.0-${GITHUB_SHA} as the version for hash-based.

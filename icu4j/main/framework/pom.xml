@@ -7,8 +7,9 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>main</artifactId>
+    <artifactId>icu4j-root</artifactId>
     <version>74.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>framework</artifactId>
@@ -46,8 +47,14 @@
           </archive>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <!-- We don't want to deploy this to Maven -->
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
 
 </project>

@@ -13,7 +13,8 @@
 
   <name>${proj-title} (${project.artifactId})</name>
   <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
-    providing Unicode and Globalization support</description>
+    providing Unicode and Globalization support.
+    This is the base artifact with common settings, not intended to use directly.</description>
   <url>https://icu.unicode.org/</url>
   <inceptionYear>1995</inceptionYear>
 
@@ -23,7 +24,23 @@
   </organization>
 
   <modules>
-    <module>main</module>
+    <module>main/framework</module>
+    <module>main/core</module>
+    <!-- For publishing to Maven Central -->
+    <module>main/charset</module>
+    <module>main/collate</module>
+    <module>main/currdata</module>
+    <module>main/langdata</module>
+    <module>main/regiondata</module>
+    <module>main/translit</module>
+    <module>main/common_tests</module>
+    <!-- Shaded jar for publishing to Maven Central -->
+    <module>main/icu4j</module>
+    <!-- For publishing to Maven Central. Not shaded, but depends on the shaded artifacts above.
+         Also contains all the project properties (developers, scm, etc) needed for maven publishing.
+    -->
+    <module>main/localespi</module>
+
     <module>demos</module>
     <module>samples</module>
     <module>tools/misc</module>
@@ -36,8 +53,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <maven_central_repo_url>https://oss.sonatype.org</maven_central_repo_url>
-    <maven-central-releases-repo-url>${maven-central-repo-url}/service/local/staging/deploy/maven2</maven-central-releases-repo-url>
+    <maven-central-repo-url>https://oss.sonatype.org</maven-central-repo-url>
     <maven-central-snapshots-repo-url>${maven-central-repo-url}/content/repositories/snapshots</maven-central-snapshots-repo-url>
 
     <junit.version>4.13.2</junit.version>
@@ -227,13 +243,6 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.1</version>
-          <!-- We don't want to deploy all submodules to Maven, so we make it opt-in.
-            What we want to publish to Maven Central are the current 3 artifacts (icu4j, charset, and localespi).
-            And what we publish to the GitHub Maven repository is the specific-to-CLDR version of ICU4J.
-          -->
-          <configuration>
-            <skip>true</skip>
-          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>

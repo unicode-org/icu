@@ -7,11 +7,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>main</artifactId>
+    <artifactId>icu4j-root</artifactId>
     <version>74.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>icu4j-localespi</artifactId>
+  <description>icu4j-localespi is a supplemental library for icu4j, implementing Java Locale SPI.</description>
 
   <properties>
     <proj.displayname>JDK locale service provider</proj.displayname>
@@ -180,13 +182,6 @@
             <java.locale.providers>${localespi-tests.locale-providers}</java.locale.providers>
           </systemPropertyVariables>
 
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>false</skip>
         </configuration>
       </plugin>
 

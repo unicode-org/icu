@@ -8,11 +8,14 @@
 
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>main</artifactId>
+    <artifactId>icu4j-root</artifactId>
     <version>74.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>icu4j</artifactId>
+  <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
+    providing Unicode and Globalization support</description>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
@@ -84,6 +87,7 @@
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+              <useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
@@ -108,12 +112,6 @@
               <followSymlinks>false</followSymlinks>
             </fileset>
           </filesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>

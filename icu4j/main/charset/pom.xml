@@ -7,11 +7,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>main</artifactId>
+    <artifactId>icu4j-root</artifactId>
     <version>74.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>icu4j-charset</artifactId>
+  <description>icu4j-charset is a supplemental library for icu4j, implementing Java Charset SPI.</description>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
@@ -66,12 +68,6 @@
               <Export-Package>com.ibm.icu.charset</Export-Package>
             </manifestEntries>
           </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>
