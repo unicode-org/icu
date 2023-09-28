@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695905870554,
+  "lastUpdate": 1695937616182,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31378,6 +31378,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 9.9547,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "07137b64e454dfda7ab0c46eaaa55d6bfc29e399",
+          "message": "ICU-22521 Return U_INTERNAL_PROGRAM_ERROR instead of % 0\n\nWhen the gap is 0, return status as U_INTERNAL_PROGRAM_ERROR\nand avoid the operation of \"% gap\"",
+          "timestamp": "2023-09-28T14:23:07-07:00",
+          "tree_id": "b5dfc3acc475ba088d23eb5f55b3be8500c8ae92",
+          "url": "https://github.com/unicode-org/icu/commit/07137b64e454dfda7ab0c46eaaa55d6bfc29e399"
+        },
+        "date": 1695937542133,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 7.3495,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 7.3567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 7.4286,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 7.2944,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 7.2981,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 7.4772,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
