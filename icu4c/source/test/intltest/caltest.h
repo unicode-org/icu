@@ -332,6 +332,7 @@ public: // package
     void TestDangiOverflowIsLeapMonthBetween22507();
 
     void TestFWWithISO8601();
+    void TestRollWeekOfYear();
 
     void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
     void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);

@@ -1927,6 +1927,10 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
 
             // Now roll between start and (limit - 1).
             int32_t gap = limit - start;
+            if (gap == 0) {
+                status =  U_INTERNAL_PROGRAM_ERROR;
+                return;
+            }
             int32_t day_of_month = (internalGet(UCAL_DAY_OF_MONTH) + amount*7 -
                 start) % gap;
             if (day_of_month < 0) day_of_month += gap;
@@ -1985,6 +1989,10 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
 
             // Now roll between start and (limit - 1).
             int32_t gap = limit - start;
+            if (gap == 0) {
+                status =  U_INTERNAL_PROGRAM_ERROR;
+                return;
+            }
             int32_t day_of_year = (internalGet(UCAL_DAY_OF_YEAR) + amount*7 -
                 start) % gap;
             if (day_of_year < 0) day_of_year += gap;
