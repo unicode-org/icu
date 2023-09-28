@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695858587626,
+  "lastUpdate": 1695861775671,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28132,6 +28132,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7419704.8113,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "9ed8532d2dd25afd15841a80aac010a6c3d0638e",
+          "message": "ICU-22332 document advanced usage of bidi confusability\n\nCo-authored-by: Markus Scherer <markus.icu@gmail.com>",
+          "timestamp": "2023-09-28T02:22:05+02:00",
+          "tree_id": "4c87988086e4b6959a97f1346437736843dd2da9",
+          "url": "https://github.com/unicode-org/icu/commit/9ed8532d2dd25afd15841a80aac010a6c3d0638e"
+        },
+        "date": 1695861698539,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 341.1403,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 28149385.6728,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6476339.7258,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 28469488.7343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7554911.2138,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
