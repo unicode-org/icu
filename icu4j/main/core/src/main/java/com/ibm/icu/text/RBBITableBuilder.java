@@ -20,8 +20,6 @@ import java.util.TreeSet;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.RBBIDataWrapper;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
 
 /**

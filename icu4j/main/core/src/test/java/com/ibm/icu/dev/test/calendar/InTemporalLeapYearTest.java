@@ -10,7 +10,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
-import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)

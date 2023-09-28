@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.personname;
 
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;

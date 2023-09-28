@@ -4,6 +4,7 @@ package com.ibm.icu.impl.locale;
 
 import java.util.List;
 import java.util.Objects;
+
 import com.ibm.icu.lang.UScript;
 
 public final class LSR {
