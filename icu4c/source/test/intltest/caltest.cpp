@@ -188,6 +188,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
     TESTCASE_AUTO(TestFWWithISO8601);
     TESTCASE_AUTO(TestDangiOverflowIsLeapMonthBetween22507);
+    TESTCASE_AUTO(TestRollWeekOfYear);
 
     TESTCASE_AUTO_END;
 }
@@ -5539,6 +5540,17 @@ void CalendarTest::TestFWWithISO8601() {
         msg = msg + locale + "\")->getFirstDayOfWeek()";
         assertEquals(msg.c_str(), i, cal->getFirstDayOfWeek());
     }
+}
+void CalendarTest::TestRollWeekOfYear() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l("zh_TW@calendar=chinese");
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status), status);
+    cal->set(UCAL_EXTENDED_YEAR, -1107626);
+    cal->set(UCAL_MONTH, UCAL_JANUARY);
+    cal->set(UCAL_DATE, 1);
+    cal->roll(UCAL_WEEK_OF_YEAR, 0x7fffff, status);
+    U_ASSERT(U_SUCCESS(status));
+    cal->roll(UCAL_WEEK_OF_YEAR, 1, status);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
