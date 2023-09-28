@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695905446871,
+  "lastUpdate": 1695937235316,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13168,6 +13168,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.655936037040646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "07137b64e454dfda7ab0c46eaaa55d6bfc29e399",
+          "message": "ICU-22521 Return U_INTERNAL_PROGRAM_ERROR instead of % 0\n\nWhen the gap is 0, return status as U_INTERNAL_PROGRAM_ERROR\nand avoid the operation of \"% gap\"",
+          "timestamp": "2023-09-28T14:23:07-07:00",
+          "tree_id": "b5dfc3acc475ba088d23eb5f55b3be8500c8ae92",
+          "url": "https://github.com/unicode-org/icu/commit/07137b64e454dfda7ab0c46eaaa55d6bfc29e399"
+        },
+        "date": 1695937160576,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.140541649566329,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
