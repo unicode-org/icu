@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695861615086,
+  "lastUpdate": 1695863524432,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12868,6 +12868,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.9449661241908975,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "bfbf578f1c83fbda60d68ef2739f381ad6c61866",
+          "message": "ICU-22325 docmain ICU 74 new C services",
+          "timestamp": "2023-09-27T17:55:37-07:00",
+          "tree_id": "b17718641046e4a76a94c8410ac51a2ec632ac4d",
+          "url": "https://github.com/unicode-org/icu/commit/bfbf578f1c83fbda60d68ef2739f381ad6c61866"
+        },
+        "date": 1695863458798,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.130756101247563,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
