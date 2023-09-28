@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695863631042,
+  "lastUpdate": 1695905457845,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12868,6 +12868,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.250386800757313,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "acfe1c299b010026b98f315eb3960f19086590c1",
+          "message": "ICU-22325 Update double-conversion to v3.3.0",
+          "timestamp": "2023-09-28T14:31:16+02:00",
+          "tree_id": "333ec8533860e613066e4a98f8bbd5116376dd53",
+          "url": "https://github.com/unicode-org/icu/commit/acfe1c299b010026b98f315eb3960f19086590c1"
+        },
+        "date": 1695905381640,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.206401721604492,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
