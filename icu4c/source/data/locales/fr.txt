@@ -701,7 +701,7 @@ fr{
                         evening1{"soir"}
                         midnight{"minuit"}
                         morning1{"matin"}
-                        night1{"nuit"}
+                        night1{"matin"}
                         noon{"midi"}
                     }
                     narrow{
@@ -709,7 +709,7 @@ fr{
                         evening1{"soir"}
                         midnight{"minuit"}
                         morning1{"mat."}
-                        night1{"nuit"}
+                        night1{"matin"}
                         noon{"midi"}
                     }
                     wide{
@@ -726,13 +726,13 @@ fr{
                         afternoon1{"ap.m."}
                         evening1{"soir"}
                         morning1{"mat."}
-                        night1{"nuit"}
+                        night1{"matin"}
                     }
                     wide{
                         afternoon1{"après-midi"}
                         evening1{"soir"}
                         morning1{"matin"}
-                        night1{"nuit"}
+                        night1{"matin"}
                     }
                 }
             }
