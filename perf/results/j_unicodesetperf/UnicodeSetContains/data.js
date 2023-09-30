@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695948090130,
+  "lastUpdate": 1696045138394,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13198,6 +13198,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 3.396462235701533,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "38643e14e50a1f0679ea7de8e863b8b7f64d0354",
+          "message": "ICU-22325 CLDR 44 beta1 integration to ICU part two, source files generated or copied from CLDR",
+          "timestamp": "2023-09-29T20:29:49-07:00",
+          "tree_id": "956f9614a307d72908fe603565e2060626d806e4",
+          "url": "https://github.com/unicode-org/icu/commit/38643e14e50a1f0679ea7de8e863b8b7f64d0354"
+        },
+        "date": 1696045066271,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 2.4316145137032086,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
