@@ -220,7 +220,7 @@ Note that the examples may not reflect current CLDR data.
 | `F` | day of week in month | `F` | 2 (2nd Wed in July) |
 | `g` | modified julian day | `g` | 2451334 |
 | `E` | day of week | `E,` `EE`, or `EEE`<br/>`EEEE`<br/>`EEEEE`<br/>`EEEEEE` | Tue<br/>Tuesday<br/>T<br/>Tu |
-| `e` | local day of week<br/>example: if Monday is 1st day, Tuesday is 2nd ) | `e` or `ee`<br/>`eee`<br/>`eeee`<br/>`eeeee`<br/>`eeeeee` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
+| `e` | local day of week<br/>example: if Monday is 1st day, Tuesday is 2nd ) | `e`<br>`ee`<br/>`eee`<br/>`eeee`<br/>`eeeee`<br/>`eeeeee` | 2<br>02<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
 | `c` | stand-alone local day of week | `c` or `cc`<br/>`ccc`<br/>`cccc`<br/>`ccccc`<br/>`cccccc` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
 | `a` | AM or PM | `a`, `aa`, or `aaa`<br/>`aaaa`<br/>`aaaaa` | PM [abbrev]<br/>PM [wide]<br/>p |
 | `b` | am, pm, noon, midnight | `b`, `bb`, or `bbb`<br/>`bbbb`<br/>`bbbbb` | mid.<br/>midnight<br/>md |
