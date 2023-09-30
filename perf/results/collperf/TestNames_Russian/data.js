@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1695948802954,
+  "lastUpdate": 1696045876307,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28456,6 +28456,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 225659.1376,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "38643e14e50a1f0679ea7de8e863b8b7f64d0354",
+          "message": "ICU-22325 CLDR 44 beta1 integration to ICU part two, source files generated or copied from CLDR",
+          "timestamp": "2023-09-29T20:29:49-07:00",
+          "tree_id": "956f9614a307d72908fe603565e2060626d806e4",
+          "url": "https://github.com/unicode-org/icu/commit/38643e14e50a1f0679ea7de8e863b8b7f64d0354"
+        },
+        "date": 1696045794317,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 885.0406,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 940744.1732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 247197.0357,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 893339.1365,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 230923.95,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
