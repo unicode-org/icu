@@ -1359,6 +1359,14 @@ static void TestCoverage(void){
         }
     }
 
+    // ICU-22149: Cover this code path even if the lang bundle is not present
+    UErrorCode localStatus = U_ZERO_ERROR;
+    UChar pattern[20];
+    ulocdata_getLocaleDisplayPattern(uld, pattern, 20, &localStatus);
+    if (U_FAILURE(localStatus) && localStatus != U_MISSING_RESOURCE_ERROR) {
+        log_err("ulocdata_getLocaleDisplayPattern coverage error %s", u_errorName(localStatus));
+    }
+
     sub = ulocdata_getNoSubstitute(uld);
     ulocdata_setNoSubstitute(uld,sub);
     ulocdata_close(uld);

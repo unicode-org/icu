@@ -65,7 +65,8 @@ jobs:
         ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && \
         make -j2 tests && \
         \[ ! -d data/out/build/icudt66l/translit \] && \
-        (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData)
+        (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData) && \
+        (cd test/cintltst && LANG=C LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestEnglishExemplarCharacters /tsutil/cldrtest/TestCoverage)
       displayName: 'Build with Data Filter'
       env:
         CC: clang
