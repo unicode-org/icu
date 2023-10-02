@@ -86,6 +86,33 @@ static const char16_t gPatternChars[] = {
     0
 };
 
+/**
+ * Map of each ASCII character to its corresponding index in the table above if
+ * it is a pattern character and -1 otherwise.
+ */
+static const int8_t gLookupPatternChars[] = {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    //       !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
+    //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 37, -1, -1, -1, -1, -1,
+#else
+    //   0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+#endif
+    //   @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+        -1, 22, 36, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, 31,
+    //   P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+        -1, 27, -1,  8, -1, 30, 29, 13, 32, 18, 23, -1, -1, -1, -1, -1,
+    //   `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+        -1, 14, 35, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
+    //   p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+        -1, 28, 34,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1
+};
+
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource
 // files.  They aren't designed for actual use, just for backup.
@@ -1391,12 +1418,11 @@ DateFormatSymbols::getPatternUChars()
 
 UDateFormatField U_EXPORT2
 DateFormatSymbols::getPatternCharIndex(char16_t c) {
-    const char16_t *p = u_strchr(gPatternChars, c);
-    if (p == nullptr) {
+    if (c >= UPRV_LENGTHOF(gLookupPatternChars)) {
         return UDAT_FIELD_COUNT;
-    } else {
-        return static_cast<UDateFormatField>(p - gPatternChars);
     }
+    const auto idx = gLookupPatternChars[c];
+    return idx == -1 ? UDAT_FIELD_COUNT : static_cast<UDateFormatField>(idx);
 }
 
 static const uint64_t kNumericFieldsAlways =

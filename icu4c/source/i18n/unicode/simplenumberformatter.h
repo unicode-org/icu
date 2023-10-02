@@ -30,6 +30,8 @@
 
 U_NAMESPACE_BEGIN
 
+/* forward declaration */
+class SimpleDateFormat;
 
 namespace number {  // icu::number
 
@@ -169,6 +171,9 @@ class U_I18N_API SimpleNumber : public UMemory {
     USimpleNumberSign fSign = UNUM_SIMPLE_NUMBER_NO_SIGN;
 
     friend class SimpleNumberFormatter;
+
+    // Uses the private constructor to avoid a heap allocation
+    friend class icu::SimpleDateFormat;
 };
 
 

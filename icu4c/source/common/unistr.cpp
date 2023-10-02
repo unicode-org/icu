@@ -1607,41 +1607,58 @@ UnicodeString::doAppend(const char16_t *srcChars, int32_t srcStart, int32_t srcL
 
   int32_t oldLength = length();
   int32_t newLength;
-  if (uprv_add32_overflow(oldLength, srcLength, &newLength)) {
-    setToBogus();
-    return *this;
-  }
 
-  // Check for append onto ourself
-  const char16_t* oldArray = getArrayStart();
-  if (isBufferWritable() &&
-      oldArray < srcChars + srcLength &&
-      srcChars < oldArray + oldLength) {
-    // Copy into a new UnicodeString and start over
-    UnicodeString copy(srcChars, srcLength);
-    if (copy.isBogus()) {
+  if (srcLength <= getCapacity() - oldLength && isBufferWritable()) {
+    newLength = oldLength + srcLength;
+    // Faster than a memmove
+    if (srcLength <= 4) {
+      char16_t *arr = getArrayStart();
+      arr[oldLength] = srcChars[0];
+      if (srcLength > 1) arr[oldLength+1] = srcChars[1];
+      if (srcLength > 2) arr[oldLength+2] = srcChars[2];
+      if (srcLength > 3) arr[oldLength+3] = srcChars[3];
+      setLength(newLength);
+      return *this;
+    }
+  } else {
+    if (uprv_add32_overflow(oldLength, srcLength, &newLength)) {
       setToBogus();
       return *this;
     }
-    return doAppend(copy.getArrayStart(), 0, srcLength);
+
+    // Check for append onto ourself
+    const char16_t* oldArray = getArrayStart();
+    if (isBufferWritable() &&
+        oldArray < srcChars + srcLength &&
+        srcChars < oldArray + oldLength) {
+      // Copy into a new UnicodeString and start over
+      UnicodeString copy(srcChars, srcLength);
+      if (copy.isBogus()) {
+        setToBogus();
+        return *this;
+      }
+      return doAppend(copy.getArrayStart(), 0, srcLength);
+    }
+
+    // optimize append() onto a large-enough, owned string
+    if (!cloneArrayIfNeeded(newLength, getGrowCapacity(newLength))) {
+      return *this;
+    }
   }
 
-  // optimize append() onto a large-enough, owned string
-  if((newLength <= getCapacity() && isBufferWritable()) ||
-      cloneArrayIfNeeded(newLength, getGrowCapacity(newLength))) {
-    char16_t *newArray = getArrayStart();
-    // Do not copy characters when
-    //   char16_t *buffer=str.getAppendBuffer(...);
-    // is followed by
-    //   str.append(buffer, length);
-    // or
-    //   str.appendString(buffer, length)
-    // or similar.
-    if(srcChars != newArray + oldLength) {
-      us_arrayCopy(srcChars, 0, newArray, oldLength, srcLength);
-    }
-    setLength(newLength);
+  char16_t *newArray = getArrayStart();
+  // Do not copy characters when
+  //   char16_t *buffer=str.getAppendBuffer(...);
+  // is followed by
+  //   str.append(buffer, length);
+  // or
+  //   str.appendString(buffer, length)
+  // or similar.
+  if(srcChars != newArray + oldLength) {
+    us_arrayCopy(srcChars, 0, newArray, oldLength, srcLength);
   }
+  setLength(newLength);
+
   return *this;
 }
 

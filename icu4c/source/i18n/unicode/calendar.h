@@ -2340,7 +2340,7 @@ private:
      * @return   Day number from 1..7 (SUN..SAT).
      * @internal
      */
-    static uint8_t julianDayToDayOfWeek(double julian);
+    static uint8_t julianDayToDayOfWeek(int32_t julian);
 #endif  /* U_HIDE_INTERNAL_API */
 
  private:

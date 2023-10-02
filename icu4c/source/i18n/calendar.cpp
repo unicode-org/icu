@@ -1532,11 +1532,11 @@ void Calendar::computeFields(UErrorCode &ec)
     U_ASSERT(fFields[UCAL_DST_OFFSET] <= getMaximum(UCAL_DST_OFFSET));
 }
 
-uint8_t Calendar::julianDayToDayOfWeek(double julian)
+uint8_t Calendar::julianDayToDayOfWeek(int32_t julian)
 {
     // If julian is negative, then julian%7 will be negative, so we adjust
     // accordingly.  We add 1 because Julian day 0 is Monday.
-    int8_t dayOfWeek = (int8_t) uprv_fmod(julian + 1, 7);
+    int8_t dayOfWeek = (int8_t) ((julian + 1) % 7);
 
     uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7+UCAL_SUNDAY ) : UCAL_SUNDAY));
     return result;
