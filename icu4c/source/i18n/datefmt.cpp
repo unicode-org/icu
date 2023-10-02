@@ -28,6 +28,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtptngen.h"
 #include "unicode/udisplaycontext.h"
+#include "unicode/gregocal.h"
 #include "reldtfmt.h"
 #include "sharedobject.h"
 #include "unifiedcache.h"
@@ -277,15 +278,25 @@ DateFormat::format(Calendar& /* unused cal */,
 UnicodeString&
 DateFormat::format(UDate date, UnicodeString& appendTo, FieldPosition& fieldPosition) const {
     if (fCalendar != nullptr) {
-        // Use a clone of our calendar instance
-        Calendar* calClone = fCalendar->clone();
-        if (calClone != nullptr) {
-            UErrorCode ec = U_ZERO_ERROR;
-            calClone->setTime(date, ec);
+        UErrorCode ec = U_ZERO_ERROR;
+        auto calType = fCalendar->getType();
+        // Avoid a heap allocation and corresponding free for the common case
+        if (uprv_strcmp(calType, "gregorian") == 0) {
+            GregorianCalendar cal(*static_cast<GregorianCalendar*>(fCalendar));
+            cal.setTime(date, ec);
             if (U_SUCCESS(ec)) {
-                format(*calClone, appendTo, fieldPosition);
+                format(cal, appendTo, fieldPosition);
             }
-            delete calClone;
+        } else {
+            // Use a clone of our calendar instance
+            Calendar *calClone = fCalendar->clone();
+            if (calClone != nullptr) {
+                calClone->setTime(date, ec);
+                if (U_SUCCESS(ec)) {
+                    format(*calClone, appendTo, fieldPosition);
+                }
+                delete calClone;
+            }
         }
     }
     return appendTo;
@@ -297,13 +308,24 @@ UnicodeString&
 DateFormat::format(UDate date, UnicodeString& appendTo, FieldPositionIterator* posIter,
                    UErrorCode& status) const {
     if (fCalendar != nullptr) {
-        Calendar* calClone = fCalendar->clone();
-        if (calClone != nullptr) {
-            calClone->setTime(date, status);
-            if (U_SUCCESS(status)) {
-               format(*calClone, appendTo, posIter, status);
+        UErrorCode ec = U_ZERO_ERROR;
+        auto calType = fCalendar->getType();
+        // Avoid a heap allocation and corresponding free for the common case
+        if (uprv_strcmp(calType, "gregorian") == 0) {
+            GregorianCalendar cal(*static_cast<GregorianCalendar*>(fCalendar));
+            cal.setTime(date, ec);
+            if (U_SUCCESS(ec)) {
+                format(cal, appendTo, posIter, status);
             }
-            delete calClone;
+        } else {
+            Calendar* calClone = fCalendar->clone();
+            if (calClone != nullptr) {
+                calClone->setTime(date, status);
+                if (U_SUCCESS(status)) {
+                    format(*calClone, appendTo, posIter, status);
+                }
+                delete calClone;
+            }
         }
     }
     return appendTo;

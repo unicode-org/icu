@@ -32,6 +32,15 @@ int64_t ClockMath::floorDivide(int64_t numerator, int64_t denominator) {
         numerator / denominator : ((numerator + 1) / denominator) - 1;
 }
 
+int32_t ClockMath::floorDivide(int32_t numerator, int32_t denominator,
+                          int32_t* remainder) {
+    auto quotient = floorDivide(numerator, denominator);
+    if (remainder != nullptr) {
+      *remainder = numerator - (quotient * denominator);
+    }
+    return quotient;
+}
+
 int32_t ClockMath::floorDivide(double numerator, int32_t denominator,
                           int32_t* remainder) {
     // For an integer n and representable ⌊x/n⌋, ⌊RN(x/n)⌋=⌊x/n⌋, where RN is
@@ -106,7 +115,7 @@ double Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
     return julian - JULIAN_1970_CE; // JD => epoch day
 }
 
-void Grego::dayToFields(double day, int32_t& year, int32_t& month,
+void Grego::dayToFields(int32_t day, int32_t& year, int32_t& month,
                         int32_t& dom, int32_t& dow, int32_t& doy) {
 
     // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
@@ -130,7 +139,7 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     UBool isLeap = isLeapYear(year);
     
     // Gregorian day zero is a Monday.
-    dow = (int32_t) uprv_fmod(day + 1, 7);
+    dow = (day + 1) % 7;
     dow += (dow < 0) ? (UCAL_SUNDAY + 7) : UCAL_SUNDAY;
 
     // Common Julian/Gregorian calculation
@@ -152,7 +161,7 @@ void Grego::timeToFields(UDate time, int32_t& year, int32_t& month,
     dayToFields(day, year, month, dom, dow, doy);
 }
 
-int32_t Grego::dayOfWeek(double day) {
+int32_t Grego::dayOfWeek(int32_t day) {
     int32_t dow;
     ClockMath::floorDivide(day + int{UCAL_THURSDAY}, 7, &dow);
     return (dow == 0) ? UCAL_SATURDAY : dow;
