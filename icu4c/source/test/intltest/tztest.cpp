@@ -80,6 +80,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestCasablancaNameAndOffset22041);
     TESTCASE_AUTO(TestRawOffsetAndOffsetConsistency22041);
     TESTCASE_AUTO(TestGetIanaID);
+    TESTCASE_AUTO(TestGMTMinus24ICU22526);
     TESTCASE_AUTO_END;
 }
 
@@ -2663,5 +2664,14 @@ void TimeZoneTest::TestGetIanaID() {
             assertEquals(ianaID, ianaID, ianaID2);
         }
     }
+}
+
+void TimeZoneTest::TestGMTMinus24ICU22526() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<TimeZone> tz(TimeZone::createTimeZone("GMT-23:59"), status);
+    U_ASSERT(U_SUCCESS(status));
+    GregorianCalendar gc(tz.orphan(), status);
+    gc.setTime(123456789, status);
+    gc.get(UCAL_MONTH, status);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

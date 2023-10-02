@@ -2419,6 +2419,13 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+    @Test
+    public void TestGMTMinus24ICU22526() {
+        TimeZone tz = TimeZone.getTimeZone("GMT-23:59");
+        GregorianCalendar gc = new GregorianCalendar(tz);
+        gc.setTimeInMillis(123456789);
+        gc.get(GregorianCalendar.MONTH);
+    }
 }
 
 //eof
