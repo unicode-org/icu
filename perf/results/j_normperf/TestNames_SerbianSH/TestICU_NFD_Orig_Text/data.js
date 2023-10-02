@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696045258802,
+  "lastUpdate": 1696275676887,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13138,6 +13138,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 15.584849502636477,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "atnbueno@gmail.com",
+            "name": "Antonio Bueno",
+            "username": "atnbueno"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "f24e0a0ff36ae214415898917f17290bd4211c38",
+          "message": "ICU-22323 Describe date field symbol `ee` as `02`, not `2`\n\nSee #2636",
+          "timestamp": "2023-10-02T12:29:59-07:00",
+          "tree_id": "d4e8e4129146536afb4b188917f54aecc86e97f9",
+          "url": "https://github.com/unicode-org/icu/commit/f24e0a0ff36ae214415898917f17290bd4211c38"
+        },
+        "date": 1696275603007,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 12.025773825604892,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
