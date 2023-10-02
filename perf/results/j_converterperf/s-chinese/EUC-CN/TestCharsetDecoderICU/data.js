@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696284059312,
+  "lastUpdate": 1696289116641,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13318,6 +13318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.044195318426939786,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "e73d9736c9cd9fb3a7ab45b3a51a98dec3d6b5bc",
+          "message": "ICU-22325 Update docs.md to change `ant` commands to new scripts",
+          "timestamp": "2023-10-02T16:04:02-07:00",
+          "tree_id": "eed108fd5609a081e068ce26859ed797dba28b6b",
+          "url": "https://github.com/unicode-org/icu/commit/e73d9736c9cd9fb3a7ab45b3a51a98dec3d6b5bc"
+        },
+        "date": 1696289029965,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.04981916544121751,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
