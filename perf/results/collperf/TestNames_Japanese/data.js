@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696284360069,
+  "lastUpdate": 1696289520145,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28618,6 +28618,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7796412.6587,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "e73d9736c9cd9fb3a7ab45b3a51a98dec3d6b5bc",
+          "message": "ICU-22325 Update docs.md to change `ant` commands to new scripts",
+          "timestamp": "2023-10-02T16:04:02-07:00",
+          "tree_id": "eed108fd5609a081e068ce26859ed797dba28b6b",
+          "url": "https://github.com/unicode-org/icu/commit/e73d9736c9cd9fb3a7ab45b3a51a98dec3d6b5bc"
+        },
+        "date": 1696289441855,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 347.0874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 30452928.6601,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7354585.8241,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 30204807.6857,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 8361676.773,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
