@@ -99,6 +99,7 @@ private:
     void Test21060_AddressSanitizerProblem();
     void Test21223_FrenchDuration();
     void TestInternalMeasureUnitImpl();
+    void TestMeasureEquality();
 
     void verifyFormat(
         const char *description,
@@ -236,6 +237,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
     TESTCASE_AUTO(Test21223_FrenchDuration);
     TESTCASE_AUTO(TestInternalMeasureUnitImpl);
+    TESTCASE_AUTO(TestMeasureEquality);
     TESTCASE_AUTO_END;
 }
 
@@ -6226,6 +6228,39 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
     }
     assertEquals("meter-square-meter: identifier", "cubic-meter",
                  std::move(m2m).build(status).getIdentifier());
+}
+
+void MeasureFormatTest::TestMeasureEquality() {
+    IcuTestErrorCode errorCode(*this, "TestMeasureEquality");
+    Measure measures[] = {
+        { 1., MeasureUnit::createLiter(errorCode), errorCode },
+        { 1., MeasureUnit::createLiter(errorCode), errorCode },
+        { 2., MeasureUnit::createLiter(errorCode), errorCode },
+        { 1., MeasureUnit::createGram(errorCode), errorCode }
+    };
+    static const char *const names[] = { "1 liter", "another liter", "2 liters", "1 gram" };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(measures); ++i) {
+        for (int32_t j = 0; j < UPRV_LENGTHOF(measures); ++j) {
+            const Measure &a = measures[i];
+            const UObject &b = measures[j];  // UObject for "other"
+            std::string eq = std::string(names[i]) + std::string(" == ") + std::string(names[j]);
+            std::string ne = std::string(names[i]) + std::string(" != ") + std::string(names[j]);
+            // 1l = 1l
+            bool expectedEquals = i == j || (i <= 1 && j <= 1);
+            assertEquals(eq.c_str(), expectedEquals, a == b);
+            assertEquals(ne.c_str(), !expectedEquals, a != b);
+        }
+    }
+
+    UnicodeString s(u"?");
+    for (int32_t i = 0; i < UPRV_LENGTHOF(measures); ++i) {
+        const Measure &a = measures[i];
+        std::string eq = std::string(names[i]) + std::string(" == UnicodeString");
+        std::string ne = std::string(names[i]) + std::string(" != UnicodeString");
+        assertEquals(eq.c_str(), false, a == s);
+        assertEquals(ne.c_str(), true, a != s);
+    }
 }
 
 
