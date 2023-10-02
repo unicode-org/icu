@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696045828934,
+  "lastUpdate": 1696276312054,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28402,6 +28402,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 26077807.6046,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "atnbueno@gmail.com",
+            "name": "Antonio Bueno",
+            "username": "atnbueno"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "f24e0a0ff36ae214415898917f17290bd4211c38",
+          "message": "ICU-22323 Describe date field symbol `ee` as `02`, not `2`\n\nSee #2636",
+          "timestamp": "2023-10-02T12:29:59-07:00",
+          "tree_id": "d4e8e4129146536afb4b188917f54aecc86e97f9",
+          "url": "https://github.com/unicode-org/icu/commit/f24e0a0ff36ae214415898917f17290bd4211c38"
+        },
+        "date": 1696276242161,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 562.6492,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 81725998.7195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 21129892.546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 77975872.9041,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 24331741.6651,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
