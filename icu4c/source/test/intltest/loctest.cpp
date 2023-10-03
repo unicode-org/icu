@@ -5527,7 +5527,7 @@ void LocaleTest::TestLocaleCanonicalizationFromFile()
     char testPath[400];
     char line[256];
     strcpy(testPath, sourceTestDataPath);
-    strcat(testPath, "localeCanonicalization.txt");
+    strcat(testPath, "cldr/localeIdentifiers/localeCanonicalization.txt");
     LocalStdioFilePointer testFile(fopen(testPath, "r"));
     if(testFile.isNull()) {
         errln("unable to open %s", testPath);
@@ -5707,7 +5707,7 @@ LocaleTest::TestDataDrivenLikelySubtags() {
         return;
     }
     IcuTestErrorCode errorCode(*this, "TestDataDrivenLikelySubtags()");
-    const char* name = "likelySubtags.txt";
+    const char* name = "cldr/localeIdentifiers/likelySubtags.txt";
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                        "folder (getSourceTestData())")) {

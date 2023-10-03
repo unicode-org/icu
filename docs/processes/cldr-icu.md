@@ -270,17 +270,8 @@ cd $TOOLS_ROOT/cldr
 ant copy-cldr-testdata
 ```
 
-5d. Copy localeCanonicalization.txt from CLDR testData and add a source reference line:
-```
-cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4C_DIR/source/test/testdata/
-cp -p $CLDR_DIR/common/testData/localeIdentifiers/localeCanonicalization.txt $ICU4J_ROOT/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/
-open $ICU4C_DIR/source/test/testdata/localeCanonicalization.txt
-open $ICU4J_ROOT/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/localeCanonicalization.txt
-```
-At the beginning of each file add the following line:\
-```
-# File copied from cldr common/testData/localeIdentifiers/localeCanonicalization.txt
-```
+5d. NOP
+(This step has been subsumed into 5c above)
 
 5e. For now, manually re-add the `lstm` entries in `data/brkitr/root.txt`
 ```

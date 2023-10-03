@@ -5396,7 +5396,7 @@ public class ULocaleTest extends TestFmwk {
 
     @Test
     public void TestLocaleCanonicalizationFromFile() throws IOException {
-        BufferedReader testFile = TestUtil.getDataReader("unicode/localeCanonicalization.txt");
+        BufferedReader testFile = TestUtil.getDataReader("cldr/localeIdentifiers/localeCanonicalization.txt");
         try {
             String line;
             while ((line = testFile.readLine()) != null) {
@@ -5460,7 +5460,7 @@ public class ULocaleTest extends TestFmwk {
     static List<TestCase> readLikelySubtagsTestCases() throws Exception {
         List<TestCase> tests = new ArrayList<>();
         TestCase test = new TestCase();
-        BufferedReader testFile = TestUtil.getDataReader("likelySubtags.txt");
+        BufferedReader testFile = TestUtil.getDataReader("cldr/localeIdentifiers/likelySubtags.txt");
         try {
             String line;
             while ((line = testFile.readLine()) != null) {
