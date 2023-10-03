@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696354709855,
+  "lastUpdate": 1696356670937,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13318,6 +13318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 6.8555197881565,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e6f7ef7ef41882ae87d4608b3c5e27fefb5d2a8f",
+          "message": "ICU-22324 Mavenization, remove maven proof of concept and ant script",
+          "timestamp": "2023-10-03T10:58:25-07:00",
+          "tree_id": "0da6bd5e956eaed17379ad557f0078abe3ed776f",
+          "url": "https://github.com/unicode-org/icu/commit/e6f7ef7ef41882ae87d4608b3c5e27fefb5d2a8f"
+        },
+        "date": 1696356600233,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.849147501759966,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
