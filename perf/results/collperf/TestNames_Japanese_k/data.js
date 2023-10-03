@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696364682795,
+  "lastUpdate": 1696369994772,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -28996,6 +28996,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 9037950.8054,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fc386c3a9a7b7bc68a746e51319388eafcaf2c2b",
+          "message": "ICU-22149 Be more graceful with missing lang bundle data\n\nSee #2635",
+          "timestamp": "2023-10-03T14:20:26-07:00",
+          "tree_id": "f852d38a7ca70692df4baee0de32bbaba84a59a6",
+          "url": "https://github.com/unicode-org/icu/commit/fc386c3a9a7b7bc68a746e51319388eafcaf2c2b"
+        },
+        "date": 1696369918860,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 339.0467,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 28241451.1772,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 6439280.6042,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 28367635.783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 7531514.6556,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
