@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696361724227,
+  "lastUpdate": 1696364190845,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26878,6 +26878,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 16.480388857022483,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e09adbf05a136cc2e59159300d74e0ec81401e41",
+          "message": "ICU-22324 Mavenization: removed license links (error on Windows)\n\nSee #2652",
+          "timestamp": "2023-10-03T12:47:48-07:00",
+          "tree_id": "5a0d192b434f566dfd30a84be0f7faead76e146a",
+          "url": "https://github.com/unicode-org/icu/commit/e09adbf05a136cc2e59159300d74e0ec81401e41"
+        },
+        "date": 1696364084038,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 19.0470065942883,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
