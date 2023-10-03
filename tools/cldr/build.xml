@@ -40,9 +40,10 @@
         <!-- CLDR test data directories to be copied into ICU. -->
         <fileset id="cldrTestData" dir="${cldrDir}/common/testData">
             <!-- Add directories here to control which test data is installed. -->
-            <include name="units/**"/> <!-- Used in UnitsTest tests -->
+            <include name="localeIdentifiers/**"/> <!-- ... -->
             <include name="personNameTest/**"/> <!-- Used in ExhaustivePersonNameTest -->
-        </fileset>
+            <include name="units/**"/> <!-- Used in UnitsTest tests -->
+       </fileset>
 
         <copy todir="${testDataDir4C}">
             <fileset refid="cldrTestData"/>
