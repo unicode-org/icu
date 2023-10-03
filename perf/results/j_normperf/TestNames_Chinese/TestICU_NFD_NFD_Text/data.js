@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696369505925,
+  "lastUpdate": 1696371634913,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13738,6 +13738,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 4.645682296174656,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "c58706989552debfb3a555664b01553664518855",
+          "message": "ICU-22527 Add -Wambiguous-reversed-operator test code.",
+          "timestamp": "2023-10-04T00:05:31+02:00",
+          "tree_id": "4aaaa92f5ccab10a66d03ef7988a035c43ad3f9c",
+          "url": "https://github.com/unicode-org/icu/commit/c58706989552debfb3a555664b01553664518855"
+        },
+        "date": 1696371563776,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.547449317188909,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
