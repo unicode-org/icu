@@ -178,22 +178,6 @@
   </distributionManagement>
 
   <build>
-    <!-- Workaround for Windows symlink issue:
-      https://issues.apache.org/jira/browse/MRESOURCES-237
-      BUT FAILS ON LINUX :-(
-    -->
-    <!--
-    <resources>
-      <resource>
-        <directory>src/test/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>LICENSE</include>
-        </includes>
-      </resource>
-    </resources>
-    -->
-
     <pluginManagement>
       <plugins>
         <plugin>
@@ -272,6 +256,38 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>3.4.0</version>
+          <executions>
+            <execution>
+              <!-- Workaround for Windows symlink issue:
+                 https://issues.apache.org/jira/browse/MRESOURCES-237
+                 Note: The recommended fix there is to filter out the symlink files, which
+                 would result in no license files in the .jar. That is not what we want.
+                 Instead, this `<execution>` config copies the LICENSE file to `target` at build time.
+              -->
+              <id>add-resource</id>
+              <goals>
+                <goal>add-resource</goal>
+              </goals>
+              <configuration>
+                <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                <resources>
+                  <resource>
+                    <directory>${rootlocation}/..</directory>
+                    <includes>
+                      <include>LICENSE</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>root-location</id>
+              <phase>initialize</phase>
+              <goals>
+                <goal>rootlocation</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
@@ -280,6 +296,21 @@
         <plugin>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.3.0</version>
+          <executions>
+            <execution>
+              <id>enforce-maven</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>3.2.5</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
@@ -392,21 +423,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.2.5</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
     </plugins>
 
