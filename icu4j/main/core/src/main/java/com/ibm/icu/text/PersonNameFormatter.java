@@ -355,6 +355,7 @@ public class PersonNameFormatter {
      * @deprecated This API is for debugging only.
      */
     @Override
+    @Deprecated
     public String toString() {
         return impl.toString();
     }
