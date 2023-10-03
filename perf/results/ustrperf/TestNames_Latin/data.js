@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696294282460,
+  "lastUpdate": 1696300589455,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -50878,6 +50878,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 58.3246,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "05b0e7abaf1e46c7d66c46ee997a0bf9eff7e36a",
+          "message": "ICU-22517 Limit the closure expansion loop and return error\n\nTo avoid very slow return from the constructor, we return\nerror while the Collation rule expand too big.\nAdd a soft limit to limit to the number of loop needed for 8 Hanguls\n  Necessary number of loop: H(0)=0; H(i)=3H(i-1)+2.\n  Where i is the length of Hangul in the rule.\n  H(1) = 2, H(2) = 8, H(3)=26, H(4)=80, H(5) = 242 ...",
+          "timestamp": "2023-10-02T19:06:38-07:00",
+          "tree_id": "da708510595a1a6f0cc9512e6b55e6fc23011f8b",
+          "url": "https://github.com/unicode-org/icu/commit/05b0e7abaf1e46c7d66c46ee997a0bf9eff7e36a"
+        },
+        "date": 1696300508586,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 23.8463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 25.2889,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 29.759,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 44.4232,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 49.4822,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 44.5136,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.2518,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 21.1327,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 186.6738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 31.7198,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 61.3388,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 49.1375,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
