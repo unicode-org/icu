@@ -592,11 +592,19 @@
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGasolineEquivalent()</td><td class="">(missing)</td><td>Draft<br>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGasolineEnergyDensity()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGasolineEquivalent(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGasolineEnergyDensity(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">measure.h</td><td class="proto">bool icu::Measure::operator!=(const UObject&amp;) const</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normalizer2.h</td><td class="proto"><tt>static</tt> const Normalizer2* icu::Normalizer2::getNFKCSimpleCasefoldInstance(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
@@ -612,7 +620,7 @@
 <span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">rbbi.h</td><td class="proto">int32_t icu::ExternalBreakEngine::fillBreak(UText*, int32_t, int32_t, int32_t*, int32_t, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Internal<br>
+<td class="file">rbbi.h</td><td class="proto">int32_t icu::ExternalBreakEngine::fillBreaks(UText*, int32_t, int32_t, int32_t*, int32_t, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
@@ -652,135 +660,151 @@
 <span class=""><span>ICU 74</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 74.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_IDS_UNARY_OPERATOR</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_ID_COMPAT_MATH_CONTINUE</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_ID_COMPAT_MATH_START</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">UEnumeration* ulocale_getKeywords(const ULocale*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">UEnumeration* ulocale_getUnicodeKeywords(const ULocale*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">ULocale* ulocale_openForLanguageTag(const char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">ULocale* ulocale_openForLocaleID(const char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">bool ulocale_isBogus(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">const char* ulocale_getBaseName(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">const char* ulocale_getLanguage(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">const char* ulocale_getLocaleID(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">const char* ulocale_getRegion(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">const char* ulocale_getScript(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">const char* ulocale_getVariant(const ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">int32_t ulocale_getKeywordValue(const ULocale*, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocale.h</td><td class="proto">int32_t ulocale_getUnicodeKeywordValue(const ULocale*, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocale.h</td><td class="proto">void ulocale_close(ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">ULocale* ulocbld_buildULocale(ULocaleBuilder*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">ULocaleBuilder* ulocbld_open()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">bool ulocbld_copyErrorTo(const ULocaleBuilder*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">int32_t ulocbld_buildLanguageTag(ULocaleBuilder*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">int32_t ulocbld_buildLocaleID(ULocaleBuilder*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_addUnicodeLocaleAttribute(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_adoptULocale(ULocaleBuilder*, ULocale*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_clear(ULocaleBuilder*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_clearExtensions(ULocaleBuilder*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_close(ULocaleBuilder*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_removeUnicodeLocaleAttribute(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setExtension(ULocaleBuilder*, char, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLanguage(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLanguageTag(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLocale(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setRegion(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setScript(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setUnicodeLocaleKeyword(ULocaleBuilder*, const char*, int32_t, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setVariant(ULocaleBuilder*, const char*, int32_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 74</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFKCSimpleCasefoldInstance(UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 74</span></span></td>
 </tr>
 <tr class="row1">
@@ -983,7 +1007,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Tue Sep 12 13:51:27 PDT 2023<br>
+<i><font size="-1">Contents generated by StableAPI tool on Mon Oct 02 17:50:42 PDT 2023<br>
         Copyright &copy; 2017 and later: Unicode, Inc. and others.<br>
         License &amp; terms of use: http://www.unicode.org/copyright.html
     </font></i>
