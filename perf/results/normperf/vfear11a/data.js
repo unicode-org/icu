@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696293868416,
+  "lastUpdate": 1696300241239,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31858,6 +31858,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 3.0883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "05b0e7abaf1e46c7d66c46ee997a0bf9eff7e36a",
+          "message": "ICU-22517 Limit the closure expansion loop and return error\n\nTo avoid very slow return from the constructor, we return\nerror while the Collation rule expand too big.\nAdd a soft limit to limit to the number of loop needed for 8 Hanguls\n  Necessary number of loop: H(0)=0; H(i)=3H(i-1)+2.\n  Where i is the length of Hangul in the rule.\n  H(1) = 2, H(2) = 8, H(3)=26, H(4)=80, H(5) = 242 ...",
+          "timestamp": "2023-10-02T19:06:38-07:00",
+          "tree_id": "da708510595a1a6f0cc9512e6b55e6fc23011f8b",
+          "url": "https://github.com/unicode-org/icu/commit/05b0e7abaf1e46c7d66c46ee997a0bf9eff7e36a"
+        },
+        "date": 1696300158494,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 3.2437,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 3.1868,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.2153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.0548,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.0277,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 2.9966,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
