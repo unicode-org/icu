@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696289052214,
+  "lastUpdate": 1696293148466,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13258,6 +13258,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 6.30038011422991,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f6d09d514dbe09366265dbc5381a7e2eddb577c6",
+          "message": "ICU-22527 add Measure::operator!=()",
+          "timestamp": "2023-10-02T17:03:28-07:00",
+          "tree_id": "866a0b99be396c014ff865082ffa6b129da2c3bb",
+          "url": "https://github.com/unicode-org/icu/commit/f6d09d514dbe09366265dbc5381a7e2eddb577c6"
+        },
+        "date": 1696293068189,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 9.648349305710326,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
