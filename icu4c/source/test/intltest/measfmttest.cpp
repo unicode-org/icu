@@ -6240,6 +6240,10 @@ void MeasureFormatTest::TestMeasureEquality() {
     };
     static const char *const names[] = { "1 liter", "another liter", "2 liters", "1 gram" };
 
+    // Verify that C++20 -Wambiguous-reversed-operator isn't triggered.
+    assertTrue("Equal", measures[0] == measures[1]);
+    assertTrue("Not Equal", measures[2] != measures[3]);
+
     for (int32_t i = 0; i < UPRV_LENGTHOF(measures); ++i) {
         for (int32_t j = 0; j < UPRV_LENGTHOF(measures); ++j) {
             const Measure &a = measures[i];
