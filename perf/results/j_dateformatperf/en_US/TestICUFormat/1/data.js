@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696459120170,
+  "lastUpdate": 1696462805361,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13588,6 +13588,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 308.6135371714184,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "1b5542da42a984f40f828871ad9674cadf04509d",
+          "message": "ICU-22324 Mavenization: fix the with_full_javadoc profile\n\nSee #2658",
+          "timestamp": "2023-10-04T16:29:18-07:00",
+          "tree_id": "5d7f5d9df12241531ff31ed4f7b820d1bbeeca92",
+          "url": "https://github.com/unicode-org/icu/commit/1b5542da42a984f40f828871ad9674cadf04509d"
+        },
+        "date": 1696462733078,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 284.3132293399958,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
