@@ -348,22 +348,24 @@
             <taglets>
               <taglet>
                 <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
-                <tagletArtifact>
-                  <groupId>com.ibm.icu</groupId>
-                  <artifactId>tools_build</artifactId>
-                  <version>${project.version}</version>
-                </tagletArtifact>
               </taglet>
               <taglet>
                 <tagletClass>ch.arrenbrecht.jcite.JCiteTaglet</tagletClass>
-                <tagletArtifact>
-                  <groupId>org.mcraig</groupId>
-                  <artifactId>jcite</artifactId>
-                  <version>1.13.0</version>
-                </tagletArtifact>
               </taglet>
             </taglets>
             <tagletArtifacts>
+              <!-- To handle the ICU custom taglets (@icu, @draft, @stable, etc -->
+              <tagletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </tagletArtifact>
+              <!-- Include code fragments from a .java file. -->
+              <tagletArtifact>
+                <groupId>org.mcraig</groupId>
+                <artifactId>jcite</artifactId>
+                <version>1.13.0</version>
+              </tagletArtifact>
               <!-- Dependencies for org.mcraig:jcite -->
               <tagletArtifact>
                 <groupId>commons-discovery</groupId>
@@ -474,7 +476,12 @@
       </build>
     </profile>
 
-    <!-- This is used to create the *-javadoc.jar for individual modules -->
+    <!-- This is used to create "merged" javadoc for all modules combined.
+      Matches what is posted on a website (where icu4j / charset / localespi are all in one).
+      That's why you need to run this with `site`, but build the artifacts first (for the taglets):
+        mvn install -DskipTests -DskipITs
+        mvn site -DskipTests -DskipITs -P with_full_javadoc
+    -->
     <profile>
       <id>with_full_javadoc</id>
       <build>
