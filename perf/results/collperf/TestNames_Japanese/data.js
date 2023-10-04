@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696372138287,
+  "lastUpdate": 1696437147968,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29158,6 +29158,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 7242211.0845,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "1651e63b338a947b5979a219c5ecaa1e38e5fea5",
+          "message": "ICU-22325 BRS74 ICU4J API signature file",
+          "timestamp": "2023-10-04T12:11:07-04:00",
+          "tree_id": "bf91f0563fb1c4520317c6f4024a639f9c6117f9",
+          "url": "https://github.com/unicode-org/icu/commit/1651e63b338a947b5979a219c5ecaa1e38e5fea5"
+        },
+        "date": 1696437066226,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 374.4236,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 33087813.4697,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7405752.1242,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 34669972.7548,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 8847408.392,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
