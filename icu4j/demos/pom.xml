@@ -44,6 +44,27 @@
           <skip>true</skip>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-classpath</argument>
+            <!-- automatically creates the classpath using all project dependencies,
+                 also adding the project build directory -->
+            <classpath/>
+            <argument>com.ibm.icu.dev.demo.Launcher</argument>
+          </arguments>          
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

@@ -541,8 +541,8 @@ demo.
 
 ```sh
 $ cd icu4j
-$ ant jarDemos
-$ java -jar icu4jdemos.jar
+$ mvn install -am -pl demos -DskipTests -DskipITs
+$ mvn exec:exec -pl demos
 ```
 
 Above command invokes GUI demo applications. As such it has to connect to a
@@ -561,16 +561,12 @@ ICU4J samples are located in directory <icu4j_root>/samples. Check that:
     
 To check ICU4J samples, you may use the command line to build and then run each:
 ```sh
-    $ cd icu4j/samples
-    $ ant build
-    
-    # Get the list of main samples to test.
-    $ grep -r main src/
-      src/com/ibm/icu/samples/text/dateintervalformat/DateIntervalFormatSample.java
-      ...
-    
-    # For each sample, execute as follows:
-    $ java -cp ../icu4j.jar:out/lib/icu4j-samples.jar com.ibm.icu.samples.text.dateintervalformat.DateIntervalFormatSample
+$ cd icu4j
+$ mvn install -am -pl samples -DskipTests -DskipITs
+
+# Get the list of samples with `main` methods, and execute to test.
+$ classes=`grep -r "void main" samples/src/ -l | ruby -lane 'file=$_; m = file.match(/src\/main\/java\/(.*)\.java$/); puts m[1];' | tr '/' '.'`
+$ for class in $classes; do echo $class; mvn exec:java -pl samples -Dexec.mainClass="$class"; echo "Press enter to continue"; read; done
 ```
     
 To use Eclipse, do the following:
@@ -590,7 +586,7 @@ To use Eclipse, do the following:
 For ICU4J,
 
 ```sh
-$ ant exhaustiveCheck
+$ mvn verify -DICU.exhaustive=10
 ```
 
 For ICU4C, testing with an optimized build will help reduce the elapsed time
