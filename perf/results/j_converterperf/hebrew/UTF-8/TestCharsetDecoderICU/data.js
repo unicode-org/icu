@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696371773942,
+  "lastUpdate": 1696436853541,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13618,6 +13618,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 4.0546433958921115,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "1651e63b338a947b5979a219c5ecaa1e38e5fea5",
+          "message": "ICU-22325 BRS74 ICU4J API signature file",
+          "timestamp": "2023-10-04T12:11:07-04:00",
+          "tree_id": "bf91f0563fb1c4520317c6f4024a639f9c6117f9",
+          "url": "https://github.com/unicode-org/icu/commit/1651e63b338a947b5979a219c5ecaa1e38e5fea5"
+        },
+        "date": 1696436782605,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 4.314706013398177,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
