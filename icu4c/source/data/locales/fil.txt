@@ -505,7 +505,7 @@ fil{
                         midnight{"hatinggabi"}
                         morning1{"nang umaga"}
                         morning2{"madaling-araw"}
-                        night1{"gabi"}
+                        night1{"ng gabi"}
                         noon{"tanghaling-tapat"}
                     }
                     narrow{
@@ -514,21 +514,19 @@ fil{
                         midnight{"hatinggabi"}
                         morning1{"umaga"}
                         morning2{"madaling-araw"}
-                        night1{"gabi"}
-                        noon{"tanghaling-tapat"}
-                    }
-                    wide{
-                        afternoon1{"tanghali"}
-                        evening1{"ng gabi"}
-                        midnight{"hatinggabi"}
-                        morning1{"nang umaga"}
-                        morning2{"madaling-araw"}
                         night1{"ng gabi"}
                         noon{"tanghaling-tapat"}
                     }
                 }
                 stand-alone{
                     abbreviated{
+                        afternoon1{"hapon"}
+                        evening1{"gabi"}
+                        morning1{"umaga"}
+                        morning2{"madaling-araw"}
+                        night1{"gabi"}
+                    }
+                    wide{
                         afternoon1{"hapon"}
                         evening1{"gabi"}
                         morning1{"umaga"}
