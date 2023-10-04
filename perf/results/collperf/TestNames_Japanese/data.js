@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696437147968,
+  "lastUpdate": 1696457272542,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29212,6 +29212,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 8847408.392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d82ad9975d46f901b01fd277becc0e4f458b8f7c",
+          "message": "ICU-22526 Allow GMT-23:59 time zone\n\nECMA402 now allow offset timezone from -23:59 to 23:59.\nWe need to lower the minimum ZONE_OFFSET value to -23:59",
+          "timestamp": "2023-10-04T14:43:36-07:00",
+          "tree_id": "8874ee6f66b2e4e728081582c76d65ca567db66c",
+          "url": "https://github.com/unicode-org/icu/commit/d82ad9975d46f901b01fd277becc0e4f458b8f7c"
+        },
+        "date": 1696457188668,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 338.3402,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 30743825.5097,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 7330613.9358,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 32895740.057,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 8531299.1799,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
