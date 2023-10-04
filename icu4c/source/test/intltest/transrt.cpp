@@ -1240,9 +1240,6 @@ void TransliteratorRoundTripTest::TestHebrew() {
     delete legal;
 }
 void TransliteratorRoundTripTest::TestCyrillic() {
-    if (logKnownIssue("CLDR-17026", "Remaining roundtrip issues with new Cyrillic-Latin transform")) {
-        return;
-    }
     RTTest test("Latin-Cyrillic");
     Legal *legal = new Legal();
 

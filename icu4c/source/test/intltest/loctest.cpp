@@ -5592,17 +5592,12 @@ public:
     }
 };
 
-
 bool isKnownSourceForCLDR17099(const std::string& s) {
     if (s.compare("qaa-Cyrl-CH") == 0) {
         return true;
     }
-    if (s.compare(0, 9, "und-Latn-") != 0) {
-        return false;
-    }
-    std::string tail(s.substr(9));
-    std::string regionsForCLDR17099("AE CC ER HK IL IN MV PK RS SD SS");
-    return (regionsForCLDR17099.find(tail) != std::string::npos);
+    
+	return false;
 }
 
 void U_CALLCONV
@@ -5615,7 +5610,7 @@ testLikelySubtagsLineFn(void *context,
     (void)fieldCount;
     LocaleTest* THIS = (LocaleTest*)context;
     std::string source(trim(std::string(fields[0][0], fields[0][1]-fields[0][0])));
-    if (isKnownSourceForCLDR17099(source) && THIS->logKnownIssue("CLDR-17099", "likelySubtags.txt wrong for certain und-Latn-XX locales")) {
+    if (isKnownSourceForCLDR17099(source) && THIS->logKnownIssue("CLDR-17099", "likelySubtags.txt wrong for qaa-Cyrl-CH")) {
         return;
     }
     std::string addLikely(trim(std::string(fields[1][0], fields[1][1]-fields[1][0])));
