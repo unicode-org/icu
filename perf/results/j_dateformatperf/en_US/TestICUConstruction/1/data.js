@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696521454837,
+  "lastUpdate": 1696540094095,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13768,6 +13768,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2383.9433630575995,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "deab8eef82c2005d7690b8dd9e95b24ca325d10b",
+          "message": "ICU-22324 Update Maven migration scripts\n\nSee #2661",
+          "timestamp": "2023-10-05T13:43:31-07:00",
+          "tree_id": "4b8a78b881153ab8a31bfad79a3f13891cb5187a",
+          "url": "https://github.com/unicode-org/icu/commit/deab8eef82c2005d7690b8dd9e95b24ca325d10b"
+        },
+        "date": 1696540020367,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2297.963603199663,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
