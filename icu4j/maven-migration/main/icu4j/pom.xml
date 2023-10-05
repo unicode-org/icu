@@ -8,11 +8,14 @@
 
   <parent>
     <groupId>com.ibm.icu</groupId>
-    <artifactId>main</artifactId>
-    <version>74.0.1-SNAPSHOT</version>
+    <artifactId>icu4j-root</artifactId>
+    <version>74.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>icu4j</artifactId>
+  <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
+    providing Unicode and Globalization support</description>
 
   <properties>
     <icu4j.api.doc.root.dir>${project.basedir}/../..</icu4j.api.doc.root.dir>
@@ -67,6 +70,15 @@
         <artifactId>maven-shade-plugin</artifactId>
         <executions>
           <execution>
+            <id>source-jar</id>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createSourcesJar>true</createSourcesJar>
+            </configuration>
+          </execution>
+          <execution>
             <goals>
               <goal>shade</goal>
             </goals>
@@ -75,22 +87,60 @@
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+              <useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>com.ibm.icu.util.VersionInfo</Main-Class>
+                    <Export-Package>com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util</Export-Package>
+                  </manifestEntries>
+                </transformer>
+              </transformers>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
+        <artifactId>maven-clean-plugin</artifactId>
         <configuration>
-          <archive>
-            <manifestEntries>
-              <Main-Class>com.ibm.icu.util.VersionInfo</Main-Class>
-              <Export-Package>com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util</Export-Package>
-            </manifestEntries>
-          </archive>
+          <filesets>
+            <fileset>
+              <directory>.</directory>
+              <includes>
+                <include>**/dependency-reduced-pom.xml</include>
+              </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>with_javadoc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <!-- This is important. Since this is a shaded jar with no sources,
+                    there is no javadoc generated without this line.
+                  -->
+                  <includeDependencySources>true</includeDependencySources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
