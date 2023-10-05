@@ -44,11 +44,11 @@ import com.ibm.icu.impl.locale.InternalLocaleBuilder;
 import com.ibm.icu.impl.locale.KeyTypeData;
 import com.ibm.icu.impl.locale.LSR;
 import com.ibm.icu.impl.locale.LanguageTag;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.impl.locale.LocaleExtensions;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
 import com.ibm.icu.impl.locale.ParseStatus;
 import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
-import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
@@ -2723,7 +2723,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             trailing = loc.localeID.substring(trailingIndex);
         }
 
-        LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(
+        LSR max = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(
             new ULocale(loc.getLanguage(), loc.getScript(), loc.getCountry()), true);
         String newLocaleID = createTagString(max.language, max.script, max.region,
             trailing);
@@ -2828,7 +2828,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             trailing = loc.localeID.substring(trailingIndex);
         }
 
-        LSR lsr = XLikelySubtags.INSTANCE.minimizeSubtags(
+        LSR lsr = LikelySubtags.INSTANCE.minimizeSubtags(
             loc.getLanguage(), loc.getScript(), loc.getCountry(), fieldToFavor);
         String newLocaleID = createTagString(lsr.language, lsr.script, lsr.region,
             trailing);

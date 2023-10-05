@@ -26,12 +26,12 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.locale.LSR;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.impl.locale.LocaleDistance;
 import com.ibm.icu.impl.locale.XCldrStub.Multimap;
 import com.ibm.icu.impl.locale.XCldrStub.Predicate;
 import com.ibm.icu.impl.locale.XCldrStub.Splitter;
 import com.ibm.icu.impl.locale.XCldrStub.TreeMultimap;
-import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.util.BytesTrieBuilder;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
@@ -489,7 +489,7 @@ public final class LocaleDistanceBuilder {
         Set<LSR> paradigmLSRs = new LinkedHashSet<>();  // could be TreeSet if LSR were Comparable
         for (String paradigm : paradigms) {
             ULocale pl = new ULocale(paradigm);
-            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl, false);
+            LSR max = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl, false);
             // Clear the LSR flags to make the data equality test in
             // LocaleDistanceTest happy.
             paradigmLSRs.add(new LSR(max.language, max.script, max.region, LSR.DONT_CARE_FLAGS));
@@ -887,7 +887,7 @@ public final class LocaleDistanceBuilder {
     }
 
     public static final void main(String[] args) throws IOException {
-        XLikelySubtags.Data likelyData = XLikelySubtags.Data.load();
+        LikelySubtags.Data likelyData = LikelySubtags.Data.load();
         LocaleDistance.Data distanceData = build();
         System.out.println("Writing LocaleDistance.Data to " + TXT_PATH + '/' + TXT_FILE_NAME);
         try (PrintWriter out = openWriter()) {

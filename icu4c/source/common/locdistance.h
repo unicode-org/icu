@@ -83,7 +83,7 @@ private:
     // tic constexpr int32_t MAX_INDEX = 0x1fffff;  // avoids sign bit
     static constexpr int32_t INDEX_NEG_1 = 0xfffffc00;
 
-    LocaleDistance(const LocaleDistanceData &data, const XLikelySubtags &likely);
+    LocaleDistance(const LocaleDistanceData &data, const LikelySubtags &likely);
     LocaleDistance(const LocaleDistance &other) = delete;
     LocaleDistance &operator=(const LocaleDistance &other) = delete;
 
@@ -119,7 +119,7 @@ private:
         return defaultRegionDistance;
     }
 
-    const XLikelySubtags &likelySubtags;
+    const LikelySubtags &likelySubtags;
 
     // The trie maps each dlang+slang+dscript+sscript+dregion+sregion
     // (encoded in ASCII with bit 7 set on the last character of each subtag) to a distance.
