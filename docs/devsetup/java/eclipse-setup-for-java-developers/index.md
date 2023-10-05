@@ -10,7 +10,7 @@ parent: Java Setup
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# Eclipse Setup for Java Developers
+# Eclipse Setup for Java Developers Using Ant
 {: .no_toc }
 
 ## Contents
@@ -33,8 +33,8 @@ ICU4J. If you don't do the following, you run the risk of calling Java library
 APIs that are newer than ICU4J's Java version, and you cause runtime exceptions
 for people who use the older version.
 
-Currently (as of 2018-aug / ICU 63), ICU4J is on Java 7 (and Eclipse 4.6
-requires Java 8).
+Currently (as of 2023-sep / ICU 73), ICU4J is on Java 8 (and Eclipse 4.28/2023-06
+requires Java 17).
 
 (Note: localespi/localespi-tests may use a different Java version from ICU4J
 proper.)
@@ -46,8 +46,8 @@ proper.)
 2.  Select \[Window\] - \[Preferences\] *(On Mac, this is \[Eclipse -
     Preferences\])*
 3.  Navigate the preferences tree to Java/Installed JREs/Execution Environments
-4.  On the left, Execution Enviornments: Select J2SE-1.7
-5.  On the right, Compatible JREs, if there is no old-version Java 7 JRE:
+4.  On the left, Execution Enviornments: Select J2SE-1.8
+5.  On the right, Compatible JREs, if there is no old-version Java 8 JRE:
     1.  Go up one tree level to Java/Installed JREs.
     2.  Click "Add..." and select "Standard VM" as JRE type.
     3.  Click "Directory..." and find the location of your old-version JRE (or
@@ -59,7 +59,7 @@ proper.)
     5.  Go back down in the tree to Java/Installed JREs/Execution Environments.
     6.  On the right, Compatible JREs, you should now see your old-version JRE
 6.  The matching-old-version JRE should have a "\[perfect match\]" suffix.
-    Select it for "JavaSE-1.7" on the left.
+    Select it for "JavaSE-1.8" on the left.
 
 ## Other Settings
 

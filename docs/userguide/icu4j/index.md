@@ -55,9 +55,8 @@ ICU4J is an add-on to the regular JRE that provides:
 
 ## Platform Dependencies
 
-The minimum Java runtime version supported by ICU4J 68 is version 7\. Java runtime version 6 is not supported.
-
-ICU4J since version 63 depend on J2SE 7 functionality. Therefore, ICU4J only runs on JRE version 7 or later. ICU4J 68 is tested on JRE 7, 8, 9, 10 and 11.
+Check the [Downloading ICU](https://icu.unicode.org/download) page to look up the minimum supported version of Java
+for your version of ICU.
 
 ## How to Download ICU4J
 
@@ -68,32 +67,33 @@ There are a few different ways to download the ICU4J releases.
     *   [ICU Download page](https://icu.unicode.org/download)
     *   Maven repository:
 
-~~~
-<dependency>
-    <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j</artifactId>
-    <version>68.1</version>
-</dependency>
+        ```
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>68.1</version>
+        </dependency>
 
-<dependency>
-    <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-charset</artifactId>
-    <version>68.1</version>
-</dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j-charset</artifactId>
+            <version>68.1</version>
+        </dependency>
 
-<dependency>
-    <groupId>com.ibm.icu</groupId>
-    <artifactId>icu4j-localespi</artifactId>
-    <version>68.1</version>
-</dependency>
-~~~
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j-localespi</artifactId>
+            <version>68.1</version>
+        </dependency>
+        ```
 
 *   **GitHub Source Repository:**
-    If you are interested in developing features, patches, or bug fixes for ICU4J, you should probably be working with the latest version of the ICU4J source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. There are several ways to do this. Please follow the directions that are contained on the [Source Repository page](https://icu.unicode.org/repository) for details.
+    If you are interested in developing features, patches, or bug fixes for ICU4J, you should probably be working with the latest version of the ICU4J source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. There are several ways to do this. Please follow the directions that are contained on the [Source Code Setup page](../../devsetup/source/) for details.
 
 For more details on how to download ICU4J directly from the web site, please see the ICU download page at [https://icu.unicode.org/download](https://icu.unicode.org/download)
 
-## The Structure and Contents of ICU4J
+
+## The Structure and Contents of ICU4J - ICU 74 and later
 
 Below, all directory paths are relative to the directory where the ICU4J source archive is extracted.
 
@@ -101,8 +101,84 @@ Below, all directory paths are relative to the directory where the ICU4J source 
 
 | Path                         | Description                                                                             |
 |------------------------------|-----------------------------------------------------------------------------------------|
-| build.xml                   | The main Ant build file for ICU4J. See [How to Install and Build](#how-to-install-and-build) for more information |
-| main/shared/licenses/LICENSE | ICU license                                                                             |
+| `pom.xml`                   | The root Maven build file for ICU4J. See [How to Install and Build](#how-to-install-and-build---icu-74-and-later) for more information |
+| `LICENSE` | ICU license                                                                             |
+
+### ICU4J runtime class files
+
+Each sub-component is represented in the Maven build as a separate Maven module / project.
+
+The directory structure of the codebase within each module follows Maven defaults.
+Thus, runtime class sources will be in the `src/main/java` subdirectory of the module.
+Ex: the class `com.ibm.icu.text.Collator` can be found at `<ICU>/icu4j/main/collate/src/main/java/com/ibm/icu/text/Collator.java`.
+Any resource files (non-source files) will be located at `src/main/resources`.
+
+
+| Sub-component Path                    | Sub-component Name | Build Dependencies        | Public API Packages | Description   |
+|-------------------------|--------------------|---------------------------|---------------------|---------------|
+| `main/charset`    | `icu4j-charset`      | `icu4j-core` | `com.ibm.icu.charset` | Implementation of   `java.nio.charset.spi.CharsetProvider`. This sub-component is shipped as `icu4j-charset.jar` along with ICU charset converter data files. |
+| `main/collate`    | `collate`      | `core` | `com.ibm.icu.text` <br/> `com.ibm.icu.util` | Collator APIs and implementation. Also includes some public API classes that depend on Collator. This sub-component is packaged as a part of `icu4j.jar`. |
+| `main/core`       | `core`         | n/a  | `com.ibm.icu.lang` <br/> `com.ibm.icu.math` <br/> `com.ibm.icu.text` <br/> `com.ibm.icu.util` | ICU core API classes and implementation. This sub-component is packaged as a part of `icu4j.jar`. |
+| `main/currdata`   | `currdata`     | `core` | n/a | No public API classes. Provides access to currency display data. This sub-component is packaged as a part of `icu4j.jar`. |
+| `main/langdata`   | `langdata`     | `core` | n/a | No public API classes. Provides access to language display data. This sub-component is packaged as a part of `icu4j.jar`. |
+| `main/localespi`  | `icu4j-localespi`    | `core` <br/> `collate` | n/a | Implementation of various locale-sensitive service providers defined in   `java.text.spi`   and   `java.util.spi`  in J2SE 6.0 or later Java releases. This sub-component is shipped as `icu4j-localespi.jar`. |
+| `main/regiondata` | `regiondata`   | `core` | n/a | No public API classes. Provides access to region display data. This sub-component is packaged as a part of `icu4j.jar`. |
+| `main/translit`   | `translit`     | `core` | `com.ibm.icu.text` | Transliterator APIs and implementation. This sub-component is packaged as a part of `icu4j.jar`. |
+
+### ICU4J unit test files
+
+Unit test and integration tests are grouped together in the same Maven submodule as the runtime class code
+for the same component.
+The test source code lives in the standard Maven directory structure,
+`src/test/java` for test sources,
+and `src/test/resources` for test-specific non-source files.
+
+> :point_right: **Note**: Tests that depend on multiple sub-components must be placed
+in the `main/common_tests` directory and run as integration tests.
+
+The Maven build enforces isolation vis-a-vis dependencies for tests within a multi-module project such that
+unit tests must only test code within its same submodule.
+When a test depends on runtime code from multiple modules, it cannot exist in any of those modules,
+or else it would create a circular dependency in the Maven build.
+Instead, such tests should be refactored into a separate component
+and designated as integration tests.
+
+| Path                                      | Sub-component Name              | Runtime Dependencies                                                                                         | Description                                     |
+|-------------------------------------------|---------------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| `main/common_tests`                        | `common_tests`             | `core` <br/> `currdata` <br/> `translit` <br/> `langdata` <br/> `collate` <br/> `regiondata` <br/>                                                                 | Sub-component for integration tests that depend on runtime code of multiple components. |
+
+
+### Others
+
+<table>
+    <tr>
+        <th>Path</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><code>demos</code></td>
+        <td>ICU4J demo programs.</td>
+    </tr>
+    <tr>
+        <td><code>perf-tests</code></td>
+        <td>ICU4J performance test files.</td>
+    </tr>
+    <tr>
+        <td><code>tools</code></td>
+        <td>ICU4J tools including: <ul> <li>Custom JavaDoc taglets used for generating ICU4J API references.</li> <li>API report tool and data.</li> <li>Other independent utilities used for ICU4J development.</li> </ul></td>
+    </tr>
+</table>
+
+## The Structure and Contents of ICU4J - ICU 73 and earlier
+
+Below, all directory paths are relative to the directory where the ICU4J source archive is extracted.
+
+### Information and build files
+
+| Path                         | Description                                                                             |
+|------------------------------|-----------------------------------------------------------------------------------------|
+| `build.xml`                   | The main Ant build file for ICU4J. See [How to Install and Build](#how-to-install-and-build---icu-73-and-earlier) for more information |
+| `main/shared/licenses/LICENSE` | ICU license                                                                             |
 
 ### ICU4J runtime class files
 
@@ -128,9 +204,6 @@ Below, all directory paths are relative to the directory where the ICU4J source 
 | `main/tests/localespi`                      | `icu4j-localespi-tests`           | `icu4j-core` <br/> `icu4j-collate` <br/> `icu4j-currdata` <br/> `icu4j-langdata` <br/> `icu4j-localespi` <br/> `icu4j-regiondata` <br/> `icu4j-test-framework` | Test suite for localespi sub-component.         |
 | `main/tests/packaging` | `icu4j-packaging-tests` | `icu4j-core` <br/> `icu4j-test-framework`                                                                      | Test suite for sub-component packaging.         |
 | `main/tests/translit`                       | `icu4j-translit-tests`            | `icu4j-core` <br/> `icu4j-translit` <br/> `icu4j-test-framework`                                                               | Test suite for translit sub-component.          |
-
-
-
 
 ### Others
 
@@ -161,6 +234,7 @@ Below, all directory paths are relative to the directory where the ICU4J source 
     </tr>
 </table>
 
+
 ## Where to get Documentation
 
 The [ICU User Guide](../) contains lots of general information about ICU, in its C, C++, and Java incarnations.
@@ -179,7 +253,91 @@ The complete API documentation for ICU4J (javadoc) is available on the ICU4J web
 *   Unicode Text [Compression](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/UnicodeCompressor.html) & [Decompression](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/UnicodeDecompressor.html) – 2:1 compression on English Unicode text.
 *   Collation – [Rule-based sorting](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/RuleBasedCollator.html), [Efficient multi-lingual searching](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/StringSearch.html), [Alphabetic indexing](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/AlphabeticIndex.html)
 
-## How to Install and Build
+## How to Install and Build - ICU 74 and later
+
+Using a pre-built version of ICU from Maven Central can be achieved simply by using the artifact
+coordinates as described above in the Maven portion of the [How to Download ICU4J](#how-to-download-icu4j)
+section.
+
+For non Maven-aware builds, to install ICU4J, simply place the pre-built jar file `icu4j.jar` on your Java `CLASSPATH`.
+If you need Charset API support please also place `icu4j-charset.jar` on your class path along with `icu4j.jar`.
+
+To build ICU4J, you will need a version of Maven and JDK supported by the version of ICU
+and by the Maven build configuration. See [Maven Setup for Java](../../devsetup/java/maven).
+
+Once the JDK and Maven are installed, run the desired Maven target. For example:
+
+~~~
+~/icu/icu4j$ mvn verify
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] International Components for Unicode for Java (icu4j-root)         [pom]
+[INFO] framework                                                          [jar]
+[INFO] core                                                               [jar]
+[INFO] langdata                                                           [jar]
+[INFO] regiondata                                                         [jar]
+[INFO] currdata                                                           [jar]
+[INFO] collate                                                            [jar]
+[INFO] translit                                                           [jar]
+[INFO] icu4j                                                              [jar]
+[INFO] icu4j-charset                                                      [jar]
+[INFO] common_tests                                                       [jar]
+[INFO] icu4j-localespi                                                    [jar]
+[INFO] demos                                                              [jar]
+[INFO] samples                                                            [jar]
+[INFO] tools_misc                                                         [jar]
+[INFO] utilities-for-cldr                                                 [jar]
+[INFO] perf-tests                                                         [jar]
+[INFO] 
+[INFO] -----------------------< com.ibm.icu:icu4j-root >-----------------------
+[INFO] Building International Components for Unicode for Java (icu4j-root) 74.1-SNAPSHOT [1/17]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-maven) @ icu4j-root ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+
+...
+...
+...
+
+[INFO] Reactor Summary for International Components for Unicode for Java (icu4j-root) 74.1-SNAPSHOT:
+[INFO] 
+[INFO] International Components for Unicode for Java (icu4j-root) SUCCESS [  0.317 s]
+[INFO] framework .......................................... SUCCESS [  1.125 s]
+[INFO] core ............................................... SUCCESS [02:28 min]
+[INFO] langdata ........................................... SUCCESS [  0.117 s]
+[INFO] regiondata ......................................... SUCCESS [  0.113 s]
+[INFO] currdata ........................................... SUCCESS [  0.113 s]
+[INFO] collate ............................................ SUCCESS [ 32.421 s]
+[INFO] translit ........................................... SUCCESS [ 27.787 s]
+[INFO] icu4j .............................................. SUCCESS [  0.019 s]
+[INFO] icu4j-charset ...................................... SUCCESS [ 17.512 s]
+[INFO] common_tests ....................................... SUCCESS [ 25.786 s]
+[INFO] icu4j-localespi .................................... SUCCESS [  0.202 s]
+[INFO] demos .............................................. SUCCESS [  0.111 s]
+[INFO] samples ............................................ SUCCESS [  0.076 s]
+[INFO] tools_misc ......................................... SUCCESS [  0.079 s]
+[INFO] utilities-for-cldr ................................. SUCCESS [  1.284 s]
+[INFO] perf-tests ......................................... SUCCESS [  0.128 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:16 min
+[INFO] Finished at: 2023-10-03T16:16:06-07:00
+[INFO] ------------------------------------------------------------------------
+~~~
+
+> :point_right: **Note**:  The above output is an example. The numbers are likely to be different with the current version ICU4J.
+
+For more information on how to build or test specific components, 
+or run specific tests,
+or to set up your IDE, refer to
+[Maven Setup for Java](../../devsetup/java/maven)
+
+## How to Install and Build - ICU 73 and earlier
 
 To install ICU4J, simply place the pre-built jar file `icu4j.jar` on your Java `CLASSPATH`. If you need Charset API support please also place `icu4j-charset.jar` on your class path along with `icu4j.jar`.
 
