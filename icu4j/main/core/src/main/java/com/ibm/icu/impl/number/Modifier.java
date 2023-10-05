@@ -24,6 +24,7 @@ public interface Modifier {
         POS;
 
         static final int COUNT = Signum.values().length;
+        public static final Signum[] VALUES = Signum.values();
     };
 
     /**
@@ -84,8 +85,45 @@ public interface Modifier {
     public Parameters getParameters();
 
     /**
+     * Returns whether this Modifier equals another Modifier.
+     */
+    public boolean strictEquals(Modifier other);
+
+    /**
      * Returns whether this Modifier is *semantically equivalent* to the other Modifier;
      * in many cases, this is the same as equal, but parameters should be ignored.
      */
-    public boolean semanticallyEquivalent(Modifier other);
+    default boolean semanticallyEquivalent(Modifier other) {
+        Parameters paramsThis = this.getParameters();
+        Parameters paramsOther = other.getParameters();
+        if (paramsThis == null && paramsOther == null) {
+            return this.strictEquals(other);
+        } else if (paramsThis == null || paramsOther == null) {
+            return false;
+        } else if (paramsThis.obj == null && paramsOther.obj == null) {
+            return this.strictEquals(other);
+        } else if (paramsThis.obj == null || paramsOther.obj == null) {
+            return false;
+        }
+        for (Signum signum : Signum.VALUES) {
+            for (StandardPlural plural : StandardPlural.VALUES) {
+                Modifier mod1 = paramsThis.obj.getModifier(signum, plural);
+                Modifier mod2 = paramsOther.obj.getModifier(signum, plural);
+                if (mod1 == mod2) {
+                    // Equal pointers
+                    continue;
+                } else if (mod1 == null || mod2 == null) {
+                    // One pointer is null but not the other
+                    return false;
+                } else if (!mod1.strictEquals(mod2)) {
+                    // The modifiers are NOT equivalent
+                    return false;
+                } else {
+                    // The modifiers are equivalent
+                    continue;
+                }
+            }
+        }
+        return true;
+    }
 }

@@ -225,10 +225,15 @@ class U_I18N_API Modifier {
     virtual void getParameters(Parameters& output) const = 0;
 
     /**
+     * Returns whether this Modifier equals another Modifier.
+     */
+    virtual bool strictEquals(const Modifier& other) const = 0;
+
+    /**
      * Returns whether this Modifier is *semantically equivalent* to the other Modifier;
      * in many cases, this is the same as equal, but parameters should be ignored.
      */
-    virtual bool semanticallyEquivalent(const Modifier& other) const = 0;
+    bool semanticallyEquivalent(const Modifier& other) const;
 };
 
 

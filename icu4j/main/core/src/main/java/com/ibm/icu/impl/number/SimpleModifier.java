@@ -71,14 +71,11 @@ public class SimpleModifier implements Modifier {
     }
 
     @Override
-    public boolean semanticallyEquivalent(Modifier other) {
+    public boolean strictEquals(Modifier other) {
         if (!(other instanceof SimpleModifier)) {
             return false;
         }
         SimpleModifier _other = (SimpleModifier) other;
-        if (parameters != null && _other.parameters != null && parameters.obj == _other.parameters.obj) {
-            return true;
-        }
         return compiledPattern.equals(_other.compiledPattern) && field == _other.field && strong == _other.strong;
     }
 

@@ -60,6 +60,41 @@ Modifier::Parameters::Parameters(
     const ModifierStore* _obj, Signum _signum, StandardPlural::Form _plural)
         : obj(_obj), signum(_signum), plural(_plural) {}
 
+bool Modifier::semanticallyEquivalent(const Modifier& other) const {
+    Parameters paramsThis;
+    Parameters paramsOther;
+    getParameters(paramsThis);
+    other.getParameters(paramsOther);
+    if (paramsThis.obj == nullptr && paramsOther.obj == nullptr) {
+        return strictEquals(other);
+    } else if (paramsThis.obj == nullptr || paramsOther.obj == nullptr) {
+        return false;
+    }
+    for (size_t i=0; i<SIGNUM_COUNT; i++) {
+        auto signum = static_cast<Signum>(i);
+        for (size_t j=0; j<StandardPlural::COUNT; j++) {
+            auto plural = static_cast<StandardPlural::Form>(j);
+            auto mod1 = paramsThis.obj->getModifier(signum, plural);
+            auto mod2 = paramsOther.obj->getModifier(signum, plural);
+            if (mod1 == mod2) {
+                // Equal pointers
+                continue;
+            } else if (mod1 == nullptr || mod2 == nullptr) {
+                // One pointer is null but not the other
+                return false;
+            } else if (!mod1->strictEquals(*mod2)) {
+                // The modifiers are NOT equivalent
+                return false;
+            } else {
+                // The modifiers are equivalent
+                continue;
+            }
+        }
+    }
+    return true;
+}
+
+
 ModifierStore::~ModifierStore() = default;
 
 AdoptingSignumModifierStore::~AdoptingSignumModifierStore()  {
@@ -110,7 +145,7 @@ void ConstantAffixModifier::getParameters(Parameters& output) const {
     UPRV_UNREACHABLE_EXIT;
 }
 
-bool ConstantAffixModifier::semanticallyEquivalent(const Modifier& other) const {
+bool ConstantAffixModifier::strictEquals(const Modifier& other) const {
     auto* _other = dynamic_cast<const ConstantAffixModifier*>(&other);
     if (_other == nullptr) {
         return false;
@@ -197,13 +232,10 @@ void SimpleModifier::getParameters(Parameters& output) const {
     output = fParameters;
 }
 
-bool SimpleModifier::semanticallyEquivalent(const Modifier& other) const {
+bool SimpleModifier::strictEquals(const Modifier& other) const {
     auto* _other = dynamic_cast<const SimpleModifier*>(&other);
     if (_other == nullptr) {
         return false;
-    }
-    if (fParameters.obj != nullptr) {
-        return fParameters.obj == _other->fParameters.obj;
     }
     return fCompiledPattern == _other->fCompiledPattern
         && fField == _other->fField
@@ -327,13 +359,10 @@ void ConstantMultiFieldModifier::getParameters(Parameters& output) const {
     output = fParameters;
 }
 
-bool ConstantMultiFieldModifier::semanticallyEquivalent(const Modifier& other) const {
+bool ConstantMultiFieldModifier::strictEquals(const Modifier& other) const {
     auto* _other = dynamic_cast<const ConstantMultiFieldModifier*>(&other);
     if (_other == nullptr) {
         return false;
-    }
-    if (fParameters.obj != nullptr) {
-        return fParameters.obj == _other->fParameters.obj;
     }
     return fPrefix.contentEquals(_other->fPrefix)
         && fSuffix.contentEquals(_other->fSuffix)

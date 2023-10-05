@@ -258,7 +258,7 @@ void MutablePatternModifier::getParameters(Parameters& output) const {
     UPRV_UNREACHABLE_EXIT;
 }
 
-bool MutablePatternModifier::semanticallyEquivalent(const Modifier& other) const {
+bool MutablePatternModifier::strictEquals(const Modifier& other) const {
     (void)other;
     // This method is not currently used.
     UPRV_UNREACHABLE_EXIT;
