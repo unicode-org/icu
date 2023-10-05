@@ -34,7 +34,7 @@ class U_I18N_API ScientificModifier : public UMemory, public Modifier {
 
     void getParameters(Parameters& output) const override;
 
-    bool semanticallyEquivalent(const Modifier& other) const override;
+    bool strictEquals(const Modifier& other) const override;
 
   private:
     int32_t fExponent;

@@ -347,7 +347,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     @Override
-    public boolean semanticallyEquivalent(Modifier other) {
+    public boolean strictEquals(Modifier other) {
         // This method is not currently used. (unsafe path not used in range formatting)
         assert false;
         return false;

@@ -96,14 +96,11 @@ public class ConstantMultiFieldModifier implements Modifier {
     }
 
     @Override
-    public boolean semanticallyEquivalent(Modifier other) {
+    public boolean strictEquals(Modifier other) {
         if (!(other instanceof ConstantMultiFieldModifier)) {
             return false;
         }
         ConstantMultiFieldModifier _other = (ConstantMultiFieldModifier) other;
-        if (parameters != null && _other.parameters != null && parameters.obj == _other.parameters.obj) {
-            return true;
-        }
         return Arrays.equals(prefixChars, _other.prefixChars) && Arrays.equals(prefixFields, _other.prefixFields)
                 && Arrays.equals(suffixChars, _other.suffixChars) && Arrays.equals(suffixFields, _other.suffixFields)
                 && overwrite == _other.overwrite && strong == _other.strong;

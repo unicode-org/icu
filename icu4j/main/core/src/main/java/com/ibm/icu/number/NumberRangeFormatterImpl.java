@@ -17,6 +17,8 @@ import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.SimpleModifier;
+import com.ibm.icu.impl.number.Modifier.Parameters;
+import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.impl.number.range.PrefixInfixSuffixLengthHelper;
 import com.ibm.icu.impl.number.range.RangeMacroProps;
 import com.ibm.icu.impl.number.range.StandardPluralRanges;
@@ -437,5 +439,4 @@ class NumberRangeFormatterImpl {
         assert mod != null;
         return mod;
     }
-
 }

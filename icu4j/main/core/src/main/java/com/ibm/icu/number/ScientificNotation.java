@@ -255,7 +255,7 @@ public class ScientificNotation extends Notation {
         }
 
         @Override
-        public boolean semanticallyEquivalent(Modifier other) {
+        public boolean strictEquals(Modifier other) {
             // This method is not currently used. (unsafe path not used in range formatting)
             assert false;
             return false;
@@ -334,7 +334,7 @@ public class ScientificNotation extends Notation {
         }
 
         @Override
-        public boolean semanticallyEquivalent(Modifier other) {
+        public boolean strictEquals(Modifier other) {
             if (!(other instanceof ScientificModifier)) {
                 return false;
             }

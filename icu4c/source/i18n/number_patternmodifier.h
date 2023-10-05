@@ -191,7 +191,7 @@ class U_I18N_API MutablePatternModifier
 
     void getParameters(Parameters& output) const override;
 
-    bool semanticallyEquivalent(const Modifier& other) const override;
+    bool strictEquals(const Modifier& other) const override;
 
     /**
      * Returns the string that substitutes a given symbol type in a pattern.

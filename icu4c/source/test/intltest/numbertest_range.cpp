@@ -59,6 +59,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(test21358_SignPosition);
         TESTCASE_AUTO(test21683_StateLeak);
         TESTCASE_AUTO(testCreateLNRFFromNumberingSystemInSkeleton);
+        TESTCASE_AUTO(test22288_DifferentStartEndSettings);
     TESTCASE_AUTO_END;
 }
 
@@ -1157,6 +1158,27 @@ cleanup:
     unumrf_close(nrf);
     unumrf_closeResult(result);
     ucfpos_close(fpos);
+}
+
+void NumberRangeFormatterTest::test22288_DifferentStartEndSettings() {
+    IcuTestErrorCode status(*this, "test22288_DifferentStartEndSettings");
+    LocalizedNumberRangeFormatter lnrf(NumberRangeFormatter
+            ::withLocale("en")
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterFirst(
+                NumberFormatter::with()
+                    .unit(CurrencyUnit("USD", status))
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                    .precision(Precision::integer())
+                    .roundingMode(UNUM_ROUND_FLOOR))
+            .numberFormatterSecond(
+                NumberFormatter::with()
+                    .unit(CurrencyUnit("USD", status))
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                    .precision(Precision::integer())
+                    .roundingMode(UNUM_ROUND_CEILING)));
+        FormattedNumberRange result = lnrf.formatFormattableRange(2.5, 2.5, status);
+        assertEquals("Should format successfully", u"2–3 US dollars", result.toString(status));
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(
