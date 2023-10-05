@@ -225,8 +225,8 @@ public class LocaleDistance {
     // VisibleForTesting
     public int testOnlyDistance(ULocale desired, ULocale supported,
             int threshold, FavorSubtag favorSubtag) {
-        LSR supportedLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported, false);
-        LSR desiredLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired, false);
+        LSR supportedLSR = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported, false);
+        LSR desiredLSR = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired, false);
         int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR }, 1,
                 shiftDistance(threshold), favorSubtag, LocaleMatcher.Direction.WITH_ONE_WAY);
         return getDistanceFloor(indexAndDistance);
@@ -250,7 +250,7 @@ public class LocaleDistance {
         long desLangState = desLangDistance >= 0 && supportedLSRsLength > 1 ? iter.getState64() : 0;
         // Index of the supported LSR with the lowest distance.
         int bestIndex = -1;
-        // Cached lookup info from XLikelySubtags.compareLikely().
+        // Cached lookup info from LikelySubtags.compareLikely().
         int bestLikelyInfo = -1;
         for (int slIndex = 0; slIndex < supportedLSRsLength; ++slIndex) {
             LSR supported = supportedLSRs[slIndex];
@@ -369,7 +369,7 @@ public class LocaleDistance {
                     if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
                             // Is there also a match when we swap desired/supported?
                             isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
-                        bestLikelyInfo = XLikelySubtags.INSTANCE.compareLikely(
+                        bestLikelyInfo = LikelySubtags.INSTANCE.compareLikely(
                                 supported, supportedLSRs[bestIndex], bestLikelyInfo);
                         if ((bestLikelyInfo & 1) != 0) {
                             // This supported locale matches as well as the previous best match,

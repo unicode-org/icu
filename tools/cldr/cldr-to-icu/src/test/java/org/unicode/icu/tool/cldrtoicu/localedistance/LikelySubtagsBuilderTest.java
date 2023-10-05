@@ -20,14 +20,14 @@ import org.unicode.cldr.api.CldrValue;
 
 import com.google.common.collect.ImmutableMap;
 import com.ibm.icu.impl.locale.LSR;
-import com.ibm.icu.impl.locale.XLikelySubtags;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.util.BytesTrie;
 
 public class LikelySubtagsBuilderTest {
 
     @Test
     public void testLanguageAliases() {
-        XLikelySubtags.Data subtags = LikelySubtagsBuilder.build(getTestData(
+        LikelySubtags.Data subtags = LikelySubtagsBuilder.build(getTestData(
                 // Minimum mapping (or else code complains).
                 likelySubtag("und", "en_Latn_US"),
 
@@ -44,7 +44,7 @@ public class LikelySubtagsBuilderTest {
 
     @Test
     public void testTerritoryAliases() {
-        XLikelySubtags.Data subtags = LikelySubtagsBuilder.build(getTestData(
+        LikelySubtags.Data subtags = LikelySubtagsBuilder.build(getTestData(
                 // Minimum mapping (or else code complains).
                 likelySubtag("und", "en_Latn_US"),
 
@@ -60,7 +60,7 @@ public class LikelySubtagsBuilderTest {
 
     @Test
     public void testLikelySubtags() {
-        XLikelySubtags.Data subtags = LikelySubtagsBuilder.build(getTestData(
+        LikelySubtags.Data subtags = LikelySubtagsBuilder.build(getTestData(
                 likelySubtag("und", "en_Latn_US"),
                 likelySubtag("en", "en_Latn_US"),
                 likelySubtag("pt", "pt_Latn_BR"),
@@ -99,7 +99,7 @@ public class LikelySubtagsBuilderTest {
                 .inOrder();
     }
 
-    private static ImmutableMap<String, LSR> getTrieTable(XLikelySubtags.Data subtags) {
+    private static ImmutableMap<String, LSR> getTrieTable(LikelySubtags.Data subtags) {
         // We rebuild the Trie from the byte[] data.
         return TestData.getTrieTable(new BytesTrie(subtags.trie, 0), "*", i -> subtags.lsrs[i]);
     }

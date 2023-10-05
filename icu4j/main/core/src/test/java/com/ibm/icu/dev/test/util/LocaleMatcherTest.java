@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
-import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.LocalePriorityList;
@@ -868,7 +868,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
         long start = System.nanoTime();
         for (int i = iterations; i > 0; --i) {
             for (ULocale locale : list) {
-                XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale, false);
+                LikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale, false);
             }
         }
         return System.nanoTime() - start;

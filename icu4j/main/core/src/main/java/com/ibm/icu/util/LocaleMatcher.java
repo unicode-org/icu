@@ -17,8 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.locale.LSR;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.impl.locale.LocaleDistance;
-import com.ibm.icu.impl.locale.XLikelySubtags;
 
 /**
  * Immutable class that picks the best match between a user's desired locales and
@@ -796,7 +796,7 @@ public final class LocaleMatcher {
         if (locale.equals(UND_ULOCALE)) {
             return UND_LSR;
         } else {
-            return XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale, false);
+            return LikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale, false);
         }
     }
 
@@ -804,7 +804,7 @@ public final class LocaleMatcher {
         if (locale.equals(UND_LOCALE) || locale.equals(EMPTY_LOCALE)) {
             return UND_LSR;
         } else {
-            return XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale);
+            return LikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale);
         }
     }
 
@@ -1169,7 +1169,7 @@ public final class LocaleMatcher {
      * @stable ICU 4.4
      */
     public ULocale canonicalize(ULocale locale) {
-        return XLikelySubtags.INSTANCE.canonicalize(locale);
+        return LikelySubtags.INSTANCE.canonicalize(locale);
     }
 
     /**

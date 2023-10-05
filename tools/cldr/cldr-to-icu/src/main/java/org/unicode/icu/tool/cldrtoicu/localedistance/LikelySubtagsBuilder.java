@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ImmutableSortedMap;
 import com.ibm.icu.impl.locale.LSR;
-import com.ibm.icu.impl.locale.XLikelySubtags;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrPath;
@@ -149,7 +149,7 @@ final class LikelySubtagsBuilder {
         }
     }
 
-    public static XLikelySubtags.Data build(CldrData supplementalData) {
+    public static LikelySubtags.Data build(CldrData supplementalData) {
         // Build the table of LSR data from CLDR aliases and likely subtag information.
         Aliases languageAliases = Aliases.getAliases(supplementalData, AliasType.LANGUAGE);
         Aliases regionAliases = Aliases.getAliases(supplementalData, AliasType.TERRITORY);
@@ -175,12 +175,12 @@ final class LikelySubtagsBuilder {
         // Build the Trie of the LSR table data.
         Trie trie = writeLsrTable(lsrTable, lsrToIndex);
 
-        // Note: Using XLikelySubtags as a fairly "dumb" container for the return values
+        // Note: Using LikelySubtags as a fairly "dumb" container for the return values
         // requires us to do slightly awkward things like passing mutable arrays around, but
         // the advantage it has is that this data structure is also what's used in client code,
         // so if the likely subtags data changes, it will be a forcing function to change this
         // code.
-        return new XLikelySubtags.Data(
+        return new LikelySubtags.Data(
                 languageAliases.getCanonicalMap(),
                 regionAliases.getCanonicalMap(),
                 trie.toByteArray(),
@@ -214,7 +214,7 @@ final class LikelySubtagsBuilder {
             // We already checked '*' is in every scripts table.
             Map<String, LSR> regions = scripts.get("*");
             if (regions.size() > 1) {
-                languageSpan.putPrefixAndValue(XLikelySubtags.SKIP_SCRIPT);
+                languageSpan.putPrefixAndValue(LikelySubtags.SKIP_SCRIPT);
             }
             writeRegions(languageSpan, regions, lsrToIndex);
         } else {

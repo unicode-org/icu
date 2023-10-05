@@ -139,7 +139,7 @@ public class TrieTest {
         // We rebuild the Trie from the byte[] data.
         BytesTrie trie = new BytesTrie(data, 0);
 
-        // Mostly copied from XLikelySubtags (since the necessary constructor is private).
+        // Mostly copied from LikelySubtags (since the necessary constructor is private).
         // Main change is the this no longer uses a TreeMap, since we want to test order.
         Map<String, Integer> map = new LinkedHashMap<>();
         StringBuilder sb = new StringBuilder();

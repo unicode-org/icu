@@ -486,7 +486,7 @@ _uloc_addLikelySubtags(const char* localeID,
 
     CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
     {
-        const icu::XLikelySubtags* likelySubtags = icu::XLikelySubtags::getSingleton(*err);
+        const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(*err);
         if(U_FAILURE(*err)) {
             goto error;
         }
@@ -590,7 +590,7 @@ _uloc_minimizeSubtags(const char* localeID,
     CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
 
     {
-        const icu::XLikelySubtags* likelySubtags = icu::XLikelySubtags::getSingleton(*err);
+        const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(*err);
         if(U_FAILURE(*err)) {
             goto error;
         }

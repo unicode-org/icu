@@ -302,7 +302,7 @@ LocaleMatcher LocaleMatcher::Builder::build(UErrorCode &errorCode) const {
 
 namespace {
 
-LSR getMaximalLsrOrUnd(const XLikelySubtags &likelySubtags, const Locale &locale,
+LSR getMaximalLsrOrUnd(const LikelySubtags &likelySubtags, const Locale &locale,
                        UErrorCode &errorCode) {
     if (U_FAILURE(errorCode) || locale.isBogus() || *locale.getName() == 0 /* "und" */) {
         return UND_LSR;
@@ -338,7 +338,7 @@ int32_t LocaleMatcher::putIfAbsent(const LSR &lsr, int32_t i, int32_t suppLength
 }
 
 LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
-        likelySubtags(*XLikelySubtags::getSingleton(errorCode)),
+        likelySubtags(*LikelySubtags::getSingleton(errorCode)),
         localeDistance(*LocaleDistance::getSingleton(errorCode)),
         thresholdDistance(builder.thresholdDistance_),
         demotionPerDesiredLocale(0),
@@ -551,7 +551,7 @@ LocaleMatcher &LocaleMatcher::operator=(LocaleMatcher &&src) noexcept {
 
 class LocaleLsrIterator {
 public:
-    LocaleLsrIterator(const XLikelySubtags &likelySubtags, Locale::Iterator &locales,
+    LocaleLsrIterator(const LikelySubtags &likelySubtags, Locale::Iterator &locales,
                       ULocMatchLifetime lifetime) :
             likelySubtags(likelySubtags), locales(locales), lifetime(lifetime) {}
 
@@ -596,7 +596,7 @@ public:
     }
 
 private:
-    const XLikelySubtags &likelySubtags;
+    const LikelySubtags &likelySubtags;
     Locale::Iterator &locales;
     ULocMatchLifetime lifetime;
     const Locale *current = nullptr, *remembered = nullptr;

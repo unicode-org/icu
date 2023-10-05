@@ -133,10 +133,10 @@ U_NAMESPACE_BEGIN
 
 struct LSR;
 
+class LikelySubtags;
 class LocaleDistance;
 class LocaleLsrIterator;
 class UVector;
-class XLikelySubtags;
 
 /**
  * Immutable class that picks the best match between a user's desired locales and
@@ -680,7 +680,7 @@ private:
 
     int32_t getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remainingIter, UErrorCode &errorCode) const;
 
-    const XLikelySubtags &likelySubtags;
+    const LikelySubtags &likelySubtags;
     const LocaleDistance &localeDistance;
     int32_t thresholdDistance;
     int32_t demotionPerDesiredLocale;

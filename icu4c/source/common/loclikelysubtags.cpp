@@ -51,8 +51,7 @@ LocaleDistanceData::~LocaleDistanceData() {
     delete[] paradigms;
 }
 
-// TODO(ICU-20777): Rename to just LikelySubtagsData.
-struct XLikelySubtagsData {
+struct LikelySubtagsData {
     UResourceBundle *langInfoBundle = nullptr;
     UniqueCharStrings strings;
     CharStringMap languageAliases;
@@ -63,9 +62,9 @@ struct XLikelySubtagsData {
 
     LocaleDistanceData distanceData;
 
-    XLikelySubtagsData(UErrorCode &errorCode) : strings(errorCode) {}
+    LikelySubtagsData(UErrorCode &errorCode) : strings(errorCode) {}
 
-    ~XLikelySubtagsData() {
+    ~LikelySubtagsData() {
         ures_close(langInfoBundle);
         delete[] lsrs;
     }
@@ -339,7 +338,7 @@ private:
 
 namespace {
 
-XLikelySubtags *gLikelySubtags = nullptr;
+LikelySubtags *gLikelySubtags = nullptr;
 UVector *gMacroregions = nullptr;
 UInitOnce gInitOnce {};
 
@@ -443,13 +442,13 @@ UVector* getStaticMacroregions(UErrorCode &status) {
 
 }  // namespace
 
-void U_CALLCONV XLikelySubtags::initLikelySubtags(UErrorCode &errorCode) {
+void U_CALLCONV LikelySubtags::initLikelySubtags(UErrorCode &errorCode) {
     // This function is invoked only via umtx_initOnce().
     U_ASSERT(gLikelySubtags == nullptr);
-    XLikelySubtagsData data(errorCode);
+    LikelySubtagsData data(errorCode);
     data.load(errorCode);
     if (U_FAILURE(errorCode)) { return; }
-    gLikelySubtags = new XLikelySubtags(data);
+    gLikelySubtags = new LikelySubtags(data);
     gMacroregions = getStaticMacroregions(errorCode);
 #if U_DEBUG
     auto macroregionsFromData = loadMacroregions(errorCode);
@@ -466,13 +465,13 @@ void U_CALLCONV XLikelySubtags::initLikelySubtags(UErrorCode &errorCode) {
     ucln_common_registerCleanup(UCLN_COMMON_LIKELY_SUBTAGS, cleanup);
 }
 
-const XLikelySubtags *XLikelySubtags::getSingleton(UErrorCode &errorCode) {
+const LikelySubtags *LikelySubtags::getSingleton(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return nullptr; }
-    umtx_initOnce(gInitOnce, &XLikelySubtags::initLikelySubtags, errorCode);
+    umtx_initOnce(gInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
     return gLikelySubtags;
 }
 
-XLikelySubtags::XLikelySubtags(XLikelySubtagsData &data) :
+LikelySubtags::LikelySubtags(LikelySubtagsData &data) :
         langInfoBundle(data.langInfoBundle),
         strings(data.strings.orphanCharStrings()),
         languageAliases(std::move(data.languageAliases)),
@@ -507,13 +506,13 @@ XLikelySubtags::XLikelySubtags(XLikelySubtagsData &data) :
     }
 }
 
-XLikelySubtags::~XLikelySubtags() {
+LikelySubtags::~LikelySubtags() {
     ures_close(langInfoBundle);
     delete strings;
     delete[] lsrs;
 }
 
-LSR XLikelySubtags::makeMaximizedLsrFrom(const Locale &locale,
+LSR LikelySubtags::makeMaximizedLsrFrom(const Locale &locale,
                                          bool returnInputIfUnmatch,
                                          UErrorCode &errorCode) const {
     if (locale.isBogus()) {
@@ -550,7 +549,7 @@ const char *getCanonical(const CharStringMap &aliases, const char *alias) {
 
 }  // namespace
 
-LSR XLikelySubtags::makeMaximizedLsr(const char *language, const char *script, const char *region,
+LSR LikelySubtags::makeMaximizedLsr(const char *language, const char *script, const char *region,
                                      const char *variant,
                                      bool returnInputIfUnmatch,
                                      UErrorCode &errorCode) const {
@@ -605,7 +604,7 @@ LSR XLikelySubtags::makeMaximizedLsr(const char *language, const char *script, c
     return maximize(language, script, region, returnInputIfUnmatch, errorCode);
 }
 
-LSR XLikelySubtags::maximize(const char *language, const char *script, const char *region,
+LSR LikelySubtags::maximize(const char *language, const char *script, const char *region,
                              bool returnInputIfUnmatch,
                              UErrorCode &errorCode) const {
     return maximize({language, (int32_t)uprv_strlen(language)},
@@ -615,18 +614,18 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
                     errorCode);
 }
 
-bool XLikelySubtags::isMacroregion(StringPiece& region, UErrorCode& errorCode) const {
+bool LikelySubtags::isMacroregion(StringPiece& region, UErrorCode& errorCode) const {
     // In Java, we use Region class. In C++, since Region is under i18n,
     // we read the same data used by Region into gMacroregions avoid dependency
     // from common to i18n/region.cpp
     if (U_FAILURE(errorCode)) { return false; }
-    umtx_initOnce(gInitOnce, &XLikelySubtags::initLikelySubtags, errorCode);
+    umtx_initOnce(gInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
     if (U_FAILURE(errorCode)) { return false; }
     UnicodeString str(UnicodeString::fromUTF8(region));
     return gMacroregions->contains((void *)&str);
 }
 
-LSR XLikelySubtags::maximize(StringPiece language, StringPiece script, StringPiece region,
+LSR LikelySubtags::maximize(StringPiece language, StringPiece script, StringPiece region,
                              bool returnInputIfUnmatch,
                              UErrorCode &errorCode) const {
     if (U_FAILURE(errorCode)) {
@@ -750,7 +749,7 @@ LSR XLikelySubtags::maximize(StringPiece language, StringPiece script, StringPie
     return LSR(language, script, region, retainMask, errorCode);
 }
 
-int32_t XLikelySubtags::compareLikely(const LSR &lsr, const LSR &other, int32_t likelyInfo) const {
+int32_t LikelySubtags::compareLikely(const LSR &lsr, const LSR &other, int32_t likelyInfo) const {
     // If likelyInfo >= 0:
     // likelyInfo bit 1 is set if the previous comparison with lsr
     // was for equal language and script.
@@ -792,7 +791,7 @@ int32_t XLikelySubtags::compareLikely(const LSR &lsr, const LSR &other, int32_t 
 }
 
 // Subset of maximize().
-int32_t XLikelySubtags::getLikelyIndex(const char *language, const char *script) const {
+int32_t LikelySubtags::getLikelyIndex(const char *language, const char *script) const {
     if (uprv_strcmp(language, "und") == 0) {
         language = "";
     }
@@ -850,7 +849,7 @@ int32_t XLikelySubtags::getLikelyIndex(const char *language, const char *script)
     return value;
 }
 
-int32_t XLikelySubtags::trieNext(BytesTrie &iter, const char *s, int32_t i) {
+int32_t LikelySubtags::trieNext(BytesTrie &iter, const char *s, int32_t i) {
     UStringTrieResult result;
     uint8_t c;
     if ((c = s[i]) == 0) {
@@ -883,7 +882,7 @@ int32_t XLikelySubtags::trieNext(BytesTrie &iter, const char *s, int32_t i) {
     default: return -1;
     }
 }
-int32_t XLikelySubtags::trieNext(BytesTrie &iter, StringPiece s, int32_t i) {
+int32_t LikelySubtags::trieNext(BytesTrie &iter, StringPiece s, int32_t i) {
     UStringTrieResult result;
     uint8_t c;
     if (s.length() == i) {
@@ -917,7 +916,7 @@ int32_t XLikelySubtags::trieNext(BytesTrie &iter, StringPiece s, int32_t i) {
     }
 }
 
-LSR XLikelySubtags::minimizeSubtags(StringPiece language, StringPiece script,
+LSR LikelySubtags::minimizeSubtags(StringPiece language, StringPiece script,
                                     StringPiece region,
                                     bool favorScript,
                                     UErrorCode &errorCode) const {

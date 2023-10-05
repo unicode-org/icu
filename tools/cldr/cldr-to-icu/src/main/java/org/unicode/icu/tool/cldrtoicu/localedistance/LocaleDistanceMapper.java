@@ -41,8 +41,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.Bytes;
 import com.ibm.icu.impl.locale.LSR;
+import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.impl.locale.LocaleDistance;
-import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.lang.UScript;
 
 import com.ibm.icu.util.ULocale;
@@ -141,7 +141,7 @@ public final class LocaleDistanceMapper {
             throw new IllegalStateException(
                 "The M49 list is too long. We can only encode up to 27 M49 codes.");
         }
-        XLikelySubtags.Data likelyData = LikelySubtagsBuilder.build(data);
+        LikelySubtags.Data likelyData = LikelySubtagsBuilder.build(data);
         icuData.add(LIKELY_LANGUAGES, ofMapEntries(likelyData.languageAliases));
         icuData.add(LIKELY_M49, RbValue.of(M49));
         icuData.add(LIKELY_REGIONS, ofMapEntries(likelyData.regionAliases));
@@ -422,7 +422,7 @@ public final class LocaleDistanceMapper {
 
         Set<LSR> paradigmLSRs = new LinkedHashSet<>();
         for (String paradigm : LIST_SPLITTER.split(localesList)) {
-            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(new ULocale(paradigm), false);
+            LSR max = LikelySubtags.INSTANCE.makeMaximizedLsrFrom(new ULocale(paradigm), false);
             // Clear the LSR flags to make the data equality test in LocaleDistanceTest happy.
             paradigmLSRs.add(new LSR(max.language, max.script, max.region, LSR.DONT_CARE_FLAGS));
         }
