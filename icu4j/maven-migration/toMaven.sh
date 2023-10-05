@@ -28,6 +28,17 @@
 #
 # Then we cleanup older Eclipse project & launcher files, ant scripts, manifest.stub
 
+function safeMkdir() {
+  mkdir -p "$1"
+}
+
+function moveOrRename() {
+  local SRC=$1
+  local DEST=$2
+
+  mv "$SRC" "$DEST"
+}
+
 function rmDirIfExists() {
   [ -d "$1" ] && rm -fr "$1"
 }
@@ -36,10 +47,17 @@ function rmFileIfExists() {
   [ -f "$1" ] && rm "$1"
 }
 
+function copyRecursive() {
+  local SRC=$1
+  local DEST=$2
+
+  cp -R "$SRC" "$DEST"
+}
+
 function safeMoveDir() {
-  export FOLDER_NAME=$1
-  export FROM_FOLDER=$2
-  export TO_FOLDER=$3
+  local FOLDER_NAME=$1
+  local FROM_FOLDER=$2
+  local TO_FOLDER=$3
 
   if [ ! -d "$FROM_FOLDER/$FOLDER_NAME" ]; then
     echo "  No '$FROM_FOLDER/$FOLDER_NAME' to move."
@@ -49,29 +67,43 @@ function safeMoveDir() {
     echo "  Error: folder '$TO_FOLDER/$FOLDER_NAME' already exists!"
     exit
   else
-    mkdir -p $TO_FOLDER
-    mv $FROM_FOLDER/$FOLDER_NAME $TO_FOLDER/
+    safeMkdir $TO_FOLDER
+    moveOrRename $FROM_FOLDER/$FOLDER_NAME $TO_FOLDER/
     echo "  Moving '$FOLDER_NAME' folder from '$FROM_FOLDER' to '$TO_FOLDER'"
   fi
+}
+
+function rmFileGlobInDir() {
+  local DIR=$1
+  local PATTERN=$2
+
+  find "$DIR" -type f -name "$PATTERN" -exec rm {} \;
+}
+
+function keepOnlyFileGlobInDir() {
+  local DIR=$1
+  local PATTERN=$2
+
+  find "$DIR" -type f -not -name "$PATTERN" -exec rm {} \;
 }
 
 # Split the content of the `java` foldert into `java` and `resources`, the way maven wants it
 function splitJavaToResources() {
   # Should point to the folder containing `java`, either main/ or test/
-  export BASE_FOLDER=$1
+  local BASE_FOLDER=$1
 
   echo "  Splitting '$BASE_FOLDER/java/' into '$BASE_FOLDER/java/' and '$BASE_FOLDER/resources/'"
   # copy `java` to `resources`
-  cp -R $BASE_FOLDER/java/ $BASE_FOLDER/resources/
+  copyRecursive $BASE_FOLDER/java/ $BASE_FOLDER/resources/
   # delete all not `.java` from `java`
-  find $BASE_FOLDER/java/      -type f -not -name *.java -exec rm {} \;
+  keepOnlyFileGlobInDir $BASE_FOLDER/java/ *.java
   # delete all `.java` from `resources`
-  find $BASE_FOLDER/resources/ -type f      -name *.java -exec rm {} \;
+  rmFileGlobInDir $BASE_FOLDER/resources/  *.java
 }
 
 function removeEclipseProjectFiles() {
   # Should point to the old folder (to be moved), containing the eclipse / ant files
-  export BASE_FOLDER=$1
+  local BASE_FOLDER=$1
 
   # Cleanup Eclipse project & launcher files, ant projects, other stuff
   # Eclipse
@@ -89,7 +121,7 @@ function removeEclipseProjectFiles() {
 
 # Takes a folder as parameter and removes the all the empty sub-folders.
 function removeEmptyFolders() {
-  export BASE_FOLDER=$1
+  local BASE_FOLDER=$1
   # `find -type d .` finds all subfolders, empty or not.
   # We can't just force delete (-r), as that would also delete non-empty folders.
   # And the find iteration is not children first, but parent first.
@@ -112,11 +144,11 @@ function removeEmptyFolders() {
 
 function moveMainModuleToMaven() {
   # 1. $1: component name (core, charset, etc)
-  export MODULE_NAME=$1
+  local MODULE_NAME=$1
   # 2. folder name in the pre-maven structure (`classes` or `tests`)
-  export SRC_TYPE=$2
+  local SRC_TYPE=$2
   # 3. folder name in the maven standard structure (`main` or `test`)
-  export TRG_TYPE=$3
+  local TRG_TYPE=$3
 
   if [ ! -d main/$SRC_TYPE/$MODULE_NAME ]; then
     echo "  Module '$MODULE_NAME' does not have '$SRC_TYPE' to move to '$TRG_TYPE'"
@@ -148,14 +180,14 @@ function mainModuleToMaven() {
   echo "Migrating $1 to maven"
   moveMainModuleToMaven $1 classes main
   moveMainModuleToMaven $1 tests test
-  mkdir -p main/$MODULE_NAME/src/main/resources/
+  safeMkdir main/$MODULE_NAME/src/main/resources/
   ln -s ../../../../../../LICENSE main/$MODULE_NAME/src/main/resources/LICENSE
 }
 
 function simpleModuleToMaven() {
   # 1. $1: component name (core, charset, etc)
-  export MODULE_NAME=$1
-  export LICENSE_PATH=$2
+  local MODULE_NAME=$1
+  local LICENSE_PATH=$2
   echo "Migrating $MODULE_NAME to maven"
 
   safeMoveDir com $MODULE_NAME/src $MODULE_NAME/src/main/java
@@ -163,7 +195,7 @@ function simpleModuleToMaven() {
 
   removeEclipseProjectFiles $MODULE_NAME
 
-  mkdir -p $MODULE_NAME/src/main/resources/
+  safeMkdir $MODULE_NAME/src/main/resources/
   ln -s $LICENSE_PATH $MODULE_NAME/src/main/resources/LICENSE
 
   echo "  Remove empty folders from '$MODULE_NAME'"
@@ -171,22 +203,24 @@ function simpleModuleToMaven() {
 }
 
 function moveCoreTestFileToCommon() {
-  export FOLDER_NAME=$1
-  export FILE_NAME=$2
-  mkdir -p $COMMON_TEST_FOLDER/$FOLDER_NAME
-  mv       $CORE_TEST_FOLDER/$FOLDER_NAME/$FILE_NAME $COMMON_TEST_FOLDER/$FOLDER_NAME/
+  local FOLDER_NAME=$1
+  local FILE_NAME=$2
+  safeMkdir $COMMON_TEST_FOLDER/$FOLDER_NAME
+  moveOrRename $CORE_TEST_FOLDER/$FOLDER_NAME/$FILE_NAME $COMMON_TEST_FOLDER/$FOLDER_NAME/
 }
 
 function moveCircDepTestOutOfCore() {
   export CORE_TEST_FOLDER=main/core/src/test/java/com/ibm/icu/dev/test
   export COMMON_TEST_FOLDER=main/common_tests/src/test/java/com/ibm/icu/dev/test
 
-  mkdir -p $CORE_TEST_FOLDER
+  safeMkdir $CORE_TEST_FOLDER
 
   moveCoreTestFileToCommon calendar DataDrivenCalendarTest.java
   moveCoreTestFileToCommon format CompactDecimalFormatTest.java
   moveCoreTestFileToCommon format DataDrivenFormatTest.java
   moveCoreTestFileToCommon format DateFormatTest.java
+  moveCoreTestFileToCommon format IntlTestDecimalFormatSymbolsC.java
+  moveCoreTestFileToCommon format IntlTestDecimalFormatAPIC.java
   moveCoreTestFileToCommon format MeasureUnitTest.java
   moveCoreTestFileToCommon format NumberFormatDataDrivenTest.java
   moveCoreTestFileToCommon format NumberFormatRegressionTest.java
@@ -226,12 +260,20 @@ function moveCircDepTestOutOfCore() {
 
   # Looks like the packaging project was already some kind of test for how things come together.
   # Should we move all the files in this project instead of common_tests?
-  mv main/tests/packaging/src/com/ibm/icu/dev/test/* $COMMON_TEST_FOLDER/
+  moveOrRename main/tests/packaging/src/com/ibm/icu/dev/test/* $COMMON_TEST_FOLDER/
   removeEclipseProjectFiles main/tests/packaging
 
   # At this point this folder should be empty
   # So remove if empty (-d) should work
   rm -d main/core/src/test/java/com/ibm/icu/dev/test/serializable
+}
+
+function moveFilesInTools() {
+  local TOOLS_SRC_ROOT_FOLDER=tools/misc/src/main/java/com/ibm/icu/dev/tool
+  local TOOLS_SRC_SHARED_SUBFOLDER=tools/misc/src/main/java/com/ibm/icu/dev/tool/shared
+
+  safeMkdir $TOOLS_SRC_SHARED_SUBFOLDER
+  moveOrRename $TOOLS_SRC_ROOT_FOLDER/UOption.java $TOOLS_SRC_SHARED_SUBFOLDER/
 }
 
 # ===============================================================
@@ -247,13 +289,13 @@ if [ ! -f "main/classes/core/build.xml" ]; then
   exit
 fi
 
+# Copy over most files from `maven-migration` dir needed for Maven build...
 MVN_MIG_DIR="$(dirname "${BASH_SOURCE[0]}")"
-
-cp -R ${MVN_MIG_DIR}/* .
-# Don't copy files that are only used for migration
-rm README_MAVEN.md
-rm toMaven.sh
-rm unpack_jars.sh
+copyRecursive ${MVN_MIG_DIR}/* .
+# ...but don't copy files that are only used for migration
+rmFileIfExists README_MAVEN.md
+rmFileIfExists toMaven.sh
+rmFileIfExists unpack_jars.sh
 
 # Migrate the modules in icu4j/main, which have code (in main/classes) & unit tests (in main/test)
 echo "===================================="
@@ -285,6 +327,16 @@ echo "==== Moving core unit tests that depend on non-core (circular dependencies
 echo "================================================================================="
 
 moveCircDepTestOutOfCore
+
+echo "================================================================="
+echo "==== Move files to resolve dependency cycles in tools, etc. ====="
+echo "================================================================="
+
+moveFilesInTools
+
+# Cleanup of Ant-specific dirs & prototype Maven build dirs
+rmDirIfExists  "$BASE_FOLDER/maven/"
+rmDirIfExists  "$BASE_FOLDER/maven-build/"
 
 # Some final cleanup for any empty folders
 removeEmptyFolders main/classes

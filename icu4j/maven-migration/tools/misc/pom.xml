@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.ibm.icu</groupId>
     <artifactId>icu4j-root</artifactId>
-    <version>74.0.1-SNAPSHOT</version>
+    <version>74.1-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -41,6 +41,13 @@
               <Main-Class>com.ibm.icu.dev.tool.localeconverter.XLIFF2ICUConverter</Main-Class>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <!-- We don't want to deploy this to Maven -->
+        <configuration>
+          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-* © 2023 and later: Unicode, Inc. and others.
+* © 2016 and later: Unicode, Inc. and others.
 * License & terms of use: http://www.unicode.org/copyright.html
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -8,12 +8,15 @@
 
   <groupId>com.ibm.icu</groupId>
   <artifactId>icu4j-root</artifactId>
-  <version>74.0.1-SNAPSHOT</version>
+  <version>74.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${proj-title} (${project.artifactId})</name>
-  <description>International Component for Unicode for Java (ICU4J) is a mature, widely used Java library
-    providing Unicode and Globalization support</description>
+  <description>International Components for Unicode for Java (ICU4J) is a mature, widely used Java library
+    providing Unicode and Globalization support.
+    This is the base artifact with common settings, not intended to use directly.</description>
+  <url>https://icu.unicode.org/</url>
+  <inceptionYear>1995</inceptionYear>
 
   <organization>
     <name>Unicode, Inc.</name>
@@ -21,10 +24,28 @@
   </organization>
 
   <modules>
-    <module>main</module>
+    <module>main/framework</module>
+    <module>main/core</module>
+    <!-- For publishing to Maven Central -->
+    <module>main/charset</module>
+    <module>main/collate</module>
+    <module>main/currdata</module>
+    <module>main/langdata</module>
+    <module>main/regiondata</module>
+    <module>main/translit</module>
+    <module>main/common_tests</module>
+    <!-- Shaded jar for publishing to Maven Central -->
+    <module>main/icu4j</module>
+    <!-- For publishing to Maven Central. Not shaded, but depends on the shaded artifacts above.
+         Also contains all the project properties (developers, scm, etc) needed for maven publishing.
+    -->
+    <module>main/localespi</module>
+
     <module>demos</module>
     <module>samples</module>
     <module>tools/misc</module>
+    <module>tools/utilities-for-cldr</module>
+    <module>perf-tests</module>
   </modules>
 
   <properties>
@@ -32,26 +53,33 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
+    <maven-central-repo-url>https://oss.sonatype.org</maven-central-repo-url>
+    <maven-central-snapshots-repo-url>${maven-central-repo-url}/content/repositories/snapshots</maven-central-snapshots-repo-url>
+
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
 
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>
 
+    <!-- Version update! -->
+    <icu.major.version>74</icu.major.version>
+
     <!-- Variables used to generate the javadoc -->
-    <api.doc.version>74 Release Candidate</api.doc.version>
+    <!-- Version update! -->
+    <api.doc.version>${icu.major.version} Release Candidate</api.doc.version>
     <icu4j.api.doc.window.title>ICU4J ${api.doc.version}</icu4j.api.doc.window.title>
     <icu4j.api.doc.header>ICU4J ${api.doc.version}</icu4j.api.doc.header>
     <icu4j.api.doc.copyright.footer>&lt;font size=-1&gt;Copyright © 2016 Unicode, Inc. and others.&lt;/font&gt;</icu4j.api.doc.copyright.footer>
+
     <!-- Needs to be overriden in sub-modules -->
     <icu4j.api.doc.root.dir>${project.basedir}</icu4j.api.doc.root.dir>
+    <icu4j.api.report.version>${icu.major.version}</icu4j.api.report.version>
 
     <!-- Used for the .jar Manifest files -->
-
-    <mf.Specification-Version>74</mf.Specification-Version>
-    <mf.Implementation-Version>74.0.1</mf.Implementation-Version>
-    <mf.Bundle-Version>74.0.1</mf.Bundle-Version>
-
+    <mf.Specification-Version>${icu.major.version}</mf.Specification-Version>
+    <mf.Implementation-Version>${project.version}</mf.Implementation-Version>
+    <mf.Bundle-Version>${project.version}</mf.Bundle-Version>
     <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
 
     <!-- For most modules artifactId does not have an "icu4j" prefix, so this is a good default -->
@@ -74,6 +102,81 @@
     <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
   </properties>
 
+  <licenses>
+    <license>
+      <name>Unicode/ICU License</name>
+      <url>https://raw.githubusercontent.com/unicode-org/icu/main/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>markusicu</id>
+      <name>Markus Scherer</name>
+      <organization>Google</organization>
+      <roles>
+        <role>Chair</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>yumaoka</id>
+      <name>Yoshito Umaoka</name>
+      <organization>IBM</organization>
+      <roles>
+        <role>Vice chair</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <mailingLists>
+    <mailingList>
+      <name>icu-support</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-support</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-support</unsubscribe>
+      <post>icu-support@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-support</archive>
+    </mailingList>
+    <mailingList>
+      <name>icu-announce</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-announce</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-announce</unsubscribe>
+      <post>icu-announce@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-announce</archive>
+    </mailingList>
+    <mailingList>
+      <name>icu-design</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/icu-design</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/icu-design</unsubscribe>
+      <post>icu-design@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=icu-design</archive>
+    </mailingList>
+  </mailingLists>
+
+  <scm>
+    <connection>scm:git:git://github.com/unicode-org/icu.git</connection>
+    <developerConnection>scm:git:git@github.com:unicode-org/icu.git</developerConnection>
+    <url>https://github.com/unicode-org/icu</url>
+  </scm>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://unicode-org.atlassian.net/projects/ICU</url>
+  </issueManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>icu4j-releases</id>
+      <name>ICU4J Central Repository</name>
+      <url>${maven-central-releases-repo-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>icu4j-snapshots</id>
+      <name>ICU4J Central Development Repository</name>
+      <url>${maven-central-snapshots-repo-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -88,9 +191,33 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.11.0</version>
+          <!-- Plugin bug, maven.compiler.* properties are not honored, see
+            https://issues.apache.org/jira/browse/MCOMPILER-545
+          -->
+          <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.1.2</version>
+          <configuration>
+            <includes>
+              <!-- Some test files start with "IntlTest...". Many don't fit
+                the Surefire test file name default patterns. To be safe, use
+                a catchall pattern instead of the default patterns.
+
+                FYI, the default patterns are documented on the website of the
+                testing plugin:
+                https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html
+              -->
+              <include>**/*.java</include>
+            </includes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
           <version>3.1.2</version>
         </plugin>
         <plugin>
@@ -126,12 +253,64 @@
           <version>3.6.0</version>
         </plugin>
         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.4.0</version>
+          <executions>
+            <execution>
+              <!-- Workaround for Windows symlink issue:
+                 https://issues.apache.org/jira/browse/MRESOURCES-237
+                 Note: The recommended fix there is to filter out the symlink files, which
+                 would result in no license files in the .jar. That is not what we want.
+                 Instead, this `<execution>` config copies the LICENSE file to `target` at build time.
+              -->
+              <id>add-resource</id>
+              <goals>
+                <goal>add-resource</goal>
+              </goals>
+              <configuration>
+                <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                <resources>
+                  <resource>
+                    <directory>${rootlocation}/..</directory>
+                    <includes>
+                      <include>LICENSE</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>root-location</id>
+              <phase>initialize</phase>
+              <goals>
+                <goal>rootlocation</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <version>3.0.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.3.0</version>
+          <executions>
+            <execution>
+              <id>enforce-maven</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>3.2.5</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
@@ -169,20 +348,22 @@
             <taglets>
               <taglet>
                 <tagletClass>com.ibm.icu.dev.tool.docs.ICUTaglet</tagletClass>
-                <!-- We can use `tagletArtifact` instead of `tagletpath`,
-                     but then we must `mvn install` the `tools_build` artifact. -->
-                <tagletpath>${icu4j.api.doc.root.dir}/tools/build/target/classes</tagletpath>
+                <tagletArtifact>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>tools_build</artifactId>
+                  <version>${project.version}</version>
+                </tagletArtifact>
               </taglet>
               <taglet>
                 <tagletClass>ch.arrenbrecht.jcite.JCiteTaglet</tagletClass>
+                <tagletArtifact>
+                  <groupId>org.mcraig</groupId>
+                  <artifactId>jcite</artifactId>
+                  <version>1.13.0</version>
+                </tagletArtifact>
               </taglet>
             </taglets>
             <tagletArtifacts>
-              <tagletArtifact>
-                <groupId>org.mcraig</groupId>
-                <artifactId>jcite</artifactId>
-                <version>1.13.0</version>
-              </tagletArtifact>
               <!-- Dependencies for org.mcraig:jcite -->
               <tagletArtifact>
                 <groupId>commons-discovery</groupId>
@@ -242,21 +423,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.2.5</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
     </plugins>
 
@@ -265,7 +435,6 @@
   <profiles>
 
     <!-- This is used to create the *-sources.jar for individual modules -->
-    <!-- TODO: the shaded equivalent. -->
     <profile>
       <id>with_sources</id>
       <build>
@@ -286,7 +455,6 @@
     </profile>
 
     <!-- This is used to create the *-javadoc.jar for individual modules -->
-    <!-- TODO: the shaded equivalent. -->
     <profile>
       <id>with_javadoc</id>
       <build>
@@ -327,10 +495,63 @@
       </build>
     </profile>
 
+    <!-- This is used to gather API data used to generate API reports
+      (regular, draft, deprecated, status consistency, etc.)
+      To run it:
+        mvn install -DskipITs -DskipTests
+        mvn site -DskipITs -DskipTests -P gatherapi
+    -->
+    <profile>
+      <id>gatherapi</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- For incomplete doc tags javadoc fails with:
+                  ```
+                  Error while creating javadoc report:
+                  Exit code: 1
+                  Command line was: ...
+                  Refer to the generated Javadoc files in '...' dir.
+                  ```
+                But in most cases these are not related to what we do here, which is API reporting.
+                We ignore them so that we can progess with what we really care.
+              -->
+              <failOnError>false</failOnError>
+              <useStandardDocletOptions>false</useStandardDocletOptions>
+              <doclet>com.ibm.icu.dev.tool.docs.GatherAPIData</doclet>
+              <docletArtifact>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>tools_build</artifactId>
+                <version>${project.version}</version>
+              </docletArtifact>
+              <additionalOptions>
+                <additionalOption>-name 'ICU4J ${mf.Implementation-Version}'</additionalOption>
+                <additionalOption>-output ${project.build.directory}/icu4j${icu4j.api.report.version}.api3</additionalOption>
+                <additionalOption>-internal</additionalOption>
+                <additionalOption>-version</additionalOption>
+                <additionalOption>-gzip</additionalOption>
+              </additionalOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!-- The tools/build module depends on the old tools.jar (jdk 1.8)
       The com.sun.javadoc package was deprecated in Java 11, and has been removed for Java 17.
       JDK 11 does not include tools.jar anymore. The code must be updated, see migration guide at
-      https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
+        https://docs.oracle.com/en/java/javase/11/docs/api/jdk.javadoc/jdk/javadoc/doclet/package-summary.html#migration
     -->
     <profile>
       <id>old_jdk_taglet</id>
@@ -341,6 +562,31 @@
          <module>tools/build</module>
       </modules>
     </profile>
+
+    <!-- Starting with JDK 9, the Java compiler supports the −−release version.
+      Unlike source (checking the language features) and target (the version of the classes generated),
+      this option also checks that newer APIs are not used.
+        https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-release.html
+      Would be nice if the maven-compiler-plugin would filter this out below JDK 9, but it does not.
+      So we must use an auto-activated profile for this option.
+    -->
+    <profile>
+      <id>newer_jdk</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <release>8</release>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
   </profiles>
 
 </project>
