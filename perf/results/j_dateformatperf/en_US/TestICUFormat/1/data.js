@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696479384011,
+  "lastUpdate": 1696521506214,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13648,6 +13648,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 321.1720087839162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "cc777ef48c27ae9f3c180be8354b9034118ccd6a",
+          "message": "ICU-22324 Remove Ant build's `shared` directory",
+          "timestamp": "2023-10-05T08:43:18-07:00",
+          "tree_id": "8e67d2fa4cd27bc5317a7059bf04ea273cda4737",
+          "url": "https://github.com/unicode-org/icu/commit/cc777ef48c27ae9f3c180be8354b9034118ccd6a"
+        },
+        "date": 1696521396315,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 333.82466714931707,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
