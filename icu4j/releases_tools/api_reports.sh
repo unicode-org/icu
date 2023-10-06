@@ -8,20 +8,6 @@ if [ ! -f "releases_tools/shared.sh" ]; then
 fi
 . releases_tools/shared.sh
 
-function checkThatJdk8IsDefault() {
-  javac -version appPath 2>&1 | grep -E 'javac 1\.8\.' > /dev/null
-  if [ $? -eq 0 ]; then
-    echo "The default JDK version is 8, all good!"
-    javac -version
-  else
-    echo "This step can only be executed with JDK 8!"
-    echo "Make sure that you have the PATH pointing to a JDK 8!"
-    javac -version
-    exit
-  fi
-
-}
-
 # ====================================================================================
 # The start of the script proper
 
