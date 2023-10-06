@@ -213,6 +213,7 @@ Edit the root pom file at `icu4j/pom.xml` and manually make this change:
 5. Update the following variables in `icu4j/releases_tools/shared.sh`
 
     * `artifact_version` - The version used in the Maven `pom.xml` files. You can alternatively produce this value by running `mvn help:evaluate -Dexpression=project.version -q -DforceStdout`.
+    * `github_rel_version` - The version used in the name of the GitHub downloadable artifacts. For example "73_2" or "74rc".
     * `api_report_version` - The major version of the new version. Change during RC BRS.
     * `api_report_prev_version`  - The major version of the previous version. Change during RC BRS.
 
