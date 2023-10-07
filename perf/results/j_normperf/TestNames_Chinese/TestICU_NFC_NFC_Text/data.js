@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696540512524,
+  "lastUpdate": 1696636861118,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13708,6 +13708,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 6.552595695857188,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "049c8ad36518d75bfefa63f3647cfee8b35c5ac0",
+          "message": "ICU-22534 Script preparing the GitHub icu4j release files\n\nSee #2665",
+          "timestamp": "2023-10-06T16:49:26-07:00",
+          "tree_id": "d482652aa9019a6fdf01855022c2f428212567c6",
+          "url": "https://github.com/unicode-org/icu/commit/049c8ad36518d75bfefa63f3647cfee8b35c5ac0"
+        },
+        "date": 1696636786908,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.853047483255104,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
