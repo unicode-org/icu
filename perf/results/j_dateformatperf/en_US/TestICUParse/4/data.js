@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696636829784,
+  "lastUpdate": 1696882479274,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13648,6 +13648,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 926.7205839008096,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dakusan@castledragmire.com",
+            "name": "Jeffrey Riaboy",
+            "username": "dakusan"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "cdbf0ef6dfb478d04bb0f661c4f86e1ae7ea7075",
+          "message": "ICU-22529 Update services.md\n\nAll external links were incorrectly pointing to the current directory with .md as the file extension.\n\nChanged all links to be \"../\" with the .md extension removed",
+          "timestamp": "2023-10-09T13:01:06-07:00",
+          "tree_id": "adda7df8cb5659be82be4aa9a7a54b276c34d46a",
+          "url": "https://github.com/unicode-org/icu/commit/cdbf0ef6dfb478d04bb0f661c4f86e1ae7ea7075"
+        },
+        "date": 1696882397604,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 942.2925043028367,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
