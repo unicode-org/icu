@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1696637908871,
+  "lastUpdate": 1696883548281,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -52606,6 +52606,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.4284,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dakusan@castledragmire.com",
+            "name": "Jeffrey Riaboy",
+            "username": "dakusan"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "cdbf0ef6dfb478d04bb0f661c4f86e1ae7ea7075",
+          "message": "ICU-22529 Update services.md\n\nAll external links were incorrectly pointing to the current directory with .md as the file extension.\n\nChanged all links to be \"../\" with the .md extension removed",
+          "timestamp": "2023-10-09T13:01:06-07:00",
+          "tree_id": "adda7df8cb5659be82be4aa9a7a54b276c34d46a",
+          "url": "https://github.com/unicode-org/icu/commit/cdbf0ef6dfb478d04bb0f661c4f86e1ae7ea7075"
+        },
+        "date": 1696883454016,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 21.7874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.2808,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 27.6898,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 41.6523,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 48.8517,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 48.1851,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.1988,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.8076,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 153.1727,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 29.7948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 61.8951,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 50.5202,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
