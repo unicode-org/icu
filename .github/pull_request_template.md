@@ -1,8 +1,8 @@
 <!--
 Thank you for your pull request!
 
-Please see http://site.icu-project.org/processes/contribute for general
-information on contributing to ICU.
+Please see https://github.com/unicode-org/icu/blob/main/CONTRIBUTING.md for
+general information on contributing to ICU.
 
 You will be automatically asked to sign the contributors license agreement (CLA) before the PR is accepted.
 - sign: https://cla-assistant.io/unicode-org/icu

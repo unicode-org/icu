@@ -102,7 +102,8 @@ There are many resources available to help you work with git, here are a few:
 *   <https://try.github.io/> - Resources to learn Git
 
 Want to contribute back to ICU? See
-[How to contribute](../../userguide/processes/contribute.md).
+[Contributing to ICU](https://github.com/unicode-org/icu/blob/main/CONTRIBUTING.md)
+and [the Contributors section of the User Guide](../../userguide/dev/).
 
 ## Repository Layout
 
