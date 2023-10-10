@@ -284,8 +284,7 @@ run \`make dist\`.
 
 *   Manual process:
     *   Build with MSVC x64 Release. (See
-        [Building ICU4C](https://unicode-org.github.io/icu/userguide/icu4c/build.html)
-        for details).
+        [Building ICU4C](../../../../userguide/icu4c/build.md) for details).
     *   Open a command prompt.
         ```
         cd C:\icu\icu4c\ (or wherever you have ICU located).

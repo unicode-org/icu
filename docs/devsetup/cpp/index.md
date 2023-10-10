@@ -35,8 +35,7 @@ source and build trees in parallel folders.
 are visible as environment variables in the runConfigureICU shell script, rather
 than just options text.) See the sample runConfigureICU invocations below.
 
-See the ICU4C readme's [Recommended Build
-Options](https://unicode-org.github.io/icu/userguide/icu4c/build.html#recommended-build-options).
+See the ICU4C readme's [Recommended Build Options](../../userguide/icu4c/build.md#recommended-build-options).
 
 For example:
 
