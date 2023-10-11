@@ -1175,6 +1175,18 @@ uprv_tzname(int n)
         if (ret != nullptr && uprv_strcmp(TZDEFAULT, gTimeZoneBuffer) != 0) {
             int32_t tzZoneInfoTailLen = uprv_strlen(TZZONEINFOTAIL);
             const char *tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
+            // MacOS14 has the realpath as something like
+            // /usr/share/zoneinfo.default/Australia/Melbourne
+            // which will not have "/zoneinfo/" in the path.
+            // Therefore if we fail, we fall back to read the link which is
+            // /var/db/timezone/zoneinfo/Australia/Melbourne
+            if (tzZoneInfoTailPtr == nullptr) {
+                ssize_t size = readlink(TZDEFAULT, gTimeZoneBuffer, sizeof(gTimeZoneBuffer)-1);
+                if (size > 0) {
+                    gTimeZoneBuffer[size] = 0;
+                    tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
+                }
+            }
             if (tzZoneInfoTailPtr != nullptr) {
                 tzZoneInfoTailPtr += tzZoneInfoTailLen;
                 skipZoneIDPrefix(&tzZoneInfoTailPtr);
