@@ -5743,6 +5743,8 @@ void MeasureFormatTest::TestPrefixes() {
         int32_t expectedBase;
         int32_t expectedPower;
     } cases[] = {
+        {UMEASURE_PREFIX_QUECTO, 10, -30},
+        {UMEASURE_PREFIX_RONTO, 10, -27},
         {UMEASURE_PREFIX_YOCTO, 10, -24},
         {UMEASURE_PREFIX_ZEPTO, 10, -21},
         {UMEASURE_PREFIX_ATTO, 10, -18},
@@ -5764,6 +5766,8 @@ void MeasureFormatTest::TestPrefixes() {
         {UMEASURE_PREFIX_EXA, 10, 18},
         {UMEASURE_PREFIX_ZETTA, 10, 21},
         {UMEASURE_PREFIX_YOTTA, 10, 24},
+        {UMEASURE_PREFIX_RONNA, 10, 27},
+        {UMEASURE_PREFIX_QUETTA, 10, 30},
         {UMEASURE_PREFIX_KIBI, 1024, 1},
         {UMEASURE_PREFIX_MEBI, 1024, 2},
         {UMEASURE_PREFIX_GIBI, 1024, 3},

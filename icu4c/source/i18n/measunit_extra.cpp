@@ -102,6 +102,8 @@ const struct UnitPrefixStrings {
     UMeasurePrefix value;
 } gUnitPrefixStrings[] = {
     // SI prefixes
+    { "quetta", UMEASURE_PREFIX_QUETTA },
+    { "ronna", UMEASURE_PREFIX_RONNA },
     { "yotta", UMEASURE_PREFIX_YOTTA },
     { "zetta", UMEASURE_PREFIX_ZETTA },
     { "exa", UMEASURE_PREFIX_EXA },
@@ -122,6 +124,8 @@ const struct UnitPrefixStrings {
     { "atto", UMEASURE_PREFIX_ATTO },
     { "zepto", UMEASURE_PREFIX_ZEPTO },
     { "yocto", UMEASURE_PREFIX_YOCTO },
+    { "ronto", UMEASURE_PREFIX_RONTO },
+    { "quecto", UMEASURE_PREFIX_QUECTO },
     // Binary prefixes
     { "yobi", UMEASURE_PREFIX_YOBI },
     { "zebi", UMEASURE_PREFIX_ZEBI },
