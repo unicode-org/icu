@@ -119,6 +119,20 @@ public class MeasureUnit implements Serializable {
     public enum MeasurePrefix {
 
         /**
+         * SI prefix: quetta, 10^30.
+         *
+         * @draft ICU 75
+         */
+        QUETTA(30, "quetta", 10),
+
+        /**
+         * SI prefix: ronna, 10^27.
+         *
+         * @draft ICU 75
+         */
+        RONNA(27, "ronna", 10),
+
+        /**
          * SI prefix: yotta, 10^24.
          *
          * @stable ICU 69
@@ -264,6 +278,20 @@ public class MeasureUnit implements Serializable {
          * @stable ICU 69
          */
         YOCTO(-24, "yocto", 10),
+
+        /**
+         * SI prefix: ronto, 10^-27.
+         *
+         * @draft ICU 75
+         */
+        RONTO(-27, "ronto", 10),
+
+        /**
+         * SI prefix: quecto, 10^-30.
+         *
+         * @draft ICU 75
+         */
+        QUECTO(-30, "quecto", 10),
 
         /**
          * IEC binary prefix: kibi, 1024^1.
