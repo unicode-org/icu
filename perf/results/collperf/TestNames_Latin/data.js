@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1697102860863,
+  "lastUpdate": 1697241521621,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29752,6 +29752,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1788639.8726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cb7b1b6506e6bbd4f241d7f9b9e0d23b892e398f",
+          "message": "ICU-22548 Reduce the loop limit to fail faster\n\nReduce the error return from about 100s to 30s to avoid\nfuzzer 60s timeout error.\nAlso add a include file to fix uint8_t build breakage.",
+          "timestamp": "2023-10-13T16:29:29-07:00",
+          "tree_id": "1cf986850337444eb611569ab37daef3c7d515ee",
+          "url": "https://github.com/unicode-org/icu/commit/cb7b1b6506e6bbd4f241d7f9b9e0d23b892e398f"
+        },
+        "date": 1697241443997,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 377.5706,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3902683.5064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1784539.6253,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 3707933.5023,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1884785.0294,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
