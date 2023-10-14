@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1697241488543,
+  "lastUpdate": 1697249589822,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42976,6 +42976,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2281.5362,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mohd.akram@outlook.com",
+            "name": "Mohamed Akram",
+            "username": "mohd-akram"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3d1dee683743c4578ced479c10b1fbe25aeacc9a",
+          "message": "ICU-22528 Improve date formatting performance",
+          "timestamp": "2023-10-13T18:43:04-07:00",
+          "tree_id": "446db9fd9d2084fb39744715ad742d12747aa403",
+          "url": "https://github.com/unicode-org/icu/commit/3d1dee683743c4578ced479c10b1fbe25aeacc9a"
+        },
+        "date": 1697249497686,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 72586.6867,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 129201.2352,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5234,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 11.7734,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.8848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 13992.4685,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 44676.2438,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2405.7967,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
