@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1697241137604,
+  "lastUpdate": 1697249243979,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13918,6 +13918,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.878397239145575,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "mohd.akram@outlook.com",
+            "name": "Mohamed Akram",
+            "username": "mohd-akram"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "3d1dee683743c4578ced479c10b1fbe25aeacc9a",
+          "message": "ICU-22528 Improve date formatting performance",
+          "timestamp": "2023-10-13T18:43:04-07:00",
+          "tree_id": "446db9fd9d2084fb39744715ad742d12747aa403",
+          "url": "https://github.com/unicode-org/icu/commit/3d1dee683743c4578ced479c10b1fbe25aeacc9a"
+        },
+        "date": 1697249168321,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.881948439215166,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
