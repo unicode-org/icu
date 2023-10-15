@@ -7,6 +7,8 @@
 *******************************************************************************
 */
 package com.ibm.icu.dev.test.lang;
+
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -20,7 +22,7 @@ import com.ibm.icu.lang.UCharacterCategory;
 * @since April 02 2002
 */
 @RunWith(JUnit4.class)
-public class UCharacterCategoryTest extends TestFmwk
+public class UCharacterCategoryTest extends CoreTestFmwk
 {
     // constructor -----------------------------------------------------------
 

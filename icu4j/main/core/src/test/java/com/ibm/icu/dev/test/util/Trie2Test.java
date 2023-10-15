@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,7 +29,7 @@ import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.impl.Trie2_32;
 
 @RunWith(JUnit4.class)
-public class Trie2Test extends TestFmwk {
+public class Trie2Test extends CoreTestFmwk {
     /**
      * Constructor
      */

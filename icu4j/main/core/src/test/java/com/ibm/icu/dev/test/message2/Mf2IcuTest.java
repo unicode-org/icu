@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -24,7 +25,7 @@ import com.ibm.icu.util.GregorianCalendar;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class Mf2IcuTest extends TestFmwk {
+public class Mf2IcuTest extends CoreTestFmwk {
 
     @Test
     public void testSample() {

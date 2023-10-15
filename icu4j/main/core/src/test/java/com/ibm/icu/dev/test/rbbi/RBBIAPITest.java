@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.CharacterIterator;
@@ -35,7 +36,7 @@ import com.ibm.icu.util.ULocale;
  * API Test the RuleBasedBreakIterator class
  */
 @RunWith(JUnit4.class)
-public class RBBIAPITest extends TestFmwk {
+public class RBBIAPITest extends CoreTestFmwk {
     /**
      * Tests clone() and equals() methods of RuleBasedBreakIterator
      **/

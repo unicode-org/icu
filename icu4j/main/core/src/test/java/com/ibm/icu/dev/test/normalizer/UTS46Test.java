@@ -8,6 +8,7 @@
 */
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
@@ -36,7 +37,7 @@ import com.ibm.icu.util.ICUInputTooLongException;
  * @since 2010jul10
  */
 @RunWith(JUnit4.class)
-public class UTS46Test extends TestFmwk {
+public class UTS46Test extends CoreTestFmwk {
     public UTS46Test() {
         int commonOptions=
             IDNA.USE_STD3_RULES|IDNA.CHECK_BIDI|

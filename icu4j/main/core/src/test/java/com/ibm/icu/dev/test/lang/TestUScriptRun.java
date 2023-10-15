@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -18,7 +19,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UScriptRun;
 
 @RunWith(JUnit4.class)
-public class TestUScriptRun extends TestFmwk
+public class TestUScriptRun extends CoreTestFmwk
 {
     public TestUScriptRun()
     {

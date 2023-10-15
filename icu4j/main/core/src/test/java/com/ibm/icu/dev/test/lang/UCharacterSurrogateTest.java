@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -22,7 +23,7 @@ import com.ibm.icu.text.UTF16;
  * Test JDK 1.5 cover APIs.
  */
 @RunWith(JUnit4.class)
-public final class UCharacterSurrogateTest extends TestFmwk {
+public final class UCharacterSurrogateTest extends CoreTestFmwk {
     @Test
     public void TestUnicodeBlockForName() {
       String[] names = {"Latin-1 Supplement",

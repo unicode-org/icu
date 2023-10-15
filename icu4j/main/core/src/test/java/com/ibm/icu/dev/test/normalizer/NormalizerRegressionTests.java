@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -17,7 +18,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Normalizer;
 
 @RunWith(JUnit4.class)
-public class NormalizerRegressionTests extends TestFmwk {
+public class NormalizerRegressionTests extends CoreTestFmwk {
     @Test
     public void TestJB4472() {
         // submitter's test case

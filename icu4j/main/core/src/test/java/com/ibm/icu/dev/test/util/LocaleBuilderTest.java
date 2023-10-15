@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -23,7 +24,7 @@ import com.ibm.icu.util.ULocale.Builder;
  * Test cases for ULocale.LocaleBuilder
  */
 @RunWith(JUnit4.class)
-public class LocaleBuilderTest extends TestFmwk {
+public class LocaleBuilderTest extends CoreTestFmwk {
     @Test
     public void TestLocaleBuilder() {
         // "L": +1 = language

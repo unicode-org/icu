@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -20,7 +21,7 @@ import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class NumberFormatRegistrationTest extends TestFmwk {
+public class NumberFormatRegistrationTest extends CoreTestFmwk {
     @Test
     public void TestRegistration() {
         final ULocale SRC_LOC = ULocale.FRANCE;

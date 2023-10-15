@@ -8,6 +8,7 @@
 */
 package com.ibm.icu.dev.test.stringprep;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Random;
 
 import org.junit.Ignore;
@@ -27,7 +28,7 @@ import com.ibm.icu.text.UTF16;
  * @author ram
  */
 @RunWith(JUnit4.class)
-public class TestIDNA extends TestFmwk {
+public class TestIDNA extends CoreTestFmwk {
     private StringPrepParseException unassignedException = new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR);
 
     @Test

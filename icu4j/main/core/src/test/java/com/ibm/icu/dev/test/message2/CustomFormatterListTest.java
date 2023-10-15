@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -27,7 +28,7 @@ import com.ibm.icu.text.ListFormatter.Width;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class CustomFormatterListTest extends TestFmwk {
+public class CustomFormatterListTest extends CoreTestFmwk {
 
     static class ListFormatterFactory implements FormatterFactory {
 

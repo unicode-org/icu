@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -73,7 +74,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis (Mark Davis) [for fractional support]
  */
 @RunWith(JUnit4.class)
-public class PluralRulesTest extends TestFmwk {
+public class PluralRulesTest extends CoreTestFmwk {
 
     PluralRulesFactory factory = PluralRulesFactory.NORMAL;
 
@@ -1712,6 +1713,8 @@ public class PluralRulesTest extends TestFmwk {
 
     @Test
     public void testBug20264() {
+        Locale startLocale = Locale.getDefault();
+
         String expected = "1.23400";
         FixedDecimal fd = new FixedDecimal(1.234, 5, 2);
         assertEquals("FixedDecimal toString", expected, fd.toString());
@@ -1719,6 +1722,8 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("FixedDecimal toString", expected, fd.toString());
         Locale.setDefault(Locale.GERMAN);
         assertEquals("FixedDecimal toString", expected, fd.toString());
+
+        Locale.setDefault(startLocale);
     }
 
     @Test

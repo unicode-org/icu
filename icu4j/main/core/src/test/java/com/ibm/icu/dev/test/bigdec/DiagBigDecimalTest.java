@@ -11,6 +11,7 @@
 /* The generated code has been manually modified. */
 package com.ibm.icu.dev.test.bigdec;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.math.BigInteger;
 
 import org.junit.Test;
@@ -100,7 +101,7 @@ import com.ibm.icu.math.BigDecimal;
  */
 
 @RunWith(JUnit4.class)
-public class DiagBigDecimalTest extends TestFmwk {
+public class DiagBigDecimalTest extends CoreTestFmwk {
     private static final com.ibm.icu.math.BigDecimal zero = com.ibm.icu.math.BigDecimal.ZERO;
     private static final com.ibm.icu.math.BigDecimal one = com.ibm.icu.math.BigDecimal.ONE;
     private static final com.ibm.icu.math.BigDecimal two = new com.ibm.icu.math.BigDecimal(2);

@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -17,7 +18,7 @@ import com.ibm.icu.dev.test.TestFmwk;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class FromJsonTest extends TestFmwk {
+public class FromJsonTest extends CoreTestFmwk {
 
     static final TestCase[] TEST_CASES = {
             new TestCase.Builder()

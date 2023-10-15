@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,20 +43,20 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
-public class PropertiesTest {
+public class PropertiesTest extends CoreTestFmwk {
 
     @Test
     public void testBasicEquals() {
         DecimalFormatProperties p1 = new DecimalFormatProperties();
         DecimalFormatProperties p2 = new DecimalFormatProperties();
-        assertEquals(p1, p2);
+        assertEquals("DecimalFormatProperties.equals()", p1, p2);
 
         p1.setPositivePrefix("abc");
-        assertNotEquals(p1, p2);
+        assertNotEquals("DecimalFormatProperties.equals()", p1, p2);
         p2.setPositivePrefix("xyz");
-        assertNotEquals(p1, p2);
+        assertNotEquals("DecimalFormatProperties.equals()", p1, p2);
         p1.setPositivePrefix("xyz");
-        assertEquals(p1, p2);
+        assertEquals("DecimalFormatProperties.equals()", p1, p2);
     }
 
     @Test
@@ -124,50 +125,50 @@ public class PropertiesTest {
                 Object val0 = getSampleValueForType(field.getType(), 0);
                 Object val1 = getSampleValueForType(field.getType(), 1);
                 Object val2 = getSampleValueForType(field.getType(), 2);
-                assertNotEquals(val0, val1);
+                assertNotEquals("Test setup values should be different", val0, val1);
                 setter.invoke(p1, val0);
                 setter.invoke(p2, val0);
-                assertEquals(p1, p2);
-                assertEquals(p1.hashCode(), p2.hashCode());
-                assertEquals(getter.invoke(p1), getter.invoke(p2));
-                assertEquals(getter.invoke(p1), val0);
-                assertNotEquals(getter.invoke(p1), val1);
+                assertEquals("Equal outputs for equal DecimalFormatProperties inputs", p1, p2);
+                assertEquals("Equal outputs for equal DecimalFormatProperties inputs", p1.hashCode(), p2.hashCode());
+                assertEquals("Equal outputs for equal DecimalFormatProperties inputs", getter.invoke(p1), getter.invoke(p2));
+                assertEquals("Getter returns equal val set by setter for DecimalFormatProperties", getter.invoke(p1), val0);
+                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), val1);
                 hashCodes.add(p1.hashCode());
                 setter.invoke(p1, val1);
                 assertNotEquals("Field " + field + " is missing from equals()", p1, p2);
-                assertNotEquals(getter.invoke(p1), getter.invoke(p2));
-                assertNotEquals(getter.invoke(p1), val0);
-                assertEquals(getter.invoke(p1), val1);
+                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
+                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), val0);
+                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), val1);
                 setter.invoke(p1, val0);
                 assertEquals("Field " + field + " setter might have side effects", p1, p2);
-                assertEquals(p1.hashCode(), p2.hashCode());
-                assertEquals(getter.invoke(p1), getter.invoke(p2));
+                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
                 setter.invoke(p1, val1);
                 setter.invoke(p2, val1);
-                assertEquals(p1, p2);
-                assertEquals(p1.hashCode(), p2.hashCode());
-                assertEquals(getter.invoke(p1), getter.invoke(p2));
+                assertEquals("Getter returns equal vals for equal inputs", p1, p2);
+                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
                 setter.invoke(p1, val2);
                 setter.invoke(p1, val1);
                 assertEquals("Field " + field + " setter might have side effects", p1, p2);
-                assertEquals(p1.hashCode(), p2.hashCode());
-                assertEquals(getter.invoke(p1), getter.invoke(p2));
+                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
                 hashCodes.add(p1.hashCode());
 
                 // Check for clone behavior
                 DecimalFormatProperties copy = p1.clone();
                 assertEquals("Field " + field + " did not get copied in clone", p1, copy);
-                assertEquals(p1.hashCode(), copy.hashCode());
-                assertEquals(getter.invoke(p1), getter.invoke(copy));
+                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), copy.hashCode());
+                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(copy));
 
                 // Check for copyFrom behavior
                 setter.invoke(p1, val0);
-                assertNotEquals(p1, p2);
-                assertNotEquals(getter.invoke(p1), getter.invoke(p2));
+                assertNotEquals("Getter returns equal vals for equal inputs", p1, p2);
+                assertNotEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
                 p2.copyFrom(p1);
                 assertEquals("Field " + field + " is missing from copyFrom()", p1, p2);
-                assertEquals(p1.hashCode(), p2.hashCode());
-                assertEquals(getter.invoke(p1), getter.invoke(p2));
+                assertEquals("Getter returns equal vals for equal inputs", p1.hashCode(), p2.hashCode());
+                assertEquals("Getter returns equal vals for equal inputs", getter.invoke(p1), getter.invoke(p2));
 
                 // Load values into p3 and p4 for clear() behavior test
                 setter.invoke(p3, getSampleValueForType(field.getType(), 3));
@@ -184,7 +185,7 @@ public class PropertiesTest {
         }
 
         // Check for clear() behavior
-        assertNotEquals(p3, p4);
+        assertNotEquals("Setup for check for clear() behavior", p3, p4);
         p3.clear();
         p4.clear();
         assertEquals("A field is missing from the clear() function", p3, p4);

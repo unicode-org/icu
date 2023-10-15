@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,7 +47,7 @@ import com.ibm.icu.util.ULocale;
  * 4174361 4177484 4197699 4209071 4288792
  */
 @RunWith(JUnit4.class)
-public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
+public class CalendarRegressionTest extends CoreTestFmwk {
     static final String[] FIELD_NAME = {
             "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
             "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",

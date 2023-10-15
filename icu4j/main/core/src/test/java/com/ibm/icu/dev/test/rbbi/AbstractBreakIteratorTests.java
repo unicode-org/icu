@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.CharacterIterator;
 
 import org.junit.Before;
@@ -17,7 +18,7 @@ import com.ibm.icu.text.BreakIterator;
  *
  */
 @RunWith(JUnit4.class)
-public class AbstractBreakIteratorTests extends TestFmwk {
+public class AbstractBreakIteratorTests extends CoreTestFmwk {
 
     private class AbstractBreakIterator extends BreakIterator {
         private int position = 0;

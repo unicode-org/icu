@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
@@ -62,7 +62,7 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
-public class NumberFormatterApiTest extends TestFmwk {
+public class NumberFormatterApiTest extends CoreTestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");

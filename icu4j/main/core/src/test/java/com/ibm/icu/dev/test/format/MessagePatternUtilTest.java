@@ -11,6 +11,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,7 @@ import com.ibm.icu.text.MessagePatternUtil.VariantNode;
  * by building parallel trees of nodes and verifying that they match.
  */
 @RunWith(JUnit4.class)
-public final class MessagePatternUtilTest extends TestFmwk {
+public final class MessagePatternUtilTest extends CoreTestFmwk {
     // The following nested "Expect..." classes are used to build
     // a tree structure parallel to what the MessagePatternUtil class builds.
     // These nested test classes are not static so that they have access to TestFmwk methods.

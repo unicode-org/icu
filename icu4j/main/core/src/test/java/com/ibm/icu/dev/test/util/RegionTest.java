@@ -13,6 +13,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ import com.ibm.icu.util.Region.RegionType;
  */
 
 @RunWith(JUnit4.class)
-public class RegionTest extends TestFmwk {
+public class RegionTest extends CoreTestFmwk {
     String[][] knownRegions = {
             //   Code  , Numeric , Parent, Type, Containing Continent
             { "001", "001", null , "WORLD", null },

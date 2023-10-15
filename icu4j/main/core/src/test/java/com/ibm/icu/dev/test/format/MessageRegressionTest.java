@@ -32,6 +32,7 @@ attribution to Taligent may not be removed.
 */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -55,7 +56,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class MessageRegressionTest extends TestFmwk {
+public class MessageRegressionTest extends CoreTestFmwk {
     /* @bug 4074764
      * Null exception when formatting pattern with MessageFormat
      * with no parameters.

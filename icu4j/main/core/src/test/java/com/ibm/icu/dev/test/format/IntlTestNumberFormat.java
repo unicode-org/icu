@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Locale;
 import java.util.Random;
 
@@ -31,7 +32,7 @@ import com.ibm.icu.util.ULocale;
  * NumberFormat.
  */
 @RunWith(JUnit4.class)
-public class IntlTestNumberFormat extends TestFmwk {
+public class IntlTestNumberFormat extends CoreTestFmwk {
 
     public NumberFormat fNumberFormat;
 

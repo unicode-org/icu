@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
@@ -31,7 +32,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols
  **/
 @RunWith(JUnit4.class)
-public class DateFormatMiscTests extends TestFmwk {
+public class DateFormatMiscTests extends CoreTestFmwk {
     /*
      * @bug 4097450
      */

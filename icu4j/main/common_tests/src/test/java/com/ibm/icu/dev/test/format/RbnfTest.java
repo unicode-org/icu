@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Locale;
@@ -31,7 +32,7 @@ import com.ibm.icu.util.ULocale;
  * introduces a dependency on collation.  See RbnfLenientScannerTest.
  */
 @RunWith(JUnit4.class)
-public class RbnfTest extends TestFmwk {
+public class RbnfTest extends CoreTestFmwk {
     static String fracRules =
         "%main:\n" +
         // this rule formats the number if it's 1 or more.  It formats

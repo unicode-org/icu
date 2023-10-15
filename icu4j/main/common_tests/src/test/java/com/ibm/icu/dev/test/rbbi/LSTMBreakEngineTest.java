@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.breakiter.DictionaryBreakEngine;
 import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
 import com.ibm.icu.lang.UScript;
@@ -28,7 +28,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  */
 @RunWith(JUnit4.class)
-public class LSTMBreakEngineTest extends TestFmwk {
+public class LSTMBreakEngineTest extends CoreTestFmwk {
 
     private static final ClassLoader testLoader = LSTMBreakEngineTest.class.getClassLoader();
 

@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,7 @@ import com.ibm.icu.text.ListFormatter.Width;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class ListFormatterTest extends TestFmwk {
+public class ListFormatterTest extends CoreTestFmwk {
     String[] HardcodedTestData = {
             "",
             "A",

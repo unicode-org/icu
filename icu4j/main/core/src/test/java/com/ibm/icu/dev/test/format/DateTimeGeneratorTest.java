@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.Date;
@@ -43,7 +44,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class DateTimeGeneratorTest extends TestFmwk {
+public class DateTimeGeneratorTest extends CoreTestFmwk {
     public static boolean GENERATE_TEST_DATA;
     static {
         try {

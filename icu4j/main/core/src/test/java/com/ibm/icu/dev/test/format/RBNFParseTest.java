@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -21,7 +22,7 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class RBNFParseTest extends TestFmwk {
+public class RBNFParseTest extends CoreTestFmwk {
     @Test
     public void TestParse() {
 

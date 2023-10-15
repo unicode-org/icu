@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.bidi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ import com.ibm.icu.text.BidiClassifier;
  * Ported from ICU4C intltest/bidiconf.cpp .
  */
 @RunWith(JUnit4.class)
-public class BiDiConformanceTest extends TestFmwk {
+public class BiDiConformanceTest extends CoreTestFmwk {
     public BiDiConformanceTest() {}
 
     @Test

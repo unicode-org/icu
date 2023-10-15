@@ -11,6 +11,7 @@
 
 package com.ibm.icu.dev.test.duration;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +41,7 @@ import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
  * Test cases for en
  */
 @RunWith(JUnit4.class)
-public abstract class LanguageTestFmwk extends TestFmwk implements TimeUnitConstants {
+public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitConstants {
 
     private static final TimeUnit[] units = {
         TimeUnit.YEAR, TimeUnit.MONTH, TimeUnit.WEEK, TimeUnit.DAY, TimeUnit.HOUR,

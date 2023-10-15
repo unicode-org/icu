@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,7 +47,7 @@ import com.ibm.icu.util.ULocale;
  * Performs regression test for DateFormat
  **/
 @RunWith(JUnit4.class)
-public class DateFormatRegressionTest extends TestFmwk {
+public class DateFormatRegressionTest extends CoreTestFmwk {
     /**
      * @bug 4029195
      */

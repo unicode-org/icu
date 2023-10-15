@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import com.ibm.icu.impl.Utility;
 /**
  * A collection of methods to run the data driven number format test suite.
  */
-public class DataDrivenNumberFormatTestUtility extends TestFmwk {
+public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
 
     /**
      * Base class for code under test.

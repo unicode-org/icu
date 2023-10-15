@@ -8,6 +8,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import com.ibm.icu.util.MutableCodePointTrie;
 import com.ibm.icu.util.VersionInfo;
 
 @RunWith(JUnit4.class)
-public final class CodePointTrieTest extends TestFmwk {
+public final class CodePointTrieTest extends CoreTestFmwk {
     /* Values for setting possibly overlapping, out-of-order ranges of values */
     private static class SetRange {
         SetRange(int start, int limit, int value) {

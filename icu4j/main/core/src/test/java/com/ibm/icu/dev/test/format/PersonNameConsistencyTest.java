@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,7 +32,7 @@ import junitparams.Parameters;
  * the CLDR project.
  */
 @RunWith(JUnitParamsRunner.class)
-public class PersonNameConsistencyTest extends TestFmwk {
+public class PersonNameConsistencyTest extends CoreTestFmwk {
     /**
      * Change this to true to cause the tests that would normally be skipped to also run (without
      * causing the test suite to fail).

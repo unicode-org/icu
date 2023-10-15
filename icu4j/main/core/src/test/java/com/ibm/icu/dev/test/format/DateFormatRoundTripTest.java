@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
@@ -35,7 +36,7 @@ import com.ibm.icu.util.TimeZone;
  * Performs round-trip tests for DateFormat
  **/
 @RunWith(JUnit4.class)
-public class DateFormatRoundTripTest extends TestFmwk {
+public class DateFormatRoundTripTest extends CoreTestFmwk {
     public boolean INFINITE = false;
     public boolean quick = true;
     private SimpleDateFormat dateFormat;

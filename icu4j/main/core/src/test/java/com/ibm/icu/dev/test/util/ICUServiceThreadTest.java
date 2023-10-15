@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class ICUServiceThreadTest extends TestFmwk
+public class ICUServiceThreadTest extends CoreTestFmwk
 {
     private static final boolean PRINTSTATS = false;
 

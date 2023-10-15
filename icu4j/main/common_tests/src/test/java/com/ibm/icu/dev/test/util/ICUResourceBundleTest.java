@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
@@ -44,7 +44,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 @RunWith(JUnit4.class)
-public final class ICUResourceBundleTest extends TestFmwk {
+public final class ICUResourceBundleTest extends CoreTestFmwk {
     private static final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();
 
     @Test

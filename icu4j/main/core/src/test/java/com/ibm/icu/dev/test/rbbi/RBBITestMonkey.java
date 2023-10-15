@@ -13,6 +13,7 @@ package com.ibm.icu.dev.test.rbbi;
 //    The old, original monkey test. TODO: remove
 //    The new monkey test is class RBBIMonkeyTest.
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +43,7 @@ import com.ibm.icu.text.UnicodeSet;
  *
  */
 @RunWith(JUnit4.class)
-public class RBBITestMonkey extends TestFmwk {
+public class RBBITestMonkey extends CoreTestFmwk {
     //
     //     class RBBIMonkeyKind
     //

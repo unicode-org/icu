@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -31,7 +32,7 @@ import com.ibm.icu.util.RangeValueIterator;
 * @since release 2.1 Jan 01 2002
 */
 @RunWith(JUnit4.class)
-public final class TrieTest extends TestFmwk
+public final class TrieTest extends CoreTestFmwk
 {
     // constructor ---------------------------------------------------
 

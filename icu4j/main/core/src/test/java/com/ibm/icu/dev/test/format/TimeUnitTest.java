@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
@@ -32,7 +33,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class TimeUnitTest extends TestFmwk {
+public class TimeUnitTest extends CoreTestFmwk {
     @Test
     public void Test10219FractionalPlurals() {
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);

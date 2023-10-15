@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.Locale;
 
@@ -31,12 +32,14 @@ import com.ibm.icu.util.ULocale;
  * Tests for the <code>Holiday</code> class.
  */
 @RunWith(JUnit4.class)
-public class HolidayTest extends TestFmwk {
+public class HolidayTest extends CoreTestFmwk {
 
     // Do not use Before annotation, because TestFmwk's Before
     // method must be executed first to initialize default time zone
     @Override
-    protected void localTestInitialize() {
+    public void localTestInitialize() {
+        super.localTestInitialize();
+
         cal = new GregorianCalendar(1, 0, 1);
         longTimeAgo = cal.getTime();
         now = new Date();

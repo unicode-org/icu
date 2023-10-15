@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -17,7 +18,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(Enclosed.class)
-public class DataDrivenUScriptTest extends TestFmwk {
+public class DataDrivenUScriptTest extends CoreTestFmwk {
 
     private static String scriptsToString(int[] scripts) {
         if (scripts == null) {
@@ -114,7 +115,7 @@ public class DataDrivenUScriptTest extends TestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class TestMultipleUScript extends TestFmwk {
+    public static class TestMultipleUScript extends CoreTestFmwk {
         private String testLocaleName;
         private Locale testLocale;
         private int[] expected;
@@ -165,7 +166,7 @@ public class DataDrivenUScriptTest extends TestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetCodeTest extends TestFmwk {
+    public static class GetCodeTest extends CoreTestFmwk {
         private String testName;
         private int expected;
 

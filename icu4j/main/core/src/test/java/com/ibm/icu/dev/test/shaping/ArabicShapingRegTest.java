@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.shaping;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
@@ -22,7 +23,7 @@ import com.ibm.icu.text.ArabicShaping;
  * Regression test for Arabic shaping.
  */
 @RunWith(JUnit4.class)
-public class ArabicShapingRegTest extends TestFmwk {
+public class ArabicShapingRegTest extends CoreTestFmwk {
 
     /* constants copied from ArabicShaping for convenience */
 

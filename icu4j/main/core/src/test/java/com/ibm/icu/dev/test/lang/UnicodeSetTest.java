@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ import com.ibm.icu.util.OutputInt;
  * @summary General test of UnicodeSet
  */
 @RunWith(JUnit4.class)
-public class UnicodeSetTest extends TestFmwk {
+public class UnicodeSetTest extends CoreTestFmwk {
 
     static final String NOT = "%%%%";
 

@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.iterator;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
@@ -29,7 +30,7 @@ import com.ibm.icu.text.UTF16;
  * Window>Preferences>Java>Code Generation.
  */
 @RunWith(JUnit4.class)
-public class TestUCharacterIterator extends TestFmwk{
+public class TestUCharacterIterator extends CoreTestFmwk{
 
     // constructor -----------------------------------------------------
 

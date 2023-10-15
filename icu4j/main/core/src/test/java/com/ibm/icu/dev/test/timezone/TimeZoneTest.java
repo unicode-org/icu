@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.timezone;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -52,7 +53,7 @@ import com.ibm.icu.util.VersionInfo;
  * @build TimeZoneTest
  */
 @RunWith(JUnit4.class)
-public class TimeZoneTest extends TestFmwk
+public class TimeZoneTest extends CoreTestFmwk
 {
     static final int millisPerHour = 3600000;
 

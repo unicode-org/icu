@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.StringCharacterIterator;
@@ -26,7 +27,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 @RunWith(JUnit4.class)
-public class ConformanceTest extends TestFmwk {
+public class ConformanceTest extends CoreTestFmwk {
 
     Normalizer normalizer;
 

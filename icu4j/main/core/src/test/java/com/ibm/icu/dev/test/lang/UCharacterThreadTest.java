@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -24,7 +25,7 @@ import com.ibm.icu.lang.UCharacter;
  *
  */
 @RunWith(JUnit4.class)
-public class UCharacterThreadTest extends TestFmwk {
+public class UCharacterThreadTest extends CoreTestFmwk {
   // constructor -----------------------------------------------------------
 
     /**

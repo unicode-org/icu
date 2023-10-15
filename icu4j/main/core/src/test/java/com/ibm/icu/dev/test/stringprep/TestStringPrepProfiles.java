@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.stringprep;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -21,7 +22,7 @@ import com.ibm.icu.text.StringPrepParseException;
  *
  */
 @RunWith(JUnit4.class)
-public class TestStringPrepProfiles extends TestFmwk {
+public class TestStringPrepProfiles extends CoreTestFmwk {
     /*
      * The format of the test cases should be the following:
      * {

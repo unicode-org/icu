@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -41,7 +41,7 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class CompactDecimalFormatTest extends TestFmwk {
+public class CompactDecimalFormatTest extends CoreTestFmwk {
     Object[][] EnglishTestData = {
             // default is 2 digits of accuracy
             {0.0d, "0"},

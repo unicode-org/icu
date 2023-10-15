@@ -38,12 +38,12 @@ abstract public class TestFmwk extends AbstractTestLog {
     /**
      * The default time zone for all of our tests. Used in @Before
      */
-    private final static TimeZone defaultTimeZone = TimeZone.getTimeZone("America/Los_Angeles");
+    protected final static TimeZone defaultTimeZone = TimeZone.getTimeZone("America/Los_Angeles");
 
     /**
      * The default locale used for all of our tests. Used in @Before
      */
-    private final static Locale defaultLocale = Locale.US;
+    protected final static Locale defaultLocale = Locale.US;
 
     private static final String EXHAUSTIVENESS = "ICU.exhaustive";
     private static final int DEFAULT_EXHAUSTIVENESS = 0;
@@ -86,6 +86,9 @@ abstract public class TestFmwk extends AbstractTestLog {
      * Because JUnit does not guarantee the order of multiple Before
      * methods, TestFmwk implementation class should override this
      * method, instead of annotating Before.
+     *
+     * <p>Any implementation of the override should be sure to call
+     * super.localTestInitialize().
      */
     protected void localTestInitialize() {
     }
@@ -94,6 +97,9 @@ abstract public class TestFmwk extends AbstractTestLog {
      * This method is called at the beginning of {@link #testTeardown()}.
      * TestFmwk implementation class should override this method, instead
      * of annotating After.
+     *
+     * <p>Any implementation of the override should be sure to call
+     * super.localTestTeardown().
      */
     protected void localTestTeardown() {
     }

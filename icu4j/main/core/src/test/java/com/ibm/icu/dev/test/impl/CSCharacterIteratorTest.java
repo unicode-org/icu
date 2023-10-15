@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.impl;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
@@ -14,7 +15,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CSCharacterIterator;
 
 @RunWith(JUnit4.class)
-public class CSCharacterIteratorTest extends TestFmwk {
+public class CSCharacterIteratorTest extends CoreTestFmwk {
     public CSCharacterIteratorTest() {};
 
     @Test

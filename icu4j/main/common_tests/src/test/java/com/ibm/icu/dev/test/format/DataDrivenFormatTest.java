@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Date;
@@ -23,7 +24,6 @@ import com.ibm.icu.dev.test.ModuleTest.TestDataPair;
 import com.ibm.icu.dev.test.TestDataModule;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
 import com.ibm.icu.dev.test.TestDataModule.TestData;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CalendarFieldsSet;
 import com.ibm.icu.dev.test.util.DateTimeStyleSet;
 import com.ibm.icu.text.DateFormat;
@@ -41,7 +41,7 @@ import junitparams.Parameters;
  *
  */
 @RunWith(JUnitParamsRunner.class)
-public class DataDrivenFormatTest extends TestFmwk {
+public class DataDrivenFormatTest extends CoreTestFmwk {
 
     /**
      * @param baseName
@@ -59,7 +59,6 @@ public class DataDrivenFormatTest extends TestFmwk {
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.ModuleTest#processModules()
      */
-    @Ignore  // TODO(ICU-22505)
     @Test
     @Parameters(method="getTestData")
     public void formatTest(TestDataPair pair) {

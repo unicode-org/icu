@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.timezone;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 
 import org.junit.Test;
@@ -31,7 +32,7 @@ import com.ibm.icu.util.TimeZone;
  * Testing getOffset APIs using local time
  */
 @RunWith(JUnit4.class)
-public class TimeZoneOffsetLocalTest extends TestFmwk {
+public class TimeZoneOffsetLocalTest extends CoreTestFmwk {
     /*
      * Testing getOffset APIs around rule transition by local standard/wall time.
      */

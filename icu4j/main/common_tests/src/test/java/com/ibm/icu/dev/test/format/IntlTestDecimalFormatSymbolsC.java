@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.util.Locale;
 
@@ -29,7 +30,7 @@ import com.ibm.icu.text.DecimalFormatSymbols;
  * Tests for DecimalFormatSymbols
  **/
 @RunWith(JUnit4.class)
-public class IntlTestDecimalFormatSymbolsC extends TestFmwk {
+public class IntlTestDecimalFormatSymbolsC extends CoreTestFmwk {
     /**
      * Test the API of DecimalFormatSymbols; primarily a simple get/set set.
      */

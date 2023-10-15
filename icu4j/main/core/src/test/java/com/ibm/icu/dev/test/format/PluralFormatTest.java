@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,7 +29,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class PluralFormatTest extends TestFmwk {
+public class PluralFormatTest extends CoreTestFmwk {
   private void helperTestRules(String localeIDs, String testPattern, Map<Integer,String> changes) {
     String[] locales = Utility.split(localeIDs, ',');
 

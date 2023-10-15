@@ -19,6 +19,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
@@ -39,12 +40,14 @@ import com.ibm.icu.text.SimpleDateFormat;
 * @summary test International Simple Date Format API
 */
 @RunWith(JUnit4.class)
-public class IntlTestSimpleDateFormatAPI extends TestFmwk
+public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk
 {
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test
     public void TestAPI()
     {
+        Locale startLocale = Locale.getDefault();
+
         logln("SimpleDateFormat API test---"); logln("");
 
         Locale.setDefault(Locale.ENGLISH);
@@ -185,6 +188,8 @@ public class IntlTestSimpleDateFormatAPI extends TestFmwk
 //        catch (Exception e) {
 //            errln("ERROR: Couldn't create a SimpleDateFormat");
 //        }
+
+        Locale.setDefault(startLocale);
     }
 
     // Jitterbug 4451, for coverage

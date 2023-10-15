@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,7 +26,7 @@ import com.ibm.icu.util.StringTokenizer;
 * @since oct 26 2002
 */
 @RunWith(JUnit4.class)
-public final class StringTokenizerTest extends TestFmwk
+public final class StringTokenizerTest extends CoreTestFmwk
 {
       // constructor ===================================================
 

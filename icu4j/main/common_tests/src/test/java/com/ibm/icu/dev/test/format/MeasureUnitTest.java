@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -60,7 +61,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 @RunWith(JUnit4.class)
-public class MeasureUnitTest extends TestFmwk {
+public class MeasureUnitTest extends CoreTestFmwk {
 
     static class OrderedPair<F extends Comparable, S extends Comparable> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
 

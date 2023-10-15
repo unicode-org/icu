@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import static com.ibm.icu.impl.StaticUnicodeSets.get;
 
 import java.math.BigDecimal;
@@ -28,7 +29,7 @@ import com.ibm.icu.util.ULocale;
  *
  * @author sffc
  */
-public class ExhaustiveNumberTest extends TestFmwk {
+public class ExhaustiveNumberTest extends CoreTestFmwk {
     @Before
     public void beforeMethod() {
         // Disable this test class except for exhaustive mode.

@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -27,7 +28,7 @@ import com.ibm.icu.impl.ICUBinary;
 * @since release 2.1 Jan 01 2002
 */
 @RunWith(JUnit4.class)
-public final class ICUBinaryTest extends TestFmwk
+public final class ICUBinaryTest extends CoreTestFmwk
 {
     // constructor ---------------------------------------------------
 

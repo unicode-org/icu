@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ import junitparams.Parameters;
  * @author markdavis
  */
 @RunWith(JUnitParamsRunner.class)
-public class LocaleMatcherTest extends TestFmwk {
+public class LocaleMatcherTest extends CoreTestFmwk {
     private static final ULocale ZH_MO = new ULocale("zh_MO");
     private static final ULocale ZH_HK = new ULocale("zh_HK");
 
