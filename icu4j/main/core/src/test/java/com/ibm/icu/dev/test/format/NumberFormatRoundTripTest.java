@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Locale;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ import com.ibm.icu.text.NumberFormat;
  * Performs round-trip tests for NumberFormat
  **/
 @RunWith(JUnit4.class)
-public class NumberFormatRoundTripTest extends TestFmwk {
+public class NumberFormatRoundTripTest extends CoreTestFmwk {
 
     public double MAX_ERROR = 1e-14;
     public double max_numeric_error = 0.0;

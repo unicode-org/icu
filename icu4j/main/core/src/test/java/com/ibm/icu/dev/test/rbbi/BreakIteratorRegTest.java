@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.CharacterIterator;
 import java.util.Arrays;
 import java.util.Locale;
@@ -20,7 +21,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
 
 @RunWith(JUnit4.class)
-public class BreakIteratorRegTest extends TestFmwk
+public class BreakIteratorRegTest extends CoreTestFmwk
 {
     @Test
     public void TestRegUnreg() {

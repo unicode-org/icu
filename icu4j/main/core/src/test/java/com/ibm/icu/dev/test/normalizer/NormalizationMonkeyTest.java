@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Random;
 
 import org.junit.Test;
@@ -22,7 +23,7 @@ import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 
 @RunWith(JUnit4.class)
-public class NormalizationMonkeyTest extends TestFmwk {
+public class NormalizationMonkeyTest extends CoreTestFmwk {
     int loopCount = 100;
     int maxCharCount = 20;
     int maxCodePoint = 0x10ffff;

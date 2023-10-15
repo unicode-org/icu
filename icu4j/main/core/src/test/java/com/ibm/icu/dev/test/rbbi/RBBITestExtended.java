@@ -9,6 +9,7 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,7 +36,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class RBBITestExtended extends TestFmwk {
+public class RBBITestExtended extends CoreTestFmwk {
 public RBBITestExtended() {
     }
 

@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -27,7 +28,7 @@ import com.ibm.icu.text.UTF16.StringComparator;
 * @since feb 09 2001
 */
 @RunWith(JUnit4.class)
-public final class UTF16Test extends TestFmwk
+public final class UTF16Test extends CoreTestFmwk
 {
     // constructor ===================================================
 

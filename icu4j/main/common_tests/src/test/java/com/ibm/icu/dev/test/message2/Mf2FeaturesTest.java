@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
@@ -27,7 +27,7 @@ import com.ibm.icu.util.CurrencyAmount;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class Mf2FeaturesTest extends TestFmwk {
+public class Mf2FeaturesTest extends CoreTestFmwk {
 
     // November 23, 2022 at 7:42:37.123 PM
     static final Date TEST_DATE = new Date(1669261357123L);
@@ -59,7 +59,6 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     public void testArgumentMissing() {
         // Test to check what happens if an argument name from the placeholder is not found
@@ -88,7 +87,6 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     public void testDefaultLocale() {
         String message = "{Date: {$date :datetime skeleton=yMMMMdEEEE}.}";
@@ -124,7 +122,6 @@ public class Mf2FeaturesTest extends TestFmwk {
         Locale.setDefault(originalLocale);
     }
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     public void testAllKindOfDates() {
         // Default function
@@ -361,7 +358,6 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     public void testDefaultFunctionAndOptions() {
         TestUtils.runTestCase(new TestCase.Builder()
@@ -436,7 +432,6 @@ public class Mf2FeaturesTest extends TestFmwk {
 
     // Local Variables
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     public void testSimpleLocaleVariable() {
         TestUtils.runTestCase(new TestCase.Builder()
@@ -448,7 +443,6 @@ public class Mf2FeaturesTest extends TestFmwk {
                 .build());
     }
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     public void testLocaleVariableWithSelect() {
         String message = ""

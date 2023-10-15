@@ -12,6 +12,7 @@
 
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -26,7 +27,7 @@ import com.ibm.icu.util.BytesTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder;
 
 @RunWith(JUnit4.class)
-public class BytesTrieTest extends TestFmwk {
+public class BytesTrieTest extends CoreTestFmwk {
     public BytesTrieTest() {}
 
     // All test functions have a TestNN prefix where NN is a double-digit number.

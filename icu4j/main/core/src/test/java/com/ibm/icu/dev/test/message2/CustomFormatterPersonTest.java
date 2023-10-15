@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +24,7 @@ import com.ibm.icu.message2.PlainStringFormattedValue;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class CustomFormatterPersonTest extends TestFmwk {
+public class CustomFormatterPersonTest extends CoreTestFmwk {
 
     public static class Person {
         final String title;

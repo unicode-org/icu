@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.timezone;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ import com.ibm.icu.util.VTimeZone;
  * Test cases for TimeZoneRule and RuleBasedTimeZone
  */
 @RunWith(JUnit4.class)
-public class TimeZoneRuleTest extends TestFmwk {
+public class TimeZoneRuleTest extends CoreTestFmwk {
 
     private static final int HOUR = 60 * 60 * 1000;
 

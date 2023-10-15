@@ -9,6 +9,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -21,7 +22,7 @@ import com.ibm.icu.text.SelectFormat;
  * This class does the unit testing for the SelectFormat
  */
 @RunWith(JUnit4.class)
-public class SelectFormatUnitTest extends TestFmwk {
+public class SelectFormatUnitTest extends CoreTestFmwk {
 
     static final String SIMPLE_PATTERN = "feminine {feminineVerbValue} other{otherVerbValue}";
 

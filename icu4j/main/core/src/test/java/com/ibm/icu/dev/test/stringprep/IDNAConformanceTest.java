@@ -11,6 +11,7 @@
 
 package com.ibm.icu.dev.test.stringprep;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -34,7 +35,7 @@ import com.ibm.icu.text.UTF16;
  *
  */
 @RunWith(JUnit4.class)
-public class IDNAConformanceTest extends TestFmwk {
+public class IDNAConformanceTest extends CoreTestFmwk {
     @Test
     public void TestConformance() {
 

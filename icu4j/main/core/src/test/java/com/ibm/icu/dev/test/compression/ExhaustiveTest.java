@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.compression;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -17,7 +18,7 @@ import com.ibm.icu.text.UnicodeCompressor;
 import com.ibm.icu.text.UnicodeDecompressor;
 
 @RunWith(JUnit4.class)
-public class ExhaustiveTest extends TestFmwk {
+public class ExhaustiveTest extends CoreTestFmwk {
     /** Test simple compress/decompress API, returning # of errors */
     @Test
     public void testSimple() throws Exception {

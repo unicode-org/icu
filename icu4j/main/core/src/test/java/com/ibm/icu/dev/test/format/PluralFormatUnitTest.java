@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collection;
@@ -39,7 +40,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class PluralFormatUnitTest extends TestFmwk {
+public class PluralFormatUnitTest extends CoreTestFmwk {
     @Test
     public void TestConstructor() {
         // Test correct formatting of numbers.

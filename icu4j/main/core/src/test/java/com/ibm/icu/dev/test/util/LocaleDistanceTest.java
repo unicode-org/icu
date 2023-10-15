@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 @RunWith(JUnit4.class)
-public class LocaleDistanceTest extends TestFmwk {
+public class LocaleDistanceTest extends CoreTestFmwk {
     private static final boolean REFORMAT = false; // set to true to get a reformatted data file listed
 
     private LocaleDistance localeDistance = LocaleDistance.INSTANCE;

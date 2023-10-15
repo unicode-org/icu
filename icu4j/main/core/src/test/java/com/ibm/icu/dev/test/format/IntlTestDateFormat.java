@@ -18,6 +18,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
@@ -34,7 +35,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class IntlTestDateFormat extends TestFmwk {
+public class IntlTestDateFormat extends CoreTestFmwk {
     // Values in milliseconds (== Date)
     private static final long ONESECOND = 1000;
     private static final long ONEMINUTE = 60 * ONESECOND;

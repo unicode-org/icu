@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.Format;
@@ -38,11 +39,12 @@ import com.ibm.icu.util.ULocale;
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 @RunWith(JUnit4.class)
-public class IntlTestDecimalFormatAPIC extends TestFmwk {
+public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test
     public void TestAPI() {
+        Locale startLocale = Locale.getDefault();
 
         logln("DecimalFormat API test---");
         logln("");
@@ -250,6 +252,7 @@ public class IntlTestDecimalFormatAPIC extends TestFmwk {
         //            errln("ERROR: Couldn't create a DecimalFormat");
         //        }
 
+        Locale.setDefault(startLocale);
     }
 
     @Test

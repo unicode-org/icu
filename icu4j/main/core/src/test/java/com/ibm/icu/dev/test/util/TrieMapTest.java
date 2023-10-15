@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +39,7 @@ import com.ibm.icu.util.StringTrieBuilder.Option;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class TrieMapTest extends TestFmwk {
+public class TrieMapTest extends CoreTestFmwk {
     static final boolean SHORT = false;
     static final boolean HACK_TO_MAKE_TESTS_PASS = false;
     static final int MASK = 0x3;

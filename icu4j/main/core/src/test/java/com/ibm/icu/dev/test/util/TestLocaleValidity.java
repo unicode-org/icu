@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
@@ -34,7 +35,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class TestLocaleValidity extends TestFmwk {
+public class TestLocaleValidity extends CoreTestFmwk {
     @Test
     public void testBasic() {
         String[][] tests = {

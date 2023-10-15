@@ -10,6 +10,7 @@
 
 package com.ibm.icu.dev.test.timescale;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.Locale;
 
@@ -30,7 +31,7 @@ import com.ibm.icu.util.UniversalTimeScale;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 @RunWith(JUnit4.class)
-public class TimeScaleDataTest extends TestFmwk
+public class TimeScaleDataTest extends CoreTestFmwk
 {
 
     /**

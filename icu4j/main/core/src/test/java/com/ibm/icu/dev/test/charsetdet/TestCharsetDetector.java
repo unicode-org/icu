@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.charsetdet;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -41,7 +42,7 @@ import com.ibm.icu.text.CharsetMatch;
  * @author andy
  */
 @RunWith(JUnit4.class)
-public class TestCharsetDetector extends TestFmwk
+public class TestCharsetDetector extends CoreTestFmwk
 {
     public TestCharsetDetector()
     {

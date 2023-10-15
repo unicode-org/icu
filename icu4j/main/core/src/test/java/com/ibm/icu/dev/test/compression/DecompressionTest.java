@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.compression;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -16,7 +17,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UnicodeDecompressor;
 
 @RunWith(JUnit4.class)
-public class DecompressionTest extends TestFmwk {
+public class DecompressionTest extends CoreTestFmwk {
     /** Print out a segment of a character array, if in verbose mode */
     private void log(char [] chars, int start, int count) {
         log("|");

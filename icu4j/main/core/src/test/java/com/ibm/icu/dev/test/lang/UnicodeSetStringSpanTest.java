@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Collection;
 
 import org.junit.Test;
@@ -26,7 +27,7 @@ import com.ibm.icu.util.OutputInt;
  * @summary General test of UnicodeSet string span.
  */
 @RunWith(JUnit4.class)
-public class UnicodeSetStringSpanTest extends TestFmwk {
+public class UnicodeSetStringSpanTest extends CoreTestFmwk {
     // Simple test first, easier to debug.
     @Test
     public void TestSimpleStringSpan() {

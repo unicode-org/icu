@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.USerializedSet;
@@ -34,7 +34,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
 
 
 @RunWith(JUnit4.class)
-public class BasicTest extends TestFmwk {
+public class BasicTest extends CoreTestFmwk {
     String[][] canonTests = {
         // Input                Decomposed              Composed
         { "cat",                "cat",                  "cat"               },

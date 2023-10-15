@@ -14,6 +14,8 @@
  */
 
 package com.ibm.icu.dev.test.timezone;
+
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +39,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class TimeZoneRegressionTest extends TestFmwk {
+public class TimeZoneRegressionTest extends CoreTestFmwk {
     @Test
     public void Test4052967() {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");

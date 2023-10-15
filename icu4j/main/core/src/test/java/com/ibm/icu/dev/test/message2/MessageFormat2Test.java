@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,7 +36,7 @@ import com.ibm.icu.util.MeasureUnit;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class MessageFormat2Test extends TestFmwk {
+public class MessageFormat2Test extends CoreTestFmwk {
 
     @Test
     public void test() {

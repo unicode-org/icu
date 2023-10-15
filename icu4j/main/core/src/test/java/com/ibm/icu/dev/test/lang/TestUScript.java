@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.BitSet;
 
 import org.junit.Test;
@@ -22,7 +23,7 @@ import com.ibm.icu.lang.UScript.ScriptUsage;
 import com.ibm.icu.text.UnicodeSet;
 
 @RunWith(JUnit4.class)
-public class TestUScript extends TestFmwk {
+public class TestUScript extends CoreTestFmwk {
 
     /**
     * Constructor

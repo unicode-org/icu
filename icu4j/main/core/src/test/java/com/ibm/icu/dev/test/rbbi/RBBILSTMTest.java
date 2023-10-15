@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ import com.ibm.icu.text.BreakIterator;
  *      See the data file for a description of the tests.
  */
 @RunWith(JUnit4.class)
-public class RBBILSTMTest extends TestFmwk {
+public class RBBILSTMTest extends CoreTestFmwk {
     public RBBILSTMTest() {
     }
 

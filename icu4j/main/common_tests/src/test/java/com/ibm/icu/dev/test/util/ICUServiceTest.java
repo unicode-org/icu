@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
@@ -43,7 +43,7 @@ import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class ICUServiceTest extends TestFmwk
+public class ICUServiceTest extends CoreTestFmwk
 {
     private String lrmsg(String message, Object lhs, Object rhs) {
     return message + " lhs: " + lhs + " rhs: " + rhs;

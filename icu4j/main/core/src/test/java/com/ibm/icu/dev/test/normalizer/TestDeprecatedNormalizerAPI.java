@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -21,7 +22,7 @@ import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.StringCharacterIterator;
 
 @RunWith(JUnit4.class)
-public class TestDeprecatedNormalizerAPI extends TestFmwk
+public class TestDeprecatedNormalizerAPI extends CoreTestFmwk
 {
     public TestDeprecatedNormalizerAPI() {
     }

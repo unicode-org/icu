@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -36,7 +37,7 @@ import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class DecimalQuantityTest extends TestFmwk {
+public class DecimalQuantityTest extends CoreTestFmwk {
 
     @Ignore
     @Test

@@ -10,7 +10,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
-
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ import com.ibm.icu.util.ULocale;
 * @since march 14 2002
 */
 @RunWith(JUnit4.class)
-public final class UCharacterCaseTest extends TestFmwk
+public final class UCharacterCaseTest extends CoreTestFmwk
 {
     // constructor -----------------------------------------------------------
 

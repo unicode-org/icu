@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ import com.ibm.icu.text.UnicodeSet;
 
 
 @RunWith(JUnit4.class)
-public class UnicodeNormalizerConformanceTest extends TestFmwk {
+public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
 
     UnicodeNormalizer normalizer_C, normalizer_D, normalizer_KC, normalizer_KD;
 

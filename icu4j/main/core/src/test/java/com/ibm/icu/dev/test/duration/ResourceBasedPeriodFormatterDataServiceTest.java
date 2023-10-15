@@ -11,6 +11,7 @@
 
 package com.ibm.icu.dev.test.duration;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -23,7 +24,7 @@ import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
 import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
 
 @RunWith(JUnit4.class)
-public class ResourceBasedPeriodFormatterDataServiceTest extends TestFmwk {
+public class ResourceBasedPeriodFormatterDataServiceTest extends CoreTestFmwk {
   @Test
   public void testAvailable() {
     ResourceBasedPeriodFormatterDataService service =

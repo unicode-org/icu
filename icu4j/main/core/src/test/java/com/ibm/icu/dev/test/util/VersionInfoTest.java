@@ -10,7 +10,7 @@
 
 package com.ibm.icu.dev.test.util;
 
-
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -27,7 +27,7 @@ import com.ibm.icu.util.VersionInfo;
 * @since release 2.1 March 01 2002
 */
 @RunWith(JUnit4.class)
-public final class VersionInfoTest extends TestFmwk
+public final class VersionInfoTest extends CoreTestFmwk
 {
     // constructor ---------------------------------------------------
 

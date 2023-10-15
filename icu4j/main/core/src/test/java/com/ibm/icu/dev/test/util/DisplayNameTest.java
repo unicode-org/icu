@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,7 +36,7 @@ import com.ibm.icu.util.UResourceBundle;
 // TODO(junit): test is broken in main branch
 
 @RunWith(JUnit4.class)
-public class DisplayNameTest extends TestFmwk {
+public class DisplayNameTest extends CoreTestFmwk {
     static final boolean SHOW_ALL = false;
 
     interface DisplayNameGetter {

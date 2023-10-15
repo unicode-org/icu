@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -53,7 +54,7 @@ import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class TimeZoneFormatTest extends TestFmwk {
+public class TimeZoneFormatTest extends CoreTestFmwk {
 
     private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
     private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");

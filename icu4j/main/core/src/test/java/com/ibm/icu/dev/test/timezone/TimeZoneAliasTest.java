@@ -8,6 +8,7 @@
 */
 package com.ibm.icu.dev.test.timezone;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import com.ibm.icu.util.TimeZone;
  *
  */
 @RunWith(JUnit4.class)
-public class TimeZoneAliasTest extends TestFmwk {
+public class TimeZoneAliasTest extends CoreTestFmwk {
     /**
      * There are two things to check aliases for:<br>
      * 1. the alias set must be uniform: if a isAlias b, then aliasSet(a) == aliasSet(b)<br>

@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,7 +24,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class ScientificNumberFormatterTest extends TestFmwk {
+public class ScientificNumberFormatterTest extends CoreTestFmwk {
     @Test
     public void TestBasic() {
         ScientificNumberFormatter markup = ScientificNumberFormatter.getMarkupInstance(

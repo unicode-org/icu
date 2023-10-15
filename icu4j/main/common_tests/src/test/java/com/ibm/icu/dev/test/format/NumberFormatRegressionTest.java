@@ -14,6 +14,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +39,7 @@ import com.ibm.icu.util.ULocale;
  * Performs regression test for MessageFormat
  **/
 @RunWith(JUnit4.class)
-public class NumberFormatRegressionTest extends TestFmwk {
+public class NumberFormatRegressionTest extends CoreTestFmwk {
     /**
      * alphaWorks upgrade
      */

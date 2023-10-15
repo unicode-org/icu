@@ -15,6 +15,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.Format.Field;
 import java.text.ParseException;
@@ -49,7 +50,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class DateIntervalFormatTest extends TestFmwk {
+public class DateIntervalFormatTest extends CoreTestFmwk {
 
     /**
      *

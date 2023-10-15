@@ -13,6 +13,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
@@ -31,7 +32,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 
 @RunWith(JUnit4.class)
-public class DateFormatRegressionTestJ extends TestFmwk {
+public class DateFormatRegressionTestJ extends CoreTestFmwk {
 
     private static final String TIME_STRING = "2000/11/17 08:01:00";
     private static final long UTC_LONG = 974476860000L;
@@ -170,6 +171,8 @@ public class DateFormatRegressionTestJ extends TestFmwk {
     //about regression test
     @Test
     public void Test4266432() {
+        Locale startLocale = Locale.getDefault();
+
         Locale.setDefault(Locale.JAPAN);
         Locale loc = Locale.getDefault();
         String dateFormat = "MM/dd/yy HH:mm:ss zzz";
@@ -179,6 +182,8 @@ public class DateFormatRegressionTestJ extends TestFmwk {
         logln("Under  " + loc +"  locale");
         Date d = fmt.parse("01/22/92 04:52:00 GMT", p0);
         logln(d.toString());
+
+        Locale.setDefault(startLocale);
     }
 
     //SimpleDateFormat inconsistent for number of digits for years

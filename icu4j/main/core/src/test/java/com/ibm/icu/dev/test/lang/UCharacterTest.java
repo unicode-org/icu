@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -49,7 +50,7 @@ import com.ibm.icu.util.VersionInfo;
 * @since nov 04 2000
 */
 @RunWith(JUnit4.class)
-public final class UCharacterTest extends TestFmwk
+public final class UCharacterTest extends CoreTestFmwk
 {
     // private variables =============================================
 

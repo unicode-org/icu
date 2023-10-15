@@ -18,6 +18,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -30,7 +31,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class IntlTestDateFormatSymbols extends TestFmwk
+public class IntlTestDateFormatSymbols extends CoreTestFmwk
 {
     // Test getMonths
     @Test

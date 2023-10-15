@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -29,7 +30,7 @@ import com.ibm.icu.text.UTF16;
 // TODO: fit into test framework
 
 @RunWith(JUnit4.class)
-public class TestCanonicalIterator extends TestFmwk {
+public class TestCanonicalIterator extends CoreTestFmwk {
 
     static final boolean SHOW_NAMES = false;
 

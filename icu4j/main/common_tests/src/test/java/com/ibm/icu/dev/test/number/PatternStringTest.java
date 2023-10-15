@@ -5,6 +5,7 @@ package com.ibm.icu.dev.test.number;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.format.FormattedValueTest;
@@ -21,7 +22,7 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 /** @author sffc */
-public class PatternStringTest {
+public class PatternStringTest extends CoreTestFmwk {
 
     @Test
     public void testLocalized() {
@@ -35,8 +36,8 @@ public class PatternStringTest {
         String localized = "’.'ab'c'b''a'''#,##0a0b'a%'";
         String toStandard = "+-'ab'c'b''a'''#,##0.0%'a%'";
 
-        assertEquals(localized, PatternStringUtils.convertLocalized(standard, symbols, true));
-        assertEquals(toStandard, PatternStringUtils.convertLocalized(localized, symbols, false));
+        assertEquals("Localized decimal format symbols", localized, PatternStringUtils.convertLocalized(standard, symbols, true));
+        assertEquals("Standard (unlocalized) decimal format symbols", toStandard, PatternStringUtils.convertLocalized(localized, symbols, false));
     }
 
     @Test

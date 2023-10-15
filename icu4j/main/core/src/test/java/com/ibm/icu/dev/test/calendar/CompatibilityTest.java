@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 
 @RunWith(JUnit4.class)
-public class CompatibilityTest extends TestFmwk {
+public class CompatibilityTest extends CoreTestFmwk {
     static final String[] FIELD_NAME = {
         "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
         "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",

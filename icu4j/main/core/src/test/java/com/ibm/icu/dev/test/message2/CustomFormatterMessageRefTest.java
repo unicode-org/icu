@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -28,7 +29,7 @@ import com.ibm.icu.message2.PlainStringFormattedValue;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class CustomFormatterMessageRefTest extends TestFmwk {
+public class CustomFormatterMessageRefTest extends CoreTestFmwk {
 
     static class ResourceManagerFactory implements FormatterFactory {
 

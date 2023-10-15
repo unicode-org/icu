@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.text;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -42,7 +43,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class SpoofCheckerTest extends TestFmwk {
+public class SpoofCheckerTest extends CoreTestFmwk {
     /*
      * Identifiers for verifying that spoof checking is minimally alive and working.
      */

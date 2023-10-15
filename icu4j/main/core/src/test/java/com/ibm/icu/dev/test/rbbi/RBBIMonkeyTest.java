@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,7 +35,7 @@ import com.ibm.icu.util.ULocale;
  */
 
 @RunWith(JUnit4.class)
-public class RBBIMonkeyTest extends TestFmwk {
+public class RBBIMonkeyTest extends CoreTestFmwk {
 
 
     //  class CharClass    Represents a single character class from the source break rules.

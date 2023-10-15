@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
@@ -43,7 +43,7 @@ import com.ibm.icu.util.ULocale;
  * @summary General test of Currency
  */
 @RunWith(JUnit4.class)
-public class CurrencyTest extends TestFmwk {
+public class CurrencyTest extends CoreTestFmwk {
     /**
      * Test of basic API.
      */

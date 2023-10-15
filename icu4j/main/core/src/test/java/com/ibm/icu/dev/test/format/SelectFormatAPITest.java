@@ -9,6 +9,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
@@ -24,7 +25,7 @@ import com.ibm.icu.text.SelectFormat;
  * This class tests the API functionality of the SelectFormat
  */
 @RunWith(JUnit4.class)
-public class SelectFormatAPITest extends TestFmwk {
+public class SelectFormatAPITest extends CoreTestFmwk {
 
     static final String SIMPLE_PATTERN1 = "feminine {feminineVerbValue1} other{otherVerbValue1}";
     static final String SIMPLE_PATTERN2 = "feminine {feminineVerbValue2} other{otherVerbValue2}";

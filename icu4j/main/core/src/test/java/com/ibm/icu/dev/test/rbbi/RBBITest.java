@@ -16,6 +16,7 @@ package com.ibm.icu.dev.test.rbbi;
 //          Much of the remaining data has been moved into the rbbitst.txt test data file,
 //            which is common between ICU4C and ICU4J.  The remaining test data should also be moved,
 //            or simply retired if it is no longer interesting.
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ import com.ibm.icu.util.ULocale;
 
 
 @RunWith(JUnit4.class)
-public class RBBITest extends TestFmwk {
+public class RBBITest extends CoreTestFmwk {
     public RBBITest() {
     }
 

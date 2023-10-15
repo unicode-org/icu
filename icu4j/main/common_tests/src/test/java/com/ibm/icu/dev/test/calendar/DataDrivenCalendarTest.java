@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,6 @@ import com.ibm.icu.dev.test.ModuleTest.TestDataPair;
 import com.ibm.icu.dev.test.TestDataModule;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
 import com.ibm.icu.dev.test.TestDataModule.TestData;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CalendarFieldsSet;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -40,7 +40,7 @@ import junitparams.Parameters;
  *
  */
 @RunWith(JUnitParamsRunner.class)
-public class DataDrivenCalendarTest extends TestFmwk {
+public class DataDrivenCalendarTest extends CoreTestFmwk {
 
     public DataDrivenCalendarTest() {
         //super("com/ibm/icu/dev/data/testdata/", "calendar");
@@ -54,7 +54,6 @@ public class DataDrivenCalendarTest extends TestFmwk {
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.ModuleTest#processModules()
      */
-    @Ignore  // TODO(ICU-22505)
     @Test
     @Parameters(method="getTestData")
     public void calendarTest(TestDataPair pair) {

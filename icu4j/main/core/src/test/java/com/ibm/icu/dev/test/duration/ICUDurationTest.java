@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.duration;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.math.BigDecimal;
 import java.text.FieldPosition;
 import java.util.Date;
@@ -33,7 +34,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class ICUDurationTest extends TestFmwk {
+public class ICUDurationTest extends CoreTestFmwk {
     /**
      * Allows us to not depend on javax.xml.datatype.DatatypeFactory.
      * We need just a tiny subset of the Duration API:

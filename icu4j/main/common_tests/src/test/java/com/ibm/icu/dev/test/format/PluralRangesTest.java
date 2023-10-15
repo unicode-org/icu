@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -33,7 +34,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class PluralRangesTest extends TestFmwk {
+public class PluralRangesTest extends CoreTestFmwk {
     @Test
     public void TestLocaleData() {
         String[][] tests = {
