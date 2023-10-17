@@ -16,6 +16,7 @@ package com.ibm.icu.impl.coll;
 import com.ibm.icu.text.Collator;
 
 public final class CollationCompare /* all static */ {
+    private static int kSamePrimaryLoopLimit = 3;
     public static int compareUpToQuaternary(CollationIterator left, CollationIterator right,
             CollationSettings settings) {
         int options = settings.options;
@@ -28,6 +29,8 @@ public final class CollationCompare /* all static */ {
         }
         boolean anyVariable = false;
 
+        long lastPrimary = 0;
+        int samePrimaryCount = 0;
         // Fetch CEs, compare primaries, store secondary & tertiary weights.
         for (;;) {
             // We fetch CEs until we get a non-ignorable primary or reach the end.
@@ -90,6 +93,19 @@ public final class CollationCompare /* all static */ {
             if (leftPrimary == Collation.NO_CE_PRIMARY) {
                 break;
             }
+
+            // leftPrimary and rightPrimary is surely the same now.
+            // ICU-22511 To avoid infinity loop, terminate and return error if the
+            // leftPrimary stay the same for too many times..
+            if (lastPrimary == leftPrimary) {
+                if (++samePrimaryCount > kSamePrimaryLoopLimit) {
+                    throw new IllegalStateException("Internal program error");
+                }
+            } else {
+                // reset samePrimaryCount
+                samePrimaryCount = 0;
+            }
+            lastPrimary = leftPrimary;
         }
 
         // Compare the buffered secondary & tertiary weights.

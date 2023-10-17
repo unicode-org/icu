@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
@@ -1759,6 +1760,19 @@ public class CollationTest extends TestFmwk {
             }
         } catch (Exception e) {
             errln("unexpected type of exception: " + e);
+        }
+    }
+    @Test
+    public void TestWoHang22511() {
+        String str1 = "\u0000\u0100\u032a\u01e0\ud804\udd00\u031c";
+        String str2 = str1.substring(1);
+        for (Locale l : Collator.getAvailableLocales()) {
+            Collator col = Collator.getInstance(l);
+            col.setStrength(Collator.IDENTICAL);
+            try {
+                col.compare(str1, str2);
+            } catch (IllegalStateException e) {
+            }
         }
     }
 }
