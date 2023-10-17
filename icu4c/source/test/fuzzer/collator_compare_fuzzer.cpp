@@ -42,7 +42,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   std::unique_ptr<char16_t[]> compbuff2(new char16_t[size/4]);
   std::memcpy(compbuff2.get(), data + size/2, (size/4)*2);
 
-
   icu::LocalPointer<icu::Collator> fuzzCollator(
       icu::Collator::createInstance(locale, status), status);
   if (U_SUCCESS(status)) {
