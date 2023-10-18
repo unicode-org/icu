@@ -242,28 +242,23 @@ Look at previous releases for an example.
 
 Follow instructions here: [Building ICU4J Release Files](../release-build.md)
 
-### C source/binary:
-
-<span style="background:yellow">***WORK IN PROGRESS***</a>
+### CPP source/binary:
 
 #### Source and Linux Binaries:
 
 Important: this step works with Unix make + docker.
 
-First, install *docker* and *docker-compose. D*o not proceed until *docker run
+First, install *docker* and *docker-compose.* Do not proceed until *docker run
 hello-world* works!
 
 ```sh
-$ git clone https://github.com/unicode-org/icu-docker.git
-$ cd icu-docker/src
-$ git clone --branch release-64-rc --depth 1 https://github.com/unicode-org/icu.git
-$ cd icu
-$ git lfs install --local
-$ git lfs fetch
-$ git lfs checkout
-$ cd ../..
-$ less [README.md](https://github.com/unicode-org/icu-docker/blob/main/README.md)  # Follow these instructions.
+# DO THIS once at the level above repositories for icu, icu-docs, conformance, etc.
+git clone https://github.com/unicode-org/icu-docker.git
+
+cd icu-docker
 ```
+
+* Follow directions "Build the distributions" at [icu-docker](https://github.com/unicode-org/icu-docker/tree/main) to make binary distributions of ICU4C.
 
 *   Source and binaries are created in ./dist/.
 *   The names [don't match what's needed on
@@ -273,7 +268,7 @@ $ less [README.md](https://github.com/unicode-org/icu-docker/blob/main/README.m
 **Note:** If you only want to make a source tarball (.tgz/.zip), then you can
 run \`make dist\`.
 
-*   This will produce a source tarball and will include a pre-compiled .dat file
+*   This creates a source tarball. It will include a pre-compiled .dat file
     under icu4c/source/data/in/.
 *   Note: This tarball will also omit all of the data sub-directories containing
     locale data.
