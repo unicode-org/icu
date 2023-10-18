@@ -76,7 +76,7 @@ of classes. This protocol includes:
 
 * A programmatic ID, for example, "America/Los_Angeles". This ID is used to
   call up a specific real-world time zone. It corresponds to the IDs defined
-  in the [IANA Time Zone datbase](https://www.iana.org/time-zones) used by UNIX
+  in the [IANA Time Zone database](https://www.iana.org/time-zones) used by UNIX
   and other systems, and has the format continent/city or ocean/city.
 * A raw offset. This is the difference, in milliseconds, between a time zone's
   standard time and GMT. Positive raw offsets are east of Greenwich.
@@ -245,7 +245,7 @@ sources for general information on building ICU.
 
 ### Update the time zone data for ICU4J
 
-The [ICU4J Time Zone Update Update
+The [ICU4J Time Zone Update 
 Utility](https://icu.unicode.org/download/icutzu) automates the process of
 updating ICU4J jar files with the latest time zone data. Instructions for use
 are [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-data/blob/main/tzdata/tzu/readme.html).
