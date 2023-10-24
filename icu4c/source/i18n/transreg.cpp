@@ -11,7 +11,7 @@
 */
 
 #include "unicode/utypes.h"
-#include <unicode/rep.h>
+#include "unicode/rep.h"
 
 #if !UCONFIG_NO_TRANSLITERATION
 
