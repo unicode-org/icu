@@ -242,6 +242,8 @@ public:
 
     void TestICU22517();
 
+    void TestICU22555InfinityLoop();
+
 private:
     //------------------------------------------------------------------------
     // Internal utilities
