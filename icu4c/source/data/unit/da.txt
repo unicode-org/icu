@@ -1446,13 +1446,13 @@ da{
             kilometer-per-hour{
                 case{
                     genitive{
-                        one{"kilometer i timens"}
+                        one{"{0} kilometer i timens"}
                         other{"{0} kilometer i timens"}
                     }
                 }
                 dnam{"kilometer i timen"}
                 gender{"common"}
-                one{"kilometer i timen"}
+                one{"{0} kilometer i timen"}
                 other{"{0} kilometer i timen"}
             }
             meter-per-second{
