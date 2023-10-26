@@ -60,6 +60,7 @@ public:
     void TestConsistencyIslamicUmalqura();
     void TestConsistencyPersian();
     void TestConsistencyJapanese();
+    void TestIslamicUmalquraCalendarSlow();
 
  protected:
     // Test a Gregorian-Like calendar

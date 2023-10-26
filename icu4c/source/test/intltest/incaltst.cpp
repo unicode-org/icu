@@ -105,6 +105,7 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestConsistencyIslamicUmalqura);
     TESTCASE_AUTO(TestConsistencyPersian);
     TESTCASE_AUTO(TestConsistencyJapanese);
+    TESTCASE_AUTO(TestIslamicUmalquraCalendarSlow);
     TESTCASE_AUTO_END;
 }
 
@@ -1120,6 +1121,18 @@ void IntlCalendarTest::checkConsistency(const char* locale) {
             status.errIfFailureAndReset();
         }
     }
+}
+
+void IntlCalendarTest::TestIslamicUmalquraCalendarSlow() {
+    IcuTestErrorCode status(*this, "TestIslamicUmalquraCalendarSlow");
+    Locale l("th@calendar=islamic-umalqura");
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance(l, status));
+    cal->add(UCAL_YEAR, 1229080905, status);
+    cal->roll(UCAL_WEEK_OF_MONTH, 1499050699, status);
+    cal->fieldDifference(0.000000, UCAL_YEAR_WOY, status);
+    // Ignore the error
+    status.reset();
 }
 
 void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)

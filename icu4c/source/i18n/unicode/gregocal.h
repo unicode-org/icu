@@ -495,10 +495,11 @@ public:
      * handleGetMonthLength() to obtain the calendar-specific month
      * length.
      * @param bestField which field to use to calculate the date 
+     * @param status Fill-in parameter which receives the status of this operation.
      * @return julian day specified by calendar fields.
      * @internal
      */
-    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField) override;
+    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode& status) override;
 
     /**
      * Return the number of days in the given month of the given extended
