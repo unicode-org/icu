@@ -145,6 +145,7 @@ group: iostream
     "std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)"
     std::ios_base::Init::Init()
     std::ios_base::Init::~Init()
+    std::ios_base_library_init()
     std::istream::get()
     std::istream::putback(char)
     # Additional symbols in an optimized build.
