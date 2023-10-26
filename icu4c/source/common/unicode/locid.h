@@ -518,20 +518,20 @@ public:
      * If this Locale is already in the maximal form, or not valid, or there is
      * no data available for maximization, the Locale will be unchanged.
      *
-     * For example, "und-Zzzz" cannot be maximized, since there is no
+     * For example, "sh" cannot be maximized, since there is no
      * reasonable maximization.
      *
      * Examples:
      *
+     * "und_Zzzz" maximizes to "en_Latn_US"
+     *
      * "en" maximizes to "en_Latn_US"
      *
-     * "de" maximizes to "de_Latn_US"
+     * "de" maximizes to "de_Latn_DE"
      *
      * "sr" maximizes to "sr_Cyrl_RS"
      *
-     * "sh" maximizes to "sr_Latn_RS" (Note this will not reverse.)
-     *
-     * "zh_Hani" maximizes to "zh_Hans_CN" (Note this will not reverse.)
+     * "zh_Hani" maximizes to "zh_Hani_CN"
      *
      * @param status  error information if maximizing this Locale failed.
      *                If this Locale is not well-formed, the error code is
