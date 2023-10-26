@@ -472,17 +472,20 @@ GregorianCalendar::isLeapYear(int32_t year) const
 
 // -------------------------------------
 
-int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField) 
+int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode& status)
 {
     fInvertGregorian = false;
 
-    int32_t jd = Calendar::handleComputeJulianDay(bestField);
+    int32_t jd = Calendar::handleComputeJulianDay(bestField, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
 
     if((bestField == UCAL_WEEK_OF_YEAR) &&  // if we are doing WOY calculations, we are counting relative to Jan 1 *julian*
         (internalGet(UCAL_EXTENDED_YEAR)==fGregorianCutoverYear) && 
         jd >= fCutoverJulianDay) { 
             fInvertGregorian = true;  // So that the Julian Jan 1 will be used in handleComputeMonthStart
-            return Calendar::handleComputeJulianDay(bestField);
+            return Calendar::handleComputeJulianDay(bestField, status);
         }
 
 
@@ -495,7 +498,10 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)
                 __FILE__, __LINE__, jd);
 #endif
             fInvertGregorian = true;
-            jd = Calendar::handleComputeJulianDay(bestField);
+            jd = Calendar::handleComputeJulianDay(bestField, status);
+            if (U_FAILURE(status)) {
+                return 0;
+            }
 #if defined (U_DEBUG_CAL)
             fprintf(stderr, "%s:%d:  fIsGregorian %s, fInvertGregorian %s - ", 
                 __FILE__, __LINE__,fIsGregorian?"T":"F", fInvertGregorian?"T":"F");

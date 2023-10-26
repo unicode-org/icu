@@ -3078,7 +3078,10 @@ void Calendar::computeTime(UErrorCode& status) {
     }
 
     // Compute the Julian day
-    int32_t julianDay = computeJulianDay();
+    int32_t julianDay = computeJulianDay(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     double millis = Grego::julianDayToMillis(julianDay);
 
@@ -3309,7 +3312,7 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
     return rawOffset + dstOffset;
 }
 
-int32_t Calendar::computeJulianDay()
+int32_t Calendar::computeJulianDay(UErrorCode &status)
 {
     // We want to see if any of the date fields is newer than the
     // JULIAN_DAY.  If not, then we use JULIAN_DAY.  If so, then we do
@@ -3333,12 +3336,15 @@ int32_t Calendar::computeJulianDay()
         bestField = UCAL_DAY_OF_MONTH;
     }
 
-    return handleComputeJulianDay(bestField);
+    return handleComputeJulianDay(bestField, status);
 }
 
 // -------------------------------------------
 
-int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
+int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode &status)  {
+    if (U_FAILURE(status)) {
+       return 0;
+    }
     UBool useMonth = (bestField == UCAL_DAY_OF_MONTH ||
         bestField == UCAL_WEEK_OF_MONTH ||
         bestField == UCAL_DAY_OF_WEEK_IN_MONTH);
@@ -3351,6 +3357,12 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
     }
 
     internalSet(UCAL_EXTENDED_YEAR, year);
+    // Return U_ILLEGAL_ARGUMENT_ERROR if year is too large that may cuase int32_t overflow
+    // later.
+    if (year > INT32_MAX / 400) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
 #if defined (U_DEBUG_CAL)
     fprintf(stderr, "%s:%d: bestField= %s - y=%d\n", __FILE__, __LINE__, fldName(bestField), year);

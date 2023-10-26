@@ -6233,6 +6233,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         internalSet(EXTENDED_YEAR, year);
 
+        if (year > Long.MAX_VALUE / 400) {
+            throw new IllegalArgumentException("year is too large");
+        }
+
         int month = useMonth ? internalGetMonth(getDefaultMonthInYear(year)) : 0;
 
         // Get the Julian day of the day BEFORE the start of this year.

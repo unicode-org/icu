@@ -1704,10 +1704,11 @@ protected:
      * handleGetMonthLength() to obtain the calendar-specific month
      * length.
      * @param bestField which field to use to calculate the date
+     * @param status        ICU Error Code
      * @return julian day specified by calendar fields.
      * @internal
      */
-    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField);
+    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode &status);
 
     /**
      * Subclasses must override this to convert from week fields
@@ -1731,10 +1732,11 @@ protected:
     /**
      * Compute the Julian day from fields.  Will determine whether to use
      * the JULIAN_DAY field directly, or other fields.
+     * @param status        ICU Error Code
      * @return the julian day
      * @internal
      */
-    int32_t computeJulianDay();
+    int32_t computeJulianDay(UErrorCode &status);
 
     /**
      * Compute the milliseconds in the day from the fields.  This is a
