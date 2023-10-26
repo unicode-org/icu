@@ -8,7 +8,6 @@
 */
 package com.ibm.icu.dev.test.stringprep;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 

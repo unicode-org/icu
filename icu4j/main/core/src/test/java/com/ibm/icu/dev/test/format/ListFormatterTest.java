@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.ListFormatter.FormattedList;

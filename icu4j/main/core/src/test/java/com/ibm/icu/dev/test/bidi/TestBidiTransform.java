@@ -3,12 +3,11 @@
 
 package com.ibm.icu.dev.test.bidi;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.Bidi;

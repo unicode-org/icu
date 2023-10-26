@@ -13,7 +13,6 @@
 
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.Region;
 import com.ibm.icu.util.Region.RegionType;
 

@@ -3,9 +3,10 @@
 
 package com.ibm.icu.dev.test;
 
-import com.ibm.icu.util.ULocale;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+
+import com.ibm.icu.util.ULocale;
 
 /**
  * A base class for testing within the cross-component tests in the `common_tests` component.

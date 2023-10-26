@@ -8,7 +8,6 @@
 */
 package com.ibm.icu.dev.test.stringprep;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Random;
 
 import org.junit.Ignore;
@@ -16,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.StringPrep;

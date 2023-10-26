@@ -3,7 +3,6 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
 import com.ibm.icu.text.BreakIterator;

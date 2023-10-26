@@ -3,12 +3,11 @@
 
 package com.ibm.icu.dev.test.text;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DisplayOptions;
 import com.ibm.icu.text.DisplayOptions.Capitalization;
 import com.ibm.icu.text.DisplayOptions.DisplayLength;

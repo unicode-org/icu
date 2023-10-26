@@ -12,7 +12,6 @@
 
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -21,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.BytesTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder;

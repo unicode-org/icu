@@ -11,13 +11,13 @@
 /* The generated code has been manually modified. */
 package com.ibm.icu.dev.test.bigdec;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.math.BigInteger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;

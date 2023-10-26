@@ -12,14 +12,13 @@
 
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.NoSuchElementException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;

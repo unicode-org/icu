@@ -9,7 +9,6 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;

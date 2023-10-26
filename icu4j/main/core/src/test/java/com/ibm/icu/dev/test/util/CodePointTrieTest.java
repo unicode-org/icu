@@ -8,7 +8,6 @@
 
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;

@@ -9,7 +9,6 @@
 
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +23,7 @@ import java.util.TreeSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.util.LocaleMatcher;

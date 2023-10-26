@@ -2,12 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.MacroProps;

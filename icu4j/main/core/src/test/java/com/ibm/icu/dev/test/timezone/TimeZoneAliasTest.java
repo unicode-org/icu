@@ -8,7 +8,6 @@
 */
 package com.ibm.icu.dev.test.timezone;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.TimeZone;
 
 /**
