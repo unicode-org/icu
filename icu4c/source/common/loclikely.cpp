@@ -467,7 +467,14 @@ _uloc_addLikelySubtags(const char* localeID,
         goto error;
     }
     if (langLength > 3) {
-        goto error;
+        if (langLength == 4 && scriptLength == 0) {
+            langLength = 0;
+            scriptLength = 4;
+            uprv_memcpy(script, lang, 4);
+            lang[0] = '\0';
+        } else {
+            goto error;
+        }
     }
 
     /* Find the length of the trailing portion. */

@@ -3782,6 +3782,38 @@ const char* const basic_maximize_data[][2] = {
   }, {
     "_DE@em=emoji",
     "de_Latn_DE@em=emoji"
+  }, {
+    // ICU-22547
+    // unicode_language_id = "root" |
+    //   (unicode_language_subtag (sep unicode_script_subtag)?  | unicode_script_subtag)
+    //     (sep unicode_region_subtag)?  (sep unicode_variant_subtag)* ;
+    // so "aaaa" is a well-formed unicode_language_id
+    "aaaa",
+    "aaaa",
+  }, {
+    // ICU-22546
+    "und-Zzzz",
+    "en_Latn_US" // If change, please also update common/unicode/uloc.h
+  }, {
+    // ICU-22546
+    "en",
+    "en_Latn_US" // If change, please also update common/unicode/uloc.h
+  }, {
+    // ICU-22546
+    "de",
+    "de_Latn_DE" // If change, please also update common/unicode/uloc.h
+  }, {
+    // ICU-22546
+    "sr",
+    "sr_Cyrl_RS" // If change, please also update common/unicode/uloc.h
+  }, {
+    // ICU-22546
+    "sh",
+    "sh" // If change, please also update common/unicode/uloc.h
+  }, {
+    // ICU-22546
+    "zh_Hani",
+    "zh_Hani_CN" // If change, please also update common/unicode/uloc.h
   }
 };
 
@@ -6013,7 +6045,7 @@ static void TestLikelySubtags()
             }
         }
         else if (uprv_stricmp(maximal, buffer) != 0) {
-            log_err("  maximal doesn't match expected %s in uloc_addLikelySubtags(), minimal \"%s\" = %s\n", maximal, minimal, buffer);
+            log_err("1  maximal doesn't match expected %s in uloc_addLikelySubtags(), minimal \"%s\" = %s\n", maximal, minimal, buffer);
         }
     }
 
@@ -6066,7 +6098,7 @@ static void TestLikelySubtags()
             }
         }
         else if (uprv_stricmp(maximal, buffer) != 0) {
-            log_err("  maximal doesn't match expected \"%s\" in uloc_addLikelySubtags(), minimal \"%s\" = \"%s\"\n", maximal, minimal, buffer);
+            log_err("2  maximal doesn't match expected \"%s\" in uloc_addLikelySubtags(), minimal \"%s\" = \"%s\"\n", maximal, minimal, buffer);
         }
     }
 
@@ -6128,7 +6160,7 @@ static void TestLikelySubtags()
         }
         else if (status == U_BUFFER_OVERFLOW_ERROR || status == U_STRING_NOT_TERMINATED_WARNING) {
             if (uprv_strnicmp(maximal, buffer, bufferSize) != 0) {
-                log_err("  maximal doesn't match expected %s in uloc_addLikelySubtags(), minimal \"%s\" = %*s\n",
+                log_err("3  maximal doesn't match expected %s in uloc_addLikelySubtags(), minimal \"%s\" = %*s\n",
                     maximal, minimal, (int)sizeof(buffer), buffer);
             }
         }

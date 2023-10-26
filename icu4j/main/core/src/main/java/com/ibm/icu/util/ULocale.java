@@ -2694,20 +2694,18 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *
      * If the provided ULocale instance is already in the maximal form, or there is no
      * data available available for maximization, it will be returned.  For example,
-     * "und-Zzzz" cannot be maximized, since there is no reasonable maximization.
+     * "sh" cannot be maximized, since there is no reasonable maximization.
      * Otherwise, a new ULocale instance with the maximal form is returned.
      *
      * Examples:
      *
      * "en" maximizes to "en_Latn_US"
      *
-     * "de" maximizes to "de_Latn_US"
+     * "de" maximizes to "de_Latn_DE"
      *
      * "sr" maximizes to "sr_Cyrl_RS"
      *
-     * "sh" maximizes to "sr_Latn_RS" (Note this will not reverse.)
-     *
-     * "zh_Hani" maximizes to "zh_Hans_CN" (Note this will not reverse.)
+     * "zh_Hani" maximizes to "zh_Hani_CN"
      *
      * @param loc The ULocale to maximize
      * @return The maximized ULocale instance.

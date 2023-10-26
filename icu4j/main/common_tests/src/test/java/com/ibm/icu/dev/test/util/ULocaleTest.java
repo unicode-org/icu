@@ -1917,6 +1917,38 @@ public class ULocaleTest extends TestFmwk {
                 }, {
                     "zzz",
                     ""
+                }, {
+                    // ICU-22547
+                    // unicode_language_id = "root" |
+                    //   (unicode_language_subtag (sep unicode_script_subtag)?  | unicode_script_subtag)
+                    //     (sep unicode_region_subtag)?  (sep unicode_variant_subtag)* ;
+                    // so "aaaa" is a well-formed unicode_language_id
+                    "aaaa",
+                    "aaaa",
+                }, {
+                    // ICU-22546
+                    "und-Zzzz",
+                    "en_Latn_US" // If change, please also update ULocale.java
+                }, {
+                    // ICU-22546
+                    "en",
+                    "en_Latn_US" // If change, please also update ULocale.java
+                }, {
+                    // ICU-22546
+                    "de",
+                    "de_Latn_DE" // If change, please also update ULocale.java
+                }, {
+                    // ICU-22546
+                    "sr",
+                    "sr_Cyrl_RS" // If change, please also update ULocale.java
+                }, {
+                    // ICU-22546
+                    "sh",
+                    "sh" // If change, please also update ULocale.java
+                }, {
+                    // ICU-22546
+                    "zh_Hani",
+                    "zh_Hani_CN" // If change, please also update ULocale.java
                 }
         };
 
