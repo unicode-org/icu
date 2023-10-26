@@ -11,7 +11,6 @@
 
 package com.ibm.icu.dev.test.duration;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -19,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
 import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
 

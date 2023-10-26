@@ -3,7 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -12,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.Calendar;

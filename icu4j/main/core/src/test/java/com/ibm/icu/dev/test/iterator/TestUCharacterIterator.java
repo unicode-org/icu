@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.dev.test.iterator;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
@@ -16,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;

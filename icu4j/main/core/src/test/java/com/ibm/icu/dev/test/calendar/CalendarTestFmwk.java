@@ -9,12 +9,12 @@
 
 package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;

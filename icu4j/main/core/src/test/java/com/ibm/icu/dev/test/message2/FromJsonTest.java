@@ -3,12 +3,11 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 
 /**
  * These tests come from the test suite created for the JavaScript implementation of MessageFormat v2.

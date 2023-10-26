@@ -11,7 +11,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
 import com.ibm.icu.text.MessagePatternUtil.ArgNode;

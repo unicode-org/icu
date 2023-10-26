@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.dev.test.normalizer;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -19,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CanonicalIterator;

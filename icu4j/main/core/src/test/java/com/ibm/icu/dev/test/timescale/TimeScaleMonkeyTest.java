@@ -10,14 +10,13 @@
 
 package com.ibm.icu.dev.test.timescale;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Random;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.UniversalTimeScale;
 

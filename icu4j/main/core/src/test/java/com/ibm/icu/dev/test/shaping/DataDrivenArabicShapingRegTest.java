@@ -3,7 +3,6 @@
 
 package com.ibm.icu.dev.test.shaping;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.MissingResourceException;
@@ -13,7 +12,7 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 

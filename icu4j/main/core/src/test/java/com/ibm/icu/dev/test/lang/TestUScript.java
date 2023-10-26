@@ -9,14 +9,13 @@
 
 package com.ibm.icu.dev.test.lang;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.util.BitSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UScript.ScriptUsage;
