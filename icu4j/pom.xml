@@ -67,7 +67,7 @@
 
     <!-- Variables used to generate the javadoc -->
     <!-- Version update! -->
-    <api.doc.version>${icu.major.version} Release Candidate</api.doc.version>
+    <api.doc.version>${icu.major.version}</api.doc.version>
     <icu4j.api.doc.window.title>ICU4J ${api.doc.version}</icu4j.api.doc.window.title>
     <icu4j.api.doc.header>ICU4J ${api.doc.version}</icu4j.api.doc.header>
     <icu4j.api.doc.copyright.footer>&lt;font size=-1&gt;Copyright © 2016 Unicode, Inc. and others.&lt;/font&gt;</icu4j.api.doc.copyright.footer>
