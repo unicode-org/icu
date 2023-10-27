@@ -227,6 +227,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11649_DecFmtCurrencies);
   TESTCASE_AUTO(Test13148_ParseGroupingSeparators);
   TESTCASE_AUTO(Test12753_PatternDecimalPoint);
+  TESTCASE_AUTO(Test22303_PatternDecimalPoint_InfNaN);
   TESTCASE_AUTO(Test11647_PatternCurrencySymbols);
   TESTCASE_AUTO(Test11913_BigDecimal);
   TESTCASE_AUTO(Test11020_RoundingInScientificNotation);
@@ -9423,9 +9424,26 @@ void NumberFormatTest::Test12753_PatternDecimalPoint() {
     df.parse(u"123",result, status);
     assertEquals("Parsing integer succeeded even though setDecimalPatternMatchRequired was set",
                  U_INVALID_FORMAT_ERROR, status);
-    }
+}
 
- void NumberFormatTest::Test11647_PatternCurrencySymbols() {
+void NumberFormatTest::Test22303_PatternDecimalPoint_InfNaN() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols symbols(Locale::getUS(), status);
+    symbols.setSymbol(DecimalFormatSymbols::kInfinitySymbol, u"infinity", false);
+    symbols.setSymbol(DecimalFormatSymbols::kNaNSymbol, u"notanumber", false);
+    DecimalFormat df(u"0.00", symbols, status);
+    if (!assertSuccess("", status)) return;
+    df.setDecimalPatternMatchRequired(true);
+    Formattable result;
+    df.parse(u"infinity", result, status);
+    assertEquals("Should parse to +INF even though decimal is required", INFINITY, result.getDouble());
+    df.parse(u"notanumber", result, status);
+    assertEquals("Should parse to NaN even though decimal is required", NAN, result.getDouble());
+    df.parse("-infinity", result, status);
+    assertEquals("Should parse to -INF even though decimal is required", -INFINITY, result.getDouble());
+}
+
+void NumberFormatTest::Test11647_PatternCurrencySymbols() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat df(status);
     df.applyPattern(u"¤¤¤¤#", status);
