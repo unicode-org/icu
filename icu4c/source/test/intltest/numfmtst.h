@@ -283,6 +283,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test11649_DecFmtCurrencies();
     void Test13148_ParseGroupingSeparators();
     void Test12753_PatternDecimalPoint();
+    void Test22303_PatternDecimalPoint_InfNaN();
     void Test11647_PatternCurrencySymbols();
     void Test11913_BigDecimal();
     void Test11020_RoundingInScientificNotation();
