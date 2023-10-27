@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1697249595547,
+  "lastUpdate": 1698367470193,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33178,6 +33178,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 15.0541,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cdab88ff4ef53342482a81f276af91567ddc4ff5",
+          "message": "ICU-22513 Return error if days is too large in IslamicUmalquraCalendar\n\nIf the year is too large it may overflow the int32_t variable and cause\nslow or infinity loop, return error if the year is too large that the\nconversion to day may overflow int32_t. Limit the value to max value of\nint32_t divide by 400.",
+          "timestamp": "2023-10-26T17:09:41-07:00",
+          "tree_id": "4cbb2afadc7ff44c575612d67ca5a3a0f270e0dd",
+          "url": "https://github.com/unicode-org/icu/commit/cdab88ff4ef53342482a81f276af91567ddc4ff5"
+        },
+        "date": 1698367387916,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 17.5162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 11.0998,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 11.0976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 13.0894,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 14.1577,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 14.1308,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
