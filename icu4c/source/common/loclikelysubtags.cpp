@@ -352,7 +352,53 @@ UBool U_CALLCONV cleanup() {
     return true;
 }
 
+static const char16_t* MACROREGION_HARDCODE[] = {
+    u"001~3",
+    u"005",
+    u"009",
+    u"011",
+    u"013~5",
+    u"017~9",
+    u"021",
+    u"029",
+    u"030",
+    u"034~5",
+    u"039",
+    u"053~4",
+    u"057",
+    u"061",
+    u"142~3",
+    u"145",
+    u"150~1",
+    u"154~5",
+    u"202",
+    u"419",
+    u"EU",
+    u"EZ",
+    u"QO",
+    u"UN",
+};
+
 static const char16_t RANGE_MARKER = 0x7E; /* '~' */
+static void processMacroregionRange(const UnicodeString& regionName, UVector* newMacroRegions, UErrorCode& status) {
+    int32_t rangeMarkerLocation = regionName.indexOf(RANGE_MARKER);
+    char16_t buf[6];
+    regionName.extract(buf,6,status);
+    if ( rangeMarkerLocation > 0 ) {
+        char16_t endRange = regionName.charAt(rangeMarkerLocation+1);
+        buf[rangeMarkerLocation] = 0;
+        while ( buf[rangeMarkerLocation-1] <= endRange && U_SUCCESS(status)) {
+            LocalPointer<UnicodeString> newRegion(new UnicodeString(buf), status);
+            newMacroRegions->adoptElement(newRegion.orphan(),status);
+            buf[rangeMarkerLocation-1]++;
+        }
+    } else {
+        LocalPointer<UnicodeString> newRegion(new UnicodeString(regionName), status);
+        newMacroRegions->adoptElement(newRegion.orphan(),status);
+    }
+}
+
+#if U_DEBUG
 UVector* loadMacroregions(UErrorCode &status) {
     LocalPointer<UVector> newMacroRegions(new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status), status);
 
@@ -365,24 +411,33 @@ UVector* loadMacroregions(UErrorCode &status) {
         return nullptr;
     }
 
-    while (U_SUCCESS(status) && ures_hasNext(regionMacro.getAlias())) {
+    while (ures_hasNext(regionMacro.getAlias())) {
         UnicodeString regionName = ures_getNextUnicodeString(regionMacro.getAlias(),nullptr,&status);
-        int32_t rangeMarkerLocation = regionName.indexOf(RANGE_MARKER);
-        char16_t buf[6];
-        regionName.extract(buf,6,status);
-        if ( rangeMarkerLocation > 0 ) {
-            char16_t endRange = regionName.charAt(rangeMarkerLocation+1);
-            buf[rangeMarkerLocation] = 0;
-            while ( buf[rangeMarkerLocation-1] <= endRange && U_SUCCESS(status)) {
-                LocalPointer<UnicodeString> newRegion(new UnicodeString(buf), status);
-                newMacroRegions->adoptElement(newRegion.orphan(),status);
-                buf[rangeMarkerLocation-1]++;
-            }
-        } else {
-            LocalPointer<UnicodeString> newRegion(new UnicodeString(regionName), status);
-            newMacroRegions->adoptElement(newRegion.orphan(),status);
+        processMacroregionRange(regionName, newMacroRegions.getAlias(), status);
+        if (U_FAILURE(status)) {
+            return nullptr;
         }
     }
+
+    return newMacroRegions.orphan();
+}
+#endif // U_DEBUG
+
+UVector* getStaticMacroregions(UErrorCode &status) {
+    LocalPointer<UVector> newMacroRegions(new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status), status);
+
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+
+    for (const auto *region : MACROREGION_HARDCODE) {
+        UnicodeString regionName(region);
+        processMacroregionRange(regionName, newMacroRegions.getAlias(), status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+    }
+
     return newMacroRegions.orphan();
 }
 
@@ -395,7 +450,12 @@ void U_CALLCONV XLikelySubtags::initLikelySubtags(UErrorCode &errorCode) {
     data.load(errorCode);
     if (U_FAILURE(errorCode)) { return; }
     gLikelySubtags = new XLikelySubtags(data);
-    gMacroregions = loadMacroregions(errorCode);
+    gMacroregions = getStaticMacroregions(errorCode);
+#if U_DEBUG
+    auto macroregionsFromData = loadMacroregions(errorCode);
+    U_ASSERT((*gMacroregions) == (*macroregionsFromData));
+    delete macroregionsFromData;
+#endif
     if (U_FAILURE(errorCode) || gLikelySubtags == nullptr || gMacroregions == nullptr) {
         delete gLikelySubtags;
         delete gMacroregions;
@@ -421,7 +481,7 @@ XLikelySubtags::XLikelySubtags(XLikelySubtagsData &data) :
         lsrs(data.lsrs),
 #if U_DEBUG
         lsrsLength(data.lsrsLength),
-#endif
+#endif // U_DEBUG
         distanceData(std::move(data.distanceData)) {
     data.langInfoBundle = nullptr;
     data.lsrs = nullptr;
