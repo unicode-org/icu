@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1698367382263,
+  "lastUpdate": 1698442955327,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29968,6 +29968,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 27077622.6279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "e04f4427dc838279f458fdc94fca26171af7a12c",
+          "message": "ICU-22559 Hardcode the macroregions in XLikelySubtags and add a debug assertion\n\nSee #2688",
+          "timestamp": "2023-10-27T14:18:51-07:00",
+          "tree_id": "27d0ffdcb1715aa465bf3371821ac7ef19034957",
+          "url": "https://github.com/unicode-org/icu/commit/e04f4427dc838279f458fdc94fca26171af7a12c"
+        },
+        "date": 1698442864840,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 567.8568,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 60044344.5606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 23134279.4848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 62223883.4183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 26733475.6904,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
