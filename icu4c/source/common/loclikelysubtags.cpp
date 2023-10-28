@@ -561,12 +561,21 @@ LSR XLikelySubtags::makeMaximizedLsr(const char *language, const char *script, c
     if (region[0] == 'X' && (c1 = region[1]) != 0 && region[2] == 0) {
         switch (c1) {
         case 'A':
+            if (returnInputIfUnmatch) {
+                return LSR(language, script, region, LSR::EXPLICIT_LSR);
+            }
             return LSR(PSEUDO_ACCENTS_PREFIX, language, script, region,
                        LSR::EXPLICIT_LSR, errorCode);
         case 'B':
+            if (returnInputIfUnmatch) {
+                return LSR(language, script, region, LSR::EXPLICIT_LSR);
+            }
             return LSR(PSEUDO_BIDI_PREFIX, language, script, region,
                        LSR::EXPLICIT_LSR, errorCode);
         case 'C':
+            if (returnInputIfUnmatch) {
+                return LSR(language, script, region, LSR::EXPLICIT_LSR);
+            }
             return LSR(PSEUDO_CRACKED_PREFIX, language, script, region,
                        LSR::EXPLICIT_LSR, errorCode);
         default:  // normal locale

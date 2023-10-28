@@ -3881,6 +3881,21 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "zh_Hani",
             "zh_Hani_CN", // If change, please also update common/unicode/locid.h
             "zh_Hani"
+        }, {
+            // ICU-22545
+            "en_XA",
+            "en_XA",
+            "en_XA",
+        }, {
+            // ICU-22545
+            "en_XB",
+            "en_XB",
+            "en_XB",
+        }, {
+            // ICU-22545
+            "en_XC",
+            "en_XC",
+            "en_XC",
         }
     };
 
