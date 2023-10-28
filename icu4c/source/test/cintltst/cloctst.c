@@ -3814,6 +3814,18 @@ const char* const basic_maximize_data[][2] = {
     // ICU-22546
     "zh_Hani",
     "zh_Hani_CN" // If change, please also update common/unicode/uloc.h
+  }, {
+    // ICU-22545
+    "en_XA",
+    "en_XA"
+  }, {
+    // ICU-22545
+    "en_XB",
+    "en_XB"
+  }, {
+    // ICU-22545
+    "en_XC",
+    "en_XC"
   }
 };
 

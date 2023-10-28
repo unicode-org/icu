@@ -1949,6 +1949,18 @@ public class ULocaleTest extends CoreTestFmwk {
                     // ICU-22546
                     "zh_Hani",
                     "zh_Hani_CN" // If change, please also update ULocale.java
+                }, {
+                    // ICU-22545
+                    "en_XA",
+                    "en_XA",
+                }, {
+                    // ICU-22545
+                    "en_XB",
+                    "en_XB",
+                }, {
+                    // ICU-22545
+                    "en_XC",
+                    "en_XC",
                 }
         };
 

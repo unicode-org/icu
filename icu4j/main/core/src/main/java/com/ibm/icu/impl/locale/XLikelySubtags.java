@@ -216,12 +216,21 @@ public final class XLikelySubtags {
         if (region.length() == 2 && region.charAt(0) == 'X') {
             switch (region.charAt(1)) {
             case 'A':
+                if (returnInputIfUnmatch) {
+                    return new LSR(language, script, region, LSR.EXPLICIT_LSR);
+                }
                 return new LSR(PSEUDO_ACCENTS_PREFIX + language,
                         PSEUDO_ACCENTS_PREFIX + script, region, LSR.EXPLICIT_LSR);
             case 'B':
+                if (returnInputIfUnmatch) {
+                    return new LSR(language, script, region, LSR.EXPLICIT_LSR);
+                }
                 return new LSR(PSEUDO_BIDI_PREFIX + language,
                         PSEUDO_BIDI_PREFIX + script, region, LSR.EXPLICIT_LSR);
             case 'C':
+                if (returnInputIfUnmatch) {
+                    return new LSR(language, script, region, LSR.EXPLICIT_LSR);
+                }
                 return new LSR(PSEUDO_CRACKED_PREFIX + language,
                         PSEUDO_CRACKED_PREFIX + script, region, LSR.EXPLICIT_LSR);
             default:  // normal locale
