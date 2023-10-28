@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1698442316335,
+  "lastUpdate": 1698453730691,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -13978,6 +13978,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 9.742552232279992,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "92eeb45811055e0f055c21ac28e536a41156e57f",
+          "message": "ICU-22547 fix addLikelySubtags for 4 chars script code\n\nAlso fix ICU-22546 to correct the comments in the API doc\nand add additional unit tests",
+          "timestamp": "2023-10-27T17:29:05-07:00",
+          "tree_id": "6e48d66768f9fad7e84f559dc01d0c709a977e30",
+          "url": "https://github.com/unicode-org/icu/commit/92eeb45811055e0f055c21ac28e536a41156e57f"
+        },
+        "date": 1698453647731,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 7.498425489368063,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
