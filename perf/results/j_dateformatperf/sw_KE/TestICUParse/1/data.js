@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1698453664978,
+  "lastUpdate": 1698699759236,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14038,6 +14038,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 557.3964213660303,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b070c932ad3541e33ffb52f202b3bafb6f6c5118",
+          "message": "ICU-22560 Merge ICU 74 maintenance branch to main (#2689)",
+          "timestamp": "2023-10-30T13:50:52-07:00",
+          "tree_id": "685233430c7a0ac58ad12feb2254e1367cc00247",
+          "url": "https://github.com/unicode-org/icu/commit/b070c932ad3541e33ffb52f202b3bafb6f6c5118"
+        },
+        "date": 1698699673093,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 655.0657144969827,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
