@@ -481,6 +481,34 @@
       </build>
     </profile>
 
+    <profile>
+      <id>with_signature</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <keyname>${gpg-keyname}</keyname>
+                  <passphraseServerId>${gpg-keyname}</passphraseServerId>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!-- This is used to create "merged" javadoc for all modules combined.
       Matches what is posted on a website (where icu4j / charset / localespi are all in one).
       That's why you need to run this with `site`, but build the artifacts first (for the taglets):
