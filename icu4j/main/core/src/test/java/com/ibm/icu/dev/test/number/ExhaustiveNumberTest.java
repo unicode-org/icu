@@ -10,7 +10,7 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.StaticUnicodeSets.Key;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.lang.UCharacter;
@@ -28,7 +28,7 @@ import com.ibm.icu.util.ULocale;
  *
  * @author sffc
  */
-public class ExhaustiveNumberTest extends TestFmwk {
+public class ExhaustiveNumberTest extends CoreTestFmwk {
     @Before
     public void beforeMethod() {
         // Disable this test class except for exhaustive mode.

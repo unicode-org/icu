@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
@@ -32,7 +32,7 @@ import com.ibm.icu.util.ULocale;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 @RunWith(JUnit4.class)
-public class LocaleDataTest extends TestFmwk{
+public class LocaleDataTest extends CoreTestFmwk{
     private ULocale[] availableLocales = null;
 
     public LocaleDataTest(){

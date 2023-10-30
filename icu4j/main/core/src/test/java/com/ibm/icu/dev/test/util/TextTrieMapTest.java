@@ -15,12 +15,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.UnicodeSet;
 
 @RunWith(JUnit4.class)
-public class TextTrieMapTest extends TestFmwk {
+public class TextTrieMapTest extends CoreTestFmwk {
 
     private static final Integer SUN = new Integer(1);
     private static final Integer MON = new Integer(2);

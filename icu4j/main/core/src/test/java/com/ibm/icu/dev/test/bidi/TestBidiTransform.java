@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.Bidi;
@@ -22,7 +22,7 @@ import com.ibm.icu.text.BidiTransform.Order;
  *
  */
 @RunWith(JUnit4.class)
-public class TestBidiTransform extends TestFmwk {
+public class TestBidiTransform extends CoreTestFmwk {
 
     static final char LATN_ZERO         = '\u0030';
     static final char ARAB_ZERO         = '\u0660';

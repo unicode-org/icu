@@ -16,12 +16,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
 @RunWith(JUnit4.class)
-public class UPropertyAliasesTest extends TestFmwk {
+public class UPropertyAliasesTest extends CoreTestFmwk {
 
     public UPropertyAliasesTest() {}
 

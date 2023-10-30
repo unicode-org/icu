@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
@@ -100,7 +101,7 @@ import com.ibm.icu.math.BigDecimal;
  */
 
 @RunWith(JUnit4.class)
-public class DiagBigDecimalTest extends TestFmwk {
+public class DiagBigDecimalTest extends CoreTestFmwk {
     private static final com.ibm.icu.math.BigDecimal zero = com.ibm.icu.math.BigDecimal.ZERO;
     private static final com.ibm.icu.math.BigDecimal one = com.ibm.icu.math.BigDecimal.ONE;
     private static final com.ibm.icu.math.BigDecimal two = new com.ibm.icu.math.BigDecimal(2);

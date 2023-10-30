@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -26,7 +26,7 @@ import com.ibm.icu.text.NumberFormat;
  * General test of Big NumberFormat
  */
 @RunWith(JUnit4.class)
-public class BigNumberFormatTest extends TestFmwk {
+public class BigNumberFormatTest extends CoreTestFmwk {
 
     static final int ILLEGAL = -1;
 

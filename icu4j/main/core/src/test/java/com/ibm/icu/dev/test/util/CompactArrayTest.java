@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CompactByteArray;
 import com.ibm.icu.util.CompactCharArray;
@@ -21,7 +21,7 @@ import com.ibm.icu.util.CompactCharArray;
  * @since release 2.2
  */
 @RunWith(JUnit4.class)
-public final class CompactArrayTest extends TestFmwk
+public final class CompactArrayTest extends CoreTestFmwk
 {
     @Test
     public void TestByteArrayCoverage() {

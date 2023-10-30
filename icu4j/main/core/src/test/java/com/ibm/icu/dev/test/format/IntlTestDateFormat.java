@@ -28,13 +28,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class IntlTestDateFormat extends TestFmwk {
+public class IntlTestDateFormat extends CoreTestFmwk {
     // Values in milliseconds (== Date)
     private static final long ONESECOND = 1000;
     private static final long ONEMINUTE = 60 * ONESECOND;

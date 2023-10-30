@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -31,7 +32,7 @@ import com.ibm.icu.util.ULocale;
  * NumberFormat.
  */
 @RunWith(JUnit4.class)
-public class IntlTestNumberFormat extends TestFmwk {
+public class IntlTestNumberFormat extends CoreTestFmwk {
 
     public NumberFormat fNumberFormat;
 

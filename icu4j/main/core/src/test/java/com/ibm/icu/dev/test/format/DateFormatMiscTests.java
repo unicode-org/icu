@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 
@@ -31,7 +31,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols
  **/
 @RunWith(JUnit4.class)
-public class DateFormatMiscTests extends TestFmwk {
+public class DateFormatMiscTests extends CoreTestFmwk {
     /*
      * @bug 4097450
      */

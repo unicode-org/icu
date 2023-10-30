@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.range.StandardPluralRanges;
@@ -33,7 +33,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class PluralRangesTest extends TestFmwk {
+public class PluralRangesTest extends CoreTestFmwk {
     @Test
     public void TestLocaleData() {
         String[][] tests = {

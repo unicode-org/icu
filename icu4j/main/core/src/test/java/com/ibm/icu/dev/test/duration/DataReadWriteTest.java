@@ -18,12 +18,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.impl.XMLRecordReader;
 import com.ibm.icu.impl.duration.impl.XMLRecordWriter;
 
 @RunWith(JUnit4.class)
-public class DataReadWriteTest extends TestFmwk {
+public class DataReadWriteTest extends CoreTestFmwk {
     // strip line ends and trailing spaces
     private String normalize(String str) {
         StringBuffer sb = new StringBuffer();

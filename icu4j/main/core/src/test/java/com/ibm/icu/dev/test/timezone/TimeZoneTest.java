@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.TimeZoneAdapter;
@@ -52,7 +53,7 @@ import com.ibm.icu.util.VersionInfo;
  * @build TimeZoneTest
  */
 @RunWith(JUnit4.class)
-public class TimeZoneTest extends TestFmwk
+public class TimeZoneTest extends CoreTestFmwk
 {
     static final int millisPerHour = 3600000;
 

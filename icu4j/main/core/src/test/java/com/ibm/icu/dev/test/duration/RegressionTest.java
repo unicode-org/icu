@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
 import com.ibm.icu.impl.duration.DurationFormatter;
 import com.ibm.icu.impl.duration.PeriodBuilder;
@@ -21,7 +21,7 @@ import com.ibm.icu.text.DurationFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class RegressionTest extends TestFmwk {
+public class RegressionTest extends CoreTestFmwk {
     // bug6397
     @Test
     public void TestDisallowedMillis() {

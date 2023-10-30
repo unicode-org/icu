@@ -12,13 +12,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
 import com.ibm.icu.text.SimplePersonName;
 
 @RunWith(JUnit4.class)
-public class PersonNameFormatterTest extends TestFmwk{
+public class PersonNameFormatterTest extends CoreTestFmwk{
     private static class NameAndTestCases {
         public String nameFields;
         public String[][] testCases;

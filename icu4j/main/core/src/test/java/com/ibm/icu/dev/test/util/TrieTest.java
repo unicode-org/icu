@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.IntTrieBuilder;
@@ -31,7 +31,7 @@ import com.ibm.icu.util.RangeValueIterator;
 * @since release 2.1 Jan 01 2002
 */
 @RunWith(JUnit4.class)
-public final class TrieTest extends TestFmwk
+public final class TrieTest extends CoreTestFmwk
 {
     // constructor ---------------------------------------------------
 

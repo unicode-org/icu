@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.ScientificNumberFormatter;
@@ -23,7 +23,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 @RunWith(JUnit4.class)
-public class ScientificNumberFormatterTest extends TestFmwk {
+public class ScientificNumberFormatterTest extends CoreTestFmwk {
     @Test
     public void TestBasic() {
         ScientificNumberFormatter markup = ScientificNumberFormatter.getMarkupInstance(

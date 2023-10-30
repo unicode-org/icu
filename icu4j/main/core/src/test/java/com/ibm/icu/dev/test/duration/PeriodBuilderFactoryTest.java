@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
 import com.ibm.icu.impl.duration.Period;
 import com.ibm.icu.impl.duration.PeriodBuilder;
@@ -24,7 +24,7 @@ import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.TimeUnitConstants;
 
 @RunWith(JUnit4.class)
-public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConstants {
+public class PeriodBuilderFactoryTest extends CoreTestFmwk implements TimeUnitConstants {
     private PeriodBuilderFactory pbf;
 
     private static final long[] approxDurations = {

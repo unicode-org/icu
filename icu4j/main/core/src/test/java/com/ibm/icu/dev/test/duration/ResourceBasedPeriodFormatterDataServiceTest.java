@@ -18,12 +18,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
 import com.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
 
 @RunWith(JUnit4.class)
-public class ResourceBasedPeriodFormatterDataServiceTest extends TestFmwk {
+public class ResourceBasedPeriodFormatterDataServiceTest extends CoreTestFmwk {
   @Test
   public void testAvailable() {
     ResourceBasedPeriodFormatterDataService service =

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.UniversalTimeScale;
 
@@ -22,7 +22,7 @@ import com.ibm.icu.util.UniversalTimeScale;
  * Test UniversalTimeScale API
  */
 @RunWith(JUnit4.class)
-public class TimeScaleAPITest extends TestFmwk
+public class TimeScaleAPITest extends CoreTestFmwk
 {
 
     /**

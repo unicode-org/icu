@@ -181,10 +181,10 @@
                 af, agq, ak, am, ar, ars, as, asa, ast, az, az_AZ, az_Cyrl
 
                 // B
-                bas, be, bem, bez, bg, bgc, bho, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
+                bas, be, bem, bez, bg, bgc, bho, blo, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
 
                 // C
-                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cv, cy
+                ca, ccp, ce, ceb, cgg, chr, ckb, cs, csw, cv, cy
 
                 // D
                 da, dav, de, dje, doi, dsb, dua, dyo, dz
@@ -209,7 +209,7 @@
 
                 // K
                 ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
-                ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, ky
+                ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, kxv, kxv_Deva, kxv_Orya, kxv_Telu, ky
 
                 // L
                 lag, lb, lg, lij, lkt, lmo, ln, lo, lrc, lt, lu, luo, luy, lv
@@ -239,19 +239,19 @@
                 sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw, syr, szl
 
                 // T
-                ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tr, tt, twq, tzm
+                ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tok, tr, tt, twq, tzm
 
                 // U
                 ug, uk, ur, uz, uz_AF, uz_Arab, uz_Cyrl, uz_UZ
 
                 // V
-                vai, vai_LR, vai_Latn, vi, vmw, vun
+                vai, vai_LR, vai_Latn, vec, vi, vmw, vun
 
                 // W
                 wae, wo
 
                 // X
-                xh, xog
+                xh, xnr, xog
 
                 // Y
                 yav, yi, yo, yrl, yue, yue_CN, yue_HK, yue_Hans
@@ -349,7 +349,7 @@
 
                     // Q-Z
                     qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, th, tr,
-                    uk, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
+                    uk, vec, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
                 </localeIds>
             </directory>
 

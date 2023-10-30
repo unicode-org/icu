@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 
 /**
  * These tests come from the test suite created for the JavaScript implementation of MessageFormat v2.
@@ -17,7 +17,7 @@ import com.ibm.icu.dev.test.TestFmwk;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class FromJsonTest extends TestFmwk {
+public class FromJsonTest extends CoreTestFmwk {
 
     static final TestCase[] TEST_CASES = {
             new TestCase.Builder()

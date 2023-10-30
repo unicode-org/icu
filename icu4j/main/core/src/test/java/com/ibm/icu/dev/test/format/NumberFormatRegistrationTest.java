@@ -14,13 +14,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class NumberFormatRegistrationTest extends TestFmwk {
+public class NumberFormatRegistrationTest extends CoreTestFmwk {
     @Test
     public void TestRegistration() {
         final ULocale SRC_LOC = ULocale.FRANCE;

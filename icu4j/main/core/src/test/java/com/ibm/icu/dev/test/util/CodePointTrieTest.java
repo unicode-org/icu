@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -29,7 +29,7 @@ import com.ibm.icu.util.MutableCodePointTrie;
 import com.ibm.icu.util.VersionInfo;
 
 @RunWith(JUnit4.class)
-public final class CodePointTrieTest extends TestFmwk {
+public final class CodePointTrieTest extends CoreTestFmwk {
     /* Values for setting possibly overlapping, out-of-order ranges of values */
     private static class SetRange {
         SetRange(int start, int limit, int value) {

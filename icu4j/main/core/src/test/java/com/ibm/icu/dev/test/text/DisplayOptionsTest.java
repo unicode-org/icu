@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DisplayOptions;
 import com.ibm.icu.text.DisplayOptions.Capitalization;
 import com.ibm.icu.text.DisplayOptions.DisplayLength;
@@ -22,7 +22,7 @@ import com.ibm.icu.text.DisplayOptions.SubstituteHandling;
  * @summary Test of DisplayOptions Class.
  */
 @RunWith(JUnit4.class)
-public class DisplayOptionsTest extends TestFmwk {
+public class DisplayOptionsTest extends CoreTestFmwk {
 
     @Test
     public void TestDisplayOptionsDefault(){

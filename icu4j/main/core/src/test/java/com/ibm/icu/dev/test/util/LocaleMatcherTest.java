@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.util.LocaleMatcher;
@@ -40,7 +40,7 @@ import junitparams.Parameters;
  * @author markdavis
  */
 @RunWith(JUnitParamsRunner.class)
-public class LocaleMatcherTest extends TestFmwk {
+public class LocaleMatcherTest extends CoreTestFmwk {
     private static final ULocale ZH_MO = new ULocale("zh_MO");
     private static final ULocale ZH_HK = new ULocale("zh_HK");
 

@@ -18,7 +18,7 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_64BitBCD;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_ByteArrayBCD;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_SimpleStorage;
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -36,7 +36,7 @@ import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class DecimalQuantityTest extends TestFmwk {
+public class DecimalQuantityTest extends CoreTestFmwk {
 
     @Ignore
     @Test

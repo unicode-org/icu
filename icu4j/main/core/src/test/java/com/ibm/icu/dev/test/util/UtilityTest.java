@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.InvalidFormatException;
@@ -36,7 +37,7 @@ import com.ibm.icu.util.CaseInsensitiveString;
  * @summary Test of internal Utility class
  */
 @RunWith(JUnit4.class)
-public class UtilityTest extends TestFmwk {
+public class UtilityTest extends CoreTestFmwk {
     @Test
     public void TestUnescape() {
         final String input =

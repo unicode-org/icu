@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.SortedSetRelation;
@@ -56,7 +57,7 @@ import com.ibm.icu.util.OutputInt;
  * @summary General test of UnicodeSet
  */
 @RunWith(JUnit4.class)
-public class UnicodeSetTest extends TestFmwk {
+public class UnicodeSetTest extends CoreTestFmwk {
 
     static final String NOT = "%%%%";
 

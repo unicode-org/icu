@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.Utility;
@@ -42,7 +42,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class SpoofCheckerTest extends TestFmwk {
+public class SpoofCheckerTest extends CoreTestFmwk {
     /*
      * Identifiers for verifying that spoof checking is minimally alive and working.
      */

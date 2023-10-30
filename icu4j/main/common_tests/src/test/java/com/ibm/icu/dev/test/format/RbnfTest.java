@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -31,7 +31,7 @@ import com.ibm.icu.util.ULocale;
  * introduces a dependency on collation.  See RbnfLenientScannerTest.
  */
 @RunWith(JUnit4.class)
-public class RbnfTest extends TestFmwk {
+public class RbnfTest extends CoreTestFmwk {
     static String fracRules =
         "%main:\n" +
         // this rule formats the number if it's 1 or more.  It formats

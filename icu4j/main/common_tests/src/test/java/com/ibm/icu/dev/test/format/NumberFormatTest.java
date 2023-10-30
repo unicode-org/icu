@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.format.IntlTestDecimalFormatAPIC.FieldContainer;
 import com.ibm.icu.impl.DontCareFieldPosition;
@@ -69,7 +69,7 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class NumberFormatTest extends TestFmwk {
+public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestRoundingScientific10542() {
@@ -208,7 +208,7 @@ public class NumberFormatTest extends TestFmwk {
             double value = parser.parse("-0,5").doubleValue();
             assertEquals("Expect -0.5", -0.5, value);
         } catch (ParseException e) {
-            TestFmwk.errln("Parsing -0.5 should have succeeded.");
+            errln("Parsing -0.5 should have succeeded.");
         }
     }
 
@@ -219,7 +219,7 @@ public class NumberFormatTest extends TestFmwk {
             double value = parser.parse("\u208B0.5").doubleValue();
             assertEquals("Expect -0.5", -0.5, value);
         } catch (ParseException e) {
-            TestFmwk.errln("Parsing -0.5 should have succeeded.");
+            errln("Parsing -0.5 should have succeeded.");
         }
     }
 
@@ -4625,14 +4625,14 @@ public class NumberFormatTest extends TestFmwk {
                 result = parser.parse(value2Parse).doubleValue();
                 assertEquals("wrong parsed value", parseValue, result);
             } catch (ParseException e) {
-                TestFmwk.errln("Parsing " + value2Parse + " should have succeeded with " + testPattern[i] +
+                errln("Parsing " + value2Parse + " should have succeeded with " + testPattern[i] +
                             " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
             }
             try {
                 result = parser.parse(value2ParseWithDecimal).doubleValue();
                 assertEquals("wrong parsed value", parseValueWithDecimal, result);
             } catch (ParseException e) {
-                TestFmwk.errln("Parsing " + value2ParseWithDecimal + " should have succeeded with " + testPattern[i] +
+                errln("Parsing " + value2ParseWithDecimal + " should have succeeded with " + testPattern[i] +
                             " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
             }
 
@@ -4640,7 +4640,7 @@ public class NumberFormatTest extends TestFmwk {
             try {
                 result = parser.parse(value2Parse).doubleValue();
                 if(hasDecimalPoint){
-                    TestFmwk.errln("Parsing " + value2Parse + " should NOT have succeeded with " + testPattern[i] +
+                    errln("Parsing " + value2Parse + " should NOT have succeeded with " + testPattern[i] +
                             " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired());
                 }
             } catch (ParseException e) {
@@ -4649,7 +4649,7 @@ public class NumberFormatTest extends TestFmwk {
             try {
                 result = parser.parse(value2ParseWithDecimal).doubleValue();
                 if(!hasDecimalPoint){
-                    TestFmwk.errln("Parsing " + value2ParseWithDecimal + " should NOT have succeeded with " + testPattern[i] +
+                    errln("Parsing " + value2ParseWithDecimal + " should NOT have succeeded with " + testPattern[i] +
                             " and isDecimalPointMatchRequired set to: " + parser.isDecimalPatternMatchRequired() +
                             " (got: " + result + ")");
                 }

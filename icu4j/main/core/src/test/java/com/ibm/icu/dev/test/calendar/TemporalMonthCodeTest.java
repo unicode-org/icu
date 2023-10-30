@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CopticCalendar;
@@ -15,7 +16,7 @@ import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class TemporalMonthCodeTest extends com.ibm.icu.dev.test.TestFmwk {
+public class TemporalMonthCodeTest extends CoreTestFmwk {
     @Test
     public void TestChineseCalendarGetTemporalMonthCode() {
         RunChineseGetTemporalMonthCode(

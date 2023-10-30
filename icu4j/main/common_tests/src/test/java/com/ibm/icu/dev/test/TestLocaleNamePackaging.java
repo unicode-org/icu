@@ -23,7 +23,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class TestLocaleNamePackaging extends TestFmwk {
+public class TestLocaleNamePackaging extends CoreTestFmwk {
     public TestLocaleNamePackaging() {
     }
 

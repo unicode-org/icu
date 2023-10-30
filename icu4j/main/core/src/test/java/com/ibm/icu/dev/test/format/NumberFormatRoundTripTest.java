@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 
@@ -29,7 +29,7 @@ import com.ibm.icu.text.NumberFormat;
  * Performs round-trip tests for NumberFormat
  **/
 @RunWith(JUnit4.class)
-public class NumberFormatRoundTripTest extends TestFmwk {
+public class NumberFormatRoundTripTest extends CoreTestFmwk {
 
     public double MAX_ERROR = 1e-14;
     public double max_numeric_error = 0.0;

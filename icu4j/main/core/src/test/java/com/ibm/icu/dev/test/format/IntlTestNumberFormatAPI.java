@@ -27,17 +27,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class IntlTestNumberFormatAPI extends TestFmwk
+public class IntlTestNumberFormatAPI extends CoreTestFmwk
 {
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test
     public void TestAPI()
     {
+        Locale startLocale = Locale.getDefault();
+
         logln("NumberFormat API test---"); logln("");
         Locale.setDefault(Locale.ENGLISH);
 
@@ -204,6 +206,8 @@ public class IntlTestNumberFormatAPI extends TestFmwk
 //        catch (Exception e) {
 //            errln("ERROR: Couldn't create a DecimalFormat");
 //        }
+
+        Locale.setDefault(startLocale);
     }
 
     // Jitterbug 4451, for coverage

@@ -28,14 +28,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 
 @RunWith(JUnit4.class)
-public class IntlTestDateFormatAPI extends TestFmwk
+public class IntlTestDateFormatAPI extends CoreTestFmwk
 {
     // Test that the equals method works correctly.
     @Test
@@ -74,6 +74,8 @@ public class IntlTestDateFormatAPI extends TestFmwk
     @Test
     public void TestAPI()
     {
+        Locale startLocale = Locale.getDefault();
+
         logln("DateFormat API test---"); logln("");
         Locale.setDefault(Locale.ENGLISH);
 
@@ -228,5 +230,7 @@ public class IntlTestDateFormatAPI extends TestFmwk
 //        catch (Exception e) {
 //            errln("ERROR: Couldn't create a DateFormat");
 //        }
+
+        Locale.setDefault(startLocale);
     }
 }

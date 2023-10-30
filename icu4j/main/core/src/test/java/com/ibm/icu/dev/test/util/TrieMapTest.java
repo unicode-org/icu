@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.TrieMap.Style;
 import com.ibm.icu.dev.util.Timer;
@@ -38,7 +39,7 @@ import com.ibm.icu.util.StringTrieBuilder.Option;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class TrieMapTest extends TestFmwk {
+public class TrieMapTest extends CoreTestFmwk {
     static final boolean SHORT = false;
     static final boolean HACK_TO_MAKE_TESTS_PASS = false;
     static final int MASK = 0x3;

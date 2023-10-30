@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
@@ -22,7 +23,7 @@ import com.ibm.icu.impl.Utility;
 /**
  * A collection of methods to run the data driven number format test suite.
  */
-public class DataDrivenNumberFormatTestUtility extends TestFmwk {
+public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
 
     /**
      * Base class for code under test.

@@ -31,8 +31,5 @@ en_GB{
             sg{"WET"}
             ss{"WET"}
         }
-        "meta:Gulf"{
-            ss{"GTS"}
-        }
     }
 }

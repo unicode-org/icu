@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -26,7 +27,7 @@ import com.ibm.icu.util.SimpleTimeZone;
  * A base class for classes that test individual Calendar subclasses.
  * Defines various useful utility methods and constants
  */
-public class CalendarTestFmwk extends TestFmwk {
+public class CalendarTestFmwk extends CoreTestFmwk {
 
     // Constants for use by subclasses, solely to save typing
     public final static int SUN = Calendar.SUNDAY;

@@ -35,7 +35,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.serializable.FormatHandler;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.Pair;
@@ -60,7 +60,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 @RunWith(JUnit4.class)
-public class MeasureUnitTest extends TestFmwk {
+public class MeasureUnitTest extends CoreTestFmwk {
 
     static class OrderedPair<F extends Comparable, S extends Comparable> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
 

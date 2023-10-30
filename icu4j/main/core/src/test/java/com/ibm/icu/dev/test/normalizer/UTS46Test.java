@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import com.ibm.icu.impl.Punycode;
@@ -36,7 +36,7 @@ import com.ibm.icu.util.ICUInputTooLongException;
  * @since 2010jul10
  */
 @RunWith(JUnit4.class)
-public class UTS46Test extends TestFmwk {
+public class UTS46Test extends CoreTestFmwk {
     public UTS46Test() {
         int commonOptions=
             IDNA.USE_STD3_RULES|IDNA.CHECK_BIDI|

@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
 
 import junitparams.JUnitParamsRunner;
@@ -38,7 +37,7 @@ import junitparams.Parameters;
  * @author emader
  */
 @RunWith(JUnitParamsRunner.class)
-public class CompatibilityTest extends TestFmwk
+public class CompatibilityTest extends CoreTestFmwk
 {
     private static final class FileHolder {
         String className;
@@ -78,7 +77,6 @@ public class CompatibilityTest extends TestFmwk
         }
     }
 
-    @Ignore  // TODO(ICU-22505)
     @Test
     @Parameters(method="generateClassList")
     public void testCompatibility(FileHolder holder) throws ClassNotFoundException, IOException {

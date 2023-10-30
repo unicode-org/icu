@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -18,7 +18,7 @@ import com.ibm.icu.util.ULocale;
  * @author sffc
  *
  */
-public class NumberPermutationTest extends TestFmwk {
+public class NumberPermutationTest extends CoreTestFmwk {
 
     static final String[] kSkeletonParts = {
         // Notation

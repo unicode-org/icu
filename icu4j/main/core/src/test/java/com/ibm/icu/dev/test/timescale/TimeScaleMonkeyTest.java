@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.UniversalTimeScale;
 
@@ -26,7 +26,7 @@ import com.ibm.icu.util.UniversalTimeScale;
  * that they round-trip correctly.
  */
 @RunWith(JUnit4.class)
-public class TimeScaleMonkeyTest extends TestFmwk
+public class TimeScaleMonkeyTest extends CoreTestFmwk
 {
 
     /**

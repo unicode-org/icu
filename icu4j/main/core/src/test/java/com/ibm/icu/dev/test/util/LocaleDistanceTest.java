@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.tool.locale.LocaleDistanceBuilder;
 import com.ibm.icu.impl.locale.LocaleDistance;
 import com.ibm.icu.util.LocaleMatcher;
@@ -26,7 +26,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 @RunWith(JUnit4.class)
-public class LocaleDistanceTest extends TestFmwk {
+public class LocaleDistanceTest extends CoreTestFmwk {
     private static final boolean REFORMAT = false; // set to true to get a reformatted data file listed
 
     private LocaleDistance localeDistance = LocaleDistance.INSTANCE;

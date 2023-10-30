@@ -82,10 +82,12 @@
         <!-- ICU4J - which should be kept as up-to-date as possible. -->
         <dependency>
             <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j-for-cldr</artifactId>
-            <version>74.0.1-SNAPSHOT-cldr-2023-08-22</version>
-            <!-- Note: see https://github.com/unicode-org/icu/packages/411079/versions
-                for the icu4j-for-cldr version tag to use -->
+            <artifactId>icu4j</artifactId>
+            <version>74.1-SNAPSHOT</version>
+		<!-- Note: see https://github.com/unicode-org/icu/packages/1954682/versions
+			for the icu4j.version tag to use. In general we should just use the latest
+			SNAPSHOT for the ICU version that we want, so this should only need updating
+			when the ICU version changes e.g. from 74.0.1, to 74.1, then to 75.0.1 -->
         </dependency>
 
         <!-- Useful common libraries. Note that some of the code in the CLDR library is also

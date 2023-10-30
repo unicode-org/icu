@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -26,7 +26,7 @@ import com.ibm.icu.util.OutputInt;
  * @summary General test of UnicodeSet string span.
  */
 @RunWith(JUnit4.class)
-public class UnicodeSetStringSpanTest extends TestFmwk {
+public class UnicodeSetStringSpanTest extends CoreTestFmwk {
     // Simple test first, easier to debug.
     @Test
     public void TestSimpleStringSpan() {

@@ -12,7 +12,7 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 
@@ -20,7 +20,7 @@ import com.ibm.icu.text.ArabicShapingException;
  * Regression test for Arabic shaping.
  */
 @RunWith(Enclosed.class)
-public class DataDrivenArabicShapingRegTest extends TestFmwk {
+public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
 
     /* constants copied from ArabicShaping for convenience */
 
@@ -48,7 +48,7 @@ public class DataDrivenArabicShapingRegTest extends TestFmwk {
     public static final int DIGIT_TYPE_AN_EXTENDED = 0x100;
 
     @RunWith(Parameterized.class)
-    public static class StandardDataTest extends TestFmwk {
+    public static class StandardDataTest extends CoreTestFmwk {
         private String source;
         private int flags;
         private String expected;
@@ -378,7 +378,7 @@ public class DataDrivenArabicShapingRegTest extends TestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class PreflightDataTest extends TestFmwk {
+    public static class PreflightDataTest extends CoreTestFmwk {
         private String source;
         private int flags;
         private int length;
@@ -429,7 +429,7 @@ public class DataDrivenArabicShapingRegTest extends TestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class ErrorDataTest extends TestFmwk {
+    public static class ErrorDataTest extends CoreTestFmwk {
         private String source;
         private int flags;
         private Class error;

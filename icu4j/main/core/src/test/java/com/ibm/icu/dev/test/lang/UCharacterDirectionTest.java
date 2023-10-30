@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UCharacterDirection;
 
 /**
@@ -21,7 +21,7 @@ import com.ibm.icu.lang.UCharacterDirection;
 * @since July 22 2002
 */
 @RunWith(JUnit4.class)
-public class UCharacterDirectionTest extends TestFmwk
+public class UCharacterDirectionTest extends CoreTestFmwk
 {
     // constructor -----------------------------------------------------------
 

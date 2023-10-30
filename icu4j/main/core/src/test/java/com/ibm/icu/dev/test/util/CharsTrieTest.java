@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
@@ -26,7 +26,7 @@ import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder;
 
 @RunWith(JUnit4.class)
-public class CharsTrieTest extends TestFmwk {
+public class CharsTrieTest extends CoreTestFmwk {
     public CharsTrieTest() {}
 
     // All test functions have a TestNN prefix where NN is a double-digit number.

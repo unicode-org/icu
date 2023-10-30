@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CanonicalIterator;
@@ -29,7 +29,7 @@ import com.ibm.icu.text.UTF16;
 // TODO: fit into test framework
 
 @RunWith(JUnit4.class)
-public class TestCanonicalIterator extends TestFmwk {
+public class TestCanonicalIterator extends CoreTestFmwk {
 
     static final boolean SHOW_NAMES = false;
 

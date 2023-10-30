@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
@@ -30,7 +30,7 @@ import com.ibm.icu.util.UniversalTimeScale;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 @RunWith(JUnit4.class)
-public class TimeScaleDataTest extends TestFmwk
+public class TimeScaleDataTest extends CoreTestFmwk
 {
 
     /**

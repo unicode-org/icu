@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -41,7 +41,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @author sffc
  *
  */
-public class NumberRangeFormatterTest extends TestFmwk {
+public class NumberRangeFormatterTest extends CoreTestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency CHF = Currency.getInstance("CHF");

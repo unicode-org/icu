@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.Region;
 import com.ibm.icu.util.Region.RegionType;
 
@@ -30,7 +30,7 @@ import com.ibm.icu.util.Region.RegionType;
  */
 
 @RunWith(JUnit4.class)
-public class RegionTest extends TestFmwk {
+public class RegionTest extends CoreTestFmwk {
     String[][] knownRegions = {
             //   Code  , Numeric , Parent, Type, Containing Continent
             { "001", "001", null , "WORLD", null },

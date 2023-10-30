@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.StringPrep;
@@ -27,7 +27,7 @@ import com.ibm.icu.text.UTF16;
  * @author ram
  */
 @RunWith(JUnit4.class)
-public class TestIDNA extends TestFmwk {
+public class TestIDNA extends CoreTestFmwk {
     private StringPrepParseException unassignedException = new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR);
 
     @Test

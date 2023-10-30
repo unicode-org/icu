@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.text.Bidi;
@@ -27,7 +27,7 @@ import com.ibm.icu.text.BidiClassifier;
  * Ported from ICU4C intltest/bidiconf.cpp .
  */
 @RunWith(JUnit4.class)
-public class BiDiConformanceTest extends TestFmwk {
+public class BiDiConformanceTest extends CoreTestFmwk {
     public BiDiConformanceTest() {}
 
     @Test

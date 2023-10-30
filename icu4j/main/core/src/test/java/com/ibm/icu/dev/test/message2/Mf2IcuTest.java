@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.Calendar;
@@ -24,7 +24,7 @@ import com.ibm.icu.util.GregorianCalendar;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class Mf2IcuTest extends TestFmwk {
+public class Mf2IcuTest extends CoreTestFmwk {
 
     @Test
     public void testSample() {

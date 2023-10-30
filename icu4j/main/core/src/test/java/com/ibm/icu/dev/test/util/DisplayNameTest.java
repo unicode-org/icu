@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
@@ -35,7 +35,7 @@ import com.ibm.icu.util.UResourceBundle;
 // TODO(junit): test is broken in main branch
 
 @RunWith(JUnit4.class)
-public class DisplayNameTest extends TestFmwk {
+public class DisplayNameTest extends CoreTestFmwk {
     static final boolean SHOW_ALL = false;
 
     interface DisplayNameGetter {

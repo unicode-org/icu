@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateFormat;
@@ -43,7 +43,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class DateTimeGeneratorTest extends TestFmwk {
+public class DateTimeGeneratorTest extends CoreTestFmwk {
     public static boolean GENERATE_TEST_DATA;
     static {
         try {

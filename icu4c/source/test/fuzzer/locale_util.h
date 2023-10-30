@@ -4,6 +4,7 @@
 #ifndef I18N_ICU_FUZZ_LOCALE_UTIL_H_
 #define I18N_ICU_FUZZ_LOCALE_UTIL_H_
 
+#include <cstdint>
 #include <string>
 #include "unicode/utypes.h"
 

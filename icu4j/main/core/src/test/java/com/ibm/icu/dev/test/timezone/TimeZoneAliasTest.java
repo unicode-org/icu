@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.TimeZone;
 
 /**
@@ -37,7 +37,7 @@ import com.ibm.icu.util.TimeZone;
  *
  */
 @RunWith(JUnit4.class)
-public class TimeZoneAliasTest extends TestFmwk {
+public class TimeZoneAliasTest extends CoreTestFmwk {
     /**
      * There are two things to check aliases for:<br>
      * 1. the alias set must be uniform: if a isAlias b, then aliasSet(a) == aliasSet(b)<br>

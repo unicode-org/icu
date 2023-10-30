@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -38,7 +38,7 @@ import com.ibm.icu.util.ULocale;
  * Performs regression test for MessageFormat
  **/
 @RunWith(JUnit4.class)
-public class NumberFormatRegressionTest extends TestFmwk {
+public class NumberFormatRegressionTest extends CoreTestFmwk {
     /**
      * alphaWorks upgrade
      */

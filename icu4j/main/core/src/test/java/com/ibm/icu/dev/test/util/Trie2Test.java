@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.Trie2Writable;
@@ -28,7 +28,7 @@ import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.impl.Trie2_32;
 
 @RunWith(JUnit4.class)
-public class Trie2Test extends TestFmwk {
+public class Trie2Test extends CoreTestFmwk {
     /**
      * Constructor
      */

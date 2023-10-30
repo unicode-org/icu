@@ -7,13 +7,14 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.timezone;
+
 import java.util.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.text.DateFormat;
@@ -26,7 +27,7 @@ import com.ibm.icu.util.TimeZone;
  * that they are correct.
  */
 @RunWith(JUnit4.class)
-public class TimeZoneBoundaryTest extends TestFmwk
+public class TimeZoneBoundaryTest extends CoreTestFmwk
 {
     static final int ONE_SECOND = 1000;
     static final int ONE_MINUTE = 60*ONE_SECOND;

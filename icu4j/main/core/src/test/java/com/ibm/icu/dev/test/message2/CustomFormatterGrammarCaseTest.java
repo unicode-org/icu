@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Formatter;
 import com.ibm.icu.message2.FormatterFactory;
@@ -23,7 +23,7 @@ import com.ibm.icu.message2.PlainStringFormattedValue;
  */
 @RunWith(JUnit4.class)
 @SuppressWarnings("javadoc")
-public class CustomFormatterGrammarCaseTest extends TestFmwk {
+public class CustomFormatterGrammarCaseTest extends CoreTestFmwk {
 
     static class GrammarCasesFormatterFactory implements FormatterFactory {
 

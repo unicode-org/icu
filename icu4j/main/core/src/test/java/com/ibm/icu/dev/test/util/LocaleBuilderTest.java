@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Builder;
@@ -23,7 +23,7 @@ import com.ibm.icu.util.ULocale.Builder;
  * Test cases for ULocale.LocaleBuilder
  */
 @RunWith(JUnit4.class)
-public class LocaleBuilderTest extends TestFmwk {
+public class LocaleBuilderTest extends CoreTestFmwk {
     @Test
     public void TestLocaleBuilder() {
         // "L": +1 = language

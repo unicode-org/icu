@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUBinary;
 
 /**
@@ -27,7 +27,7 @@ import com.ibm.icu.impl.ICUBinary;
 * @since release 2.1 Jan 01 2002
 */
 @RunWith(JUnit4.class)
-public final class ICUBinaryTest extends TestFmwk
+public final class ICUBinaryTest extends CoreTestFmwk
 {
     // constructor ---------------------------------------------------
 

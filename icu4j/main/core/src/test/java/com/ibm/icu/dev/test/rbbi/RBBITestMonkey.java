@@ -9,10 +9,6 @@
 package com.ibm.icu.dev.test.rbbi;
 
 
-// Monkey testing of RuleBasedBreakIterator.
-//    The old, original monkey test. TODO: remove
-//    The new monkey test is class RBBIMonkeyTest.
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +18,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+// Monkey testing of RuleBasedBreakIterator.
+//    The old, original monkey test. TODO: remove
+//    The new monkey test is class RBBIMonkeyTest.
+
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
@@ -42,7 +42,7 @@ import com.ibm.icu.text.UnicodeSet;
  *
  */
 @RunWith(JUnit4.class)
-public class RBBITestMonkey extends TestFmwk {
+public class RBBITestMonkey extends CoreTestFmwk {
     //
     //     class RBBIMonkeyKind
     //

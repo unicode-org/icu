@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.BasicTimeZone;
@@ -42,7 +43,7 @@ import com.ibm.icu.util.VTimeZone;
  * Test cases for TimeZoneRule and RuleBasedTimeZone
  */
 @RunWith(JUnit4.class)
-public class TimeZoneRuleTest extends TestFmwk {
+public class TimeZoneRuleTest extends CoreTestFmwk {
 
     private static final int HOUR = 60 * 60 * 1000;
 

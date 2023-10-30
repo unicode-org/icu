@@ -49,13 +49,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class MessageRegressionTest extends TestFmwk {
+public class MessageRegressionTest extends CoreTestFmwk {
     /* @bug 4074764
      * Null exception when formatting pattern with MessageFormat
      * with no parameters.

@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.lang.UCharacter;
 
 /**
@@ -24,7 +24,7 @@ import com.ibm.icu.lang.UCharacter;
  *
  */
 @RunWith(JUnit4.class)
-public class UCharacterThreadTest extends TestFmwk {
+public class UCharacterThreadTest extends CoreTestFmwk {
   // constructor -----------------------------------------------------------
 
     /**

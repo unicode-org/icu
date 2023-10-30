@@ -11,7 +11,7 @@ package com.ibm.icu.dev.test.bidi;
 
 import java.util.Arrays;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Bidi;
@@ -24,7 +24,7 @@ import com.ibm.icu.util.VersionInfo;
  * @author Lina Kemmel, Matitiahu Allouche
  */
 
-public class BidiFmwk extends TestFmwk {
+public class BidiFmwk extends CoreTestFmwk {
 
     protected static final char[] charFromDirProp = {
          /* L      R    EN    ES    ET     AN    CS    B    S    WS    ON */

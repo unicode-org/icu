@@ -17,7 +17,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
@@ -31,7 +31,7 @@ import junitparams.Parameters;
  * the CLDR project.
  */
 @RunWith(JUnitParamsRunner.class)
-public class PersonNameConsistencyTest extends TestFmwk {
+public class PersonNameConsistencyTest extends CoreTestFmwk {
     /**
      * Change this to true to cause the tests that would normally be skipped to also run (without
      * causing the test suite to fail).

@@ -5567,6 +5567,7 @@ structLocale:table(nofallback){
         bjn{""}
         bkm{""}
         bla{""}
+        blo{""}
         bm{""}
         bn{""}
         bo{""}
@@ -5610,6 +5611,7 @@ structLocale:table(nofallback){
         crh{""}
         cs{""}
         csb{""}
+        csw{""}
         cu{""}
         cv{""}
         cy{""}
@@ -5790,6 +5792,7 @@ structLocale:table(nofallback){
         kut{""}
         kv{""}
         kw{""}
+        kxv{""}
         ky{""}
         la{""}
         lad{""}
@@ -6032,6 +6035,7 @@ structLocale:table(nofallback){
         tn{""}
         to{""}
         tog{""}
+        tok{""}
         tpi{""}
         tr{""}
         tru{""}
@@ -6079,6 +6083,7 @@ structLocale:table(nofallback){
         xal{""}
         xh{""}
         xmf{""}
+        xnr{""}
         xog{""}
         yao{""}
         yap{""}

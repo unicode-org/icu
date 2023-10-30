@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 
@@ -23,7 +23,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 @RunWith(JUnit4.class)
-public class TestIDNARef extends TestFmwk {
+public class TestIDNARef extends CoreTestFmwk {
     private StringPrepParseException unassignedException = new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR);
 
     @Test

@@ -29,7 +29,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.Utility;
@@ -41,7 +41,7 @@ import com.ibm.icu.text.CharsetMatch;
  * @author andy
  */
 @RunWith(JUnit4.class)
-public class TestCharsetDetector extends TestFmwk
+public class TestCharsetDetector extends CoreTestFmwk
 {
     public TestCharsetDetector()
     {

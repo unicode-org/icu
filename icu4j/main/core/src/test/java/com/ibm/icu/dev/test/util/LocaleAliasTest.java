@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.DateFormat;
@@ -29,7 +30,7 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 @RunWith(JUnit4.class)
-public class LocaleAliasTest extends TestFmwk {
+public class LocaleAliasTest extends CoreTestFmwk {
     private static final ULocale[][] _LOCALES = {
 
             {new ULocale("en", "RH"), new ULocale("en", "ZW")},

@@ -17,14 +17,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 
 @RunWith(JUnit4.class)
-public class UnicodeNormalizerConformanceTest extends TestFmwk {
+public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
 
     UnicodeNormalizer normalizer_C, normalizer_D, normalizer_KC, normalizer_KD;
 

@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
 import com.ibm.icu.impl.duration.Period;
 import com.ibm.icu.impl.duration.PeriodBuilder;
@@ -40,7 +40,7 @@ import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
  * Test cases for en
  */
 @RunWith(JUnit4.class)
-public abstract class LanguageTestFmwk extends TestFmwk implements TimeUnitConstants {
+public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitConstants {
 
     private static final TimeUnit[] units = {
         TimeUnit.YEAR, TimeUnit.MONTH, TimeUnit.WEEK, TimeUnit.DAY, TimeUnit.HOUR,

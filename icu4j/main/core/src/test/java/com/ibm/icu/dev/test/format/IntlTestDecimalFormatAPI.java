@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.DecimalFormat;
@@ -36,7 +36,7 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 
 @RunWith(JUnit4.class)
-public class IntlTestDecimalFormatAPI extends TestFmwk
+public class IntlTestDecimalFormatAPI extends CoreTestFmwk
 {
     /**
      * Problem 1: simply running
@@ -101,6 +101,8 @@ public class IntlTestDecimalFormatAPI extends TestFmwk
     @Test
     public void TestAPI()
     {
+        Locale startLocale = Locale.getDefault();
+
         logln("DecimalFormat API test---"); logln("");
         Locale.setDefault(Locale.ENGLISH);
 
@@ -265,6 +267,8 @@ public class IntlTestDecimalFormatAPI extends TestFmwk
         if( ! s3.equals(p2) ) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
+
+        Locale.setDefault(startLocale);
     }
 
     @Test

@@ -12,14 +12,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 
 /**
  * @author srl
  *
  */
 @RunWith(JUnit4.class)
-public class DebugUtilitiesTest extends TestFmwk {
+public class DebugUtilitiesTest extends CoreTestFmwk {
 
     @Test
     public void TestStrings() {

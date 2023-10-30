@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.LocalePriorityList;
 import com.ibm.icu.util.ULocale;
 
@@ -24,7 +24,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis@google.com
  */
 @RunWith(JUnit4.class)
-public class LocalePriorityListTest extends TestFmwk {
+public class LocalePriorityListTest extends CoreTestFmwk {
     @Test
     public void testLanguagePriorityList() {
         final String expected = "af, en, fr";

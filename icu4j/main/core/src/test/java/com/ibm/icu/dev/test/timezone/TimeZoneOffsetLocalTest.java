@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.BasicTimeZone;
@@ -31,7 +31,7 @@ import com.ibm.icu.util.TimeZone;
  * Testing getOffset APIs using local time
  */
 @RunWith(JUnit4.class)
-public class TimeZoneOffsetLocalTest extends TestFmwk {
+public class TimeZoneOffsetLocalTest extends CoreTestFmwk {
     /*
      * Testing getOffset APIs around rule transition by local standard/wall time.
      */

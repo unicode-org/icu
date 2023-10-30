@@ -6,13 +6,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class OrdinalMonthTest extends com.ibm.icu.dev.test.TestFmwk {
+public class OrdinalMonthTest extends CoreTestFmwk {
 
     private void VerifyMonth(String message, Calendar cc, int expectedMonth,
                  int expectedOrdinalMonth, boolean expectedLeapMonth,

@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.ListFormatter.FormattedList;
@@ -26,7 +26,7 @@ import com.ibm.icu.text.ListFormatter.Width;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
-public class ListFormatterTest extends TestFmwk {
+public class ListFormatterTest extends CoreTestFmwk {
     String[] HardcodedTestData = {
             "",
             "A",

@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.StringPrepParseException;
@@ -34,7 +34,7 @@ import com.ibm.icu.text.UTF16;
  *
  */
 @RunWith(JUnit4.class)
-public class IDNAConformanceTest extends TestFmwk {
+public class IDNAConformanceTest extends CoreTestFmwk {
     @Test
     public void TestConformance() {
 
