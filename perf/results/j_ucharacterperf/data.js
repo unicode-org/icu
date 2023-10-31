@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1698792477267,
+  "lastUpdate": 1698793227055,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -102598,6 +102598,222 @@ window.BENCHMARK_DATA = {
           {
             "name": "testJDKIsIdentifierIgnorable",
             "value": 3.262069947329302,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "fa6a4661ba002c1c1ee68cbf5c7ac9af75132d07",
+          "message": "ICU-22545 Fix addLikelySubtags for pseudo Locales",
+          "timestamp": "2023-10-31T15:00:34-07:00",
+          "tree_id": "1cd1cc90cd4cad01544f57fa822debf95fb014de",
+          "url": "https://github.com/unicode-org/icu/commit/fa6a4661ba002c1c1ee68cbf5c7ac9af75132d07"
+        },
+        "date": 1698793131064,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "testJDKIsDefined",
+            "value": 3.2357166854116506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLetterOrDigit",
+            "value": 1.708903366424229,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUpperCase",
+            "value": 1.8389313733305823,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsDigit",
+            "value": 1.5047892286395925,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLetter",
+            "value": 3.237861508704258,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUnicodeIdentifierPart",
+            "value": 2.5496298172973346,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsTitleCase",
+            "value": 3.2560651344673945,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsWhiteSpace",
+            "value": 1.4920027347348945,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsISOControl",
+            "value": 0.404100844185631,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKGetNumericValue",
+            "value": 7.637531932090888,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUnicodeIdentifierStart",
+            "value": 3.228644245326314,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsSpaceChar",
+            "value": 1.4758895834875172,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKDigit",
+            "value": 3.1950171155351756,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKGetType",
+            "value": 3.1988746327629096,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsWhiteSpace",
+            "value": 3.245266783345977,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsISOControl",
+            "value": 1.008012741583671,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUpperCase",
+            "value": 7.1202016724392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testDigit",
+            "value": 1.4908200928975606,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLowerCase",
+            "value": 1.4678760493662915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testGetType",
+            "value": 1.4738038123273665,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUnicodeIdentifierStart",
+            "value": 2.5634602655439065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUnicodeIdentifierPart",
+            "value": 3.199796594713239,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsIdentifierIgnorable",
+            "value": 1.8489155709278957,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLetter",
+            "value": 1.482647966152127,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testGetNumericValue",
+            "value": 1.4795335106532426,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsTitleCase",
+            "value": 1.4917493312468173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsDigit",
+            "value": 3.2176296132553697,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsSpaceChar",
+            "value": 3.200788913353022,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLetterOrDigit",
+            "value": 3.2115640020237795,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLowerCase",
+            "value": 7.948225286249472,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsDefined",
+            "value": 1.4926403863754907,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsIdentifierIgnorable",
+            "value": 3.221360748952551,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
