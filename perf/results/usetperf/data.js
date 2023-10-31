@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1698700522947,
+  "lastUpdate": 1698722166909,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -43366,6 +43366,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2142.4631,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "a7c7d8f214926ef23d2b54500ab77d95e5ea0068",
+          "message": "ICU-22561 Added maven-gpg-plugin in pom.xml to sign artifacts for maven central release.",
+          "timestamp": "2023-10-30T19:51:44-07:00",
+          "tree_id": "d036564712e564ff038d3e3ae718297daa440b74",
+          "url": "https://github.com/unicode-org/icu/commit/a7c7d8f214926ef23d2b54500ab77d95e5ea0068"
+        },
+        "date": 1698722075937,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 71502.8183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 127971.2673,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.4974,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 11.6962,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.8507,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 13950.2839,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 45062.4048,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2410.1976,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
