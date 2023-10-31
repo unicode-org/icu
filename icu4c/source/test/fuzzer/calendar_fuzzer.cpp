@@ -52,6 +52,9 @@ const char* GetRandomCalendarType(uint8_t rnd) {
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     uint16_t rnd;
+    // Set the limit for the test data to 1000 bytes to avoid timeout for a
+    // very long list of operations.
+    if (size > 1000) { size = 1000; }
     if (size < 2*sizeof(rnd) + 1) return 0;
     icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
     // Byte 0 and 1 randomly select a TimeZone
