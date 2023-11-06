@@ -327,17 +327,18 @@ TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status)
     const char* region = fLocale.getCountry();
     int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
     if (regionLen == 0) {
+        UErrorCode tempStatus = U_ZERO_ERROR;
         CharString loc;
         {
             CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, &status);
+            ulocimp_addLikelySubtags(fLocale.getName(), sink, &tempStatus);
         }
 
-        regionLen = uloc_getCountry(loc.data(), fTargetRegion, sizeof(fTargetRegion), &status);
-        if (U_SUCCESS(status)) {
+        regionLen = uloc_getCountry(loc.data(), fTargetRegion, sizeof(fTargetRegion), &tempStatus);
+        if (U_SUCCESS(tempStatus)) {
             fTargetRegion[regionLen] = 0;
         } else {
-            return;
+            fTargetRegion[0] = 0;
         }
     } else if (regionLen < (int32_t)sizeof(fTargetRegion)) {
         uprv_strcpy(fTargetRegion, region);
