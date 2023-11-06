@@ -87,6 +87,7 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
         TESTCASE(7, TestFormatTZDBNamesAllZoneCoverage);
         TESTCASE(8, TestAdoptDefaultThreadSafe);
         TESTCASE(9, TestCentralTime);
+        TESTCASE(10, TestBogusLocale);
     default: name = ""; break;
     }
 }
@@ -1400,6 +1401,16 @@ TimeZoneFormatTest::TestCentralTime() {
         if (dUS != dBZ) {
             errln((UnicodeString)"Parse results should be same for input: " + testInputs[i]);
         }
+    }
+}
+void
+TimeZoneFormatTest::TestBogusLocale() {
+    Locale bogus("not a lang");
+    UErrorCode status = U_ZERO_ERROR;
+    std::unique_ptr<icu::TimeZoneFormat> tzfmt(
+        icu::TimeZoneFormat::createInstance(bogus, status));
+    if (U_FAILURE(status)) {
+        errln(u"Failed to createInstance with bogus locale");
     }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
