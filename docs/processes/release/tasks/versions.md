@@ -198,19 +198,7 @@ The command requires a version number string that follows the typical Java / Mav
     In other words, the above `versions:set-property` step should be executed at the same time
     `mvn versions:set -DnewVersion=74.0.1-SNAPSHOT` is executed.
 
-4. Update the `api.doc.version` property.
-Edit the root pom file at `icu4j/pom.xml` and manually make this change:
-
-    * Before the RC release, ensure that the property includes the phrase "Release Candidate".
-    ```
-    <api.doc.version>${icu.major.version} Release Candidate</api.doc.version>
-    ```
-    * For the final GA release, ensure that the property only includes the major version number.
-    ```
-    <api.doc.version>${icu.major.version}</api.doc.version>
-    ```
-
-5. Update the following variables in `icu4j/releases_tools/shared.sh`
+4. Update the following variables in `icu4j/releases_tools/shared.sh`
 
     * `artifact_version` - The version used in the Maven `pom.xml` files. You can alternatively produce this value by running `mvn help:evaluate -Dexpression=project.version -q -DforceStdout`.
     * `github_rel_version` - The version used in the name of the GitHub downloadable artifacts. For example "73_2" or "74rc".
