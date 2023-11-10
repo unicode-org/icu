@@ -102,23 +102,23 @@ Use the GitHub GUI to create both the "release" and the "tag" at the same time:
 
 <https://github.com/unicode-org/icu/releases/new>
 
-Fill in the tag name, such as "release-63-rc" or "release-63-1", and make the
-target the "maint/maint-xx" branch (such as maint/maint-63).
-
-Set the title to "ICU 63 RC" or "ICU 63.1". Fill in the description using the
+1. Fill in the tag name, such as `release-63-rc` or `release-63-1`, and make the
+target the "maint/maint-xx" branch (such as `maint/maint-63`).
+1. Set the title to `ICU 63 RC` or `ICU 63.1`.
+1. Fill in the description using the
 text from the announcement email. (You can also look at previous releases and
 possibly re-use some of the generic text, such as links to the API docs, etc.)
-
-Your screen should look like this:
-
-![image](maint-63-rc-screenshot.png)
-
-For the release candidate tag, please check the box that says "Pre-Release".
-
-We no longer need to add the note about Git LFS files, as GitHub now includes
-them in the auto-generated .zip downloads.
-
-Click the "Publish Release" button to make the tag.
+1. Your screen should look like this:
+    ![image](maint-63-rc-screenshot.png)
+1. Check the box that says "Set as a pre-release".
+1. Click the "Publish Release" button to make the tag.
+1. Additional step only for the GA release:
+After completing the step above to mark the release as "pre-release",
+the second step is to wait for the day of the official announcement of the release,
+and then to edit the Github release entry's settings.
+    1.  The first Github release settings change should uncheck the "Set as a pre-release" checkbox,
+which has the effect of converting the release into  a regular release.
+    1. The next settings change should check the box that says "Set as the latest release".
 
 Note: The "latest" tag is no longer updated. It was agreed by the ICU-TC to be
 deleted around the 64.2 time-frame, as it doesn't work well with with Git. (You
@@ -126,6 +126,9 @@ need to force-push the new tag, and if somebody has already cloned the
 repository, they might have something different for the "latest" tag).
 A possible future alternative might be a sym-link folder, or HTTP redirect that
 points to the latest release.
+
+We no longer need to add the note about Git LFS files, as GitHub now includes
+them in the auto-generated .zip downloads.
 
 #### Maintenance release
 
