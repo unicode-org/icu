@@ -11,8 +11,12 @@ on:
     branches:
       - main
       - 'maint/maint*'
+    paths:
+      - 'icu4c/**'
   pull_request:
     branches: '**'
+    paths:
+      - 'icu4c/**'
 
 permissions:
   contents: read

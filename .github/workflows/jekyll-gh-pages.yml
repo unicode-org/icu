@@ -32,6 +32,7 @@ concurrency:
 
 jobs:
   # Build job
+  # Keep in sync with docs test workflow in `icu_docs.yml`
   build:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,84 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: ICU Common
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+  pull_request:
+    branches: '**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+env:
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+
+permissions:
+  contents: read
+
+jobs:
+
+  # Copyright scan
+  copyright-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: perl tools/scripts/cpysearch/cpyscan.pl
+
+  # Check source files for valid UTF-8 and for absence of BOM.
+  valid-UTF-8-and-no-BOM-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: tools/scripts/icu-file-utf8-check.py
+
+  # Initialize the Maven artifact cache
+  #
+  # This job is created according to the cache strategy of reuse from a single job:
+  # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
+  icu4j-mvn-init-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Download all of the artifacts needed for the code and build plugins, but
+      # exclude any needed by profiles depending on system artifacts
+      - name: Download all artifacts
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} dependency:go-offline -P '!old_jdk_taglet'
+
+  # Verify icu4c release tools buildability.
+  icu4c-release-tools:
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - run: mvn ${SHARED_MVN_ARGS} -f tools/release/java/pom.xml package dependency:analyze
