@@ -156,12 +156,17 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             throw new MissingResourceException(e.toString(),"","");
         }
 
+        // Dictionary Break Exclusion
+        String dxValue = null;
+        if (kind == BreakIterator.KIND_LINE || kind == BreakIterator.KIND_WORD) {
+            dxValue = locale.getUnicodeLocaleType("dx");
+        }
         //
         // Create a normal RuleBasedBreakIterator.
         //
         try {
             boolean isPhraseBreaking = (brkfname != null) && brkfname.contains("phrase");
-            iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(bytes, isPhraseBreaking);
+            iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(bytes, isPhraseBreaking, dxValue);
         }
         catch (IOException e) {
             // Shouldn't be possible to get here.

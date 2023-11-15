@@ -25,6 +25,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/uclean.h"
 #include "unicode/udata.h"
+#include "unicode/uniset.h"
 
 #include "brkeng.h"
 #include "ucln_cmn.h"
@@ -89,9 +90,45 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UBool isPhraseBreaking,
+                                               const char* dxs,
         UErrorCode &status) : RuleBasedBreakIterator(udm, status)
 {
     fIsPhraseBreaking = isPhraseBreaking;
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (dxs != nullptr) {
+        size_t length = uprv_strlen(dxs);
+        // The value should be a list of 4 letter script codes joined by '-'.
+        if (length % 5 != 4) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        // The code Zyyy (Common) can be specified to exclude all scripts, if
+        // and only if it is the only SCRIPT_CODE value specified. If it is
+        // not the only script code, Zyyy has the normal meaning: excluding
+        // Script_Extension=Common.
+        if (uprv_strcmp(dxs, "zyyy") == 0) {
+            fDX = (new UnicodeSet(UnicodeSet::MIN_VALUE, UnicodeSet::MAX_VALUE))->freeze();
+            return;
+        }
+        size_t items = 1 + length / 5;
+        // Change from "thai" to "[[:scx=thai:]]" or
+        // "thai-arab" to "[[:scx=thai:][:scx=arab:]]"
+        UnicodeString udxs(u'[');
+        for (size_t i = 0; i < items; i++) {
+            if (i > 0 && dxs[i*5-1] != u'-') {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            // Dictionary-based break iterators will ignore each character whose
+            // Script_Extension value set intersects with the DX value set.
+            udxs.append(u"[:scx=", -1)
+                .append(UnicodeString(dxs + i * 5, 4, US_INV))
+                .append(u":]", -1);
+        }
+        fDX = (new UnicodeSet(udxs.append(u']'), status))->freeze();
+    }
 }
 
 //
@@ -198,7 +235,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator()
  * Simple Constructor with an error code.
  * Handles common initialization for all other constructors.
  */
-RuleBasedBreakIterator::RuleBasedBreakIterator(UErrorCode *status) {
+RuleBasedBreakIterator::RuleBasedBreakIterator(UErrorCode *status) : fDX(nullptr) {
     UErrorCode ec = U_ZERO_ERROR;
     if (status == nullptr) {
         status = &ec;
@@ -212,6 +249,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UErrorCode *status) {
     }
     fDictionaryCache = lpDictionaryCache.orphan();
     fBreakCache = lpBreakCache.orphan();
+    fDX = nullptr;
 
 #ifdef RBBI_DEBUG
     static UBool debugInitDone = false;
@@ -260,6 +298,9 @@ RuleBasedBreakIterator::~RuleBasedBreakIterator() {
 
     delete fDictionaryCache;
     fDictionaryCache = nullptr;
+
+    delete fDX;
+    fDX = nullptr;
 
     delete fLanguageBreakEngines;
     fLanguageBreakEngines = nullptr;
@@ -333,6 +374,7 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     //       the assumption that the current position is on a rule boundary.
     fBreakCache->reset(fPosition, fRuleStatusIndex);
     fDictionaryCache->reset();
+    fDX = (that.fDX == nullptr) ? nullptr : that.fDX->cloneAsThawed();
 
     return *this;
 }
@@ -381,11 +423,15 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
         return false;
     }
 
+    // If only one has fDX or they are not equal
+    if (!((that2.fDX == nullptr && fDX == nullptr) || *that2.fDX == *fDX)) {
+        return false;
+    }
     if (that2.fData == fData ||
         (fData != nullptr && that2.fData != nullptr && *that2.fData == *fData)) {
             // The two break iterators are using the same rules.
             return true;
-        }
+    }
     return false;
 }
 
@@ -1296,6 +1342,10 @@ RuleBasedBreakIterator::getRules() const {
         umtx_initOnce(gRBBIInitOnce, &rbbiInit);
         return *gEmptyString;
     }
+}
+
+bool RuleBasedBreakIterator::excludedFromDictionaryBreak(int32_t c) {
+    return fDX != nullptr && fDX->contains(c);
 }
 
 U_NAMESPACE_END
