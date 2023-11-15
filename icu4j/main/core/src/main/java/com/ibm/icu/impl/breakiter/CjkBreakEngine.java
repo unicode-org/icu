@@ -118,6 +118,7 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
     @Override
     public int divideUpDictionaryRange(CharacterIterator inText, int startPos, int endPos,
             DequeI foundBreaks, boolean isPhraseBreaking) {
+      System.out.println("CjkBreakEngine: start " + startPos + " end " + endPos);
         if (startPos >= endPos) {
             return 0;
         }

@@ -101,6 +101,8 @@ public:
     void TestBug22581();
     void TestBug22584();
 
+    void TestDXLineBreaks();
+    void TestDXWordBreaks();
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();
     void TestTraceCreateWord();
