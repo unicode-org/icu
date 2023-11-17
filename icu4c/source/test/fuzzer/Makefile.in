@@ -50,10 +50,10 @@ FUZZER_TARGETS = \
 		 uloc_get_name_fuzzer \
 		 uloc_is_right_to_left_fuzzer \
 		 uloc_open_keywords_fuzzer \
+		 unicodeset_fuzzer \
 		 unicode_string_codepage_create_fuzzer \
 		 uprop_fuzzer \
 		 uregex_open_fuzzer \
-
 
 OBJECTS = $(FUZZER_TARGETS:%=%.o)
 OBJECTS += fuzzer_driver.o locale_util.o
