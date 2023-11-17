@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1700176449487,
+  "lastUpdate": 1700262357396,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14128,6 +14128,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.797705301576373,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8d3d214ad7f76b7d0650f19a871a0e7d58a5986f",
+          "message": "ICU-22531 Remove X from XLikelySubtags*",
+          "timestamp": "2023-11-17T14:49:39-08:00",
+          "tree_id": "9a9d59df81f551204a6ceda1d13d61ee96b6f874",
+          "url": "https://github.com/unicode-org/icu/commit/8d3d214ad7f76b7d0650f19a871a0e7d58a5986f"
+        },
+        "date": 1700262284369,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.7952260702318716,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
