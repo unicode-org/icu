@@ -45,6 +45,7 @@ FUZZER_TARGETS = \
 		 number_formatter_fuzzer \
 		 relative_date_time_formatter_fuzzer \
 		 rule_based_break_iterator_fuzzer \
+		 timezone_create_fuzzer \
 		 ucasemap_fuzzer \
 		 uloc_canonicalize_fuzzer \
 		 uloc_for_language_tag_fuzzer \
@@ -55,6 +56,7 @@ FUZZER_TARGETS = \
 		 unicode_string_codepage_create_fuzzer \
 		 uprop_fuzzer \
 		 uregex_open_fuzzer \
+
 
 OBJECTS = $(FUZZER_TARGETS:%=%.o)
 OBJECTS += fuzzer_driver.o locale_util.o
