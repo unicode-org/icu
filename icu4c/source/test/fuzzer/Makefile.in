@@ -42,6 +42,7 @@ FUZZER_TARGETS = \
 		 list_format_fuzzer locale_fuzzer \
 		 locale_morph_fuzzer \
 		 number_format_fuzzer \
+		 number_formatter_fuzzer \
 		 relative_date_time_formatter_fuzzer \
 		 rule_based_break_iterator_fuzzer \
 		 ucasemap_fuzzer \
