@@ -268,7 +268,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
                 // but not a previous availableFormats entry:
                 String formatValue = value.toString();
-                addPatternWithSkeleton(formatValue, formatKey, !isRoot, returnInfo);
+                addPatternWithSkeleton(formatValue, formatKey, true, returnInfo);
             }
         }
     }

@@ -65,9 +65,9 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 {"zh-TW",  "CCCCm",   "BBBBhh:mm"},
                 {"zh-TW",  "CCCCCm",  "BBBBBh:mm"},
                 {"zh-TW",  "CCCCCCm", "BBBBBhh:mm"},
-                {"de",     "Cm",      "H:mm"},
+                {"de",     "Cm",      "HH:mm"},
                 {"de",     "CCm",     "HH:mm"},
-                {"de",     "CCCm",    "H:mm"},
+                {"de",     "CCCm",    "HH:mm"},
                 {"de",     "CCCCm",   "HH:mm"},
                 {"en",     "Cm",      "h:mm\u202Fa"},
                 {"en",     "CCm",     "hh:mm\u202Fa"},
@@ -1832,6 +1832,9 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
             // ICU-21873: Missing aliased values
             "en_001@calendar=islamic", "Ehm", "EEE h:mm\u202Fa",
+
+            // ICU-22575: AvailableFormats not inheriting from root
+            "sv_SE",       "yMd",         "y-MM-dd",
         };
 
         for (int i = 0; i < testCases.length; i += 3) {
@@ -1921,7 +1924,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                                            "EEEE d MMMM, y 'da' HH:mm",
                                            "d MMMM, y 'da' HH:mm",
                                            "d MMM, y, HH:mm",
-                                           "d/M/y, HH:mm" } ),
+                                           "y-MM-dd, HH:mm" } ),
         };
 
         String[] enDTPatterns = {
