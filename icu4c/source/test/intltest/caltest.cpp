@@ -189,6 +189,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestFWWithISO8601);
     TESTCASE_AUTO(TestDangiOverflowIsLeapMonthBetween22507);
     TESTCASE_AUTO(TestRollWeekOfYear);
+    TESTCASE_AUTO(TestFirstDayOfWeek);
 
     TESTCASE_AUTO_END;
 }
@@ -5551,6 +5552,81 @@ void CalendarTest::TestRollWeekOfYear() {
     cal->roll(UCAL_WEEK_OF_YEAR, 0x7fffff, status);
     U_ASSERT(U_SUCCESS(status));
     cal->roll(UCAL_WEEK_OF_YEAR, 1, status);
+}
+
+void CalendarTest::verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l = Locale::forLanguageTag(locale, status);
+    U_ASSERT(U_SUCCESS(status));
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status), status);
+    U_ASSERT(U_SUCCESS(status));
+    assertEquals(locale,
+                 expected, cal->getFirstDayOfWeek(status));
+    U_ASSERT(U_SUCCESS(status));
+}
+
+/**
+ * Test "First Day Overrides" behavior
+ * https://unicode.org/reports/tr35/tr35-dates.html#first-day-overrides
+ * And data in <firstDay> of
+ * https://github.com/unicode-org/cldr/blob/main/common/supplemental/supplementalData.xml
+ *
+ * Examples of region for First Day of a week
+ * Friday: MV
+ * Saturday: AE AF
+ * Sunday: US JP
+ * Monday: GB
+ */
+void CalendarTest::TestFirstDayOfWeek() {
+    // Test -u-fw- value
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-sun-rg-mvzzzz-sd-usca", UCAL_SUNDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-mon-rg-mvzzzz-sd-usca", UCAL_MONDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-tue-rg-mvzzzz-sd-usca", UCAL_TUESDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-wed-rg-mvzzzz-sd-usca", UCAL_WEDNESDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-thu-rg-mvzzzz-sd-usca", UCAL_THURSDAY);
+    verifyFirstDayOfWeek("en-AE-u-ca-iso8601-fw-fri-rg-aezzzz-sd-usca", UCAL_FRIDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-sat-rg-mvzzzz-sd-usca", UCAL_SATURDAY);
+
+    // Test -u-rg- value
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-mvzzzz-sd-usca", UCAL_FRIDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-aezzzz-sd-usca", UCAL_SATURDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-uszzzz-sd-usca", UCAL_SUNDAY);
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-gbzzzz-sd-usca", UCAL_MONDAY);
+
+    // Test -u-ca-iso8601
+    verifyFirstDayOfWeek("en-MV-u-ca-iso8601-sd-mv00", UCAL_MONDAY);
+    verifyFirstDayOfWeek("en-AE-u-ca-iso8601-sd-aeaj", UCAL_MONDAY);
+    verifyFirstDayOfWeek("en-US-u-ca-iso8601-sd-usca", UCAL_MONDAY);
+
+    // Test Region Tags only
+    verifyFirstDayOfWeek("en-MV", UCAL_FRIDAY);
+    verifyFirstDayOfWeek("en-AE", UCAL_SATURDAY);
+    verifyFirstDayOfWeek("en-US", UCAL_SUNDAY);
+    verifyFirstDayOfWeek("dv-GB", UCAL_MONDAY);
+
+    // Test -u-sd-
+    verifyFirstDayOfWeek("en-u-sd-mv00", UCAL_FRIDAY);
+    verifyFirstDayOfWeek("en-u-sd-aeaj", UCAL_SATURDAY);
+    verifyFirstDayOfWeek("en-u-sd-usca", UCAL_SUNDAY);
+    verifyFirstDayOfWeek("dv-u-sd-gbsct", UCAL_MONDAY);
+
+    // Test Add Likely Subtags algorithm produces a region
+    // dv => dv_Thaa_MV => Friday
+    verifyFirstDayOfWeek("dv", UCAL_FRIDAY);
+    // und_Thaa => dv_Thaa_MV => Friday
+    verifyFirstDayOfWeek("und-Thaa", UCAL_FRIDAY);
+
+    // ssh => ssh_Arab_AE => Saturday
+    verifyFirstDayOfWeek("ssh", UCAL_SATURDAY);
+    // wbl_Arab => wbl_Arab_AF => Saturday
+    verifyFirstDayOfWeek("wbl-Arab", UCAL_SATURDAY);
+
+    // en => en_Latn_US => Sunday
+    verifyFirstDayOfWeek("en", UCAL_SUNDAY);
+    // und_Hira => ja_Hira_JP => Sunday
+    verifyFirstDayOfWeek("und-Hira", UCAL_SUNDAY);
+
+    verifyFirstDayOfWeek("zxx", UCAL_MONDAY);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

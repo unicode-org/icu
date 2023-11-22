@@ -1856,10 +1856,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case ISO8601:
             // Only differs week numbering rule from Gregorian
             cal = new GregorianCalendar(zone, locale);
-            String type = locale.getUnicodeLocaleType("fw");
-            // Only set fw to Monday for ISO8601 if there aer no fw keyword.
-            // If there is a fw keyword, the Calendar constructor already set it to the fw value.
-            if (locale.getKeywordValue("fw") == null) {
+            // Based on UTS35 "First Day Overrides"
+            // https://unicode.org/reports/tr35/tr35-dates.html#first-day-overrides
+            // Only set fw to Monday for ISO8601 if there are no fw nor rg keywords.
+            // If there is a fw or rg keywords, the Calendar constructor already set it
+            // to the fw value or based on the rg value.
+            if (locale.getUnicodeLocaleType("fw") == null &&
+                locale.getUnicodeLocaleType("rg") == null) {
                 cal.setFirstDayOfWeek(MONDAY);
             }
             cal.setMinimalDaysInFirstWeek(4);

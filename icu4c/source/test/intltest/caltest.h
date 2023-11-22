@@ -334,6 +334,9 @@ public: // package
     void TestFWWithISO8601();
     void TestRollWeekOfYear();
 
+    void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
+    void TestFirstDayOfWeek();
+
     void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
     void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);
     void Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* cal);
