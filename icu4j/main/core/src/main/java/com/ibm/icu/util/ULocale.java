@@ -959,6 +959,22 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
+     * Get region code from a key in locale or null.
+     */
+    private static String getRegionFromKey(ULocale locale, String key) {
+        String region = locale.getKeywordValue(key);
+        if (region != null && region.length() >= 3 && region.length() <= 7) {
+            if (Character.isLetter(region.charAt(0))) {
+                return AsciiUtil.toUpperString(region.substring(0, 2));
+            } else {
+                // assume three-digit region code
+                return region.substring(0, 3);
+            }
+        }
+        return null;
+    }
+
+    /**
      * {@icu} Get the region to use for supplemental data lookup.
      * Uses
      * (1) any region specified by locale tag "rg"; if none then
@@ -981,17 +997,16 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     @Deprecated
     public static String getRegionForSupplementalData(
                             ULocale locale, boolean inferRegion) {
-        String region = locale.getKeywordValue("rg");
-        if (region != null && region.length() >= 3 && region.length() <= 7) {
-            if (Character.isLetter(region.charAt(0))) {
-                return AsciiUtil.toUpperString(region.substring(0, 2));
-            } else {
-                // assume three-digit region code
-                return region.substring(0, 3);
-            }
+        String region = getRegionFromKey(locale, "rg");
+        if (region != null) {
+            return region;
         }
         region = locale.getCountry();
         if (region.length() == 0 && inferRegion) {
+            region = getRegionFromKey(locale, "sd");
+            if (region != null) {
+                return region;
+            }
             ULocale maximized = addLikelySubtags(locale);
             region = maximized.getCountry();
         }

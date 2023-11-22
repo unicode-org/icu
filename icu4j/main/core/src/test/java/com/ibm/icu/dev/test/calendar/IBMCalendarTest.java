@@ -205,6 +205,76 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         }
     }
 
+    private void verifyFirstDayOfWeek(String l, int weekday) {
+        assertEquals(l, weekday,
+            Calendar.getInstance(Locale.forLanguageTag(l)).getFirstDayOfWeek());
+    }
+    /**
+     * Test "First Day Overrides" behavior
+     * https://unicode.org/reports/tr35/tr35-dates.html#first-day-overrides
+     * And data in <firstDay> of
+     * https://github.com/unicode-org/cldr/blob/main/common/supplemental/supplementalData.xml
+     *
+     * Examples of region for First Day of a week
+     * Friday: MV
+     * Saturday: AE AF
+     * Sunday: US JP
+     * Monday: GB
+     */
+    @Test
+    public void TestFirstDayOfWeek() {
+        String l;
+        // Test -u-fw- value
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-sun-rg-mvzzzz-sd-usca", Calendar.SUNDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-mon-rg-mvzzzz-sd-usca", Calendar.MONDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-tue-rg-mvzzzz-sd-usca", Calendar.TUESDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-wed-rg-mvzzzz-sd-usca", Calendar.WEDNESDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-thu-rg-mvzzzz-sd-usca", Calendar.THURSDAY);
+        verifyFirstDayOfWeek("en-AE-u-ca-iso8601-fw-fri-rg-aezzzz-sd-usca", Calendar.FRIDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-sat-rg-mvzzzz-sd-usca", Calendar.SATURDAY);
+
+        // Test -u-rg- value
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-mvzzzz-sd-usca", Calendar.FRIDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-aezzzz-sd-usca", Calendar.SATURDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-uszzzz-sd-usca", Calendar.SUNDAY);
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-rg-gbzzzz-sd-usca", Calendar.MONDAY);
+
+        // Test -u-ca-iso8601
+        verifyFirstDayOfWeek("en-MV-u-ca-iso8601-sd-mv00", Calendar.MONDAY);
+        verifyFirstDayOfWeek("en-AE-u-ca-iso8601-sd-aeaj", Calendar.MONDAY);
+        verifyFirstDayOfWeek("en-US-u-ca-iso8601-sd-usca", Calendar.MONDAY);
+
+        // Test Region Tags only
+        verifyFirstDayOfWeek("en-MV", Calendar.FRIDAY);
+        verifyFirstDayOfWeek("en-AE", Calendar.SATURDAY);
+        verifyFirstDayOfWeek("en-US", Calendar.SUNDAY);
+        verifyFirstDayOfWeek("dv-GB", Calendar.MONDAY);
+
+        // Test -u-sd-
+        //verifyFirstDayOfWeek("en-u-sd-mv00", Calendar.FRIDAY);
+       // verifyFirstDayOfWeek("en-u-sd-aeaj", Calendar.SATURDAY);
+       // verifyFirstDayOfWeek("en-u-sd-usca", Calendar.SUNDAY);
+        // verifyFirstDayOfWeek("dv-u-sd-gbsct", Calendar.MONDAY);
+
+        // Test Add Likely Subtags algorithm produces a region
+        // dv => dv_Thaa_MV => Friday
+        verifyFirstDayOfWeek("dv", Calendar.FRIDAY);
+        // und_Thaa => dv_Thaa_MV => Friday
+        verifyFirstDayOfWeek("und-Thaa", Calendar.FRIDAY);
+
+        // ssh => ssh_Arab_AE => Saturday
+        verifyFirstDayOfWeek("ssh", Calendar.SATURDAY);
+        // wbl_Arab => wbl_Arab_AF => Saturday
+        verifyFirstDayOfWeek("wbl-Arab", Calendar.SATURDAY);
+
+        // en => en_Latn_US => Sunday
+        verifyFirstDayOfWeek("en", Calendar.SUNDAY);
+        // und_Hira => ja_Hira_JP => Sunday
+        verifyFirstDayOfWeek("und-Hira", Calendar.SUNDAY);
+
+        verifyFirstDayOfWeek("zxx", Calendar.MONDAY);
+    }
+
     /**
      * Verify that BuddhistCalendar shifts years to Buddhist Era but otherwise
      * behaves like GregorianCalendar.
