@@ -446,11 +446,10 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
         // Compare the results of the two parallel tests
         int32_t  usi = 0;    // UnicodeString position, utf-16 index.
         int64_t  uti = 0;    // UText position, native index.
-        int32_t  cpi;        // char32 position (code point index)
         UChar32  usc;        // code point from Unicode String
         UChar32  utc;        // code point from UText
         utext_setNativeIndex(targetUT, 0);
-        for (cpi=0; ; cpi++) {
+        for (;;) {
             usc = targetUS.char32At(usi);
             utc = utext_next32(targetUT);
             if (utc < 0) {
@@ -522,12 +521,11 @@ void UTextTest::TestReplace(
     //
     int32_t  usi = 0;    // UnicodeString position, utf-16 index.
     int64_t  uti = 0;    // UText position, native index.
-    int32_t  cpi;        // char32 position (code point index)
     UChar32  usc;        // code point from Unicode String
     UChar32  utc;        // code point from UText
     int64_t  expectedNativeLength = 0;
     utext_setNativeIndex(targetUT, 0);
-    for (cpi=0; ; cpi++) {
+    for (;;) {
         usc = targetUS.char32At(usi);
         utc = utext_next32(targetUT);
         if (utc < 0) {

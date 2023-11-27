@@ -286,7 +286,7 @@ void BreakRules::compileRules(UCHARBUF *rules, UErrorCode &status) {
     }
 
     UnicodeString emptyString;
-    for (int32_t lineNumber=0; ;lineNumber++) {    // Loop once per input line.
+    for (;;) {    // Loop once per input line.
         if (U_FAILURE(status)) {
             return;
         }

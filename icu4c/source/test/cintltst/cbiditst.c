@@ -4539,8 +4539,7 @@ overrideBidiClass(const void *context, UChar32 c) {
           DEF,   DEF,   DEF,   LRO,     B,   RLO,    BN,   DEF  /* 78-7F */
     };
     static const int nEntries = UPRV_LENGTHOF(customClasses);
-    const char *dummy = context;        /* just to avoid a compiler warning */
-    dummy++;
+    (void)context;        /* just to avoid a compiler warning */
 
     return c >= nEntries ? U_BIDI_CLASS_DEFAULT : customClasses[c];
 }
