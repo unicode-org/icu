@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701305413772,
+  "lastUpdate": 1701356028195,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30778,6 +30778,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1298184.0057,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "78b1a3fc46f182c9277b532ac6f65f4bc35f230c",
+          "message": "ICU-22522 Update the Azure CI from Clang 14 to Clang 16.",
+          "timestamp": "2023-11-30T15:34:36+01:00",
+          "tree_id": "0208ff4a672164a56f3ab8c7f3ecd6f9322e1d4b",
+          "url": "https://github.com/unicode-org/icu/commit/78b1a3fc46f182c9277b532ac6f65f4bc35f230c"
+        },
+        "date": 1701355963495,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 293.119,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 3013970.513,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1316557.7484,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2742282.3874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1297611.871,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
