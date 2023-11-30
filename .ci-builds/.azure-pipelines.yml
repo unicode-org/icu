@@ -164,7 +164,7 @@ jobs:
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang-16
-        CPPFLAGS: '-Werror -Wno-strict-prototypes -Wno-gnu-offsetof-extensions -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override'
+        CPPFLAGS: '-Werror -Wno-strict-prototypes -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override'
         CXX: clang++-16
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang16_Cpp20_Ubuntu_2004
@@ -188,7 +188,7 @@ jobs:
       displayName: 'Build and Test'
       env:
         CC: clang-16
-        CPPFLAGS: '-Werror -Wno-strict-prototypes -Wno-gnu-offsetof-extensions'
+        CPPFLAGS: '-Werror -Wno-strict-prototypes'
         CXX: clang++-16
         CXXFLAGS: '-std=c++20'
 #-------------------------------------------------------------------------
@@ -213,7 +213,7 @@ jobs:
       displayName: 'Build and Test'
       env:
         CC: clang-16
-        CPPFLAGS: '-Werror -Wno-strict-prototypes -Wno-gnu-offsetof-extensions'
+        CPPFLAGS: '-Werror -Wno-strict-prototypes'
         CXX: clang++-16
         CXXFLAGS: '-std=c++20 -stdlib=libc++'
 #-------------------------------------------------------------------------
