@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701305181351,
+  "lastUpdate": 1701355652089,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14488,6 +14488,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.4356971800835942,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "78b1a3fc46f182c9277b532ac6f65f4bc35f230c",
+          "message": "ICU-22522 Update the Azure CI from Clang 14 to Clang 16.",
+          "timestamp": "2023-11-30T15:34:36+01:00",
+          "tree_id": "0208ff4a672164a56f3ab8c7f3ecd6f9322e1d4b",
+          "url": "https://github.com/unicode-org/icu/commit/78b1a3fc46f182c9277b532ac6f65f4bc35f230c"
+        },
+        "date": 1701355595261,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.43521036904228966,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
