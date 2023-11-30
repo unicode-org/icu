@@ -17,7 +17,7 @@
 
 class PluralMapForPluralMapTest : public PluralMap<UnicodeString> {
 public:
-    bool operator==(const PluralMapForPluralMapTest &other) {
+    bool operator==(const PluralMapForPluralMapTest &other) const {
         return equals(other, strEqual);
     }
 private:
