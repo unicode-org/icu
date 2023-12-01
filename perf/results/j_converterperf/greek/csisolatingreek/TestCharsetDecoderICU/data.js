@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701473114026,
+  "lastUpdate": 1701474113604,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14458,6 +14458,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.10951675801037655,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "83327fb92ca5831df8ab78d5f706fae4ba25eb11",
+          "message": "ICU-22549 Add Fuzzer for TimeZone",
+          "timestamp": "2023-12-01T15:04:51-08:00",
+          "tree_id": "c8601a6f3a7edba5a0c4a9c752186d3d0c6e4374",
+          "url": "https://github.com/unicode-org/icu/commit/83327fb92ca5831df8ab78d5f706fae4ba25eb11"
+        },
+        "date": 1701474056817,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.10927665408104928,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
