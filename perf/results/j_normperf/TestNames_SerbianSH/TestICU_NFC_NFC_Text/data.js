@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701472838519,
+  "lastUpdate": 1701474025731,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14338,6 +14338,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.8396869478989264,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "83327fb92ca5831df8ab78d5f706fae4ba25eb11",
+          "message": "ICU-22549 Add Fuzzer for TimeZone",
+          "timestamp": "2023-12-01T15:04:51-08:00",
+          "tree_id": "c8601a6f3a7edba5a0c4a9c752186d3d0c6e4374",
+          "url": "https://github.com/unicode-org/icu/commit/83327fb92ca5831df8ab78d5f706fae4ba25eb11"
+        },
+        "date": 1701473959101,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.8444045864722884,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
