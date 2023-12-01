@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701362756583,
+  "lastUpdate": 1701472952445,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14368,6 +14368,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 3.9227591375009796,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e8e19454dac630d874fa980cfa8de8495c7bd268",
+          "message": "ICU-22549 Add fuzzer for NumberFormatter",
+          "timestamp": "2023-12-01T15:04:22-08:00",
+          "tree_id": "d75c8643351c5109f01dc32a19ce96afb6642360",
+          "url": "https://github.com/unicode-org/icu/commit/e8e19454dac630d874fa980cfa8de8495c7bd268"
+        },
+        "date": 1701472896228,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 3.9673324032434327,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
