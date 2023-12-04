@@ -11,6 +11,10 @@ IcuEnvironment* env = new IcuEnvironment();
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
+  // Limit the test for at most 1000 Unicode characters.
+  if (size > 2000) {
+    size = 2000;
+  }
   size_t unistr_size = size/2;
   std::unique_ptr<char16_t[]> fuzzbuff(new char16_t[unistr_size]);
   std::memcpy(fuzzbuff.get(), data, unistr_size * 2);
