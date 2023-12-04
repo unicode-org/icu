@@ -12,7 +12,7 @@
 
 #include "srchtest.h"
 #if !UCONFIG_NO_BREAK_ITERATION
-#include "../cintltst/usrchdat.c"
+#include "../cintltst/usrchdat.inc"
 #endif
 #include "unicode/stsearch.h"
 #include "unicode/ustring.h"
