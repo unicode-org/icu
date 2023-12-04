@@ -105,9 +105,6 @@
     <ClCompile Include="encoll.c">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="usrchdat.c">
-      <Filter>collation</Filter>
-    </ClCompile>
     <ClCompile Include="usrchtst.c">
       <Filter>collation</Filter>
     </ClCompile>
@@ -369,6 +366,9 @@
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="encoll.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="usrchdat.inc">
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="ccapitst.h">
