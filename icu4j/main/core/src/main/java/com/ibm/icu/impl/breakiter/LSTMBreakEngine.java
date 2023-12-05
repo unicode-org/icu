@@ -238,7 +238,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public boolean handles(int c, ULocale locale) {
+    public boolean handles(int c) {
         return fScript == UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
     }
 

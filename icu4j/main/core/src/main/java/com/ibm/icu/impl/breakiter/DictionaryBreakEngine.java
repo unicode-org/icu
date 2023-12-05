@@ -178,7 +178,12 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     @Override
-    public boolean handles(int c, ULocale locale) {
+    public boolean isFor(ULocale locale) {
+        return true; // by default, we handle all locales.
+    }
+
+    @Override
+    public boolean handles(int c) {
         return fSet.contains(c);        // we recognize the character
     }
 

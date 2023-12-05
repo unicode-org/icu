@@ -1023,10 +1023,10 @@ public class RBBITest extends CoreTestFmwk {
         RuleBasedBreakIterator.registerExternalBreakEngine(
             new RuleBasedBreakIterator.ExternalBreakEngine() {
                 UnicodeSet block = new UnicodeSet(0x4e00, 0x9FFF);
-                public boolean isFor(int c, ULocale locale) {
+                public boolean isFor(ULocale locale) {
                     // We implmement this for any locale with "yue" such as
                     // "yue", "yue-CN", "yue-Hant-CN", etc.
-                    return handles(c) && locale.getLanguage().equals("yue");
+                    return locale.getLanguage().equals("yue");
                 }
                 public boolean handles(int c) {
                     return block.contains(c);
@@ -1076,8 +1076,8 @@ public class RBBITest extends CoreTestFmwk {
             new RuleBasedBreakIterator.ExternalBreakEngine() {
                 UnicodeSet block = new UnicodeSet(0x1950, 0x197f);
                 UnicodeSet tones = new UnicodeSet(0x1970, 0x1974);
-                public boolean isFor(int c, ULocale locale) {
-                    return handles(c);
+                public boolean isFor(ULocale locale) {
+                    return true; // Handle all locales
                 }
                 public boolean handles(int c) {
                     return block.contains(c);

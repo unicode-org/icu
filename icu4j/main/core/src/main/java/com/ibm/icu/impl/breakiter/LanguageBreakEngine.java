@@ -18,10 +18,15 @@ import com.ibm.icu.util.ULocale;
 public interface LanguageBreakEngine {
     /**
      * @param c A Unicode codepoint value
-     * @param locale A locale
      * @return true if the engine can handle this character, false otherwise
      */
-    boolean handles(int c, ULocale locale);
+    boolean handles(int c);
+
+    /**
+     * @param locale A locale
+     * @return true if the engine is for this Locale, false otherwise
+     */
+    boolean isFor(ULocale locale);
 
     /**
      * Implements the actual breaking logic. Find any breaks within a run in the supplied text.

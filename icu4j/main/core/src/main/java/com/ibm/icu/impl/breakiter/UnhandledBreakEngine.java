@@ -39,7 +39,11 @@ public final class UnhandledBreakEngine implements LanguageBreakEngine {
     }
 
     @Override
-    public boolean handles(int c, ULocale locale) {
+    public boolean isFor(ULocale locale) {
+        return true;  // Handle all locales
+    }
+    @Override
+    public boolean handles(int c) {
         return fHandled.contains(c);
     }
 

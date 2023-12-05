@@ -90,7 +90,7 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public boolean handles(int c, ULocale locale) {
+    public boolean handles(int c) {
         int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
         return (script == UScript.THAI);
     }

@@ -728,7 +728,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         // We have a dictionary character.
         // Does an already instantiated break engine handle it?
         for (LanguageBreakEngine candidate : fBreakEngines) {
-            if (candidate.handles(c, getRequestedLocale())) {
+            if (candidate.isFor(getRequestedLocale()) && candidate.handles(c)) {
                 return candidate;
             }
         }
@@ -738,7 +738,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // Check the global list, another break iterator may have instantiated the
             // desired engine.
             for (LanguageBreakEngine candidate : gAllBreakEngines) {
-                if (candidate.handles(c, getRequestedLocale())) {
+                if (candidate.isFor(getRequestedLocale()) && candidate.handles(c)) {
                     fBreakEngines.add(candidate);
                     return candidate;
                 }
@@ -1094,8 +1094,12 @@ public class RuleBasedBreakIterator extends BreakIterator {
         synchronized(gAllBreakEngines) {
             gAllBreakEngines.add(0, new LanguageBreakEngine() {
                 @Override
-                public boolean handles(int c, ULocale locale) {
-                   return engine.isFor(c, locale);
+                public boolean handles(int c) {
+                   return engine.handles(c);
+                }
+                @Override
+                public boolean isFor(ULocale locale) {
+                   return engine.isFor(locale);
                 }
                 @Override
                 public int findBreaks(CharacterIterator text, int startPos, int endPos,
@@ -1917,15 +1921,14 @@ class BreakCache {
 
     public interface ExternalBreakEngine {
         /**
-         * <p>Indicate whether this engine handles a particular character when
-         * the RuleBasedBreakIterator is used for a particular locale. This method is used
-         * by the RuleBasedBreakIterator to find a break engine.</p>
-         * @param c A character which begins a run that the engine might handle.
+         * <p>Indicate whether this engine is used for a particular locale.
+         * This method is used by the RuleBasedBreakIterator to find a break engine.</p>
+         *
          * @param locale    The locale.
          * @return true if this engine handles the particular character for that locale.
          * @internal ICU 75 technology preview
          */
-        public boolean isFor(int c, ULocale locale);
+        public boolean isFor(ULocale locale);
 
         /**
          * <p>Indicate whether this engine handles a particular character.This method is
