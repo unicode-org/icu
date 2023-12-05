@@ -269,7 +269,12 @@ public final class LikelySubtags {
      * Helper method to find out a region is a macroregion
      */
     private boolean isMacroregion(String region) {
-        Region.RegionType type = Region.getInstance(region).getType();
+        Region.RegionType type;
+        try {
+            type = Region.getInstance(region).getType();
+        } catch (Exception e) {
+            return false;  // return false for unrecognized region.
+        }
         return type == Region.RegionType.WORLD ||
             type == Region.RegionType.CONTINENT ||
             type == Region.RegionType.SUBCONTINENT ;
@@ -356,7 +361,7 @@ public final class LikelySubtags {
                     matchRegion = true;
                 }
             } else {
-                retainRegion = true;
+                retainRegion = !region.isEmpty() && !isMacroregion(region);
                 if (state == 0) {
                     value = defaultLsrIndex;
                 } else {

@@ -3832,8 +3832,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "es_419"
         }, {
             "und_150",
-            "en_Latn_150",
-            "en_150"
+            "en_Latn_US",
+            "en"
         }, {
             "und_AT",
             "de_Latn_AT",

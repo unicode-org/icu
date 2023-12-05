@@ -709,7 +709,7 @@ LSR LikelySubtags::maximize(StringPiece language, StringPiece script, StringPiec
                 matchRegion = true;
             }
         } else {
-            retainRegion = true;
+            retainRegion = !region.empty() && !isMacroregion(region, errorCode);
             if (state == 0) {
                 value = defaultLsrIndex;
             } else {
