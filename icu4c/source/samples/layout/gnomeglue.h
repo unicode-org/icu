@@ -16,8 +16,8 @@
 
 #include "unicode/utypes.h"
 
-#include "LETypes.h"
-#include "loengine.h"
+#include "layout/LETypes.h"
+#include "layout/loengine.h"
 #include "gsupport.h"
 #include "rsurface.h"
 

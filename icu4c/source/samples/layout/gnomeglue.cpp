@@ -12,14 +12,14 @@
 #include FT_FREETYPE_H
 
 #include "unicode/utypes.h"
-#include "loengine.h"
+#include "layout/loengine.h"
 #include "rsurface.h"
 #include "gsupport.h"
 
 #include "gnomeglue.h"
 
-#include "LETypes.h"
-#include "LEFontInstance.h"
+#include "layout/LETypes.h"
+#include "layout/LEFontInstance.h"
 #include "GnomeGUISupport.h"
 #include "GnomeFontMap.h"
 #include "GnomeFontInstance.h"

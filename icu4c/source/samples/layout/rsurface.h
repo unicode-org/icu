@@ -10,7 +10,7 @@
 #ifndef __RSURFACE_H
 #define __RSURFACE_H
 
-#include "loengine.h"
+#include "layout/loengine.h"
 
 typedef void rs_surface;
 
