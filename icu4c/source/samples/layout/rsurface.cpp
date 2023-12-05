@@ -7,11 +7,11 @@
  *
  */
 
-#include "loengine.h"
+#include "layout/loengine.h"
 #include "rsurface.h"
 
-#include "LETypes.h"
-#include "LEFontInstance.h"
+#include "layout/LETypes.h"
+#include "layout/LEFontInstance.h"
 #include "RenderingSurface.h"
 
 U_CDECL_BEGIN
