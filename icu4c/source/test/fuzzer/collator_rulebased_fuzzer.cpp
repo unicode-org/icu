@@ -13,6 +13,11 @@ IcuEnvironment* env = new IcuEnvironment();
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   UErrorCode status = U_ZERO_ERROR;
+  if (size > 2000) {
+      // Limit the effective test data to only 2000 bytes to avoid meaningless
+      // timeout.
+      size = 2000;
+  }
 
   size_t unistr_size = size/2;
   std::unique_ptr<char16_t[]> fuzzbuff(new char16_t[unistr_size]);
