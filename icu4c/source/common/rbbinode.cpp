@@ -123,19 +123,64 @@ RBBINode::~RBBINode() {
         break;
 
     default:
-        delete        fLeftChild;
+        // Avoid using a recursive implementation because of stack overflow problems.
+        // See bug ICU-22584.
+        // delete        fLeftChild;
+        NRDeleteNode(fLeftChild);
         fLeftChild =   nullptr;
-        delete        fRightChild;
+        // delete        fRightChild;
+        NRDeleteNode(fRightChild);
         fRightChild = nullptr;
     }
-
 
     delete fFirstPosSet;
     delete fLastPosSet;
     delete fFollowPos;
-
 }
 
+/**
+ * Non-recursive delete of a node + its children. Used from the node destructor
+ * instead of the more obvious recursive implementation to avoid problems with
+ * stack overflow with some perverse test rule data (from fuzzing).
+ */
+void RBBINode::NRDeleteNode(RBBINode *node) {
+    if (node == nullptr) {
+        return;
+    }
+
+    RBBINode *stopNode = node->fParent;
+    RBBINode *nextNode = node;
+    while (nextNode != stopNode) {
+        RBBINode *currentNode = nextNode;
+
+        if ((currentNode->fLeftChild == nullptr && currentNode->fRightChild == nullptr) ||
+                currentNode->fType == varRef ||      // varRef and setRef nodes do not
+                currentNode->fType == setRef) {      // own their children nodes.
+            // CurrentNode is effectively a leaf node; it's safe to go ahead and delete it.
+            nextNode = currentNode->fParent;
+            if (nextNode->fLeftChild == currentNode) {
+                nextNode->fLeftChild = nullptr;
+            } else if (nextNode->fRightChild == currentNode) {
+                nextNode->fRightChild = nullptr;
+            }
+            delete currentNode;
+        } else if (currentNode->fLeftChild) {
+            nextNode = currentNode->fLeftChild;
+            if (nextNode->fParent == nullptr) {
+                nextNode->fParent = currentNode;
+                // fParent isn't always set; do it now if not.
+            }
+            U_ASSERT(nextNode->fParent == currentNode);
+        } else if (currentNode->fRightChild) {
+            nextNode = currentNode->fRightChild;
+            if (nextNode->fParent == nullptr) {
+                nextNode->fParent = currentNode;
+                // fParent isn't always set; do it now if not.
+            }
+            U_ASSERT(nextNode->fParent == currentNode);
+        }
+    }
+}
 
 //-------------------------------------------------------------------------
 //
