@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701823818892,
+  "lastUpdate": 1701824625505,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31156,6 +31156,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2093931.9075,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "2a3cb99f6e7aaf75fc88c536e95b34c60af1fd87",
+          "message": "ICU-22589 Avoid timeout in TimeZone test",
+          "timestamp": "2023-12-05T16:24:33-08:00",
+          "tree_id": "e0296c97e01eb455b2f0d2215875ccbe04ad7fb9",
+          "url": "https://github.com/unicode-org/icu/commit/2a3cb99f6e7aaf75fc88c536e95b34c60af1fd87"
+        },
+        "date": 1701824558572,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 161.7987,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8914156.7407,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2232314.0141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7975414.2866,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2095378.9584,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
