@@ -94,6 +94,7 @@ class RBBINode : public UMemory {
         RBBINode(NodeType t);
         RBBINode(const RBBINode &other);
         ~RBBINode();
+        static void  NRDeleteNode(RBBINode *node);
         
         RBBINode    *cloneTree();
         RBBINode    *flattenVariables();
