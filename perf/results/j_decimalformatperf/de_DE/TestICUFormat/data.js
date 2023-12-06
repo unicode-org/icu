@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701823318454,
+  "lastUpdate": 1701823782628,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14638,6 +14638,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 555.9210195507226,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "2a3cb99f6e7aaf75fc88c536e95b34c60af1fd87",
+          "message": "ICU-22589 Avoid timeout in TimeZone test",
+          "timestamp": "2023-12-05T16:24:33-08:00",
+          "tree_id": "e0296c97e01eb455b2f0d2215875ccbe04ad7fb9",
+          "url": "https://github.com/unicode-org/icu/commit/2a3cb99f6e7aaf75fc88c536e95b34c60af1fd87"
+        },
+        "date": 1701823725551,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 553.2975999186982,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
