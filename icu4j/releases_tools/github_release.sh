@@ -13,9 +13,11 @@ function copyArtifactForGithubRelease() {
   # Copy artifacts in the output folder
   mvn dependency:copy -q -Dmdep.stripVersion=true -Dartifact=com.ibm.icu:${artifactId}:${artifact_version} -DoutputDirectory=${release_folder}
   mvn dependency:copy -q -Dmdep.stripVersion=true -Dartifact=com.ibm.icu:${artifactId}:${artifact_version}:jar:sources -DoutputDirectory=${release_folder}
+  mvn dependency:copy -q -Dmdep.stripVersion=true -Dartifact=com.ibm.icu:${artifactId}:${artifact_version}:jar:javadoc -DoutputDirectory=${release_folder}
   # Change the names
   mv ${release_folder}/${artifactId}.jar ${release_folder}/${artifactId}-${github_rel_version}.jar
   mv ${release_folder}/${artifactId}-sources.jar ${release_folder}/${artifactId}-${github_rel_version}-sources.jar
+  mv ${release_folder}/${artifactId}-javadoc.jar ${release_folder}/${artifactId}-${github_rel_version}-javadoc.jar
 }
 
 # ====================================================================================
@@ -30,7 +32,7 @@ checkThatJdk8IsDefault
 
 reportTitle Prepare folder with artifacts for GitHub release
 
-mvn clean install -DskipITs -DskipTests -P with_sources
+mvn clean install -DskipITs -DskipTests -P with_sources,with_javadoc
 
 rm   -fr ${release_folder}
 mkdir -p ${release_folder}
@@ -45,7 +47,7 @@ reportTitle Prepare complete javadoc for GitHub release
 
 mvn site -DskipITs -DskipTests -P with_full_javadoc
 
-jar -Mcf ${release_folder}/icu4j-${github_rel_version}-javadoc.jar  -C ${out_dir}/site/apidocs/ .
+jar -Mcf ${release_folder}/icu4j-${github_rel_version}-fulljavadoc.jar  -C ${out_dir}/site/apidocs/ .
 
 # ====================================================================================
 
