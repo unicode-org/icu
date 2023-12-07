@@ -144,6 +144,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestRandomAccess);
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeTaiLe);
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);
+    TESTCASE_AUTO(TestBug22581);
     TESTCASE_AUTO(TestBug22584);
 
 #if U_ENABLE_TRACING
@@ -5873,4 +5874,12 @@ void RBBITest::TestBug22584() {
     RuleBasedBreakIterator bi(ruleStr, pe, ec);
 }
 
+void RBBITest::TestBug22581() {
+    // Test duplicate variable setting will not leak the rule compilation
+    UnicodeString ruleStr = u"$foo=[abc]; $foo=[xyz]; $foo;";
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+
+    RuleBasedBreakIterator bi(ruleStr, pe, ec);
+}
 #endif // #if !UCONFIG_NO_BREAK_ITERATION

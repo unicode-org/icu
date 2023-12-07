@@ -289,6 +289,9 @@ UBool RBBIRuleScanner::doParseActions(int32_t action)
 
             // Terminate expression, leaves expression parse tree rooted in TOS node.
             fixOpStack(RBBINode::precStart);
+            if (U_FAILURE(*fRB->fStatus)) {
+                break;
+            }
 
             RBBINode *startExprNode  = fNodeStack[fNodeStackPtr-2];
             RBBINode *varRefNode     = fNodeStack[fNodeStackPtr-1];
@@ -312,6 +315,11 @@ UBool RBBIRuleScanner::doParseActions(int32_t action)
                 UErrorCode t = *fRB->fStatus;
                 *fRB->fStatus = U_ZERO_ERROR;
                 error(t);
+                // When adding $variableRef to the symbol table fail, Delete
+                // both nodes because deleting varRefNode will not delete
+                // RHSExprNode internally.
+                delete RHSExprNode;
+                delete varRefNode;
             }
 
             // Clean up the stack.
