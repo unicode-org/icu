@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701824144984,
+  "lastUpdate": 1701975300858,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14518,6 +14518,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.8432551139527145,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "da83309900e90509d6d559e4ad5f9a2a0a1cef6b",
+          "message": "ICU-22595 GitHub release file generation script to include javadoc for each artifact in addition to full javadoc",
+          "timestamp": "2023-12-07T10:37:15-08:00",
+          "tree_id": "7739ff175cf22e7965eb192ad49dd11697ac658d",
+          "url": "https://github.com/unicode-org/icu/commit/da83309900e90509d6d559e4ad5f9a2a0a1cef6b"
+        },
+        "date": 1701975165919,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.8187302691840441,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
