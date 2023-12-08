@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1701976162188,
+  "lastUpdate": 1702069746946,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34738,6 +34738,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 10.479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "andy.heninger@gmail.com",
+            "name": "Andy Heninger",
+            "username": "aheninger"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e6892996b1541564965a8eb0151a0bcabbd88ffc",
+          "message": "ICU-22584 Fix RBBI rule builder stack overflow.\n\nThe problem was found by fuzz testing.\n\nA rule consisting of a long literal string produces a large, unbalanced parse tree,\none node per string element. Deleting the tree was recursive, once per node, resulting\nin deep recursion.\n\nThis PR changes node deletion to use an iterative (non-recursive) approach.\n\nThis change only affects rule building. There is no change to the RBBI run time\nusing pre-built rules.",
+          "timestamp": "2023-12-08T12:49:26-08:00",
+          "tree_id": "1468d96e3a369e3aa0d59b567cbf8088e05cccc7",
+          "url": "https://github.com/unicode-org/icu/commit/e6892996b1541564965a8eb0151a0bcabbd88ffc"
+        },
+        "date": 1702069690181,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 12.6456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 8.6359,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 8.6179,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 9.9941,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 10.802,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 10.785,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
