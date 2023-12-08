@@ -881,6 +881,35 @@ void RBBIAPITest::TestBug2190() {
      delete bi;
 }
 
+void RBBIAPITest::TestBug22580() {
+     UParseError    parseError;
+     // Test single ' will not cause infinity loop
+     {
+         UnicodeString rulesString = u"'";
+         UErrorCode status=U_ZERO_ERROR;
+         RuleBasedBreakIterator(rulesString, parseError, status);
+     }
+     if (quick) {
+         return;
+     }
+     // Test any 1 or 2 ASCII chars as rule will not cause infinity loop.
+     // only in exhaust mode
+     for (char16_t u1 = u' '; u1 <= u'~'; u1++) {
+         {
+             UnicodeString rule = u1;
+             UErrorCode status=U_ZERO_ERROR;
+             RuleBasedBreakIterator bi (rule, parseError, status);
+         }
+         for (char16_t u2 = u' '; u2 <= u'~'; u2++) {
+             {
+                 UnicodeString rule;
+                 rule.append(u1).append(u2);
+                 UErrorCode status=U_ZERO_ERROR;
+                 RuleBasedBreakIterator bi (rule, parseError, status);
+             }
+         }
+     }
+}
 
 void RBBIAPITest::TestRegistration() {
 #if !UCONFIG_NO_SERVICE
@@ -1428,6 +1457,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestQuoteGrouping);
     TESTCASE_AUTO(TestRuleStatusVec);
     TESTCASE_AUTO(TestBug2190);
+    TESTCASE_AUTO(TestBug22580);
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestRegistration);
     TESTCASE_AUTO(TestBoilerPlate);
