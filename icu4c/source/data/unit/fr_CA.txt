@@ -968,10 +968,6 @@ fr_CA{
                 one{"{0} cal"}
                 other{"{0} cal"}
             }
-            foodcalorie{
-                one{"{0} kcal"}
-                other{"{0} kcal"}
-            }
             joule{
                 one{"{0} J"}
                 other{"{0} J"}
