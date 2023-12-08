@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702069100264,
+  "lastUpdate": 1702075897341,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14758,6 +14758,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.073475954164675,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "rp9.next@gmail.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "665d9dbbe993b89c074c3463500237f8c99a4ac3",
+          "message": "ICU-22534 BRS 75 front-load update version to 75.0.1\n\nSee #2726",
+          "timestamp": "2023-12-08T14:32:40-08:00",
+          "tree_id": "82548d317d2baa371e96c050243c26478a6906ba",
+          "url": "https://github.com/unicode-org/icu/commit/665d9dbbe993b89c074c3463500237f8c99a4ac3"
+        },
+        "date": 1702075838972,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.198102164842537,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
