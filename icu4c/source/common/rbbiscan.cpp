@@ -934,6 +934,9 @@ void RBBIRuleScanner::nextChar(RBBIRuleChar &c) {
         }
     }
 
+    if (c.fChar == (UChar32)-1) {
+        return;
+    }
     if (fQuoteMode) {
         c.fEscaped = true;
     }

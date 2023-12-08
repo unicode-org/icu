@@ -770,7 +770,7 @@ class RBBIRuleScanner {
         //  These are recognized in all contexts, whether in quoted text or not.
         //
         if (c.fChar == '\'') {
-            if (UTF16.charAt(fRB.fRules, fNextIndex) == '\'') {
+            if (fNextIndex < fRB.fRules.length() && UTF16.charAt(fRB.fRules, fNextIndex) == '\'') {
                 c.fChar = nextCharLL(); // get nextChar officially so character counts
                 c.fEscaped = true; //   stay correct.
             } else {
@@ -786,6 +786,9 @@ class RBBIRuleScanner {
                 c.fEscaped = false; // The paren that we return is not escaped.
                 return;
             }
+        }
+        if (c.fChar == -1) {
+            return;
         }
 
         if (fQuoteMode) {
