@@ -100,6 +100,7 @@ public:
     void TestExternalBreakEngineWithFakeYue();
     void TestBug22581();
     void TestBug22584();
+    void TestBug22585();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();

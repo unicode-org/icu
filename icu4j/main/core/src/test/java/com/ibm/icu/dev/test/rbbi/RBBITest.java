@@ -908,7 +908,7 @@ public class RBBITest extends CoreTestFmwk {
         assertEquals("Wrong number of breaks found", 2, breaksFound);
     }
 
-    /* Test handling of unpair surrogate.
+    /* Test handling of unpaired surrogate.
      */
     @Test
     public void TestUnpairedSurrogate() {
@@ -919,24 +919,24 @@ public class RBBITest extends CoreTestFmwk {
 
         try {
             new RuleBasedBreakIterator("a\ud800b;");
-            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpair low surrogate.");
+            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpaired low surrogate.");
         }
         catch (IllegalArgumentException e) {
-            // expected exception with unpair surrogate.
+            // expected exception with unpaired surrogate.
         }
         catch (Exception e) {
-            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpair low surrogate: " + e);
+            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpaired low surrogate: " + e);
         }
 
         try {
             new RuleBasedBreakIterator("a\ude00b;");
-            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpair high surrogate.");
+            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpaired high surrogate.");
         }
         catch (IllegalArgumentException e) {
-            // expected exception with unpair surrogate.
+            // expected exception with unpaired surrogate.
         }
         catch (Exception e) {
-            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpair high surrogate: " + e);
+            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpaired high surrogate: " + e);
         }
 
 
@@ -946,6 +946,30 @@ public class RBBITest extends CoreTestFmwk {
         assertEquals("Rules does not match", rules, bi.toString());
     }
 
+    @Test
+    public void TestBug22585() {
+        try {
+            new RuleBasedBreakIterator("$a=[\udecb];");
+            fail("TestBug22585: RuleBasedBreakIterator() failed to throw an exception with unpaired high surrogate.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with unpaired surrogate.
+        }
+        catch (Exception e) {
+            fail("TestBug22585: Unexpected exception while new RuleBasedBreakIterator() with unpaired high surrogate: " + e);
+        }
+
+        try {
+            new RuleBasedBreakIterator("$a=[\ud94e];");
+            fail("TestBug22585: RuleBasedBreakIterator() failed to throw an exception with unpaired low surrogate.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with unpaired surrogate.
+        }
+        catch (Exception e) {
+            fail("TestBug22585: Unexpected exception while new RuleBasedBreakIterator() with unpaired low surrogate: " + e);
+        }
+    }
     /* Test preceding(index) and following(index), with semi-random indexes.
      * The random indexes are produced in clusters that are relatively closely spaced,
      * to increase the occurrences of hits to the internal break cache.

@@ -770,6 +770,7 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     RBBINode *usetNode    = new RBBINode(RBBINode::uset);
     if (usetNode == nullptr) {
         error(U_MEMORY_ALLOCATION_ERROR);
+        delete setToAdopt;
         return;
     }
     usetNode->fInputSet   = setToAdopt;
@@ -1210,7 +1211,6 @@ RBBINode  *RBBIRuleScanner::pushNewNode(RBBINode::NodeType  t) {
 //
 //------------------------------------------------------------------------------
 void RBBIRuleScanner::scanSet() {
-    UnicodeSet    *uset;
     ParsePosition  pos;
     int            startPos;
     int            i;
@@ -1222,12 +1222,11 @@ void RBBIRuleScanner::scanSet() {
     pos.setIndex(fScanIndex);
     startPos = fScanIndex;
     UErrorCode localStatus = U_ZERO_ERROR;
-    uset = new UnicodeSet();
-    if (uset == nullptr) {
-        localStatus = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        uset->applyPatternIgnoreSpace(fRB->fRules, pos, fSymbolTable, localStatus);
+    LocalPointer<UnicodeSet> uset(new UnicodeSet(), localStatus);
+    if (U_FAILURE(localStatus)) {
+        return;
     }
+    uset->applyPatternIgnoreSpace(fRB->fRules, pos, fSymbolTable, localStatus);
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
@@ -1235,20 +1234,18 @@ void RBBIRuleScanner::scanSet() {
             RBBIDebugPrintf("UnicodeSet parse position.ErrorIndex = %d\n", pos.getIndex());
         #endif
         error(localStatus);
-        delete uset;
         return;
     }
 
     // Verify that the set contains at least one code point.
     //
-    U_ASSERT(uset!=nullptr);
+    U_ASSERT(uset.isValid());
     if (uset->isEmpty()) {
         // This set is empty.
         //  Make it an error, because it almost certainly is not what the user wanted.
         //  Also, avoids having to think about corner cases in the tree manipulation code
         //   that occurs later on.
         error(U_BRK_RULE_EMPTY_SET);
-        delete uset;
         return;
     }
 
@@ -1257,7 +1254,7 @@ void RBBIRuleScanner::scanSet() {
     //   Don't just set fScanIndex because the line/char positions maintained
     //   for error reporting would be thrown off.
     i = pos.getIndex();
-    for (;;) {
+    for (;U_SUCCESS(*fRB->fStatus);) {
         if (fNextIndex >= i) {
             break;
         }
@@ -1280,7 +1277,7 @@ void RBBIRuleScanner::scanSet() {
         //          character categories for run time engine.
         //     - Eliminates mulitiple instances of the same set.
         //     - Creates a new uset node if necessary (if this isn't a duplicate.)
-        findSetFor(n->fText, n, uset);
+        findSetFor(n->fText, n, uset.orphan());
     }
 
 }

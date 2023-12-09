@@ -146,6 +146,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);
     TESTCASE_AUTO(TestBug22581);
     TESTCASE_AUTO(TestBug22584);
+    TESTCASE_AUTO(TestBug22585);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5858,6 +5859,23 @@ void RBBITest::TestExternalBreakEngineWithFakeTaiLe() {
          70, 73, 76, 80, 86, 89, 92}});
     assertTrue("break Tai Le by Fake external breaker",
                expected2 == actual2);
+}
+
+// Test a single unpaired unpaired char (either surrogate low or high) in
+// an Unicode set will not cause infinity loop.
+void RBBITest::TestBug22585() {
+    UnicodeString rule = u"$a=[";
+    rule.append(0xdecb) // an unpaired surrogate high
+        .append("];");
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+    RuleBasedBreakIterator bi(rule, pe, ec);
+
+    rule = u"$a=[";
+    rule.append(0xd94e) // an unpaired surrogate low
+        .append("];");
+    ec = U_ZERO_ERROR;
+    RuleBasedBreakIterator bi2(rule, pe, ec);
 }
 
 void RBBITest::TestBug22584() {
