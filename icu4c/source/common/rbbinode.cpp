@@ -150,7 +150,7 @@ void RBBINode::NRDeleteNode(RBBINode *node) {
 
     RBBINode *stopNode = node->fParent;
     RBBINode *nextNode = node;
-    while (nextNode != stopNode) {
+    while (nextNode != stopNode && nextNode != nullptr) {
         RBBINode *currentNode = nextNode;
 
         if ((currentNode->fLeftChild == nullptr && currentNode->fRightChild == nullptr) ||
@@ -158,10 +158,12 @@ void RBBINode::NRDeleteNode(RBBINode *node) {
                 currentNode->fType == setRef) {      // own their children nodes.
             // CurrentNode is effectively a leaf node; it's safe to go ahead and delete it.
             nextNode = currentNode->fParent;
-            if (nextNode->fLeftChild == currentNode) {
-                nextNode->fLeftChild = nullptr;
-            } else if (nextNode->fRightChild == currentNode) {
-                nextNode->fRightChild = nullptr;
+            if (nextNode) {
+                if (nextNode->fLeftChild == currentNode) {
+                    nextNode->fLeftChild = nullptr;
+                } else if (nextNode->fRightChild == currentNode) {
+                    nextNode->fRightChild = nullptr;
+                }
             }
             delete currentNode;
         } else if (currentNode->fLeftChild) {
