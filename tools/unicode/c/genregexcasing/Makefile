@@ -13,4 +13,4 @@ data: genregexcasing
 	LD_LIBRARY_PATH=$(ICU_BUILD)/lib:$(ICU_BUILD)/stubdata ICU_DATA=$(ICU_BUILD)/data/out ./genregexcasing
 
 genregexcasing: genregexcasing.cpp
-	clang++ genregexcasing.cpp -std=c++0x -g -I $(ICU_HOME)/common -I $(ICU_HOME)/i18n -I $(ICU_HOME)/io -L$(ICU_BUILD)/lib -L$(ICU_BUILD)/stubdata -licuuc -licui18n -licudata -o genregexcasing 
+	clang++ genregexcasing.cpp -std=c++17 -g -I $(ICU_HOME)/common -I $(ICU_HOME)/i18n -I $(ICU_HOME)/io -L$(ICU_BUILD)/lib -L$(ICU_BUILD)/stubdata -licuuc -licui18n -licudata -o genregexcasing

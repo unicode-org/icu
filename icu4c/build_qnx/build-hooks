@@ -15,7 +15,7 @@ function hook_preconfigure {
 
 		CFLAGS="$CFLAGS -fPIC"
 		CPPFLAGS="$CPPFLAGS -fPIC"
-		CXXFLAGS="$CXXFLAGS -std=gnu++11"
+		CXXFLAGS="$CXXFLAGS -std=gnu++17"
 	else
 # prefix is the base path where architecture independent files are installed in the target filesystem
 		configure_opts="${configure_opts} --prefix=/"

@@ -507,6 +507,8 @@
     /* Otherwise use the predefined value. */
 #elif !defined(__cplusplus)
 #   define U_CPLUSPLUS_VERSION 0
+#elif __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
+#   define U_CPLUSPLUS_VERSION 17
 #elif __cplusplus >= 201402L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201402L)
 #   define U_CPLUSPLUS_VERSION 14
 #elif __cplusplus >= 201103L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201103L)

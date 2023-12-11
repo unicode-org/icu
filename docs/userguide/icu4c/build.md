@@ -200,7 +200,7 @@ The value of `v140` corresponds to the Visual Studio 2015 compiler tool set, whe
 
 In order to build the non-UWP projects with Visual Studio 2015 you will need to modify the file called `Build.Windows.ProjectConfiguration.props` to change the value of the `PlatformToolset` property. Note however that Visual Studio 2017 is required for building the UWP projects.
 
-> :point_right: **Note**: Using older versions of the MSVC compiler is generally not recommended due to the improved support for the C++11 standard in newer versions of the compiler.
+> :point_right: **Note**: Using older versions of the MSVC compiler is generally not recommended due to the improved support for the C++17 standard in newer versions of the compiler.
 
 ### Re-targeting the Windows 10 SDK for the UWP projects
 

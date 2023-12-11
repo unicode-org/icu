@@ -148,8 +148,8 @@ AC_SUBST(ENABLE_RELEASE)
 
 # Checks for compilers
 AC_PROG_CC([clang gcc cc c99 c89 xlc_r xlc cl.exe icc])
-# Make sure that we try clang++ first, which provides C++11 support.
-# The g++ compiler is less likely to support C++11.
+# Make sure that we try clang++ first, which provides C++17 support.
+# The g++ compiler is less likely to support C++17.
 AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
 
 # pkg-config is needed for harfbuzz support
@@ -513,17 +513,17 @@ else
 fi
 
 if [[ "$GXX" = yes ]]; then
-    # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++11,
+    # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++17,
     # and check that the compiler still works.
     if ! echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1; then
         OLD_CXXFLAGS="${CXXFLAGS}"
-        CXXFLAGS="$CXXFLAGS -std=c++11"
-        AC_MSG_CHECKING([[if we have a C++11 compiler]])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx11_okay=yes],[cxx11_okay=no])
-        AC_MSG_RESULT($cxx11_okay)
-        if [[ $cxx11_okay = yes ]]; then
-            AC_MSG_NOTICE([Adding CXXFLAGS option -std=c++11])
-            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -std=c++11"
+        CXXFLAGS="$CXXFLAGS -std=c++17"
+        AC_MSG_CHECKING([[if we have a C++17 compiler]])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx17_okay=yes],[cxx17_okay=no])
+        AC_MSG_RESULT($cxx17_okay)
+        if [[ $cxx17_okay = yes ]]; then
+            AC_MSG_NOTICE([Adding CXXFLAGS option -std=c++17])
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -std=c++17"
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
