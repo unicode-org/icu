@@ -1062,7 +1062,11 @@ class RBBIRuleScanner {
 
         // Verify that the set contains at least one code point.
         //
-        if (uset.isEmpty()) {
+        // Use tempSet to handle the case that the UnicodeSet contains
+        // only string element, such as [{ab}] and treat it as empty set.
+        UnicodeSet tempSet = new UnicodeSet(uset);
+        tempSet.removeAllStrings();
+        if (tempSet.isEmpty()) {
             // This set is empty.
             //  Make it an error, because it almost certainly is not what the user wanted.
             //  Also, avoids having to think about corner cases in the tree manipulation code
