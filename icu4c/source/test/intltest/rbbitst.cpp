@@ -5872,6 +5872,9 @@ void RBBITest::TestBug22584() {
     UErrorCode ec {U_ZERO_ERROR};
 
     RuleBasedBreakIterator bi(ruleStr, pe, ec);
+    ec = U_ZERO_ERROR;
+    ruleStr = u"a/b;c";
+    RuleBasedBreakIterator bi2(ruleStr, pe, ec);
 }
 
 void RBBITest::TestBug22581() {
