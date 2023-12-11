@@ -130,17 +130,17 @@ jobs:
           make check;
 
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
-  gcc-10-stdlib14:
+  gcc-10-stdlib17:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: ICU4C with gcc 10 and c++14 and extra warnings.
+      - name: ICU4C with gcc 10 and c++17 and extra warnings.
         env:
           PREFIX: /tmp/icu-prefix
           CC: gcc-10
           CXX: g++-10
-          CXXFLAGS: -std=c++14 -Wextra
+          CXXFLAGS: -std=c++17 -Wextra
         run: |
           mkdir build;
           cd build;

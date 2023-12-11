@@ -2084,7 +2084,7 @@ PREDEFINED             = U_EXPORT2= \
                          U_DEFINE_LOCAL_OPEN_POINTER()= \
                          U_IN_DOXYGEN=1 \
                          U_CHAR16_IS_TYPEDEF=0 \
-                         U_CPLUSPLUS_VERSION=11 \
+                         U_CPLUSPLUS_VERSION=17 \
                          U_WCHAR_IS_UTF16
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this

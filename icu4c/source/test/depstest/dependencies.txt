@@ -125,6 +125,7 @@ group: cplusplus
     # even when no code actually uses it.
     # ICU must not _use_ the global operator delete.
     "operator delete(void*)"
+    "operator delete(void*, unsigned long)"
     # ICU also must not use the global operator new.
     # "operator new[](unsigned long)"
 
