@@ -947,6 +947,20 @@ public class RBBITest extends CoreTestFmwk {
     }
 
     @Test
+    public void TestBug22579() {
+        try {
+            new RuleBasedBreakIterator("[{ab}];");
+            fail("TestBug22579: RuleBasedBreakIterator() failed to throw an exception with only string in an Unicode set.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with only string inside an Unicode set.
+        }
+        catch (Exception e) {
+            fail("TestBug22579: Unexpected exception while new RuleBasedBreakIterator() with only string in an Unicode Set: " + e);
+        }
+
+    }
+    @Test
     public void TestBug22585() {
         try {
             new RuleBasedBreakIterator("$a=[\udecb];");

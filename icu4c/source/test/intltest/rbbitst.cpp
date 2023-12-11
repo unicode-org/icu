@@ -144,6 +144,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestRandomAccess);
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeTaiLe);
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);
+    TESTCASE_AUTO(TestBug22579);
     TESTCASE_AUTO(TestBug22581);
     TESTCASE_AUTO(TestBug22584);
     TESTCASE_AUTO(TestBug22585);
@@ -5895,6 +5896,14 @@ void RBBITest::TestBug22584() {
     RuleBasedBreakIterator bi2(ruleStr, pe, ec);
 }
 
+void RBBITest::TestBug22579() {
+    // Test not causing null deref in cloneTree
+    UnicodeString ruleStr = u"[{ab}];";
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+
+    RuleBasedBreakIterator bi(ruleStr, pe, ec);
+}
 void RBBITest::TestBug22581() {
     // Test duplicate variable setting will not leak the rule compilation
     UnicodeString ruleStr = u"$foo=[abc]; $foo=[xyz]; $foo;";

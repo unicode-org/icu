@@ -1224,6 +1224,7 @@ void RBBIRuleScanner::scanSet() {
     UErrorCode localStatus = U_ZERO_ERROR;
     LocalPointer<UnicodeSet> uset(new UnicodeSet(), localStatus);
     if (U_FAILURE(localStatus)) {
+        error(localStatus);
         return;
     }
     uset->applyPatternIgnoreSpace(fRB->fRules, pos, fSymbolTable, localStatus);
@@ -1240,7 +1241,11 @@ void RBBIRuleScanner::scanSet() {
     // Verify that the set contains at least one code point.
     //
     U_ASSERT(uset.isValid());
-    if (uset->isEmpty()) {
+    UnicodeSet tempSet(*uset);
+    // Use tempSet to handle the case that the UnicodeSet contains
+    // only string element, such as [{ab}] and treat it as empty set.
+    tempSet.removeAllStrings();
+    if (tempSet.isEmpty()) {
         // This set is empty.
         //  Make it an error, because it almost certainly is not what the user wanted.
         //  Also, avoids having to think about corner cases in the tree manipulation code
