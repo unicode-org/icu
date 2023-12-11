@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702335202877,
+  "lastUpdate": 1702338462465,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14968,6 +14968,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.1814877034127558,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "8b14c0579190eea71c030899581b1004ab665c77",
+          "message": "ICU-22585 Fix infinity loop while unicode set contains single surrogate",
+          "timestamp": "2023-12-11T15:33:12-08:00",
+          "tree_id": "96c2fec2a75ad720208cd2a7612003124173534d",
+          "url": "https://github.com/unicode-org/icu/commit/8b14c0579190eea71c030899581b1004ab665c77"
+        },
+        "date": 1702338401766,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.1472841567160597,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
