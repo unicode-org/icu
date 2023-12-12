@@ -953,13 +953,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 // look up the current character's character category, which tells us
                 // which column in the state table to look at.
                 //
-                if (excludedFromDictionaryBreak(c)) {
-                    c = 'A';
-                }
                 category = (short) trie.get(c);
 
                 // Check for categories that require word dictionary handling.
-                if (category >= dictStart) {
+                if (category >= dictStart && !excludedFromDictionaryBreak(c)) {
                     fDictionaryCharCount++;
                 }
 
