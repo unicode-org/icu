@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702338367452,
+  "lastUpdate": 1702421408442,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14878,6 +14878,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.341714164979885,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "4a7d61d2617b2c165d2a58841d99762757f70f75",
+          "message": "ICU-22579 Fix Null deref while Unicode Set only has string",
+          "timestamp": "2023-12-12T14:39:12-08:00",
+          "tree_id": "cebbbfc602168758597444336d5838e860d95fbe",
+          "url": "https://github.com/unicode-org/icu/commit/4a7d61d2617b2c165d2a58841d99762757f70f75"
+        },
+        "date": 1702421340343,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.3721579457183704,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
