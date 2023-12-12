@@ -97,7 +97,7 @@ class RBBINode : public UMemory {
         static void  NRDeleteNode(RBBINode *node);
         
         RBBINode    *cloneTree();
-        RBBINode    *flattenVariables();
+        RBBINode    *flattenVariables(UErrorCode &status, int depth=0);
         void         flattenSets();
         void         findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &status);
 
