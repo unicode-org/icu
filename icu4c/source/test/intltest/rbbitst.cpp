@@ -148,6 +148,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22581);
     TESTCASE_AUTO(TestBug22584);
     TESTCASE_AUTO(TestBug22585);
+    TESTCASE_AUTO(TestBug22602);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5877,6 +5878,15 @@ void RBBITest::TestBug22585() {
         .append("];");
     ec = U_ZERO_ERROR;
     RuleBasedBreakIterator bi2(rule, pe, ec);
+}
+
+// Test a long string with a ; in the end will not cause stack overflow.
+void RBBITest::TestBug22602() {
+    UnicodeString rule(25000, (UChar32)'A', 25000-1);
+    rule.append(u";");
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+    RuleBasedBreakIterator bi(rule, pe, ec);
 }
 
 void RBBITest::TestBug22584() {

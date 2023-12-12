@@ -116,7 +116,7 @@ class RBBITableBuilder {
            // Walk through the tree, replacing any references to $variables with a copy of the
            //   parse tree for the substitution expression.
            //
-           fRB.fTreeRoots[fRootIx] = fRB.fTreeRoots[fRootIx].flattenVariables();
+           fRB.fTreeRoots[fRootIx] = fRB.fTreeRoots[fRootIx].flattenVariables(0);
            if (fRB.fDebugEnv!=null && fRB.fDebugEnv.indexOf("ftree")>=0) {
                System.out.println("Parse tree after flattening variable references.");
                fRB.fTreeRoots[fRootIx].printTree(true);
