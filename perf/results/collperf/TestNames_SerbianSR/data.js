@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702584464429,
+  "lastUpdate": 1702585243693,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31804,6 +31804,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16794648.6638,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "391e3b85fed0319e6c63588e9d9e69685542a8f2",
+          "message": "ICU-22591 Delete obsolete source file.",
+          "timestamp": "2023-12-14T20:42:00+01:00",
+          "tree_id": "42ba0f42d26d6092ecc9810fa38560cb113e0412",
+          "url": "https://github.com/unicode-org/icu/commit/391e3b85fed0319e6c63588e9d9e69685542a8f2"
+        },
+        "date": 1702585183836,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 384.9722,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 53298021.8847,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 15258866.7749,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 53830146.7896,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16787090.1035,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
