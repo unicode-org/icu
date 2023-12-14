@@ -18,6 +18,9 @@
 
 #include "GUISupport.h"
 
+using icu::LEFontInstance;
+using icu::scriptCodeCount;
+
 #define BUFFER_SIZE 128
 
 class FontMap

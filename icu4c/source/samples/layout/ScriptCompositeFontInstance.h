@@ -16,6 +16,8 @@
 
 #include "FontMap.h"
 
+using icu::LEFontInstance;
+
 // U_NAMESPACE_BEGIN
 
 class ScriptCompositeFontInstance : public LEFontInstance

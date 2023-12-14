@@ -25,6 +25,9 @@
 
 #include "ScriptCompositeFontInstance.h"
 
+using icu::LEFontInstance;
+using icu::scriptCodeCount;
+
 const char ScriptCompositeFontInstance::fgClassID=0;
 
 ScriptCompositeFontInstance::ScriptCompositeFontInstance(FontMap *fontMap)

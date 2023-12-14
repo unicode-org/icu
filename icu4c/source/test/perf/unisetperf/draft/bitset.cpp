@@ -26,6 +26,10 @@
 #include "unicont.h"
 #include "cmemory.h" // for UPRV_LENGTHOF
 
+using icu::UObject;
+using icu::UnicodeSet;
+using icu::UnicodeSetIterator;
+
 /*
  * Hash table for up to 1k 64-bit words, for 1 bit per BMP code point.
  * Hashes 64-bit words and maps them to 16-bit integers which are

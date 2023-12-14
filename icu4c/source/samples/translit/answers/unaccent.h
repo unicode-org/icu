@@ -11,6 +11,10 @@
 #include "unicode/translit.h"
 #include "unicode/normlzr.h"
 
+using icu::Normalizer;
+using icu::Replaceable;
+using icu::Transliterator;
+
 class UnaccentTransliterator : public Transliterator {
     
  public:

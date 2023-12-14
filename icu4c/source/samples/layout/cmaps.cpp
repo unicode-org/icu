@@ -26,6 +26,8 @@
 #define SWAPU16(code) ((LEUnicode16) SWAPW(code))
 #define SWAPU32(code) ((LEUnicode32) SWAPL(code))
 
+using icu::LESwaps;
+
 //
 // Finds the high bit by binary searching
 // through the bits in value.

@@ -26,6 +26,8 @@
 #include "ScriptCompositeFontInstance.h"
 
 
+using icu::LEFontInstance;
+
 U_CDECL_BEGIN
 
 gs_guiSupport *gs_gnomeGuiSupportOpen()
