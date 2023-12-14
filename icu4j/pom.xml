@@ -54,6 +54,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
 
     <maven-central-repo-url>https://oss.sonatype.org</maven-central-repo-url>
+    <maven-central-releases-repo-url>${maven-central-repo-url}/service/local/staging/deploy/maven2</maven-central-releases-repo-url>
     <maven-central-snapshots-repo-url>${maven-central-repo-url}/content/repositories/snapshots</maven-central-snapshots-repo-url>
 
     <junit.version>4.13.2</junit.version>
@@ -235,6 +236,10 @@
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
@@ -456,6 +461,16 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <excludes>
+                <exclude>/com/ibm/icu/impl/data/icudt*/**</exclude>
+                <exclude>/com/ibm/icu/impl/duration/impl/data/*.xml</exclude>
+                <exclude>/com/ibm/icu/impl/duration/impl/data/*.xml.escaped</exclude>
+                <exclude>/com/ibm/icu/impl/duration/impl/data/*.txt</exclude>
+                <exclude>/com/ibm/icu/ICUConfig.properties</exclude>
+                <exclude>/**/package.html</exclude>
+              </excludes>
+            </configuration>
           </plugin>
         </plugins>
       </build>
