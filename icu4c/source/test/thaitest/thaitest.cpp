@@ -20,6 +20,12 @@
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
 
+using icu::BreakIterator;
+using icu::Locale;
+using icu::UCharCharacterIterator;
+using icu::UnicodeSet;
+using icu::UnicodeString;
+
 /*
  * This program takes a Unicode text file containing Thai text with
  * spaces inserted where the word breaks are. It computes a copy of

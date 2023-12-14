@@ -9,6 +9,10 @@
 
 #include "unaccent.h"
 
+using icu::Replaceable;
+using icu::Transliterator;
+using icu::UnicodeString;
+
 /**
  * Constructor
  */

@@ -17,6 +17,8 @@
 #include "FontObject.h"
 #include "layout/LESwaps.h"
 
+using icu::LESwaps;
+
 FontObject::FontObject(char *fileName)
   : directory(nullptr), numTables(0), searchRange(0),entrySelector(0),
     cmapTable(nullptr), cmSegCount(0), cmSearchRange(0), cmEntrySelector(0),

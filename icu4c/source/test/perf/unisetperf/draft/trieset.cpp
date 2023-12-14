@@ -24,6 +24,10 @@
 #include "unicode/utypes.h"
 #include "unicont.h"
 
+using icu::UObject;
+using icu::UnicodeSet;
+using icu::UnicodeSetIterator;
+
 #define UTRIE_GET8_LATIN1(trie) ((const uint8_t *)(trie)->data32+UTRIE_DATA_BLOCK_LENGTH)
 
 #define UTRIE_GET8_FROM_LEAD(trie, c16) \

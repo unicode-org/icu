@@ -18,6 +18,8 @@
 #include "util.h"
 #include "unaccent.h"
 
+using icu::Transliterator;
+
 // RuleBasedTransliterator rules to remove accents from characters
 // so they can be displayed as ASCIIx
 UnicodeString UNACCENT_RULES(

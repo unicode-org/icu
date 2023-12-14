@@ -33,6 +33,8 @@
 #include "sfnt.h"
 #include "cmaps.h"
 
+using icu::LEFontInstance;
+
 GnomeSurface::GnomeSurface(GtkWidget *theWidget)
     : fWidget(theWidget)
 {

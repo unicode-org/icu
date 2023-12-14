@@ -23,6 +23,8 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
+using icu::LEFontInstance;
+
 class RenderingSurface
 {
 public:

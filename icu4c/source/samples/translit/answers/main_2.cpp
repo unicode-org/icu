@@ -18,6 +18,8 @@
 #include "util.h"
 #include "unaccent.h"
 
+using icu::Transliterator;
+
 int main(int argc, char **argv) {
 
     Calendar *cal;

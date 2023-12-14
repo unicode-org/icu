@@ -21,6 +21,8 @@
 #include "GUISupport.h"
 #include "UnicodeReader.h"
 
+using icu::UnicodeString;
+
 #define BYTE(b) (((int) b) & 0xFF)
 
 /*
