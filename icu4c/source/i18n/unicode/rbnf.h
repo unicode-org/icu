@@ -764,7 +764,7 @@ public:
    * @return the number of locales for which we have localized rule set display names.
    * @stable ICU 3.2
    */
-  virtual int32_t getNumberOfRuleSetDisplayNameLocales(void) const;
+  virtual int32_t getNumberOfRuleSetDisplayNameLocales() const;
 
   /**
    * Return the index'th display name locale.
@@ -978,7 +978,7 @@ public:
    * @see #setLenient
    * @stable ICU 2.0
    */
-  virtual inline UBool isLenient(void) const override;
+  virtual inline UBool isLenient() const override;
 
 #endif
 
@@ -1017,7 +1017,7 @@ public:
      * @return A rounding mode
      * @stable ICU 60
      */
-    virtual ERoundingMode getRoundingMode(void) const override;
+    virtual ERoundingMode getRoundingMode() const override;
 
     /**
      * Set the rounding mode.
@@ -1032,14 +1032,14 @@ public:
      *
      * @stable ICU 2.8
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.8
      */
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * Sets the decimal format symbols, which is generally not changed
@@ -1122,7 +1122,7 @@ private:
 #if !UCONFIG_NO_COLLATION
 
 inline UBool
-RuleBasedNumberFormat::isLenient(void) const {
+RuleBasedNumberFormat::isLenient() const {
     return lenient;
 }
 

@@ -571,7 +571,7 @@ public:
      *
      * @stable ICU 3.8
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID();
 
 private:
     /**
