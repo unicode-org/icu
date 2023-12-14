@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702594883353,
+  "lastUpdate": 1702596459698,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14938,6 +14938,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.8555046140746754,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "19af9e7ce3869cbe959e8e85b89abc8a28592309",
+          "message": "ICU-22602 Fix stack overflow inside flattenVariables\n\nLimit the recursive call of flattenVariables to maximum depth 3500\nsince Java on my machine throw stack overflow exception around 3900.",
+          "timestamp": "2023-12-14T15:14:21-08:00",
+          "tree_id": "cb8d379e142f7d5b63e79f9ea26c5e267a863ce2",
+          "url": "https://github.com/unicode-org/icu/commit/19af9e7ce3869cbe959e8e85b89abc8a28592309"
+        },
+        "date": 1702596382012,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.8403222619402395,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
