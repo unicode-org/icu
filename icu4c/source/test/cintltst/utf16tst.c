@@ -67,7 +67,7 @@ addUTF16Test(TestNode** root)
     addTest(root, &TestSurrogate,               "utf16tst/TestSurrogate");
 }
 
-static void TestCodeUnitValues()
+static void TestCodeUnitValues(void)
 {
     static uint16_t codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
     
@@ -105,7 +105,7 @@ static void TestCodeUnitValues()
     }
 }
 
-static void TestCharLength()
+static void TestCharLength(void)
 {
     static uint32_t codepoint[]={
         1, 0x0061,
@@ -144,7 +144,7 @@ static void TestCharLength()
     }
 }
 
-static void TestGetChar()
+static void TestGetChar(void)
 {
     static UChar input[]={
     /*  code unit,*/
@@ -223,7 +223,7 @@ static void TestGetChar()
     }
 }
 
-static void TestNextPrevChar(){
+static void TestNextPrevChar(void){
 
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
     static UChar32 result[]={
@@ -398,7 +398,7 @@ static void TestNextPrevChar(){
 }
 
 /* keep this in sync with utf8tst.c's TestNulTerminated() */
-static void TestNulTerminated() {
+static void TestNulTerminated(void) {
     static const UChar input[]={
         /*  0 */  0x61,
         /*  1 */  0xd801, 0xdc01,
@@ -478,7 +478,7 @@ static void TestNulTerminated() {
     } while(c!=0);
 }
 
-static void TestFwdBack(){ 
+static void TestFwdBack(void){
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
     static uint16_t fwd_unsafe[] ={1, 3, 5, 6,  8, 10, 11, 12};
     static uint16_t fwd_safe[]   ={1, 3, 5, 6, 7, 8, 10, 11, 12};
@@ -643,7 +643,7 @@ static void TestFwdBack(){
     }
 }
 
-static void TestSetChar(){
+static void TestSetChar(void){
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
     static uint16_t start_unsafe[]={0, 1, 1, 3, 3, 5, 6, 7, 8, 8, 9, 11};
     static uint16_t start_safe[]  ={0, 1, 1, 3, 3, 5, 6, 7, 8, 8, 10, 11};
@@ -703,7 +703,7 @@ static void TestSetChar(){
     }
 }
 
-static void TestAppendChar(){
+static void TestAppendChar(void){
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
     static UChar s[5]={0x0061, 0x0062, 0x0063, 0x0064, 0x0000};
     static uint32_t test[]={
@@ -803,7 +803,7 @@ static void TestAppendChar(){
 #endif
 }
 
-static void TestAppend() {
+static void TestAppend(void) {
     static const UChar32 codePoints[]={
         0x61, 0xdf, 0x901, 0x3040,
         0xac00, 0xd800, 0xdbff, 0xdcde,
@@ -864,7 +864,7 @@ static void TestAppend() {
     }
 }
 
-static void TestSurrogate(){
+static void TestSurrogate(void){
     static UChar32 s[] = {0x10000, 0x10ffff, 0x50000, 0x100000, 0x1abcd};
     int i = 0;
     while (i < 5) {

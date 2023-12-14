@@ -87,7 +87,7 @@ static const UChar sampleFormatted[] = {0x31, 0x30, 0x20, 0x6A, 0x75, 0x69, 0x6C
 static const UChar skeleton[]= {0x4d, 0x4d, 0x4d, 0x64, 0};  /* MMMd */
 static const UChar timeZoneGMT[] = { 0x0047, 0x004d, 0x0054, 0x0000 };  /* "GMT" */
 
-static void TestOpenClose() {
+static void TestOpenClose(void) {
     UErrorCode errorCode=U_ZERO_ERROR;
     UDateTimePatternGenerator *dtpg, *dtpg2;
     const UChar *s;
@@ -143,7 +143,7 @@ static const AppendItemNameData appendItemNameData[] = { /* for Finnish */
     { UDATPG_FIELD_COUNT,   {0}        }  /* terminator */
 };
 
-static void TestUsage() {
+static void TestUsage(void) {
     UErrorCode errorCode=U_ZERO_ERROR;
     UDateTimePatternGenerator *dtpg;
     const AppendItemNameData * appItemNameDataPtr;
@@ -254,7 +254,7 @@ static void TestUsage() {
     udatpg_close(dtpg);
 }
 
-static void TestBuilder() {
+static void TestBuilder(void) {
     UErrorCode errorCode=U_ZERO_ERROR;
     UDateTimePatternGenerator *dtpg;
     UDateTimePatternConflict conflict;
@@ -409,7 +409,7 @@ static const UChar patn_hpmm_a[]  = u"h.mm\u202Fa";
 static const UChar patn_Hpmm[]    = u"H.mm";
 static const UChar patn_hhpmm_a[] = u"hh.mm\u202Fa";
 
-static void TestOptions() {
+static void TestOptions(void) {
     const DTPtnGenOptionsData testData[] = {
         /*loc   skel       options                       expectedPattern */
         { "en", skel_Hmm,  UDATPG_MATCH_NO_OPTIONS,        patn_HHcmm   },
@@ -461,7 +461,7 @@ typedef struct FieldDisplayNameData {
 } FieldDisplayNameData;
 enum { kFieldDisplayNameMax = 32, kFieldDisplayNameBytesMax  = 64};
 
-static void TestGetFieldDisplayNames() {
+static void TestGetFieldDisplayNames(void) {
     const FieldDisplayNameData testData[] = {
         /*loc      field                              width               expectedName */
         { "de",    UDATPG_QUARTER_FIELD,              UDATPG_WIDE,        "Quartal" },
@@ -528,7 +528,7 @@ typedef struct HourCycleData {
     UDateFormatHourCycle   expected;
 } HourCycleData;
 
-static void TestGetDefaultHourCycle() {
+static void TestGetDefaultHourCycle(void) {
     const HourCycleData testData[] = {
         /*loc      expected */
         { "ar_EG",    UDAT_HOUR_CYCLE_12 },
@@ -566,7 +566,7 @@ static void TestGetDefaultHourCycle() {
 }
 
 // Ensure that calling udatpg_getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE_EXIT/abort.
-static void TestGetDefaultHourCycleOnEmptyInstance() {
+static void TestGetDefaultHourCycleOnEmptyInstance(void) {
     UErrorCode status = U_ZERO_ERROR;
     UDateTimePatternGenerator * dtpgen = udatpg_openEmpty(&status);
 

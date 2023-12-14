@@ -50,7 +50,7 @@ void addDtFrDepTest(TestNode** root)
 /**
  * Test the parsing of 2-digit years.
  */
-void TestTwoDigitYearDSTParse()
+void TestTwoDigitYearDSTParse(void)
 {
     UDateFormat *fullFmt, *fmt;
     UErrorCode status = U_ZERO_ERROR;
@@ -114,7 +114,7 @@ void TestTwoDigitYearDSTParse()
  * correctly.  In some instances, this means not being parsed at all, and
  * returning an appropriate error.
  */
-void TestPartialParse994()
+void TestPartialParse994(void)
 {
     int32_t pos;
     UDateFormat *f;
@@ -197,7 +197,7 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
  * Verify the behavior of patterns in which digits for different fields run together
  * without intervening separators.
  */
-void TestRunTogetherPattern985()
+void TestRunTogetherPattern985(void)
 {
     int32_t pos;
     UChar *pattern=NULL, *now=NULL, *then=NULL;
@@ -231,7 +231,7 @@ void TestRunTogetherPattern985()
  * Verify the handling of Czech June and July, which have the unique attribute that
  * one is a proper prefix substring of the other.
  */
-void TestCzechMonths459()
+void TestCzechMonths459(void)
 {
     int32_t lneed, pos;
     UChar *pattern=NULL, *tzID=NULL;
@@ -305,7 +305,7 @@ void TestCzechMonths459()
 /**
  * Test the handling of single quotes in patterns.
  */
-void TestQuotePattern161()
+void TestQuotePattern161(void)
 {
     UDateFormat *format = NULL;
     UCalendar *cal = NULL;

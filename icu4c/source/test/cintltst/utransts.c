@@ -142,7 +142,7 @@ static void InitXReplaceableCallbacks(UReplaceableCallbacks* callbacks) {
  * Tests
  *------------------------------------------------------------------*/
 
-static void TestAPI() {
+static void TestAPI(void) {
     enum { BUF_CAP = 128 };
     char buf[BUF_CAP], buf2[BUF_CAP];
     UErrorCode status = U_ZERO_ERROR;
@@ -184,7 +184,7 @@ static void TestAPI() {
     }
 }
 
-static void TestUnicodeIDs() {
+static void TestUnicodeIDs(void) {
     UEnumeration *uenum;
     UTransliterator *utrans;
     const UChar *id, *id2;
@@ -249,7 +249,7 @@ static void TestUnicodeIDs() {
     uenum_close(uenum);
 }
 
-static void TestOpenInverse(){
+static void TestOpenInverse(void){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
     UTransliterator* inverse1=NULL;
@@ -297,7 +297,7 @@ static void TestOpenInverse(){
    }
 }
 
-static void TestClone(){
+static void TestClone(void){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
     UTransliterator* t2=NULL;
@@ -344,7 +344,7 @@ static void TestClone(){
 
 }
 
-static void TestRegisterUnregister(){
+static void TestRegisterUnregister(void){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
     UTransliterator* rules=NULL, *rules2;
@@ -439,7 +439,7 @@ static void TestRegisterUnregister(){
     utrans_close(inverse1);
 }
 
-static void TestSimpleRules() {
+static void TestSimpleRules(void) {
     /* Test rules */
     /* Example: rules 1. ab>x|y
      *                2. yc>z
@@ -492,7 +492,7 @@ static void TestSimpleRules() {
                  "abc ababc aba", "xy abxy z"); 
 }
 
-static void TestFilter() {
+static void TestFilter(void) {
     UErrorCode status = U_ZERO_ERROR;
     UChar filt[128];
     UChar buf[128];
@@ -558,7 +558,7 @@ static void TestFilter() {
  * Test the UReplaceableCallback extractBetween support.  We use a
  * transliterator known to rely on this call.
  */
-static void TestExtractBetween() {
+static void TestExtractBetween(void) {
 
     UTransliterator *trans;
     UErrorCode status = U_ZERO_ERROR;
@@ -587,7 +587,7 @@ static const UChar transSimpleID[] = { 0x79,0x6F,0x2D,0x79,0x6F,0x5F,0x42,0x4A,0
 static const char* transSimpleCName = "yo-yo_BJ";
 
 enum { kUBufMax = 512 };
-static void TestGetRulesAndSourceSet() {
+static void TestGetRulesAndSourceSet(void) {
     UErrorCode status = U_ZERO_ERROR;
     UTransliterator *utrans = utrans_openU(transSimpleID, -1, UTRANS_FORWARD, NULL, 0, NULL, &status);
     if ( U_SUCCESS(status) ) {
@@ -672,7 +672,7 @@ static const TransIDSourceTarg dataVarCompItems[] = {
 };
 
 enum { kBBufMax = 1024 };
-static void TestDataVariantsCompounds() {
+static void TestDataVariantsCompounds(void) {
     const TransIDSourceTarg* itemsPtr;
     for (itemsPtr = dataVarCompItems; itemsPtr->transID != NULL; itemsPtr++) {
         UErrorCode status = U_ZERO_ERROR;

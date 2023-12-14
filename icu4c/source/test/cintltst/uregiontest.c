@@ -362,7 +362,7 @@ static KnownRegion knownRegions[] = {
     };
 
 
-static void TestKnownRegions() {
+static void TestKnownRegions(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -389,7 +389,7 @@ static void TestKnownRegions() {
     }
 }
 
-static void TestGetContainedRegions() {
+static void TestGetContainedRegions(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -418,7 +418,7 @@ static void TestGetContainedRegions() {
     }
 }
 
-static void TestGroupingChildren() {
+static void TestGroupingChildren(void) {
     const char* testGroupings[] = {
         "003", "021,013,029",
         "419", "013,029,005",
@@ -470,7 +470,7 @@ static void TestGroupingChildren() {
     }
 }
 
-static void TestGetContainedRegionsWithType() {
+static void TestGetContainedRegionsWithType(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -499,7 +499,7 @@ static void TestGetContainedRegionsWithType() {
     }
 }
 
-static void TestGetContainingRegion() {        
+static void TestGetContainingRegion(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -523,7 +523,7 @@ static void TestGetContainingRegion() {
     }
 }
 
-static void TestGetContainingRegionWithType() {        
+static void TestGetContainingRegionWithType(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -563,7 +563,7 @@ static const char ** expectPrefRegionsTestData[] = {
     NULL
 };
 
-static void TestGetPreferredValues() {
+static void TestGetPreferredValues(void) {
     const char *** testDataPtr = expectPrefRegionsTestData;
     const char ** regionListPtr;
     while ( (regionListPtr = *testDataPtr++) != NULL ) {
@@ -600,7 +600,7 @@ static void TestGetPreferredValues() {
     }
 }
 
-static void TestContains() {
+static void TestContains(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;

@@ -72,7 +72,7 @@ static const char* raw[3][4] = {
     {   "English_United States", "French_France", "Croatian_Croatia", "English_United States"}
 };
 
-static void setUpDataTable()
+static void setUpDataTable(void)
 {
     int32_t i,j;
     if(dataTable == NULL) {
@@ -88,7 +88,7 @@ static void setUpDataTable()
     }
 }
 
-static void cleanUpDataTable()
+static void cleanUpDataTable(void)
 {
     int32_t i,j;
     if(dataTable != NULL) {
@@ -104,7 +104,7 @@ static void cleanUpDataTable()
 }
 
 /*Tests  for u_strcat(),u_strcmp(), u_strlen(), u_strcpy(),u_strncat(),u_strncmp(),u_strncpy, u_uastrcpy(),u_austrcpy(), u_uastrncpy(); */
-static void TestStringFunctions()
+static void TestStringFunctions(void)
 {
     int32_t i,j,k;
     UChar temp[512];
@@ -480,7 +480,7 @@ static void TestStringFunctions()
     cleanUpDataTable();
 }
 
-static void TestStringSearching()
+static void TestStringSearching(void)
 {
     const UChar testString[] = {0x0061, 0x0062, 0x0063, 0x0064, 0x0064, 0x0061, 0};
     const UChar testSurrogateString[] = {0xdbff, 0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0};
@@ -691,7 +691,7 @@ static void TestStringSearching()
  * There are some new functions, too - just test them all.
  */
 static void
-TestSurrogateSearching() {
+TestSurrogateSearching(void) {
     static const UChar s[]={
         /* 0       1       2     3       4     5       6     7       8       9    10 11 */
         0x61, 0xd801, 0xdc02, 0x61, 0xdc02, 0x61, 0xd801, 0x61, 0xd801, 0xdc02, 0x61, 0
@@ -979,7 +979,7 @@ TestSurrogateSearching() {
     }
 }
 
-static void TestStringCopy()
+static void TestStringCopy(void)
 {
     UChar temp[40];
     UChar *result=0;
@@ -1098,7 +1098,7 @@ static void TestStringCopy()
 /* test u_unescape() and u_unescapeAt() ------------------------------------- */
 
 static void
-TestUnescape() {
+TestUnescape(void) {
     static UChar buffer[200];
     
     static const char* input =
@@ -1130,7 +1130,7 @@ TestUnescape() {
 }
 
 static void
-TestUnescapeRepeatedSurrogateLead20725() {
+TestUnescapeRepeatedSurrogateLead20725(void) {
     const int32_t repeat = 20000;
     const int32_t srclen = repeat * 6 + 1;
     char *src = (char*)malloc(srclen);
@@ -1197,7 +1197,7 @@ _testStrHasMoreChar32Than(const UChar *s, int32_t i, int32_t length, int32_t num
 }
 
 static void
-TestCountChar32() {
+TestCountChar32(void) {
     static const UChar string[]={
         0x61, 0x62, 0xd800, 0xdc00,
         0xd801, 0xdc01, 0x63, 0xd802,
@@ -1498,7 +1498,7 @@ testIteratorState(UCharIterator *iter1, UCharIterator *iter2, const char *n, int
 }
 
 static void
-TestUCharIterator() {
+TestUCharIterator(void) {
     static const UChar text[]={
         0x61, 0x62, 0x63, 0xd801, 0xdffd, 0x78, 0x79, 0x7a, 0
     };

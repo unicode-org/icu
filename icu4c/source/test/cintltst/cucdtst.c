@@ -208,7 +208,7 @@ void addUnicodeTest(TestNode** root)
 /*==================================================== */
 /* test u_toupper() and u_tolower()                    */
 /*==================================================== */
-static void TestUpperLower()
+static void TestUpperLower(void)
 {
     const UChar upper[] = {0x41, 0x42, 0x00b2, 0x01c4, 0x01c6, 0x01c9, 0x01c8, 0x01c9, 0x000c, 0x0000};
     const UChar lower[] = {0x61, 0x62, 0x00b2, 0x01c6, 0x01c6, 0x01c9, 0x01c9, 0x01c9, 0x000c, 0x0000};
@@ -440,7 +440,7 @@ compareUSets(const USet *a, const USet *b,
 }
 
 /* test isLetter(u_isapha()) and isDigit(u_isdigit()) */
-static void TestLetterNumber()
+static void TestLetterNumber(void)
 {
     UChar i = 0x0000;
 
@@ -542,7 +542,7 @@ static void testSampleCharProps(UBool propFn(UChar32), const char *propName,
 }
 
 /* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue() */
-static void TestMisc()
+static void TestMisc(void)
 {
     static const UChar32 sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
     static const UChar32 sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
@@ -822,7 +822,7 @@ static const struct {
 };
 
 static void
-TestPOSIX() {
+TestPOSIX(void) {
     uint32_t mask;
     int32_t cl, i;
     UBool expect;
@@ -841,7 +841,7 @@ TestPOSIX() {
 }
 
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
-static void TestControlPrint()
+static void TestControlPrint(void)
 {
     const UChar32 sampleControl[] = {0x1b, 0x97, 0x82, 0x2028, 0x2029, 0x200c, 0x202b};
     const UChar32 sampleNonControl[] = {0x61, 0x0031, 0x00e2};
@@ -889,7 +889,7 @@ static void TestControlPrint()
 }
 
 /* u_isJavaIDStart, u_isJavaIDPart, u_isIDStart(), u_isIDPart(), u_isIDIgnorable()*/
-static void TestIdentifier()
+static void TestIdentifier(void)
 {
     const UChar32 sampleJavaIDStart[] = {0x0071, 0x00e4, 0x005f};
     const UChar32 sampleNonJavaIDStart[] = {0x0020, 0x2030, 0x0082};
@@ -1313,7 +1313,7 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
 }
 
 /* tests for several properties */
-static void TestUnicodeData()
+static void TestUnicodeData(void)
 {
     UVersionInfo expectVersionArray;
     UVersionInfo versionArray;
@@ -1401,7 +1401,7 @@ static void TestUnicodeData()
     u_enumCharTypes(enumDefaultsRange, NULL);
 }
 
-static void TestCodeUnit(){
+static void TestCodeUnit(void){
     const UChar codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
 
     int32_t i;
@@ -1448,7 +1448,7 @@ static void TestCodeUnit(){
     }
 }
 
-static void TestCodePoint(){
+static void TestCodePoint(void){
     const UChar32 codePoint[]={
         /*surrogate, notvalid(codepoint), not a UnicodeChar, not Error */
         0xd800,
@@ -1586,7 +1586,7 @@ static void TestCodePoint(){
     }
 }
 
-static void TestCharLength()
+static void TestCharLength(void)
 {
     const int32_t codepoint[]={
         1, 0x0061,
@@ -1770,7 +1770,7 @@ u_charToUChar(char c) {
 }
 
 static void
-TestCharNames() {
+TestCharNames(void) {
     static char name[80];
     UErrorCode errorCode=U_ZERO_ERROR;
     struct enumExtCharNamesContext extContext;
@@ -2010,7 +2010,7 @@ TestCharNames() {
 }
 
 static void
-TestUCharFromNameUnderflow() {
+TestUCharFromNameUnderflow(void) {
     // Ticket #10889: Underflow crash when there is no dash.
     const char *name="<NO BREAK SPACE>";
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -2074,7 +2074,7 @@ TestUCharFromNameUnderflow() {
 /* test u_isMirrored() and u_charMirror() ----------------------------------- */
 
 static void
-TestMirroring() {
+TestMirroring(void) {
     USet *set;
     UErrorCode errorCode;
 
@@ -2186,7 +2186,7 @@ CheckScriptRuns(UScriptRun *scriptRun, int32_t *runStarts, const RunTestData *te
 }
 
 static void
-TestUScriptRunAPI()
+TestUScriptRunAPI(void)
 {
     static const RunTestData testData1[] = {
         {"\\u0020\\u0946\\u0939\\u093F\\u0928\\u094D\\u0926\\u0940\\u0020", USCRIPT_DEVANAGARI},
@@ -2350,7 +2350,7 @@ TestUScriptRunAPI()
 
 /* test additional, non-core properties */
 static void
-TestAdditionalProperties() {
+TestAdditionalProperties(void) {
     /* test data for u_charAge() */
     static const struct {
         UChar32 c;
@@ -3210,7 +3210,7 @@ TestPropertyValues(void) {
 
 /* various tests for consistency of UCD data and API behavior */
 static void
-TestConsistency() {
+TestConsistency(void) {
     char buffer[300];
     USet *set1, *set2, *set3, *set4;
     UErrorCode errorCode;
@@ -3540,7 +3540,7 @@ caseFoldingLineFn(void *context,
 }
 
 static void
-TestCaseFolding() {
+TestCaseFolding(void) {
     CaseFoldingData data={ NULL, 0, 0, {0}, 0, 0 };
     char *fields[3][2];
     UErrorCode errorCode;
@@ -3580,7 +3580,7 @@ TestCaseFolding() {
     uset_close(data.notSeen);
 }
 
-static void TestBinaryCharacterPropertiesAPI() {
+static void TestBinaryCharacterPropertiesAPI(void) {
     // API test only. See intltest/ucdtest.cpp for functional test.
     UErrorCode errorCode = U_ZERO_ERROR;
     const USet *set = u_getBinaryPropertySet(-1, &errorCode);
@@ -3599,7 +3599,7 @@ static void TestBinaryCharacterPropertiesAPI() {
     }
 }
 
-static void TestIntCharacterPropertiesAPI() {
+static void TestIntCharacterPropertiesAPI(void) {
     // API test only. See intltest/ucdtest.cpp for functional test.
     UErrorCode errorCode = U_ZERO_ERROR;
     const UCPMap *map = u_getIntPropertyMap(UCHAR_INT_START - 1, &errorCode);
