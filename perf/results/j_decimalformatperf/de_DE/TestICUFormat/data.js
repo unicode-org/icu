@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702594781400,
+  "lastUpdate": 1702596312426,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15088,6 +15088,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 553.8075548172677,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "19af9e7ce3869cbe959e8e85b89abc8a28592309",
+          "message": "ICU-22602 Fix stack overflow inside flattenVariables\n\nLimit the recursive call of flattenVariables to maximum depth 3500\nsince Java on my machine throw stack overflow exception around 3900.",
+          "timestamp": "2023-12-14T15:14:21-08:00",
+          "tree_id": "cb8d379e142f7d5b63e79f9ea26c5e267a863ce2",
+          "url": "https://github.com/unicode-org/icu/commit/19af9e7ce3869cbe959e8e85b89abc8a28592309"
+        },
+        "date": 1702596251441,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 541.9299570191985,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
