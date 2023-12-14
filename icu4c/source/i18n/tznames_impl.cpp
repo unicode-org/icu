@@ -1303,11 +1303,16 @@ static void mergeTimeZoneKey(const UnicodeString& mzID, char* result) {
 ZNames*
 TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID, UErrorCode& status) {
     if (U_FAILURE(status)) { return nullptr; }
-    U_ASSERT(mzID.length() <= ZID_KEY_MAX - MZ_PREFIX_LEN);
+    if (mzID.length() > ZID_KEY_MAX - MZ_PREFIX_LEN) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return nullptr;
+    }
 
     char16_t mzIDKey[ZID_KEY_MAX + 1];
     mzID.extract(mzIDKey, ZID_KEY_MAX + 1, status);
-    U_ASSERT(U_SUCCESS(status));   // already checked length above
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     mzIDKey[mzID.length()] = 0;
 
     void* mznames = uhash_get(fMZNamesMap, mzIDKey);
@@ -1331,7 +1336,10 @@ TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID, UErrorCode& stat
 ZNames*
 TimeZoneNamesImpl::loadTimeZoneNames(const UnicodeString& tzID, UErrorCode& status) {
     if (U_FAILURE(status)) { return nullptr; }
-    U_ASSERT(tzID.length() <= ZID_KEY_MAX);
+    if (tzID.length() > ZID_KEY_MAX) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return nullptr;
+    }
 
     char16_t tzIDKey[ZID_KEY_MAX + 1];
     int32_t tzIDKeyLen = tzID.extract(tzIDKey, ZID_KEY_MAX + 1, status);
@@ -2248,7 +2256,9 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
 
     char16_t mzIDKey[ZID_KEY_MAX + 1];
     mzID.extract(mzIDKey, ZID_KEY_MAX + 1, status);
-    U_ASSERT(status == U_ZERO_ERROR);   // already checked length above
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     mzIDKey[mzID.length()] = 0;
 
     static UMutex gTZDBNamesMapLock;
