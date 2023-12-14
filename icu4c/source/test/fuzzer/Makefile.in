@@ -41,6 +41,7 @@ FUZZER_TARGETS = \
 		 date_time_pattern_generator_fuzzer \
 		 list_format_fuzzer locale_fuzzer \
 		 locale_morph_fuzzer \
+		 normalizer2_fuzzer \
 		 number_format_fuzzer \
 		 number_formatter_fuzzer \
 		 relative_date_time_formatter_fuzzer \
