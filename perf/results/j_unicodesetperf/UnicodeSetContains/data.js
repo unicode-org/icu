@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702577841465,
+  "lastUpdate": 1702581619026,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15058,6 +15058,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 1.7487494706018625,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e2d1d3ed43773549b31e201501d28a8f98bba9b5",
+          "message": "ICU-22592 Rename source file that should not be directly compiled.",
+          "timestamp": "2023-12-14T20:11:50+01:00",
+          "tree_id": "4844eb11f6154cbdb58fdb1a3cbe128caf6d292a",
+          "url": "https://github.com/unicode-org/icu/commit/e2d1d3ed43773549b31e201501d28a8f98bba9b5"
+        },
+        "date": 1702581458364,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 1.7405893638863343,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
