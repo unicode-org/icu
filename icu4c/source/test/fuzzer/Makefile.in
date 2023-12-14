@@ -46,6 +46,7 @@ FUZZER_TARGETS = \
 		 relative_date_time_formatter_fuzzer \
 		 rule_based_break_iterator_fuzzer \
 		 timezone_create_fuzzer \
+		 time_zone_names_fuzzer \
 		 ucasemap_fuzzer \
 		 uloc_canonicalize_fuzzer \
 		 uloc_for_language_tag_fuzzer \
