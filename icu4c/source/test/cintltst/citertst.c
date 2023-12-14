@@ -65,7 +65,7 @@ void addCollIterTest(TestNode** root)
 
 static const char * LOCALES[] = {"en_AU", "en_BE", "en_CA"};
 
-static void TestBug672() {
+static void TestBug672(void) {
     UErrorCode  status = U_ZERO_ERROR;
     UChar       pattern[20];
     UChar       text[50];
@@ -138,7 +138,7 @@ static void TestBug672() {
 
 /*  Running this test with normalization enabled showed up a bug in the incremental
     normalization code. */
-static void TestBug672Normalize() {
+static void TestBug672Normalize(void) {
     UErrorCode  status = U_ZERO_ERROR;
     UChar       pattern[20];
     UChar       text[50];
@@ -217,7 +217,7 @@ static void TestBug672Normalize() {
  * Test for CollationElementIterator previous and next for the whole set of
  * unicode characters.
  */
-static void TestUnicodeChar()
+static void TestUnicodeChar(void)
 {
     UChar source[0x100];
     UCollator *en_us;
@@ -283,7 +283,7 @@ static void TestUnicodeChar()
  * Test for CollationElementIterator previous and next for the whole set of
  * unicode characters with normalization on.
  */
-static void TestNormalizedUnicodeChar()
+static void TestNormalizedUnicodeChar(void)
 {
     UChar source[0x100];
     UCollator *th_th;
@@ -347,7 +347,7 @@ static void TestNormalizedUnicodeChar()
 /**
 * Test the incremental normalization
 */
-static void TestNormalization()
+static void TestNormalization(void)
 {
           UErrorCode          status = U_ZERO_ERROR;
     const char               *str    =
@@ -418,7 +418,7 @@ static void TestNormalization()
  * @bug 4108758 - Make sure it works with contracting characters
  *
  */
-static void TestPrevious()
+static void TestPrevious(void)
 {
     UCollator *coll=NULL;
     UChar rule[50];
@@ -558,7 +558,7 @@ static void TestPrevious()
 /**
  * Test for getOffset() and setOffset()
  */
-static void TestOffset()
+static void TestOffset(void)
 {
     UErrorCode status= U_ZERO_ERROR;
     UCollator *en_us=NULL;
@@ -703,7 +703,7 @@ static void TestOffset()
 /**
  * Test for setText()
  */
-static void TestSetText()
+static void TestSetText(void)
 {
     int32_t c,i;
     UErrorCode status = U_ZERO_ERROR;
@@ -776,7 +776,7 @@ static void TestSetText()
 /** @bug 4108762
  * Test for getMaxExpansion()
  */
-static void TestMaxExpansion()
+static void TestMaxExpansion(void)
 {
     UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
@@ -934,7 +934,7 @@ static void assertEqual(UCollationElements *i1, UCollationElements *i2)
 /**
  * Testing iterators with extremely small buffers
  */
-static void TestSmallBuffer()
+static void TestSmallBuffer(void)
 {
     UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll;
@@ -1007,7 +1007,7 @@ static void TestSmallBuffer()
 /**
 * Testing the discontiguous contractions
 */
-static void TestDiscontiguos() {
+static void TestDiscontiguos(void) {
     const char               *rulestr    =
                             "&z < AB < X\\u0300 < ABC < X\\u0300\\u0315";
           UChar               rule[50];

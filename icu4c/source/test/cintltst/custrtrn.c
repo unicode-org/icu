@@ -208,7 +208,7 @@ static void Test_strToUTF32(void){
 }
 
 /* test unpaired surrogates */
-static void Test_strToUTF32_surrogates() {
+static void Test_strToUTF32_surrogates(void) {
     UErrorCode err = U_ZERO_ERROR;
     UChar32 u32Target[400];
     int32_t len16, u32DestLen;
@@ -388,7 +388,7 @@ static void Test_strFromUTF32(void){
 }
 
 /* test surrogate code points */
-static void Test_strFromUTF32_surrogates() {
+static void Test_strFromUTF32_surrogates(void) {
     UErrorCode err = U_ZERO_ERROR;
     UChar uTarget[400];
     int32_t len32, uDestLen;
@@ -1381,7 +1381,7 @@ static void Test_UChar_WCHART_API(void){
 #endif
 } 
 
-static void Test_widestrs()
+static void Test_widestrs(void)
 {
 #if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
         wchar_t ws[100];
@@ -1425,7 +1425,7 @@ static void Test_widestrs()
 }
 
 static void
-Test_WCHART_LongString(){
+Test_WCHART_LongString(void){
 #if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
     UErrorCode status = U_ZERO_ERROR;
     const char* testdatapath=loadTestData(&status);
@@ -1513,7 +1513,7 @@ Test_WCHART_LongString(){
 #endif
 }
 
-static void Test_strToJavaModifiedUTF8() {
+static void Test_strToJavaModifiedUTF8(void) {
     static const UChar src[]={
         0x61, 0x62, 0x63, 0xe1, 0xe2, 0xe3,
         0xe01, 0xe02, 0xe03, 0xe001, 0xe002, 0xe003,
@@ -1689,7 +1689,7 @@ static void Test_strToJavaModifiedUTF8() {
     }
 }
 
-static void Test_strFromJavaModifiedUTF8() {
+static void Test_strFromJavaModifiedUTF8(void) {
     static const uint8_t src[]={
         0x61, 0x62, 0x63, 0xc3, 0xa1, 0xc3, 0xa2, 0xc3, 0xa3,
         0xe0, 0xb8, 0x81, 0xe0, 0xb8, 0x82, 0xe0, 0xb8, 0x83,
@@ -1992,7 +1992,7 @@ static void Test_strFromJavaModifiedUTF8() {
 }
 
 /* test that string transformation functions permit NULL source pointer when source length==0 */
-static void TestNullEmptySource() {
+static void TestNullEmptySource(void) {
     char dest8[4]={ 3, 3, 3, 3 };
     UChar dest16[4]={ 3, 3, 3, 3 };
     UChar32 dest32[4]={ 3, 3, 3, 3 };

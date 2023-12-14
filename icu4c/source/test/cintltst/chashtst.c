@@ -155,7 +155,7 @@ static void TestBasic(void) {
     uhash_close(hash);
 }
 
-static void TestAllowZero() {
+static void TestAllowZero(void) {
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash = uhash_open(hashChars, isEqualChars, NULL,  &status);
     if (U_FAILURE(status)) {

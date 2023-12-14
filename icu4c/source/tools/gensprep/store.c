@@ -199,7 +199,7 @@ static UNewTrie *sprepTrie;
 
 
 extern void
-init() {
+init(void) {
 
     sprepTrie = (UNewTrie *)uprv_calloc(1, sizeof(UNewTrie));
 

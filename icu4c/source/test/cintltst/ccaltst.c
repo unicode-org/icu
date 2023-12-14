@@ -112,7 +112,7 @@ static const UCalGetTypeTest ucalGetTypeTests[] = {
     { NULL, 0, NULL } /* terminator */
 };    
     
-static void TestCalendar()
+static void TestCalendar(void)
 {
     UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0, *calfrclone = 0;
     UEnumeration* uenum = NULL;
@@ -527,7 +527,7 @@ static void TestCalendar()
 /*------------------------------------------------------*/
 /*Testing the getMillis, setMillis, setDate and setDateTime functions extensively*/
 
-static void TestGetSetDateAPI()
+static void TestGetSetDateAPI(void)
 {
     UCalendar *caldef = 0, *caldef2 = 0, *caldef3 = 0;
     UChar tzID[4];
@@ -795,7 +795,7 @@ static void TestGetSetDateAPI()
 /**
  * Confirm the functioning of the calendar field related functions.
  */
-static void TestFieldGetSet()
+static void TestFieldGetSet(void)
 {
     UCalendar *cal = 0;
     UChar tzID[4];
@@ -955,7 +955,7 @@ static const TransitionItem transitionItems[] = {
 /**
  * Execute adding and rolling in Calendar extensively,
  */
-static void TestAddRollExtensive()
+static void TestAddRollExtensive(void)
 {
     const TransitionItem * itemPtr;
     UCalendar *cal = 0;
@@ -1149,7 +1149,7 @@ static void TestAddRollExtensive()
 
 /*------------------------------------------------------ */
 /*Testing the Limits for various Fields of Calendar*/
-static void TestGetLimits()
+static void TestGetLimits(void)
 {
     UCalendar *cal = 0;
     int32_t min, max, gr_min, le_max, ac_min, ac_max, val;
@@ -1245,7 +1245,7 @@ static void TestGetLimits()
  * Test that the days of the week progress properly when add is called repeatedly
  * for increments of 24 days.
  */
-static void TestDOWProgression()
+static void TestDOWProgression(void)
 {
     int32_t initialDOW, DOW, newDOW, expectedDOW;
     UCalendar *cal = 0;
@@ -1311,7 +1311,7 @@ static void TestDOWProgression()
 /**
  * Confirm that the offset between local time and GMT behaves as expected.
  */
-static void TestGMTvsLocal()
+static void TestGMTvsLocal(void)
 {
     log_verbose("\nTesting the offset between the GMT and local time\n");
     testZones(1999, 1, 1, 12, 0, 0);
@@ -1551,7 +1551,7 @@ static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t yea
         
 }
 
-void TestGregorianChange() {
+void TestGregorianChange(void) {
     static const UChar utc[] = { 0x45, 0x74, 0x63, 0x2f, 0x47, 0x4d, 0x54, 0 }; /* "Etc/GMT" */
     const int32_t dayMillis = 86400 * INT64_C(1000);    /* 1 day = 86400 seconds */
     UCalendar *cal;
@@ -1615,7 +1615,7 @@ void TestGregorianChange() {
     ucal_close(cal);
 }
 
-static void TestGetKeywordValuesForLocale() {
+static void TestGetKeywordValuesForLocale(void) {
 #define PREFERRED_SIZE 26
 #define MAX_NUMBER_OF_KEYWORDS 5
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
@@ -1816,7 +1816,7 @@ static const UChar logDateFormat[] = { 0x0045,0x0045,0x0045,0x0020,0x004D,0x004D
                                        0x0073,0x0073,0x002E,0x0053,0x0053,0x0053,0 }; /* "EEE MMM dd yyyy G HH:mm:ss.SSS" */
 enum { kFormattedDateMax = 2*UPRV_LENGTHOF(logDateFormat) };
 
-static void TestWeekend() {
+static void TestWeekend(void) {
     const TestWeekendDatesList * testDatesPtr = testDates;
     const TestDaysOfWeekList *   testDaysPtr = testDays;
     int32_t count, subCount;
@@ -1956,7 +1956,7 @@ static const TFDItem tfdItems[] = {
     { NULL,        NULL,           0.0,               0.0,              false,    0,   0,     0,      0,        0,          0 }  /* terminator */
 };
 
-void TestFieldDifference() {
+void TestFieldDifference(void) {
     const TFDItem * tfdItemPtr;
     for (tfdItemPtr = tfdItems; tfdItemPtr->timezone != NULL; tfdItemPtr++) {
         UErrorCode status = U_ZERO_ERROR;
@@ -2031,7 +2031,7 @@ void TestFieldDifference() {
     }
 }
 
-void TestAmbiguousWallTime() {
+void TestAmbiguousWallTime(void) {
     UErrorCode status = U_ZERO_ERROR;
     UChar tzID[32];
     UCalendar* ucal;
@@ -2162,7 +2162,7 @@ static const EraTestItem eraTestItems[] = {
 
 static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 };
 
-void TestAddRollEra0AndEraBounds() {
+void TestAddRollEra0AndEraBounds(void) {
     const EraTestItem * eraTestItemPtr;
     for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
         UErrorCode status = U_ZERO_ERROR;
@@ -2385,7 +2385,7 @@ static const TZTransitionItem tzTransitionItems[] = {
     { NULL,                 NULL,             0,         0, 0, false, false } /* terminator */
 };
 
-void TestGetTZTransition() {
+void TestGetTZTransition(void) {
     UErrorCode status = U_ZERO_ERROR;
     UCalendar * ucal = ucal_open(zoneGMT, -1, "en", UCAL_GREGORIAN, &status);
     if ( U_SUCCESS(status) ) {
@@ -2455,7 +2455,7 @@ static const UChar sBogusWithVariantCharacters[] = /* Bogus with Variant charact
     {0x48,0xE8,0x2113,0x2113,0xF4,0x20,0x57,0xF4,0x159,0x2113,0x3B4,0x00};
 #endif
 
-void TestGetWindowsTimeZoneID() {
+void TestGetWindowsTimeZoneID(void) {
     UErrorCode status;
     UChar winID[64];
     int32_t len;
@@ -2489,7 +2489,7 @@ void TestGetWindowsTimeZoneID() {
     }
 }
 
-void TestGetTimeZoneIDByWindowsID() {
+void TestGetTimeZoneIDByWindowsID(void) {
     UErrorCode status;
     UChar tzID[64];
     int32_t len;
@@ -2543,7 +2543,7 @@ void TestGetTimeZoneIDByWindowsID() {
 
 // The following currently assumes that Reiwa is the last known/valid era.
 // Filed ICU-20551 to generalize this when we have more time...
-void TestJpnCalAddSetNextEra() {
+void TestJpnCalAddSetNextEra(void) {
     UErrorCode status = U_ZERO_ERROR;
     UCalendar *jCal = ucal_open(NULL, 0, "ja_JP@calendar=japanese", UCAL_DEFAULT, &status);
     if ( U_FAILURE(status) ) {
@@ -2588,7 +2588,7 @@ void TestJpnCalAddSetNextEra() {
     }
 }
 
-void TestUcalOpenBufferRead() {
+void TestUcalOpenBufferRead(void) {
     // ICU-21004: The issue shows under valgrind or as an Address Sanitizer failure.
     UErrorCode status = U_ZERO_ERROR;
     // string length: 157 + 1 + 100 = 258
@@ -2602,7 +2602,7 @@ void TestUcalOpenBufferRead() {
  * Testing ucal_getTimeZoneOffsetFromLocal
  */
 void
-TestGetTimeZoneOffsetFromLocal() {
+TestGetTimeZoneOffsetFromLocal(void) {
     static const UChar utc[] = u"Etc/GMT";
 
     const int32_t HOUR = 60*60*1000;
@@ -2814,7 +2814,7 @@ TestGetTimeZoneOffsetFromLocal() {
 }
 
 void
-TestFWWithISO8601() {
+TestFWWithISO8601(void) {
     /* UCAL_SUNDAY is 1, UCAL_MONDAY is 2, ..., UCAL_SATURDAY is 7 */
     const char* LOCALES[] = {
         "",
@@ -2843,7 +2843,7 @@ TestFWWithISO8601() {
 }
 
 void
-TestGetIanaTimeZoneID() {
+TestGetIanaTimeZoneID(void) {
     const UChar* UNKNOWN = u"Etc/Unknown";
     typedef struct {
         const UChar* id;

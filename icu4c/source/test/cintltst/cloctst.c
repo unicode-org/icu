@@ -64,7 +64,7 @@ static void TestExcessivelyLongIDs(void);
 static void TestUldnNameVariants(void);
 #endif
 
-void PrintDataTable();
+void PrintDataTable(void);
 
 /*---------------------------------------------------
   table of valid data
@@ -295,7 +295,7 @@ void addLocaleTest(TestNode** root)
 
 
 /* testing uloc(), uloc_getName(), uloc_getLanguage(), uloc_getVariant(), uloc_getCountry() */
-static void TestBasicGetters() {
+static void TestBasicGetters(void) {
     int32_t i;
     int32_t cap;
     UErrorCode status = U_ZERO_ERROR;
@@ -370,7 +370,7 @@ static void TestBasicGetters() {
     }
 }
 
-static void TestNullDefault() {
+static void TestNullDefault(void) {
     UErrorCode status = U_ZERO_ERROR;
     char original[ULOC_FULLNAME_CAPACITY];
 
@@ -434,7 +434,7 @@ static void TestNullDefault() {
 
 #define PREFIXBUFSIZ 128
 
-static void TestPrefixes() {
+static void TestPrefixes(void) {
     int row = 0;
     int n;
     const char *loc, *expected;
@@ -570,7 +570,7 @@ static void TestPrefixes() {
 
 
 /* testing uloc_getISO3Language(), uloc_getISO3Country(),  */
-static void TestSimpleResourceInfo() {
+static void TestSimpleResourceInfo(void) {
     int32_t i;
     char* testLocale = 0;
     UChar* expected = 0;
@@ -696,7 +696,7 @@ static int32_t UCharsToEscapedAscii(const UChar* utext, int32_t len, char* resul
  * The lookup of display names must not fall back through the default
  * locale because that yields useless results.
  */
-static void TestDisplayNames()
+static void TestDisplayNames(void)
 {
     UChar buffer[100];
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -846,7 +846,7 @@ static void TestDisplayNames()
  * ICU-21160 test the pre-flighting call to uloc_getDisplayScript returns the actual length needed
  * for the result buffer.
  */
-static void TestGetDisplayScriptPreFlighting21160()
+static void TestGetDisplayScriptPreFlighting21160(void)
 {
     const char* locale = "und-Latn";
     const char* inlocale = "de";
@@ -864,7 +864,7 @@ static void TestGetDisplayScriptPreFlighting21160()
 }
 
 /* test for uloc_getAvailable()  and uloc_countAvailable()*/
-static void TestGetAvailableLocales()
+static void TestGetAvailableLocales(void)
 {
 
     const char *locList;
@@ -889,7 +889,7 @@ static void TestGetAvailableLocales()
     }
 }
 
-static void TestGetAvailableLocalesByType() {
+static void TestGetAvailableLocalesByType(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     UEnumeration* uenum = uloc_openAvailableByType(ULOC_AVAILABLE_DEFAULT, &status);
@@ -961,7 +961,7 @@ static void TestGetAvailableLocalesByType() {
 }
 
 /* test for u_getDataDirectory, u_setDataDirectory, uloc_getISO3Language */
-static void TestDataDirectory()
+static void TestDataDirectory(void)
 {
 
     char            oldDirectory[512];
@@ -1197,7 +1197,7 @@ static const DisplayNameBracketsItem displayNameBracketsItems[] = {
 
 enum { kDisplayNameBracketsMax = 128 };
 
-static void TestDisplayNameBrackets()
+static void TestDisplayNameBrackets(void)
 {
     const DisplayNameBracketsItem * itemPtr = displayNameBracketsItems;
     for (; itemPtr->displayLocale != NULL; itemPtr++) {
@@ -1252,7 +1252,7 @@ static void TestDisplayNameBrackets()
  * TestIllegalArgumentWhenNoDataWithNoSubstitute
  */
 
-static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
+static void TestIllegalArgumentWhenNoDataWithNoSubstitute(void)
 {
 #if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
@@ -1320,7 +1320,7 @@ static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
 
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 /* test for uloc_getISOLanguages, uloc_getISOCountries */
-static void TestISOFunctions()
+static void TestISOFunctions(void)
 {
     const char* const* str=uloc_getISOLanguages();
     const char* const* str1=uloc_getISOCountries();
@@ -1452,7 +1452,7 @@ static void TestISOFunctions()
 }
 #endif
 
-static void setUpDataTable()
+static void setUpDataTable(void)
 {
     int32_t i,j;
     dataTable = (UChar***)(calloc(sizeof(UChar**),LOCALE_INFO_SIZE));
@@ -1465,7 +1465,7 @@ static void setUpDataTable()
     }
 }
 
-static void cleanUpDataTable()
+static void cleanUpDataTable(void)
 {
     int32_t i,j;
     if(dataTable != NULL) {
@@ -1483,7 +1483,7 @@ static void cleanUpDataTable()
 /**
  * @bug 4011756 4011380
  */
-static void TestISO3Fallback()
+static void TestISO3Fallback(void)
 {
     const char* test="xx_YY";
 
@@ -1505,7 +1505,7 @@ static void TestISO3Fallback()
 /**
  * @bug 4118587
  */
-static void TestSimpleDisplayNames()
+static void TestSimpleDisplayNames(void)
 {
   /*
      This test is different from TestDisplayNames because TestDisplayNames checks
@@ -1550,7 +1550,7 @@ static void TestSimpleDisplayNames()
 /**
  * @bug 4118595
  */
-static void TestUninstalledISO3Names()
+static void TestUninstalledISO3Names(void)
 {
   /* This test checks to make sure getISO3Language and getISO3Country work right
      even for locales that are not installed (and some installed ones). */
@@ -1583,7 +1583,7 @@ static void TestUninstalledISO3Names()
 }
 
 
-static void TestVariantParsing()
+static void TestVariantParsing(void)
 {
     static const char* en_US_custom="en_US_De Anza_Cupertino_California_United States_Earth";
     static const char* dispName="English (United States, DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH)";
@@ -3250,7 +3250,7 @@ static UBool isLocaleAvailable(UResourceBundle* resIndex, const char* loc){
     return true;
 }
 
-static void TestCalendar() {
+static void TestCalendar(void) {
 #if !UCONFIG_NO_FORMATTING
     int i;
     UErrorCode status = U_ZERO_ERROR;
@@ -3286,7 +3286,7 @@ static void TestCalendar() {
 #endif
 }
 
-static void TestDateFormat() {
+static void TestDateFormat(void) {
 #if !UCONFIG_NO_FORMATTING
     int i;
     UErrorCode status = U_ZERO_ERROR;
@@ -3329,7 +3329,7 @@ static void TestDateFormat() {
 #endif
 }
 
-static void TestCollation() {
+static void TestCollation(void) {
 #if !UCONFIG_NO_COLLATION
     int i;
     UErrorCode status = U_ZERO_ERROR;
@@ -3401,7 +3401,7 @@ static const char* ULayoutTypeToString(ULayoutType type)
     return "Unknown enum value for ULayoutType!";
 }
 
-static void  TestOrientation()
+static void  TestOrientation(void)
 {
     static const OrientationStruct toTest [] = {
         { "ar", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
@@ -3454,7 +3454,7 @@ static void  TestOrientation()
     }
 }
 
-static void  TestULocale() {
+static void  TestULocale(void) {
     int i;
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
@@ -3494,7 +3494,7 @@ static void  TestULocale() {
 
 }
 
-static void TestUResourceBundle() {
+static void TestUResourceBundle(void) {
     const char* us1;
     const char* us2;
 
@@ -3542,7 +3542,7 @@ static void TestUResourceBundle() {
     ures_close(resIndex);
 }
 
-static void TestDisplayName() {
+static void TestDisplayName(void) {
     
     UChar oldCountry[256] = {'\0'};
     UChar newCountry[256] = {'\0'};
@@ -3584,7 +3584,7 @@ static void TestDisplayName() {
     }
 }
 
-static void TestGetLocaleForLCID() {
+static void TestGetLocaleForLCID(void) {
     int32_t i, length, lengthPre;
     const char* testLocale = 0;
     UErrorCode status = U_ZERO_ERROR;
@@ -6030,7 +6030,7 @@ static int32_t getBufferSize(const errorData* data, int32_t actualSize)
     }
 }
 
-static void TestLikelySubtags()
+static void TestLikelySubtags(void)
 {
     char buffer[ULOC_FULLNAME_CAPACITY + ULOC_KEYWORD_AND_VALUES_CAPACITY + 1];
     int32_t i = 0;
@@ -6929,7 +6929,7 @@ static void TestUnicodeDefines(void) {
   TEST_UNICODE_DEFINE(ULOC_KEYWORD_ITEM_SEPARATOR, ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE);
 }
 
-static void TestIsRightToLeft() {
+static void TestIsRightToLeft(void) {
     // API test only. More test cases in intltest/LocaleTest.
     if(uloc_isRightToLeft("root") || !uloc_isRightToLeft("EN-HEBR")) {
         log_err("uloc_isRightToLeft() failed");
@@ -6955,7 +6955,7 @@ static const BadLocaleItem badLocaleItems[] = {
 
 enum { kUBufDispNameMax = 128, kBBufDispNameMax = 256 };
 
-static void TestBadLocaleIDs() {
+static void TestBadLocaleIDs(void) {
     const BadLocaleItem* itemPtr;
     for (itemPtr = badLocaleItems; itemPtr->badLocaleID != NULL; itemPtr++) {
         UChar ubufExpect[kUBufDispNameMax], ubufGet[kUBufDispNameMax];
@@ -6979,7 +6979,7 @@ static void TestBadLocaleIDs() {
 
 // Test case for ICU-20370.
 // The issue shows as an Address Sanitizer failure.
-static void TestBug20370() {
+static void TestBug20370(void) {
     const char *localeID = "x-privatebutreallylongtagfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar";
     uint32_t lcid = uloc_getLCID(localeID);
     if (lcid != 0) {
@@ -6989,7 +6989,7 @@ static void TestBug20370() {
 
 // Test case for ICU-20149
 // Handle the duplicate U extension attribute
-static void TestBug20149() {
+static void TestBug20149(void) {
     const char *localeID = "zh-u-foo-foo-co-pinyin";
     char locale[256];
     UErrorCode status = U_ZERO_ERROR;
@@ -7144,7 +7144,7 @@ static const UldnLocAndOpts uldnLocAndOpts[] = {
 
 enum { kUNameBuf = 128, kBNameBuf = 256 };
 
-static void TestUldnNameVariants() {
+static void TestUldnNameVariants(void) {
     const UldnLocAndOpts * uloPtr;
     for (uloPtr = uldnLocAndOpts; uloPtr->displayLocale != NULL; uloPtr++) {
         UErrorCode status = U_ZERO_ERROR;
@@ -7228,7 +7228,7 @@ static void TestUldnNameVariants() {
 }
 #endif
 
-static void TestUsingDefaultWarning() {
+static void TestUsingDefaultWarning(void) {
     UChar buff[256];
     char errorOutputBuff[256];
     UErrorCode status = U_ZERO_ERROR;
@@ -7301,7 +7301,7 @@ static void TestUsingDefaultWarning() {
 // Test case for ICU-20575
 // This test checks if the environment variable LANG is set, 
 // and if so ensures that both C and C.UTF-8 cause ICU's default locale to be en_US_POSIX.
-static void TestCDefaultLocale() {
+static void TestCDefaultLocale(void) {
     const char *defaultLocale = uloc_getDefault();
     char *env_var = getenv("LANG");
     if (env_var == NULL) {
@@ -7318,7 +7318,7 @@ static void TestCDefaultLocale() {
 }
 
 // Test case for ICU-21449
-static void TestBug21449InfiniteLoop() {
+static void TestBug21449InfiniteLoop(void) {
     UErrorCode status = U_ZERO_ERROR;
     const char* invalidLocaleId = RES_PATH_SEPARATOR_S;
 

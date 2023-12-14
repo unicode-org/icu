@@ -46,7 +46,7 @@ static const char **gAvailableNames = NULL;
 static int32_t gCountAvailable = 0;
 
 static UBool
-getAvailableNames() {
+getAvailableNames(void) {
   int32_t i;
   if (gAvailableNames != NULL) {
     return true;
@@ -69,7 +69,7 @@ getAvailableNames() {
 }
 
 static void
-releaseAvailableNames() {
+releaseAvailableNames(void) {
   uprv_free((void *)gAvailableNames);
   gAvailableNames = NULL;
   gCountAvailable = 0;
@@ -377,7 +377,7 @@ serializeAndUnserialize(UConverterSelector *sel, char **buffer, UErrorCode *stat
   return sel;
 }
 
-static void TestSelector()
+static void TestSelector(void)
 {
   TestText text;
   USet* excluded_sets[3] = { NULL };
@@ -507,7 +507,7 @@ static void TestSelector()
 }
 
 /* Improve code coverage of UPropsVectors */
-static void TestUPropsVector() {
+static void TestUPropsVector(void) {
     UErrorCode errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     UPropsVectors *pv = upvec_open(100, &errorCode);
     if (pv != NULL) {

@@ -443,7 +443,7 @@ static const DotNetDateTimeTicks dotNetDateTimeTicks[]={
  * any date that we test, that is, before 0001 AD.
  */
 static void
-TestDotNet() {
+TestDotNet(void) {
     static const UChar utc[] = { 0x45, 0x74, 0x63, 0x2f, 0x47, 0x4d, 0x54, 0 }; /* "Etc/GMT" */
     const int32_t dayMillis = 86400 * INT64_C(1000);    /* 1 day = 86400 seconds */
     const int64_t dayTicks = 86400 * INT64_C(10000000);

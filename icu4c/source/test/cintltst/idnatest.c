@@ -427,7 +427,7 @@ static const char * const domainNames[] = {
 };
 
 static void
-TestToASCII(){
+TestToASCII(void){
 
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
@@ -441,7 +441,7 @@ TestToASCII(){
 }
 
 static void
-TestToUnicode(){
+TestToUnicode(void){
 
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
@@ -455,7 +455,7 @@ TestToUnicode(){
 
 
 static void
-TestIDNToUnicode(){
+TestIDNToUnicode(void){
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     UChar expected[MAX_DEST_SIZE];
@@ -484,7 +484,7 @@ TestIDNToUnicode(){
 }
 
 static void
-TestIDNToASCII(){
+TestIDNToASCII(void){
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     UChar expected[MAX_DEST_SIZE];
@@ -564,7 +564,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
 
 
 static void
-TestCompare(){
+TestCompare(void){
     int32_t i;
 
     const char* testName ="uidna_compare";
@@ -641,7 +641,7 @@ TestCompare(){
     }
 }
 
-static void TestJB4490(){
+static void TestJB4490(void){
     static const UChar data[][50]= {
         {0x00F5,0x00dE,0x00dF,0x00dD, 0x0000},
         {0xFB00,0xFB01}
@@ -673,7 +673,7 @@ static void TestJB4490(){
     }
 }
 
-static void TestJB4475(){
+static void TestJB4475(void){
     
     static const UChar input[][10] = {
         {0x0054,0x0045,0x0053,0x0054,0x0000},/* TEST */
@@ -700,7 +700,7 @@ static void TestJB4475(){
     }
 }
 
-static void TestLength(){
+static void TestLength(void){
     {
         static const char* cl = "my_very_very_very_very_very_very_very_very_very_very_very_very_very_long_and_incredibly_uncreative_domain_label";
         UChar ul[128] = {'\0'};
@@ -823,7 +823,7 @@ static void TestLength(){
         }
     }    
 }
-static void TestJB5273(){
+static void TestJB5273(void){
     static const char INVALID_DOMAIN_NAME[] = "xn--m\\u00FCller.de";
     UChar invalid_idn[25] = {'\0'};
     int32_t len = u_unescape(INVALID_DOMAIN_NAME, invalid_idn, (int32_t)strlen(INVALID_DOMAIN_NAME));
@@ -857,7 +857,7 @@ static void TestJB5273(){
  * Test the new (ICU 4.6/2010) C API that was added for UTS #46.
  * Just an API test: Functionality is tested via C++ intltest.
  */
-static void TestUTS46() {
+static void TestUTS46(void) {
     static const UChar fA_sharps16[] = { 0x66, 0x41, 0xdf, 0 };
     static const char fA_sharps8[] = { 0x66, 0x41, (char)0xc3, (char)0x9f, 0 };
     static const UChar fa_sharps16[] = { 0x66, 0x61, 0xdf, 0 };

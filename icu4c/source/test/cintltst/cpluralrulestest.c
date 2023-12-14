@@ -76,7 +76,7 @@ enum {
     kKeywordBufLen = 32
 };
 
-static void TestPluralRules()
+static void TestPluralRules(void)
 {
     const PluralRulesTestItem * testItemPtr;
     log_verbose("\nTesting uplrules_open() and uplrules_select() with various parameters\n");
@@ -133,7 +133,7 @@ static void TestPluralRules()
     }
 }
 
-static void TestOrdinalRules() {
+static void TestOrdinalRules(void) {
     U_STRING_DECL(two, "two", 3);
     UChar keyword[8];
     int32_t length;
@@ -195,7 +195,7 @@ static const KeywordsForLang getKeywordsItems[] = {
     { NULL, { NULL } }
 };
 
-static void TestGetKeywords() {
+static void TestGetKeywords(void) {
     /*
      * We don't know the order in which the enumeration will return keywords,
      * so we have an array with known keywords in a fixed order and then
@@ -260,7 +260,7 @@ static void TestGetKeywords() {
     }
 }
 
-static void TestFormatted() {
+static void TestFormatted(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UNumberFormatter* unumf = NULL;
     UFormattedNumber* uresult = NULL;
@@ -300,7 +300,7 @@ cleanup:
     unumf_closeResult(uresult);
 }
 
-static void TestSelectRange() {
+static void TestSelectRange(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UNumberRangeFormatter* unumrf = NULL;
     UFormattedNumberRange* uresult = NULL;

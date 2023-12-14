@@ -271,7 +271,7 @@ void TestGetDefaultRules(){
 /* Collator Properties
  ucol_open, ucol_strcoll,  getStrength/setStrength
  getDecomposition/setDecomposition, getDisplayName*/
-void TestProperty()
+void TestProperty(void)
 {
     UCollator *col, *ruled;
     const UChar *rules;
@@ -449,7 +449,7 @@ void TestProperty()
 }
 
 /* Test RuleBasedCollator and getRules*/
-void TestRuleBasedColl()
+void TestRuleBasedColl(void)
 {
     UCollator *col1, *col2, *col3, *col4;
     UCollationElements *iter1, *iter2;
@@ -562,7 +562,7 @@ void TestRuleBasedColl()
     ucol_close(col1);
 }
 
-void TestCompare()
+void TestCompare(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UCollator *col;
@@ -612,7 +612,7 @@ void TestCompare()
 ---------------------------------------------
  tests decomposition setting
 */
-void TestDecomposition() {
+void TestDecomposition(void) {
     UErrorCode status = U_ZERO_ERROR;
     UCollator *en_US, *el_GR, *vi_VN;
     en_US = ucol_open("en_US", &status);
@@ -651,7 +651,7 @@ void TestDecomposition() {
 
 #define CLONETEST_COLLATOR_COUNT 4
 
-void TestSafeClone() {
+void TestSafeClone(void) {
     UChar test1[6];
     UChar test2[6];
     static const UChar umlautUStr[] = {0x00DC, 0};
@@ -808,7 +808,7 @@ void TestSafeClone() {
     }
 }
 
-void TestClone() {
+void TestClone(void) {
     UChar test1[6];
     UChar test2[6];
     static const UChar umlautUStr[] = {0x00DC, 0};
@@ -926,7 +926,7 @@ void TestClone() {
     }
 }
 
-void TestCloneBinary(){
+void TestCloneBinary(void){
     UErrorCode err = U_ZERO_ERROR;
     UCollator * col = ucol_open("en_US", &err);
     UCollator * c;
@@ -1046,7 +1046,7 @@ static void TestBengaliSortKey(void)
     TestOpenVsOpenRules ensures that collators from ucol_open and ucol_openRules
     will generate identical sort keys
 */
-void TestOpenVsOpenRules(){
+void TestOpenVsOpenRules(void){
 
     /* create an array of all the locales */
     int32_t numLocales = uloc_countAvailable();
@@ -1189,7 +1189,7 @@ void TestOpenVsOpenRules(){
 ----------------------------------------------------------------------------
  ctor -- Tests the getSortKey
 */
-void TestSortKey()
+void TestSortKey(void)
 {
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL, *sortkEmpty = NULL;
     int32_t sortklen, osortklen;
@@ -1334,7 +1334,7 @@ void TestSortKey()
     free(sortk2);
 
 }
-void TestHashCode()
+void TestHashCode(void)
 {
     uint8_t *sortk1, *sortk2, *sortk3;
     int32_t sortk1len, sortk2len, sortk3len;
@@ -1388,7 +1388,7 @@ void TestHashCode()
  * Tests the UCollatorElements API.
  *
  */
-void TestElemIter()
+void TestElemIter(void)
 {
     int32_t offset;
     int32_t order1, order2, order3;
@@ -1518,7 +1518,7 @@ doAssert( (ucol_tertiaryOrder(order1) != ucol_tertiaryOrder(order3)), "The terti
     log_verbose("testing CollationElementIterator ends...\n");
 }
 
-void TestGetLocale() {
+void TestGetLocale(void) {
   UErrorCode status = U_ZERO_ERROR;
   const char *rules = "&a<x<y<z";
   UChar rlz[256] = {0};
@@ -1619,7 +1619,7 @@ void TestGetLocale() {
 }
 
 
-void TestGetAll()
+void TestGetAll(void)
 {
     int32_t i, count;
     count=ucol_countAvailable();
@@ -1646,7 +1646,7 @@ static int compare_teststruct(const void *string1, const void *string2) {
     return(strcmp((const char *)((struct teststruct *)string1)->key, (const char *)((struct teststruct *)string2)->key));
 }
 
-void TestBounds() {
+void TestBounds(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     UCollator *coll = ucol_open("sh", &status);
@@ -1861,7 +1861,7 @@ void TestSortKeyBufferOverrun(void) {
     ucol_close(coll);
 }
 
-static void TestAttribute()
+static void TestAttribute(void)
 {
     UErrorCode error = U_ZERO_ERROR;
     UCollator *coll = ucol_open(NULL, &error);
@@ -1964,7 +1964,7 @@ static void TestAttribute()
     ucol_close(coll);
 }
 
-void TestGetTailoredSet() {
+void TestGetTailoredSet(void) {
   struct {
     const char *rules;
     const char *tests[20];

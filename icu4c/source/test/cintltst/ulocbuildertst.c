@@ -40,7 +40,7 @@ static void Verify(ULocaleBuilder* bld, const char* expected, const char* msg) {
     }
 }
 
-static void TestLocaleBuilder() {
+static void TestLocaleBuilder(void) {
 
     // The following test data are copy from
     // icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/LocaleBuilderTest.java
@@ -274,7 +274,7 @@ static void TestLocaleBuilder() {
     ulocbld_close(bld);
 }
 
-static void TestLocaleBuilderBasic() {
+static void TestLocaleBuilderBasic(void) {
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "zh", -1);
     Verify(bld, "zh", "ulocbld_setLanguage('zh') got Error: %s\n");
@@ -331,7 +331,7 @@ static void TestLocaleBuilderBasic() {
     ulocbld_close(bld);
 }
 
-static void TestLocaleBuilderBasicWithExtensionsOnDefaultLocale() {
+static void TestLocaleBuilderBasicWithExtensionsOnDefaultLocale(void) {
     // Change the default locale to one with extension tags.
     UErrorCode status = U_ZERO_ERROR;
     char originalDefault[ULOC_FULLNAME_CAPACITY];
@@ -351,7 +351,7 @@ static void TestLocaleBuilderBasicWithExtensionsOnDefaultLocale() {
     }
 }
 
-static void TestSetLanguageWellFormed() {
+static void TestSetLanguageWellFormed(void) {
     // http://www.unicode.org/reports/tr35/tr35.html#unicode_language_subtag
     // unicode_language_subtag = alpha{2,3} | alpha{5,8};
     // ICUTC decided also support alpha{4}
@@ -408,7 +408,7 @@ static void TestSetLanguageWellFormed() {
     }
 }
 
-static void TestSetLanguageIllFormed() {
+static void TestSetLanguageIllFormed(void) {
     static const char* illFormed[] = {
         "a",
         "z",
@@ -477,7 +477,7 @@ static void TestSetLanguageIllFormed() {
     }
 }
 
-static void TestSetScriptWellFormed() {
+static void TestSetScriptWellFormed(void) {
     // http://www.unicode.org/reports/tr35/tr35.html#unicode_script_subtag
     // unicode_script_subtag = alpha{4} ;
     static const char* wellFormedScripts[] = {
@@ -508,7 +508,7 @@ static void TestSetScriptWellFormed() {
         ulocbld_close(bld);
     }
 }
-static void TestSetScriptIllFormed() {
+static void TestSetScriptIllFormed(void) {
     static const char* illFormed[] = {
         "a",
         "z",
@@ -580,7 +580,7 @@ static void TestSetScriptIllFormed() {
     }
 }
 
-static void TestSetRegionWellFormed() {
+static void TestSetRegionWellFormed(void) {
     // http://www.unicode.org/reports/tr35/tr35.html#unicode_region_subtag
     // unicode_region_subtag = (alpha{2} | digit{3})
     static const char* wellFormedRegions[] = {
@@ -613,7 +613,7 @@ static void TestSetRegionWellFormed() {
     }
 }
 
-static void TestSetRegionIllFormed() {
+static void TestSetRegionIllFormed(void) {
     static const char* illFormed[] = {
         "a",
         "z",
@@ -685,7 +685,7 @@ static void TestSetRegionIllFormed() {
     }
 }
 
-static void TestSetVariantWellFormed() {
+static void TestSetVariantWellFormed(void) {
     // http://www.unicode.org/reports/tr35/tr35.html#unicode_variant_subtag
     // (sep unicode_variant_subtag)*
     // unicode_variant_subtag = (alphanum{5,8} | digit alphanum{3}) ;
@@ -763,7 +763,7 @@ static void TestSetVariantWellFormed() {
     }
 }
 
-static void TestSetVariantIllFormed() {
+static void TestSetVariantIllFormed(void) {
     static const char* illFormed[] = {
         "a",
         "z",
@@ -871,7 +871,7 @@ static void TestSetVariantIllFormed() {
     }
 }
 
-static void TestSetUnicodeLocaleKeywordWellFormed() {
+static void TestSetUnicodeLocaleKeywordWellFormed(void) {
     // http://www.unicode.org/reports/tr35/tr35.html#unicode_locale_extensions
     // keyword = key (sep type)? ;
     // key = alphanum alpha ;
@@ -901,7 +901,7 @@ static void TestSetUnicodeLocaleKeywordWellFormed() {
     }
 }
 
-static void TestSetUnicodeLocaleKeywordIllFormedKey() {
+static void TestSetUnicodeLocaleKeywordIllFormedKey(void) {
     static const char* illFormed[] = {
         "34",
         "ab-cde",
@@ -925,7 +925,7 @@ static void TestSetUnicodeLocaleKeywordIllFormedKey() {
     }
 }
 
-static void TestSetUnicodeLocaleKeywordIllFormedValue() {
+static void TestSetUnicodeLocaleKeywordIllFormedValue(void) {
     static const char* illFormed[] = {
         "34",
         "ab-",
@@ -952,7 +952,7 @@ static void TestSetUnicodeLocaleKeywordIllFormedValue() {
     ulocbld_close(bld);
 }
 
-static void TestAddRemoveUnicodeLocaleAttribute() {
+static void TestAddRemoveUnicodeLocaleAttribute(void) {
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "fr", -1);
     ulocbld_addUnicodeLocaleAttribute(bld, "abc", -1);
@@ -1050,7 +1050,7 @@ static void TestAddRemoveUnicodeLocaleAttribute() {
     ulocbld_close(bld);
 }
 
-static void TestAddRemoveUnicodeLocaleAttributeWellFormed() {
+static void TestAddRemoveUnicodeLocaleAttributeWellFormed(void) {
     // http://www.unicode.org/reports/tr35/tr35.html#unicode_locale_extensions
     // attribute = alphanum{3,8} ;
     static const char* wellFormedAttributes[] = {
@@ -1126,7 +1126,7 @@ static void TestAddRemoveUnicodeLocaleAttributeWellFormed() {
     ulocbld_close(bld);
 }
 
-static void TestAddUnicodeLocaleAttributeIllFormed() {
+static void TestAddUnicodeLocaleAttributeIllFormed(void) {
     static const char* illFormed[] = {
         "aa",
         "34",
@@ -1154,7 +1154,7 @@ static void TestAddUnicodeLocaleAttributeIllFormed() {
     }
 }
 
-static void TestSetExtensionU() {
+static void TestSetExtensionU(void) {
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "zhABC", 2);
     Verify(bld, "zh",
@@ -1195,7 +1195,7 @@ static void TestSetExtensionU() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidateUWellFormed() {
+static void TestSetExtensionValidateUWellFormed(void) {
     static const char* wellFormedExtensions[] = {
         // keyword
         //   keyword = key (sep type)? ;
@@ -1244,7 +1244,7 @@ static void TestSetExtensionValidateUWellFormed() {
     }
 }
 
-static void TestSetExtensionValidateUIllFormed() {
+static void TestSetExtensionValidateUIllFormed(void) {
     static const char* illFormed[] = {
         // bad key
         "-",
@@ -1287,7 +1287,7 @@ static void TestSetExtensionValidateUIllFormed() {
     }
 }
 
-static void TestSetExtensionT() {
+static void TestSetExtensionT(void) {
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "fr", 2);
     Verify(bld, "fr",
@@ -1324,7 +1324,7 @@ static void TestSetExtensionT() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidateTWellFormed() {
+static void TestSetExtensionValidateTWellFormed(void) {
     // ((sep tlang (sep tfield)*) | (sep tfield)+)
     static const char* wellFormedExtensions[] = {
         // tlang
@@ -1387,7 +1387,7 @@ static void TestSetExtensionValidateTWellFormed() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidateTIllFormed() {
+static void TestSetExtensionValidateTIllFormed(void) {
     static const char* illFormed[] = {
         "a",
         "a-",
@@ -1437,7 +1437,7 @@ static void TestSetExtensionValidateTIllFormed() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionPU() {
+static void TestSetExtensionPU(void) {
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "ar123", 2);
     Verify(bld, "ar",
@@ -1465,7 +1465,7 @@ static void TestSetExtensionPU() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidatePUWellFormed() {
+static void TestSetExtensionValidatePUWellFormed(void) {
     // ((sep tlang (sep tfield)*) | (sep tfield)+)
     static const char* wellFormedExtensions[] = {
         "a",  // Short subtag
@@ -1499,7 +1499,7 @@ static void TestSetExtensionValidatePUWellFormed() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidatePUIllFormed() {
+static void TestSetExtensionValidatePUIllFormed(void) {
     static const char* illFormed[] = {
         "123456789",  // Too long
         "abcdefghi",  // Too long
@@ -1522,7 +1522,7 @@ static void TestSetExtensionValidatePUIllFormed() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionOthers() {
+static void TestSetExtensionOthers(void) {
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "fr", -1);
     Verify(bld, "fr",
@@ -1562,7 +1562,7 @@ static void TestSetExtensionOthers() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidateOthersWellFormed() {
+static void TestSetExtensionValidateOthersWellFormed(void) {
     static const char* wellFormedExtensions[] = {
         "ab",
         "abc",
@@ -1616,7 +1616,7 @@ static void TestSetExtensionValidateOthersWellFormed() {
     ulocbld_close(bld);
 }
 
-static void TestSetExtensionValidateOthersIllFormed() {
+static void TestSetExtensionValidateOthersIllFormed(void) {
     static const char* illFormed[] = {
         "0",  // Too short
         "a",  // Too short
@@ -1645,7 +1645,7 @@ static void TestSetExtensionValidateOthersIllFormed() {
     ulocbld_close(bld);
 }
 
-static void TestSetLocale() {
+static void TestSetLocale(void) {
     ULocaleBuilder* bld1 = ulocbld_open();
     ULocaleBuilder* bld2 = ulocbld_open();
     UErrorCode status = U_ZERO_ERROR;
@@ -1679,7 +1679,7 @@ static void TestSetLocale() {
     ulocbld_close(bld2);
 }
 
-static void TestBuildULocale() {
+static void TestBuildULocale(void) {
     ULocaleBuilder* bld1 = ulocbld_open();
     UErrorCode status = U_ZERO_ERROR;
 
@@ -1735,7 +1735,7 @@ static void TestBuildULocale() {
 }
 
 
-static void TestPosixCases() {
+static void TestPosixCases(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocaleBuilder* bld = ulocbld_open();
     ulocbld_setLanguage(bld, "en", -1);

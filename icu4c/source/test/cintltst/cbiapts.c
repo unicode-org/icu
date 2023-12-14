@@ -156,7 +156,7 @@ static void freeToUCharStrings(void **hook) {
 
 
 #if !UCONFIG_NO_FILE_IO
-static void TestBreakIteratorCAPI()
+static void TestBreakIteratorCAPI(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *word, *sentence, *line, *character, *b, *bogus;
@@ -633,7 +633,7 @@ static UBreakIterator * testOpenRules(char *rules) {
  *  TestBreakIteratorRules - Verify that a break iterator can be created from
  *                           a set of source rules.
  */
-static void TestBreakIteratorRules() {
+static void TestBreakIteratorRules(void) {
     /*  Rules will keep together any run of letters not including 'a', OR
      *             keep together 'abc', but only when followed by 'def', OTHERWISE
      *             just return one char at a time.
@@ -720,7 +720,7 @@ static void TestBreakIteratorRules() {
     ubrk_close(bi);
 }
 
-static void TestBreakIteratorRuleError() {
+static void TestBreakIteratorRuleError(void) {
 /*
  *  TestBreakIteratorRuleError -   Try to create a BI from rules with syntax errors,
  *                                 check that the error is reported correctly.
@@ -754,7 +754,7 @@ static void TestBreakIteratorRuleError() {
 /*
 *   TestsBreakIteratorStatusVals()   Test the ubrk_getRuleStatusVec() function
 */
-static void TestBreakIteratorStatusVec() {
+static void TestBreakIteratorStatusVec(void) {
     #define RULE_STRING_LENGTH 200
     UChar          rules[RULE_STRING_LENGTH];
 

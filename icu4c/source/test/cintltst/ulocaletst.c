@@ -35,7 +35,7 @@ static const char* const rawData[][6] = {
     { "x-klingon", "Latn", "ZX", "", "x-klingon_Latn_ZX.utf32be@special", "x-klingon_Latn_ZX.utf32be@special"},
 };
 
-static void TestBasicGetters() {
+static void TestBasicGetters(void) {
     for (int32_t i = 0; i < UPRV_LENGTHOF(rawData); i++)  {
         UErrorCode status = U_ZERO_ERROR;
         ULocale* l = ulocale_openForLocaleID(rawData[i][NAME], -1, &status);
@@ -64,7 +64,7 @@ static void VerifyMatch(const char* localeID, const char* tag) {
     }
 }
 
-static void TestForLanguageTag() {
+static void TestForLanguageTag(void) {
     VerifyMatch("en_US", "en-US");
     VerifyMatch("en_GB_OXENDICT", "en-GB-oed");
     VerifyMatch("af@calendar=coptic;t=ar-i0-handwrit;x=foo", "af-t-ar-i0-handwrit-u-ca-coptic-x-foo");
@@ -88,7 +88,7 @@ static void TestForLanguageTag() {
     VerifyMatch("__1994_BISKE_ROZAJ@x=private", "und-1994-biske-rozaj-x-private");
 }
 
-static void TestGetKeywords() {
+static void TestGetKeywords(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLocaleID("de@calendar=buddhist;collation=phonebook", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLocaleID()", &status)) {
@@ -117,7 +117,7 @@ static void TestGetKeywords() {
     }
 }
 
-static void TestGetKeywordsEmpty() {
+static void TestGetKeywordsEmpty(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLocaleID("de", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLocaleID()", &status)) {
@@ -130,7 +130,7 @@ static void TestGetKeywordsEmpty() {
     }
 }
 
-static void TestGetKeywordsWithPrivateUse() {
+static void TestGetKeywordsWithPrivateUse(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLanguageTag("en-US-u-ca-gregory-x-foo", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLanguageTag()", &status)) {
@@ -157,7 +157,7 @@ static void TestGetKeywordsWithPrivateUse() {
     }
 }
 
-static void TestGetUnicodeKeywords() {
+static void TestGetUnicodeKeywords(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLocaleID("de@calendar=buddhist;collation=phonebook", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLocaleID()", &status)) {
@@ -186,7 +186,7 @@ static void TestGetUnicodeKeywords() {
     }
 }
 
-static void TestGetUnicodeKeywordsEmpty() {
+static void TestGetUnicodeKeywordsEmpty(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLocaleID("de", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLocaleID()", &status)) {
@@ -199,7 +199,7 @@ static void TestGetUnicodeKeywordsEmpty() {
     }
 }
 
-static void TestGetUnicodeKeywordsWithPrivateUse() {
+static void TestGetUnicodeKeywordsWithPrivateUse(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLanguageTag("en-US-u-ca-gregory-x-foo", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLanguageTag()", &status)) {
@@ -220,7 +220,7 @@ static void TestGetUnicodeKeywordsWithPrivateUse() {
     }
 }
 
-static void TestGetKeywordValue() {
+static void TestGetKeywordValue(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLanguageTag("fa-u-nu-thai", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLanguageTag()", &status)) {
@@ -242,7 +242,7 @@ static void TestGetKeywordValue() {
     }
 }
 
-static void TestGetUnicodeKeywordValue() {
+static void TestGetUnicodeKeywordValue(void) {
     UErrorCode status = U_ZERO_ERROR;
     ULocale* l = ulocale_openForLanguageTag("fa-u-nu-thai", -1, &status);
     if (assertSuccess(WHERE "ulocale_openForLanguageTag()", &status)) {

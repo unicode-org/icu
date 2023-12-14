@@ -37,7 +37,7 @@ void addUFormattedValueTest(TestNode** root) {
 }
 
 
-static void TestBasic() {
+static void TestBasic(void) {
     UErrorCode status = U_ZERO_ERROR;
     UConstrainedFieldPosition* ucfpos = ucfpos_open(&status);
     assertSuccess("opening ucfpos", &status);
@@ -56,7 +56,7 @@ static void TestBasic() {
     ucfpos_close(ucfpos);
 }
 
-void TestSetters() {
+void TestSetters(void) {
     UErrorCode status = U_ZERO_ERROR;
     UConstrainedFieldPosition* ucfpos = ucfpos_open(&status);
     assertSuccess("opening ucfpos", &status);

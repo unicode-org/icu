@@ -295,7 +295,7 @@ static void ctest_appendToDataDirectory(const char *toAppend)
 */
 
 /* returns the path to icu/source/data */
-const char *  ctest_dataSrcDir()
+const char *  ctest_dataSrcDir(void)
 {
     static const char *dataSrcDir = NULL;
 
@@ -362,7 +362,7 @@ const char *  ctest_dataSrcDir()
 }
 
 /* returns the path to icu/source/data/out */
-const char *ctest_dataOutDir()
+const char *ctest_dataOutDir(void)
 {
     static const char *dataOutDir = NULL;
 
@@ -439,7 +439,7 @@ const char *ctest_dataOutDir()
  *                       picked up via a static (build time) reference, but the
  *                       tests dynamically load some data.
  */
-void ctest_setICU_DATA() {
+void ctest_setICU_DATA(void) {
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
@@ -454,7 +454,7 @@ void ctest_setICU_DATA() {
  *    The ICU data directory must be preserved across these operations.
  *    Here is a helper function to assist with that.
  */
-static char *safeGetICUDataDirectory() {
+static char *safeGetICUDataDirectory(void) {
     const char *dataDir = u_getDataDirectory();  /* Returned string vanashes with u_cleanup */
     char *retStr = NULL;
     if (dataDir != NULL) {
@@ -464,7 +464,7 @@ static char *safeGetICUDataDirectory() {
     return retStr;
 }
 
-UBool ctest_resetICU() {
+UBool ctest_resetICU(void) {
     UErrorCode   status = U_ZERO_ERROR;
     char         *dataDir = safeGetICUDataDirectory();
 
@@ -675,7 +675,7 @@ void *ctst_malloc(size_t size) {
 }
 
 #ifdef CTST_LEAK_CHECK
-static void ctst_freeAll() {
+static void ctst_freeAll(void) {
     int i;
     if(ctst_free == false) { /* only free up to the allocated mark */
         for(i=0; i<ctst_allocated; i++) {

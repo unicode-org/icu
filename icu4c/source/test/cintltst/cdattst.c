@@ -80,7 +80,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestLocaleNameCrash);
 }
 /* Testing the DateFormat API */
-static void TestDateFormat()
+static void TestDateFormat(void)
 {
     UDateFormat *def, *fr, *it, *de, *def1, *fr_pat;
     UDateFormat *any;
@@ -440,7 +440,7 @@ enum { kDateOrTimeOutMax = 96, kDateAndTimeOutMax = 192 };
 static const UDate minutesTolerance = 2 * 60.0 * 1000.0;
 static const UDate daysTolerance = 2 * 24.0 * 60.0 * 60.0 * 1000.0;
 
-static void TestRelativeDateFormat()
+static void TestRelativeDateFormat(void)
 {
     UDate today = 0.0;
     const UDateFormatStyle * stylePtr;
@@ -590,7 +590,7 @@ static void TestRelativeDateFormat()
 }
 
 /*Testing udat_getSymbols() and udat_setSymbols() and udat_countSymbols()*/
-static void TestSymbols()
+static void TestSymbols(void)
 {
     UDateFormat *def, *fr, *zhChiCal, *esMX;
     UErrorCode status = U_ZERO_ERROR;
@@ -864,7 +864,7 @@ free(pattern);
 /**
  * Test DateFormat(Calendar) API
  */
-static void TestDateFormatCalendar() {
+static void TestDateFormatCalendar(void) {
     UDateFormat *date=0, *time=0, *full=0;
     UCalendar *cal=0;
     UChar buf[256];
@@ -991,7 +991,7 @@ static void TestDateFormatCalendar() {
 /**
  * Test parsing two digit year against "YY" vs. "YYYY" patterns
  */
-static void TestCalendarDateParse() {
+static void TestCalendarDateParse(void) {
 
     int32_t result;
     UErrorCode ec = U_ZERO_ERROR;
@@ -1071,7 +1071,7 @@ static void TestCalendarDateParse() {
 
 
 /*INTERNAL FUNCTIONS USED*/
-static int getCurrentYear() {
+static int getCurrentYear(void) {
     static int currentYear = 0;
     if (currentYear == 0) {
         UErrorCode status = U_ZERO_ERROR;
@@ -1304,7 +1304,7 @@ static UBool _aux2ExtremeDates(UDateFormat* fmt, UDate small, UDate large,
  *  0.75*10^30, etc.  A logarithmic search will find 10^15, then 10^7.5
  *  and 10^22.5, etc.
  */
-static void TestExtremeDates() {
+static void TestExtremeDates(void) {
     UDateFormat *fmt;
     UErrorCode ec;
     UChar buf[256];

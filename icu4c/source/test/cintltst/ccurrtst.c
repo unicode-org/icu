@@ -37,7 +37,7 @@ void addCurrencyCollTest(TestNode** root)
 }
 
 
-void currTest()
+void currTest(void)
 {
     /* All the currency symbols, in UCA order*/
     static const UChar currency[][2] =

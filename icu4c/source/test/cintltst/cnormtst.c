@@ -212,23 +212,23 @@ static void TestNormCases(UNormalizationMode mode,
     }
 }
 
-void TestDecomp() {
+void TestDecomp(void) {
     TestNormCases(UNORM_NFD, canonTests, UPRV_LENGTHOF(canonTests));
 }
 
-void TestCompatDecomp() {
+void TestCompatDecomp(void) {
     TestNormCases(UNORM_NFKD, compatTests, UPRV_LENGTHOF(compatTests));
 }
 
-void TestCanonDecompCompose() {
+void TestCanonDecompCompose(void) {
     TestNormCases(UNORM_NFC, canonTests, UPRV_LENGTHOF(canonTests));
 }
 
-void TestCompatDecompCompose() {
+void TestCompatDecompCompose(void) {
     TestNormCases(UNORM_NFKC, compatTests, UPRV_LENGTHOF(compatTests));
 }
 
-void TestFCD() {
+void TestFCD(void) {
     TestNormCases(UNORM_FCD, fcdTests, UPRV_LENGTHOF(fcdTests));
 }
 
@@ -285,7 +285,7 @@ static void TestNull_check(UChar *src, int32_t srcLen,
     log_verbose("unorm_normalize(%s) with 0x0000: OK\n", name);
 }
 
-void TestNull() 
+void TestNull(void)
 {
 
     UChar   source_comp[] = { 0x0061, 0x0000, 0x0044, 0x0307 };
@@ -322,7 +322,7 @@ void TestNull()
 
 }
 
-static void TestQuickCheckResultNO() 
+static void TestQuickCheckResultNO(void)
 {
   const UChar CPNFD[] = {0x00C5, 0x0407, 0x1E00, 0x1F57, 0x220C, 
                          0x30AE, 0xAC00, 0xD7A3, 0xFB36, 0xFB4E};
@@ -369,7 +369,7 @@ static void TestQuickCheckResultNO()
 }
 
  
-static void TestQuickCheckResultYES() 
+static void TestQuickCheckResultYES(void)
 {
   const UChar CPNFD[] = {0x00C6, 0x017F, 0x0F74, 0x1000, 0x1E9A, 
                          0x2261, 0x3075, 0x4000, 0x5000, 0xF000};
@@ -441,7 +441,7 @@ static void TestQuickCheckResultYES()
   }
 }
 
-static void TestQuickCheckResultMAYBE() 
+static void TestQuickCheckResultMAYBE(void)
 {
   const UChar CPNFC[] = {0x0306, 0x0654, 0x0BBE, 0x102E, 0x1161, 
                          0x116A, 0x1173, 0x1175, 0x3099, 0x309A};
@@ -472,7 +472,7 @@ static void TestQuickCheckResultMAYBE()
   }
 }
 
-static void TestQuickCheckStringResult() 
+static void TestQuickCheckStringResult(void)
 {
   int count;
   UChar *d = NULL;
@@ -528,7 +528,7 @@ static void TestQuickCheckStringResult()
   }  
 }
 
-void TestQuickCheck() 
+void TestQuickCheck(void)
 {
   TestQuickCheckResultNO();
   TestQuickCheckResultYES();
@@ -605,7 +605,7 @@ static void TestIsNormalized(void) {
     }
 }
 
-void TestCheckFCD() 
+void TestCheckFCD(void)
 {
   UErrorCode status = U_ZERO_ERROR;
   static const UChar FAST_[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 
@@ -711,7 +711,7 @@ void TestCheckFCD()
 }
 
 static void
-TestAPI() {
+TestAPI(void) {
     static const UChar in[]={ 0x68, 0xe4 };
     UChar out[20]={ 0xffff, 0xffff, 0xffff, 0xffff };
     UErrorCode errorCode;
@@ -767,7 +767,7 @@ enum {
 };
 
 static void
-TestNormCoverage() {
+TestNormCoverage(void) {
     UChar input[1000], expect[1000], output[1000];
     UErrorCode errorCode;
     int32_t i, length, inLength, expectLength, hangulPrefixLength, preflightLength;
@@ -1148,7 +1148,7 @@ _testIter(const UChar *src, int32_t srcLength,
 }
 
 static void
-TestNextPrevious() {
+TestNextPrevious(void) {
     static const UChar
     src[]={ /* input string */
         0xa0, 0xe4, 0x63, 0x302, 0x327, 0xac00, 0x3133
@@ -1363,7 +1363,7 @@ TestFCNFKCClosure(void) {
 }
 
 static void
-TestQuickCheckPerCP() {
+TestQuickCheckPerCP(void) {
     UErrorCode errorCode;
     UChar32 c, lead, trail;
     UChar s[U16_MAX_LENGTH], nfd[16];
@@ -1487,7 +1487,7 @@ TestComposition(void) {
 }
 
 static void
-TestGetDecomposition() {
+TestGetDecomposition(void) {
     UChar decomp[32];
     int32_t length;
 
@@ -1530,7 +1530,7 @@ TestGetDecomposition() {
 }
 
 static void
-TestGetRawDecomposition() {
+TestGetRawDecomposition(void) {
     UChar decomp[32];
     int32_t length;
 
@@ -1595,7 +1595,7 @@ TestGetRawDecomposition() {
 }
 
 static void
-TestAppendRestoreMiddle() {
+TestAppendRestoreMiddle(void) {
     UChar a[20]={ 0x61, 0x62, 0x63, 0x41, 0x327, 0 };  /* last chars are 'A' and 'cedilla' NFC */
     static const UChar b[]={ 0x30A, 0x64, 0x65, 0x66, 0 };  /* first char is 'ring above' NFC */
     /* NFC: C5 is 'A with ring above' */
@@ -1632,7 +1632,7 @@ TestAppendRestoreMiddle() {
 }
 
 static void
-TestGetEasyToUseInstance() {
+TestGetEasyToUseInstance(void) {
     static const UChar in[]={
         0xA0,  /* -> <noBreak> 0020 */
         0xC7, 0x301  /* = 1E08 = 0043 0327 0301 */
@@ -1716,7 +1716,7 @@ TestGetEasyToUseInstance() {
 }
 
 static void
-TestAPICoverage() {
+TestAPICoverage(void) {
     UErrorCode errorCode = U_ZERO_ERROR;
     const UNormalizer2 *n2 = unorm2_getNFDInstance(&errorCode);
     if (U_FAILURE(errorCode)) {

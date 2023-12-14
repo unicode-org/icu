@@ -2274,7 +2274,7 @@ static UBool U_CALLCONV MatchCallback(const void *context, int32_t steps) {
     return false;
 }
 
-static void TestBug10815() {
+static void TestBug10815(void) {
   /* Bug 10815:   uregex_findNext() does not set U_REGEX_STOPPED_BY_CALLER 
    *              when the callback function specified by uregex_setMatchCallback() returns false
    */

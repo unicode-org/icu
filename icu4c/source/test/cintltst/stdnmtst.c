@@ -55,7 +55,7 @@ static int dotestname(const char *name, const char *standard, const char *expect
     return res;
 }
 
-static void TestStandardName()
+static void TestStandardName(void)
 {
     int res = 1;
 
@@ -139,7 +139,7 @@ static int dotestconv(const char *name, const char *standard, const char *expect
     return res;
 }
 
-static void TestCanonicalName()
+static void TestCanonicalName(void)
 {
     /* Test for some expected results. */
 
@@ -267,7 +267,7 @@ static UBool doTestUCharNames(const char *name, const char *standard, const char
     return 1;
 }
 
-static void TestStandardNames()
+static void TestStandardNames(void)
 {
     static const char *asciiIANA[] = {
         "ANSI_X3.4-1968",

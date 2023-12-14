@@ -54,7 +54,7 @@ addUSetTest(TestNode** root) {
  * Tests
  *------------------------------------------------------------------*/
 
-static void Testj2269() {
+static void Testj2269(void) {
   UErrorCode status = U_ZERO_ERROR;
   UChar a[4] = { 0x61, 0x62, 0x63, 0 };
   USet *s = uset_open(1, 0);
@@ -82,7 +82,7 @@ static const int32_t STR_ab_LEN = UPRV_LENGTHOF(STR_ab) - 1;
 /**
  * Basic API test for uset.x
  */
-static void TestAPI() {
+static void TestAPI(void) {
     USet* set;
     USet* set2;
     UErrorCode ec;
@@ -540,7 +540,7 @@ static void expectItems(const USet* set,
 }
 
 static void
-TestSerialized() {
+TestSerialized(void) {
     uint16_t buffer[1000];
     USerializedSet sset;
     USet *set;
@@ -583,7 +583,7 @@ TestSerialized() {
  * JB#3795.
  */
 static void
-TestNonInvariantPattern() {
+TestNonInvariantPattern(void) {
     UErrorCode ec = U_ZERO_ERROR;
     /* The critical part of this test is that the following pattern
        must contain a non-invariant character. */
@@ -608,14 +608,14 @@ static void TestBadPattern(void) {
     }
 }
 
-static USet *openIDSet() {
+static USet *openIDSet(void) {
     UErrorCode errorCode = U_ZERO_ERROR;
     U_STRING_DECL(pattern, "[:ID_Continue:]", 15);
     U_STRING_INIT(pattern, "[:ID_Continue:]", 15);
     return uset_openPattern(pattern, 15, &errorCode);
 }
 
-static void TestFreezable() {
+static void TestFreezable(void) {
     USet *idSet;
     USet *frozen;
     USet *thawed;
@@ -666,7 +666,7 @@ static void TestFreezable() {
     uset_close(thawed);
 }
 
-static void TestSpan() {
+static void TestSpan(void) {
     static const UChar s16[2]={ 0xe01, 0x3000 };
     static const char* s8="\xE0\xB8\x81\xE3\x80\x80";
 
