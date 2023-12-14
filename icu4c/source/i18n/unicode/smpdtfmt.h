@@ -1057,7 +1057,7 @@ public:
      * with this date-time formatter.
      * @stable ICU 2.0
      */
-    virtual const DateFormatSymbols* getDateFormatSymbols(void) const;
+    virtual const DateFormatSymbols* getDateFormatSymbols() const;
 
     /**
      * Set the date/time formatting symbols.  The caller no longer owns the
@@ -1085,7 +1085,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -1098,7 +1098,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * Set the calendar to be used by this date format. Initially, the default
@@ -1133,7 +1133,7 @@ public:
      * @return the time zone format associated with this date/time formatter.
      * @internal ICU 49 technology preview
      */
-    virtual const TimeZoneFormat* getTimeZoneFormat(void) const;
+    virtual const TimeZoneFormat* getTimeZoneFormat() const;
 
     /**
      * Set a particular UDisplayContext value in the formatter, such as
@@ -1216,16 +1216,16 @@ public:
      * @return   locale in this simple date formatter
      * @internal ICU 4.0
      */
-    const Locale& getSmpFmtLocale(void) const;
+    const Locale& getSmpFmtLocale() const;
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
     friend class DateFormat;
     friend class DateIntervalFormat;
 
-    void initializeDefaultCentury(void);
+    void initializeDefaultCentury();
 
-    void initializeBooleanAttributes(void);
+    void initializeBooleanAttributes();
 
     SimpleDateFormat() = delete; // default constructor not implemented
 

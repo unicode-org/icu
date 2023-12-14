@@ -413,7 +413,7 @@ public:
      * @return   The current UTC time in milliseconds.
      * @stable ICU 2.0
      */
-    static UDate U_EXPORT2 getNow(void);
+    static UDate U_EXPORT2 getNow();
 
     /**
      * Gets this Calendar's time as milliseconds. May involve recalculation of time due
@@ -850,7 +850,7 @@ public:
      * @return   The time zone object associated with this calendar.
      * @stable ICU 2.0
      */
-    const TimeZone& getTimeZone(void) const;
+    const TimeZone& getTimeZone() const;
 
     /**
      * Returns the time zone owned by this calendar. The caller owns the returned object
@@ -860,7 +860,7 @@ public:
      * @return   The time zone object which was associated with this calendar.
      * @stable ICU 2.0
      */
-    TimeZone* orphanTimeZone(void);
+    TimeZone* orphanTimeZone();
 
     /**
      * Queries if the current date for this Calendar is in Daylight Savings Time.
@@ -892,7 +892,7 @@ public:
      * @return   True tells that date/time interpretation is to be lenient.
      * @stable ICU 2.0
      */
-    UBool isLenient(void) const;
+    UBool isLenient() const;
 
     /**
      * Sets the behavior for handling wall time repeating multiple times
@@ -925,7 +925,7 @@ public:
      * @see #setRepeatedWallTimeOption
      * @stable ICU 49
      */
-    UCalendarWallTimeOption getRepeatedWallTimeOption(void) const;
+    UCalendarWallTimeOption getRepeatedWallTimeOption() const;
 
     /**
      * Sets the behavior for handling skipped wall time at positive time zone offset
@@ -960,7 +960,7 @@ public:
      * @see #setSkippedWallTimeOption
      * @stable ICU 49
      */
-    UCalendarWallTimeOption getSkippedWallTimeOption(void) const;
+    UCalendarWallTimeOption getSkippedWallTimeOption() const;
 
     /**
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
@@ -977,7 +977,7 @@ public:
      * @return   The first day of the week.
      * @deprecated ICU 2.6 use the overload with error code
      */
-    EDaysOfWeek getFirstDayOfWeek(void) const;
+    EDaysOfWeek getFirstDayOfWeek() const;
 #endif  /* U_HIDE_DEPRECATED_API */
 
     /**
@@ -1009,7 +1009,7 @@ public:
      * @return   The minimal days required in the first week of the year.
      * @stable ICU 2.0
      */
-    uint8_t getMinimalDaysInFirstWeek(void) const;
+    uint8_t getMinimalDaysInFirstWeek() const;
 
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
@@ -1232,7 +1232,7 @@ public:
      * resolving of time into time fields.
      * @stable ICU 2.0
      */
-    void clear(void);
+    void clear();
 
     /**
      * Clears the value in the given time field, both making it unset and assigning it a
@@ -1260,7 +1260,7 @@ public:
      *           same class ID. Objects of other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const override = 0;
+    virtual UClassID getDynamicClassID() const override = 0;
 
     /**
      * Returns the calendar type name string for this Calendar object.
@@ -1348,7 +1348,7 @@ public:
      * this calendar system, false otherwise.
      * @stable ICU 4.4
      */
-    virtual UBool isWeekend(void) const;
+    virtual UBool isWeekend() const;
 
 #ifndef U_FORCE_HIDE_DRAFT_API
     /**
@@ -1914,7 +1914,7 @@ protected:
      * @return     the current time without recomputing.
      * @stable ICU 2.0
      */
-    UDate        internalGetTime(void) const     { return fTime; }
+    UDate internalGetTime() const { return fTime; }
 
     /**
      * Set the current time without affecting flags or fields.
@@ -2362,7 +2362,7 @@ private:
      * @return a StringEnumeration over the locales available at the time of the call
      * @internal
      */
-    static StringEnumeration* getAvailableLocales(void);
+    static StringEnumeration* getAvailableLocales();
 
     /**
      * Register a new Calendar factory.  The factory will be adopted.
