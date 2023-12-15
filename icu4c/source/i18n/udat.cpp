@@ -150,26 +150,17 @@ udat_open(UDateFormatStyle  timeStyle,
         return (UDateFormat*)fmt;
       } // else fall through.
     }
+    Locale localeObj(locale);
+    if (localeObj.isBogus()) {
+        localeObj = Locale::getDefault();
+    }
     if(timeStyle != UDAT_PATTERN) {
-        if(locale == 0) {
-            fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
-                (DateFormat::EStyle)timeStyle);
-        }
-        else {
-            fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
-                (DateFormat::EStyle)timeStyle,
-                Locale(locale));
-        }
+        fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle, (DateFormat::EStyle)timeStyle, localeObj);
     }
     else {
         UnicodeString pat((UBool)(patternLength == -1), pattern, patternLength);
 
-        if(locale == 0) {
-            fmt = new SimpleDateFormat(pat, *status);
-        }
-        else {
-            fmt = new SimpleDateFormat(pat, Locale(locale), *status);
-        }
+        fmt = new SimpleDateFormat(pat, localeObj, *status);
     }
 
     if(fmt == nullptr) {
