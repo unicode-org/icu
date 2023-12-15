@@ -51,6 +51,7 @@ static void TestNarrowQuarters(void);
 static void TestExtraneousCharacters(void);
 static void TestParseTooStrict(void);
 static void TestHourCycle(void);
+static void TestLocaleNameCrash(void);
 
 void addDateForTest(TestNode** root);
 
@@ -76,6 +77,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestExtraneousCharacters);
     TESTCASE(TestParseTooStrict);
     TESTCASE(TestHourCycle);
+    TESTCASE(TestLocaleNameCrash);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -2127,6 +2129,19 @@ static void TestHourCycle(void) {
             }
         }
     }
+}
+
+static void TestLocaleNameCrash(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UDateFormat icudf;
+
+    icudf = udat_open(UDAT_MEDIUM, UDAT_NONE, "notalanguage", NULL, 0, NULL, 0, &status);
+    if ( U_SUCCESS(status) ) {
+        log_verbose("Success: did not crash on udat_open(locale=\"notalanguage\")\n");
+    } else {
+        log_err("FAIL: didn't crash on udat_open(locale=\"notalanguage\"), but got %s.\n", u_errorName(status));
+    }
+    udat_close(icudf);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
