@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702596487781,
+  "lastUpdate": 1702660320340,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -14998,6 +14998,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.736922589843268,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "distinct": true,
+          "id": "e76094c55a0fe4bc6f5307102698e0fc632bf89d",
+          "message": "ICU-22605 Exclude the data files from the -sources.jar",
+          "timestamp": "2023-12-15T09:08:22-08:00",
+          "tree_id": "8ee8d12124d3163af2a54194543e145f7ebfd7bf",
+          "url": "https://github.com/unicode-org/icu/commit/e76094c55a0fe4bc6f5307102698e0fc632bf89d"
+        },
+        "date": 1702660260117,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.7327086740174913,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
