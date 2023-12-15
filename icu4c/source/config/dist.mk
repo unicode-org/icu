@@ -66,13 +66,15 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	-$(RMV) $(DISTY_FILE) $(DISTY_TMP)
 	$(MKINSTALLDIRS) $(DISTY_TMP)
 	( cd $(ICU4CTOP)/.. && git archive --format=tar --prefix=icu/ HEAD:icu4c/ ) | ( cd "$(DISTY_TMP)" && tar xf - )
+    # special handling for LICENSE file. The symlinks will be included as files by tar and zip.
+	cp -fv $(ICU4CTOP)/LICENSE "$(DISTY_TMP)/LICENSE"
 	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
 	$(MKINSTALLDIRS) $(DISTY_IN)
 	echo DISTY_DAT=$(DISTY_DAT)
 	cp $(DISTY_DAT) $(DISTY_IN)
 	$(RMV) $(DISTY_RMDIR)
 	( cd $(DISTY_TMP)/icu ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
-	( cd $(DISTY_TMP) ; tar cfpz $(DISTY_FILE_TGZ) icu )
+	( cd $(DISTY_TMP) ; tar cfpzh $(DISTY_FILE_TGZ) icu )
 	( cd $(DISTY_TMP) ; zip -rlq $(DISTY_FILE_ZIP) icu )
 	$(RMV) $(DISTY_TMP)
 	ln -sf $(shell basename $(DISTY_FILE_ZIP)) $(DISTY_FILE_DIR)/icu4c-src.zip
