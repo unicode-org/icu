@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702669813480,
+  "lastUpdate": 1702670443088,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15178,6 +15178,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.9205397740080631,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "5cf5ec1adbd2332b3cc289b5b1f5ca8324275fc3",
+          "message": "ICU-22549 Add TimeZoneNames fuzzer",
+          "timestamp": "2023-12-15T11:30:45-08:00",
+          "tree_id": "9adc7082a05fb360ee47cf198c123c829d86f83a",
+          "url": "https://github.com/unicode-org/icu/commit/5cf5ec1adbd2332b3cc289b5b1f5ca8324275fc3"
+        },
+        "date": 1702670338339,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9221242501091913,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
