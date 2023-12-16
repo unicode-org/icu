@@ -83,5 +83,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     if (U_SUCCESS(status)) {
         df->format(date, appendTo);
     }
+
+    icu::Locale locale2(fuzzData.data());
+    df.reset(
+        icu::DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale2));
+    df.reset(
+        icu::DateFormat::createDateTimeInstance(dateStyle2, timeStyle2, locale2));
     return EXIT_SUCCESS;
 }
