@@ -66,6 +66,26 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   for (int32_t p = bi->first(); p != icu::BreakIterator::DONE; p = bi->next()) {}
 
   utext_close(fuzzstr);
+
+  icu::Locale locale2(reinterpret_cast<const char*>(data));
+  switch (rnd8 % 5) {
+    case 0:
+      bi.reset(icu::BreakIterator::createWordInstance(locale2, status));
+      break;
+    case 1:
+      bi.reset(icu::BreakIterator::createLineInstance(locale2, status));
+      break;
+    case 2:
+      bi.reset(icu::BreakIterator::createCharacterInstance(locale2, status));
+      break;
+    case 3:
+      bi.reset(icu::BreakIterator::createSentenceInstance(locale2, status));
+      break;
+    case 4:
+      bi.reset(icu::BreakIterator::createTitleInstance(locale2, status));
+      break;
+  }
+
   return 0;
 }
 
