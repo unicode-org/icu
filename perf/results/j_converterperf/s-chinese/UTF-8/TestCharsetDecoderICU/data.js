@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702671030956,
+  "lastUpdate": 1702687231857,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15148,6 +15148,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.7934735954344114,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "7bef50e71d6ae7a58c5547092feb110ec71810ab",
+          "message": "ICU-22609 Fix nulldef w/ bogus locale in DateFormat::create*",
+          "timestamp": "2023-12-15T16:14:56-08:00",
+          "tree_id": "68dc6b3791d7d9eaf1b9eb8a272d7a618e257b40",
+          "url": "https://github.com/unicode-org/icu/commit/7bef50e71d6ae7a58c5547092feb110ec71810ab"
+        },
+        "date": 1702687155530,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.7904106903209613,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
