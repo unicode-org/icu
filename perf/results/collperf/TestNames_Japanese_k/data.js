@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702688543397,
+  "lastUpdate": 1702936204730,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32290,6 +32290,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5756970.4126,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "11d1148e5680fe62456659af85b37f690612ba73",
+          "message": "ICU-22549 Improve fuzzer to test more locale\n\nWe found bogus locale cause crash in DateFormat so here\nwe enhance the fuzzer to also test locale name which are not\nreturn by the available locale list.",
+          "timestamp": "2023-12-18T13:31:06-08:00",
+          "tree_id": "6408ab517d2e1a3cc6b80abb260b057428f7512e",
+          "url": "https://github.com/unicode-org/icu/commit/11d1148e5680fe62456659af85b37f690612ba73"
+        },
+        "date": 1702936141011,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 242.1327,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20787520.5689,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5328451.4248,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19723710.2609,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5757349.3074,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
