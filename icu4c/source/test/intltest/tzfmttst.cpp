@@ -88,6 +88,7 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
         TESTCASE(8, TestAdoptDefaultThreadSafe);
         TESTCASE(9, TestCentralTime);
         TESTCASE(10, TestBogusLocale);
+        TESTCASE(11, Test22614GetMetaZoneNamesNotCrash);
     default: name = ""; break;
     }
 }
@@ -1307,6 +1308,17 @@ TimeZoneFormatTest::TestFormatCustomZone() {
     }
 }
 
+void
+TimeZoneFormatTest::Test22614GetMetaZoneNamesNotCrash() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<TimeZoneNames> tzdbNames(TimeZoneNames::createTZDBInstance(Locale("en"), status));
+    UnicodeString name;
+    for (int32_t i = 124; i < 150; i++) {
+        name.remove();
+        UnicodeString mzId(i+1, u'A', i);
+        tzdbNames->getMetaZoneDisplayName(mzId, UTZNM_SHORT_STANDARD, name);
+    }
+}
 void
 TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage() {
     UErrorCode status = U_ZERO_ERROR;
