@@ -110,7 +110,7 @@ struct ZMatchInfo {
 };
 
 // Helper functions
-static void mergeTimeZoneKey(const UnicodeString& mzID, char* result);
+static void mergeTimeZoneKey(const UnicodeString& mzID, char* result, size_t capacity, UErrorCode& status);
 
 #define DEFAULT_CHARACTERNODE_CAPACITY 1
 
@@ -755,7 +755,7 @@ struct ZNames::ZNamesLoader : public ResourceSink {
         if (U_FAILURE(errorCode)) { return; }
 
         char key[ZID_KEY_MAX + 1];
-        mergeTimeZoneKey(mzID, key);
+        mergeTimeZoneKey(mzID, key, sizeof(key), errorCode);
 
         loadNames(zoneStrings, key, errorCode);
     }
@@ -770,6 +770,10 @@ struct ZNames::ZNamesLoader : public ResourceSink {
         }
 
         char key[ZID_KEY_MAX + 1];
+        if (uKey.length() > ZID_KEY_MAX) {
+            errorCode = U_INTERNAL_PROGRAM_ERROR;
+            return;
+        }
         uKey.extract(0, uKey.length(), key, sizeof(key), US_INV);
 
         loadNames(zoneStrings, key, errorCode);
@@ -1282,19 +1286,30 @@ TimeZoneNamesImpl::getExemplarLocationName(const UnicodeString& tzID, UnicodeStr
 
 
 // Merge the MZ_PREFIX and mzId
-static void mergeTimeZoneKey(const UnicodeString& mzID, char* result) {
+static void mergeTimeZoneKey(const UnicodeString& mzID, char* result, size_t capacity,
+                             UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (mzID.isEmpty()) {
         result[0] = '\0';
         return;
     }
 
-    char mzIdChar[ZID_KEY_MAX + 1];
-    int32_t keyLen;
-    int32_t prefixLen = static_cast<int32_t>(uprv_strlen(gMZPrefix));
-    keyLen = mzID.extract(0, mzID.length(), mzIdChar, ZID_KEY_MAX + 1, US_INV);
-    uprv_memcpy((void *)result, (void *)gMZPrefix, prefixLen);
-    uprv_memcpy((void *)(result + prefixLen), (void *)mzIdChar, keyLen);
-    result[keyLen + prefixLen] = '\0';
+    if (MZ_PREFIX_LEN + 1 > capacity) {
+        result[0] = '\0';
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+    uprv_memcpy((void *)result, (void *)gMZPrefix, MZ_PREFIX_LEN);
+    if (static_cast<size_t>(MZ_PREFIX_LEN +  mzID.length() + 1) > capacity) {
+        result[0] = '\0';
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+    int32_t keyLen = mzID.extract(0, mzID.length(), result + MZ_PREFIX_LEN,
+                                  static_cast<int32_t>(capacity - MZ_PREFIX_LEN), US_INV);
+    result[keyLen + MZ_PREFIX_LEN] = '\0';
 }
 
 /*
@@ -1309,7 +1324,7 @@ TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID, UErrorCode& stat
     }
 
     char16_t mzIDKey[ZID_KEY_MAX + 1];
-    mzID.extract(mzIDKey, ZID_KEY_MAX + 1, status);
+    mzID.extract(mzIDKey, ZID_KEY_MAX, status);
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -1342,7 +1357,7 @@ TimeZoneNamesImpl::loadTimeZoneNames(const UnicodeString& tzID, UErrorCode& stat
     }
 
     char16_t tzIDKey[ZID_KEY_MAX + 1];
-    int32_t tzIDKeyLen = tzID.extract(tzIDKey, ZID_KEY_MAX + 1, status);
+    int32_t tzIDKeyLen = tzID.extract(tzIDKey, ZID_KEY_MAX, status);
     U_ASSERT(U_SUCCESS(status));   // already checked length above
     tzIDKey[tzIDKeyLen] = 0;
 
@@ -2255,7 +2270,7 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
     TZDBNames* tzdbNames = nullptr;
 
     char16_t mzIDKey[ZID_KEY_MAX + 1];
-    mzID.extract(mzIDKey, ZID_KEY_MAX + 1, status);
+    mzID.extract(mzIDKey, ZID_KEY_MAX, status);
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -2268,9 +2283,9 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
         if (cacheVal == nullptr) {
             UResourceBundle *zoneStringsRes = ures_openDirect(U_ICUDATA_ZONE, "tzdbNames", &status);
             zoneStringsRes = ures_getByKey(zoneStringsRes, gZoneStrings, zoneStringsRes, &status);
+            char key[ZID_KEY_MAX + 1];
+            mergeTimeZoneKey(mzID, key, sizeof(key), status);
             if (U_SUCCESS(status)) {
-                char key[ZID_KEY_MAX + 1];
-                mergeTimeZoneKey(mzID, key);
                 tzdbNames = TZDBNames::createInstance(zoneStringsRes, key);
 
                 if (tzdbNames == nullptr) {
