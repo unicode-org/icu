@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702948628250,
+  "lastUpdate": 1703023783465,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15478,6 +15478,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1963.390428237181,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "fc6e282d98668dea248c847f9cf13a0a4b55443a",
+          "message": "ICU-22549 Limit Normalizer2 Fuzzer for 5K of input\n\nTo avoid timeout",
+          "timestamp": "2023-12-19T13:58:03-08:00",
+          "tree_id": "b6c96857821b0eb92b74e403a33d2102e7c6d385",
+          "url": "https://github.com/unicode-org/icu/commit/fc6e282d98668dea248c847f9cf13a0a4b55443a"
+        },
+        "date": 1703023716297,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1970.1985043267314,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
