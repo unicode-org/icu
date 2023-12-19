@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702949341967,
+  "lastUpdate": 1703024174818,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32560,6 +32560,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5631940.4459,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "fc6e282d98668dea248c847f9cf13a0a4b55443a",
+          "message": "ICU-22549 Limit Normalizer2 Fuzzer for 5K of input\n\nTo avoid timeout",
+          "timestamp": "2023-12-19T13:58:03-08:00",
+          "tree_id": "b6c96857821b0eb92b74e403a33d2102e7c6d385",
+          "url": "https://github.com/unicode-org/icu/commit/fc6e282d98668dea248c847f9cf13a0a4b55443a"
+        },
+        "date": 1703024114157,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 223.5757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20052876.2033,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5283013.3282,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19114647.5203,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5735181.6938,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
