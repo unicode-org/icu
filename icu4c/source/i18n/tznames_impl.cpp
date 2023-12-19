@@ -34,6 +34,7 @@
 #include "ureslocs.h"
 #include "zonemeta.h"
 #include "ucln_in.h"
+#include "uinvchar.h"
 #include "uvector.h"
 #include "olsontz.h"
 
@@ -2280,6 +2281,10 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
         return nullptr;
     }
     mzIDKey[mzID.length()] = 0;
+    if (!uprv_isInvariantUString(mzIDKey, mzID.length())) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
 
     static UMutex gTZDBNamesMapLock;
     umtx_lock(&gTZDBNamesMapLock);

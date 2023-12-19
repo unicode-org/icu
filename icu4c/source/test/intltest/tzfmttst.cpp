@@ -89,6 +89,7 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
         TESTCASE(9, TestCentralTime);
         TESTCASE(10, TestBogusLocale);
         TESTCASE(11, Test22614GetMetaZoneNamesNotCrash);
+        TESTCASE(12, Test22615NonASCIIID);
     default: name = ""; break;
     }
 }
@@ -1314,6 +1315,52 @@ TimeZoneFormatTest::TestFormatCustomZone() {
         tzfmt->format(UTZFMT_STYLE_SPECIFIC_LONG, tz, now, tzstr, nullptr);
         assertEquals(UnicodeString("Format result for ") + tzid, expected, tzstr);
     }
+}
+
+void
+TimeZoneFormatTest::Test22615NonASCIIID() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<TimeZoneNames> tzdb(TimeZoneNames::createTZDBInstance(Locale("en"), status));
+    // A test to ensure under the debugging build non ASCII id will not cause
+    // internal assertion error.
+    UnicodeString id(9, u'\u00C0', 8);
+    UnicodeString output;
+    tzdb->getMetaZoneDisplayName(id, UTZNM_SHORT_STANDARD, output);
+    assertTrue("getMetaZoneID of non ASCII id should return bogus string",
+               output.isBogus());
+
+    status = U_ZERO_ERROR;
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        tzdb->getAvailableMetaZoneIDs(id, status));
+    assertSuccess("getAvailableMetaZoneIDs should success", status);
+    assertEquals("getAvailableMetaZoneIDs with non ASCII id return 0 ids",
+                 0, enumeration->count(status));
+    assertSuccess("count should success", status);
+
+    output.remove();
+    tzdb->getMetaZoneID(id, 0, output);
+    assertTrue("getMetaZoneID of non ASCII id should return bogus string",
+               output.isBogus());
+
+    output.remove();
+    tzdb->getMetaZoneDisplayName(id, UTZNM_EXEMPLAR_LOCATION, output);
+    assertTrue("getMetaZoneDisplayName of non ASCII id should return bogus string",
+               output.isBogus());
+
+    output.remove();
+    tzdb->getTimeZoneDisplayName(id, UTZNM_SHORT_DAYLIGHT, output);
+    assertTrue("getTimeZoneDisplayName of non ASCII id should return bogus string",
+               output.isBogus());
+
+    output.remove();
+    tzdb->getExemplarLocationName(id, output);
+    assertTrue("getExemplarLocationName of non ASCII id should return bogus string",
+               output.isBogus());
+
+    output.remove();
+    tzdb->getDisplayName(id, UTZNM_LONG_GENERIC, 0, output);
+    assertTrue("getDisplayName of non ASCII id should return bogus string",
+               output.isBogus());
 }
 
 void
