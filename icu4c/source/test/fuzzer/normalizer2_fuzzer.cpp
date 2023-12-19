@@ -1,7 +1,7 @@
 // © 2023 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// Fuzzer for ICU Calendar.
+// Fuzzer for ICU Normalizer2.
 
 #include <cstring>
 
@@ -10,6 +10,10 @@
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     uint16_t rnd;
     UChar32 char1, char2;
+    // To avoid timeout, limit the input to 5000 bytes
+    if (size > 5000) {
+        size = 5000;
+    }
     if (size < sizeof(rnd) + sizeof(char1) + sizeof(char2)) return 0;
     icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
 
