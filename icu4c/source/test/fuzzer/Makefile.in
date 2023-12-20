@@ -45,6 +45,7 @@ FUZZER_TARGETS = \
 		 normalizer2_fuzzer \
 		 number_format_fuzzer \
 		 number_formatter_fuzzer \
+		 plurrule_fuzzer \
 		 relative_date_time_formatter_fuzzer \
 		 rule_based_break_iterator_fuzzer \
 		 timezone_create_fuzzer \
