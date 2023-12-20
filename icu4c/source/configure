@@ -3987,6 +3987,41 @@ if test "$GCC" = yes; then
             CXXFLAGS="$CXXFLAGS -O2"
         fi
     fi
+    # if CFLAGS does not have a "-std=" setting, set it now to -std=c11,
+    # and check that the compiler still works.
+    if ! echo "$CFLAGS" | grep '\-std=' >/dev/null 2>&1; then
+        OLD_CFLAGS="${CFLAGS}"
+        CFLAGS="$CFLAGS -std=c11"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if we have a C11 compiler" >&5
+$as_echo_n "checking if we have a C11 compiler... " >&6; }
+
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  c11_okay=yes
+else
+  c11_okay=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $c11_okay" >&5
+$as_echo "$c11_okay" >&6; }
+        if [ $c11_okay = yes ]; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: Adding CFLAGS option -std=c11" >&5
+$as_echo "$as_me: Adding CFLAGS option -std=c11" >&6;}
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -std=c11"
+        else
+            CFLAGS="$OLD_CFLAGS"
+        fi
+    fi
 fi
 
 ac_ext=c
@@ -4479,17 +4514,6 @@ $as_echo "$ac_use_strict_options" >&6; }
     then
         if test "$GCC" = yes
         then
-            case "${host}" in
-            *-*-solaris*)
-                # Don't use -std=c11 on Solaris because of timezone check fails
-                ;;
-            *)
-                # Do not use -ansi. It limits us to C90, and it breaks some platforms.
-                # We use -std=c11 to disable the gnu99 defaults and its associated warnings
-                CFLAGS="$CFLAGS -std=c11"
-                ;;
-            esac
-
             CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
         else
             case "${host}" in
@@ -4520,7 +4544,6 @@ $as_echo "$ac_use_strict_options" >&6; }
 
 
 # Check if we can build and use 64-bit libraries
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
 $as_echo_n "checking for grep that handles long lines and -e... " >&6; }
