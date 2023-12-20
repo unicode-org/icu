@@ -22,7 +22,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Recommended Build Options
 
-Depending on the platform and the type of installation, we recommend a small number of modifications and build options. Note that C99 compatibility is now required.
+Depending on the platform and the type of installation, we recommend a small number of modifications and build options. Note that C11 compatibility is now required.
 
 *   **Namespace (ICU 61 and later):** Since ICU 61, call sites need to qualify ICU types explicitly, for example `icu::UnicodeString`, or do `using icu::UnicodeString;` where appropriate. If your code relies on the "using namespace icu;" that used to be in `unicode/uversion.h`, then you need to update your code.
     You could temporarily (until you have more time to update your code) revert to the default "using" via `-DU_USING_ICU_NAMESPACE=1` or by modifying `unicode/uversion.h`:
@@ -339,7 +339,7 @@ Here are the steps to build ICU:
 gmake
 ```
      (or just `make` if GNU make is the default make on your platform) to compile the libraries and all the data files. The proper name of the GNU make command is printed at the end of the configuration run, as in `"You must use gmake to compile ICU"`.
-    Note that the compilation command output may be simplified on your platform. If this is the case, you will see just: `gcc ... stubdata.c` rather than `gcc -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c`
+    Note that the compilation command output may be simplified on your platform. If this is the case, you will see just: `gcc ... stubdata.c` rather than `gcc -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c11 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c`
     If you need to see the whole compilation line, use `gmake VERBOSE=1`. The full compilation line will print if an error occurs.
 1.  Optionally,
 ```
