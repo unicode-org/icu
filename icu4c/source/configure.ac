@@ -175,6 +175,21 @@ if test "$GCC" = yes; then
             CXXFLAGS="$CXXFLAGS -O2"
         fi
     fi
+    # if CFLAGS does not have a "-std=" setting, set it now to -std=c11,
+    # and check that the compiler still works.
+    if ! echo "$CFLAGS" | grep '\-std=' >/dev/null 2>&1; then
+        OLD_CFLAGS="${CFLAGS}"
+        CFLAGS="$CFLAGS -std=c11"
+        AC_MSG_CHECKING([[if we have a C11 compiler]])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[c11_okay=yes],[c11_okay=no])
+        AC_MSG_RESULT($c11_okay)
+        if [[ $c11_okay = yes ]]; then
+            AC_MSG_NOTICE([Adding CFLAGS option -std=c11])
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -std=c11"
+        else
+            CFLAGS="$OLD_CFLAGS"
+        fi
+    fi
 fi
 
 AC_PROG_CPP
