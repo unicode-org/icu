@@ -21,6 +21,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "mutex.h"
+#include "uassert.h"
 #include "ulocimp.h"
 #include "umutex.h"
 #include "ureslocs.h"
@@ -64,12 +65,13 @@ U_NAMESPACE_BEGIN
 // Access resource data for locale components.
 // Wrap code in uloc.c for now.
 class ICUDataTable {
-    const char* path;
+    const char* const path;
     Locale locale;
 
 public:
+    // Note: path should be a pointer to a statically allocated string.
     ICUDataTable(const char* path, const Locale& locale);
-    ~ICUDataTable();
+    ~ICUDataTable() = default;
 
     const Locale& getLocale();
 
@@ -95,23 +97,9 @@ ICUDataTable::getNoFallback(const char* tableKey, const char* itemKey, UnicodeSt
 }
 
 ICUDataTable::ICUDataTable(const char* path, const Locale& locale)
-    : path(nullptr), locale(Locale::getRoot())
+    : path(path), locale(locale)
 {
-  if (path) {
-    int32_t len = static_cast<int32_t>(uprv_strlen(path));
-    this->path = (const char*) uprv_malloc(len + 1);
-    if (this->path) {
-      uprv_strcpy((char *)this->path, path);
-      this->locale = locale;
-    }
-  }
-}
-
-ICUDataTable::~ICUDataTable() {
-  if (path) {
-    uprv_free((void*) path);
-    path = nullptr;
-  }
+    U_ASSERT(path != nullptr);
 }
 
 const Locale&
