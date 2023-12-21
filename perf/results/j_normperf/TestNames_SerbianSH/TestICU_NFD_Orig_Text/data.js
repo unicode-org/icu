@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703197906931,
+  "lastUpdate": 1703201015487,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15478,6 +15478,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 9.842308650922716,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "daa0171501f47962bb41e9fc1bb7e1a1e7148ab0",
+          "message": "ICU-22608 Add necessary using statements for namespace icu.",
+          "timestamp": "2023-12-22T08:12:47+09:00",
+          "tree_id": "bd144ab4491415949b4791324098d0bd37ef335a",
+          "url": "https://github.com/unicode-org/icu/commit/daa0171501f47962bb41e9fc1bb7e1a1e7148ab0"
+        },
+        "date": 1703200940805,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 10.905002412477684,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
