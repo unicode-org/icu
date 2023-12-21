@@ -7,6 +7,8 @@
 **********************************************************************
 */
 
+#include <utility>
+
 #include "unicode/bytestream.h"
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
@@ -26,7 +28,7 @@
 
 
 /* struct holding a single variant */
-typedef struct VariantListEntry {
+typedef struct VariantListEntry : public icu::UMemory {
     const char              *variant;
     struct VariantListEntry *next;
 } VariantListEntry;
@@ -834,12 +836,10 @@ ultag_isUnicodeExtensionSubtags(const char* s, int32_t len) {
 */
 
 static UBool
-_addVariantToList(VariantListEntry **first, VariantListEntry *var) {
-    UBool bAdded = true;
-
+_addVariantToList(VariantListEntry **first, icu::LocalPointer<VariantListEntry> var) {
     if (*first == nullptr) {
         var->next = nullptr;
-        *first = var;
+        *first = var.orphan();
     } else {
         VariantListEntry *prev, *cur;
         int32_t cmp;
@@ -849,8 +849,8 @@ _addVariantToList(VariantListEntry **first, VariantListEntry *var) {
         cur = *first;
         while (true) {
             if (cur == nullptr) {
-                prev->next = var;
                 var->next = nullptr;
+                prev->next = var.orphan();
                 break;
             }
 
@@ -858,15 +858,14 @@ _addVariantToList(VariantListEntry **first, VariantListEntry *var) {
             cmp = uprv_compareInvCharsAsAscii(var->variant, cur->variant);
             if (cmp == 0) {
                 /* duplicated variant */
-                bAdded = false;
-                break;
+                return false;
             }
             prev = cur;
             cur = cur->next;
         }
     }
 
-    return bAdded;
+    return true;
 }
 
 static UBool
@@ -1165,7 +1164,6 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
     if (len > 0) {
         char *p, *pVar;
         UBool bNext = true;
-        VariantListEntry *var;
         VariantListEntry *varFirst = nullptr;
 
         pVar = nullptr;
@@ -1194,15 +1192,13 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                     if (_isVariantSubtag(pVar, -1)) {
                         if (uprv_strcmp(pVar,POSIX_VALUE) || len != (int32_t)uprv_strlen(POSIX_VALUE)) {
                             /* emit the variant to the list */
-                            var = (VariantListEntry*)uprv_malloc(sizeof(VariantListEntry));
-                            if (var == nullptr) {
-                                *status = U_MEMORY_ALLOCATION_ERROR;
+                            icu::LocalPointer<VariantListEntry> var(new VariantListEntry, *status);
+                            if (U_FAILURE(*status)) {
                                 break;
                             }
                             var->variant = pVar;
-                            if (!_addVariantToList(&varFirst, var)) {
+                            if (!_addVariantToList(&varFirst, std::move(var))) {
                                 /* duplicated variant */
-                                uprv_free(var);
                                 if (strict) {
                                     *status = U_ILLEGAL_ARGUMENT_ERROR;
                                     break;
@@ -1237,7 +1233,7 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 _sortVariants(varFirst);
 
                 /* write out validated/normalized variants to the target */
-                var = varFirst;
+                VariantListEntry* var = varFirst;
                 while (var != nullptr) {
                     sink.Append("-", 1);
                     varLen = (int32_t)uprv_strlen(var->variant);
@@ -1248,10 +1244,9 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         }
 
         /* clean up */
-        var = varFirst;
-        while (var != nullptr) {
+        for (VariantListEntry* var = varFirst; var != nullptr; ) {
             VariantListEntry *tmpVar = var->next;
-            uprv_free(var);
+            delete var;
             var = tmpVar;
         }
 
@@ -2001,7 +1996,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     char *pSubtag, *pNext, *pLastGoodPosition;
     int32_t subtagLen;
     int32_t extlangIdx;
-    ExtensionListEntry *pExtension;
+    icu::LocalPointer<ExtensionListEntry> pExtension;
     char *pExtValueSubtag, *pExtValueSubtagEnd;
     int32_t i;
     UBool privateuseVar = false;
@@ -2133,7 +2128,6 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     next = LANG | PRIV;
     pNext = pLastGoodPosition = tagBuf;
     extlangIdx = 0;
-    pExtension = nullptr;
     pExtValueSubtag = nullptr;
     pExtValueSubtagEnd = nullptr;
 
@@ -2219,20 +2213,14 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         if (next & VART) {
             if (_isVariantSubtag(pSubtag, subtagLen) ||
                (privateuseVar && _isPrivateuseVariantSubtag(pSubtag, subtagLen))) {
-                VariantListEntry *var;
-                UBool isAdded;
-
-                var = (VariantListEntry*)uprv_malloc(sizeof(VariantListEntry));
-                if (var == nullptr) {
-                    *status = U_MEMORY_ALLOCATION_ERROR;
+                icu::LocalPointer<VariantListEntry> var(new VariantListEntry, *status);
+                if (U_FAILURE(*status)) {
                     return nullptr;
                 }
                 *pSep = 0;
                 var->variant = T_CString_toUpperCase(pSubtag);
-                isAdded = _addVariantToList(&(t->variants), var);
-                if (!isAdded) {
+                if (!_addVariantToList(&(t->variants), std::move(var))) {
                     /* duplicated variant entry */
-                    uprv_free(var);
                     break;
                 }
                 pLastGoodPosition = pSep;
@@ -2242,11 +2230,10 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         }
         if (next & EXTS) {
             if (_isExtensionSingleton(pSubtag, subtagLen)) {
-                if (pExtension != nullptr) {
+                if (pExtension.isValid()) {
                     if (pExtValueSubtag == nullptr || pExtValueSubtagEnd == nullptr) {
                         /* the previous extension is incomplete */
-                        uprv_free(pExtension);
-                        pExtension = nullptr;
+                        delete pExtension.orphan();
                         break;
                     }
 
@@ -2255,20 +2242,19 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                     pExtension->value = T_CString_toLowerCase(pExtValueSubtag);
 
                     /* insert the extension to the list */
-                    if (_addExtensionToList(&(t->extensions), pExtension, false)) {
+                    if (_addExtensionToList(&(t->extensions), pExtension.getAlias(), false)) {
+                        pExtension.orphan();
                         pLastGoodPosition = pExtValueSubtagEnd;
                     } else {
                         /* stop parsing here */
-                        uprv_free(pExtension);
-                        pExtension = nullptr;
+                        delete pExtension.orphan();
                         break;
                     }
                 }
 
                 /* create a new extension */
-                pExtension = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
-                if (pExtension == nullptr) {
-                    *status = U_MEMORY_ALLOCATION_ERROR;
+                pExtension.adoptInsteadAndCheckErrorCode(new ExtensionListEntry, *status);
+                if (U_FAILURE(*status)) {
                     return nullptr;
                 }
                 *pSep = 0;
@@ -2305,12 +2291,11 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             if (uprv_tolower(*pSubtag) == PRIVATEUSE && subtagLen == 1) {
                 char *pPrivuseVal;
 
-                if (pExtension != nullptr) {
+                if (pExtension.isValid()) {
                     /* Process the last extension */
                     if (pExtValueSubtag == nullptr || pExtValueSubtagEnd == nullptr) {
                         /* the previous extension is incomplete */
-                        uprv_free(pExtension);
-                        pExtension = nullptr;
+                        delete pExtension.orphan();
                         break;
                     } else {
                         /* terminate the previous extension value */
@@ -2318,13 +2303,12 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                         pExtension->value = T_CString_toLowerCase(pExtValueSubtag);
 
                         /* insert the extension to the list */
-                        if (_addExtensionToList(&(t->extensions), pExtension, false)) {
+                        if (_addExtensionToList(&(t->extensions), pExtension.getAlias(), false)) {
+                            pExtension.orphan();
                             pLastGoodPosition = pExtValueSubtagEnd;
-                            pExtension = nullptr;
                         } else {
                         /* stop parsing here */
-                            uprv_free(pExtension);
-                            pExtension = nullptr;
+                            delete pExtension.orphan();
                             break;
                         }
                     }
@@ -2386,20 +2370,21 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         break;
     }
 
-    if (pExtension != nullptr) {
+    if (pExtension.isValid()) {
         /* Process the last extension */
         if (pExtValueSubtag == nullptr || pExtValueSubtagEnd == nullptr) {
             /* the previous extension is incomplete */
-            uprv_free(pExtension);
+            delete pExtension.orphan();
         } else {
             /* terminate the previous extension value */
             *pExtValueSubtagEnd = 0;
             pExtension->value = T_CString_toLowerCase(pExtValueSubtag);
             /* insert the extension to the list */
-            if (_addExtensionToList(&(t->extensions), pExtension, false)) {
+            if (_addExtensionToList(&(t->extensions), pExtension.getAlias(), false)) {
+                pExtension.orphan();
                 pLastGoodPosition = pExtValueSubtagEnd;
             } else {
-                uprv_free(pExtension);
+                delete pExtension.orphan();
             }
         }
     }
@@ -2429,7 +2414,7 @@ ultag_close(ULanguageTag* langtag) {
         VariantListEntry *curVar = langtag->variants;
         while (curVar) {
             VariantListEntry *nextVar = curVar->next;
-            uprv_free(curVar);
+            delete curVar;
             curVar = nextVar;
         }
     }
