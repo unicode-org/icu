@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703119503299,
+  "lastUpdate": 1703197950665,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15238,6 +15238,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 262.9511527011181,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "23dd2b8b5499506a9ff541c9c2f8bf7701cf93b8",
+          "message": "ICU-22549 Add PluralRule Fuzzer",
+          "timestamp": "2023-12-21T14:21:33-08:00",
+          "tree_id": "5ccead0f9023e30c98546f9ce98c71be6bff5aee",
+          "url": "https://github.com/unicode-org/icu/commit/23dd2b8b5499506a9ff541c9c2f8bf7701cf93b8"
+        },
+        "date": 1703197885222,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 230.8019728485764,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
