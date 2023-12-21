@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703201050976,
+  "lastUpdate": 1703203149150,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15298,6 +15298,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 28.614457319274038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "887005b68a689cc1d9f2b13e8e23dd4bfeaaf5f5",
+          "message": "ICU-22520 Remove unnecessary copying of statically allocated strings.",
+          "timestamp": "2023-12-22T08:43:55+09:00",
+          "tree_id": "8882ca817ed66a753f3f867b66959bd6cea767cd",
+          "url": "https://github.com/unicode-org/icu/commit/887005b68a689cc1d9f2b13e8e23dd4bfeaaf5f5"
+        },
+        "date": 1703203082830,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 28.06055498112814,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
