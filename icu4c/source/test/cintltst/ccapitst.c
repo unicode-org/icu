@@ -15,6 +15,7 @@
 ******************************************************************************
 */
 
+#include <stdalign.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,12 +37,6 @@
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 512
-
-#if __STDC_VERSION__ < 201112
-# define alignof(type) offsetof (struct { char c; type member; }, member)
-#elif __STDC_VERSION__ < 202311
-# include <stdalign.h>
-#endif
 
 /*returns an action other than the one provided*/
 #if !UCONFIG_NO_LEGACY_CONVERSION
