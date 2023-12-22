@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703203717468,
+  "lastUpdate": 1703267381062,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47344,6 +47344,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1385.0952,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "9d3e12b8202e030f5993a195bf8d1332485206c6",
+          "message": "ICU-22601 v74.2 fix dangling LICENSE file\n\n- 'git archive' works on a subtree so did not include LICENSE\n- we copy the LICENSE file from the build dir\n- broken by ICU-22309",
+          "timestamp": "2023-12-22T09:28:09-08:00",
+          "tree_id": "931a9c4fb66c66d728da81bc3c2ded4dbfc13534",
+          "url": "https://github.com/unicode-org/icu/commit/9d3e12b8202e030f5993a195bf8d1332485206c6"
+        },
+        "date": 1703267315113,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 66704.2156,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 134719.8084,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.4788,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 7.7765,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 5.0136,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8050.1074,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 26090.4288,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1399.7019,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
