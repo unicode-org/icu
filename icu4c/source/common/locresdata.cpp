@@ -53,7 +53,6 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
 /*    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];*/
     const char16_t *item=nullptr;
     UErrorCode errorCode;
-    char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
 
     /*
      * open the bundle for the current locale
@@ -128,15 +127,16 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                *pErrorCode = errorCode;
                 break;
             }
-            
-            u_UCharsToChars(fallbackLocale, explicitFallbackName, len);
-            
+
+            icu::CharString explicitFallbackName;
+            explicitFallbackName.appendInvariantChars(fallbackLocale, len, errorCode);
+
             /* guard against recursive fallback */
-            if(uprv_strcmp(explicitFallbackName, locale)==0){
+            if (explicitFallbackName == locale) {
                 *pErrorCode = U_INTERNAL_PROGRAM_ERROR;
                 break;
             }
-            rb.adoptInstead(ures_open(path, explicitFallbackName, &errorCode));
+            rb.adoptInstead(ures_open(path, explicitFallbackName.data(), &errorCode));
             if(U_FAILURE(errorCode)){
                 *pErrorCode = errorCode;
                 break;
