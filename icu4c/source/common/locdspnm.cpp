@@ -18,6 +18,8 @@
 #include "unicode/udisplaycontext.h"
 #include "unicode/brkiter.h"
 #include "unicode/ucurr.h"
+#include "bytesinkutil.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "mutex.h"
@@ -26,37 +28,6 @@
 #include "umutex.h"
 #include "ureslocs.h"
 #include "uresimp.h"
-
-#include <stdarg.h>
-
-/**
- * Concatenate a number of null-terminated strings to buffer, leaving a
- * null-terminated string.  The last argument should be the null pointer.
- * Return the length of the string in the buffer, not counting the trailing
- * null.  Return -1 if there is an error (buffer is null, or buflen < 1).
- */
-static int32_t ncat(char *buffer, uint32_t buflen, ...) {
-  va_list args;
-  char *str;
-  char *p = buffer;
-  const char* e = buffer + buflen - 1;
-
-  if (buffer == nullptr || buflen < 1) {
-    return -1;
-  }
-
-  va_start(args, buflen);
-  while ((str = va_arg(args, char *)) != 0) {
-    char c;
-    while (p != e && (c = *str++) != 0) {
-      *p++ = c;
-    }
-  }
-  *p = 0;
-  va_end(args);
-
-  return static_cast<int32_t>(p - buffer);
-}
 
 U_NAMESPACE_BEGIN
 
@@ -575,31 +546,46 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
   UBool hasVariant = uprv_strlen(variant) > 0;
 
   if (dialectHandling == ULDN_DIALECT_NAMES) {
-    char buffer[ULOC_FULLNAME_CAPACITY];
+    UErrorCode status = U_ZERO_ERROR;
+    CharString buffer;
     do { // loop construct is so we can break early out of search
       if (hasScript && hasCountry) {
-        ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, "_", country, (char *)0);
-        localeIdName(buffer, resultName, false);
-        if (!resultName.isBogus()) {
-          hasScript = false;
-          hasCountry = false;
-          break;
+        buffer.append(lang, status)
+              .append('_', status)
+              .append(script, status)
+              .append('_', status)
+              .append(country, status);
+        if (U_SUCCESS(status)) {
+          localeIdName(buffer.data(), resultName, false);
+          if (!resultName.isBogus()) {
+            hasScript = false;
+            hasCountry = false;
+            break;
+          }
         }
       }
       if (hasScript) {
-        ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", script, (char *)0);
-        localeIdName(buffer, resultName, false);
-        if (!resultName.isBogus()) {
-          hasScript = false;
-          break;
+        buffer.append(lang, status)
+              .append('_', status)
+              .append(script, status);
+        if (U_SUCCESS(status)) {
+          localeIdName(buffer.data(), resultName, false);
+          if (!resultName.isBogus()) {
+            hasScript = false;
+            break;
+          }
         }
       }
       if (hasCountry) {
-        ncat(buffer, ULOC_FULLNAME_CAPACITY, lang, "_", country, (char*)0);
-        localeIdName(buffer, resultName, false);
-        if (!resultName.isBogus()) {
-          hasCountry = false;
-          break;
+        buffer.append(lang, status)
+              .append('_', status)
+              .append(country, status);
+        if (U_SUCCESS(status)) {
+          localeIdName(buffer.data(), resultName, false);
+          if (!resultName.isBogus()) {
+            hasCountry = false;
+            break;
+          }
         }
       }
     } while (false);
@@ -646,21 +632,23 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
   LocalPointer<StringEnumeration> e(loc.createKeywords(status));
   if (e.isValid() && U_SUCCESS(status)) {
     UnicodeString temp2;
-    char value[ULOC_KEYWORD_AND_VALUES_CAPACITY]; // sigh, no ULOC_VALUE_CAPACITY
     const char* key;
     while ((key = e->next((int32_t *)0, status)) != nullptr) {
-      value[0] = 0;
-      loc.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
-      if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
+      CharString value;
+      {
+        CharStringByteSink sink(&value);
+        loc.getKeywordValue(key, sink, status);
+      }
+      if (U_FAILURE(status)) {
         return result;
       }
       keyDisplayName(key, temp, true);
       temp.findAndReplace(formatOpenParen, formatReplaceOpenParen);
       temp.findAndReplace(formatCloseParen, formatReplaceCloseParen);
-      keyValueDisplayName(key, value, temp2, true);
+      keyValueDisplayName(key, value.data(), temp2, true);
       temp2.findAndReplace(formatOpenParen, formatReplaceOpenParen);
       temp2.findAndReplace(formatCloseParen, formatReplaceCloseParen);
-      if (temp2 != UnicodeString(value, -1, US_INV)) {
+      if (temp2 != UnicodeString(value.data(), -1, US_INV)) {
         appendWithSep(resultRemainder, temp2);
       } else if (temp != UnicodeString(key, -1, US_INV)) {
         UnicodeString temp3;
