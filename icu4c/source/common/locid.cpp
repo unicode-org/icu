@@ -2420,33 +2420,23 @@ Locale::getLocaleCache()
 
 class KeywordEnumeration : public StringEnumeration {
 protected:
-    char *keywords;
+    CharString keywords;
 private:
-    char *current;
-    int32_t length;
-    UnicodeString currUSKey;
-    static const char fgClassID;/* Warning this is used beyond the typical RTTI usage. */
+    const char *current;
+    static const char fgClassID;
 
 public:
     static UClassID U_EXPORT2 getStaticClassID() { return (UClassID)&fgClassID; }
     virtual UClassID getDynamicClassID() const override { return getStaticClassID(); }
 public:
     KeywordEnumeration(const char *keys, int32_t keywordLen, int32_t currentIndex, UErrorCode &status)
-        : keywords((char *)&fgClassID), current((char *)&fgClassID), length(0) {
+        : keywords(), current(keywords.data()) {
         if(U_SUCCESS(status) && keywordLen != 0) {
             if(keys == nullptr || keywordLen < 0) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             } else {
-                keywords = (char *)uprv_malloc(keywordLen+1);
-                if (keywords == nullptr) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                }
-                else {
-                    uprv_memcpy(keywords, keys, keywordLen);
-                    keywords[keywordLen] = 0;
-                    current = keywords + currentIndex;
-                    length = keywordLen;
-                }
+                keywords.append(keys, keywordLen, status);
+                current = keywords.data() + currentIndex;
             }
         }
     }
@@ -2456,11 +2446,13 @@ public:
     virtual StringEnumeration * clone() const override
     {
         UErrorCode status = U_ZERO_ERROR;
-        return new KeywordEnumeration(keywords, length, (int32_t)(current - keywords), status);
+        return new KeywordEnumeration(
+                keywords.data(), keywords.length(),
+                (int32_t)(current - keywords.data()), status);
     }
 
     virtual int32_t count(UErrorCode &/*status*/) const override {
-        char *kw = keywords;
+        const char *kw = keywords.data();
         int32_t result = 0;
         while(*kw) {
             result++;
@@ -2495,15 +2487,14 @@ public:
     }
 
     virtual void reset(UErrorCode& /*status*/) override {
-        current = keywords;
+        current = keywords.data();
     }
 };
 
 const char KeywordEnumeration::fgClassID = '\0';
 
-KeywordEnumeration::~KeywordEnumeration() {
-    uprv_free(keywords);
-}
+// Out-of-line virtual destructor to serve as the "key function".
+KeywordEnumeration::~KeywordEnumeration() = default;
 
 // A wrapper around KeywordEnumeration that calls uloc_toUnicodeLocaleKey() in
 // the next() method for each keyword before returning it.
@@ -2529,7 +2520,7 @@ public:
         return nullptr;
     }
     virtual int32_t count(UErrorCode &/*status*/) const override {
-        char *kw = keywords;
+        const char *kw = keywords.data();
         int32_t result = 0;
         while(*kw) {
             if (uloc_toUnicodeLocaleKey(kw) != nullptr) {
