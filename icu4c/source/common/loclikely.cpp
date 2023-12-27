@@ -71,12 +71,7 @@ appendTag(
  * parameters may be nullptr pointers. If they are, their corresponding length parameters
  * must be less than or equal to 0.
  *
- * If any of the language, script or region parameters are empty, and the alternateTags
- * parameter is not nullptr, it will be parsed for potential language, script and region tags
- * to be used when constructing the new tag.  If the alternateTags parameter is nullptr, or
- * it contains no language tag, the default tag for the unknown language is used.
- *
- * If the length of the new string exceeds the capacity of the output buffer, 
+ * If the length of the new string exceeds the capacity of the output buffer,
  * the function copies as many bytes to the output buffer as it can, and returns
  * the error U_BUFFER_OVERFLOW_ERROR.
  *
@@ -94,7 +89,6 @@ appendTag(
  * @param regionLength The length of the region tag.
  * @param trailing Any trailing data to append to the new tag.
  * @param trailingLength The length of the trailing data.
- * @param alternateTags A string containing any alternate tags.
  * @param sink The output sink receiving the tag string.
  * @param err A pointer to a UErrorCode for error reporting.
  **/
@@ -108,7 +102,6 @@ createTagStringWithAlternates(
     int32_t regionLength,
     const char* trailing,
     int32_t trailingLength,
-    const char* alternateTags,
     icu::ByteSink& sink,
     UErrorCode* err) {
 
@@ -139,44 +132,6 @@ createTagStringWithAlternates(
                 &tagLength,
                 /*withSeparator=*/false);
         }
-        else if (alternateTags == nullptr) {
-            /*
-             * Use the empty string for an unknown language, if
-             * we found no language.
-             */
-        }
-        else {
-            /*
-             * Parse the alternateTags string for the language.
-             */
-            char alternateLang[ULOC_LANG_CAPACITY];
-            int32_t alternateLangLength = sizeof(alternateLang);
-
-            alternateLangLength =
-                uloc_getLanguage(
-                    alternateTags,
-                    alternateLang,
-                    alternateLangLength,
-                    err);
-            if(U_FAILURE(*err) ||
-                alternateLangLength >= ULOC_LANG_CAPACITY) {
-                goto error;
-            }
-            else if (alternateLangLength == 0) {
-                /*
-                 * Use the empty string for an unknown language, if
-                 * we found no language.
-                 */
-            }
-            else {
-                appendTag(
-                    alternateLang,
-                    alternateLangLength,
-                    tagBuffer,
-                    &tagLength,
-                    /*withSeparator=*/false);
-            }
-        }
 
         if (scriptLength > 0) {
             appendTag(
@@ -185,32 +140,6 @@ createTagStringWithAlternates(
                 tagBuffer,
                 &tagLength,
                 /*withSeparator=*/true);
-        }
-        else if (alternateTags != nullptr) {
-            /*
-             * Parse the alternateTags string for the script.
-             */
-            char alternateScript[ULOC_SCRIPT_CAPACITY];
-
-            const int32_t alternateScriptLength =
-                uloc_getScript(
-                    alternateTags,
-                    alternateScript,
-                    sizeof(alternateScript),
-                    err);
-
-            if (U_FAILURE(*err) ||
-                alternateScriptLength >= ULOC_SCRIPT_CAPACITY) {
-                goto error;
-            }
-            else if (alternateScriptLength > 0) {
-                appendTag(
-                    alternateScript,
-                    alternateScriptLength,
-                    tagBuffer,
-                    &tagLength,
-                    /*withSeparator=*/true);
-            }
         }
 
         if (regionLength > 0) {
@@ -222,33 +151,6 @@ createTagStringWithAlternates(
                 /*withSeparator=*/true);
 
             regionAppended = true;
-        }
-        else if (alternateTags != nullptr) {
-            /*
-             * Parse the alternateTags string for the region.
-             */
-            char alternateRegion[ULOC_COUNTRY_CAPACITY];
-
-            const int32_t alternateRegionLength =
-                uloc_getCountry(
-                    alternateTags,
-                    alternateRegion,
-                    sizeof(alternateRegion),
-                    err);
-            if (U_FAILURE(*err) ||
-                alternateRegionLength >= ULOC_COUNTRY_CAPACITY) {
-                goto error;
-            }
-            else if (alternateRegionLength > 0) {
-                appendTag(
-                    alternateRegion,
-                    alternateRegionLength,
-                    tagBuffer,
-                    &tagLength,
-                    /*withSeparator=*/true);
-
-                regionAppended = true;
-            }
         }
 
         /**
@@ -513,7 +415,6 @@ _uloc_addLikelySubtags(const char* localeID,
             (int32_t)uprv_strlen(lsr.region),
             trailing,
             trailingLength,
-            nullptr,
             sink,
             err);
         if(U_FAILURE(*err)) {
@@ -616,7 +517,6 @@ _uloc_minimizeSubtags(const char* localeID,
             (int32_t)uprv_strlen(lsr.region),
             trailing,
             trailingLength,
-            nullptr,
             sink,
             err);
         if(U_FAILURE(*err)) {
