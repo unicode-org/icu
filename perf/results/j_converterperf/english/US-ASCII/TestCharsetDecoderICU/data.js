@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703296671618,
+  "lastUpdate": 1703727677775,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15658,6 +15658,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5531480947108532,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "03a870a23cc07fab7e937919b5095b7ec2b98553",
+          "message": "ICU-22520 Replace uprv_malloc() / uprv_free() with icu::CharString.",
+          "timestamp": "2023-12-28T10:27:35+09:00",
+          "tree_id": "8c8283296e42f5bcf3a0bcb6e7dd3432d6bfb8c6",
+          "url": "https://github.com/unicode-org/icu/commit/03a870a23cc07fab7e937919b5095b7ec2b98553"
+        },
+        "date": 1703727612727,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5526160473852149,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
