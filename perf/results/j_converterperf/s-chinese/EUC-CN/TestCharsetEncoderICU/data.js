@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703727630643,
+  "lastUpdate": 1703730363301,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15658,6 +15658,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 6.290058108779,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7eb56fee1ec2ce125c92f3a38003f743cb738992",
+          "message": "ICU-22520 Remove now superfluous intermediate buffers.",
+          "timestamp": "2023-12-28T11:13:38+09:00",
+          "tree_id": "dec5277fd6c69f542fda90c5bdad4f5231862e7e",
+          "url": "https://github.com/unicode-org/icu/commit/7eb56fee1ec2ce125c92f3a38003f743cb738992"
+        },
+        "date": 1703730296907,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 6.287661549476762,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
