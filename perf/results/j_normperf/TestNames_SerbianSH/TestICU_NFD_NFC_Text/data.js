@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703747581611,
+  "lastUpdate": 1703817628518,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -31228,6 +31228,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.78949851236343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "02740597ce6a90d14ee2bb9b1a66e16ed5543328",
+          "message": "ICU-22520 Replace char arrays with icu::CharString.",
+          "timestamp": "2023-12-29T11:30:57+09:00",
+          "tree_id": "2b97a4f8909dae952a07d05e7f9ee3737e84a0c9",
+          "url": "https://github.com/unicode-org/icu/commit/02740597ce6a90d14ee2bb9b1a66e16ed5543328"
+        },
+        "date": 1703817563234,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.507304986872505,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
