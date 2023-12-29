@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1703817783426,
+  "lastUpdate": 1703831210543,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15508,6 +15508,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 252.9731427521373,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "1a60a038e14f0c56f50052c03fe76c4933cda339",
+          "message": "ICU-21952 Add withoutLocale functions to LocalizedNumber[Range]Formatter\n\nSee #2483",
+          "timestamp": "2023-12-28T22:04:02-08:00",
+          "tree_id": "3acc1dc6c4403976a6da569cc0bbfd32999a1b4a",
+          "url": "https://github.com/unicode-org/icu/commit/1a60a038e14f0c56f50052c03fe76c4933cda339"
+        },
+        "date": 1703831145810,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 230.2411235851732,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
