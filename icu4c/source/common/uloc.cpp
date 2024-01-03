@@ -1569,30 +1569,16 @@ uloc_openKeywords(const char* localeID,
         tmpLocaleID=localeID;
     }
 
-    /* Skip the language */
-    ulocimp_getLanguage(tmpLocaleID, &tmpLocaleID, *status);
+    ulocimp_getSubtags(
+            tmpLocaleID,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            &tmpLocaleID,
+            *status);
     if (U_FAILURE(*status)) {
         return 0;
-    }
-
-    if(_isIDSeparator(*tmpLocaleID)) {
-        const char *scriptID;
-        /* Skip the script if available */
-        ulocimp_getScript(tmpLocaleID+1, &scriptID, *status);
-        if (U_FAILURE(*status)) {
-            return 0;
-        }
-        if(scriptID != tmpLocaleID+1) {
-            /* Found optional script */
-            tmpLocaleID = scriptID;
-        }
-        /* Skip the Country */
-        if (_isIDSeparator(*tmpLocaleID)) {
-            ulocimp_getCountry(tmpLocaleID+1, &tmpLocaleID, *status);
-            if (U_FAILURE(*status)) {
-                return 0;
-            }
-        }
     }
 
     /* keywords are located after '@' */
@@ -1634,7 +1620,7 @@ _canonicalize(const char* localeID,
         return;
     }
 
-    int32_t j, fieldCount=0, scriptSize=0, variantSize=0;
+    int32_t j, fieldCount=0;
     CharString tempBuffer;  // if localeID has a BCP47 extension, tmpLocaleID points to this
     CharString localeIDWithHyphens;  // if localeID has a BPC47 extension and have _, tmpLocaleID points to this
     const char* origLocaleID;
@@ -1671,57 +1657,41 @@ _canonicalize(const char* localeID,
     origLocaleID=tmpLocaleID;
 
     /* get all pieces, one after another, and separate with '_' */
-    CharString tag = ulocimp_getLanguage(tmpLocaleID, &tmpLocaleID, *err);
+    CharString tag;
+    CharString script;
+    CharString country;
+    CharString variant;
+    ulocimp_getSubtags(
+            tmpLocaleID,
+            &tag,
+            &script,
+            &country,
+            &variant,
+            &tmpLocaleID,
+            *err);
 
     if (tag.length() == I_DEFAULT_LENGTH &&
             uprv_strncmp(origLocaleID, i_default, I_DEFAULT_LENGTH) == 0) {
         tag.clear();
         tag.append(uloc_getDefault(), *err);
-    } else if(_isIDSeparator(*tmpLocaleID)) {
-        const char *scriptID;
-
-        ++fieldCount;
-        tag.append('_', *err);
-
-        CharString script = ulocimp_getScript(tmpLocaleID+1, &scriptID, *err);
-        tag.append(script, *err);
-        scriptSize = script.length();
-        if(scriptSize > 0) {
-            /* Found optional script */
-            tmpLocaleID = scriptID;
+    } else {
+        if (!script.isEmpty()) {
             ++fieldCount;
-            if (_isIDSeparator(*tmpLocaleID)) {
-                /* If there is something else, then we add the _ */
+            tag.append('_', *err);
+            tag.append(script, *err);
+        }
+        if (!country.isEmpty()) {
+            ++fieldCount;
+            tag.append('_', *err);
+            tag.append(country, *err);
+        }
+        if (!variant.isEmpty()) {
+            ++fieldCount;
+            if (country.isEmpty()) {
                 tag.append('_', *err);
             }
-        }
-
-        if (_isIDSeparator(*tmpLocaleID)) {
-            const char *cntryID;
-
-            CharString country = ulocimp_getCountry(tmpLocaleID+1, &cntryID, *err);
-            tag.append(country, *err);
-            if (!country.isEmpty()) {
-                /* Found optional country */
-                tmpLocaleID = cntryID;
-            }
-            if(_isIDSeparator(*tmpLocaleID)) {
-                /* If there is something else, then we add the _  if we found country before. */
-                if (!_isIDSeparator(*(tmpLocaleID+1))) {
-                    ++fieldCount;
-                    tag.append('_', *err);
-                }
-
-                variantSize = -tag.length();
-                {
-                    CharStringByteSink s(&tag);
-                    _getVariant(tmpLocaleID+1, *tmpLocaleID, &s, nullptr, false);
-                }
-                variantSize += tag.length();
-                if (variantSize > 0) {
-                    tmpLocaleID += variantSize + 1; /* skip '_' and variant */
-                }
-            }
+            tag.append('_', *err);
+            tag.append(variant, *err);
         }
     }
 
@@ -1767,22 +1737,15 @@ _canonicalize(const char* localeID,
         /* Handle @FOO variant if @ is present and not followed by = */
         if (tmpLocaleID!=nullptr && keywordAssign==nullptr) {
             /* Add missing '_' if needed */
-            if (fieldCount < 2 || (fieldCount < 3 && scriptSize > 0)) {
+            if (fieldCount < 2 || (fieldCount < 3 && !script.isEmpty())) {
                 do {
                     tag.append('_', *err);
                     ++fieldCount;
                 } while(fieldCount<2);
             }
 
-            int32_t posixVariantSize = -tag.length();
-            {
-                CharStringByteSink s(&tag);
-                _getVariant(tmpLocaleID+1, '@', &s, nullptr, (UBool)(variantSize > 0));
-            }
-            posixVariantSize += tag.length();
-            if (posixVariantSize > 0) {
-                variantSize += posixVariantSize;
-            }
+            CharStringByteSink s(&tag);
+            _getVariant(tmpLocaleID+1, '@', &s, nullptr, !variant.isEmpty());
         }
 
         /* Look up the ID in the canonicalization map */

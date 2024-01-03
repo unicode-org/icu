@@ -209,17 +209,11 @@ static bool getParentLocaleID(char *name, const char *origName, UResOpenType ope
     }
     
     UErrorCode err = U_ZERO_ERROR;
-    const char* tempNamePtr = name;
-    CharString language = ulocimp_getLanguage(tempNamePtr, &tempNamePtr, err);
-    if (*tempNamePtr == '_') {
-        ++tempNamePtr;
-    }
-    CharString script = ulocimp_getScript(tempNamePtr, &tempNamePtr, err);
-    if (*tempNamePtr == '_') {
-        ++tempNamePtr;
-    }
-    CharString region = ulocimp_getCountry(tempNamePtr, &tempNamePtr, err);
-    CharString workingLocale;
+    CharString language;
+    CharString script;
+    CharString region;
+    ulocimp_getSubtags(name, &language, &script, &region, nullptr, nullptr, err);
+
     if (U_FAILURE(err)) {
         // hopefully this never happens...
         return chopLocale(name);
@@ -238,6 +232,8 @@ static bool getParentLocaleID(char *name, const char *origName, UResOpenType ope
         }
     }
 
+    CharString workingLocale;
+
     // if it's not in the parent locale table, figure out the fallback script algorithmically
     // (see CLDR-15265 for an explanation of the algorithm)
     if (!script.isEmpty() && !region.isEmpty()) {
@@ -254,12 +250,9 @@ static bool getParentLocaleID(char *name, const char *origName, UResOpenType ope
         // - if yes, replace the region with the script from the original locale ID
         // - if no, replace the region with the default script for that language and region
         UErrorCode err = U_ZERO_ERROR;
-        tempNamePtr = origName;
-        CharString origNameLanguage = ulocimp_getLanguage(tempNamePtr, &tempNamePtr, err);
-        if (*tempNamePtr == '_') {
-            ++tempNamePtr;
-        }
-        CharString origNameScript = ulocimp_getScript(origName, nullptr, err);
+        CharString origNameLanguage;
+        CharString origNameScript;
+        ulocimp_getSubtags(origName, &origNameLanguage, &origNameScript, nullptr, nullptr, nullptr, err);
         if (!origNameScript.isEmpty()) {
             workingLocale.append(language, err).append("_", err).append(origNameScript, err);
         } else {
