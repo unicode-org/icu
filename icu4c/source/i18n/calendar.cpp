@@ -1216,6 +1216,15 @@ Calendar::set(UCalendarDateFields field, int32_t value)
     if (fAreFieldsVirtuallySet) {
         UErrorCode ec = U_ZERO_ERROR;
         computeFields(ec);
+
+        // handle the ambiguous time that occurs twice at the end of DST:
+        // if we're in DST, then we want the first occurrence of this time,
+        // otherwise we want the second occurrence of this time
+        if (fFields[UCAL_DST_OFFSET] != 0) {
+            setRepeatedWallTimeOption(UCAL_WALLTIME_FIRST);
+        } else {
+            setRepeatedWallTimeOption(UCAL_WALLTIME_LAST);
+        }
     }
     fFields[field]     = value;
     /* Ensure that the fNextStamp value doesn't go pass max value for int32_t */

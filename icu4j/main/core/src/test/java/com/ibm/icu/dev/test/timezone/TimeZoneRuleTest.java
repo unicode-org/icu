@@ -1849,4 +1849,35 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             errln("Fail: Exception thrown - " + e.getMessage());
         }
     }
+
+    @Test
+    public void TestTimeAtEndOfDST() {
+        // regression test for ICU-22616
+    
+        // America/Los_Angeles -- end of DST
+        // start time:
+        //    UTC:   Sun Nov 05 2023 07:00:00
+        //    local: Sun Nov 05 2023 00:00:00
+        // step through three hours, 15 minutes at a time
+        // checking for mismatches between set millis and get millis
+        // during the hour that happens twice at the end of DST
+        final long start_millis = 1699167600000L;
+        long get_millis;
+        TimeZone losangeles = TimeZone.getTimeZone("America/Los_Angeles", TimeZone.TIMEZONE_ICU);
+        Calendar cal = new GregorianCalendar(losangeles);
+        for (long set_millis = start_millis; set_millis < start_millis + (1000*60*60*3); set_millis += (1000*60*15)) {
+            cal.clear();
+            cal.setTimeInMillis(set_millis);
+    
+            // Note that the call to cal.set() sets isTimeSet to false so then
+            // Calendar::getTimeInMillis() calls Calendar::updateTime()
+            // instead of just returning time.
+            cal.set(Calendar.ERA, GregorianCalendar.AD);
+            
+            get_millis = cal.getTimeInMillis();
+            if ( get_millis != set_millis) {
+                errln("FAIL: value returned by getTimeInMillis() does not match value set by setTimeInMillis()");
+            }
+        }
+    }
 }

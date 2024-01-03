@@ -2228,6 +2228,15 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     {
         if (areFieldsVirtuallySet) {
             computeFields();
+
+            // handle the ambiguous time that occurs twice at the end of DST:
+            // if we're in DST, then we want the first occurrence of this time,
+            // otherwise we want the second occurrence of this time
+            if (fields[DST_OFFSET] != 0) {
+                setRepeatedWallTimeOption(WALLTIME_FIRST);
+            } else {
+                setRepeatedWallTimeOption(WALLTIME_LAST);
+            }
         }
         fields[field] = value;
         /* Ensure that the fNextStamp value doesn't go pass max value for 32 bit integer */

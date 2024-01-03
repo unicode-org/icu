@@ -49,6 +49,7 @@ static void TestForceGannenNumbering(void);
 static void TestMapDateToCalFields(void);
 static void TestNarrowQuarters(void);
 static void TestExtraneousCharacters(void);
+static void TestTimeAtEndOfDST(void);
 static void TestParseTooStrict(void);
 static void TestHourCycle(void);
 static void TestLocaleNameCrash(void);
@@ -75,6 +76,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestMapDateToCalFields);
     TESTCASE(TestNarrowQuarters);
     TESTCASE(TestExtraneousCharacters);
+    TESTCASE(TestTimeAtEndOfDST);
     TESTCASE(TestParseTooStrict);
     TESTCASE(TestHourCycle);
     TESTCASE(TestLocaleNameCrash);
@@ -2145,3 +2147,35 @@ static void TestLocaleNameCrash(void) {
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+
+static void TestTimeAtEndOfDST(void) {
+    // regression test for ICU-22616
+    UErrorCode status;
+    UCalendar *cal;
+    double set_millis, get_millis;
+
+    status = U_ZERO_ERROR;
+
+    // America/Los_Angeles -- end of DST
+    // start time:
+    //    UTC:   Sun Nov 05 2023 07:00:00
+    //    local: Sun Nov 05 2023 00:00:00
+    // step through three hours, 15 minutes at a time
+    // checking for mismatches between set millis and get millis
+    // during the hour that happens twice at the end of DST
+    cal = ucal_open(u"America/Los_Angeles", -1, "en_US", UCAL_DEFAULT, &status);
+    for (set_millis = 1699167600000; set_millis < 1699167600000 + (1000*60*60*3); set_millis += (1000*60*15)) {
+        ucal_clear(cal);
+        ucal_setMillis(cal, set_millis, &status);
+
+        // Note that the call to ucal_set() sets fIsTimeSet to false so then
+        // Calendar::getTimeInMillis() calls Calendar::updateTime()
+        // instead of just returning fTime.
+        ucal_set(cal, UCAL_ERA, 1);
+        
+        get_millis = ucal_getMillis(cal, &status);
+        assertTrue("ucal_getMillis() returns value set by ucal_setMillis()", get_millis == set_millis);
+    }
+    ucal_close(cal);
+}
