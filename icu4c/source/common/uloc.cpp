@@ -30,6 +30,8 @@
      l = lang, C = ctry, M = charmap, V = variant
 */
 
+#include <optional>
+
 #include "unicode/bytestream.h"
 #include "unicode/errorcode.h"
 #include "unicode/stringpiece.h"
@@ -1285,24 +1287,31 @@ ulocimp_getCountry(const char *localeID,
 static void
 _getVariant(const char *localeID,
             char prev,
-            ByteSink& sink,
+            ByteSink* sink,
+            const char** pEnd,
             UBool needSeparator) {
     UBool hasVariant = false;
+    if (pEnd != nullptr) { *pEnd = localeID; }
 
     /* get one or more variant tags and separate them with '_' */
     if(_isIDSeparator(prev)) {
         /* get a variant string after a '-' or '_' */
         while(!_isTerminator(*localeID)) {
             if (needSeparator) {
-                sink.Append("_", 1);
+                if (sink != nullptr) {
+                    sink->Append("_", 1);
+                }
                 needSeparator = false;
             }
-            char c = (char)uprv_toupper(*localeID);
-            if (c == '-') c = '_';
-            sink.Append(&c, 1);
+            if (sink != nullptr) {
+                char c = (char)uprv_toupper(*localeID);
+                if (c == '-') c = '_';
+                sink->Append(&c, 1);
+            }
             hasVariant = true;
             localeID++;
         }
+        if (pEnd != nullptr) { *pEnd = localeID; }
     }
 
     /* if there is no variant tag after a '-' or '_' then look for '@' */
@@ -1316,14 +1325,133 @@ _getVariant(const char *localeID,
         }
         while(!_isTerminator(*localeID)) {
             if (needSeparator) {
-                sink.Append("_", 1);
+                if (sink != nullptr) {
+                    sink->Append("_", 1);
+                }
                 needSeparator = false;
             }
-            char c = (char)uprv_toupper(*localeID);
-            if (c == '-' || c == ',') c = '_';
-            sink.Append(&c, 1);
+            if (sink != nullptr) {
+                char c = (char)uprv_toupper(*localeID);
+                if (c == '-' || c == ',') c = '_';
+                sink->Append(&c, 1);
+            }
             localeID++;
         }
+        if (pEnd != nullptr) { *pEnd = localeID; }
+    }
+}
+
+U_EXPORT void U_EXPORT2
+ulocimp_getSubtags(
+        const char* localeID,
+        CharString* language,
+        CharString* script,
+        CharString* region,
+        CharString* variant,
+        const char** pEnd,
+        UErrorCode& status) {
+    std::optional<CharStringByteSink> languageSink;
+    std::optional<CharStringByteSink> scriptSink;
+    std::optional<CharStringByteSink> regionSink;
+    std::optional<CharStringByteSink> variantSink;
+
+    if (language != nullptr) { languageSink.emplace(language); }
+    if (script != nullptr) { scriptSink.emplace(script); }
+    if (region != nullptr) { regionSink.emplace(region); }
+    if (variant != nullptr) { variantSink.emplace(variant); }
+
+    ulocimp_getSubtags(
+            localeID,
+            languageSink.has_value() ? &languageSink.value() : nullptr,
+            scriptSink.has_value() ? &scriptSink.value() : nullptr,
+            regionSink.has_value() ? &regionSink.value() : nullptr,
+            variantSink.has_value() ? &variantSink.value() : nullptr,
+            pEnd,
+            status);
+}
+
+U_EXPORT void U_EXPORT2
+ulocimp_getSubtags(
+        const char* localeID,
+        ByteSink* language,
+        ByteSink* script,
+        ByteSink* region,
+        ByteSink* variant,
+        const char** pEnd,
+        UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
+    if (pEnd != nullptr) {
+        *pEnd = localeID;
+    } else if (language == nullptr &&
+               script == nullptr &&
+               region == nullptr &&
+               variant == nullptr) {
+        return;
+    }
+
+    bool hasRegion = false;
+
+    if (localeID == nullptr) {
+        localeID = uloc_getDefault();
+    }
+
+    {
+        CharString tmp = ulocimp_getLanguage(localeID, &localeID, status);
+        if (U_FAILURE(status)) { return; }
+        U_ASSERT(localeID != nullptr);
+        if (language != nullptr) { language->Append(tmp.data(), tmp.length()); }
+    }
+
+    if (pEnd != nullptr) {
+        *pEnd = localeID;
+    } else if (script == nullptr &&
+               region == nullptr &&
+               variant == nullptr) {
+        return;
+    }
+
+    if (_isIDSeparator(*localeID)) {
+        const char* begin = localeID + 1;
+        const char* end = nullptr;
+        CharString tmp = ulocimp_getScript(begin, &end, status);
+        if (U_FAILURE(status)) { return; }
+        U_ASSERT(end != nullptr);
+        if (end != begin) {
+            localeID = end;
+            if (script != nullptr) { script->Append(tmp.data(), tmp.length()); }
+            if (pEnd != nullptr) { *pEnd = localeID; }
+        }
+    }
+
+    if (region == nullptr && variant == nullptr && pEnd == nullptr) { return; }
+
+    if (_isIDSeparator(*localeID)) {
+        const char* begin = localeID + 1;
+        const char* end = nullptr;
+        CharString tmp = ulocimp_getCountry(begin, &end, status);
+        if (U_FAILURE(status)) { return; }
+        U_ASSERT(end != nullptr);
+        if (end != begin) {
+            hasRegion = true;
+            localeID = end;
+            if (region != nullptr) { region->Append(tmp.data(), tmp.length()); }
+            if (pEnd != nullptr) { *pEnd = localeID; }
+        }
+    }
+
+    if (variant == nullptr && pEnd == nullptr) { return; }
+
+    if (_isIDSeparator(*localeID) && !_isBCP47Extension(localeID)) {
+        /* If there was no country ID, skip a possible extra IDSeparator */
+        if (!hasRegion && _isIDSeparator(localeID[1])) {
+            localeID++;
+        }
+        const char* begin = localeID + 1;
+        const char* end = nullptr;
+        _getVariant(begin, *localeID, variant, &end, false);
+        U_ASSERT(end != nullptr);
+        if (end != begin && pEnd != nullptr) { *pEnd = end; }
     }
 }
 
@@ -1587,7 +1715,7 @@ _canonicalize(const char* localeID,
                 variantSize = -tag.length();
                 {
                     CharStringByteSink s(&tag);
-                    _getVariant(tmpLocaleID+1, *tmpLocaleID, s, false);
+                    _getVariant(tmpLocaleID+1, *tmpLocaleID, &s, nullptr, false);
                 }
                 variantSize += tag.length();
                 if (variantSize > 0) {
@@ -1649,7 +1777,7 @@ _canonicalize(const char* localeID,
             int32_t posixVariantSize = -tag.length();
             {
                 CharStringByteSink s(&tag);
-                _getVariant(tmpLocaleID+1, '@', s, (UBool)(variantSize > 0));
+                _getVariant(tmpLocaleID+1, '@', &s, nullptr, (UBool)(variantSize > 0));
             }
             posixVariantSize += tag.length();
             if (posixVariantSize > 0) {
@@ -1755,11 +1883,28 @@ uloc_getLanguage(const char*    localeID,
         return 0;
     }
 
-    if(localeID==nullptr) {
-        localeID=uloc_getDefault();
+    CheckedArrayByteSink sink(language, languageCapacity);
+    ulocimp_getSubtags(
+            localeID,
+            &sink,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            *err);
+
+    int32_t length = sink.NumberOfBytesAppended();
+
+    if (U_FAILURE(*err)) {
+        return length;
     }
 
-    return ulocimp_getLanguage(localeID, nullptr, *err).extract(language, languageCapacity, *err);
+    if (sink.Overflowed()) {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+        return length;
+    }
+
+    return u_terminateChars(language, languageCapacity, length, err);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1772,20 +1917,28 @@ uloc_getScript(const char*    localeID,
         return 0;
     }
 
-    if(localeID==nullptr) {
-        localeID=uloc_getDefault();
-    }
+    CheckedArrayByteSink sink(script, scriptCapacity);
+    ulocimp_getSubtags(
+            localeID,
+            nullptr,
+            &sink,
+            nullptr,
+            nullptr,
+            nullptr,
+            *err);
 
-    /* skip the language */
-    ulocimp_getLanguage(localeID, &localeID, *err);
+    int32_t length = sink.NumberOfBytesAppended();
+
     if (U_FAILURE(*err)) {
-        return 0;
+        return length;
     }
 
-    if(_isIDSeparator(*localeID)) {
-        return ulocimp_getScript(localeID+1, nullptr, *err).extract(script, scriptCapacity, *err);
+    if (sink.Overflowed()) {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+        return length;
     }
-    return u_terminateChars(script, scriptCapacity, 0, err);
+
+    return u_terminateChars(script, scriptCapacity, length, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -1798,32 +1951,28 @@ uloc_getCountry(const char* localeID,
         return 0;
     }
 
-    if(localeID==nullptr) {
-        localeID=uloc_getDefault();
-    }
+    CheckedArrayByteSink sink(country, countryCapacity);
+    ulocimp_getSubtags(
+            localeID,
+            nullptr,
+            nullptr,
+            &sink,
+            nullptr,
+            nullptr,
+            *err);
 
-    /* Skip the language */
-    ulocimp_getLanguage(localeID, &localeID, *err);
+    int32_t length = sink.NumberOfBytesAppended();
+
     if (U_FAILURE(*err)) {
-        return 0;
+        return length;
     }
 
-    if(_isIDSeparator(*localeID)) {
-        const char *scriptID;
-        /* Skip the script if available */
-        ulocimp_getScript(localeID+1, &scriptID, *err);
-        if (U_FAILURE(*err)) {
-            return 0;
-        }
-        if(scriptID != localeID+1) {
-            /* Found optional script */
-            localeID = scriptID;
-        }
-        if(_isIDSeparator(*localeID)) {
-            return ulocimp_getCountry(localeID+1, nullptr, *err).extract(country, countryCapacity, *err);
-        }
+    if (sink.Overflowed()) {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+        return length;
     }
-    return u_terminateChars(country, countryCapacity, 0, err);
+
+    return u_terminateChars(country, countryCapacity, length, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -1832,68 +1981,32 @@ uloc_getVariant(const char* localeID,
                 int32_t variantCapacity,
                 UErrorCode* err)
 {
-    int32_t i=0;
-
     if(err==nullptr || U_FAILURE(*err)) {
         return 0;
     }
 
-    if (localeID == nullptr) {
-       localeID = uloc_getDefault();
-    }
+    CheckedArrayByteSink sink(variant, variantCapacity);
+    ulocimp_getSubtags(
+            localeID,
+            nullptr,
+            nullptr,
+            nullptr,
+            &sink,
+            nullptr,
+            *err);
 
-    /* Skip the language */
-    ulocimp_getLanguage(localeID, &localeID, *err);
+    int32_t length = sink.NumberOfBytesAppended();
+
     if (U_FAILURE(*err)) {
-        return 0;
+        return length;
     }
 
-    if (_isIDSeparator(*localeID)) {
-        const char *scriptID;
-        /* Skip the script if available */
-        ulocimp_getScript(localeID+1, &scriptID, *err);
-        if (U_FAILURE(*err)) {
-            return 0;
-        }
-        if (scriptID != localeID+1) {
-            /* Found optional script */
-            localeID = scriptID;
-        }
-        /* Skip the Country */
-        if (_isIDSeparator(*localeID)) {
-            const char *cntryID;
-            ulocimp_getCountry(localeID+1, &cntryID, *err);
-            if (U_FAILURE(*err)) {
-                return 0;
-            }
-            if (cntryID != localeID+1) {
-                /* Found optional country */
-                localeID = cntryID;
-            }
-            if (_isIDSeparator(*localeID) && !_isBCP47Extension(localeID)) {
-                /* If there was no country ID, skip a possible extra IDSeparator */
-                if (localeID != cntryID && _isIDSeparator(localeID[1])) {
-                    localeID++;
-                }
-
-                CheckedArrayByteSink sink(variant, variantCapacity);
-                _getVariant(localeID+1, *localeID, sink, false);
-
-                i = sink.NumberOfBytesAppended();
-
-                if (U_FAILURE(*err)) {
-                    return i;
-                }
-
-                if (sink.Overflowed()) {
-                    *err = U_BUFFER_OVERFLOW_ERROR;
-                    return i;
-                }
-            }
-        }
+    if (sink.Overflowed()) {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+        return length;
     }
 
-    return u_terminateChars(variant, variantCapacity, i, err);
+    return u_terminateChars(variant, variantCapacity, length, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
