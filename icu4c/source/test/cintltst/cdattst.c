@@ -2146,9 +2146,6 @@ static void TestLocaleNameCrash(void) {
     udat_close(icudf);
 }
 
-#endif /* #if !UCONFIG_NO_FORMATTING */
-
-
 static void TestTimeAtEndOfDST(void) {
     // regression test for ICU-22616
     UErrorCode status;
@@ -2179,3 +2176,5 @@ static void TestTimeAtEndOfDST(void) {
     }
     ucal_close(cal);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
