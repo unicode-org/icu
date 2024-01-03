@@ -1159,17 +1159,19 @@ uloc_getCurrentLanguageID(const char* oldID){
     return oldID;
 }
 /*
- * the internal functions _getLanguage(), _getCountry(), _getVariant()
+ * the internal functions _getLanguage(), _getScript(), _getRegion(), _getVariant()
  * avoid duplicating code to handle the earlier locale ID pieces
  * in the functions for the later ones by
  * setting the *pEnd pointer to where they stopped parsing
  *
  * TODO try to use this in Locale
  */
-CharString U_EXPORT2
-ulocimp_getLanguage(const char *localeID,
-                    const char **pEnd,
-                    UErrorCode &status) {
+static void
+_getLanguage(const char* localeID,
+             ByteSink* sink,
+             const char** pEnd,
+             UErrorCode& status) {
+    U_ASSERT(pEnd != nullptr);
     CharString result;
 
     if (uprv_stricmp(localeID, "root") == 0) {
@@ -1204,23 +1206,23 @@ ulocimp_getLanguage(const char *localeID,
         }
     }
 
-    if(pEnd!=nullptr) {
-        *pEnd=localeID;
+    if (sink != nullptr && !result.isEmpty()) {
+        sink->Append(result.data(), result.length());
     }
 
-    return result;
+    *pEnd = localeID;
 }
 
-CharString U_EXPORT2
-ulocimp_getScript(const char *localeID,
-                  const char **pEnd,
-                  UErrorCode &status) {
+static void
+_getScript(const char* localeID,
+           ByteSink* sink,
+           const char** pEnd,
+           UErrorCode& status) {
+    U_ASSERT(pEnd != nullptr);
     CharString result;
     int32_t idLen = 0;
 
-    if (pEnd != nullptr) {
-        *pEnd = localeID;
-    }
+    *pEnd = localeID;
 
     /* copy the second item as far as possible and count its length */
     while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])
@@ -1231,9 +1233,7 @@ ulocimp_getScript(const char *localeID,
     /* If it's exactly 4 characters long, then it's a script and not a country. */
     if (idLen == 4) {
         int32_t i;
-        if (pEnd != nullptr) {
-            *pEnd = localeID+idLen;
-        }
+        *pEnd = localeID + idLen;
         if (idLen >= 1) {
             result.append((char)uprv_toupper(*(localeID++)), status);
         }
@@ -1242,13 +1242,17 @@ ulocimp_getScript(const char *localeID,
         }
     }
 
-    return result;
+    if (sink != nullptr && !result.isEmpty()) {
+        sink->Append(result.data(), result.length());
+    }
 }
 
-CharString U_EXPORT2
-ulocimp_getCountry(const char *localeID,
-                   const char **pEnd,
-                   UErrorCode &status) {
+static void
+_getRegion(const char* localeID,
+           ByteSink* sink,
+           const char** pEnd,
+           UErrorCode& status) {
+    U_ASSERT(pEnd != nullptr);
     CharString result;
     int32_t idLen=0;
 
@@ -1273,11 +1277,11 @@ ulocimp_getCountry(const char *localeID,
         result.clear();
     }
 
-    if(pEnd!=nullptr) {
-        *pEnd=localeID;
+    if (sink != nullptr && !result.isEmpty()) {
+        sink->Append(result.data(), result.length());
     }
 
-    return result;
+    *pEnd = localeID;
 }
 
 /**
@@ -1285,7 +1289,7 @@ ulocimp_getCountry(const char *localeID,
  * are added to 'variant'
  */
 static void
-_getVariant(const char *localeID,
+_getVariant(const char* localeID,
             char prev,
             ByteSink* sink,
             const char** pEnd,
@@ -1396,12 +1400,9 @@ ulocimp_getSubtags(
         localeID = uloc_getDefault();
     }
 
-    {
-        CharString tmp = ulocimp_getLanguage(localeID, &localeID, status);
-        if (U_FAILURE(status)) { return; }
-        U_ASSERT(localeID != nullptr);
-        if (language != nullptr) { language->Append(tmp.data(), tmp.length()); }
-    }
+    _getLanguage(localeID, language, &localeID, status);
+    if (U_FAILURE(status)) { return; }
+    U_ASSERT(localeID != nullptr);
 
     if (pEnd != nullptr) {
         *pEnd = localeID;
@@ -1414,12 +1415,11 @@ ulocimp_getSubtags(
     if (_isIDSeparator(*localeID)) {
         const char* begin = localeID + 1;
         const char* end = nullptr;
-        CharString tmp = ulocimp_getScript(begin, &end, status);
+        _getScript(begin, script, &end, status);
         if (U_FAILURE(status)) { return; }
         U_ASSERT(end != nullptr);
         if (end != begin) {
             localeID = end;
-            if (script != nullptr) { script->Append(tmp.data(), tmp.length()); }
             if (pEnd != nullptr) { *pEnd = localeID; }
         }
     }
@@ -1429,13 +1429,12 @@ ulocimp_getSubtags(
     if (_isIDSeparator(*localeID)) {
         const char* begin = localeID + 1;
         const char* end = nullptr;
-        CharString tmp = ulocimp_getCountry(begin, &end, status);
+        _getRegion(begin, region, &end, status);
         if (U_FAILURE(status)) { return; }
         U_ASSERT(end != nullptr);
         if (end != begin) {
             hasRegion = true;
             localeID = end;
-            if (region != nullptr) { region->Append(tmp.data(), tmp.length()); }
             if (pEnd != nullptr) { *pEnd = localeID; }
         }
     }
