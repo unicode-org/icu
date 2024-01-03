@@ -1462,7 +1462,7 @@ void Calendar::computeFields(UErrorCode &ec)
     // 11/6/00
 
     int32_t millisInDay;
-    int32_t days = ClockMath::floorDivide(localMillis, kOneDay, &millisInDay);
+    int32_t days = ClockMath::floorDivide(localMillis, U_MILLIS_PER_DAY, &millisInDay);
 
     internalSet(UCAL_JULIAN_DAY,days + kEpochStartAsJulianDay);
 
