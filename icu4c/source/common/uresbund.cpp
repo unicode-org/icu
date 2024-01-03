@@ -244,7 +244,7 @@ static bool getParentLocaleID(char *name, const char *origName, UResOpenType ope
         // if "name" has both script and region, is the script the default script?
         // - if so, remove it and keep the region
         // - if not, remove the region and keep the script
-        if (getDefaultScript(language, region) == script.toStringPiece()) {
+        if (getDefaultScript(language, region) == script) {
             workingLocale.append(language, err).append("_", err).append(region, err);
         } else {
             workingLocale.append(language, err).append("_", err).append(script, err);
@@ -272,7 +272,7 @@ static bool getParentLocaleID(char *name, const char *origName, UResOpenType ope
         // - if not, return false to continue up the chain
         // (we don't do this for other open types for the same reason we don't look things up in the parent
         // locale table for other open types-- see the reference to UTS #35 above)
-        if (openType != URES_OPEN_LOCALE_DEFAULT_ROOT || getDefaultScript(language, CharString()) == script.toStringPiece()) {
+        if (openType != URES_OPEN_LOCALE_DEFAULT_ROOT || getDefaultScript(language, CharString()) == script) {
             workingLocale.append(language, err);
         } else {
             return false;
@@ -3168,7 +3168,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             found.clear().append(ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus), subStatus);
         }
 
-        if (found != parent.toStringPiece()) {
+        if (found != parent) {
             parent.copyFrom(found, subStatus);
         } else {
             getParentForFunctionalEquivalent(found.data(),res,&bund1,parent);
@@ -3277,7 +3277,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         subStatus = U_ZERO_ERROR;
     } while(full.isEmpty() && !found.isEmpty() && U_SUCCESS(*status));
 
-    if(full.isEmpty() && kwVal != defVal.toStringPiece()) {
+    if(full.isEmpty() && kwVal != defVal) {
 #if defined(URES_TREE_DEBUG)
         fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal.data(), defVal.data());
 #endif
@@ -3361,7 +3361,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 #endif        
           if(defLoc.length() <= full.length()) {
             /* found the keyword in a *child* of where the default tag was present. */
-            if(kwVal == defVal.toStringPiece()) { /* if the requested kw is default, */
+            if(kwVal == defVal) { /* if the requested kw is default, */
               /* and the default is in or in an ancestor of the current locale */
 #if defined(URES_TREE_DEBUG)
               fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal.data());

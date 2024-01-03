@@ -382,7 +382,7 @@ void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &resu
 const ConversionRateInfo *ConversionRates::extractConversionInfo(StringPiece source,
                                                                  UErrorCode &status) const {
     for (size_t i = 0, n = conversionInfo_.length(); i < n; ++i) {
-        if (conversionInfo_[i]->sourceUnit.toStringPiece() == source) return conversionInfo_[i];
+        if (conversionInfo_[i]->sourceUnit == source) return conversionInfo_[i];
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
