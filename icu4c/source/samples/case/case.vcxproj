@@ -33,9 +33,11 @@
   <!-- Options that are common to *all* project configurations -->
   <ItemDefinitionGroup>
     <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

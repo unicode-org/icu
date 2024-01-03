@@ -32,9 +32,11 @@
       <TypeLibraryName>$(OutDir)\gendict.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(OutDir)\gendict.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(OutDir)/</AssemblerListingLocation>

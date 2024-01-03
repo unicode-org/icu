@@ -29,7 +29,9 @@
   <!-- Options that are common to *all* project configurations -->
   <ItemDefinitionGroup>
     <ClCompile>
-       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>U_TOOLUTIL_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <WarningLevel>Level3</WarningLevel>
