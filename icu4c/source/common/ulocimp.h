@@ -10,6 +10,8 @@
 #ifndef ULOCIMP_H
 #define ULOCIMP_H
 
+#include <cstddef>
+
 #include "unicode/bytestream.h"
 #include "unicode/uloc.h"
 
@@ -104,6 +106,45 @@ ulocimp_setKeywordValue(const char* keywords,
                         const char* keywordValue,
                         icu::ByteSink& sink,
                         UErrorCode* status);
+
+U_EXPORT void U_EXPORT2
+ulocimp_getSubtags(
+        const char* localeID,
+        icu::CharString* language,
+        icu::CharString* script,
+        icu::CharString* region,
+        icu::CharString* variant,
+        const char** pEnd,
+        UErrorCode& status);
+
+U_EXPORT void U_EXPORT2
+ulocimp_getSubtags(
+        const char* localeID,
+        icu::ByteSink* language,
+        icu::ByteSink* script,
+        icu::ByteSink* region,
+        icu::ByteSink* variant,
+        const char** pEnd,
+        UErrorCode& status);
+
+inline void U_EXPORT2
+ulocimp_getSubtags(
+        const char* localeID,
+        std::nullptr_t,
+        std::nullptr_t,
+        std::nullptr_t,
+        std::nullptr_t,
+        const char** pEnd,
+        UErrorCode& status) {
+    ulocimp_getSubtags(
+            localeID,
+            static_cast<icu::ByteSink*>(nullptr),
+            static_cast<icu::ByteSink*>(nullptr),
+            static_cast<icu::ByteSink*>(nullptr),
+            static_cast<icu::ByteSink*>(nullptr),
+            pEnd,
+            status);
+}
 
 U_CAPI void U_EXPORT2
 ulocimp_getParent(const char* localeID,
