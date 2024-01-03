@@ -156,50 +156,25 @@ parseTagString(
     icu::CharString& region,
     UErrorCode* err)
 {
+    icu::CharString variant;
     const char* position = localeID;
 
     if (U_FAILURE(*err) || localeID == nullptr) {
         goto error;
     }
 
-    lang = ulocimp_getLanguage(position, &position, *err);
+    ulocimp_getSubtags(localeID, &lang, &script, &region, &variant, &position, *err);
 
-    /*
-     * Note that we explicit consider U_STRING_NOT_TERMINATED_WARNING
-     * to be an error, because it indicates the user-supplied tag is
-     * not well-formed.
-     */
     if(U_FAILURE(*err)) {
         goto error;
     }
 
-    /*
-     * If no language was present, use the empty string instead.
-     * Otherwise, move past any separator.
-     */
+    if (!variant.isEmpty()) {
+        position -= 1 + variant.length();
+    }
+
     if (_isIDSeparator(*position)) {
         ++position;
-    }
-
-    script = ulocimp_getScript(position, &position, *err);
-
-    if(U_FAILURE(*err)) {
-        goto error;
-    }
-
-    if (!script.isEmpty()) {
-        /*
-         * Move past any separator.
-         */
-        if (_isIDSeparator(*position)) {
-            ++position;
-        }    
-    }
-
-    region = ulocimp_getCountry(position, &position, *err);
-
-    if(U_FAILURE(*err)) {
-        goto error;
     }
 
     if (region.isEmpty() && *position != 0 && *position != '@') {
