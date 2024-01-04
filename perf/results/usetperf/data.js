@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1704322111554,
+  "lastUpdate": 1704330157171,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -47968,6 +47968,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1441.665,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "539e8f41a35fec30fba4cfb3a65ea4db67978f85",
+          "message": "ICU-22532 Compiler warning: conversion from 'double' to 'int32_t'.\n\nThe definition of kOneDay is 1.0 * U_MILLIS_PER_DAY so there's no\nreason whatsoever to not just use U_MILLIS_PER_DAY directly here.",
+          "timestamp": "2024-01-04T09:40:40+09:00",
+          "tree_id": "25d2437641ab75a247edd9732303544139770b89",
+          "url": "https://github.com/unicode-org/icu/commit/539e8f41a35fec30fba4cfb3a65ea4db67978f85"
+        },
+        "date": 1704330038766,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 66693.4764,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 122253.153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5086,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 7.4673,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.5951,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8423.3915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 28632.833,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1468.8316,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
