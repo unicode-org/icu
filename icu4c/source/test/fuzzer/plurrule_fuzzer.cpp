@@ -74,7 +74,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     status = U_ZERO_ERROR;
     TestPluralRulesWithLocale(locale, number, dbl, type, status);
 
-    icu::Locale locale2 = icu::Locale(fuzzData.data());
+    std::string str(fuzzData.data(), fuzzData.size()); // ensure null-terminate
+                                                       // by std::string c_str
+    icu::Locale locale2(str.c_str());
 
     status = U_ZERO_ERROR;
     TestPluralRulesWithLocale(locale2, number, dbl, type, status);
