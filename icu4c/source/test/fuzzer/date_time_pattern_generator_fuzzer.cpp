@@ -29,28 +29,32 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   icu::LocalPointer<icu::DateTimePatternGenerator > gen(
       icu::DateTimePatternGenerator::createInstance(locale, status), status);
-  if (U_FAILURE(status))
-    return 0;
+  if (U_SUCCESS(status)) {
+
+      status = U_ZERO_ERROR;
+      gen->getSkeleton(fuzzstr, status);
+
+      status = U_ZERO_ERROR;
+      gen->getBaseSkeleton(fuzzstr, status);
+
+      status = U_ZERO_ERROR;
+      gen->getBaseSkeleton(fuzzstr, status);
+
+      status = U_ZERO_ERROR;
+      gen->getPatternForSkeleton(fuzzstr);
+
+      status = U_ZERO_ERROR;
+      gen->getBestPattern(fuzzstr, status);
+
+      status = U_ZERO_ERROR;
+      icu::DateTimePatternGenerator::staticGetSkeleton(fuzzstr, status);
+
+      status = U_ZERO_ERROR;
+      icu::DateTimePatternGenerator::staticGetBaseSkeleton (fuzzstr, status);
+  }
 
   status = U_ZERO_ERROR;
-  gen->getSkeleton(fuzzstr, status);
-
-  status = U_ZERO_ERROR;
-  gen->getBaseSkeleton(fuzzstr, status);
-
-  status = U_ZERO_ERROR;
-  gen->getBaseSkeleton(fuzzstr, status);
-
-  status = U_ZERO_ERROR;
-  gen->getPatternForSkeleton(fuzzstr);
-
-  status = U_ZERO_ERROR;
-  gen->getBestPattern(fuzzstr, status);
-
-  status = U_ZERO_ERROR;
-  icu::DateTimePatternGenerator::staticGetSkeleton(fuzzstr, status);
-
-  status = U_ZERO_ERROR;
-  icu::DateTimePatternGenerator::staticGetBaseSkeleton (fuzzstr, status);
+  std::string str(reinterpret_cast<const char*>(data), size);
+  gen.adoptInstead(icu::DateTimePatternGenerator::createInstance(icu::Locale(str.c_str()), status));
   return 0;
 }
