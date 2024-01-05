@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1704329423318,
+  "lastUpdate": 1704447257521,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15928,6 +15928,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 316.72719546127195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "cfba9a8caf6cb6ab39eb4ca5702c78f97989bcde",
+          "message": "ICU-22549 Reland PR2770 w/ fix\n\nReland PR2770 w/ the fix that null termination the input to Locale\nconstuctor.",
+          "timestamp": "2024-01-05T01:18:10-08:00",
+          "tree_id": "3f6b34bc29d24edb76e878374b92031d49dd1d6e",
+          "url": "https://github.com/unicode-org/icu/commit/cfba9a8caf6cb6ab39eb4ca5702c78f97989bcde"
+        },
+        "date": 1704447180118,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 316.3700865030375,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
