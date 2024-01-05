@@ -1,0 +1,28 @@
+# © 2024 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+
+# By default, build ICU4C as C11 & C++17.
+
+build --enable_platform_specific_config
+
+build:android --conlyopt=-std=c11
+build:android --host_conlyopt=-std=c11
+build:ios --conlyopt=-std=c11
+build:ios --host_conlyopt=-std=c11
+build:linux --conlyopt=-std=c11
+build:linux --host_conlyopt=-std=c11
+build:macos --conlyopt=-std=c11
+build:macos --host_conlyopt=-std=c11
+build:windows --conlyopt=/std:c11
+build:windows --host_conlyopt=/std:c11
+
+build:android --cxxopt=-std=c++17
+build:android --host_cxxopt=-std=c++17
+build:ios --cxxopt=-std=c++17
+build:ios --host_cxxopt=-std=c++17
+build:linux --cxxopt=-std=c++17
+build:linux --host_cxxopt=-std=c++17
+build:macos --cxxopt=-std=c++17
+build:macos --host_cxxopt=-std=c++17
+build:windows --cxxopt=/std:c++17
+build:windows --host_cxxopt=/std:c++17
