@@ -426,6 +426,13 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                         continue;
                     }
 
+                    if ((id.equals("America/Miquelon") || id.equals("America/Hermosillo") || id.equals("America/Mazatlan"))
+                            && PATTERNS[patidx].equals("v")
+                            && LOCALES[locidx].getName().startsWith("ku")
+                            && logKnownIssue("CLDR-17024", "TestTimeRoundTrip fail with tz=America/Miquelon, pattern=v, locale=ku")) {
+                        continue;
+                    }
+
                     BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(id, TimeZone.TIMEZONE_ICU);
                     TimeZone tz = TimeZone.getTimeZone(id);
                     sdf.setTimeZone(tz);

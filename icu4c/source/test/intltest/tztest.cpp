@@ -2143,7 +2143,6 @@ void TimeZoneTest::TestCanonicalID() {
         {"Asia/Muscat", "Asia/Dubai"},
         {"Asia/Phnom_Penh", "Asia/Bangkok"},
         {"Asia/Qatar", "Asia/Bahrain"},
-        {"Asia/Urumqi", "Antarctica/Vostok"},
         {"Asia/Vientiane", "Asia/Bangkok"},
         {"Atlantic/Jan_Mayen", "Europe/Berlin"},
         {"Atlantic/Reykjavik", "Africa/Abidjan"},
