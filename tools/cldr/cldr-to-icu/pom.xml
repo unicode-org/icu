@@ -83,7 +83,7 @@
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>74.1-SNAPSHOT</version>
+            <version>75.0.1-SNAPSHOT</version>
 		<!-- Note: see https://github.com/unicode-org/icu/packages/1954682/versions
 			for the icu4j.version tag to use. In general we should just use the latest
 			SNAPSHOT for the ICU version that we want, so this should only need updating
