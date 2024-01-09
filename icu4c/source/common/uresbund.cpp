@@ -3097,8 +3097,18 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     ures_initStackObject(&bund1);
     ures_initStackObject(&bund2);
 
-    base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
-    base.extract(found, UPRV_LENGTHOF(found), subStatus);
+    base.extract(parent, UPRV_LENGTHOF(parent)-1, subStatus);
+    // parent may not be null terminated if subStatus is
+    // U_STRING_NOT_TERMINATED_WARNING.
+    if (subStatus == U_STRING_NOT_TERMINATED_WARNING) {
+      parent[UPRV_LENGTHOF(parent)-1] = '\0'; // null terminate.
+    }
+    base.extract(found, UPRV_LENGTHOF(found)-1, subStatus);
+    // found may not be null terminated if subStatus is
+    // U_STRING_NOT_TERMINATED_WARNING.
+    if (subStatus == U_STRING_NOT_TERMINATED_WARNING) {
+      found[UPRV_LENGTHOF(found)-1] = '\0'; // null terminate.
+    }
 
     if(isAvailable) {
         UEnumeration *locEnum = ures_openAvailableLocales(path, &subStatus);
@@ -3173,8 +3183,18 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     } while(!defVal[0] && *found && uprv_strcmp(found, "root") != 0 && U_SUCCESS(*status));
     
     /* Now, see if we can find the kwVal collator.. start the search over.. */
-    base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
-    base.extract(found, UPRV_LENGTHOF(found), subStatus);
+    base.extract(parent, UPRV_LENGTHOF(parent)-1, subStatus);
+    // parent may not be null terminated if subStatus is
+    // U_STRING_NOT_TERMINATED_WARNING.
+    if (subStatus == U_STRING_NOT_TERMINATED_WARNING) {
+      parent[UPRV_LENGTHOF(parent)-1] = '\0'; // null terminate.
+    }
+    base.extract(found, UPRV_LENGTHOF(found)-1, subStatus);
+    // found may not be null terminated if subStatus is
+    // U_STRING_NOT_TERMINATED_WARNING.
+    if (subStatus == U_STRING_NOT_TERMINATED_WARNING) {
+      found[UPRV_LENGTHOF(found)-1] = '\0'; // null terminate.
+    }
 
     do {
         res = ures_open(path, parent, &subStatus);
@@ -3277,8 +3297,18 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal.data(), defVal);
 #endif
         kwVal.clear().append(defVal, subStatus);
-        base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
-        base.extract(found, UPRV_LENGTHOF(found), subStatus);
+        base.extract(parent, UPRV_LENGTHOF(parent)-1, subStatus);
+        // parent may not be null terminated if subStatus is
+        // U_STRING_NOT_TERMINATED_WARNING.
+        if (subStatus == U_STRING_NOT_TERMINATED_WARNING) {
+          parent[UPRV_LENGTHOF(parent)-1] = '\0'; // null terminate.
+        }
+        base.extract(found, UPRV_LENGTHOF(found)-1, subStatus);
+        // found may not be null terminated if subStatus is
+        // U_STRING_NOT_TERMINATED_WARNING.
+        if (subStatus == U_STRING_NOT_TERMINATED_WARNING) {
+          found[UPRV_LENGTHOF(found)-1] = '\0'; // null terminate.
+        }
 
         do { /* search for 'default' named item */
             res = ures_open(path, parent, &subStatus);
