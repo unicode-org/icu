@@ -271,6 +271,7 @@ public:
     void TestHourCycle();
     void TestHCInLocale();
     void TestBogusLocale();
+    void TestLongLocale();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);
