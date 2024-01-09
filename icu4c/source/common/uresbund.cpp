@@ -3040,25 +3040,29 @@ static UBool isLocaleInList(UEnumeration *locEnum, const char *locToSearch, UErr
 static void getParentForFunctionalEquivalent(const char*      localeID,
                                              UResourceBundle* res,
                                              UResourceBundle* bund1,
-                                             char*            parent,
-                                             int32_t          parentCapacity) {
+                                             CharString&      parent) {
     // Get parent.
     // First check for a parent from %%Parent resource (Note that in resource trees
     // such as collation, data may have different parents than in parentLocales).
     UErrorCode subStatus = U_ZERO_ERROR;
-    parent[0] = '\0';
+    parent.clear();
     if (res != NULL) {
         ures_getByKey(res, "%%Parent", bund1, &subStatus);
         if (U_SUCCESS(subStatus)) {
-            int32_t parentLen = parentCapacity;
-            ures_getUTF8String(bund1, parent, &parentLen, true, &subStatus);
+            int32_t length16;
+            const char16_t* s16 = ures_getString(bund1, &length16, &subStatus);
+            parent.appendInvariantChars(s16, length16, subStatus);
         }
     }
     
     // If none there, use normal truncation parent
-    if (U_FAILURE(subStatus) || parent[0] == 0) {
+    if (U_FAILURE(subStatus) || parent.isEmpty()) {
         subStatus = U_ZERO_ERROR;
-        uloc_getParent(localeID, parent, parentCapacity, &subStatus);
+        parent.clear();
+        {
+            CharStringByteSink sink(&parent);
+            ulocimp_getParent(localeID, sink, &subStatus);
+        }
     }
 }
 
@@ -3067,12 +3071,12 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                              const char *path, const char *resName, const char *keyword, const char *locid,
                              UBool *isAvailable, UBool omitDefault, UErrorCode *status)
 {
-    char defVal[1024] = ""; /* default value for given locale */
-    char defLoc[1024] = ""; /* default value for given locale */
+    CharString defVal; /* default value for given locale */
+    CharString defLoc; /* default value for given locale */
     CharString base; /* base locale */
-    char found[1024] = "";
-    char parent[1024] = "";
-    char full[1024] = "";
+    CharString found;
+    CharString parent;
+    CharString full;
     UResourceBundle bund1, bund2;
     UResourceBundle *res = nullptr;
     UErrorCode subStatus = U_ZERO_ERROR;
@@ -3097,14 +3101,14 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     ures_initStackObject(&bund1);
     ures_initStackObject(&bund2);
 
-    base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
-    base.extract(found, UPRV_LENGTHOF(found), subStatus);
+    parent.copyFrom(base, subStatus);
+    found.copyFrom(base, subStatus);
 
     if(isAvailable) {
         UEnumeration *locEnum = ures_openAvailableLocales(path, &subStatus);
         *isAvailable = true;
         if (U_SUCCESS(subStatus)) {
-            *isAvailable = isLocaleInList(locEnum, parent, &subStatus);
+            *isAvailable = isLocaleInList(locEnum, parent.data(), &subStatus);
         }
         uenum_close(locEnum);
     }
@@ -3116,7 +3120,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     
     do {
         subStatus = U_ZERO_ERROR;
-        res = ures_open(path, parent, &subStatus);
+        res = ures_open(path, parent.data(), &subStatus);
         if(((subStatus == U_USING_FALLBACK_WARNING) ||
             (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable)
         {
@@ -3125,7 +3129,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         isAvailable = nullptr; /* only want to set this the first time around */
         
 #if defined(URES_TREE_DEBUG)
-        fprintf(stderr, "%s;%s -> %s [%s]\n", path?path:"ICUDATA", parent, u_errorName(subStatus), ures_getLocale(res, &subStatus));
+        fprintf(stderr, "%s;%s -> %s [%s]\n", path?path:"ICUDATA", parent.data(), u_errorName(subStatus), ures_getLocale(res, &subStatus));
 #endif
         if(U_FAILURE(subStatus)) {
             *status = subStatus;
@@ -3137,21 +3141,21 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                 /* look for default item */
 #if defined(URES_TREE_DEBUG)
                 fprintf(stderr, "%s;%s : loaded default -> %s\n",
-                    path?path:"ICUDATA", parent, u_errorName(subStatus));
+                    path?path:"ICUDATA", parent.data(), u_errorName(subStatus));
 #endif
                 defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
                 if(U_SUCCESS(subStatus) && defLen) {
-                    u_UCharsToChars(defUstr, defVal, u_strlen(defUstr));
+                    defVal.clear().appendInvariantChars(defUstr, defLen, subStatus);
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "%s;%s -> default %s=%s,  %s\n", 
-                        path?path:"ICUDATA", parent, keyword, defVal, u_errorName(subStatus));
+                        path?path:"ICUDATA", parent.data(), keyword, defVal.data(), u_errorName(subStatus));
 #endif
-                    uprv_strcpy(defLoc, parent);
+                    defLoc.copyFrom(parent, subStatus);
                     if(kwVal.isEmpty()) {
-                        kwVal.append(defVal, defLen, subStatus);
+                        kwVal.append(defVal, subStatus);
 #if defined(URES_TREE_DEBUG)
                         fprintf(stderr, "%s;%s -> kwVal =  %s\n", 
-                            path?path:"ICUDATA", parent, keyword, kwVal.data());
+                            path?path:"ICUDATA", parent.data(), keyword, kwVal.data());
 #endif
                     }
                 }
@@ -3161,23 +3165,23 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         subStatus = U_ZERO_ERROR;
 
         if (res != nullptr) {
-            uprv_strcpy(found, ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus));
+            found.clear().append(ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus), subStatus);
         }
 
-        if (uprv_strcmp(found, parent) != 0) {
-            uprv_strcpy(parent, found);
+        if (found != parent.toStringPiece()) {
+            parent.copyFrom(found, subStatus);
         } else {
-            getParentForFunctionalEquivalent(found,res,&bund1,parent,sizeof(parent));
+            getParentForFunctionalEquivalent(found.data(),res,&bund1,parent);
         }
         ures_close(res);
-    } while(!defVal[0] && *found && uprv_strcmp(found, "root") != 0 && U_SUCCESS(*status));
+    } while(defVal.isEmpty() && !found.isEmpty() && found != "root" && U_SUCCESS(*status));
     
     /* Now, see if we can find the kwVal collator.. start the search over.. */
-    base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
-    base.extract(found, UPRV_LENGTHOF(found), subStatus);
+    parent.copyFrom(base, subStatus);
+    found.copyFrom(base, subStatus);
 
     do {
-        res = ures_open(path, parent, &subStatus);
+        res = ures_open(path, parent.data(), &subStatus);
         if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
             *isAvailable = false;
         }
@@ -3185,7 +3189,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         
 #if defined(URES_TREE_DEBUG)
         fprintf(stderr, "%s;%s -> %s (looking for %s)\n", 
-            path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal.data());
+            path?path:"ICUDATA", parent.data(), u_errorName(subStatus), kwVal.data());
 #endif
         if(U_FAILURE(subStatus)) {
             *status = subStatus;
@@ -3202,45 +3206,47 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                 if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "%s;%s -> full0 %s=%s,  %s\n", 
-                        path?path:"ICUDATA", parent, keyword, kwVal.data(), u_errorName(subStatus));
+                        path?path:"ICUDATA", parent.data(), keyword, kwVal.data(), u_errorName(subStatus));
 #endif
-                    uprv_strcpy(full, parent);
-                    if(*full == 0) {
-                        uprv_strcpy(full, "root");
+                    if (parent.isEmpty()) {
+                        full.clear().append("root", subStatus);
+                    } else {
+                        full.copyFrom(parent, subStatus);
                     }
                         /* now, recalculate default kw if need be */
-                        if(uprv_strlen(defLoc) > uprv_strlen(full)) {
+                        if(defLoc.length() > full.length()) {
                           const char16_t *defUstr;
                           int32_t defLen;
                           /* look for default item */
 #if defined(URES_TREE_DEBUG)
                             fprintf(stderr, "%s;%s -> recalculating Default0\n", 
-                                    path?path:"ICUDATA", full);
+                                    path?path:"ICUDATA", full.data());
 #endif
                           defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
                           if(U_SUCCESS(subStatus) && defLen) {
-                            u_UCharsToChars(defUstr, defVal, u_strlen(defUstr));
+                            defVal.clear().appendInvariantChars(defUstr, defLen, subStatus);
 #if defined(URES_TREE_DEBUG)
                             fprintf(stderr, "%s;%s -> default0 %s=%s,  %s\n", 
-                                    path?path:"ICUDATA", full, keyword, defVal, u_errorName(subStatus));
+                                    path?path:"ICUDATA", full.data(), keyword, defVal.data(), u_errorName(subStatus));
 #endif
-                            uprv_strcpy(defLoc, full);
+                            defLoc.copyFrom(full, subStatus);
                           }
                         } /* end of recalculate default KW */
 #if defined(URES_TREE_DEBUG)
                         else {
-                          fprintf(stderr, "No trim0,  %s <= %s\n", defLoc, full);
+                          fprintf(stderr, "No trim0,  %s <= %s\n", defLoc.data(), full.data());
                         }
 #endif
                 } else {
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "err=%s in %s looking for %s\n", 
-                        u_errorName(subStatus), parent, kwVal.data());
+                        u_errorName(subStatus), parent.data(), kwVal.data());
 #endif
                 }
             }
         }
         
+        subStatus = U_ZERO_ERROR;
         UBool haveFound = false;
         // At least for collations which may be aliased, we need to use the VALID locale
         // as the parent instead of just truncating, as long as the VALID locale is not
@@ -3248,40 +3254,39 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         // here is similar to the procedure used at the end of the previous do-while loop
         // for all resource types.
         if (res != NULL && uprv_strcmp(resName, "collations") == 0) {
-            subStatus = U_ZERO_ERROR;
             const char *validLoc = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus);
             if (U_SUCCESS(subStatus) && validLoc != NULL && validLoc[0] != 0 && uprv_strcmp(validLoc, "root") != 0) {
                 char validLang[ULOC_LANG_CAPACITY];
                 char parentLang[ULOC_LANG_CAPACITY];
                 uloc_getLanguage(validLoc, validLang, ULOC_LANG_CAPACITY, &subStatus);
-                uloc_getLanguage(parent, parentLang, ULOC_LANG_CAPACITY, &subStatus);
+                uloc_getLanguage(parent.data(), parentLang, ULOC_LANG_CAPACITY, &subStatus);
                 if (U_SUCCESS(subStatus) && uprv_strcmp(validLang, parentLang) != 0) {
                     // validLoc is not root and has a different language than parent, use it instead
-                    uprv_strcpy(found, validLoc);
+                    found.clear().append(validLoc, subStatus);
                     haveFound = true;
                 }
             }
             subStatus = U_ZERO_ERROR;
         }
         if (!haveFound) {
-            uprv_strcpy(found, parent);
+            found.copyFrom(parent, subStatus);
         }
 
-        getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
+        getParentForFunctionalEquivalent(found.data(),res,&bund1,parent);
         ures_close(res);
         subStatus = U_ZERO_ERROR;
-    } while(!full[0] && *found && U_SUCCESS(*status));
+    } while(full.isEmpty() && !found.isEmpty() && U_SUCCESS(*status));
 
-    if((full[0]==0) && kwVal != defVal) {
+    if(full.isEmpty() && kwVal != defVal.toStringPiece()) {
 #if defined(URES_TREE_DEBUG)
-        fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal.data(), defVal);
+        fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal.data(), defVal.data());
 #endif
         kwVal.clear().append(defVal, subStatus);
-        base.extract(parent, UPRV_LENGTHOF(parent), subStatus);
-        base.extract(found, UPRV_LENGTHOF(found), subStatus);
+        parent.copyFrom(base, subStatus);
+        found.copyFrom(base, subStatus);
 
         do { /* search for 'default' named item */
-            res = ures_open(path, parent, &subStatus);
+            res = ures_open(path, parent.data(), &subStatus);
             if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
                 *isAvailable = false;
             }
@@ -3289,7 +3294,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             
 #if defined(URES_TREE_DEBUG)
             fprintf(stderr, "%s;%s -> %s (looking for default %s)\n",
-                path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal.data());
+                path?path:"ICUDATA", parent.data(), u_errorName(subStatus), kwVal.data());
 #endif
             if(U_FAILURE(subStatus)) {
                 *status = subStatus;
@@ -3300,61 +3305,63 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                     if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
                         fprintf(stderr, "%s;%s -> full1 %s=%s,  %s\n", path?path:"ICUDATA",
-                            parent, keyword, kwVal.data(), u_errorName(subStatus));
+                            parent.data(), keyword, kwVal.data(), u_errorName(subStatus));
 #endif
-                        uprv_strcpy(full, parent);
-                        if(*full == 0) {
-                            uprv_strcpy(full, "root");
+                        if (parent.isEmpty()) {
+                            full.clear().append("root", subStatus);
+                        } else {
+                            full.copyFrom(parent, subStatus);
                         }
                         
                         /* now, recalculate default kw if need be */
-                        if(uprv_strlen(defLoc) > uprv_strlen(full)) {
+                        if(defLoc.length() > full.length()) {
                           const char16_t *defUstr;
                           int32_t defLen;
                           /* look for default item */
 #if defined(URES_TREE_DEBUG)
                             fprintf(stderr, "%s;%s -> recalculating Default1\n", 
-                                    path?path:"ICUDATA", full);
+                                    path?path:"ICUDATA", full.data());
 #endif
                           defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
                           if(U_SUCCESS(subStatus) && defLen) {
-                            u_UCharsToChars(defUstr, defVal, u_strlen(defUstr));
+                            defVal.clear().appendInvariantChars(defUstr, defLen, subStatus);
 #if defined(URES_TREE_DEBUG)
                             fprintf(stderr, "%s;%s -> default %s=%s,  %s\n", 
-                                    path?path:"ICUDATA", full, keyword, defVal, u_errorName(subStatus));
+                                    path?path:"ICUDATA", full.data(), keyword, defVal.data(), u_errorName(subStatus));
 #endif
-                            uprv_strcpy(defLoc, full);
+                            defLoc.copyFrom(full, subStatus);
                           }
                         } /* end of recalculate default KW */
 #if defined(URES_TREE_DEBUG)
                         else {
-                          fprintf(stderr, "No trim1,  %s <= %s\n", defLoc, full);
+                          fprintf(stderr, "No trim1,  %s <= %s\n", defLoc.data(), full.data());
                         }
 #endif
                     }
                 }
             }
             
-            uprv_strcpy(found, parent);
-            getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
+            subStatus = U_ZERO_ERROR;
+            found.copyFrom(parent, subStatus);
+            getParentForFunctionalEquivalent(found.data(),res,&bund1,parent);
             ures_close(res);
             subStatus = U_ZERO_ERROR;
-        } while(!full[0] && *found && U_SUCCESS(*status));
+        } while(full.isEmpty() && !found.isEmpty() && U_SUCCESS(*status));
     }
     
     if(U_SUCCESS(*status)) {
-        if(!full[0]) {
+        if(full.isEmpty()) {
 #if defined(URES_TREE_DEBUG)
           fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal.data());
 #endif
           *status = U_MISSING_RESOURCE_ERROR;
         } else if(omitDefault) {
 #if defined(URES_TREE_DEBUG)
-          fprintf(stderr,"Trim? full=%s, defLoc=%s, found=%s\n", full, defLoc, found);
+          fprintf(stderr,"Trim? full=%s, defLoc=%s, found=%s\n", full.data(), defLoc.data(), found.data());
 #endif        
-          if(uprv_strlen(defLoc) <= uprv_strlen(full)) {
+          if(defLoc.length() <= full.length()) {
             /* found the keyword in a *child* of where the default tag was present. */
-            if(kwVal == defVal) { /* if the requested kw is default, */
+            if(kwVal == defVal.toStringPiece()) { /* if the requested kw is default, */
               /* and the default is in or in an ancestor of the current locale */
 #if defined(URES_TREE_DEBUG)
               fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal.data());
@@ -3363,17 +3370,19 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             }
           }
         }
-        uprv_strcpy(found, full);
+        found.copyFrom(full, subStatus);
         if(!kwVal.isEmpty()) {
-            uprv_strcat(found, "@");
-            uprv_strcat(found, keyword);
-            uprv_strcat(found, "=");
-            uprv_strcat(found, kwVal.data());
+            found
+                .append("@", subStatus)
+                .append(keyword, subStatus)
+                .append("=", subStatus)
+                .append(kwVal, subStatus);
         } else if(!omitDefault) {
-            uprv_strcat(found, "@");
-            uprv_strcat(found, keyword);
-            uprv_strcat(found, "=");
-            uprv_strcat(found, defVal);
+            found
+                .append("@", subStatus)
+                .append(keyword, subStatus)
+                .append("=", subStatus)
+                .append(defVal, subStatus);
         }
     }
     /* we found the default locale - no need to repeat it.*/
@@ -3381,12 +3390,12 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     ures_close(&bund1);
     ures_close(&bund2);
     
-    length = (int32_t)uprv_strlen(found);
+    length = found.length();
 
     if(U_SUCCESS(*status)) {
         int32_t copyLength = uprv_min(length, resultCapacity);
         if(copyLength>0) {
-            uprv_strncpy(result, found, copyLength);
+            found.extract(result, copyLength, subStatus);
         }
         if(length == 0) {
           *status = U_MISSING_RESOURCE_ERROR; 
