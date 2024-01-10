@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1704857705153,
+  "lastUpdate": 1704876400991,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -25954,6 +25954,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.8544,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "906093f31b44316ba7da24972f95a0510355e61d",
+          "message": "ICU-22520 Make icu::CharString comparable with itself.",
+          "timestamp": "2024-01-10T17:30:32+09:00",
+          "tree_id": "23c5a2293028696211e169684baf57e36ec7dc42",
+          "url": "https://github.com/unicode-org/icu/commit/906093f31b44316ba7da24972f95a0510355e61d"
+        },
+        "date": 1704876329180,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 7.121,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 2.5355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.852,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
