@@ -80,6 +80,7 @@ public:
     void TestDataDriven();
     void TestLongLocale();
     void TestBuilderContextsOverflow();
+    void TestWoHang22511();
     void TestHang22414();
 
 private:
@@ -154,6 +155,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestLongLocale);
     TESTCASE_AUTO(TestBuilderContextsOverflow);
     TESTCASE_AUTO(TestHang22414);
+    TESTCASE_AUTO(TestWoHang22511);
     TESTCASE_AUTO_END;
 }
 
@@ -1881,6 +1883,31 @@ void CollationTest::TestLongLocale() {
     LocalPointer<Collator> coll(Collator::createInstance(longLocale, errorCode));
 }
 
+void CollationTest::TestWoHang22511() {
+    IcuTestErrorCode errorCode(*this, "TestWoHang22511");
+    char16_t str1[] = {
+      0x0000, 0x0100, 0x032a, 0x01e0, 0xd804, 0xdd00, 0x031c,
+    };
+
+    int32_t num_locales = 0;
+    const icu::Locale* locales = icu::Locale::getAvailableLocales(num_locales);
+    for (int32_t i = 0; i < num_locales; i++) {
+        errorCode.reset();
+        icu::Locale l = locales[i];
+        LocalPointer<Collator> coll(Collator::createInstance(l, errorCode));
+        if(errorCode.isFailure()) {
+            logln("cannot built the Collator");
+            continue;
+        }
+        coll->setStrength(icu::Collator::IDENTICAL);
+
+        coll->compare(str1,
+                      sizeof(str1)/sizeof(char16_t),
+                      str1+1,
+                      (sizeof(str1)/sizeof(char16_t))-1,
+                      errorCode);
+    }
+}
 void CollationTest::TestHang22414() {
     IcuTestErrorCode errorCode(*this, "TestHang22414");
     const char* cases[] = {
