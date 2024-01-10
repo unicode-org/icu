@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1704857249600,
+  "lastUpdate": 1704876019270,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15778,6 +15778,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 521.6721016317681,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "906093f31b44316ba7da24972f95a0510355e61d",
+          "message": "ICU-22520 Make icu::CharString comparable with itself.",
+          "timestamp": "2024-01-10T17:30:32+09:00",
+          "tree_id": "23c5a2293028696211e169684baf57e36ec7dc42",
+          "url": "https://github.com/unicode-org/icu/commit/906093f31b44316ba7da24972f95a0510355e61d"
+        },
+        "date": 1704875951068,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 518.1028811478458,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
