@@ -69,6 +69,7 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testFixedDecimal);
     TESTCASE_AUTO(testSelectTrailingZeros);
     TESTCASE_AUTO(testLocaleExtension);
+    TESTCASE_AUTO(testDoubleEqualSign);
     TESTCASE_AUTO_END;
 }
 
@@ -1636,6 +1637,16 @@ void PluralRulesTest::compareLocaleResults(const char* loc1, const char* loc2, c
             errln("PluralRules.select(%d) does not return the same values for %s, %s, %s\n", value, loc1, loc2, loc3);
         }
     }
+}
+
+void PluralRulesTest::testDoubleEqualSign() {
+    IcuTestErrorCode errorCode(*this, "testDoubleEqualSign");
+
+    // ICU-22626
+    // Two '=' in the rul should not leak.
+    LocalPointer<PluralRules> rules(
+        PluralRules::createRules(u"e:c=2=", errorCode), errorCode);
+    errorCode.expectErrorAndReset(U_UNEXPECTED_TOKEN);
 }
 
 void PluralRulesTest::testLocaleExtension() {

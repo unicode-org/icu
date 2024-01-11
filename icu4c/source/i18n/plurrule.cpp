@@ -656,6 +656,11 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
         case tEqual:
             {
                 U_ASSERT(curAndConstraint != nullptr);
+                if (curAndConstraint->rangeList != nullptr) {
+                    // Already get a '='.
+                    status = U_UNEXPECTED_TOKEN;
+                    break;
+                }
                 LocalPointer<UVector32> newRangeList(new UVector32(status), status);
                 if (U_FAILURE(status)) {
                     break;

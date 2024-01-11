@@ -50,6 +50,7 @@ private:
     void testFixedDecimal();
     void testSelectTrailingZeros();
     void testLocaleExtension();
+    void testDoubleEqualSign();
 
     void assertRuleValue(const UnicodeString& rule, double expected);
     void assertRuleKeyValue(const UnicodeString& rule, const UnicodeString& key,
