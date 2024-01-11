@@ -1258,9 +1258,6 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
 
 static void
 _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool hadPosix, UErrorCode* status) {
-    char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY] = { 0 };
-    int32_t attrBufLength = 0;
-
     icu::MemoryPool<AttributeListEntry> attrPool;
     icu::MemoryPool<ExtensionListEntry> extPool;
     icu::MemoryPool<icu::CharString> strPool;
@@ -1318,28 +1315,19 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 if (len > 0) {
                     int32_t i = 0;
                     while (true) {
-                        attrBufLength = 0;
+                        icu::CharString attrBuf;
                         for (; i < len; i++) {
                             if (buf[i] != '-') {
-                                if (static_cast<size_t>(attrBufLength) < sizeof(attrBuf)) {
-                                    attrBuf[attrBufLength++] = buf[i];
-                                } else {
-                                    *status = U_ILLEGAL_ARGUMENT_ERROR;
-                                    return;
-                                }
+                                attrBuf.append(buf[i], *status);
                             } else {
                                 i++;
                                 break;
                             }
                         }
-                        if (attrBufLength > 0) {
-                            if (static_cast<size_t>(attrBufLength) < sizeof(attrBuf)) {
-                                attrBuf[attrBufLength] = 0;
-                            } else {
-                                *status = U_STRING_NOT_TERMINATED_WARNING;
-                            }
-
-                        } else if (i >= len){
+                        if (U_FAILURE(*status)) {
+                            return;
+                        }
+                        if (attrBuf.isEmpty() && i >= len) {
                             break;
                         }
 
@@ -1349,16 +1337,14 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                             *status = U_MEMORY_ALLOCATION_ERROR;
                             break;
                         }
-                        icu::CharString* attrValue =
-                                strPool.create(attrBuf, attrBufLength, *status);
-                        if (attrValue == nullptr) {
+                        if (icu::CharString* str =
+                                strPool.create(std::move(attrBuf), *status)) {
+                            if (U_FAILURE(*status)) { break; }
+                            attr->attribute = str->data();
+                        } else {
                             *status = U_MEMORY_ALLOCATION_ERROR;
                             break;
                         }
-                        if (U_FAILURE(*status)) {
-                            break;
-                        }
-                        attr->attribute = attrValue->data();
 
                         if (!_addAttributeToList(&firstAttr, attr)) {
                             if (strict) {
@@ -1533,9 +1519,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
         AttributeListEntry *attrFirst = nullptr;   /* first attribute */
         AttributeListEntry *attr, *nextAttr;
 
-        char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
-        int32_t attrBufIdx = 0;
-
+        icu::MemoryPool<icu::CharString> strPool;
         icu::MemoryPool<AttributeListEntry> attrPool;
 
         /* Iterate through u extension attributes */
@@ -1555,13 +1539,11 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                 return;
             }
 
-            if (len < (int32_t)sizeof(attrBuf) - attrBufIdx) {
-                uprv_memcpy(&attrBuf[attrBufIdx], pTag, len);
-                attrBuf[attrBufIdx + len] = 0;
-                attr->attribute = &attrBuf[attrBufIdx];
-                attrBufIdx += (len + 1);
+            if (icu::CharString* str = strPool.create(pTag, len, *status)) {
+                if (U_FAILURE(*status)) { return; }
+                attr->attribute = str->data();
             } else {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                *status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
 
@@ -1707,38 +1689,32 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                 }
 
                 if (pBcpType) {
-                    char bcpTypeBuf[128];       /* practically long enough even considering multiple subtag type */
-                    if (bcpTypeLen >= (int32_t)sizeof(bcpTypeBuf)) {
-                        /* the BCP type is too long */
-                        *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    icu::CharString bcpTypeBuf(pBcpType, bcpTypeLen, *status);
+                    if (U_FAILURE(*status)) {
                         return;
                     }
 
-                    uprv_strncpy(bcpTypeBuf, pBcpType, bcpTypeLen);
-                    bcpTypeBuf[bcpTypeLen] = 0;
-
                     /* BCP type to locale type */
-                    pType = uloc_toLegacyType(pKey, bcpTypeBuf);
+                    pType = uloc_toLegacyType(pKey, bcpTypeBuf.data());
                     if (pType == nullptr) {
                         *status = U_ILLEGAL_ARGUMENT_ERROR;
                         return;
                     }
-                    if (pType == bcpTypeBuf) {
+                    if (pType == bcpTypeBuf.data()) {
                         /*
                         The type returned by toLegacyType points to the input buffer.
                         We normalize the result type to lower case.
                         */
                         /* normalize to lower case */
-                        T_CString_toLowerCase(bcpTypeBuf);
-                        icu::CharString* type = kwdBuf.create(bcpTypeBuf, bcpTypeLen, *status);
-                        if (type == nullptr) {
+                        T_CString_toLowerCase(bcpTypeBuf.data());
+                        if (icu::CharString* type =
+                                kwdBuf.create(std::move(bcpTypeBuf), *status)) {
+                            if (U_FAILURE(*status)) { return; }
+                            pType = type->data();
+                        } else {
                             *status = U_MEMORY_ALLOCATION_ERROR;
                             return;
                         }
-                        if (U_FAILURE(*status)) {
-                            return;
-                        }
-                        pType = type->data();
                     }
                 } else {
                     /* typeless - default type value is "yes" */
