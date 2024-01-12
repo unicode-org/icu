@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1704991874442,
+  "lastUpdate": 1705081663113,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16108,6 +16108,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 243.3856836677774,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "509405c9f2ee99a56a3fc77ba8de4799cec28d7c",
+          "message": "ICU-22626 Fix leakage when 2 '=' in PluralRules\n\nSee #2782",
+          "timestamp": "2024-01-12T09:36:29-08:00",
+          "tree_id": "ddfdfc694910b45a4719331b731180fd916366a0",
+          "url": "https://github.com/unicode-org/icu/commit/509405c9f2ee99a56a3fc77ba8de4799cec28d7c"
+        },
+        "date": 1705081590697,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 254.50982843380623,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
