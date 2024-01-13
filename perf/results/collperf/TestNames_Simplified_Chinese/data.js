@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705082146749,
+  "lastUpdate": 1705134314333,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -33694,6 +33694,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2096917.0584,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ab72ab1d4a3c3f9beeb7d92b0c7817ca93dfdb04",
+          "message": "ICU-22520 Replace char arrays with icu::CharString & icu::MemoryPool.",
+          "timestamp": "2024-01-13T17:05:58+09:00",
+          "tree_id": "371968f83db3ff8f1becc9ff5b5797046b90f0b7",
+          "url": "https://github.com/unicode-org/icu/commit/ab72ab1d4a3c3f9beeb7d92b0c7817ca93dfdb04"
+        },
+        "date": 1705134250598,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 158.624,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8872328.266,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2234359.2114,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7941019.4087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2099453.3535,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
