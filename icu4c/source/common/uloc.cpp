@@ -886,6 +886,21 @@ uloc_setKeywordValue(const char* keywordName,
     return u_terminateChars(buffer, bufferCapacity, reslen + baseLen, status);
 }
 
+U_EXPORT void U_EXPORT2
+ulocimp_setKeywordValue(const char* keywordName,
+                        const char* keywordValue,
+                        CharString& localeID,
+                        UErrorCode* status)
+{
+    if (U_FAILURE(*status)) return;
+    // This is safe because CharString::truncate() doesn't actually erase any
+    // data, but simply sets the position for where new data will be written.
+    const char* keywords = locale_getKeywordsStart(localeID.data());
+    if (keywords != nullptr) localeID.truncate(keywords - localeID.data());
+    CharStringByteSink sink(&localeID);
+    ulocimp_setKeywordValue(keywords, keywordName, keywordValue, sink, status);
+}
+
 U_EXPORT int32_t U_EXPORT2
 ulocimp_setKeywordValue(const char* keywords,
                         const char* keywordName,
@@ -2088,29 +2103,20 @@ uloc_getLCID(const char* localeID)
     if (uprv_strchr(localeID, '@')) {
         // uprv_convertToLCID does not support keywords other than collation.
         // Remove all keywords except collation.
-        int32_t len;
-        char tmpLocaleID[ULOC_FULLNAME_CAPACITY];
-
         CharString collVal;
         {
             CharStringByteSink sink(&collVal);
             ulocimp_getKeywordValue(localeID, "collation", sink, &status);
         }
-
         if (U_SUCCESS(status) && !collVal.isEmpty()) {
-            len = uloc_getBaseName(localeID, tmpLocaleID,
-                UPRV_LENGTHOF(tmpLocaleID) - 1, &status);
-
-            if (U_SUCCESS(status) && len > 0) {
-                tmpLocaleID[len] = 0;
-
-                len = uloc_setKeywordValue("collation", collVal.data(), tmpLocaleID,
-                    UPRV_LENGTHOF(tmpLocaleID) - len - 1, &status);
-
-                if (U_SUCCESS(status) && len > 0) {
-                    tmpLocaleID[len] = 0;
-                    return uprv_convertToLCID(langID, tmpLocaleID, &status);
-                }
+            CharString tmpLocaleID;
+            {
+                CharStringByteSink sink(&tmpLocaleID);
+                ulocimp_getBaseName(localeID, sink, &status);
+            }
+            ulocimp_setKeywordValue("collation", collVal.data(), tmpLocaleID, &status);
+            if (U_SUCCESS(status)) {
+                return uprv_convertToLCID(langID, tmpLocaleID.data(), &status);
             }
         }
 

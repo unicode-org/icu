@@ -22,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
 #include "unicode/localpointer.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "iso8601cal.h"
@@ -167,21 +168,15 @@ ucal_open(  const char16_t*  zoneID,
   }
 
   if ( caltype == UCAL_GREGORIAN ) {
-      char localeBuf[ULOC_LOCALE_IDENTIFIER_CAPACITY];
       if ( locale == nullptr ) {
           locale = uloc_getDefault();
       }
-      int32_t localeLength = static_cast<int32_t>(uprv_strlen(locale));
-      if (localeLength >= ULOC_LOCALE_IDENTIFIER_CAPACITY) {
-          *status = U_ILLEGAL_ARGUMENT_ERROR;
-          return nullptr;
-      }
-      uprv_strcpy(localeBuf, locale);
-      uloc_setKeywordValue("calendar", "gregorian", localeBuf, ULOC_LOCALE_IDENTIFIER_CAPACITY, status);
+      CharString localeBuf(locale, *status);
+      ulocimp_setKeywordValue("calendar", "gregorian", localeBuf, status);
       if (U_FAILURE(*status)) {
           return nullptr;
       }
-      return (UCalendar*)Calendar::createInstance(zone.orphan(), Locale(localeBuf), *status);
+      return (UCalendar*)Calendar::createInstance(zone.orphan(), Locale(localeBuf.data()), *status);
   }
   return (UCalendar*)Calendar::createInstance(zone.orphan(), Locale(locale), *status);
 }

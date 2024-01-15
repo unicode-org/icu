@@ -92,6 +92,12 @@ ulocimp_getKeywordValue(const char* localeID,
                         icu::ByteSink& sink,
                         UErrorCode* status);
 
+U_EXPORT void U_EXPORT2
+ulocimp_setKeywordValue(const char* keywordName,
+                        const char* keywordValue,
+                        icu::CharString& localeID,
+                        UErrorCode* status);
+
 U_EXPORT int32_t U_EXPORT2
 ulocimp_setKeywordValue(const char* keywords,
                         const char* keywordName,
