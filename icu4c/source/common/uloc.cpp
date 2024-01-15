@@ -537,35 +537,26 @@ locale_getKeywordsStart(const char *localeID) {
 }
 
 /**
- * @param buf buffer of size [ULOC_KEYWORD_BUFFER_LEN]
  * @param keywordName incoming name to be canonicalized
  * @param status return status (keyword too long)
- * @return length of the keyword name
+ * @return the keyword name
  */
-static int32_t locale_canonKeywordName(char *buf, const char *keywordName, UErrorCode *status)
+static CharString locale_canonKeywordName(const char *keywordName, UErrorCode *status)
 {
-  int32_t keywordNameLen = 0;
+  CharString result;
 
   for (; *keywordName != 0; keywordName++) {
     if (!UPRV_ISALPHANUM(*keywordName)) {
       *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
-      return 0;
+      return result;
     }
-    if (keywordNameLen < ULOC_KEYWORD_BUFFER_LEN - 1) {
-      buf[keywordNameLen++] = uprv_tolower(*keywordName);
-    } else {
-      /* keyword name too long for internal buffer */
-      *status = U_INTERNAL_PROGRAM_ERROR;
-      return 0;
-    }
+    result.append(uprv_tolower(*keywordName), *status);
   }
-  if (keywordNameLen == 0) {
+  if (result.isEmpty()) {
     *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty keyword name */
-    return 0;
   }
-  buf[keywordNameLen] = 0; /* terminate */
 
-  return keywordNameLen;
+  return result;
 }
 
 typedef struct {
@@ -739,8 +730,6 @@ ulocimp_getKeywordValue(const char* localeID,
 {
     const char* startSearchHere = nullptr;
     const char* nextSeparator = nullptr;
-    char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
-    char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
 
     if(status && U_SUCCESS(*status) && localeID) {
       CharString tempBuffer;
@@ -751,7 +740,7 @@ ulocimp_getKeywordValue(const char* localeID,
         return;
       }
 
-      locale_canonKeywordName(keywordNameBuffer, keywordName, status);
+      CharString canonKeywordName = locale_canonKeywordName(keywordName, status);
       if(U_FAILURE(*status)) {
         return;
       }
@@ -773,7 +762,6 @@ ulocimp_getKeywordValue(const char* localeID,
       /* find the first keyword */
       while(startSearchHere) {
           const char* keyValueTail;
-          int32_t keyValueLen;
 
           startSearchHere++; /* skip @ or ; */
           nextSeparator = uprv_strchr(startSearchHere, '=');
@@ -795,25 +783,21 @@ ulocimp_getKeywordValue(const char* localeID,
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty keyword name in passed-in locale */
               return;
           }
-          keyValueLen = 0;
+          CharString localeKeywordName;
           while (startSearchHere < keyValueTail) {
             if (!UPRV_ISALPHANUM(*startSearchHere)) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
               return;
             }
-            if (keyValueLen < ULOC_KEYWORD_BUFFER_LEN - 1) {
-              localeKeywordNameBuffer[keyValueLen++] = uprv_tolower(*startSearchHere++);
-            } else {
-              /* keyword name too long for internal buffer */
-              *status = U_INTERNAL_PROGRAM_ERROR;
-              return;
-            }
+            localeKeywordName.append(uprv_tolower(*startSearchHere++), *status);
           }
-          localeKeywordNameBuffer[keyValueLen] = 0; /* terminate */
+          if (U_FAILURE(*status)) {
+              return;
+          }
 
           startSearchHere = uprv_strchr(nextSeparator, ';');
 
-          if(uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer) == 0) {
+          if (canonKeywordName == localeKeywordName) {
                /* current entry matches the keyword. */
              nextSeparator++; /* skip '=' */
               /* First strip leading & trailing spaces (TC decided to tolerate these) */
@@ -909,12 +893,7 @@ ulocimp_setKeywordValue(const char* keywords,
                         UErrorCode* status)
 {
     /* TODO: sorting. removal. */
-    int32_t keywordNameLen;
-    int32_t keywordValueLen;
     int32_t needLen = 0;
-    char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
-    char keywordValueBuffer[ULOC_KEYWORDS_CAPACITY+1];
-    char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     int32_t rc;
     const char* nextSeparator = nullptr;
     const char* nextEqualsign = nullptr;
@@ -933,37 +912,33 @@ ulocimp_setKeywordValue(const char* keywords,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    keywordNameLen = locale_canonKeywordName(keywordNameBuffer, keywordName, status);
+    CharString canonKeywordName = locale_canonKeywordName(keywordName, status);
     if(U_FAILURE(*status)) {
         return 0;
     }
 
-    keywordValueLen = 0;
+    CharString canonKeywordValue;
     if(keywordValue) {
         while (*keywordValue != 0) {
             if (!UPRV_ISALPHANUM(*keywordValue) && !UPRV_OK_VALUE_PUNCTUATION(*keywordValue)) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed key value */
                 return 0;
             }
-            if (keywordValueLen < ULOC_KEYWORDS_CAPACITY) {
-                /* Should we force lowercase in value to set? */
-                keywordValueBuffer[keywordValueLen++] = *keywordValue++;
-            } else {
-                /* keywordValue too long for internal buffer */
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                return 0;
-            }
+            /* Should we force lowercase in value to set? */
+            canonKeywordValue.append(*keywordValue++, *status);
         }
     }
-    keywordValueBuffer[keywordValueLen] = 0; /* terminate */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
 
     if (keywords == nullptr || keywords[1] == '\0') {
-        if(keywordValueLen == 0) { /* no keywords = nothing to remove */
+        if (canonKeywordValue.isEmpty()) { /* no keywords = nothing to remove */
             U_ASSERT(*status != U_STRING_NOT_TERMINATED_WARNING);
             return 0;
         }
 
-        needLen = 1+keywordNameLen+1+keywordValueLen;
+        needLen = 1 + canonKeywordName.length() + 1 + canonKeywordValue.length();
         int32_t capacity = 0;
         char* buffer = sink.GetAppendBuffer(
                 needLen, needLen, nullptr, needLen, &capacity);
@@ -974,10 +949,10 @@ ulocimp_setKeywordValue(const char* keywords,
         char* it = buffer;
 
         *it++ = '@';
-        uprv_memcpy(it, keywordNameBuffer, keywordNameLen);
-        it += keywordNameLen;
+        uprv_memcpy(it, canonKeywordName.data(), canonKeywordName.length());
+        it += canonKeywordName.length();
         *it++ = '=';
-        uprv_memcpy(it, keywordValueBuffer, keywordValueLen);
+        uprv_memcpy(it, canonKeywordValue.data(), canonKeywordValue.length());
         sink.Append(buffer, needLen);
         U_ASSERT(*status != U_STRING_NOT_TERMINATED_WARNING);
         return needLen;
@@ -987,7 +962,6 @@ ulocimp_setKeywordValue(const char* keywords,
     /* search for keyword */
     while(keywordStart) {
         const char* keyValueTail;
-        int32_t keyValueLen;
 
         keywordStart++; /* skip @ or ; */
         nextEqualsign = uprv_strchr(keywordStart, '=');
@@ -1009,21 +983,17 @@ ulocimp_setKeywordValue(const char* keywords,
             *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty keyword name in passed-in locale */
             return 0;
         }
-        keyValueLen = 0;
+        CharString localeKeywordName;
         while (keywordStart < keyValueTail) {
             if (!UPRV_ISALPHANUM(*keywordStart)) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
                 return 0;
             }
-            if (keyValueLen < ULOC_KEYWORD_BUFFER_LEN - 1) {
-                localeKeywordNameBuffer[keyValueLen++] = uprv_tolower(*keywordStart++);
-            } else {
-                /* keyword name too long for internal buffer */
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                return 0;
-            }
+            localeKeywordName.append(uprv_tolower(*keywordStart++), *status);
         }
-        localeKeywordNameBuffer[keyValueLen] = 0; /* terminate */
+        if (U_FAILURE(*status)) {
+            return 0;
+        }
 
         nextSeparator = uprv_strchr(nextEqualsign, ';');
 
@@ -1042,42 +1012,42 @@ ulocimp_setKeywordValue(const char* keywords,
             return 0;
         }
 
-        rc = uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer);
+        rc = uprv_strcmp(canonKeywordName.data(), localeKeywordName.data());
         if(rc == 0) {
             /* Current entry matches the input keyword. Update the entry */
-            if(keywordValueLen > 0) { /* updating a value */
+            if (!canonKeywordValue.isEmpty()) { /* updating a value */
                 updatedKeysAndValues.append(keyValuePrefix, *status);
                 keyValuePrefix = ';'; /* for any subsequent key-value pair */
-                updatedKeysAndValues.append(keywordNameBuffer, keywordNameLen, *status);
+                updatedKeysAndValues.append(canonKeywordName, *status);
                 updatedKeysAndValues.append('=', *status);
-                updatedKeysAndValues.append(keywordValueBuffer, keywordValueLen, *status);
+                updatedKeysAndValues.append(canonKeywordValue, *status);
             } /* else removing this entry, don't emit anything */
             handledInputKeyAndValue = true;
         } else {
            /* input keyword sorts earlier than current entry, add before current entry */
-            if (rc < 0 && keywordValueLen > 0 && !handledInputKeyAndValue) {
+            if (rc < 0 && !canonKeywordValue.isEmpty() && !handledInputKeyAndValue) {
                 /* insert new entry at this location */
                 updatedKeysAndValues.append(keyValuePrefix, *status);
                 keyValuePrefix = ';'; /* for any subsequent key-value pair */
-                updatedKeysAndValues.append(keywordNameBuffer, keywordNameLen, *status);
+                updatedKeysAndValues.append(canonKeywordName, *status);
                 updatedKeysAndValues.append('=', *status);
-                updatedKeysAndValues.append(keywordValueBuffer, keywordValueLen, *status);
+                updatedKeysAndValues.append(canonKeywordValue, *status);
                 handledInputKeyAndValue = true;
             }
             /* copy the current entry */
             updatedKeysAndValues.append(keyValuePrefix, *status);
             keyValuePrefix = ';'; /* for any subsequent key-value pair */
-            updatedKeysAndValues.append(localeKeywordNameBuffer, keyValueLen, *status);
+            updatedKeysAndValues.append(localeKeywordName, *status);
             updatedKeysAndValues.append('=', *status);
             updatedKeysAndValues.append(nextEqualsign, static_cast<int32_t>(keyValueTail-nextEqualsign), *status);
         }
-        if (!nextSeparator && keywordValueLen > 0 && !handledInputKeyAndValue) {
+        if (!nextSeparator && !canonKeywordValue.isEmpty() && !handledInputKeyAndValue) {
             /* append new entry at the end, it sorts later than existing entries */
             updatedKeysAndValues.append(keyValuePrefix, *status);
             /* skip keyValuePrefix update, no subsequent key-value pair */
-            updatedKeysAndValues.append(keywordNameBuffer, keywordNameLen, *status);
+            updatedKeysAndValues.append(canonKeywordName, *status);
             updatedKeysAndValues.append('=', *status);
-            updatedKeysAndValues.append(keywordValueBuffer, keywordValueLen, *status);
+            updatedKeysAndValues.append(canonKeywordValue, *status);
             handledInputKeyAndValue = true;
         }
         keywordStart = nextSeparator;
