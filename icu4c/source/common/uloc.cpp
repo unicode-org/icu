@@ -849,19 +849,61 @@ uloc_setKeywordValue(const char* keywordName,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 {
+    if (U_FAILURE(*status)) {
+        return -1;
+    }
+
+    if (bufferCapacity <= 1) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    int32_t bufLen = (int32_t)uprv_strlen(buffer);
+    if(bufferCapacity<bufLen) {
+        /* The capacity is less than the length?! Is this NUL terminated? */
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    char* keywords = const_cast<char*>(locale_getKeywordsStart(buffer));
+    int32_t baseLen = keywords == nullptr ? bufLen : keywords - buffer;
+    // Remove -1 from the capacity so that this function can guarantee NUL termination.
+    CheckedArrayByteSink sink(keywords == nullptr ? buffer + bufLen : keywords,
+                              bufferCapacity - baseLen - 1);
+    int32_t reslen = ulocimp_setKeywordValue(
+            keywords, keywordName, keywordValue, sink, status);
+
+    if (U_FAILURE(*status)) {
+        // A positive return value is a length, otherwise it's an error code.
+        return reslen > 0 ? reslen + baseLen : reslen;
+    }
+
+    // See the documentation for this function, it's guaranteed to never
+    // overflow the buffer but instead abort with BUFFER_OVERFLOW_ERROR.
+    // In this case, nothing has been written to the sink, so it cannot have Overflowed().
+    U_ASSERT(!sink.Overflowed());
+    U_ASSERT(reslen >= 0);
+    return u_terminateChars(buffer, bufferCapacity, reslen + baseLen, status);
+}
+
+U_EXPORT int32_t U_EXPORT2
+ulocimp_setKeywordValue(const char* keywords,
+                        const char* keywordName,
+                        const char* keywordValue,
+                        ByteSink& sink,
+                        UErrorCode* status)
+{
     /* TODO: sorting. removal. */
     int32_t keywordNameLen;
     int32_t keywordValueLen;
-    int32_t bufLen;
     int32_t needLen = 0;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char keywordValueBuffer[ULOC_KEYWORDS_CAPACITY+1];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     int32_t rc;
-    char* nextSeparator = nullptr;
-    char* nextEqualsign = nullptr;
-    char* startSearchHere = nullptr;
-    char* keywordStart = nullptr;
+    const char* nextSeparator = nullptr;
+    const char* nextEqualsign = nullptr;
+    const char* keywordStart = nullptr;
     CharString updatedKeysAndValues;
     UBool handledInputKeyAndValue = false;
     char keyValuePrefix = '@';
@@ -872,13 +914,7 @@ uloc_setKeywordValue(const char* keywordName,
     if (*status == U_STRING_NOT_TERMINATED_WARNING) {
         *status = U_ZERO_ERROR;
     }
-    if (keywordName == nullptr || keywordName[0] == 0 || bufferCapacity <= 1) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    bufLen = (int32_t)uprv_strlen(buffer);
-    if(bufferCapacity<bufLen) {
-        /* The capacity is less than the length?! Is this NUL terminated? */
+    if (keywordName == nullptr || keywordName[0] == 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -906,34 +942,33 @@ uloc_setKeywordValue(const char* keywordName,
     }
     keywordValueBuffer[keywordValueLen] = 0; /* terminate */
 
-    startSearchHere = (char*)locale_getKeywordsStart(buffer);
-    if(startSearchHere == nullptr || (startSearchHere[1]==0)) {
+    if (keywords == nullptr || keywords[1] == '\0') {
         if(keywordValueLen == 0) { /* no keywords = nothing to remove */
             U_ASSERT(*status != U_STRING_NOT_TERMINATED_WARNING);
-            return bufLen;
+            return 0;
         }
 
-        needLen = bufLen+1+keywordNameLen+1+keywordValueLen;
-        if(startSearchHere) { /* had a single @ */
-            needLen--; /* already had the @ */
-            /* startSearchHere points at the @ */
-        } else {
-            startSearchHere=buffer+bufLen;
-        }
-        if(needLen >= bufferCapacity) {
+        needLen = 1+keywordNameLen+1+keywordValueLen;
+        int32_t capacity = 0;
+        char* buffer = sink.GetAppendBuffer(
+                needLen, needLen, nullptr, needLen, &capacity);
+        if (capacity < needLen || buffer == nullptr) {
             *status = U_BUFFER_OVERFLOW_ERROR;
             return needLen; /* no change */
         }
-        *startSearchHere++ = '@';
-        uprv_strcpy(startSearchHere, keywordNameBuffer);
-        startSearchHere += keywordNameLen;
-        *startSearchHere++ = '=';
-        uprv_strcpy(startSearchHere, keywordValueBuffer);
+        char* it = buffer;
+
+        *it++ = '@';
+        uprv_memcpy(it, keywordNameBuffer, keywordNameLen);
+        it += keywordNameLen;
+        *it++ = '=';
+        uprv_memcpy(it, keywordValueBuffer, keywordValueLen);
+        sink.Append(buffer, needLen);
         U_ASSERT(*status != U_STRING_NOT_TERMINATED_WARNING);
         return needLen;
     } /* end shortcut - no @ */
 
-    keywordStart = startSearchHere;
+    keywordStart = keywords;
     /* search for keyword */
     while(keywordStart) {
         const char* keyValueTail;
@@ -1045,24 +1080,27 @@ uloc_setKeywordValue(const char* keywordName,
         /* if input key/value specified removal of a keyword not present in locale, or
          * there was an error in CharString.append, leave original locale alone. */
         U_ASSERT(*status != U_STRING_NOT_TERMINATED_WARNING);
-        return bufLen;
+        return (int32_t)uprv_strlen(keywords);
     }
 
-    // needLen = length of the part before '@'
-    needLen = (int32_t)(startSearchHere - buffer);
-    // Check to see can we fit the startSearchHere, if not, return
+    needLen = updatedKeysAndValues.length();
+    // Check to see can we fit the updatedKeysAndValues, if not, return
     // U_BUFFER_OVERFLOW_ERROR without copy updatedKeysAndValues into it.
     // We do this because this API function does not behave like most others:
     // It promises never to set a U_STRING_NOT_TERMINATED_WARNING.
     // When the contents fits but without the terminating NUL, in this case we need to not change
     // the buffer contents and return with a buffer overflow error.
-    int32_t appendLength = updatedKeysAndValues.length();
-    if (appendLength >= bufferCapacity - needLen) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-        return needLen + appendLength;
+    if (needLen > 0) {
+        int32_t capacity = 0;
+        char* buffer = sink.GetAppendBuffer(
+                needLen, needLen, nullptr, needLen, &capacity);
+        if (capacity < needLen || buffer == nullptr) {
+            *status = U_BUFFER_OVERFLOW_ERROR;
+            return needLen;
+        }
+        uprv_memcpy(buffer, updatedKeysAndValues.data(), needLen);
+        sink.Append(buffer, needLen);
     }
-    needLen += updatedKeysAndValues.extract(
-                         startSearchHere, bufferCapacity - needLen, *status);
     U_ASSERT(*status != U_STRING_NOT_TERMINATED_WARNING);
     return needLen;
 }

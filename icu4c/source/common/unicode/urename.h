@@ -1203,6 +1203,7 @@
 #define ulocimp_getScript U_ICU_ENTRY_POINT_RENAME(ulocimp_getScript)
 #define ulocimp_isCanonicalizedLocaleForTest U_ICU_ENTRY_POINT_RENAME(ulocimp_isCanonicalizedLocaleForTest)
 #define ulocimp_minimizeSubtags U_ICU_ENTRY_POINT_RENAME(ulocimp_minimizeSubtags)
+#define ulocimp_setKeywordValue U_ICU_ENTRY_POINT_RENAME(ulocimp_setKeywordValue)
 #define ulocimp_toBcpKey U_ICU_ENTRY_POINT_RENAME(ulocimp_toBcpKey)
 #define ulocimp_toBcpType U_ICU_ENTRY_POINT_RENAME(ulocimp_toBcpType)
 #define ulocimp_toLanguageTag U_ICU_ENTRY_POINT_RENAME(ulocimp_toLanguageTag)
