@@ -3695,13 +3695,15 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
 
 int32_t Calendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const
 {
-    return handleComputeMonthStart(extendedYear, month+1, true) -
-        handleComputeMonthStart(extendedYear, month, true);
+    const int32_t nextMonthStart = handleComputeMonthStart(extendedYear, month+1, true);
+    const int32_t thisMonthStart = handleComputeMonthStart(extendedYear, month, true);
+    return nextMonthStart - thisMonthStart;
 }
 
-int32_t Calendar::handleGetYearLength(int32_t eyear) const {
-    int32_t nextYearStart = handleComputeMonthStart(eyear + 1, 0, false);
-    int32_t thisYearStart = handleComputeMonthStart(eyear, 0, false);
+int32_t Calendar::handleGetYearLength(int32_t eyear) const
+{
+    const int32_t nextYearStart = handleComputeMonthStart(eyear + 1, 0, false);
+    const int32_t thisYearStart = handleComputeMonthStart(eyear, 0, false);
     return nextYearStart - thisYearStart;
 }
 
