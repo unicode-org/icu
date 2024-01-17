@@ -191,6 +191,8 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestRollWeekOfYear);
     TESTCASE_AUTO(TestFirstDayOfWeek);
 
+    TESTCASE_AUTO(TestChineseCalendarComputeMonthStart);
+
     TESTCASE_AUTO_END;
 }
 
@@ -5628,6 +5630,35 @@ void CalendarTest::TestFirstDayOfWeek() {
 
     verifyFirstDayOfWeek("zxx", UCAL_MONDAY);
 }
+
+void CalendarTest::TestChineseCalendarComputeMonthStart() {  // ICU-22639
+    UErrorCode status = U_ZERO_ERROR;
+
+    // An extended year for which hasLeapMonthBetweenWinterSolstices is true.
+    constexpr int32_t eyear = 4643;
+    constexpr int32_t monthStart = 2453764;
+
+    LocalPointer<Calendar> calendar(
+        Calendar::createInstance(Locale("en_US@calendar=chinese"), status),
+        status);
+    if (failure(status, "Calendar::createInstance")) return;
+
+    // This test case is a friend of ChineseCalendar and may access internals.
+    const ChineseCalendar& chinese =
+        *dynamic_cast<ChineseCalendar*>(calendar.getAlias());
+
+    // The initial value of hasLeapMonthBetweenWinterSolstices should be false.
+    assertFalse("hasLeapMonthBetweenWinterSolstices [#1]",
+                chinese.hasLeapMonthBetweenWinterSolstices);
+
+    assertEquals("monthStart", monthStart,
+                 chinese.handleComputeMonthStart(eyear, 0, false));
+
+    // Calling a const method must not haved changed the state of the object.
+    assertFalse("hasLeapMonthBetweenWinterSolstices [#2]",
+                chinese.hasLeapMonthBetweenWinterSolstices);
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
