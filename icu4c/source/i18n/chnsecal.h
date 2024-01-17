@@ -325,6 +325,10 @@ class U_I18N_API ChineseCalendar : public Calendar {
   int32_t          internalGetDefaultCenturyStartYear() const;
 
   ChineseCalendar() = delete; // default constructor not implemented
+
+#ifdef __CalendarTest__
+  friend void CalendarTest::TestChineseCalendarComputeMonthStart();
+#endif
 };
 
 U_NAMESPACE_END

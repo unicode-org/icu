@@ -325,8 +325,6 @@ const UFieldResolutionTable* ChineseCalendar::getFieldResolutionTable() const {
  * @stable ICU 2.8
  */
 int32_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
-    ChineseCalendar *nonConstThis = (ChineseCalendar*)this; // cast away const
-
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
@@ -341,32 +339,29 @@ int32_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     
     int32_t julianDay = newMoon + kEpochStartAsJulianDay;
 
-    // Save fields for later restoration
-    int32_t saveMonth = internalGet(UCAL_MONTH);
-    int32_t saveOrdinalMonth = internalGet(UCAL_ORDINAL_MONTH);
-    int32_t saveIsLeapMonth = internalGet(UCAL_IS_LEAP_MONTH);
-
     // Ignore IS_LEAP_MONTH field if useMonth is false
-    int32_t isLeapMonth = useMonth ? saveIsLeapMonth : 0;
+    int32_t isLeapMonth = useMonth ? internalGet(UCAL_IS_LEAP_MONTH) : 0;
+
+    // Clone the calendar so we don't mess with the real one.
+    LocalPointer<ChineseCalendar> work(clone());
+    if (work.isNull())
+        return 0;
 
     UErrorCode status = U_ZERO_ERROR;
-    nonConstThis->computeGregorianFields(julianDay, status);
+    work->computeGregorianFields(julianDay, status);
     if (U_FAILURE(status))
         return 0;
-    
-    // This will modify the MONTH and IS_LEAP_MONTH fields (only)
-    nonConstThis->computeChineseFields(newMoon, getGregorianYear(),
-                         getGregorianMonth(), false);        
 
-    if (month != internalGet(UCAL_MONTH) ||
-        isLeapMonth != internalGet(UCAL_IS_LEAP_MONTH)) {
+    // This will modify the MONTH and IS_LEAP_MONTH fields (only)
+    work->computeChineseFields(newMoon, work->getGregorianYear(),
+                               work->getGregorianMonth(), false);
+
+    if (month != work->internalGet(UCAL_MONTH) ||
+        isLeapMonth != work->internalGet(UCAL_IS_LEAP_MONTH)) {
         newMoon = newMoonNear(newMoon + SYNODIC_GAP, true);
         julianDay = newMoon + kEpochStartAsJulianDay;
     }
 
-    nonConstThis->internalSet(UCAL_MONTH, saveMonth);
-    nonConstThis->internalSet(UCAL_ORDINAL_MONTH, saveOrdinalMonth);
-    nonConstThis->internalSet(UCAL_IS_LEAP_MONTH, saveIsLeapMonth);
     return julianDay - 1;
 }
 

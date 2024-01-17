@@ -337,6 +337,8 @@ public: // package
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
     void TestFirstDayOfWeek();
 
+    void TestChineseCalendarComputeMonthStart();
+
     void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
     void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);
     void Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* cal);
