@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705477150635,
+  "lastUpdate": 1705481703690,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16198,6 +16198,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.012923033577760054,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "4a8cd80973a29a48d4876160406a3fb6004d13bd",
+          "message": "ICU-21107 Clarify the C11 & C++17 requirement in the userguide.",
+          "timestamp": "2024-01-17T17:48:10+09:00",
+          "tree_id": "1eea726aa6877c37f4697232e587e613eee6790b",
+          "url": "https://github.com/unicode-org/icu/commit/4a8cd80973a29a48d4876160406a3fb6004d13bd"
+        },
+        "date": 1705481619619,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.013082915235648026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
