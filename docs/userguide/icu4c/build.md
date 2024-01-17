@@ -22,7 +22,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Recommended Build Options
 
-Depending on the platform and the type of installation, we recommend a small number of modifications and build options. Note that C11 compatibility is now required.
+Depending on the platform and the type of installation, we recommend a small number of modifications and build options. Note that ICU4C requires C11 & C++17.
 
 *   **Namespace (ICU 61 and later):** Since ICU 61, call sites need to qualify ICU types explicitly, for example `icu::UnicodeString`, or do `using icu::UnicodeString;` where appropriate. If your code relies on the "using namespace icu;" that used to be in `unicode/uversion.h`, then you need to update your code.
     You could temporarily (until you have more time to update your code) revert to the default "using" via `-DU_USING_ICU_NAMESPACE=1` or by modifying `unicode/uversion.h`:
