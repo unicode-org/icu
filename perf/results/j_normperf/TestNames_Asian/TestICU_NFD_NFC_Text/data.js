@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705477078763,
+  "lastUpdate": 1705481524030,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32338,6 +32338,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.602247463199799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "4a8cd80973a29a48d4876160406a3fb6004d13bd",
+          "message": "ICU-21107 Clarify the C11 & C++17 requirement in the userguide.",
+          "timestamp": "2024-01-17T17:48:10+09:00",
+          "tree_id": "1eea726aa6877c37f4697232e587e613eee6790b",
+          "url": "https://github.com/unicode-org/icu/commit/4a8cd80973a29a48d4876160406a3fb6004d13bd"
+        },
+        "date": 1705481452613,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.391139308053338,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
