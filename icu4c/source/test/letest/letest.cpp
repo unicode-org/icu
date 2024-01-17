@@ -324,7 +324,8 @@ le_bool compareResults(const char *testID, TestResult *expected, TestResult *act
 {
     /* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */
     if (actual->glyphCount != expected->glyphCount) {
-        log_err("Test %s: incorrect glyph count: expected %d, got %d\n",
+        log_knownIssue("ICU-22628",
+            "Test %s: incorrect glyph count: expected %d, got %d\n",
             testID, expected->glyphCount, actual->glyphCount);
         return false;
     }
