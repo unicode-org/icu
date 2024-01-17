@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705411945017,
+  "lastUpdate": 1705476975930,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -15898,6 +15898,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 226.47385408839187,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "2d65456a3bb3f874df4c14ca1584598517bfe611",
+          "message": "ICU-21107 Specify language standard versions C11 & C++17 also for Bazel.\n\nThis is copied (with C11 added) from:\n\nhttps://github.com/tensorflow/tensorflow/blob/v2.15.0/.bazelrc\n\nThere were until now no versions specified at all, relying on the\ndefault (or commandline overrides) to be sufficiently recent.",
+          "timestamp": "2024-01-17T16:26:57+09:00",
+          "tree_id": "a0f1e5e082d14396e30841240765d74b49075823",
+          "url": "https://github.com/unicode-org/icu/commit/2d65456a3bb3f874df4c14ca1584598517bfe611"
+        },
+        "date": 1705476875256,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 233.26019534597486,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
