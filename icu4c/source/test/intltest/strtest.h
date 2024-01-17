@@ -46,9 +46,7 @@ private:
     void TestStringPieceFind();
     void TestStringPieceComparisons();
     void TestStringPieceOther();
-#ifdef U_HAVE_STRING_VIEW
     void TestStringPieceStringView();
-#endif
     void TestStringPieceU8();
     void TestByteSink();
     void TestCheckedArrayByteSink();

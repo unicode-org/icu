@@ -14,10 +14,7 @@
 *   created by: Markus W. Scherer
 */
 
-#ifdef U_HAVE_STRING_VIEW
 #include <string_view>
-#endif
-
 #include <cstddef>
 #include <string.h>
 #include <limits>
@@ -246,9 +243,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestStringPieceComparisons);
     TESTCASE_AUTO(TestStringPieceFind);
     TESTCASE_AUTO(TestStringPieceOther);
-#ifdef U_HAVE_STRING_VIEW
     TESTCASE_AUTO(TestStringPieceStringView);
-#endif
     TESTCASE_AUTO(TestStringPieceU8);
     TESTCASE_AUTO(TestByteSink);
     TESTCASE_AUTO(TestCheckedArrayByteSink);
@@ -512,7 +507,6 @@ StringTest::TestStringPieceOther() {
     assertEquals("data()", piece.data(), other.data());
 }
 
-#ifdef U_HAVE_STRING_VIEW
 void
 StringTest::TestStringPieceStringView() {
     static constexpr char msg[] = "Kapow!";
@@ -523,7 +517,6 @@ StringTest::TestStringPieceStringView() {
     assertEquals("size()", piece.size(), view.size());
     assertEquals("data()", piece.data(), view.data());
 }
-#endif
 
 void
 StringTest::TestStringPieceU8() {

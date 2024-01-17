@@ -913,14 +913,6 @@ else
 fi
 AC_SUBST(U_HAVE_STRTOD_L)
 
-# Check if C++17 std::string_view is available.
-AC_LANG_PUSH([C++])
-AC_CHECK_TYPE(std::string_view, [], [], [[#include <string_view>]])
-if test "x$ac_cv_type_std__string_view" = xyes; then :
-  CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRING_VIEW=1"
-fi
-AC_LANG_POP([C++])
-
 # Checks for typedefs
 AC_CHECK_TYPE(int8_t,signed char)
 AC_CHECK_TYPE(uint8_t,unsigned char)
