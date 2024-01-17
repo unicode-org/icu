@@ -32,11 +32,8 @@
       <TypeLibraryName>$(OutDir)\icupkg.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <WarningLevel>Level4</WarningLevel>
       <CompileAs>Default</CompileAs>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(OutDir)\icupkg.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(OutDir)/</AssemblerListingLocation>

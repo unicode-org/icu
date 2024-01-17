@@ -33,11 +33,8 @@
       <TypeLibraryName>$(OutDir)\intltest.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\..\i18n;..\..\tools\toolutil;..\..\tools\ctestfw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
       <PrecompiledHeaderOutputFile>$(OutDir)/intltest.pch</PrecompiledHeaderOutputFile>
@@ -73,21 +70,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bytestrietest.cpp" />
-    <ClCompile Include="collationtest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="colldata.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="collationtest.cpp" />
+    <ClCompile Include="colldata.cpp" />
     <ClCompile Include="erarulestest.cpp" />
     <ClCompile Include="numfmtspectest.cpp" />
     <ClCompile Include="regiontst.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
     <ClCompile Include="lstmbetst.cpp" />
-    <ClCompile Include="rbbiapts.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="rbbiapts.cpp" />
     <ClCompile Include="rbbitst.cpp" />
     <ClCompile Include="rbbimonkeytest.cpp" />
     <ClCompile Include="itspoof.cpp" />
@@ -115,29 +106,17 @@
     <ClCompile Include="ucaconf.cpp" />
     <ClCompile Include="uvectest.cpp" />
     <ClCompile Include="v32test.cpp" />
-    <ClCompile Include="simplethread.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="strtest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="tsmthred.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="simplethread.cpp" />
+    <ClCompile Include="strtest.cpp" />
+    <ClCompile Include="tsmthred.cpp" />
     <ClCompile Include="tsputil.cpp" />
-    <ClCompile Include="uobjtest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="uobjtest.cpp" />
     <ClCompile Include="astrotst.cpp" />
     <ClCompile Include="calcasts.cpp" />
-    <ClCompile Include="callimts.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="callimts.cpp" />
     <ClCompile Include="calregts.cpp" />
     <ClCompile Include="caltest.cpp" />
-    <ClCompile Include="caltztst.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="caltztst.cpp" />
     <ClCompile Include="compactdecimalformattest.cpp" />
     <ClCompile Include="dadrcal.cpp" />
     <ClCompile Include="dadrfmt.cpp" />
@@ -148,9 +127,7 @@
     <ClCompile Include="dtfmrgts.cpp" />
     <ClCompile Include="dtfmtrtts.cpp" />
     <ClCompile Include="dtfmttst.cpp" />
-    <ClCompile Include="dtifmtts.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="dtifmtts.cpp" />
     <ClCompile Include="dtptngts.cpp" />
     <ClCompile Include="fldset.cpp" />
     <ClCompile Include="formatted_string_builder_test.cpp" />
@@ -189,9 +166,7 @@
     <ClCompile Include="plurults.cpp" />
     <ClCompile Include="pptest.cpp" />
     <ClCompile Include="quantityformattertest.cpp" />
-    <ClCompile Include="reldatefmttest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="reldatefmttest.cpp" />
     <ClCompile Include="scientificnumberformattertest.cpp" />
     <ClCompile Include="sdtfmtts.cpp" />
     <ClCompile Include="selfmts.cpp" />
@@ -206,75 +181,45 @@
     <ClCompile Include="tsnmfmt.cpp" />
     <ClCompile Include="tufmtts.cpp" />
     <ClCompile Include="tzbdtest.cpp" />
-    <ClCompile Include="tzfmttst.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="tzfmttst.cpp" />
     <ClCompile Include="tzoffloc.cpp" />
     <ClCompile Include="tzregts.cpp" />
     <ClCompile Include="tzrulets.cpp" />
-    <ClCompile Include="tztest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="unifiedcachetest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="windttst.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="winnmtst.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="tztest.cpp" />
+    <ClCompile Include="unifiedcachetest.cpp" />
+    <ClCompile Include="windttst.cpp" />
+    <ClCompile Include="winnmtst.cpp" />
     <ClCompile Include="idnaconf.cpp" />
     <ClCompile Include="idnaref.cpp" />
     <ClCompile Include="nptrans.cpp" />
     <ClCompile Include="punyref.cpp" />
-    <ClCompile Include="testidn.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="testidn.cpp" />
     <ClCompile Include="testidna.cpp" />
     <ClCompile Include="uts46test.cpp" />
     <ClCompile Include="aliastst.cpp" />
     <ClCompile Include="loctest.cpp" />
     <ClCompile Include="restest.cpp" />
     <ClCompile Include="restsnew.cpp" />
-    <ClCompile Include="intltest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="itmajor.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="itutil.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="intltest.cpp" />
+    <ClCompile Include="itmajor.cpp" />
+    <ClCompile Include="itutil.cpp" />
     <ClCompile Include="testutil.cpp" />
     <ClCompile Include="textfile.cpp" />
     <ClCompile Include="tokiter.cpp" />
-    <ClCompile Include="winutil.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="winutil.cpp" />
     <ClCompile Include="canittst.cpp" />
     <ClCompile Include="normconf.cpp" />
-    <ClCompile Include="tstnorm.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="tstnrapi.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="ucdtest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="tstnorm.cpp" />
+    <ClCompile Include="tstnrapi.cpp" />
+    <ClCompile Include="ucdtest.cpp" />
     <ClCompile Include="usettest.cpp" />
     <ClCompile Include="regextst.cpp" />
-    <ClCompile Include="icusvtst.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="icusvtst.cpp" />
     <ClCompile Include="citrtest.cpp" />
     <ClCompile Include="reptest.cpp" />
     <ClCompile Include="sfwdchit.cpp" />
     <ClCompile Include="strcase.cpp" />
-    <ClCompile Include="ustrtest.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="ustrtest.cpp" />
     <ClCompile Include="utxttest.cpp" />
     <ClCompile Include="cpdtrtst.cpp" />
     <ClCompile Include="ittrans.cpp" />

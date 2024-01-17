@@ -96,6 +96,9 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <!-- Enable parallel compilation for faster builds. -->
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <!-- Set the C/C++ versions supported. -->
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>

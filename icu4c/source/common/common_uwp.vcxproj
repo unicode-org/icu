@@ -72,8 +72,6 @@
       <TypeLibraryName>$(OutDir)\icuuc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <!-- U_DISABLE_RENAMING -->
       <!-- U_HIDE_DRAFT_API & U_HIDE_DEPRECATED_API -->
@@ -82,7 +80,6 @@
       <ExceptionHandling>
       </ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
