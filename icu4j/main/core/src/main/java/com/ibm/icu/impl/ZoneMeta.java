@@ -20,7 +20,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
@@ -681,66 +681,30 @@ public final class ZoneMeta {
      * @return Returns true when the given custom id is valid.
      */
     static boolean parseCustomID(String id, int[] fields) {
-        NumberFormat numberFormat = null;
-
         if (id != null && id.length() > kGMT_ID.length() &&
-                id.toUpperCase(Locale.ENGLISH).startsWith(kGMT_ID)) {
-            ParsePosition pos = new ParsePosition(kGMT_ID.length());
+                id.substring(0, 3).equalsIgnoreCase(kGMT_ID)) {
             int sign = 1;
             int hour = 0;
             int min = 0;
             int sec = 0;
 
-            if (id.charAt(pos.getIndex()) == 0x002D /*'-'*/) {
+            int[] pos = new int[1];
+            pos[0] = kGMT_ID.length();
+            if (id.charAt(pos[0]) == 0x002D /*'-'*/) {
                 sign = -1;
-            } else if (id.charAt(pos.getIndex()) != 0x002B /*'+'*/) {
+            } else if (id.charAt(pos[0]) != 0x002B /*'+'*/) {
                 return false;
             }
-            pos.setIndex(pos.getIndex() + 1);
-
-            numberFormat = NumberFormat.getInstance();
-            numberFormat.setParseIntegerOnly(true);
-
-            // Look for either hh:mm, hhmm, or hh
-            int start = pos.getIndex();
-
-            Number n = numberFormat.parse(id, pos);
-            if (pos.getIndex() == start) {
+            pos[0]++;
+            int start = pos[0];
+            // Utility.parseNumber also accept non ASCII digits so we need to first
+            // check we only have ASCII chars.
+            if (!id.chars().allMatch(c -> c < 128)) {
                 return false;
             }
-            hour = n.intValue();
-
-            if (pos.getIndex() < id.length()){
-                if (pos.getIndex() - start > 2
-                        || id.charAt(pos.getIndex()) != 0x003A /*':'*/) {
-                    return false;
-                }
-                // hh:mm
-                pos.setIndex(pos.getIndex() + 1);
-                int oldPos = pos.getIndex();
-                n = numberFormat.parse(id, pos);
-                if ((pos.getIndex() - oldPos) != 2) {
-                    // must be 2 digits
-                    return false;
-                }
-                min = n.intValue();
-                if (pos.getIndex() < id.length()) {
-                    if (id.charAt(pos.getIndex()) != 0x003A /*':'*/) {
-                        return false;
-                    }
-                    // [:ss]
-                    pos.setIndex(pos.getIndex() + 1);
-                    oldPos = pos.getIndex();
-                    n = numberFormat.parse(id, pos);
-                    if (pos.getIndex() != id.length()
-                            || (pos.getIndex() - oldPos) != 2) {
-                        return false;
-                    }
-                    sec = n.intValue();
-                }
-            } else {
-                // Supported formats are below -
-                //
+            hour = Utility.parseNumber(id, pos, 10);
+            if (pos[0] == id.length()) {
+                // Handle the following cases
                 // HHmmss
                 // Hmmss
                 // HHmm
@@ -748,27 +712,57 @@ public final class ZoneMeta {
                 // HH
                 // H
 
-                int length = pos.getIndex() - start;
-                if (length <= 0 || 6 < length) {
-                    // invalid length
-                    return false;
-                }
+                // Get all digits
+                // Should be 1 to 6 digits.
+                int length = pos[0] - start;
                 switch (length) {
-                    case 1:
-                    case 2:
+                    case 1: // H
+                    case 2: // HH
                         // already set to hour
                         break;
-                    case 3:
-                    case 4:
+                    case 3: // Hmm
+                    case 4: // HHmm
                         min = hour % 100;
                         hour /= 100;
                         break;
-                    case 5:
-                    case 6:
+                    case 5: // Hmmss
+                    case 6: // HHmmss
                         sec = hour % 100;
                         min = (hour/100) % 100;
                         hour /= 10000;
                         break;
+                    default:
+                        // invalid range
+                        return false;
+                }
+            } else {
+                // Handle the following cases
+                // HH:mm:ss
+                // H:mm:ss
+                // HH:mm
+                // H:mm
+                if (pos[0] - start < 1 || pos[0] - start > 2 || id.charAt(pos[0]) != 0x003A /*':'*/) {
+                    return false;
+                }
+                pos[0]++; // skip : after H
+                if (id.length() == pos[0]) {
+                    return false;
+                }
+                start = pos[0];
+                min = Utility.parseNumber(id, pos, 10);
+                if (pos[0] - start != 2) {
+                    return false;
+                }
+                if (id.length() > pos[0]) {
+                    if (id.charAt(pos[0]) != 0x003A /*':'*/) {
+                        return false;
+                    }
+                    pos[0]++; // skip : after mm
+                    start = pos[0];
+                    sec = Utility.parseNumber(id, pos, 10);
+                    if (pos[0] - start != 2 || id.length() > pos[0]) {
+                        return false;
+                    }
                 }
             }
 
