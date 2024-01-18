@@ -1210,7 +1210,9 @@ BasicNormalizerTest::TestCompare() {
     if( nfcNorm2->composePair(0x20, 0x301)>=0 ||
         nfcNorm2->composePair(0x61, 0x305)>=0 ||
         nfcNorm2->composePair(0x1100, 0x1160)>=0 ||
-        nfcNorm2->composePair(0xac00, 0x11a7)>=0
+        nfcNorm2->composePair(0xac00, 0x11a7)>=0 ||
+        nfcNorm2->composePair(0x1100, 0x80000020)>= 0 ||  // ICU-22635
+        nfcNorm2->composePair(0xac00, 0x80000020)>= 0     // ICU-22635
     ) {
         errln("NFC.composePair() incorrectly composes some pairs of characters");
     }
