@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705551787913,
+  "lastUpdate": 1705577996199,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16078,6 +16078,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.8446136370072648,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "d0672fa8ab11a9795ad7d42f20e63dd2307cd8e2",
+          "message": "ICU-21107 Simplify type_traits expressions for C++17.",
+          "timestamp": "2024-01-18T20:28:39+09:00",
+          "tree_id": "0893fe1623c3207c625e372bb155877aa123d8e3",
+          "url": "https://github.com/unicode-org/icu/commit/d0672fa8ab11a9795ad7d42f20e63dd2307cd8e2"
+        },
+        "date": 1705577930795,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.8411176111615652,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
