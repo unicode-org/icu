@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705577905064,
+  "lastUpdate": 1705620097772,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16258,6 +16258,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 559.1200743413398,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ca53838b8363589816b1464140128c2963a3881d",
+          "message": "ICU-22576 Remove now obsolete pre-C11 backward compatibility code.",
+          "timestamp": "2024-01-19T08:05:24+09:00",
+          "tree_id": "2154f68dd394fa6c651518a6ef0b269ed454d4c3",
+          "url": "https://github.com/unicode-org/icu/commit/ca53838b8363589816b1464140128c2963a3881d"
+        },
+        "date": 1705620028889,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 537.1810966579251,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
