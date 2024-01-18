@@ -298,6 +298,26 @@ public class TimeZoneTest extends CoreTestFmwk
             "GMT-2:31:123",     "0",            TimeZone.UNKNOWN_ZONE_ID,
             "GMT+3:75",         "0",            TimeZone.UNKNOWN_ZONE_ID,
             "GMT-01010101",     "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-4E58",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-4e58",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-1E01",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-2E01",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-2e01",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-9e02",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-1e03",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-2e03",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-500M",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-500T",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-9E00",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0X0F",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0x0F",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0x12",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-B111",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-b111",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-0b11",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-๑๒",           "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-๑๒:๓๔",        "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT+๑๒:๓๔:๕๖",     "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
         };
         for (int i = 0; i < DATA.length; i += 3) {
             String id = DATA[i];
