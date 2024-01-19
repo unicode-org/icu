@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705659496719,
+  "lastUpdate": 1705661983519,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16198,6 +16198,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2011.64844114535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7cec4a9308b0d693b08f0bc35a2a08ce6d5f4646",
+          "message": "ICU-21107 Replace use of adapter and binder classes removed in C++17.",
+          "timestamp": "2024-01-19T19:49:44+09:00",
+          "tree_id": "8d10c33edb1e82c9049488e3e35ed8814a73ce0d",
+          "url": "https://github.com/unicode-org/icu/commit/7cec4a9308b0d693b08f0bc35a2a08ce6d5f4646"
+        },
+        "date": 1705661910787,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1945.676616232706,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
