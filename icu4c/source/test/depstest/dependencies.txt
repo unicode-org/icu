@@ -994,6 +994,7 @@ group: number_output
     # PluralRules internals:
     unifiedcache
     display_options
+    icu_utility_with_props
 
 group: numberformatter
     # ICU 60+ NumberFormatter API

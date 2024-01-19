@@ -678,20 +678,40 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
             U_ASSERT(curAndConstraint != nullptr);
             if ( (curAndConstraint->op==AndConstraint::MOD)&&
                  (curAndConstraint->opNum == -1 ) ) {
-                curAndConstraint->opNum=getNumberValue(token);
+                int32_t num = getNumberValue(token);
+                if (num == -1) {
+                    status = U_UNEXPECTED_TOKEN;
+                    break;
+                }
+                curAndConstraint->opNum=num;
             }
             else {
                 if (curAndConstraint->rangeList == nullptr) {
                     // this is for an 'is' rule
-                    curAndConstraint->value = getNumberValue(token);
+                    int32_t num = getNumberValue(token);
+                    if (num == -1) {
+                        status = U_UNEXPECTED_TOKEN;
+                        break;
+                    }
+                    curAndConstraint->value = num;
                 } else {
                     // this is for an 'in' or 'within' rule
                     if (curAndConstraint->rangeList->elementAti(rangeLowIdx) == -1) {
-                        curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeLowIdx);
-                        curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeHiIdx);
+                        int32_t num = getNumberValue(token);
+                        if (num == -1) {
+                            status = U_UNEXPECTED_TOKEN;
+                            break;
+                        }
+                        curAndConstraint->rangeList->setElementAt(num, rangeLowIdx);
+                        curAndConstraint->rangeList->setElementAt(num, rangeHiIdx);
                     }
                     else {
-                        curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeHiIdx);
+                        int32_t num = getNumberValue(token);
+                        if (num == -1) {
+                            status = U_UNEXPECTED_TOKEN;
+                            break;
+                        }
+                        curAndConstraint->rangeList->setElementAt(num, rangeHiIdx);
                         if (curAndConstraint->rangeList->elementAti(rangeLowIdx) >
                                 curAndConstraint->rangeList->elementAti(rangeHiIdx)) {
                             // Range Lower bound > Range Upper bound.
@@ -1263,13 +1283,8 @@ PluralRuleParser::~PluralRuleParser() {
 
 int32_t
 PluralRuleParser::getNumberValue(const UnicodeString& token) {
-    int32_t i;
-    char digits[128];
-
-    i = token.extract(0, token.length(), digits, UPRV_LENGTHOF(digits), US_INV);
-    digits[i]='\0';
-
-    return((int32_t)atoi(digits));
+    int32_t pos = 0;
+    return ICU_Utility::parseNumber(token, pos, 10);
 }
 
 
