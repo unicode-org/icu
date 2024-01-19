@@ -174,6 +174,7 @@ public:
     void TestIterNumeric();
     void TestBadKeywords();
     void TestGapTooSmall();
+    void TestNFCNull();
 
 private:
     // If this is too small for the test data, just increase it.

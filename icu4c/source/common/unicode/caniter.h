@@ -183,8 +183,8 @@ private:
     // transient fields
     UnicodeString buffer;
 
-    const Normalizer2 &nfd;
-    const Normalizer2Impl &nfcImpl;
+    const Normalizer2 *nfd;
+    const Normalizer2Impl *nfcImpl;
 
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
     UnicodeString *getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status); //private String[] getEquivalents(String segment)
