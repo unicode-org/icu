@@ -1190,11 +1190,6 @@ ostream& printStringList( ostream& os, const ZoneMap& zoneinfo) {
 // main
 //--------------------------------------------------------------------
 
-// Unary predicate for finding transitions after a given time
-bool isAfter(const Transition t, int64_t thresh) {
-    return t.time >= thresh;
-}
-
 /**
  * A zone type that contains only the raw and dst offset.  Used by the
  * optimizeTypeList() method.
@@ -1371,7 +1366,7 @@ void ZoneInfo::mergeFinalData(const FinalZone& fz) {
 
     vector<Transition>::iterator it =
         find_if(transitions.begin(), transitions.end(),
-                bind2nd(ptr_fun(isAfter), seconds));
+                [seconds](const Transition& t) { return t.time >= seconds; });
     transitions.erase(it, transitions.end());
 
     if (finalYear != -1) {
