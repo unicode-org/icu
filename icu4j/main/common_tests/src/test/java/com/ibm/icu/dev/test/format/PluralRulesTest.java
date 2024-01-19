@@ -1757,4 +1757,11 @@ public class PluralRulesTest extends CoreTestFmwk {
         form = xyz.select(range);
         assertEquals("Fallback form", "other", form);
     }
+    @Test
+    public void test22638LongNumberValue() {
+        PluralRules test = PluralRules.createRules(
+            "g:c%4422322222232222222222232222222322222223222222232222222322222223" +
+            "2222222322222232222222322222223222232222222222222322222223222222");
+        assertEquals("Long number value should get null", null, test);
+    }
 }

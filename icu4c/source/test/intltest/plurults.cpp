@@ -70,6 +70,7 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testSelectTrailingZeros);
     TESTCASE_AUTO(testLocaleExtension);
     TESTCASE_AUTO(testDoubleEqualSign);
+    TESTCASE_AUTO(test22638LongNumberValue);
     TESTCASE_AUTO_END;
 }
 
@@ -1063,6 +1064,16 @@ PluralRulesTest::testDoubleValue() {
         UnicodeString message(u"FixedDecimal::doubleValue() for" + DoubleToUnicodeString(inputNum));
         assertEquals(message, expVal, fd.doubleValue());
     }
+}
+
+void
+PluralRulesTest::test22638LongNumberValue() {
+    IcuTestErrorCode errorCode(*this, "test22638LongNumberValue");
+    LocalPointer<PluralRules> pr(PluralRules::createRules(
+        u"g:c%4422322222232222222222232222222322222223222222232222222322222223"
+        u"2222222322222232222222322222223222232222222222222322222223222222",
+        errorCode));
+    errorCode.expectErrorAndReset(U_UNEXPECTED_TOKEN);
 }
 
 void

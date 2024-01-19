@@ -51,6 +51,7 @@ private:
     void testSelectTrailingZeros();
     void testLocaleExtension();
     void testDoubleEqualSign();
+    void test22638LongNumberValue();
 
     void assertRuleValue(const UnicodeString& rule, double expected);
     void assertRuleKeyValue(const UnicodeString& rule, const UnicodeString& key,
