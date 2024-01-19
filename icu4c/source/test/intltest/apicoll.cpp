@@ -2517,6 +2517,13 @@ void CollationAPITest::TestGapTooSmall() {
     }
 }
 
+void CollationAPITest::TestNFCNull() {
+    IcuTestErrorCode errorCode(*this, "TestNFCNull");
+    RuleBasedCollator coll(
+       u"&†<†\u0f81\u0f81\u0f81\u0f81\u0f81|†", errorCode);
+    errorCode.expectErrorAndReset(U_UNSUPPORTED_ERROR);
+}
+
  void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
     const char* bigone = "One";
     const char* littleone = "one";
@@ -2560,6 +2567,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestIterNumeric);
     TESTCASE_AUTO(TestBadKeywords);
     TESTCASE_AUTO(TestGapTooSmall);
+    TESTCASE_AUTO(TestNFCNull);
     TESTCASE_AUTO_END;
 }
 
