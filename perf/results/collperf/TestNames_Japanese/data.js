@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705660127206,
+  "lastUpdate": 1705662503664,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34396,6 +34396,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5708260.3482,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7cec4a9308b0d693b08f0bc35a2a08ce6d5f4646",
+          "message": "ICU-21107 Replace use of adapter and binder classes removed in C++17.",
+          "timestamp": "2024-01-19T19:49:44+09:00",
+          "tree_id": "8d10c33edb1e82c9049488e3e35ed8814a73ce0d",
+          "url": "https://github.com/unicode-org/icu/commit/7cec4a9308b0d693b08f0bc35a2a08ce6d5f4646"
+        },
+        "date": 1705662430845,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.2064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20017751.6937,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5414859.9057,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19216618.7303,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5787729.3447,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
