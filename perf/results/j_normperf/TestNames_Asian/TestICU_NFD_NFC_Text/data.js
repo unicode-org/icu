@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705658792869,
+  "lastUpdate": 1705659649835,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32818,6 +32818,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.580936044023254,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "c8336085bb7489650c449f05c13be7b6a660fd89",
+          "message": "ICU-22637 Rewrite custom timezone parser\n\nSee #2792",
+          "timestamp": "2024-01-19T01:44:52-08:00",
+          "tree_id": "f26273c3c36ce63d5c80fabed5cea318955aa21f",
+          "url": "https://github.com/unicode-org/icu/commit/c8336085bb7489650c449f05c13be7b6a660fd89"
+        },
+        "date": 1705659579639,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.632823774899574,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
