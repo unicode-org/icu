@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705637852080,
+  "lastUpdate": 1705638724415,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34288,6 +34288,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16868159.5542,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7b690aa8c797ca3fead7821200f1b1b10093bcfc",
+          "message": "ICU-22639 Revert now obsolete bug workarounds.\n\nThis reverts changes from commit 47b9a517be000559499dcfcb2ed62eace740e194.\nThis reverts changes from commit 214ae60d9425e5cc78580d0dddf3bbbe4c80e991.",
+          "timestamp": "2024-01-19T13:11:49+09:00",
+          "tree_id": "9c5b90e11bb0ac463376ac7cccc1376f7f71a481",
+          "url": "https://github.com/unicode-org/icu/commit/7b690aa8c797ca3fead7821200f1b1b10093bcfc"
+        },
+        "date": 1705638658665,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 330.6778,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 34761369.2284,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14803021.9588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 34560131.4722,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16502523.9088,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
