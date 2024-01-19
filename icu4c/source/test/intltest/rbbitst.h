@@ -103,6 +103,7 @@ public:
     void TestBug22584();
     void TestBug22585();
     void TestBug22602();
+    void TestBug22636();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();

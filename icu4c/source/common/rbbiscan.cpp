@@ -530,7 +530,13 @@ UBool RBBIRuleScanner::doParseActions(int32_t action)
             n = fNodeStack[fNodeStackPtr];
             uint32_t v = u_charDigitValue(fC.fChar);
             U_ASSERT(v < 10);
-            n->fVal = n->fVal*10 + v;
+            int64_t updated = static_cast<int64_t>(n->fVal)*10 + v;
+            // Avoid overflow n->fVal
+            if (updated > INT32_MAX) {
+                error(U_BRK_RULE_SYNTAX);
+                break;
+            }
+            n->fVal = static_cast<int32_t>(updated);
             break;
         }
 

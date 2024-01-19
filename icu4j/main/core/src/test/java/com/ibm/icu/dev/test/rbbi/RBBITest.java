@@ -1002,6 +1002,24 @@ public class RBBITest extends CoreTestFmwk {
             fail("TestBug22602: Unexpected exception while new RuleBasedBreakIterator() with a long string followed by a ';': " + e);
         }
     }
+    @Test
+    public void TestBug22636() {
+        try {
+            RuleBasedBreakIterator bi = new RuleBasedBreakIterator("A{77777777777777};");
+            fail("TestBug22636: new RuleBasedBreakIterator() with a large status value inside {}:  should throw IllegalArgumentException");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with a large status value inside {}.
+        }
+        try {
+            RuleBasedBreakIterator bi2 = new RuleBasedBreakIterator("A{2147483648};");
+            fail("TestBug22636: new RuleBasedBreakIterator() with a large status value inside {}:  should throw IllegalArgumentException");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with a large status value inside {}.
+        }
+        RuleBasedBreakIterator bi3 = new RuleBasedBreakIterator("A{2147483647};");
+    }
     /* Test preceding(index) and following(index), with semi-random indexes.
      * The random indexes are produced in clusters that are relatively closely spaced,
      * to increase the occurrences of hits to the internal break cache.

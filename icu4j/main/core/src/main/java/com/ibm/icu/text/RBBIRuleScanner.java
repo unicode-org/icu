@@ -412,7 +412,11 @@ class RBBIRuleScanner {
         {
             n = fNodeStack[fNodeStackPtr];
             int v = UCharacter.digit((char) fC.fChar, 10);
-            n.fVal = n.fVal * 10 + v;
+            long update = (long)(n.fVal) * 10 + v;
+            if (update > Integer.MAX_VALUE) {
+                error(RBBIRuleBuilder.U_BRK_RULE_SYNTAX);
+            }
+            n.fVal = (int)(update);
             break;
         }
 
