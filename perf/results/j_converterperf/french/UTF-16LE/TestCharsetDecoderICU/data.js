@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705638446863,
+  "lastUpdate": 1705640294760,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16468,6 +16468,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.734704386142092,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "c5160765d40cf18751f4b3407e1cc7e8800c1cbe",
+          "message": "ICU-22639 Clone the calendar so we don't mess with the real one.",
+          "timestamp": "2024-01-19T08:07:22+09:00",
+          "tree_id": "392cd07c74d4cd17a45694c2bd1cf12de9aeeff5",
+          "url": "https://github.com/unicode-org/icu/commit/c5160765d40cf18751f4b3407e1cc7e8800c1cbe"
+        },
+        "date": 1705640224625,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.7329300627365347,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
