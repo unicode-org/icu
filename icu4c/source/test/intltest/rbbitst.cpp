@@ -149,6 +149,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22584);
     TESTCASE_AUTO(TestBug22585);
     TESTCASE_AUTO(TestBug22602);
+    TESTCASE_AUTO(TestBug22636);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5887,6 +5888,19 @@ void RBBITest::TestBug22602() {
     UParseError pe {};
     UErrorCode ec {U_ZERO_ERROR};
     RuleBasedBreakIterator bi(rule, pe, ec);
+}
+
+void RBBITest::TestBug22636() {
+    UParseError pe {};
+    UErrorCode ec {U_ZERO_ERROR};
+    RuleBasedBreakIterator bi(u"A{77777777777777};", pe, ec);
+    assertEquals(WHERE, ec, U_BRK_RULE_SYNTAX);
+    ec = U_ZERO_ERROR;
+    RuleBasedBreakIterator bi2(u"A{2147483648};", pe, ec);
+    assertEquals(WHERE, ec, U_BRK_RULE_SYNTAX);
+    ec = U_ZERO_ERROR;
+    RuleBasedBreakIterator bi3(u"A{2147483647};", pe, ec);
+    assertEquals(WHERE, ec, U_ZERO_ERROR);
 }
 
 void RBBITest::TestBug22584() {
