@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705662503664,
+  "lastUpdate": 1705714551666,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34450,6 +34450,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5787729.3447,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9832f48e229010e2a5d413eb8d48cacc3cafbdcd",
+          "message": "ICU-22636 Return U_BRK_RULE_SYNTAX when status number is too large\n\nSee #2793",
+          "timestamp": "2024-01-19T17:16:54-08:00",
+          "tree_id": "1f0a7cf45c1ed76faa6c21a5a7eb870fdcf5c630",
+          "url": "https://github.com/unicode-org/icu/commit/9832f48e229010e2a5d413eb8d48cacc3cafbdcd"
+        },
+        "date": 1705714469706,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 218.7742,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 19763786.2846,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5298998.8696,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19070550.4299,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5757850.6082,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
