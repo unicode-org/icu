@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705714792108,
+  "lastUpdate": 1705896010779,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -57418,6 +57418,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 4.6283,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "9167d6beaf4be16f2f88ec9997563d21d4251757",
+          "message": "ICU-21107 Update configure files from configure.ac using autoreconf.",
+          "timestamp": "2024-01-22T12:30:24+09:00",
+          "tree_id": "5199ff2a053426e21ec1340797831ad7a4213258",
+          "url": "https://github.com/unicode-org/icu/commit/9167d6beaf4be16f2f88ec9997563d21d4251757"
+        },
+        "date": 1705895937949,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.2969,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.0089,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.605,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.6043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 4.9353,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.2964,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.2972,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.5891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 4.9724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 4.934,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 4.6268,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
