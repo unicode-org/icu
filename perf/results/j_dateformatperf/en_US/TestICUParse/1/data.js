@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705714123552,
+  "lastUpdate": 1705895315735,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16438,6 +16438,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 373.8244110468651,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "9167d6beaf4be16f2f88ec9997563d21d4251757",
+          "message": "ICU-21107 Update configure files from configure.ac using autoreconf.",
+          "timestamp": "2024-01-22T12:30:24+09:00",
+          "tree_id": "5199ff2a053426e21ec1340797831ad7a4213258",
+          "url": "https://github.com/unicode-org/icu/commit/9167d6beaf4be16f2f88ec9997563d21d4251757"
+        },
+        "date": 1705895240503,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 368.4378876802791,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
