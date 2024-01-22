@@ -697,11 +697,6 @@ public final class ZoneMeta {
             }
             pos[0]++;
             int start = pos[0];
-            // Utility.parseNumber also accept non ASCII digits so we need to first
-            // check we only have ASCII chars.
-            if (!id.chars().allMatch(c -> c < 128)) {
-                return false;
-            }
             hour = Utility.parseNumber(id, pos, 10);
             if (pos[0] == id.length()) {
                 // Handle the following cases

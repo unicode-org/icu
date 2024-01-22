@@ -1218,9 +1218,9 @@ void TimeZoneTest::TestCustomParse()
         {u"GMT-B111",        kUnparseable}, // ICU-22637
         {u"GMT-b111",        kUnparseable}, // ICU-22637
         {u"GMT-0b11",        kUnparseable}, // ICU-22637
-        {u"GMT-๑๒",          kUnparseable}, // ICU-22637
-        {u"GMT-๑๒:๓๔",       kUnparseable}, // ICU-22637
-        {u"GMT+๑๒:๓๔:๕๖",    kUnparseable}, // ICU-22637
+        {u"GMT-๑๒",          (-((12*60)*60))}, // ICU-22637
+        {u"GMT-๑๒:๓๔",       (-((12*60+34)*60))}, // ICU-22637
+        {u"GMT+๑๒:๓๔:๕๖",    ((12*60+34)*60+56)}, // ICU-22637
         {0,           0}
     };
 
