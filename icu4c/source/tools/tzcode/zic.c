@@ -3,9 +3,6 @@
 ** 2006-07-17 by Arthur David Olson.
 */
 
-/* https://man7.org/linux/man-pages/man2/symlink.2.html */
-#define _POSIX_C_SOURCE 200112L
-
 /* Enable extensions and modifications for ICU. */
 #define ICU
 
