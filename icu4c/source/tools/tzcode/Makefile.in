@@ -27,7 +27,8 @@ TDATA =	$(PRIMARY_DATA) $(SUPPLEMENTAL_DATA)
 
 TZDIR=zoneinfo
 
-CFLAGS+=-D_POSIX_C_SOURCE
+# https://man7.org/linux/man-pages/man2/symlink.2.html
+CFLAGS+=-D_POSIX_C_SOURCE=200112L
 CPPFLAGS+= -DTZDIR=\"$(TZDIR)\" 
 
 # more data
