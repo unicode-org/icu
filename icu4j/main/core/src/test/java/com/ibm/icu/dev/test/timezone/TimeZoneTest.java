@@ -315,9 +315,9 @@ public class TimeZoneTest extends CoreTestFmwk
             "GMT-B111",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
             "GMT-b111",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
             "GMT-0b11",         "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-๑๒",           "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT-๑๒:๓๔",        "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
-            "GMT+๑๒:๓๔:๕๖",     "0",            TimeZone.UNKNOWN_ZONE_ID, // ICU-22637
+            "GMT-๑๒",           "-43200",       "GMT-12:00", // ICU-22637
+            "GMT-๑๒:๓๔",        "-45240",       "GMT-12:34", // ICU-22637
+            "GMT+๑๒:๓๔:๕๖",     "45296",        "GMT+12:34:56", // ICU-22637
         };
         for (int i = 0; i < DATA.length; i += 3) {
             String id = DATA[i];

@@ -1376,11 +1376,6 @@ TimeZone::parseCustomID(const UnicodeString& id, int32_t& sign,
     if (0 != u_strncasecmp(id.getBuffer(), GMT_ID, GMT_ID_LENGTH, 0)) {
         return false;
     }
-    // ICU_Utility::parseNumber also accept non ASCII digits so we need to first
-    // check we only have ASCII chars.
-    if (!uprv_isInvariantUString(id.getBuffer(), id.length())) {
-        return false;
-    }
     sign = 1;
     hour = 0;
     min = 0;
