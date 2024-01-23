@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705983999683,
+  "lastUpdate": 1705984772477,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -34774,6 +34774,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 17395413.4402,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e81b8727aaafa306858565c0e4116703c4893459",
+          "message": "ICU-22532 Move the definition of _POSIX_C_SOURCE to the Makefile.\n\nThis is already set in Makefile.in and therefore results in a macro\nredefined warning if also defined in the source file. It seems that\nsetting this in the Makefile was how it was originally intended do be\ndone (but then it was just never updated there).",
+          "timestamp": "2024-01-23T13:00:54+09:00",
+          "tree_id": "9a6422a3f0dee226460d2bc21a04a4489dc5d0f3",
+          "url": "https://github.com/unicode-org/icu/commit/e81b8727aaafa306858565c0e4116703c4893459"
+        },
+        "date": 1705984703287,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 320.3355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35568377.5509,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14832891.6699,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 34906318.9455,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16469186.0393,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
