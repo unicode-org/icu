@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1706047073299,
+  "lastUpdate": 1706048003895,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20698,6 +20698,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 39.4687,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "400d97e7d206ffae77c294faeb9e2aa3850c6c23",
+          "message": "ICU-22533 Update Maven CLI instructions for multi-module ICU4J\n\nSee #2791",
+          "timestamp": "2024-01-23T13:59:56-08:00",
+          "tree_id": "e634878e4f29d0755bdf5063ebaffc4befeef719",
+          "url": "https://github.com/unicode-org/icu/commit/400d97e7d206ffae77c294faeb9e2aa3850c6c23"
+        },
+        "date": 1706047930008,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 19.1769,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 39.8037,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
