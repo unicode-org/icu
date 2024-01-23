@@ -413,18 +413,18 @@ cd $ICU4J_ROOT
 ```
 cd $ICU4J_ROOT
 mvn clean
-mvn verify 2>&1 | tee $NOTES/icu4j-newData-mvnCheck.txt
+mvn install 2>&1 | tee $NOTES/icu4j-newData-mvnCheck.txt
 ```
 
 It is possible to re-run a specific test class or method if necessary when fixing bugs.
 
 For example (using artifactId, full class name, test all methods):
 ```
-mvn test -pl :core -Dtest=com.ibm.icu.dev.test.util.LocaleBuilderTest
+mvn install -pl :core -Dtest=com.ibm.icu.dev.test.util.LocaleBuilderTest
 ```
 or (example of using module path, class name, one method):
 ```
-mvn test -pl main/common_tests -Dtest=MeasureUnitTest#TestGreek
+mvn install -pl main/common_tests -Dtest=MeasureUnitTest#TestGreek
 ```
 
 13b. Optionally run the tests in exhautive mode
@@ -433,12 +433,12 @@ Optionally run before committing changes, or run to diagnose failures from
 running exhastive CI tests in the PR using `/azp run CI-Exhaustive`: 
 ```
 cd $ICU4J_ROOT
-mvn verify -DICU.exhaustive=10 2>&1 | tee $NOTES/icu4j-newData-mvnCheckEx.txt
+mvn install -DICU.exhaustive=10 2>&1 | tee $NOTES/icu4j-newData-mvnCheckEx.txt
 ```
 
 Running a specific test is the same as above:
 ```
-mvn test --pl :core -DICU.exhaustive=10 -Dtest=ExhaustiveNumberTest
+mvn install --pl :core -DICU.exhaustive=10 -Dtest=ExhaustiveNumberTest
 ```
 
 ## 14 Investigate and fix maven check test failures

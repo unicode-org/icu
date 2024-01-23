@@ -268,7 +268,7 @@ and by the Maven build configuration. See [Maven Setup for Java](../../devsetup/
 Once the JDK and Maven are installed, run the desired Maven target. For example:
 
 ~~~
-~/icu/icu4j$ mvn verify
+~/icu/icu4j$ mvn install
 [INFO] Scanning for projects...
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Build Order:
