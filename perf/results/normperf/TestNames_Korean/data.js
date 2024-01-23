@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1705984073743,
+  "lastUpdate": 1705984882496,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38518,6 +38518,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 26.2903,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e81b8727aaafa306858565c0e4116703c4893459",
+          "message": "ICU-22532 Move the definition of _POSIX_C_SOURCE to the Makefile.\n\nThis is already set in Makefile.in and therefore results in a macro\nredefined warning if also defined in the source file. It seems that\nsetting this in the Makefile was how it was originally intended do be\ndone (but then it was just never updated there).",
+          "timestamp": "2024-01-23T13:00:54+09:00",
+          "tree_id": "9a6422a3f0dee226460d2bc21a04a4489dc5d0f3",
+          "url": "https://github.com/unicode-org/icu/commit/e81b8727aaafa306858565c0e4116703c4893459"
+        },
+        "date": 1705984809325,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 10.1176,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 14.9932,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 14.9627,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 8.2842,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 26.0936,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 26.3812,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
