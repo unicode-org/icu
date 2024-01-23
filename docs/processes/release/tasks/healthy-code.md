@@ -586,7 +586,7 @@ To use Eclipse, do the following:
 For ICU4J,
 
 ```sh
-$ mvn verify -DICU.exhaustive=10
+$ mvn install -DICU.exhaustive=10
 ```
 
 For ICU4C, testing with an optimized build will help reduce the elapsed time

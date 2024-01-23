@@ -37,6 +37,37 @@ for the current minimum version.
 The Maven page lists [system requirements](https://maven.apache.org/download.cgi),
 which includes a minimum of JDK 8 as of ICU 74.
 
+## Maven multi-module projects
+
+ICU4J's codebase is structured as a "multi-module" Maven project.
+In other words, the Maven project is divided into submodules that have dependencies on each other.
+Multi-module projects are not uncommon in Maven over the several years,
+yet the support for them by Maven is not complete.
+
+Commonly-found instructions to use Maven at the command line
+are usually designed for simple "single-module" Maven projects.
+In such cases, the command names correspond intuitively to their function:
+`mvn test` for running unit tests, `mvn package` for creating jar files, etc.
+However, multi-module projects have the tradeoff between time and complexity:
+running `mvn test` at the root recompiles all the sources
+even if a module's sources are all unchanged,
+which takes longer than it otherwise could.
+The alternative is to always instruct Maven to compile and locally cache the artifact
+for each submodule,
+which speeds up tasks by avoiding duplicate compilation and testing effort,
+but also changes the distinct Maven commands
+`mvn {test, integration-test, ...}`
+all into
+`mvn install`
+that are instead differentiated by appropriate options.
+
+The instructions in this page for command line usage will choose,
+from the 2 alternatives above,
+the option that consistently uses `mvn install` for all Maven tasks.
+Note that this choice should not affect IDEs with well working native Maven support like IntelliJ and Eclipse.
+See the "IDE Setup" section for more details on how IDEs handle Maven projects differently than
+the standard command line style usage of Maven.
+
 ## IDE Setup
 
 Users of IDEs should familiarize themselves with the information about how to use Maven at
@@ -101,14 +132,11 @@ by adding this section to the settings:
     "command-runner.commands": {
         // The following commands assume your VS Code workspace is rooted at `<ICU_ROOT>/icu4j`. If not,
         // then adjust accordingly.
-        "core > all > compile": "cd ${workspaceFolder}; mvn -am -pl main/core compile",
-        "core > all > test": "cd ${workspaceFolder}; mvn -am -pl main/core test -Dsurefire.failIfNoSpecifiedTests=false",
+        "core > all > test": "cd ${workspaceFolder}; mvn -am -pl main/core install",
         "core > number > test": "cd ${workspaceFolder}; mvn -am -pl main/core test -Dtest=\"com/ibm/icu/dev/test/number/*,com/ibm/icu/dev/impl/number/*\" -Dsurefire.failIfNoSpecifiedTests=false",
         "core > text > test": "cd ${workspaceFolder}; mvn -am -pl main/core test -Dtest=\"com.ibm.icu.dev.test.text.*\" -Dsurefire.failIfNoSpecifiedTests=false",
-        "charset > compile": "cd ${workspaceFolder}; mvn -am -pl main/charset compile",
-        "charset > test": "cd ${workspaceFolder}; mvn -am -pl main/charset test -Dsurefire.failIfNoSpecifiedTests=false",
-        "localespi > compile": "cd ${workspaceFolder}; mvn -am -pl main/localespi compile",
-        "localespi > test": "cd ${workspaceFolder}; mvn -am -pl main/localespi test -Dsurefire.failIfNoSpecifiedTests=false",
+        "charset > test": "cd ${workspaceFolder}; mvn -am -pl main/charset test",
+        "common_tests > integration test": "cd ${workspaceFolder}; mvn -am -pl main/localespi test",
     }
     //...
 }
@@ -123,23 +151,24 @@ After the palette appears, you can choose which Maven build target to execute.
 ## Usage at the command line
 
 Maven divides its concept of a build into a "lifecycle" of a linear sequence of steps, called "phases".
-These phases have a predefined order, and each phase can only begin if all of the previous phases have finished successfully.
-Phases also serve as default build targets.
-The sequence of phases include ... `compile` ... `test` ... `package` ... `integration-test` ... `verify` ... `deploy`.
+These phases correspond to common good practice tasks of a project, and they have a predefined order.
+Each phase can only begin if all of the previous phases have finished successfully.
+The sequence of phases include ... `compile` ... `test` ... `package` ... `integration-test` ... `verify` ... `install` ... `deploy`.
 
-### Compile
-
-At the root of the project, you can run `mvn compile` to build/compile, and `mvn test` to run all of the tests (after first compiling successfully).
+In a simple Maven project, the phases also serve as default build targets.
+However, as mentioned above,
+ICU4J is structured as a multi-module Maven project.
+The instructions here for command line Maven usage will take the approach of using the `install` target
+for all tasks.
+Options can be used to control whether tests are executed, and which ones.
 
 ### Testing
 
 To only execute a command within a submodule of the project, from the root, use the `-am -pl <projectlist>` syntax like this:
 
 ```
-mvn test -am -pl main/core
+mvn install -am -pl main/core
 ```
-
-The `test` target runs unit tests only, while `integraiton-test` runs unit tests *and* integration tests.
 
 where `<projectlist>` is a comma-separated list of names of the subfolders which contain the submodule configuration pom.xml files.
 
@@ -151,30 +180,30 @@ If you want to run only a specific test(s), use the `-Dtest="<test>"` option, wh
 The `test` target will only run unit tests (excludes integration tests). Ex:
 
 ```
-mvn test -am -pl main/core
+mvn install -am -pl main/core -DskipITs
 ```
 
 #### Run all tests (integration and unit tests)
 
-The `integration-test` target will run integration tests *and* unit tests. Ex:
+All tests (unit tests and integration tests) will run by default.
 
 ```
-mvn integration-test -am -pl main/core
+mvn install -am -pl main/core
 ```
 
 #### Run a single test
 ```
-mvn test -Dtest="ULocaleTest" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="ULocaleTest" -Dsurefire.failIfNoSpecifiedTests=false -DskipITs
 ```
 or
 ```
-mvn test -Dtest="com.ibm.icu.dev.test.util.ULocaleTest" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="com.ibm.icu.dev.test.util.ULocaleTest" -Dsurefire.failIfNoSpecifiedTests=false -DskipITs
 ```
 
 #### Run a single method in a single test
 
 ```
-mvn test -Dtest="ULocaleTest#TestGetAvailableByType" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="ULocaleTest#TestGetAvailableByType" -Dsurefire.failIfNoSpecifiedTests=false -DskipITs
 ```
 
 #### Run multiple tests
@@ -182,21 +211,23 @@ You can use regular expression patterns and comma-separate lists,
 such as:
 
 ```
-mvn test -Dtest="RBBI*" -Dsurefire.failIfNoSpecifiedTests=false
-mvn test -Dtest="*Locale*" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="RBBI*" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="*Locale*" -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
 or
 
 ```
-mvn test -Dtest="*Locale*,RBBI*" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="*Locale*,RBBI*" -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
 If you want to run tests according to the package structure of the classes,
 then you should use the filesystem notation for the test files in the regular expression expansion.
-Therefore, this syntax will not work: `mvn test -Dtest="com.ibm.icu.dev.test.util.*" -Dsurefire.failIfNoSpecifiedTests=false`. Instead, you want to use this syntax:
+Therefore, this syntax will not work:
+`mvn install -Dtest="com.ibm.icu.dev.test.util.*" -Dsurefire.failIfNoSpecifiedTests=false`.
+Instead, you want to use this syntax:
 ```
-mvn test -Dtest="com/ibm/icu/dev/test/util/*" -Dsurefire.failIfNoSpecifiedTests=false
+mvn install -Dtest="com/ibm/icu/dev/test/util/*" -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
 #### Run in exhaustive mode
@@ -212,7 +243,7 @@ See `TestFmwk.java` for more details,
 and `ExhaustiveNumberTest.java` for an example of a test using it.
 
 ```
-mvn integration-test -DICU.exhaustive=10
+mvn install -DICU.exhaustive=10
 ```
 
 #### Skip tests
