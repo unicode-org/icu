@@ -243,8 +243,8 @@ void PluralRulesTest::testAPI(/*char *par*/)
         dataerrln("ERROR: Could not create PluralRules for testing fractions - exiting");
         return;
     }
-    double fData[] =     {-101, -100, -1,     -0.0,  0,     0.1,  1,     1.999,  2.0,   100,   100.001 };
-    bool isKeywordA[] = {true, false, false, false, false, true, false,  true,   false, false, true };
+    double fData[] =     {-101, -100, -1,     -0.0,  0,     0.1,  1,     1.999,  2.0,   100,   100.001, 1.39e188 };
+    bool isKeywordA[] = {true, false, false, false, false, true, false,  true,   false, false, true, true };
     for (int32_t i=0; i<UPRV_LENGTHOF(fData); i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
              errln("File %s, Line %d, ERROR: plural rules for decimal fractions test failed!\n"

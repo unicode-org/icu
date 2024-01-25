@@ -1778,7 +1778,9 @@ void FixedDecimal::init(double n, int32_t v, int64_t f, int32_t e, int32_t c) {
     if (exponent == 0) {
         exponent = c;
     }
-    if (_isNaN || _isInfinite) {
+    if (_isNaN || _isInfinite ||
+        source > static_cast<double>(U_INT64_MAX) ||
+        source < static_cast<double>(U_INT64_MIN)) {
         v = 0;
         f = 0;
         intValue = 0;
