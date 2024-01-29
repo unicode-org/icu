@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1706214097705,
+  "lastUpdate": 1706559000979,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -16798,6 +16798,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1975.3965330997867,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e1415d1282b058e701d41d75e42b0bffed5f8477",
+          "message": "ICU-22635 Avoid integer-overflow for invalid large UChar32",
+          "timestamp": "2024-01-29T11:57:12-08:00",
+          "tree_id": "037f96ae21f0c3b9d50004e2ca03d6b8ca93c720",
+          "url": "https://github.com/unicode-org/icu/commit/e1415d1282b058e701d41d75e42b0bffed5f8477"
+        },
+        "date": 1706558875391,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2010.836999400789,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
