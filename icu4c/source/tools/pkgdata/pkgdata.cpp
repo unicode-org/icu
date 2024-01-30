@@ -60,11 +60,9 @@ U_CDECL_BEGIN
 U_CDECL_END
 
 #if U_HAVE_POPEN
-
-using icu::LocalPointerBase;
-
+U_NAMESPACE_BEGIN
 U_DEFINE_LOCAL_OPEN_POINTER(LocalPipeFilePointer, FILE, pclose);
-
+U_NAMESPACE_END
 #endif
 
 using icu::LocalMemory;
@@ -2184,7 +2182,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 static UBool getPkgDataPath(const char *cmd, UBool verbose, char *buf, size_t items) {
     icu::CharString cmdBuf;
     UErrorCode status = U_ZERO_ERROR;
-    LocalPipeFilePointer p;
+    icu::LocalPipeFilePointer p;
     size_t n;
 
     cmdBuf.append(cmd, status);
