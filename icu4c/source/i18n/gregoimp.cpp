@@ -34,7 +34,7 @@ int64_t ClockMath::floorDivide(int64_t numerator, int64_t denominator) {
 
 int32_t ClockMath::floorDivide(int32_t numerator, int32_t denominator,
                           int32_t* remainder) {
-    auto quotient = floorDivide(numerator, denominator);
+    int64_t quotient = floorDivide(numerator, denominator);
     if (remainder != nullptr) {
       *remainder = numerator - (quotient * denominator);
     }

@@ -190,6 +190,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestDangiOverflowIsLeapMonthBetween22507);
     TESTCASE_AUTO(TestRollWeekOfYear);
     TESTCASE_AUTO(TestFirstDayOfWeek);
+    TESTCASE_AUTO(TestAddOverflow);
 
     TESTCASE_AUTO(TestChineseCalendarComputeMonthStart);
 
@@ -5659,6 +5660,48 @@ void CalendarTest::TestChineseCalendarComputeMonthStart() {  // ICU-22639
                 chinese.hasLeapMonthBetweenWinterSolstices);
 }
 
+void CalendarTest::TestAddOverflow() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    LocalPointer<Calendar> calendar(
+        Calendar::createInstance(Locale("en"), status),
+        status);
+    if (failure(status, "Calendar::createInstance")) return;
+    for (int32_t i = 0; i < UCAL_FIELD_COUNT; i++) {
+        status = U_ZERO_ERROR;
+        calendar->setTime(0, status);
+        calendar->add(static_cast<UCalendarDateFields>(i), INT32_MAX / 2, status);
+        calendar->add(static_cast<UCalendarDateFields>(i), INT32_MAX, status);
+        if ((i == UCAL_ERA) ||
+            (i == UCAL_YEAR) ||
+            (i == UCAL_YEAR_WOY) ||
+            (i == UCAL_EXTENDED_YEAR) ||
+            (i == UCAL_IS_LEAP_MONTH) ||
+            (i == UCAL_MONTH) ||
+            (i == UCAL_ORDINAL_MONTH) ||
+            (i == UCAL_ZONE_OFFSET) ||
+            (i == UCAL_DST_OFFSET)) {
+            assertTrue("add INT32_MAX should fail", U_FAILURE(status));
+        } else {
+            assertTrue("add INT32_MAX should still success", U_SUCCESS(status));
+        }
+
+        status = U_ZERO_ERROR;
+        calendar->setTime(0, status);
+        calendar->add(static_cast<UCalendarDateFields>(i), INT32_MIN / 2, status);
+        calendar->add(static_cast<UCalendarDateFields>(i), INT32_MIN, status);
+        if ((i == UCAL_YEAR) ||
+            (i == UCAL_YEAR_WOY) ||
+            (i == UCAL_EXTENDED_YEAR) ||
+            (i == UCAL_IS_LEAP_MONTH) ||
+            (i == UCAL_ZONE_OFFSET) ||
+            (i == UCAL_DST_OFFSET)) {
+            assertTrue("add INT32_MIN should fail", U_FAILURE(status));
+        } else {
+            assertTrue("add INT32_MIN should still success", U_SUCCESS(status));
+        }
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
