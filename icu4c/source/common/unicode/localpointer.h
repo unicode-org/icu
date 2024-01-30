@@ -548,46 +548,52 @@ public:
  * @stable ICU 4.4
  */
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
-    class LocalPointerClassName : public LocalPointerBase<Type> { \
-    public: \
-        using LocalPointerBase<Type>::operator*; \
-        using LocalPointerBase<Type>::operator->; \
-        explicit LocalPointerClassName(Type *p=nullptr) : LocalPointerBase<Type>(p) {} \
-        LocalPointerClassName(LocalPointerClassName &&src) noexcept \
-                : LocalPointerBase<Type>(src.ptr) { \
-            src.ptr=nullptr; \
-        } \
-        /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */ \
-        explicit LocalPointerClassName(std::unique_ptr<Type, decltype(&closeFunction)> &&p) \
-                : LocalPointerBase<Type>(p.release()) {} \
-        ~LocalPointerClassName() { if (ptr != nullptr) { closeFunction(ptr); } } \
-        LocalPointerClassName &operator=(LocalPointerClassName &&src) noexcept { \
-            if (ptr != nullptr) { closeFunction(ptr); } \
-            LocalPointerBase<Type>::ptr=src.ptr; \
-            src.ptr=nullptr; \
-            return *this; \
-        } \
-        /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */ \
-        LocalPointerClassName &operator=(std::unique_ptr<Type, decltype(&closeFunction)> &&p) { \
-            adoptInstead(p.release()); \
-            return *this; \
-        } \
-        void swap(LocalPointerClassName &other) noexcept { \
-            Type *temp=LocalPointerBase<Type>::ptr; \
-            LocalPointerBase<Type>::ptr=other.ptr; \
-            other.ptr=temp; \
-        } \
-        friend inline void swap(LocalPointerClassName &p1, LocalPointerClassName &p2) noexcept { \
-            p1.swap(p2); \
-        } \
-        void adoptInstead(Type *p) { \
-            if (ptr != nullptr) { closeFunction(ptr); } \
-            ptr=p; \
-        } \
-        operator std::unique_ptr<Type, decltype(&closeFunction)> () && { \
-            return std::unique_ptr<Type, decltype(&closeFunction)>(LocalPointerBase<Type>::orphan(), closeFunction); \
-        } \
+    using LocalPointerClassName = LocalOpenPointer<Type, closeFunction>
+
+#ifndef U_IN_DOXYGEN
+template <typename Type, auto closeFunction>
+class LocalOpenPointer : public LocalPointerBase<Type> {
+    using LocalPointerBase<Type>::ptr;
+public:
+    using LocalPointerBase<Type>::operator*;
+    using LocalPointerBase<Type>::operator->;
+    explicit LocalOpenPointer(Type *p=nullptr) : LocalPointerBase<Type>(p) {}
+    LocalOpenPointer(LocalOpenPointer &&src) noexcept
+            : LocalPointerBase<Type>(src.ptr) {
+        src.ptr=nullptr;
     }
+    /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */
+    explicit LocalOpenPointer(std::unique_ptr<Type, decltype(closeFunction)> &&p)
+            : LocalPointerBase<Type>(p.release()) {}
+    ~LocalOpenPointer() { if (ptr != nullptr) { closeFunction(ptr); } }
+    LocalOpenPointer &operator=(LocalOpenPointer &&src) noexcept {
+        if (ptr != nullptr) { closeFunction(ptr); }
+        LocalPointerBase<Type>::ptr=src.ptr;
+        src.ptr=nullptr;
+        return *this;
+    }
+    /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */
+    LocalOpenPointer &operator=(std::unique_ptr<Type, decltype(closeFunction)> &&p) {
+        adoptInstead(p.release());
+        return *this;
+    }
+    void swap(LocalOpenPointer &other) noexcept {
+        Type *temp=LocalPointerBase<Type>::ptr;
+        LocalPointerBase<Type>::ptr=other.ptr;
+        other.ptr=temp;
+    }
+    friend inline void swap(LocalOpenPointer &p1, LocalOpenPointer &p2) noexcept {
+        p1.swap(p2);
+    }
+    void adoptInstead(Type *p) {
+        if (ptr != nullptr) { closeFunction(ptr); }
+        ptr=p;
+    }
+    operator std::unique_ptr<Type, decltype(closeFunction)> () && {
+        return std::unique_ptr<Type, decltype(closeFunction)>(LocalPointerBase<Type>::orphan(), closeFunction);
+    }
+};
+#endif
 
 U_NAMESPACE_END
 
