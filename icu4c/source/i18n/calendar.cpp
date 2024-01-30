@@ -2129,9 +2129,19 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
 
     switch (field) {
     case UCAL_ERA:
-        set(field, get(field, status) + amount);
+      {
+        int32_t era = get(UCAL_ERA, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (uprv_add32_overflow(era, amount, &era)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        set(UCAL_ERA, era);
         pinField(UCAL_ERA, status);
         return;
+      }
 
     case UCAL_YEAR:
     case UCAL_YEAR_WOY:
@@ -2147,7 +2157,10 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
         if (era == 0) {
           const char * calType = getType();
           if ( uprv_strcmp(calType,"gregorian")==0 || uprv_strcmp(calType,"roc")==0 || uprv_strcmp(calType,"coptic")==0 ) {
-            amount = -amount;
+            if (uprv_mul32_overflow(amount, -1, &amount)) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
           }
         }
       }
@@ -2159,7 +2172,16 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
       {
         UBool oldLenient = isLenient();
         setLenient(true);
-        set(field, get(field, status) + amount);
+        int32_t value = get(field, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (uprv_add32_overflow(value, amount, &value)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        set(field, value);
+
         pinField(UCAL_DAY_OF_MONTH, status);
         if(oldLenient==false) {
           complete(status); /* force recalculate */

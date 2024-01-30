@@ -332,6 +332,7 @@ public: // package
     void TestDangiOverflowIsLeapMonthBetween22507();
 
     void TestFWWithISO8601();
+    void TestAddOverflow();
     void TestRollWeekOfYear();
 
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
