@@ -1103,6 +1103,18 @@ ulocimp_setKeywordValue(const char* keywords,
  */
 #define _isTerminator(a)  ((a==0)||(a=='.')||(a=='@'))
 
+namespace {
+
+inline bool _isBCP47Extension(const char* p) {
+    return p[0] == '-' &&
+           (p[1] == 't' || p[1] == 'T' ||
+            p[1] == 'u' || p[1] == 'U' ||
+            p[1] == 'x' || p[1] == 'X') &&
+           p[2] == '-';
+}
+
+}  // namespace
+
 /**
  * Lookup 'key' in the array 'list'.  The array 'list' should contain
  * a nullptr entry, followed by more entries, and a second nullptr entry.
@@ -1820,61 +1832,52 @@ uloc_getVariant(const char* localeID,
                 int32_t variantCapacity,
                 UErrorCode* err)
 {
-    CharString tempBuffer;
-    const char* tmpLocaleID;
     int32_t i=0;
 
     if(err==nullptr || U_FAILURE(*err)) {
         return 0;
     }
 
-    if (_hasBCP47Extension(localeID)) {
-        CharStringByteSink sink(&tempBuffer);
-        ulocimp_forLanguageTag(localeID, -1, sink, nullptr, err);
-        tmpLocaleID = U_SUCCESS(*err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
-    } else {
-        if (localeID==nullptr) {
-           localeID=uloc_getDefault();
-        }
-        tmpLocaleID=localeID;
+    if (localeID == nullptr) {
+       localeID = uloc_getDefault();
     }
 
     /* Skip the language */
-    ulocimp_getLanguage(tmpLocaleID, &tmpLocaleID, *err);
+    ulocimp_getLanguage(localeID, &localeID, *err);
     if (U_FAILURE(*err)) {
         return 0;
     }
 
-    if(_isIDSeparator(*tmpLocaleID)) {
+    if (_isIDSeparator(*localeID)) {
         const char *scriptID;
         /* Skip the script if available */
-        ulocimp_getScript(tmpLocaleID+1, &scriptID, *err);
+        ulocimp_getScript(localeID+1, &scriptID, *err);
         if (U_FAILURE(*err)) {
             return 0;
         }
-        if(scriptID != tmpLocaleID+1) {
+        if (scriptID != localeID+1) {
             /* Found optional script */
-            tmpLocaleID = scriptID;
+            localeID = scriptID;
         }
         /* Skip the Country */
-        if (_isIDSeparator(*tmpLocaleID)) {
+        if (_isIDSeparator(*localeID)) {
             const char *cntryID;
-            ulocimp_getCountry(tmpLocaleID+1, &cntryID, *err);
+            ulocimp_getCountry(localeID+1, &cntryID, *err);
             if (U_FAILURE(*err)) {
                 return 0;
             }
-            if (cntryID != tmpLocaleID+1) {
+            if (cntryID != localeID+1) {
                 /* Found optional country */
-                tmpLocaleID = cntryID;
+                localeID = cntryID;
             }
-            if(_isIDSeparator(*tmpLocaleID)) {
+            if (_isIDSeparator(*localeID) && !_isBCP47Extension(localeID)) {
                 /* If there was no country ID, skip a possible extra IDSeparator */
-                if (tmpLocaleID != cntryID && _isIDSeparator(tmpLocaleID[1])) {
-                    tmpLocaleID++;
+                if (localeID != cntryID && _isIDSeparator(localeID[1])) {
+                    localeID++;
                 }
 
                 CheckedArrayByteSink sink(variant, variantCapacity);
-                _getVariant(tmpLocaleID+1, *tmpLocaleID, sink, false);
+                _getVariant(localeID+1, *localeID, sink, false);
 
                 i = sink.NumberOfBytesAppended();
 
