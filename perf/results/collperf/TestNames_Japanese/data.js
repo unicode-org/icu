@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1706899635541,
+  "lastUpdate": 1707140127354,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35206,6 +35206,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5687917.5816,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "6fa113eaa8e73088399995ac79fdc332a7499c1c",
+          "message": "ICU-22651 Refactor U_DEFINE_LOCAL_OPEN_POINTER into a template.",
+          "timestamp": "2024-02-05T14:15:15+01:00",
+          "tree_id": "d629c9f9201fe85e1c9a2514b5ce1db420b7841d",
+          "url": "https://github.com/unicode-org/icu/commit/6fa113eaa8e73088399995ac79fdc332a7499c1c"
+        },
+        "date": 1707140057808,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 221.8659,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20263261.3202,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5279357.273,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19287844.2409,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5738719.9808,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
