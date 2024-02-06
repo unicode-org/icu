@@ -716,13 +716,12 @@ static const char * const CAL_TYPES[] = {
 U_CAPI UEnumeration* U_EXPORT2
 ucal_getKeywordValuesForLocale(const char * /* key */, const char* locale, UBool commonlyUsed, UErrorCode *status) {
     // Resolve region
-    char prefRegion[ULOC_COUNTRY_CAPACITY];
-    (void)ulocimp_getRegionForSupplementalData(locale, true, prefRegion, sizeof(prefRegion), status);
-    
+    CharString prefRegion = ulocimp_getRegionForSupplementalData(locale, true, status);
+
     // Read preferred calendar values from supplementalData calendarPreference
     UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", status);
     ures_getByKey(rb, "calendarPreferenceData", rb, status);
-    UResourceBundle *order = ures_getByKey(rb, prefRegion, nullptr, status);
+    UResourceBundle *order = ures_getByKey(rb, prefRegion.data(), nullptr, status);
     if (*status == U_MISSING_RESOURCE_ERROR && rb != nullptr) {
         *status = U_ZERO_ERROR;
         order = ures_getByKey(rb, "001", nullptr, status);

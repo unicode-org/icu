@@ -658,10 +658,9 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
     if (U_FAILURE(status)) { return; }
 
     const char *language = locale.getLanguage();
-    char baseCountry[8];
-    ulocimp_getRegionForSupplementalData(locale.getName(), false, baseCountry, 8, &status);
-    const char* country = baseCountry;
-    
+    CharString baseCountry = ulocimp_getRegionForSupplementalData(locale.getName(), false, &status);
+    const char* country = baseCountry.data();
+
     Locale maxLocale;  // must be here for correct lifetime
     if (*language == '\0' || *country == '\0') {
         maxLocale = locale;

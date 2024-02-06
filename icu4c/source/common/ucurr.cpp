@@ -349,10 +349,10 @@ _findMetaData(const char16_t* currency, UErrorCode& ec) {
 
 // -------------------------------------
 
-static void
-idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCode* ec)
+static CharString
+idForLocale(const char* locale, UErrorCode* ec)
 {
-    ulocimp_getRegionForSupplementalData(locale, false, countryAndVariant, capacity, ec);
+    return ulocimp_getRegionForSupplementalData(locale, false, ec);
 }
 
 // ------------------------------------------
@@ -464,9 +464,8 @@ U_CAPI UCurrRegistryKey U_EXPORT2
 ucurr_register(const char16_t* isoCode, const char* locale, UErrorCode *status)
 {
     if (status && U_SUCCESS(*status)) {
-        char id[ULOC_FULLNAME_CAPACITY];
-        idForLocale(locale, id, sizeof(id), status);
-        return CReg::reg(isoCode, id, status);
+        CharString id = idForLocale(locale, status);
+        return CReg::reg(isoCode, id.data(), status);
     }
     return nullptr;
 }
@@ -540,14 +539,13 @@ ucurr_forLocale(const char* locale,
     }
 
     // get country or country_variant in `id'
-    char id[ULOC_FULLNAME_CAPACITY];
-    idForLocale(locale, id, UPRV_LENGTHOF(id), ec);
+    CharString id = idForLocale(locale, ec);
     if (U_FAILURE(*ec)) {
         return 0;
     }
 
 #if !UCONFIG_NO_SERVICE
-    const char16_t* result = CReg::get(id);
+    const char16_t* result = CReg::get(id.data());
     if (result) {
         if(buffCapacity > u_strlen(result)) {
             u_strcpy(buff, result);
@@ -557,13 +555,13 @@ ucurr_forLocale(const char* locale,
     }
 #endif
     // Remove variants, which is only needed for registration.
-    char *idDelim = uprv_strchr(id, VAR_DELIM);
+    char *idDelim = uprv_strchr(id.data(), VAR_DELIM);
     if (idDelim) {
-        idDelim[0] = 0;
+        id.truncate(idDelim - id.data());
     }
 
     const char16_t* s = nullptr;  // Currency code from data file.
-    if (id[0] == 0) {
+    if (id.isEmpty()) {
         // No point looking in the data for an empty string.
         // This is what we would get.
         localStatus = U_MISSING_RESOURCE_ERROR;
@@ -572,7 +570,7 @@ ucurr_forLocale(const char* locale,
         localStatus = U_ZERO_ERROR;
         UResourceBundle *rb = ures_openDirect(U_ICUDATA_CURR, CURRENCY_DATA, &localStatus);
         UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
-        UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+        UResourceBundle *countryArray = ures_getByKey(rb, id.data(), cm, &localStatus);
         // https://unicode-org.atlassian.net/browse/ICU-21997
         // Prefer to use currencies that are legal tender.
         if (U_SUCCESS(localStatus)) {
@@ -602,7 +600,7 @@ ucurr_forLocale(const char* locale,
         ures_close(countryArray);
     }
 
-    if ((U_FAILURE(localStatus)) && strchr(id, '_') != 0) {
+    if ((U_FAILURE(localStatus)) && strchr(id.data(), '_') != 0) {
         // We don't know about it.  Check to see if we support the variant.
         CharString parent;
         {
@@ -2325,10 +2323,9 @@ ucurr_countCurrencies(const char* locale,
     {
         // local variables
         UErrorCode localStatus = U_ZERO_ERROR;
-        char id[ULOC_FULLNAME_CAPACITY];
 
         // get country or country_variant in `id'
-        idForLocale(locale, id, sizeof(id), ec);
+        CharString id = idForLocale(locale, ec);
 
         if (U_FAILURE(*ec))
         {
@@ -2336,10 +2333,10 @@ ucurr_countCurrencies(const char* locale,
         }
 
         // Remove variants, which is only needed for registration.
-        char *idDelim = strchr(id, VAR_DELIM);
+        char *idDelim = strchr(id.data(), VAR_DELIM);
         if (idDelim)
         {
-            idDelim[0] = 0;
+            id.truncate(idDelim - id.data());
         }
 
         // Look up the CurrencyMap element in the root bundle.
@@ -2347,7 +2344,7 @@ ucurr_countCurrencies(const char* locale,
         UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
 
         // Using the id derived from the local, get the currency data
-        UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+        UResourceBundle *countryArray = ures_getByKey(rb, id.data(), cm, &localStatus);
 
         // process each currency to see which one is valid for the given date
         if (U_SUCCESS(localStatus))
@@ -2440,20 +2437,19 @@ ucurr_forLocaleAndDate(const char* locale,
         {
             // local variables
             UErrorCode localStatus = U_ZERO_ERROR;
-            char id[ULOC_FULLNAME_CAPACITY];
 
             // get country or country_variant in `id'
-            idForLocale(locale, id, sizeof(id), ec);
+            CharString id = idForLocale(locale, ec);
             if (U_FAILURE(*ec))
             {
                 return 0;
             }
 
             // Remove variants, which is only needed for registration.
-            char *idDelim = strchr(id, VAR_DELIM);
+            char *idDelim = strchr(id.data(), VAR_DELIM);
             if (idDelim)
             {
-                idDelim[0] = 0;
+                id.truncate(idDelim - id.data());
             }
 
             // Look up the CurrencyMap element in the root bundle.
@@ -2461,7 +2457,7 @@ ucurr_forLocaleAndDate(const char* locale,
             UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
 
             // Using the id derived from the local, get the currency data
-            UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+            UResourceBundle *countryArray = ures_getByKey(rb, id.data(), cm, &localStatus);
 
             // process each currency to see which one is valid for the given date
             bool matchFound = false;
@@ -2587,9 +2583,8 @@ static const UEnumeration defaultKeywordValues = {
 
 U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, const char *locale, UBool commonlyUsed, UErrorCode* status) {
     // Resolve region
-    char prefRegion[ULOC_COUNTRY_CAPACITY];
-    ulocimp_getRegionForSupplementalData(locale, true, prefRegion, sizeof(prefRegion), status);
-    
+    CharString prefRegion = ulocimp_getRegionForSupplementalData(locale, true, status);
+
     // Read value from supplementalData
     UList *values = ulist_createEmptyList(status);
     UList *otherValues = ulist_createEmptyList(status);
@@ -2621,7 +2616,7 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
             break;
         }
         const char *region = ures_getKey(&bundlekey);
-        UBool isPrefRegion = uprv_strcmp(region, prefRegion) == 0 ? true : false;
+        UBool isPrefRegion = prefRegion == region;
         if (!isPrefRegion && commonlyUsed) {
             // With commonlyUsed=true, we do not put
             // currencies for other regions in the

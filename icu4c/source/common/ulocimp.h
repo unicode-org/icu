@@ -212,28 +212,23 @@ ulocimp_forLanguageTag(const char* langtag,
  * (2) any unicode_region_tag in the locale ID; if none then
  * (3) if inferRegion is true, the region suggested by
  * getLikelySubtags on the localeID.
- * If no region is found, returns length 0.
- * 
+ * If no region is found, returns an empty string.
+ *
  * @param localeID
  *     The complete locale ID (with keywords) from which
  *     to get the region to use for supplemental data.
  * @param inferRegion
  *     If true, will try to infer region from localeID if
  *     no other region is found.
- * @param region
- *     Buffer in which to put the region ID found; should
- *     have a capacity at least ULOC_COUNTRY_CAPACITY. 
- * @param regionCapacity
- *     The actual capacity of the region buffer.
  * @param status
  *     Pointer to in/out UErrorCode value for latest status.
  * @return
- *     The length of any region code found, or 0 if none.
+ *     The region code found, empty if none found.
  * @internal ICU 57
  */
-U_CAPI int32_t U_EXPORT2
+U_EXPORT icu::CharString U_EXPORT2
 ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
-                                     char *region, int32_t regionCapacity, UErrorCode* status);
+                                     UErrorCode* status);
 
 /**
  * Add the likely subtags for a provided locale ID, per the algorithm described
