@@ -1111,6 +1111,10 @@ en{
             "EC$",
             "East Caribbean Dollar",
         }
+        XCG{
+            "Cg.",
+            "Caribbean guilder",
+        }
         XDR{
             "XDR",
             "Special Drawing Rights",
@@ -2332,6 +2336,10 @@ en{
         XCD{
             one{"East Caribbean dollar"}
             other{"East Caribbean dollars"}
+        }
+        XCG{
+            one{"Caribbean guilder"}
+            other{"Caribbean guilders"}
         }
         XDR{
             one{"special drawing rights"}

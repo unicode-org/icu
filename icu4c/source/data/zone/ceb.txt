@@ -360,9 +360,6 @@ ceb{
             lg{"Oras sa Lord Howe"}
             ls{"Tamdanang Oras sa Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Oras sa Macquarie Island"}
-        }
         "meta:Magadan"{
             ld{"Oras sa Tag-init sa Magadan"}
             lg{"Oras sa Magadan"}
@@ -387,11 +384,6 @@ ceb{
         }
         "meta:Mawson"{
             ls{"Oras sa Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Oras sa Tag-init sa Northwest Mexico"}
-            lg{"Oras sa Northwest Mexico"}
-            ls{"Tamdanang Oras sa Northwest Mexico"}
         }
         "meta:Mexico_Pacific"{
             ld{"Oras sa Tag-init sa Mexican Pacific"}

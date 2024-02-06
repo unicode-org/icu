@@ -313,14 +313,8 @@ rm{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uschhorod"}
-        }
         "Europe:Warsaw"{
             ec{"Varsovia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporischja"}
         }
         "Europe:Zurich"{
             ec{"Turitg"}

@@ -357,9 +357,6 @@ ig{
             lg{"Oge Lord Howe"}
             ls{"Oge Izugbe Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Oge Macquarie Island"}
-        }
         "meta:Magadan"{
             ld{"Oge Okpomọkụ Magadan"}
             lg{"Oge Magadan"}
@@ -384,11 +381,6 @@ ig{
         }
         "meta:Mawson"{
             ls{"Oge Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Oge Ihe Northwest Mexico"}
-            lg{"Oge Northwest Mexico"}
-            ls{"Oge Izugbe Northwest Mexico"}
         }
         "meta:Mexico_Pacific"{
             ld{"Oge Ihe Mexican Pacific"}

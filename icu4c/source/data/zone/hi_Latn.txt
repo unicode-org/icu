@@ -58,9 +58,6 @@ hi_Latn{
         "Atlantic:Faeroe"{
             ec{"Faeroe"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uzhgorod"}
-        }
         "Indian:Reunion"{
             ec{"Reunion"}
         }

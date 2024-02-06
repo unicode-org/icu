@@ -135,9 +135,6 @@ fr{
         "America:Puerto_Rico"{
             ec{"Porto Rico"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -345,9 +342,6 @@ fr{
         "Australia:Adelaide"{
             ec{"Adélaïde"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"temps universel coordonné"}
         }
@@ -406,9 +400,6 @@ fr{
         "Europe:Ulyanovsk"{
             ec{"Oulianovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Oujgorod"}
-        }
         "Europe:Vatican"{
             ec{"Le Vatican"}
         }
@@ -417,9 +408,6 @@ fr{
         }
         "Europe:Warsaw"{
             ec{"Varsovie"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporojie"}
         }
         "Indian:Comoro"{
             ec{"Comores"}
@@ -838,9 +826,6 @@ fr{
             lg{"heure de Lord Howe"}
             ls{"heure normale de Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"heure de l’île Macquarie"}
-        }
         "meta:Magadan"{
             ld{"heure d’été de Magadan"}
             lg{"heure de Magadan"}
@@ -865,11 +850,6 @@ fr{
         }
         "meta:Mawson"{
             ls{"heure de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"heure d’été du Nord-Ouest du Mexique"}
-            lg{"heure du Nord-Ouest du Mexique"}
-            ls{"heure normale du Nord-Ouest du Mexique"}
         }
         "meta:Mexico_Pacific"{
             ld{"heure d’été du Pacifique mexicain"}

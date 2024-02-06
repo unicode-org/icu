@@ -366,9 +366,6 @@ ha{
             lg{"Lokacin Lord Howe"}
             ls{"Tsayayyen Lokacin Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Lokacin Macquarie Island"}
-        }
         "meta:Magadan"{
             ld{"Lokacin Bazara na Magadan"}
             lg{"Lokacin Magadan"}
@@ -393,11 +390,6 @@ ha{
         }
         "meta:Mawson"{
             ls{"Lokacin Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Lokacin Rana na Arewa Maso Yammacin Mekziko"}
-            lg{"Lokacin Arewa Maso Yammacin Mekziko"}
-            ls{"Tsayayyen Lokacin Arewa Maso Yammacin Mekziko"}
         }
         "meta:Mexico_Pacific"{
             ld{"Lokacin Rana na Mekziko Pacific"}

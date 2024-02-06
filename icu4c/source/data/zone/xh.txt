@@ -42,9 +42,6 @@ xh{
         "Europe:London"{
             ld{"British Summer Time"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uzhhorod"}
-        }
         "Indian:Reunion"{
             ec{"Réunion"}
         }
@@ -390,9 +387,6 @@ xh{
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie Island Time"}
-        }
         "meta:Magadan"{
             ld{"Magadan Summer Time"}
             lg{"Magadan Time"}
@@ -417,11 +411,6 @@ xh{
         }
         "meta:Mawson"{
             ls{"Mawson Time"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Northwest Mexico Daylight Time"}
-            lg{"Northwest Mexico Time"}
-            ls{"Northwest Mexico Standard Time"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexican Pacific Daylight Time"}

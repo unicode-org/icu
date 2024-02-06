@@ -44,7 +44,7 @@ en{
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
-        ace{"Achinese"}
+        ace{"Acehnese"}
         ach{"Acoli"}
         ada{"Adangme"}
         ady{"Adyghe"}
@@ -1027,7 +1027,6 @@ en{
             phonebook{"Phonebook Sort Order"}
             phonetic{"Phonetic Sort Order"}
             pinyin{"Pinyin Sort Order"}
-            reformed{"Reformed Sort Order"}
             search{"General-Purpose Search"}
             searchjl{"Search By Hangul Initial Consonant"}
             standard{"Standard Sort Order"}

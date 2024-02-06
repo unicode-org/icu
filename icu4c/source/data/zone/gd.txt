@@ -126,9 +126,6 @@ gd{
         "America:New_York"{
             ec{"Nuadh Eabhrac"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangniqtuuq"}
-        }
         "America:Port_of_Spain"{
             ec{"Port na Spàinne"}
         }
@@ -140,9 +137,6 @@ gd{
         }
         "America:Resolute"{
             ec{"Qausuittuq"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
         }
         "America:Santarem"{
             ec{"Santarém"}
@@ -272,9 +266,6 @@ gd{
         }
         "Atlantic:St_Helena"{
             ec{"Eilean Naomh Eilidh"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Australia:Sydney"{
             ec{"Sidni"}
@@ -823,9 +814,6 @@ gd{
             lg{"Àm Macàthu"}
             ls{"Bun-àm Macàthu"}
         }
-        "meta:Macquarie"{
-            ls{"Àm Eilein MhicGuaire"}
-        }
         "meta:Magadan"{
             ld{"Tìde Samhraidh Magadan"}
             lg{"Àm Magadan"}
@@ -850,11 +838,6 @@ gd{
         }
         "meta:Mawson"{
             ls{"Àm Mhawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Tìde samhraidh Mheagsago an Iar-thuath"}
-            lg{"Àm Mheagsago an Iar-thuath"}
-            ls{"Bun-àm Mheagsago an Iar-thuath"}
         }
         "meta:Mexico_Pacific"{
             ld{"Tìde samhraidh a’ Chuain Sèimh Mheagsago"}

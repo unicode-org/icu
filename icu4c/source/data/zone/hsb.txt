@@ -255,9 +255,6 @@ hsb{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -269,9 +266,6 @@ hsb{
         }
         "Europe:Warsaw"{
             ec{"Waršawa"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporižžja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -645,9 +639,6 @@ hsb{
             lg{"čas kupy Lord-Howe"}
             ls{"standardny čas kupy Lord-Howe"}
         }
-        "meta:Macquarie"{
-            ls{"čas kupy Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Magadanski lětni čas"}
             lg{"Magadanski čas"}
@@ -672,11 +663,6 @@ hsb{
         }
         "meta:Mawson"{
             ls{"Mawsonski čas"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"mexiski sewjerozapadny lětni čas"}
-            lg{"mexiski sewjerozapadny čas"}
-            ls{"mexiski sewjerozapadny standardny čas"}
         }
         "meta:Mexico_Pacific"{
             ld{"mexiski pacifiski lětni čas"}

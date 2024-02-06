@@ -957,7 +957,6 @@ sv{
             phonebook{"telefonkatalogssorteringsordning"}
             phonetic{"fonetisk sorteringsordning"}
             pinyin{"pinyin-sorteringsordning"}
-            reformed{"reformerad sorteringsordning"}
             search{"allmän sökning"}
             searchjl{"söksorteringsordning för att söka på inledande Hangul-konsonant"}
             standard{"normal sorteringsordning"}

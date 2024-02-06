@@ -81,9 +81,6 @@ it{
         "America:Puerto_Rico"{
             ec{"Portorico"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -195,9 +192,6 @@ it{
         "Atlantic:St_Helena"{
             ec{"Sant’Elena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Tempo coordinato universale"}
         }
@@ -271,9 +265,6 @@ it{
         }
         "Europe:Tirane"{
             ec{"Tirana"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Užhorod"}
         }
         "Europe:Vatican"{
             ec{"Città del Vaticano"}
@@ -680,9 +671,6 @@ it{
             lg{"Ora di Macao"}
             ls{"Ora standard di Macao"}
         }
-        "meta:Macquarie"{
-            ls{"Ora dell’Isola Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Ora legale di Magadan"}
             lg{"Ora di Magadan"}
@@ -707,11 +695,6 @@ it{
         }
         "meta:Mawson"{
             ls{"Ora di Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Ora legale del Messico nord-occidentale"}
-            lg{"Ora del Messico nord-occidentale"}
-            ls{"Ora standard del Messico nord-occidentale"}
         }
         "meta:Mexico_Pacific"{
             ld{"Ora legale del Pacifico (Messico)"}

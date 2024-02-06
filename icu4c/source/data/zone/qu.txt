@@ -195,9 +195,6 @@ qu{
         "Australia:Adelaide"{
             ec{"Adelaida"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Australia:Sydney"{
             ec{"Sidney"}
         }
@@ -622,9 +619,6 @@ qu{
             lg{"Hora de Lord Howe"}
             ls{"Hora Estandar de Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Hora de Isla Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Hora de Verano de Magadan"}
             lg{"Hora de Magadan"}
@@ -649,11 +643,6 @@ qu{
         }
         "meta:Mawson"{
             ls{"Hora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Hora de Verano del Noroeste de México"}
-            lg{"Hora Estandar de Verano de México"}
-            ls{"Hora Estandar del Noroeste de México"}
         }
         "meta:Mexico_Pacific"{
             ld{"Hora de Verano del Pacífico Mexicano"}

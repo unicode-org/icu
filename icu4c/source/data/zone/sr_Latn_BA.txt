@@ -414,9 +414,6 @@ sr_Latn_BA{
             lg{"Lord Hov vrijeme"}
             ls{"Lord Hov, standardno vrijeme"}
         }
-        "meta:Macquarie"{
-            ls{"ostrvo Makvori vrijeme"}
-        }
         "meta:Magadan"{
             ld{"Magadan, ljetnje vrijeme"}
             lg{"Magadan vrijeme"}
@@ -441,11 +438,6 @@ sr_Latn_BA{
         }
         "meta:Mawson"{
             ls{"Moson vrijeme"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Sjeverozapadni Meksiko, letnje vrijeme"}
-            lg{"Sjeverozapadni Meksiko"}
-            ls{"Sjeverozapadni Meksiko, standardno vrijeme"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksički Pacifik, ljetnje vrijeme"}

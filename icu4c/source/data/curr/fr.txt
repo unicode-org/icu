@@ -1031,6 +1031,10 @@ fr{
             "XCD",
             "dollar des Caraïbes orientales",
         }
+        XCG{
+            "Cg.",
+            "florin caribéen",
+        }
         XDR{
             "XDR",
             "droit de tirage spécial",
@@ -2171,6 +2175,10 @@ fr{
         XCD{
             one{"dollar des Caraïbes orientales"}
             other{"dollars des Caraïbes orientales"}
+        }
+        XCG{
+            one{"florin caribéen"}
+            other{"florins caribéens"}
         }
         XDR{
             one{"droit de tirage spécial"}

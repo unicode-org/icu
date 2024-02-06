@@ -465,9 +465,6 @@ zh{
         "America:New_York"{
             ec{"纽约"}
         }
-        "America:Nipigon"{
-            ec{"尼皮贡"}
-        }
         "America:Nome"{
             ec{"诺姆"}
         }
@@ -488,9 +485,6 @@ zh{
         }
         "America:Panama"{
             ec{"巴拿马"}
-        }
-        "America:Pangnirtung"{
-            ec{"旁涅唐"}
         }
         "America:Paramaribo"{
             ec{"帕拉马里博"}
@@ -513,9 +507,6 @@ zh{
         "America:Punta_Arenas"{
             ec{"蓬塔阿雷纳斯"}
         }
-        "America:Rainy_River"{
-            ec{"雷尼河"}
-        }
         "America:Rankin_Inlet"{
             ec{"兰今湾"}
         }
@@ -530,9 +521,6 @@ zh{
         }
         "America:Rio_Branco"{
             ec{"里奥布郎库"}
-        }
-        "America:Santa_Isabel"{
-            ec{"圣伊萨贝尔"}
         }
         "America:Santarem"{
             ec{"圣塔伦"}
@@ -579,9 +567,6 @@ zh{
         "America:Thule"{
             ec{"图勒"}
         }
-        "America:Thunder_Bay"{
-            ec{"桑德贝"}
-        }
         "America:Tijuana"{
             ec{"蒂华纳"}
         }
@@ -602,9 +587,6 @@ zh{
         }
         "America:Yakutat"{
             ec{"亚库塔特"}
-        }
-        "America:Yellowknife"{
-            ec{"耶洛奈夫"}
         }
         "Antarctica:Casey"{
             ec{"卡塞"}
@@ -930,9 +912,6 @@ zh{
         "Australia:Broken_Hill"{
             ec{"布罗肯希尔"}
         }
-        "Australia:Currie"{
-            ec{"柯里"}
-        }
         "Australia:Darwin"{
             ec{"达尔文"}
         }
@@ -1115,9 +1094,6 @@ zh{
         "Europe:Ulyanovsk"{
             ec{"乌里扬诺夫斯克"}
         }
-        "Europe:Uzhgorod"{
-            ec{"乌日哥罗德"}
-        }
         "Europe:Vaduz"{
             ec{"瓦杜兹"}
         }
@@ -1138,9 +1114,6 @@ zh{
         }
         "Europe:Zagreb"{
             ec{"萨格勒布"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"扎波罗热"}
         }
         "Europe:Zurich"{
             ec{"苏黎世"}
@@ -1222,9 +1195,6 @@ zh{
         }
         "Pacific:Honolulu"{
             ec{"檀香山"}
-        }
-        "Pacific:Johnston"{
-            ec{"约翰斯顿"}
         }
         "Pacific:Kanton"{
             ec{"坎顿岛"}
@@ -1684,9 +1654,6 @@ zh{
             lg{"澳门时间"}
             ls{"澳门标准时间"}
         }
-        "meta:Macquarie"{
-            ls{"麦夸里岛时间"}
-        }
         "meta:Magadan"{
             ld{"马加丹夏令时间"}
             lg{"马加丹时间"}
@@ -1711,11 +1678,6 @@ zh{
         }
         "meta:Mawson"{
             ls{"莫森时间"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"墨西哥西北部夏令时间"}
-            lg{"墨西哥西北部时间"}
-            ls{"墨西哥西北部标准时间"}
         }
         "meta:Mexico_Pacific"{
             ld{"墨西哥太平洋夏令时间"}

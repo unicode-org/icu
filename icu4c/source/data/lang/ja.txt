@@ -932,7 +932,6 @@ ja{
             phonebook{"電話帳順"}
             phonetic{"音声順による並べ替え"}
             pinyin{"ピンイン順"}
-            reformed{"リフォーム"}
             search{"汎用検索"}
             searchjl{"ハングル語頭子音による並べ替え"}
             standard{"標準並べ替え順序"}

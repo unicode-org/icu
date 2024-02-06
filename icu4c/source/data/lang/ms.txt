@@ -769,7 +769,6 @@ ms{
             phonebook{"Aturan Isih Buku Telefon"}
             phonetic{"Urutan Isih Fonetik"}
             pinyin{"Aturan Isih Pinyin"}
-            reformed{"Aturan Isih Pembaharuan"}
             search{"Carian Tujuan Umum"}
             searchjl{"Cari Mengikut Konsonan Awal Hangul"}
             standard{"Tertib Isih Standard"}

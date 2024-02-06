@@ -246,9 +246,6 @@ dsb{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -263,9 +260,6 @@ dsb{
         }
         "Europe:Warsaw"{
             ec{"Waršawa"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporižja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -639,9 +633,6 @@ dsb{
             lg{"cas kupy Lord-Howe"}
             ls{"Standardny cas kupy Lord-Howe"}
         }
-        "meta:Macquarie"{
-            ls{"cas kupy Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Magadański lěśojski cas"}
             lg{"Magadański cas"}
@@ -666,11 +657,6 @@ dsb{
         }
         "meta:Mawson"{
             ls{"Mawson cas"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Mexiski dłujkowjacorny lěśojski cas"}
-            lg{"Mexiski dłujkowjacorny cas"}
-            ls{"Mexiski dłujkowjacorny standardny cas"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexiski pacifiski lěśojski cas"}

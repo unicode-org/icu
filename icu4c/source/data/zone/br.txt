@@ -659,9 +659,6 @@ br{
             lg{"eur Macau"}
             ls{"eur cʼhoañv Macau"}
         }
-        "meta:Macquarie"{
-            ls{"eur Enez Macquarie"}
-        }
         "meta:Magadan"{
             ld{"eur hañv Magadan"}
             lg{"eur Magadan"}
@@ -686,11 +683,6 @@ br{
         }
         "meta:Mawson"{
             ls{"eur Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"eur hañv Gwalarn Mecʼhiko"}
-            lg{"eur Gwalarn Mecʼhiko"}
-            ls{"eur cʼhoañv Gwalarn Mecʼhiko"}
         }
         "meta:Mexico_Pacific"{
             ld{"eur hañv an Habask mecʼhikan"}

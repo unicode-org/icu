@@ -103,7 +103,6 @@ zh_Hant_HK{
             big5han{"繁體中文排序 (Big5)"}
             dictionary{"詞典排序"}
             gb2312han{"簡體中文排序 (GB2312)"}
-            reformed{"改革版排序"}
         }
         ms{
             uksystem{"英制"}

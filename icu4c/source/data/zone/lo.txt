@@ -465,9 +465,6 @@ lo{
         "America:New_York"{
             ec{"ນິວຢອກ"}
         }
-        "America:Nipigon"{
-            ec{"ນີປີກອນ"}
-        }
         "America:Nome"{
             ec{"ນອມ"}
         }
@@ -488,9 +485,6 @@ lo{
         }
         "America:Panama"{
             ec{"ພານາມາ"}
-        }
-        "America:Pangnirtung"{
-            ec{"ແພງເນີດທັງ"}
         }
         "America:Paramaribo"{
             ec{"ພາຣາມາຣິໂບ"}
@@ -513,9 +507,6 @@ lo{
         "America:Punta_Arenas"{
             ec{"ພຸນທາ ອະຣີນາສ໌"}
         }
-        "America:Rainy_River"{
-            ec{"ເຣນນີ ຣິເວີ"}
-        }
         "America:Rankin_Inlet"{
             ec{"ແຣນກິນ ອິນເລັດ"}
         }
@@ -530,9 +521,6 @@ lo{
         }
         "America:Rio_Branco"{
             ec{"ຣິໂອ ບຣັນໂກ"}
-        }
-        "America:Santa_Isabel"{
-            ec{"ຊານຕາ ອິດຊາເບວ"}
         }
         "America:Santarem"{
             ec{"ຊັນຕາເຣມ"}
@@ -579,9 +567,6 @@ lo{
         "America:Thule"{
             ec{"ທູເລ"}
         }
-        "America:Thunder_Bay"{
-            ec{"ທັນເດີເບ"}
-        }
         "America:Tijuana"{
             ec{"ທີຈົວນາ"}
         }
@@ -602,9 +587,6 @@ lo{
         }
         "America:Yakutat"{
             ec{"ຢາຄູຕັດ"}
-        }
-        "America:Yellowknife"{
-            ec{"ເຢໂລໄນຟ໌"}
         }
         "Antarctica:Casey"{
             ec{"ເຄຊີ"}
@@ -930,9 +912,6 @@ lo{
         "Australia:Broken_Hill"{
             ec{"ໂບຣກເຄນ ຮິວ"}
         }
-        "Australia:Currie"{
-            ec{"ກູຣີ"}
-        }
         "Australia:Darwin"{
             ec{"ດາວິນ"}
         }
@@ -1115,9 +1094,6 @@ lo{
         "Europe:Ulyanovsk"{
             ec{"ອູລີອານອບສຄ໌"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ອັສຊ໌ກໍໂຣດ"}
-        }
         "Europe:Vaduz"{
             ec{"ວາດາຊ"}
         }
@@ -1138,9 +1114,6 @@ lo{
         }
         "Europe:Zagreb"{
             ec{"ຊາເກຣບ"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ຊາໂປໂຣຊີ"}
         }
         "Europe:Zurich"{
             ec{"ຊູຣິກ"}
@@ -1222,9 +1195,6 @@ lo{
         }
         "Pacific:Honolulu"{
             ec{"ໂຮໂນລູລູ"}
-        }
-        "Pacific:Johnston"{
-            ec{"ຈອນສະໂຕນ"}
         }
         "Pacific:Kanton"{
             ec{"ແຄນຕອນ"}
@@ -1674,9 +1644,6 @@ lo{
             lg{"ເວລາມາເກົາ"}
             ls{"ເວລາມາດຕະຖານມາເກົາ"}
         }
-        "meta:Macquarie"{
-            ls{"ເວ​ລາ​ເກາະ​ແມັກ​ຄົວ​ຣີ"}
-        }
         "meta:Magadan"{
             ld{"ເວລາລະດູຮ້ອນເມັກກາເດນ"}
             lg{"ເວລາເມັກກາເດນ"}
@@ -1701,11 +1668,6 @@ lo{
         }
         "meta:Mawson"{
             ls{"ເວລາມໍສັນ"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"ເວລາກາງເວັນເມັກຊິກັນນອດເວສ"}
-            lg{"​ເວ​ລາ​ນອດ​ເວ​ສ​ເມັກ​ຊິ​ໂກ"}
-            ls{"​ເວ​ລາ​ມາດ​ຕະ​ຖານນອດ​ເວ​ສ​ເມັກ​ຊິ​ໂກ"}
         }
         "meta:Mexico_Pacific"{
             ld{"ເວລາກາງເວັນແປຊິຟິກເມັກຊິກັນ"}

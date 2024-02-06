@@ -465,9 +465,6 @@ ja{
         "America:New_York"{
             ec{"ニューヨーク"}
         }
-        "America:Nipigon"{
-            ec{"ニピゴン"}
-        }
         "America:Nome"{
             ec{"ノーム"}
         }
@@ -488,9 +485,6 @@ ja{
         }
         "America:Panama"{
             ec{"パナマ"}
-        }
-        "America:Pangnirtung"{
-            ec{"パンナータング"}
         }
         "America:Paramaribo"{
             ec{"パラマリボ"}
@@ -513,9 +507,6 @@ ja{
         "America:Punta_Arenas"{
             ec{"プンタアレナス"}
         }
-        "America:Rainy_River"{
-            ec{"レイニーリバー"}
-        }
         "America:Rankin_Inlet"{
             ec{"ランキンインレット"}
         }
@@ -530,9 +521,6 @@ ja{
         }
         "America:Rio_Branco"{
             ec{"リオブランコ"}
-        }
-        "America:Santa_Isabel"{
-            ec{"サンタイサベル"}
         }
         "America:Santarem"{
             ec{"サンタレム"}
@@ -579,9 +567,6 @@ ja{
         "America:Thule"{
             ec{"チューレ"}
         }
-        "America:Thunder_Bay"{
-            ec{"サンダーベイ"}
-        }
         "America:Tijuana"{
             ec{"ティフアナ"}
         }
@@ -602,9 +587,6 @@ ja{
         }
         "America:Yakutat"{
             ec{"ヤクタット"}
-        }
-        "America:Yellowknife"{
-            ec{"イエローナイフ"}
         }
         "Antarctica:Casey"{
             ec{"ケーシー基地"}
@@ -930,9 +912,6 @@ ja{
         "Australia:Broken_Hill"{
             ec{"ブロークンヒル"}
         }
-        "Australia:Currie"{
-            ec{"カリー"}
-        }
         "Australia:Darwin"{
             ec{"ダーウィン"}
         }
@@ -1115,9 +1094,6 @@ ja{
         "Europe:Ulyanovsk"{
             ec{"ウリヤノフスク"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ウージュホロド"}
-        }
         "Europe:Vaduz"{
             ec{"ファドゥーツ"}
         }
@@ -1138,9 +1114,6 @@ ja{
         }
         "Europe:Zagreb"{
             ec{"ザグレブ"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ザポリージャ"}
         }
         "Europe:Zurich"{
             ec{"チューリッヒ"}
@@ -1222,9 +1195,6 @@ ja{
         }
         "Pacific:Honolulu"{
             ec{"ホノルル"}
-        }
-        "Pacific:Johnston"{
-            ec{"ジョンストン島"}
         }
         "Pacific:Kanton"{
             ec{"カントン島"}
@@ -1687,9 +1657,6 @@ ja{
             lg{"マカオ時間"}
             ls{"マカオ標準時"}
         }
-        "meta:Macquarie"{
-            ls{"マッコーリー島時間"}
-        }
         "meta:Magadan"{
             ld{"マガダン夏時間"}
             lg{"マガダン時間"}
@@ -1714,11 +1681,6 @@ ja{
         }
         "meta:Mawson"{
             ls{"モーソン基地時間"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"メキシコ北西部夏時間"}
-            lg{"メキシコ北西部時間"}
-            ls{"メキシコ北西部標準時"}
         }
         "meta:Mexico_Pacific"{
             ld{"メキシコ太平洋夏時間"}

@@ -757,7 +757,6 @@ lv{
             phonebook{"tālruņu grāmatas kārtošanas secība"}
             phonetic{"Fonētiskā kārtošanas secība"}
             pinyin{"piņjiņa kārtošanas secība"}
-            reformed{"Reformētā kārtošanas secība"}
             search{"vispārīga meklēšana"}
             searchjl{"Meklēt pēc Hangul sākuma līdzskaņa"}
             standard{"standarta kārtošanas secība"}

@@ -1031,6 +1031,10 @@ es{
             "XCD",
             "dólar del Caribe Oriental",
         }
+        XCG{
+            "Cg.",
+            "florín caribeño",
+        }
         XDR{
             "XDR",
             "derechos especiales de giro",
@@ -2082,6 +2086,10 @@ es{
         XCD{
             one{"dólar del Caribe Oriental"}
             other{"dólares del Caribe Oriental"}
+        }
+        XCG{
+            one{"florín caribeño"}
+            other{"florines caribeños"}
         }
         XEU{
             one{"unidad de moneda europea"}

@@ -617,9 +617,6 @@ pt_PT{
             lg{"Hora de Macau"}
             ls{"Hora padrão de Macau"}
         }
-        "meta:Macquarie"{
-            ls{"Hora da Ilha Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Hora de verão de Magadan"}
             lg{"Hora de Magadan"}
@@ -644,11 +641,6 @@ pt_PT{
         }
         "meta:Mawson"{
             ls{"Hora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Hora de verão do Noroeste do México"}
-            lg{"Hora do Noroeste do México"}
-            ls{"Hora padrão do Noroeste do México"}
         }
         "meta:Mexico_Pacific"{
             ld{"Hora de verão do Pacífico Mexicano"}

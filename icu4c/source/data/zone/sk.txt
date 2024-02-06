@@ -99,9 +99,6 @@ sk{
         "America:Puerto_Rico"{
             ec{"Portoriko"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -312,9 +309,6 @@ sk{
         "Atlantic:St_Helena"{
             ec{"Svätá Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"koordinovaný svetový čas"}
         }
@@ -403,9 +397,6 @@ sk{
         "Europe:Ulyanovsk"{
             ec{"Uľjanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užhorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikán"}
         }
@@ -417,9 +408,6 @@ sk{
         }
         "Europe:Zagreb"{
             ec{"Záhreb"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Záporožie"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -861,9 +849,6 @@ sk{
             lg{"macajský čas"}
             ls{"macajský štandardný čas"}
         }
-        "meta:Macquarie"{
-            ls{"čas ostrova Macquarie"}
-        }
         "meta:Magadan"{
             ld{"magadanský letný čas"}
             lg{"magadanský čas"}
@@ -888,11 +873,6 @@ sk{
         }
         "meta:Mawson"{
             ls{"čas Mawsonovej stanice"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"severozápadný mexický letný čas"}
-            lg{"severozápadný mexický čas"}
-            ls{"severozápadný mexický štandardný čas"}
         }
         "meta:Mexico_Pacific"{
             ld{"mexický tichomorský letný čas"}

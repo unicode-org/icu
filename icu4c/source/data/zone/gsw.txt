@@ -201,9 +201,6 @@ gsw{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uschgorod"}
-        }
         "Europe:Vienna"{
             ec{"Wien"}
         }
@@ -212,9 +209,6 @@ gsw{
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporischja"}
         }
         "Europe:Zurich"{
             ec{"Züri"}

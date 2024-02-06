@@ -357,9 +357,6 @@ tk{
         "America:Ojinaga"{
             ec{"Ohinaga"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangnirtang"}
-        }
         "America:Phoenix"{
             ec{"Feniks"}
         }
@@ -378,9 +375,6 @@ tk{
         "America:Punta_Arenas"{
             ec{"Punta-Arenas"}
         }
-        "America:Rainy_River"{
-            ec{"Reýni-Riwer"}
-        }
         "America:Rankin_Inlet"{
             ec{"Rankin-Inlet"}
         }
@@ -395,9 +389,6 @@ tk{
         }
         "America:Rio_Branco"{
             ec{"Riu-Branku"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santa-Izabel"}
         }
         "America:Santiago"{
             ec{"Santýago"}
@@ -438,9 +429,6 @@ tk{
         "America:Thule"{
             ec{"Tule"}
         }
-        "America:Thunder_Bay"{
-            ec{"Tander-Beý"}
-        }
         "America:Tijuana"{
             ec{"Tihuana"}
         }
@@ -452,9 +440,6 @@ tk{
         }
         "America:Yakutat"{
             ec{"Ýakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Ýellounaýf"}
         }
         "Antarctica:Casey"{
             ec{"Keýsi"}
@@ -702,9 +687,6 @@ tk{
         "Australia:Broken_Hill"{
             ec{"Broken-Hil"}
         }
-        "Australia:Currie"{
-            ec{"Kerri"}
-        }
         "Australia:Eucla"{
             ec{"Ýukla"}
         }
@@ -837,9 +819,6 @@ tk{
         "Europe:Ulyanovsk"{
             ec{"Ulýanowsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vaduz"{
             ec{"Waduz"}
         }
@@ -857,9 +836,6 @@ tk{
         }
         "Europe:Warsaw"{
             ec{"Warşawa"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporožýe"}
         }
         "Europe:Zurich"{
             ec{"Sýurih"}
@@ -923,9 +899,6 @@ tk{
         }
         "Pacific:Honolulu"{
             ec{"Gonolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Jonston"}
         }
         "Pacific:Kosrae"{
             ec{"Kosraýe"}
@@ -1317,9 +1290,6 @@ tk{
             lg{"Lord-Hau wagty"}
             ls{"Lord-Hau standart wagty"}
         }
-        "meta:Macquarie"{
-            ls{"Makkuori adasy wagty"}
-        }
         "meta:Magadan"{
             ld{"Magadan tomusky wagty"}
             lg{"Magadan wagty"}
@@ -1344,11 +1314,6 @@ tk{
         }
         "meta:Mawson"{
             ls{"Mouson wagty"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Demirgazyk-günbatar Meksika tomusky wagty"}
-            lg{"Demirgazyk-günbatar Meksika wagty"}
-            ls{"Demirgazyk-günbatar Meksika standart wagty"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksikan Ýuwaş umman tomusky wagty"}

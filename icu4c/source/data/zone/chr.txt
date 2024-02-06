@@ -465,9 +465,6 @@ chr{
         "America:New_York"{
             ec{"ᏄᏯᎩ"}
         }
-        "America:Nipigon"{
-            ec{"ᏂᏈᎪᏂ"}
-        }
         "America:Nome"{
             ec{"ᏃᎺ"}
         }
@@ -489,9 +486,6 @@ chr{
         "America:Panama"{
             ec{"ᏆᎾᎹ"}
         }
-        "America:Pangnirtung"{
-            ec{"ᏆᏂᏂᏚᏂᎦ"}
-        }
         "America:Paramaribo"{
             ec{"ᏆᎳᎹᎴᏉ"}
         }
@@ -512,9 +506,6 @@ chr{
         }
         "America:Punta_Arenas"{
             ec{"ᏊᏔ ᎡᏫᎾᏍ"}
-        }
-        "America:Rainy_River"{
-            ec{"ᎠᎦᏍᎦ ᎤᏪᏴ"}
         }
         "America:Rankin_Inlet"{
             ec{"ᎴᏂᎩᏂ ᎢᏂᎴᏘ"}
@@ -576,9 +567,6 @@ chr{
         "America:Thule"{
             ec{"ᏡᎵ"}
         }
-        "America:Thunder_Bay"{
-            ec{"ᎠᏴᏓᏆᎶᏍᎦ ᎡᏉᏄᎸᏗ"}
-        }
         "America:Tijuana"{
             ec{"ᏘᏳᏩᎾ"}
         }
@@ -599,9 +587,6 @@ chr{
         }
         "America:Yakutat"{
             ec{"ᏯᎫᏔᏘ"}
-        }
-        "America:Yellowknife"{
-            ec{"ᏓᎶᏂᎨ ᎭᏰᏍᏗ"}
         }
         "Antarctica:Casey"{
             ec{"ᎨᏏ"}
@@ -927,9 +912,6 @@ chr{
         "Australia:Broken_Hill"{
             ec{"ᎤᏲᏨᎯ ᎦᏚᏏ"}
         }
-        "Australia:Currie"{
-            ec{"ᎫᎵ"}
-        }
         "Australia:Darwin"{
             ec{"ᏓᏩᏂ"}
         }
@@ -1112,9 +1094,6 @@ chr{
         "Europe:Ulyanovsk"{
             ec{"ᎤᎵᏯᏃᏬᏍᎧ"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ᎤᏍᎪᎶᏗ"}
-        }
         "Europe:Vaduz"{
             ec{"ᏩᏚᏏ"}
         }
@@ -1135,9 +1114,6 @@ chr{
         }
         "Europe:Zagreb"{
             ec{"ᏌᏇᏈ"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ᏌᏉᎶᏌᏱ"}
         }
         "Europe:Zurich"{
             ec{"ᏑᎵᏥ"}
@@ -1222,9 +1198,6 @@ chr{
             sd{"HDT"}
             sg{"HST"}
             ss{"HST"}
-        }
-        "Pacific:Johnston"{
-            ec{"ᏣᏂᏏᏂ"}
         }
         "Pacific:Kanton"{
             ec{"ᎧᏛᏂ"}
@@ -1661,9 +1634,6 @@ chr{
             lg{"ᎤᎬᏫᏳᎯ ᎭᏫ ᎠᏟᎢᎵᏒ"}
             ls{"ᎤᎬᏫᏳᎯ ᎭᏫ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
         }
-        "meta:Macquarie"{
-            ls{"ᎹᏇᎵ ᎤᎦᏚᏛᎢ ᎠᏟᎢᎵᏒ"}
-        }
         "meta:Magadan"{
             ld{"ᎹᎦᏓᏂ ᎪᎩ ᎠᏟᎢᎵᏒ"}
             lg{"ᎹᎦᏓᏂ ᎠᏟᎢᎵᏒ"}
@@ -1688,11 +1658,6 @@ chr{
         }
         "meta:Mawson"{
             ls{"ᎹᏌᏂ ᎠᏟᎢᎵᏒ"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"ᏧᏴᏢ ᏭᏕᎵᎬ ᎠᏂᏍᏆᏂ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
-            lg{"ᏧᏴᏢ ᏭᏕᎵᎬ ᎠᏂᏍᏆᏂ ᎠᏟᎢᎵᏒ"}
-            ls{"ᏧᏴᏢ ᏭᏕᎵᎬ ᎠᏂᏍᏆᏂ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
         }
         "meta:Mexico_Pacific"{
             ld{"ᎠᏂᏍᏆᏂ ᏭᏕᎵᎬ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}

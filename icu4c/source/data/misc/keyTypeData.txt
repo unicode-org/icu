@@ -74,6 +74,7 @@ keyTypeData:table(nofallback){
         deprecated{
             co{
                 direct{"true"}
+                reformed{"true"}
             }
         }
     }
@@ -445,6 +446,7 @@ keyTypeData:table(nofallback){
             xbc{""}
             xbd{""}
             xcd{""}
+            xcg{""}
             xdr{""}
             xeu{""}
             xfo{""}

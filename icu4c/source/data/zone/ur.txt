@@ -465,9 +465,6 @@ ur{
         "America:New_York"{
             ec{"نیو یارک"}
         }
-        "America:Nipigon"{
-            ec{"نپیگون"}
-        }
         "America:Nome"{
             ec{"نوم"}
         }
@@ -488,9 +485,6 @@ ur{
         }
         "America:Panama"{
             ec{"پنامہ"}
-        }
-        "America:Pangnirtung"{
-            ec{"پینگنِرٹنگ"}
         }
         "America:Paramaribo"{
             ec{"پراماریبو"}
@@ -513,9 +507,6 @@ ur{
         "America:Punta_Arenas"{
             ec{"پنٹا اریناس"}
         }
-        "America:Rainy_River"{
-            ec{"رینی ریور"}
-        }
         "America:Rankin_Inlet"{
             ec{"رینکن انلیٹ"}
         }
@@ -530,9 +521,6 @@ ur{
         }
         "America:Rio_Branco"{
             ec{"ریئو برینکو"}
-        }
-        "America:Santa_Isabel"{
-            ec{"سانتا ایزابیل"}
         }
         "America:Santarem"{
             ec{"سنٹارین"}
@@ -579,9 +567,6 @@ ur{
         "America:Thule"{
             ec{"تھولو"}
         }
-        "America:Thunder_Bay"{
-            ec{"تھنڈر بے"}
-        }
         "America:Tijuana"{
             ec{"تیجوآنا"}
         }
@@ -602,9 +587,6 @@ ur{
         }
         "America:Yakutat"{
             ec{"یکوٹیٹ"}
-        }
-        "America:Yellowknife"{
-            ec{"ایلو نائف"}
         }
         "Antarctica:Casey"{
             ec{"کیسی"}
@@ -930,9 +912,6 @@ ur{
         "Australia:Broken_Hill"{
             ec{"بروکن ہِل"}
         }
-        "Australia:Currie"{
-            ec{"کیوری"}
-        }
         "Australia:Darwin"{
             ec{"ڈارون"}
         }
@@ -1115,9 +1094,6 @@ ur{
         "Europe:Ulyanovsk"{
             ec{"الیانوسک"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ازہوراڈ"}
-        }
         "Europe:Vaduz"{
             ec{"ویڈوز"}
         }
@@ -1138,9 +1114,6 @@ ur{
         }
         "Europe:Zagreb"{
             ec{"زیگریب"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"زیپوروزائی"}
         }
         "Europe:Zurich"{
             ec{"زیورخ"}
@@ -1222,9 +1195,6 @@ ur{
         }
         "Pacific:Honolulu"{
             ec{"ہونولولو"}
-        }
-        "Pacific:Johnston"{
-            ec{"جانسٹن"}
         }
         "Pacific:Kanton"{
             ec{"کانٹن"}
@@ -1650,9 +1620,6 @@ ur{
             lg{"لارڈ ہووے ٹائم"}
             ls{"لارڈ ہووے اسٹینڈرڈ ٹائم"}
         }
-        "meta:Macquarie"{
-            ls{"مکوآری آئلینڈ کا وقت"}
-        }
         "meta:Magadan"{
             ld{"میگیدن سمر ٹائم"}
             lg{"میگیدن ٹائم"}
@@ -1677,11 +1644,6 @@ ur{
         }
         "meta:Mawson"{
             ls{"ماؤسن ٹائم"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"شمال مغربی میکسیکو ڈے لائٹ ٹائم"}
-            lg{"شمال مغربی میکسیکو ٹائم"}
-            ls{"شمال مغربی میکسیکو اسٹینڈرڈ ٹائم"}
         }
         "meta:Mexico_Pacific"{
             ld{"میکسیکن پیسفک ڈے لائٹ ٹائم"}

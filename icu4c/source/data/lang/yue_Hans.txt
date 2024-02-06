@@ -911,7 +911,6 @@ yue_Hans{
             phonebook{"电话簿排序"}
             phonetic{"发音排序"}
             pinyin{"拼音排序"}
-            reformed{"改良排序"}
             search{"一般用途搜寻"}
             searchjl{"韩文子音排序"}
             standard{"标准排序"}

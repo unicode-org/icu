@@ -117,9 +117,6 @@ ga{
         "America:Puerto_Rico"{
             ec{"Pórtó Ríce"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
@@ -248,9 +245,6 @@ ga{
         }
         "Atlantic:St_Helena"{
             ec{"San Héilin"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Am Uilíoch Lárnach"}
@@ -853,9 +847,6 @@ ga{
             lg{"Am Mhacao"}
             ls{"Am Caighdeánach Mhacao"}
         }
-        "meta:Macquarie"{
-            ls{"Am Oileán Mhic Guaire"}
-        }
         "meta:Magadan"{
             ld{"Am Samhraidh Mhagadan"}
             lg{"Am Mhagadan"}
@@ -880,11 +871,6 @@ ga{
         }
         "meta:Mawson"{
             ls{"Am Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Am Samhraidh Iarthuaisceart Mheicsiceo"}
-            lg{"Am Iarthuaisceart Mheicsiceo"}
-            ls{"Am Caighdeánach Iarthuaisceart Mheicsiceo"}
         }
         "meta:Mexico_Pacific"{
             ld{"Am Samhraidh Meicsiceach an Aigéin Chiúin"}

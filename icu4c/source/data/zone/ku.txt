@@ -402,9 +402,6 @@ ku{
         "Europe:Tirane"{
             ec{"Tîran"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ujgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatîkan"}
         }
@@ -416,9 +413,6 @@ ku{
         }
         "Europe:Warsaw"{
             ec{"Warşova"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporojye"}
         }
         "Europe:Zurich"{
             ec{"Zûrîh"}
@@ -810,9 +804,6 @@ ku{
             lg{"Saeta Lord Howeyê"}
             ls{"Saeta Standard a Lord Howeyê"}
         }
-        "meta:Macquarie"{
-            ls{"Saeta Girava Macquarieyê"}
-        }
         "meta:Magadan"{
             ld{"Saeta Havînê ya Magadanê"}
             lg{"Saeta Magadanê"}
@@ -837,14 +828,6 @@ ku{
         }
         "meta:Mawson"{
             ls{"Saeta Mawsonê"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Saeta Havînê ya Meksîkoya Bakurrojava"}
-            lg{"Saeta Meksîkoya Bakurrojava"}
-            ls{"Saeta Standard a Meksîkoya Bakurrojava"}
-            sd{"SHMBR"}
-            sg{"SMBR"}
-            ss{"SSMBR"}
         }
         "meta:Mexico_Pacific"{
             ld{"Saeta Havînê ya Pasîfîka Meksîkayê"}

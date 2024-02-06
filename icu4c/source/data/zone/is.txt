@@ -81,9 +81,6 @@ is{
         "America:Puerto_Rico"{
             ec{"Púertó Ríkó"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"Sankti Bartólómeusareyjar"}
         }
@@ -215,9 +212,6 @@ is{
         }
         "Atlantic:St_Helena"{
             ec{"Sankti Helena"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Samræmdur alþjóðlegur tími"}
@@ -716,9 +710,6 @@ is{
             lg{"Tími á Lord Howe-eyju"}
             ls{"Staðaltími á Lord Howe-eyju"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie-eyjartími"}
-        }
         "meta:Magadan"{
             ld{"Sumartími í Magadan"}
             lg{"Tími í Magadan"}
@@ -743,11 +734,6 @@ is{
         }
         "meta:Mawson"{
             ls{"Mawson-tími"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Sumartími í Norðvestur-Mexíkó"}
-            lg{"Tími í Norðvestur-Mexíkó"}
-            ls{"Staðaltími í Norðvestur-Mexíkó"}
         }
         "meta:Mexico_Pacific"{
             ld{"Sumartími í Mexíkó á Kyrrahafssvæðinu"}

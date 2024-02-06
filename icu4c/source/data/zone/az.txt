@@ -339,9 +339,6 @@ az{
         "America:New_York"{
             ec{"Nyu York"}
         }
-        "America:Nipigon"{
-            ec{"Nipiqon"}
-        }
         "America:Nome"{
             ec{"Nom"}
         }
@@ -360,9 +357,6 @@ az{
         "America:Ojinaga"{
             ec{"Ocinaqa"}
         }
-        "America:Pangnirtung"{
-            ec{"Panqnirtanq"}
-        }
         "America:Phoenix"{
             ec{"Feniks"}
         }
@@ -378,9 +372,6 @@ az{
         "America:Puerto_Rico"{
             ec{"Puerto Riko"}
         }
-        "America:Rainy_River"{
-            ec{"Reyni Çayı"}
-        }
         "America:Rankin_Inlet"{
             ec{"Rankin Girişi"}
         }
@@ -395,9 +386,6 @@ az{
         }
         "America:Rio_Branco"{
             ec{"Rio Branko"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santa İzabel"}
         }
         "America:Santiago"{
             ec{"Santyaqo"}
@@ -438,9 +426,6 @@ az{
         "America:Thule"{
             ec{"Tul"}
         }
-        "America:Thunder_Bay"{
-            ec{"İldırım Körfəzi"}
-        }
         "America:Tijuana"{
             ec{"Tixuana"}
         }
@@ -452,9 +437,6 @@ az{
         }
         "America:Winnipeg"{
             ec{"Vinnipeq"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellounayf"}
         }
         "Antarctica:Casey"{
             ec{"Keysi"}
@@ -687,9 +669,6 @@ az{
         "Australia:Brisbane"{
             ec{"Brisbeyn"}
         }
-        "Australia:Currie"{
-            ec{"Kuriye"}
-        }
         "Australia:Darwin"{
             ec{"Darvin"}
         }
@@ -813,9 +792,6 @@ az{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ujqorod"}
-        }
         "Europe:Vaduz"{
             ec{"Vaduts"}
         }
@@ -836,9 +812,6 @@ az{
         }
         "Europe:Zagreb"{
             ec{"Zaqreb"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporojye"}
         }
         "Europe:Zurich"{
             ec{"Sürix"}
@@ -899,9 +872,6 @@ az{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Conston"}
         }
         "Pacific:Kiritimati"{
             ec{"Kirimati"}
@@ -1293,9 +1263,6 @@ az{
             lg{"Lord Hau Vaxtı"}
             ls{"Lord Hau Standart Vaxtı"}
         }
-        "meta:Macquarie"{
-            ls{"Makari Adası Vaxtı"}
-        }
         "meta:Magadan"{
             ld{"Maqadan Yay Vaxtı"}
             lg{"Maqadan Vaxtı"}
@@ -1320,11 +1287,6 @@ az{
         }
         "meta:Mawson"{
             ls{"Mouson Vaxtı"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Şimal-Qərbi Meksika Yay Vaxtı"}
-            lg{"Şimal-Qərbi Meksika Vaxtı"}
-            ls{"Şimal-Qərbi Meksika Standart Vaxtı"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksika Sakit Okean Yay Vaxtı"}

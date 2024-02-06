@@ -791,7 +791,6 @@ sl{
             phonebook{"razvrščanje po sistemu telefonskega imenika"}
             phonetic{"fonetično razvrščanje"}
             pinyin{"razvrščanje po sistemu pinjin"}
-            reformed{"reformirano razvrščanje"}
             search{"Splošno iskanje"}
             searchjl{"Iskanje po začetnem soglasniku hangul"}
             standard{"Standardno razvrščanje"}

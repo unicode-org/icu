@@ -222,11 +222,6 @@ en_CA{
         "meta:Maldives"{
             ss{"MVT"}
         }
-        "meta:Mexico_Northwest"{
-            ld{"Northwest Mexico Daylight Saving Time"}
-            lg{"Northwest Mexico Time"}
-            ls{"Northwest Mexico Standard Time"}
-        }
         "meta:Mexico_Pacific"{
             ld{"Mexican Pacific Daylight Saving Time"}
             lg{"Mexican Pacific Time"}

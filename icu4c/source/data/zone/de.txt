@@ -72,9 +72,6 @@ de{
         "America:Mexico_City"{
             ec{"Mexiko-Stadt"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
@@ -222,9 +219,6 @@ de{
         "Atlantic:South_Georgia"{
             ec{"Südgeorgien"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Koordinierte Weltzeit"}
         }
@@ -288,9 +282,6 @@ de{
         "Europe:Ulyanovsk"{
             ec{"Uljanowsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uschgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -302,9 +293,6 @@ de{
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporischschja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -728,9 +716,6 @@ de{
             lg{"Macau-Zeit"}
             ls{"Macau-Normalzeit"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarieinsel-Zeit"}
-        }
         "meta:Magadan"{
             ld{"Magadan-Sommerzeit"}
             lg{"Magadan-Zeit"}
@@ -755,11 +740,6 @@ de{
         }
         "meta:Mawson"{
             ls{"Mawson-Zeit"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Nordwestmexiko-Sommerzeit"}
-            lg{"Nordwestmexiko-Zeit"}
-            ls{"Nordwestmexiko-Normalzeit"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexikanische Pazifik-Sommerzeit"}

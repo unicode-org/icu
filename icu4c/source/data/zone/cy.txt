@@ -57,9 +57,6 @@ cy{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Gogledd Dakota"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"St. Barthélemy"}
         }
@@ -95,9 +92,6 @@ cy{
         }
         "Atlantic:South_Georgia"{
             ec{"De Georgia"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Amser Cyffredniol Cydlynol"}
@@ -139,9 +133,6 @@ cy{
         }
         "Europe:Rome"{
             ec{"Rhufain"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Uzhhorod"}
         }
         "Europe:Vatican"{
             ec{"Y Fatican"}
@@ -516,9 +507,6 @@ cy{
             lg{"Amser yr Arglwydd Howe"}
             ls{"Amser Safonol yr Arglwydd Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Amser Ynys Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Amser Haf Magadan"}
             lg{"Amser Magadan"}
@@ -543,11 +531,6 @@ cy{
         }
         "meta:Mawson"{
             ls{"Amser Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Amser Haf Gogledd Orllewin Mecsico"}
-            lg{"Amser Gogledd Orllewin Mecsico"}
-            ls{"Amser Safonol Gogledd Orllewin Mecsico"}
         }
         "meta:Mexico_Pacific"{
             ld{"Amser Haf Pasiffig Mecsico"}

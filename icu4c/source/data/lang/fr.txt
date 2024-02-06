@@ -431,7 +431,7 @@ fr{
         ng{"ndonga"}
         nia{"niha"}
         niu{"niuéen"}
-        njo{"Ao"}
+        njo{"ao"}
         nl{"néerlandais"}
         nl_BE{"flamand"}
         nmg{"ngoumba"}
@@ -913,7 +913,6 @@ fr{
             phonebook{"ordre de l’annuaire"}
             phonetic{"ordre de tri phonétique"}
             pinyin{"ordre pinyin"}
-            reformed{"ordre réformé"}
             search{"recherche générique"}
             searchjl{"rechercher par consonne initiale en hangeul"}
             standard{"ordre de tri standard"}

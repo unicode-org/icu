@@ -928,7 +928,6 @@ no{
             phonebook{"telefonkatalogsortering"}
             phonetic{"fonetisk sortering"}
             pinyin{"pinyinsortering"}
-            reformed{"reformert sortering"}
             search{"generelt søk"}
             searchjl{"Søk etter første konsonant i hangul"}
             standard{"standard sorteringsrekkefølge"}

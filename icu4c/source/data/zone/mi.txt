@@ -87,9 +87,6 @@ mi{
         "America:St_Vincent"{
             ec{"Hato Wēneti"}
         }
-        "America:Thunder_Bay"{
-            ec{"Whaitiri Pei"}
-        }
         "America:Toronto"{
             ec{"Tāroto"}
         }
@@ -680,9 +677,6 @@ mi{
             lg{"Wā Lord Howe"}
             ls{"Wā Lord Howe Arowhānui"}
         }
-        "meta:Macquarie"{
-            ls{"Wā o Te Moutere Makoare"}
-        }
         "meta:Magadan"{
             ld{"Wā Magadan Raumati"}
             lg{"Wā Magadan"}
@@ -707,11 +701,6 @@ mi{
         }
         "meta:Mawson"{
             ls{"Wā Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Wā Awatea o Mēhiko ki te uru-mā-raki"}
-            lg{"Wā Mēhiko ki te uru-mā-raki"}
-            ls{"Wā Arowhānui o Mēhiko ki te uru-mā-raki"}
         }
         "meta:Mexico_Pacific"{
             ld{"Wā Awatea Mēhiko Kiwa"}

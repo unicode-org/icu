@@ -102,9 +102,6 @@ ca{
         "America:Panama"{
             ec{"Panamà"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -264,9 +261,6 @@ ca{
         "Atlantic:St_Helena"{
             ec{"Saint Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Temps universal coordinat"}
         }
@@ -350,9 +344,6 @@ ca{
         "Europe:Ulyanovsk"{
             ec{"Uliànovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Újhorod"}
-        }
         "Europe:Vatican"{
             ec{"Vaticà"}
         }
@@ -364,9 +355,6 @@ ca{
         }
         "Europe:Warsaw"{
             ec{"Varsòvia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporíjia"}
         }
         "Europe:Zurich"{
             ec{"Zúric"}
@@ -768,9 +756,6 @@ ca{
             lg{"Hora de Macau"}
             ls{"Hora estàndard de Macau"}
         }
-        "meta:Macquarie"{
-            ls{"Hora de Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Hora d’estiu de Magadan"}
             lg{"Hora de Magadan"}
@@ -795,11 +780,6 @@ ca{
         }
         "meta:Mawson"{
             ls{"Hora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Hora d’estiu del nord-oest de Mèxic"}
-            lg{"Hora del nord-oest de Mèxic"}
-            ls{"Hora estàndard del nord-oest de Mèxic"}
         }
         "meta:Mexico_Pacific"{
             ld{"Hora d’estiu del Pacífic de Mèxic"}

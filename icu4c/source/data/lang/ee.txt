@@ -253,7 +253,6 @@ ee{
             gb2312han{"chinagbe yeye ƒe ɖoɖomɔ nu"}
             phonebook{"fonegbalẽ me ɖoɖomɔ nu"}
             pinyin{"pinyin ɖoɖomɔ nu"}
-            reformed{"nugbugbɔtoɖo ƒe ɖoɖomɔ nu"}
             search{"nudidi hena zazã gbadza"}
             stroke{"stroke ɖoɖomɔ nu"}
             traditional{"blema ɖoɖomɔ nu"}

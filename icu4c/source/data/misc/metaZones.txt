@@ -89,7 +89,6 @@ metaZones:table(nofallback){
         America_Mountain{
             001{"America/Denver"}
             CA{"America/Edmonton"}
-            MX{"America/Hermosillo"}
         }
         America_Pacific{
             001{"America/Los_Angeles"}
@@ -476,9 +475,6 @@ metaZones:table(nofallback){
         Macau{
             001{"Asia/Macau"}
         }
-        Macquarie{
-            001{"Antarctica/Macquarie"}
-        }
         Magadan{
             001{"Asia/Magadan"}
         }
@@ -802,7 +798,6 @@ metaZones:table(nofallback){
         liis{"Line_Islands"}
         loho{"Lord_Howe"}
         maca{"Macau"}
-        macq{"Macquarie"}
         maga{"Magadan"}
         mais{"Marshall_Islands"}
         mala{"Malaysia"}

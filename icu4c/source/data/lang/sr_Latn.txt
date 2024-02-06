@@ -799,7 +799,6 @@ sr_Latn{
             phonebook{"sortiranje kao telefonski imenik"}
             phonetic{"fonetski redosled sortiranja"}
             pinyin{"pinjin sortiranje"}
-            reformed{"reformisani redosled sortiranja"}
             search{"pretraga opšte namene"}
             searchjl{"Pretraga prema hangul početnom suglasniku"}
             standard{"standardni redosled sortiranja"}

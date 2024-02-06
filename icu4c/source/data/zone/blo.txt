@@ -444,9 +444,6 @@ blo{
         "America:New_York"{
             ec{"Niu Yɔrk"}
         }
-        "America:Nipigon"{
-            ec{"Nipigɔn"}
-        }
         "America:Noronha"{
             ec{"Norɔnya"}
         }
@@ -465,9 +462,6 @@ blo{
         "America:Panama"{
             ec{"Panamaa"}
         }
-        "America:Pangnirtung"{
-            ec{"Panyɩrtʊʊŋ"}
-        }
         "America:Paramaribo"{
             ec{"Paramariboo"}
         }
@@ -485,9 +479,6 @@ blo{
         }
         "America:Puerto_Rico"{
             ec{"Pɔrto Rikoo"}
-        }
-        "America:Rainy_River"{
-            ec{"Rɛɩni Riifa"}
         }
         "America:Rankin_Inlet"{
             ec{"Raŋkɩn Ɩnlɛɛtɩ"}
@@ -549,9 +540,6 @@ blo{
         "America:Thule"{
             ec{"Tuule"}
         }
-        "America:Thunder_Bay"{
-            ec{"Sanɖɛɛr Baɩ"}
-        }
         "America:Tijuana"{
             ec{"Tihuwana"}
         }
@@ -569,9 +557,6 @@ blo{
         }
         "America:Winnipeg"{
             ec{"Winipɛɛg"}
-        }
-        "America:Yellowknife"{
-            ec{"Yɛloonaɩf"}
         }
         "Antarctica:Casey"{
             ec{"Keesi"}
@@ -1071,9 +1056,6 @@ blo{
         "Europe:Ulyanovsk"{
             ec{"Ulyanɔɔf"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Usgɔrɔɖ"}
-        }
         "Europe:Vaduz"{
             ec{"Faɖus"}
         }
@@ -1094,9 +1076,6 @@ blo{
         }
         "Europe:Zagreb"{
             ec{"Sagrɛb"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Sapɔrɔsɩyɛ"}
         }
         "Europe:Zurich"{
             ec{"Suriik"}
@@ -1169,9 +1148,6 @@ blo{
         }
         "Pacific:Guam"{
             ec{"Guwam"}
-        }
-        "Pacific:Johnston"{
-            ec{"Jɔnstɔn"}
         }
         "Pacific:Kanton"{
             ec{"Kantɔn"}
@@ -1599,9 +1575,6 @@ blo{
             lg{"Makawoo kaakɔŋkɔŋɔ̀"}
             ls{"Makawoo kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
-        "meta:Macquarie"{
-            ls{"Makarii kaAtukǝltǝna kaakɔŋkɔŋɔ̀"}
-        }
         "meta:Magadan"{
             ld{"Magaɖan kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Magaɖan kaakɔŋkɔŋɔ̀"}
@@ -1626,11 +1599,6 @@ blo{
         }
         "meta:Mawson"{
             ls{"Mɔsɔn kaakɔŋkɔŋɔ̀"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Mɛsik gʊpɛnɛ na gɩteŋshilelaŋ kʊfɔɔ nɩ kaakɔŋkɔŋɔ̀ gafʊbaka"}
-            lg{"Mɛsik gʊpɛnɛ na gɩteŋshilelaŋ kʊfɔɔ nɩ kaakɔŋkɔŋɔ̀"}
-            ls{"Mɛsik gʊpɛnɛ na gɩteŋshilelaŋ kʊfɔɔ nɩ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mɛsik kapasifika kaakɔŋkɔŋɔ̀ gafʊbaka"}

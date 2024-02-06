@@ -63,12 +63,6 @@ af{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Noord-Dakota"}
         }
-        "America:Rainy_River"{
-            ec{"Rainyrivier"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"Sint Barthélemy"}
         }
@@ -86,9 +80,6 @@ af{
         }
         "America:St_Vincent"{
             ec{"Sint Vincent"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunderbaai"}
         }
         "Antarctica:Vostok"{
             ec{"Wostok"}
@@ -200,9 +191,6 @@ af{
         }
         "Atlantic:St_Helena"{
             ec{"Sint Helena"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Gekoördineerde universele tyd"}
@@ -662,9 +650,6 @@ af{
             lg{"Lord Howe-tyd"}
             ls{"Lord Howe-standaardtyd"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie-eiland-tyd"}
-        }
         "meta:Magadan"{
             ld{"Magadan-somertyd"}
             lg{"Magadan-tyd"}
@@ -689,11 +674,6 @@ af{
         }
         "meta:Mawson"{
             ls{"Mawson-tyd"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Noordwes-Meksiko-dagligtyd"}
-            lg{"Noordwes-Meksiko-tyd"}
-            ls{"Noordwes-Meksiko-standaardtyd"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksikaanse Pasifiese dagligtyd"}

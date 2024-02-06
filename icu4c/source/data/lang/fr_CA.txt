@@ -105,7 +105,6 @@ fr_CA{
             gb2312han{"ordre de tri chinois simplifié - GB2312"}
             phonebook{"ordre de tri de l’annuaire"}
             pinyin{"ordre de tri pinyin"}
-            reformed{"ordre de tri réformé"}
             searchjl{"Rechercher par consonne initiale en hangeul"}
             stroke{"ordre de tri des traits"}
             traditional{"ordre de tri traditionnel"}

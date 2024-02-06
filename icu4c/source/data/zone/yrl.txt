@@ -432,9 +432,6 @@ yrl{
         "America:New_York"{
             ec{"Yurki Pisasú"}
         }
-        "America:Nipigon"{
-            ec{"Nipigũ"}
-        }
         "America:Nome"{
             ec{"Réra"}
         }
@@ -455,9 +452,6 @@ yrl{
         }
         "America:Panama"{
             ec{"Panamã"}
-        }
-        "America:Pangnirtung"{
-            ec{"Pãginitũgi"}
         }
         "America:Paramaribo"{
             ec{"Paramaribu"}
@@ -480,9 +474,6 @@ yrl{
         "America:Punta_Arenas"{
             ec{"Pũta Arena-ita"}
         }
-        "America:Rainy_River"{
-            ec{"Paranã Amanawera"}
-        }
         "America:Rankin_Inlet"{
             ec{"Rãkĩ Uikesawa"}
         }
@@ -497,9 +488,6 @@ yrl{
         }
         "America:Rio_Branco"{
             ec{"Paranã Murutĩga"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Sãta Isabeu"}
         }
         "America:Santarem"{
             ec{"Sãtarẽ"}
@@ -546,9 +534,6 @@ yrl{
         "America:Thule"{
             ec{"Tixuri"}
         }
-        "America:Thunder_Bay"{
-            ec{"Tupã Kuara"}
-        }
         "America:Tijuana"{
             ec{"Tijuvỹnỹ"}
         }
@@ -569,9 +554,6 @@ yrl{
         }
         "America:Yakutat"{
             ec{"Yakutati"}
-        }
-        "America:Yellowknife"{
-            ec{"Kisé-tawá"}
         }
         "Antarctica:Casey"{
             ec{"Kasei"}
@@ -873,9 +855,6 @@ yrl{
         "Australia:Broken_Hill"{
             ec{"Iwitera Mupenaíra"}
         }
-        "Australia:Currie"{
-            ec{"Kurie"}
-        }
         "Australia:Darwin"{
             ec{"Dariwĩ"}
         }
@@ -1049,9 +1028,6 @@ yrl{
         "Europe:Ulyanovsk"{
             ec{"Ulianuwiki"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Usigurudi"}
-        }
         "Europe:Vaduz"{
             ec{"Vadusi"}
         }
@@ -1072,9 +1048,6 @@ yrl{
         }
         "Europe:Zagreb"{
             ec{"Sagarebi"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporisiya"}
         }
         "Europe:Zurich"{
             ec{"Zuriki"}
@@ -1153,9 +1126,6 @@ yrl{
         }
         "Pacific:Honolulu"{
             ec{"Hunururu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Jũsitũ"}
         }
         "Pacific:Kosrae"{
             ec{"Kusirai"}
@@ -1597,9 +1567,6 @@ yrl{
             lg{"Makau Hurariyu"}
             ls{"Makau Hurariyu Retewa"}
         }
-        "meta:Macquarie"{
-            ls{"Kapuãma Makikuari Hurariyu"}
-        }
         "meta:Magadan"{
             ld{"Magadã Kurasí Ara Hurariyu"}
             lg{"Magadã Hurariyu"}
@@ -1624,11 +1591,6 @@ yrl{
         }
         "meta:Mawson"{
             ls{"Mausũ Hurariyu"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Mẽsiku Nutiwesiti Kurasí Ara Hurariyu"}
-            lg{"Mẽsiku Nutiwesiti Hurariyu"}
-            ls{"Mẽsiku Nutiwesiti Hurariyu Retewa"}
         }
         "meta:Mexico_Pacific"{
             ld{"Pasifiku Mexikanu Kurasí Ara Hurariyu"}

@@ -2240,7 +2240,7 @@ fr{
             }
             foodcalorie{
                 one{"{0} kcal"}
-                other{"{0}  kcal"}
+                other{"{0} kcal"}
             }
             joule{
                 dnam{"J"}

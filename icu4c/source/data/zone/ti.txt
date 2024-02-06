@@ -465,9 +465,6 @@ ti{
         "America:New_York"{
             ec{"ኒው ዮርክ"}
         }
-        "America:Nipigon"{
-            ec{"ኒፒጎን"}
-        }
         "America:Nome"{
             ec{"ነውም"}
         }
@@ -489,9 +486,6 @@ ti{
         "America:Panama"{
             ec{"ፓናማ"}
         }
-        "America:Pangnirtung"{
-            ec{"ፓንግኒርተንግ"}
-        }
         "America:Paramaribo"{
             ec{"ፓራማሪቦ"}
         }
@@ -512,9 +506,6 @@ ti{
         }
         "America:Punta_Arenas"{
             ec{"ፑንታ ኣረናስ"}
-        }
-        "America:Rainy_River"{
-            ec{"ረይኒ ሪቨር"}
         }
         "America:Rankin_Inlet"{
             ec{"ራንኪን ኢንለት"}
@@ -576,9 +567,6 @@ ti{
         "America:Thule"{
             ec{"ዙል"}
         }
-        "America:Thunder_Bay"{
-            ec{"ዛንደር በይ"}
-        }
         "America:Tijuana"{
             ec{"ቲጅዋና"}
         }
@@ -599,9 +587,6 @@ ti{
         }
         "America:Yakutat"{
             ec{"ያኩታት"}
-        }
-        "America:Yellowknife"{
-            ec{"የለውናይፍ"}
         }
         "Antarctica:Casey"{
             ec{"ከይዚ"}
@@ -927,9 +912,6 @@ ti{
         "Australia:Broken_Hill"{
             ec{"ብሮክን ሂል"}
         }
-        "Australia:Currie"{
-            ec{"ኩሪ"}
-        }
         "Australia:Darwin"{
             ec{"ዳርዊን"}
         }
@@ -1112,9 +1094,6 @@ ti{
         "Europe:Ulyanovsk"{
             ec{"ኡልያኖቭስክ"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ኡዝጎሮድ"}
-        }
         "Europe:Vaduz"{
             ec{"ቫዱዝ"}
         }
@@ -1135,9 +1114,6 @@ ti{
         }
         "Europe:Zagreb"{
             ec{"ዛግረብ"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ዛፖሪዥያ"}
         }
         "Europe:Zurich"{
             ec{"ዙሪክ"}
@@ -1219,9 +1195,6 @@ ti{
         }
         "Pacific:Honolulu"{
             ec{"ሆኖሉሉ"}
-        }
-        "Pacific:Johnston"{
-            ec{"ጆንስተን"}
         }
         "Pacific:Kanton"{
             ec{"ካንቶን"}

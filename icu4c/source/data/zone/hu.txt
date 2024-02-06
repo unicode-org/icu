@@ -102,9 +102,6 @@ hu{
         "America:Rio_Branco"{
             ec{"Río Branco"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
@@ -327,9 +324,6 @@ hu{
         "Atlantic:St_Helena"{
             ec{"Szent Ilona"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"koordinált világidő"}
         }
@@ -435,9 +429,6 @@ hu{
         "Europe:Ulyanovsk"{
             ec{"Uljanovszk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ungvár"}
-        }
         "Europe:Vatican"{
             ec{"Vatikán"}
         }
@@ -452,9 +443,6 @@ hu{
         }
         "Europe:Zagreb"{
             ec{"Zágráb"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizzsja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -921,9 +909,6 @@ hu{
             lg{"Macaui idő"}
             ls{"Macaui zónaidő"}
         }
-        "meta:Macquarie"{
-            ls{"macquarie-szigeti téli idő"}
-        }
         "meta:Magadan"{
             ld{"magadáni nyári idő"}
             lg{"magadáni idő"}
@@ -948,11 +933,6 @@ hu{
         }
         "meta:Mawson"{
             ls{"mawsoni idő"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"északnyugat-mexikói nyári idő"}
-            lg{"északnyugat-mexikói idő"}
-            ls{"északnyugat-mexikói zónaidő"}
         }
         "meta:Mexico_Pacific"{
             ld{"mexikói csendes-óceáni nyári idő"}

@@ -892,7 +892,6 @@ zh{
             phonebook{"电话簿排序"}
             phonetic{"语音排序"}
             pinyin{"拼音排序"}
-            reformed{"改良排序"}
             search{"常规搜索"}
             searchjl{"按韩文字开首辅音来搜索"}
             standard{"标准排序"}

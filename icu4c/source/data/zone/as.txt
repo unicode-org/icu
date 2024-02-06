@@ -465,9 +465,6 @@ as{
         "America:New_York"{
             ec{"নিউ ইয়ৰ্ক"}
         }
-        "America:Nipigon"{
-            ec{"নিপিগন"}
-        }
         "America:Nome"{
             ec{"নোম"}
         }
@@ -489,9 +486,6 @@ as{
         "America:Panama"{
             ec{"পানামা"}
         }
-        "America:Pangnirtung"{
-            ec{"পাংনিৰ্টুংগ"}
-        }
         "America:Paramaribo"{
             ec{"পাৰামাৰিবো"}
         }
@@ -512,9 +506,6 @@ as{
         }
         "America:Punta_Arenas"{
             ec{"পুণ্টা এৰিনাছ"}
-        }
-        "America:Rainy_River"{
-            ec{"ৰেইনী নদী"}
         }
         "America:Rankin_Inlet"{
             ec{"ৰেংকিন ইনলেট"}
@@ -576,9 +567,6 @@ as{
         "America:Thule"{
             ec{"থ্যুলে"}
         }
-        "America:Thunder_Bay"{
-            ec{"থাণ্ডাৰ উপসাগৰ"}
-        }
         "America:Tijuana"{
             ec{"তিজুৱানা"}
         }
@@ -599,9 +587,6 @@ as{
         }
         "America:Yakutat"{
             ec{"য়াকুটাট"}
-        }
-        "America:Yellowknife"{
-            ec{"য়েল্লোনাইফ"}
         }
         "Antarctica:Casey"{
             ec{"কেছী"}
@@ -927,9 +912,6 @@ as{
         "Australia:Broken_Hill"{
             ec{"ব্ৰোকেন হিল"}
         }
-        "Australia:Currie"{
-            ec{"ক্যুৰি"}
-        }
         "Australia:Darwin"{
             ec{"ডাৰউইন"}
         }
@@ -1112,9 +1094,6 @@ as{
         "Europe:Ulyanovsk"{
             ec{"উল্যানোভ্‌স্ক"}
         }
-        "Europe:Uzhgorod"{
-            ec{"উজ্গোৰোড"}
-        }
         "Europe:Vaduz"{
             ec{"ভাদুজ"}
         }
@@ -1135,9 +1114,6 @@ as{
         }
         "Europe:Zagreb"{
             ec{"জাগ্ৰেব"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"জাপোৰোজাই"}
         }
         "Europe:Zurich"{
             ec{"জুৰিখ"}
@@ -1216,9 +1192,6 @@ as{
         }
         "Pacific:Guam"{
             ec{"গুৱাম"}
-        }
-        "Pacific:Johnston"{
-            ec{"জনষ্টন"}
         }
         "Pacific:Kanton"{
             ec{"কেণ্টন"}
@@ -1635,9 +1608,6 @@ as{
             lg{"লৰ্ড হাওৰ সময়"}
             ls{"লৰ্ড হাওৰ মান সময়"}
         }
-        "meta:Macquarie"{
-            ls{"মেক্‌কুৱেৰী দ্বীপৰ সময়"}
-        }
         "meta:Magadan"{
             ld{"মাগাদানৰ গ্ৰীষ্মকালীন সময়"}
             lg{"মাগাদানৰ সময়"}
@@ -1662,11 +1632,6 @@ as{
         }
         "meta:Mawson"{
             ls{"মাউছনৰ সময়"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"উত্তৰ-পশ্চিম মেক্সিকোৰ ডেলাইট সময়"}
-            lg{"উত্তৰ-পশ্চিম মেক্সিকোৰ সময়"}
-            ls{"উত্তৰ-পশ্চিম মেক্সিকোৰ মান সময়"}
         }
         "meta:Mexico_Pacific"{
             ld{"মেক্সিকোৰ প্ৰশান্ত ডেলাইট সময়"}
