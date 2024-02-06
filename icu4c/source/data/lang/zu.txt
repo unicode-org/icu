@@ -736,7 +736,6 @@ zu{
             phonebook{"Ukuhlunga kwebhuku lefoni"}
             phonetic{"Hlela Ngokwefonetiki"}
             pinyin{"Ukuhlunga nge-Pinyin"}
-            reformed{"Ukuhlunga okwenziwe kabusha"}
             search{"Usesho olujwayelekile"}
             searchjl{"Sesha nge-Hangul Ongwaqa Basekuqaleni"}
             standard{"I-oda yokuhlunga ejwayelekile"}

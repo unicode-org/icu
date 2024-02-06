@@ -156,9 +156,6 @@ sc{
         "Atlantic:St_Helena"{
             ec{"Sant’Elene"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Tempus coordinadu universale"}
             ss{"TCU"}
@@ -683,9 +680,6 @@ sc{
             lg{"Ora de Macao"}
             ls{"Ora istandard de Macao"}
         }
-        "meta:Macquarie"{
-            ls{"Ora de s’Ìsula Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Ora legale de Magadan"}
             lg{"Ora de Magadan"}
@@ -710,11 +704,6 @@ sc{
         }
         "meta:Mawson"{
             ls{"Ora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Ora legale de su Mèssicu nord-otzidentale"}
-            lg{"Ora de su Mèssicu nord-otzidentale"}
-            ls{"Ora istandard de su Mèssicu nord-otzidentale"}
         }
         "meta:Mexico_Pacific"{
             ld{"Ora legale de su Patzìficu (Mèssicu)"}

@@ -928,7 +928,6 @@ zh_Hant{
             phonebook{"電話簿排序"}
             phonetic{"發音排序"}
             pinyin{"拼音排序"}
-            reformed{"改良排序"}
             search{"一般用途搜尋"}
             searchjl{"韓文子音排序"}
             standard{"標準排序"}

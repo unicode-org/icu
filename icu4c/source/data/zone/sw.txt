@@ -18,9 +18,6 @@ sw{
         "America:Mexico_City"{
             ec{"Jiji la Mexico"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "Asia:Macau"{
             ec{"Macau"}
         }
@@ -32,9 +29,6 @@ sw{
         }
         "Atlantic:South_Georgia"{
             ec{"Georgia Kusini"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Mfumo wa kuratibu saa ulimwenguni"}
@@ -409,9 +403,6 @@ sw{
             lg{"Saa za Lord Howe"}
             ls{"Saa za Wastani za Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Saa za kisiwa cha Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Saa za Majira ya joto za Magadan"}
             lg{"Saa za Magadan"}
@@ -436,11 +427,6 @@ sw{
         }
         "meta:Mawson"{
             ls{"Saa za Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Saa za mchana za Meksiko Kaskazini Magharibi"}
-            lg{"Saa za Meksiko Kaskazini Magharibi"}
-            ls{"Saa za Wastani za Meksiko Kaskazini Magharibi"}
         }
         "meta:Mexico_Pacific"{
             ld{"Saa za mchana za pasifiki za Meksiko"}

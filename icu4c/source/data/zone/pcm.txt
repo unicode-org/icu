@@ -447,9 +447,6 @@ pcm{
         "America:New_York"{
             ec{"Niú Yọk"}
         }
-        "America:Nipigon"{
-            ec{"Nípígọn"}
-        }
         "America:Nome"{
             ec{"Noom"}
         }
@@ -471,9 +468,6 @@ pcm{
         "America:Panama"{
             ec{"Pánáma"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangnírtung"}
-        }
         "America:Paramaribo"{
             ec{"Párámaribo"}
         }
@@ -494,9 +488,6 @@ pcm{
         }
         "America:Punta_Arenas"{
             ec{"Púntá Arẹ́nas"}
-        }
-        "America:Rainy_River"{
-            ec{"Réní Ríva"}
         }
         "America:Rankin_Inlet"{
             ec{"Ránkín Ínlẹt"}
@@ -555,9 +546,6 @@ pcm{
         "America:Thule"{
             ec{"Túli"}
         }
-        "America:Thunder_Bay"{
-            ec{"Tọ́nda Bè"}
-        }
         "America:Tijuana"{
             ec{"Tikhuána"}
         }
@@ -578,9 +566,6 @@ pcm{
         }
         "America:Yakutat"{
             ec{"Yakútat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yẹ́lónaif"}
         }
         "Antarctica:Casey"{
             ec{"Kési"}
@@ -888,9 +873,6 @@ pcm{
         "Australia:Broken_Hill"{
             ec{"Brókún Hil"}
         }
-        "Australia:Currie"{
-            ec{"Kọ́ri"}
-        }
         "Australia:Darwin"{
             ec{"Dárwin"}
         }
@@ -1067,9 +1049,6 @@ pcm{
         "Europe:Ulyanovsk"{
             ec{"Uliánọvsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ọ́zhọrọd"}
-        }
         "Europe:Vatican"{
             ec{"Vátíkan"}
         }
@@ -1087,9 +1066,6 @@ pcm{
         }
         "Europe:Zagreb"{
             ec{"Zágrẹb"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporózhia"}
         }
         "Europe:Zurich"{
             ec{"Zúrik"}
@@ -1165,9 +1141,6 @@ pcm{
         }
         "Pacific:Guadalcanal"{
             ec{"Guádálkanal"}
-        }
-        "Pacific:Johnston"{
-            ec{"Jọ́nstun"}
         }
         "Pacific:Kiritimati"{
             ec{"Kritímáti"}
@@ -1577,9 +1550,6 @@ pcm{
             lg{"Lọd Haú Taim"}
             ls{"Lọd Haú Fíksd Taim"}
         }
-        "meta:Macquarie"{
-            ls{"Makwuéí Aíland Taim"}
-        }
         "meta:Magadan"{
             ld{"Mágádan Họ́t Sízin Taim"}
             lg{"Mágádan Taim"}
@@ -1604,11 +1574,6 @@ pcm{
         }
         "meta:Mawson"{
             ls{"Mọ́sọn Taim"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Nọ́twẹ́st Mẹ́ksíko Délaít Taim"}
-            lg{"Nọ́twẹ́st Mẹ́ksíko Taim"}
-            ls{"Nọ́twẹ́st Mẹ́ksíko Fíksd Taim"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mẹ́ksíkó Pasífík Délaít Taim"}

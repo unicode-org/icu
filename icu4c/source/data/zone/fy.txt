@@ -229,9 +229,6 @@ fy{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Oezjhorod"}
-        }
         "Europe:Vatican"{
             ec{"Fatikaanstêd"}
         }
@@ -243,9 +240,6 @@ fy{
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -669,9 +663,6 @@ fy{
             ld{"Macause simmertiid"}
             lg{"Macause tiid"}
             ls{"Macause standerttiid"}
-        }
-        "meta:Macquarie"{
-            ls{"Macquarie-eilânske tiid"}
         }
         "meta:Magadan"{
             ld{"Magadan-simmertiid"}

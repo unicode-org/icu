@@ -78,9 +78,6 @@ sv{
         "America:Noronha"{
             ec{"Fernando de Noronha"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -201,9 +198,6 @@ sv{
         "Atlantic:St_Helena"{
             ec{"Sankt Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"koordinerad universell tid"}
         }
@@ -264,9 +258,6 @@ sv{
         "Europe:Ulyanovsk"{
             ec{"Uljanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uzjhorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikanen"}
         }
@@ -275,9 +266,6 @@ sv{
         }
         "Europe:Warsaw"{
             ec{"Warszawa"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizjzja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -320,9 +308,6 @@ sv{
             sd{"Honolulusommartid"}
             sg{"Honolulutid"}
             ss{"Honolulunormaltid"}
-        }
-        "Pacific:Johnston"{
-            ec{"Johnstonatollen"}
         }
         "Pacific:Marquesas"{
             ec{"Marquesasöarna"}
@@ -735,9 +720,6 @@ sv{
             lg{"Macaotid"}
             ls{"Macaonormaltid"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarietid"}
-        }
         "meta:Magadan"{
             ld{"Magadan, sommartid"}
             lg{"Magadantid"}
@@ -762,11 +744,6 @@ sv{
         }
         "meta:Mawson"{
             ls{"Mawsontid"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"nordvästmexikansk sommartid"}
-            lg{"nordvästmexikansk tid"}
-            ls{"nordvästmexikansk normaltid"}
         }
         "meta:Mexico_Pacific"{
             ld{"mexikansk stillahavstid, sommartid"}

@@ -871,7 +871,6 @@ bs{
             phonebook{"Sortiranje kao telefonski imenik"}
             phonetic{"Fonetsko sortiranje"}
             pinyin{"Pinjin sortiranje"}
-            reformed{"Reformirano sortiranje"}
             search{"općenito pretraživanje"}
             searchjl{"Pretraživanje po početnom suglasniku hangula"}
             standard{"standardno sortiranje"}

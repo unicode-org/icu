@@ -117,9 +117,6 @@ ast{
         "America:Puerto_Rico"{
             ec{"Puertu Ricu"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santo_Domingo"{
             ec{"Santu Domingu"}
         }
@@ -239,9 +236,6 @@ ast{
         }
         "Australia:Adelaide"{
             ec{"Adelaida"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Hora coordinada universal"}
@@ -773,9 +767,6 @@ ast{
             lg{"Hora de Macáu"}
             ls{"Hora estándar de Macáu"}
         }
-        "meta:Macquarie"{
-            ls{"Hora de la Islla Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Hora braniega de Magadán"}
             lg{"Hora de Magadán"}
@@ -800,11 +791,6 @@ ast{
         }
         "meta:Mawson"{
             ls{"Hora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Hora braniega del noroeste de Méxicu"}
-            lg{"Hora del noroeste de Méxicu"}
-            ls{"Hora estándar del noroeste de Méxicu"}
         }
         "meta:Mexico_Pacific"{
             ld{"Hora braniega del Pacíficu de Méxicu"}

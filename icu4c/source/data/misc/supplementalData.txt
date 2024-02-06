@@ -2176,7 +2176,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"44"}
+    cldrVersion{"45"}
     codeMappings{
         {
             "AA",
@@ -4723,6 +4723,7 @@ supplementalData:table(nofallback){
                 "WST",
                 "XAF",
                 "XCD",
+                "XCG",
                 "XOF",
                 "XPF",
                 "YER",

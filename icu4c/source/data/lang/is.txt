@@ -731,7 +731,6 @@ is{
             phonebook{"Símaskráarröðun"}
             phonetic{"Hljóðfræðileg röð"}
             pinyin{"Pinyin-röðun"}
-            reformed{"Endurbætt röð"}
             search{"Almenn leit"}
             searchjl{"Leita eftir upphafssamhljóða í Hangul"}
             standard{"Stöðluð röðun"}

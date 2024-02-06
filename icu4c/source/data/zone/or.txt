@@ -465,9 +465,6 @@ or{
         "America:New_York"{
             ec{"ନ୍ୟୁ ୟୋର୍କ୍"}
         }
-        "America:Nipigon"{
-            ec{"ନିପିଗୋନ୍"}
-        }
         "America:Nome"{
             ec{"ନୋମେ"}
         }
@@ -489,9 +486,6 @@ or{
         "America:Panama"{
             ec{"ପାନାମା"}
         }
-        "America:Pangnirtung"{
-            ec{"ପାଙ୍ଗନିର୍ଟୁଙ୍ଗ"}
-        }
         "America:Paramaribo"{
             ec{"ପାରାମାରିବୋ"}
         }
@@ -512,9 +506,6 @@ or{
         }
         "America:Punta_Arenas"{
             ec{"ପୁଣ୍ଟା ଏରିନାସ୍‌"}
-        }
-        "America:Rainy_River"{
-            ec{"ରେଇନି ରିଭର୍"}
         }
         "America:Rankin_Inlet"{
             ec{"ରାନକିନ୍ ଇନଲେଟ୍"}
@@ -576,9 +567,6 @@ or{
         "America:Thule"{
             ec{"ଥୁଲେ"}
         }
-        "America:Thunder_Bay"{
-            ec{"ଥଣ୍ଡର୍ ବେ"}
-        }
         "America:Tijuana"{
             ec{"ତିଜୁଆନା"}
         }
@@ -599,9 +587,6 @@ or{
         }
         "America:Yakutat"{
             ec{"ୟାକୁଟାଟ୍"}
-        }
-        "America:Yellowknife"{
-            ec{"ୟେଲ୍ଲୋନାଇଫ୍"}
         }
         "Antarctica:Casey"{
             ec{"କାସେ"}
@@ -927,9 +912,6 @@ or{
         "Australia:Broken_Hill"{
             ec{"ବ୍ରୋକେନ୍‌ ହିଲ୍‌"}
         }
-        "Australia:Currie"{
-            ec{"କ୍ୟୁରୀ"}
-        }
         "Australia:Darwin"{
             ec{"ଡାରୱିନ୍‌"}
         }
@@ -1112,9 +1094,6 @@ or{
         "Europe:Ulyanovsk"{
             ec{"ୟୁଲୟାନୋଭସ୍କ"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ଉଜହୋରୋଦ୍"}
-        }
         "Europe:Vaduz"{
             ec{"ଭାଡୁଜ"}
         }
@@ -1135,9 +1114,6 @@ or{
         }
         "Europe:Zagreb"{
             ec{"ଜାଗ୍ରେବ୍"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ଜାପୋରୋଜହୟେ"}
         }
         "Europe:Zurich"{
             ec{"ଜୁରିକ୍"}
@@ -1219,9 +1195,6 @@ or{
         }
         "Pacific:Honolulu"{
             ec{"ହୋନୋଲୁଲୁ"}
-        }
-        "Pacific:Johnston"{
-            ec{"ଜନଷ୍ଟନ୍"}
         }
         "Pacific:Kanton"{
             ec{"କ୍ୟାଣ୍ଟନ"}
@@ -1677,9 +1650,6 @@ or{
             lg{"ମାକାଓ ସମୟ"}
             ls{"ମକାଓ ମାନକ ସମୟ"}
         }
-        "meta:Macquarie"{
-            ls{"ମାକ୍ୱେରୀ ଦ୍ୱୀପ ସମୟ"}
-        }
         "meta:Magadan"{
             ld{"ମାଗାଡାନ୍ ଗ୍ରୀଷ୍ମକାଳ ସମୟ"}
             lg{"ମାଗାଡାନ୍ ସମୟ"}
@@ -1704,11 +1674,6 @@ or{
         }
         "meta:Mawson"{
             ls{"ମାୱସନ୍‌ ସମୟ"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"ଉତ୍ତରପଶ୍ଚିମ ମେକ୍ସିକୋ ଦିବାଲୋକ ସମୟ"}
-            lg{"ଉତ୍ତରପଶ୍ଚିମ ମେକ୍ସିକୋ ସମୟ"}
-            ls{"ଉତ୍ତରପଶ୍ଚିମ ମେକ୍ସିକୋ ମାନାଙ୍କ ସମୟ"}
         }
         "meta:Mexico_Pacific"{
             ld{"ମେକ୍ସିକାନ୍ ପାସିଫିକ୍ ଦିବାଲୋକ ସମୟ"}

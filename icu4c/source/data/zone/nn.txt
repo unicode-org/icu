@@ -344,11 +344,6 @@ nn{
             lg{"mauritisk tid"}
             ls{"mauritisk normaltid"}
         }
-        "meta:Mexico_Northwest"{
-            ld{"sommartid for nordvestlege Mexico"}
-            lg{"tidssone for nordvestlege Mexico"}
-            ls{"normaltid for nordvestlege Mexico"}
-        }
         "meta:Mexico_Pacific"{
             ld{"sommartid for den meksikanske stillehavskysten"}
             lg{"tidssone for den meksikanske stillehavskysten"}

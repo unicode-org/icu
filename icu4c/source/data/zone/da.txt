@@ -30,9 +30,6 @@ da{
         "America:Merida"{
             ec{"Merida"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
@@ -123,9 +120,6 @@ da{
         "Atlantic:Faeroe"{
             ec{"Færøerne"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Koordineret universaltid"}
         }
@@ -174,9 +168,6 @@ da{
         "Europe:Ulyanovsk"{
             ec{"Uljanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uzjhorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikanet"}
         }
@@ -185,9 +176,6 @@ da{
         }
         "Europe:Warsaw"{
             ec{"Warszawa"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizjzja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -605,9 +593,6 @@ da{
             lg{"Macao-tid"}
             ls{"Macao-normaltid"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie-tid"}
-        }
         "meta:Magadan"{
             ld{"Magadan-sommertid"}
             lg{"Magadan-tid"}
@@ -632,11 +617,6 @@ da{
         }
         "meta:Mawson"{
             ls{"Mawson-tid"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Nordvestmexicansk sommertid"}
-            lg{"Nordvestmexicansk tid"}
-            ls{"Nordvestmexicansk normaltid"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexicansk Pacific-sommertid"}

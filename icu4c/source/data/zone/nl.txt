@@ -63,9 +63,6 @@ nl{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Noord-Dakota"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
@@ -198,9 +195,6 @@ nl{
         "Atlantic:St_Helena"{
             ec{"Sint-Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"gecoördineerde wereldtijd"}
         }
@@ -259,9 +253,6 @@ nl{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Oezjhorod"}
-        }
         "Europe:Vatican"{
             ec{"Vaticaanstad"}
         }
@@ -273,9 +264,6 @@ nl{
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -736,9 +724,6 @@ nl{
             lg{"Macause tijd"}
             ls{"Macause standaardtijd"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie-eilandse tijd"}
-        }
         "meta:Magadan"{
             ld{"Magadan-zomertijd"}
             lg{"Magadan-tijd"}
@@ -763,11 +748,6 @@ nl{
         }
         "meta:Mawson"{
             ls{"Mawson-tijd"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Northwest Mexico Daylight Time"}
-            lg{"Northwest Mexico Time"}
-            ls{"Northwest Mexico Standard Time"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexican Pacific Daylight Time"}

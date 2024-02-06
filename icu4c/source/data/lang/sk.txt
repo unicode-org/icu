@@ -742,7 +742,6 @@ sk{
             phonebook{"lexikografické zoradenie"}
             phonetic{"fonetické zoradenie"}
             pinyin{"zoradenie pinyin"}
-            reformed{"reformované zoradenie"}
             search{"všeobecné vyhľadávanie"}
             searchjl{"Hľadať podľa počiatočnej spoluhlásky písma Hangul"}
             standard{"štandardné zoradenie"}

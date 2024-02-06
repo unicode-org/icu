@@ -934,7 +934,6 @@ lt{
             phonebook{"telefonų knygos rūšiavimo tvarka"}
             phonetic{"Fonetinė rikiavimo tvarka"}
             pinyin{"supaprastinta kiniškų hieroglifų rūšiavimo tvarka"}
-            reformed{"reformuota rūšiavimo tvarka"}
             search{"bendroji paieška"}
             standard{"standartinis rikiavimas"}
             stroke{"Įprasta kiniško požymio rūšiavimo tvarka"}

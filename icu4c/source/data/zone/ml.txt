@@ -465,9 +465,6 @@ ml{
         "America:New_York"{
             ec{"ന്യൂയോർക്ക്"}
         }
-        "America:Nipigon"{
-            ec{"നിപ്പിഗോൺ"}
-        }
         "America:Nome"{
             ec{"നോം"}
         }
@@ -488,9 +485,6 @@ ml{
         }
         "America:Panama"{
             ec{"പനാമ"}
-        }
-        "America:Pangnirtung"{
-            ec{"പാൻഗ്‌നിറ്റംഗ്"}
         }
         "America:Paramaribo"{
             ec{"പരാമാരിബോ"}
@@ -513,9 +507,6 @@ ml{
         "America:Punta_Arenas"{
             ec{"പുന്റ അരീനസ്"}
         }
-        "America:Rainy_River"{
-            ec{"റെയ്നി റിവർ"}
-        }
         "America:Rankin_Inlet"{
             ec{"റാങ്കിൻ ഇൻലെറ്റ്"}
         }
@@ -530,9 +521,6 @@ ml{
         }
         "America:Rio_Branco"{
             ec{"റിയോ ബ്രാങ്കോ"}
-        }
-        "America:Santa_Isabel"{
-            ec{"സാന്ത ഇസബേൽ"}
         }
         "America:Santarem"{
             ec{"സാന്ററെം"}
@@ -579,9 +567,6 @@ ml{
         "America:Thule"{
             ec{"തൂളി"}
         }
-        "America:Thunder_Bay"{
-            ec{"തണ്ടർ ബേ"}
-        }
         "America:Tijuana"{
             ec{"തിയുവാന"}
         }
@@ -602,9 +587,6 @@ ml{
         }
         "America:Yakutat"{
             ec{"യാകുറ്റാറ്റ്"}
-        }
-        "America:Yellowknife"{
-            ec{"യെല്ലോനൈഫ്"}
         }
         "Antarctica:Casey"{
             ec{"കാസെ"}
@@ -930,9 +912,6 @@ ml{
         "Australia:Broken_Hill"{
             ec{"ബ്രോക്കൺ ഹിൽ"}
         }
-        "Australia:Currie"{
-            ec{"ക്യൂറി"}
-        }
         "Australia:Darwin"{
             ec{"ഡാർവിൻ"}
         }
@@ -1115,9 +1094,6 @@ ml{
         "Europe:Ulyanovsk"{
             ec{"ഉല്ല്യാനോവ്‌സ്‌ക്"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ഉസ്ഗൊറോഡ്"}
-        }
         "Europe:Vaduz"{
             ec{"വാദുസ്"}
         }
@@ -1138,9 +1114,6 @@ ml{
         }
         "Europe:Zagreb"{
             ec{"സാക്രെബ്"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"സാപ്പറോസൈ"}
         }
         "Europe:Zurich"{
             ec{"സൂറിച്ച്"}
@@ -1222,9 +1195,6 @@ ml{
         }
         "Pacific:Honolulu"{
             ec{"ഹോണലൂലു"}
-        }
-        "Pacific:Johnston"{
-            ec{"ജോൺസ്റ്റൺ"}
         }
         "Pacific:Kanton"{
             ec{"കാൻട്ടൻ"}
@@ -1682,9 +1652,6 @@ ml{
             lg{"മകൌ സമയം"}
             ls{"മകൌ സ്റ്റാൻഡേർഡ് സമയം"}
         }
-        "meta:Macquarie"{
-            ls{"മക്വാറി ദ്വീപ് സമയം"}
-        }
         "meta:Magadan"{
             ld{"മഗാദൻ ഗ്രീഷ്‌മകാല സമയം"}
             lg{"മഗാദൻ സമയം"}
@@ -1709,11 +1676,6 @@ ml{
         }
         "meta:Mawson"{
             ls{"മാസൺ സമയം"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"വടക്കുപടിഞ്ഞാറൻ മെക്സിക്കൻ ഡേലൈറ്റ് സമയം"}
-            lg{"വടക്കുപടിഞ്ഞാറൻ മെക്സിക്കൻ സമയം"}
-            ls{"വടക്കുപടിഞ്ഞാറൻ മെക്‌സിക്കൻ സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Mexico_Pacific"{
             ld{"മെക്സിക്കൻ പസഫിക് ഡേലൈറ്റ് സമയം"}

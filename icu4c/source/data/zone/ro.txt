@@ -51,9 +51,6 @@ ro{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Dakota de Nord"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"Saint Barthélemy"}
         }
@@ -177,9 +174,6 @@ ro{
         "Atlantic:St_Helena"{
             ec{"Sf. Elena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Timpul universal coordonat"}
         }
@@ -247,17 +241,11 @@ ro{
         "Europe:Ulyanovsk"{
             ec{"Ulianovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ujhorod"}
-        }
         "Europe:Vienna"{
             ec{"Viena"}
         }
         "Europe:Warsaw"{
             ec{"Varșovia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporoje"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -668,9 +656,6 @@ ro{
             lg{"Ora din Lord Howe"}
             ls{"Ora standard din Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Ora din Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Ora de vară din Magadan"}
             lg{"Ora din Magadan"}
@@ -695,11 +680,6 @@ ro{
         }
         "meta:Mawson"{
             ls{"Ora din Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Ora de vară a Mexicului de nord-vest"}
-            lg{"Ora Mexicului de nord-vest"}
-            ls{"Ora standard a Mexicului de nord-vest"}
         }
         "meta:Mexico_Pacific"{
             ld{"Ora de vară a zonei Pacific mexicane"}

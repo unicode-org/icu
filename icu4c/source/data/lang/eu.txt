@@ -741,7 +741,6 @@ eu{
             phonebook{"Telefonoen zerrenda"}
             phonetic{"Ordenatzeko irizpide fonetikoa"}
             pinyin{"Pinyin hurrenkera"}
-            reformed{"Erreformaren araberako hurrenkera"}
             search{"Bilaketa orokorra"}
             searchjl{"Bilatu hangularen lehen kontsonantearen arabera"}
             standard{"Ordenatzeko irizpide estandarra"}

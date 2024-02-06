@@ -245,11 +245,6 @@ kea{
             lg{"Ora di Avaí i Aleutas"}
             ls{"Ora Padron di Avaí i Aleutas"}
         }
-        "meta:Mexico_Northwest"{
-            ld{"Ora di Veron di Noroesti di Méxiku"}
-            lg{"Ora di Noroesti di Méxiku"}
-            ls{"Ora Padron di Noroesti di Méxiku"}
-        }
         "meta:Mexico_Pacific"{
             ld{"Ora di Veron di Pasífiku Mexikanu"}
             lg{"Ora di Pasífiku Mexikanu"}

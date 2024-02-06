@@ -114,9 +114,6 @@ eu{
         "America:Port_of_Spain"{
             ec{"Port-of-Spain"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -270,9 +267,6 @@ eu{
         "Atlantic:St_Helena"{
             ec{"Santa Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"ordu unibertsal koordinatua"}
         }
@@ -340,9 +334,6 @@ eu{
         "Europe:Ulyanovsk"{
             ec{"Ulianovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uzhhorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikano Hiria"}
         }
@@ -351,9 +342,6 @@ eu{
         }
         "Europe:Warsaw"{
             ec{"Varsovia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizhia"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -808,9 +796,6 @@ eu{
             lg{"Macaoko ordua"}
             ls{"Macaoko ordu estandarra"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie uharteko ordua"}
-        }
         "meta:Magadan"{
             ld{"Magadango udako ordua"}
             lg{"Magadango ordua"}
@@ -835,11 +820,6 @@ eu{
         }
         "meta:Mawson"{
             ls{"Mawsoneko ordua"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Mexikoko ipar-ekialdeko udako ordua"}
-            lg{"Mexikoko ipar-ekialdeko ordua"}
-            ls{"Mexikoko ipar-ekialdeko ordu estandarra"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexikoko Pazifikoko udako ordua"}

@@ -992,7 +992,6 @@ fi{
             phonebook{"puhelinluettelojärjestys"}
             phonetic{"äänteellinen järjestys"}
             pinyin{"pinyin-järjestys"}
-            reformed{"uudistettu järjestys"}
             search{"yleishakujärjestys"}
             searchjl{"haku hangul-alkukonsonantin mukaan"}
             standard{"normaalijärjestys"}

@@ -147,9 +147,6 @@ pt{
         "America:Puerto_Rico"{
             ec{"Porto Rico"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -294,9 +291,6 @@ pt{
         "Atlantic:St_Helena"{
             ec{"Santa Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Horário Universal Coordenado"}
         }
@@ -402,9 +396,6 @@ pt{
         }
         "Europe:Warsaw"{
             ec{"Varsóvia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporizhia"}
         }
         "Europe:Zurich"{
             ec{"Zurique"}
@@ -843,9 +834,6 @@ pt{
             lg{"Horário de Macau"}
             ls{"Horário Padrão de Macau"}
         }
-        "meta:Macquarie"{
-            ls{"Horário da Ilha Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Horário de Verão de Magadan"}
             lg{"Horário de Magadan"}
@@ -870,11 +858,6 @@ pt{
         }
         "meta:Mawson"{
             ls{"Horário de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Horário de Verão do Noroeste do México"}
-            lg{"Horário do Noroeste do México"}
-            ls{"Horário Padrão do Noroeste do México"}
         }
         "meta:Mexico_Pacific"{
             ld{"Horário de Verão do Pacífico Mexicano"}

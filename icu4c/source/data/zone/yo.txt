@@ -213,9 +213,6 @@ yo{
         "America:New_York"{
             ec{"ìlú New York"}
         }
-        "America:Nipigon"{
-            ec{"ìlú Nipigoni"}
-        }
         "America:Nome"{
             ec{"ìlú Nomi"}
         }
@@ -234,9 +231,6 @@ yo{
         "America:Panama"{
             ec{"ìlú Panama"}
         }
-        "America:Pangnirtung"{
-            ec{"ìlú Panituni"}
-        }
         "America:Phoenix"{
             ec{"ìlú Fínísì"}
         }
@@ -248,9 +242,6 @@ yo{
         }
         "America:Puerto_Rico"{
             ec{"ìlú Puerto Riko"}
-        }
-        "America:Rainy_River"{
-            ec{"ìlú Raini Rifà"}
         }
         "America:Rankin_Inlet"{
             ec{"ìlú Rankin Inlet"}
@@ -297,9 +288,6 @@ yo{
         "America:Thule"{
             ec{"ìlú Tulè"}
         }
-        "America:Thunder_Bay"{
-            ec{"ìlú Omi Thunder"}
-        }
         "America:Tijuana"{
             ec{"ìlú Tíjúana"}
         }
@@ -320,9 +308,6 @@ yo{
         }
         "America:Yakutat"{
             ec{"ìlú Yakuta"}
-        }
-        "America:Yellowknife"{
-            ec{"ìlú Yelonáfù"}
         }
         "Atlantic:Bermuda"{
             ec{"ìlú Bẹ̀múdà"}
@@ -681,9 +666,6 @@ yo{
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie Island Time"}
-        }
         "meta:Magadan"{
             ld{"Magadan Summer Time"}
             lg{"Magadan Time"}
@@ -708,11 +690,6 @@ yo{
         }
         "meta:Mawson"{
             ls{"Mawson Time"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Àkókò Ojúmọmọ Apá Ìwọ̀ Oorùn Mẹ́ṣíkò"}
-            lg{"Àkókò Apá Ìwọ̀ Oorùn Mẹ́ṣíkò"}
-            ls{"Àkókò Àfẹnukò Apá Ìwọ̀ Oorùn Mẹ́ṣíkò"}
         }
         "meta:Mexico_Pacific"{
             ld{"Àkókò Ojúmọmọ Pásífíìkì Mẹ́síkò"}

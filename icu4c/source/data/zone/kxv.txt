@@ -462,9 +462,6 @@ kxv{
         "America:New_York"{
             ec{"niyu york"}
         }
-        "America:Nipigon"{
-            ec{"nipigen"}
-        }
         "America:Nome"{
             ec{"nom"}
         }
@@ -486,9 +483,6 @@ kxv{
         "America:Panama"{
             ec{"panama"}
         }
-        "America:Pangnirtung"{
-            ec{"pangnirtung"}
-        }
         "America:Paramaribo"{
             ec{"paramaribo"}
         }
@@ -509,9 +503,6 @@ kxv{
         }
         "America:Punta_Arenas"{
             ec{"puṇṭa erenas"}
-        }
-        "America:Rainy_River"{
-            ec{"reni rivr"}
         }
         "America:Rankin_Inlet"{
             ec{"rankin inledṭ"}
@@ -573,9 +564,6 @@ kxv{
         "America:Thule"{
             ec{"tule"}
         }
-        "America:Thunder_Bay"{
-            ec{"tanḍr be"}
-        }
         "America:Tijuana"{
             ec{"tihvana"}
         }
@@ -596,9 +584,6 @@ kxv{
         }
         "America:Yakutat"{
             ec{"yakuṭaṭ"}
-        }
-        "America:Yellowknife"{
-            ec{"yellonaip"}
         }
         "Antarctica:Casey"{
             ec{"kesee"}
@@ -1106,9 +1091,6 @@ kxv{
         "Europe:Ulyanovsk"{
             ec{"ulyanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"ujhorod"}
-        }
         "Europe:Vaduz"{
             ec{"vaḍuj"}
         }
@@ -1129,9 +1111,6 @@ kxv{
         }
         "Europe:Zagreb"{
             ec{"tegusigalpa"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"japorjye"}
         }
         "Europe:Zurich"{
             ec{"juric"}
@@ -1207,9 +1186,6 @@ kxv{
         }
         "Pacific:Guam"{
             ec{"guam"}
-        }
-        "Pacific:Johnston"{
-            ec{"johnsṭon"}
         }
         "Pacific:Kanton"{
             ec{"kanṭon"}
@@ -1625,9 +1601,6 @@ kxv{
             lg{"laṛ hawe belā"}
             ls{"laṛ hawe mānānka belā"}
         }
-        "meta:Macquarie"{
-            ls{"makwārī dīp belā"}
-        }
         "meta:Magadan"{
             ld{"māgādan ḍelāit belā"}
             lg{"māgādan belā"}
@@ -1652,11 +1625,6 @@ kxv{
         }
         "meta:Mawson"{
             ls{"māwosn belā"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"utar weḍā kūṇpū meksik ḍelāiṭ belā"}
-            lg{"utar weḍā kūṇpū meksik belā"}
-            ls{"utar weḍā kūṇpū meksik mānānka belā"}
         }
         "meta:Mexico_Pacific"{
             ld{"meksikān pesipic ḍelāiṭ belā"}

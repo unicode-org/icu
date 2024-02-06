@@ -465,9 +465,6 @@ uk{
         "America:New_York"{
             ec{"Нью-Йорк"}
         }
-        "America:Nipigon"{
-            ec{"Ніпігон"}
-        }
         "America:Nome"{
             ec{"Ном"}
         }
@@ -488,9 +485,6 @@ uk{
         }
         "America:Panama"{
             ec{"Панама"}
-        }
-        "America:Pangnirtung"{
-            ec{"Панґніртанґ"}
         }
         "America:Paramaribo"{
             ec{"Парамарибо"}
@@ -513,9 +507,6 @@ uk{
         "America:Punta_Arenas"{
             ec{"Пунта-Аренас"}
         }
-        "America:Rainy_River"{
-            ec{"Рейні-Рівер"}
-        }
         "America:Rankin_Inlet"{
             ec{"Ренкін-Інлет"}
         }
@@ -530,9 +521,6 @@ uk{
         }
         "America:Rio_Branco"{
             ec{"Ріо-Бранко"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Санта-Ісабель"}
         }
         "America:Santarem"{
             ec{"Сантарен"}
@@ -579,9 +567,6 @@ uk{
         "America:Thule"{
             ec{"Туле"}
         }
-        "America:Thunder_Bay"{
-            ec{"Тандер-Бей"}
-        }
         "America:Tijuana"{
             ec{"Тіхуана"}
         }
@@ -602,9 +587,6 @@ uk{
         }
         "America:Yakutat"{
             ec{"Якутат"}
-        }
-        "America:Yellowknife"{
-            ec{"Єллоунайф"}
         }
         "Antarctica:Casey"{
             ec{"Кейсі"}
@@ -930,9 +912,6 @@ uk{
         "Australia:Broken_Hill"{
             ec{"Брокен-Хілл"}
         }
-        "Australia:Currie"{
-            ec{"Каррі"}
-        }
         "Australia:Darwin"{
             ec{"Дарвін"}
         }
@@ -1115,9 +1094,6 @@ uk{
         "Europe:Ulyanovsk"{
             ec{"Ульянівськ"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ужгород"}
-        }
         "Europe:Vaduz"{
             ec{"Вадуц"}
         }
@@ -1138,9 +1114,6 @@ uk{
         }
         "Europe:Zagreb"{
             ec{"Загреб"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Запоріжжя"}
         }
         "Europe:Zurich"{
             ec{"Цюріх"}
@@ -1222,9 +1195,6 @@ uk{
         }
         "Pacific:Honolulu"{
             ec{"Гонолулу"}
-        }
-        "Pacific:Johnston"{
-            ec{"Джонстон"}
         }
         "Pacific:Kanton"{
             ec{"Кантон"}
@@ -1658,9 +1628,6 @@ uk{
             lg{"за часом на острові Лорд-Хау"}
             ls{"за стандартним часом на острові Лорд-Хау"}
         }
-        "meta:Macquarie"{
-            ls{"за часом на острові Маккуорі"}
-        }
         "meta:Magadan"{
             ld{"за магаданським літнім часом"}
             lg{"за магаданським часом"}
@@ -1685,11 +1652,6 @@ uk{
         }
         "meta:Mawson"{
             ls{"за часом на станції Моусон"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"за літнім північнозахідним часом у Мексиці"}
-            lg{"за північнозахідним часом у Мексиці"}
-            ls{"за стандартним північнозахідним часом у Мексиці"}
         }
         "meta:Mexico_Pacific"{
             ld{"за літнім тихоокеанським часом у Мексиці"}

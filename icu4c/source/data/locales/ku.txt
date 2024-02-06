@@ -147,9 +147,9 @@ ku{
                     y{"G MMM'a' y'an' – MMMa y'an'"}
                 }
                 yMMMEd{
-                    M{"G d'ê' MMM'a' y'an' E  – d'ê' MMM'a' y'an' E"}
-                    d{"G d'ê' MMM'a' y'an' E  – d'ê' MMM'a' y'an' E"}
-                    y{"G d'ê' MMM'a' y'an' E  – d'ê' MMM'a' y'an' E"}
+                    M{"G d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
+                    d{"G d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
+                    y{"G d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
                 }
                 yMMMM{
                     M{"G MMMM – MMMM y"}
@@ -396,9 +396,9 @@ ku{
                     y{"MMM'a' y'an' – MMM'a' y'an'"}
                 }
                 yMMMEd{
-                    M{"d'ê' MMM'a' y'an' E  – d'ê' MMM'a' y'an' E"}
-                    d{"d'ê' MMM'a' y'an' E  – d'ê' MMM'a' y'an' E"}
-                    y{"d'ê' MMM'a' y'an' E  – d'ê' MMM'a' y'an' E"}
+                    M{"d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
+                    d{"d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
+                    y{"d'ê' MMM'a' y'an' E – d'ê' MMM'a' y'an' E"}
                 }
                 yMMMM{
                     M{"MMMM – MMMM y"}

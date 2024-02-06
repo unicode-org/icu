@@ -78,7 +78,6 @@ hi_Latn{
         collation{
             compat{"Compatibility ke liye, picchla sort order"}
             dictionary{"Dictionary kaa sort order"}
-            reformed{"Reform kiya gaya Sort Order"}
             searchjl{"Hangul initial consonant se search karein"}
         }
         d0{

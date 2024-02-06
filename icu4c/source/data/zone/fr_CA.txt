@@ -368,11 +368,6 @@ fr_CA{
             lg{"heure de Maurice"}
             ls{"heure normale de Maurice"}
         }
-        "meta:Mexico_Northwest"{
-            ld{"heure avancée du Nord-Ouest du Mexique"}
-            lg{"heure du Nord-Ouest du Mexique"}
-            ls{"heure normale du Nord-Ouest du Mexique"}
-        }
         "meta:Mexico_Pacific"{
             ld{"heure avancée du Pacifique mexicain"}
             lg{"heure du Pacifique mexicain"}

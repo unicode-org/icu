@@ -324,9 +324,6 @@ uz{
         "America:Ojinaga"{
             ec{"Oxinaga"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangnirtang"}
-        }
         "America:Phoenix"{
             ec{"Feniks"}
         }
@@ -345,9 +342,6 @@ uz{
         "America:Punta_Arenas"{
             ec{"Punta-Arenas"}
         }
-        "America:Rainy_River"{
-            ec{"Reyni-River"}
-        }
         "America:Rankin_Inlet"{
             ec{"Rankin-Inlet"}
         }
@@ -362,9 +356,6 @@ uz{
         }
         "America:Rio_Branco"{
             ec{"Riu-Branku"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santa-Izabel"}
         }
         "America:Santiago"{
             ec{"Santyago"}
@@ -405,9 +396,6 @@ uz{
         "America:Thule"{
             ec{"Tule"}
         }
-        "America:Thunder_Bay"{
-            ec{"Tander-Bey"}
-        }
         "America:Tijuana"{
             ec{"Tixuana"}
         }
@@ -419,9 +407,6 @@ uz{
         }
         "America:Winnipeg"{
             ec{"Vinnipeg"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellounayf"}
         }
         "Antarctica:Casey"{
             ec{"Keysi"}
@@ -654,9 +639,6 @@ uz{
         "Australia:Broken_Hill"{
             ec{"Broken-Xill"}
         }
-        "Australia:Currie"{
-            ec{"Kerri"}
-        }
         "Australia:Darwin"{
             ec{"Darvin"}
         }
@@ -783,9 +765,6 @@ uz{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ujgorod"}
-        }
         "Europe:Vaduz"{
             ec{"Vaduts"}
         }
@@ -800,9 +779,6 @@ uz{
         }
         "Europe:Warsaw"{
             ec{"Varshava"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporojye"}
         }
         "Europe:Zurich"{
             ec{"Syurix"}
@@ -860,9 +836,6 @@ uz{
         }
         "Pacific:Honolulu"{
             ec{"Gonolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Jonston"}
         }
         "Pacific:Kwajalein"{
             ec{"Kvajaleyn"}
@@ -1248,9 +1221,6 @@ uz{
             lg{"Lord-Xau vaqti"}
             ls{"Lord-Xau standart vaqti"}
         }
-        "meta:Macquarie"{
-            ls{"Makkuori oroli vaqti"}
-        }
         "meta:Magadan"{
             ld{"Magadan yozgi vaqti"}
             lg{"Magadan vaqti"}
@@ -1275,11 +1245,6 @@ uz{
         }
         "meta:Mawson"{
             ls{"Mouson vaqti"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Shimoli-g‘arbiy Meksika yozgi vaqti"}
-            lg{"Shimoli-g‘arbiy Meksika vaqti"}
-            ls{"Shimoli-g‘arbiy Meksika standart vaqti"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksika Tinch okeani yozgi vaqti"}

@@ -843,7 +843,6 @@ ast{
             gb2312han{"orde de clasificación chinu simplificáu - GB2312"}
             phonebook{"orde de clasificación de llista telefónica"}
             pinyin{"orde de clasificación pinyin"}
-            reformed{"orde de clasificación reformáu"}
             search{"gueta xeneral"}
             searchjl{"gueta por consonante Hangul d’aniciu"}
             standard{"orde de clasificación estándar"}

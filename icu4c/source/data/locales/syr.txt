@@ -336,7 +336,7 @@ syr{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
                 }
-                fallback{"{0}  –  {1}"}
+                fallback{"{0} – {1}"}
                 yM{
                     M{"M/y – M/y"}
                     y{"M/y – M/y"}

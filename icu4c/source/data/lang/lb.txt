@@ -770,7 +770,6 @@ lb{
             gb2312han{"Vereinfacht Chinesesch - GB2312"}
             phonebook{"Telefonsbuch-Zortéierung"}
             pinyin{"Pinyin-Zortéierregelen"}
-            reformed{"Reforméiert Zortéierreiefolleg"}
             search{"Allgemeng Sich"}
             searchjl{"Sich no Ufanksbuschtawen aus dem koreaneschen Alphabet"}
             standard{"Standard Zortéierreiefolleg"}

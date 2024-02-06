@@ -940,7 +940,6 @@ tr{
             phonebook{"Telefon Defteri Sıralama Düzeni"}
             phonetic{"Fonetik Sıralama Düzeni"}
             pinyin{"Pinyin Sıralama Düzeni"}
-            reformed{"Yeni Sıralama Düzeni"}
             search{"Genel Amaçlı Arama"}
             searchjl{"Hangul İlk Sessiz Harfe Göre Arama"}
             standard{"Standart Sıralama Düzeni"}

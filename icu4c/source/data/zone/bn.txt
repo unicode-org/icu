@@ -465,9 +465,6 @@ bn{
         "America:New_York"{
             ec{"নিউইয়র্ক"}
         }
-        "America:Nipigon"{
-            ec{"নিপিগোন"}
-        }
         "America:Nome"{
             ec{"নোম"}
         }
@@ -488,9 +485,6 @@ bn{
         }
         "America:Panama"{
             ec{"পানামা"}
-        }
-        "America:Pangnirtung"{
-            ec{"প্যাঙ্গনির্টুং"}
         }
         "America:Paramaribo"{
             ec{"প্যারামেরিবো"}
@@ -513,9 +507,6 @@ bn{
         "America:Punta_Arenas"{
             ec{"পুন্টা আরেনাস"}
         }
-        "America:Rainy_River"{
-            ec{"রেইনি রিভার"}
-        }
         "America:Rankin_Inlet"{
             ec{"র‍্যাঙ্কিন ইনলেট"}
         }
@@ -530,9 +521,6 @@ bn{
         }
         "America:Rio_Branco"{
             ec{"রিও ব্রাঙ্কো"}
-        }
-        "America:Santa_Isabel"{
-            ec{"সান্তা ইসাবেল"}
         }
         "America:Santarem"{
             ec{"সেনটুরেম"}
@@ -579,9 +567,6 @@ bn{
         "America:Thule"{
             ec{"থুলি"}
         }
-        "America:Thunder_Bay"{
-            ec{"থান্ডার বে"}
-        }
         "America:Tijuana"{
             ec{"তিজুয়ানা"}
         }
@@ -602,9 +587,6 @@ bn{
         }
         "America:Yakutat"{
             ec{"ইয়াকুটাট"}
-        }
-        "America:Yellowknife"{
-            ec{"ইয়েলোনাইফ"}
         }
         "Antarctica:Casey"{
             ec{"কেইসি"}
@@ -930,9 +912,6 @@ bn{
         "Australia:Broken_Hill"{
             ec{"ব্রোকেন হিল"}
         }
-        "Australia:Currie"{
-            ec{"কিউরি"}
-        }
         "Australia:Darwin"{
             ec{"ডারউইন"}
         }
@@ -1115,9 +1094,6 @@ bn{
         "Europe:Ulyanovsk"{
             ec{"উলিয়ানোভস্ক"}
         }
-        "Europe:Uzhgorod"{
-            ec{"উঝগোরোড"}
-        }
         "Europe:Vaduz"{
             ec{"ভাদুজ"}
         }
@@ -1138,9 +1114,6 @@ bn{
         }
         "Europe:Zagreb"{
             ec{"জাগ্রেব"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"জেপোরোজাইয়াই"}
         }
         "Europe:Zurich"{
             ec{"জুরিখ"}
@@ -1222,9 +1195,6 @@ bn{
         }
         "Pacific:Honolulu"{
             ec{"হনোলুলু"}
-        }
-        "Pacific:Johnston"{
-            ec{"জনস্টন"}
         }
         "Pacific:Kanton"{
             ec{"ক্যান্টন"}
@@ -1656,9 +1626,6 @@ bn{
             lg{"লর্ড হাওয়ে সময়"}
             ls{"লর্ড হাওয়ে মানক মসয়"}
         }
-        "meta:Macquarie"{
-            ls{"ম্যাককুরি দ্বীপ সময়"}
-        }
         "meta:Magadan"{
             ld{"ম্যাগাডান গ্রীষ্মকালীন সময়"}
             lg{"ম্যাগাডান সময়"}
@@ -1683,11 +1650,6 @@ bn{
         }
         "meta:Mawson"{
             ls{"মসন সময়"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"উত্তরপশ্চিম মেক্সিকোর দিনের সময়"}
-            lg{"উত্তরপশ্চিম মেক্সিকোর সময়"}
-            ls{"উত্তরপশ্চিম মেক্সিকোর মানক সময়"}
         }
         "meta:Mexico_Pacific"{
             ld{"মেক্সিকান প্রশান্ত মহাসাগরীয় দিবালোক সময়"}

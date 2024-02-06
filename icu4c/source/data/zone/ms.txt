@@ -24,12 +24,6 @@ ms{
         "America:Merida"{
             ec{"Merida"}
         }
-        "America:Rainy_River"{
-            ec{"Sungai Rainy"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"Saint Barthelemy"}
         }
@@ -47,9 +41,6 @@ ms{
         }
         "Asia:Singapore"{
             ec{"Singapura"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Waktu Universal Selaras"}
@@ -450,9 +441,6 @@ ms{
             lg{"Waktu Macao"}
             ls{"Waktu Piawai Macao"}
         }
-        "meta:Macquarie"{
-            ls{"Waktu Pulau Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Waktu Musim Panas Magadan"}
             lg{"Waktu Magadan"}
@@ -478,11 +466,6 @@ ms{
         }
         "meta:Mawson"{
             ls{"Waktu Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Waktu Siang Barat Laut Mexico"}
-            lg{"Waktu Barat Laut Mexico"}
-            ls{"Waktu Piawai Barat Laut Mexico"}
         }
         "meta:Mexico_Pacific"{
             ld{"Waktu Siang Pasifik Mexico"}

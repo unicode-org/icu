@@ -18,9 +18,6 @@ ee{
         "Asia:Macau"{
             ec{"Macau"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Xexeme gaƒoƒoɖoanyi me"}
         }
@@ -387,9 +384,6 @@ ee{
             lg{"Lord Howe gaƒoƒo me"}
             ls{"Lord Howe nutome gaƒoƒo me"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie Island gaƒoƒo me"}
-        }
         "meta:Magadan"{
             ld{"Magadan dzomeŋɔli gaƒoƒo me"}
             lg{"Magadan gaƒoƒo me"}
@@ -414,11 +408,6 @@ ee{
         }
         "meta:Mawson"{
             ls{"Mawson gaƒoƒo me"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Northwest Mexico kele gaƒoƒo me"}
-            lg{"Northwest Mexico gaƒoƒo me"}
-            ls{"Northwest Mexico nutome gaƒoƒo me"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexican Pacific kele gaƒoƒome"}

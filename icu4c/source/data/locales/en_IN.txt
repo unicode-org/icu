@@ -12,14 +12,6 @@ en_IN{
             }
             patternsShort{
                 currencyFormat{
-                    1000{
-                        one{"¤0T"}
-                        other{"¤0T"}
-                    }
-                    10000{
-                        one{"¤00T"}
-                        other{"¤00T"}
-                    }
                     100000{
                         one{"¤0L"}
                         other{"¤0L"}
@@ -41,12 +33,12 @@ en_IN{
                         other{"¤000Cr"}
                     }
                     10000000000{
-                        one{"¤0TCr"}
-                        other{"¤0TCr"}
+                        one{"¤0KCr"}
+                        other{"¤0KCr"}
                     }
                     100000000000{
-                        one{"¤00TCr"}
-                        other{"¤00TCr"}
+                        one{"¤00KCr"}
+                        other{"¤00KCr"}
                     }
                     1000000000000{
                         one{"¤0LCr"}
@@ -62,14 +54,6 @@ en_IN{
                     }
                 }
                 currencyFormat%alphaNextToNumber{
-                    1000{
-                        one{"¤ 0T"}
-                        other{"¤ 0T"}
-                    }
-                    10000{
-                        one{"¤ 00T"}
-                        other{"¤ 00T"}
-                    }
                     100000{
                         one{"¤ 0L"}
                         other{"¤ 0L"}
@@ -91,12 +75,12 @@ en_IN{
                         other{"¤ 000Cr"}
                     }
                     10000000000{
-                        one{"¤ 0TCr"}
-                        other{"¤ 0TCr"}
+                        one{"¤ 0KCr"}
+                        other{"¤ 0KCr"}
                     }
                     100000000000{
-                        one{"¤ 00TCr"}
-                        other{"¤ 00TCr"}
+                        one{"¤ 00KCr"}
+                        other{"¤ 00KCr"}
                     }
                     1000000000000{
                         one{"¤ 0LCr"}
@@ -113,12 +97,12 @@ en_IN{
                 }
                 decimalFormat{
                     1000{
-                        one{"0T"}
-                        other{"0T"}
+                        one{"0K"}
+                        other{"0K"}
                     }
                     10000{
-                        one{"00T"}
-                        other{"00T"}
+                        one{"00K"}
+                        other{"00K"}
                     }
                     100000{
                         one{"0L"}
@@ -141,12 +125,12 @@ en_IN{
                         other{"000Cr"}
                     }
                     10000000000{
-                        one{"0TCr"}
-                        other{"0TCr"}
+                        one{"0KCr"}
+                        other{"0KCr"}
                     }
                     100000000000{
-                        one{"00TCr"}
-                        other{"00TCr"}
+                        one{"00KCr"}
+                        other{"00KCr"}
                     }
                     1000000000000{
                         one{"0LCr"}

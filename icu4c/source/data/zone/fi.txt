@@ -78,9 +78,6 @@ fi{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Pohjois-Dakota"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -234,9 +231,6 @@ fi{
         "Atlantic:St_Helena"{
             ec{"Saint Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"UTC-yleisaika"}
         }
@@ -320,9 +314,6 @@ fi{
         "Europe:Ulyanovsk"{
             ec{"Uljanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikaani"}
         }
@@ -334,9 +325,6 @@ fi{
         }
         "Europe:Warsaw"{
             ec{"Varsova"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporižžja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -775,9 +763,6 @@ fi{
             lg{"Macaon aika"}
             ls{"Macaon normaaliaika"}
         }
-        "meta:Macquarie"{
-            ls{"Macquariensaaren aika"}
-        }
         "meta:Magadan"{
             ld{"Magadanin kesäaika"}
             lg{"Magadanin aika"}
@@ -802,11 +787,6 @@ fi{
         }
         "meta:Mawson"{
             ls{"Mawsonin aika"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Luoteis-Meksikon kesäaika"}
-            lg{"Luoteis-Meksikon aika"}
-            ls{"Luoteis-Meksikon normaaliaika"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksikon Tyynenmeren kesäaika"}

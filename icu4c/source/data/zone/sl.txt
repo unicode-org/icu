@@ -93,9 +93,6 @@ sl{
         "America:Puerto_Rico"{
             ec{"Portoriko"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"Sv. Bartolomej"}
         }
@@ -294,9 +291,6 @@ sl{
         "Atlantic:St_Helena"{
             ec{"Sv. Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"univerzalni koordinirani čas"}
         }
@@ -375,9 +369,6 @@ sl{
         "Europe:Ulyanovsk"{
             ec{"Uljanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -389,9 +380,6 @@ sl{
         }
         "Europe:Warsaw"{
             ec{"Varšava"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporožje"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -772,9 +760,6 @@ sl{
             lg{"Čas otoka Lord Howe"}
             ls{"Standardni čas otoka Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarieski čas"}
-        }
         "meta:Magadan"{
             ld{"Magadanski poletni čas"}
             lg{"Magadanski čas"}
@@ -799,11 +784,6 @@ sl{
         }
         "meta:Mawson"{
             ls{"Mawsonski čas"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Mehiški severozahodni poletni čas"}
-            lg{"Mehiški severozahodni čas"}
-            ls{"Mehiški severozahodni standardni čas"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mehiški pacifiški poletni čas"}

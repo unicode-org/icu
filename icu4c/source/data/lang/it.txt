@@ -925,7 +925,6 @@ it{
             phonebook{"Ordinamento Elenco telefonico"}
             phonetic{"Ordinamento fonetico"}
             pinyin{"Ordinamento pinyin"}
-            reformed{"Ordinamento riformato"}
             search{"Ricerca generica"}
             searchjl{"Cerca per consonante hangul iniziale"}
             standard{"Ordinamento standard"}

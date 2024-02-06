@@ -75,9 +75,6 @@ et{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Põhja-Dakota"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -243,9 +240,6 @@ et{
         "Atlantic:St_Helena"{
             ec{"Saint Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:UTC"{
             ls{"Koordineeritud maailmaaeg"}
         }
@@ -324,9 +318,6 @@ et{
         "Europe:Ulyanovsk"{
             ec{"Uljanovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -335,9 +326,6 @@ et{
         }
         "Europe:Warsaw"{
             ec{"Varssavi"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporožje"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -761,9 +749,6 @@ et{
             lg{"Macau aeg"}
             ls{"Macau standardaeg"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarie saare aeg"}
-        }
         "meta:Magadan"{
             ld{"Magadani suveaeg"}
             lg{"Magadani aeg"}
@@ -788,11 +773,6 @@ et{
         }
         "meta:Mawson"{
             ls{"Mawsoni aeg"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Loode-Mehhiko suveaeg"}
-            lg{"Loode-Mehhiko aeg"}
-            ls{"Loode-Mehhiko standardaeg"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mehhiko Vaikse ookeani suveaeg"}

@@ -516,9 +516,6 @@ ia{
             lg{"hora de Lord Howe"}
             ls{"hora standard de Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"hora del Insula Macquarie"}
-        }
         "meta:Magadan"{
             ld{"hora estive de Magadan"}
             lg{"hora de Magadan"}
@@ -543,11 +540,6 @@ ia{
         }
         "meta:Mawson"{
             ls{"hora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"hora estive del nordwest de Mexico"}
-            lg{"hora del nordwest de Mexico"}
-            ls{"hora normal del nordwest de Mexico"}
         }
         "meta:Mexico_Pacific"{
             ld{"hora estive del Pacifico mexican"}

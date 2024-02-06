@@ -69,9 +69,6 @@ bs{
         "America:Puerto_Rico"{
             ec{"Portoriko"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "Asia:Almaty"{
             ec{"Almati"}
         }
@@ -249,9 +246,6 @@ bs{
         "Atlantic:St_Helena"{
             ec{"Sveta Helena"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Australia:Lord_Howe"{
             ec{"Lord Hau"}
         }
@@ -355,9 +349,6 @@ bs{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -366,9 +357,6 @@ bs{
         }
         "Europe:Warsaw"{
             ec{"Varšava"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporožje"}
         }
         "Europe:Zurich"{
             ec{"Cirih"}
@@ -793,9 +781,6 @@ bs{
             lg{"Makao vreme"}
             ls{"Makao standardno vreme"}
         }
-        "meta:Macquarie"{
-            ls{"Vrijeme na Ostrvu Makvori"}
-        }
         "meta:Magadan"{
             ld{"Magadansko ljetno vrijeme"}
             lg{"Magadansko vrijeme"}
@@ -820,11 +805,6 @@ bs{
         }
         "meta:Mawson"{
             ls{"Vrijeme stanice Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Sjeverozapadno meksičko ljetno vrijeme"}
-            lg{"Sjeverozapadno meksičko vrijeme"}
-            ls{"Sjeverozapadno meksičko standardno vrijeme"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksičko pacifičko ljetno vrijeme"}

@@ -174,9 +174,6 @@ es{
         "America:Rio_Branco"{
             ec{"Río Branco"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:Santarem"{
             ec{"Santarém"}
         }
@@ -372,9 +369,6 @@ es{
         "Australia:Adelaide"{
             ec{"Adelaida"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Australia:Sydney"{
             ec{"Sídney"}
         }
@@ -485,9 +479,6 @@ es{
         "Europe:Ulyanovsk"{
             ec{"Uliánovsk"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Úzhgorod"}
-        }
         "Europe:Vatican"{
             ec{"El Vaticano"}
         }
@@ -502,9 +493,6 @@ es{
         }
         "Europe:Warsaw"{
             ec{"Varsovia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporiyia"}
         }
         "Europe:Zurich"{
             ec{"Zúrich"}
@@ -942,9 +930,6 @@ es{
             lg{"Hora de Macao"}
             ls{"Hora estándar de Macao"}
         }
-        "meta:Macquarie"{
-            ls{"hora de la isla Macquarie"}
-        }
         "meta:Magadan"{
             ld{"hora de verano de Magadán"}
             lg{"hora de Magadán"}
@@ -969,11 +954,6 @@ es{
         }
         "meta:Mawson"{
             ls{"hora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"hora de verano del noroeste de México"}
-            lg{"hora del noroeste de México"}
-            ls{"hora estándar del noroeste de México"}
         }
         "meta:Mexico_Pacific"{
             ld{"hora de verano del Pacífico de México"}

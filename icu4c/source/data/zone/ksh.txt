@@ -240,9 +240,6 @@ ksh{
         "Europe:Tirane"{
             ec{"Tiraana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uschjorod"}
-        }
         "Europe:Vatican"{
             ec{"der Vatikahn"}
         }
@@ -257,9 +254,6 @@ ksh{
         }
         "Europe:Zagreb"{
             ec{"Sagreb"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporischschja"}
         }
         "Europe:Zurich"{
             ec{"Züresch"}

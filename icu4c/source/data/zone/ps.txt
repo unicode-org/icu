@@ -465,9 +465,6 @@ ps{
         "America:New_York"{
             ec{"نیویارک"}
         }
-        "America:Nipigon"{
-            ec{"نیپګون"}
-        }
         "America:Nome"{
             ec{"نوم"}
         }
@@ -489,9 +486,6 @@ ps{
         "America:Panama"{
             ec{"پاناما"}
         }
-        "America:Pangnirtung"{
-            ec{"پينګنرچونګ"}
-        }
         "America:Paramaribo"{
             ec{"پاراماربو"}
         }
@@ -512,9 +506,6 @@ ps{
         }
         "America:Punta_Arenas"{
             ec{"پنټا آریناس"}
-        }
-        "America:Rainy_River"{
-            ec{"د باران باران"}
         }
         "America:Rankin_Inlet"{
             ec{"رينکن انلټ"}
@@ -576,9 +567,6 @@ ps{
         "America:Thule"{
             ec{"تول"}
         }
-        "America:Thunder_Bay"{
-            ec{"تنډر بی"}
-        }
         "America:Tijuana"{
             ec{"تجوانا"}
         }
@@ -599,9 +587,6 @@ ps{
         }
         "America:Yakutat"{
             ec{"ياکوټټ"}
-        }
-        "America:Yellowknife"{
-            ec{"يلونايف"}
         }
         "Antarctica:Casey"{
             ec{"کیسي"}
@@ -927,9 +912,6 @@ ps{
         "Australia:Broken_Hill"{
             ec{"بروکن هل"}
         }
-        "Australia:Currie"{
-            ec{"کرري"}
-        }
         "Australia:Darwin"{
             ec{"ډارون"}
         }
@@ -1112,9 +1094,6 @@ ps{
         "Europe:Ulyanovsk"{
             ec{"اليانوسک"}
         }
-        "Europe:Uzhgorod"{
-            ec{"یوژورډ"}
-        }
         "Europe:Vaduz"{
             ec{"واډوز"}
         }
@@ -1135,9 +1114,6 @@ ps{
         }
         "Europe:Zagreb"{
             ec{"زګرب"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"زاپوروژی"}
         }
         "Europe:Zurich"{
             ec{"زریچ"}
@@ -1219,9 +1195,6 @@ ps{
         }
         "Pacific:Honolulu"{
             ec{"هینولولو"}
-        }
-        "Pacific:Johnston"{
-            ec{"جانسټن"}
         }
         "Pacific:Kiritimati"{
             ec{"کيريټماټي"}
@@ -1634,9 +1607,6 @@ ps{
             lg{"لارډ هوي وخت"}
             ls{"لارډ هوي معياري وخت"}
         }
-        "meta:Macquarie"{
-            ls{"مکواري ټاپو وخت"}
-        }
         "meta:Magadan"{
             ld{"ميګډان اوړي وخت"}
             lg{"ميګډان وخت"}
@@ -1661,11 +1631,6 @@ ps{
         }
         "meta:Mawson"{
             ls{"ماوسن وخت"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"د شمال لویدیځ مکسیکو رڼا ورځې وخت"}
-            lg{"د شمال لویدیځ مکسیکو وخت"}
-            ls{"د شمال لویدیځ مکسیکو معیاري وخت"}
         }
         "meta:Mexico_Pacific"{
             ld{"مکسیکن پیسفک رڼا ورځې وخت"}

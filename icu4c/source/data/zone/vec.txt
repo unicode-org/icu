@@ -216,9 +216,6 @@ vec{
         "America:Panama"{
             ec{"Pànama"}
         }
-        "America:Pangnirtung"{
-            ec{"Pang"}
-        }
         "America:Port-au-Prince"{
             ec{"Porto Prìnsipe"}
         }
@@ -487,9 +484,6 @@ vec{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ùzgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vategan"}
         }
@@ -498,9 +492,6 @@ vec{
         }
         "Europe:Warsaw"{
             ec{"Varsavia"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporija"}
         }
         "Europe:Zurich"{
             ec{"Zurigo"}
@@ -558,9 +549,6 @@ vec{
         }
         "Pacific:Guadalcanal"{
             ec{"Ìzola Guadalcanal"}
-        }
-        "Pacific:Johnston"{
-            ec{"Atolo Johnston"}
         }
         "Pacific:Kanton"{
             ec{"Atolo Canton"}
@@ -973,9 +961,6 @@ vec{
             lg{"Ora de l’Ìzola Lord Howe"}
             ls{"Ora normale de l’Ìzola Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Ora de l’Ìzola Macquarie"}
-        }
         "meta:Magadan"{
             ld{"Ora d’istà de Magadan"}
             lg{"Ora de Magadan"}
@@ -1000,11 +985,6 @@ vec{
         }
         "meta:Mawson"{
             ls{"Ora de Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Ora d’istà de’l Mèsego nord osidentale"}
-            lg{"Ora de’l Mèsego nord osidentale"}
-            ls{"Ora normale de’l Mèsego nord osidentale"}
         }
         "meta:Mexico_Pacific"{
             ld{"Ora d’istà de’l Mèsego de’l Pasìfego"}

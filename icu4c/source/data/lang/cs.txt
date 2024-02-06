@@ -928,7 +928,6 @@ cs{
             phonebook{"Řazení telefonního seznamu"}
             phonetic{"Fonetické řazení"}
             pinyin{"Řazení podle pchin-jinu"}
-            reformed{"Reformované řazení"}
             search{"Obecné hledání"}
             searchjl{"Vyhledávat podle počáteční souhlásky písma hangul"}
             standard{"Standardní řazení"}

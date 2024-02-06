@@ -689,7 +689,6 @@ sc{
             gb2312han{"ordinamentu de su tzinesu semplificadu - GB2312"}
             phonebook{"ordinamentu de s’elencu telefònicu"}
             pinyin{"ordinamentu pinyin"}
-            reformed{"ordinamentu riformadu"}
             search{"chirca genèrica"}
             searchjl{"chirca pro consonante hangul initziale"}
             standard{"ordinamentu istandard"}

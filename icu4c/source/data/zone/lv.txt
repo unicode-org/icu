@@ -399,9 +399,6 @@ lv{
         "America:New_York"{
             ec{"Ņujorka"}
         }
-        "America:Nipigon"{
-            ec{"Nipigona"}
-        }
         "America:Nome"{
             ec{"Noma"}
         }
@@ -419,9 +416,6 @@ lv{
         }
         "America:Ojinaga"{
             ec{"Ohinaga"}
-        }
-        "America:Pangnirtung"{
-            ec{"Pannirtuna"}
         }
         "America:Phoenix"{
             ec{"Fīniksa"}
@@ -441,9 +435,6 @@ lv{
         "America:Punta_Arenas"{
             ec{"Puntaarenasa"}
         }
-        "America:Rainy_River"{
-            ec{"Reinirivera"}
-        }
         "America:Rankin_Inlet"{
             ec{"Rankininleta"}
         }
@@ -458,9 +449,6 @@ lv{
         }
         "America:Rio_Branco"{
             ec{"Riobranko"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Santaisabela"}
         }
         "America:Santarem"{
             ec{"Santarena"}
@@ -504,9 +492,6 @@ lv{
         "America:Thule"{
             ec{"Tule"}
         }
-        "America:Thunder_Bay"{
-            ec{"Tanderbeja"}
-        }
         "America:Tijuana"{
             ec{"Tihuana"}
         }
@@ -521,9 +506,6 @@ lv{
         }
         "America:Yakutat"{
             ec{"Jakutata"}
-        }
-        "America:Yellowknife"{
-            ec{"Jelounaifa"}
         }
         "Antarctica:Casey"{
             ec{"Keisi"}
@@ -822,9 +804,6 @@ lv{
         "Australia:Broken_Hill"{
             ec{"Brokenhila"}
         }
-        "Australia:Currie"{
-            ec{"Kari"}
-        }
         "Australia:Darwin"{
             ec{"Dārvina"}
         }
@@ -986,9 +965,6 @@ lv{
         "Europe:Ulyanovsk"{
             ec{"Uļjanovska"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užhoroda"}
-        }
         "Europe:Vaduz"{
             ec{"Vaduca"}
         }
@@ -1009,9 +985,6 @@ lv{
         }
         "Europe:Zagreb"{
             ec{"Zagreba"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporožje"}
         }
         "Europe:Zurich"{
             ec{"Cīrihe"}
@@ -1084,9 +1057,6 @@ lv{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Džonstona atols"}
         }
         "Pacific:Kanton"{
             ec{"Kantona"}
@@ -1506,9 +1476,6 @@ lv{
             lg{"Lorda Hava salas laiks"}
             ls{"Lorda Hava salas ziemas laiks"}
         }
-        "meta:Macquarie"{
-            ls{"Makvorija salas laiks"}
-        }
         "meta:Magadan"{
             ld{"Magadanas vasaras laiks"}
             lg{"Magadanas laiks"}
@@ -1533,11 +1500,6 @@ lv{
         }
         "meta:Mawson"{
             ls{"Mosonas laiks"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Ziemeļrietumu Meksikas vasaras laiks"}
-            lg{"Ziemeļrietumu Meksikas laiks"}
-            ls{"Ziemeļrietumu Meksikas ziemas laiks"}
         }
         "meta:Mexico_Pacific"{
             ld{"Meksikas Klusā okeāna piekrastes vasaras laiks"}

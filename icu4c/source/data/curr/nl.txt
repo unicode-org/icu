@@ -1111,6 +1111,10 @@ nl{
             "EC$",
             "Oost-Caribische dollar",
         }
+        XCG{
+            "Cg.",
+            "Caribische gulden",
+        }
         XDR{
             "XDR",
             "Special Drawing Rights",
@@ -1228,6 +1232,7 @@ nl{
         BYN{"р."}
         RUR{"р."}
         TWD{"NT$"}
+        XCG{"Cg"}
     }
     Currencies%variant{
         GEL{"ლ"}

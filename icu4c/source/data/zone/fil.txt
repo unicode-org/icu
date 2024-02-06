@@ -27,9 +27,6 @@ fil{
         "America:Rankin_Inlet"{
             ec{"Makipot na Look ng Rankin"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "America:St_Barthelemy"{
             ec{"St. Barthélemy"}
         }
@@ -44,9 +41,6 @@ fil{
         }
         "Asia:Saigon"{
             ec{"Lungsod ng Ho Chi Minh"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Coordinated Universal Time"}
@@ -424,9 +418,6 @@ fil{
             lg{"Oras sa Lord Howe"}
             ls{"Standard na Oras sa Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Oras sa Macquarie Island"}
-        }
         "meta:Magadan"{
             ld{"Oras sa Tag-init ng Magadan"}
             lg{"Oras sa Magadan"}
@@ -451,11 +442,6 @@ fil{
         }
         "meta:Mawson"{
             ls{"Oras sa Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Daylight na Oras sa Hilagang-kanlurang Mexico"}
-            lg{"Oras sa Hilagang-kanlurang Mexico"}
-            ls{"Standard na Oras sa Hilagang-kanlurang Mexico"}
         }
         "meta:Mexico_Pacific"{
             ld{"Daylight na Oras sa Pasipiko ng Mexico"}

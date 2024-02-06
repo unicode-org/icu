@@ -36,9 +36,6 @@ mt{
         "Atlantic:South_Georgia"{
             ec{"il-Georgia tan-Nofsinhar"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Etc:Unknown"{
             ec{"Belt Mhux Magħruf"}
         }

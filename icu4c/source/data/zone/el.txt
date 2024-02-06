@@ -462,9 +462,6 @@ el{
         "America:New_York"{
             ec{"Νέα Υόρκη"}
         }
-        "America:Nipigon"{
-            ec{"Νιπιγκόν"}
-        }
         "America:Nome"{
             ec{"Νόμε"}
         }
@@ -485,9 +482,6 @@ el{
         }
         "America:Panama"{
             ec{"Παναμάς"}
-        }
-        "America:Pangnirtung"{
-            ec{"Πανγκνίρτουνγκ"}
         }
         "America:Paramaribo"{
             ec{"Παραμαρίμπο"}
@@ -510,9 +504,6 @@ el{
         "America:Punta_Arenas"{
             ec{"Πούντα Αρένας"}
         }
-        "America:Rainy_River"{
-            ec{"Ρέινι Ρίβερ"}
-        }
         "America:Rankin_Inlet"{
             ec{"Ράνκιν Ίνλετ"}
         }
@@ -527,9 +518,6 @@ el{
         }
         "America:Rio_Branco"{
             ec{"Ρίο Μπράνκο"}
-        }
-        "America:Santa_Isabel"{
-            ec{"Σάντα Ιζαμπέλ"}
         }
         "America:Santarem"{
             ec{"Σανταρέμ"}
@@ -576,9 +564,6 @@ el{
         "America:Thule"{
             ec{"Θούλη"}
         }
-        "America:Thunder_Bay"{
-            ec{"Θάντερ Μπέι"}
-        }
         "America:Tijuana"{
             ec{"Τιχουάνα"}
         }
@@ -599,9 +584,6 @@ el{
         }
         "America:Yakutat"{
             ec{"Γιάκουτατ"}
-        }
-        "America:Yellowknife"{
-            ec{"Γέλοουναϊφ"}
         }
         "Antarctica:Casey"{
             ec{"Κάσεϊ"}
@@ -927,9 +909,6 @@ el{
         "Australia:Broken_Hill"{
             ec{"Μπρόκεν Χιλ"}
         }
-        "Australia:Currie"{
-            ec{"Κάρι"}
-        }
         "Australia:Darwin"{
             ec{"Ντάργουιν"}
         }
@@ -1112,9 +1091,6 @@ el{
         "Europe:Ulyanovsk"{
             ec{"Ουλιάνοφσκ"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Ούζχοροντ"}
-        }
         "Europe:Vaduz"{
             ec{"Βαντούζ"}
         }
@@ -1135,9 +1111,6 @@ el{
         }
         "Europe:Zagreb"{
             ec{"Ζάγκρεμπ"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Ζαπορόζιε"}
         }
         "Europe:Zurich"{
             ec{"Ζυρίχη"}
@@ -1219,9 +1192,6 @@ el{
         }
         "Pacific:Honolulu"{
             ec{"Χονολουλού"}
-        }
-        "Pacific:Johnston"{
-            ec{"Τζόνστον"}
         }
         "Pacific:Kanton"{
             ec{"Καντών"}
@@ -1664,9 +1634,6 @@ el{
             lg{"Ώρα Μακάο"}
             ls{"Χειμερινή ώρα Μακάο"}
         }
-        "meta:Macquarie"{
-            ls{"Ώρα Νησιού Μακουάρι"}
-        }
         "meta:Magadan"{
             ld{"Θερινή ώρα Μαγκαντάν"}
             lg{"Ώρα Μαγκαντάν"}
@@ -1691,11 +1658,6 @@ el{
         }
         "meta:Mawson"{
             ls{"Ώρα Μόσον"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Θερινή ώρα Βορειοδυτικού Μεξικού"}
-            lg{"Ώρα Βορειοδυτικού Μεξικού"}
-            ls{"Χειμερινή ώρα Βορειοδυτικού Μεξικού"}
         }
         "meta:Mexico_Pacific"{
             ld{"Θερινή ώρα Ειρηνικού Μεξικού"}

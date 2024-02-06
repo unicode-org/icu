@@ -845,7 +845,6 @@ da{
             phonebook{"sorteringsrækkefølge i telefonbøger"}
             phonetic{"fonetisk sorteringsrækkefølge"}
             pinyin{"pinyin-baseret sorteringsrækkefølge"}
-            reformed{"ny sorteringsrækkefølge"}
             search{"generel søgning"}
             searchjl{"sortér efter den første konsonant i hangul"}
             standard{"standardsorteringsrækkefølge"}

@@ -210,9 +210,6 @@ lb{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uschgorod"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -227,9 +224,6 @@ lb{
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Saporischschja"}
         }
         "Europe:Zurich"{
             ec{"Zürech"}
@@ -609,9 +603,6 @@ lb{
             lg{"Lord-Howe-Zäit"}
             ls{"Lord-Howe-Normalzäit"}
         }
-        "meta:Macquarie"{
-            ls{"Macquarieinsel-Zäit"}
-        }
         "meta:Magadan"{
             ld{"Magadan-Summerzäit"}
             lg{"Magadan-Zäit"}
@@ -636,11 +627,6 @@ lb{
         }
         "meta:Mawson"{
             ls{"Mawson-Zäit"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Nordwest-Mexiko-Summerzäit"}
-            lg{"Nordwest-Mexiko-Zäit"}
-            ls{"Nordwest-Mexiko-Normalzäit"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexikanesch Pazifik-Summerzäit"}

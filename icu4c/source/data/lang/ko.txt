@@ -855,7 +855,6 @@ ko{
             phonebook{"전화번호부순"}
             phonetic{"소리나는 대로 정렬 순서"}
             pinyin{"병음순"}
-            reformed{"개정 정렬순"}
             search{"범용 검색"}
             searchjl{"한글 자음으로 검색"}
             standard{"표준 정렬 순서"}

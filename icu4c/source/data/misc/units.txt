@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 units:table(nofallback){
-    cldrVersion{"44"}
+    cldrVersion{"45"}
     convertUnits{
         100-kilometer{
             factor{"100000"}
@@ -48,6 +48,11 @@ units:table(nofallback){
             factor{"42*gal_to_m3"}
             systems{"ussystem"}
             target{"cubic-meter"}
+        }
+        beaufort{
+            special{"beaufort"}
+            systems{"metric_adjacent"}
+            target{"meter-per-second"}
         }
         becquerel{
             factor{"1"}

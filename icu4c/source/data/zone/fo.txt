@@ -36,9 +36,6 @@ fo{
         "America:Puerto_Rico"{
             ec{"Puerto Riko"}
         }
-        "America:Santa_Isabel"{
-            ec{"Santa Isabel"}
-        }
         "Asia:Bahrain"{
             ec{"Barein"}
         }
@@ -77,9 +74,6 @@ fo{
         }
         "Atlantic:South_Georgia"{
             ec{"Suðurgeorgiaoyggjar"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
         }
         "Etc:UTC"{
             ls{"Samskipað heimstíð"}
@@ -131,9 +125,6 @@ fo{
         }
         "Europe:Stockholm"{
             ec{"Stokkhólm"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Uzhhorod"}
         }
         "Europe:Vatican"{
             ec{"Vatikanið"}
@@ -504,9 +495,6 @@ fo{
             lg{"Lord Howe tíð"}
             ls{"Lord Howe vanlig tíð"}
         }
-        "meta:Macquarie"{
-            ls{"Macquariesoyggj tíð"}
-        }
         "meta:Magadan"{
             ld{"Magadan summartíð"}
             lg{"Magadan tíð"}
@@ -531,11 +519,6 @@ fo{
         }
         "meta:Mawson"{
             ls{"Mawson tíð"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Northwest Mexico summartíð"}
-            lg{"Northwest Mexico tíð"}
-            ls{"Northwest Mexico vanlig tíð"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexican Pacific summartíð"}
