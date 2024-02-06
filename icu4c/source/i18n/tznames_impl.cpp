@@ -16,6 +16,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/strenum.h"
+#include "unicode/stringpiece.h"
 #include "unicode/ustring.h"
 #include "unicode/timezone.h"
 #include "unicode/utf16.h"
@@ -1912,7 +1913,7 @@ U_CDECL_END
 
 class TZDBNameSearchHandler : public TextTrieMapSearchResultHandler {
 public:
-    TZDBNameSearchHandler(uint32_t types, const char* region);
+    TZDBNameSearchHandler(uint32_t types, StringPiece region);
     virtual ~TZDBNameSearchHandler();
 
     UBool handleMatch(int32_t matchLength, const CharacterNode *node, UErrorCode &status) override;
@@ -1922,10 +1923,10 @@ private:
     uint32_t fTypes;
     int32_t fMaxMatchLen;
     TimeZoneNames::MatchInfoCollection* fResults;
-    const char* fRegion;
+    StringPiece fRegion;
 };
 
-TZDBNameSearchHandler::TZDBNameSearchHandler(uint32_t types, const char* region) 
+TZDBNameSearchHandler::TZDBNameSearchHandler(uint32_t types, StringPiece region)
 : fTypes(types), fMaxMatchLen(0), fResults(nullptr), fRegion(region) {
 }
 
@@ -1974,7 +1975,7 @@ TZDBNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *nod
                     // as metazone China (China Standard Time).
                     for (int32_t j = 0; j < ninfo->nRegions; j++) {
                         const char *region = ninfo->parseRegions[j];
-                        if (uprv_strcmp(fRegion, region) == 0) {
+                        if (fRegion == region) {
                             match = ninfo;
                             matchRegion = true;
                             break;
@@ -2153,7 +2154,7 @@ static void U_CALLCONV prepareFind(UErrorCode &status) {
 U_CDECL_END
 
 TZDBTimeZoneNames::TZDBTimeZoneNames(const Locale& locale)
-: fLocale(locale) {
+: fLocale(locale), fRegion() {
     UBool useWorld = true;
     const char* region = fLocale.getCountry();
     int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
@@ -2164,16 +2165,20 @@ TZDBTimeZoneNames::TZDBTimeZoneNames(const Locale& locale)
             CharStringByteSink sink(&loc);
             ulocimp_addLikelySubtags(fLocale.getName(), sink, &status);
         }
-        regionLen = uloc_getCountry(loc.data(), fRegion, sizeof(fRegion), &status);
-        if (U_SUCCESS(status) && regionLen < (int32_t)sizeof(fRegion)) {
+        ulocimp_getSubtags(loc.data(), nullptr, nullptr, &fRegion, nullptr, nullptr, status);
+        if (U_SUCCESS(status)) {
             useWorld = false;
         }
-    } else if (regionLen < (int32_t)sizeof(fRegion)) {
-        uprv_strcpy(fRegion, region);
+    } else {
+        UErrorCode status = U_ZERO_ERROR;
+        fRegion.append(region, regionLen, status);
+        U_ASSERT(U_SUCCESS(status));
         useWorld = false;
     }
     if (useWorld) {
-        uprv_strcpy(fRegion, "001");
+        UErrorCode status = U_ZERO_ERROR;
+        fRegion.append("001", status);
+        U_ASSERT(U_SUCCESS(status));
     }
 }
 
@@ -2251,7 +2256,7 @@ TZDBTimeZoneNames::find(const UnicodeString& text, int32_t start, uint32_t types
         return nullptr;
     }
 
-    TZDBNameSearchHandler handler(types, fRegion);
+    TZDBNameSearchHandler handler(types, fRegion.toStringPiece());
     gTZDBNamesTrie->search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     if (U_FAILURE(status)) {
         return nullptr;

@@ -2143,17 +2143,16 @@ U_CAPI const char*  U_EXPORT2
 uloc_getISO3Language(const char* localeID)
 {
     int16_t offset;
-    char lang[ULOC_LANG_CAPACITY];
     UErrorCode err = U_ZERO_ERROR;
 
     if (localeID == nullptr)
     {
         localeID = uloc_getDefault();
     }
-    uloc_getLanguage(localeID, lang, ULOC_LANG_CAPACITY, &err);
+    CharString lang = ulocimp_getLanguage(localeID, err);
     if (U_FAILURE(err))
         return "";
-    offset = _findIndex(LANGUAGES, lang);
+    offset = _findIndex(LANGUAGES, lang.data());
     if (offset < 0)
         return "";
     return LANGUAGES_3[offset];
@@ -2163,17 +2162,16 @@ U_CAPI const char*  U_EXPORT2
 uloc_getISO3Country(const char* localeID)
 {
     int16_t offset;
-    char cntry[ULOC_LANG_CAPACITY];
     UErrorCode err = U_ZERO_ERROR;
 
     if (localeID == nullptr)
     {
         localeID = uloc_getDefault();
     }
-    uloc_getCountry(localeID, cntry, ULOC_LANG_CAPACITY, &err);
+    CharString cntry = ulocimp_getRegion(localeID, err);
     if (U_FAILURE(err))
         return "";
-    offset = _findIndex(COUNTRIES, cntry);
+    offset = _findIndex(COUNTRIES, cntry.data());
     if (offset < 0)
         return "";
 
@@ -2184,7 +2182,6 @@ U_CAPI uint32_t  U_EXPORT2
 uloc_getLCID(const char* localeID)
 {
     UErrorCode status = U_ZERO_ERROR;
-    char       langID[ULOC_FULLNAME_CAPACITY];
     uint32_t   lcid = 0;
 
     /* Check for incomplete id. */
@@ -2203,8 +2200,8 @@ uloc_getLCID(const char* localeID)
         return lcid;
     }
 
-    uloc_getLanguage(localeID, langID, sizeof(langID), &status);
-    if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
+    CharString langID = ulocimp_getLanguage(localeID, status);
+    if (U_FAILURE(status)) {
         return 0;
     }
 
@@ -2224,7 +2221,7 @@ uloc_getLCID(const char* localeID)
             }
             ulocimp_setKeywordValue("collation", collVal.data(), tmpLocaleID, &status);
             if (U_SUCCESS(status)) {
-                return uprv_convertToLCID(langID, tmpLocaleID.data(), &status);
+                return uprv_convertToLCID(langID.data(), tmpLocaleID.data(), &status);
             }
         }
 
@@ -2232,7 +2229,7 @@ uloc_getLCID(const char* localeID)
         status = U_ZERO_ERROR;
     }
 
-    return uprv_convertToLCID(langID, localeID, &status);
+    return uprv_convertToLCID(langID.data(), localeID, &status);
 }
 
 U_CAPI int32_t U_EXPORT2

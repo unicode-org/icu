@@ -509,22 +509,16 @@ static const char LANG_DIR_STRING[] =
 U_CAPI UBool U_EXPORT2
 uloc_isRightToLeft(const char *locale) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    char script[8];
-    int32_t scriptLength = uloc_getScript(locale, script, UPRV_LENGTHOF(script), &errorCode);
-    if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING ||
-            scriptLength == 0) {
+    icu::CharString lang;
+    icu::CharString script;
+    ulocimp_getSubtags(locale, &lang, &script, nullptr, nullptr, nullptr, errorCode);
+    if (U_FAILURE(errorCode) || script.isEmpty()) {
         // Fastpath: We know the likely scripts and their writing direction
         // for some common languages.
-        errorCode = U_ZERO_ERROR;
-        char lang[8];
-        int32_t langLength = uloc_getLanguage(locale, lang, UPRV_LENGTHOF(lang), &errorCode);
-        if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
-            return false;
-        }
-        if (langLength > 0) {
-            const char* langPtr = uprv_strstr(LANG_DIR_STRING, lang);
+        if (!lang.isEmpty()) {
+            const char* langPtr = uprv_strstr(LANG_DIR_STRING, lang.data());
             if (langPtr != nullptr) {
-                switch (langPtr[langLength]) {
+                switch (langPtr[lang.length()]) {
                 case '-': return false;
                 case '+': return true;
                 default: break;  // partial match of a longer code
@@ -538,16 +532,15 @@ uloc_isRightToLeft(const char *locale) {
             icu::CharStringByteSink sink(&likely);
             ulocimp_addLikelySubtags(locale, sink, &errorCode);
         }
-        if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
+        if (U_FAILURE(errorCode)) {
             return false;
         }
-        scriptLength = uloc_getScript(likely.data(), script, UPRV_LENGTHOF(script), &errorCode);
-        if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING ||
-                scriptLength == 0) {
+        ulocimp_getSubtags(likely.data(), nullptr, &script, nullptr, nullptr, nullptr, errorCode);
+        if (U_FAILURE(errorCode) || script.isEmpty()) {
             return false;
         }
     }
-    UScriptCode scriptCode = (UScriptCode)u_getPropertyValueEnum(UCHAR_SCRIPT, script);
+    UScriptCode scriptCode = (UScriptCode)u_getPropertyValueEnum(UCHAR_SCRIPT, script.data());
     return uscript_isRightToLeft(scriptCode);
 }
 
@@ -560,36 +553,30 @@ Locale::isRightToLeft() const {
 
 U_NAMESPACE_END
 
-// The following must at least allow for rg key value (6) plus terminator (1).
-#define ULOC_RG_BUFLEN 8
-
 namespace {
-int GetRegionFromKey(const char *localeID, const char* key, char* buf) {
-    UErrorCode status = U_ZERO_ERROR;
+icu::CharString
+GetRegionFromKey(const char* localeID, const char* key, UErrorCode& status) {
+    icu::CharString result;
 
-    // First check for rg keyword value
-    icu::CharString rg;
+    // First check for keyword value
+    icu::CharString kw;
     {
-        icu::CharStringByteSink sink(&rg);
+        icu::CharStringByteSink sink(&kw);
         ulocimp_getKeywordValue(localeID, key, sink, &status);
     }
-    int32_t len = rg.length();
-    if (U_FAILURE(status) || len < 3 || len > 7) {
-        len = 0;
-    } else {
+    int32_t len = kw.length();
+    if (U_SUCCESS(status) && len >= 3 && len <= 7) {
         // chop off the subdivision code (which will generally be "zzzz" anyway)
-        const char* const data = rg.data();
+        const char* const data = kw.data();
         if (uprv_isASCIILetter(data[0])) {
-            len = 2;
-            buf[0] = uprv_toupper(data[0]);
-            buf[1] = uprv_toupper(data[1]);
+            result.append(uprv_toupper(data[0]), status);
+            result.append(uprv_toupper(data[1]), status);
         } else {
             // assume three-digit region code
-            len = 3;
-            uprv_memcpy(buf, data, len);
+            result.append(data, 3, status);
         }
     }
-    return len;
+    return result;
 }
 }  // namespace
 
@@ -599,17 +586,14 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    char rgBuf[ULOC_RG_BUFLEN];
-    int32_t rgLen = GetRegionFromKey(localeID, "rg", rgBuf);
-    if (rgLen == 0) {
+    icu::CharString rgBuf = GetRegionFromKey(localeID, "rg", *status);
+    if (U_SUCCESS(*status) && rgBuf.isEmpty()) {
         // No valid rg keyword value, try for unicode_region_subtag
-        rgLen = uloc_getCountry(localeID, rgBuf, ULOC_RG_BUFLEN, status);
-        if (U_FAILURE(*status)) {
-            rgLen = 0;
-        } else if (rgLen == 0 && inferRegion) {
+        rgBuf = ulocimp_getRegion(localeID, *status);
+        if (U_SUCCESS(*status) && rgBuf.isEmpty() && inferRegion) {
             // Second check for sd keyword value
-            rgLen = GetRegionFromKey(localeID, "sd", rgBuf);
-            if (rgLen == 0) {
+            rgBuf = GetRegionFromKey(localeID, "sd", *status);
+            if (U_SUCCESS(*status) && rgBuf.isEmpty()) {
                 // no unicode_region_subtag but inferRegion true, try likely subtags
                 UErrorCode rgStatus = U_ZERO_ERROR;
                 icu::CharString locBuf;
@@ -618,17 +602,11 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
                     ulocimp_addLikelySubtags(localeID, sink, &rgStatus);
                 }
                 if (U_SUCCESS(rgStatus)) {
-                    rgLen = uloc_getCountry(locBuf.data(), rgBuf, ULOC_RG_BUFLEN, status);
-                    if (U_FAILURE(*status)) {
-                        rgLen = 0;
-                    }
+                    rgBuf = ulocimp_getRegion(locBuf.data(), *status);
                 }
             }
         }
     }
 
-    rgBuf[rgLen] = 0;
-    uprv_strncpy(region, rgBuf, regionCapacity);
-    return u_terminateChars(region, regionCapacity, rgLen, status);
+    return rgBuf.extract(region, regionCapacity, *status);
 }
-

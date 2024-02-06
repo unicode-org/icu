@@ -357,7 +357,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
-typedef  int32_t U_CALLCONV UDisplayNameGetter(const char *, char *, int32_t, UErrorCode *);
+using UDisplayNameGetter = icu::CharString(const char*, UErrorCode&);
 
 static int32_t
 _getDisplayNameForComponent(const char *locale,
@@ -366,8 +366,6 @@ _getDisplayNameForComponent(const char *locale,
                             UDisplayNameGetter *getter,
                             const char *tag,
                             UErrorCode *pErrorCode) {
-    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
-    int32_t length;
     UErrorCode localStatus;
     const char* root = nullptr;
 
@@ -382,15 +380,15 @@ _getDisplayNameForComponent(const char *locale,
     }
 
     localStatus = U_ZERO_ERROR;
-    length=(*getter)(locale, localeBuffer, sizeof(localeBuffer), &localStatus);
-    if(U_FAILURE(localStatus) || localStatus==U_STRING_NOT_TERMINATED_WARNING) {
+    icu::CharString localeBuffer = (*getter)(locale, localStatus);
+    if (U_FAILURE(localStatus)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    if(length==0) {
+    if (localeBuffer.isEmpty()) {
         // For the display name, we treat this as unknown language (ICU-20273).
-        if (getter == uloc_getLanguage) {
-            uprv_strcpy(localeBuffer, "und");
+        if (getter == ulocimp_getLanguage) {
+            localeBuffer.append("und", *pErrorCode);
         } else {
             return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
         }
@@ -399,8 +397,8 @@ _getDisplayNameForComponent(const char *locale,
     root = tag == _kCountries ? U_ICUDATA_REGION : U_ICUDATA_LANG;
 
     return _getStringOrCopyKey(root, displayLocale,
-                               tag, nullptr, localeBuffer,
-                               localeBuffer,
+                               tag, nullptr, localeBuffer.data(),
+                               localeBuffer.data(),
                                dest, destCapacity,
                                pErrorCode);
 }
@@ -411,7 +409,7 @@ uloc_getDisplayLanguage(const char *locale,
                         char16_t *dest, int32_t destCapacity,
                         UErrorCode *pErrorCode) {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                uloc_getLanguage, _kLanguages, pErrorCode);
+                ulocimp_getLanguage, _kLanguages, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -422,17 +420,17 @@ uloc_getDisplayScript(const char* locale,
 {
     UErrorCode err = U_ZERO_ERROR;
     int32_t res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                uloc_getScript, _kScriptsStandAlone, &err);
+                ulocimp_getScript, _kScriptsStandAlone, &err);
 
     if (destCapacity == 0 && err == U_BUFFER_OVERFLOW_ERROR) {
         // For preflight, return the max of the value and the fallback.
         int32_t fallback_res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                                                           uloc_getScript, _kScripts, pErrorCode);
+                                                           ulocimp_getScript, _kScripts, pErrorCode);
         return (fallback_res > res) ? fallback_res : res;
     }
     if ( err == U_USING_DEFAULT_WARNING ) {
         return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                                           uloc_getScript, _kScripts, pErrorCode);
+                                           ulocimp_getScript, _kScripts, pErrorCode);
     } else {
         *pErrorCode = err;
         return res;
@@ -446,7 +444,7 @@ uloc_getDisplayScriptInContext(const char* locale,
                       UErrorCode *pErrorCode)
 {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                    uloc_getScript, _kScripts, pErrorCode);
+                    ulocimp_getScript, _kScripts, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -455,7 +453,7 @@ uloc_getDisplayCountry(const char *locale,
                        char16_t *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                uloc_getCountry, _kCountries, pErrorCode);
+                ulocimp_getRegion, _kCountries, pErrorCode);
 }
 
 /*
@@ -469,7 +467,7 @@ uloc_getDisplayVariant(const char *locale,
                        char16_t *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                uloc_getVariant, _kVariants, pErrorCode);
+                ulocimp_getVariant, _kVariants, pErrorCode);
 }
 
 /* Instead of having a separate pass for 'special' patterns, reintegrate the two
