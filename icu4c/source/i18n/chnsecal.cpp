@@ -324,7 +324,7 @@ const UFieldResolutionTable* ChineseCalendar::getFieldResolutionTable() const {
  * day of the given month and year
  * @stable ICU 2.8
  */
-int32_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
+int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
@@ -337,7 +337,7 @@ int32_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     int32_t theNewYear = newYear(gyear);
     int32_t newMoon = newMoonNear(theNewYear + month * 29, true);
     
-    int32_t julianDay = newMoon + kEpochStartAsJulianDay;
+    int64_t julianDay = newMoon + kEpochStartAsJulianDay;
 
     // Ignore IS_LEAP_MONTH field if useMonth is false
     int32_t isLeapMonth = useMonth ? internalGet(UCAL_IS_LEAP_MONTH) : 0;
@@ -546,7 +546,12 @@ int32_t ChineseCalendar::winterSolstice(int32_t gyear) const {
         umtx_unlock(&astroLock);
 
         // Winter solstice is 270 degrees solar longitude aka Dongzhi
-        cacheValue = (int32_t)millisToDays(solarLong);
+        double days = millisToDays(solarLong);
+        if (days < INT32_MIN || days > INT32_MAX) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        cacheValue = (int32_t) days;
         CalendarCache::put(&gChineseCalendarWinterSolsticeCache, gyear, cacheValue, status);
     }
     if(U_FAILURE(status)) {

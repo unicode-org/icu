@@ -166,14 +166,14 @@ int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear) const {
 //-------------------------------------------------------------------------
 
 // Return JD of start of given month/year
-int32_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
+int64_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
         eyear += ClockMath::floorDivide(month, 12, &month);
     }
 
-    int32_t julianDay = PERSIAN_EPOCH - 1 + 365 * (eyear - 1) + ClockMath::floorDivide(8 * eyear + 21, 33);
+    int64_t julianDay = PERSIAN_EPOCH - 1 + 365LL * (eyear - 1) + ClockMath::floorDivide(8 * eyear + 21, 33);
 
     if (month != 0) {
         julianDay += kPersianNumDays[month];

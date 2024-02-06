@@ -150,21 +150,6 @@ EthiopicCalendar::getJDEpochOffset() const
 }
 
 
-#if 0
-// We do not want to introduce this API in ICU4C.
-// It was accidentally introduced in ICU4J as a public API.
-
-//-------------------------------------------------------------------------
-// Calendar system Conversion methods...
-//-------------------------------------------------------------------------
-
-int32_t
-EthiopicCalendar::ethiopicToJD(int32_t year, int32_t month, int32_t date)
-{
-    return ceToJD(year, month, date, JD_EPOCH_OFFSET_AMETE_MIHRET);
-}
-#endif
-
 //-------------------------------------------------------------------------
 // Constructors...
 //-------------------------------------------------------------------------

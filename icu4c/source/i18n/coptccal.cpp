@@ -161,21 +161,6 @@ CopticCalendar::getJDEpochOffset() const
 }
 
 
-#if 0
-// We do not want to introduce this API in ICU4C.
-// It was accidentally introduced in ICU4J as a public API.
-
-//-------------------------------------------------------------------------
-// Calendar system Conversion methods...
-//-------------------------------------------------------------------------
-
-int32_t
-CopticCalendar::copticToJD(int32_t year, int32_t month, int32_t day)
-{
-    return CECalendar::ceToJD(year, month, day, COPTIC_JD_EPOCH_OFFSET);
-}
-#endif
-
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -208,7 +208,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
  protected:
   virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const override;
   virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const override;
-  virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
+  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
   virtual int32_t handleGetExtendedYear() override;
   virtual void handleComputeFields(int32_t julianDay, UErrorCode &status) override;
   virtual const UFieldResolutionTable* getFieldResolutionTable() const override;

@@ -219,7 +219,7 @@ class PersianCalendar : public Calendar {
   /**
    * @internal
    */
-  virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
+  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
 
   //-------------------------------------------------------------------------
   // Functions for converting from milliseconds to field values

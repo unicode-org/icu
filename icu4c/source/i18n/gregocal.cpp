@@ -536,7 +536,7 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField,
         return jd;
 }
 
-int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
+int64_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
 
                                                    UBool /* useMonth */) const
 {
@@ -580,7 +580,7 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
         julianDay += isLeap?kLeapNumDays[month]:kNumDays[month];
     }
 
-    return static_cast<int32_t>(julianDay);
+    return julianDay;
 }
 
 int32_t GregorianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month)  const
