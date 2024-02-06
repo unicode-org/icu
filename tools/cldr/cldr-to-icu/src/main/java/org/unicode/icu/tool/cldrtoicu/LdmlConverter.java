@@ -111,7 +111,8 @@ public final class LdmlConverter {
             "convertUnits",
             "unitConstants",
             "unitQuantities",
-            "unitPreferenceData");
+            "unitPreferenceData",
+            "unitPrefixes");
     private static final Predicate<CldrPath> GRAMMATICAL_FEATURES_PATHS =
         supplementalMatcher("grammaticalData");
     private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
