@@ -1345,6 +1345,66 @@ _getVariant(const char* localeID,
     }
 }
 
+U_EXPORT CharString U_EXPORT2
+ulocimp_getLanguage(const char* localeID, UErrorCode& status) {
+    CharString language;
+    CharStringByteSink sink(&language);
+    ulocimp_getSubtags(
+            localeID,
+            &sink,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            status);
+    return language;
+}
+
+U_EXPORT CharString U_EXPORT2
+ulocimp_getScript(const char* localeID, UErrorCode& status) {
+    CharString script;
+    CharStringByteSink sink(&script);
+    ulocimp_getSubtags(
+            localeID,
+            nullptr,
+            &sink,
+            nullptr,
+            nullptr,
+            nullptr,
+            status);
+    return script;
+}
+
+U_EXPORT CharString U_EXPORT2
+ulocimp_getRegion(const char* localeID, UErrorCode& status) {
+    CharString region;
+    CharStringByteSink sink(&region);
+    ulocimp_getSubtags(
+            localeID,
+            nullptr,
+            nullptr,
+            &sink,
+            nullptr,
+            nullptr,
+            status);
+    return region;
+}
+
+U_EXPORT CharString U_EXPORT2
+ulocimp_getVariant(const char* localeID, UErrorCode& status) {
+    CharString variant;
+    CharStringByteSink sink(&variant);
+    ulocimp_getSubtags(
+            localeID,
+            nullptr,
+            nullptr,
+            nullptr,
+            &sink,
+            nullptr,
+            status);
+    return variant;
+}
+
 U_EXPORT void U_EXPORT2
 ulocimp_getSubtags(
         const char* localeID,
