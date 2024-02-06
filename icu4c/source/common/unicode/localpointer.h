@@ -548,9 +548,10 @@ public:
  * @stable ICU 4.4
  */
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
-    using LocalPointerClassName = LocalOpenPointer<Type, closeFunction>
+    using LocalPointerClassName = internal::LocalOpenPointer<Type, closeFunction>
 
 #ifndef U_IN_DOXYGEN
+namespace internal {
 template <typename Type, auto closeFunction>
 class LocalOpenPointer : public LocalPointerBase<Type> {
     using LocalPointerBase<Type>::ptr;
@@ -593,6 +594,7 @@ public:
         return std::unique_ptr<Type, decltype(closeFunction)>(LocalPointerBase<Type>::orphan(), closeFunction);
     }
 };
+}  // namespace internal
 #endif
 
 U_NAMESPACE_END
