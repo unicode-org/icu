@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707140661398,
+  "lastUpdate": 1707223245586,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -62590,6 +62590,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.953,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "835b009314ed49778a4d664f770c4a9e2a15fa75",
+          "message": "ICU-22520 Make ulocimp_get*() internal to ulocimp_getSubtags().\n\nThese functions now no longer have any other callers so they can be made\ninternal to the compilation unit of ulocimp_getSubtags(), thus bringing\nthem back to how they originally were intended to be used (and making\nthe comment above them true once again).\n\nThis also makes it possible to remove the temporary icu::CharString\nobjects that previously were returned to callers and instead write\ndirectly to icu::ByteSink, making the code both simpler and less\nwasteful (also that how this was once intended).",
+          "timestamp": "2024-02-06T13:12:55+01:00",
+          "tree_id": "5aaae898059a68c8783a483ae59fb89eb5ef486f",
+          "url": "https://github.com/unicode-org/icu/commit/835b009314ed49778a4d664f770c4a9e2a15fa75"
+        },
+        "date": 1707223171073,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.2761,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 21.7227,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.4014,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.7133,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 32.3523,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 31.7017,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.963,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.8485,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 82.1009,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.9763,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 39.8455,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 41.9771,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
