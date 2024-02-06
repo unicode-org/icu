@@ -313,7 +313,7 @@ ResourceBundleTest::TestConstruction()
     char *versionID1 = new char[1+strlen(version1)]; // + 1 for zero byte
     char *versionID2 = new char[1+ strlen(version2)]; // + 1 for zero byte
 
-    strcpy(versionID1, "44.0");  // hardcoded, please change if the default.txt file or ResourceBundle::kVersionSeparater is changed.
+    strcpy(versionID1, "45.0");  // hardcoded, please change if the default.txt file or ResourceBundle::kVersionSeparater is changed.
 
     strcpy(versionID2, "55.0");  // hardcoded, please change if the te_IN.txt file or ResourceBundle::kVersionSeparater is changed.
 

@@ -5802,8 +5802,7 @@ void MeasureFormatTest::TestParseBuiltIns() {
 
         // Prove that all built-in units are parseable, except "generic" temperature:
         MeasureUnit parsed = MeasureUnit::forIdentifier(unit.getIdentifier(), status);
-        if (unit == MeasureUnit::getGenericTemperature() ||
-                (unit == MeasureUnit::getBeaufort() && logKnownIssue("CLDR-16327", "beaufort currently not convertible"))) {
+        if (unit == MeasureUnit::getGenericTemperature()) {
             status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
         } else {
             status.assertSuccess();
