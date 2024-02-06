@@ -1012,28 +1012,25 @@ _initializeULanguageTag(ULanguageTag* langtag) {
 
 static void
 _appendLanguageToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UErrorCode* status) {
-    char buf[ULOC_LANG_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len, i;
 
     if (U_FAILURE(*status)) {
         return;
     }
 
-    len = uloc_getLanguage(localeID, buf, sizeof(buf), &tmpStatus);
-    if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
+    icu::CharString buf = ulocimp_getLanguage(localeID, tmpStatus);
+    if (U_FAILURE(tmpStatus)) {
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        len = 0;
     }
 
     /* Note: returned language code is in lower case letters */
 
-    if (len == 0) {
+    if (buf.isEmpty()) {
         sink.Append(LANG_UND, LANG_UND_LEN);
-    } else if (!ultag_isLanguageSubtag(buf, len)) {
+    } else if (!ultag_isLanguageSubtag(buf.data(), buf.length())) {
             /* invalid language code */
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1042,42 +1039,40 @@ _appendLanguageToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         sink.Append(LANG_UND, LANG_UND_LEN);
     } else {
         /* resolve deprecated */
-        for (i = 0; i < UPRV_LENGTHOF(DEPRECATEDLANGS); i += 2) {
+        for (int32_t i = 0; i < UPRV_LENGTHOF(DEPRECATEDLANGS); i += 2) {
             // 2-letter deprecated subtags are listede before 3-letter
             // ones in DEPRECATEDLANGS[]. Get out of loop on coming
             // across the 1st 3-letter subtag, if the input is a 2-letter code.
             // to avoid continuing to try when there's no match.
-            if (uprv_strlen(buf) < uprv_strlen(DEPRECATEDLANGS[i])) break;
-            if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDLANGS[i]) == 0) {
-                uprv_strcpy(buf, DEPRECATEDLANGS[i + 1]);
-                len = (int32_t)uprv_strlen(buf);
-                break;
+            if (buf.length() < (int32_t)uprv_strlen(DEPRECATEDLANGS[i])) break;
+            if (uprv_compareInvCharsAsAscii(buf.data(), DEPRECATEDLANGS[i]) == 0) {
+                const char* const resolved = DEPRECATEDLANGS[i + 1];
+                sink.Append(resolved, (int32_t)uprv_strlen(resolved));
+                return;
             }
         }
-        sink.Append(buf, len);
+        sink.Append(buf.data(), buf.length());
     }
 }
 
 static void
 _appendScriptToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UErrorCode* status) {
-    char buf[ULOC_SCRIPT_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len;
 
     if (U_FAILURE(*status)) {
         return;
     }
 
-    len = uloc_getScript(localeID, buf, sizeof(buf), &tmpStatus);
-    if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
+    icu::CharString buf = ulocimp_getScript(localeID, tmpStatus);
+    if (U_FAILURE(tmpStatus)) {
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
         return;
     }
 
-    if (len > 0) {
-        if (!ultag_isScriptSubtag(buf, len)) {
+    if (!buf.isEmpty()) {
+        if (!ultag_isScriptSubtag(buf.data(), buf.length())) {
             /* invalid script code */
             if (strict) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1085,31 +1080,29 @@ _appendScriptToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool stri
             return;
         } else {
             sink.Append("-", 1);
-            sink.Append(buf, len);
+            sink.Append(buf.data(), buf.length());
         }
     }
 }
 
 static void
 _appendRegionToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UErrorCode* status) {
-    char buf[ULOC_COUNTRY_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len;
 
     if (U_FAILURE(*status)) {
         return;
     }
 
-    len = uloc_getCountry(localeID, buf, sizeof(buf), &tmpStatus);
-    if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
+    icu::CharString buf = ulocimp_getRegion(localeID, tmpStatus);
+    if (U_FAILURE(tmpStatus)) {
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
         return;
     }
 
-    if (len > 0) {
-        if (!ultag_isRegionSubtag(buf, len)) {
+    if (!buf.isEmpty()) {
+        if (!ultag_isRegionSubtag(buf.data(), buf.length())) {
             /* invalid region code */
             if (strict) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1118,14 +1111,14 @@ _appendRegionToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool stri
         } else {
             sink.Append("-", 1);
             /* resolve deprecated */
-            for (int i = 0; i < UPRV_LENGTHOF(DEPRECATEDREGIONS); i += 2) {
-                if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDREGIONS[i]) == 0) {
-                    uprv_strcpy(buf, DEPRECATEDREGIONS[i + 1]);
-                    len = (int32_t)uprv_strlen(buf);
-                    break;
+            for (int32_t i = 0; i < UPRV_LENGTHOF(DEPRECATEDREGIONS); i += 2) {
+                if (uprv_compareInvCharsAsAscii(buf.data(), DEPRECATEDREGIONS[i]) == 0) {
+                    const char* const resolved = DEPRECATEDREGIONS[i + 1];
+                    sink.Append(resolved, (int32_t)uprv_strlen(resolved));
+                    return;
                 }
             }
-            sink.Append(buf, len);
+            sink.Append(buf.data(), buf.length());
         }
     }
 }
@@ -1145,15 +1138,13 @@ static void _sortVariants(VariantListEntry* first) {
 
 static void
 _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool *hadPosix, UErrorCode* status) {
-    char buf[ULOC_FULLNAME_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len, i;
 
     if (U_FAILURE(*status)) {
         return;
     }
 
-    len = uloc_getVariant(localeID, buf, sizeof(buf), &tmpStatus);
+    icu::CharString buf = ulocimp_getVariant(localeID, tmpStatus);
     if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1161,13 +1152,13 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         return;
     }
 
-    if (len > 0) {
+    if (!buf.isEmpty()) {
         char *p, *pVar;
         UBool bNext = true;
         VariantListEntry *varFirst = nullptr;
 
         pVar = nullptr;
-        p = buf;
+        p = buf.data();
         while (bNext) {
             if (*p == SEP || *p == LOCALE_SEP || *p == 0) {
                 if (*p == 0) {
@@ -1184,13 +1175,13 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 } else {
                     /* ICU uses upper case letters for variants, but
                        the canonical format is lowercase in BCP47 */
-                    for (i = 0; *(pVar + i) != 0; i++) {
+                    for (int32_t i = 0; *(pVar + i) != 0; i++) {
                         *(pVar + i) = uprv_tolower(*(pVar + i));
                     }
 
                     /* validate */
                     if (_isVariantSubtag(pVar, -1)) {
-                        if (uprv_strcmp(pVar,POSIX_VALUE) || len != (int32_t)uprv_strlen(POSIX_VALUE)) {
+                        if (uprv_strcmp(pVar,POSIX_VALUE) || buf.length() != (int32_t)uprv_strlen(POSIX_VALUE)) {
                             /* emit the variant to the list */
                             icu::LocalPointer<VariantListEntry> var(new VariantListEntry, *status);
                             if (U_FAILURE(*status)) {
@@ -1858,30 +1849,28 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
 static void
 _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool hadPosix, UErrorCode* status) {
     (void)hadPosix;
-    char buf[ULOC_FULLNAME_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
-    int32_t len, i;
 
     if (U_FAILURE(*status)) {
         return;
     }
 
-    len = uloc_getVariant(localeID, buf, sizeof(buf), &tmpStatus);
-    if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
+    icu::CharString buf = ulocimp_getVariant(localeID, tmpStatus);
+    if (U_FAILURE(tmpStatus)) {
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
         return;
     }
 
-    if (len > 0) {
+    if (!buf.isEmpty()) {
         char *p, *pPriv;
         UBool bNext = true;
         UBool firstValue = true;
         UBool writeValue;
 
         pPriv = nullptr;
-        p = buf;
+        p = buf.data();
         while (bNext) {
             writeValue = false;
             if (*p == SEP || *p == LOCALE_SEP || *p == 0) {
@@ -1892,7 +1881,7 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
                 }
                 if (pPriv != nullptr) {
                     /* Private use in the canonical format is lowercase in BCP47 */
-                    for (i = 0; *(pPriv + i) != 0; i++) {
+                    for (int32_t i = 0; *(pPriv + i) != 0; i++) {
                         *(pPriv + i) = uprv_tolower(*(pPriv + i));
                     }
 
@@ -1923,7 +1912,7 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
                             firstValue = false;
                         }
 
-                        len = (int32_t)uprv_strlen(pPriv);
+                        int32_t len = (int32_t)uprv_strlen(pPriv);
                         sink.Append(pPriv, len);
                     }
                 }
