@@ -61,10 +61,10 @@
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
         <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
-        <property name="icuVersion" value="74.1.0.0"/>
+        <property name="icuVersion" value="75.0.1.0"/>
 
         <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
-        <property name="icuDataVersion" value="74.1.0.0"/>
+        <property name="icuDataVersion" value="75.0.1.0"/>
 
         <!-- An override for the CLDR version string (icuver.txt and others). This will be
              extracted from the CLDR library used for building the data if not set here. -->

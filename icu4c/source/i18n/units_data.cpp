@@ -80,6 +80,7 @@ class ConversionRateDataSink : public ResourceSink {
             UnicodeString baseUnit = ICU_Utility::makeBogusString();
             UnicodeString factor = ICU_Utility::makeBogusString();
             UnicodeString offset = ICU_Utility::makeBogusString();
+            UnicodeString special = ICU_Utility::makeBogusString();
             UnicodeString systems = ICU_Utility::makeBogusString();
             for (int32_t i = 0; unitTable.getKeyAndValue(i, key, value); i++) {
                 if (uprv_strcmp(key, "target") == 0) {
@@ -88,12 +89,14 @@ class ConversionRateDataSink : public ResourceSink {
                     factor = value.getUnicodeString(status);
                 } else if (uprv_strcmp(key, "offset") == 0) {
                     offset = value.getUnicodeString(status);
+                } else if (uprv_strcmp(key, "special") == 0) {
+                    special = value.getUnicodeString(status);
                 } else if (uprv_strcmp(key, "systems") == 0) {
                     systems = value.getUnicodeString(status);
                 }
             }
             if (U_FAILURE(status)) { return; }
-            if (baseUnit.isBogus() || factor.isBogus()) {
+            if (baseUnit.isBogus() || (factor.isBogus() && special.isBogus())) {
                 // We could not find a usable conversion rate: bad resource.
                 status = U_MISSING_RESOURCE_ERROR;
                 return;
@@ -107,10 +110,13 @@ class ConversionRateDataSink : public ResourceSink {
             } else {
                 cr->sourceUnit.append(srcUnit, status);
                 cr->baseUnit.appendInvariantChars(baseUnit, status);
-                cr->factor.appendInvariantChars(factor, status);
-                cr->systems.appendInvariantChars(systems, status);
-                trimSpaces(cr->factor, status);
+                if (!factor.isBogus()) {
+                    cr->factor.appendInvariantChars(factor, status);
+                    trimSpaces(cr->factor, status);
+                }
                 if (!offset.isBogus()) cr->offset.appendInvariantChars(offset, status);
+                if (!special.isBogus()) cr->offset.appendInvariantChars(special, status);
+                cr->systems.appendInvariantChars(systems, status);
             }
         }
         return;

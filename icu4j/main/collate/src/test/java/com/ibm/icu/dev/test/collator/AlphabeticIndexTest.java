@@ -81,7 +81,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             /* Japanese*/   {"ja", "\u3042:\u304B:\u3055:\u305F:\u306A:\u306F:\u307E:\u3084:\u3089:\u308F"},
             /* Korean*/ {"ko", "\u3131:\u3134:\u3137:\u3139:\u3141:\u3142:\u3145:\u3147:\u3148:\u314A:\u314B:\u314C:\u314D:\u314E"},
             /* Lithuanian*/ {"lt", "A:B:C:\u010C:D:E:F:G:H:I:J:K:L:M:N:O:P:R:S:\u0160:T:U:V:Z:\u017D"},
-            /* Latvian*/    {"lv", "A:B:C:\u010C:D:E:F:G:\u0122:H:I:J:K:\u0136:L:\u013B:M:N:\u0145:O:P:Q:R:S:\u0160:T:U:V:W:X:Z:\u017D"},
+            /* Latvian*/    {"lv", "A:\u0100:B:C:\u010C:D:E:\u0112:F:G:\u0122:H:I:Y:\u012A:J:K:\u0136:L:\u013B:M:N:\u0145:O:P:Q:R:S:\u0160:T:U:\u016A:V:W:X:Z:\u017D"},
             /* Norwegian Bokm\u00E5l*/  {"nb", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:\u00C6:\u00D8:\u00C5"},
             /* Dutch*/  {"nl", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
             /* Polish*/ {"pl", "A:B:C:\u0106:D:E:F:G:H:I:J:K:L:\u0141:M:N:O:\u00D3:P:Q:R:S:\u015A:T:U:V:W:X:Y:Z:\u0179:\u017B"},

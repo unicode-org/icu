@@ -78,7 +78,9 @@ void UnitsDataTest::testGetAllConversionRates() {
               cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
         assertTrue("sourceUnit", cri->sourceUnit.length() > 0);
         assertTrue("baseUnit", cri->baseUnit.length() > 0);
-        assertTrue("factor", cri->factor.length() > 0);
+        if (!logKnownIssue("ICU-22655", "Implement support for Beaufort conversion")) {
+            assertTrue("factor || special", cri->factor.length() > 0 || cri->special.length() > 0);
+        }
     }
 }
 

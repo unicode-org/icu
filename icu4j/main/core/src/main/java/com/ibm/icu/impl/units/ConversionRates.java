@@ -162,6 +162,7 @@ public class ConversionRates {
                 String target = null;
                 String factor = null;
                 String offset = "0";
+                String special = null;
                 String systems = null;
                 for (int j = 0; simpleUnitConversionInfo.getKeyAndValue(j, key, value); j++) {
                     assert (value.getType() == UResourceBundle.STRING);
@@ -175,18 +176,20 @@ public class ConversionRates {
                         factor = valueString;
                     } else if ("offset".equals(keyString)) {
                         offset = valueString;
+                    } else if ("special".equals(keyString)) {
+                        special = valueString;
                     } else if ("systems".equals(keyString)) {
                         systems = value.toString(); // still want the spaces here
                     } else {
-                        assert false : "The key must be target, factor, systems or offset";
+                        assert false : "The key must be target, factor, offset, special. or systems";
                     }
                 }
 
                 // HERE a single conversion rate data should be loaded
                 assert (target != null);
-                assert (factor != null);
+                assert (factor != null || special != null);
 
-                mapToConversionRate.put(simpleUnit, new ConversionRateInfo(simpleUnit, target, factor, offset, systems));
+                mapToConversionRate.put(simpleUnit, new ConversionRateInfo(simpleUnit, target, factor, offset, special, systems));
             }
 
 
@@ -204,13 +207,15 @@ public class ConversionRates {
         private final String target;
         private final String conversionRate;
         private final BigDecimal offset;
+        private final String special;
         private final String systems;
 
-        public ConversionRateInfo(String simpleUnit, String target, String conversionRate, String offset, String systems) {
+        public ConversionRateInfo(String simpleUnit, String target, String conversionRate, String offset, String special, String systems) {
             this.simpleUnit = simpleUnit;
             this.target = target;
             this.conversionRate = conversionRate;
             this.offset = forNumberWithDivision(offset);
+            this.special = special;
             this.systems = systems;
         }
 
@@ -248,6 +253,11 @@ public class ConversionRates {
         public String getConversionRate() {
             return conversionRate;
         }
+
+        /**
+         * @return The special conversion system for this unit.
+         */
+        public String getSpecial() { return special; }
 
         /**
          * @return The measurement systems this unit belongs to.

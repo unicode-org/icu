@@ -31,7 +31,7 @@ class U_I18N_API ConversionRateInfo : public UMemory {
     ConversionRateInfo() {}
     ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
                        StringPiece offset, UErrorCode &status)
-        : sourceUnit(), baseUnit(), factor(), offset() {
+        : sourceUnit(), baseUnit(), factor(), offset(), special() {
         this->sourceUnit.append(sourceUnit, status);
         this->baseUnit.append(baseUnit, status);
         this->factor.append(factor, status);
@@ -41,6 +41,7 @@ class U_I18N_API ConversionRateInfo : public UMemory {
     CharString baseUnit;
     CharString factor;
     CharString offset;
+    CharString special;
     CharString systems;
 };
 
