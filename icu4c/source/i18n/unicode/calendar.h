@@ -1667,7 +1667,7 @@ protected:
      * day of the given month and year
      * @internal
      */
-    virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
+    virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month,
                                                    UBool useMonth) const  = 0;
 
     /**

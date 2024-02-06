@@ -79,6 +79,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     if (U_FAILURE(status)) return 0;
     std::unique_ptr<icu::Calendar> cal(
         icu::Calendar::createInstance(*timeZone, locale, status));
+    printf("locale = %s\n", locale.getName());
     if (U_FAILURE(status)) return 0;
     cal->clear();
 

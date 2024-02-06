@@ -3412,11 +3412,20 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCo
         } else {
             dayOfMonth = getDefaultDayInMonth(year, month);
         }
-        return julianDay + dayOfMonth;
+        if (uprv_add32_overflow(dayOfMonth, julianDay, &dayOfMonth)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        return dayOfMonth;
     }
 
     if (bestField == UCAL_DAY_OF_YEAR) {
-        return julianDay + internalGet(UCAL_DAY_OF_YEAR);
+        int32_t result;
+        if (uprv_add32_overflow(internalGet(UCAL_DAY_OF_YEAR), julianDay, &result)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        return result;
     }
 
     int32_t firstDayOfWeek = getFirstDayOfWeek(); // Localized fdw

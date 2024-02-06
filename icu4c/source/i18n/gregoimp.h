@@ -95,7 +95,7 @@ class ClockMath {
      * |denominator|)</code>.
      * @return the floor of the quotient
      */
-    static int32_t floorDivide(double numerator, int32_t denominator,
+    static double floorDivide(double numerator, int32_t denominator,
                                int32_t* remainder);
 
     /**
@@ -196,7 +196,7 @@ class Grego {
      * @param dom 1-based day of month
      * @return the day number, with day 0 == Jan 1 1970
      */
-    static double fieldsToDay(int32_t year, int32_t month, int32_t dom);
+    static int64_t fieldsToDay(int32_t year, int32_t month, int32_t dom);
     
     /**
      * Convert a 1970-epoch day number to proleptic Gregorian year,
