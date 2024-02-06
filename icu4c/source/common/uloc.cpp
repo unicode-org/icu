@@ -1172,7 +1172,7 @@ _getLanguage(const char* localeID,
              const char** pEnd,
              UErrorCode& status) {
     U_ASSERT(pEnd != nullptr);
-    CharString result;
+    *pEnd = localeID;
 
     if (uprv_stricmp(localeID, "root") == 0) {
         localeID += 4;
@@ -1184,104 +1184,128 @@ _getLanguage(const char* localeID,
         localeID += 3;
     }
 
+    constexpr int32_t MAXLEN = ULOC_LANG_CAPACITY - 1;  // Minus NUL.
+
     /* if it starts with i- or x- then copy that prefix */
-    if(_isIDPrefix(localeID)) {
-        result.append((char)uprv_tolower(*localeID), status);
-        result.append('-', status);
-        localeID+=2;
+    int32_t len = _isIDPrefix(localeID) ? 2 : 0;
+    while (!_isTerminator(localeID[len]) && !_isIDSeparator(localeID[len])) {
+        if (len == MAXLEN) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        len++;
     }
 
-    /* copy the language as far as possible and count its length */
-    while(!_isTerminator(*localeID) && !_isIDSeparator(*localeID)) {
-        result.append((char)uprv_tolower(*localeID), status);
-        localeID++;
+    *pEnd = localeID + len;
+    if (sink == nullptr || len == 0) { return; }
+
+    int32_t minCapacity = uprv_max(len, 4);  // Minimum 3 letters plus NUL.
+    char scratch[MAXLEN];
+    int32_t capacity = 0;
+    char* buffer = sink->GetAppendBuffer(
+            minCapacity, minCapacity, scratch, UPRV_LENGTHOF(scratch), &capacity);
+
+    for (int32_t i = 0; i < len; ++i) {
+        buffer[i] = uprv_tolower(localeID[i]);
+    }
+    if (_isIDSeparator(localeID[1])) {
+        buffer[1] = '-';
     }
 
-    if(result.length()==3) {
+    if (len == 3) {
         /* convert 3 character code to 2 character code if possible *CWB*/
-        int32_t offset = _findIndex(LANGUAGES_3, result.data());
+        U_ASSERT(capacity >= 4);
+        buffer[3] = '\0';
+        int32_t offset = _findIndex(LANGUAGES_3, buffer);
         if(offset>=0) {
-            result.clear();
-            result.append(LANGUAGES[offset], status);
+            const char* const alias = LANGUAGES[offset];
+            sink->Append(alias, (int32_t)uprv_strlen(alias));
+            return;
         }
     }
 
-    if (sink != nullptr && !result.isEmpty()) {
-        sink->Append(result.data(), result.length());
-    }
-
-    *pEnd = localeID;
+    sink->Append(buffer, len);
 }
 
 static void
 _getScript(const char* localeID,
            ByteSink* sink,
-           const char** pEnd,
-           UErrorCode& status) {
+           const char** pEnd) {
     U_ASSERT(pEnd != nullptr);
-    CharString result;
-    int32_t idLen = 0;
-
     *pEnd = localeID;
 
-    /* copy the second item as far as possible and count its length */
-    while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])
-            && uprv_isASCIILetter(localeID[idLen])) {
-        idLen++;
+    constexpr int32_t LENGTH = 4;
+
+    int32_t len = 0;
+    while (!_isTerminator(localeID[len]) && !_isIDSeparator(localeID[len]) &&
+            uprv_isASCIILetter(localeID[len])) {
+        if (len == LENGTH) { return; }
+        len++;
+    }
+    if (len != LENGTH) { return; }
+
+    *pEnd = localeID + LENGTH;
+    if (sink == nullptr) { return; }
+
+    char scratch[LENGTH];
+    int32_t capacity = 0;
+    char* buffer = sink->GetAppendBuffer(
+            LENGTH, LENGTH, scratch, UPRV_LENGTHOF(scratch), &capacity);
+
+    buffer[0] = uprv_toupper(localeID[0]);
+    for (int32_t i = 1; i < LENGTH; ++i) {
+        buffer[i] = uprv_tolower(localeID[i]);
     }
 
-    /* If it's exactly 4 characters long, then it's a script and not a country. */
-    if (idLen == 4) {
-        int32_t i;
-        *pEnd = localeID + idLen;
-        if (idLen >= 1) {
-            result.append((char)uprv_toupper(*(localeID++)), status);
-        }
-        for (i = 1; i < idLen; i++) {
-            result.append((char)uprv_tolower(*(localeID++)), status);
-        }
-    }
-
-    if (sink != nullptr && !result.isEmpty()) {
-        sink->Append(result.data(), result.length());
-    }
+    sink->Append(buffer, LENGTH);
 }
 
 static void
 _getRegion(const char* localeID,
            ByteSink* sink,
-           const char** pEnd,
-           UErrorCode& status) {
+           const char** pEnd) {
     U_ASSERT(pEnd != nullptr);
-    CharString result;
-    int32_t idLen=0;
-
-    /* copy the country as far as possible and count its length */
-    while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])) {
-        result.append((char)uprv_toupper(localeID[idLen]), status);
-        idLen++;
-    }
-
-    /* the country should be either length 2 or 3 */
-    if (idLen == 2 || idLen == 3) {
-        /* convert 3 character code to 2 character code if possible *CWB*/
-        if(idLen==3) {
-            int32_t offset = _findIndex(COUNTRIES_3, result.data());
-            if(offset>=0) {
-                result.clear();
-                result.append(COUNTRIES[offset], status);
-            }
-        }
-        localeID+=idLen;
-    } else {
-        result.clear();
-    }
-
-    if (sink != nullptr && !result.isEmpty()) {
-        sink->Append(result.data(), result.length());
-    }
-
     *pEnd = localeID;
+
+    constexpr int32_t MINLEN = 2;
+    constexpr int32_t MAXLEN = ULOC_COUNTRY_CAPACITY - 1;  // Minus NUL.
+
+    int32_t len = 0;
+    while (!_isTerminator(localeID[len]) && !_isIDSeparator(localeID[len])) {
+        if (len == MAXLEN) { return; }
+        len++;
+    }
+    if (len < MINLEN) { return; }
+
+    *pEnd = localeID + len;
+    if (sink == nullptr) { return; }
+
+    char scratch[ULOC_COUNTRY_CAPACITY];
+    int32_t capacity = 0;
+    char* buffer = sink->GetAppendBuffer(
+            ULOC_COUNTRY_CAPACITY,
+            ULOC_COUNTRY_CAPACITY,
+            scratch,
+            UPRV_LENGTHOF(scratch),
+            &capacity);
+
+    for (int32_t i = 0; i < len; ++i) {
+        buffer[i] = uprv_toupper(localeID[i]);
+    }
+
+    if (len == 3) {
+        /* convert 3 character code to 2 character code if possible *CWB*/
+        U_ASSERT(capacity >= 4);
+        buffer[3] = '\0';
+        int32_t offset = _findIndex(COUNTRIES_3, buffer);
+        if(offset>=0) {
+            const char* const alias = COUNTRIES[offset];
+            sink->Append(alias, (int32_t)uprv_strlen(alias));
+            return;
+        }
+    }
+
+    sink->Append(buffer, len);
 }
 
 /**
@@ -1415,8 +1439,7 @@ ulocimp_getSubtags(
     if (_isIDSeparator(*localeID)) {
         const char* begin = localeID + 1;
         const char* end = nullptr;
-        _getScript(begin, script, &end, status);
-        if (U_FAILURE(status)) { return; }
+        _getScript(begin, script, &end);
         U_ASSERT(end != nullptr);
         if (end != begin) {
             localeID = end;
@@ -1429,8 +1452,7 @@ ulocimp_getSubtags(
     if (_isIDSeparator(*localeID)) {
         const char* begin = localeID + 1;
         const char* end = nullptr;
-        _getRegion(begin, region, &end, status);
-        if (U_FAILURE(status)) { return; }
+        _getRegion(begin, region, &end);
         U_ASSERT(end != nullptr);
         if (end != begin) {
             hasRegion = true;
