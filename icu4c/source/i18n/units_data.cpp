@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "bytesinkutil.h"
+#include "charstr.h"
 #include "cstring.h"
 #include "measunit_impl.h"
 #include "number_decimalquantity.h"
@@ -443,10 +444,8 @@ MaybeStackVector<UnitPreference>
         }
     }
 
-    char regionBuf[8];
-    ulocimp_getRegionForSupplementalData(locale.getName(), false, regionBuf, 8, &status);
-    CharString region(regionBuf, status);
-        
+    CharString region = ulocimp_getRegionForSupplementalData(locale.getName(), false, &status);
+
     // Check the locale system tag, e.g `ms=metric`.
     UErrorCode internalMeasureTagStatus = U_ZERO_ERROR;
     CharString localeSystem = getKeyWordValue(locale, "measure", internalMeasureTagStatus);

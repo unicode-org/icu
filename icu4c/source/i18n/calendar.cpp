@@ -283,8 +283,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
 
     // when calendar keyword is not available or not supported, read supplementalData
     // to get the default calendar type for the locale's region
-    char region[ULOC_COUNTRY_CAPACITY];
-    (void)ulocimp_getRegionForSupplementalData(canonicalName.data(), true, region, sizeof(region), &status);
+    CharString region = ulocimp_getRegionForSupplementalData(canonicalName.data(), true, &status);
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;
     }
@@ -292,7 +291,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     // Read preferred calendar values from supplementalData calendarPreference
     UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", &status);
     ures_getByKey(rb, "calendarPreferenceData", rb, &status);
-    UResourceBundle *order = ures_getByKey(rb, region, nullptr, &status);
+    UResourceBundle *order = ures_getByKey(rb, region.data(), nullptr, &status);
     if (status == U_MISSING_RESOURCE_ERROR && rb != nullptr) {
         status = U_ZERO_ERROR;
         order = ures_getByKey(rb, "001", nullptr, &status);
@@ -4027,13 +4026,12 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
         return;
     }
 
-    char region[ULOC_COUNTRY_CAPACITY];
-    (void)ulocimp_getRegionForSupplementalData(desiredLocale.getName(), true, region, sizeof(region), &status);
+    CharString region = ulocimp_getRegionForSupplementalData(desiredLocale.getName(), true, &status);
 
     // Read week data values from supplementalData week data
     UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", &status);
     ures_getByKey(rb, "weekData", rb, &status);
-    UResourceBundle *weekData = ures_getByKey(rb, region, nullptr, &status);
+    UResourceBundle *weekData = ures_getByKey(rb, region.data(), nullptr, &status);
     if (status == U_MISSING_RESOURCE_ERROR && rb != nullptr) {
         status = U_ZERO_ERROR;
         weekData = ures_getByKey(rb, "001", nullptr, &status);

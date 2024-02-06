@@ -580,11 +580,11 @@ GetRegionFromKey(const char* localeID, const char* key, UErrorCode& status) {
 }
 }  // namespace
 
-U_CAPI int32_t U_EXPORT2
+U_EXPORT icu::CharString U_EXPORT2
 ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
-                                     char *region, int32_t regionCapacity, UErrorCode* status) {
+                                     UErrorCode* status) {
     if (U_FAILURE(*status)) {
-        return 0;
+        return {};
     }
     icu::CharString rgBuf = GetRegionFromKey(localeID, "rg", *status);
     if (U_SUCCESS(*status) && rgBuf.isEmpty()) {
@@ -608,5 +608,5 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
         }
     }
 
-    return rgBuf.extract(region, regionCapacity, *status);
+    return rgBuf;
 }
