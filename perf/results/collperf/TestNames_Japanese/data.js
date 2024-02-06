@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707140127354,
+  "lastUpdate": 1707222699648,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35260,6 +35260,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5738719.9808,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "835b009314ed49778a4d664f770c4a9e2a15fa75",
+          "message": "ICU-22520 Make ulocimp_get*() internal to ulocimp_getSubtags().\n\nThese functions now no longer have any other callers so they can be made\ninternal to the compilation unit of ulocimp_getSubtags(), thus bringing\nthem back to how they originally were intended to be used (and making\nthe comment above them true once again).\n\nThis also makes it possible to remove the temporary icu::CharString\nobjects that previously were returned to callers and instead write\ndirectly to icu::ByteSink, making the code both simpler and less\nwasteful (also that how this was once intended).",
+          "timestamp": "2024-02-06T13:12:55+01:00",
+          "tree_id": "5aaae898059a68c8783a483ae59fb89eb5ef486f",
+          "url": "https://github.com/unicode-org/icu/commit/835b009314ed49778a4d664f770c4a9e2a15fa75"
+        },
+        "date": 1707222630419,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.8014,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20204447.915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5255355.2948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19170577.1561,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5755512.3231,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
