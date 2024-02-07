@@ -476,11 +476,11 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "zh_YUE",         "yue" }, /* registered name */
 };
 
+namespace {
+
 /* ### BCP47 Conversion *******************************************/
-/* Test if the locale id has BCP47 u extension and does not have '@' */
-#define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == nullptr && getShortestSubtagLength(id) == 1)
 /* Gets the size of the shortest subtag in the given localeID. */
-static int32_t getShortestSubtagLength(const char *localeID) {
+int32_t getShortestSubtagLength(const char *localeID) {
     int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));
     int32_t length = localeIDLength;
     int32_t tmpLength = 0;
@@ -504,12 +504,18 @@ static int32_t getShortestSubtagLength(const char *localeID) {
 
     return length;
 }
+/* Test if the locale id has BCP47 u extension and does not have '@' */
+inline bool _hasBCP47Extension(const char *id) {
+    return id != nullptr && uprv_strstr(id, "@") == nullptr && getShortestSubtagLength(id) == 1;
+}
 
 /* ### Keywords **************************************************/
-#define UPRV_ISDIGIT(c) (((c) >= '0') && ((c) <= '9'))
-#define UPRV_ISALPHANUM(c) (uprv_isASCIILetter(c) || UPRV_ISDIGIT(c) )
+inline bool UPRV_ISDIGIT(char c) { return c >= '0' && c <= '9'; }
+inline bool UPRV_ISALPHANUM(char c) { return uprv_isASCIILetter(c) || UPRV_ISDIGIT(c); }
 /* Punctuation/symbols allowed in legacy key values */
-#define UPRV_OK_VALUE_PUNCTUATION(c) ((c) == '_' || (c) == '-' || (c) == '+' || (c) == '/')
+inline bool UPRV_OK_VALUE_PUNCTUATION(char c) { return c == '_' || c == '-' || c == '+' || c == '/'; }
+
+}  // namespace
 
 #define ULOC_KEYWORD_BUFFER_LEN 25
 #define ULOC_MAX_NO_KEYWORDS 25
@@ -1094,18 +1100,18 @@ ulocimp_setKeywordValue(const char* keywords,
 
 /* ### ID parsing implementation **************************************************/
 
-#define _isPrefixLetter(a) ((a=='x')||(a=='X')||(a=='i')||(a=='I'))
+namespace {
+
+inline bool _isPrefixLetter(char a) { return a == 'x' || a == 'X' || a == 'i' || a == 'I'; }
 
 /*returns true if one of the special prefixes is here (s=string)
   'x-' or 'i-' */
-#define _isIDPrefix(s) (_isPrefixLetter(s[0])&&_isIDSeparator(s[1]))
+inline bool _isIDPrefix(const char *s) { return _isPrefixLetter(s[0]) && _isIDSeparator(s[1]); }
 
 /* Dot terminates it because of POSIX form  where dot precedes the codepage
  * except for variant
  */
-#define _isTerminator(a)  ((a==0)||(a=='.')||(a=='@'))
-
-namespace {
+inline bool _isTerminator(char a) { return a == 0 || a == '.' || a == '@'; }
 
 inline bool _isBCP47Extension(const char* p) {
     return p[0] == '-' &&
@@ -1680,10 +1686,14 @@ uloc_openKeywords(const char* localeID,
 #define _ULOC_STRIP_KEYWORDS 0x2
 #define _ULOC_CANONICALIZE   0x1
 
-#define OPTION_SET(options, mask) ((options & mask) != 0)
+namespace {
 
-static const char i_default[] = {'i', '-', 'd', 'e', 'f', 'a', 'u', 'l', 't'};
-#define I_DEFAULT_LENGTH UPRV_LENGTHOF(i_default)
+inline bool OPTION_SET(uint32_t options, uint32_t mask) { return (options & mask) != 0; }
+
+constexpr char i_default[] = {'i', '-', 'd', 'e', 'f', 'a', 'u', 'l', 't'};
+constexpr int32_t I_DEFAULT_LENGTH = UPRV_LENGTHOF(i_default);
+
+}  // namespace
 
 /**
  * Canonicalize the given localeID, to level 1 or to level 2,

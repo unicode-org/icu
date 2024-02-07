@@ -69,8 +69,10 @@ typedef struct ULanguageTag {
 #define LOCALE_KEYWORD_SEP ';'
 #define LOCALE_KEY_TYPE_SEP '='
 
-#define ISALPHA(c) uprv_isASCIILetter(c)
-#define ISNUMERIC(c) ((c)>='0' && (c)<='9')
+namespace {
+constexpr auto ISALPHA = uprv_isASCIILetter;
+inline bool ISNUMERIC(char c) { return c >= '0' && c <= '9'; }
+}  // namespace
 
 static const char EMPTY[] = "";
 static const char LANG_UND[] = "und";
