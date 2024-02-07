@@ -199,24 +199,27 @@ error:
     goto exit;
 }
 
-#define CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength) UPRV_BLOCK_MACRO_BEGIN { \
-    int32_t count = 0; \
-    int32_t i; \
-    for (i = 0; i < trailingLength; i++) { \
-        if (trailing[i] == '-' || trailing[i] == '_') { \
-            count = 0; \
-            if (count > 8) { \
-                goto error; \
-            } \
-        } else if (trailing[i] == '@') { \
-            break; \
-        } else if (count > 8) { \
-            goto error; \
-        } else { \
-            count++; \
-        } \
-    } \
-} UPRV_BLOCK_MACRO_END
+namespace {
+inline bool CHECK_TRAILING_VARIANT_SIZE(const char* trailing, int32_t trailingLength) {
+    int32_t count = 0;
+    int32_t i;
+    for (i = 0; i < trailingLength; i++) {
+        if (trailing[i] == '-' || trailing[i] == '_') {
+            count = 0;
+            if (count > 8) {
+                return false;
+            }
+        } else if (trailing[i] == '@') {
+            break;
+        } else if (count > 8) {
+            return false;
+        } else {
+            count++;
+        }
+    }
+    return true;
+}
+}  // namespace
 
 static UBool
 _uloc_addLikelySubtags(const char* localeID,
@@ -266,7 +269,8 @@ _uloc_addLikelySubtags(const char* localeID,
     trailing = &localeID[trailingIndex];
     trailingLength = (int32_t)uprv_strlen(trailing);
 
-    CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
+    if (!CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength)) goto error;
+
     {
         const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(*err);
         if(U_FAILURE(*err)) {
@@ -362,7 +366,7 @@ _uloc_minimizeSubtags(const char* localeID,
     trailing = &localeID[trailingIndex];
     trailingLength = (int32_t)uprv_strlen(trailing);
 
-    CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength);
+    if (!CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength)) goto error;
 
     {
         const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(*err);

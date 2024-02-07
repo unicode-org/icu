@@ -12,8 +12,10 @@
 
 U_NAMESPACE_BEGIN
 
-#define UPRV_ISDIGIT(c) (((c) >= '0') && ((c) <= '9'))
-#define UPRV_ISALPHANUM(c) (uprv_isASCIILetter(c) || UPRV_ISDIGIT(c) )
+namespace {
+inline bool UPRV_ISDIGIT(char c) { return c >= '0' && c <= '9'; }
+inline bool UPRV_ISALPHANUM(char c) { return uprv_isASCIILetter(c) || UPRV_ISDIGIT(c); }
+}  // namespace
 
 constexpr const char* kAttributeKey = "attribute";
 

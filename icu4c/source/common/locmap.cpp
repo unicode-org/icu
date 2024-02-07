@@ -1030,22 +1030,24 @@ getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
 /////////////////////////////////////
 */
 #if U_PLATFORM_HAS_WIN32_API && UCONFIG_USE_WINDOWS_LCID_MAPPING_API
+namespace {
 /*
  * Various language tags needs to be changed:
  * quz -> qu
  * prs -> fa
  */
-#define FIX_LANGUAGE_ID_TAG(buffer, len) \
-    if (len >= 3) { \
-        if (buffer[0] == 'q' && buffer[1] == 'u' && buffer[2] == 'z') {\
-            buffer[2] = 0; \
-            uprv_strcat(buffer, buffer+3); \
-        } else if (buffer[0] == 'p' && buffer[1] == 'r' && buffer[2] == 's') {\
-            buffer[0] = 'f'; buffer[1] = 'a'; buffer[2] = 0; \
-            uprv_strcat(buffer, buffer+3); \
-        } \
+inline void FIX_LANGUAGE_ID_TAG(char* buffer, int32_t len) {
+    if (len >= 3) {
+        if (buffer[0] == 'q' && buffer[1] == 'u' && buffer[2] == 'z') {
+            buffer[2] = 0;
+            uprv_strcat(buffer, buffer+3);
+        } else if (buffer[0] == 'p' && buffer[1] == 'r' && buffer[2] == 's') {
+            buffer[0] = 'f'; buffer[1] = 'a'; buffer[2] = 0;
+            uprv_strcat(buffer, buffer+3);
+        }
     }
-
+}
+}  // namespace
 #endif
 
 U_CAPI int32_t
