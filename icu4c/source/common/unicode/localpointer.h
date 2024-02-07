@@ -552,6 +552,12 @@ public:
 
 #ifndef U_IN_DOXYGEN
 namespace internal {
+/**
+ * Implementation, do not use directly: use U_DEFINE_LOCAL_OPEN_POINTER.
+ *
+ * @see U_DEFINE_LOCAL_OPEN_POINTER
+ * @internal
+ */
 template <typename Type, auto closeFunction>
 class LocalOpenPointer : public LocalPointerBase<Type> {
     using LocalPointerBase<Type>::ptr;
