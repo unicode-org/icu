@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707339986014,
+  "lastUpdate": 1707350156535,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35584,6 +35584,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5695146.2523,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "699555a5bd43b439aba370288fa90f5fcb0705f8",
+          "message": "ICU-22520 Use a ByteSink append buffer instead of a local CharString.\n\nThese functions that eventually write their output to a ByteSink need a\nsmall temporary buffer for processing the subtag they're about to write\nand currently use a local CharString object to provide this buffer,\nwhich then gets written to the ByteSink and discarded.\n\nThis intermediate step is unnecessary as a ByteSink can provide an\nappend buffer which can be used instead, eliminating the need to\nallocate a local temporary buffer and to copy the data around.\n\nThis approach also makes it natural to split the processing into two\nsteps, first calculating the length of the subtag, then processing it,\nwhich makes it possible to return early when no output is requested.",
+          "timestamp": "2024-02-08T00:38:09+01:00",
+          "tree_id": "687e9039d6c4bc244a46afe4c68d2213490bed86",
+          "url": "https://github.com/unicode-org/icu/commit/699555a5bd43b439aba370288fa90f5fcb0705f8"
+        },
+        "date": 1707350079783,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 250.5948,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20784898.6163,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5350429.5217,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19767938.7315,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5803056.6732,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
