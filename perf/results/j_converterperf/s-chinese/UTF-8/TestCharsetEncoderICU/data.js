@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707335989248,
+  "lastUpdate": 1707339873655,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17128,6 +17128,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.531869970130773,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a210fc8351141c2e0547db1020f19dfd11c62462",
+          "message": "ICU-22651 Add a docstring for LocalOpenPointer.",
+          "timestamp": "2024-02-07T21:47:13+01:00",
+          "tree_id": "7aa0e42d2f2f7c37a21414f9661c3e075ca9619d",
+          "url": "https://github.com/unicode-org/icu/commit/a210fc8351141c2e0547db1020f19dfd11c62462"
+        },
+        "date": 1707339795648,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.5192150620993217,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
