@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707314571376,
+  "lastUpdate": 1707333349237,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17188,6 +17188,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.7369027042453795,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "0b66fada30eeb572a75f7266db56326600c437a2",
+          "message": "ICU-22633 Fix integer overflow inside Calendar code\n\nSee #2806",
+          "timestamp": "2024-02-07T10:58:41-08:00",
+          "tree_id": "65a74dc2d406474c298c0a40ec731d351f5ee698",
+          "url": "https://github.com/unicode-org/icu/commit/0b66fada30eeb572a75f7266db56326600c437a2"
+        },
+        "date": 1707333189584,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.7333883698124444,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
