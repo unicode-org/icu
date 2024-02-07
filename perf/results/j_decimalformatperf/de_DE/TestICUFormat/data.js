@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707313287001,
+  "lastUpdate": 1707314118380,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17008,6 +17008,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 558.1629809256378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a6efa924ad04f7e3c7ad325237bf026b39abe4e8",
+          "message": "ICU-22520 Let ulocimp_getRegionForSupplementalData() return CharString.",
+          "timestamp": "2024-02-07T14:27:40+01:00",
+          "tree_id": "1506023d9bf4a704e5f9fea58c84f3a8dca7c264",
+          "url": "https://github.com/unicode-org/icu/commit/a6efa924ad04f7e3c7ad325237bf026b39abe4e8"
+        },
+        "date": 1707314042074,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 552.2401617232521,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
