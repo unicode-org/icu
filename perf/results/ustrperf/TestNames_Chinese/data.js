@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707315302610,
+  "lastUpdate": 1707334332153,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -62974,6 +62974,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.8611,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "0b66fada30eeb572a75f7266db56326600c437a2",
+          "message": "ICU-22633 Fix integer overflow inside Calendar code\n\nSee #2806",
+          "timestamp": "2024-02-07T10:58:41-08:00",
+          "tree_id": "65a74dc2d406474c298c0a40ec731d351f5ee698",
+          "url": "https://github.com/unicode-org/icu/commit/0b66fada30eeb572a75f7266db56326600c437a2"
+        },
+        "date": 1707334101377,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 16.9035,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 19.3586,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 21.2277,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 24.0878,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 29.6669,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 30.0227,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 20.4283,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.7309,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 80.0502,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.2401,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 38.9159,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 41.2027,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
