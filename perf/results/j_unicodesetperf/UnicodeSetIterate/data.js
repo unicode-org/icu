@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707349529126,
+  "lastUpdate": 1707364946628,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17128,6 +17128,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.9199317089453974,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "ba1208e49b10c808651cd40bc05e0138c5291194",
+          "message": "ICU-22518 Add a flag to export the output of the reference implementation from the old segmentation monkey tests",
+          "timestamp": "2024-02-08T04:54:33+01:00",
+          "tree_id": "b81baf84994204a358f7267689b22f0f54f25627",
+          "url": "https://github.com/unicode-org/icu/commit/ba1208e49b10c808651cd40bc05e0138c5291194"
+        },
+        "date": 1707364864424,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9192004698610535,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
