@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707340551536,
+  "lastUpdate": 1707350717453,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -63454,6 +63454,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 43.4922,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "699555a5bd43b439aba370288fa90f5fcb0705f8",
+          "message": "ICU-22520 Use a ByteSink append buffer instead of a local CharString.\n\nThese functions that eventually write their output to a ByteSink need a\nsmall temporary buffer for processing the subtag they're about to write\nand currently use a local CharString object to provide this buffer,\nwhich then gets written to the ByteSink and discarded.\n\nThis intermediate step is unnecessary as a ByteSink can provide an\nappend buffer which can be used instead, eliminating the need to\nallocate a local temporary buffer and to copy the data around.\n\nThis approach also makes it natural to split the processing into two\nsteps, first calculating the length of the subtag, then processing it,\nwhich makes it possible to return early when no output is requested.",
+          "timestamp": "2024-02-08T00:38:09+01:00",
+          "tree_id": "687e9039d6c4bc244a46afe4c68d2213490bed86",
+          "url": "https://github.com/unicode-org/icu/commit/699555a5bd43b439aba370288fa90f5fcb0705f8"
+        },
+        "date": 1707350609695,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.2004,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.8853,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 25.2148,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 41.7605,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 46.2258,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 33.3675,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 22.5518,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.8739,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 100.237,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 23.7162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 40.2702,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 44.026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
