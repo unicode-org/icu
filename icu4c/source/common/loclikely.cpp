@@ -51,6 +51,8 @@
  * @param scriptLength The length of the script tag.
  * @param region The region tag to use.
  * @param regionLength The length of the region tag.
+ * @param variant The region tag to use.
+ * @param variantLength The length of the region tag.
  * @param trailing Any trailing data to append to the new tag.
  * @param trailingLength The length of the trailing data.
  * @param sink The output sink receiving the tag string.
@@ -64,6 +66,8 @@ createTagStringWithAlternates(
     int32_t scriptLength,
     const char* region,
     int32_t regionLength,
+    const char* variant,
+    int32_t variantLength,
     const char* trailing,
     int32_t trailingLength,
     icu::ByteSink& sink,
@@ -79,8 +83,6 @@ createTagStringWithAlternates(
         return;
     }
 
-    UBool regionAppended = false;
-
     if (langLength > 0) {
         sink.Append(lang, langLength);
     }
@@ -93,19 +95,18 @@ createTagStringWithAlternates(
     if (regionLength > 0) {
         sink.Append("_", 1);
         sink.Append(region, regionLength);
+    }
 
-        regionAppended = true;
+    if (variantLength > 0) {
+        if (regionLength == 0) {
+            /* extra separator is required */
+            sink.Append("_", 1);
+        }
+        sink.Append("_", 1);
+        sink.Append(variant, variantLength);
     }
 
     if (trailingLength > 0) {
-        if (*trailing != '@') {
-            sink.Append("_", 1);
-            if (!regionAppended) {
-                /* extra separator is required */
-                sink.Append("_", 1);
-            }
-        }
-
         /*
          * Copy the trailing data into the supplied buffer.
          */
@@ -113,77 +114,13 @@ createTagStringWithAlternates(
     }
 }
 
-/**
- * Parse the language, script, and region subtags from a tag string, and copy the
- * results into the corresponding output parameters.
- *
- * If an illegal argument is provided, the function returns the error
- * U_ILLEGAL_ARGUMENT_ERROR.
- *
- * @param localeID The locale ID to parse.
- * @param lang The language tag buffer.
- * @param script The script tag buffer.
- * @param region The region tag buffer.
- * @param err A pointer to a UErrorCode for error reporting.
- * @return The number of chars of the localeID parameter consumed.
- **/
-static int32_t U_CALLCONV
-parseTagString(
-    const char* localeID,
-    icu::CharString& lang,
-    icu::CharString& script,
-    icu::CharString& region,
-    UErrorCode* err)
-{
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    if (localeID == nullptr) {
-        *err = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    const char* position = localeID;
-
-    {
-        icu::CharString variant;
-        ulocimp_getSubtags(localeID, &lang, &script, &region, &variant, &position, *err);
-
-        if (U_FAILURE(*err)) {
-            return 0;
-        }
-
-        if (!variant.isEmpty()) {
-            position -= 1 + variant.length();
-        }
-    }
-
-    if (_isIDSeparator(*position)) {
-        ++position;
-    }
-
-    if (region.isEmpty() && *position != 0 && *position != '@') {
-        /* back up over consumed trailing separator */
-        --position;
-    }
-
-    return (int32_t)(position - localeID);
-}
-
 namespace {
-inline bool CHECK_TRAILING_VARIANT_SIZE(const char* trailing, int32_t trailingLength) {
+inline bool CHECK_TRAILING_VARIANT_SIZE(const char* variant, int32_t variantLength) {
     int32_t count = 0;
-    int32_t i;
-    for (i = 0; i < trailingLength; i++) {
-        if (trailing[i] == '-' || trailing[i] == '_') {
+    for (int32_t i = 0; i < variantLength; i++) {
+        if (_isIDSeparator(variant[i])) {
             count = 0;
-            if (count > 8) {
-                return false;
-            }
-        } else if (trailing[i] == '@') {
-            break;
-        } else if (count > 8) {
+        } else if (count == 8) {
             return false;
         } else {
             count++;
@@ -209,8 +146,15 @@ _uloc_addLikelySubtags(const char* localeID,
     icu::CharString lang;
     icu::CharString script;
     icu::CharString region;
-    int32_t trailingIndex = parseTagString(localeID, lang, script, region, err);
+    icu::CharString variant;
+    const char* trailing = nullptr;
+    ulocimp_getSubtags(localeID, &lang, &script, &region, &variant, &trailing, *err);
     if (U_FAILURE(*err)) {
+        return false;
+    }
+
+    if (!CHECK_TRAILING_VARIANT_SIZE(variant.data(), variant.length())) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
         return false;
     }
 
@@ -224,17 +168,7 @@ _uloc_addLikelySubtags(const char* localeID,
         }
     }
 
-    /* Find the length of the trailing portion. */
-    while (_isIDSeparator(localeID[trailingIndex])) {
-        trailingIndex++;
-    }
-    const char* trailing = &localeID[trailingIndex];
     int32_t trailingLength = (int32_t)uprv_strlen(trailing);
-
-    if (!CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength)) {
-        *err = U_ILLEGAL_ARGUMENT_ERROR;
-        return false;
-    }
 
     const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(*err);
     if (U_FAILURE(*err)) {
@@ -262,6 +196,8 @@ _uloc_addLikelySubtags(const char* localeID,
         (int32_t)uprv_strlen(lsr.script),
         lsr.region,
         (int32_t)uprv_strlen(lsr.region),
+        variant.data(),
+        variant.length(),
         trailing,
         trailingLength,
         sink,
@@ -293,22 +229,19 @@ _uloc_minimizeSubtags(const char* localeID,
     icu::CharString lang;
     icu::CharString script;
     icu::CharString region;
-    int32_t trailingIndex = parseTagString(localeID, lang, script, region, err);
+    icu::CharString variant;
+    const char* trailing = nullptr;
+    ulocimp_getSubtags(localeID, &lang, &script, &region, &variant, &trailing, *err);
     if (U_FAILURE(*err)) {
         return;
     }
 
-    /* Find the spot where the variants or the keywords begin, if any. */
-    while (_isIDSeparator(localeID[trailingIndex])) {
-        trailingIndex++;
-    }
-    const char* trailing = &localeID[trailingIndex];
-    int32_t trailingLength = (int32_t)uprv_strlen(trailing);
-
-    if (!CHECK_TRAILING_VARIANT_SIZE(trailing, trailingLength)) {
+    if (!CHECK_TRAILING_VARIANT_SIZE(variant.data(), variant.length())) {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+
+    int32_t trailingLength = (int32_t)uprv_strlen(trailing);
 
     const icu::LikelySubtags* likelySubtags = icu::LikelySubtags::getSingleton(*err);
     if (U_FAILURE(*err)) {
@@ -334,6 +267,8 @@ _uloc_minimizeSubtags(const char* localeID,
         (int32_t)uprv_strlen(lsr.script),
         lsr.region,
         (int32_t)uprv_strlen(lsr.region),
+        variant.data(),
+        variant.length(),
         trailing,
         trailingLength,
         sink,
