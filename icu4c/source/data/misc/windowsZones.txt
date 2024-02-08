@@ -126,12 +126,11 @@ windowsZones:table(nofallback){
             ZZ{"Etc/GMT+6"}
         }
         "Central Asia Standard Time"{
-            001{"Asia/Almaty"}
+            001{"Asia/Bishkek"}
             AQ{"Antarctica/Vostok"}
             CN{"Asia/Urumqi"}
             IO{"Indian/Chagos"}
             KG{"Asia/Bishkek"}
-            KZ{"Asia/Almaty Asia/Qostanay"}
             ZZ{"Etc/GMT-6"}
         }
         "Central Brazilian Standard Time"{
@@ -779,7 +778,10 @@ windowsZones:table(nofallback){
         "West Asia Standard Time"{
             001{"Asia/Tashkent"}
             AQ{"Antarctica/Mawson"}
-            KZ{"Asia/Oral Asia/Aqtau Asia/Aqtobe Asia/Atyrau"}
+            KZ{
+                "Asia/Oral Asia/Almaty Asia/Aqtau Asia/Aqtobe Asia/Atyrau Asia/Qostan"
+                "ay"
+            }
             MV{"Indian/Maldives"}
             TF{"Indian/Kerguelen"}
             TJ{"Asia/Dushanbe"}
