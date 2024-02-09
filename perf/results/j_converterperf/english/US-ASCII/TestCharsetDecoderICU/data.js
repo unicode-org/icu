@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707503187211,
+  "lastUpdate": 1707507772371,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17368,6 +17368,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.553172408017554,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "69c8e12642fb628e7b6643720c34e1eb83899859",
+          "message": "ICU-22520 Remove local custom code for parsing variant subtags.\n\nNow when the parseTagString() helper function just is a wrapper over\nulocimp_getSubtags() it can be replaced by calling that function\ndirectly instead and letting it handle variant subtags as well.",
+          "timestamp": "2024-02-09T20:26:09+01:00",
+          "tree_id": "cd8533c16f9a8b5c3fa3750e01d986705cd967be",
+          "url": "https://github.com/unicode-org/icu/commit/69c8e12642fb628e7b6643720c34e1eb83899859"
+        },
+        "date": 1707507697153,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5528026544158522,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
