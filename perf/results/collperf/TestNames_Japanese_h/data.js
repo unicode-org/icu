@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707503380325,
+  "lastUpdate": 1707507983822,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36070,6 +36070,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5751488.4308,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "69c8e12642fb628e7b6643720c34e1eb83899859",
+          "message": "ICU-22520 Remove local custom code for parsing variant subtags.\n\nNow when the parseTagString() helper function just is a wrapper over\nulocimp_getSubtags() it can be replaced by calling that function\ndirectly instead and letting it handle variant subtags as well.",
+          "timestamp": "2024-02-09T20:26:09+01:00",
+          "tree_id": "cd8533c16f9a8b5c3fa3750e01d986705cd967be",
+          "url": "https://github.com/unicode-org/icu/commit/69c8e12642fb628e7b6643720c34e1eb83899859"
+        },
+        "date": 1707507800527,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 227.8359,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20029199.6002,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5228569.6882,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19090512.2196,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5638646.9127,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
