@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707423068758,
+  "lastUpdate": 1707464899983,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17008,6 +17008,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 245.13176400724666,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "abcb80fd536b4505d8f74209aca71656a7aa54e7",
+          "message": "ICU-22615 Test TimeZoneNames API will not assert with non ASCII.\n\nAdd tests and return error when the ID is non ASCII",
+          "timestamp": "2024-02-08T23:37:14-08:00",
+          "tree_id": "90ed3c527ea7ff05be9931355803f818ebf1ea90",
+          "url": "https://github.com/unicode-org/icu/commit/abcb80fd536b4505d8f74209aca71656a7aa54e7"
+        },
+        "date": 1707464820912,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 268.8037957150506,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
