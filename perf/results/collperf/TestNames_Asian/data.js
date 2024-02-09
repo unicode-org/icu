@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707423591388,
+  "lastUpdate": 1707465329978,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -35746,6 +35746,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2055113.989,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "abcb80fd536b4505d8f74209aca71656a7aa54e7",
+          "message": "ICU-22615 Test TimeZoneNames API will not assert with non ASCII.\n\nAdd tests and return error when the ID is non ASCII",
+          "timestamp": "2024-02-08T23:37:14-08:00",
+          "tree_id": "90ed3c527ea7ff05be9931355803f818ebf1ea90",
+          "url": "https://github.com/unicode-org/icu/commit/abcb80fd536b4505d8f74209aca71656a7aa54e7"
+        },
+        "date": 1707465250736,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 219.6962,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8955014.1119,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2155518.29,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8381122.9834,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2045062.5109,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
