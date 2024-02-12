@@ -203,6 +203,7 @@ _copyExtensions(const Locale& from, icu::StringEnumeration *keywords,
 void
 _clearUAttributesAndKeyType(Locale& locale, UErrorCode& errorCode)
 {
+    if (U_FAILURE(errorCode)) { return; }
     // Clear Unicode attributes
     locale.setKeywordValue(kAttributeKey, "", errorCode);
 
@@ -218,6 +219,7 @@ _clearUAttributesAndKeyType(Locale& locale, UErrorCode& errorCode)
 void
 _setUnicodeExtensions(Locale& locale, const CharString& value, UErrorCode& errorCode)
 {
+    if (U_FAILURE(errorCode)) { return; }
     // Add the unicode extensions to extensions_
     CharString locale_str("und-u-", errorCode);
     locale_str.append(value, errorCode);

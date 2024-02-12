@@ -201,6 +201,8 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
 namespace {
 
 UResourceBundle * measurementTypeBundleForLocale(const char *localeID, const char *measurementType, UErrorCode *status){
+    if (U_FAILURE(*status)) { return nullptr; }
+
     UResourceBundle *rb;
     UResourceBundle *measTypeBundle = nullptr;
 
@@ -279,6 +281,7 @@ ulocdata_getPaperSize(const char* localeID, int32_t *height, int32_t *width, UEr
 
 U_CAPI void U_EXPORT2
 ulocdata_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status) {
+    if (U_FAILURE(*status)) { return; }
     UResourceBundle *rb = nullptr;
     rb = ures_openDirect(nullptr, "supplementalData", status);
     ures_getVersionByKey(rb, "cldrVersion", versionArray, status);

@@ -50,6 +50,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                               int32_t *pLength,
                               UErrorCode *pErrorCode)
 {
+    if (U_FAILURE(*pErrorCode)) { return nullptr; }
 /*    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];*/
     const char16_t *item=nullptr;
     UErrorCode errorCode;
@@ -159,45 +160,47 @@ _uloc_getOrientationHelper(const char* localeId,
 {
     ULayoutType result = ULOC_LAYOUT_UNKNOWN;
 
-    if (!U_FAILURE(status)) {
-        icu::CharString localeBuffer;
+    if (U_FAILURE(status)) { return result; }
+
+    icu::CharString localeBuffer;
+    {
+        icu::CharStringByteSink sink(&localeBuffer);
+        ulocimp_canonicalize(localeId, sink, status);
+    }
+
+    if (U_FAILURE(status)) { return result; }
+
+    int32_t length = 0;
+    const char16_t* const value =
+        uloc_getTableStringWithFallback(
+            nullptr,
+            localeBuffer.data(),
+            "layout",
+            nullptr,
+            key,
+            &length,
+            &status);
+
+    if (U_FAILURE(status)) { return result; }
+
+    if (length != 0) {
+        switch(value[0])
         {
-            icu::CharStringByteSink sink(&localeBuffer);
-            ulocimp_canonicalize(localeId, sink, status);
-        }
-
-        if (!U_FAILURE(status)) {
-            int32_t length = 0;
-            const char16_t* const value =
-                uloc_getTableStringWithFallback(
-                    nullptr,
-                    localeBuffer.data(),
-                    "layout",
-                    nullptr,
-                    key,
-                    &length,
-                    &status);
-
-            if (!U_FAILURE(status) && length != 0) {
-                switch(value[0])
-                {
-                case 0x0062: /* 'b' */
-                    result = ULOC_LAYOUT_BTT;
-                    break;
-                case 0x006C: /* 'l' */
-                    result = ULOC_LAYOUT_LTR;
-                    break;
-                case 0x0072: /* 'r' */
-                    result = ULOC_LAYOUT_RTL;
-                    break;
-                case 0x0074: /* 't' */
-                    result = ULOC_LAYOUT_TTB;
-                    break;
-                default:
-                    status = U_INTERNAL_PROGRAM_ERROR;
-                    break;
-                }
-            }
+        case 0x0062: /* 'b' */
+            result = ULOC_LAYOUT_BTT;
+            break;
+        case 0x006C: /* 'l' */
+            result = ULOC_LAYOUT_LTR;
+            break;
+        case 0x0072: /* 'r' */
+            result = ULOC_LAYOUT_RTL;
+            break;
+        case 0x0074: /* 't' */
+            result = ULOC_LAYOUT_TTB;
+            break;
+        default:
+            status = U_INTERNAL_PROGRAM_ERROR;
+            break;
         }
     }
 

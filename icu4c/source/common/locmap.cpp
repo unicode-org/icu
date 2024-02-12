@@ -977,6 +977,7 @@ idCmp(const char* id1, const char* id2)
 uint32_t
 getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode& status)
 {
+    if (U_FAILURE(status)) { return locmap_root->hostID; }
     int32_t bestIdx = 0;
     int32_t bestIdxDiff = 0;
     int32_t posixIDlen = (int32_t)uprv_strlen(posixID);
@@ -1004,7 +1005,7 @@ getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode& status)
 
     /*no match found */
     status = U_ILLEGAL_ARGUMENT_ERROR;
-    return this_0->regionMaps->hostID;
+    return locmap_root->hostID;
 }
 
 const char*
@@ -1151,7 +1152,7 @@ uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UEr
 
     /* no match found */
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return -1;
+    return 0;
 }
 
 /*
@@ -1257,6 +1258,14 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
 U_CAPI uint32_t
 uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
 {
+    if (U_FAILURE(*status) ||
+            langID == nullptr ||
+            posixID == nullptr ||
+            uprv_strlen(langID) < 2 ||
+            uprv_strlen(posixID) < 2) {
+        return locmap_root->hostID;
+    }
+
     // This function does the table lookup when native platform name->lcid conversion isn't available,
     // or for locales that don't follow patterns the platform expects.
     uint32_t   low    = 0;
@@ -1269,11 +1278,6 @@ uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
     uint32_t   fallbackValue = (uint32_t)-1;
     UErrorCode myStatus;
     uint32_t   idx;
-
-    /* Check for incomplete id. */
-    if (!langID || !posixID || uprv_strlen(langID) < 2 || uprv_strlen(posixID) < 2) {
-        return 0;
-    }
 
     /*Binary search for the map entry for normal cases */
 
@@ -1319,5 +1323,5 @@ uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
 
     /* no match found */
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;   /* return international (root) */
+    return locmap_root->hostID;   /* return international (root) */
 }

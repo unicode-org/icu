@@ -19,15 +19,17 @@ U_NAMESPACE_USE
 
 ULocale*
 ulocale_openForLocaleID(const char* localeID, int32_t length, UErrorCode* err) {
+    if (U_FAILURE(*err)) { return nullptr; }
     CharString str(length < 0 ? StringPiece(localeID) : StringPiece(localeID, length), *err);
-    if (U_FAILURE(*err)) return nullptr;
+    if (U_FAILURE(*err)) { return nullptr; }
     return EXTERNAL(icu::Locale::createFromName(str.data()).clone());
 }
 
 ULocale*
 ulocale_openForLanguageTag(const char* tag, int32_t length, UErrorCode* err) {
+  if (U_FAILURE(*err)) { return nullptr; }
   Locale l = icu::Locale::forLanguageTag(length < 0 ? StringPiece(tag) : StringPiece(tag, length), *err);
-  if (U_FAILURE(*err)) return nullptr;
+  if (U_FAILURE(*err)) { return nullptr; }
   return EXTERNAL(l.clone());
 }
 
@@ -57,10 +59,10 @@ int32_t ulocale_get ##N ( \
     CONST_INTERNAL(locale)->get ## N( \
         keywordLength < 0 ? StringPiece(keyword) : StringPiece(keyword, keywordLength), \
         sink, *err); \
-    int32_t reslen = sink.NumberOfBytesAppended(); \
     if (U_FAILURE(*err)) { \
-        return reslen; \
+        return 0; \
     } \
+    int32_t reslen = sink.NumberOfBytesAppended(); \
     if (sink.Overflowed()) { \
         *err = U_BUFFER_OVERFLOW_ERROR; \
     } else { \

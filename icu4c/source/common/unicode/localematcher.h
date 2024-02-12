@@ -11,6 +11,8 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
+#include <optional>
+
 #include "unicode/locid.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
@@ -678,7 +680,7 @@ private:
 
     int32_t putIfAbsent(const LSR &lsr, int32_t i, int32_t suppLength, UErrorCode &errorCode);
 
-    int32_t getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remainingIter, UErrorCode &errorCode) const;
+    std::optional<int32_t> getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remainingIter, UErrorCode &errorCode) const;
 
     const LikelySubtags &likelySubtags;
     const LocaleDistance &localeDistance;

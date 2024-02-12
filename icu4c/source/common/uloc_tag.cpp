@@ -1169,12 +1169,9 @@ void _sortVariants(VariantListEntry* first) {
 
 void
 _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool strict, bool& hadPosix, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     UErrorCode tmpStatus = U_ZERO_ERROR;
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     icu::CharString buf = ulocimp_getVariant(localeID, tmpStatus);
     if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
         if (strict) {
@@ -1280,6 +1277,8 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool str
 
 void
 _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool strict, bool hadPosix, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     icu::MemoryPool<AttributeListEntry> attrPool;
     icu::MemoryPool<ExtensionListEntry> extPool;
     icu::MemoryPool<icu::CharString> strPool;
@@ -1522,6 +1521,8 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool str
  */
 void
 _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendTo, icu::MemoryPool<ExtensionListEntry>& extPool, icu::MemoryPool<icu::CharString>& kwdBuf, bool& posixVariant, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     const char *pTag;   /* beginning of current subtag */
     const char *pKwds;  /* beginning of key-type pairs */
     bool variantExists = posixVariant;
@@ -1782,6 +1783,8 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
 
 void
 _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     int32_t i, n;
     int32_t len;
     ExtensionListEntry *kwdFirst = nullptr;
@@ -1790,10 +1793,6 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode& status) 
     icu::MemoryPool<ExtensionListEntry> extPool;
     icu::MemoryPool<icu::CharString> kwdBuf;
     bool posixVariant = false;
-
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     n = ultag_getExtensionsSize(langtag);
 
@@ -1877,14 +1876,10 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode& status) 
 }
 
 void
-_appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, bool strict, bool hadPosix, UErrorCode& status) {
-    (void)hadPosix;
+_appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, bool strict, bool /*hadPosix*/, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     UErrorCode tmpStatus = U_ZERO_ERROR;
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     icu::CharString buf = ulocimp_getVariant(localeID, tmpStatus);
     if (U_FAILURE(tmpStatus)) {
         if (strict) {
@@ -1986,6 +1981,8 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, bool s
 
 ULanguageTag*
 ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode& status) {
+    if (U_FAILURE(status)) { return nullptr; }
+
     char *tagBuf;
     int16_t next;
     char *pSubtag, *pNext, *pLastGoodPosition;
@@ -1999,10 +1996,6 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode& sta
 
     if (parsedLen != nullptr) {
         *parsedLen = 0;
-    }
-
-    if (U_FAILURE(status)) {
-        return nullptr;
     }
 
     if (tagLen < 0) {
@@ -2583,12 +2576,11 @@ uloc_toLanguageTag(const char* localeID,
 
     icu::CheckedArrayByteSink sink(langtag, langtagCapacity);
     ulocimp_toLanguageTag(localeID, sink, strict, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
 
     int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (U_FAILURE(*status)) {
-        return reslen;
-    }
 
     if (sink.Overflowed()) {
         *status = U_BUFFER_OVERFLOW_ERROR;
@@ -2605,6 +2597,8 @@ ulocimp_toLanguageTag(const char* localeID,
                       icu::ByteSink& sink,
                       bool strict,
                       UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     icu::CharString canonical;
     UErrorCode tmpStatus = U_ZERO_ERROR;
     bool hadPosix = false;
@@ -2684,12 +2678,11 @@ uloc_forLanguageTag(const char* langtag,
 
     icu::CheckedArrayByteSink sink(localeID, localeIDCapacity);
     ulocimp_forLanguageTag(langtag, -1, sink, parsedLength, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
 
     int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (U_FAILURE(*status)) {
-        return reslen;
-    }
 
     if (sink.Overflowed()) {
         *status = U_BUFFER_OVERFLOW_ERROR;
@@ -2707,6 +2700,8 @@ ulocimp_forLanguageTag(const char* langtag,
                        icu::ByteSink& sink,
                        int32_t* parsedLength,
                        UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     bool isEmpty = true;
     const char *subtag, *p;
     int32_t len;
