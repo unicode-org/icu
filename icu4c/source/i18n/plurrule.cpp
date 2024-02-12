@@ -863,7 +863,7 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
             {
                 CharString tmp;
                 CharStringByteSink sink(&tmp);
-                ulocimp_getParent(parentLocaleName.data(), sink, &status);
+                ulocimp_getParent(parentLocaleName.data(), sink, status);
                 if (tmp.isEmpty()) break;
                 parentLocaleName = std::move(tmp);
             }

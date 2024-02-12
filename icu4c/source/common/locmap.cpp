@@ -49,6 +49,8 @@
  * [MS-LCID] Windows Language Code Identifier (LCID) Reference
  */
 
+namespace {
+
 /*
 ////////////////////////////////////////////////
 //
@@ -87,7 +89,7 @@ typedef struct ILcidPosixMap
  * @param posixID posix ID of the language_TERRITORY such as 'de_CH'
  */
 #define ILCID_POSIX_ELEMENT_ARRAY(hostID, languageID, posixID) \
-static const ILcidPosixElement locmap_ ## languageID [] = { \
+constexpr ILcidPosixElement locmap_ ## languageID [] = { \
     {LANGUAGE_LCID(hostID), #languageID},     /* parent locale */ \
     {hostID, #posixID}, \
 };
@@ -97,7 +99,7 @@ static const ILcidPosixElement locmap_ ## languageID [] = { \
  * @param id the POSIX ID, either a language or language_TERRITORY
  */
 #define ILCID_POSIX_SUBTABLE(id) \
-static const ILcidPosixElement locmap_ ## id [] =
+constexpr ILcidPosixElement locmap_ ## id [] =
 
 
 /**
@@ -796,7 +798,7 @@ ILCID_POSIX_SUBTABLE(zh) {
 ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
 
 /* This must be static and grouped by LCID. */
-static const ILcidPosixMap gPosixIDmap[] = {
+constexpr ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(af),    /*  af  Afrikaans                 0x36 */
     ILCID_POSIX_MAP(am),    /*  am  Amharic                   0x5e */
     ILCID_POSIX_MAP(ar),    /*  ar  Arabic                    0x01 */
@@ -945,14 +947,14 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(zu),    /*  zu  Zulu                      0x35 */
 };
 
-static const uint32_t gLocaleCount = UPRV_LENGTHOF(gPosixIDmap);
+constexpr uint32_t gLocaleCount = UPRV_LENGTHOF(gPosixIDmap);
 
 /**
  * Do not call this function. It is called by hostID.
  * The function is not private because this struct must stay as a C struct,
  * and this is an internal class.
  */
-static int32_t
+int32_t
 idCmp(const char* id1, const char* id2)
 {
     int32_t diffIdx = 0;
@@ -972,8 +974,8 @@ idCmp(const char* id1, const char* id2)
  *               no equivalent Windows LCID.
  * @return the LCID
  */
-static uint32_t
-getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
+uint32_t
+getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode& status)
 {
     int32_t bestIdx = 0;
     int32_t bestIdxDiff = 0;
@@ -996,16 +998,16 @@ getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
     if ((posixID[bestIdxDiff] == '_' || posixID[bestIdxDiff] == '@')
         && this_0->regionMaps[bestIdx].posixID[bestIdxDiff] == 0)
     {
-        *status = U_USING_FALLBACK_WARNING;
+        status = U_USING_FALLBACK_WARNING;
         return this_0->regionMaps[bestIdx].hostID;
     }
 
     /*no match found */
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    status = U_ILLEGAL_ARGUMENT_ERROR;
     return this_0->regionMaps->hostID;
 }
 
-static const char*
+const char*
 getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
 {
     uint32_t i;
@@ -1030,13 +1032,12 @@ getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
 /////////////////////////////////////
 */
 #if U_PLATFORM_HAS_WIN32_API && UCONFIG_USE_WINDOWS_LCID_MAPPING_API
-namespace {
 /*
  * Various language tags needs to be changed:
  * quz -> qu
  * prs -> fa
  */
-inline void FIX_LANGUAGE_ID_TAG(char* buffer, int32_t len) {
+void FIX_LANGUAGE_ID_TAG(char* buffer, int32_t len) {
     if (len >= 3) {
         if (buffer[0] == 'q' && buffer[1] == 'u' && buffer[2] == 'z') {
             buffer[2] = 0;
@@ -1047,8 +1048,9 @@ inline void FIX_LANGUAGE_ID_TAG(char* buffer, int32_t len) {
         }
     }
 }
-}  // namespace
 #endif
+
+}  // namespace
 
 U_CAPI int32_t
 uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UErrorCode* status)
@@ -1181,7 +1183,7 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
         icu::CharString collVal;
         {
             icu::CharStringByteSink sink(&collVal);
-            ulocimp_getKeywordValue(localeID, "collation", sink, status);
+            ulocimp_getKeywordValue(localeID, "collation", sink, *status);
         }
         if (U_SUCCESS(*status) && !collVal.isEmpty())
         {
@@ -1193,7 +1195,7 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
             // If the locale ID contains keywords other than collation, just use the base name.
             {
                 icu::CharStringByteSink sink(&baseName);
-                ulocimp_getBaseName(localeID, sink, status);
+                ulocimp_getBaseName(localeID, sink, *status);
             }
             if (U_SUCCESS(*status) && !baseName.isEmpty())
             {
@@ -1206,7 +1208,7 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
     icu::CharString asciiBCP47Tag;
     {
         icu::CharStringByteSink sink(&asciiBCP47Tag);
-        ulocimp_toLanguageTag(mylocaleID, sink, false, status);
+        ulocimp_toLanguageTag(mylocaleID, sink, false, *status);
     }
 
     if (U_SUCCESS(*status))
@@ -1290,7 +1292,7 @@ uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
             low = mid;
         }
         else /*we found it*/{
-            return getHostID(&gPosixIDmap[mid], posixID, status);
+            return getHostID(&gPosixIDmap[mid], posixID, *status);
         }
         oldmid = mid;
     }
@@ -1301,7 +1303,7 @@ uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
      */
     for (idx = 0; idx < gLocaleCount; idx++ ) {
         myStatus = U_ZERO_ERROR;
-        value = getHostID(&gPosixIDmap[idx], posixID, &myStatus);
+        value = getHostID(&gPosixIDmap[idx], posixID, myStatus);
         if (myStatus == U_ZERO_ERROR) {
             return value;
         }

@@ -135,7 +135,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     icu::CharString likely;
     {
         icu::CharStringByteSink sink(&likely);
-        ulocimp_addLikelySubtags(nameOrAbbrOrLocale, sink, &internalErrorCode);
+        ulocimp_addLikelySubtags(nameOrAbbrOrLocale, sink, internalErrorCode);
     }
     if(U_SUCCESS(internalErrorCode) && internalErrorCode != U_STRING_NOT_TERMINATED_WARNING) {
         length = getCodesFromLocale(likely.data(), fillIn, capacity, err);

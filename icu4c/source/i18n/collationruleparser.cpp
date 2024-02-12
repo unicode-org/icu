@@ -610,7 +610,7 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
             int32_t parsedLength;
             {
                 CharStringByteSink sink(&localeID);
-                ulocimp_forLanguageTag(lang.data(), -1, sink, &parsedLength, &errorCode);
+                ulocimp_forLanguageTag(lang.data(), -1, sink, &parsedLength, errorCode);
             }
             if(U_FAILURE(errorCode) || parsedLength != lang.length()) {
                 errorCode = U_ZERO_ERROR;
@@ -635,7 +635,7 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
             CharString collationType;
             {
                 CharStringByteSink sink(&collationType);
-                ulocimp_getKeywordValue(localeID.data(), "collation", sink, &errorCode);
+                ulocimp_getKeywordValue(localeID.data(), "collation", sink, errorCode);
             }
             if(U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;

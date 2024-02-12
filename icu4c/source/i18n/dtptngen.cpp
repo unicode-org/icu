@@ -658,7 +658,7 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
     if (U_FAILURE(status)) { return; }
 
     const char *language = locale.getLanguage();
-    CharString baseCountry = ulocimp_getRegionForSupplementalData(locale.getName(), false, &status);
+    CharString baseCountry = ulocimp_getRegionForSupplementalData(locale.getName(), false, status);
     const char* country = baseCountry.data();
 
     Locale maxLocale;  // must be here for correct lifetime
@@ -911,7 +911,7 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString&
                 localeWithCalendarKey,
                 "calendar",
                 sink,
-                &localStatus);
+                localStatus);
         }
         // If the input locale was invalid, don't fail with missing resource error, instead
         // continue with default of Gregorian.

@@ -1583,7 +1583,7 @@ RuleBasedCollator::internalGetShortDefinitionString(const char *locale,
     {
         CharString collation;
         CharStringByteSink sink(&collation);
-        ulocimp_getKeywordValue(resultLocale, "collation", sink, &errorCode);
+        ulocimp_getKeywordValue(resultLocale, "collation", sink, errorCode);
         appendSubtag(result, 'K', collation.data(), collation.length(), errorCode);
     }
     CharString language;

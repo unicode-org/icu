@@ -264,7 +264,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     };
     // Capitalization transforms. For each usage type, indicates whether to titlecase for
     // the context specified in capitalizationContext (which we know at construction time)
-     UBool fCapitalization[kCapContextUsageCount];
+     bool fCapitalization[kCapContextUsageCount];
 
 public:
     // constructor
@@ -300,12 +300,12 @@ private:
                                 UnicodeString& result, bool substitute) const;
     UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
     UnicodeString& adjustForUsageAndContext(CapContextUsage usage, UnicodeString& result) const;
-    UnicodeString& scriptDisplayName(const char* script, UnicodeString& result, UBool skipAdjust) const;
-    UnicodeString& regionDisplayName(const char* region, UnicodeString& result, UBool skipAdjust) const;
-    UnicodeString& variantDisplayName(const char* variant, UnicodeString& result, UBool skipAdjust) const;
-    UnicodeString& keyDisplayName(const char* key, UnicodeString& result, UBool skipAdjust) const;
+    UnicodeString& scriptDisplayName(const char* script, UnicodeString& result, bool skipAdjust) const;
+    UnicodeString& regionDisplayName(const char* region, UnicodeString& result, bool skipAdjust) const;
+    UnicodeString& variantDisplayName(const char* variant, UnicodeString& result, bool skipAdjust) const;
+    UnicodeString& keyDisplayName(const char* key, UnicodeString& result, bool skipAdjust) const;
     UnicodeString& keyValueDisplayName(const char* key, const char* value,
-                                        UnicodeString& result, UBool skipAdjust) const;
+                                        UnicodeString& result, bool skipAdjust) const;
     void initialize();
 
     struct CapitalizationContextSink;
@@ -358,7 +358,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
 }
 
 struct LocaleDisplayNamesImpl::CapitalizationContextSink : public ResourceSink {
-    UBool hasCapitalizationUsage;
+    bool hasCapitalizationUsage;
     LocaleDisplayNamesImpl& parent;
 
     CapitalizationContextSink(LocaleDisplayNamesImpl& _parent)
@@ -449,7 +449,7 @@ LocaleDisplayNamesImpl::initialize() {
 #if !UCONFIG_NO_BREAK_ITERATION
     // Only get the context data if we need it! This is a const object so we know now...
     // Also check whether we will need a break iterator (depends on the data)
-    UBool needBrkIter = false;
+    bool needBrkIter = false;
     if (capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU || capitalizationContext == UDISPCTX_CAPITALIZATION_FOR_STANDALONE) {
         LocalUResourceBundlePointer resource(ures_open(nullptr, locale.getName(), &status));
         if (U_FAILURE(status)) { return; }
@@ -541,9 +541,9 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
   const char* country = loc.getCountry();
   const char* variant = loc.getVariant();
 
-  UBool hasScript = uprv_strlen(script) > 0;
-  UBool hasCountry = uprv_strlen(country) > 0;
-  UBool hasVariant = uprv_strlen(variant) > 0;
+  bool hasScript = uprv_strlen(script) > 0;
+  bool hasCountry = uprv_strlen(country) > 0;
+  bool hasVariant = uprv_strlen(variant) > 0;
 
   if (dialectHandling == ULDN_DIALECT_NAMES) {
     UErrorCode status = U_ZERO_ERROR;
@@ -755,7 +755,7 @@ LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
 UnicodeString&
 LocaleDisplayNamesImpl::scriptDisplayName(const char* script,
                                           UnicodeString& result,
-                                          UBool skipAdjust) const {
+                                          bool skipAdjust) const {
     if (nameLength == UDISPCTX_LENGTH_SHORT) {
         langData.getNoFallback("Scripts%short", script, result);
         if (!result.isBogus()) {
@@ -785,7 +785,7 @@ LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode,
 UnicodeString&
 LocaleDisplayNamesImpl::regionDisplayName(const char* region,
                                           UnicodeString& result,
-                                          UBool skipAdjust) const {
+                                          bool skipAdjust) const {
     if (nameLength == UDISPCTX_LENGTH_SHORT) {
          regionData.getNoFallback("Countries%short", region, result);
         if (!result.isBogus()) {
@@ -810,7 +810,7 @@ LocaleDisplayNamesImpl::regionDisplayName(const char* region,
 UnicodeString&
 LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
                                            UnicodeString& result,
-                                           UBool skipAdjust) const {
+                                           bool skipAdjust) const {
     // don't have a resource for short variant names
     if (substitute == UDISPCTX_SUBSTITUTE) {
         langData.get("Variants", variant, result);
@@ -829,7 +829,7 @@ LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
 UnicodeString&
 LocaleDisplayNamesImpl::keyDisplayName(const char* key,
                                        UnicodeString& result,
-                                       UBool skipAdjust) const {
+                                       bool skipAdjust) const {
     // don't have a resource for short key names
     if (substitute == UDISPCTX_SUBSTITUTE) {
         langData.get("Keys", key, result);
@@ -849,7 +849,7 @@ UnicodeString&
 LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
                                             const char* value,
                                             UnicodeString& result,
-                                            UBool skipAdjust) const {
+                                            bool skipAdjust) const {
     if (uprv_strcmp(key, "currency") == 0) {
         // ICU4C does not have ICU4J CurrencyDisplayInfo equivalent for now.
         UErrorCode sts = U_ZERO_ERROR;

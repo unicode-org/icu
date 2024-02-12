@@ -2164,7 +2164,7 @@ TZDBTimeZoneNames::TZDBTimeZoneNames(const Locale& locale)
         CharString loc;
         {
             CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, &status);
+            ulocimp_addLikelySubtags(fLocale.getName(), sink, status);
         }
         ulocimp_getSubtags(loc.data(), nullptr, nullptr, &fRegion, nullptr, nullptr, status);
         if (U_SUCCESS(status)) {

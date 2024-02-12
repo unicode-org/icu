@@ -53,60 +53,60 @@ uloc_getCurrentCountryID(const char* oldID);
 U_CFUNC const char* 
 uloc_getCurrentLanguageID(const char* oldID);
 
-U_CFUNC void
-ulocimp_getKeywords(const char *localeID,
-             char prev,
-             icu::ByteSink& sink,
-             UBool valuesToo,
-             UErrorCode *status);
+U_EXPORT void
+ulocimp_getKeywords(const char* localeID,
+                    char prev,
+                    icu::ByteSink& sink,
+                    bool valuesToo,
+                    UErrorCode& status);
 
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_getName(const char* localeID,
                 icu::ByteSink& sink,
-                UErrorCode* err);
+                UErrorCode& err);
 
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_getBaseName(const char* localeID,
                     icu::ByteSink& sink,
-                    UErrorCode* err);
+                    UErrorCode& err);
 
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_canonicalize(const char* localeID,
                      icu::ByteSink& sink,
-                     UErrorCode* err);
+                     UErrorCode& err);
 
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_getKeywordValue(const char* localeID,
                         const char* keywordName,
                         icu::ByteSink& sink,
-                        UErrorCode* status);
+                        UErrorCode& status);
 
-U_EXPORT icu::CharString U_EXPORT2
+U_EXPORT icu::CharString
 ulocimp_getLanguage(const char* localeID, UErrorCode& status);
 
-U_EXPORT icu::CharString U_EXPORT2
+U_EXPORT icu::CharString
 ulocimp_getScript(const char* localeID, UErrorCode& status);
 
-U_EXPORT icu::CharString U_EXPORT2
+U_EXPORT icu::CharString
 ulocimp_getRegion(const char* localeID, UErrorCode& status);
 
-U_EXPORT icu::CharString U_EXPORT2
+U_EXPORT icu::CharString
 ulocimp_getVariant(const char* localeID, UErrorCode& status);
 
-U_EXPORT void U_EXPORT2
+U_EXPORT void
 ulocimp_setKeywordValue(const char* keywordName,
                         const char* keywordValue,
                         icu::CharString& localeID,
-                        UErrorCode* status);
+                        UErrorCode& status);
 
-U_EXPORT int32_t U_EXPORT2
+U_EXPORT int32_t
 ulocimp_setKeywordValue(const char* keywords,
                         const char* keywordName,
                         const char* keywordValue,
                         icu::ByteSink& sink,
-                        UErrorCode* status);
+                        UErrorCode& status);
 
-U_EXPORT void U_EXPORT2
+U_EXPORT void
 ulocimp_getSubtags(
         const char* localeID,
         icu::CharString* language,
@@ -116,7 +116,7 @@ ulocimp_getSubtags(
         const char** pEnd,
         UErrorCode& status);
 
-U_EXPORT void U_EXPORT2
+U_EXPORT void
 ulocimp_getSubtags(
         const char* localeID,
         icu::ByteSink* language,
@@ -126,7 +126,7 @@ ulocimp_getSubtags(
         const char** pEnd,
         UErrorCode& status);
 
-inline void U_EXPORT2
+inline void
 ulocimp_getSubtags(
         const char* localeID,
         std::nullptr_t,
@@ -145,10 +145,10 @@ ulocimp_getSubtags(
             status);
 }
 
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_getParent(const char* localeID,
                   icu::ByteSink& sink,
-                  UErrorCode* err);
+                  UErrorCode& err);
 
 /**
  * Writes a well-formed language tag for this locale ID.
@@ -169,11 +169,11 @@ ulocimp_getParent(const char* localeID,
  *
  * @internal ICU 64
  */
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_toLanguageTag(const char* localeID,
                       icu::ByteSink& sink,
-                      UBool strict,
-                      UErrorCode* err);
+                      bool strict,
+                      UErrorCode& err);
 
 /**
  * Returns a locale ID for the specified BCP47 language tag string.
@@ -201,12 +201,12 @@ ulocimp_toLanguageTag(const char* localeID,
  *                  failed.
  * @internal ICU 63
  */
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_forLanguageTag(const char* langtag,
                        int32_t tagLen,
                        icu::ByteSink& sink,
                        int32_t* parsedLength,
-                       UErrorCode* err);
+                       UErrorCode& err);
 
 /**
  * Get the region to use for supplemental data lookup. Uses
@@ -228,9 +228,9 @@ ulocimp_forLanguageTag(const char* langtag,
  *     The region code found, empty if none found.
  * @internal ICU 57
  */
-U_EXPORT icu::CharString U_EXPORT2
-ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
-                                     UErrorCode* status);
+U_EXPORT icu::CharString
+ulocimp_getRegionForSupplementalData(const char *localeID, bool inferRegion,
+                                     UErrorCode& status);
 
 /**
  * Add the likely subtags for a provided locale ID, per the algorithm described
@@ -261,10 +261,10 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
  * @internal ICU 64
  */
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_addLikelySubtags(const char* localeID,
                          icu::ByteSink& sink,
-                         UErrorCode* err);
+                         UErrorCode& err);
 
 /**
  * Minimize the subtags for a provided locale ID, per the algorithm described
@@ -296,70 +296,72 @@ ulocimp_addLikelySubtags(const char* localeID,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
  * @internal ICU 64
  */
-U_CAPI void U_EXPORT2
+U_EXPORT void
 ulocimp_minimizeSubtags(const char* localeID,
                         icu::ByteSink& sink,
                         bool favorScript,
-                        UErrorCode* err);
+                        UErrorCode& err);
 
 U_CAPI const char * U_EXPORT2
 locale_getKeywordsStart(const char *localeID);
 
-U_CFUNC UBool
+bool
 ultag_isExtensionSubtags(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isLanguageSubtag(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isPrivateuseValueSubtags(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isRegionSubtag(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isScriptSubtag(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isTransformedExtensionSubtags(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isUnicodeExtensionSubtags(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isUnicodeLocaleAttribute(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isUnicodeLocaleAttributes(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isUnicodeLocaleKey(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isUnicodeLocaleType(const char* s, int32_t len);
 
-U_CFUNC UBool
+bool
 ultag_isVariantSubtags(const char* s, int32_t len);
 
-U_CAPI const char * U_EXPORT2
-ultag_getTKeyStart(const char *localeID);
+const char*
+ultag_getTKeyStart(const char* localeID);
 
-U_CFUNC const char*
+U_EXPORT const char*
 ulocimp_toBcpKey(const char* key);
 
-U_CFUNC const char*
+U_EXPORT const char*
 ulocimp_toLegacyKey(const char* key);
 
-U_CFUNC const char*
-ulocimp_toBcpType(const char* key, const char* type, UBool* isKnownKey, UBool* isSpecialType);
+U_EXPORT const char*
+ulocimp_toBcpType(const char* key, const char* type, bool* isKnownKey, bool* isSpecialType);
 
-U_CFUNC const char*
-ulocimp_toLegacyType(const char* key, const char* type, UBool* isKnownKey, UBool* isSpecialType);
+U_EXPORT const char*
+ulocimp_toLegacyType(const char* key, const char* type, bool* isKnownKey, bool* isSpecialType);
 
 /* Function for testing purpose */
-U_CAPI const char* const* ulocimp_getKnownCanonicalizedLocaleForTest(int32_t* length);
+U_EXPORT const char* const*
+ulocimp_getKnownCanonicalizedLocaleForTest(int32_t& length);
 
 // Return true if the value is already canonicalized.
-U_CAPI bool ulocimp_isCanonicalizedLocaleForTest(const char* localeName);
+U_EXPORT bool
+ulocimp_isCanonicalizedLocaleForTest(const char* localeName);
 
 #endif

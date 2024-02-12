@@ -454,7 +454,7 @@ ucol_prepareShortStringOpen( const char *definition,
     CharString buffer;
     {
         CharStringByteSink sink(&buffer);
-        ulocimp_canonicalize(s.locale.data(), sink, status);
+        ulocimp_canonicalize(s.locale.data(), sink, *status);
     }
 
     UResourceBundle *b = ures_open(U_ICUDATA_COLL, buffer.data(), status);
@@ -465,7 +465,7 @@ ucol_prepareShortStringOpen( const char *definition,
     {
         // if there is a keyword, we pick it up and try to get elements
         CharStringByteSink sink(&keyBuffer);
-        ulocimp_getKeywordValue(buffer.data(), "collation", sink, status);
+        ulocimp_getKeywordValue(buffer.data(), "collation", sink, *status);
     }
     if(keyBuffer.isEmpty()) {
       // no keyword
@@ -526,7 +526,7 @@ ucol_openFromShortString( const char *definition,
     CharString buffer;
     {
         CharStringByteSink sink(&buffer);
-        ulocimp_canonicalize(s.locale.data(), sink, status);
+        ulocimp_canonicalize(s.locale.data(), sink, *status);
     }
 
     UCollator *result = ucol_open(buffer.data(), status);

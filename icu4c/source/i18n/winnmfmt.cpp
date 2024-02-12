@@ -152,7 +152,7 @@ static UErrorCode GetEquivalentWindowsLocaleName(const Locale& locale, UnicodeSt
     CharString asciiBCP47Tag;
     {
         CharStringByteSink sink(&asciiBCP47Tag);
-        ulocimp_toLanguageTag(locale.getName(), sink, false, &status);
+        ulocimp_toLanguageTag(locale.getName(), sink, false, status);
     }
 
     if (U_SUCCESS(status))

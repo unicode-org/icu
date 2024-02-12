@@ -351,7 +351,7 @@ UBool U_CALLCONV cleanup() {
     return true;
 }
 
-static const char16_t* MACROREGION_HARDCODE[] = {
+constexpr const char16_t* MACROREGION_HARDCODE[] = {
     u"001~3",
     u"005",
     u"009",
@@ -378,8 +378,8 @@ static const char16_t* MACROREGION_HARDCODE[] = {
     u"UN",
 };
 
-static const char16_t RANGE_MARKER = 0x7E; /* '~' */
-static void processMacroregionRange(const UnicodeString& regionName, UVector* newMacroRegions, UErrorCode& status) {
+constexpr char16_t RANGE_MARKER = 0x7E; /* '~' */
+void processMacroregionRange(const UnicodeString& regionName, UVector* newMacroRegions, UErrorCode& status) {
     int32_t rangeMarkerLocation = regionName.indexOf(RANGE_MARKER);
     char16_t buf[6];
     regionName.extract(buf,6,status);

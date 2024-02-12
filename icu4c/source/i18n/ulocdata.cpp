@@ -198,11 +198,13 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
     return len;
 }
 
-static UResourceBundle * measurementTypeBundleForLocale(const char *localeID, const char *measurementType, UErrorCode *status){
+namespace {
+
+UResourceBundle * measurementTypeBundleForLocale(const char *localeID, const char *measurementType, UErrorCode *status){
     UResourceBundle *rb;
     UResourceBundle *measTypeBundle = nullptr;
 
-    icu::CharString region = ulocimp_getRegionForSupplementalData(localeID, true, status);
+    icu::CharString region = ulocimp_getRegionForSupplementalData(localeID, true, *status);
 
     rb = ures_openDirect(nullptr, "supplementalData", status);
     ures_getByKey(rb, "measurementData", rb, status);
@@ -224,6 +226,8 @@ static UResourceBundle * measurementTypeBundleForLocale(const char *localeID, co
     ures_close(rb);
     return measTypeBundle;
 }
+
+}  // namespace
 
 U_CAPI UMeasurementSystem U_EXPORT2
 ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status){

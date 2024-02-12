@@ -566,7 +566,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
         {
             CharString tmp;
             CharStringByteSink sink(&tmp);
-            ulocimp_getParent(parentLocale.data(), sink, &status);
+            ulocimp_getParent(parentLocale.data(), sink, status);
             parentLocale = std::move(tmp);
         }
         // look for pattern for srcPluralCount in locale tree
