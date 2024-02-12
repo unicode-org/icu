@@ -306,6 +306,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
                     const char *substitute,
                     char16_t *dest, int32_t destCapacity,
                     UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return 0; }
     const char16_t *s = nullptr;
     int32_t length = 0;
 
@@ -368,13 +369,9 @@ _getDisplayNameForComponent(const char *locale,
                             UDisplayNameGetter *getter,
                             const char *tag,
                             UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return 0; }
     UErrorCode localStatus;
     const char* root = nullptr;
-
-    /* argument checking */
-    if (U_FAILURE(errorCode)) {
-        return 0;
-    }
 
     if(destCapacity<0 || (destCapacity>0 && dest==nullptr)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -422,6 +419,7 @@ uloc_getDisplayScript(const char* locale,
                       char16_t *dest, int32_t destCapacity,
                       UErrorCode *pErrorCode)
 {
+    if (U_FAILURE(*pErrorCode)) { return 0; }
     UErrorCode err = U_ZERO_ERROR;
     int32_t res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
                 ulocimp_getScript, _kScriptsStandAlone, err);

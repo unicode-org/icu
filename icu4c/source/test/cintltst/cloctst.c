@@ -5946,19 +5946,19 @@ const errorData maximizeErrors[] = {
         "enfueiujhytdf",
         NULL,
         U_ILLEGAL_ARGUMENT_ERROR,
-        -1
+        0
     },
     {
         "en_THUJIOGIURJHGJFURYHFJGURYYYHHGJURHG",
         NULL,
         U_ILLEGAL_ARGUMENT_ERROR,
-        -1
+        0
     },
     {
         "en_THUJIOGIURJHGJFURYHFJGURYYYHHGJURHG",
         NULL,
         U_ILLEGAL_ARGUMENT_ERROR,
-        -1
+        0
     },
     {
         "en_Latn_US_POSIX@currency=EURO",
@@ -5979,13 +5979,13 @@ const errorData minimizeErrors[] = {
         "enfueiujhytdf",
         NULL,
         U_ILLEGAL_ARGUMENT_ERROR,
-        -1
+        0
     },
     {
         "en_THUJIOGIURJHGJFURYHFJGURYYYHHGJURHG",
         NULL,
         U_ILLEGAL_ARGUMENT_ERROR,
-        -1
+        0
     },
     {
         "en_Latn_US_POSIX@currency=EURO",
@@ -6010,7 +6010,7 @@ static int32_t getExpectedReturnValue(const errorData* data)
     }
     else
     {
-        return -1;
+        return 0;
     }
 }
 

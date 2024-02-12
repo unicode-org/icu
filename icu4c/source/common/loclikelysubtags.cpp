@@ -70,6 +70,7 @@ struct LikelySubtagsData {
     }
 
     void load(UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) { return; }
         langInfoBundle = ures_openDirect(nullptr, "langInfo", &errorCode);
         if (U_FAILURE(errorCode)) { return; }
         StackUResourceBundle stackTempBundle;
@@ -230,6 +231,7 @@ struct LikelySubtagsData {
 private:
     bool readStrings(const ResourceTable &table, const char *key, ResourceValue &value,
                      LocalMemory<int32_t> &indexes, int32_t &length, UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) { return false; }
         if (table.findValue(key, value)) {
             ResourceArray stringArray = value.getArray(errorCode);
             if (U_FAILURE(errorCode)) { return false; }
@@ -296,7 +298,7 @@ private:
     }
 
     UnicodeString toRegion(const ResourceArray& m49Array, ResourceValue &value, int encoded, UErrorCode &errorCode) {
-        if (encoded == 0 || encoded == 1) {
+        if (U_FAILURE(errorCode) || encoded == 0 || encoded == 1) {
             return UNICODE_STRING_SIMPLE("");
         }
         encoded &= 0x00ffffff;
@@ -314,6 +316,7 @@ private:
 
     bool readLSREncodedStrings(const ResourceTable &table, const char* key, ResourceValue &value, const ResourceArray& m49Array,
                      LocalMemory<int32_t> &indexes, int32_t &length, UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) { return false; }
         if (table.findValue(key, value)) {
             const int32_t* vectors = value.getIntVector(length, errorCode);
             if (U_FAILURE(errorCode)) { return false; }
@@ -380,6 +383,7 @@ constexpr const char16_t* MACROREGION_HARDCODE[] = {
 
 constexpr char16_t RANGE_MARKER = 0x7E; /* '~' */
 void processMacroregionRange(const UnicodeString& regionName, UVector* newMacroRegions, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
     int32_t rangeMarkerLocation = regionName.indexOf(RANGE_MARKER);
     char16_t buf[6];
     regionName.extract(buf,6,status);
@@ -399,6 +403,7 @@ void processMacroregionRange(const UnicodeString& regionName, UVector* newMacroR
 
 #if U_DEBUG
 UVector* loadMacroregions(UErrorCode &status) {
+    if (U_FAILURE(status)) { return nullptr; }
     LocalPointer<UVector> newMacroRegions(new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status), status);
 
     LocalUResourceBundlePointer supplementalData(ures_openDirect(nullptr,"supplementalData",&status));
@@ -423,6 +428,7 @@ UVector* loadMacroregions(UErrorCode &status) {
 #endif // U_DEBUG
 
 UVector* getStaticMacroregions(UErrorCode &status) {
+    if (U_FAILURE(status)) { return nullptr; }
     LocalPointer<UVector> newMacroRegions(new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status), status);
 
     if (U_FAILURE(status)) {
@@ -515,9 +521,10 @@ LikelySubtags::~LikelySubtags() {
 LSR LikelySubtags::makeMaximizedLsrFrom(const Locale &locale,
                                          bool returnInputIfUnmatch,
                                          UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) { return {}; }
     if (locale.isBogus()) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return LSR("", "", "", LSR::EXPLICIT_LSR);
+        return {};
     }
     const char *name = locale.getName();
     if (uprv_isAtSign(name[0]) && name[1] == 'x' && name[2] == '=') {  // name.startsWith("@x=")
@@ -553,6 +560,7 @@ LSR LikelySubtags::makeMaximizedLsr(const char *language, const char *script, co
                                      const char *variant,
                                      bool returnInputIfUnmatch,
                                      UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) { return {}; }
     // Handle pseudolocales like en-XA, ar-XB, fr-PSCRACK.
     // They should match only themselves,
     // not other locales with what looks like the same language and script subtags.
@@ -607,6 +615,7 @@ LSR LikelySubtags::makeMaximizedLsr(const char *language, const char *script, co
 LSR LikelySubtags::maximize(const char *language, const char *script, const char *region,
                              bool returnInputIfUnmatch,
                              UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) { return {}; }
     return maximize({language, (int32_t)uprv_strlen(language)},
                     {script, (int32_t)uprv_strlen(script)},
                     {region, (int32_t)uprv_strlen(region)},
@@ -615,10 +624,10 @@ LSR LikelySubtags::maximize(const char *language, const char *script, const char
 }
 
 bool LikelySubtags::isMacroregion(StringPiece& region, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) { return false; }
     // In Java, we use Region class. In C++, since Region is under i18n,
     // we read the same data used by Region into gMacroregions avoid dependency
     // from common to i18n/region.cpp
-    if (U_FAILURE(errorCode)) { return false; }
     umtx_initOnce(gInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
     if (U_FAILURE(errorCode)) { return false; }
     UnicodeString str(UnicodeString::fromUTF8(region));
@@ -628,9 +637,7 @@ bool LikelySubtags::isMacroregion(StringPiece& region, UErrorCode& errorCode) co
 LSR LikelySubtags::maximize(StringPiece language, StringPiece script, StringPiece region,
                              bool returnInputIfUnmatch,
                              UErrorCode &errorCode) const {
-    if (U_FAILURE(errorCode)) {
-        return LSR(language, script, region, LSR::EXPLICIT_LSR, errorCode);
-    }
+    if (U_FAILURE(errorCode)) { return {}; }
     if (language.compare("und") == 0) {
         language = "";
     }
@@ -920,10 +927,9 @@ LSR LikelySubtags::minimizeSubtags(StringPiece language, StringPiece script,
                                     StringPiece region,
                                     bool favorScript,
                                     UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) { return {}; }
     LSR max = maximize(language, script, region, true, errorCode);
-    if (U_FAILURE(errorCode)) {
-        return max;
-    }
+    if (U_FAILURE(errorCode)) { return {}; }
     // If no match, return it.
     if (uprv_strlen(max.language) == 0 &&
         uprv_strlen(max.script) == 0 &&
@@ -936,9 +942,7 @@ LSR LikelySubtags::minimizeSubtags(StringPiece language, StringPiece script,
     }
     // try language
     LSR test = maximize(max.language, "", "", true, errorCode);
-    if (U_FAILURE(errorCode)) {
-        return max;
-    }
+    if (U_FAILURE(errorCode)) { return {}; }
     if (test.isEquivalentTo(max)) {
         return LSR(max.language, "", "", LSR::DONT_CARE_FLAGS, errorCode);
     }
@@ -947,27 +951,21 @@ LSR LikelySubtags::minimizeSubtags(StringPiece language, StringPiece script,
         // favor Region
         // try language and region
         test = maximize(max.language, "", max.region, true, errorCode);
-        if (U_FAILURE(errorCode)) {
-            return max;
-        }
+        if (U_FAILURE(errorCode)) { return {}; }
         if (test.isEquivalentTo(max)) {
             return LSR(max.language, "", max.region, LSR::DONT_CARE_FLAGS, errorCode);
         }
     }
     // try language and script
     test = maximize(max.language, max.script, "", true, errorCode);
-    if (U_FAILURE(errorCode)) {
-        return max;
-    }
+    if (U_FAILURE(errorCode)) { return {}; }
     if (test.isEquivalentTo(max)) {
         return LSR(max.language, max.script, "", LSR::DONT_CARE_FLAGS, errorCode);
     }
     if (favorScript) {
         // try language and region
         test = maximize(max.language, "", max.region, true, errorCode);
-        if (U_FAILURE(errorCode)) {
-            return max;
-        }
+        if (U_FAILURE(errorCode)) { return {}; }
         if (test.isEquivalentTo(max)) {
             return LSR(max.language, "", max.region, LSR::DONT_CARE_FLAGS, errorCode);
         }

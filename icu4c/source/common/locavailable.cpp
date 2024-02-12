@@ -101,10 +101,9 @@ icu::UInitOnce ginstalledLocalesInitOnce {};
 class AvailableLocalesSink : public ResourceSink {
   public:
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
+        if (U_FAILURE(status)) { return; }
         ResourceTable resIndexTable = value.getTable(status);
-        if (U_FAILURE(status)) {
-            return;
-        }
+        if (U_FAILURE(status)) { return; }
         for (int32_t i = 0; resIndexTable.getKeyAndValue(i, key, value); ++i) {
             ULocAvailableType type;
             if (uprv_strcmp(key, "InstalledLocales") == 0) {
@@ -138,7 +137,8 @@ class AvailableLocalesStringEnumeration : public StringEnumeration {
     AvailableLocalesStringEnumeration(ULocAvailableType type) : fType(type) {
     }
 
-    const char* next(int32_t *resultLength, UErrorCode&) override {
+    const char* next(int32_t *resultLength, UErrorCode &status) override {
+        if (U_FAILURE(status)) { return nullptr; }
         ULocAvailableType actualType = fType;
         int32_t actualIndex = fIndex++;
 
@@ -170,11 +170,13 @@ class AvailableLocalesStringEnumeration : public StringEnumeration {
         return result;
     }
 
-    void reset(UErrorCode&) override {
+    void reset(UErrorCode &status) override {
+        if (U_FAILURE(status)) { return; }
         fIndex = 0;
     }
 
-    int32_t count(UErrorCode&) const override {
+    int32_t count(UErrorCode &status) const override {
+        if (U_FAILURE(status)) { return 0; }
         if (fType == ULOC_AVAILABLE_WITH_LEGACY_ALIASES) {
             return gAvailableLocaleCounts[ULOC_AVAILABLE_DEFAULT]
                 + gAvailableLocaleCounts[ULOC_AVAILABLE_ONLY_LEGACY_ALIASES];
