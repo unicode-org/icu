@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707508047271,
+  "lastUpdate": 1707771881738,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40018,6 +40018,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 6.3512,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "939f08f2743dc7ec752e3a74758ccde0bb7a91d4",
+          "message": "ICU-22520 Use C++ function signatures for internal C++ functions.\n\nSome of this code was originally written as C code and some of this code\nwas originally written as C++ code but made to resemble the then already\nexisting code that had once been C code. Changing it all to normal C++\nnow will make it easier and safer to work with going forward.\n\n· Use unnamed namespace instead of static.\n· Use reference instead of non-nullable pointer.\n· Use bool instead of UBool.\n· Use constexpr for static data.\n· Use U_EXPORT instead of U_CAPI or U_CFUNC.\n· Use the default calling convention instead of U_EXPORT2.",
+          "timestamp": "2024-02-12T21:44:06+01:00",
+          "tree_id": "a5ce266887bc2a225e1a34fc014831da5bc0dc59",
+          "url": "https://github.com/unicode-org/icu/commit/939f08f2743dc7ec752e3a74758ccde0bb7a91d4"
+        },
+        "date": 1707771805030,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 5.4613,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.442,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.5051,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.7766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.8454,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 6.4101,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
