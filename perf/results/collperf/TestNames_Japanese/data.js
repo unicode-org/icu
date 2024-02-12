@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1707507873982,
+  "lastUpdate": 1707771841334,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36070,6 +36070,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5689520.0806,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "939f08f2743dc7ec752e3a74758ccde0bb7a91d4",
+          "message": "ICU-22520 Use C++ function signatures for internal C++ functions.\n\nSome of this code was originally written as C code and some of this code\nwas originally written as C++ code but made to resemble the then already\nexisting code that had once been C code. Changing it all to normal C++\nnow will make it easier and safer to work with going forward.\n\n· Use unnamed namespace instead of static.\n· Use reference instead of non-nullable pointer.\n· Use bool instead of UBool.\n· Use constexpr for static data.\n· Use U_EXPORT instead of U_CAPI or U_CFUNC.\n· Use the default calling convention instead of U_EXPORT2.",
+          "timestamp": "2024-02-12T21:44:06+01:00",
+          "tree_id": "a5ce266887bc2a225e1a34fc014831da5bc0dc59",
+          "url": "https://github.com/unicode-org/icu/commit/939f08f2743dc7ec752e3a74758ccde0bb7a91d4"
+        },
+        "date": 1707771698707,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 226.6242,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20227427.3853,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5311499.5967,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19357013.075,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5747019.7339,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
