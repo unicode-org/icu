@@ -331,7 +331,7 @@ TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status)
         CharString loc;
         {
             CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, &tempStatus);
+            ulocimp_addLikelySubtags(fLocale.getName(), sink, tempStatus);
         }
 
         regionLen = uloc_getCountry(loc.data(), fTargetRegion, sizeof(fTargetRegion), &tempStatus);

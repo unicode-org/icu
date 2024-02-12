@@ -172,7 +172,7 @@ ucal_open(  const char16_t*  zoneID,
           locale = uloc_getDefault();
       }
       CharString localeBuf(locale, *status);
-      ulocimp_setKeywordValue("calendar", "gregorian", localeBuf, status);
+      ulocimp_setKeywordValue("calendar", "gregorian", localeBuf, *status);
       if (U_FAILURE(*status)) {
           return nullptr;
       }
@@ -716,7 +716,7 @@ static const char * const CAL_TYPES[] = {
 U_CAPI UEnumeration* U_EXPORT2
 ucal_getKeywordValuesForLocale(const char * /* key */, const char* locale, UBool commonlyUsed, UErrorCode *status) {
     // Resolve region
-    CharString prefRegion = ulocimp_getRegionForSupplementalData(locale, true, status);
+    CharString prefRegion = ulocimp_getRegionForSupplementalData(locale, true, *status);
 
     // Read preferred calendar values from supplementalData calendarPreference
     UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", status);

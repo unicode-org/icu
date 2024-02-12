@@ -39,14 +39,10 @@ static icu::Locale*  availableLocaleList = nullptr;
 static int32_t  availableLocaleListCount;
 static icu::UInitOnce gInitOnceLocale {};
 
-U_NAMESPACE_END
+namespace {
 
-U_CDECL_BEGIN
-
-static UBool U_CALLCONV locale_available_cleanup()
+UBool U_CALLCONV locale_available_cleanup()
 {
-    U_NAMESPACE_USE
-
     if (availableLocaleList) {
         delete []availableLocaleList;
         availableLocaleList = nullptr;
@@ -57,9 +53,7 @@ static UBool U_CALLCONV locale_available_cleanup()
     return true;
 }
 
-U_CDECL_END
-
-U_NAMESPACE_BEGIN
+}  // namespace
 
 void U_CALLCONV locale_available_init() {
     // This function is a friend of class Locale.
@@ -196,7 +190,7 @@ class AvailableLocalesStringEnumeration : public StringEnumeration {
 
 /* ### Get available **************************************************/
 
-static UBool U_CALLCONV uloc_cleanup() {
+UBool U_CALLCONV uloc_cleanup() {
     for (int32_t i = 0; i < UPRV_LENGTHOF(gAvailableLocaleNames); i++) {
         uprv_free(gAvailableLocaleNames[i]);
         gAvailableLocaleNames[i] = nullptr;
@@ -209,7 +203,7 @@ static UBool U_CALLCONV uloc_cleanup() {
 // Load Installed Locales. This function will be called exactly once
 //   via the initOnce mechanism.
 
-static void U_CALLCONV loadInstalledLocales(UErrorCode& status) {
+void U_CALLCONV loadInstalledLocales(UErrorCode& status) {
     ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
 
     icu::LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "res_index", &status));
@@ -267,4 +261,3 @@ uloc_openAvailableByType(ULocAvailableType type, UErrorCode* status) {
     }
     return uenum_openFromStringEnumeration(result.orphan(), status);
 }
-

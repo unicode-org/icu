@@ -262,7 +262,7 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
     return htp;
 }
 
-UBool
+bool
 LocaleUtility::isFallbackOf(const UnicodeString& root, const UnicodeString& child)
 {
     return child.indexOf(root) == 0 &&
@@ -274,5 +274,3 @@ U_NAMESPACE_END
 
 /* !UCONFIG_NO_SERVICE */
 #endif
-
-

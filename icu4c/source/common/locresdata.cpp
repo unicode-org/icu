@@ -150,21 +150,23 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
     return item;
 }
 
-static ULayoutType
+namespace {
+
+ULayoutType
 _uloc_getOrientationHelper(const char* localeId,
                            const char* key,
-                           UErrorCode *status)
+                           UErrorCode& status)
 {
     ULayoutType result = ULOC_LAYOUT_UNKNOWN;
 
-    if (!U_FAILURE(*status)) {
+    if (!U_FAILURE(status)) {
         icu::CharString localeBuffer;
         {
             icu::CharStringByteSink sink(&localeBuffer);
             ulocimp_canonicalize(localeId, sink, status);
         }
 
-        if (!U_FAILURE(*status)) {
+        if (!U_FAILURE(status)) {
             int32_t length = 0;
             const char16_t* const value =
                 uloc_getTableStringWithFallback(
@@ -174,9 +176,9 @@ _uloc_getOrientationHelper(const char* localeId,
                     nullptr,
                     key,
                     &length,
-                    status);
+                    &status);
 
-            if (!U_FAILURE(*status) && length != 0) {
+            if (!U_FAILURE(status) && length != 0) {
                 switch(value[0])
                 {
                 case 0x0062: /* 'b' */
@@ -192,7 +194,7 @@ _uloc_getOrientationHelper(const char* localeId,
                     result = ULOC_LAYOUT_TTB;
                     break;
                 default:
-                    *status = U_INTERNAL_PROGRAM_ERROR;
+                    status = U_INTERNAL_PROGRAM_ERROR;
                     break;
                 }
             }
@@ -202,11 +204,13 @@ _uloc_getOrientationHelper(const char* localeId,
     return result;
 }
 
+}  // namespace
+
 U_CAPI ULayoutType U_EXPORT2
 uloc_getCharacterOrientation(const char* localeId,
                              UErrorCode *status)
 {
-    return _uloc_getOrientationHelper(localeId, "characters", status);
+    return _uloc_getOrientationHelper(localeId, "characters", *status);
 }
 
 /**
@@ -220,5 +224,5 @@ U_CAPI ULayoutType U_EXPORT2
 uloc_getLineOrientation(const char* localeId,
                         UErrorCode *status)
 {
-    return _uloc_getOrientationHelper(localeId, "lines", status);
+    return _uloc_getOrientationHelper(localeId, "lines", *status);
 }

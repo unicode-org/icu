@@ -62,7 +62,7 @@ public:
                                     ULocMatchFavorSubtag favorSubtag,
                                     ULocMatchDirection direction) const;
 
-    UBool isParadigmLSR(const LSR &lsr) const;
+    bool isParadigmLSR(const LSR &lsr) const;
 
     int32_t getDefaultScriptDistance() const {
         return defaultScriptDistance;
@@ -89,8 +89,8 @@ private:
 
     static void initLocaleDistance(UErrorCode &errorCode);
 
-    UBool isMatch(const LSR &desired, const LSR &supported,
-                  int32_t shiftedThreshold, ULocMatchFavorSubtag favorSubtag) const {
+    bool isMatch(const LSR &desired, const LSR &supported,
+                 int32_t shiftedThreshold, ULocMatchFavorSubtag favorSubtag) const {
         const LSR *pSupp = &supported;
         return getBestIndexAndDistance(
             desired, &pSupp, 1,

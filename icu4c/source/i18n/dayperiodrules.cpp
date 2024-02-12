@@ -363,7 +363,7 @@ const DayPeriodRules *DayPeriodRules::getInstance(const Locale &locale, UErrorCo
         if (ruleSetNum == 0) {
             CharString parent;
             CharStringByteSink sink(&parent);
-            ulocimp_getParent(name, sink, &errorCode);
+            ulocimp_getParent(name, sink, errorCode);
             if (parent.isEmpty()) {
                 // Saves a lookup in the hash table.
                 break;

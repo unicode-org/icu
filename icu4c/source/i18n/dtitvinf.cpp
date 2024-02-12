@@ -408,7 +408,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
     CharString calendarType;
     {
         CharStringByteSink sink(&calendarType);
-        ulocimp_getKeywordValue(localeWithCalendarKey, "calendar", sink, &status);
+        ulocimp_getKeywordValue(localeWithCalendarKey, "calendar", sink, status);
     }
     if (U_SUCCESS(status)) {
         calendarTypeToUse = calendarType.data();

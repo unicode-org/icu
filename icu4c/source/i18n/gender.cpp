@@ -158,7 +158,7 @@ const GenderInfo* GenderInfo::loadInstance(const Locale& locale, UErrorCode& sta
       {
         CharString tmp;
         CharStringByteSink sink(&tmp);
-        ulocimp_getParent(parentLocaleName.data(), sink, &status);
+        ulocimp_getParent(parentLocaleName.data(), sink, status);
         if (tmp.isEmpty()) break;
         parentLocaleName = std::move(tmp);
       }

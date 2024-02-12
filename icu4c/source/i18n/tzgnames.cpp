@@ -413,7 +413,7 @@ TZGNCore::initialize(const Locale& locale, UErrorCode& status) {
         CharString loc;
         {
             CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, &status);
+            ulocimp_addLikelySubtags(fLocale.getName(), sink, status);
         }
 
         ulocimp_getSubtags(loc.data(), nullptr, nullptr, &fTargetRegion, nullptr, nullptr, status);

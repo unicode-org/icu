@@ -57,10 +57,6 @@
 #include "ustr_imp.h"
 #include "uvector.h"
 
-U_CDECL_BEGIN
-static UBool U_CALLCONV locale_cleanup();
-U_CDECL_END
-
 U_NAMESPACE_BEGIN
 
 static Locale   *gLocaleCache = nullptr;
@@ -106,16 +102,17 @@ typedef enum ELocalePos {
     eMAX_LOCALES
 } ELocalePos;
 
-U_CDECL_BEGIN
+namespace {
+
 //
 // Deleter function for Locales owned by the default Locale hash table/
 //
-static void U_CALLCONV
+void U_CALLCONV
 deleteLocale(void *obj) {
     delete (icu::Locale *) obj;
 }
 
-static UBool U_CALLCONV locale_cleanup()
+UBool U_CALLCONV locale_cleanup()
 {
     U_NAMESPACE_USE
 
@@ -131,8 +128,7 @@ static UBool U_CALLCONV locale_cleanup()
     return true;
 }
 
-
-static void U_CALLCONV locale_init(UErrorCode &status) {
+void U_CALLCONV locale_init(UErrorCode &status) {
     U_NAMESPACE_USE
 
     U_ASSERT(gLocaleCache == nullptr);
@@ -163,7 +159,7 @@ static void U_CALLCONV locale_init(UErrorCode &status) {
     gLocaleCache[eCANADA_FRENCH] = Locale("fr", "CA");
 }
 
-U_CDECL_END
+}  // namespace
 
 U_NAMESPACE_BEGIN
 
@@ -186,9 +182,9 @@ Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
     {
         CharStringByteSink sink(&localeNameBuf);
         if (canonicalize) {
-            ulocimp_canonicalize(id, sink, &status);
+            ulocimp_canonicalize(id, sink, status);
         } else {
-            ulocimp_getName(id, sink, &status);
+            ulocimp_getName(id, sink, status);
         }
     }
 
@@ -494,7 +490,7 @@ namespace {
 UInitOnce gKnownCanonicalizedInitOnce {};
 UHashtable *gKnownCanonicalized = nullptr;
 
-static const char* const KNOWN_CANONICALIZED[] = {
+constexpr const char* KNOWN_CANONICALIZED[] = {
     "c",
     // Commonly used locales known are already canonicalized
     "af", "af_ZA", "am", "am_ET", "ar", "ar_001", "as", "as_IN", "az", "az_AZ",
@@ -518,13 +514,13 @@ static const char* const KNOWN_CANONICALIZED[] = {
     "zh_Hant_TW", "zh_TW", "zu", "zu_ZA"
 };
 
-static UBool U_CALLCONV cleanupKnownCanonicalized() {
+UBool U_CALLCONV cleanupKnownCanonicalized() {
     gKnownCanonicalizedInitOnce.reset();
     if (gKnownCanonicalized) { uhash_close(gKnownCanonicalized); }
     return true;
 }
 
-static void U_CALLCONV loadKnownCanonicalized(UErrorCode &status) {
+void U_CALLCONV loadKnownCanonicalized(UErrorCode &status) {
     ucln_common_registerCleanup(UCLN_COMMON_LOCALE_KNOWN_CANONICALIZED,
                                 cleanupKnownCanonicalized);
     LocalUHashtablePointer newKnownCanonicalizedMap(
@@ -1809,23 +1805,29 @@ isKnownCanonicalizedLocale(const char* locale, UErrorCode& status)
 
 }  // namespace
 
+U_NAMESPACE_END
+
 // Function for testing.
-U_CAPI const char* const*
-ulocimp_getKnownCanonicalizedLocaleForTest(int32_t* length)
+U_EXPORT const char* const*
+ulocimp_getKnownCanonicalizedLocaleForTest(int32_t& length)
 {
-    *length = UPRV_LENGTHOF(KNOWN_CANONICALIZED);
+    U_NAMESPACE_USE
+    length = UPRV_LENGTHOF(KNOWN_CANONICALIZED);
     return KNOWN_CANONICALIZED;
 }
 
 // Function for testing.
-U_CAPI bool
+U_EXPORT bool
 ulocimp_isCanonicalizedLocaleForTest(const char* localeName)
 {
+    U_NAMESPACE_USE
     Locale l(localeName);
     UErrorCode status = U_ZERO_ERROR;
     CharString temp;
     return !canonicalizeLocale(l, temp, status) && U_SUCCESS(status);
 }
+
+U_NAMESPACE_BEGIN
 
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID, UBool canonicalize)
@@ -2077,7 +2079,7 @@ Locale::addLikelySubtags(UErrorCode& status) {
     CharString maximizedLocaleID;
     {
         CharStringByteSink sink(&maximizedLocaleID);
-        ulocimp_addLikelySubtags(fullName, sink, &status);
+        ulocimp_addLikelySubtags(fullName, sink, status);
     }
 
     if (U_FAILURE(status)) {
@@ -2103,7 +2105,7 @@ Locale::minimizeSubtags(bool favorScript, UErrorCode& status) {
     CharString minimizedLocaleID;
     {
         CharStringByteSink sink(&minimizedLocaleID);
-        ulocimp_minimizeSubtags(fullName, sink, favorScript, &status);
+        ulocimp_minimizeSubtags(fullName, sink, favorScript, status);
     }
 
     if (U_FAILURE(status)) {
@@ -2164,7 +2166,7 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
                 tag.length(),
                 sink,
                 &parsedLength,
-                &status);
+                status);
     }
 
     if (U_FAILURE(status)) {
@@ -2195,7 +2197,7 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
         return;
     }
 
-    ulocimp_toLanguageTag(fullName, sink, /*strict=*/false, &status);
+    ulocimp_toLanguageTag(fullName, sink, /*strict=*/false, status);
 }
 
 Locale U_EXPORT2
@@ -2550,7 +2552,7 @@ Locale::createKeywords(UErrorCode &status) const
         if(assignment > variantStart) {
             CharString keywords;
             CharStringByteSink sink(&keywords);
-            ulocimp_getKeywords(variantStart+1, '@', sink, false, &status);
+            ulocimp_getKeywords(variantStart+1, '@', sink, false, status);
             if (U_SUCCESS(status) && !keywords.isEmpty()) {
                 result = new KeywordEnumeration(keywords.data(), keywords.length(), 0, status);
                 if (!result) {
@@ -2579,7 +2581,7 @@ Locale::createUnicodeKeywords(UErrorCode &status) const
         if(assignment > variantStart) {
             CharString keywords;
             CharStringByteSink sink(&keywords);
-            ulocimp_getKeywords(variantStart+1, '@', sink, false, &status);
+            ulocimp_getKeywords(variantStart+1, '@', sink, false, status);
             if (U_SUCCESS(status) && !keywords.isEmpty()) {
                 result = new UnicodeKeywordEnumeration(keywords.data(), keywords.length(), 0, status);
                 if (!result) {
@@ -2616,7 +2618,7 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
         return;
     }
 
-    ulocimp_getKeywordValue(fullName, keywordName_nul.data(), sink, &status);
+    ulocimp_getKeywordValue(fullName, keywordName_nul.data(), sink, status);
 }
 
 void

@@ -262,7 +262,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     CharString canonicalName;
     {
         CharStringByteSink sink(&canonicalName);
-        ulocimp_canonicalize(locid, sink, &status);
+        ulocimp_canonicalize(locid, sink, status);
     }
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;
@@ -271,7 +271,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     CharString calTypeBuf;
     {
         CharStringByteSink sink(&calTypeBuf);
-        ulocimp_getKeywordValue(canonicalName.data(), "calendar", sink, &status);
+        ulocimp_getKeywordValue(canonicalName.data(), "calendar", sink, status);
     }
     if (U_SUCCESS(status)) {
         calType = getCalendarType(calTypeBuf.data());
@@ -283,7 +283,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
 
     // when calendar keyword is not available or not supported, read supplementalData
     // to get the default calendar type for the locale's region
-    CharString region = ulocimp_getRegionForSupplementalData(canonicalName.data(), true, &status);
+    CharString region = ulocimp_getRegionForSupplementalData(canonicalName.data(), true, status);
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;
     }
@@ -4035,7 +4035,7 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
         return;
     }
 
-    CharString region = ulocimp_getRegionForSupplementalData(desiredLocale.getName(), true, &status);
+    CharString region = ulocimp_getRegionForSupplementalData(desiredLocale.getName(), true, status);
 
     // Read week data values from supplementalData week data
     UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", &status);

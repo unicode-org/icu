@@ -276,50 +276,52 @@ U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
+namespace {
+
 /* ### Constants **************************************************/
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
-static const char _kLanguages[]       = "Languages";
-static const char _kScripts[]         = "Scripts";
-static const char _kScriptsStandAlone[] = "Scripts%stand-alone";
-static const char _kCountries[]       = "Countries";
-static const char _kVariants[]        = "Variants";
-static const char _kKeys[]            = "Keys";
-static const char _kTypes[]           = "Types";
-//static const char _kRootName[]        = "root";
-static const char _kCurrency[]        = "currency";
-static const char _kCurrencies[]      = "Currencies";
-static const char _kLocaleDisplayPattern[] = "localeDisplayPattern";
-static const char _kPattern[]         = "pattern";
-static const char _kSeparator[]       = "separator";
+constexpr char _kLanguages[]       = "Languages";
+constexpr char _kScripts[]         = "Scripts";
+constexpr char _kScriptsStandAlone[] = "Scripts%stand-alone";
+constexpr char _kCountries[]       = "Countries";
+constexpr char _kVariants[]        = "Variants";
+constexpr char _kKeys[]            = "Keys";
+constexpr char _kTypes[]           = "Types";
+//constexpr char _kRootName[]        = "root";
+constexpr char _kCurrency[]        = "currency";
+constexpr char _kCurrencies[]      = "Currencies";
+constexpr char _kLocaleDisplayPattern[] = "localeDisplayPattern";
+constexpr char _kPattern[]         = "pattern";
+constexpr char _kSeparator[]       = "separator";
 
 /* ### Display name **************************************************/
 
-static int32_t
+int32_t
 _getStringOrCopyKey(const char *path, const char *locale,
                     const char *tableKey, 
                     const char* subTableKey,
                     const char *itemKey,
                     const char *substitute,
                     char16_t *dest, int32_t destCapacity,
-                    UErrorCode *pErrorCode) {
+                    UErrorCode &errorCode) {
     const char16_t *s = nullptr;
     int32_t length = 0;
 
     if(itemKey==nullptr) {
         /* top-level item: normal resource bundle access */
-        icu::LocalUResourceBundlePointer rb(ures_open(path, locale, pErrorCode));
+        icu::LocalUResourceBundlePointer rb(ures_open(path, locale, &errorCode));
 
-        if(U_SUCCESS(*pErrorCode)) {
-            s=ures_getStringByKey(rb.getAlias(), tableKey, &length, pErrorCode);
+        if(U_SUCCESS(errorCode)) {
+            s=ures_getStringByKey(rb.getAlias(), tableKey, &length, &errorCode);
             /* see comment about closing rb near "return item;" in _res_getTableStringWithFallback() */
         }
     } else {
         bool isLanguageCode = (uprv_strncmp(tableKey, _kLanguages, 9) == 0);
         /* Language code should not be a number. If it is, set the error code. */
         if (isLanguageCode && uprv_strtol(itemKey, nullptr, 10)) {
-            *pErrorCode = U_MISSING_RESOURCE_ERROR;
+            errorCode = U_MISSING_RESOURCE_ERROR;
         } else {
             /* second-level item, use special fallback */
             s=uloc_getTableStringWithFallback(path, locale,
@@ -327,22 +329,22 @@ _getStringOrCopyKey(const char *path, const char *locale,
                                                subTableKey,
                                                itemKey,
                                                &length,
-                                               pErrorCode);
-            if (U_FAILURE(*pErrorCode) && isLanguageCode && itemKey != nullptr) {
+                                               &errorCode);
+            if (U_FAILURE(errorCode) && isLanguageCode && itemKey != nullptr) {
                 // convert itemKey locale code to canonical form and try again, ICU-20870
-                *pErrorCode = U_ZERO_ERROR;
+                errorCode = U_ZERO_ERROR;
                 Locale canonKey = Locale::createCanonical(itemKey);
                 s=uloc_getTableStringWithFallback(path, locale,
                                                     tableKey,
                                                     subTableKey,
                                                     canonKey.getName(),
                                                     &length,
-                                                    pErrorCode);
+                                                    &errorCode);
             }
         }
     }
 
-    if(U_SUCCESS(*pErrorCode)) {
+    if(U_SUCCESS(errorCode)) {
         int32_t copyLength=uprv_min(length, destCapacity);
         if(copyLength>0 && s != nullptr) {
             u_memcpy(dest, s, copyLength);
@@ -351,46 +353,46 @@ _getStringOrCopyKey(const char *path, const char *locale,
         /* no string from a resource bundle: convert the substitute */
         length=(int32_t)uprv_strlen(substitute);
         u_charsToUChars(substitute, dest, uprv_min(length, destCapacity));
-        *pErrorCode=U_USING_DEFAULT_WARNING;
+        errorCode = U_USING_DEFAULT_WARNING;
     }
 
-    return u_terminateUChars(dest, destCapacity, length, pErrorCode);
+    return u_terminateUChars(dest, destCapacity, length, &errorCode);
 }
 
 using UDisplayNameGetter = icu::CharString(const char*, UErrorCode&);
 
-static int32_t
+int32_t
 _getDisplayNameForComponent(const char *locale,
                             const char *displayLocale,
                             char16_t *dest, int32_t destCapacity,
                             UDisplayNameGetter *getter,
                             const char *tag,
-                            UErrorCode *pErrorCode) {
+                            UErrorCode &errorCode) {
     UErrorCode localStatus;
     const char* root = nullptr;
 
     /* argument checking */
-    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
+    if (U_FAILURE(errorCode)) {
         return 0;
     }
 
     if(destCapacity<0 || (destCapacity>0 && dest==nullptr)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     localStatus = U_ZERO_ERROR;
     icu::CharString localeBuffer = (*getter)(locale, localStatus);
     if (U_FAILURE(localStatus)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     if (localeBuffer.isEmpty()) {
         // For the display name, we treat this as unknown language (ICU-20273).
         if (getter == ulocimp_getLanguage) {
-            localeBuffer.append("und", *pErrorCode);
+            localeBuffer.append("und", errorCode);
         } else {
-            return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
+            return u_terminateUChars(dest, destCapacity, 0, &errorCode);
         }
     }
 
@@ -400,8 +402,10 @@ _getDisplayNameForComponent(const char *locale,
                                tag, nullptr, localeBuffer.data(),
                                localeBuffer.data(),
                                dest, destCapacity,
-                               pErrorCode);
+                               errorCode);
 }
+
+}  // namespace
 
 U_CAPI int32_t U_EXPORT2
 uloc_getDisplayLanguage(const char *locale,
@@ -409,7 +413,7 @@ uloc_getDisplayLanguage(const char *locale,
                         char16_t *dest, int32_t destCapacity,
                         UErrorCode *pErrorCode) {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                ulocimp_getLanguage, _kLanguages, pErrorCode);
+                ulocimp_getLanguage, _kLanguages, *pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -420,17 +424,17 @@ uloc_getDisplayScript(const char* locale,
 {
     UErrorCode err = U_ZERO_ERROR;
     int32_t res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                ulocimp_getScript, _kScriptsStandAlone, &err);
+                ulocimp_getScript, _kScriptsStandAlone, err);
 
     if (destCapacity == 0 && err == U_BUFFER_OVERFLOW_ERROR) {
         // For preflight, return the max of the value and the fallback.
         int32_t fallback_res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                                                           ulocimp_getScript, _kScripts, pErrorCode);
+                                                           ulocimp_getScript, _kScripts, *pErrorCode);
         return (fallback_res > res) ? fallback_res : res;
     }
     if ( err == U_USING_DEFAULT_WARNING ) {
         return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                                           ulocimp_getScript, _kScripts, pErrorCode);
+                                           ulocimp_getScript, _kScripts, *pErrorCode);
     } else {
         *pErrorCode = err;
         return res;
@@ -444,7 +448,7 @@ uloc_getDisplayScriptInContext(const char* locale,
                       UErrorCode *pErrorCode)
 {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                    ulocimp_getScript, _kScripts, pErrorCode);
+                    ulocimp_getScript, _kScripts, *pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -453,7 +457,7 @@ uloc_getDisplayCountry(const char *locale,
                        char16_t *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                ulocimp_getRegion, _kCountries, pErrorCode);
+                ulocimp_getRegion, _kCountries, *pErrorCode);
 }
 
 /*
@@ -467,7 +471,7 @@ uloc_getDisplayVariant(const char *locale,
                        char16_t *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                ulocimp_getVariant, _kVariants, pErrorCode);
+                ulocimp_getVariant, _kVariants, *pErrorCode);
 }
 
 /* Instead of having a separate pass for 'special' patterns, reintegrate the two
@@ -807,7 +811,7 @@ uloc_getDisplayKeyword(const char* keyword,
                                keyword, 
                                keyword,      
                                dest, destCapacity,
-                               status);
+                               *status);
 
 }
 
@@ -837,7 +841,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
     CharString keywordValue;
     {
         CharStringByteSink sink(&keywordValue);
-        ulocimp_getKeywordValue(locale, keyword, sink, status);
+        ulocimp_getKeywordValue(locale, keyword, sink, *status);
     }
 
     /* 
@@ -895,6 +899,6 @@ uloc_getDisplayKeywordValue(   const char* locale,
                                    keywordValue.data(),
                                    keywordValue.data(),
                                    dest, destCapacity,
-                                   status);
+                                   *status);
     }
 }

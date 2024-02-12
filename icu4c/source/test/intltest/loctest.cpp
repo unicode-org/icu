@@ -5790,7 +5790,7 @@ void LocaleTest::TestKnownCanonicalizedListCorrect()
     IcuTestErrorCode status(*this, "TestKnownCanonicalizedListCorrect");
     int32_t numOfKnownCanonicalized;
     const char* const* knownCanonicalized =
-        ulocimp_getKnownCanonicalizedLocaleForTest(&numOfKnownCanonicalized);
+        ulocimp_getKnownCanonicalizedLocaleForTest(numOfKnownCanonicalized);
     for (int32_t i = 0; i < numOfKnownCanonicalized; i++) {
         std::string msg("Known Canonicalized Locale is not canonicalized: ");
         assertTrue((msg + knownCanonicalized[i]).c_str(),

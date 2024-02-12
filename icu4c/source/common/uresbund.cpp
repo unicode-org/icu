@@ -2721,7 +2721,7 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
         CharString canonLocaleID;
         {
             CharStringByteSink sink(&canonLocaleID);
-            ulocimp_getBaseName(localeID, sink, status);
+            ulocimp_getBaseName(localeID, sink, *status);
         }
         if(U_FAILURE(*status)) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -3062,7 +3062,7 @@ static void getParentForFunctionalEquivalent(const char*      localeID,
         parent.clear();
         {
             CharStringByteSink sink(&parent);
-            ulocimp_getParent(localeID, sink, &subStatus);
+            ulocimp_getParent(localeID, sink, subStatus);
         }
     }
 }
@@ -3086,14 +3086,14 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     CharString kwVal;
     {
         CharStringByteSink sink(&kwVal);
-        ulocimp_getKeywordValue(locid, keyword, sink, &subStatus);
+        ulocimp_getKeywordValue(locid, keyword, sink, subStatus);
     }
     if(kwVal == DEFAULT_TAG) {
         kwVal.clear();
     }
     {
         CharStringByteSink sink(&base);
-        ulocimp_getBaseName(locid, sink, &subStatus);
+        ulocimp_getBaseName(locid, sink, subStatus);
     }
 #if defined(URES_TREE_DEBUG)
     fprintf(stderr, "getFunctionalEquivalent: \"%s\" [%s=%s] in %s - %s\n", 

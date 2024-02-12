@@ -399,7 +399,7 @@ int32_t LocaleDistance::trieNext(BytesTrie &iter, const char *s, bool wantValue)
     }
 }
 
-UBool LocaleDistance::isParadigmLSR(const LSR &lsr) const {
+bool LocaleDistance::isParadigmLSR(const LSR &lsr) const {
     // Linear search for a very short list (length 6 as of 2019),
     // because we look for equivalence not equality, and
     // because it's easy.

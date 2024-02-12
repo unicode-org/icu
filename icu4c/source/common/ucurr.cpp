@@ -352,7 +352,7 @@ _findMetaData(const char16_t* currency, UErrorCode& ec) {
 static CharString
 idForLocale(const char* locale, UErrorCode* ec)
 {
-    return ulocimp_getRegionForSupplementalData(locale, false, ec);
+    return ulocimp_getRegionForSupplementalData(locale, false, *ec);
 }
 
 // ------------------------------------------
@@ -526,7 +526,7 @@ ucurr_forLocale(const char* locale,
     CharString currency;
     {
         CharStringByteSink sink(&currency);
-        ulocimp_getKeywordValue(locale, "currency", sink, &localStatus);
+        ulocimp_getKeywordValue(locale, "currency", sink, localStatus);
     }
     int32_t resLen = currency.length();
 
@@ -605,7 +605,7 @@ ucurr_forLocale(const char* locale,
         CharString parent;
         {
             CharStringByteSink sink(&parent);
-            ulocimp_getParent(locale, sink, ec);
+            ulocimp_getParent(locale, sink, *ec);
         }
         *ec = U_USING_FALLBACK_WARNING;
         // TODO: Loop over the parent rather than recursing and
@@ -647,7 +647,7 @@ static UBool fallback(CharString& loc) {
     } else {
         CharString tmp;
         CharStringByteSink sink(&tmp);
-        ulocimp_getParent(loc.data(), sink, &status);
+        ulocimp_getParent(loc.data(), sink, status);
         loc = std::move(tmp);
     }
  /*
@@ -706,7 +706,7 @@ ucurr_getName(const char16_t* currency,
     CharString loc;
     {
         CharStringByteSink sink(&loc);
-        ulocimp_getName(locale, sink, &ec2);
+        ulocimp_getName(locale, sink, ec2);
     }
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
@@ -808,7 +808,7 @@ ucurr_getPluralName(const char16_t* currency,
     CharString loc;
     {
         CharStringByteSink sink(&loc);
-        ulocimp_getName(locale, sink, &ec2);
+        ulocimp_getName(locale, sink, ec2);
     }
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1003,7 +1003,7 @@ collectCurrencyNames(const char* locale,
     CharString loc;
     {
         CharStringByteSink sink(&loc);
-        ulocimp_getName(locale, sink, &ec2);
+        ulocimp_getName(locale, sink, ec2);
     }
     if (U_FAILURE(ec2)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2583,7 +2583,7 @@ static const UEnumeration defaultKeywordValues = {
 
 U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, const char *locale, UBool commonlyUsed, UErrorCode* status) {
     // Resolve region
-    CharString prefRegion = ulocimp_getRegionForSupplementalData(locale, true, status);
+    CharString prefRegion = ulocimp_getRegionForSupplementalData(locale, true, *status);
 
     // Read value from supplementalData
     UList *values = ulist_createEmptyList(status);
