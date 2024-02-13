@@ -27,7 +27,7 @@ int32_t ClockMath::floorDivide(int32_t numerator, int32_t denominator) {
         numerator / denominator : ((numerator + 1) / denominator) - 1;
 }
 
-int64_t ClockMath::floorDivide(int64_t numerator, int64_t denominator) {
+int64_t ClockMath::floorDivideInt64(int64_t numerator, int64_t denominator) {
     return (numerator >= 0) ?
         numerator / denominator : ((numerator + 1) / denominator) - 1;
 }
@@ -108,8 +108,10 @@ int64_t Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
 
     int64_t y = year - 1;
 
-    int64_t julian = 365LL * y + ClockMath::floorDivide(y, 4LL) + (JULIAN_1_CE - 3) + // Julian cal
-        ClockMath::floorDivide(y, 400LL) - ClockMath::floorDivide(y, 100LL) + 2 + // => Gregorian cal
+    int64_t julian = 365LL * y +
+        ClockMath::floorDivideInt64(y, 4LL) + (JULIAN_1_CE - 3) + // Julian cal
+        ClockMath::floorDivideInt64(y, 400LL) -
+        ClockMath::floorDivideInt64(y, 100LL) + 2 + // => Gregorian cal
         DAYS_BEFORE[month + (isLeapYear(year) ? 12 : 0)] + dom; // => month/dom
 
     return julian - JULIAN_1970_CE; // JD => epoch day

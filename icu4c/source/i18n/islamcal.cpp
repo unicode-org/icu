@@ -346,7 +346,7 @@ int64_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
 int32_t IslamicCalendar::trueMonthStart(int32_t month) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t start = CalendarCache::get(&gMonthCache, month, status);
+    int64_t start = CalendarCache::get(&gMonthCache, month, status);
 
     if (start==0) {
         // Make a guess at when the month started, using the average length
@@ -379,8 +379,8 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
                 }
             } while (age < 0);
         }
-        start = (int32_t)(ClockMath::floorDivide(
-            (int64_t)((int64_t)origin - HIJRA_MILLIS), (int64_t)kOneDay) + 1);
+        start = ClockMath::floorDivideInt64(
+            (int64_t)((int64_t)origin - HIJRA_MILLIS), (int64_t)kOneDay) + 1;
         CalendarCache::put(&gMonthCache, month, start, status);
     }
 trueMonthStartEnd :
@@ -694,9 +694,7 @@ IslamicCivilCalendar* IslamicCivilCalendar::clone() const {
 * from the Hijri epoch, origin 0.
 */
 int64_t IslamicCivilCalendar::yearStart(int32_t year) const{
-    return static_cast<int64_t>(
-        (year-1)*354LL + ClockMath::floorDivide((3+11*static_cast<int64_t>(year)),
-                                                 static_cast<int64_t>(30)));
+    return 354LL * (year-1) + ClockMath::floorDivideInt64(3 + 11LL * year, 30LL);
 }
 
 /**
@@ -709,10 +707,9 @@ int64_t IslamicCivilCalendar::yearStart(int32_t year) const{
 int64_t IslamicCivilCalendar::monthStart(int32_t year, int32_t month) const {
     // This does not handle months out of the range 0..11
     return static_cast<int64_t>(
-        uprv_ceil(29.5*month) + (year-1)*354LL +
-        static_cast<int32_t>(ClockMath::floorDivide(
-             3+11*static_cast<int64_t>(year),
-             static_cast<int64_t>(30))));
+        uprv_ceil(29.5*month) + 354LL*(year-1) +
+        ClockMath::floorDivideInt64(
+             11LL*static_cast<int64_t>(year) + 3LL, 30LL));
 }
 
 /**
@@ -759,9 +756,8 @@ void IslamicCivilCalendar::handleComputeFields(int32_t julianDay, UErrorCode &st
     int32_t days = julianDay - getEpoc();
 
     // Use the civil calendar approximation, which is just arithmetic
-    int32_t year  = static_cast<int32_t>(
-        ClockMath::floorDivide(30 * static_cast<int64_t>(days) + 10646,
-                               static_cast<int64_t>(10631)));
+    int64_t year  =
+        ClockMath::floorDivideInt64(30LL * days + 10646LL, 10631LL);
     int32_t month = static_cast<int32_t>(
         uprv_ceil((days - 29 - yearStart(year)) / 29.5 ));
     month = month<11?month:11;
@@ -837,9 +833,8 @@ IslamicUmalquraCalendar* IslamicUmalquraCalendar::clone() const {
 */
 int64_t IslamicUmalquraCalendar::yearStart(int32_t year) const {
     if (year < UMALQURA_YEAR_START || year > UMALQURA_YEAR_END) {
-        return static_cast<int64_t>(
-            (year-1)*354LL + ClockMath::floorDivide((3+11*static_cast<int64_t>(year)),
-                                                  static_cast<int64_t>(30)));
+        return 354LL * (year-1) +
+            ClockMath::floorDivideInt64((11LL*year+3LL), 30LL);
     }
     year -= UMALQURA_YEAR_START;
     // rounded least-squares fit of the dates previously calculated from UMALQURA_MONTHLENGTH iteration
@@ -915,15 +910,16 @@ int32_t IslamicUmalquraCalendar::handleGetYearLength(int32_t extendedYear) const
 */
 void IslamicUmalquraCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
     if (U_FAILURE(status)) return;
-    int32_t year, month, dayOfYear;
+    int64_t year;
+    int32_t month, dayOfYear;
     int64_t dayOfMonth;
     int32_t days = julianDay - getEpoc();
 
     int64_t umalquraStartdays = yearStart(UMALQURA_YEAR_START) ;
     if (days < umalquraStartdays) {
         //Use Civil calculation
-        year  = (int32_t)ClockMath::floorDivide(
-            (30 * (int64_t)days + 10646) , (int64_t)10631.0 );
+        year  = ClockMath::floorDivideInt64(
+            (30LL * days + 10646LL) , 10631LL );
         month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
         month = month < 11 ? month : 11;
     } else {

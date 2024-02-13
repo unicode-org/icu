@@ -398,7 +398,8 @@ int32_t HebrewCalendar::startOfYear(int32_t year, UErrorCode &status)
 
     if (day == 0) {
         // # of months before year
-        int64_t months = ClockMath::floorDivide((235 * (int64_t)year - 234), (int64_t)19);
+        int64_t months = ClockMath::floorDivideInt64(
+            (235LL * (int64_t)year - 234LL), 19LL);
 
         int64_t frac = months * MONTH_FRACT + BAHARAD;  // Fractional part of day #
         day  = months * 29LL + frac / DAY_PARTS;        // Whole # part of calculation
