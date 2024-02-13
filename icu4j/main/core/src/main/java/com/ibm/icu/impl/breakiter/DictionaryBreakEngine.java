@@ -12,6 +12,7 @@ import java.text.CharacterIterator;
 
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 
 public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
 
@@ -174,6 +175,11 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
      *  Constructor
      */
     public DictionaryBreakEngine() {
+    }
+
+    @Override
+    public boolean isFor(ULocale locale) {
+        return true; // by default, we handle all locales.
     }
 
     @Override

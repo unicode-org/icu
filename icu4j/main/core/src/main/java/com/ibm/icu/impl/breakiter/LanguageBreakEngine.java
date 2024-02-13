@@ -9,6 +9,7 @@
 package com.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
+import com.ibm.icu.util.ULocale;
 
 /**
  * The LanguageBreakEngine interface is to be used to implement any
@@ -20,6 +21,12 @@ public interface LanguageBreakEngine {
      * @return true if the engine can handle this character, false otherwise
      */
     boolean handles(int c);
+
+    /**
+     * @param locale A locale
+     * @return true if the engine is for this Locale, false otherwise
+     */
+    boolean isFor(ULocale locale);
 
     /**
      * Implements the actual breaking logic. Find any breaks within a run in the supplied text.

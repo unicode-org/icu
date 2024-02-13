@@ -14,6 +14,7 @@ import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 
 public final class UnhandledBreakEngine implements LanguageBreakEngine {
     // TODO: Use two UnicodeSets, one with all frozen sets, one with unfrozen.
@@ -37,6 +38,10 @@ public final class UnhandledBreakEngine implements LanguageBreakEngine {
     public UnhandledBreakEngine() {
     }
 
+    @Override
+    public boolean isFor(ULocale locale) {
+        return true;  // Handle all locales
+    }
     @Override
     public boolean handles(int c) {
         return fHandled.contains(c);
