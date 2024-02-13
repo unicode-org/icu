@@ -49,7 +49,7 @@ class ClockMath {
      * @param denominator a divisor which must be != 0
      * @return the floor of the quotient
      */
-    static int64_t floorDivide(int64_t numerator, int64_t denominator);
+    static int64_t floorDivideInt64(int64_t numerator, int64_t denominator);
 
     /**
      * Divide two numbers, returning the floor of the quotient.
@@ -309,7 +309,7 @@ inline void Grego::dayToFields(int32_t day, int32_t& year, int32_t& month,
 
 inline double Grego::julianDayToMillis(int32_t julian)
 {
-  return (julian - kEpochStartAsJulianDay) * kOneDay;
+  return (static_cast<double>(julian) - kEpochStartAsJulianDay) * kOneDay;
 }
 
 inline int32_t Grego::millisToJulianDay(double millis) {
@@ -318,8 +318,8 @@ inline int32_t Grego::millisToJulianDay(double millis) {
 
 inline int32_t Grego::gregorianShift(int32_t eyear) {
   int64_t y = (int64_t)eyear-1;
-  int32_t gregShift = static_cast<int32_t>(ClockMath::floorDivide(y, (int64_t)400) - ClockMath::floorDivide(y, (int64_t)100) + 2);
-  return gregShift;
+  int64_t gregShift = ClockMath::floorDivideInt64(y, 400LL) - ClockMath::floorDivideInt64(y, 100LL) + 2;
+  return static_cast<int32_t>(gregShift);
 }
 
 U_NAMESPACE_END

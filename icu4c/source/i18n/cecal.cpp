@@ -93,7 +93,7 @@ CECalendar::handleComputeMonthStart(int32_t eyear,int32_t emonth, UBool /*useMon
     return (
         getJDEpochOffset()                    // difference from Julian epoch to 1,1,1
         + 365LL * year64                      // number of days from years
-        + ClockMath::floorDivide(year64, 4LL) // extra day of leap year
+        + ClockMath::floorDivideInt64(year64, 4LL) // extra day of leap year
         + 30 * emonth                         // number of days from months (months are 0-based)
         - 1                                   // number of days for present month (1 based)
         );

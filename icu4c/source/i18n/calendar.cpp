@@ -1461,9 +1461,15 @@ void Calendar::computeFields(UErrorCode &ec)
     // 11/6/00
 
     int32_t millisInDay;
-    int32_t days = ClockMath::floorDivide(localMillis, U_MILLIS_PER_DAY, &millisInDay);
+    double days = ClockMath::floorDivide(
+        localMillis, U_MILLIS_PER_DAY, &millisInDay) +
+        kEpochStartAsJulianDay;
+    if (days > INT32_MAX || days < INT32_MIN) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
-    internalSet(UCAL_JULIAN_DAY,days + kEpochStartAsJulianDay);
+    internalSet(UCAL_JULIAN_DAY, static_cast<int32_t>(days));
 
 #if defined (U_DEBUG_CAL)
     //fprintf(stderr, "%s:%d- Hmm! Jules @ %d, as per %.0lf millis\n",
@@ -1579,7 +1585,14 @@ void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode& ec) {
         return;
     }
     int32_t gregorianDayOfWeekUnused;
-    Grego::dayToFields(julianDay - kEpochStartAsJulianDay, fGregorianYear, fGregorianMonth, fGregorianDayOfMonth, gregorianDayOfWeekUnused, fGregorianDayOfYear);
+    if (uprv_add32_overflow(
+            julianDay, -kEpochStartAsJulianDay, &julianDay)) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    Grego::dayToFields(julianDay, fGregorianYear, fGregorianMonth,
+                       fGregorianDayOfMonth, gregorianDayOfWeekUnused,
+                       fGregorianDayOfYear);
 }
 
 /**
