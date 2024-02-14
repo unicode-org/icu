@@ -181,7 +181,10 @@ Possible combinations and their encoding:
 
 _The rows of the table, from bottom to top, are encoded with increasing 16-bit "norm16" values as noted in the last column. Per-row and per-row-group properties are determined via norm16 range checks._
 
-<table border="1" bordercolor="#888888" style="border-color:rgb(136,136,136);border-width:1px;border-collapse:collapse;border-spacing:0" data-table-local-id="table-2">
+<!-- The default style on these pages sets th/td padding and max-width that make these tables very bloated and hard to read. -->
+<style type="text/css">.compacttable th,.compacttable td { padding: unset; min-width: unset; }</style>
+
+<table border="1" bordercolor="#888888" class="compacttable" style="border-color:rgb(136,136,136);border-width:1px;border-collapse:collapse;border-spacing:0" data-table-local-id="table-2">
   <tbody>
     <tr>
       <td style="width:71px;height:47px">
@@ -756,7 +759,7 @@ _The rows of the table, from bottom to top, are encoded with increasing 16-bit "
 
 The minYesNoMappingsOnly distinction was added in ICU 49, .nrm formatVersion 2.0. In formatVersion 1.0, the data for either type of yesNo characters (combines-forward or not) were mixed, and the mapping's firstUnit bit 6 was the `MAPPING_PLUS_COMPOSITION_LIST` flag. See the firstUnit documentation below.
 
-<table border="1" bordercolor="#888888" style="border-color:rgb(136,136,136);border-width:1px;border-collapse:collapse;border-spacing:0" data-table-local-id="table-3">
+<table border="1" bordercolor="#888888" class="compacttable" style="border-color:rgb(136,136,136);border-width:1px;border-collapse:collapse;border-spacing:0" data-table-local-id="table-3">
   <tbody>
     <tr>
       <td style="width:60px">
