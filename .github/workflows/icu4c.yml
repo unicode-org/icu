@@ -89,7 +89,7 @@ jobs:
           CXXFLAGS: -Wimplicit-fallthrough
         run: |
           cd icu4c/source;
-          ./runConfigureICU Linux;
+          ./runConfigureICU Linux/clang;
           make -j -l4.5 check;
       - name: Test Dependency
         run: |
@@ -124,7 +124,7 @@ jobs:
       - name: Build ICU4C with clang
         run: |
           cd icu4c/source;
-          ./runConfigureICU Linux ${{ matrix.build_option }};
+          ./runConfigureICU Linux/clang ${{ matrix.build_option }};
           make -j -l4.5 tests;
       - name: Test
         run: |
@@ -161,7 +161,7 @@ jobs:
       - name: ICU4C with clang and asan
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming --enable-tracing;
           make -j -l4.5 check;
         env:
           CPPFLAGS: -fsanitize=address
@@ -175,7 +175,7 @@ jobs:
       - name: ICU4C with clang and ubsan +alignment
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming;
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming;
           make -j -l4.5 check;
         env:
           CPPFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
@@ -209,7 +209,7 @@ jobs:
       - name: ICU4C with clang and tsan
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming
           make -j -l4.5;
           make -j -l4.5 -C test;
           make -j -l4.5 -C test/intltest check

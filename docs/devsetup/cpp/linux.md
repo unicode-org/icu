@@ -81,7 +81,7 @@ the configure options for building ICU with the address checker:
 
 ```
 CPPFLAGS=-fsanitize=address LDFLAGS=-fsanitize=address ./runConfigureICU
---enable-debug --disable-release Linux --disable-renaming
+--enable-debug --disable-release Linux/clang --disable-renaming
 ```
 
 The other available sanitizers are `thread`, `memory` and `undefined` behavior.

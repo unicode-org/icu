@@ -46,7 +46,8 @@ The following names can be supplied as the argument for platform:
     FreeBSD             Use the clang/clang++ or GNU gcc/g++ compilers on FreeBSD
     HP-UX/ACC           Use the HP ANSI C/Advanced C++ compilers on HP-UX 11
     IBMi                Use the iCC compilers on IBM i, i5/OS, OS/400
-    Linux               Use the clang/clang++ or GNU gcc/g++ compilers on Linux
+    Linux               Use the default cc/c++ compilers on Linux
+    Linux/clang         Use the clang/clang++ compilers on Linux
     Linux/gcc           Use the GNU gcc/g++ compilers on Linux
     Linux/ECC           Use the Intel ECC compiler on Linux
     Linux/ICC           Use the Intel ICC compiler on Linux
@@ -259,9 +260,19 @@ case $platform in
         DEBUG_CFLAGS='-g'
         DEBUG_CXXFLAGS='-g'
         ;;
+    Linux/clang)
+        THE_OS="Linux"
+        THE_COMP="the Clang C++"
+        CC=clang; export CC
+        CXX=clang++; export CXX
+        RELEASE_CFLAGS='-O3'
+        RELEASE_CXXFLAGS='-O3'
+        DEBUG_CFLAGS='-g'
+        DEBUG_CXXFLAGS='-g'
+        ;;
     Linux*)
         THE_OS="Linux"
-        THE_COMP="the clang or else GNU C++"
+        THE_COMP="the default C++"
         RELEASE_CFLAGS='-O3'
         RELEASE_CXXFLAGS='-O3'
         DEBUG_CFLAGS='-g'

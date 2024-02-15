@@ -431,7 +431,7 @@ To run manually, on a Linux system with clang,
 
 ```sh
 cd icu4c/source
-CPPFLAGS=-fsanitize=thread LDFLAGS=-fsanitize=thread ./runConfigureICU --enable-debug --disable-release Linux
+CPPFLAGS=-fsanitize=thread LDFLAGS=-fsanitize=thread ./runConfigureICU --enable-debug --disable-release Linux/clang
 make clean
 make -j -l2.5 check
 ```
@@ -449,7 +449,7 @@ To run manually, on a Linux system with clang,
 
 ```sh
 cd icu4c/source
-CPPFLAGS=-fsanitize=address LDFLAGS=-fsanitize=address ./runConfigureICU --enable-debug --disable-release Linux
+CPPFLAGS=-fsanitize=address LDFLAGS=-fsanitize=address ./runConfigureICU --enable-debug --disable-release Linux/clang
 make clean
 make -j -l2.5 check
 ```
