@@ -147,10 +147,8 @@ AC_SUBST(ENABLE_RELEASE)
 : ${CXXFLAGS=""}
 
 # Checks for compilers
-AC_PROG_CC([clang gcc cc c99 c89 xlc_r xlc cl.exe icc])
-# Make sure that we try clang++ first, which provides C++17 support.
-# The g++ compiler is less likely to support C++17.
-AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
+AC_PROG_CC([cc clang gcc c99 c89 xlc_r xlc cl.exe icc])
+AC_PROG_CXX([c++ clang++ g++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
 
 # pkg-config is needed for harfbuzz support
 PKG_PROG_PKG_CONFIG([0.20])
