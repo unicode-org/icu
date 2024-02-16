@@ -2870,7 +2870,7 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test -n "$ac_tool_prefix"; then
-  for ac_prog in clang gcc cc c99 c89 xlc_r xlc cl.exe icc
+  for ac_prog in cc clang gcc c99 c89 xlc_r xlc cl.exe icc
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -2914,7 +2914,7 @@ fi
 fi
 if test -z "$CC"; then
   ac_ct_CC=$CC
-  for ac_prog in clang gcc cc c99 c89 xlc_r xlc cl.exe icc
+  for ac_prog in cc clang gcc c99 c89 xlc_r xlc cl.exe icc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -3461,8 +3461,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-# Make sure that we try clang++ first, which provides C++17 support.
-# The g++ compiler is less likely to support C++17.
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3473,7 +3471,7 @@ if test -z "$CXX"; then
     CXX=$CCC
   else
     if test -n "$ac_tool_prefix"; then
-  for ac_prog in clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC
+  for ac_prog in c++ clang++ g++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -3517,7 +3515,7 @@ fi
 fi
 if test -z "$CXX"; then
   ac_ct_CXX=$CXX
-  for ac_prog in clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC
+  for ac_prog in c++ clang++ g++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
