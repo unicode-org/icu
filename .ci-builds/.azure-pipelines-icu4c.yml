@@ -1,30 +1,15 @@
 # Azure Pipelines (VSTS) configuration for CI builds for ICU.
 
+trigger:
+  paths:
+    include:
+    - icu4c/*
+
+
 variables:
   MAVEN_ARGS: '--show-version --no-transfer-progress'
 
 jobs:
-#-------------------------------------------------------------------------
-- job: ICU4J_OpenJDK_Ubuntu_2204
-  displayName: 'J: Linux OpenJDK (Ubuntu 22.04)'
-  timeoutInMinutes: 20
-  pool:
-    vmImage: 'ubuntu-22.04'
-    demands: ant
-  steps:
-    - checkout: self
-      lfs: true
-      fetchDepth: 10
-    - script: |
-        echo "Building ICU4J" && cd icu4j && mvn install
-      displayName: 'Build and Test'
-      env:
-        BUILD: ICU4J
-    # exit with a non-zero status in order to make this step show as a red X in the UI.
-    - script: |
-        cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;` && exit 1
-      condition: failed() # only run if the build fails.
-      displayName: 'List failures (if any)'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_2204
   displayName: 'C: Linux Clang (Ubuntu 22.04)'
@@ -587,11 +572,11 @@ jobs:
     - task: Cache@2
       displayName: 'Restore Cygwin cache'
       inputs:
-        # Use the contents of the file ".azure-pipelines.yml" as part of the key, as that contains the list of CYG_PACKAGES.
+        # Use the contents of the file ".azure-pipelines-icu4c.yml" as part of the key, as that contains the list of CYG_PACKAGES.
         # Also include the Cygwin version as part of the key. If we want to use a newer version of Cygwin, we can update CYG_VERSION_KEY.
         # Note: CYG_VERSION_KEY may become out of sync with (older than) the version we actually use if we update this file
         #       without updating CYG_VERSION_KEY. Any updates to this file guarantees that we're using the latest version.
-        key: '"$(CYG_VERSION_KEY)" | .ci-builds/.azure-pipelines.yml'
+        key: '"$(CYG_VERSION_KEY)" | .ci-builds/.azure-pipelines-icu4c.yml'
         path: "$(CYG_CACHE)"
     - task: PowerShell@2
       displayName: 'Download Cygwin setup'
