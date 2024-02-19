@@ -1,0 +1,227 @@
+# -*- makefile -*-
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (C) 2012 IBM Corporation and Others. All Rights Reserved.
+## Name of the app
+
+TARGET=icu4jscan
+
+all:
+	@echo To build and list "'" $(OUTFILES) "'"  in "'" $(J_GOOD) "'" use "$(MAKE) check"
+
+## Setup multicu
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/j/Makefile-j.inc
+
+
+## The output files.  Will result in:   out/3_8.txt  out/4_0.txt  etc.
+OUT=jxml
+OUTFILES=$(J_GOOD:%=$(OUT)/%.txt)
+
+.PRECIOUS: $(C_CLEAN_TARGET)
+
+## Generate a file
+$(OUT)/%.txt: $(OUT) $(C_INS)/%/bin/$(TARGET)
+	$(shell $(C_INS)/$*/bin/icu-config --invoke) $(C_INS)/$*/bin/$(TARGET)  > $@
+
+## clean
+clean:
+	-rm -f $(C_CLEAN_TARGET)
+	-rm -f ./$(OUT)/*
+	-rmdir $(OUT)
+
+
+## Test: generate out files, and print them.
+check: $(OUTFILES)
+	@for file in $(OUTFILES); \
+	do \
+		echo; \
+		sed -e "s%^%$$file: %g" < $$file; \
+	done
+
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/common/Makefile-multi.inc
+
+XML=./xml
+
+JVMXML=./jvmxml
+JVM=$(MULTICU_ROOT)/j/jvm
+JVM_CFG=.sh
+JVMSH:=$(wildcard $(JVM)/[0-9]*$(JVM_CFG))
+
+ALLICUS=$(ICUVERS:%=$(BLD)/%/$(S_BLD))
+IICUS=$(ICUVERS:%=$(INS)/%/$(S_INS))
+ALLAPPS=$(ICUVERS:%=$(INS)/%/bin/$(TARGET))
+ALLXMLS=$(ICUVERS:%=$(XML)/%.xml)
+COOKED=cooked
+INPUT=input
+INTROXMLS=$(wildcard $(INPUT)/*-introduction.xml)
+FEATXMLS=$(INTROXMLS:$(INPUT)/%-introduction.xml=$(COOKED)/%-cooked.xml) $(COOKED)/characters.xml
+ALLCOOKED=cooked/features.xml
+
+JXML=./jxml
+#ICU4JVERS
+ALLICU4JS=$(ICU4JVERS:%=$(ICUS)/icu4j-%.jar)
+ALLJXMLS=$(J_GOOD:%=$(JXML)/%.xml)
+JSCAN=ScanICU
+alljxmls: $(JXML) $(ALLJXMLS)
+JSCANDIR=../icu4jscan
+JCLASSFILE=$(JSCANDIR)/bin/com/ibm/icu/dev/scan/$(JSCAN).class
+JScanPackage=com.ibm.icu.dev.scan
+ALLJVM=$(JVMSH:$(JVM)/%$(JVM_CFG)=%)
+ALLJVMXMLS=$(ALLJVM:%=$(JVMXML)/%.xml)
+JVMSCAN=ScanJava
+alljvmxmls: $(JVMXML) $(ALLJVMXMLS)
+JVMCLASSFILE=$(JSCANDIR)/bin/com/ibm/icu/dev/scan/$(JVMSCAN).class
+
+
+# java stuff
+JAVA=java
+MergerName=Merger
+PropagateName=PropagateFeatures
+PropagateCharsName=PropagateCharacters
+MergerPackage=com.ibm.icu.dev.meta
+MergerPackageSlash=$(subst .,/,$(MergerPackage))
+## ICUMETA=/xsrl/E/data/meta  (in Makefile.local)
+MergerLib=$(ICUMETA)/lib
+MergerJar=$(ICUMETA)/icumeta.jar
+#was: $(ICUMETA)/classes
+MergerClassPath=$(shell ls $(MergerLib)/*.jar | tr '\n' ':')$(MergerJar):$(OTHERJARS)
+include Makefile.local
+MergerBuild=$(ICUMETA)/build.xml
+#MergerClass=$(ICUMETA)/classes/$(MergerPackageSlash)/$(MergerName).class
+#MergerJava=$(ICUMETA)/src/$(MergerPackageSlash)/$(MergerName).java
+#BASEXMLS=$(ICUMETA)/xml/icumeta.xml
+BASEXMLS=$(ICUMETA)/input/versions.xml
+
+
+APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS))
+
+.PRECIOUS: $(APRECIOUS)
+
+tehprecious:
+	echo $(APRECIOUS)
+
+$(MergerJar):
+	( cd $(ICUMETA)  ; ant jar )
+
+$(BLD):
+	-mkdir $(BLD)
+
+$(INS)/%/$(S_INS): $(BLD)/%/$(S_BLD)
+	@if [ -f $(BLD)/$*/build.err ]; then echo Error for $* stored in $(BLD)/$*/build.err; false;  fi
+	( make $(MAKE_OPTS) -C $(BLD)/$*/icu/source 2>&1 all install | tee $(BLD)/$*/build.log ) || ( mv $(BLD)/$*/build.log $(BLD)/$*/build.err ; false )
+	touch -c $@
+
+$(BLD)/%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
+	-mv $(BLD)/$* $(BLD)/$*.old
+	-( rm -rf ./$(BLD)/$*.old& )
+	mkdir -p $(BLD)/$*
+	( cd $(BLD)/$* ; tar xfpz $(DOT)/$^ )
+	([ -f patch/$* ] && patch -d $(BLD)/$* -p1 < $(DOT)/patch/$*) || true
+	touch -c $@
+
+$(BLD)/%/$(S_BLD): $(BLD)/%/$(S_SRC)
+	-mkdir -p $(INS)
+	( cd $(BLD)/$*/icu/source ; ./configure --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(DOT)/$(INS)/$* )
+	touch -c $@
+
+$(INS)/%/bin/$(TARGET): $(INS)/%/$(S_INS) $(SRCS)
+	-rm -rf ./$(BLD)/$*/tmp
+	mkdir ./$(BLD)/$*/tmp
+	@for file in $(OBJECTS); \
+	do \
+		what=`basename $$file .o` ; \
+		echo compiling $*/$$what ; \
+		$(CXX) -c -o ./$(BLD)/$*/tmp/$$what.o $$what.cpp -I $(INS)/$*/include -I $(BLD)/$*/icu/source/tools/toolutil ; \
+	done
+	$(CXX) -o $@ $(OBJECTS:%.o=./$(BLD)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -L$(INS)/$*/lib 
+
+$(XML):
+	mkdir $(XML)
+
+$(JXML):
+	mkdir $(JXML)
+
+ifeq ($(JVMSH),)
+JVMSH_WARN=warn-jvmsh
+warn-jvmsh:
+	@echo "Note: No $(JVM)/*$(JVM_CFG) files found, see $(JVM)/readme.txt"
+endif
+
+
+$(JVMXML):
+	mkdir $(JVMXML)
+
+$(XML)/%.xml: $(INS)/%/bin/$(TARGET) $(XML)
+	$(shell $(INS)/$*/bin/icu-config --invoke) $(INS)/$*/bin/$(TARGET)  > $@
+
+allxmls: $(ALLXMLS) | $(OUT)
+
+alljvmxmls:  $(ALLJVMXMLS) $(JVMSH_WARN)  | $(JVMXML)
+
+allapps: $(BLD) $(ALLAPPS)
+
+allicus: $(BLD) $(ALLICUS)
+
+clean-allapps:
+	-rm -f $(ALLAPPS)
+
+iicus: $(BLD) $(IICUS)
+
+DTDCACHE=$(shell pwd)/dtdcache
+DTDTMP=$(shell pwd)/dtdtmp
+DTDOVR=$(ICUMETA)/dtd
+JAVADEBUG=-DCLDR_DTD_CACHE_DEBUG=n -DCLDR_DTD_CACHE_ADEBUG=n 
+JAVAPROPS= -DCLDR_DTD_CACHE=$(DTDCACHE) -DCLDR_DTD_OVERRIDE=$(DTDOVR) -DICU_DTD_CACHE=$(DTDCACHE) -DICU_DTD_OVERRIDE=$DTDOVR 
+
+#//$(DTD)/Makefile: $(ICUMETA)/dtd/Makfile
+#//	ln -s $^ $@
+#//
+#//dtd/icucaps.dtd: $(DTD)/Makefile dtd/icucaps.rnc
+#//	make -C $(DTD)
+
+ICUMETA_XML=$(ICUMETA)/xml/icumeta.xml
+
+#$(ICUMETA)/xml/icumeta.xml: $(MergerBuild)
+#	( cd $(ICUMETA) ; ant xml )	
+
+featxmls: $(FEATXMLS)
+
+allcooked: $(ALLCOOKED)
+
+$(ALLCOOKED): $(FEATXMLS) $(MergerJar)
+	-rm -rf ./dtdcache
+	mkdir dtdcache
+	$(JAVA) $(JAVAPROPS) -classpath $(MergerClassPath) $(MergerPackage).$(MergerName) -v  -o:$@ $(FEATXMLS)
+
+$(COOKED)/%-cooked.xml: $(ICUMETA_XML) $(INPUT)/%-introduction.xml $(MergerJar)
+	-rm -rf ./dtdcache
+	mkdir dtdcache
+	$(JAVA) $(JAVAPROPS) -classpath $(MergerClassPath) $(MergerPackage).$(PropagateName) $(ICUMETA_XML) $(INPUT)/$*-introduction.xml > $(COOKED)/$*-cooked.xml
+
+$(COOKED)/characters.xml: $(ALLJXMLS) $(ALLXMLS) $(MergerJar)
+	$(JAVA) $(JAVAPROPS) -classpath $(MergerClassPath) $(MergerPackage).$(PropagateCharsName) > $@ $(ALLJXMLS) $(ALLXMLS) || (rm ./$@ ; false)
+
+
+icucaps.xml: $(BASEXMLS) $(ALLJXMLS) $(ALLXMLS) $(MergerJar) $(ALLCOOKED)
+	-rm -rf ./dtdcache
+	mkdir dtdcache
+#	-rm -rf ./dtdtmp
+#	mkdir dtdtmp
+#	ln -s $(ICUMETA)/dtd/*.dtd ./dtdtmp/
+#	ln -s ./dtd/*.dtd ./dtdtmp/
+	$(JAVA) $(JAVAPROPS) -classpath $(MergerClassPath) $(MergerPackage).$(MergerName) -v  -o:$@ $(BASEXMLS)  $(ALLXMLS) $(ALLJXMLS) $(ALLCOOKED)
+
+# --- J 
+
+$(JXML)/%.xml: $(JCLASSFILE) $(ICUS)/icu4j-%.jar | $(JXML)
+	$(JAVA) -classpath $(JSCANDIR)/bin:$(ICUS)/icu4j-$*.jar:$(JSCANDIR)/lib/icumeta.jar:$(JSCANDIR)/lib/xalan.jar:$(JSCANDIR)/lib/cldr.jar:$(JSCANDIR)/lib/utilities.jar:$(MergerJar):$(MergerLib)/utilities.jar:$(MergerLib)/cldr.jar:$(JSCANDIR)/lib/xerces.jar:$(OTHERJARS) $(JScanPackage).$(JSCAN) > $@ || (rm -f ./$@ ; false)
+
+$(JVMXML)/%.xml: $(JVMCLASSFILE) $(JVM)/%$(JVM_CFG) | $(JVMXML)
+	$(JVM)/invoke.sh $(JVM)/$*$(JVM_CFG) $(JSCANDIR)/bin:$(ICUS)/icu4j-$*.jar:$(JSCANDIR)/lib/icumeta.jar:$(JSCANDIR)/lib/xalan.jar:$(JSCANDIR)/lib/cldr.jar:$(MergerJar):$(MergerJar):$(MergerLib)/utilities.jar:$(MergerLib)/cldr.jar:$(JSCANDIR)/lib/utilities.jar:$(JSCANDIR)/lib/xerces.jar:$(OTHERJARS) $(JScanPackage).$(JVMSCAN) > $@ || (rm ./$@ ; false)
+
+## Just generate
+outfiles: $(XML) $(JXML) $(ALLJXMLS) $(ALLJVMXMLS)

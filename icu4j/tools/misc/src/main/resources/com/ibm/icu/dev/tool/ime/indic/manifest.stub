@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+
+Name: com/ibm/icu/dev/tool/ime/indic
+Specification-Title: ICU Indic IME
+Specification-Version: 1.0
+Specification-Vendor: Unicode, Inc.
+Implementation-Title: ICU Indic IME
+Implementation-Version: 1.0
+Implementation-Vendor: Unicode, Inc.
+Implementation-Vendor-Id: org.unicode
+Copyright-Info: @COPYRIGHT@
+Extension-Name: com.ibm.icu.dev.tool.ime.indic
+
+

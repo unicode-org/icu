@@ -1,0 +1,219 @@
+#!/bin/sh
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (C) 2011-2014 IBM Corporation and Others. All Rights Reserved.
+#
+# This is designed for building and running single-source-file ICU programs.
+#
+# You can always download the latest from http://source.icu-project.org/repos/icu/tools/trunk/scripts/icurun
+# Or, as an unofficial link, http://bit.ly/icu-run
+#
+# In its simplest usage,  simply type:
+#
+#     icurun  yourprogram.c
+#       (or .cpp if it is a C++ program)
+#
+#  The tool will compile and then run the program
+#
+#  FINDING ICU
+#  To find ICU, the following search order is used by priority:
+#
+#  1)    "-i <path>" .. the <path> will be searched for either a direct path to icu-config,
+#            or a directory containing it, or a directory containing '/bin' containing it.
+#        In other words, if icu-config is  /opt/local/bin/icu-config, any of the following will work:
+#                 -i /opt/local
+#                 -i /opt/local/bin
+#                 -i /opt/local/bin/icu-config
+#
+#         Additionally, /icu/source is a built ICU source directory, either of the following will work:
+#
+#                 -i /icu
+#                 -i /icu/source
+#
+#         Also, if /build is an out-of-source build, this will work:
+#
+#                 -i /build
+#
+#  2)    If there is an executable ~/.icurunrc script, it can set the variable "ICU_CONFIG" to point
+#        directly to the icu-config file.
+#        An example ~/.icurunrc script  contains just this line:
+#
+#              ICU_CONFIG=/home/srl/E/II/bin/icu-config
+#
+#  3)    ICU_CONFIG can be set in the environment to point to icu-config  ( it's overridden by the .icurunrc script )
+#
+#  4)    if "icu-config" is on the PATH, it will be used.
+#
+#
+#  RUNNING
+#   Any additional arguments following the file will be passed to the application.
+#
+#  TODO
+#   * should support pkg-config, which is preferred over icu-config, although icu-config makes this usage
+#     easier
+#
+#   * need to test the $PATH and $ICU_CONFIG usage models
+
+SCRIPTVER='$Revision$'
+
+
+ICU_OVERRIDE=""
+
+usage()
+{
+    echo "Script Version ${SCRIPTVER}"
+    echo "Usage: $0 [ -i /path/to/icu | -i /path/to/icu-config ]  file.c{pp} [ program args ...]"
+}
+
+if [ $# -lt 1 ];
+then
+        usage
+        exit 1
+fi
+
+if [ "$1" = "-?" -o $1 = "-h" ];
+then
+        usage
+        exit 0
+fi
+
+
+if [ $1 = "-i" ];
+then
+        shift
+        ICU_OVERRIDE=$1
+        shift
+fi
+
+if [ $1 = "-O" ];
+then
+    shift
+    XTRA_OPTS=$1
+    shift
+fi
+
+if [ ! -x "${ICU_CONFIG}" ];
+then
+    ICU_CONFIG=`which icu-config 2>/dev/null || echo`
+fi
+
+
+# now, search
+if [ -x ~/.icurunrc ];
+then
+        . ~/.icurunrc
+fi
+
+IN_SOURCE=
+ICU_CONFIG_OPTS=
+
+if [ "x${ICU_OVERRIDE}" != "x" ];
+then
+        if [ -f "${ICU_OVERRIDE}" -a -x "${ICU_OVERRIDE}" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}"
+        elif [ -x "${ICU_OVERRIDE}/icu-config" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}/icu-config"
+        elif [ -x "${ICU_OVERRIDE}/bin/icu-config" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}/bin/icu-config"
+        elif [ -x "${ICU_OVERRIDE}/source/config/icu-config" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}/source/config/icu-config"
+                IN_SOURCE="${ICU_OVERRIDE}/source"
+        elif [ -x "${ICU_OVERRIDE}/config/icu-config" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}/config/icu-config"
+                IN_SOURCE="${ICU_OVERRIDE}"
+        else
+                echo "$0: Don't know what to do with $ICU_OVERRIDE - not an executable or a directory containing ICU source or install" >&2
+                exit 1
+        fi
+fi
+
+if [ ! -x "${ICU_CONFIG}" ];
+then
+    echo "$0: Error: \"${ICU_CONFIG}\" is not an icu-config script. Goodbye." >&2
+    exit 1
+fi
+
+if ! fgrep -q -s noverify "${ICU_CONFIG}" ;
+then
+    rm -rf  "${ICU_CONFIG}".junk
+    grep -v '^sanity$' < "${ICU_CONFIG}" > "${ICU_CONFIG}".junk
+    chmod u+rwx  "${ICU_CONFIG}".junk
+    ICU_CONFIG="${ICU_CONFIG}.junk"
+else
+    SANITY_OPTS=--noverify
+fi
+
+if [ -d "${IN_SOURCE}" ];
+then
+    echo "ICU workspace dir:" "${IN_SOURCE}"
+    # revisit
+    if [ -f "${IN_SOURCE}/common/unicode/utypes.h" ];
+    then
+        top_srcdir="${IN_SOURCE}"
+    else
+        top_srcdir=`sed -n -e 's%^top_srcdir = \(.*\)%\1%p' < "${IN_SOURCE}/Makefile"`
+        if [ ! -d "${top_srcdir}" ];
+        then
+            echo "Sorry: cannot find top_srcdir from ${IN_SOURCE}/Makefile"
+            exit 1
+        fi
+    fi
+    if [ ! -f "${top_srcdir}/common/unicode/utypes.h" ];
+    then
+        echo Sorry: cannot find "${top_srcdir}/common/unicode/utypes.h"
+        exit 1
+    fi
+    echo "ICU top level source dir:" "${top_srcdir}"
+    
+    ICU_CONFIG_OPTS=${SANITY_OPTS}
+    LINKOPTS="--ldflags-libsonly --ldflags-system --ldflags-icuio"
+    OURLIBPATH=${IN_SOURCE}/lib:${IN_SOURCE}/stubdata:${IN_SOURCE}/tools/ctestfw
+    SRC_OPTS="-I${top_srcdir}/common -I${top_srcdir}/i18n  -I${top_srcdir}/io -I${top_srcdir}/tools/ctestfw -I${top_srcdir}/tools/toolutil -I${IN_SOURCE}/common -L${IN_SOURCE}/lib -L${IN_SOURCE}/stubdata -L${IN_SOURCE}/tools/ctestfw"
+    INVOKE=`${ICU_CONFIG} ${ICU_CONFIG_OPTS} --invoke`:"${OURLIBPATH}"
+else
+    # no cppflags for in-source
+    CPPOPTS="--cppflags"
+    LINKOPTS="--ldflags --ldflags-icuio"
+    INVOKE=`${ICU_CONFIG} ${ICU_CONFIG_OPTS} --invoke`
+fi
+
+echo 'ICU ' version: `${ICU_CONFIG} ${ICU_CONFIG_OPTS} --version` prefix: `${ICU_CONFIG} ${ICU_CONFIG_OPTS} --prefix`
+
+FILE=$1
+shift
+
+if [ ! -f "${FILE}" ];
+then
+    echo "$0: Can't open ${FILE}" >&2
+    usage
+    exit 1
+fi
+
+
+
+case "${FILE}" in
+     *.cpp)
+        COMP=`${ICU_CONFIG} ${ICU_CONFIG_OPTS} --cxx --cxxflags ${CPPOPTS} ${LINKOPTS}`
+        OUT=`basename ${FILE} .cpp`
+     ;;
+
+     *.c)
+        COMP=`${ICU_CONFIG}  ${ICU_CONFIG_OPTS} --cc --cflags ${CPPOPTS} ${LINKOPTS}`
+        OUT=`basename ${FILE} .c`
+     ;;
+
+     *)
+        echo "$0: error, don't know what to do with ${FILE}" >&2
+        exit 1
+     ;;
+esac
+
+echo "# ${COMP}" "${SRC_OPTS}" -o "${OUT}" "${FILE}" "${XTRA_OPTS}"
+( ${COMP} ${SRC_OPTS} -o "${OUT}" "${FILE}" ${XTRA_OPTS} || (rm -f "${OUT}" ; exit 1) )  && ( echo "# ${INVOKE} ${LEAK_CHECKER} ./${OUT}" "$@" ; "${SHELL}" -c "${INVOKE} ${LEAK_CHECKER} ./${OUT} $*")

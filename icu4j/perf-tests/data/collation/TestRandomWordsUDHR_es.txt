@@ -1,0 +1,10022 @@
+/**
+# * © 2021 and later: Unicode, Inc. and others.
+# * License & terms of use: http://www.unicode.org/copyright.html
+# *******************************************************************************
+#  Copyright (C) 2013, International Business Machines Corporation and
+#  others. All Rights Reserved.
+# *******************************************************************************
+#
+# This test data file was generated from the UDHR translated to Spanish.
+#
+# Each line consists from one or more words collected from the UDHR, and concatenated randomly.
+# Therefore, the generated phrase does not make sense literally.
+#
+# Source file: http://www.unicode.org/udhr/d/udhr_spa.txt
+#
+compromiso plena
+pérdida
+pena
+pacíficas privado libre
+raza acción disfrute
+democrática dependa
+tiene organización
+Derechos indispensables pérdida
+igualdad
+privará del
+Toda
+religiosos crueles seguros
+resulten miseria también
+esencial administración
+vacaciones son
+217
+idioma
+para reconocidos propiedad
+sean
+salud promover presente
+técnica
+condenado
+tienen
+cambiar artísticas
+miembro sociales
+raza elemental
+circular
+invocado tipo
+moral alguno
+cometerse habrán
+amistosas
+nivel producciones reconocidos
+bienestar vea Proclama
+descanso
+funciones satisfacer general
+elegir
+cada cualquier nacional
+proclamados fundada
+acusada científicas
+comprometido
+están color
+artes justas Organización
+sus torturas
+establezca crueles Además
+preso casarse preferente
+confiere invalidez
+administración
+una han superiores
+para comisión
+colectivamente limitación
+proclamada matrimonio literarias
+Asamblea obligado humanidad
+menos autora
+motivos económicos
+tendrán
+origen
+remuneración social efectivo
+sindicarse confiere fin
+cultural
+están
+duración mujeres libre
+medios Unidas favorecerá
+medidas cometerse oposición
+partes niños
+tales reafirmado
+Asamblea miseria hayan
+humanidad penal del
+conforme libre
+ser jurídica amplio
+independientes estará para
+creencia delito representantes
+práctica
+nivel asegurado
+las amistosas
+declarado deben
+fuera color
+periódicas hagan individuo
+menosprecio
+voto impondrá cuidados
+mantenimiento amistad
+salario
+valor cuenta
+soberanía común oposición
+paz personalidad ella
+Estado alguna matrimonio
+méritos independiente
+III realizar
+vida
+opinión general
+tendientes producciones
+grupo
+liberados durante organización
+comunidad deberes
+obligatoria Humanos sometido
+salario III
+restricción
+culto
+amistad elecciones caso
+individuos
+literarias
+torturas infancia ultrajantes
+tolerancia
+instituciones respectivos
+bajo menos
+acusación paz mediante
+General matrimonio Artículo
+según será protección
+núbil color defensa
+podrán sindicatos
+resolución
+Tampoco
+independientes por
+aspiración competentes
+elevar
+esfuerzo aseguren auténticas
+cualquier
+autónomo individuo
+intereses tales
+trabajo
+sufragio presente culto
+otro bajo esforzarse
+paz
+que ley
+Estados cuenta será
+grupos autoridad violen
+nacidos
+proclamados Estados
+Toda
+ser justas discriminación
+vivienda méritos las
+examen respectivos
+único universales
+independientes expresará inspirándose
+disfruten
+arbitrariamente salir esencial
+existencia grave establezca
+acusación
+disfrutarán religiosos méritos
+seguros
+libertades ejercidos presuma
+condición Unidas remuneración
+adecuado comisión necesarias
+manifestar cambiar todos
+compromiso
+proclamada invalidez edad
+matrimonio Nadie
+Toda cooperación
+Sólo según concerniente
+prohibidas elemental Todo
+adecuado
+elección vea pérdida
+parte pagadas independiente
+podrá grave
+país libremente
+sindicatos fraternalmente realmente
+partir Preámbulo mientras
+seres enfermedad maternidad
+proclamados seguridad
+medidas Naciones
+esencial las delito
+partir cooperación
+comunes
+derecho plenamente
+opinión ser
+pueblos acción
+orden libre
+cuidados
+pensamiento
+alimentación concepto
+hijos
+menos
+autora violen secreto
+vea honra
+vida
+amistad Asamblea producciones
+reputación
+cuenta tendientes
+interpretarse especiales puede
+núbil privará
+jurídica fortalecimiento
+domicilio salud
+hombre obligatoria
+provocación Todo
+condiciones
+cualquiera honra instrucción
+progresivas satisfactoria
+disolución
+dotados
+procedimiento
+degradantes
+científico fuera proclamado
+Todos
+defensa dignidad proclamados
+comportarse dignidad
+Naciones las expresará
+actividades
+carácter económicos justicia
+comisión Estos
+propiedad
+color gobierno
+nivel especiales
+obligado
+miembros
+detenido valor
+infrinja
+debe molestado
+regresar sus
+tribunal progreso
+por hagan aspiración
+indispensables voluntad
+elecciones
+tipo plenamente fundada
+advenimiento función razonable
+cambiar mantenimiento
+privado
+habrá
+pueblos miseria expresión
+hará
+como desempleo
+respecto
+por
+habrán miembros elegir
+tendrá
+acusada
+obligado
+aplicable artes plenamente
+materia originado individuo
+cuenta
+privado
+reunión
+democrática trabaja resulten
+representantes directamente
+comportarse
+beneficios periódicamente podrá
+elecciones Nada Unidas
+religión Preámbulo materiales
+soberanía los delitos
+persona dicho Organización
+tal realizar contraerse
+público rebelión general
+Estos
+exigencias preferente
+realmente vivienda
+pensamiento
+universal puesto elemento
+arbitrarias
+acusada deberes Estado
+cualquiera nacimiento seres
+imparcial
+tales
+casos reunión sometido
+adecuado están impondrá
+nacional degradantes poder
+autora liberados reconocimiento
+residencia
+217 las
+grave dependa desterrado
+Este
+efectivo Miembros
+acceso médica
+amistosas condenado proclamada
+Universal condenado dotados
+Humanos respeto las
+educación limitaciones
+sindicatos
+escoger
+Sólo concepto nacionalidad
+tolerancia necesarios declarado
+elegir
+Miembros pruebe pertenecer
+acusada proclamada alguna
+pensamiento
+proclamados crueles gobierno
+índole matrimonio partir
+asociación representantes reafirmado
+morales
+Estados posición libres
+Estados las condenado
+enseñanza
+Asamblea cuenta
+tribunales tendientes
+tal
+vida cualquiera régimen
+progreso plenamente
+colectivamente omisiones nacional
+mediante
+científicas inhumanos
+Estados
+superiores amistad
+alguno alguno
+periódicas así deberes
+miembros incluye
+debe elemental pleno
+edad
+cuidados
+nacen
+demás habrá individuo
+observancia propio torturas
+libres
+participar
+son examen
+artes política necesario
+será
+penal disfrute
+podrán
+todos
+delito necesarios fundamental
+garantías actos tolerancia
+disfrutarán
+plena
+causa
+dotados religiosos dentro
+alguno Estado
+correspondan como
+amplio
+persecución
+inocencia
+persona
+asegure servicios independientes
+comunidad amistosas
+distinción
+respeto
+ante correspondencia
+comportarse comunes autónomo
+descanso consentimiento matrimonio
+propiedad comunes inspirándose
+progresivas
+públicas conforme literarias
+territorios todas
+constitución reunión
+remuneración caso
+mayor
+concepto
+cualesquiera
+honra
+raza rebelión
+respectivos vida una
+humana
+sólo servidumbre
+tribunal tipo degradantes
+jurisdicción concepción
+actos
+equitativas condiciones
+posición domicilio
+cooperación comunes
+derecho
+escoger
+tratos Toda momento
+ante respectivos igual
+casarse estudios fundada
+representantes
+crueles
+Sólo son
+reafirmado humanos comportarse
+asilo
+ejercicio asistencia
+elevada participar
+instrucción
+darse correspondan
+Este degradantes
+fronteras tanto adecuado
+sus oposición fundada
+menosprecio nacionales
+justas
+III jurídica fundada
+plenamente internacional literarias
+naciones
+difundirlas aplicable
+sociedad
+vestido casos
+trabaja
+elemento nacionales expresará
+duración este fundamentales
+razón
+liberados opresión
+otro
+esfuerzo obligado
+paz compromiso determinación
+trata otra
+podrán mayor
+procedimiento derechos educación
+cometerse ser barbarie
+ella otro
+Todo igual importancia
+individuo juicio
+bienestar sentido
+acción
+opinión fraternalmente
+universales
+soberanía
+generalizada respeto
+advenimiento tienen dentro
+adecuado examen moral
+declarado acusada
+democrática
+igualdad buscar están
+beneficios así económica
+tratos participar
+fundar Todo Organización
+acusada
+habrán desarrollar
+carácter morales instituciones
+especial
+infrinja Artículo tratos
+nacen
+tendrán
+deben
+único religión asimismo
+tipo
+literarias
+con del
+reunión dotados
+Universal servidumbre
+nacionalidad privado descanso
+esclavitud preso
+asegurado desterrado incluso
+todos todas
+preferente infrinja
+delito materia base
+opuestos
+están seguridad presuma
+núbil resulten podrá
+más habrá preso
+trabajo
+cada profesional
+libertad
+momento tendrán aplicable
+medidas
+cultural
+constitución dotados
+penal
+único
+inhumanos
+voluntad también secreto
+proclamado obligatoria protegidos
+tiempo
+vacaciones sociales razón
+dotados sindicarse
+mantenimiento idioma libres
+alguna
+públicas nacional
+individuo alimentación esta
+nadie tiempo puede
+vida niños
+individuos fiduciaria
+escogidos instituciones
+que tribunal resulten
+trabajo
+concepción técnica pagadas
+general enseñanza
+Los respeto
+omisiones protección actos
+adecuado
+aseguren torturas
+comunidad
+elemento
+elevar
+organización razón
+pensamiento judicial
+directamente sexo niños
+investigar
+persecución asegure recibir
+podrán vacaciones invocado
+posición universales
+ultrajantes respeto
+humanidad otros así
+sea garantías respeto
+correspondencia
+núbil compelido acción
+jurídica acceso
+voto libertades
+sindicatos humana
+materiales
+estos educación
+unos esclavitud
+privado
+toda
+presuma como nacen
+individuos principios
+difundirlas resolución Miembros
+territorios
+Derecho omisiones
+defensa
+habrán
+médica fundamental escoger
+justas Derechos hombres
+independiente
+recursos
+confiere
+satisfacer tiempo persona
+independiente
+fiduciaria
+estudios declarado
+científico humana sólo
+Nadie grupo
+imparcial creencias general
+nacionales poder
+observancia fronteras
+respecto
+buscar étnicos
+obtener mantenimiento
+viudez vea público
+tendrá
+1948 asociación tendrán
+limitaciones cultural sea
+instituciones libre mientras
+servicios para
+indispensables
+seres matrimonio
+ejercicio
+Naciones satisfacer tiranía
+producciones tipo
+informaciones
+manifestar justicia
+examen especiales cuidados
+disfrute razonable
+actividades artes
+son
+buscar auténticas determinación
+constantemente
+estos
+satisfacción deben fiduciaria
+literarias dentro
+Universal conforme
+Estado
+deberes comisión
+medios
+equitativa alguno
+incluso trabaja directamente
+amistosas concepto infancia
+dotados completada
+disfrutar
+justas originada cooperación
+culturales manifestar
+creencias garantías
+beneficios originado
+obligatoria
+tienen personalidad
+distinción sea
+menosprecio indispensables
+existencia justicia justas
+Los formas razón
+unos caso
+expresará
+cometerse garantías
+paz
+declarado
+equivalente
+efectivos equitativa buscar
+plena derechos
+deberes
+escogidos escoger
+Todo social restricción
+instituciones derecho
+expresará parte religiosos
+compromiso obligaciones también
+igual
+medidas culpabilidad puesto
+detenido partes asegure
+general vida
+núbil
+examen alimentación ella
+parte
+comunidad
+defensa
+penal propiedad
+nacimiento
+trata trabajo
+causa
+respeto
+enseñanza escoger demás
+opinión cambiar
+padres
+protección vejez podrá
+declarado
+culto materia culpabilidad
+Miembros opresión cometerse
+pensamiento
+inocencia
+han
+determinación juicio
+provocación
+necesarios elevada
+reafirmado Artículo artísticas
+materiales padres Universal
+cualquier
+partes pensamiento razonable
+literarias
+educación sufragio
+tanto necesarias fundamental
+desconocimiento determinación
+persona Toda importancia
+sea ejercidos persecución
+torturas
+ser
+efectivos comprometido Universal
+casarse
+autónomo
+las
+política humana preferente
+provocación
+disolución mantenimiento condiciones
+miembro culturales
+desarrollo literarias estudios
+celebrarse médica establecidas
+voto oída
+hombres Humanos
+libre reputación intrínseca
+tomar mediante
+puesto mayor
+217 sufragio humanos
+justicia parte
+dentro valor instrucción
+estos
+equitativa tendientes Este
+administración partes limitaciones
+color esta
+artes invocado
+acusación durante
+religiosos
+asilo libres palabra
+tomar comportarse
+reafirmado esta
+económica sociales
+aplicación
+determinación
+desempleo
+organización fronteras
+invocado
+nacimiento
+índole cualquiera prohibidas
+necesarios
+casarse vea
+podrá asegurar fundar
+compromiso opresión
+casos color
+respectivos dicho juicio
+adecuado reunión casos
+resulten pertenecer respeto
+limitación escoger
+democrática
+indispensables Artículo cooperación
+los económicos
+también
+remuneración
+domicilio toda públicamente
+cooperación
+edad nacionalidad iguales
+difundirlas tal ella
+existencia
+culto
+amistad tribunal tendrán
+libertades públicas
+presente posición derechos
+inhumanos privado
+sólo
+III tal
+Estos
+fundada debe sus
+otros
+educación cumplimiento independientes
+examen
+resulten razón
+podrá
+tiene
+respectivos limitaciones
+amistad
+seres adecuado
+preso equitativas estos
+tribunal correspondencia
+cometerse provocación
+tendrán resueltos
+personal más más
+plena torturas judicial
+internacional sus
+como
+toda miembros
+tribunales condenado política
+cualquiera individuo cualquiera
+favorecerá obligaciones
+creencia sólo
+fin liberados
+natural como palabra
+proclamada confiere limitaciones
+penal tribunales
+existencia vivienda comprensión
+preso
+otra igualdad
+tiene
+niños materia individual
+durante fraternalmente
+resueltos servicios
+supresión
+bienestar ser
+tribunales indispensables
+Los
+humana
+las
+imparcial según artísticas
+oposición esclavos habrán
+realizar diciembre
+bienestar
+fueron puede orden
+amistosas respecto
+vejez
+idioma ningún
+emprender
+mediante recurso
+demás privado
+impondrá proclamados
+habrá desterrado garantice
+salud estudios opuestos
+universales tanto voto
+causa hayan amistad
+tiene honra materiales
+garantías limitación observancia
+acción país dignidad
+advenimiento
+Considerando democrática podrán
+asimismo acusada escogidos
+económicos
+efectivos inhumanos cometerse
+existencia Preámbulo beneficios
+desempleo cumplimiento
+grupo humanidad libremente
+adecuado determinación colocados
+acción mayor
+resueltos
+violen autora
+sociedad territorios
+especial
+Declaración equitativas
+desarrollar
+sus núbil comprensión
+voluntad Carta
+ningún fuera cambiar
+comprensión auténticas
+disfrute
+conforme
+celebrarse
+origen
+tienen tribunal salud
+garantías fundamentales libre
+servicios casos estos
+territorios esencial hombres
+beneficios
+omisiones
+tolerancia
+representantes seguridad creencia
+nacimiento aplicación
+Derecho funciones
+presente
+artísticas
+Sólo descanso según
+infancia Nada
+fronteras
+práctica dignidad inocencia
+Universal han
+universal pueblo beneficios
+comisión
+realizar
+tiranía fundamental
+distinción menosprecio discriminación
+elemental
+opresión contraerse
+directamente menosprecio
+constitución
+tienen fundamentales
+deberes Toda
+III
+son debe
+resueltos natural justicia
+valor
+una mediante
+progresivas
+tienen
+intereses
+bajo
+inalienables entre régimen
+provocación profesional
+privada Toda fortalecimiento
+mundo base seguridad
+índole cuenta fortalecimiento
+asilo base barbarie
+personalidad una
+obtener
+adecuado Nadie
+necesarias infrinja
+elegir
+igualdad maternidad duración
+asociación sin religión
+inhumanos sociales
+garantías jurídica informaciones
+será Toda obligatoria
+nacen funciones escoger
+profesional celebrarse
+esposos otros
+omisiones
+dicho disfruten universal
+vestido
+otra
+ejercicio observancia vivienda
+medio directamente libertades
+grupos moral delito
+especiales
+Adoptada seguros disfrute
+plena
+individuos
+partes vacaciones
+informaciones tipo determinación
+por práctica acción
+creencia
+individuo esforzarse
+núbil intereses
+imparcial menos asilo
+religiosos oposición ampare
+esencial promuevan
+asegurado creencia
+privada fundamentales asegure
+ejercicio pena
+molestado
+culpabilidad Artículo
+equivalente mantenimiento trata
+darse expresará grupo
+periódicamente orden caso
+condición
+presente podrán
+posición comunes
+Unidas enfermedad satisfacción
+tratos tolerancia soberanía
+cuanto debe
+producciones
+humana
+único
+Proclama satisfacción
+que
+artísticas buscar
+sindicatos poder
+humanos condiciones
+hagan individual
+formas disfrutar
+directamente impondrá desterrado
+defensa
+Preámbulo
+generalizada
+podrá
+detenido
+liberados vestido
+con grupos
+representantes estos esta
+salir
+medidas entre Naciones
+tiene
+promover color viudez
+inalienables originada
+paz constantemente generalizada
+público
+color
+presuma individuo religiosos
+cualquiera
+opiniones enfermedad
+raza directamente hagan
+resulten
+efectivo están otros
+Adoptada individuos hayan
+están contraerse esposos
+salir fuera promover
+tribunales soberanía tal
+territorio
+disfruten
+Declaración beneficios
+autoridad
+debe Carta Proclama
+cuidados parte actividades
+tendientes estudios
+ataques
+auténticas casarse
+correspondencia grupos
+elección otro
+país
+medio disfrutarán
+por fundamental pueblos
+vestido
+han Todo carácter
+elevar
+pacíficas
+padres
+todas vacaciones
+fueron viudez razón
+base Proclama materiales
+trata libertad penal
+elemental
+217 satisfactorias disfruten
+subsistencia
+culturales otros justicia
+Adoptada inalienables
+bienestar
+los
+alimentación pena idioma
+progreso
+comunes inalienables
+realmente
+Sólo libremente demás
+religiosos
+edad desempleo
+origen tales
+confiere
+estos
+parte edad
+cualquiera
+Organización elemento sexo
+darse
+culturales sexo procedimiento
+sus nacimiento jurisdicción
+independiente existencia
+mientras actividades
+nacional
+proclamada
+elemental creencias
+fin
+directamente vivienda
+religiosos
+humano
+originado
+propiedad
+miseria acceso
+pertenecer materiales persona
+preso miseria pérdida
+fundar Adoptada méritos
+periódicamente comprometido
+originada iguales
+artísticas
+investigar escoger educación
+familia deberes indispensables
+culpabilidad satisfactoria respectivos
+instrucción ampare
+artes contraerse domicilio
+política
+establecidas
+equitativas
+públicas respecto cuya
+comprensión habrá
+hará
+opuestos limitación
+unos advenimiento
+medidas salario Tampoco
+omisiones pensamiento
+cada naciones cuidados
+tipo Además
+amistosas comprensión
+libre motivos trabajo
+todos
+presente disolución casarse
+científicas literarias difundirlas
+gratuita hayan tanto
+derechos judicial
+tomar igual
+establecidas
+creencias
+establezca Estados
+moral territorios como
+respectivos científicas instrucción
+tipo casos intereses
+podrán
+injerencias Asamblea así
+desterrado cooperación
+resolución Toda aplicable
+duración especial
+progresivas actividades
+universales obtener
+cualquier
+religiosos
+torturas obtener
+realizar
+protección entre
+maternidad casos individuo
+sociales
+cuenta salir
+Considerando práctica
+tal actividades
+sindicatos desconocimiento
+establezca fiduciaria familia
+establecidas objeto medidas
+III especiales
+naciones hombre determinación
+ultrajantes
+resulten fortalecimiento trabaja
+pagadas sea darse
+cooperación miembro
+esclavitud literarias
+desempleo méritos
+deben
+determinación maternidad cualquier
+otros
+satisfactorias entre
+étnicos auténticas unos
+son defensa
+podrá dignidad
+pertenecer nivel esforzarse
+gratuita
+comprometido este Derechos
+núbil disfrutarán
+territorio
+remuneración seguridad
+respectivos naciones
+derechos ataques científicas
+enfermedad con servidumbre
+descanso pleno
+sindicarse individuo cooperación
+correspondan salud esforzarse
+estudios
+Considerando desarrollo
+fundamentales nacionales moral
+libre celebrarse penal
+Unidas
+vida
+residencia reconocidos
+cultural propio sexo
+trabaja general
+gobierno recibir estará
+cuidados
+especial escoger
+Miembros
+religión domicilio personalidad
+esclavitud privado partes
+contra base
+proclamada
+dependa
+colocados provocación
+seguridad grave desconocimiento
+alguna comisión
+obligado restricción sin
+promuevan advenimiento
+tribunal
+auténticas desarrollar
+representantes
+217 inhumanos Los
+hombres pueblo
+limitación están propiedad
+aseguren pérdida
+igual
+individual tratos colectivamente
+interpretarse impondrá
+respecto con estará
+religión expresará proclamada
+plena tienen opiniones
+declarado
+prohibidas comunidad realmente
+hayan reconocidos
+edad médica
+los
+comportarse
+preso informaciones
+humanidad limitación humanidad
+correspondencia esclavitud libremente
+dignidad favorecerá
+ley temor constitución
+acusada étnicos
+del promover
+humanidad libre trata
+organización salir esclavitud
+Todos base
+Artículo propio tribunales
+sufragio palabra
+privado
+elegir libremente común
+advenimiento deberes enseñanza
+elecciones voluntad autónomo
+cuanto miembro cuya
+molestado carácter
+esfuerzo
+tiempo
+Considerando pena vivienda
+consentimiento
+concerniente acción
+Además creencias cuya
+toda
+alguno
+infrinja
+elegir
+elemental autoridad equitativa
+compelido con enfermedad
+libre seguridad hombres
+fuera
+ningún ideal
+satisfactorias están respeto
+alimentación
+tratos edad
+consentimiento
+generalizada
+independientes derecho
+propio servicios
+investigar ser
+prohibidas
+satisfacción función
+realmente
+miseria invocado
+correspondan cooperación imparcial
+esclavitud indispensables natural
+viudez
+debe 1948 aseguren
+jurídica
+libertad
+fundar servicios
+satisfactoria
+elemental hombre derechos
+Miembros pueblos libre
+solamente concepción
+supremo técnica
+promuevan partes individual
+elecciones
+estos persecución reconocimiento
+materia propiedad manifestar
+III medio Naciones
+durante acusación existencia
+confiere intrínseca
+habrá Asamblea
+cometerse miembros nacionalidad
+cualquier
+escogidos organización
+cuenta
+Todos justas
+comportarse tratos profesional
+todos incluye sindicatos
+mediante mundo difundirlas
+existencia
+miembro
+con Asamblea
+administración
+las cualquiera garantías
+momento amistad omisiones
+subsistencia resueltos pertenecer
+equitativa tolerancia
+étnicos
+tiranía salud
+partes
+artísticas
+secreto delito
+interpretarse
+individual económicos
+fundada
+cuidados recibir
+reafirmado ampare régimen
+estos asegure
+conciencia
+humanidad condenado
+cometerse pertenecer especial
+persecución individual
+equivalente
+viudez estudios
+Todo completada
+garantice disfrute sin
+caso público invocado
+Universal libertades
+Carta
+sean trabajo
+realizar
+esclavos amplio
+así
+todos equitativa contraerse
+sujeta tribunales Estados
+nacimiento examen Organización
+impondrá durante
+efectivos esencial proclamados
+debe obligaciones Todo
+rebelión religión
+individuo desconocimiento cuanto
+habrá necesario organización
+presuma condiciones
+entre como
+soberanía familia
+disfrutar cultural
+Todo religiosos igual
+más
+periódicamente oposición
+buscar
+trabaja sindicarse cualquiera
+nacional solamente Asamblea
+por
+unos
+escoger sindicarse sindicarse
+ataques pueblos
+favorecerá procedimiento dependa
+con habrán inalienables
+distinción tiranía
+otra
+especiales
+artes equivalente III
+efectivos concepción humanos
+todas conforme
+tal oposición maternidad
+distinción pensamiento ejercicio
+satisfacer ningún núbil
+conforme
+función motivos
+los pagadas
+originada nacionalidad medio
+producciones
+recibir
+otros limitaciones comprometido
+penal padres formas
+cuya para
+circular
+periódicas
+sean buscar
+disolución pacíficas salir
+medio
+nacimiento
+favorecerá razonable hombre
+Humanos
+diciembre con incluso
+violen descanso
+los
+circular
+elecciones inhumanos
+aseguren vida grupo
+fiduciaria
+miembro concepto
+familia
+Asamblea libres sufragio
+ser
+familia equitativas
+217 del
+índole del aseguren
+según cooperación cambiar
+distinción difundirlas emprender
+nacional entre
+motivos infancia
+fiduciaria conforme
+fundada regresar acceso
+universal
+tratos
+juicio tribunales esfuerzo
+interpretarse
+concerniente circunstancias
+régimen degradantes degradantes
+obligatoria
+partir
+privará comisión
+educación observancia
+colectivamente públicas ser
+pacíficas obligaciones habrá
+alguno privada han
+opinión reconocidos
+limitación
+propósitos
+profesional
+infrinja delictivos núbil
+actividades
+también servidumbre
+incluso
+artísticas niños menos
+pertenecer
+aspiración estará
+orden
+parte caso equitativas
+pueblos demás enfermedad
+Considerando Estos poder
+efectivo recursos
+presente públicas más
+voto desarrollar
+escogidos incluso
+celebrarse
+trabajo
+universales
+superiores tendrán acusada
+recursos asilo
+asistencia
+toda
+disfrutarán
+fundamental arbitrariamente
+ultrajantes Toda persecución
+tanto
+razón protegidos humano
+todas completada
+servidumbre sólo hará
+parte creencias humana
+indispensables cuya
+partir Además
+idioma individual
+fundar
+disolución
+carácter
+Artículo sindicatos 1948
+Unidas
+salud medidas
+jurisdicción
+Este difundirlas satisfactoria
+honra fronteras asegure
+hagan opresión
+propiedad cuidados
+para jurisdicción grave
+garantice esforzarse grupo
+infancia Proclama imparcial
+delitos
+cuanto
+voto
+médica debe
+vejez reunión sin
+obtener actividades
+valor emprender
+Naciones Organización
+completada cuanto una
+creencia
+bienestar aplicación
+independientes disfruten
+directamente voto desarrollo
+domicilio
+humanidad momento causa
+darse pleno
+mujeres intrínseca
+realizar alguno
+fundamental tienen religiosos
+como ultrajantes los
+Unidas
+Nada tipo
+Adoptada
+culto crueles régimen
+disolución fundada alguno
+vejez
+acusación otra
+humana
+bienestar como
+pagadas casos
+equitativa esclavos matrimonio
+pérdida realizar
+tomar condiciones pensamiento
+tratos
+examen materia comprensión
+disolución
+salir
+pensamiento intrínseca asegurado
+voluntad realmente
+función
+rebelión
+edad
+esclavitud asociación
+partir
+libremente omisiones
+217
+amplio parte
+nacionales disfrutarán color
+tribunal
+sindicarse seres
+propiedad
+Humanos estará
+interpretarse Además
+las futuros concepto
+reconocimiento disolución ningún
+ejercicio violen asilo
+necesarios Miembros
+producciones Estados III
+impondrá salud
+independientes
+cualquier nacen palabra
+fundamentales respeto
+menosprecio desconocimiento
+Artículo
+dignidad disfruten
+presente necesario
+Adoptada Asamblea elegir
+estará fundamental establecidas
+Tampoco subsistencia personalidad
+Artículo
+privada opiniones
+pacíficas fronteras vejez
+asimismo
+orden
+con dotados
+Considerando han
+culto medio
+constitución fundada
+elevada niños
+pruebe especial
+fueron
+fundar cambiar servicios
+nacionales intrínseca durante
+comunes fortalecimiento
+tanto
+jurídica
+libre vea
+nacionalidad
+sólo autora
+elegir
+equitativa enfermedad
+culpabilidad reconocimiento
+asociación conciencia
+trata
+imparcial
+nacen
+cooperación pena expresará
+originada
+fiduciaria tipo
+origen así
+seres temor necesario
+científico efectivos
+libre Estos origen
+elevada sentido enseñanza
+vivienda satisfacción
+limitaciones
+Derechos este
+derechos moral
+tendrán sufragio
+iguales otro
+pagadas
+tendrá participar libertad
+técnica propio como
+expresará temor
+nacionales
+reconocimiento cuenta
+recursos
+fueron intereses
+trata delictivos
+seguridad
+independiente
+progresivas seres Estado
+desarrollar
+celebrarse emprender remuneración
+asegurar origen
+Declaración
+cada menos social
+gratuita durante
+restricción
+supremo partes
+ideal miembro opiniones
+correspondan razonable
+asimismo tendrán favorecerá
+padres satisfactorias instituciones
+caso necesarias medidas
+opuestos
+cualquier
+Preámbulo
+competentes disfrutarán
+libre
+inspirándose
+examen
+personal público concepción
+culto constitución
+ejercidos
+democrática
+investigar justas hará
+mayor concerniente
+judicial vivienda
+creencia Universal disfrute
+nacionalidad observancia tal
+trabajo existencia establecidas
+opresión organización
+salud
+beneficios
+solamente justas
+barbarie nacidos inocencia
+viudez
+Estos cultural
+padres esclavitud
+médica
+públicas pleno III
+contra actos
+mayor
+nacionales pacíficas
+deberes carácter moral
+compelido asistencia expresará
+sociedad tales
+Estos inalienables
+Nada
+realizar
+naciones expresará producciones
+resulten
+impondrá
+circular vida miseria
+nivel pueblos
+edad públicas asegurar
+más proclamados
+viudez recursos imparcial
+superiores disfrutar
+puede penal actividades
+salir materia disfrutar
+competentes edad preferente
+justicia científicas realizar
+respeto discriminación
+competentes
+impondrá tipo social
+Además bajo
+ningún elevar limitación
+supresión celebrarse científico
+sufragio organización deben
+subsistencia preferente actividades
+comunes
+otros medidas
+respecto supremo será
+molestado investigar
+toda
+descanso palabra Derechos
+económicos tienen
+podrá
+compelido
+puede sociedad
+constitución materia
+vestido casarse hará
+difundirlas
+regresar delictivos buscar
+comprensión
+propiedad nadie
+recursos
+tendrán parte
+inocencia
+delictivos
+escoger con religión
+Naciones interpretarse
+ante
+ataques salir
+comunidad
+universales Nadie concepto
+función
+miembros establezca temor
+científicas obtener estos
+con sean
+libertades resulten
+tolerancia realizar
+elección cuya hombre
+promover rebelión cualquiera
+pleno arbitrarias
+discriminación realizar pacíficas
+equitativa persecución
+matrimonio
+tiene
+temor aplicable
+económica circular color
+niños pagadas
+informaciones presuma colectivamente
+padres comunidad funciones
+fueron
+sujeta alimentación
+promoverá examen inalienables
+durante
+humanidad reconocimiento mundo
+producciones tribunal
+objeto acceso mujeres
+expresión desempleo
+plena
+superiores sometido manifestar
+Universal tolerancia Los
+práctica nivel derechos
+menos
+están
+proclamado
+tendrán medio
+rebelión científico debe
+diciembre
+Los pagadas
+aseguren alimentación
+función
+proclamado
+asistencia celebrarse
+según
+aseguren equitativa salud
+tanto libremente
+pleno
+han Derecho
+privará recibir
+tiranía distinción pacíficas
+propiedad
+dependa
+una debe
+equivalente
+desconocimiento tales Unidas
+preso edad
+moral
+correspondan molestado universales
+asistencia contraerse
+interpretarse
+Nadie sufragio debe
+acusación alguna
+unos literarias arbitrariamente
+esta
+servidumbre libres
+bienestar Declaración orden
+amistad
+fiduciaria pérdida
+oída
+arbitrariamente fundar Organización
+pleno plena
+jurídica
+injerencias liberados culpabilidad
+solamente
+celebrarse
+medidas
+prohibidas
+tolerancia voluntad
+Miembros tribunales
+equitativa
+aseguren
+menosprecio establezca promover
+objeto intereses barbarie
+podrán disfruten producciones
+opresión reconocimiento
+derechos
+enseñanza indispensables protegidos
+mundo
+instituciones necesarias
+funciones presente
+asegure más fortalecimiento
+interpretarse
+disolución
+recursos organización
+menosprecio
+gratuita fortalecimiento
+viudez tribunales
+incluso cooperación
+desarrollo naciones
+proclamados futuros
+salir opuestos
+enseñanza
+matrimonio solamente
+crueles con partes
+todos
+importancia limitaciones nacional
+sea culturales auténticas
+elección valor
+ley disfrute resueltos
+moral podrán
+217 trata todos
+General colectivamente
+país independientes preso
+Nada
+elemental
+regresar
+determinación tendientes interpretarse
+violen judicial individuo
+General Asamblea
+injerencias libertad acceso
+reafirmado
+persecución dicho razonable
+determinación
+los trabajo unos
+ideal respecto
+correspondencia contra esclavos
+casarse originado elecciones
+los fuera ataques
+común manifestar
+cualquiera
+incluye Organización
+voto vida constitución
+administración aspiración territorio
+molestado
+universales elevar salir
+privado determinación elección
+Nada circular acusación
+conforme
+delito Sólo servicios
+puede medidas
+salario práctica
+mujeres progreso garantías
+resueltos
+hayan 217
+sin distinción
+limitaciones elevada
+asegure
+mantenimiento
+intereses desarrollar
+seres especiales
+satisfacer pensamiento elevar
+color trabajo autora
+escogidos tribunal
+régimen
+progresivas dependa rebelión
+miembro
+libre
+toda ataques
+presente comprensión relaciones
+juicio
+tribunales
+materiales esclavos
+compelido omisiones
+otros amistosas
+elecciones menos
+núbil limitaciones justicia
+nadie humanos libres
+comprensión
+idioma asimismo
+miembros origen sin
+respectivos están presuma
+idioma
+nacionalidad inspirándose cada
+formas
+ningún
+sólo pensamiento superiores
+obligaciones con
+ella
+Humanos Organización disfruten
+tendientes
+expresará sea bajo
+interpretarse declarado
+impondrá
+correspondencia acción igual
+vejez
+razonable
+duración menos
+funciones
+recibir procedimiento
+organización internacional
+familia gobierno
+razonable opresión grupos
+tribunales degradantes
+plena progreso
+casarse
+concepto casarse
+degradantes regresar 1948
+Adoptada mundo realmente
+acusación desarrollo maternidad
+obligatoria humanos casos
+Derechos
+impondrá provocación social
+ley periódicamente
+miseria públicamente pensamiento
+intrínseca
+satisfactorias seguridad
+creencias seres menosprecio
+padres tanto
+ataques social idioma
+incluye opiniones
+otros amistosas
+público religiosos
+miseria delictivos
+cooperación
+elemental declarado
+pruebe salud
+habrá partes méritos
+dignidad públicas
+provocación necesarias
+crueles fuera
+procedimiento autora relaciones
+formas
+crueles sociales
+preso fundamental
+fin fundar enfermedad
+toda paz procedimiento
+estará Naciones
+tribunal independiente causa
+temor mundo
+naciones todas
+gobierno padres
+sean
+inocencia públicamente
+escogidos menosprecio gobierno
+acción sexo Proclama
+prohibidas
+asociación vacaciones
+miembros
+vea provocación buscar
+secreto
+discriminación pleno religiosos
+protección ser rebelión
+soberanía práctica
+regresar inalienables
+sin especial
+Derecho
+alguna jurisdicción
+jurídica
+opuestos
+conforme
+ante privada
+igualdad justicia científicas
+partes asegurado intereses
+este preferente subsistencia
+Considerando determinación reconocidos
+emprender tiranía social
+servicios carácter
+mayor
+nacional actividades
+darse
+protección supresión
+dependa supremo esfuerzo
+humano realizar
+que diciembre también
+iguales equitativa
+tratos elevar objeto
+posición
+propósitos necesarias
+pertenecer regresar literarias
+universales gozar méritos
+Miembros tribunal toda
+ultrajantes establezca
+alguna
+intrínseca
+fundar pleno
+familia
+propio
+voto jurídica valor
+imparcial profesional dicho
+núbil
+inspirándose
+reunión inalienables
+política privado principios
+limitación torturas esclavitud
+diciembre
+desarrollar actos
+Además competentes creencias
+declarado culturales ningún
+beneficios matrimonio
+preferente puesto realizar
+Organización
+promoverá cumplimiento
+desempleo
+imparcial
+nacen Sólo individuos
+indispensables torturas
+necesarios elección Declaración
+disfruten
+progreso
+salario razón subsistencia
+omisiones
+descanso
+hombre incluso pruebe
+limitaciones arbitrarias
+consentimiento solamente
+salir Estos
+presente fundada
+217 mayor
+infrinja
+por
+autoridad ejercicio pacíficas
+intrínseca
+Considerando nacionales
+religión medidas injerencias
+obligado violen elección
+tienen con artes
+escogidos
+prohibidas libremente palabra
+indispensables
+origen esfuerzo privará
+miseria adecuado
+Nada
+cuanto dentro tendientes
+expresión
+limitaciones razonable habida
+Además darse
+será persona derecho
+esforzarse
+necesarios
+desempleo científico
+medios promover
+acceso mantenimiento
+favorecerá satisfactorias conforme
+libre
+prohibidas nacen tanto
+han
+Preámbulo entre cualquier
+arbitrariamente
+entre públicas restricción
+tribunal esclavitud adecuado
+descanso
+unos estudios seguros
+opiniones
+infrinja funciones
+palabra tribunal
+progreso garantice sea
+idioma origen Considerando
+penal Este sus
+desconocimiento servicios
+Este ante
+acceso científico proclamada
+asegure
+judicial directamente
+estará sean Estos
+tiranía
+organización internacional fronteras
+esforzarse
+rebelión limitación
+morales establecidas
+todas restricción
+acusación régimen
+Organización
+seres
+familia
+este plena subsistencia
+asegurar médica dotados
+morales
+tribunales según
+habrá sin
+estudios
+técnica vestido Derecho
+vejez ella tendrán
+dicho Sólo
+durante Organización
+según del
+creencias núbil desterrado
+sus
+artísticas
+satisfacción trata
+Sólo Considerando constantemente
+puede
+duración tribunales
+enseñanza
+disfrute
+degradantes advenimiento
+nacen
+condiciones ser molestado
+vea desconocimiento poder
+proclamados pérdida resulten
+elecciones tipo
+investigar futuros
+obligatoria Los
+comunes
+preferente mediante funciones
+ley entre partes
+tal arbitrariamente
+respectivos
+obligaciones
+instrucción
+tratos
+otros
+esfuerzo
+cumplimiento barbarie pueblo
+respeto compelido
+tiempo miembros
+opresión dicho
+como único
+generalizada esclavos asilo
+compelido humano realmente
+imparcial del relaciones
+humanidad Artículo disfrute
+dentro
+recurso originado acusación
+condenado enfermedad Estados
+tal inspirándose
+periódicamente defensa
+universales duración
+violen infancia
+desempleo salario
+materia presente
+mujeres arbitrarias
+circunstancias será
+proclamada libertad plena
+examen competentes estudios
+independiente promuevan
+domicilio
+plena
+cambiar satisfacción inspirándose
+momento
+incluye
+reunión
+dependa medidas privada
+individuos proclamados
+las
+cometerse Universal invocado
+paz públicas
+orden equitativas jurisdicción
+correspondencia sociedad social
+hijos fueron tribunales
+independientes
+alguna
+están indispensables Carta
+territorios
+superiores delito vejez
+esforzarse
+cualesquiera
+desarrollo
+mientras instituciones régimen
+enseñanza
+tribunales otro
+supresión
+amistosas nacionalidad
+descanso protección 217
+preso
+invocado
+confiere una sociales
+sus reunión del
+condenado opiniones justicia
+artísticas
+materiales domicilio
+preso colectivamente
+obtener nacimiento gratuita
+esforzarse
+hombres
+Los
+natural niños
+podrá
+esclavitud elevar
+con confiere
+superiores este
+otro plenamente cultural
+puesto cooperación hombres
+importancia Miembros
+acción interpretarse menosprecio
+internacional ante creencias
+Humanos desconocimiento
+fundamental inspirándose informaciones
+razonable
+infancia
+solamente universal
+otra observancia
+cooperación
+equitativa
+artes
+crueles toda entre
+penas restricción
+asegure pérdida
+compelido
+Todo escoger
+torturas elemental importancia
+protección
+entre obligado
+instituciones
+todas existencia
+moral
+liberados especiales
+esforzarse
+Tampoco
+asistencia
+plenamente
+nacen económicos
+interpretarse
+Considerando
+para los
+observancia temor
+grupos
+pertenecer acceso dignidad
+color
+amistosas instrucción
+seguros acusación
+proclamados Los tienen
+morales color sindicatos
+limitaciones inalienables
+miseria más
+único territorios grupos
+establecidas
+internacional
+valor derecho defensa
+tribunal propiedad
+vida
+servidumbre condición
+puede
+poder
+arbitrarias participar literarias
+nacidos tolerancia
+práctica
+son conforme cooperación
+medidas
+Humanos
+ningún
+obtener futuros principios
+satisfacer caso
+Preámbulo aplicación fiduciaria
+asociación
+injerencias libertades
+creencias pérdida raza
+progreso asimismo grupos
+jurídica
+viudez descanso protegidos
+reafirmado voto posición
+práctica autónomo
+relaciones hará favorecerá
+correspondan tribunal especial
+vejez función palabra
+instrucción
+proclamados fundada tendrá
+casos
+toda pleno
+independientes vejez secreto
+asegurar impondrá hijos
+invocado actividades
+secreto promoverá enseñanza
+hijos degradantes
+estos entre
+asociación
+científicas deberes raza
+unos
+limitaciones
+opiniones
+orden fronteras materia
+Los así condiciones
+pérdida
+universal delito examen
+limitación tribunales
+derechos impondrá expresión
+remuneración realmente resolución
+Todo Derecho auténticas
+omisiones
+declarado menos
+cuidados
+hagan
+voluntad Adoptada indispensables
+pueblo
+difundirlas
+vejez motivos
+igualdad
+menos efectivos
+entre
+interpretarse
+edad individuos universal
+sindicarse procedimiento
+entre todas buscar
+tendrán jurisdicción grupos
+régimen
+1948
+garantice
+hagan religión
+ampare
+vestido satisfactorias
+materiales asociación fundamentales
+opuestos esclavitud
+nivel Los
+económicos
+puesto
+plenamente
+elemental Derechos Tampoco
+elemental independiente
+internacional
+padres ser esta
+están este causa
+asegurar opinión delito
+sociales declarado fiduciaria
+alguno degradantes
+pleno
+beneficios
+asociación palabra
+recibir según sea
+217 impondrá
+favorecerá
+salud fraternalmente
+esclavitud violen todas
+presuma expresará
+residencia esposos superiores
+viudez
+delito
+sexo resolución
+como
+igualdad nacidos
+fuera origen
+informaciones
+condenado propósitos
+delictivos han reconocimiento
+contraerse
+viudez
+todos ley
+propio subsistencia colocados
+duración
+viudez
+instrucción
+equitativas
+producciones
+constantemente Asamblea
+cualquiera
+barbarie han
+tienen compelido
+rebelión nacimiento sufragio
+Estos por
+privado tomar
+desarrollo más
+ningún progresivas
+cualesquiera
+elecciones
+condiciones medios
+otra mediante será
+completada
+tipo contraerse
+dentro degradantes
+directamente interpretarse
+seguros
+cooperación ningún
+detenido sea índole
+ejercicio nadie
+autoridad ningún
+medio individuo disfrutar
+acceso
+seguros delitos
+observancia Los
+desconocimiento Asamblea
+necesarias proclamada
+esclavitud tienen
+respeto momento
+delitos voluntad residencia
+seguridad
+acceso nadie
+profesional Asamblea
+procedimiento asimismo
+para
+Derecho
+internacional
+asegurar Derechos
+promover democrática
+creencia ningún omisiones
+justicia
+sin poder expresará
+salir asegurar
+obligado jurisdicción con
+efectivo
+oposición núbil
+examen soberanía
+opinión
+inalienables
+condiciones
+trabaja jurídica
+enfermedad
+individuo
+regresar causa tal
+supremo
+colocados
+fundar mientras
+durante temor privará
+elegir asistencia voluntad
+justicia
+fundamental sus Asamblea
+país seres barbarie
+judicial molestado
+mayor vea
+celebrarse vejez
+asegure mundo vea
+dicho liberados
+tendrán ejercidos
+difundirlas
+importancia
+molestado esclavitud
+Toda han privará
+asistencia núbil trabajo
+estos futuros
+necesarias
+contra nacionales
+acceso defensa
+imparcial autoridad
+pacíficas circunstancias
+Derechos
+torturas
+disfrutarán
+grupo
+duración delictivos
+durante concepción enfermedad
+base supremo
+ejercidos jurisdicción
+recursos principios técnica
+grupos
+ningún
+promoverá
+oposición social aplicación
+tal
+regresar ejercicio privado
+interpretarse representantes defensa
+concepción libres enseñanza
+índole cuidados
+cambiar
+comprometido liberados Toda
+colocados morales actividades
+Carta darse
+asimismo
+mayor
+Todos
+esfuerzo dotados
+elecciones fraternalmente justicia
+para seguros Sólo
+índole equivalente
+elegir resueltos otros
+oída consentimiento
+oída
+obligado contra
+jurídica esencial
+funciones asistencia desarrollar
+una libertades salario
+Proclama
+efectivos vivienda deben
+será
+Toda
+progreso
+equitativa circunstancias cooperación
+artísticas penal culturales
+otros contraerse fundamentales
+esforzarse ante
+obligatoria
+liberados
+actividades declarado
+podrá alguno
+delitos
+degradantes
+tiene escogidos
+creencia ejercicio Declaración
+competentes
+equivalente salud bienestar
+favorecerá
+son provocación Todo
+tipo cualquiera
+Todo progreso incluye
+recursos
+partir parte
+cometerse
+estará
+celebrarse partir cuanto
+examen realmente
+Nada cambiar
+materia plena
+establecidas esta
+pruebe motivos
+menos observancia
+materiales
+libertades fronteras
+salario
+reconocimiento amplio opuestos
+igual universal tipo
+informaciones profesional raza
+según residencia
+Universal investigar estará
+Naciones
+puesto barbarie
+expresará molestado
+incluso participar discriminación
+mujeres actos reafirmado
+igualdad hayan
+intrínseca público
+originado exigencias
+menosprecio defensa puede
+reafirmado privada privará
+general opiniones originada
+autoridad subsistencia
+único
+supremo
+Estados ataques
+oposición
+independientes más
+tomar propiedad derechos
+pena
+respeto duración
+otro compromiso
+Todos podrán
+ataques honra
+ultrajantes satisfacción
+tribunal obtener recurso
+aplicable fin
+1948
+ampare
+jurisdicción superiores propósitos
+desempleo mayor momento
+seguridad funciones protección
+progreso solamente para
+Proclama
+unos
+trata especiales provocación
+obligatoria barbarie
+informaciones III interpretarse
+equitativa nivel
+asimismo
+resulten actos
+respecto asegurado
+acción enseñanza esta
+estudios
+dignidad mantenimiento
+periódicas
+territorio fiduciaria
+trata creencia
+Artículo artísticas esclavitud
+limitaciones
+supremo por violen
+salud
+proclamado índole actos
+correspondan pueblos
+delito interpretarse emprender
+también fundar entre
+vida deben único
+nacimiento subsistencia
+importancia disfrute elevada
+servidumbre posición cooperación
+ideal domicilio
+toda dotados país
+salir periódicamente
+otros pensamiento
+que
+217
+satisfactorias dentro actividades
+inocencia descanso pleno
+cuidados medidas
+pertenecer expresión
+incluso económica
+arbitrariamente
+valor maternidad
+asegure vestido tomar
+reputación
+nacional trata
+individual privada
+colocados ningún
+naciones concepción
+actividades valor adecuado
+habrá
+existencia reunión
+otros público
+maternidad cualquiera respectivos
+examen superiores
+motivos condición oposición
+necesarios efectivos
+natural obligado obligado
+respectivos completada
+momento
+establezca
+casos
+solamente nacimiento fueron
+ley
+social tendrá nivel
+los índole
+crueles asilo tendrán
+protección
+deben torturas acusación
+proclamados acción nacidos
+satisfacer pueblos reafirmado
+adecuado
+universales
+mayor
+grupos impondrá honra
+resulten nadie
+tribunales
+delictivos gozar
+duración pena durante
+informaciones satisfactorias
+religión recurso nacionales
+futuros fundar injerencias
+sindicatos Este
+palabra raza
+iguales elección producciones
+degradantes público humana
+asimismo Estados sindicatos
+existencia imparcial
+correspondan
+Estos
+advenimiento gobierno
+condenado subsistencia
+sexo durante
+medio fundamental equitativa
+compromiso social
+salario deben científicas
+privará sindicatos justicia
+debe hagan habida
+viudez
+disfrutarán Todo alguna
+juicio grupo
+objeto honra
+jurisdicción comunes fraternalmente
+culto toda nacimiento
+expresará
+esforzarse
+difundirlas injerencias
+formas
+para
+razón
+han
+invocado
+régimen
+esta
+edad ultrajantes
+morales país
+detenido general
+maternidad acceso
+sin
+fortalecimiento recurso durante
+Todo
+también democrática compelido
+infancia disfrute
+autónomo
+servidumbre desarrollo
+asegurar jurídica disfrute
+opresión amistosas
+cultural
+barbarie tomar sociales
+opinión Asamblea
+fraternalmente
+tribunales invocado
+comisión
+importancia
+derechos
+equitativas mundo
+hijos menos
+trabaja satisfactorias
+diciembre pueblo
+ningún padres
+culto delictivos
+servidumbre asilo arbitrariamente
+tendrá cultural común
+dicho comisión importancia
+este conforme toda
+habrán inalienables una
+tiene escoger
+para Estados constitución
+observancia elemento
+fronteras superiores
+correspondan contra
+nadie deberes nacen
+Tampoco libertad ser
+indispensables disfruten fueron
+matrimonio étnicos auténticas
+núbil comisión
+cuanto iguales
+alguna parte
+Humanos
+pertenecer
+elevada
+participar trata demás
+iguales hará habrán
+recursos
+paz
+reconocimiento funciones pensamiento
+caso Todo
+descanso Proclama recurso
+ningún fiduciaria libres
+III ataques
+tendrán periódicamente artes
+otra
+natural concepto acción
+ante palabra constantemente
+colocados
+literarias esclavitud
+méritos tal tendrán
+natural darse
+sociedad superiores acceso
+asilo esfuerzo
+autónomo disfrute sufragio
+invalidez duración actos
+comisión
+este cualquier impondrá
+tolerancia
+grupos amistad tanto
+núbil hombre Todos
+progreso democrática
+política
+compromiso
+vestido formas asimismo
+participar
+sexo
+fundada hará
+parte
+regresar
+elecciones artísticas
+disfruten religión sindicarse
+carácter rebelión este
+política social
+disfruten generalizada
+promuevan necesario autónomo
+prohibidas cuenta
+actividades promover vea
+núbil
+Preámbulo
+esclavitud salario
+tienen vea regresar
+cuidados pérdida
+creencias servidumbre para
+mediante interpretarse naciones
+indispensables público desarrollar
+sociales científicas habida
+creencias ejercicio relaciones
+Tampoco
+libertades razón
+orden
+procedimiento ejercicio liberados
+molestado buscar
+partir
+colocados
+étnicos paz
+profesional Sólo jurídica
+autoridad profesional reconocidos
+liberados respeto exigencias
+país culto
+culpabilidad seguros interpretarse
+habida literarias voluntad
+directamente valor tiene
+públicas necesarias
+supremo fiduciaria remuneración
+dicho Artículo
+méritos científicas
+dentro crueles
+emprender
+política raza
+condenado
+declarado
+reafirmado posición cada
+menosprecio efectivo escogidos
+opiniones escoger autónomo
+degradantes secreto
+entre originada voto
+origen
+comunes individuo
+idioma
+caso
+podrán
+comunidad
+elegir palabra infrinja
+contraerse
+base representantes
+unos otro igual
+1948 también incluso
+respecto fundar
+elección cumplimiento
+mujeres profesional
+iguales razón estos
+ataques religión que
+correspondencia han
+actividades efectivo asegurado
+religión
+habrá progreso necesarios
+artísticas son buscar
+Todos presuma libre
+delictivos educación
+competentes difundirlas pena
+solamente arbitrariamente tendrá
+deberes opuestos favorecerá
+territorio origen
+familia así
+relaciones necesarios
+aplicación
+periódicas propiedad limitación
+voto
+sindicarse formas temor
+cumplimiento Humanos humano
+salud asociación
+privado tendrán
+común
+desconocimiento
+partir inhumanos
+inalienables
+familia estará
+medios penal Declaración
+dotados sujeta
+mayor grupo proclamado
+formas color recursos
+tiranía determinación
+Derechos manifestar
+preferente
+necesario
+difundirlas habrá elecciones
+producciones crueles soberanía
+asegurar esclavos
+alguna parte
+pertenecer
+artísticas remuneración
+garantice resolución tribunal
+necesarias otra
+Adoptada cometerse único
+respeto General
+niños cooperación cada
+regresar todas incluso
+Tampoco
+equivalente
+detenido cultural Unidas
+materia caso país
+acción universales
+humana oposición Sólo
+tiene judicial
+realmente compromiso
+parte propio
+puesto investigar
+mientras detenido
+esfuerzo
+pacíficas diciembre todos
+resueltos
+tendrá
+regresar informaciones declarado
+Declaración justas
+maternidad asegurar científicas
+nacional Organización matrimonio
+medios mayor sólo
+otra
+Este
+obtener penas
+auténticas
+molestado jurisdicción
+materia Nada ella
+moral aspiración pueblo
+orden condiciones
+residencia judicial
+individuo
+correspondan
+fortalecimiento pruebe
+ejercidos con
+grupos obligaciones
+delitos desconocimiento
+tiranía creencia
+desarrollar
+vida
+Derecho paz
+liberados representantes
+méritos
+detenido base matrimonio
+mientras miseria con
+miembros sus
+discriminación opinión restricción
+promover durante comunidad
+nacionales fronteras
+compromiso pueblo
+propósitos tendientes
+infancia esfuerzo
+prohibidas
+inhumanos
+acceso fundamental
+ella están comprensión
+humano deberes
+caso humanidad los
+obtener fueron personalidad
+concepto limitación trata
+Tampoco
+supremo
+morales Derecho
+grupo
+darse darse infancia
+obtener seres
+circular crueles
+territorio opuestos tiempo
+correspondan
+pueblo cualquier liberados
+índole directamente grupo
+religiosos política alguna
+igual hayan diciembre
+progreso servidumbre sólo
+limitación manifestar procedimiento
+futuros advenimiento
+nacional
+elemento núbil color
+bienestar
+tiempo
+respeto humana disolución
+edad
+delito prohibidas
+enseñanza morales barbarie
+Artículo bienestar
+beneficios
+limitaciones molestado garantice
+torturas tomar
+salud ella son
+menos Preámbulo auténticas
+principios trabajo
+nacen condiciones creencias
+ser gozar actividades
+personalidad actividades
+sociales
+invocado los ampare
+alimentación
+orden inalienables Unidas
+darse dentro hagan
+Todo correspondan
+contra
+pena invalidez
+fundar
+ser artes Unidas
+duración
+pena comisión
+gozar ultrajantes cometerse
+libertad
+defensa
+satisfacción asistencia Asamblea
+intereses igual desarrollo
+organización
+son maternidad
+pertenecer tienen hombres
+pagadas opiniones
+promuevan pruebe jurídica
+descanso tolerancia
+cultural
+General
+motivos alguna domicilio
+reafirmado limitación
+Organización
+deben
+protegidos único
+comunes
+Organización profesional promuevan
+Los fraternalmente
+profesional elevada auténticas
+nadie restricción
+opresión nacidos
+será
+trabaja casos partir
+alguno privada impondrá
+relaciones observancia crueles
+como esta
+relaciones han arbitrarias
+incluso confiere
+están inocencia penas
+desarrollo Tampoco
+trata
+público
+natural sujeta iguales
+nacimiento
+también fundada
+desconocimiento
+injerencias
+creencias
+esclavitud
+familia
+internacional
+democrática
+arbitrarias
+base concepción
+resolución
+intereses
+concepto General
+Nadie disfrutar tiene
+concepción Preámbulo
+obligado oída detenido
+exigencias públicas darse
+penas
+mediante más Organización
+privará vivienda
+individuos partir elemental
+hombres
+único cuya protección
+inalienables medio
+resolución
+todas
+ampare práctica mediante
+para
+acusada libres
+disfrute buscar
+grave reunión
+deberes
+persecución existencia
+remuneración libertades cualquier
+sometido
+méritos Universal
+incluye nacionalidad
+este pruebe
+circular
+hayan salario
+miembro
+formas motivos opuestos
+idioma difundirlas
+limitación
+internacional informaciones religiosos
+efectivo gozar
+protección religión Proclama
+colocados cuya Sólo
+infancia
+infrinja
+efectivos penal práctica
+comprensión
+salir
+para enseñanza tiranía
+disfrutar subsistencia maternidad
+salud materiales
+originado artísticas
+resulten alguno
+tendrá
+necesario
+padres debe
+promuevan individuos
+discriminación vejez participar
+persecución esposos
+científico sociales
+recurso tales acusada
+obligado temor circunstancias
+persona dicho asociación
+pacíficas internacional declarado
+sean
+amistosas salud
+torturas Unidas
+establezca salario resueltos
+todas ser consentimiento
+especiales
+propiedad progresivas reputación
+justicia asistencia
+medio
+todos
+motivos
+vejez Organización desempleo
+colectivamente
+nacimiento democrática grupo
+privará natural degradantes
+recursos Estados
+propio
+niños ante Unidas
+estos orden
+inocencia omisiones cuidados
+todos limitación autora
+podrá
+asegurar económica
+aseguren originado
+satisfactorias
+tratos Todo desempleo
+Sólo
+naciones sociedad
+Carta culturales públicas
+nacionalidad opiniones Considerando
+disfrutar delictivos
+instrucción
+futuros arbitrarias ataques
+garantías cuanto
+remuneración reconocidos autoridad
+domicilio pueblos práctica
+este amistad molestado
+diciembre
+elevada Los
+actividades
+satisfactoria
+satisfacción Además fin
+invocado esposos casarse
+generalizada
+humanidad asilo esfuerzo
+universales
+personalidad desarrollo
+circunstancias
+tratos que concepto
+comprometido desempleo realmente
+edad presuma vida
+disolución buscar III
+comprometido
+grupo Los
+Además sociedad
+seguridad especiales
+realizar dentro internacional
+obtener humanos instituciones
+sindicatos Organización
+completada
+supremo
+sociedad sentido
+creencia
+autónomo incluso matrimonio
+nacimiento opuestos grupo
+Nada sometido
+discriminación
+individuo jurídica
+fronteras
+económica
+compelido
+esclavos padres fuera
+invalidez Nadie mantenimiento
+declarado menosprecio
+habrá declarado
+sociales
+formas territorio
+maternidad
+públicas creencia secreto
+futuros
+desconocimiento colocados deben
+independiente razón formas
+satisfacer delito conforme
+necesarias protegidos desterrado
+igualdad
+administración elemental compromiso
+podrán
+religión este
+protección
+libres así
+religión
+así realizar alimentación
+especial domicilio arbitrarias
+promuevan justas Naciones
+asistencia méritos
+vea
+democrática territorios trata
+Los cuanto los
+promuevan Toda cuanto
+examen gratuita
+remuneración fin
+maternidad
+establezca
+ultrajantes impondrá base
+privado satisfactorias
+culpabilidad bienestar informaciones
+ella
+ataques propiedad enseñanza
+temor derechos prohibidas
+condiciones
+conforme
+causa gozar cuenta
+cumplimiento pensamiento conforme
+solamente
+Toda
+alguno niños conforme
+derecho esfuerzo
+correspondencia asimismo
+determinación
+progresivas acceso partes
+así
+resulten fuera
+dignidad compromiso esclavitud
+beneficios
+los
+aseguren
+promover motivos originada
+esfuerzo soberanía
+alimentación
+nacional
+cambiar por dotados
+mundo dentro
+sólo dentro otra
+creencias Considerando 217
+cumplimiento servidumbre
+incluso personal vacaciones
+violen
+secreto disfruten
+sociedad
+paz
+regresar persecución
+equitativas según
+pérdida
+delito respecto
+propio condenado
+miembro científicas
+promoverá personal nacimiento
+acusada originado
+realmente arbitrariamente Estos
+Todos obligado
+elevada emprender
+presuma confiere vida
+descanso
+expresará proclamado
+rebelión según práctica
+judicial
+grupos acusada
+tribunales
+comunes pleno así
+infancia Sólo
+crueles aspiración
+promover sujeta
+autora
+ningún cumplimiento los
+imparcial
+provocación opiniones
+partes colocados individuos
+una gozar contraerse
+nadie
+tiene
+futuros
+origen
+equitativas nacimiento humanidad
+acusación duración
+adecuado
+disfrute igual
+asegurado
+soberanía
+medio subsistencia
+dignidad
+sin
+preso esta elemental
+fuera
+partir
+raza intereses difundirlas
+iguales
+públicas política
+auténticas seguros inhumanos
+degradantes
+dotados motivos comisión
+presuma limitación
+supremo preferente tales
+casarse las
+vea
+unos las materiales
+interpretarse otros darse
+público supresión
+están
+tendientes acusada
+tiempo religión
+derecho culto
+infrinja desconocimiento individuo
+remuneración
+miembros
+advenimiento diciembre
+cuanto fundamentales equivalente
+Proclama desconocimiento
+interpretarse
+realmente periódicamente culto
+opresión buscar comportarse
+juicio condenado miembros
+ideal concerniente
+derechos culto
+investigar derecho
+asegure representantes
+sometido
+circular
+autoridad circunstancias
+maternidad único privada
+profesional examen sufragio
+raza detenido
+equitativa satisfactorias fuera
+idioma cuanto
+asilo habrá
+funciones fortalecimiento asimismo
+buscar
+núbil cuanto
+dependa
+inspirándose
+condiciones
+duración limitaciones
+Sólo participar cuya
+efectivo esclavos
+esclavos
+tienen profesional creencia
+universales organización con
+estará
+cada dicho
+podrán política darse
+fundamental otra
+habida esclavos valor
+esforzarse
+diciembre originada
+viudez resulten remuneración
+cualquier ejercicio
+deberes
+pensamiento
+cada
+igual
+torturas pueblos
+Estos realmente solamente
+estudios hombre
+maternidad será alguno
+examen
+esforzarse injerencias
+especiales
+amplio
+humana
+vestido asilo remuneración
+efectivo ampare
+opinión asimismo
+cuidados cultural
+existencia
+detenido
+ideal
+directamente
+Derechos delitos infancia
+matrimonio torturas buscar
+intrínseca sometido
+derecho
+familia
+auténticas ningún Universal
+proclamado Estos
+razón jurídica
+difundirlas favorecerá
+también
+III producciones igual
+individual
+maternidad originado
+intrínseca
+seguridad será
+circunstancias comisión oposición
+culto razón
+producciones
+hijos
+crueles
+sindicarse protección adecuado
+esclavitud defensa
+reunión
+elemento vivienda condiciones
+causa
+detenido
+violen elemental humanos
+grave establezca efectivo
+grupo
+las
+inspirándose obtener proclamados
+ella
+comprometido económicos
+nacimiento
+palabra
+voluntad
+originada
+desarrollar ley
+supremo Toda
+sea educación Nada
+nivel servidumbre
+podrán condición sindicarse
+pertenecer
+manifestar Preámbulo para
+III tienen
+común
+esencial
+Derecho
+celebrarse
+circular
+supresión
+esfuerzo efectivos
+resulten vea
+disfrutar sometido pertenecer
+deberes prohibidas equivalente
+actos inocencia
+individual soberanía científico
+representantes territorio
+resolución sometido vivienda
+ataques instituciones tribunal
+puede
+proclamados
+reputación
+contraerse Naciones
+restricción
+equitativas penal sus
+protegidos puede
+constitución necesario representantes
+elevar esclavitud propiedad
+tratos para asilo
+plenamente parte
+médica plenamente
+libertades cualquiera
+desconocimiento
+periódicamente
+ultrajantes
+artísticas
+materiales cuidados
+edad
+igual correspondencia idioma
+obligaciones objeto
+arbitrariamente
+universales cultural
+autónomo color III
+delictivos poder
+equivalente delito
+aseguren comportarse motivos
+procedimiento inhumanos dentro
+igual
+difundirlas
+tendientes asegure alimentación
+propósitos esforzarse
+administración Nadie fraternalmente
+artes
+será nacionales color
+razonable directamente puesto
+opinión vacaciones objeto
+Organización aplicación
+respecto
+pensamiento promover
+universal
+jurisdicción por violen
+méritos trabaja miembros
+inocencia acusada
+pertenecer Preámbulo
+declarado plena
+especial prohibidas
+expresión asegure general
+los
+menos invalidez raza
+nacen
+públicas
+obligado tiranía
+menosprecio méritos
+recursos gobierno
+vida especiales recursos
+emprender
+territorios actos
+creencia detenido
+respeto
+todos durante
+esposos sus Además
+plenamente elecciones preso
+recurso
+injerencias invalidez general
+recursos barbarie
+sexo
+observancia
+obligado comprensión deberes
+del ningún
+exigencias
+elegir
+satisfacción
+índole especial todos
+humana pacíficas
+opuestos privada
+sociedad obtener esencial
+omisiones demás justas
+superiores del igualdad
+acceso objeto resulten
+están núbil libres
+religión causa
+proclamados
+religiosos miembro expresará
+cuenta
+persecución satisfacción proclamada
+sociales
+omisiones dependa
+aseguren
+especial autora motivos
+cooperación
+adecuado injerencias
+desterrado
+originado
+recibir
+obtener
+técnica Estos
+seres sean acusación
+disfrutar Declaración
+promoverá barbarie
+amistad
+seguridad cooperación pueblo
+menos disolución casos
+ejercicio
+individuos esencial sexo
+dentro
+opinión
+elegir fueron
+individual Derecho
+jurisdicción restricción detenido
+establezca otro
+relaciones razonable sometido
+asegure casos
+alguna
+Además voto
+concerniente proclamado
+entre concepto manifestar
+reafirmado para
+moral tal
+Declaración respecto
+concepto esta emprender
+vejez funciones
+amistad incluso
+resolución pérdida
+plenamente crueles progreso
+asilo sin Proclama
+beneficios periódicamente función
+propiedad
+concerniente
+exigencias comportarse
+subsistencia otros privará
+será
+Toda otros
+deben intereses
+tratos resolución privado
+asistencia
+comprometido
+voluntad observancia 1948
+periódicamente concerniente
+provocación protección
+garantice individuo
+libres
+plenamente especial
+liberados función
+mediante científicas
+alguno régimen
+como recibir tribunal
+residencia dependa
+investigar
+miembro
+país asimismo
+acusación examen
+paz
+necesarias investigar
+procedimiento propiedad
+fiduciaria
+Derecho democrática autoridad
+menosprecio
+habrán
+carácter fundar
+efectivo Además
+amistad por arbitrarias
+molestado cualesquiera plenamente
+pueblo estará
+necesarias comunes
+aseguren cuenta
+protegidos tanto sujeta
+sociedad
+esclavos pueblos
+fraternalmente iguales materiales
+salud
+Asamblea aseguren
+otro económica
+conforme
+supresión
+menos justicia
+culto vejez
+tendrá elemental
+equitativa asociación
+estudios
+pleno compelido motivos
+omisiones
+elegir causa
+ultrajantes
+unos núbil
+Estados
+gratuita conforme consentimiento
+satisfactorias desconocimiento
+mantenimiento Adoptada Además
+especiales sujeta periódicamente
+Derecho cualquier
+Unidas 1948
+nivel medidas otra
+cuenta fraternalmente
+reafirmado trabajo nivel
+casarse nivel
+reunión tomar territorios
+origen nacen liberados
+manifestar nivel
+pagadas edad
+injerencias cultural asegurado
+principios cambiar
+sentido
+orden restricción contra
+respecto sus
+étnicos alguna
+infancia infancia
+desterrado
+enseñanza manifestar tiene
+rebelión derecho inspirándose
+alimentación satisfacción
+viudez amistosas invocado
+salario
+tanto desterrado medidas
+sociales
+1948 vea amistosas
+necesarios Sólo
+tiene
+desempleo futuros domicilio
+paz disfrutarán
+pena morales
+unos satisfacción
+correspondan
+gozar asimismo
+razón condición salir
+degradantes actividades
+más
+grupo
+garantías
+territorio esencial
+descanso
+barbarie ningún examen
+informaciones Organización
+trabaja como injerencias
+enseñanza
+enfermedad medios delito
+mujeres ultrajantes
+Organización ante
+esclavitud honra beneficios
+científico principios privado
+liberados
+todos compromiso
+1948
+Artículo viudez
+Sólo
+será
+necesarias
+públicamente privado libre
+los humano distinción
+comunidad
+toda
+originado
+limitaciones territorios
+duración conciencia
+razón
+adecuado
+valor gratuita trabaja
+hombre
+ideal remuneración demás
+consentimiento instrucción por
+ella universales
+Artículo universal han
+secreto
+darse procedimiento causa
+rebelión emprender consentimiento
+especiales regresar duración
+personalidad causa hijos
+principios salud
+auténticas
+determinación como
+promuevan
+diciembre asegure
+delito esforzarse formas
+ejercicio Adoptada
+aplicable nacional
+formas fundar
+justas confiere
+puesto desempleo acusada
+subsistencia resueltos sindicatos
+oposición
+desconocimiento Estado regresar
+esclavos ningún libremente
+casos asegurado color
+originado molestado
+fundamentales promoverá originado
+respeto tiempo mediante
+individual
+fortalecimiento
+amistad
+ejercidos resulten cooperación
+protección promoverá
+estos
+miembro paz contra
+persona amplio individuos
+trabajo
+también arbitrarias efectivos
+cuanto disolución fundada
+económicos sentido materiales
+función beneficios
+declarado nivel
+literarias hará garantice
+propio natural
+cuenta sometido
+obligado económicos
+menos ataques
+Sólo médica establecidas
+especiales
+vejez
+correspondencia
+concepción
+Además
+del
+hará
+equitativas infancia dotados
+recibir sociedad
+efectivos delictivos
+exigencias origen
+distinción
+favorecerá procedimiento
+satisfactoria independiente
+competentes directamente
+núbil
+las hombre
+pleno social
+cambiar opresión
+sentido
+fiduciaria tales cualquiera
+tomar dotados comportarse
+sindicarse justas
+indispensables medios Naciones
+invalidez
+instrucción pensamiento todos
+podrán
+judicial establezca originada
+delitos
+adecuado progresivas otros
+individuo
+cooperación reconocidos sociedad
+interpretarse
+Naciones
+deberes diciembre
+elemento buscar
+base temor limitación
+esta gratuita
+elevada alguna
+estará méritos
+sean
+otros por
+unos participar
+darse
+sean
+Declaración
+práctica inhumanos
+directamente
+vea aspiración
+juicio iguales promuevan
+escogidos color pueblo
+reunión
+formas grupo Adoptada
+económica
+penas acusación
+ante sean social
+libremente circular como
+comisión
+objeto
+gratuita
+creencia social desterrado
+fuera
+intereses nacionales públicas
+cualquier invocado también
+Miembros medios
+fraternalmente
+como
+1948 cumplimiento confiere
+religiosos Todo protección
+carácter
+culto
+sociedad privada elevar
+persecución materiales
+efectivos del pena
+asegurar detenido descanso
+del médica liberados
+relaciones promoverá
+derechos
+Naciones formas General
+podrán condenado enfermedad
+correspondencia obtener directamente
+actividades privado
+equitativas niños cualquier
+gozar fundamentales producciones
+rebelión inalienables
+propiedad
+condenado condenado amplio
+puede podrá
+esclavos obligaciones informaciones
+Sólo diciembre
+privará vestido
+remuneración puesto solamente
+promoverá esposos
+trabajo
+comisión progreso tendrán
+cualquiera
+habrán organización
+cumplimiento periódicas
+pueblo satisfactoria
+futuros
+Nada fin orden
+tales especiales hombre
+satisfacer igual
+las nacional
+Organización función fundamental
+sean vida mundo
+participar tolerancia fiduciaria
+económicos asilo
+desarrollo desarrollar
+difundirlas conforme culto
+disfrute recursos disfrutar
+justas
+sindicatos
+Adoptada
+este
+creencias servidumbre concepción
+administración disfrute entre
+núbil
+vida
+Todo cualquiera confiere
+tribunal
+acusada
+puesto
+fundamental
+detenido manifestar
+fin también
+comisión ante base
+comisión técnica funciones
+amplio juicio expresión
+nacionales inocencia
+tribunal
+instituciones acceso ampare
+compromiso
+podrá incluye
+inspirándose
+cuanto recurso
+por garantías
+periódicamente
+fundamental
+moral organización
+medios
+personal casos
+necesario reputación los
+jurisdicción reafirmado
+alimentación especiales
+determinación
+vejez
+supresión temor
+voto que más
+será delito auténticas
+sean tiene
+valor Nada
+manifestar
+méritos omisiones
+podrá
+plena tendrán libremente
+otro general
+técnica profesional asegurado
+partir padres niños
+sociales amistad conforme
+régimen
+hijos amistad
+motivos asistencia otro
+derechos
+Carta completada
+objeto defensa
+mantenimiento razón otros
+casarse inhumanos declarado
+por pruebe
+originado
+nivel sea
+concepto
+entre
+elemental humano estudios
+también culpabilidad
+tales darse
+tomar puede
+personal pleno
+iguales
+progresivas supresión
+pruebe otros manifestar
+garantías inspirándose tolerancia
+humana razón vivienda
+derechos edad parte
+necesario las
+Miembros gratuita pensamiento
+concepción
+vacaciones disfrutar demás
+actos ningún padres
+fundada
+públicamente proclamados comunes
+sociales fundar
+todas reconocimiento promoverá
+elección estos aplicable
+fueron
+origen contra
+menosprecio sexo rebelión
+desarrollo invocado
+tales constantemente acusación
+todas
+protección cuenta
+más literarias comportarse
+formas
+Los desarrollar
+colocados Humanos
+originado
+función Estos fronteras
+resulten fuera
+Los interpretarse generalizada
+hará participar general
+actividades
+General concepción
+fin amplio deben
+obligatoria obligatoria satisfactoria
+como especiales incluye
+tolerancia otros
+ejercidos
+vacaciones
+color Artículo
+desconocimiento
+científicas
+examen persona obligado
+disolución
+presuma darse
+adecuado públicamente
+elegir alimentación
+respectivos
+autora
+restricción
+directamente proclamada
+organización
+fundar
+humana así adecuado
+recibir bajo
+elemento actos tiempo
+nadie casarse será
+omisiones
+Proclama carácter Los
+ejercidos
+Todos efectivo elemento
+respectivos universal
+enfermedad
+deberes vea
+tratos diciembre
+regresar
+parte
+pueblos directamente pena
+aseguren esfuerzo informaciones
+representantes núbil
+otra fin esclavos
+infancia fundar Unidas
+los secreto Además
+Derechos
+periódicamente libertades
+núbil
+favorecerá opuestos creencias
+libertad
+respecto Nada recursos
+escogidos
+tomar independientes aspiración
+sentido
+Declaración casos materia
+partes educación inocencia
+público público servicios
+relaciones
+pueblo igual sean
+Derecho
+resulten étnicos
+tiene sometido
+obligatoria
+literarias palabra cualesquiera
+religión
+tipo reconocidos
+opuestos hagan sean
+liberados desarrollar científico
+esclavos
+sólo pueblos fundada
+menos
+obligatoria
+humana elevar desarrollar
+propiedad esfuerzo respeto
+propio
+universal universal
+miembros privará arbitrarias
+fundar medios resolución
+constantemente efectivos creencia
+tipo salud será
+tienen cometerse viudez
+recurso
+único disfruten enseñanza
+sólo equitativa
+pena
+imparcial
+administración
+barbarie están mientras
+efectivos
+actos
+humano protección públicamente
+completada razón
+gozar humanos fraternalmente
+servicios
+esta
+Universal
+bajo originada competentes
+Declaración medidas momento
+satisfacción
+también torturas adecuado
+estará opinión pérdida
+asimismo hayan
+realizar reconocidos respeto
+con mediante una
+concepción
+discriminación
+público
+obligaciones sindicarse auténticas
+sus
+satisfacción
+aplicación son Declaración
+intereses consentimiento establecidas
+gobierno cuidados directamente
+fundamentales entre
+necesarios hombres torturas
+poder Derechos
+futuros tribunal idioma
+libre
+servidumbre invalidez
+territorios grave inalienables
+universales comprometido Nada
+pleno casarse libres
+otros Unidas proclamados
+entre
+sufragio personalidad cuya
+Preámbulo creencia están
+fueron elevada seguridad
+razonable moral buscar
+desarrollar
+solamente colectivamente científicas
+índole menos
+distinción moral
+podrá escogidos representantes
+tipo
+igualdad habrán
+administración expresará
+violen organización esencial
+tal juicio obligado
+Derecho
+cuya ejercidos
+actos habrá
+étnicos nacionalidad
+penas concepción tendrá
+advenimiento pena
+protección
+periódicamente
+individual
+auténticas
+respectivos
+demás
+delito
+grave proclamado estará
+tendientes recurso adecuado
+indispensables degradantes
+funciones nacionalidad
+miembro efectivos natural
+consentimiento obtener educación
+escoger generalizada satisfacción
+miembro jurídica condiciones
+nacionales padres
+declarado libre
+recurso
+parte
+amistosas disfrutar
+materiales
+asociación diciembre examen
+literarias imparcial
+tiene individual tanto
+solamente voluntad
+públicas valor grupos
+para remuneración
+sometido desarrollo nadie
+habrá administración individuo
+Nada ante
+Sólo nacional
+fin
+concepción sindicatos
+vacaciones autoridad sujeta
+causa expresión
+medio amistosas consentimiento
+residencia
+generalizada ideal
+profesional elegir elevada
+color religión
+sociales
+circunstancias habrán esfuerzo
+molestado
+soberanía base
+honra cada generalizada
+degradantes nacimiento respecto
+elegir
+aseguren
+Unidas
+tribunales función
+delictivos Además
+soberanía inspirándose razón
+desconocimiento esposos Asamblea
+culpabilidad nacionales duración
+edad régimen índole
+puesto degradantes fiduciaria
+salud contra principios
+resolución correspondencia cultural
+nacionalidad libertad necesarias
+auténticas
+otra progresivas obligado
+seguridad
+progreso
+realizar mientras todas
+sean dignidad Todos
+opiniones
+durante amistad elegir
+han grupos
+obligado
+colocados Declaración fraternalmente
+fin
+conciencia Sólo
+tendrán
+Toda penal
+temor
+económicos voluntad equitativa
+hará seguros
+contraerse resueltos reconocimiento
+creencia ideal fin
+importancia
+por
+acusada las
+mientras libertad prohibidas
+difundirlas
+temor
+jurídica humanos público
+barbarie delictivos grupos
+Derechos territorios
+comunes
+trabaja
+provocación durante cualquiera
+económicos manifestar
+necesario auténticas dotados
+servicios
+pruebe asegurado difundirlas
+entre poder
+elevar acceso
+gobierno
+desconocimiento país
+razonable restricción vejez
+establecidas funciones cooperación
+orden
+servicios comprometido circular
+tipo trabajo instrucción
+poder oposición
+política
+función provocación
+actos demás
+generalizada
+delitos supremo cumplimiento
+dignidad
+todos
+equitativas
+desterrado grupo esclavitud
+asegurar científico
+trabaja
+especial limitaciones ella
+tanto
+equivalente han demás
+público
+tal fueron
+culto funciones oposición
+elemental razonable
+realizar esclavos
+libertad
+cuenta comunidad
+momento
+cumplimiento independientes
+materia fundar
+cuidados competentes
+fundamental periódicamente futuros
+creencias confiere persecución
+procedimiento promoverá miembros
+proclamados descanso vivienda
+común ataques
+concepción comprometido
+materia injerencias necesarias
+núbil
+acusación para
+culto
+tribunal producciones elemento
+partes satisfacción
+reunión religiosos las
+oída voluntad equitativas
+esclavos pertenecer acusación
+Humanos
+pena plena
+toda impondrá
+torturas asegurar enfermedad
+medidas casarse asimismo
+defensa
+tanto grave derecho
+fronteras seguridad concerniente
+subsistencia igualdad protección
+creencia mundo
+preso remuneración
+duración común
+tribunales ejercidos padres
+razonable obligaciones
+parte
+instituciones persecución Nada
+colocados debe
+reunión debe
+raza
+invalidez
+compelido 1948
+grave
+especiales
+Sólo Artículo resueltos
+Miembros
+salario hará
+resolución
+residencia
+ejercidos procedimiento
+objeto Derecho jurídica
+Organización han
+supresión amplio sindicarse
+privado efectivos
+solamente ante plena
+dignidad estudios
+hayan
+país
+elección tribunal
+concepción distinción ejercicio
+cuidados concepto omisiones
+concerniente asegure
+los
+expresará liberados progresivas
+reconocidos
+elecciones protegidos
+económicos auténticas
+Estado puede
+técnica temor
+igualdad
+podrá cambiar intrínseca
+completada intrínseca
+Además cambiar
+unos supresión salario
+tal
+satisfacer
+sea vida Proclama
+funciones realmente
+supremo Adoptada
+amistad
+personal
+nacen
+sindicarse mediante
+creencias familia mantenimiento
+culpabilidad
+sujeta
+desarrollar Unidas presuma
+asegurar autora
+temor materia
+nacional respeto libre
+otra intrínseca
+territorios otro
+desconocimiento amistosas palabra
+desarrollo disfruten
+Toda necesario
+individual Tampoco
+mientras acusación origen
+asegurado
+equivalente
+tolerancia opuestos remuneración
+estudios cada
+auténticas buscar
+individuos equitativas vivienda
+delictivos gozar todas
+Este
+elemento familia
+seguros
+méritos
+tal auténticas nacimiento
+relaciones
+Estados religiosos especiales
+color respecto
+garantías práctica
+menos
+esencial durante
+educación efectivos concepción
+esforzarse
+color
+compelido elemento durante
+diciembre
+mayor esclavitud protegidos
+menos
+económica disfruten
+dignidad comprensión disfruten
+fuera cuya miembro
+opinión
+Preámbulo acción origen
+pueblos
+promuevan funciones declarado
+conciencia
+III actividades incluso
+orden son
+tanto aplicable
+voluntad tratos libertades
+promoverá
+pertenecer
+nacionalidad Estos pueblos
+torturas
+fundamentales general progresivas
+propósitos podrá
+asociación
+todos competentes
+Estado
+importancia
+poder provocación
+puede duración cualquiera
+presuma
+otros recurso
+derecho justas libertad
+satisfactoria
+tal
+por
+elección reputación
+individuo
+nacimiento
+humano fin
+jurídica
+natural concerniente recibir
+padres inspirándose instrucción
+circunstancias social fuera
+protegidos buscar
+materia
+disfrutarán
+dependa favorecerá
+competentes protección
+elevar
+determinación
+seres delito salario
+individuos
+necesarios 217
+fiduciaria correspondan
+ella las
+omisiones técnica sufragio
+Organización trata
+cuidados raza respeto
+fuera respectivos autoridad
+sentido desconocimiento hombre
+emprender comunes
+incluso cualesquiera
+religiosos científico
+habrá
+invalidez dentro concepción
+cumplimiento tiempo obligatoria
+mujeres
+toda
+habrá
+desconocimiento contraerse
+actividades con trabajo
+autónomo
+fraternalmente emprender Adoptada
+Todo nacimiento cada
+alguno
+217
+necesarios principios
+dependa puede humano
+Nada
+bienestar auténticas
+esfuerzo cuenta
+están fuera
+celebrarse
+molestado acceso miseria
+desconocimiento mediante disfrute
+sexo
+hijos esencial seguridad
+efectivos Estados
+privará superiores
+salir fundamentales
+resueltos económica
+territorios aplicación
+duración
+sociedad esclavitud
+reconocidos están intrínseca
+escoger cualesquiera cuanto
+esencial todas
+completada sindicarse declarado
+limitación
+advenimiento universales menosprecio
+durante
+fortalecimiento medio
+nacionalidad propio
+materiales
+realizar
+mediante Universal estos
+sujeta medidas
+más
+social
+matrimonio razonable sociales
+darse
+cada
+efectivos
+esposos
+partir propio
+internacional
+universales principios
+tribunales tiranía
+ejercicio
+asegure sean comunes
+mujeres personal creencias
+efectivos
+origen fundar económica
+tanto libremente
+autoridad satisfacción función
+beneficios tipo
+dentro elevar territorio
+toda acción
+necesarias disfrutar
+Adoptada 1948 sentido
+pérdida
+personalidad
+rebelión Organización cada
+asilo
+amplio esposos
+hombre recursos
+delitos residencia emprender
+competentes mundo tal
+étnicos diciembre otros
+paz establecidas defensa
+colocados seguros
+que
+constitución independiente
+reputación autoridad único
+inocencia garantice
+respeto fiduciaria mientras
+Estado respectivos
+personalidad disfrutar
+persona
+vivienda
+omisiones
+nacen regresar poder
+único
+médica
+colocados detenido
+razón creencias
+garantice General invalidez
+independientes satisfacción satisfactorias
+asegure
+gratuita hijos
+sus actos
+tomar más
+concepto
+personalidad hijos
+opiniones sus rebelión
+condición
+asegurar desempleo
+ultrajantes
+trabaja universal salario
+salir palabra
+salario importancia
+declarado paz
+las dependa advenimiento
+Nadie opinión propio
+recursos pagadas
+Tampoco comprensión
+Unidas
+limitaciones razonable limitaciones
+examen restricción proclamado
+tribunales sufragio sus
+seguros condenado
+provocación
+maternidad económica
+sólo enseñanza molestado
+salir opiniones Derecho
+generalizada
+confiere manifestar hagan
+color
+están correspondencia Declaración
+temor
+conforme
+hayan
+nacionales Universal
+cada sus inalienables
+también
+vivienda
+sindicarse
+incluye
+índole origen principios
+gratuita nacimiento
+cuya descanso
+moral
+barbarie ser
+sin satisfacer
+formas raza
+creencias privará
+confiere administración ejercicio
+seres
+progresivas infrinja profesional
+acusación sin
+deberes
+realmente sometido económica
+ella
+III
+podrá hayan
+Nadie
+necesario Los
+culto satisfacción
+principios reunión
+Derecho paz Este
+habida plena periódicamente
+establezca aseguren
+buscar
+disolución desempleo
+tienen fortalecimiento
+pueblo enfermedad
+vestido
+sometido función
+fundar justicia igualdad
+ultrajantes
+cuanto
+tal económica
+las
+mundo conforme
+tiempo recurso
+comportarse
+para
+fueron jurídica iguales
+libres expresión
+amplio supresión
+garantías concepción han
+formas artes universal
+degradantes
+nacen así razonable
+sean parte reputación
+realmente
+jurídica esposos
+privado
+humana cualquier
+ley
+alguna palabra
+escoger debe servidumbre
+efectivo
+las temor voto
+inspirándose
+ampare opiniones
+este
+son
+correspondan necesario
+ella concerniente
+materia pérdida
+disfrutar torturas
+materiales sujeta
+índole los
+representantes
+ataques
+independientes tratos liberados
+paz han nadie
+General
+común disfrutarán
+Nadie grave
+pertenecer seres tratos
+esencial
+asegure fueron
+cualesquiera
+razón
+sindicarse proclamados privada
+injerencias directamente escoger
+padres correspondencia habida
+posición privada raza
+tendientes asociación
+satisfactorias trata
+conciencia valor
+delito razón
+protegidos
+hará tribunal estos
+nacen cuenta
+país medios religiosos
+asegurar
+deberes futuros trata
+práctica
+bajo
+elevada voto
+crueles menos medios
+efectivos degradantes soberanía
+circunstancias exigencias comunidad
+territorios razón delictivos
+aplicable
+ella ser
+cada disfruten
+cumplimiento
+resulten
+cualquier
+medio medidas
+seres Artículo
+examen
+administración público
+todos garantías
+iguales fortalecimiento
+tanto opinión universales
+aspiración personal
+gozar jurisdicción
+especiales
+tales constantemente confiere
+Miembros democrática 217
+gobierno
+independiente trabajo
+equitativa tomar soberanía
+pagadas que equitativas
+así Tampoco
+protegidos limitaciones dignidad
+dentro
+competentes
+infancia elección tienen
+fuera acusación pruebe
+darse casos esposos
+honra partes supresión
+autora
+privada detenido
+invocado
+Carta universal
+recibir obligaciones
+tendientes
+elevar barbarie presente
+justicia medidas igualdad
+comunes residencia tomar
+bienestar económica favorecerá
+descanso independiente
+seguridad concerniente
+profesional actividades Nada
+discriminación pena
+elemental
+Los generalizada
+posición miembro
+degradantes Nada
+universal cuidados
+instituciones manifestar esposos
+fundar
+partes cualesquiera
+libremente
+aseguren fundada
+jurídica
+casarse
+progreso con régimen
+Universal así
+vida presente alimentación
+constantemente
+humano infrinja médica
+humano puesto
+Preámbulo
+efectivos
+consentimiento cuya administración
+propósitos culturales
+administración
+defensa limitaciones
+mantenimiento
+privará opiniones pensamiento
+pena
+hombres viudez
+justicia esposos
+limitación tribunales preso
+expresará incluso tendrá
+territorios
+medios universal inspirándose
+asistencia razón
+aplicable pruebe mantenimiento
+cambiar
+moral vejez tipo
+otro práctica técnica
+será
+promoverá
+necesarios resulten dicho
+otros disfrutar vea
+tendrá cualquier tratos
+grupo ella estudios
+debe sexo Proclama
+iguales tribunales
+Tampoco observancia culto
+religión
+que derechos
+social
+libremente momento
+tiranía
+disfrutar salud
+pertenecer base
+nadie iguales difundirlas
+régimen
+diciembre
+proclamada
+impondrá
+declarado tolerancia
+1948
+originado
+nacional medio amistosas
+amistosas
+servidumbre
+especial
+reconocimiento grave individuos
+maternidad domicilio general
+las técnica colocados
+con
+para discriminación
+creencia
+conforme
+dignidad
+motivos poder
+bajo
+obtener
+libremente
+ejercicio cuidados
+organización delito mayor
+según aspiración
+habrán valor liberados
+sufragio tal Considerando
+examen recibir
+desarrollo
+elección toda
+esposos
+disfrute penal
+individual causa sufragio
+arbitrariamente proclamada
+familia
+importancia Declaración
+Humanos
+económica
+garantice
+obligado discriminación dentro
+Este cualesquiera
+individuos celebrarse autónomo
+Miembros Nada comisión
+universales
+confiere
+religiosos
+creencias aplicación supresión
+miembros
+penal vestido
+étnicos contraerse
+justicia incluye Carta
+tiranía gozar
+esforzarse
+salud cumplimiento
+preso sentido esfuerzo
+preferente
+igualdad todos
+opinión administración
+importancia fin Tampoco
+partes común acción
+tribunal
+económicos
+autora satisfactorias
+elevar
+General ideal
+comunes
+fiduciaria único
+enseñanza intereses aplicable
+comisión impondrá expresará
+culpabilidad inocencia
+Nada
+garantice obligado
+fronteras
+sometido
+nacionales
+motivos raza producciones
+necesario mundo
+trabajo
+común incluye efectivos
+Además natural cambiar
+reconocimiento
+económicos garantías
+detenido generalizada todas
+procedimiento comprensión plenamente
+función buscar amistosas
+circunstancias compromiso opresión
+otra garantice
+aplicación proclamada
+comprometido paz hará
+correspondencia respecto obligaciones
+pena impondrá
+Adoptada completada competentes
+artísticas
+universal confiere inocencia
+concepto
+natural persona
+Organización correspondencia
+miseria
+subsistencia
+Naciones
+circunstancias único color
+habrá
+presuma
+vejez elegir tratos
+culpabilidad declarado presuma
+unos
+asegure circunstancias solamente
+nacen
+dentro Universal
+puede color
+sus
+garantice limitación inspirándose
+tanto trabaja secreto
+elevar
+alimentación
+temor niños defensa
+territorio este
+compelido
+desempleo circular
+seres plena cuanto
+dicho condiciones
+oposición III
+nivel sean viudez
+habrá cometerse examen
+supresión indispensables razón
+culpabilidad
+Considerando trabajo
+tomar que tendrán
+Además nacidos
+honra
+privada
+relaciones sea una
+equivalente
+los
+delitos privada producciones
+libre libertad
+ante domicilio
+territorio fundada elevar
+artes protegidos diciembre
+elemento
+esencial vejez
+privará
+paz
+limitación
+fraternalmente tendientes
+médica ella discriminación
+medio reputación Todo
+mujeres paz desarrollo
+resueltos
+contraerse culpabilidad fiduciaria
+humanos resueltos
+nacimiento injerencias
+desterrado desempleo independientes
+amistad
+esta servidumbre
+vivienda religión
+sentido promoverá
+investigar actividades
+sometido garantice cuya
+desconocimiento importancia cuidados
+país mayor
+función correspondencia
+materia condenado
+nivel medidas incluso
+orden amistad
+compelido humana ejercicio
+como
+territorio buscar
+tendrán privado acceso
+residencia matrimonio
+efectivo
+asociación
+cada
+sentido color
+casarse persona
+Universal
+delito democrática
+idioma maternidad
+expresión
+Toda independientes
+participar hará
+administración molestado tiene
+detenido equitativas
+técnica
+partir
+medio adecuado
+color
+invocado
+manifestar
+opresión autoridad reafirmado
+otra ataques confiere
+vivienda
+conciencia tal que
+tanto tolerancia provocación
+privada
+formas remuneración
+respectivos promuevan tribunal
+como
+desempleo delito preferente
+pleno
+escogidos reconocidos jurisdicción
+universal otros
+salud difundirlas
+realizar residencia
+esposos hará supremo
+sociedad
+color Nadie actos
+opiniones sociedad
+deberes padres generalizada
+impondrá emprender dentro
+tienen toda
+según
+promover reconocimiento
+país Naciones
+delito delitos
+proclamado comportarse
+importancia
+propiedad pleno
+deberes estará
+medio sometido
+hagan vejez competentes
+mujeres sociedad
+pueblo libres
+comunidad
+futuros propio
+respecto
+religión incluso Todo
+constantemente
+fundamentales asilo domicilio
+degradantes
+sociales constantemente informaciones
+favorecerá
+conforme
+del
+disfruten función directamente
+fuera vida intrínseca
+buscar servicios desempleo
+hijos privada aseguren
+necesarias pérdida artes
+equivalente
+hijos sometido fronteras
+voluntad concerniente universales
+fin
+manifestar amistosas difundirlas
+tiene
+pueblos voto
+núbil ejercidos
+Nadie podrá delictivos
+efectivos liberados
+establezca público promoverá
+constitución
+trata
+especial sea protección
+son así opiniones
+individuo
+médica cualesquiera defensa
+degradantes advenimiento Este
+privada fundamental protección
+inspirándose
+actos elemental colectivamente
+pertenecer preso
+fiduciaria todos artísticas
+jurídica fraternalmente podrá
+instrucción
+educación
+tribunales
+asegurar obligatoria los
+morales
+Organización
+concepción
+intereses acusación
+esclavos
+asociación infancia
+asilo científico
+principios pérdida sin
+actividades
+Unidas hombres universales
+soberanía seres comunes
+aplicación
+amistad
+tribunales proclamados
+persecución protegidos Universal
+este beneficios también
+mediante
+arbitrariamente soberanía régimen
+competentes
+voto
+inocencia
+culturales
+discriminación efectivos
+delito carácter
+opuestos ejercidos
+administración morales inspirándose
+ser comisión asilo
+justicia Asamblea
+democrática
+Preámbulo
+tomar privará sociedad
+artísticas alimentación beneficios
+interpretarse Derechos restricción
+reputación provocación funciones
+impondrá
+obtener
+remuneración
+colocados
+asociación
+nacionalidad sujeta que
+buscar humano
+los domicilio disolución
+regresar enseñanza
+recurso tribunal fin
+durante étnicos
+servicios
+Considerando equitativas
+cuenta asegure
+han obligaciones
+gobierno impondrá
+promuevan
+méritos
+carácter origen imparcial
+durante estos beneficios
+para hijos técnica
+advenimiento Carta religión
+palabra
+mediante
+disfruten nacimiento bienestar
+toda tendrá Humanos
+base partir estudios
+fundamental ser
+esposos sin
+respecto sin Todos
+será
+disfrutarán médica colectivamente
+restricción económica
+Nada
+libertades confiere medio
+justicia periódicas
+equivalente
+miembro
+hagan existencia
+respeto esclavos
+tendientes alguno
+tendientes personalidad
+salario democrática jurisdicción
+amistad
+incluso
+promuevan discriminación
+originado concerniente
+opinión comprometido privado
+hará elemental Unidas
+tiempo
+propiedad resolución favorecerá
+política ideal
+condiciones democrática
+humano partir
+tolerancia resulten sus
+motivos escogidos observancia
+momento será buscar
+ejercicio acusada
+darse
+del
+gozar
+toda
+independientes sindicatos religiosos
+consentimiento causa
+equivalente
+cooperación propósitos
+con injerencias
+Universal reafirmado
+alguna domicilio
+recursos objeto posición
+orden cada vejez
+Todos natural
+todos sindicarse
+persona pueblo
+público
+propio
+dicho nadie caso
+con
+derechos
+actos protegidos materiales
+obligatoria satisfactoria
+Considerando humano discriminación
+humanidad
+restricción
+régimen contra Organización
+nadie
+secreto salario
+pérdida justicia científico
+alguno libremente
+esta mientras resolución
+medios índole
+familia
+una expresión durante
+actos
+asegure secreto
+natural entre
+régimen condición núbil
+manifestar realmente literarias
+Sólo
+voto
+desempleo resueltos cualquiera
+auténticas Proclama ningún
+índole supresión auténticas
+expresión
+expresará reconocimiento
+libres grupo
+tribunal alimentación completada
+Los esclavos distinción
+opuestos científicas científico
+humano invalidez moral
+privará administración emprender
+relaciones Humanos
+color
+establecidas
+raza ultrajantes
+grave
+objeto presente así
+molestado deben
+sometido discriminación
+sus
+concerniente plenamente
+asegurar
+adecuado invocado
+informaciones
+pertenecer fueron raza
+una privará
+sometido
+pruebe autoridad
+sindicatos honra
+tal compelido
+que
+elevada
+materia Este
+remuneración soberanía
+Declaración tratos efectivos
+fundamentales incluye
+raza condición instrucción
+ningún creencias equitativa
+Estado circular general
+solamente
+hayan preso equitativas
+originado
+honra
+miembros
+impondrá asegurar objeto
+alimentación
+tendrán
+aplicable compelido
+Derecho único
+acusación
+otro satisfactorias
+mundo mediante supremo
+conforme casos voluntad
+unos
+salir
+confiere esclavos toda
+vida bienestar valor
+natural
+tiempo Declaración
+fortalecimiento
+asistencia disfrute
+acceso más efectivo
+funciones tipo
+reconocidos por del
+Proclama
+progreso familia
+imparcial
+omisiones
+jurisdicción satisfacción
+amistad
+edad efectivos
+seguridad
+vida Asamblea infrinja
+compelido
+sujeta común unos
+hijos trabajo
+alguno unos oída
+remuneración puesto
+Estado
+índole función
+persecución completada tomar
+una
+existencia difundirlas
+objeto
+autoridad
+recursos dignidad sentido
+grupo
+salud
+condiciones
+artísticas
+violen
+desarrollar arbitrarias
+procedimiento
+duración bajo
+régimen necesario
+futuros fiduciaria equitativas
+paz
+necesarios cualquiera dignidad
+hombres juicio
+elevada
+objeto nivel fraternalmente
+participar justicia esforzarse
+nacimiento fin
+elegir núbil elemento
+producciones
+elegir posición
+universal
+prohibidas aplicación
+servidumbre
+científico emprender garantías
+fuera
+cometerse hará
+debe reunión actividades
+derechos otro
+escogidos disolución imparcial
+ultrajantes pensamiento limitación
+equitativas aplicación materia
+asistencia
+creencias toda interpretarse
+fronteras
+humano proclamado
+funciones periódicamente miembro
+están tribunal
+Adoptada representantes reunión
+principios Organización funciones
+intrínseca personalidad estará
+infancia bienestar inocencia
+mediante
+recursos
+palabra
+juicio públicamente
+vejez deberes Adoptada
+advenimiento actividades
+Nada tiene cometerse
+hombre
+mayor
+culpabilidad elemental
+elevada Toda más
+pagadas
+ejercidos Asamblea observancia
+amplio completada como
+servicios nacen
+Además Organización dignidad
+bajo
+salud sociales públicas
+independientes independiente participar
+Universal grupo
+carácter
+garantías elección
+recursos adecuado fundamental
+determinación confiere
+futuros
+será solamente acción
+alguna funciones padres
+pleno
+para
+intrínseca
+caso compromiso
+instituciones edad
+Derecho colectivamente
+nacimiento periódicamente aseguren
+condiciones
+Derechos morales intrínseca
+amistad bienestar
+cuenta
+217 aseguren
+promover elegir libre
+instituciones artísticas necesarias
+técnica social
+trata universal
+acusada práctica arbitrarias
+tales General
+tribunal
+persona niños
+Asamblea derecho
+regresar
+una
+esclavitud invocado vida
+tomar
+nacionales ante
+las
+moral
+actos cualesquiera
+preso
+razón
+escoger delito libres
+moral Estados juicio
+tiene
+futuros raza omisiones
+propósitos
+disfrutar
+disfruten incluso
+núbil más
+cuenta por
+reputación
+fundar público
+nacionales estudios
+vida hombre
+Universal gratuita
+privado delito domicilio
+ataques
+otro temor único
+circular comportarse beneficios
+Miembros
+efectivo
+Humanos invalidez
+miseria
+desconocimiento infrinja penal
+acción opresión
+esposos fronteras
+tendientes color opiniones
+unos política
+desempleo sexo
+examen fraternalmente
+internacional razón darse
+fraternalmente
+degradantes
+religión
+establecidas
+preferente correspondencia tribunal
+fronteras artísticas práctica
+asociación
+circunstancias
+preso concepto
+Nadie
+compromiso pertenecer
+vea
+persecución
+compromiso
+único
+progresivas
+cuidados razonable propósitos
+provocación
+inhumanos
+comunes salud amplio
+hombres contraerse
+rebelión condenado discriminación
+deben pueblos
+disfrutarán satisfactorias elección
+propósitos medio
+invalidez razón
+defensa disfruten
+tiranía
+delito reconocimiento alimentación
+cultural Preámbulo actividades
+natural
+condenado
+universal
+méritos
+del
+seguros demás
+reputación asegure establecidas
+comportarse general humana
+individuo caso salir
+instrucción podrán existencia
+completada
+expresará justicia
+Considerando palabra supremo
+reunión expresión nacidos
+maternidad autora Nada
+confiere
+217 trabaja
+sufragio
+incluye como
+fundada confiere Universal
+independiente plena dependa
+público necesarias dignidad
+discriminación hayan cuidados
+confiere voto igualdad
+igualdad sociales Estado
+fundar tiempo
+puede puede
+cultural
+1948 económica
+otra organización
+razón
+elecciones
+tienen promover auténticas
+común
+casarse disfruten nacimiento
+juicio
+fundamental pensamiento colectivamente
+adecuado aplicable
+dentro individuo padres
+omisiones penal
+enseñanza otros
+ataques
+partir incluso desarrollar
+vacaciones vejez hijos
+recursos III
+incluye medidas partes
+oposición sujeta solamente
+supremo
+compromiso
+dotados necesarias restricción
+recibir intrínseca arbitrarias
+partes especiales
+casos
+correspondan discriminación
+exigencias
+estará
+partes esencial
+desarrollo injerencias grupo
+una
+equitativas
+pensamiento color
+III amistosas constantemente
+dicho
+Además
+infrinja fortalecimiento duración
+desconocimiento
+observancia promoverá
+arbitrariamente comisión examen
+religión superiores
+observancia demás
+opinión miembros nacimiento
+privado hayan
+menos disfruten restricción
+defensa acusada
+artísticas realizar tal
+constitución esta ningún
+del carácter entre
+Los
+mediante amistosas
+ideal
+tales
+esposos
+instituciones
+también satisfacción instituciones
+tiene sentido
+inocencia protegidos
+propósitos
+diciembre propósitos puede
+comunidad comunes
+propósitos delictivos contraerse
+efectivos origen
+penas privará
+hayan fundamental importancia
+régimen circunstancias completada
+competentes invocado periódicamente
+sean protegidos
+disfrute
+trata
+aspiración gozar
+satisfactorias
+Miembros niños pacíficas
+desterrado todas
+individual descanso tiranía
+opinión estará beneficios
+violen nacional otros
+salir habrá
+todos fueron
+indispensables investigar
+objeto
+territorio grupo
+tiempo
+creencia Este
+originada promoverá buscar
+conciencia puede obligado
+solamente todos representantes
+acusada internacional
+colectivamente
+domicilio méritos salir
+familia
+defensa educación acusada
+recurso habrá
+debe
+otro
+intereses
+económicos
+establecidas público Estado
+preso sin contra
+descanso asegurado pueblos
+promover pérdida
+origen satisfactorias
+promuevan derecho
+cultural oposición
+futuros desarrollar preso
+judicial efectivo
+palabra consentimiento
+profesional limitaciones fundada
+medio
+realizar
+más 1948
+periódicamente elemento
+existencia
+disolución
+mantenimiento distinción
+iguales amistosas
+reunión dicho
+igualdad según oída
+preferente incluso ejercidos
+Todo
+general alguno humanos
+tendrán superiores
+prohibidas celebrarse propio
+para tolerancia alguno
+soberanía
+raza momento persona
+Artículo mediante natural
+progreso proclamado
+todos sociedad periódicas
+alguno debe formas
+todas
+reunión dependa
+proclamados
+periódicamente trabaja razonable
+grave invalidez concepto
+especiales
+ampare
+Los efectivos
+dentro Estado reputación
+establezca vejez así
+esencial
+especial aplicable
+igual asimismo violen
+menosprecio fin
+Nada
+que
+Nadie naciones Unidas
+instrucción
+práctica
+obtener habrá
+vivienda elevar
+General
+hará
+partes
+concepto nacionalidad
+Declaración
+edad
+técnica
+desarrollo sean generalizada
+satisfactoria territorios
+especiales todas idioma
+delitos
+garantice
+esclavitud grupos
+este podrán importancia
+equitativa Derechos
+habrá
+formas discriminación privado
+dotados
+bajo fueron futuros
+colocados discriminación
+Este promover médica
+duración
+toda pagadas índole
+progresivas
+futuros ser
+comprometido sexo amplio
+artes
+autora administración delito
+recurso igual supresión
+reputación constitución limitación
+salud
+que Unidas
+proclamado
+invalidez política
+diciembre progresivas desterrado
+barbarie concepto libertades
+aseguren concerniente
+rebelión
+favorecerá General práctica
+elevada edad ningún
+política beneficios
+privará respeto
+directamente
+cualesquiera
+fueron
+medio nacional
+promover
+elevada libertad mujeres
+arbitrariamente nacen
+Toda barbarie ejercidos
+existencia sindicatos expresión
+esclavitud Nadie ejercicio
+independientes
+tratos fundamental
+vejez autora
+asilo
+miembro presente
+caso
+dignidad satisfacer
+medio ante
+seres Los
+omisiones Los Adoptada
+organización plenamente
+protegidos
+colectivamente declarado
+domicilio
+infrinja expresión
+examen puede tribunales
+elemental
+examen elegir
+comprometido prohibidas jurisdicción
+persecución seguridad
+consentimiento territorio
+artes recibir
+podrán estará
+soberanía
+vacaciones formas
+técnica
+raza plena periódicas
+internacional
+así dignidad
+Unidas idioma
+dicho otra
+vida
+delito
+cualquiera natural
+pleno
+penal Unidas
+Asamblea reputación público
+Organización inspirándose culturales
+expresión
+tratos
+especiales propio nacionales
+este comisión necesario
+III
+desarrollo esposos existencia
+posición
+religión darse
+Estos
+Todo
+sufragio
+Preámbulo artísticas
+disfrutar reconocimiento
+único
+tendientes
+elegir religiosos
+proclamado preferente Universal
+satisfacer padres especiales
+nacen
+tomar
+restricción dotados Los
+trabaja
+aplicación hagan judicial
+Estado
+seguros asistencia
+contraerse ideal
+públicamente nacen
+desarrollo mediante trata
+país
+consentimiento fuera desarrollo
+más escogidos
+informaciones
+autoridad expresará aseguren
+Adoptada recibir amplio
+debe diciembre
+Derechos satisfactorias
+investigar
+exigencias desarrollar penal
+fiduciaria sufragio nacen
+infancia
+colocados
+investigar trabaja
+disfrute independientes
+trata
+creencias ejercicio sindicarse
+desarrollar cultural morales
+realmente plenamente
+pertenecer
+amistad
+Este cuenta infrinja
+público
+salario principios concepto
+provocación bajo
+degradantes tienen
+Humanos fin
+comisión materiales
+cometerse producciones
+partes
+ataques
+establezca actos
+sindicatos privada
+sufragio todos
+las
+tribunal restricción
+igual
+debe Proclama asegurar
+Proclama presente
+recursos amplio esposos
+son Estos
+nacimiento secreto
+una infancia torturas
+morales formas infrinja
+nacimiento
+proclamada tendrá
+acusación según
+realmente
+prohibidas miembro
+proclamados satisfactoria
+momento
+Adoptada profesional
+amistosas
+proclamada caso
+reputación país
+igual violen futuros
+independiente
+económica función alguna
+tendrá
+sean
+protegidos tiene unos
+judicial tribunales
+independiente
+degradantes Este gobierno
+diciembre
+pagadas derecho defensa
+asimismo nacidos
+alguno emprender Adoptada
+pagadas inspirándose
+administración habrán
+servicios fundamental impondrá
+raza esposos colocados
+instituciones
+sindicarse humano libertades
+independientes trabajo todos
+indispensables Unidas amistosas
+cuya mundo servicios
+inhumanos
+representantes conforme
+artísticas
+aseguren pruebe
+acusada darse liberados
+tratos
+ella inocencia omisiones
+Universal
+nacional delictivos
+invocado
+relaciones nadie naciones
+individuos
+especiales cuenta asegure
+delictivos
+Nadie valor
+nacionalidad recurso Toda
+también plenamente
+Sólo pacíficas importancia
+promuevan han
+ampare tanto presuma
+esforzarse
+literarias Toda universal
+incluso
+función Además motivos
+enseñanza preso asegure
+delitos morales
+resueltos fortalecimiento tolerancia
+impondrá satisfacer
+Nada rebelión económica
+disfrute
+ideal especial
+fin
+durante
+razonable
+este obligatoria internacional
+como aseguren
+fundamental periódicamente
+determinación como informaciones
+derecho
+fundar deberes
+carácter
+compelido
+arbitrariamente justas
+manifestar
+hombres privará
+producciones cualesquiera aplicable
+disfrutar garantice
+tienen
+único
+miembros
+natural motivos
+resueltos
+entre
+gratuita tipo
+mujeres
+ante
+social crueles
+persecución Organización compromiso
+comunes esclavitud
+momento Estado
+Nada grupo podrá
+sentido fronteras salario
+examen elegir
+cualesquiera directamente
+individuo
+sufragio Estados inspirándose
+razonable ejercidos
+sus equitativa actividades
+origen liberados democrática
+materia
+comunidad sea
+nacional las
+miembros único promoverá
+procedimiento menos propio
+competentes privada
+índole
+enfermedad tal protección
+equivalente inalienables motivos
+ataques son
+han procedimiento presuma
+esclavos
+acceso función
+creencias proclamado
+Preámbulo
+país judicial
+disfrutarán grupos
+política supremo
+conforme
+familia tribunales
+habrán cooperación promuevan
+opuestos culturales disfrutarán
+incluye compelido disfrutarán
+promuevan
+confiere molestado
+sus especiales demás
+sociales tolerancia maternidad
+Organización científicas disfrutarán
+ser disfrute
+nadie
+esforzarse establezca nacional
+Además
+condición aspiración obligatoria
+arbitrarias injerencias según
+restricción
+crueles provocación libres
+como demás
+escoger
+familia públicamente
+penas
+habrá
+asociación
+territorio servicios
+Este
+comunes condición
+literarias plena
+núbil efectivos grupos
+darse
+matrimonio distinción observancia
+sujeta
+promoverá
+tales ejercidos
+concepción
+sea
+garantice parte molestado
+inspirándose recurso moral
+religiosos
+fraternalmente periódicas
+justas
+delitos
+Los
+personalidad
+menosprecio respectivos
+viudez promoverá darse
+equivalente dicho
+rebelión
+opinión fundamentales menosprecio
+Los
+cada obligaciones
+persecución Todos
+futuros gozar Unidas
+Derecho
+estudios
+liberados tendrán libremente
+este cada
+Declaración satisfactorias
+obligaciones
+pertenecer estos
+Nada fin
+promuevan
+opiniones
+Adoptada habrá
+tanto voto Proclama
+especial nacen
+paz
+ella propiedad
+desconocimiento
+garantías motivos partir
+culpabilidad personal acusada
+favorecerá opresión económicos
+base humano proclamado
+individual grupo
+técnica
+nacionalidad científicas
+partir materiales libres
+dignidad por menos
+universal fundamentales
+como
+justas torturas
+cambiar
+darse
+medidas seguridad necesarios
+asistencia
+pagadas creencia Artículo
+arbitrariamente
+comisión
+exigencias
+posición
+comunes
+Estado recurso
+resulten
+asociación
+propiedad
+natural
+esclavitud Todos
+limitaciones inocencia oposición
+tribunal delitos especiales
+obligaciones
+equitativa Asamblea
+plena
+Este
+méritos elecciones asistencia
+preferente promover
+durante económica
+Sólo
+Este favorecerá
+cuya restricción
+desterrado presuma
+Proclama privado han
+asistencia obligatoria
+confiere esforzarse
+base violen detenido
+creencia reafirmado
+libertades
+auténticas hagan
+será
+humano
+sufragio distinción
+libre
+recursos realizar
+liberados realizar progresivas
+elecciones
+recibir
+unos recursos servicios
+más preso parte
+Miembros
+fronteras
+pérdida derechos
+servidumbre disfrutarán judicial
+satisfacer
+regresar
+comprensión imparcial resolución
+momento
+proclamados comunes actos
+fundada tratos organización
+delictivos
+acceso
+colectivamente remuneración
+habida elevar dependa
+conciencia realizar Este
+reafirmado delictivos
+orden delito
+casarse
+sexo una resueltos
+ultrajantes enseñanza puesto
+motivos contra
+tratos delitos periódicamente
+asegure invocado núbil
+universal
+tiene autónomo favorecerá
+bajo dependa
+sometido
+artísticas así Carta
+disfruten seres Preámbulo
+crueles elecciones independiente
+durante
+poder origen degradantes
+desarrollar
+con estudios Asamblea
+ampare asegurado
+elemental
+esclavos necesario intereses
+crueles informaciones completada
+prohibidas dotados derecho
+correspondan judicial poder
+sufragio humana generalizada
+distinción universal
+democrática
+económica pena
+tanto individuo ampare
+sea correspondan
+territorios posición obligaciones
+asegure ideal
+instrucción vea creencia
+índole tendrá
+habrán
+Todo necesarios régimen
+paz satisfacer
+arbitrariamente para único
+méritos acceso
+cualquiera
+honra gobierno núbil
+paz los trabajo
+vea
+equitativas
+esclavos artes
+nacimiento
+Estados esta que
+exigencias derecho
+vivienda Naciones Asamblea
+preferente régimen Naciones
+vea casos
+igual
+satisfacción
+color elecciones satisfactorias
+trabajo
+fuera pensamiento elevada
+seres Además mientras
+honra
+persona
+cuidados
+disfruten servicios país
+humano obligatoria
+originada mantenimiento
+voto científico
+imparcial para investigar
+grave recurso
+sindicarse vejez
+condición 217 del
+compromiso
+ley enseñanza Todos
+fundada seguros
+tendrán
+asegurar deben
+más culto
+Humanos aplicación obligaciones
+elemental pena
+generalizada
+materiales por
+torturas Carta
+nacionalidad
+humana nacionalidad obligado
+comisión pertenecer están
+representantes
+están materiales
+ante jurisdicción acceso
+natural públicas
+Tampoco
+cualquier Asamblea
+profesional obligado religión
+sin fuera
+médica territorios propio
+Derechos
+según Preámbulo
+Nada individuo
+restricción plena motivos
+grupo cometerse fueron
+libertad opinión esta
+valor
+una
+hagan sean
+seres sociales
+violen cualquier
+humana conforme pena
+condiciones
+concepción acusada
+amplio pena
+este gozar
+según Este progresivas
+derecho satisfactoria cualesquiera
+celebrarse
+materiales Unidas
+tribunal palabra gratuita
+maternidad
+progreso disfrute pagadas
+palabra
+nacen Estados
+violen pacíficas General
+puede
+nacionalidad
+resueltos
+dignidad fundamentales
+palabra menosprecio
+fundamentales Este
+padres
+recibir crueles
+índole compelido
+así
+núbil enseñanza
+motivos comprometido reafirmado
+medidas grave
+salud
+técnica alguna desarrollar
+dicho público
+territorio sexo especial
+fuera
+cualesquiera regresar menos
+pueblo
+escogidos funciones
+restricción pensamiento
+degradantes materiales esposos
+recurso tipo personal
+elemental limitación
+cambiar sindicarse
+liberados preso mientras
+preferente grupos
+tribunales discriminación sólo
+medios
+promoverá
+puede territorio necesario
+deben miembro
+territorios
+creencia acusada
+menosprecio remuneración reputación
+disfrutar
+comportarse
+seres
+carácter seguros
+promoverá
+núbil individual
+desempleo oída Toda
+las
+acusación habrán trabajo
+esfuerzo
+equivalente restricción
+plenamente incluye elemental
+dignidad asegurado
+familia
+públicas
+disfrute
+existencia
+humanidad cuenta
+tomar
+compelido duración
+concepto
+fronteras seguridad nacionalidad
+creencias restricción reputación
+alguno cualquier
+ejercicio
+prohibidas diciembre
+libertad
+domicilio tribunales según
+será grupos pensamiento
+razón tiempo equivalente
+Considerando privada
+equitativas acceso
+1948
+auténticas
+artísticas esposos
+desterrado Todo garantías
+razón
+tendientes
+sujeta satisfacción
+sufragio fundada
+acusada
+igualdad científico preferente
+Organización iguales
+cuidados
+sindicarse
+Asamblea deberes trata
+cuanto
+raza caso alguno
+general
+Miembros
+libres
+artes individuo promover
+toda méritos bienestar
+tribunales
+será autónomo
+progreso
+preso actividades
+universales trabaja
+delictivos
+vestido Derecho plena
+cualquiera sin
+vida
+oposición podrán
+cuenta cuidados
+asilo oposición
+todos
+investigar ser enseñanza
+actos nivel
+aplicable
+cualquiera recibir
+étnicos intereses servicios
+vestido confiere
+aplicación individual
+esclavos
+tratos derecho
+independientes
+promuevan
+públicas reputación unos
+formas aseguren
+propósitos
+prohibidas desterrado edad
+arbitrarias tienen
+Asamblea invocado
+nacen
+sindicatos
+solamente difundirlas representantes
+esclavos científicas deberes
+principios
+será
+comisión
+salario efectivo Tampoco
+tomar
+seres superiores
+auténticas
+General efectivos reafirmado
+periódicamente moral religión
+penal habrá
+hagan propio
+menos delitos
+opiniones desempleo
+comprometido fuera edad
+ejercicio escoger libertad
+ella nivel
+Proclama
+plenamente fuera
+enfermedad ejercidos objeto
+equitativa familia gozar
+cultural opresión
+momento
+menos disolución especiales
+otro
+sea
+Proclama carácter
+proclamado económicos
+país directamente tendientes
+territorios
+científico supresión aplicación
+niños rebelión
+seguros
+manifestar pérdida
+dignidad
+Humanos edad
+originada
+reconocimiento humana
+sociales natural equitativa
+interpretarse
+tribunal
+culpabilidad
+ejercidos tomar
+social
+voluntad necesario
+restricción sujeta poder
+condiciones delito
+ideal
+supresión entre
+fundar tendientes
+orden
+pagadas ultrajantes presente
+posición
+del
+nacionales
+pagadas puesto
+Estado índole incluso
+derechos
+libertad
+con miseria
+investigar
+pacíficas
+país
+vida satisfactoria regresar
+también
+ataques
+incluye
+fiduciaria culto derechos
+directamente propiedad
+Carta inocencia judicial
+asegurar incluye maternidad
+inhumanos sufragio
+elevar dotados sindicatos
+sometido participar
+materia servidumbre
+posición
+propósitos hombres
+asilo
+supremo
+propósitos dicho
+especial obligaciones
+respectivos fiduciaria establecidas
+concerniente obligaciones condición
+libertad desconocimiento
+desconocimiento
+hijos solamente
+medio promuevan desarrollo
+regresar tiranía Estos
+pacíficas necesarias morales
+cometerse
+tienen social materia
+miembros humanidad
+tendientes
+Derecho Asamblea
+libremente tendrán
+bienestar Derechos
+confiere dentro
+vacaciones literarias reconocimiento
+nacional intereses
+respecto
+acceso
+otros
+auténticas
+resulten
+auténticas también
+tiranía Asamblea
+igual
+nacional remuneración cuenta
+degradantes están
+expresará aplicación
+asistencia profesional realmente
+menos seguridad
+autónomo gobierno tiempo
+celebrarse autora
+artes habida vea
+compromiso opiniones tratos
+bajo creencias
+correspondencia Declaración habrán
+individuos correspondan juicio
+seguros
+constantemente edad instituciones
+compromiso Todo declarado
+autora
+una tribunal
+Humanos médica
+elemental sufragio
+hombres
+hará sujeta grupo
+materiales individuos
+sometido Los
+política
+Miembros familia
+cada
+Toda promover
+general
+autora demás Nadie
+barbarie están razón
+parte tratos
+como
+autónomo
+impondrá Considerando elevar
+medios ante salir
+esforzarse creencias sea
+partir
+hagan
+objeto conciencia
+Nada
+cooperación color
+condición
+comunidad
+vejez será
+realmente inhumanos progresivas
+servidumbre padres esclavitud
+fundada estudios individuo
+inalienables comportarse
+limitaciones proclamado nacimiento
+voto obligaciones concerniente
+necesario satisfactorias social
+Preámbulo Además
+escoger
+sexo
+cambiar
+organización
+partes sea
+matrimonio momento
+Declaración propio
+moral estudios
+aspiración necesarios
+equitativas
+estos sufragio
+equitativa Proclama
+padres
+democrática
+unos
+propiedad cada
+voto supremo recibir
+1948
+hagan
+Este niños
+opresión padres
+equitativas voluntad auténticas
+parte
+satisfactorias nivel
+propiedad opresión miseria
+elección estudios observancia
+resueltos asegure las
+equivalente
+viudez núbil proclamados
+libertades
+estará elevada
+colocados
+Estado relaciones
+compromiso
+desempleo torturas satisfacer
+autoridad color
+opresión impondrá
+Nada demás económicos
+nacimiento público pueblos
+fundada
+bajo
+país funciones delitos
+son gratuita
+resueltos
+ella
+para
+Toda comunes
+nacionales núbil Nada
+compromiso
+propósitos
+grupo Asamblea nacionales
+puesto equitativa cooperación
+darse hayan
+hombre mediante
+cultural comunidad
+independientes
+religiosos seguridad
+fundamentales elemento país
+funciones temor
+salario especial 217
+cualquiera restricción
+vejez ante desarrollo
+pérdida tanto sexo
+cuidados principios sociales
+posición medios culturales
+esfuerzo
+Naciones elemental
+asociación
+miembro viudez esta
+delito
+salud reunión
+miembro
+esfuerzo
+vejez diciembre
+rebelión
+ley disfrutar aplicable
+examen tomar
+tanto ser
+residencia seguros compelido
+privada étnicos
+honra humanos
+otro pagadas
+puesto confiere tiempo
+cumplimiento razonable
+pérdida invocado juicio
+obligatoria pérdida
+nadie equivalente
+medio científico originada
+condición matrimonio sea
+carácter sin
+naciones interpretarse
+cualesquiera tratos delitos
+religiosos condiciones escoger
+fronteras correspondan delito
+equivalente que Todo
+establecidas amplio
+equivalente
+disfrutarán cualquiera
+incluso
+vacaciones
+desconocimiento durante acceso
+moral
+tal penas
+contra mayor internacional
+sin
+partes
+examen propiedad
+formas libremente superiores
+alimentación más
+protegidos fundamental
+penas
+personal
+instrucción
+libremente igual tipo
+funciones confiere discriminación
+administración fraternalmente
+deben favorecerá oída
+disfrute
+conforme imparcial vejez
+miembros
+tribunales
+residencia
+matrimonio hombres
+territorios Nadie
+Humanos
+equitativa
+delictivos cultural nacionalidad
+cuidados protección
+podrá generalizada personalidad
+acusación privará dependa
+individual
+Considerando aplicable pertenecer
+causa participar
+penas especiales
+cooperación
+materia
+individuo fraternalmente
+general
+territorios Organización
+grupo inalienables
+nivel obligaciones
+salario reconocimiento
+oída hagan respecto
+étnicos satisfacción tendrán
+delitos
+entre naciones aspiración
+momento
+circunstancias
+asilo elemento opuestos
+dependa
+grave
+colocados cuanto
+pérdida preso idioma
+función
+entre
+desconocimiento informaciones
+será
+fuera conforme
+naciones
+medio
+aplicable
+Sólo por injerencias
+vejez individuo
+especiales común tendientes
+disfrutar
+equitativa
+sin nacen beneficios
+Derechos
+individuos
+instituciones
+bienestar protegidos Nada
+correspondencia
+barbarie persecución
+judicial
+proclamados mediante dependa
+compromiso respecto
+voto consentimiento
+elevar
+investigar miembro directamente
+tanto
+creencias Unidas
+principios
+otro culturales remuneración
+culpabilidad culturales
+podrá
+fin
+mediante cometerse tendrán
+pertenecer voto libertades
+para
+poder
+supremo comunes
+pagadas más
+asegurado
+gobierno provocación
+inhumanos limitaciones
+poder nacen
+todos orden distinción
+base
+Toda tendientes
+Derechos Considerando tendrá
+esposos efectivo ejercicio
+libertad compelido fundada
+judicial promover
+reafirmado
+aseguren vestido nivel
+libremente
+condenado
+miembros tiene habrá
+pensamiento dicho
+alimentación partir justas
+condiciones dependa justas
+especiales propiedad persecución
+democrática Nadie cuanto
+concerniente
+todos supremo
+determinación fundar
+compelido humana
+satisfacción igual plenamente
+Los infancia
+molestado
+médica Naciones
+fueron tribunales
+ella
+tales
+religión
+vivienda sometido profesional
+autoridad buscar tiranía
+mantenimiento están oída
+relaciones obligatoria
+establezca Declaración libremente
+materia nadie secreto
+recursos
+otra remuneración asistencia
+elevar
+públicas incluso hijos
+una determinación
+pueblos defensa
+cumplimiento
+maternidad públicamente
+contra efectivos salud
+color disolución
+económicos recurso
+delitos individuo
+cambiar demás con
+garantice invalidez
+esclavitud esfuerzo dignidad
+casos obtener nadie
+habrá promuevan
+menosprecio medio ejercidos
+elevar restricción sociedad
+limitación fuera técnica
+enseñanza
+descanso vivienda deberes
+Unidas
+son
+ejercicio igual
+penal asistencia seres
+alimentación
+satisfactoria especiales infrinja
+pena adecuado distinción
+alguna paz tendrá
+libertad autónomo común
+delictivos
+concerniente desterrado escoger
+funciones grupo
+miembro
+casos
+oída humana orden
+concepción administración temor
+salario jurídica desarrollo
+con hombres
+oposición
+infrinja menosprecio
+opiniones asegurado respeto
+seguridad circular
+sujeta obligado adecuado
+Sólo
+colocados reconocimiento
+Derecho garantice
+esposos
+acusación gozar aseguren
+juicio nivel grave
+comportarse
+orden mientras
+disfrutar detenido trabaja
+rebelión étnicos fin
+dicho culpabilidad
+general
+régimen
+constitución 1948
+desarrollo domicilio incluye
+delictivos
+buscar reconocimiento
+Universal
+circular
+originada comprometido Miembros
+vida sociedad Todos
+impondrá puesto
+concepto
+propio remuneración poder
+mayor omisiones
+determinación organización
+dependa estos nivel
+mientras
+persecución autónomo
+delitos disfrutarán
+iguales
+funciones inalienables
+hijos
+público
+esforzarse oposición
+materiales hayan
+pensamiento palabra pacíficas
+fundada especial
+creencia universal preferente
+deberes
+por preferente esclavos
+nivel
+nacionales formas
+gratuita
+este torturas seguros
+invalidez
+obligaciones ley
+completada
+Naciones
+descanso podrá
+respecto nadie promover
+expresará subsistencia
+también
+morales técnica hombres
+padres tanto
+religión fundar
+menosprecio voto artísticas
+artísticas preferente
+pagadas
+origen arbitrarias escoger
+informaciones cumplimiento contra
+Los advenimiento
+competentes
+incluso raza invalidez
+miembro solamente
+religiosos
+todos amistosas así
+los hayan étnicos
+fundar
+opuestos
+fortalecimiento independiente aplicación
+correspondencia toda territorio
+hombres social domicilio
+pensamiento
+general
+recurso
+penas concepto
+acusada país secreto
+fundar
+pacíficas trabajo independientes
+igual invocado aseguren
+Adoptada igualdad disfrute
+judicial
+vacaciones individuo
+colectivamente persona
+comunidad las
+enfermedad este ampare
+económicos alimentación fronteras
+educación detenido duración
+común
+arbitrarias tribunal
+infancia
+habida
+asimismo servicios
+amplio valor
+resolución viudez mediante
+esfuerzo
+equitativas fundada respecto
+desconocimiento
+importancia libre equitativas
+cualesquiera
+disolución
+morales violen sea
+función soberanía
+han vejez
+delitos índole
+obligado autora
+fueron
+menosprecio
+satisfactoria elección democrática
+han
+tendrá
+orden
+cada producciones
+declarado
+disfruten
+natural están
+Nada
+alimentación
+sociales índole disfrute
+alguna
+ella
+comprometido universal voto
+detenido producciones
+esposos degradantes crueles
+promuevan disfrutar
+estudios
+desarrollo
+inhumanos nivel
+grave conforme territorios
+pertenecer
+literarias
+otra Tampoco
+voluntad
+han medidas reconocimiento
+democrática aspiración
+opresión voluntad
+Los como aspiración
+pensamiento amistad gozar
+entre relaciones procedimiento
+pérdida méritos General
+impondrá vida
+representantes disfruten
+libre
+con plenamente
+fundamental
+universal unos régimen
+autónomo económica
+establecidas libre
+elección progreso intereses
+contra profesional adecuado
+discriminación nacionales según
+este nadie
+oída toda arbitrariamente
+participar
+salario detenido
+Humanos
+expresión comprensión condenado
+esforzarse mientras
+será
+Asamblea
+relaciones sean
+esfuerzo
+obtener otra
+concepción
+proclamados fundada
+cada advenimiento
+servicios necesario
+supresión práctica
+Asamblea torturas bienestar
+pérdida progresivas
+según amistosas
+territorio determinación
+Estos fiduciaria entre
+partir económica auténticas
+restricción progresivas
+nacionales
+especial
+comunes hagan económica
+vestido advenimiento
+elemento
+conforme esposos
+justicia contra compromiso
+cultural como
+darse enfermedad
+cualesquiera
+esclavos pagadas universal
+servicios
+Preámbulo mientras
+vacaciones correspondan
+vacaciones para
+tribunales humana competentes
+trata promuevan obtener
+plena juicio privará
+creencias
+palabra compelido infancia
+pertenecer país iguales
+1948
+ampare Carta mundo
+invalidez
+ley será
+generalizada obtener equitativa
+trata Toda
+molestado
+nacimiento
+acceso
+Toda
+tomar
+carácter hijos miembros
+libre esforzarse remuneración
+gobierno humanos acusación
+servidumbre
+beneficios arbitrariamente constantemente
+entre mediante promuevan
+constitución equitativa
+hará desarrollo
+maternidad pueblo desempleo
+médica restricción
+promover arbitrarias
+salir
+sindicatos manifestar democrática
+demás natural interpretarse
+independiente fraternalmente
+mayor seguros
+relaciones tribunales asilo
+Universal
+durante partir
+por territorio
+moral intrínseca privada
+razón
+así
+inhumanos duración menosprecio
+habrán
+futuros humanidad
+autónomo
+progreso
+futuros progresivas
+sexo mientras
+supremo vida instituciones
+respectivos
+declarado
+exigencias
+penas progreso Organización
+fundamentales
+contraerse cumplimiento
+natural indispensables libre
+raza
+sus cualquier nacen
+progresivas
+están
+satisfactoria
+esforzarse originado ser
+recibir alguno territorios
+libertades seguros humanos
+Artículo relaciones
+desarrollar tiranía
+provocación
+Nadie posición ejercicio
+justicia
+acusada Toda
+creencia
+defensa
+equitativa núbil
+país materiales delictivos
+provocación asociación ultrajantes
+acceso obligaciones
+niños
+parte Naciones cumplimiento
+vivienda
+hijos función
+voto asegurado
+cuanto concepción Además
+Derechos vejez hijos
+obtener servidumbre
+adecuado
+Universal iguales
+menos investigar
+dicho impondrá
+desempleo
+opresión
+actividades amistosas aplicación
+fundar vacaciones religión
+seguros color elevar
+han 217 reunión
+dependa
+barbarie
+Toda esclavitud resulten
+oída
+miembro
+restricción
+asociación formas morales
+seres grave
+diciembre confiere tiene
+moral justicia
+tribunal estudios Estados
+todas
+científico Preámbulo
+Considerando independientes exigencias
+inhumanos edad
+también
+liberados Naciones
+padres recurso adecuado
+miembro caso libres
+creencias entre dotados
+núbil función
+declarado reconocimiento actos
+moral que así
+públicamente fraternalmente
+bajo
+práctica ejercidos único
+expresará solamente
+Estados trabaja
+juicio fraternalmente satisfacer
+privará fundada
+igual niños
+supresión trata
+ampare asegurar
+autoridad
+Derecho disfrutar desconocimiento
+Considerando justicia
+nacidos con
+preso auténticas humana
+compromiso mujeres ampare
+advenimiento
+aspiración social
+medios
+opuestos
+social actos
+régimen acceso seres
+autoridad partir opuestos
+parte
+seres
+jurisdicción esta
+trata
+igualdad general derechos
+promuevan también
+política
+aplicación
+concerniente por ella
+tal disolución
+comunidad comprensión
+esta derechos
+familia voto
+acceso partes restricción
+puede
+amistosas
+posición
+honra oída será
+parte pensamiento materiales
+prohibidas
+disfrutar hombre
+país Además
+violen garantice demás
+garantías entre
+fronteras esencial
+partes circunstancias
+obtener
+pena
+durante tolerancia
+violen
+asegure
+instituciones
+individual sometido condiciones
+gozar nacional dotados
+generalizada aseguren nadie
+pertenecer familia jurídica
+General
+motivos
+una
+poder General habrán
+tiranía
+caso paz
+autónomo
+Preámbulo salario Universal
+libremente conforme crueles
+jurisdicción
+miembro posición garantice
+celebrarse
+ley mundo
+especiales dotados
+elegir molestado
+intereses sus Estado
+respectivos
+defensa resulten comportarse
+examen
+públicas miembros administración
+sin
+satisfacer pena
+libertades inocencia valor
+propio protegidos creencia
+democrática morales autora
+partir impondrá
+opuestos
+mientras
+caso edad especial
+independientes acción condenado
+práctica
+correspondencia moral
+juicio acción inalienables
+jurisdicción social medios
+omisiones superiores
+Además
+artes personalidad
+técnica participar
+resueltos privado privada
+disfrute invalidez efectivo
+superiores ley esta
+circunstancias hagan
+parte durante pena
+competentes
+otros observancia Asamblea
+Artículo dignidad
+por
+para contraerse unos
+oída
+nacional mientras alguna
+condiciones colocados democrática
+1948 color
+jurisdicción 217
+temor económica
+inalienables
+equivalente grave parte
+sean
+cuanto
+temor individuo han
+impondrá
+amistad honra
+sometido
+propósitos
+tanto
+nacional
+concerniente penas Estos
+tales mujeres ningún
+profesional
+preferente ultrajantes
+esencial pertenecer sometido
+acción
+independiente justas
+buscar
+resolución
+artes justicia
+contraerse profesional desconocimiento
+materia tales vea
+periódicamente concepción
+reafirmado
+molestado
+habrá compelido declarado
+razón liberados
+temor política
+domicilio mayor contra
+tanto importancia
+educación étnicos torturas
+menosprecio técnica
+esforzarse fundamental limitaciones
+ley
+Unidas auténticas elemental
+salario pueblos
+privado como asimismo
+residencia sólo disfrutarán
+incluso natural cumplimiento
+trabajo constitución
+Sólo tal escogidos
+alguna general cometerse
+supresión equitativa objeto
+privado Derechos medios
+disfrutar
+expresión especial
+personalidad restricción
+proclamados morales
+completada orden
+injerencias progresivas cada
+arbitrariamente
+menos
+periódicamente
+momento
+equivalente
+mantenimiento padres expresión
+Miembros
+impondrá delito
+defensa escogidos independiente
+tendrá aplicable hijos
+comprensión asegurar
+los acceso
+pueblo temor
+por sufragio
+liberados tomar satisfactorias
+unos favorecerá delitos
+incluye soberanía
+poder trabajo técnica
+cuya objeto
+cultural ley
+barbarie Miembros régimen
+tolerancia propósitos periódicamente
+por
+manifestar
+materia expresará
+alguna cuya
+será violen
+concerniente recursos
+así esfuerzo
+tales grave Organización
+autora vejez promover
+medio medio
+equitativas
+son igual pleno
+fuera propósitos elección
+consentimiento
+territorios gobierno sexo
+elegir
+Los periódicas habida
+pensamiento
+dotados también pena
+celebrarse periódicamente adecuado
+ser disfrute
+reafirmado educación
+culturales supremo
+casos provocación colectivamente
+limitaciones
+Artículo
+ley
+autora infancia delito
+propiedad edad
+salir necesarias
+miseria tribunales
+comprensión
+bajo persona
+justicia
+libertad personalidad directamente
+individuo oposición resueltos
+ante Naciones
+individuo
+aseguren periódicas asegurar
+tolerancia
+elegir efectivo
+ataques exigencias Estado
+cualquiera
+ante acusación investigar
+compelido bajo
+gratuita
+educación para
+público equitativa circular
+libremente ultrajantes incluye
+régimen gobierno
+independientes progreso habrán
+colocados
+pueblos
+Miembros plenamente
+origen
+Estado medio
+propósitos
+sean
+efectivos individuos
+intrínseca tratos
+proclamada completada morales
+pruebe molestado
+fortalecimiento sociales
+sociales
+Estado conciencia compelido
+propósitos cambiar difundirlas
+dignidad habrán advenimiento
+deberes examen
+caso
+una Proclama común
+sin esencial
+Proclama
+disfrutarán preferente científicas
+son
+rebelión constantemente necesarios
+propio compelido
+miseria ella asegurado
+moral futuros
+soberanía
+justas pagadas autoridad
+reafirmado
+resolución barbarie procedimiento
+cuenta idioma
+inhumanos humanos asegurado
+territorios para vea
+Derechos territorio comunes
+persecución literarias crueles
+hagan
+escogidos degradantes instituciones
+menosprecio acusada
+libremente participar limitaciones
+independiente invalidez Sólo
+General
+maternidad origen creencias
+correspondan momento
+privará sólo invocado
+ideal tendientes cualquier
+materia libre comprensión
+alguna morales conciencia
+efectivos
+vea partes
+salir reafirmado sindicarse
+asociación
+fin
+cooperación general tal
+disfrutar motivos Naciones
+dentro distinción resolución
+caso
+medios
+bajo
+recurso cultural
+supremo interpretarse
+estudios internacional opuestos
+promoverá
+educación médica investigar
+personalidad contra bienestar
+exigencias propiedad determinación
+producciones tipo
+elegir esta
+culto carácter
+supremo culto constitución
+deben
+esfuerzo plenamente equivalente
+económicos distinción
+torturas
+mundo miembro tales
+especiales delitos limitaciones
+salir creencia
+dignidad jurídica
+dignidad dependa alguna
+interpretarse color protegidos
+protección inspirándose realizar
+económicos aplicación
+estará efectivo informaciones
+medio
+científicas Estado tratos
+expresará méritos méritos
+territorios
+comprensión moral sufragio
+conforme moral reafirmado
+recibir dotados
+podrá
+salario general
+examen sociedad
+amistad
+elemental gozar obligaciones
+mientras están méritos
+partir
+elemento étnicos proclamada
+injerencias omisiones resulten
+miseria tendientes
+base del
+opuestos mundo secreto
+descanso posición habida
+así
+razonable escogidos servicios
+estudios
+paz
+cuenta plena garantías
+fueron procedimiento social
+Estado carácter
+asistencia
+los asimismo
+universales
+igualdad
+esclavitud
+recursos recursos honra
+obligatoria mantenimiento 1948
+liberados
+General nivel
+equitativas respectivos
+otros cualquier maternidad
+ejercidos fronteras casos
+tal respecto
+base tanto administración
+ella exigencias
+indispensables elemento derecho
+generalizada libres
+actos libertad carácter
+vivienda cuya remuneración
+derecho
+económicos garantías garantice
+profesional presuma obtener
+comprometido propiedad será
+esencial originada
+religiosos
+viudez profesional niños
+posición internacional
+toda
+independiente conciencia
+asegurar humanidad
+respecto otros
+voluntad impondrá públicamente
+servicios compromiso
+creencias correspondencia
+desconocimiento
+salud independiente
+arbitrariamente elección
+Organización paz cambiar
+han infancia
+creencia vivienda
+individuos partir Todos
+Nada justicia beneficios
+pena personalidad
+hijos culturales
+limitación 1948
+general sindicarse
+ataques
+equivalente
+sin caso
+Toda nacen
+bienestar
+ultrajantes
+cada
+preso incluye
+trabajo trabaja una
+oposición vacaciones
+tales observancia nacionales
+pena base determinación
+causa condenado
+Además fronteras
+motivos
+autora
+Preámbulo literarias
+disolución
+cambiar
+recibir salir
+honra son oposición
+inocencia
+habida Estados
+materiales económica
+adecuado justicia grupo
+bajo progresivas
+tiene bajo protegidos
+vea
+humano actos
+fueron para
+unos escogidos
+desempleo
+ley obligaciones
+deberes niños nacional
+cuya desconocimiento esposos
+humano
+Nadie
+cambiar sociedad
+ley nacimiento esta
+ejercidos
+organización infancia
+índole disfruten
+mantenimiento procedimiento
+intrínseca religiosos promuevan
+proclamados garantías difundirlas
+pueblos índole tienen
+incluso restricción
+descanso individuo
+honra
+217 enseñanza General
+beneficios mantenimiento auténticas
+beneficios fundar acusación
+crueles temor partes
+sociedad realmente partes
+sus nacional
+escoger
+judicial materia
+escogidos penal
+fraternalmente
+cometerse contra
+cuanto completada
+intrínseca nacimiento
+público
+puesto barbarie inhumanos
+especiales
+sean vea solamente
+escoger
+comunidad dicho posición
+habida
+formas
+especial menosprecio
+las
+habrán otro circular
+recurso promover
+estará presuma
+desarrollar naciones razonable
+competentes Toda tiene
+principios Proclama
+científico cuanto pruebe
+promoverá esfuerzo comprensión
+infancia núbil
+contra
+sea
+indispensables
+materia puesto
+creencias
+compelido
+sólo especial
+así domicilio
+tribunales
+enseñanza propósitos
+instrucción tribunal debe
+circular
+desterrado
+internacional grupos
+núbil limitaciones
+étnicos
+médica Humanos literarias
+exigencias delitos
+instrucción Preámbulo opiniones
+desterrado
+sólo cuanto plena
+delictivos
+preso grupo
+esposos
+adecuado
+efectivo confiere
+reconocidos fraternalmente
+sindicarse tiene
+son público
+discriminación común
+organización asilo
+procedimiento
+ningún fundar
+durante
+disfrute todas miembros
+omisiones resulten
+cultural
+satisfactoria
+efectivos libremente discriminación
+correspondencia
+propio hagan fortalecimiento
+arbitrariamente viudez aseguren
+General
+pena comunidad
+servicios colectivamente tomar
+invalidez
+contraerse dentro bienestar
+respectivos Preámbulo partes
+obligaciones
+condición partir
+tienen ser
+libremente
+confiere
+conforme
+pena investigar pérdida
+interpretarse invocado
+cuanto
+Declaración común delictivos
+estudios opiniones
+establecidas para
+presuma trabajo
+educación propiedad
+motivos hayan injerencias
+así igualdad como
+sociales limitación
+universal alguno
+invalidez
+carácter equitativas elemento
+persecución Estos
+económicos propio
+reunión obligatoria literarias
+establezca confiere sujeta
+colocados
+libres
+preso
+asociación Derecho reconocidos
+limitación
+1948 necesarios
+colocados
+defensa igualdad
+restricción pueblo con
+manifestar sea juicio
+nacionales libertad
+solamente
+futuros según pertenecer
+individuo literarias hayan
+1948
+ejercicio resolución inspirándose
+ejercicio
+motivos humano
+necesarias procedimiento
+idioma esclavos
+fundamental personalidad
+cuenta concepto existencia
+hombres económica
+estudios presuma torturas
+personal intereses
+competentes ningún
+entre amistosas
+resolución
+sociales
+violen garantías inalienables
+servicios
+artes dicho tipo
+sin
+crueles desarrollo naciones
+progresivas
+satisfactorias protección
+estudios fueron opresión
+cambiar expresión
+independiente comunes reputación
+dignidad
+Este
+asilo
+pérdida comunidad ningún
+plenamente impondrá moral
+Carta
+injerencias
+internacional toda barbarie
+comunes hombres preso
+periódicamente instituciones sujeta
+vea Nadie
+delictivos
+libre
+desarrollar funciones
+viudez escogidos circunstancias
+resueltos recursos
+han común confiere
+difundirlas
+creencia
+importancia condición artísticas
+recursos elecciones matrimonio
+universales disfrutar resulten
+habida declarado
+dicho para ataques
+observancia necesarias torturas
+mujeres igual ante
+desterrado equitativa
+ejercicio
+reunión opuestos
+salario
+color libres
+inhumanos
+paz
+razonable
+hará religión
+deberes casos
+sin comprensión
+base materiales pleno
+acceso
+del
+defensa justas sin
+fundada invalidez inspirándose
+acción
+tiempo tiene los
+trabajo discriminación fueron
+dentro
+natural liberados expresará
+único residencia
+observancia cultural
+hagan sociedad también
+promover
+aspiración declarado
+infrinja
+enseñanza Todos fundada
+remuneración miembro
+justicia
+darse periódicas asimismo
+literarias
+otros
+habida
+acceso producciones
+desconocimiento presente
+defensa actos fundada
+poder
+méritos
+fraternalmente han
+tribunales elemento desconocimiento
+cualesquiera escogidos Artículo
+tal procedimiento
+respeto Organización acusación
+futuros
+del medios Artículo
+grupos constantemente
+pena ataques
+protegidos
+auténticas distinción opresión
+funciones autora
+podrán provocación tomar
+sindicatos una sólo
+opiniones
+maternidad general superiores
+soberanía
+confiere cooperación
+superiores elecciones iguales
+trata
+también
+una
+Proclama
+privada principios descanso
+tribunales educación inocencia
+menos Además protegidos
+artísticas escoger
+proclamada persona
+desterrado
+cualesquiera
+jurídica padres
+libres reputación
+colocados incluye habrá
+Asamblea menosprecio
+limitaciones acusación
+Universal seres inspirándose
+privada
+Universal otros público
+presuma pruebe tendrán
+escogidos
+restricción otra
+domicilio son
+pena
+expresará disfrutarán
+naciones
+juicio posición son
+Todos una otra
+Todo disolución estará
+vejez correspondan
+habida impondrá culto
+resueltos especial
+desarrollar
+alimentación auténticas inalienables
+literarias
+derecho
+privado
+propósitos grupo inalienables
+periódicas durante
+liberados instituciones
+ley
+menosprecio 1948 colectivamente
+propiedad desarrollar amistad
+pensamiento
+autónomo Unidas condición
+puede sean disolución
+Artículo gobierno
+futuros económicos
+condición
+todas cultural asilo
+protección
+personalidad trabaja
+Proclama
+ampare esfuerzo
+cooperación manifestar razón
+ideal
+estudios
+desterrado derecho
+deberes instrucción
+duración
+periódicas inhumanos
+preferente recibir hombres
+celebrarse
+hijos
+Naciones jurídica
+determinación prohibidas
+delitos trabajo bienestar
+colocados toda igualdad
+ejercicio disfrutar unos
+grupo
+pertenecer especiales
+inalienables Artículo
+recurso tomar tienen
+tribunales estos
+ultrajantes alguno
+beneficios administración
+ideal
+individuo ley
+servidumbre público privará
+nivel autónomo
+tiene Todo
+elemento contraerse
+libertad origen
+durante independiente
+reputación privará
+grave
+producciones por especiales
+declarado desconocimiento asegurar
+aplicable base
+desconocimiento
+vacaciones
+invocado universal
+deberes justicia arbitrariamente
+aseguren
+asociación beneficios
+casos
+respectivos elevada
+deberes del tanto
+injerencias autónomo esencial
+organización general incluso
+protegidos defensa
+necesario científicas palabra
+presente
+amistad delitos recursos
+tratos internacional práctica
+territorio este invalidez
+persecución
+grupos
+reconocidos necesarios asegurado
+hagan temor
+salud existencia
+comunidad
+democrática puede hayan
+esposos arbitrariamente
+individuo todos temor
+detenido
+asistencia
+reconocidos fortalecimiento
+amistosas tienen
+democrática
+concepto
+degradantes culto
+garantice
+satisfactorias necesarias disfrutar
+fueron
+edad completada Asamblea
+valor 217 universal
+propósitos elemento general
+Todos
+tendrá propiedad contraerse
+actos inhumanos por
+cambiar establezca
+comprometido tratos
+incluso
+sindicatos
+protegidos habida
+celebrarse
+territorios durante
+tiene pueblos detenido
+III menos
+inalienables reunión reunión
+palabra
+democrática aspiración exigencias
+culto Estado
+común vivienda
+solamente
+moral
+independientes escogidos pertenecer
+duración instituciones
+orden inocencia
+periódicamente vida padres
+color Sólo
+para
+asistencia común incluso
+servidumbre igual
+estos aplicable establezca
+grupo Estados
+dotados aplicación
+expresión pena
+preso ley
+idioma familia
+según necesario hijos
+efectivo regresar circunstancias
+obligatoria
+futuros
+culto salir periódicamente
+obligaciones alguno habida
+así
+universal advenimiento contra
+cumplimiento esfuerzo
+moral voto paz
+provocación desconocimiento
+poder
+puede escogidos tribunales
+tanto
+desempleo económicos obligado
+casos escoger degradantes
+obligaciones libres
+creencia sociales
+participar miembros correspondencia
+razón
+nacimiento Naciones residencia
+tolerancia generalizada
+preso celebrarse sometido
+artes culturales inocencia
+juicio
+constantemente fundar condiciones
+económica
+penal administración objeto
+hombre servicios moral
+elección
+obligatoria pérdida
+establezca
+único
+difundirlas
+médica manifestar
+sólo bajo tal
+entre núbil aspiración
+Artículo parte incluye
+obligaciones
+autora
+necesarios tendrán voluntad
+necesarias que rebelión
+consentimiento poder sólo
+satisfacer
+vida democrática
+diciembre obligado inspirándose
+podrá medidas limitación
+miembros esfuerzo técnica
+otro temor buscar
+restricción
+Preámbulo
+1948 sexo ideal
+sin
+favorecerá este Unidas
+comportarse asistencia
+acceso
+elemento servicios competentes
+durante amistad
+exigencias
+acusada acusada independientes
+otros ataques enseñanza
+alguno
+familia
+infrinja
+nacionales
+efectivo
+subsistencia cuidados sus
+privada humana asilo
+territorios
+artes acusación
+sociales miembro núbil
+condenado
+pueblo
+asociación
+méritos fiduciaria Carta
+fortalecimiento
+impondrá circular
+existencia
+Nadie paz periódicas
+originada
+menosprecio étnicos iguales
+equitativas ley propio
+elecciones Todo amistosas
+étnicos
+equivalente
+medios artes gobierno
+inspirándose habrá
+alimentación organización liberados
+por valor
+artes
+examen vea supremo
+equitativas instituciones sólo
+científicas intereses
+crueles
+fundamental amistosas
+con constitución
+provocación investigar
+motivos comprensión promuevan
+Estados nivel gozar
+esposos obligado miembro
+objeto
+III demás mayor
+cooperación mantenimiento mundo
+tienen representantes proclamados
+plenamente
+especial Todo Universal
+Preámbulo observancia
+alguna
+consentimiento
+interpretarse cualesquiera
+esforzarse comportarse
+ultrajantes origen
+científico alguno públicas
+económica cuya democrática
+trabajo
+delictivos
+más discriminación tendrán
+alguna penas
+asegure
+preferente nacimiento
+amistad comunidad bajo
+discriminación base
+nacen
+provocación
+propiedad objeto competentes
+Unidas
+gobierno tendrán
+formas alguno estos
+buscar fundada
+casarse
+superiores Adoptada viudez
+independiente hombres
+esfuerzo
+según 217
+Universal
+sean podrán padres
+discriminación salir creencias
+grupos
+delito
+seres habida alguno
+familia declarado
+régimen instrucción
+elevar jurisdicción
+del tienen desempleo
+comunes manifestar
+fraternalmente necesarias
+individual
+proclamado económica dependa
+reunión naciones fortalecimiento
+barbarie cometerse Preámbulo
+tales constantemente judicial
+plena
+injerencias resolución
+libres
+cualesquiera
+omisiones promoverá
+respecto
+respecto
+Unidas plenamente
+periódicas
+satisfactorias
+restricción
+reconocimiento
+incluye amplio
+pagadas Universal están
+producciones
+culto Universal
+futuros
+ante razón
+auténticas sea
+medio
+asilo inocencia originada
+gozar
+niños valor
+alimentación
+auténticas
+reunión liberados
+vacaciones satisfacer seguros
+públicamente soberanía seguridad
+remuneración
+subsistencia incluso bajo
+fuera
+conciencia fundamentales circular
+grave nacional Sólo
+resolución puesto
+ejercicio salud país
+así
+personal derecho reunión
+organización comprometido
+proclamada personalidad libertad
+desarrollo vida
+cometerse libremente
+han penas
+justicia entre
+cualquier reconocimiento
+práctica pueblos
+juicio
+elemento
+más cualquier independiente
+realmente ataques generalizada
+país confiere
+humana libertad
+inocencia cultural
+producciones discriminación
+tanto
+tribunal
+necesarias iguales
+tanto sea sin
+enseñanza judicial inhumanos
+podrán inhumanos
+tienen proclamado niños
+acción infancia
+cualquiera elemental
+cometerse resolución hagan
+examen interpretarse
+circular bienestar
+representantes maternidad
+intrínseca violen reunión
+supremo
+efectivo
+Además
+asegure sin niños
+solamente persona
+auténticas
+fundar privada públicamente
+desconocimiento
+arbitrarias 1948 proclamado
+sus país
+gratuita nivel Sólo
+celebrarse voto elegir
+privará
+ataques
+vestido Asamblea
+casarse entre satisfactorias
+investigar trata
+fortalecimiento
+escogidos hagan política
+moral fin sea
+Miembros correspondencia
+futuros tomar descanso
+sindicarse color promover
+Proclama independiente
+sometido
+informaciones nivel privada
+comportarse
+progreso
+durante tiranía
+promoverá tales justicia
+educación matrimonio
+ante delitos
+ella
+circular
+molestado participar
+Carta confiere
+deberes objeto sujeta
+momento opiniones
+moral pagadas desarrollar
+reputación igualdad artes
+derechos servicios tiene
+pueblos
+regresar nacional científicas
+Estados investigar Además
+elemental dicho manifestar
+matrimonio
+autoridad interpretarse
+esforzarse humanidad científicas
+constitución privada fuera
+autónomo médica
+esclavitud
+que inspirándose amistad
+Organización
+culpabilidad reputación
+incluye privado
+liberados arbitrariamente infrinja
+Derecho remuneración realmente
+desempleo deberes objeto
+derechos
+Considerando mediante ampare
+intrínseca residencia defensa
+partir sujeta incluso
+sin necesario
+materia elegir derecho
+moral
+obligaciones conforme
+compromiso
+inalienables autora
+circunstancias
+progresivas sufragio
+esta
+delito concepto
+auténticas individual esencial
+causa iguales resulten
+realizar seguridad hombre
+Considerando
+justicia más caso
+nivel
+ser tales personal
+Los III obligatoria
+partes 217
+otra comisión
+todas médica
+alimentación tendrá Miembros
+garantías demás
+amistad desempleo
+Tampoco voto resulten
+amistosas periódicamente cooperación
+persecución comprometido
+obligatoria
+incluso
+otro trata pertenecer
+judicial
+igualdad observancia
+disfrute
+base razón
+paz
+ejercicio gozar
+desterrado
+habrá familia
+comunidad tipo desterrado
+cuanto
+ejercidos recursos
+ataques nacionales
+efectivos periódicamente
+efectivos gobierno país
+penal
+recibir elecciones
+todos satisfactoria
+tribunales inalienables dicho
+inocencia este bajo
+universal
+exigencias
+momento asegure
+Estos favorecerá
+cuanto
+nacen fundamental
+todos
+económicos
+cuidados
+condición Humanos comunes
+Proclama remuneración
+desconocimiento política
+medio culpabilidad
+presuma
+individual
+independiente
+tendrá morales
+esta enseñanza
+tienen fuera temor
+libres equivalente darse
+pagadas
+tribunal
+política alguna presente
+servidumbre plenamente desconocimiento
+crueles pruebe
+concepción elegir
+nacionales
+relaciones cuidados
+caso
+momento funciones escoger
+color
+salud solamente descanso
+necesario
+relaciones valor todas
+grave colectivamente
+posición único
+artísticas
+buscar
+actos parte
+asegurado beneficios violen
+supremo que
+circunstancias promoverá personalidad
+Derechos asistencia
+núbil violen
+carácter natural libre
+territorio 1948 científico
+tal públicas
+servidumbre
+actividades tratos
+individuos religiosos vejez
+invalidez
+libertades profesional
+hayan Sólo vestido
+creencia seres formas
+Además declarado
+limitaciones invocado
+promover conciencia mientras
+cualesquiera tiene
+grave
+carácter miembro
+torturas
+originada
+pena estará públicamente
+contra
+necesario
+asociación cuanto regresar
+nacimiento
+privará comisión especiales
+este obligado dentro
+vida subsistencia justicia
+fortalecimiento asimismo
+vejez circular constitución
+desconocimiento
+descanso impondrá
+amistad circular
+amplio niños vida
+inspirándose equitativas instituciones
+Nada
+matrimonio
+escoger remuneración
+comprensión Preámbulo invocado
+fundar
+alguna penal
+étnicos fundamental individuo
+internacional
+necesarios necesarias
+conciencia incluso sea
+originada escoger
+jurisdicción colectivamente Estados
+esencial también omisiones
+inspirándose
+elección
+penal establecidas
+cultural mediante
+aspiración con crueles
+nacionalidad
+asimismo
+esposos asimismo remuneración
+tratos seres
+progresivas celebrarse
+las religiosos caso
+voto
+acusación
+periódicamente causa
+privará exigencias momento
+culto
+sociales determinación partir
+progresivas
+promuevan
+completada estudios razonable
+fronteras
+Declaración que
+diciembre mantenimiento manifestar
+Naciones
+actos
+promuevan
+pleno universal
+disfrutarán sean Organización
+circular científico
+momento
+obligaciones
+General Preámbulo más
+independientes
+orden base individual
+privará científicas los
+soberanía
+inalienables
+observancia comisión sean
+enfermedad hagan duración
+ante oposición
+incluso
+religión
+inalienables respectivos
+cambiar
+fundamental técnica subsistencia
+fraternalmente
+personal territorio
+penal cualquiera Nada
+circunstancias recurso
+infrinja una
+delitos
+seguridad funciones penas
+infrinja aspiración mantenimiento
+disfrutar medios
+personal
+fin
+III
+podrán vida temor
+comportarse
+celebrarse subsistencia aseguren
+inhumanos vida
+Estados
+sea
+asegurado
+arbitrarias color tales
+informaciones
+acusada satisfacer
+índole asilo directamente
+producciones disfruten instrucción
+Derecho
+podrán internacional
+libertad humanos
+escogidos
+ejercidos aplicación
+Naciones razón
+cualquiera idioma beneficios
+pruebe Estos alimentación
+igualdad
+asimismo
+preso ser Todos
+progreso
+delictivos morales violen
+puesto poder propio
+creencia Nadie general
+Nadie intereses hayan
+correspondan
+carácter adecuado gobierno
+trabajo producciones grave
+tiranía
+disfrutar enseñanza desarrollar
+compelido instituciones Declaración
+raza sean
+libre fuera régimen
+Adoptada viudez grupo
+instituciones
+por liberados
+alimentación garantías
+barbarie tendientes hombre
+sometido examen
+comunes
+justicia
+impondrá
+asegure reputación necesarios
+núbil
+hombre estos aplicable
+general
+habrá
+recurso
+organización hijos trata
+nacidos temor defensa
+concepción
+nacional
+periódicas satisfactoria estará
+relaciones 217
+sindicatos injerencias efectivos
+científicas motivos
+hombres recurso
+supresión periódicas
+cualesquiera
+elemento infancia social
+trabajo tanto protección
+disolución libremente
+temor resolución
+contra padres
+relaciones nacional hijos
+Tampoco viudez escogidos
+favorecerá Estado natural
+enfermedad ideal disolución
+sea esforzarse efectivo
+artes
+III proclamados
+fuera oposición
+barbarie recibir
+determinación otro
+examen progreso
+social hará alguno
+instituciones desempleo sean
+dicho
+sexo
+aspiración sujeta comportarse
+nacimiento
+217 cada
+ultrajantes son mayor
+padres
+paz
+aseguren Estado condenado
+pertenecer establecidas
+cada
+imparcial desterrado materiales
+tiranía dentro libre
+privará
+sindicarse
+Declaración sus
+iguales protegidos
+contra
+obtener esta
+interpretarse
+confiere
+hombre
+determinación omisiones culto
+Unidas asegurado
+regresar
+conforme pruebe
+representantes inhumanos
+privada
+aplicable casarse igualdad
+sindicarse puesto propio
+libremente efectivos
+progresivas darse padres
+independientes
+directamente arbitrariamente
+torturas méritos miseria
+fundamentales
+opinión
+presente naciones
+confiere artísticas ley
+condiciones cuenta
+recibir molestado efectivos
+supremo trabajo étnicos
+voluntad podrán nadie
+seres jurídica
+sujeta núbil esta
+libres disfruten
+reunión colectivamente país
+Sólo reafirmado así
+emprender raza
+estos elección Carta
+ataques
+alguno concepción directamente
+diciembre
+participar
+promuevan
+Organización
+morales han
+cuenta oída
+individuos maternidad mantenimiento
+impondrá investigar constantemente
+exigencias directamente
+miseria soberanía
+nacimiento equitativa
+autoridad técnica fortalecimiento
+cualquiera trabaja esclavos
+artísticas
+con nacidos propio
+morales
+habida Sólo estará
+secreto
+Miembros
+correspondan
+regresar pacíficas
+equivalente
+cambiar
+existencia
+caso asimismo
+oída incluye
+crueles judicial tiene
+Asamblea
+salario esposos
+supremo asimismo
+pensamiento
+familia
+cualquier
+obligaciones
+representantes
+preso infrinja
+momento debe
+naciones
+tratos
+obligaciones Estos
+instrucción Toda privado
+invocado mediante ampare
+217 artísticas
+demás periódicamente
+defensa así
+colocados son
+elegir religiosos
+sentido otros
+comprensión acusación
+territorio necesario
+asegurado
+dicho restricción mujeres
+instrucción ella enseñanza
+satisfactorias constantemente individuos
+opiniones existencia libres
+también
+Estados comunes nadie
+descanso justas
+dependa edad salario
+detenido propiedad
+libertades sujeta
+provocación
+ella vacaciones
+acceso individuos puesto
+trata regresar Adoptada
+esfuerzo
+sufragio mujeres
+público religión pena
+esta
+esclavitud fraternalmente
+inhumanos
+reafirmado concepción igual
+bienestar seguridad sujeta
+indispensables
+advenimiento asimismo
+que demás indispensables
+elegir Derechos
+derechos correspondencia hayan
+equitativa respectivos
+servidumbre
+supremo
+económica sociales obtener
+juicio Miembros están
+adecuado
+bajo sindicarse
+escoger
+tribunal progresivas humanos
+voluntad naciones
+juicio esposos
+artes
+servicios especial tiene
+Carta
+fuera
+principios
+obligatoria Humanos base
+derecho beneficios
+tales
+opinión étnicos
+duración régimen acceso
+limitación
+igualdad
+protegidos ningún enfermedad
+hombres
+moral actos religión
+otros tiranía darse
+periódicamente completada momento
+conforme intereses otros
+hayan pacíficas miembro
+creencias pagadas
+elemento creencias independientes
+III cuya
+buscar
+juicio
+moral ideal servidumbre
+causa
+régimen naciones
+promuevan
+alimentación originada
+remuneración seguridad duración
+opresión supremo subsistencia
+periódicamente por tendrá
+especial escogidos rebelión
+médica fundar instituciones
+disfrutar
+elegir comisión
+respectivos
+amistosas Naciones infancia
+advenimiento así
+establecidas acusación disfruten
+supremo resueltos
+establecidas escoger tendrá
+partes
+liberados asistencia pertenecer
+ante libremente
+comunes méritos
+aspiración vejez concerniente
+pruebe privada niños
+reconocimiento libertades
+creencias promuevan bajo
+este cooperación
+provocación elegir carácter
+obligatoria penal rebelión
+esfuerzo son esforzarse
+contraerse
+pena esta incluye
+imparcial moral
+disfrutar dentro independientes
+mujeres vacaciones están
+establezca
+cuenta entre
+asistencia
+condición medios justicia
+disfruten
+juicio Toda
+estará
+nacen
+nacionalidad
+General promover cualesquiera
+esclavos nacen
+obligado manifestar violen
+distinción 217
+directamente
+públicas desarrollo condiciones
+provocación alguno científicas
+del compelido resueltos
+jurisdicción
+grupo seguros
+miembros cometerse justas
+exigencias
+fiduciaria dotados Sólo
+Asamblea
+miembros
+cualquiera mujeres cuya
+proclamada judicial
+fraternalmente distinción
+libertad sea resulten
+opiniones resulten
+resolución actividades arbitrariamente
+ejercidos
+común fraternalmente
+disolución
+recurso trabaja asegure
+fraternalmente respeto distinción
+garantías asegure Este
+tratos impondrá
+libres
+celebrarse Adoptada
+Artículo mantenimiento
+beneficios miseria humanos
+sindicatos
+reputación fueron
+han elecciones
+confiere imparcial sufragio
+voto
+derechos trabajo infancia
+asegure correspondencia general
+reputación
+dotados libertad mientras
+Unidas
+creencia
+otros
+función fundamental
+invocado servidumbre
+general enfermedad prohibidas
+injerencias residencia
+libres
+Miembros
+contra Asamblea
+Estado escogidos
+edad científico
+esclavos
+libertad
+miembro desarrollar casarse
+Adoptada
+necesarias cumplimiento declarado
+será
+hagan
+justicia servidumbre
+religión
+nivel técnica
+General
+reunión seres
+colectivamente régimen
+edad consentimiento
+seguros
+tipo
+relaciones
+objeto escogidos artes
+creencias
+fin tribunal
+jurisdicción
+fiduciaria
+equitativas
+emprender
+prohibidas libremente trabajo
+escogidos tolerancia tienen
+Carta respectivos
+investigar instrucción inspirándose
+acción
+valor
+religiosos
+Organización
+tomar impondrá
+esforzarse cooperación 1948
+voto
+organización hagan tribunal
+será
+especial darse amistosas
+más comportarse proclamado
+públicamente
+preferente educación deberes
+hijos
+hagan opuestos alimentación
+degradantes posición
+difundirlas
+disfrutar interpretarse
+Considerando observancia orden
+opiniones
+cambiar
+fin
+fiduciaria aplicación
+materia
+universal desempleo
+ataques originada persona
+concerniente
+cualquiera debe
+invocado necesarias
+elegir constitución
+mayor recibir
+momento
+natural proclamados función
+cometerse efectivo
+funciones
+acusada examen
+obligaciones propio con
+educación celebrarse resulten
+artes
+durante opresión recursos
+elecciones privará
+medios razón
+efectivo estudios nacionalidad
+elemento
+infancia pruebe
+invocado menos ultrajantes
+seguridad disfruten
+fiduciaria público superiores
+libremente
+bajo escoger
+oposición tal
+nacionalidad compromiso
+distinción territorios
+recurso
+oposición necesarias
+Considerando
+trabaja núbil directamente
+infrinja
+étnicos ser
+disfrutarán
+Humanos
+ejercidos territorio
+ultrajantes
+niños satisfactorias recurso
+igualdad mujeres
+individuo individual
+nacional equitativa
+salario médica
+ampare desconocimiento
+pruebe puesto independientes
+establezca personalidad
+Preámbulo elevada Nadie
+opresión esposos ejercidos
+elemento
+sufragio bajo
+igualdad
+intrínseca
+profesional seguridad
+protegidos judicial
+fortalecimiento disfrutar asegurar
+culto adecuado originado
+determinación idioma Artículo
+estudios
+presente
+comunes
+detenido
+elevar unos preso
+momento actividades esposos
+realizar territorios vacaciones
+reconocidos nacionalidad seguridad
+residencia equitativa puede
+técnica
+ideal causa
+individuos poder
+grave fiduciaria
+profesional
+fuera competentes palabra
+médica disfrutarán
+científico
+plenamente observancia
+mundo
+constitución carácter inocencia
+razón étnicos
+salud comunes también
+estará enseñanza vejez
+pruebe profesional
+acceso
+Nada escogidos materia
+preso
+razonable celebrarse
+culpabilidad cualquiera libertad
+debe
+justas
+elecciones
+democrática administración declarado
+será emprender pena
+una delitos obligado
+equitativa seguridad
+matrimonio
+observancia inhumanos
+favorecerá todos
+inalienables
+ideal asegurado morales
+ejercicio concepción
+ideal mundo
+existencia arbitrarias
+conforme literarias las
+confiere menos nadie
+valor
+remuneración relaciones defensa
+invalidez
+práctica podrá
+necesario
+infrinja cada
+Este sea
+obligado beneficios
+organización todas
+paz podrá
+recibir razonable
+manifestar trabaja sus
+podrá palabra
+disfrutarán
+expresará cuidados
+asegurar
+especiales realizar
+habrá del reafirmado
+adecuado
+recurso
+otro
+sexo
+naciones único subsistencia
+maternidad funciones desconocimiento
+sólo territorios oposición
+incluye
+asegurado protegidos adecuado
+amplio
+étnicos será
+familia
+solamente
+hagan materiales
+esclavos único
+raza elevar asegurar
+casos ideal Preámbulo
+realizar invocado esfuerzo
+individuo
+procedimiento asegurar humanos
+nadie informaciones
+torturas
+formas viudez
+común
+circular desarrollo tienen
+proclamados
+Proclama pacíficas
+acusada manifestar obligatoria
+creencias
+han
+autora
+humano detenido
+partir domicilio
+esfuerzo durante elecciones
+III formas remuneración
+esta
+enseñanza equivalente
+elemento hombres
+vea edad
+desterrado
+tal delitos
+inhumanos para Toda
+contraerse motivos soberanía
+participar compelido económica
+técnica
+pérdida
+futuros secreto maternidad
+disolución
+privado administración palabra
+Todo
+así representantes
+tribunales
+sufragio nacen
+según conciencia
+materia medios general
+oída voluntad
+auténticas
+delictivos comprometido
+científicas resulten
+Organización elección durante
+cambiar invocado
+cumplimiento Derechos
+opresión degradantes durante
+nacimiento
+vida supresión
+conciencia limitación crueles
+interpretarse menosprecio
+todos
+grupos méritos
+ejercicio
+justas padres
+beneficios seguros miembro
+especial
+los sólo
+aseguren
+consentimiento reputación
+invalidez Proclama
+persecución médica
+fueron
+matrimonio asilo
+Asamblea
+tienen cumplimiento elevar
+limitación Carta
+salir educación
+amistad
+promover fiduciaria barbarie
+escogidos
+promover compromiso tales
+vida
+domicilio
+tanto
+comprensión cualquiera
+social independientes
+para
+Asamblea
+mayor
+tratos intereses mayor
+económica amistad
+cualquiera
+cualquiera opinión
+promoverá satisfacción
+circunstancias según aplicable
+informaciones también
+derecho
+personalidad
+que enseñanza III
+desconocimiento torturas pleno
+humanos advenimiento ideal
+proclamado proclamados detenido
+Nada compromiso pueblo
+prohibidas subsistencia Organización
+opinión cometerse
+especiales causa internacional
+gozar general
+delitos
+paz
+raza miembro efectivos
+Organización
+sean
+elecciones regresar
+competentes culto
+será
+ningún progreso
+estos rebelión
+momento función
+religión reconocidos
+ultrajantes
+interpretarse
+fueron
+esfuerzo
+asilo
+será
+podrá promuevan esforzarse
+vacaciones
+Proclama
+equivalente
+habrá
+universal disfruten
+medios
+individual jurídica sociales
+raza torturas correspondencia
+Este este
+esforzarse
+impondrá
+tiranía originado
+ampare ultrajantes posición
+estudios especiales servicios
+salir carácter desarrollo
+dignidad intrínseca
+nacimiento mediante
+humana hayan amistosas
+investigar grave
+duración colectivamente inspirándose
+durante respeto
+regresar vivienda voluntad
+momento deberes
+participar reputación
+investigar Los
+las soberanía
+satisfactorias sindicarse
+artísticas persona
+seres promoverá
+contra tienen
+menosprecio especial tiranía
+elemento sociales una
+tratos
+recurso soberanía resulten
+estos individuo periódicas
+inspirándose seguros sexo
+torturas
+que acceso
+asegurado
+amistad
+disolución desarrollo
+esencial privado
+arbitrariamente
+tendrá honra
+religiosos amplio
+reconocimiento preferente arbitrariamente
+supremo medios dependa
+preso
+será territorio
+medios
+correspondencia realmente voto
+Naciones
+ideal
+discriminación iguales enfermedad
+culpabilidad nacen limitación
+tribunal
+III realmente
+fin
+todos jurisdicción III
+auténticas
+concepto
+Naciones celebrarse
+las juicio demás
+detenido
+fueron único satisfactoria
+maternidad
+necesarias
+iguales
+elevar individuos
+pena gratuita originado
+existencia democrática
+pena cuya
+disfrute régimen nacionalidad
+violen
+difundirlas
+propósitos que dependa
+ningún
+establecidas amistad étnicos
+descanso indispensables Organización
+humana principios
+arbitrariamente
+defensa
+administración régimen tendrán
+amistosas
+públicas regresar
+elemental amistad
+supresión Unidas
+aplicable individuo
+derechos bajo obligatoria
+otros económica
+reconocidos opresión
+intrínseca
+satisfactorias caso satisfactorias
+étnicos propósitos
+1948
+molestado
+posición
+todas
+poder prohibidas
+democrática cultural
+valor sentido
+amplio son
+educación restricción según
+representantes públicas manifestar
+autoridad
+salir hombres
+tiranía
+recursos limitaciones
+práctica futuros promoverá
+aspiración universales régimen
+sometido libertad profesional
+elegir
+hijos superiores
+directamente vivienda
+artes política
+cuenta amplio escoger
+Además
+expresará
+esfuerzo mujeres
+equivalente Además originado
+proclamado autoridad pueblos
+invalidez universal dignidad
+durante para
+gratuita esfuerzo
+trabaja
+del circunstancias amistosas
+desconocimiento autoridad
+pena
+por
+determinación
+Sólo enfermedad
+comprensión casarse
+oposición Proclama
+escoger
+liberados humana ante
+remuneración servicios
+hayan fraternalmente
+rebelión
+Proclama
+propiedad
+cualquier funciones alguno
+aplicación plena
+satisfacer
+entre
+Nadie
+ataques informaciones
+preso
+inspirándose tratos ataques
+científico
+opinión tendrá esposos
+desarrollar
+supresión
+humano asegurar fortalecimiento
+sentido raza aplicable
+alguno
+hagan principios intereses
+individual para
+habida
+Además
+otros será interpretarse
+cuidados Tampoco prohibidas
+casarse público médica
+satisfacer miembros
+fortalecimiento formas disfruten
+asegurar esforzarse
+conforme
+arbitrarias Preámbulo Preámbulo
+equitativa hombres momento
+unos Miembros
+acción
+reafirmado habrán las
+padres una conciencia
+contraerse
+restricción medidas
+estará tribunal
+todas tolerancia sus
+mediante
+natural infrinja miseria
+equitativa propósitos deben
+medio
+acción personal
+General
+internacional supresión bajo
+especial miseria
+generalizada
+Sólo independiente enseñanza
+pagadas nacimiento
+inocencia comunidad
+pérdida por gobierno
+será Organización nacional
+provocación gratuita garantice
+médica debe
+liberados hayan
+resolución 1948 base
+restricción indispensables
+cuenta religiosos hayan
+tribunales habida asimismo
+originado iguales pleno
+Adoptada
+compelido
+organización General
+hijos paz circular
+origen
+esposos comunidad elemental
+sufragio
+niños han generalizada
+especiales
+ultrajantes
+jurisdicción asilo equitativa
+étnicos
+personalidad fundamentales condición
+nacionalidad
+garantías trabajo inocencia
+satisfactorias Este defensa
+fin superiores
+índole especial
+esfuerzo instituciones Estado
+comunes deben
+gobierno
+cuidados ideal oposición
+indispensables casos tomar
+proclamado
+asegurado
+ser partes
+fundamentales
+motivos indispensables justas
+función recursos
+Estados acusación Estado
+idioma
+completada pacíficas nacionalidad
+deberes proclamada
+desempleo Declaración ideal
+morales vestido partes
+condición tendientes casarse
+fundamental
+natural reconocimiento
+mientras nivel proclamado
+han
+elección culpabilidad
+Estado preso
+bajo
+Adoptada nacen matrimonio
+propósitos General cuidados
+son ante
+edad sometido seguros
+públicamente profesional
+supremo
+cometerse aplicación gozar
+independiente así
+pérdida
+celebrarse tiempo
+inalienables
+Tampoco
+infancia artísticas democrática
+disfrute que
+efectivos
+persecución darse
+tribunal distinción aseguren
+cuya funciones mundo
+plenamente
+Nada paz
+remuneración difundirlas casarse
+Este
+miembros humanidad hombres
+limitación disfrutar
+culto mujeres
+plena independientes
+miseria este como
+III
+fin
+asilo puesto disolución
+salud principios buscar
+Asamblea sujeta
+solamente otros
+más injerencias nacional
+económica dotados
+oída proclamado infrinja
+amistosas
+confiere
+justas fueron
+realmente privada trata
+índole país sindicatos
+sindicarse
+entre
+técnica defensa ejercicio
+jurídica técnica garantice
+cultural
+resolución índole justas
+casarse
+independientes
+entre seguridad escogidos
+establezca
+infrinja hayan observancia
+sus cualquiera promoverá
+darse correspondan Universal
+privada emprender
+escoger científico
+pueblos instrucción democrática
+disfrutarán voluntad
+elección
+provocación sociedad
+habrá
+condición internacional
+nivel
+principios Proclama
+comprometido administración
+asegurar
+grave necesarios del
+Humanos indispensables índole
+salario invocado concepto
+gozar habrá
+torturas 217
+ejercidos Nada persecución
+humanidad fin fraternalmente
+satisfacer
+sociedad directamente
+democrática asegurado sexo
+privado
+Declaración
+seres
+comunidad violen
+Estos nivel
+honra investigar
+restricción
+judicial condición
+igual
+tendientes ante
+será
+originada profesional
+tratos
+garantice ante
+manifestar contra
+otro expresará disfrute
+esfuerzo
+concepción
+restricción parte protección
+tipo instituciones efectivo
+Nada efectivos
+fundada educación reafirmado
+vida religión declarado
+representantes parte toda
+acusada Universal
+son obligatoria asilo
+cambiar por
+Carta respectivos económica
+fraternalmente
+país acusación cuidados
+compelido tratos propiedad
+molestado directamente
+descanso mediante
+independiente deben
+esclavos proclamado
+habida promoverá
+necesario reafirmado
+satisfacción
+amplio necesario arbitrariamente
+deben culpabilidad supremo
+presuma
+tendrá
+consentimiento
+fundada enseñanza
+independiente privada
+objeto persecución
+omisiones régimen habrán
+presuma
+infancia toda
+advenimiento nacional
+momento
+condición opinión
+enseñanza interpretarse garantice
+cultural enfermedad propio
+propósitos materiales
+cultural seres todas
+correspondan Carta religión
+literarias incluso establezca
+especiales
+sexo
+ejercicio vea cuanto
+habrán presente
+tendrán procedimiento
+índole
+derecho
+voto
+exigencias individuos
+religiosos 217 conciencia
+acción
+enfermedad
+equivalente
+interpretarse realizar
+será obtener invocado
+condición grupo
+pérdida
+nacidos entre
+mantenimiento hombre edad
+informaciones autónomo
+realizar gobierno sociales
+hombre colectivamente medios
+circular celebrarse dependa
+nacional para
+medidas recursos desterrado
+establezca
+desterrado autoridad
+torturas Considerando
+tratos médica
+Derecho
+aseguren manifestar asegurar
+desarrollo condenado
+disfruten
+generalizada humano miembros
+libertades efectivos invocado
+observancia tomar 217
+Organización
+momento
+fraternalmente auténticas
+tiranía
+sociales
+correspondencia cuidados provocación
+compromiso periódicas
+sexo
+compromiso comisión
+profesional
+hijos
+asimismo organización obtener
+tienen
+tiene
+torturas cultural sufragio
+las subsistencia
+habrán profesional arbitrarias
+ella promuevan
+futuros casarse
+Todos
+pérdida humanidad creencias
+una 1948
+amistad determinación generalizada
+palabra tolerancia superiores
+pagadas
+esposos
+miembro
+general tribunal matrimonio
+concepción reconocimiento
+jurisdicción este servidumbre
+individuos fundamentales acusación
+persecución
+elevar advenimiento
+medidas
+superiores elevar procedimiento
+progreso determinación Miembros
+presente
+proclamado
+confiere base concepción
+aseguren elemento raza
+correspondan
+judicial
+Artículo investigar
+representantes originado
+ideal jurídica
+universales garantice
+general
+principios
+para actividades
+descanso
+personalidad tribunal
+miseria
+beneficios participar económicos
+Carta equitativas
+correspondan puede
+humana
+juicio
+injerencias esencial
+índole
+sufragio como Nadie
+progresivas paz
+núbil
+desarrollo
+fraternalmente instituciones elevar
+obligado fueron
+libertad resulten amistad
+podrá dicho autónomo
+sindicarse expresión
+ella
+Declaración
+medio artes personal
+individuo actividades padres
+provocación debe técnica
+sólo
+procedimiento
+otro vida establezca
+hombre concerniente asegure
+tienen estos distinción
+igualdad obligado
+privada Nada
+condiciones
+Humanos tendrá tal
+casarse han
+acción
+Derechos
+pleno satisfactorias núbil
+color
+independiente Toda
+cambiar
+mantenimiento informaciones
+universales liberados
+comportarse causa progresivas
+todas social asistencia
+elecciones
+intereses autora tienen
+para domicilio
+ampare
+médica autónomo
+públicamente Además política
+nacionalidad
+tendrán
+disfrute
+libertad derechos penas
+confiere colectivamente gozar
+cuya realmente
+intrínseca autoridad
+disfrutar Universal
+amistosas concepto
+satisfactoria colectivamente
+discriminación dignidad
+ley constantemente
+dotados
+motivos desterrado privará
+cualquier
+incluso Carta dentro
+humanidad artes originado
+color
+garantías difundirlas
+Todos pertenecer méritos
+sometido razonable otros
+actividades cometerse
+puede nacionalidad
+independientes opinión
+disfrute beneficios públicas
+emprender asilo
+razonable inspirándose hará
+darse
+ataques
+realmente limitaciones restricción
+impondrá casarse cada
+según asilo
+Tampoco pleno
+necesarias
+domicilio
+este desarrollar equivalente
+Los paz opiniones
+proclamada propio
+juicio técnica momento
+compelido
+vea raza asegure
+Preámbulo
+toda imparcial
+procedimiento delitos
+con
+sexo inhumanos entre
+delito asociación
+elemento
+Estado esencial
+personalidad creencia Miembros
+pena
+viudez sufragio cada
+jurisdicción necesarias sólo
+niños
+niños
+iguales demás
+completada
+ley
+Proclama barbarie
+concepción nacional
+funciones medios
+grupos
+disfruten
+observancia equitativas sentido
+miseria medidas
+duración aseguren técnica
+sufragio cualesquiera cada
+persecución omisiones promover
+acusada naciones culto
+edad elemental
+promover maternidad injerencias
+beneficios
+religión producciones
+política aseguren presente
+penas
+los
+presuma persona
+fueron democrática
+alimentación
+pueblo
+méritos económica solamente
+inalienables
+equivalente
+cualesquiera
+pueblo vejez
+cualquier asimismo independientes
+sexo
+elemental tienen
+consentimiento juicio
+económicos
+plenamente
+ley
+territorios desterrado restricción
+omisiones hagan
+jurisdicción indispensables
+indispensables
+tipo
+habida instituciones relaciones
+motivos como
+desarrollar
+competentes deben
+hará nacidos tratos
+religiosos procedimiento regresar
+constantemente recibir los
+pagadas como natural
+pleno
+religión
+todos podrán auténticas
+constantemente
+función podrán
+fronteras tiempo informaciones
+escoger originada
+especial
+delictivos
+ser compromiso régimen
+difundirlas del
+importancia consentimiento Miembros
+étnicos menosprecio delitos
+Todo seguros
+Nadie preferente
+invalidez
+1948 mantenimiento incluye
+hombres seres elección
+resolución
+reunión
+práctica tiempo
+advenimiento valor
+cumplimiento
+sea ningún
+autónomo
+nacen
+arbitrarias igualdad
+superiores
+maternidad
+menosprecio Todo esta
+desempleo
+contra pacíficas reconocimiento
+morales fueron igual
+defensa gobierno desconocimiento
+acusada menosprecio
+participar
+individuo tratos
+equitativas expresará puede
+sujeta asegurado Miembros
+asilo fundamentales
+promoverá
+progreso
+crueles vida originado
+solamente representantes salir
+creencia
+inocencia
+reafirmado
+nivel público necesario
+dependa
+dicho obligado
+edad
+disfrutar servidumbre solamente
+funciones importancia
+entre
+fin prohibidas
+especial grupo
+favorecerá propio sentido
+217
+morales detenido esencial
+religión
+económica fundada relaciones
+invocado circular
+colocados comisión satisfactorias
+satisfacción elemento habida
+tendrán intereses
+esposos resulten
+una protegidos
+resulten darse
+ley fortalecimiento poder
+opiniones unos promoverá
+asociación materiales
+preferente Todos
+vejez pensamiento
+son mundo
+concepción religión creencias
+culturales
+progresivas las
+ejercicio
+reconocimiento descanso libertades
+aseguren detenido
+administración Artículo infrinja
+diciembre torturas
+correspondencia
+advenimiento todos
+casarse disfrutarán sea
+plenamente médica limitaciones
+realizar opuestos hará
+respectivos humanidad conforme
+gratuita cuya
+fin intereses
+escoger
+persecución justas raza
+Artículo necesarias colectivamente
+deben proclamada cuenta
+podrá desarrollo plenamente
+justas
+condenado
+privada amistad
+oposición habida
+asociación naciones país
+celebrarse esfuerzo
+salir interpretarse fiduciaria
+comprensión
+investigar país
+literarias
+plenamente Este
+obligatoria
+todos disfrutar escoger
+plena cuidados demás
+Toda nacidos
+importancia
+tiene reafirmado
+edad
+igualdad preferente
+amistosas
+obligaciones
+residencia social
+resulten
+privada
+científicas
+habrá tiempo
+tal correspondencia vejez
+aspiración
+garantice resolución
+manifestar
+idioma opiniones domicilio
+interpretarse tiene
+acusación
+más
+limitaciones invalidez moral
+hombre funciones acusación
+voto respecto obligado
+realmente base
+comprometido mundo práctica
+Todos conforme cuidados
+razón cuanto casos
+enfermedad pena asociación
+desarrollo confiere
+regresar degradantes secreto
+hombres independientes opresión
+progreso
+Este
+aplicación
+distinción habrá como
+tendrá presente progreso
+amistosas elevar acusación
+sindicarse
+supremo
+reputación nacimiento internacional
+medidas tiempo
+Preámbulo
+autora participar poder
+miembros núbil liberados
+razonable religión recursos
+acceso
+individual
+medidas reputación
+libres escoger
+originada satisfactorias periódicas
+seguridad circular amplio
+razonable satisfacción
+independiente imparcial concerniente
+recurso privada
+derechos
+efectivo partir
+color paz
+proclamada creencias invocado
+maternidad fortalecimiento
+pagadas examen
+satisfacer
+organización
+opuestos fin
+tienen
+asegure Miembros equitativas
+oída
+entre
+según independientes color
+satisfacción debe
+instrucción privará superiores
+tal natural originado
+cuenta
+equivalente
+núbil
+comunes único desterrado
+Derecho disfrute pueblo
+voluntad matrimonio
+delitos podrán acusación
+Universal Humanos territorio
+hará
+servidumbre observancia
+entre infancia especiales
+ante comprensión
+persecución respeto hagan
+para democrática
+actividades con
+trabajo
+pagadas necesarios
+elecciones infrinja Naciones
+universal tolerancia libertades
+económica otro salir
+libres cooperación igual
+grupos participar limitaciones
+seres
+sindicatos imparcial
+alimentación
+Derecho
+fuera
+inalienables
+las Asamblea
+persona
+cualquier infrinja
+independiente tanto
+solamente
+poder menosprecio
+elegir
+violen internacional
+violen temor interpretarse
+esencial los circunstancias
+jurisdicción alguno médica
+Nada
+tolerancia asistencia
+necesarias tolerancia creencias
+subsistencia servidumbre
+humana comisión motivos
+respeto carácter
+parte
+regresar correspondencia
+este condiciones
+libertades
+posición
+Estados
+personalidad circunstancias
+núbil culturales persecución
+restricción sean tiempo
+tribunales
+sexo por niños
+natural
+reafirmado
+materiales concepción causa
+aplicación
+respecto
+escoger preso fiduciaria
+cuya completada
+Estados así
+inalienables originado
+actos
+científico ataques
+pena fraternalmente especiales
+tribunales sentido sociedad
+elevar
+fundamentales reconocimiento universal
+procedimiento autora
+partir pruebe otros
+obligaciones
+elecciones todos mantenimiento
+competentes justicia
+creencia prohibidas
+régimen
+juicio intereses más
+especiales garantías
+esposos fundamentales
+públicas persona importancia
+cultural sindicatos
+arbitrarias
+circunstancias como
+sexo nacionalidad
+régimen exigencias
+familia otro
+limitación asegure
+otro
+Artículo comunes Estados
+impondrá
+promuevan incluso educación
+cualquiera una humana
+mayor Toda violen
+fiduciaria individuos
+General deben política
+tendrá elevada
+honra Estados
+del
+proclamado
+independiente técnica promuevan
+necesario seguridad puede
+comunes opuestos
+liberados inspirándose bajo
+disfrute
+vida
+concepción
+étnicos
+cambiar deben
+conciencia
+originado pueblos también
+autónomo fundamentales
+culto
+inhumanos pueblos
+investigar
+derecho nacional autoridad
+respeto reconocimiento ningún
+futuros determinación
+grave
+independientes sindicarse trabajo
+salir
+equivalente actos
+comprensión
+nadie pérdida entre
+según cada Humanos
+equitativa sexo
+padres sufragio
+periódicas soberanía
+otra progresivas
+presente las
+especial públicas obligaciones
+origen alimentación menos
+artísticas podrán constitución
+compelido momento
+conciencia miembros emprender
+investigar moral administración
+penal
+familia vida importancia
+dignidad
+supremo resulten
+razonable
+Adoptada oída
+comprensión tiempo
+territorios
+respeto domicilio
+tienen respeto
+Naciones injerencias
+remuneración
+estudios
+están cuya
+nivel judicial futuros
+elegir competentes persona
+originada otra
+nacidos privado cualquier
+tiempo comunes obligatoria
+asistencia Carta elección
+otra
+naciones
+disfrutar pleno organización
+ampare núbil
+Proclama
+intereses opuestos
+origen
+generalizada demás
+durante
+nacidos tanto
+beneficios
+residencia promuevan tolerancia
+satisfactorias observancia
+honra esclavitud acceso
+barbarie
+delitos otros religiosos
+una establecidas
+pruebe propiedad expresión
+trabaja
+grave emprender respecto
+arbitrariamente étnicos técnica
+asegurar observancia
+contra
+profesional soberanía
+resolución determinación servidumbre
+carácter fundamental
+momento función palabra
+para que
+enfermedad
+inspirándose condición conforme
+pena injerencias públicas
+duración
+creencia exigencias condición
+contra ataques
+general cuya
+honra Miembros
+otro son
+trabaja
+para
+personal barbarie ningún
+ante puesto
+mujeres ultrajantes fortalecimiento
+Todos otra
+alimentación colectivamente
+ejercidos Además
+asilo
+internacional
+constitución descanso
+tienen
+públicamente funciones amistosas
+Nadie
+edad
+subsistencia
+intrínseca durante oposición
+equivalente obligado política
+correspondencia promuevan
+autora producciones
+miembros
+tales escoger
+libre habida toda
+establezca
+territorio
+persona
+médica indispensables derechos
+oposición
+nacimiento
+respeto torturas reconocidos
+pleno respeto núbil
+artísticas fundamentales régimen
+Declaración toda pacíficas
+invocado cualquier
+humana
+creencia régimen
+conciencia importancia
+auténticas infancia
+mayor
+reputación amistosas iguales
+demás desarrollar salario
+mantenimiento opuestos
+literarias Además constantemente
+acusación sus delito
+existencia esposos casarse
+partir completada diciembre
+asociación tipo
+promover naciones posición
+sean artes tal
+esta indispensables
+hagan tolerancia pleno
+económicos amplio plenamente
+mientras carácter 1948
+unos advenimiento
+pueblo
+ataques núbil
+obligaciones
+Los asegurado
+expresará tal
+violen sus
+territorios arbitrariamente
+ejercicio
+parte tendrán
+sentido expresión culpabilidad
+Los
+tribunal
+formas cooperación judicial
+asociación detenido ampare
+solamente
+territorios creencias
+gozar temor grupo
+limitaciones reconocidos progresivas
+necesario
+palabra será niños
+generalizada
+casos
+orden instrucción miembros
+privará
+familia
+correspondan impondrá
+asegurado preferente sindicatos
+beneficios público barbarie
+pagadas
+propósitos científico del
+conforme según libres
+grave materiales
+concepto
+cometerse fortalecimiento natural
+democrática puesto
+que humanidad
+completada
+para
+naciones
+acusada correspondencia
+religión
+matrimonio nacionales matrimonio
+juicio esclavitud religiosos
+palabra
+elegir
+arbitrariamente
+equitativa
+familia sociales preferente
+nacimiento mantenimiento
+seguros obligado
+propio superiores comunidad
+entre opuestos individual
+esfuerzo pueblo
+Nadie
+cuidados hará están
+justas correspondan concepción
+satisfactoria tienen común
+seres
+condiciones causa
+tribunal nacional
+originada ejercicio autoridad
+salario
+fronteras otros
+individual salir seguros
+han resueltos otros
+degradantes escoger todas
+étnicos origen tiempo
+arbitrariamente universal Organización
+deberes equivalente
+dentro pensamiento asociación
+padres ella
+esclavos plenamente
+servicios reconocimiento
+periódicamente asimismo satisfacción
+solamente elemento idioma
+desarrollar independientes culpabilidad
+discriminación Tampoco
+elección sociedad buscar
+amplio
+asegurar razonable opinión
+concepto
+circular
+territorios darse
+sin
+casarse creencias
+propio cuenta color
+valor
+unos desarrollo
+gobierno podrá
+reafirmado
+obtener objeto
+delitos adecuado
+protegidos servidumbre
+práctica
+sindicatos
+nacional incluso favorecerá
+Sólo amplio
+obligaciones propiedad necesario
+maternidad
+tales
+especial
+inhumanos
+proclamados fundamental medio
+sin hijos delictivos
+enseñanza
+efectivo
+condición
+comprensión oposición
+carácter secreto
+asistencia
+obligaciones protección Asamblea
+ideal
+dicho aspiración
+Toda pueblo según
+obtener
+creencias
+necesarias cuya
+podrán individual
+elemento
+representantes opresión Derechos
+cualquiera régimen
+comportarse económicos
+progreso
+competentes
+literarias habida
+descanso aplicable miembro
+materia condenado internacional
+culto delito celebrarse
+humanos así
+temor
+medidas
+establecidas
+Naciones las humano
+unos ningún salario
+Declaración mayor
+humana adecuado
+dignidad celebrarse
+desarrollar habrán
+hombre personal estará
+domicilio seres
+deben
+futuros elevar sus
+artísticas
+indispensables
+deben universales
+elección artísticas medio
+pagadas
+étnicos
+naciones familia fortalecimiento
+administración fin
+territorios
+más momento
+privada
+Carta ante cada
+preferente
+tratos cometerse
+entre índole tienen
+progreso condición núbil
+sexo culpabilidad menos
+descanso política
+elegir
+materiales fin artes
+Toda
+beneficios humana régimen
+necesarios
+podrá
+imparcial
+hagan
+ejercicio mientras
+Tampoco importancia base
+cuanto esfuerzo
+esclavos
+creencias económica promover
+otra
+ejercicio sus obtener
+libertad alguna
+ultrajantes
+Estos será
+régimen
+reunión 217
+circular
+las comprometido propiedad
+nacional
+molestado científico
+elevada
+otro
+relaciones participar
+exigencias cuidados
+nacen molestado Además
+privado opinión
+satisfacción
+Unidas pertenecer
+tienen respectivos celebrarse
+puesto
+Estado fin medidas
+alimentación prohibidas elegir
+hombres
+secreto plena
+salud
+Sólo equitativas
+Unidas
+hará las
+vivienda instituciones méritos
+privado
+progresivas
+libremente
+gratuita médica
+del acción vea
+libertad ser vejez
+artísticas privado
+rebelión
+país morales intereses
+personalidad
+seguros
+degradantes
+temor alimentación fortalecimiento
+disolución
+trabaja
+concepción infrinja
+honra este
+comunes sindicarse prohibidas
+equitativas cualquiera práctica
+materiales privará
+delictivos nacen valor
+emprender
+delitos resolución inhumanos
+una
+partir
+temor fundamentales
+culto
+con garantice
+cualquier disolución plenamente
+artes solamente
+derecho salud
+efectivos periódicamente están
+menos expresión
+estos acusada internacional
+cuanto
+resueltos respectivos
+supremo temor
+confiere
+expresión
+circunstancias
+sus nivel Estados
+hagan
+cuya obligado
+sus constitución tipo
+vestido
+deberes
+disfrutar incluye
+correspondan cuya opiniones
+tendrá
+circular
+rebelión
+esta
+principios
+territorios causa dependa
+amistad desarrollo
+desempleo
+educación
+Declaración
+darse propiedad escogidos
+consentimiento presuma necesario
+correspondan nadie independientes
+méritos
+opiniones
+razonable competentes omisiones
+públicamente fundamentales Nada
+inalienables
+propio recibir parte
+privada cuanto
+darse nacionalidad
+Sólo inalienables
+del plenamente adecuado
+tribunal
+propósitos obligaciones
+organización
+importancia
+será
+proclamada
+materia
+invalidez correspondencia tiranía
+poder
+Todo
+política libremente
+práctica
+recurso reafirmado pruebe
+morales familia
+han protección
+presente mientras grupo
+supresión igualdad régimen
+persecución pérdida familia
+supresión
+hombre esclavos progreso
+disolución Universal protegidos
+regresar satisfactorias acusada
+humana miembro
+valor cualquiera
+distinción
+universales autora elevar
+servicios comunes
+cambiar
+servidumbre política
+humana generalizada todas
+tiempo
+fundar
+concerniente actos hijos
+justas
+#
+# Data Statistics:
+#   Number of Unique Words              [564]
+#   Word Length (min/max/avg)           [3 / 15 / 7.90]
+#   Word Count per Phrase (min/max/avg) [1 / 3 / 2.00]
+#   Phrase Length (min/max/avg)         [3 / 42 / 16.81]
+#

@@ -1,0 +1,60 @@
+.\" Hey, Emacs! This is -*-nroff-*- you know...
+.\"
+.\" genuca.8: manual page for the genuca utility
+.\"
+.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
+.\" License & terms of use: http://www.unicode.org/copyright.html
+.\" Copyright (C) 2000-2014 IBM, Inc. and others.
+.\"
+.TH GENUCA 8 "2014-Feb-24" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.SH NAME
+.B genuca
+\- create the root collation data file for ICU
+.SH SYNOPSIS
+.B genuca
+[
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
+]
+[
+.BR "\-v\fP, \fB\-\-verbose"
+]
+[
+.BI "\-c\fP, \fB\-\-copyright"
+]
+[
+.IR path/to/ICU/src/root
+]
+.SH DESCRIPTION
+.B genuca
+reads path/to/ICU/src/root/source/data/unidata/FractionalUCA.txt and
+writes source and binary data files with the collation root data.
+
+The binary file
+.B ucadata.dat
+can then be read directly by ICU, or used by
+.BR icupkg (8)
+or
+.BR pkgdata (8)
+for incorporation into a larger archive or library.
+
+See http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files
+.SH OPTIONS
+.TP
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
+Print help about usage and exit.
+.TP
+.BR "\-v\fP, \fB\-\-verbose"
+Display extra informative messages during execution.
+.TP
+.BI "\-c\fP, \fB\-\-copyright"
+Include a copyright notice into the binary data.
+.SH FILES
+.TP 15
+.B FractionalUCA.txt
+Machine-readable file containing data for the CLDR root collation order.
+.SH VERSION
+@VERSION@
+.SH COPYRIGHT
+Copyright (C) 2001 IBM, Inc. and others.
+.SH SEE ALSO
+.BR pkgdata (8)

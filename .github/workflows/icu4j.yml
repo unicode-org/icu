@@ -1,0 +1,178 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA ICU4J
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+    paths:
+      - 'icu4j/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'icu4j/**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+env:
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+
+permissions:
+  contents: read
+
+jobs:
+
+  # Initialize the Maven artifact cache
+  #
+  # This job is created according to the cache strategy of reuse from a single job:
+  # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
+  icu4j-mvn-init-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Download all of the artifacts needed for the code and build plugins, but
+      # exclude any needed by profiles depending on system artifacts
+      - name: Download all artifacts
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} dependency:go-offline -P '!old_jdk_taglet'
+          
+  # ICU4J build and unit test using Maven
+  # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+  icu4j-mvn-build-and-test:
+    needs: icu4j-mvn-init-cache
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [ '8', '11', '17' ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} verify
+      - name: List failures (if any)
+        run: |
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # ICU4J build and unit test under lstm
+  lstm-icu4j-build-and-test:
+    if: false  # TODO(ICU-22505)
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Config LSTM and Rebuild data jar
+        run: |
+          cd icu4c/source;
+          ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j -l2.5 ICU4J_ROOT=../../../icu4j icu4j-data-install;
+          cd ../..
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} verify
+      - name: List failures (if any)
+        run: |
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # ICU4J build and unit test under adaboost
+  adaboost-icu4j-build-and-test:
+    if: false # Temporary disable, until we disable the .jar creation from C and distribute the individual files
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Restore read-only cache of local Maven repository
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Config Adaboost and Rebuild data jar
+        run: |
+          cd icu4c/source;
+          ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j -l2.5 ICU4J_ROOT=../../../icu4j icu4j-data-install;
+          cd ../..
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true verify
+      - name: List failures (if any)
+        run: |
+          cd icu4j && cat `find . -name surefire-reports -type d -exec grep -l  -r --include="*.txt" FAILED {} \;`;
+        if: ${{ failure() }}
+

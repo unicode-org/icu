@@ -1,0 +1,27 @@
+# -*- makefile -*-
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (C) 2008-2012 IBM Corporation and Others. All Rights Reserved.
+
+
+
+## --- important ---
+# Path to  http://source.icu-project.org/repos/icu/data/trunk/meta
+ICUMETA=/xsrl/E/data/meta
+
+
+
+
+
+## --- all others are optional ---
+
+# if needed - additional jars on the CLASSPATH
+#OTHERJARS=somejar.jar:some/other/jar.jar
+
+# if needed - force path to ICUJAR
+#ICUJAR=.../icu.jar
+
+#Special make options
+#MAKE_OPTS=-j2

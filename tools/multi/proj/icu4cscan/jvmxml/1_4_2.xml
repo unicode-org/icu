@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!-- Copyright (c) 2008 IBM Corporation and Others, All Rights Reserved. -->
+
+<!DOCTYPE icuInfo SYSTEM "http://icu-project.org/dtd/icumeta.dtd">
+<icuInfo>
+    <icuProducts>
+        <icuProduct type="java">
+            <releases>
+                <release version="1.4.2">
+     <capabilities>
+      <feature total="134" type="formatting">
+       <!-- Note: Java locales have different conventions than ICU. -->
+       ar ar_AE ar_BH ar_DZ ar_EG ar_IQ ar_JO ar_KW ar_LB ar_LY ar_MA ar_OM ar_QA ar_SA ar_SD ar_SY ar_TN ar_YE hi_IN iw iw_IL ja ja_JP ko ko_KR th th_TH th_TH_TH zh zh_CN zh_HK zh_TW be be_BY bg bg_BG ca ca_ES cs cs_CZ da da_DK de de_AT de_CH de_DE de_LU el el_GR en_AU en_CA en_GB en_IE en_IN en_NZ en_ZA es es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_ES es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_UY es_VE et et_EE fi fi_FI fr fr_BE fr_CA fr_CH fr_FR fr_LU hr hr_HR hu hu_HU is is_IS it it_CH it_IT lt lt_LT lv lv_LV mk mk_MK nl nl_BE nl_NL no no_NO no_NO_NY pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU sh sh_YU sk sk_SK sl sl_SI sq sq_AL sr sr_YU sv sv_SE tr tr_TR uk uk_UA en en_US
+      </feature>
+      <feature total="134" type="collation">
+       <!-- Note: Java locales have different conventions than ICU. -->
+       ar ar_AE ar_BH ar_DZ ar_EG ar_IQ ar_JO ar_KW ar_LB ar_LY ar_MA ar_OM ar_QA ar_SA ar_SD ar_SY ar_TN ar_YE hi_IN iw iw_IL ja ja_JP ko ko_KR th th_TH th_TH_TH zh zh_CN zh_HK zh_TW be be_BY bg bg_BG ca ca_ES cs cs_CZ da da_DK de de_AT de_CH de_DE de_LU el el_GR en_AU en_CA en_GB en_IE en_IN en_NZ en_ZA es es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_ES es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_UY es_VE et et_EE fi fi_FI fr fr_BE fr_CA fr_CH fr_FR fr_LU hr hr_HR hu hu_HU is is_IS it it_CH it_IT lt lt_LT lv lv_LV mk mk_MK nl nl_BE nl_NL no no_NO no_NO_NY pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU sh sh_YU sk sk_SK sl sl_SI sq sq_AL sr sr_YU sv sv_SE tr tr_TR uk uk_UA en en_US
+      </feature>
+     <feature type="layout">Arab Hebr Thai Beng Deva Gujr Knda Mlym Orya Punj Taml Telu Urdu Hans Hant Jpan Latn Cyrl Grek Armn Geor Runr Ogam Thai</feature>
+                        <feature type="unicode" version="3.0"/>
+                        <feature type="characters">af af_NA af_ZA ar ar_AE ar_BH ar_DZ ar_EG ar_IQ ar_JO ar_KW ar_LB ar_LY ar_MA ar_OM ar_QA ar_SA ar_SD ar_SY ar_TN ar_YE az az_Cyrl az_Cyrl_AZ az_Latn az_Latn_AZ be be_BY bg bg_BG ca ca_ES cs cs_CZ cy cy_GB da da_DK de de_AT de_BE de_CH de_DE de_LI de_LU el el_CY el_GR en en_AU en_BE en_BW en_BZ en_CA en_GB en_HK en_IE en_IN en_JM en_MH en_MT en_NA en_NZ en_PH en_PK en_SG en_TT en_US en_US_POSIX en_VI en_ZA en_ZW eo es es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_ES es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE et et_EE eu eu_ES fa fa_AF fa_IR fi fi_FI fo fo_FO fr fr_BE fr_CA fr_CH fr_FR fr_LU fr_MC fr_SN ga ga_IE gl gl_ES gu gu_IN gv gv_GB ha ha_Latn ha_Latn_NG haw haw_US he he_IL hi hi_IN hr hr_HR hu hu_HU hy hy_AM hy_AM_REVISED id id_ID ii ii_CN is is_IS it it_CH it_IT ja ja_JP kk kk_Cyrl kk_Cyrl_KZ kl kl_GL km km_KH ko ko_KR kok kok_IN kw kw_GB lt lt_LT lv lv_LV mk mk_MK ml ml_IN mr mr_IN ms ms_BN ms_MY mt mt_MT nb nb_NO ne ne_IN ne_NP nl nl_BE nl_NL nn nn_NO om om_ET om_KE pa pa_Arab pa_Arab_PK pa_Guru pa_Guru_IN pl pl_PL ps ps_AF pt pt_BR pt_PT ro ro_RO ru ru_RU ru_UA si si_LK sk sk_SK sl sl_SI so so_DJ so_ET so_KE so_SO sq sq_AL sr sr_Cyrl sr_Cyrl_BA sr_Cyrl_ME sr_Cyrl_RS sr_Latn sr_Latn_BA sr_Latn_ME sr_Latn_RS sv sv_FI sv_SE sw sw_KE sw_TZ ta ta_IN te te_IN th th_TH tr tr_TR uk uk_UA ur ur_IN ur_PK uz uz_Arab uz_Arab_AF uz_Cyrl uz_Cyrl_UZ uz_Latn uz_Latn_UZ vi vi_VN zh zh_Hans zh_Hans_CN zh_Hans_HK zh_Hans_MO zh_Hans_SG zh_Hant zh_Hant_HK zh_Hant_MO zh_Hant_TW</feature>
+                    </capabilities>
+    </release>
+            </releases>
+        </icuProduct>
+    </icuProducts>
+</icuInfo>

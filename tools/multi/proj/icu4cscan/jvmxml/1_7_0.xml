@@ -1,0 +1,28 @@
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!-- Copyright (c) 2012 IBM Corporation and Others, All Rights Reserved. -->
+
+<!DOCTYPE icuInfo SYSTEM "http://icu-project.org/dtd/icumeta.dtd">
+
+<icuInfo>
+ <icuProducts>
+  <icuProduct type="java">
+   <releases>
+    <release version="1.7.0">
+     <capabilities>
+      <feature total="156" type="formatting">
+       <!-- Note: Java locales have different conventions than ICU. -->
+       ms_MY ar_QA is_IS fi_FI pl en_MT it_CH nl_BE ar_SA ar_IQ es_PR es_CL fi de_AT da en_GB es_PA sr ar_YE mk_MK mk en_CA vi_VN nl_NL es_US zh_CN es_HN en_US fr th ar ar_MA lv de in_ID hr en_ZA ko_KR ar_TN in ja sr_RS be_BY zh_TW ar_SD pt is ja_JP_JP_#u-ca-japanese es_BO ar_DZ ms es_AR ar_AE fr_CA sl es lt_LT sr_ME_#Latn ar_SY ru_RU fr_BE es_ES bg iw_IL sv en iw da_DK es_CR zh_HK zh ca_ES th_TH uk_UA es_DO es_VE pl_PL ar_LY ar_JO it uk hu_HU ga es_GT es_PY bg_BG hr_HR sr_BA_#Latn ro_RO fr_LU no lt en_SG es_EC sr_BA es_NI sk ru mt es_SV nl hi_IN et el_GR sl_SI it_IT ja_JP de_LU fr_CH mt_MT ar_BH sq vi sr_ME pt_BR no_NO el de_CH zh_SG ar_KW ar_EG ga_IE es_PE cs_CZ tr_TR cs es_UY en_IE en_IN ar_OM sr_CS ca be sr__#Latn ko sq_AL pt_PT lv_LV sr_RS_#Latn sk_SK es_MX en_AU no_NO_NY en_NZ sv_SE ro ar_LB de_DE th_TH_TH_#u-nu-thai tr es_CO en_PH et_EE el_CY hu fr_FR
+      </feature>
+      <feature total="156" type="collation">
+       <!-- Note: Java locales have different conventions than ICU. -->
+       ms_MY ar_QA is_IS fi_FI pl en_MT it_CH nl_BE ar_SA ar_IQ es_PR es_CL fi de_AT da en_GB es_PA sr ar_YE mk_MK mk en_CA vi_VN nl_NL es_US zh_CN es_HN en_US fr th ar ar_MA lv de in_ID hr en_ZA ko_KR ar_TN in ja sr_RS be_BY zh_TW ar_SD pt is ja_JP_JP_#u-ca-japanese es_BO ar_DZ ms es_AR ar_AE fr_CA sl es lt_LT sr_ME_#Latn ar_SY ru_RU fr_BE es_ES bg iw_IL sv en iw da_DK es_CR zh_HK zh ca_ES th_TH uk_UA es_DO es_VE pl_PL ar_LY ar_JO it uk hu_HU ga es_GT es_PY bg_BG hr_HR sr_BA_#Latn ro_RO fr_LU no lt en_SG es_EC sr_BA es_NI sk ru mt es_SV nl hi_IN et el_GR sl_SI it_IT ja_JP de_LU fr_CH mt_MT ar_BH sq vi sr_ME pt_BR no_NO el de_CH zh_SG ar_KW ar_EG ga_IE es_PE cs_CZ tr_TR cs es_UY en_IE en_IN ar_OM sr_CS ca be sr__#Latn ko sq_AL pt_PT lv_LV sr_RS_#Latn sk_SK es_MX en_AU no_NO_NY en_NZ sv_SE ro ar_LB de_DE th_TH_TH_#u-nu-thai tr es_CO en_PH et_EE el_CY hu fr_FR
+      </feature>
+     </capabilities>
+    </release>
+   </releases>
+  </icuProduct>
+ </icuProducts>
+</icuInfo>

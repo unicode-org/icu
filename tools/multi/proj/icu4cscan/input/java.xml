@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!-- Copyright (c) 2008-2012 IBM Corporation and Others, All Rights Reserved. -->
+<!DOCTYPE icuInfo SYSTEM "http://icu-project.org/dtd/icumeta.dtd">
+<icuInfo>
+    <icuProducts>
+        <icuProduct type="java">
+            <names>
+                <name type="full">Java</name>
+                <name type="short">Java</name>
+            </names>
+            <releases>
+                <release version="1.3.1"/>
+                <release version="1.4.2"/>
+                <release version="1.5.0"/>
+                <release version="1.6.0"/>
+                <release version="1.7.0"/>
+            </releases>
+	</icuProduct>
+	</icuProducts>
+</icuInfo>

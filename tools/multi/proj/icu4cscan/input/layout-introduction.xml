@@ -1,0 +1,65 @@
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!-- Copyright (C) 2012 IBM Corporation and Others. All Rights Reserved. -->
+<icuInfo>
+    <icuProducts>
+        <icuProduct type="icu4c">
+             <releases>
+             
+		<release version="1.7">
+			<capabilities>
+				<feature type="layout">
+					Arab Hebr Thai Beng Deva Gujr Knda Mlym Orya Punj Taml Telu
+				</feature>
+			</capabilities>
+		</release>
+
+		<release version="2.2">
+			<capabilities>
+				<feature type="layout">
+					+Urdu
+				</feature>
+			</capabilities>
+		</release>
+
+		<release version="2.6">
+			<capabilities>
+				<feature type="layout">
+				    +Hans Hant Jpan
+				    <!-- CJK Language Variants? -->
+				</feature>
+			</capabilities>
+		</release>
+
+		<release version="3.0">
+			<capabilities>
+				<feature type="layout">
+				    +Latn Cyrl Grek Armn Geor Runr Ogam Thai
+				</feature>
+			</capabilities>
+		</release>
+
+		<release version="3.4">
+			<capabilities>
+				<feature type="layout">
+				    +Khmr
+				</feature>
+			</capabilities>
+		</release>
+
+		<release version="3.6">
+			<capabilities>
+				<feature type="layout">
+				    +Hang Sinh Tibt
+				</feature>
+			</capabilities>
+		</release>
+
+	   </releases>
+	</icuProduct>  
+    </icuProducts>
+</icuInfo>
+
+

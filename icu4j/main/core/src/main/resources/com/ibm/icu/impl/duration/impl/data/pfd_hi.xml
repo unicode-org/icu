@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.                    *
+* License & terms of use: http://www.unicode.org/copyright.html      *
+******************************************************************************
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and    *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>PLURAL</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>साल</pluralName>
+            <pluralName>साल</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>महीने</pluralName>
+            <pluralName>महीना</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>सप्ताह</pluralName>
+            <pluralName>सप्ताह</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>दिन</pluralName>
+            <pluralName>दिन</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>घंटे</pluralName>
+            <pluralName>घंटा</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>मिनट</pluralName>
+            <pluralName>मिनट</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>सेकण्ड</pluralName>
+            <pluralName>सेकण्ड</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>मिली सेकण्ड</pluralName>
+            <pluralName>मिली सेकण्ड</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <halvesList>
+        <halves>½</halves>
+        <halves>½</halves>
+    </halvesList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep> और </unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> और </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>०</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FPLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> पहले</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>अभी से </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> बाद</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> से कम</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> से कम पहले</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> से कम from now</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> से ज़्यादा</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> से ज़्यादा ago</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> से ज़्यादा from now</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>

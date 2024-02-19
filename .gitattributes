@@ -1,0 +1,86 @@
+# The line "* text=auto !eol" means the following:
+#  For text files (auto-detected), EOLs will be converted on checkout to OS-dependent EOL (LF for Unix, CRLF for Windows).
+#  No EOL (end of line) conversion for binary files.
+* text=auto !eol
+
+# Note:
+#  "text" tells git the file is text.
+#  "-text" tells git the file is binary.
+#  The only difference between the two is that git will do EOL conversion for text files.
+#  "!eol" is the equivalent of "svneol=native".
+
+*.bat text !eol
+*.c text !eol diff=cpp
+*.cc text !eol diff=cpp
+*.classpath text !eol
+*.cmd text eol=crlf
+*.cpp text !eol diff=cpp
+*.css text !eol diff=css
+*.dsp text !eol
+*.dsw text !eol
+*.dtd text !eol
+*.el text !eol
+*.filters text !eol
+*.h text !eol diff=cpp
+*.htm text !eol diff=html
+*.html text !eol diff=html
+*.in text !eol
+*.java text !eol diff=java
+*.launch text !eol
+*.m4 text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol diff=perl
+*.pm text !eol diff=perl
+*.project text !eol
+*.properties text !eol
+*.props text !eol
+*.py text !eol diff=python
+*.rc text !eol
+*.sh text eol=lf
+*.sed text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.targets text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+AUTHORS text !eol
+BUILD text !eol
+COPYING text !eol
+Changelog text !eol
+LICENSE text !eol
+Makefile text !eol
+README text !eol
+SConscript text !eol
+SConstruct text !eol
+configure text !eol
+
+# Explicitly set the following file types as binary files.
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+*.otf -text
+*.utf16be -text
+
+# The following file types are stored in Git-LFS.
+# Only .jars
+*.jar filter=lfs diff=lfs merge=lfs -text
+
+# Enable syntax highlighting on GitHub.com
+.cpyskip.txt linguist-language=Ignore-List
+
+# Use JSONC for syntax highlighting on GitHub.com
+*.json linguist-language=jsonc
+

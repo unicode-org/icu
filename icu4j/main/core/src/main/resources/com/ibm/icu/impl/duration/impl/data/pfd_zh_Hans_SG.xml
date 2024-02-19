@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.                    *
+* License & terms of use: http://www.unicode.org/copyright.html      *
+******************************************************************************
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and    *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>NONE</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>年</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>月</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>周</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>天</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>小时</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>分</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>秒</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>毫秒</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <measureList>
+        <measure>Null</measure>
+        <measure>个</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>个</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>Null</measure>
+        <measure>个</measure>
+    </measureList>
+    <rqdSuffixList>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>钟</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+        <rqdSuffix>Null</rqdSuffix>
+    </rqdSuffixList>
+    <optSuffixList>
+        <optSuffix>Null</optSuffix>
+        <optSuffix>Null</optSuffix>
+        <optSuffix>Null</optSuffix>
+        <optSuffix>Null</optSuffix>
+        <optSuffix>Null</optSuffix>
+        <optSuffix>Null</optSuffix>
+        <optSuffix>钟</optSuffix>
+        <optSuffix>Null</optSuffix>
+    </optSuffixList>
+    <halvesList>
+        <halves>半</halves>
+        <halves>半</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>AFTER_FIRST</halfPlacement>
+    </halfPlacementList>
+    <fiveMinutes>字</fiveMinutes>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep></countSep>
+    <numberSystem>CHINESE_SIMPLIFIED</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>true</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以后</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>不到</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>不到</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>不到</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以后</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>超过</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>超过</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以前</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>超过</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>以后</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>

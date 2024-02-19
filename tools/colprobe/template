@@ -1,0 +1,51 @@
+<html>
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>$locale</title>
+<style>
+         <!--
+         table        { border-spacing: 0; border-collapse: collapse; width: 100%; 
+               border: 1px solid black }
+td, th       { width: 10%; border-spacing: 0; border-collapse: collapse; color: black; 
+               vertical-align: top; border: 1px solid black }
+-->
+     </style>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><b><font color="#FF0000">Collation:</font> $locale <a href="http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_=$locale">Demo</a>, 
+
+<a href="http://oss.software.ibm.com/cvs/icu/~checkout~/locale/all_diff_xml/comparison_charts.html">Cover 
+Page</a>, <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/locale/all_diff_xml/index.html">Index</a></b></p>
+<table>
+  <tr>
+    <th bgcolor="#AD989D">COMMON (<a href="http://oss.software.ibm.com/cvs/icu/~checkout~/locale/common/xml/$locale.xml">xml</a>)</th>
+    <th bgcolor="#1191F1">LINUX (<a href="http://oss.software.ibm.com/cvs/icu/~checkout~/locale/linux/xml/$locale.xml">xml</a>)</th>
+    <th bgcolor="#98FB98">WINDOWS (<a href="http://oss.software.ibm.com/cvs/icu/~checkout~/locale/windows/xml/$locale.xml">xml</a>)</th>
+  </tr>
+
+  <tr>
+    <td bgcolor="#AD989D">1.0-alpha</td>
+    <td bgcolor="#FF6633">1.0</td>
+    <td bgcolor="#FF6633">=</td>
+    <td bgcolor="#FF6633"><span title="006E {LATIN SMALL LETTER N}">&amp;n</span><br>
+      <span title="006E 0079 {LATIN SMALL LETTER N} {LATIN SMALL LETTER Y}">&nbsp;&nbsp;&lt;&nbsp;ny</span><br>
+
+      <span title="006E 006E 0079 {LATIN SMALL LETTER N} {LATIN SMALL LETTER N} {LATIN SMALL LETTER Y} / 006E 0079 {LATIN SMALL LETTER N} {LATIN SMALL LETTER Y}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;nny&nbsp;/&nbsp;ny</span><br>
+      <span title="006E 0059 {LATIN SMALL LETTER N} {LATIN CAPITAL LETTER Y}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&lt;&nbsp;nY</span><br>
+    </td>
+    <td bgcolor="#FF6633">=</td>
+    <td bgcolor="#FFFF33">1.2</td>
+
+    <td bgcolor="#98FB98">Windows XP</td>
+    <td bgcolor="#FF6633">=</td>
+    <td bgcolor="#FF6633">=</td>
+  </tr>
+</table>
+
+</body>

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Specification-Title: Resource Bundle Manager
+Specification-Version: 0.7.1
+Specification-Vendor: IBM Corporation
+Implementation-Title: Resource Bundle Manager
+Implementation-Version: 0.7.1
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Main-Class: com.ibm.rbm.RBManager
+Class-Path: lib/xerces.jar
+
+Name: com/ibm/rbm

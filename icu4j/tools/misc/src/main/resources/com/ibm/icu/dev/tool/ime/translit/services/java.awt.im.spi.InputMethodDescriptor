@@ -1,0 +1,11 @@
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+#
+#
+# fully-qualified name of the java.awt.im.spi.InputMethodDescriptor
+# implementation class
+#
+
+com.ibm.icu.dev.tool.ime.translit.TransliteratorInputMethodDescriptor

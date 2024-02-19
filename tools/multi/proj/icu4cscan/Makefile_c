@@ -1,0 +1,51 @@
+# -*- makefile -*-
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (C) 2008-2013 IBM Corporation and Others. All Rights Reserved.
+CPPFLAGS+=-DU_DISABLE_RENAMING=1 -I. -I/xsrl/IIE/include -I/xsrl/E/icu/source/tools/toolutil
+# TODO - where to get uoptions.h?
+OBJECTS=testxml.o xmlout.o
+CXX_SOURCES:=$(OBJECTS:%.o=%.cpp)
+C_SOURCES=
+HEADERS=xmlout.h
+TARGET=testxml
+
+all:
+	@echo To build and list "'" $(OUTFILES) "'"  in "'" $(C_GOOD) "'" use "$(MAKE) check"
+
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/c/Makefile-c.inc
+
+OUT=./xml
+$(OUT):
+	mkdir $(OUT)
+
+OUTFILES=$(C_GOOD:%=$(OUT)/%.xml)
+
+
+.PRECIOUS: $(C_CLEAN_TARGET)
+
+## Generate a file
+$(OUT)/%.xml: $(OUT) $(C_INS)/%/bin/$(TARGET)
+	$(shell $(C_INS)/$*/bin/icu-config --invoke) $(C_INS)/$*/bin/$(TARGET)  > $@
+
+## clean
+clean:
+	-rm -f $(C_CLEAN_TARGET)
+	-rm -f ./$(OUT)/*
+	-rmdir $(OUT)
+
+## Just generate
+outfiles: $(OUTFILES)
+
+## Test: generate out files, and print them.
+check: $(OUTFILES)
+	@for file in $(OUTFILES); \
+	do \
+		echo; \
+		sed -e "s%^%$$file: %g" < $$file; \
+	done
+
+

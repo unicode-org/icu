@@ -1,0 +1,35 @@
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (C) 2008-2012 IBM Corporation and Others. All Rights Reserved
+
+# local definitions must go in Makefile.local
+# example:
+
+##
+## These two are REQUIRED.
+##
+
+# The version of ICU you will build against (which API you will use).  Note, 49.1 is required for collation support, and for date support.
+# EXAMPLE: 49.1
+PROVIDER_TARGET=49.1
+
+# The versions of ICU you want to have available in the plugin. Space separated.  Don't include the PROVIDER_TARGET version.
+# EXAMPLE: 3.8.1  4.2.0.1
+PROVIDER_AVAILABLE=3.8.1 4.2.0.1
+
+
+
+
+
+##
+## following are OPTIONAL
+##
+
+## debug options
+#EXTRA_COMPILE_OPTS=-g
+
+## configure options
+#EXTRA_CONFIGURE_OPTS=--with-library-suffix=srl
+

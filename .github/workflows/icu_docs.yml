@@ -1,0 +1,54 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA ICU Docs
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+    paths:
+      - 'docs/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+permissions:
+  contents: read
+
+jobs:
+  # Build job
+  # Keep in sync with deploy workflow in `jekyll-gh-pages.yml`
+  test-docs-build:
+    name: Test build of User Guide docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.4' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          cache-version: 0 # Increment this number if you need to re-download cached gems
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
+        with:
+          generator_config_file: docs/_config.yml
+      - name: Build with Jekyll
+        # Outputs to the './_site' directory by default
+        run: |
+          cd docs  # root directory of markdown, also contains Jekyll configs, etc.
+          bundle install
+          # The baseurl arg is parsed from the `baseurl` field of _config.yml.
+          bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production

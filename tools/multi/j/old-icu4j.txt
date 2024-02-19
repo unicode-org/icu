@@ -1,0 +1,6 @@
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (c) 2009 IBM Corp. and Others. All Rights Reserved
+# a list of ICU4Cs too old to build with the current patchset.

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!-- Copyright (c) 2008 IBM Corporation and Others, All Rights Reserved. -->
+
+<!DOCTYPE icuInfo SYSTEM "http://icu-project.org/dtd/icumeta.dtd">
+<icuInfo>
+    <icuProducts>
+        <icuProduct type="java">
+            <releases>
+                <release version="1.5.0">
+                    <capabilities>
+                        <feature total="135" type="locales">ar ar_AE ar_BH ar_DZ ar_EG ar_IQ ar_JO ar_KW ar_LB ar_LY ar_MA ar_OM ar_QA ar_SA ar_SD ar_SY ar_TN ar_YE hi_IN iw iw_IL ja ja_JP ko ko_KR th th_TH th_TH_TH vi vi_VN zh zh_CN zh_HK zh_TW be be_BY bg bg_BG ca ca_ES cs cs_CZ da da_DK de de_AT de_CH de_DE de_LU el el_GR en_AU en_CA en_GB en_IE en_IN en_NZ en_ZA es es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_ES es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_UY es_VE et et_EE fi fi_FI fr fr_BE fr_CA fr_CH fr_FR fr_LU hr hr_HR hu hu_HU is is_IS it it_CH it_IT lt lt_LT lv lv_LV mk mk_MK nl nl_BE nl_NL no no_NO no_NO_NY pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU sk sk_SK sl sl_SI sq sq_AL sr sr_BA sr_CS sv sv_SE tr tr_TR uk uk_UA en_US en<!--Note: Java locales have different conventions than ICU.--></feature>
+                        <feature total="135" type="collation">ar ar_AE ar_BH ar_DZ ar_EG ar_IQ ar_JO ar_KW ar_LB ar_LY ar_MA ar_OM ar_QA ar_SA ar_SD ar_SY ar_TN ar_YE hi_IN iw iw_IL ja ja_JP ko ko_KR th th_TH th_TH_TH vi vi_VN zh zh_CN zh_HK zh_TW be be_BY bg bg_BG ca ca_ES cs cs_CZ da da_DK de de_AT de_CH de_DE de_LU el el_GR en_AU en_CA en_GB en_IE en_IN en_NZ en_ZA es es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_ES es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_UY es_VE et et_EE fi fi_FI fr fr_BE fr_CA fr_CH fr_FR fr_LU hr hr_HR hu hu_HU is is_IS it it_CH it_IT lt lt_LT lv lv_LV mk mk_MK nl nl_BE nl_NL no no_NO no_NO_NY pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU sk sk_SK sl sl_SI sq sq_AL sr sr_BA sr_CS sv sv_SE tr tr_TR uk uk_UA en_US en<!--Note: Java locales have different conventions than ICU.--></feature>
+                    </capabilities>
+                </release>
+            </releases>
+        </icuProduct>
+    </icuProducts>
+</icuInfo>

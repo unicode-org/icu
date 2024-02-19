@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (c) 2012-2014, International Business Machines Corporation and others.  All Rights Reserved.
+# for fixing misticketted
+# see http://bugs.icu-project.org/trac/wiki/MisTicketted
+# TODO:  cleanup ${TMPF}*
+
+
+
+rev=
+from=
+to=
+
+usage()
+{
+    echo "$0 -r rev -f frombug -t tobug"
+}
+
+while getopts "r:f:t:" opt; do
+    case $opt in
+        r)
+            rev=$OPTARG
+            ;;
+        f)
+            from=$OPTARG
+            ;;
+        t)
+            to=$OPTARG
+            ;;
+        \?)
+            echo "Invalid: -$OPTARG" >&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+if [[ ! $rev ]];
+then
+    echo "need -r rev option" >&2
+    usage
+    exit 1
+fi
+
+if [[ ! $from ]];
+then
+    echo "need -f oldbug option" >&2
+    usage
+    exit 1
+fi
+
+if [[ ! $to ]];
+then
+    echo "need -t newbug option" >&2
+    usage
+    exit 1
+fi
+
+if [[ ! -d .svn ]];
+then
+    echo ".svn is not a directory. Please cd somewhere else." >&2
+    exit 1
+fi
+
+if [[ ! -d ${TMPDIR} ]];
+then
+    TMPDIR=/tmp
+fi
+
+TMPF=${TMPDIR}/reticket.r${rev}.f${from}.t${to}.txt
+
+echo "Getting log for r${rev}" >&2
+( svn pg svn:log --revprop -r ${rev} . | tee  ${TMPF} | sed -e 's%^%< %g' ) || exit 1
+
+head -1 ${TMPF} > ${TMPF}.1
+
+if grep -q "^ticket:${from}[^0-9]" ${TMPF}.1;
+then
+    echo "-- old/new --"
+else
+    if grep -q "^ticket:${to}[^0-9]" ${TMPF}.1;
+    then
+        echo "r${rev} already references ticket:${to} - exiting." >&2
+        exit 0
+    else
+        echo "Error: r${rev} doesn't pertain to ticket:${from} - was this already fixed?" >&2
+        exit 1
+    fi
+fi
+
+( ( sed -e "s%^ticket:${from}%ticket:${to}%" ${TMPF}.1 && tail -n +2 ${TMPF} ) || exit 2 ) | tee ${TMPF}.fix | sed -e 's%^%> %g'
+
+CMD="svn ps svn:log --revprop -r ${rev} -F ${TMPF}.fix"
+echo "# ${CMD}"
+echo "type YES to do, ^C to kill"
+read foo
+if [[ $foo = "YES" ]];
+then
+    echo "## Remember the server still needs to be resynced. See http://bugs.icu-project.org/trac/wiki/FixingMisTicketted"
+    exec ${CMD}
+else
+    exit 0
+fi
+

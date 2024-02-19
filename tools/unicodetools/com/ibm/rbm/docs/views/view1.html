@@ -1,0 +1,150 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>RB Manager - The Resource Bundle Tree</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image: url(../images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="../images/template_ul.gif" HEIGHT="75"><IMG SRC="../images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="../images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="../images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="../images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="../faq.html">FAQ</A></LI>
+              <LI><A HREF="../future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="../future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../index.html">Home</A></LI>
+              <LI><A HREF="../tutorial/index.html">Tutorial</A></LI>
+              <LI><A HREF="index.html">Functionality and Views</A></LI>
+              <LI><A HREF="../lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="../menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="../tutorial/step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="../RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="../scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H3 ALIGN="CENTER">View 1. The Resource Bundle Tree</H3>
+      <P>Located on the left of the RB Manager application is a section for displaying 
+        a resource bundle in a tree view. Resource Bundles usually are made up 
+        of text or class files in a flat directory structure. However, the locale 
+        encodings given to each file makes a tree view a natural way to look at 
+        the bundle.</P>
+      <P>When RB Manager is initially launched, this view is empty, since there 
+        is no open resource bundle. Upon opening a valid resource bundle, the 
+        tree is updated to reflect the opened bundle. In the following screen 
+        shots, you will see the tree for the resource bundle associate with RB 
+        Manager itself.</P>
+      <P><IMG SRC="../images/screenshots/view_tree_basic.gif" WIDTH="642" HEIGHT="499"></P>
+      <P>The top most element of the tree (the root of the tree) represents the 
+        resource bundle as a whole. Below the root are resource files, which are 
+        represented with the file icons with a letter in the middle, and language, 
+        country, and variant branches. Language branches are represented by an 
+        icon with a globe. Beneath these can be language branches represented 
+        by an icon with a flag. Beneath these can be variant branches represented 
+        by an icon with a cartoon dialog symbol. Beneath any of the branch nodes, 
+        resource files can be found.</P>
+      <P>The name of the root of the tree is the base name of the resource bundle, 
+        in the example above, the bundle is called RBManager. The name of the 
+        file nodes in the tree will vary according to where in the tree they are. 
+        Each language file will display the language, country, and variant information 
+        that it knows about followed by the encoding of the file's locale in parenthesies. 
+        The branch nodes will indicate whether they are language, country, or 
+        variant branches, and will display the encoding associated with that branch.</P>
+      <P>RB Manager functions in two basic ways for everything it does, either 
+        for the resource bundle as a whole or for an individual resource file. 
+        To make changes and updates to the entire resource bundle, select the 
+        root node notated by the 'RB' icon at the top of the tree. This will also 
+        cause the statistics and search views to present results reflecting the 
+        status of the entire bundle. To work with an individual resource file, 
+        select a file from the tree by clicking on it. Now changes and views will 
+        reflect only this selected resource file.</P>
+      <P>Note that selecting the various branch nodes does not have any meaning 
+        in the current version of RBManager. In future versions the ability to 
+        work on subtrees may be added, but for now either select the resource 
+        bundle or an individual file.</P>
+      <P>Understanding the difference between working with the resource bundle 
+        and working with a resource file is crucial to using RB Manager. Normally 
+        developers adding resources or manager wishing to know the statuts of 
+        translation efforts will work from the root level. Translators and managers 
+        of individual resource files will more often work from the resource file 
+        level. Once the difference is understood, the functionality of the views 
+        in the tab will be easier to understand.</P>
+      <P ALIGN="CENTER"><A HREF="view2.html">View 2. The Statistics Tab</A></P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="../images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>

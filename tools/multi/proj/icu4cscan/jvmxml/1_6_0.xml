@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+* © 2017 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!-- Copyright (c) 2009 IBM Corporation and Others, All Rights Reserved. -->
+
+<!DOCTYPE icuInfo SYSTEM "http://icu-project.org/dtd/icumeta.dtd">
+<icuInfo>
+    <icuProducts>
+        <icuProduct type="java">
+            <releases>
+                <release version="1.6.0">
+                    <capabilities>
+                        <feature total="215" type="formatting">zh th ko iw uk tr sq sk pt pl nl ms mk lv lt kk is hr gu ga fr es cs ca es_PR en_HK pt_PT es_PY ar_YE hu_HU in_ID en_IE hi_IN te_IN ta_IN pa_IN or_IN mr_IN ml_IN kn_IN en_IN ja_JP_JP en_ZA ar_IQ sq_AL it_IT es_AR de_AT_PREEURO sr_RS_Cyrl nl_BE fr_BE en_BE_PREEURO ar_JO ja_JP es_BO pt_BR sv_SE_PREEURO zh_SG sl_SI_PREEURO sk_SK fr_CA es_SV fr_CH es_CL zh_CN ar_KW es_CO es_CR no_NO_NY th_TH ar_LB el_CY_PREEURO mt_MT_EURO cs_CZ tr_TR de_DE_PREEURO zh_TW sk_SK_EURO lt_LT_PREEURO fr_LU_PREEURO de_LU lv_LV_PREEURO es_DO uk_UA ar_LY ar_MA sr_ME es_US es_EC et_EE_PREEURO es_UY mt_MT en_MT cs_CZ_EURO es_ES ca_ES es_VE nl_NL_PREEURO no_NO fi_FI_PREEURO fr_FR en_NZ hu_HU_EURO ar_OM el_GR_PREEURO es_GT en_PH pl_PL_PREEURO vi ja ar te ta sv sr sl sh ru ro pa no mt mr kn it in hu fi et en el de da bg be zh_HK pt_PT_PREEURO es_HN hr_HR en_GB_EURO hu_HU_PREEURO ar_QA ga_IE en_IE_PREEURO iw_IL ar_AE gu_IN bn_IN is_IS it_IT_PREEURO pl_PL_EURO de_AT th_TH_TH en_AU ro_RO sr_BA sr_RS ru_RU nl_BE_PREEURO fr_BE_PREEURO en_BE bg_BG ar_BH ar_SA ar_SD sv_SE en_SG sl_SI da_DK_EURO be_BY sk_SK_PREEURO lt_LT_EURO lv_LV_EURO en_CA it_CH de_CH ar_SY ko_KR kk_KZ sr_CS sh_CS et_EE_EURO el_CY cs_CZ_PREEURO ar_TN de_DE sv_SE_EURO da_DK lt_LT fr_LU de_LU_PREEURO lv_LV ar_DZ mk_MK en_US et_EE ar_EG el_CY_EURO mt_MT_PREEURO es_MX ms_MY es_ES_PREEURO ca_ES_PREEURO sr_RS_Latn vi_VN es_NI nl_NL nb_NO fi_FI fr_FR_PREEURO en_GB el_GR es_PA es_PE pl_PL<!--Note: Java locales have different conventions than ICU.--></feature>
+                        <feature total="215" type="collation">zh th ko iw uk tr sq sk pt pl nl ms mk lv lt kk is hr gu ga fr es cs ca es_PR en_HK pt_PT es_PY ar_YE hu_HU in_ID en_IE hi_IN te_IN ta_IN pa_IN or_IN mr_IN ml_IN kn_IN en_IN ja_JP_JP en_ZA ar_IQ sq_AL it_IT es_AR de_AT_PREEURO sr_RS_Cyrl nl_BE fr_BE en_BE_PREEURO ar_JO ja_JP es_BO pt_BR sv_SE_PREEURO zh_SG sl_SI_PREEURO sk_SK fr_CA es_SV fr_CH es_CL zh_CN ar_KW es_CO es_CR no_NO_NY th_TH ar_LB el_CY_PREEURO mt_MT_EURO cs_CZ tr_TR de_DE_PREEURO zh_TW sk_SK_EURO lt_LT_PREEURO fr_LU_PREEURO de_LU lv_LV_PREEURO es_DO uk_UA ar_LY ar_MA sr_ME es_US es_EC et_EE_PREEURO es_UY mt_MT en_MT cs_CZ_EURO es_ES ca_ES es_VE nl_NL_PREEURO no_NO fi_FI_PREEURO fr_FR en_NZ hu_HU_EURO ar_OM el_GR_PREEURO es_GT en_PH pl_PL_PREEURO vi ja ar te ta sv sr sl sh ru ro pa no mt mr kn it in hu fi et en el de da bg be zh_HK pt_PT_PREEURO es_HN hr_HR en_GB_EURO hu_HU_PREEURO ar_QA ga_IE en_IE_PREEURO iw_IL ar_AE gu_IN bn_IN is_IS it_IT_PREEURO pl_PL_EURO de_AT th_TH_TH en_AU ro_RO sr_BA sr_RS ru_RU nl_BE_PREEURO fr_BE_PREEURO en_BE bg_BG ar_BH ar_SA ar_SD sv_SE en_SG sl_SI da_DK_EURO be_BY sk_SK_PREEURO lt_LT_EURO lv_LV_EURO en_CA it_CH de_CH ar_SY ko_KR kk_KZ sr_CS sh_CS et_EE_EURO el_CY cs_CZ_PREEURO ar_TN de_DE sv_SE_EURO da_DK lt_LT fr_LU de_LU_PREEURO lv_LV ar_DZ mk_MK en_US et_EE ar_EG el_CY_EURO mt_MT_PREEURO es_MX ms_MY es_ES_PREEURO ca_ES_PREEURO sr_RS_Latn vi_VN es_NI nl_NL nb_NO fi_FI fr_FR_PREEURO en_GB el_GR es_PA es_PE pl_PL<!--Note: Java locales have different conventions than ICU.--></feature>
+                    </capabilities>
+                </release>
+            </releases>
+        </icuProduct>
+    </icuProducts>
+</icuInfo>
