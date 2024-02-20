@@ -19,8 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CharacterIteration;
@@ -57,9 +56,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     private RuleBasedBreakIterator() {
         fDictionaryCharCount  = 0;
-        synchronized(gAllBreakEngines) {
-            fBreakEngines = new ArrayList<>(gAllBreakEngines);
-        }
     }
 
     /**
@@ -173,9 +169,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
         result = (RuleBasedBreakIterator)super.clone();
         if (fText != null) {
             result.fText = (CharacterIterator)(fText.clone());
-        }
-        synchronized (gAllBreakEngines)  {
-            result.fBreakEngines = new ArrayList<>(gAllBreakEngines);
         }
         result.fLookAheadMatches = new int[fRData.fFTable.fLookAheadResultsSize];
         result.fBreakCache = result.new BreakCache(fBreakCache);
@@ -342,22 +335,19 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Lazily updated as break engines are needed, because instantiation of
      * break engines is expensive.
      *
-     * Because gAllBreakEngines can be referenced concurrently from different
-     * BreakIterator instances, all access is synchronized.
+     * Important notes:
+     * <ul>Because we don't want to add the same LanguageBreakEngine multiple times, all writes
+     *     are synchronized.
+     * <ul>Read access avoids explicit synchronization, but will end up being synchronized if
+     *     needed.
      */
-    private static final List<LanguageBreakEngine> gAllBreakEngines;
+    private static final ConcurrentLinkedQueue<LanguageBreakEngine> gAllBreakEngines;
 
     static {
         gUnhandledBreakEngine = new UnhandledBreakEngine();
-        gAllBreakEngines = new ArrayList<>();
+        gAllBreakEngines = new ConcurrentLinkedQueue<>();
         gAllBreakEngines.add(gUnhandledBreakEngine);
     }
-
-    /**
-     * List of all known break engines. Similar to gAllBreakEngines, but local to a
-     * break iterator, allowing it to be used without synchronization.
-     */
-    private List<LanguageBreakEngine> fBreakEngines;
 
     /**
      * Dump the contents of the state table and character classes for this break iterator.
@@ -726,19 +716,18 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         // We have a dictionary character.
         // Does an already instantiated break engine handle it?
-        for (LanguageBreakEngine candidate : fBreakEngines) {
+        // First read without synchronization, which could lead to a new language
+        // break engine being added and we didn't go over it.
+        for (LanguageBreakEngine candidate : gAllBreakEngines) {
             if (candidate.handles(c)) {
                 return candidate;
             }
         }
 
         synchronized (gAllBreakEngines) {
-            // This break iterator's list of break engines didn't handle the character.
-            // Check the global list, another break iterator may have instantiated the
-            // desired engine.
+            // Another break iterator may have instantiated the desired engine.
             for (LanguageBreakEngine candidate : gAllBreakEngines) {
                 if (candidate.handles(c)) {
-                    fBreakEngines.add(candidate);
                     return candidate;
                 }
             }
@@ -791,7 +780,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
             if (eng != null && eng != gUnhandledBreakEngine) {
                 gAllBreakEngines.add(eng);
-                fBreakEngines.add(eng);
             }
             return eng;
         }   // end synchronized(gAllBreakEngines)

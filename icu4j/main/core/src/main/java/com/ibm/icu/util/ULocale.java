@@ -545,13 +545,13 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Keep our own default ULocale.
      */
-    private static Locale defaultLocale = Locale.getDefault();
-    private static ULocale defaultULocale;
+    private static volatile ULocale defaultULocale;
 
     private static Locale[] defaultCategoryLocales = new Locale[Category.values().length];
     private static ULocale[] defaultCategoryULocales = new ULocale[Category.values().length];
 
     static {
+        Locale defaultLocale = Locale.getDefault();
         defaultULocale = forLocale(defaultLocale);
 
         if (JDKLocaleHelper.hasLocaleCategories()) {
@@ -581,34 +581,47 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 2.8
      */
     public static ULocale getDefault() {
+        // Only synchronize if we must update the default locale.
+        ULocale currentDefaultULocale = defaultULocale;
+        if (currentDefaultULocale == null) {
+            // When Java's default locale has extensions (such as ja-JP-u-ca-japanese),
+            // Locale -> ULocale mapping requires BCP47 keyword mapping data that is currently
+            // stored in a resource bundle.
+            // If this happens during the class initialization's call to .forLocale(defaultLocale),
+            // then defaultULocale is still null until forLocale() returns.
+            // However, UResourceBundle currently requires non-null default ULocale.
+            // For now, this implementation returns ULocale.ROOT to avoid the problem.
+            // TODO: Consider moving BCP47 mapping data out of resource bundle later.
+            return ULocale.ROOT;
+        } else if (currentDefaultULocale.locale.equals(Locale.getDefault())) {
+            return currentDefaultULocale;
+        }
         synchronized (ULocale.class) {
-            if (defaultULocale == null) {
-                // When Java's default locale has extensions (such as ja-JP-u-ca-japanese),
-                // Locale -> ULocale mapping requires BCP47 keyword mapping data that is currently
-                // stored in a resource bundle. However, UResourceBundle currently requires
-                // non-null default ULocale. For now, this implementation returns ULocale.ROOT
-                // to avoid the problem.
-
-                // TODO: Consider moving BCP47 mapping data out of resource bundle later.
-
-                return ULocale.ROOT;
-            }
             Locale currentDefault = Locale.getDefault();
-            if (!defaultLocale.equals(currentDefault)) {
-                defaultLocale = currentDefault;
-                defaultULocale = forLocale(currentDefault);
+            assert currentDefault != null;
 
-                if (!JDKLocaleHelper.hasLocaleCategories()) {
-                    // Detected Java default Locale change.
-                    // We need to update category defaults to match
-                    // Java 7's behavior on Android API level 21..23.
-                    for (Category cat : Category.values()) {
-                        int idx = cat.ordinal();
-                        defaultCategoryLocales[idx] = currentDefault;
-                        defaultCategoryULocales[idx] = forLocale(currentDefault);
-                    }
-                }            }
-            return defaultULocale;
+            currentDefaultULocale = defaultULocale;
+            assert currentDefaultULocale != null;
+
+            if (currentDefaultULocale.locale.equals(currentDefault)) {
+                return currentDefaultULocale;
+            }
+
+            ULocale nextULocale = forLocale(currentDefault);
+            assert nextULocale != null;
+
+            if (!JDKLocaleHelper.hasLocaleCategories()) {
+                // Detected Java default Locale change.
+                // We need to update category defaults to match
+                // Java 7's behavior on Android API level 21..23.
+                for (Category cat : Category.values()) {
+                    int idx = cat.ordinal();
+                    defaultCategoryLocales[idx] = currentDefault;
+                    defaultCategoryULocales[idx] = nextULocale;
+                }
+            }
+
+            return defaultULocale = nextULocale;
         }
     }
 
@@ -630,8 +643,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public static synchronized void setDefault(ULocale newLocale){
-        defaultLocale = newLocale.toLocale();
-        Locale.setDefault(defaultLocale);
+        Locale.setDefault(newLocale.toLocale());
         defaultULocale = newLocale;
         // This method also updates all category default locales
         for (Category cat : Category.values()) {
@@ -675,8 +687,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 // time.
 
                 Locale currentDefault = Locale.getDefault();
-                if (!defaultLocale.equals(currentDefault)) {
-                    defaultLocale = currentDefault;
+                if (!defaultULocale.locale.equals(currentDefault)) {
                     defaultULocale = forLocale(currentDefault);
 
                     for (Category cat : Category.values()) {
