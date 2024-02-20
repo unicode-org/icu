@@ -142,7 +142,7 @@ udat_open(UDateFormatStyle  timeStyle,
 {
     DateFormat *fmt;
     if(U_FAILURE(*status)) {
-        return 0;
+        return nullptr;
     }
     if(gOpener!=nullptr) { // if it's registered
       fmt = (DateFormat*) (*gOpener)(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status);
@@ -186,7 +186,7 @@ udat_open(UDateFormatStyle  timeStyle,
         if(zone == 0) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             delete fmt;
-            return 0;
+            return nullptr;
         }
         fmt->adoptTimeZone(zone);
     }

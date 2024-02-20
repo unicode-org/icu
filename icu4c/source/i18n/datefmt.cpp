@@ -561,7 +561,7 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
     // This should never really happen, because the preceding constructor
     // should always succeed.  If the resource data is unavailable, a last
     // resort object should be returned.
-    return 0;
+    return nullptr;
 }
 
 //----------------------------------------------------------------------
