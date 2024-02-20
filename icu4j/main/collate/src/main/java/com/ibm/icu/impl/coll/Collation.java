@@ -34,6 +34,7 @@ public final class Collation {
     // Special sort key bytes for all levels.
     public static final int TERMINATOR_BYTE = 0;
     public static final int LEVEL_SEPARATOR_BYTE = 1;
+    ublic static final int DO_NOT_MERGE_TEST_ICU4J = 1;//Warning: Do not merge only to test ICU4J build trigger
 
     /** The secondary/tertiary lower limit for tailoring before any root elements. */
     static final int BEFORE_WEIGHT16 = 0x100;
