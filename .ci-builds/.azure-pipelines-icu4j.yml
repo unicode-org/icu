@@ -1,9 +1,23 @@
 # Azure Pipelines (VSTS) configuration for CI builds for ICU.
 
 trigger:
+  batch: true
+  branches:
+    include:
+    - main
+    - maint/maint-*
   paths:
     include:
-    - icu4j/*
+    - icu4j
+
+pr:
+  branches:
+    include:
+    - main
+    - maint/maint-*
+  paths:
+    include:
+    - icu4j
 
 variables:
   MAVEN_ARGS: '--show-version --no-transfer-progress'

@@ -1,9 +1,23 @@
 # Azure Pipelines (VSTS) configuration for CI builds for ICU.
 
 trigger:
+  batch: true
+  branches:
+    include:
+    - main
+    - maint/maint-*
   paths:
     include:
-    - icu4c/*
+    - icu4c
+
+pr:
+  branches:
+    include:
+    - main
+    - maint/maint-*
+  paths:
+    include:
+    - icu4c
 
 
 variables:
