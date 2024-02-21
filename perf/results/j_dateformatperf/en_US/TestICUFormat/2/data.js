@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708503199416,
+  "lastUpdate": 1708537391946,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17368,6 +17368,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 183.66323089218355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "diegogy@google.com",
+            "name": "Diego Gutierrez Yepiz",
+            "username": "Diego1149"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f3e50a7624384e325b9fb2c133a887c505308301",
+          "message": "ICU-22582 Avoid synchronizing in RuleBasedBreakIterator and ULocale unless strictly necessary\n\nSee #2775",
+          "timestamp": "2024-02-21T09:38:41-08:00",
+          "tree_id": "98e355fecc333b6d0e2b66ac110db362a12d214d",
+          "url": "https://github.com/unicode-org/icu/commit/f3e50a7624384e325b9fb2c133a887c505308301"
+        },
+        "date": 1708537286783,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 189.9880850896115,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
