@@ -65,3 +65,75 @@ jobs:
         filename: icu4c/source/samples/all/samplecheck.bat
         arguments: '$(arch) $(config)'
 #-------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
+# Other C tests
+#-------------------------------------------------------------------------
+
+- job: ICU4C_Cygwin_GCC_x86_64_Release
+  displayName: 'C: Cygwin GCC x86_64 Release'
+  timeoutInMinutes: 50
+  pool:
+    vmImage: 'windows-2019'
+  variables:
+    ICU_CI_CACHE: c:\icu-ci-cache
+    CYG_URL: https://cygwin.com/setup-x86_64.exe
+    CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
+    CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3
+    CYG_ROOT: c:\cygwin-root
+    CYG_CACHE: '$(ICU_CI_CACHE)\cygwin64-v3'
+    CYG_CACHED_SETUP: '$(CYG_CACHE)\setup.exe'
+    CYG_VERSION_KEY: cygwin-3.2
+  steps:
+    # Use 'autocrlf input' since checked-in files may already be using CRLF.
+    - script: |
+        git config --global core.autocrlf input
+      displayName: 'Configure Git to checkout with Unix line endings (LF)'
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # Cache expires after 7 days of no activity.
+    - task: Cache@2
+      displayName: 'Restore Cygwin cache'
+      inputs:
+        # Use the contents of the file ".azure-pipelines-icu4c.yml" as part of the key, as that contains the list of CYG_PACKAGES.
+        # Also include the Cygwin version as part of the key. If we want to use a newer version of Cygwin, we can update CYG_VERSION_KEY.
+        # Note: CYG_VERSION_KEY may become out of sync with (older than) the version we actually use if we update this file
+        #       without updating CYG_VERSION_KEY. Any updates to this file guarantees that we're using the latest version.
+        key: '"$(CYG_VERSION_KEY)" | .ci-builds/.azure-pipelines-icu4c.yml'
+        path: "$(CYG_CACHE)"
+    - task: PowerShell@2
+      displayName: 'Download Cygwin setup'
+      inputs:
+        targetType: inline
+        script: |
+          if ( !(Test-Path "${env:CYG_CACHED_SETUP}" -NewerThan (Get-Date).AddDays(-7)) )
+          {
+            Write-Host "Cached Cygwin setup does not exist or is older than 7 days, downloading from external site."
+
+            New-Item -Force -Type Directory $env:CYG_CACHE
+            Write-Host "Downloading Cygwin setup..."
+
+            $start_time = Get-Date
+            (New-Object System.Net.WebClient).DownloadFile($env:CYG_URL, $env:CYG_CACHED_SETUP)
+
+            Write-Output "Download took: $((Get-Date).Subtract($start_time).Seconds) second(s)."
+          }
+    - script: |
+        %CYG_CACHED_SETUP% --no-verify --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "%CYG_MIRROR%" --root "%CYG_ROOT%" --local-package-dir "%CYG_CACHE%" --packages "%CYG_PACKAGES%"
+      displayName: 'Install Cygwin'
+    - script: |
+        %CYG_ROOT%\\bin\\sh -lc 'echo Hello' && %CYG_ROOT%\\bin\\sh -lc 'uname -a'
+      displayName: 'Check Cygwin environment'
+    - script: |
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && ./runConfigureICU Cygwin && make tests -j -l2.5"
+      displayName: 'Build ICU (source and test)'
+      env:
+        CC: gcc
+        CXX: g++
+    - script: |
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && make -j -l2.5 check"
+      displayName: 'Run Tests'
+      env:
+        CC: gcc
+        CXX: g++
