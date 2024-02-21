@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708077763070,
+  "lastUpdate": 1708503471229,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21742,6 +21742,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 38.6993,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "8acebe4a0c6986814c03497ee303becfb3c153c5",
+          "message": "ICU-22314 Add PR triggers for Azure pipelines\n\nSee #2835",
+          "timestamp": "2024-02-21T13:38:48+05:30",
+          "tree_id": "577bf466d30579d5773c3ed56eb306dcb2ab6406",
+          "url": "https://github.com/unicode-org/icu/commit/8acebe4a0c6986814c03497ee303becfb3c153c5"
+        },
+        "date": 1708503389520,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 18.8171,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 38.6055,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
