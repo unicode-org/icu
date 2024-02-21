@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708503706485,
+  "lastUpdate": 1708537895450,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36394,6 +36394,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2098990.4217,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "diegogy@google.com",
+            "name": "Diego Gutierrez Yepiz",
+            "username": "Diego1149"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f3e50a7624384e325b9fb2c133a887c505308301",
+          "message": "ICU-22582 Avoid synchronizing in RuleBasedBreakIterator and ULocale unless strictly necessary\n\nSee #2775",
+          "timestamp": "2024-02-21T09:38:41-08:00",
+          "tree_id": "98e355fecc333b6d0e2b66ac110db362a12d214d",
+          "url": "https://github.com/unicode-org/icu/commit/f3e50a7624384e325b9fb2c133a887c505308301"
+        },
+        "date": 1708537821040,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 402.326,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12714245.7764,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2125725.7524,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 12119065.2946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2055251.0579,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
