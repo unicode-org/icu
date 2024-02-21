@@ -52,7 +52,7 @@
  */
 #define U_MAX_VERSION_STRING_LENGTH 20
 
-#define TEST_ICU4C_PIPELINE DO NOT MERGE
+#define TEST_ICU4C_PIPELINE DO NOT MERGE2
 
 /** The binary form of a version on ICU APIs is an array of 4 uint8_t.
  *  To compare two versions, use memcmp(v1,v2,sizeof(UVersionInfo)).
