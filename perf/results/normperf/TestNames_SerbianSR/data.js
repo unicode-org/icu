@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708503799480,
+  "lastUpdate": 1708538021833,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40318,6 +40318,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 6.5012,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "diegogy@google.com",
+            "name": "Diego Gutierrez Yepiz",
+            "username": "Diego1149"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f3e50a7624384e325b9fb2c133a887c505308301",
+          "message": "ICU-22582 Avoid synchronizing in RuleBasedBreakIterator and ULocale unless strictly necessary\n\nSee #2775",
+          "timestamp": "2024-02-21T09:38:41-08:00",
+          "tree_id": "98e355fecc333b6d0e2b66ac110db362a12d214d",
+          "url": "https://github.com/unicode-org/icu/commit/f3e50a7624384e325b9fb2c133a887c505308301"
+        },
+        "date": 1708537942423,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 6.1639,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 6.1526,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 6.24,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 6.3852,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 6.3937,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 6.5301,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
