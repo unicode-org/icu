@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708537511241,
+  "lastUpdate": 1708630201534,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -17518,6 +17518,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 379.03387367474323,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "4633254f9ea434bb48a30fbcc98812eb561ff4eb",
+          "message": "ICU-22314 Move Cygwin test to post-merge pipeline",
+          "timestamp": "2024-02-22T11:23:17-08:00",
+          "tree_id": "032c3b808d111452bbfae8a504696914a4339296",
+          "url": "https://github.com/unicode-org/icu/commit/4633254f9ea434bb48a30fbcc98812eb561ff4eb"
+        },
+        "date": 1708630099996,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 353.9300268563985,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
