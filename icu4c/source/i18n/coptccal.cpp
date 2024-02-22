@@ -57,8 +57,11 @@ CopticCalendar::getType() const
 //-------------------------------------------------------------------------
 
 int32_t
-CopticCalendar::handleGetExtendedYear()
+CopticCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t eyear;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         eyear = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
@@ -67,8 +70,11 @@ CopticCalendar::handleGetExtendedYear()
         int32_t era = internalGet(UCAL_ERA, CE);
         if (era == BCE) {
             eyear = 1 - internalGet(UCAL_YEAR, 1); // Convert to extended year
-        } else {
+        } else if (era == CE){
             eyear = internalGet(UCAL_YEAR, 1); // Default to year 1
+        } else {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
         }
     }
     return eyear;

@@ -63,8 +63,12 @@ const char *TaiwanCalendar::getType() const
     return "roc";
 }
 
-int32_t TaiwanCalendar::handleGetExtendedYear()
+int32_t TaiwanCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
     // EXTENDED_YEAR in TaiwanCalendar is a Gregorian year
     // The default value of EXTENDED_YEAR is 1970 (Minguo 59)
     int32_t year = kGregorianEpoch;
@@ -78,6 +82,9 @@ int32_t TaiwanCalendar::handleGetExtendedYear()
             year =     internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
         } else if(era == BEFORE_MINGUO) {
             year = 1 - internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
+        } else {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
         }
     }
     return year;

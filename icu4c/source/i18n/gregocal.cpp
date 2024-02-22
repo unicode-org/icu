@@ -1158,7 +1158,10 @@ int32_t GregorianCalendar::getActualMaximum(UCalendarDateFields field, UErrorCod
 }
 
 
-int32_t GregorianCalendar::handleGetExtendedYear() {
+int32_t GregorianCalendar::handleGetExtendedYear(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // the year to return
     int32_t year = kEpochYear;
 
@@ -1184,8 +1187,11 @@ int32_t GregorianCalendar::handleGetExtendedYear() {
             int32_t era = internalGet(UCAL_ERA, AD);
             if (era == BC) {
                 year = 1 - internalGet(UCAL_YEAR, 1); // Convert to extended year
-            } else {
+            } else if (era == AD) {
                 year = internalGet(UCAL_YEAR, kEpochYear);
+            } else {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return 0;
             }
         }
         break;

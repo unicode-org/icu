@@ -191,8 +191,11 @@ int32_t JapaneseCalendar::internalGetEra() const
     return internalGet(UCAL_ERA, gCurrentEra);
 }
 
-int32_t JapaneseCalendar::handleGetExtendedYear()
+int32_t JapaneseCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // EXTENDED_YEAR in JapaneseCalendar is a Gregorian year
     // The default value of EXTENDED_YEAR is 1970 (Showa 45)
     int32_t year;
@@ -201,9 +204,10 @@ int32_t JapaneseCalendar::handleGetExtendedYear()
         newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     } else {
-        UErrorCode status = U_ZERO_ERROR;
         int32_t eraStartYear = gJapaneseEraRules->getStartYear(internalGet(UCAL_ERA, gCurrentEra), status);
-        U_ASSERT(U_SUCCESS(status));
+        if (U_FAILURE(status)) {
+            return 0;
+        }
 
         // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc
         year = internalGet(UCAL_YEAR, 1)    // pin to minimum of year 1 (first year)

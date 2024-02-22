@@ -56,8 +56,11 @@ EthiopicCalendar::getType() const
 //-------------------------------------------------------------------------
 
 int32_t
-EthiopicCalendar::handleGetExtendedYear()
+EthiopicCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // Ethiopic calendar uses EXTENDED_YEAR aligned to
     // Amelete Hihret year always.
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
@@ -181,8 +184,11 @@ EthiopicAmeteAlemCalendar::getType() const
 }
 
 int32_t
-EthiopicAmeteAlemCalendar::handleGetExtendedYear()
+EthiopicAmeteAlemCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // Ethiopic calendar uses EXTENDED_YEAR aligned to
     // Amelete Hihret year always.
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {

@@ -169,7 +169,7 @@ protected:
      *             1       AMETE_MIHRET     1
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() override;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
     /**
      * Compute fields from the JD
@@ -341,7 +341,7 @@ protected:
      *             1       AMETE_ALEM  5501
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() override;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
     /**
      * Compute fields from the JD

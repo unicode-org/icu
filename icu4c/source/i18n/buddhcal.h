@@ -139,10 +139,11 @@ private:
      * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields (such
      * as UCAL_ERA) specific to the calendar system, depending on which set of
      * fields is newer.
+     * @param status
      * @return the extended year
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() override;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
     /**
      * Subclasses may override this method to compute several fields
      * specific to each calendar system.  

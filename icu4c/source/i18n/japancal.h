@@ -123,7 +123,7 @@ public:
      * Japanese calendar case, this is equal to the equivalent extended Gregorian year.
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() override;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
     /**
      * Return the maximum value that this field could have, given the current date.

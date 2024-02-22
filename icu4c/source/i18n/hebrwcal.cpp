@@ -546,7 +546,10 @@ int32_t HebrewCalendar::handleGetYearLength(int32_t eyear) const {
 
 void HebrewCalendar::validateField(UCalendarDateFields field, UErrorCode &status) {
     if ((field == UCAL_MONTH || field == UCAL_ORDINAL_MONTH)
-        && !isLeapYear(handleGetExtendedYear()) && internalGetMonth() == ADAR_1) {
+        && !isLeapYear(handleGetExtendedYear(status)) && internalGetMonth() == ADAR_1) {
+        if (U_FAILURE(status)) {
+            return;
+        }
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -636,7 +639,10 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
 /**
 * @internal
 */
-int32_t HebrewCalendar::handleGetExtendedYear() {
+int32_t HebrewCalendar::handleGetExtendedYear(UErrorCode& status ) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
@@ -783,7 +789,9 @@ int32_t HebrewCalendar::internalGetMonth() const {
         int32_t ordinalMonth = internalGet(UCAL_ORDINAL_MONTH);
         HebrewCalendar *nonConstThis = (HebrewCalendar*)this; // cast away const
 
-        int32_t year = nonConstThis->handleGetExtendedYear();
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t year = nonConstThis->handleGetExtendedYear(status);
+        U_ASSERT(U_SUCCESS(status));
         return ordinalMonth + (((!isLeapYear(year)) && (ordinalMonth > ADAR_1)) ? 1: 0);
     }
     return Calendar::internalGetMonth();

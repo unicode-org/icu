@@ -1694,10 +1694,11 @@ protected:
      * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields (such
      * as UCAL_ERA) specific to the calendar system, depending on which set of
      * fields is newer.
+     * @param status        ICU Error Code
      * @return the extended year
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() = 0;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) = 0;
 
     /**
      * Subclasses may override this.  This method calls

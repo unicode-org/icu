@@ -234,7 +234,7 @@ public:
   /**
    * @internal
    */
-  virtual int32_t handleGetExtendedYear() override;
+  virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
 
   /**
    * Override Calendar to compute several fields specific to the Indian

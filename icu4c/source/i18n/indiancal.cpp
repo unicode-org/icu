@@ -228,7 +228,10 @@ int64_t IndianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
 // Functions for converting from milliseconds to field values
 //-------------------------------------------------------------------------
 
-int32_t IndianCalendar::handleGetExtendedYear() {
+int32_t IndianCalendar::handleGetExtendedYear(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t year;
 
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
