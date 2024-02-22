@@ -2929,11 +2929,17 @@ void Calendar::validateField(UCalendarDateFields field, UErrorCode &status) {
     int32_t y;
     switch (field) {
     case UCAL_DAY_OF_MONTH:
-        y = handleGetExtendedYear();
+        y = handleGetExtendedYear(status);
+        if (U_FAILURE(status)) {
+           return;
+        }
         validateField(field, 1, handleGetMonthLength(y, internalGetMonth()), status);
         break;
     case UCAL_DAY_OF_YEAR:
-        y = handleGetExtendedYear();
+        y = handleGetExtendedYear(status);
+        if (U_FAILURE(status)) {
+           return;
+        }
         validateField(field, 1, handleGetYearLength(y), status);
         break;
     case UCAL_DAY_OF_WEEK_IN_MONTH:
@@ -3387,7 +3393,10 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCo
     if (bestField == UCAL_WEEK_OF_YEAR && newerField(UCAL_YEAR_WOY, UCAL_YEAR) == UCAL_YEAR_WOY) {
         year = internalGet(UCAL_YEAR_WOY);
     } else {
-        year = handleGetExtendedYear();
+        year = handleGetExtendedYear(status);
+        if (U_FAILURE(status)) {
+           return 0;
+        }
     }
 
     internalSet(UCAL_EXTENDED_YEAR, year);

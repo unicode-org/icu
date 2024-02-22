@@ -222,7 +222,11 @@ int32_t ChineseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
  * field as the continuous year count, depending on which is newer.
  * @stable ICU 2.8
  */
-int32_t ChineseCalendar::handleGetExtendedYear() {
+int32_t ChineseCalendar::handleGetExtendedYear(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
     int32_t year;
     if (newestStamp(UCAL_ERA, UCAL_YEAR, kUnset) <= fStamp[UCAL_EXTENDED_YEAR]) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1

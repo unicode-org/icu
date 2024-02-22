@@ -63,8 +63,11 @@ const char *BuddhistCalendar::getType() const
     return "buddhist";
 }
 
-int32_t BuddhistCalendar::handleGetExtendedYear()
+int32_t BuddhistCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // EXTENDED_YEAR in BuddhistCalendar is a Gregorian year.
     // The default value of EXTENDED_YEAR is 1970 (Buddhist 2513)
     int32_t year;

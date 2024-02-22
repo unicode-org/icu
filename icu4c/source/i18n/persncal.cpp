@@ -187,7 +187,10 @@ int64_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
 // Functions for converting from milliseconds to field values
 //-------------------------------------------------------------------------
 
-int32_t PersianCalendar::handleGetExtendedYear() {
+int32_t PersianCalendar::handleGetExtendedYear(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1

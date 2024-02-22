@@ -139,7 +139,7 @@ private:
      * @return the extended year
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() override;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
     /**
      * Subclasses may override this method to compute several fields
      * specific to each calendar system.  

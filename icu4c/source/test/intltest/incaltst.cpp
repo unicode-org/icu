@@ -106,6 +106,7 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestConsistencyPersian);
     TESTCASE_AUTO(TestConsistencyJapanese);
     TESTCASE_AUTO(TestIslamicUmalquraCalendarSlow);
+    TESTCASE_AUTO(TestJapaneseLargeEra);
     TESTCASE_AUTO_END;
 }
 
@@ -1133,6 +1134,17 @@ void IntlCalendarTest::TestIslamicUmalquraCalendarSlow() {
     cal->fieldDifference(0.000000, UCAL_YEAR_WOY, status);
     // Ignore the error
     status.reset();
+}
+
+void IntlCalendarTest::TestJapaneseLargeEra() {
+    IcuTestErrorCode status(*this, "TestJapaneseLargeEra");
+    Locale l("ja@calendar=japanese");
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance(l, status));
+    cal->clear();
+    cal->set(UCAL_ERA, 2139062143);
+    cal->add(UCAL_YEAR, 1229539657, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)
