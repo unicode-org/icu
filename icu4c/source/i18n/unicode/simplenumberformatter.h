@@ -43,22 +43,19 @@ class AdoptingSignumModifierStore;
 }  // icu::number::impl
 
 
-#ifndef U_HIDE_DRAFT_API
-
-
 /**
  * An input type for SimpleNumberFormatter.
  *
  * This class is mutable and not intended for public subclassing. This class is movable but not copyable.
  *
- * @draft ICU 73
+ * @stable ICU 73
  */
 class U_I18N_API SimpleNumber : public UMemory {
   public:
     /**
      * Creates a SimpleNumber for an integer.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     static SimpleNumber forInt64(int64_t value, UErrorCode& status);
 
@@ -67,10 +64,11 @@ class U_I18N_API SimpleNumber : public UMemory {
      *
      * This function immediately mutates the inner value.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     void multiplyByPowerOfTen(int32_t power, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Rounds the value currently stored in the SimpleNumber to the given power of 10.
      *
@@ -107,6 +105,7 @@ class U_I18N_API SimpleNumber : public UMemory {
      */
     void setMinimumFractionDigits(uint32_t minimumFractionDigits, UErrorCode& status);
 
+#endif // U_HIDE_DRAFT_API
     /**
      * Sets the sign of the number: an explicit plus sign, explicit minus sign, or no sign.
      *
@@ -114,7 +113,7 @@ class U_I18N_API SimpleNumber : public UMemory {
      *
      * NOTE: This does not support accounting sign notation.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     void setSign(USimpleNumberSign sign, UErrorCode& status);
 
@@ -123,14 +122,14 @@ class U_I18N_API SimpleNumber : public UMemory {
      * 
      * NOTE: This number will fail to format; use forInt64() to create a SimpleNumber with a value.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     SimpleNumber() = default;
 
     /**
      * Destruct this SimpleNumber, cleaning up any memory it might own.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     ~SimpleNumber() {
         cleanup();
@@ -139,7 +138,7 @@ class U_I18N_API SimpleNumber : public UMemory {
     /**
      * SimpleNumber move constructor.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     SimpleNumber(SimpleNumber&& other) noexcept {
         fData = other.fData;
@@ -150,7 +149,7 @@ class U_I18N_API SimpleNumber : public UMemory {
     /**
      * SimpleNumber move assignment.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     SimpleNumber& operator=(SimpleNumber&& other) noexcept {
         cleanup();
@@ -185,14 +184,14 @@ class U_I18N_API SimpleNumber : public UMemory {
  *
  * This class is immutable and not intended for public subclassing. This class is movable but not copyable.
  *
- * @draft ICU 73
+ * @stable ICU 73
  */
 class U_I18N_API SimpleNumberFormatter : public UMemory {
   public:
     /**
      * Creates a new SimpleNumberFormatter with all locale defaults.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     static SimpleNumberFormatter forLocale(
         const icu::Locale &locale,
@@ -201,7 +200,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
     /**
      * Creates a new SimpleNumberFormatter, overriding the grouping strategy.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     static SimpleNumberFormatter forLocaleAndGroupingStrategy(
         const icu::Locale &locale,
@@ -214,7 +213,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
      * IMPORTANT: For efficiency, this function borrows the symbols. The symbols MUST remain valid
      * for the lifetime of the SimpleNumberFormatter.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     static SimpleNumberFormatter forLocaleAndSymbolsAndGroupingStrategy(
         const icu::Locale &locale,
@@ -228,7 +227,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
      * The SimpleNumber argument is "consumed". A new SimpleNumber object should be created for
      * every formatting operation.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     FormattedNumber format(SimpleNumber value, UErrorCode &status) const;
 
@@ -237,7 +236,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
      *
      * For more control over the formatting, use SimpleNumber.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     FormattedNumber formatInt64(int64_t value, UErrorCode &status) const {
         return format(SimpleNumber::forInt64(value, status), status);
@@ -254,7 +253,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
     /**
      * Destruct this SimpleNumberFormatter, cleaning up any memory it might own.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     ~SimpleNumberFormatter() {
         cleanup();
@@ -263,14 +262,14 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
     /**
      * Creates a shell, initialized but non-functional SimpleNumberFormatter.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     SimpleNumberFormatter() = default;
 
     /**
      * SimpleNumberFormatter: Move constructor.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     SimpleNumberFormatter(SimpleNumberFormatter&& other) noexcept {
         fGroupingStrategy = other.fGroupingStrategy;
@@ -285,7 +284,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
     /**
      * SimpleNumberFormatter: Move assignment.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     SimpleNumberFormatter& operator=(SimpleNumberFormatter&& other) noexcept {
         cleanup();
@@ -320,8 +319,6 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
     impl::AdoptingSignumModifierStore* fPatternModifier = nullptr;
 };
 
-
-#endif // U_HIDE_DRAFT_API
 
 }  // namespace number
 U_NAMESPACE_END

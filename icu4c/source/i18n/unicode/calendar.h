@@ -1350,7 +1350,6 @@ public:
      */
     virtual UBool isWeekend() const;
 
-#ifndef U_FORCE_HIDE_DRAFT_API
     /**
      * Returns true if the date is in a leap year. Recalculate the current time
      * field values if the time value has been changed by a call to * setTime().
@@ -1363,7 +1362,7 @@ public:
      * @param status        ICU Error Code
      * @return       True if the date in the fields is in a Temporal proposal
      *               defined leap year. False otherwise.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     virtual bool inTemporalLeapYear(UErrorCode& status) const;
 
@@ -1383,7 +1382,7 @@ public:
      *
      * @param status        ICU Error Code
      * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     virtual const char* getTemporalMonthCode(UErrorCode& status) const;
 
@@ -1404,11 +1403,9 @@ public:
      * @param temporalMonth  The value to be set for temporal monthCode.
      * @param status        ICU Error Code
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     virtual void setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
-
-#endif  // U_FORCE_HIDE_DRAFT_API
 
 protected:
 
