@@ -1070,7 +1070,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
                 builder.setFavorSubtag(favor);
             }
             if (!test.threshold.isEmpty()) {
-                int threshold = Integer.valueOf(test.threshold);
+                int threshold = Integer.parseInt(test.threshold);
                 builder.internalSetThresholdDistance(threshold);
             }
             matcher = builder.build();

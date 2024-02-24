@@ -841,17 +841,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             }
         }
     }
-
-    static final Integer
-    I_ANY = new Integer(SortedSetRelation.ANY),
-    I_CONTAINS = new Integer(SortedSetRelation.CONTAINS),
-    I_DISJOINT = new Integer(SortedSetRelation.DISJOINT),
-    I_NO_B = new Integer(SortedSetRelation.NO_B),
-    I_ISCONTAINED = new Integer(SortedSetRelation.ISCONTAINED),
-    I_EQUALS = new Integer(SortedSetRelation.EQUALS),
-    I_NO_A = new Integer(SortedSetRelation.NO_A),
-    I_NONE = new Integer(SortedSetRelation.NONE);
-
+    
     @Test
     public void TestSetRelation() {
 
@@ -885,8 +875,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
         SortedSet jset = new TreeSet();
 
         for (int i = 0; i < size*2; i += 2) { // only even values
-            iset.add(new Integer(i));
-            jset.add(new Integer(i));
+            iset.add(i);
+            jset.add(i);
         }
 
         int iterations = 1000000 / size;
@@ -896,12 +886,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
 
         CheckSpeed(iset, jset, "when a = b", iterations);
 
-        iset.add(new Integer(size + 1));    // add odd value in middle
+        iset.add(size + 1);    // add odd value in middle
 
         CheckSpeed(iset, jset, "when a contains b", iterations);
         CheckSpeed(jset, iset, "when b contains a", iterations);
 
-        jset.add(new Integer(size - 1));    // add different odd value in middle
+        jset.add(size - 1);    // add different odd value in middle
 
         CheckSpeed(jset, iset, "when a, b are disjoint", iterations);
     }

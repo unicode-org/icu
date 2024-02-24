@@ -1077,7 +1077,7 @@ public class CollationRegressionTest extends TestFmwk {
 
         // Iterate forward and collect all of the elements into a Vector
         while ((elem = iter.next()) != CollationElementIterator.NULLORDER) {
-            elements.add(new Integer(elem));
+            elements.add(elem);
         }
 
         // Now iterate backward and make sure they're the same

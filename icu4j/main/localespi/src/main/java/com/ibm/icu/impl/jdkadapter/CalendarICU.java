@@ -328,7 +328,7 @@ public class CalendarICU extends java.util.Calendar {
         Map<String,Integer> res = new HashMap<String,Integer>();
         for (int i = 0; i < strings.length; i++) {
             if (strings[i].length() != 0) {
-                res.put(strings[i], Integer.valueOf(i));
+                res.put(strings[i], i);
             }
         }
         return res;

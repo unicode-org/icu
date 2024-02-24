@@ -378,7 +378,7 @@ public class PropsVectors {
         // sort the properties vectors to find unique vector values
         Integer[] indexArray = new Integer[rows];
         for (int i = 0; i < rows; ++i) {
-            indexArray[i] = Integer.valueOf(columns * i);
+            indexArray[i] = columns * i;
         }
 
         Arrays.sort(indexArray, new Comparator<Integer>() {

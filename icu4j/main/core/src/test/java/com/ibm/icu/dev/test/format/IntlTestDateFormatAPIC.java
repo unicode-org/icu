@@ -47,7 +47,7 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
         // compile-time name hiding.
 
         Date dateObj = new Date(0);
-        Number numObj = new Double(3.1415926535897932384626433832795);
+        Number numObj = 3.1415926535897932384626433832795;
         StringBuffer strBuffer = new StringBuffer("");
         String str;
         FieldPosition fpos = new FieldPosition(0);

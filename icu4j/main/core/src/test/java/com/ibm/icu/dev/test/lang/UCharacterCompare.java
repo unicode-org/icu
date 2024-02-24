@@ -96,8 +96,8 @@ public final class UCharacterCompare
                     if (UCharacter.toLowerCase(i) != Character.toLowerCase(i))
                         trackDifference(p, i, "toLowerCase()", Integer.toHexString(UCharacter.toLowerCase(i)), Integer
                                 .toHexString(Character.toLowerCase(i)));
-                    if (!UCharacter.toString(i).equals(new Character(i).toString()))
-                        trackDifference(p, i, "toString()", UCharacter.toString(i), new Character(i).toString());
+                    if (!UCharacter.toString(i).equals(Character.valueOf(i).toString()))
+                        trackDifference(p, i, "toString()", UCharacter.toString(i), Character.valueOf(i).toString());
                     if (UCharacter.toTitleCase(i) != Character.toTitleCase(i))
                         trackDifference(p, i, "toTitleCase()", Integer.toHexString(UCharacter.toTitleCase(i)), Integer
                                 .toHexString(Character.toTitleCase(i)));
@@ -209,9 +209,9 @@ public final class UCharacterCompare
             throws Exception {
         if (m_hashtable_.containsKey(method)) {
             Integer value = m_hashtable_.get(method);
-            m_hashtable_.put(method, new Integer(value.intValue() + 1));
+            m_hashtable_.put(method, value.intValue() + 1);
         } else
-            m_hashtable_.put(method, new Integer(1));
+            m_hashtable_.put(method, 1);
 
         String temp = Integer.toHexString(ch);
         StringBuffer s = new StringBuffer(temp);

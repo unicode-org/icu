@@ -35,18 +35,18 @@ public class PluralFormatTest extends CoreTestFmwk {
     // Create example outputs for all supported locales.
     /*
     System.out.println("\n" + localeIDs);
-    String lastValue = (String) changes.get(new Integer(0));
+    String lastValue = (String) changes.get(Integer.valueOf(0));
     int  lastNumber = 0;
 
     for (int i = 1; i < 199; ++i) {
-        if (changes.get(new Integer(i)) != null) {
+        if (changes.get(Integer.valueOf(i)) != null) {
             if (lastNumber == i-1) {
                 System.out.println(lastNumber + ": " + lastValue);
             } else {
                 System.out.println(lastNumber + "... " + (i-1) + ": " + lastValue);
             }
             lastNumber = i;
-            lastValue = (String) changes.get(new Integer(i));
+            lastValue = (String) changes.get(Integer.valueOf(i));
         }
     }
     System.out.println(lastNumber + "..." + 199 + ": " + lastValue);
@@ -56,7 +56,7 @@ public class PluralFormatTest extends CoreTestFmwk {
       try {
         PluralFormat plf = new PluralFormat(new ULocale(locales[i]), testPattern);
         log("plf: " + plf);
-        String expected = changes.get(new Integer(0));
+        String expected = changes.get(0);
         for (int n = 0; n < 200; ++n) {
           String value = changes.get(n);
           if (value != null) {
@@ -75,8 +75,8 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestOneFormLocales() {
     String localeIDs = "ja,ko,tr,vi";
     String testPattern = "other{other}";
-    Map changes = new HashMap();
-    changes.put(new Integer(0), "other");
+    Map<Integer, String> changes = new HashMap<>();
+    changes.put(0, "other");
     helperTestRules(localeIDs, testPattern, changes);
   }
 
@@ -85,10 +85,10 @@ public class PluralFormatTest extends CoreTestFmwk {
     String localeIDs = "bem,da,de,el,en,eo,es,et,fi,fo,he,it,mr,nb,nl,nn,no,pt_PT,sv,af,bg,ca,eu,fur,fy,ha,ku,lb,ml," +
         "nah,ne,om,or,pap,ps,so,sq,sw,ta,te,tk,ur,mn,gsw,rm";
     String testPattern = "one{one} other{other}";
-    Map changes = new HashMap();
-    changes.put(new Integer(0), "other");
-    changes.put(new Integer(1), "one");
-    changes.put(new Integer(2), "other");
+    Map<Integer, String> changes = new HashMap<>();
+    changes.put(0, "other");
+    changes.put(1, "one");
+    changes.put(2, "other");
     helperTestRules(localeIDs, testPattern, changes);
   }
 
@@ -96,9 +96,9 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestSingular01Locales() {
     String localeIDs = "ff,fr,kab,gu,pa,pt,zu,bn";
     String testPattern = "one{one} other{other}";
-    Map changes = new HashMap();
-    changes.put(new Integer(0), "one");
-    changes.put(new Integer(2), "other");
+    Map<Integer, String> changes = new HashMap<>();
+    changes.put(0, "one");
+    changes.put(2, "other");
     helperTestRules(localeIDs, testPattern, changes);
   }
 
@@ -106,22 +106,22 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestZeroSingularLocales() {
     String localeIDs = "lv";
     String testPattern = "zero{zero} one{one} other{other}";
-    Map changes = new HashMap();
-    changes.put(new Integer(0), "zero");
-    changes.put(new Integer(1), "one");
+    Map<Integer, String> changes = new HashMap<>();
+    changes.put(0, "zero");
+    changes.put(1, "one");
     for (int i = 2; i < 20; ++i) {
       if (i < 10) {
-        changes.put(new Integer(i), "other");
+        changes.put(i, "other");
       } else {
-        changes.put(new Integer(i), "zero");
+        changes.put(i, "zero");
       }
-      changes.put(new Integer(i*10), "zero");
+      changes.put(i*10, "zero");
       if (i == 11) {
-        changes.put(new Integer(i*10 + 1), "zero");
-        changes.put(new Integer(i*10 + 2), "zero");
+        changes.put(i * 10 + 1, "zero");
+        changes.put(i * 10 + 2, "zero");
       } else {
-        changes.put(new Integer(i*10 + 1), "one");
-        changes.put(new Integer(i*10 + 2), "other");
+        changes.put(i * 10 + 1, "one");
+        changes.put(i * 10 + 2, "other");
       }
     }
     helperTestRules(localeIDs, testPattern, changes);
@@ -131,11 +131,11 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestSingularDual() {
       String localeIDs = "ga";
       String testPattern = "one{one} two{two} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "other");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "two");
-      changes.put(new Integer(3), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "other");
+      changes.put(1, "one");
+      changes.put(2, "two");
+      changes.put(3, "other");
       helperTestRules(localeIDs, testPattern, changes);
   }
 
@@ -143,14 +143,14 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestSingularZeroSome() {
       String localeIDs = "ro";
       String testPattern = "few{few} one{one} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "few");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "few");
-      changes.put(new Integer(20), "other");
-      changes.put(new Integer(101), "few");
-      changes.put(new Integer(102), "few");
-      changes.put(new Integer(120), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "few");
+      changes.put(1, "one");
+      changes.put(2, "few");
+      changes.put(20, "other");
+      changes.put(101, "few");
+      changes.put(102, "few");
+      changes.put(120, "other");
       helperTestRules(localeIDs, testPattern, changes);
   }
 
@@ -158,18 +158,18 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestSpecial12_19() {
       String localeIDs = "lt";
       String testPattern = "one{one} few{few} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "other");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "few");
-      changes.put(new Integer(10), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "other");
+      changes.put(1, "one");
+      changes.put(2, "few");
+      changes.put(10, "other");
       for (int i = 2; i < 20; ++i) {
         if (i == 11) {
           continue;
         }
-        changes.put(new Integer(i*10 + 1), "one");
-        changes.put(new Integer(i*10 + 2), "few");
-        changes.put(new Integer((i+1)*10), "other");
+        changes.put(i * 10 + 1, "one");
+        changes.put(i * 10 + 2, "few");
+        changes.put((i + 1) * 10, "other");
       }
       helperTestRules(localeIDs, testPattern, changes);
   }
@@ -178,18 +178,18 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestPaucalExcept11_14() {
       String localeIDs = "hr,sr,uk";
       String testPattern = "one{one} few{few} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "other");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "few");
-      changes.put(new Integer(5), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "other");
+      changes.put(1, "one");
+      changes.put(2, "few");
+      changes.put(5, "other");
       for (int i = 2; i < 20; ++i) {
         if (i == 11) {
           continue;
         }
-        changes.put(new Integer(i*10 + 1), "one");
-        changes.put(new Integer(i*10 + 2), "few");
-        changes.put(new Integer(i*10 + 5), "other");
+        changes.put(i * 10 + 1, "one");
+        changes.put(i * 10 + 2, "few");
+        changes.put(i * 10 + 5, "other");
       }
       helperTestRules(localeIDs, testPattern, changes);
   }
@@ -198,7 +198,7 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestPaucalRu() {
       String localeIDs = "ru";
       String testPattern = "one{one} many{many} other{other}";
-      Map changes = new HashMap();
+      Map<Integer, String> changes = new HashMap<>();
       for (int i = 0; i < 200; i+=10) {
           if (i == 10 || i == 110) {
               put(i, 0, 9, "many", changes);
@@ -229,11 +229,11 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestSingularPaucal() {
       String localeIDs = "cs,sk";
       String testPattern = "one{one} few{few} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "other");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "few");
-      changes.put(new Integer(5), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "other");
+      changes.put(1, "one");
+      changes.put(2, "few");
+      changes.put(5, "other");
       helperTestRules(localeIDs, testPattern, changes);
   }
 
@@ -241,17 +241,17 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestPaucal1_234() {
       String localeIDs = "pl";
       String testPattern = "one{one} few{few} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "other");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "few");
-      changes.put(new Integer(5), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "other");
+      changes.put(1, "one");
+      changes.put(2, "few");
+      changes.put(5, "other");
       for (int i = 2; i < 20; ++i) {
         if (i == 11) {
           continue;
         }
-        changes.put(new Integer(i*10 + 2), "few");
-        changes.put(new Integer(i*10 + 5), "other");
+        changes.put(i * 10 + 2, "few");
+        changes.put(i * 10 + 5, "other");
       }
       helperTestRules(localeIDs, testPattern, changes);
   }
@@ -260,16 +260,16 @@ public class PluralFormatTest extends CoreTestFmwk {
   public void TestPaucal1_2_34() {
       String localeIDs = "sl";
       String testPattern = "one{one} two{two} few{few} other{other}";
-      Map changes = new HashMap();
-      changes.put(new Integer(0), "other");
-      changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "two");
-      changes.put(new Integer(3), "few");
-      changes.put(new Integer(5), "other");
-      changes.put(new Integer(101), "one");
-      changes.put(new Integer(102), "two");
-      changes.put(new Integer(103), "few");
-      changes.put(new Integer(105), "other");
+      Map<Integer, String> changes = new HashMap<>();
+      changes.put(0, "other");
+      changes.put(1, "one");
+      changes.put(2, "two");
+      changes.put(3, "few");
+      changes.put(5, "other");
+      changes.put(101, "one");
+      changes.put(102, "two");
+      changes.put(103, "few");
+      changes.put(105, "other");
       helperTestRules(localeIDs, testPattern, changes);
   }
 

@@ -751,7 +751,7 @@ class RBBITableBuilder {
                for (n=0; n<fDStates.size(); n++) {              //    For each state  s (row in the state table)
                    RBBIStateDescriptor sd = fDStates.get(n);
                    if (sd.fPositions.contains(tagNode)) {       //       if  s include the tag node t
-                       sd.fTagVals.add(Integer.valueOf(tagNode.fVal));
+                       sd.fTagVals.add(tagNode.fVal);
                    }
                }
            }
@@ -799,15 +799,15 @@ class RBBITableBuilder {
            //   We will need this as a default, for rule sets with no explicit tagging,
            //   or with explicit tagging of {0}.
            if (fRB.fRuleStatusVals.size() == 0) {
-               fRB.fRuleStatusVals.add(Integer.valueOf(1));    // Num of statuses in group
-               fRB.fRuleStatusVals.add(Integer.valueOf(0));    //   and our single status of zero
+               fRB.fRuleStatusVals.add(1);    // Num of statuses in group
+               fRB.fRuleStatusVals.add(0);    //   and our single status of zero
 
                SortedSet<Integer> s0 = new TreeSet<>();        // mapping for rules with no explicit tagging
-               fRB.fStatusSets.put(s0, Integer.valueOf(0));    //   (key is an empty set).
+               fRB.fStatusSets.put(s0, 0);    //   (key is an empty set).
 
                SortedSet<Integer> s1 = new TreeSet<>();        // mapping for rules with explicit tagging of {0}
-               s1.add(Integer.valueOf(0));
-               fRB.fStatusSets.put(s1, Integer.valueOf(0));
+               s1.add(0);
+               fRB.fStatusSets.put(s1, 0);
            }
 
            //    For each state, check whether the state's status tag values are
@@ -821,12 +821,12 @@ class RBBITableBuilder {
                    //   Add them to the statusSets map, This map associates
                    //   the set of status values with an index in the runtime status
                    //   values array.
-                   arrayIndexI = Integer.valueOf(fRB.fRuleStatusVals.size());
+                   arrayIndexI = fRB.fRuleStatusVals.size();
                    fRB.fStatusSets.put(statusVals, arrayIndexI);
 
                    // Add the new set of status values to the vector of values that
                    //   will eventually become the array used by the runtime engine.
-                   fRB.fRuleStatusVals.add(Integer.valueOf(statusVals.size()));
+                   fRB.fRuleStatusVals.add(statusVals.size());
                    fRB.fRuleStatusVals.addAll(statusVals);
                }
 

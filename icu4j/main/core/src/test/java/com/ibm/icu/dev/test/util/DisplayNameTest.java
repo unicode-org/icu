@@ -47,9 +47,8 @@ public class DisplayNameTest extends CoreTestFmwk {
         for (int k = 0; k < codeToName.length; ++k) codeToName[k] = new HashMap();
     }
 
-    static final Object[] zoneFormats = {new Integer(0), new Integer(1), new Integer(2),
-        new Integer(3), new Integer(4), new Integer(5), new Integer(6), new Integer(7)};
-    static final Object[] currencyFormats = {new Integer(Currency.SYMBOL_NAME), new Integer(Currency.LONG_NAME)};
+    static final Object[] zoneFormats = {0, 1, 2, 3, 4, 5, 6, 7};
+    static final Object[] currencyFormats = {Currency.SYMBOL_NAME, Currency.LONG_NAME};
     static final Object[] NO_CONTEXT = {null};
 
     static final Date JAN1;

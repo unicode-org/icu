@@ -246,8 +246,8 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
         private int maxOffset;
         private int minRecentOffset;
         private int maxRecentOffset;
-        private List inflectionPoints = new ArrayList();
-        private Set purportedAliases = new TreeSet();
+        private List<Long> inflectionPoints = new ArrayList<>();
+        private Set<String> purportedAliases = new TreeSet<>();
 
         private Zone(String id) { // for internal use only; use make instead!
             zone = TimeZone.getTimeZone(id);
@@ -266,7 +266,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
             if (zone.getOffset(lastDate) < zone.getOffset(endDate2)) lastDate = endDate2;
             maxRecentOffset = minRecentOffset = minOffset = maxOffset = zone.getOffset(lastDate);
 
-            inflectionPoints.add(new Long(lastDate));
+            inflectionPoints.add(lastDate);
             int lastOffset = zone.getOffset(endDate);
             long lastInflection = endDate;
 
@@ -291,12 +291,12 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
                             high = mid;
                         }
                     }
-                    inflectionPoints.add(new Long(low));
+                    inflectionPoints.add(low);
                     lastInflection = low;
                 }
                 lastOffset = currentOffset;
             }
-            inflectionPoints.add(new Long(startDate)); // just to cap it off for comparisons.
+            inflectionPoints.add(startDate); // just to cap it off for comparisons.
         }
 
         // we assume that places will not convert time zones then back within one day

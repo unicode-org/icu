@@ -688,14 +688,10 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         // Test field disambiguation with a few special hard-coded cases.
         // This shouldn't fail if the above cases aren't failing.
         Object[] DISAM = {
-            new Integer(1998), new Integer(1), new Integer(Calendar.SUNDAY),
-                d[0],
-            new Integer(1998), new Integer(2), new Integer(Calendar.SATURDAY),
-                d[1],
-            new Integer(1998), new Integer(53), new Integer(Calendar.THURSDAY),
-                d[2],
-            new Integer(1998), new Integer(53), new Integer(Calendar.FRIDAY),
-                d[3],
+            1998, 1, Calendar.SUNDAY, d[0],
+            1998, 2, Calendar.SATURDAY, d[1],
+            1998, 53, Calendar.THURSDAY, d[2],
+            1998, 53, Calendar.FRIDAY, d[3],
         };
         testCal.setMinimalDaysInFirstWeek(3);
         testCal.setFirstDayOfWeek(Calendar.SUNDAY);
@@ -739,10 +735,10 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         d[7] = tempcal.getTime();
 
         Object[] ADDROLL = {
-            ADD, new Integer(1), d[0], d[1],
-            ADD, new Integer(1), d[2], d[3],
-            ROLL, new Integer(1), d[4], d[5],
-            ROLL, new Integer(1), d[6], d[7],
+            ADD, 1, d[0], d[1],
+            ADD, 1, d[2], d[3],
+            ROLL, 1, d[4], d[5],
+            ROLL, 1, d[6], d[7],
         };
         testCal.setMinimalDaysInFirstWeek(3);
         testCal.setFirstDayOfWeek(Calendar.SUNDAY);
@@ -1693,9 +1689,9 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         d[5] = tempcal.getTime();
         // Test specific failure reported in bug
         Object[] DATA = {
-            new Integer(1), d[0], new Integer(4), d[1],
-            new Integer(8), d[2], new Integer(-1), d[3],
-            new Integer(-4), d[4], new Integer(-8), d[5],
+            1, d[0], 4, d[1],
+            8, d[2], -1, d[3],
+            -4, d[4], -8, d[5],
         };
         for (int i=0; i<DATA.length; i+=2) {
             cal.clear();

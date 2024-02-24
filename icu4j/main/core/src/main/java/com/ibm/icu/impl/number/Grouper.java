@@ -80,7 +80,7 @@ public class Grouper {
         ICUResourceBundle resource = (ICUResourceBundle) UResourceBundle
                 .getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         String result = resource.getStringWithFallback("NumberElements/minimumGroupingDigits");
-        return Short.valueOf(result);
+        return Short.parseShort(result);
     }
 
     /**

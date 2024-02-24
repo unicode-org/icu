@@ -39,7 +39,7 @@ public class TestDataElements_testtypes extends ListResourceBundle {
                 },
                 {
                     "emptyint",
-                    new Integer(0),
+                    0,
                 },
                 {
                     "emptyintv",
@@ -64,14 +64,14 @@ public class TestDataElements_testtypes extends ListResourceBundle {
                 {
                     "integerarray",
                     new Integer[] {
-                        new Integer(1),
-                        new Integer(2),
-                        new Integer(3),
-                        new Integer(-3),
-                        new Integer(4),
-                        new Integer(5),
-                        new Integer(6),
-                        new Integer(7),
+                        1,
+                        2,
+                        3,
+                        -3,
+                        4,
+                        5,
+                        6,
+                        7,
                     },
                 },
                 {
@@ -98,19 +98,19 @@ public class TestDataElements_testtypes extends ListResourceBundle {
                 },
                 {
                     "minusone",
-                    new Integer(-1),
+                    -1,
                 },
                 {
                     "one",
-                    new Integer(1),
+                    1,
                 },
                 {
                     "onehundredtwentythree",
-                    new Integer(123),
+                    123,
                 },
                 {
                     "plusone",
-                    new Integer(1),
+                    1,
                 },
                 {
                     "string",

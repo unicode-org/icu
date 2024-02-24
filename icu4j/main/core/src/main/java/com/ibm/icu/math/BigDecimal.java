@@ -2887,7 +2887,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         // Reminder: a zero double returns '0.0', so we cannot fastpath to
         // use the constant ZERO. This might be important enough to justify
         // a factory approach, a cache, or a few private constants, later.
-        return new com.ibm.icu.math.BigDecimal((new java.lang.Double(dub)).toString());
+        return new com.ibm.icu.math.BigDecimal(Double.toString(dub));
     }
 
     /**

@@ -65,7 +65,7 @@ public class ScriptRunModuleWriter extends ScriptModuleWriter
         }
         
         for (int record = 0; record < recordCount; record += 1) {
-            scriptRangeOffsets[scriptData.getRecord(record).scriptCode() - minScript].addElement(new Integer(record));
+            scriptRangeOffsets[scriptData.getRecord(record).scriptCode() - minScript].addElement(record);
         }
         
         output.println();

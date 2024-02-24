@@ -657,7 +657,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         
         try {
             if (sun) {
-                normalizerArgs = new Object[] { null, null, new Integer(0) };
+                normalizerArgs = new Object[] { null, null, 0 };
                 normalizerArgs[1] = normalizer.getField(compose ? "COMPOSE" : "DECOMP").get(null);
                 normalizerMethod = normalizer.getMethod("normalize", new Class[] { String.class, normalizerArgs[1].getClass(), int.class });
                 // sun.text.Normalizer.normalize(line, compose

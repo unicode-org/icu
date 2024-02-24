@@ -198,7 +198,7 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
 
             // Did we find a word on this iteration? If so, push it on the break stack
             if (wordLength > 0) {
-                foundBreaks.push(Integer.valueOf(current + wordLength));
+                foundBreaks.push(current + wordLength);
             }
         }
 

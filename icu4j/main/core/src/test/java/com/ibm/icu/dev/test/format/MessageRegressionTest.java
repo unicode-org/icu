@@ -133,7 +133,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         try {
             logln("Apply with pattern : " + pattern1);
             messageFormatter.applyPattern(pattern1);
-            Object[] paramArray = {new Integer(7)};
+            Object[] paramArray = {7};
             String tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals("Impossible {1} has occurred -- status code is 7 and message is {2}."))
                 errln("Tests arguments < substitution failed");
@@ -468,7 +468,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
             errln("argument0: \"" + objs[0] + "\"");
         mf.setLocale(Locale.US);
         mf.applyPattern("{0,number,#.##}, {0,number,#.#}");
-        Object[] oldobjs = {new Double(3.1415)};
+        Object[] oldobjs = {3.1415d};
         String result = mf.format( oldobjs );
         logln("pattern: \"" + mf.toPattern() + "\"");
         logln("text for parsing: \"" + result + "\"");
@@ -476,7 +476,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         if (!result.equals("3.14, 3.1"))
             errln("result = " + result);
         Object[] newobjs = mf.parse(result, new ParsePosition(0));
-        // newobjs now equals {new Double(3.1)}
+        // newobjs now equals {Double.valueOf(3.1)}
         if (((Number)newobjs[0]).doubleValue() != 3.1) // was (Double) [alan]
             errln( "newobjs[0] = " + newobjs[0]);
     }
@@ -495,7 +495,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         ChoiceFormat fileform = new ChoiceFormat(filelimits, filepart);
         form1.setFormat(1, fileform);
         form2.setFormat(0, fileform);
-        Object[] testArgs = {new Long(12373), "MyDisk"};
+        Object[] testArgs = {12373L, "MyDisk"};
         logln(form1.format(testArgs));
         logln(form2.format(testArgs));
     }
@@ -547,7 +547,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         };
 
         for (int i=0; i<3; i++) {
-            String out = mf.format(new Object[]{new Integer(i)});
+            String out = mf.format(new Object[]{i});
             if (SUFFIX[i] == null) {
                 if (!out.equals(PREFIX[i]))
                     errln("" + i + ": Got \"" + out + "\"; Want \"" + PREFIX[i] + "\"");
@@ -678,7 +678,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
             logln("Apply with pattern : " + pattern1);
             messageFormatter.applyPattern(pattern1);
             HashMap paramsMap = new HashMap();
-            paramsMap.put("arg0", new Integer(7));
+            paramsMap.put("arg0", 7);
             String tempBuffer = messageFormatter.format(paramsMap);
             if (!tempBuffer.equals("Impossible {arg1} has occurred -- status code is 7 and message is {arg2}."))
                 errln("Tests arguments < substitution failed");
@@ -701,7 +701,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
             logln("Apply with pattern : " + pattern2);
             messageFormatter.applyPattern(pattern2);
             paramsMap.clear();
-            paramsMap.put("ARG_ZERO", new Integer(7));
+            paramsMap.put("ARG_ZERO", 7);
             tempBuffer = messageFormatter.format(paramsMap);
             if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {ARG_ONE} test plus 'other {ARG_TWO} stuff'."))
                 errln("quote format test (w/ params) failed.");
@@ -829,7 +829,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         mf.setLocale(Locale.US);
         mf.applyPattern("{" + argName + ",number,#.##}, {" + argName + ",number,#.#}");
         Map oldobjs = new HashMap();
-        oldobjs.put(argName, new Double(3.1415));
+        oldobjs.put(argName, 3.1415d);
         String result = mf.format( oldobjs );
         logln("pattern: \"" + mf.toPattern() + "\"");
         logln("text for parsing: \"" + result + "\"");
@@ -837,7 +837,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         if (!result.equals("3.14, 3.1"))
             errln("result = " + result);
         Map newobjs = mf.parseToMap(result, new ParsePosition(0));
-        // newobjs now equals {new Double(3.1)}
+        // newobjs now equals {Double.valueOf(3.1)}
         if (((Number)newobjs.get(argName)).doubleValue() != 3.1) // was (Double) [alan]
             errln( "newobjs.get(argName) = " + newobjs.get(argName));
     }{ // Taken from Test4105380().
@@ -852,7 +852,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         form2.setFormat(0, fileform);
         Map testArgs = new HashMap();
         testArgs.put("diskName", "MyDisk");
-        testArgs.put("numberOfFiles", new Long(12373));
+        testArgs.put("numberOfFiles", 12373L);
         logln(form1.format(testArgs));
         logln(form2.format(testArgs));
     }{ // Taken from test4293229().

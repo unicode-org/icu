@@ -19,7 +19,7 @@ public class UnlocalizedNumberFormatter extends NumberFormatterSettings<Unlocali
 
     /** Base constructor; called during startup only. Sets the threshold to the default value of 3. */
     UnlocalizedNumberFormatter() {
-        super(null, KEY_THRESHOLD, new Long(3));
+        super(null, KEY_THRESHOLD, 3L);
     }
 
     UnlocalizedNumberFormatter(NumberFormatterSettings<?> parent, int key, Object value) {

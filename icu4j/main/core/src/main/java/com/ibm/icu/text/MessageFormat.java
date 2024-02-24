@@ -1305,7 +1305,7 @@ public class MessageFormat extends UFormat {
             String key = null;
             if(args!=null) {
                 argNumber=part.getValue();  // ARG_NUMBER
-                argId = Integer.valueOf(argNumber);
+                argId = argNumber;
             } else {
                 if(part.getType()==MessagePattern.Part.Type.ARG_NAME) {
                     key=msgPattern.getSubstring(part);
@@ -1673,7 +1673,7 @@ public class MessageFormat extends UFormat {
                 int argNumber=part.getValue();  // ARG_NUMBER
                 if (dest.attributes != null) {
                     // We only need argId if we add it into the attributes.
-                    argId = Integer.valueOf(argNumber);
+                    argId = argNumber;
                 }
                 if(0<=argNumber && argNumber<args.length) {
                     arg=args[argNumber];

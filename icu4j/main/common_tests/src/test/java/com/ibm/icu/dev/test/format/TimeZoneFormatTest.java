@@ -543,10 +543,10 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     // These special cases do not round trip time as designed.
     private boolean isSpecialTimeRoundTripCase(ULocale loc, String id, String pattern, long time) {
         final Object[][] EXCLUSIONS = {
-            {null, "Asia/Chita", "zzzz", Long.valueOf(1414252800000L)},
-            {null, "Asia/Chita", "vvvv", Long.valueOf(1414252800000L)},
-            {null, "Asia/Srednekolymsk", "zzzz", Long.valueOf(1414241999999L)},
-            {null, "Asia/Srednekolymsk", "vvvv", Long.valueOf(1414241999999L)},
+            {null, "Asia/Chita", "zzzz", 1414252800000L},
+            {null, "Asia/Chita", "vvvv", 1414252800000L},
+            {null, "Asia/Srednekolymsk", "zzzz", 1414241999999L},
+            {null, "Asia/Srednekolymsk", "vvvv", 1414241999999L},
         };
         boolean isExcluded = false;
         for (Object[] excl : EXCLUSIONS) {

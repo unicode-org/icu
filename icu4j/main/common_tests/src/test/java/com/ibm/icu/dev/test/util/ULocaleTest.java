@@ -1734,7 +1734,7 @@ public class ULocaleTest extends CoreTestFmwk {
             } else {
                 errln("#" + i + ": locale: expected " + expectLocale + " but got " + n);
             }
-            Boolean actualBoolean = Boolean.valueOf(r[0]);
+            Boolean actualBoolean = r[0];
             if(expectBoolean.equals(actualBoolean)) {
                 logln("#" + i + ": fallback: OK.");
             } else {
@@ -1765,7 +1765,7 @@ public class ULocaleTest extends CoreTestFmwk {
             } else {
                 errln("#" + i + ": expected " + expectLocale + " but got " + n.toString());
             }
-            Boolean actualBoolean = Boolean.valueOf(r[0]);
+            Boolean actualBoolean = r[0];
             if(expectBoolean.equals(actualBoolean)) {
                 logln("#" + i + ": fallback: OK.");
             } else {
@@ -4338,7 +4338,7 @@ public class ULocaleTest extends CoreTestFmwk {
 
     @Test
     public void TestForLanguageTag() {
-        final Integer NOERROR = Integer.valueOf(-1);
+        final Integer NOERROR = -1;
 
         final Object[][] langtag_to_locale = {
                 {"en",                  "en",                   NOERROR},
@@ -4346,24 +4346,24 @@ public class ULocaleTest extends CoreTestFmwk {
                 {"und-us",              "_US",                  NOERROR},
                 {"und-latn",            "_Latn",                NOERROR},
                 {"en-us-posix",         "en_US_POSIX",          NOERROR},
-                {"de-de_euro",          "de",                   Integer.valueOf(3)},
+                {"de-de_euro",          "de",                   3},
                 {"kok-in",              "kok_IN",               NOERROR},
-                {"123",                 "",                     Integer.valueOf(0)},
-                {"en_us",               "",                     Integer.valueOf(0)},
-                {"en-latn-x",           "en_Latn",              Integer.valueOf(8)},
+                {"123",                 "",                     0},
+                {"en_us",               "",                     0},
+                {"en-latn-x",           "en_Latn",              8},
                 {"art-lojban",          "jbo",                  NOERROR},
                 {"zh-hakka",            "hak",                  NOERROR},
                 {"zh-cmn-CH",           "cmn_CH",               NOERROR},
                 {"xxx-yy",              "xxx_YY",               NOERROR},
                 {"fr-234",              "fr_234",               NOERROR},
                 {"i-default",           "en@x=i-default",       NOERROR},
-                {"i-test",              "",                     Integer.valueOf(0)},
-                {"ja-jp-jp",            "ja_JP",                Integer.valueOf(6)},
+                {"i-test",              "",                     0},
+                {"ja-jp-jp",            "ja_JP",                6},
                 {"bogus",               "bogus",                NOERROR},
-                {"boguslang",           "",                     Integer.valueOf(0)},
+                {"boguslang",           "",                     0},
                 {"EN-lATN-us",          "en_Latn_US",           NOERROR},
                 {"und-variant-1234",    "__1234_VARIANT",       NOERROR}, /* ICU-20478 */
-                {"und-varzero-var1-vartwo", "__VARZERO",        Integer.valueOf(12)},
+                {"und-varzero-var1-vartwo", "__VARZERO",        12},
                 {"en-u-ca-gregory",     "en@calendar=gregorian",    NOERROR},
                 {"en-U-cu-USD",         "en@currency=usd",      NOERROR},
                 {"en-us-u-va-posix",    "en_US_POSIX",          NOERROR},
@@ -4378,8 +4378,8 @@ public class ULocaleTest extends CoreTestFmwk {
                 {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",      NOERROR},
                 {"und-a-abc-def",       "@a=abc-def",           NOERROR},
                 {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   NOERROR},
-                {"fr--FR",              "fr",                   Integer.valueOf(3)},
-                {"fr-",                 "fr",                   Integer.valueOf(3)},
+                {"fr--FR",              "fr",                   3},
+                {"fr-",                 "fr",                   3},
                 {"x-elmer",             "@x=elmer",             NOERROR},
                 {"en-US-u-attr1-attr2-ca-gregory", "en_US@attribute=attr1-attr2;calendar=gregorian",    NOERROR},
                 {"sr-u-kn",             "sr@colnumeric=yes",    NOERROR},
@@ -4387,7 +4387,7 @@ public class ULocaleTest extends CoreTestFmwk {
                 {"en-u-attr2-attr1-kn-kb",  "en@attribute=attr1-attr2;colbackwards=yes;colnumeric=yes", NOERROR},
                 {"ja-u-ijkl-efgh-abcd-ca-japanese-xx-yyy-zzz-kn",   "ja@attribute=abcd-efgh-ijkl;calendar=japanese;colnumeric=yes;xx=yyy-zzz",  NOERROR},
                 {"de-u-xc-xphonebk-co-phonebk-ca-buddhist-mo-very-lo-extensi-xd-that-de-should-vc-probably-xz-killthebuffer",
-                    "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that;xz=yes", Integer.valueOf(92)},
+                    "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that;xz=yes", 92},
                 /* #12761 */
                 {"en-a-bar-u-baz",      "en@a=bar;attribute=baz",   NOERROR},
                 {"en-a-bar-u-baz-x-u-foo",  "en@a=bar;attribute=baz;x=u-foo",   NOERROR},
@@ -4396,10 +4396,10 @@ public class ULocaleTest extends CoreTestFmwk {
                 {"en-a-bar-u-ca-islamic-civil-x-u-foo", "en@a=bar;calendar=islamic-civil;x=u-foo",  NOERROR},
                 {"en-a-bar-u-baz-ca-islamic-civil-x-u-foo", "en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",    NOERROR},
                 /* #20098 */
-                {"hant-cmn-cn", "hant", Integer.valueOf(5)},
+                {"hant-cmn-cn", "hant", 5},
                 {"zh-cmn-TW", "cmn_TW", NOERROR},
-                {"zh-x_t-ab", "zh", Integer.valueOf(3)},
-                {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  Integer.valueOf(16)},
+                {"zh-x_t-ab", "zh", 3},
+                {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  16},
                 /* #20140 dupe keys in U-extension */
                 {"zh-u-ca-chinese-ca-gregory", "zh@calendar=chinese", NOERROR},
                 {"zh-u-ca-gregory-co-pinyin-ca-chinese", "zh@calendar=gregorian;collation=pinyin", NOERROR},
@@ -4542,7 +4542,7 @@ public class ULocaleTest extends CoreTestFmwk {
 
             for (int i = 0; i < nExtensions; i++) {
                 String kstr = testcase[i/2 + 1];
-                String ext = loc.getExtension(Character.valueOf(kstr.charAt(0)));
+                String ext = loc.getExtension(kstr.charAt(0));
                 if (ext == null || !ext.equals(testcase[i/2 + 2])) {
                     errln("Incorrect extension value: key="
                             + kstr + ", returned=" + ext + ", expected=" + testcase[i/2 + 2]

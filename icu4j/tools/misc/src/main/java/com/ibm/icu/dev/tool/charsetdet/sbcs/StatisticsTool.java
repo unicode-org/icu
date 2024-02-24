@@ -289,7 +289,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         writeStatistics(statKeys, false);
         
         if (inputFile.getVisualOrder()) {
-            ArrayList reversed = new ArrayList(statKeys.size());
+            ArrayList<Integer> reversed = new ArrayList(statKeys.size());
             
             for (Iterator it = statKeys.iterator(); it.hasNext();) {
                 Integer key = (Integer) it.next();
@@ -301,7 +301,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
                     k >>= 8;
                 }
                 
-                reversed.add(new Integer(r));
+                reversed.add(r);
             }
             
             Collections.sort(reversed);

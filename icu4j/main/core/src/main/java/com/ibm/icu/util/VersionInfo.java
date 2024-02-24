@@ -336,7 +336,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
             throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
         }
         int     version = getInt(major, minor, milli, micro);
-        Integer key     = Integer.valueOf(version);
+        Integer key     = version;
         VersionInfo  result  = MAP_.get(key);
         if (result == null) {
             result = new VersionInfo(version);

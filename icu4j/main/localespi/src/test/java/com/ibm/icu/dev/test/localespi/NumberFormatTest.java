@@ -158,6 +158,8 @@ public class NumberFormatTest extends TestFmwk {
                 124578.369D,
         };
 
+        // We want to really be sure that we test those exact classes.
+        @SuppressWarnings("UnnecessaryBoxing")
         Object[] TEST_NUMBERS = {
                 Byte.valueOf((byte)13),
                 Integer.valueOf(3961),

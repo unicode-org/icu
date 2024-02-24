@@ -748,7 +748,7 @@ final class NFRuleSet {
      * will be an instance of Long if it's an integral value; otherwise,
      * it will be an instance of Double.  This function always returns
      * a valid object: If nothing matched the input string at all,
-     * this function returns new Long(0), and the parse position is
+     * this function returns Long.valueOf(0), and the parse position is
      * left unchanged.
      */
     public Number parse(String text, ParsePosition parsePosition, double upperBound, int nonNumericalExecutedRuleMask) {

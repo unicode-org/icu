@@ -895,13 +895,13 @@ final class NFRule {
      * character not consumed by matching the text against this rule
      * (if this rule doesn't match the text at all, the parse position
      * if left unchanged (presumably at 0) and the function returns
-     * new Long(0)).
+     * Long.valueOf(0)).
      * @param isFractionRule True if this rule is contained within a
      * fraction rule set.  This is only used if the rule has no
      * substitutions.
      * @return If this rule matched the text, this is the rule's base value
      * combined appropriately with the results of parsing the substitutions.
-     * If nothing matched, this is new Long(0) and the parse position is
+     * If nothing matched, this is Long.valueOf(0) and the parse position is
      * left unchanged.  The result will be an instance of Long if the
      * result is an integer and Double otherwise.  The result is never null.
      */
@@ -1052,9 +1052,9 @@ final class NFRule {
 
         // return the result as a Long if possible, or as a Double
         if (result == (long)result) {
-            return Long.valueOf((long)result);
+            return (long) result;
         } else {
-            return new Double(result);
+            return result;
         }
     }
 
@@ -1119,7 +1119,7 @@ final class NFRule {
      * consider rules with base values lower than this value.
      * @return If there's a match, this is the result of composing
      * baseValue with the result of matching the substitution.  Otherwise,
-     * this is new Long(0).  It's never null.  If the result is an integer,
+     * this is Long.valueOf(0).  It's never null.  If the result is an integer,
      * this will be an instance of Long; otherwise, it's an instance of
      * Double.
      */

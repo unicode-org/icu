@@ -292,7 +292,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
                     //if met "=====", it means this item is finished
                     if ("=====".equals(tempStr)) {
                         //set them into result, using records number as key
-                        result.put(new Long(records), hashItem);
+                        result.put((long)records, hashItem);
                         //create another hash item and continue
                         hashItem = new HashMap();
                         records++;

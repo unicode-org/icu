@@ -145,7 +145,7 @@ public class ICUZDump {
         public int getOffset(long time) {
             try {
                 Method method = tzobj.getClass().getMethod("getOffset", new Class[] {long.class});
-                Object result = method.invoke(tzobj, new Object[] {new Long(time)});
+                Object result = method.invoke(tzobj, new Object[] {time});
                 return ((Integer)result).intValue();
             } catch (Exception e) {
                 e.printStackTrace();

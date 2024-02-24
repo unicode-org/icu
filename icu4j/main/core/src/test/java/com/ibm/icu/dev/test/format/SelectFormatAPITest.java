@@ -151,7 +151,7 @@ public class SelectFormatAPITest extends CoreTestFmwk {
         boolean threwException = false;
         try {
             StringBuffer buf = new StringBuffer("AppendHere-");
-            selFmt1.format(Integer.valueOf(0), buf, new FieldPosition(0));
+            selFmt1.format(0, buf, new FieldPosition(0));
         } catch (IllegalArgumentException e) {
             threwException = true;
         }

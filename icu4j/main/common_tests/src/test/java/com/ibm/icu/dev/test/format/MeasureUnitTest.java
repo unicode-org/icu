@@ -3916,7 +3916,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 System.out.println("     * Returns by value, unit of " + type + ": " + code + ".");
                 System.out.printf("     * Also see {@link #create%s()}.\n", name);
                 String getterVersion = getVersion(javaName, thisVersion);
-                if (Integer.valueOf(getterVersion) < 64) {
+                if (Integer.parseInt(getterVersion) < 64) {
                     getterVersion = "64";
                 }
                 if (isDraft(javaName)) {

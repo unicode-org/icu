@@ -837,7 +837,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(int rawOffset) {
-        Set<String> ids = getAvailableIDs(SystemTimeZoneType.ANY, null, Integer.valueOf(rawOffset));
+        Set<String> ids = getAvailableIDs(SystemTimeZoneType.ANY, null, rawOffset);
         return ids.toArray(new String[0]);
     }
 

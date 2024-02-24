@@ -129,7 +129,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         logln("Testing getting collation values:");
         kwVals = ICUResourceBundle.getKeywordValues(ICUData.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
         for(n=0;n<kwVals.length;n++) {
-            logln(new Integer(n).toString() + ": " + kwVals[n]);
+            logln(Integer.valueOf(n).toString() + ": " + kwVals[n]);
             if(DEFAULT_NAME.equals(kwVals[n])) {
                 errln("getKeywordValues for collation returned 'default' in the list.");
             } else if(STANDARD_NAME.equals(kwVals[n])) {
@@ -169,16 +169,16 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
             ULocale inLocale = new ULocale(testCases[i+1]);
             ULocale expectLocale = new ULocale(testCases[i+2]);
 
-            logln(new Integer(i/3).toString() + ": " + new Boolean(expectAvail).toString() + "\t\t" +
-                    inLocale.toString() + "\t\t" + expectLocale.toString());
+            logln("" + i/3 + ": " + expectAvail + "\t\t" +
+                    inLocale + "\t\t" + expectLocale);
 
             ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(path, cl, resName, keyword, inLocale, isAvail, truncate);
             boolean gotAvail = isAvail[0];
 
             if((gotAvail != expectAvail) || !equivLocale.equals(expectLocale)) {
-                errln(new Integer(i/3).toString() + ":  Error, expected  Equiv=" + new Boolean(expectAvail).toString() + "\t\t" +
-                        inLocale.toString() + "\t\t--> " + expectLocale.toString() + ",  but got " + new Boolean(gotAvail).toString() + " " +
-                        equivLocale.toString());
+                errln("" + i/3 + ":  Error, expected  Equiv=" + expectAvail + "\t\t" +
+                        inLocale + "\t\t--> " + expectLocale + ",  but got " + gotAvail + " " +
+                        equivLocale);
             }
         }
     }

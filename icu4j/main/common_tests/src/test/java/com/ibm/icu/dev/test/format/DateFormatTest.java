@@ -2487,7 +2487,7 @@ public class DateFormatTest extends CoreTestFmwk {
 
         f.format((Object)cal, buf, pos);
         f.format((Object)now, buf, pos);
-        f.format(new Long(now.getTime()), buf, pos);
+        f.format(now.getTime(), buf, pos);
         try {
             f.format("Howdy", buf, pos);
         }
@@ -3619,7 +3619,7 @@ public class DateFormatTest extends CoreTestFmwk {
             errln("FAIL: Date must be accepted by formatToCharacterIterator");
         }
 
-        Number num = new Long(d.getTime());
+        Number num = d.getTime();
         try {
             acit = df.formatToCharacterIterator(num);
             if (acit == null) {

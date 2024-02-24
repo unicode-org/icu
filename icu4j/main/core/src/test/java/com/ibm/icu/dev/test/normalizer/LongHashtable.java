@@ -23,14 +23,14 @@ public class LongHashtable {
 
     public void put(long key, int value) {
         if (value == defaultValue) {
-            table.remove(new Long(key));
+            table.remove(key);
         } else {
-            table.put(new Long(key), new Integer(value));
+            table.put(key, value);
         }
     }
 
     public int get(long key) {
-        Integer value = table.get(new Long(key));
+        Integer value = table.get(key);
         if (value == null) return defaultValue;
         return value.intValue();
     }

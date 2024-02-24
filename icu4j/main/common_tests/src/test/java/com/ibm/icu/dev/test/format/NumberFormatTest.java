@@ -538,7 +538,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         for (int i=0; i<DATA.length; ++i) {
             String locale = DATA[i][0];
             String pat = DATA[i][1];
-            Double numberToBeFormat = new Double(DATA[i][2]);
+            Double numberToBeFormat = Double.valueOf(DATA[i][2]);
             DecimalFormatSymbols sym = new DecimalFormatSymbols(new ULocale(locale));
             for (int j=1; j<=3; ++j) {
                 // j represents the number of currency sign in the pattern.
@@ -721,7 +721,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         ULocale save = ULocale.getDefault();
         ULocale.setDefault(ULocale.US);
         MeasureFormat curFmt = MeasureFormat.getCurrencyFormat();
-        String strBuf = curFmt.format(new CurrencyAmount(new Float(1234.56), Currency.getInstance("USD")));
+        String strBuf = curFmt.format(new CurrencyAmount(Float.valueOf(1234.56f), Currency.getInstance("USD")));
 
         try {
             CurrencyAmount parsedVal = (CurrencyAmount)curFmt.parseObject(strBuf);
@@ -794,7 +794,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                     continue;
                 }
                 String localeString = DATA[i][0];
-                Double numberToBeFormat = new Double(DATA[i][1]);
+                Double numberToBeFormat = Double.valueOf(DATA[i][1]);
                 String currencyISOCode = DATA[i][2];
                 ULocale locale = new ULocale(localeString);
                 NumberFormat numFmt = NumberFormat.getInstance(locale, k);
@@ -1275,7 +1275,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                                      new DecimalFormat("00E0", US),
                                      new DecimalFormat("000E0", US),
                                    },
-               new Long(45678000),
+               Long.valueOf(45678000),
                new String[] { "4.5678E7",
                               "45.678E6",
                               "4567.8E4",
@@ -1296,15 +1296,15 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect(new DecimalFormat("000E0", US), 45678000, "457E5");
         /*
         expect(new DecimalFormat("###E0", US, status),
-               new Object[] { new Double(0.0000123), "12.3E-6",
-                              new Double(0.000123), "123E-6",
-                              new Double(0.00123), "1.23E-3",
-                              new Double(0.0123), "12.3E-3",
-                              new Double(0.123), "123E-3",
-                              new Double(1.23), "1.23E0",
-                              new Double(12.3), "12.3E0",
-                              new Double(123), "123E0",
-                              new Double(1230), "1.23E3",
+               new Object[] { Double.valueOf(0.0000123), "12.3E-6",
+                              Double.valueOf(0.000123), "123E-6",
+                              Double.valueOf(0.00123), "1.23E-3",
+                              Double.valueOf(0.0123), "12.3E-3",
+                              Double.valueOf(0.123), "123E-3",
+                              Double.valueOf(1.23), "1.23E0",
+                              Double.valueOf(12.3), "12.3E0",
+                              Double.valueOf(123), "123E0",
+                              Double.valueOf(1230), "1.23E3",
                              });
         !
         ! Unroll this test into individual tests below...
@@ -1321,8 +1321,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         expect2(new DecimalFormat("###E0", US), 1230.0, "1.23E3");
         /*
         expect(new DecimalFormat("0.#E+00", US, status),
-               new Object[] { new Double(0.00012), "1.2E-04",
-                              new Long(12000),     "1.2E+04",
+               new Object[] { Double.valueOf(0.00012), "1.2E-04",
+                              Long.valueOf(12000),     "1.2E+04",
                              });
         !
         ! Unroll this test into individual tests below...
@@ -1555,7 +1555,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestScientific2() {
         // jb 2552
         DecimalFormat fmt = (DecimalFormat)NumberFormat.getCurrencyInstance();
-        Number num = new Double(12.34);
+        Number num = 12.34d;
         expect(fmt, num, "$12.34");
         fmt.setScientificNotation(true);
         expect(fmt, num, "$1.23E1");
@@ -2539,7 +2539,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestBigDecimalRounding() {
         String figure = "50.000000004";
-        Double dbl = new Double(figure);
+        Double dbl = Double.valueOf(figure);
         BigDecimal dec = new BigDecimal(figure);
 
         DecimalFormat f = (DecimalFormat) NumberFormat.getInstance();
@@ -2654,20 +2654,20 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     /** Format-Parse test (convenience) */
     public void expect2(NumberFormat fmt, double n, String exp) {
-        expect2(fmt, new Double(n), exp);
+        expect2(fmt, Double.valueOf(n), exp);
     }
     /** RBNF Format-Parse test (convenience) */
     public void expect3(NumberFormat fmt, double n, String exp) {
-        expect3(fmt, new Double(n), exp);
+        expect3(fmt, Double.valueOf(n), exp);
     }
 
     /** Format-Parse test (convenience) */
     public void expect2(NumberFormat fmt, long n, String exp) {
-        expect2(fmt, new Long(n), exp);
+        expect2(fmt, Long.valueOf(n), exp);
     }
     /** RBNF Format-Parse test (convenience) */
     public void expect3(NumberFormat fmt, long n, String exp) {
-        expect3(fmt, new Long(n), exp);
+        expect3(fmt, Long.valueOf(n), exp);
     }
 
     /** Format test */
@@ -2742,12 +2742,12 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     /** Format test (convenience) */
     public void expect(NumberFormat fmt, double n, String exp) {
-        expect(fmt, new Double(n), exp);
+        expect(fmt, Double.valueOf(n), exp);
     }
 
     /** Format test (convenience) */
     public void expect(NumberFormat fmt, long n, String exp) {
-        expect(fmt, new Long(n), exp);
+        expect(fmt, Long.valueOf(n), exp);
     }
 
     /** Parse test */
@@ -2794,12 +2794,12 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     /** Parse test (convenience) */
     public void expect(NumberFormat fmt, String str, double n) {
-        expect(fmt, str, new Double(n));
+        expect(fmt, str, Double.valueOf(n));
     }
 
     /** Parse test (convenience) */
     public void expect(NumberFormat fmt, String str, long n) {
-        expect(fmt, str, new Long(n));
+        expect(fmt, str, Long.valueOf(n));
     }
 
     /** Parse test */
@@ -3261,7 +3261,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         // Tests when "if (number instanceof Long)" is true
         try {
-            nf.format(new Long("0"), sb, fp);
+            nf.format(Long.valueOf("0"), sb, fp);
         } catch (Exception e) {
             errln("NumberFormat.format(Object number, ...) was not suppose to "
                     + "return an exception for a Long object. Error: " + e);
@@ -3735,13 +3735,13 @@ public class NumberFormatTest extends CoreTestFmwk {
         } catch (NullPointerException ex) {
         }
         try {
-            ca = new CurrencyAmount(new Integer(0), (Currency) null);
+            ca = new CurrencyAmount(Integer.valueOf(0), (Currency) null);
             errln("NullPointerException should have been thrown.");
         } catch (NullPointerException ex) {
         }
 
-        ca = new CurrencyAmount(new Integer(0), Currency.getInstance(new ULocale("ja_JP")));
-        cb = new CurrencyAmount(new Integer(1), Currency.getInstance(new ULocale("ja_JP")));
+        ca = new CurrencyAmount(Integer.valueOf(0), Currency.getInstance(new ULocale("ja_JP")));
+        cb = new CurrencyAmount(Integer.valueOf(1), Currency.getInstance(new ULocale("ja_JP")));
         if (ca.equals(null)) {
             errln("Comparison should return false.");
         }
@@ -3894,41 +3894,41 @@ public class NumberFormatTest extends CoreTestFmwk {
                 {
                     ULocale.US,                             // ULocale - null for default locale
                     "#.##",                                 // Pattern
-                    Integer.valueOf(BigDecimal.ROUND_DOWN), // Rounding Mode or null (implicit)
-                    Double.valueOf(0.0d),                   // Rounding increment, Double or BigDecimal, or null (implicit)
-                    Double.valueOf(123.4567d),              // Input value, Long, Double, BigInteger or BigDecimal
+                    BigDecimal.ROUND_DOWN, // Rounding Mode or null (implicit)
+                    0.0d,                   // Rounding increment, Double or BigDecimal, or null (implicit)
+                    123.4567d,              // Input value, Long, Double, BigInteger or BigDecimal
                     "123.45"                                // Expected result, null for exception
                 },
                 {
                     ULocale.US,
                     "#.##",
                     null,
-                    Double.valueOf(0.1d),
-                    Double.valueOf(123.4567d),
+                    0.1d,
+                    123.4567d,
                     "123.5"
                 },
                 {
                     ULocale.US,
                     "#.##",
-                    Integer.valueOf(BigDecimal.ROUND_DOWN),
-                    Double.valueOf(0.1d),
-                    Double.valueOf(123.4567d),
+                    BigDecimal.ROUND_DOWN,
+                    0.1d,
+                    123.4567d,
                     "123.4"
                 },
                 {
                     ULocale.US,
                     "#.##",
-                    Integer.valueOf(BigDecimal.ROUND_UNNECESSARY),
+                    BigDecimal.ROUND_UNNECESSARY,
                     null,
-                    Double.valueOf(123.4567d),
+                    123.4567d,
                     null
                 },
                 {
                     ULocale.US,
                     "#.##",
-                    Integer.valueOf(BigDecimal.ROUND_DOWN),
+                    BigDecimal.ROUND_DOWN,
                     null,
-                    Long.valueOf(1234),
+                    1234L,
                     "1234"
                 },
         };
@@ -4837,7 +4837,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         v1.add(new FieldContainer(11, 12, NumberFormat.Field.DECIMAL_SEPARATOR));
         v1.add(new FieldContainer(12, 15, NumberFormat.Field.FRACTION));
 
-        Number number = new Double(123456789.9753);
+        Number number = 123456789.9753d;
         ULocale usLoc = new ULocale("en-US");
         DecimalFormatSymbols US = new DecimalFormatSymbols(usLoc);
 
@@ -4936,7 +4936,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestMissingFieldPositionsCurrency() {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.US);
-        Number number = new Double(92314587.66);
+        Number number = 92314587.66d;
         String result = "$92,314,587.66";
 
         checkFormatWithField("currency", formatter, number, result,
@@ -4955,7 +4955,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestMissingFieldPositionsNegativeDouble() {
         // test for exponential fields with double
         DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
-        Number number = new Double(-12345678.90123);
+        Number number = -12345678.90123d;
         DecimalFormat formatter = new DecimalFormat("0.#####E+00", us_symbols);
         String numFmtted = formatter.format(number);
 
@@ -4977,7 +4977,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestMissingFieldPositionsPerCent() {
         // Check PERCENT
         DecimalFormat percentFormat = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.US);
-        Number number = new Double(-0.986);
+        Number number = -0.986d;
         String numberFormatted = percentFormat.format(number);
         checkFormatWithField("sign", percentFormat, number, numberFormatted,
             NumberFormat.Field.SIGN, 0, 1);
@@ -4992,7 +4992,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // Check PERCENT with more digits
         DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
         DecimalFormat fmtPercent = new DecimalFormat("0.#####%", us_symbols);
-        Number number = new Double(-0.986);
+        Number number = -0.986d;
         String numFmtted = fmtPercent.format(number);
 
         checkFormatWithField("sign", fmtPercent, number, numFmtted,
@@ -5012,7 +5012,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // Check PERMILLE
         DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
         DecimalFormat fmtPerMille = new DecimalFormat("0.######‰", us_symbols);
-        Number numberPermille = new Double(-0.98654);
+        Number numberPermille = -0.98654d;
         String numFmtted = fmtPerMille.format(numberPermille);
 
         checkFormatWithField("sign", fmtPerMille, numberPermille, numFmtted,
@@ -5050,7 +5050,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestMissingFieldPositionsNegativeLong() {
-        Number number = new Long("-123456789987654321");
+        Number number = Long.valueOf("-123456789987654321");
         DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
         DecimalFormat formatter = new DecimalFormat("0.#####E+0", us_symbols);
         String longFmtted = formatter.format(number);
@@ -5074,7 +5074,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // Check complex positive;negative pattern.
         DecimalFormatSymbols us_symbols = new DecimalFormatSymbols(ULocale.US);
         DecimalFormat fmtPosNegSign = new DecimalFormat("+0.####E+00;-0.#######E+0", us_symbols);
-        Number positiveExp = new Double("9876543210");
+        Number positiveExp = Double.valueOf("9876543210");
         String posExpFormatted = fmtPosNegSign.format(positiveExp);
 
         checkFormatWithField("sign", fmtPosNegSign, positiveExp, posExpFormatted,
@@ -6113,8 +6113,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         df.setParseNoExponent(true);
         assertEquals("Parse no exponent getter is broken", true, df.isParseNoExponent());
         Number result2 = df.parse("123E4");
-        assertEquals("Exponent did not parse before setParseNoExponent", result1, new Long(1230000));
-        assertEquals("Exponent parsed after setParseNoExponent", result2, new Long(123));
+        assertEquals("Exponent did not parse before setParseNoExponent", result1, 1230000L);
+        assertEquals("Exponent parsed after setParseNoExponent", result2, 123L);
     }
 
     @Test

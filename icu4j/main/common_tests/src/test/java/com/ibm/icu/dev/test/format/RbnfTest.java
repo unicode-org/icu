@@ -1316,7 +1316,7 @@ public class RbnfTest extends CoreTestFmwk {
         // Tests when "if (!(that instanceof RuleBasedNumberFormat))" is true
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
         if (rbnf.equals("dummy") ||
-                rbnf.equals(new Character('a')) ||
+                rbnf.equals('a') ||
                 rbnf.equals(new Object()) ||
                 rbnf.equals(-1) ||
                 rbnf.equals(0) ||

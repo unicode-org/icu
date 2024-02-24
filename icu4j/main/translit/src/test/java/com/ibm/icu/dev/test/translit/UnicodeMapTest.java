@@ -282,7 +282,7 @@ public class UnicodeMapTest extends TestFmwk {
                 logln(unicodeMap.toString());
             }
             for (int i = start; i <= end; ++i) {
-                hashMap.put(new Integer(i), value);
+                hashMap.put(i, value);
             }
             if (!hasSameValues(unicodeMap, hashMap)) {
                 errln("Failed at " + count);
@@ -293,7 +293,7 @@ public class UnicodeMapTest extends TestFmwk {
     private boolean hasSameValues(UnicodeMap unicodeMap, HashMap hashMap) {
         for (int i = 0; i < MODIFY_TEST_LIMIT; ++i) {
             Object unicodeMapValue = unicodeMap.getValue(i);
-            Object hashMapValue = hashMap.get(new Integer(i));
+            Object hashMapValue = hashMap.get(i);
             if (unicodeMapValue != hashMapValue) {
                 return false;
             }

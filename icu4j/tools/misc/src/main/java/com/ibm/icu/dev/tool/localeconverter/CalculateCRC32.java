@@ -83,6 +83,6 @@ public class CalculateCRC32 {
     }
 
     public byte [] toBytes() {
-        return new BigInteger(new Integer(cachedCRC).toString()).toByteArray();
+        return new BigInteger(Integer.valueOf(cachedCRC).toString()).toByteArray();
     }
 }
