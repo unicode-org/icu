@@ -376,25 +376,25 @@ public class TimeZoneTest extends CoreTestFmwk
         // todo: check to see whether we can test for all of pst, pdt, pt
         Object[] DATA = {
             // z and zzzz
-            Boolean.FALSE, new Integer(TimeZone.SHORT), "PST",
-            Boolean.TRUE,  new Integer(TimeZone.SHORT), "PDT",
-            Boolean.FALSE, new Integer(TimeZone.LONG),  "Pacific Standard Time",
-            Boolean.TRUE,  new Integer(TimeZone.LONG),  "Pacific Daylight Time",
+            Boolean.FALSE, TimeZone.SHORT, "PST",
+            Boolean.TRUE,  TimeZone.SHORT, "PDT",
+            Boolean.FALSE, TimeZone.LONG,  "Pacific Standard Time",
+            Boolean.TRUE,  TimeZone.LONG,  "Pacific Daylight Time",
             // v and vvvv
-            Boolean.FALSE, new Integer(TimeZone.SHORT_GENERIC), "PT",
-            Boolean.TRUE,  new Integer(TimeZone.SHORT_GENERIC), "PT",
-            Boolean.FALSE, new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",
-            Boolean.TRUE,  new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",
+            Boolean.FALSE, TimeZone.SHORT_GENERIC, "PT",
+            Boolean.TRUE,  TimeZone.SHORT_GENERIC, "PT",
+            Boolean.FALSE, TimeZone.LONG_GENERIC,  "Pacific Time",
+            Boolean.TRUE,  TimeZone.LONG_GENERIC,  "Pacific Time",
             // z and ZZZZ
-            Boolean.FALSE, new Integer(TimeZone.SHORT_GMT), "-0800",
-            Boolean.TRUE,  new Integer(TimeZone.SHORT_GMT), "-0700",
-            Boolean.FALSE, new Integer(TimeZone.LONG_GMT),  "GMT-08:00",
-            Boolean.TRUE,  new Integer(TimeZone.LONG_GMT),  "GMT-07:00",
+            Boolean.FALSE, TimeZone.SHORT_GMT, "-0800",
+            Boolean.TRUE,  TimeZone.SHORT_GMT, "-0700",
+            Boolean.FALSE, TimeZone.LONG_GMT,  "GMT-08:00",
+            Boolean.TRUE,  TimeZone.LONG_GMT,  "GMT-07:00",
             // V and VVVV
-            Boolean.FALSE, new Integer(TimeZone.SHORT_COMMONLY_USED), "PST",
-            Boolean.TRUE,  new Integer(TimeZone.SHORT_COMMONLY_USED), "PDT",
-            Boolean.FALSE, new Integer(TimeZone.GENERIC_LOCATION),  "Los Angeles Time",
-            Boolean.TRUE,  new Integer(TimeZone.GENERIC_LOCATION),  "Los Angeles Time",
+            Boolean.FALSE, TimeZone.SHORT_COMMONLY_USED, "PST",
+            Boolean.TRUE,  TimeZone.SHORT_COMMONLY_USED, "PDT",
+            Boolean.FALSE, TimeZone.GENERIC_LOCATION,  "Los Angeles Time",
+            Boolean.TRUE,  TimeZone.GENERIC_LOCATION,  "Los Angeles Time",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
@@ -1809,8 +1809,8 @@ public class TimeZoneTest extends CoreTestFmwk
      */
     @Test
     public void TestDisplayNamesMeta() {
-        final Integer TZSHORT = new Integer(TimeZone.SHORT);
-        final Integer TZLONG = new Integer(TimeZone.LONG);
+        final Integer TZSHORT = TimeZone.SHORT;
+        final Integer TZLONG = TimeZone.LONG;
 
         final Object[][] zoneDisplayTestData = {
             //  zone id             locale  summer          format      expected display name

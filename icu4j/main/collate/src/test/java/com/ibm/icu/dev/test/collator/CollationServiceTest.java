@@ -424,10 +424,10 @@ public class CollationServiceTest extends TestFmwk {
             boolean expectAvailable = DATA[(i*3)+2].equals("t");
             ULocale actual = Collator.getFunctionalEquivalent(kw[0],input,isAvailable);
             if(!actual.equals(expect) || (expectAvailable!=isAvailable[0])) {
-                errln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + new Boolean(isAvailable[0]) + ", " +
-                        "expected " + expect + " avail " + new Boolean(expectAvailable));
+                errln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + isAvailable[0] + ", " +
+                        "expected " + expect + " avail " + expectAvailable);
             } else {
-                logln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + new Boolean(isAvailable[0]));
+                logln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + isAvailable[0]);
             }
         }
     }

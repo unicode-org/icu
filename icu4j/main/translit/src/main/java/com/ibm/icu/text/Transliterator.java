@@ -1507,7 +1507,7 @@ public abstract class Transliterator implements StringTransform  {
             MessageFormat format = new MessageFormat(
                     bundle.getString(RB_DISPLAY_NAME_PATTERN));
             // Construct the argument array
-            Object[] args = new Object[] { Integer.valueOf(2), stv[0], stv[1] };
+            Object[] args = new Object[] { 2, stv[0], stv[1] };
 
             // Use display names for the scripts, if they exist
             for (int j=1; j<=2; ++j) {

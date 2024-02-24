@@ -35,7 +35,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt1 = new DecimalFormat("0.###E0", US);
         DecimalFormat fmt2 = new DecimalFormat("0.###E+0", US);
-        Number n = new Long(1234);
+        Number n = 1234L;
         expect(fmt1, n, "1.234E3");
         expect(fmt2, n, "1.234E+3");
         expect(fmt1, "1.234E3", n);
@@ -50,11 +50,11 @@ public class BigNumberFormatTest extends CoreTestFmwk {
     public void TestSecondaryGrouping() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat f = new DecimalFormat("#,##,###", US);
-        expect(f, new Long(123456789), "12,34,56,789");
+        expect(f, 123456789L, "12,34,56,789");
         expectPat(f, "#,##,##0");
         f.applyPattern("#,###");
         f.setSecondaryGroupingSize(4);
-        expect(f, new Long(123456789), "12,3456,789");
+        expect(f, 123456789L, "12,3456,789");
         expectPat(f, "#,####,##0");
 
         // On Sun JDK 1.2-1.3, the hi_IN locale uses '0' for a zero digit,
@@ -62,7 +62,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
         f = (DecimalFormat) NumberFormat.getInstance(new Locale("hi", "IN"));
         String str = transmute("1,87,65,43,210",
                                f.getDecimalFormatSymbols().getZeroDigit());
-        expect(f, new Long(1876543210), str);
+        expect(f, 1876543210L, str);
     }
 
     private void expectPad(DecimalFormat fmt, String pat, int pos) {
@@ -189,19 +189,19 @@ public class BigNumberFormatTest extends CoreTestFmwk {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         /*For ICU compatibility [Richard/GCL]*/
         expect(NumberFormat.getScientificInstance(Locale.US),
-               new Number[] { new Double(12345.678901),
+               new Number[] { 12345.678901d,
                               new java.math.BigDecimal("12345.678901"),
                             },
                "1.2345678901E4");
         expect(new DecimalFormat("##0.###E0", US),
-               new Double(12345),
+               12345d,
                "12.34E3");
         expect(new DecimalFormat("##0.###E0", US),
-               new Double(12345.00001),
+               12345.00001d,
                "12.35E3");
         expect(new DecimalFormat("##0.####E0", US),
-               new Number[] { new Integer(12345),
-                              new Long(12345),
+               new Number[] { 12345,
+                              12345L,
                               new java.math.BigDecimal("12345.4999"),
                               new java.math.BigDecimal("12344.5001"),
                             },
@@ -213,19 +213,19 @@ public class BigNumberFormatTest extends CoreTestFmwk {
                "12.346E3");
         /*For ICU compatibility [Richard/GCL]*/
         expect(NumberFormat.getScientificInstance(Locale.FRANCE),
-               new Double(12345.678901),
+               12345.678901d,
                "1,2345678901E4");
         expect(new DecimalFormat("##0.####E0", US),
-               new Double(789.12345e-9),
+               789.12345e-9d,
                "789.12E-9");
         expect(new DecimalFormat("##0.####E0", US),
-               new Double(780.e-9),
+               780.e-9d,
                "780E-9");
         expect(new DecimalFormat(".###E0", US),
-               new Double(45678),
+               45678d,
                ".457E5");
         expect(new DecimalFormat(".###E0", US),
-               new Long(0),
+               0L,
                ".0E0");
         expect(new DecimalFormat[] { new DecimalFormat("#E0", US),
                                      new DecimalFormat("##E0", US),
@@ -234,7 +234,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
                                      new DecimalFormat("00E0", US),
                                      new DecimalFormat("000E0", US),
                                    },
-               new Long(45678000),
+               45678000L,
                new String[] { "4.5678E7",
                               "45.678E6",
                               "4567.8E4",
@@ -244,19 +244,19 @@ public class BigNumberFormatTest extends CoreTestFmwk {
                             }
                );
         expect(new DecimalFormat("###E0", US),
-               new Object[] { new Double(0.0000123), "12.3E-6",
-                              new Double(0.000123), "123E-6",
+               new Object[] { 0.0000123d, "12.3E-6",
+                              0.000123d, "123E-6",
                               new java.math.BigDecimal("0.00123"), "1.23E-3", // Cafe VM messes up Double(0.00123)
-                              new Double(0.0123), "12.3E-3",
-                              new Double(0.123), "123E-3",
-                              new Double(1.23), "1.23E0",
-                              new Double(12.3), "12.3E0",
-                              new Double(123), "123E0",
-                              new Double(1230), "1.23E3",
+                              0.0123d, "12.3E-3",
+                              0.123d, "123E-3",
+                              1.23d, "1.23E0",
+                              12.3d, "12.3E0",
+                              123d, "123E0",
+                              1230d, "1.23E3",
                              });
         expect(new DecimalFormat("0.#E+00", US),
-               new Object[] { new Double(0.00012), "1.2E-04",
-                              new Long(12000),     "1.2E+04",
+               new Object[] { 0.00012d, "1.2E-04",
+                              12000L,     "1.2E+04",
                              });
     }
 
@@ -266,26 +266,26 @@ public class BigNumberFormatTest extends CoreTestFmwk {
     public void TestPad() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         expect(new DecimalFormat("*^##.##", US),
-               new Object[] { new Long(0),      "^^^^0",
-                              new Double(-1.3), "^-1.3",
+               new Object[] { 0L,      "^^^^0",
+                              -1.3d, "^-1.3",
                             }
                );
         expect(new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US),
-               new Object[] { new Long(0),       "0.0E0______ g-m/s^2",
-                              new Double(1.0/3), "333.333E-3_ g-m/s^2",
+               new Object[] { 0L,       "0.0E0______ g-m/s^2",
+                              1.0d/3, "333.333E-3_ g-m/s^2",
                             }
                );
         expect(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US),
-               new Object[] { new Long(0),       "0.0______ g-m/s^2",
-                              new Double(1.0/3), "0.33333__ g-m/s^2",
+               new Object[] { 0L,       "0.0______ g-m/s^2",
+                              1.0d/3, "0.33333__ g-m/s^2",
                             }
                );
         expect(new DecimalFormat("*x#,###,###,##0.00;*x(#,###,###,##0.00)", US),
                new Object[] {
-                   new Long(-100),        "xxxxxxxx(100.00)",
-                   new Long(-1000),       "xxxxxx(1,000.00)",
-                   new Long(-1000000),    "xx(1,000,000.00)",
-                   new Long(-1000000000), "(1,000,000,000.00)",
+                   -100L,        "xxxxxxxx(100.00)",
+                   -1000L,       "xxxxxx(1,000.00)",
+                   -1000000L,    "xx(1,000,000.00)",
+                   -1000000000L, "(1,000,000,000.00)",
                });
     }
 

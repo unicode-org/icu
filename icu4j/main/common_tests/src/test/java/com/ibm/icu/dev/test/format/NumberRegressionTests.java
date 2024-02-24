@@ -392,7 +392,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     {
         DecimalFormat df = new DecimalFormat();
         String str = "0.1234";
-        Double d1 = new Double(str);
+        Double d1 = Double.parseDouble(str);
         Number d2 = df.parse(str, new ParsePosition(0));
         logln(d1.toString());
         if (d2.doubleValue() != d1.doubleValue())
@@ -849,7 +849,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         DecimalFormat fmt = new DecimalFormat("#,##0.00");
         StringBuffer formatted = new StringBuffer();
         FieldPosition field = new FieldPosition(0);
-        Double num = new Double(1234.5);
+        Double num = 1234.5;
         fmt.format(num, formatted, field);
         if (field.getBeginIndex() != 0 && field.getEndIndex() != 5)
             errln("Format 1234.5 failed. Begin index: " + field.getBeginIndex() + " End index: " + field.getEndIndex());
@@ -1388,13 +1388,13 @@ public class NumberRegressionTests extends CoreTestFmwk {
         {
             ParsePosition ppos = new ParsePosition(0);
             Number result = df.parse("-0.0", ppos);
-            assertEquals("Should parse to double -0.0", new Double(-0.0), result);
+            assertEquals("Should parse to double -0.0", -0.0d, result);
         }
         df.setParseIntegerOnly(true);
         {
             ParsePosition ppos = new ParsePosition(0);
             Number result = df.parse("-0.0", ppos);
-            assertEquals("Should parse to an integer type, not a double", new Long(0), result);
+            assertEquals("Should parse to an integer type, not a double", 0L, result);
         }
     }
 
@@ -1672,10 +1672,10 @@ public class NumberRegressionTests extends CoreTestFmwk {
     @Test
     public void Test4217661() {
         Object[] DATA = {
-            new Double(0.001), "0",
-            new Double(1.001), "1",
-            new Double(0.006), "0.01",
-            new Double(1.006), "1.01",
+            0.001d, "0",
+            1.001d, "1",
+            0.006d, "0.01",
+            1.006d, "1.01",
         };
         NumberFormat fmt = NumberFormat.getInstance(Locale.US);
         fmt.setMaximumFractionDigits(2);
@@ -1869,7 +1869,7 @@ class MyNumberFormat extends NumberFormat {
     }
     @Override
   public Number parse(String text, ParsePosition parsePosition) {
-        return new Integer(0);
+        return 0;
     }
     @Override
   public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {

@@ -205,7 +205,7 @@ public class ICUDurationTest extends CoreTestFmwk {
             logln("format date from -> " + formatted);
         }
 
-        formatted = df.format(new Long(1000*3600*24*2));
+        formatted = df.format(1000L*3600*24*2);
         expect = "fra due giorni";
         if(!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);

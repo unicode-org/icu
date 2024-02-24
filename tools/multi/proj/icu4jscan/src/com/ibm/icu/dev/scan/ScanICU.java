@@ -92,7 +92,7 @@ public class ScanICU extends CapScan{
             
             try {
             ULocale available[] = ULocale.getAvailableLocales();
-            locs.setAttribute("total", new Integer(available.length).toString());
+            locs.setAttribute("total", Integer.toString(available.length));
             
                 String locinfo = "";
                 
@@ -130,7 +130,7 @@ public class ScanICU extends CapScan{
             try {
                 ULocale available[] = Collator.getAvailableULocales();
                 Spinner sp = new Spinner(locs.getNodeName(),available.length);
-                locs.setAttribute("total", new Integer(available.length).toString());
+                locs.setAttribute("total", Integer.toString(available.length));
             
                 String locinfo = "";
                 

@@ -3941,7 +3941,7 @@ public class SimpleDateFormat extends DateFormat {
                     nDigits--;
                 }
                 pos.setIndex(oldPos + maxDigits);
-                number = Integer.valueOf((int)val);
+                number = (int) val;
             }
         }
         return number;
@@ -4640,8 +4640,7 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 54
      */
     public NumberFormat getNumberFormat(char field) {
-        Character ovrField;
-        ovrField = Character.valueOf(field);
+        Character ovrField = field;
         if (overrideMap != null && overrideMap.containsKey(ovrField)) {
             String nsName = overrideMap.get(ovrField).toString();
             NumberFormat nf = numberFormatters.get(nsName);
@@ -4687,7 +4686,7 @@ public class SimpleDateFormat extends DateFormat {
                fullOverride = true;
             } else { // Field specific override string such as "y=hebrew"
                nsName = currentString.substring(equalSignPosition+1);
-               ovrField = Character.valueOf(currentString.charAt(0));
+               ovrField = currentString.charAt(0);
                overrideMap.put(ovrField,nsName);
                fullOverride = false;
             }

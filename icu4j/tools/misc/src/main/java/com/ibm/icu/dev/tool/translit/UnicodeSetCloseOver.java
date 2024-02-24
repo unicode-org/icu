@@ -167,7 +167,7 @@ class UnicodeSetCloseOver {
             // and a string of length 3.
             v.clear();
             for (int j=0; j<a.length; ++j) {
-                v.add(new Integer(a[j].length()));
+                v.add(a[j].length());
             }
             Collections.sort(v);
             buf.setLength(0);

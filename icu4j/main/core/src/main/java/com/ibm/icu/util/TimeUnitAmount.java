@@ -31,7 +31,7 @@ public class TimeUnitAmount extends Measure {
      * @stable ICU 4.0
      */
     public TimeUnitAmount(double number, TimeUnit unit) {
-        super(new Double(number), unit);
+        super(number, unit);
     }
 
     /**

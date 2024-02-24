@@ -811,7 +811,7 @@ public class StableAPI {
         // report.setParameter("leftStatus", leftStatus);
         report.setParameter("leftVer", leftVer);
         // report.setParameter("rightStatus", rightStatus);
-        report.setParameter("ourYear", new Integer(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
+        report.setParameter("ourYear", Integer.valueOf(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
         report.setParameter("rightVer", rightVer);
         report.setParameter("rightMilestone", rightMilestone);
         report.setParameter("leftMilestone", leftMilestone);

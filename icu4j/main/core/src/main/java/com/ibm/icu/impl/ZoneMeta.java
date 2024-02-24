@@ -503,7 +503,7 @@ public final class ZoneMeta {
         if (singleZone == null) {
             Set<String> ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, country, null);
             assert(ids.size() >= 1);
-            singleZone = Boolean.valueOf(ids.size() <= 1);
+            singleZone = ids.size() <= 1;
             SINGLE_COUNTRY_CACHE.put(tzid, singleZone);
         }
 
@@ -648,8 +648,7 @@ public final class ZoneMeta {
             // fields[1] - hour / 5-bit
             // fields[2] - min  / 6-bit
             // fields[3] - sec  / 6-bit
-            Integer key = Integer.valueOf(
-                    fields[0] * (fields[1] | fields[2] << 5 | fields[3] << 11));
+            Integer key = fields[0] * (fields[1] | fields[2] << 5 | fields[3] << 11);
             return CUSTOM_ZONE_CACHE.getInstance(key, fields);
         }
         return null;

@@ -270,7 +270,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                     }
                 }
             } catch (Throwable t) {
-                //System.err.println("Error in - " + new Integer(i).toString()
+                //System.err.println("Error in - " + i
                 // + " - " + t.toString());
                 // ignore the err - just skip that resource
             }

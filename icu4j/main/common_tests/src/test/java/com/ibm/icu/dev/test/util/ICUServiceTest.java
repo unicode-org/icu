@@ -118,7 +118,7 @@ public class ICUServiceTest extends CoreTestFmwk
     // register an object with one locale,
     // search for an object with a more specific locale
     // should return the original object
-    Integer singleton0 = new Integer(0);
+    Integer singleton0 = 0;
     service.registerObject(singleton0, "en_US");
     Object result = service.get("en_US_FOO");
     confirmIdentical("1) en_US_FOO -> en_US", result, singleton0);
@@ -126,7 +126,7 @@ public class ICUServiceTest extends CoreTestFmwk
     // register a new object with the more specific locale
     // search for an object with that locale
     // should return the new object
-    Integer singleton1 = new Integer(1);
+    Integer singleton1 = 1;
     service.registerObject(singleton1, "en_US_FOO");
     result = service.get("en_US_FOO");
     confirmIdentical("2) en_US_FOO -> en_US_FOO", result, singleton1);
@@ -141,7 +141,7 @@ public class ICUServiceTest extends CoreTestFmwk
 
     // register a new object with yet another locale
     // original factory list is unchanged
-    Integer singleton2 = new Integer(2);
+    Integer singleton2 = 2;
     service.registerObject(singleton2, "en");
     confirmIdentical("5) factory size", factories.size(), 2);
 
@@ -152,7 +152,7 @@ public class ICUServiceTest extends CoreTestFmwk
     confirmIdentical("6) en_US_BAR -> en_US", result, singleton0);
 
     // register a new object with an old id, should hide earlier factory using this id, but leave it there
-    Integer singleton3 = new Integer(3);
+    Integer singleton3 = 3;
     service.registerObject(singleton3, "en_US");
     factories = service.factories();
     confirmIdentical("9) factory size", factories.size(), 4);
@@ -188,7 +188,7 @@ public class ICUServiceTest extends CoreTestFmwk
     // should be able to register invisible factories, these will not
     // be visible by default, but if you know the secret password you
     // can still access these services...
-    Integer singleton4 = new Integer(4);
+    Integer singleton4 = 4;
     service.registerObject(singleton4, "en_US_BAR", false);
     result = service.get("en_US_BAR");
     confirmIdentical("17) get invisible", result, singleton4);

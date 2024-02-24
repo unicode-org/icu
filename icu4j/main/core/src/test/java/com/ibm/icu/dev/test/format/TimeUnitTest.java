@@ -402,7 +402,7 @@ public class TimeUnitTest extends CoreTestFmwk {
     public void TestFormat() {
         TimeUnitFormat tuf = new TimeUnitFormat();
         try {
-            tuf.format(new Integer("1"), null, null);
+            tuf.format(Integer.parseInt("1"), null, null);
             errln("TimeUnitFormat.format(Object,StringBuffer,FieldPosition) "
                     + "was suppose to return an exception because the Object "
                     + "parameter was not of type TimeUnitAmount.");

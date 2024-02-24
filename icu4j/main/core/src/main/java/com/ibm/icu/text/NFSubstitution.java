@@ -421,7 +421,7 @@ abstract class NFSubstitution {
      * @return If there's a match, this is the result of composing
      * baseValue with whatever was returned from matching the
      * characters.  This will be either a Long or a Double.  If there's
-     * no match this is new Long(0) (not null), and parsePosition
+     * no match this is Long.valueOf(0) (not null), and parsePosition
      * is left unchanged.
      */
     public Number doParse(String text, ParsePosition parsePosition, double baseValue,
@@ -484,9 +484,9 @@ abstract class NFSubstitution {
             // the result.
             result = composeRuleValue(result, baseValue);
             if (result == (long)result) {
-                return Long.valueOf((long)result);
+                return (long) result;
             } else {
-                return new Double(result);
+                return result;
             }
 
             // if the parse was UNsuccessful, return 0
@@ -1028,9 +1028,9 @@ class ModulusSubstitution extends NFSubstitution {
 
                 result = composeRuleValue(result, baseValue);
                 if (result == (long)result) {
-                    return Long.valueOf((long)result);
+                    return (long) result;
                 } else {
-                    return new Double(result);
+                    return result;
                 }
             } else {
                 return tempResult;
@@ -1311,7 +1311,7 @@ class FractionalPartSubstitution extends NFSubstitution {
      * @param lenientParse If true, try matching the text as numerals if
      * matching as words doesn't work
      * @return If the match was successful, the current partial parse
-     * result; otherwise new Long(0).  The result is either a Long or
+     * result; otherwise Long.valueOf(0).  The result is either a Long or
      * a Double.
      */
     @Override
@@ -1360,7 +1360,7 @@ class FractionalPartSubstitution extends NFSubstitution {
             result = fq.toDouble();
 
             result = composeRuleValue(result, baseValue);
-            return new Double(result);
+            return result;
         }
     }
 
@@ -1693,7 +1693,7 @@ class NumeratorSubstitution extends NFSubstitution {
                 --zeroCount;
             }
             // d is now our true denominator
-            result = new Double(n/(double)d);
+            result = (double)n/(double)d;
         }
 
         return result;

@@ -305,8 +305,8 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
     @Test
     public void testFormatToCharacterIterator() {
 
-        Number number = new Double(350.76);
-        Number negativeNumber = new Double(-350.76);
+        Number number = 350.76d;
+        Number negativeNumber = -350.76d;
 
         Locale us = Locale.US;
 
@@ -339,12 +339,12 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
                 getNegativeCurrencyVectorUS());
 
         // test multiple grouping separators
-        number = new Long(100300400);
+        number = 100300400L;
         t_Format(11, number, NumberFormat.getNumberInstance(us),
                 getNumberVector2US());
 
         // test 0
-        number = new Long(0);
+        number = 0L;
         t_Format(12, number, NumberFormat.getNumberInstance(us),
                 getZeroVector());
     }
@@ -508,7 +508,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
 //         called from support_messageformat tests
         public FieldContainer(int start, int end, AttributedCharacterIterator.Attribute attribute, int value) {
-        this(start, end, attribute, new Integer(value));
+        this(start, end, attribute, Integer.valueOf(value));
         }
 
 //         called from support_messageformat tests

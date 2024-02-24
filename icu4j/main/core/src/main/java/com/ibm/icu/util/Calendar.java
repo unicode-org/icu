@@ -5862,12 +5862,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         if (mid == lower) {
-            return Long.valueOf(upper);
+            return upper;
         }
         midOffset = tz.getOffset(mid);
         if (midOffset != upperOffset) {
             if (onUnitTime) {
-                return Long.valueOf(upper);
+                return upper;
             }
             return findPreviousZoneTransitionTime(tz, upperOffset, upper, mid);
         }

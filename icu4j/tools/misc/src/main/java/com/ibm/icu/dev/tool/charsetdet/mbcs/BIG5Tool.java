@@ -206,7 +206,7 @@ public class BIG5Tool {
                 ChEl c = (ChEl)encounteredChars[i];
                 cumulativeChars += c.occurences;
                 cumulativePercent = cumulativeChars*100/totalMbcsChars;
-                charList.add(new Integer(c.charCode));
+                charList.add(c.charCode);
             }
             Object [] sortedChars = charList.toArray();
             Arrays.sort(sortedChars);

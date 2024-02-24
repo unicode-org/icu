@@ -41,7 +41,7 @@ public class CurrencyAmount extends Measure {
      * @stable ICU 3.0
      */
     public CurrencyAmount(double number, Currency currency) {
-        super(new Double(number), currency);
+        super(number, currency);
     }
 
     /**

@@ -257,8 +257,8 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                                     dow,
                                     millis);
         tzRawOffset = testTZ.getRawOffset();
-        tzOffsetFloat = new Float((float)tzOffset/(float)3600000);
-        tzRawOffsetFloat = new Float((float)tzRawOffset/(float)3600000);
+        tzOffsetFloat = (float)tzOffset/3600000f;
+        tzRawOffsetFloat = (float)tzRawOffset/3600000f;
 
         Date testDate = testCal.getTime();
 

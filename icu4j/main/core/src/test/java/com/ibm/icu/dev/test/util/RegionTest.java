@@ -426,7 +426,7 @@ public class RegionTest extends CoreTestFmwk {
             String inputID = data[0];
             String expectedID = data[1];
             Region.RegionType expectedType = Region.RegionType.valueOf(data[2]);
-            Region r = Region.getInstance(Integer.valueOf(inputID));
+            Region r = Region.getInstance(Integer.parseInt(inputID));
             if ( !expectedID.equals(r.toString())) {
                 errln("Unexpected region ID for Region.getInstance(" + inputID + "); Expected: " + expectedID + " Got: " + r.toString());
             }

@@ -84,7 +84,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
             String result = numberFmt.format(n*n);
             for (int k = 0; k < plFmts.length; ++k) {
                 sb.delete(0, sb.length());
-                String pfResult = plFmts[k].format(Long.valueOf(n*n), sb, ignore).toString();
+                String pfResult = plFmts[k].format((long)(n*n), sb, ignore).toString();
                 TestFmwk.assertEquals("PluralFormat's output is not as expected", result, pfResult);
             }
         }
@@ -306,7 +306,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         MessageFormat pfmt = new MessageFormat("The disk ''{0}'' contains {1, plural,  one {one ''''{1, number, #.0}'''' widget} other {# widgets}}.");
         logln("");
         for (int i = 0; i < 3; ++i) {
-            args[1] = new Integer(i);
+            args[1] = i;
             logln(pfmt.format(args));
         }
         /* ICU 4.8 returns null instead of a choice/plural/select Format object

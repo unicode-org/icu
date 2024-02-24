@@ -203,9 +203,9 @@ public class TestCompatibility extends BidiFmwk {
         AttributedString as = new AttributedString("HEBREW 123 english MOREHEB");
         as.addAttribute(TextAttribute.RUN_DIRECTION, TextAttribute.RUN_DIRECTION_RTL);
         as.addAttribute(TextAttribute.NUMERIC_SHAPING, NumericShaper.getShaper(NumericShaper.ARABIC));
-        as.addAttribute(TextAttribute.BIDI_EMBEDDING, new Integer(1), 0, 26);
-        as.addAttribute(TextAttribute.BIDI_EMBEDDING, new Integer(-1), 0, 6);
-        as.addAttribute(TextAttribute.BIDI_EMBEDDING, new Integer(-1), 19, 26);
+        as.addAttribute(TextAttribute.BIDI_EMBEDDING, 1, 0, 26);
+        as.addAttribute(TextAttribute.BIDI_EMBEDDING, -1, 0, 6);
+        as.addAttribute(TextAttribute.BIDI_EMBEDDING, -1, 19, 26);
         bidi = new Bidi(as.getIterator());
         jbidi = new java.text.Bidi(as.getIterator());
         compareBidi(bidi, jbidi);
@@ -214,7 +214,7 @@ public class TestCompatibility extends BidiFmwk {
 
         as = new AttributedString("HEBREW 123 english MOREHEB");
         as.addAttribute(TextAttribute.RUN_DIRECTION, TextAttribute.RUN_DIRECTION_RTL);
-        as.addAttribute(TextAttribute.BIDI_EMBEDDING, new Integer(0), 0, 26);
+        as.addAttribute(TextAttribute.BIDI_EMBEDDING, 0, 0, 26);
         bidi = new Bidi(as.getIterator());
         jbidi = new java.text.Bidi(as.getIterator());
         compareBidi(bidi, jbidi);
@@ -256,7 +256,7 @@ public class TestCompatibility extends BidiFmwk {
         Character[] objects = new Character[10];
         levels = new byte[objects.length];
         for (int i = 0; i < objects.length; i++) {
-            objects[i] = new Character((char)('a'+i));
+            objects[i] = (char)('a'+i);
             levels[i] = myLevels[i];
         }
         Bidi.reorderVisually(levels, 3, objects, 3, 7);
@@ -265,7 +265,7 @@ public class TestCompatibility extends BidiFmwk {
             strbidi += objects[i].toString();
         }
         for (int i = 0; i < objects.length; i++) {
-            objects[i] = new Character((char)('a'+i));
+            objects[i] = (char)('a'+i);
             levels[i] = myLevels[i];
         }
         java.text.Bidi.reorderVisually(levels, 3, objects, 3, 7);

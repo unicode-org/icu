@@ -22,22 +22,22 @@ import com.ibm.icu.text.UnicodeSet;
 @RunWith(JUnit4.class)
 public class TextTrieMapTest extends CoreTestFmwk {
 
-    private static final Integer SUN = new Integer(1);
-    private static final Integer MON = new Integer(2);
-    private static final Integer TUE = new Integer(3);
-    private static final Integer WED = new Integer(4);
-    private static final Integer THU = new Integer(5);
-    private static final Integer FRI = new Integer(6);
-    private static final Integer SAT = new Integer(7);
+    private static final Integer SUN = 1;
+    private static final Integer MON = 2;
+    private static final Integer TUE = 3;
+    private static final Integer WED = 4;
+    private static final Integer THU = 5;
+    private static final Integer FRI = 6;
+    private static final Integer SAT = 7;
 
-    private static final Integer SUP1 = new Integer(8);
-    private static final Integer SUP2 = new Integer(9);
-    private static final Integer SUP3 = new Integer(10);
-    private static final Integer SUP4 = new Integer(11);
-    private static final Integer SUP5 = new Integer(12);
+    private static final Integer SUP1 = 8;
+    private static final Integer SUP2 = 9;
+    private static final Integer SUP3 = 10;
+    private static final Integer SUP4 = 11;
+    private static final Integer SUP5 = 12;
 
-    private static final Integer FOO = new Integer(-1);
-    private static final Integer BAR = new Integer(-2);
+    private static final Integer FOO = -1;
+    private static final Integer BAR = -2;
 
     private static final Object[][] TESTDATA = {
         {"Sunday", SUN},

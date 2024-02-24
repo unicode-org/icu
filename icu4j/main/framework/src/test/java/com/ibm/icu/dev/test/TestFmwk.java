@@ -397,7 +397,7 @@ abstract public class TestFmwk extends AbstractTestLog {
             if (s == null) {
                 return defVal;
             }
-            return (maxVal == -1) ? Integer.valueOf(s) : Math.max(Integer.valueOf(s), maxVal);
+            return (maxVal == -1) ? Integer.parseInt(s) : Math.max(Integer.parseInt(s), maxVal);
         }
 
         public long getLongProperty(String key, long defVal) {
@@ -405,7 +405,7 @@ abstract public class TestFmwk extends AbstractTestLog {
             if (s == null) {
                 return defVal;
             }
-            return Long.valueOf(s);
+            return Long.parseLong(s);
         }
 
         public int getInclusion() {

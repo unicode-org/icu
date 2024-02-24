@@ -307,15 +307,15 @@ public class TimeUnitFormat extends MeasureFormat {
         if (resultNumber == null && longestParseDistance != 0) {
             // set the number using plurrual count
             if (countOfLongestMatch.equals("zero")) {
-                resultNumber = Integer.valueOf(0);
+                resultNumber = 0;
             } else if (countOfLongestMatch.equals("one")) {
-                resultNumber = Integer.valueOf(1);
+                resultNumber = 1;
             } else if (countOfLongestMatch.equals("two")) {
-                resultNumber = Integer.valueOf(2);
+                resultNumber = 2;
             } else {
                 // should not happen.
                 // TODO: how to handle?
-                resultNumber = Integer.valueOf(3);
+                resultNumber = 3;
             }
         }
         if (longestParseDistance == 0) {

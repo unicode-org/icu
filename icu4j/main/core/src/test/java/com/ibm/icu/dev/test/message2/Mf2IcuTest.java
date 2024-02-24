@@ -37,7 +37,7 @@ public class Mf2IcuTest extends CoreTestFmwk {
 
     @Test
     public void testStaticFormat() {
-        Map<String, Object> arguments = Args.of("planet", new Integer(7), "when", new Date(871068000000L), "what",
+        Map<String, Object> arguments = Args.of("planet", 7, "when", new Date(871068000000L), "what",
                 "a disturbance in the Force");
 
         assertEquals("format", "At 12:20:00\u202FPM on Aug 8, 1997, there was a disturbance in the Force on planet 7.",
@@ -52,9 +52,9 @@ public class Mf2IcuTest extends CoreTestFmwk {
 
     @Test
     public void testSimpleFormat() {
-        Map<String, Object> testArgs1 = Args.of("fileCount", new Integer(0), "diskName", "MyDisk");
-        Map<String, Object> testArgs2 = Args.of("fileCount", new Integer(1), "diskName", "MyDisk");
-        Map<String, Object> testArgs3 = Args.of("fileCount", new Integer(12), "diskName", "MyDisk");
+        Map<String, Object> testArgs1 = Args.of("fileCount", 0, "diskName", "MyDisk");
+        Map<String, Object> testArgs2 = Args.of("fileCount", 1, "diskName", "MyDisk");
+        Map<String, Object> testArgs3 = Args.of("fileCount", 12, "diskName", "MyDisk");
 
         MessageFormatter form = MessageFormatter.builder()
                 .setPattern("{The disk \"{$diskName}\" contains {$fileCount} file(s).}")

@@ -993,7 +993,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         List<String> labels = index.getBucketLabels();
         for (String[] testCase : testCases) {
             String name = testCase[0];
-            int bucketIndex = Integer.valueOf(testCase[1]);
+            int bucketIndex = Integer.parseInt(testCase[1]);
             String label = testCase[2];
             String msg = "getBucketIndex(" + name + ")";
             assertEquals(msg, bucketIndex, index.getBucketIndex(name));

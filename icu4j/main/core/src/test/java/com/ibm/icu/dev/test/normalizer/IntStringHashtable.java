@@ -24,14 +24,14 @@ public class IntStringHashtable {
 
     public void put(int key, String value) {
         if (value == defaultValue) {
-            table.remove(new Integer(key));
+            table.remove(key);
         } else {
-            table.put(new Integer(key), value);
+            table.put(key, value);
         }
     }
 
     public String get(int key) {
-        String value = table.get(new Integer(key));
+        String value = table.get(key);
         if (value == null) return defaultValue;
         return value;
     }

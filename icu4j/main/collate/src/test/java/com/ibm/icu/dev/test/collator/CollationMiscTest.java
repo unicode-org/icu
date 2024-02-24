@@ -530,11 +530,10 @@ public class CollationMiscTest extends TestFmwk {
         };
 
         String[] att = { "strength", };
-        Object[] val = { new Integer(Collator.QUATERNARY), };
+        Object[] val = { Collator.QUATERNARY, };
 
         String[] attShifted = { "strength", "AlternateHandling"};
-        Object valShifted[] = { new Integer(Collator.QUATERNARY),
-                                Boolean.TRUE };
+        Object valShifted[] = { Collator.QUATERNARY, Boolean.TRUE };
 
         genericLocaleStarterWithOptions(Locale.JAPANESE, test1, att, val);
         genericLocaleStarterWithOptions(Locale.JAPANESE, test2, att, val);
@@ -2210,7 +2209,7 @@ public class CollationMiscTest extends TestFmwk {
     {
       String tests[] = { "B", "b", "Bb", "bB" };
       String[] att = { "strength", "UpperFirst" };
-      Object attVals[] = { new Integer(Collator.QUATERNARY), Boolean.TRUE };
+      Object attVals[] = { Collator.QUATERNARY, Boolean.TRUE };
       genericLocaleStarterWithOptions(new Locale("root","",""), tests, att, attVals);
     }
 
@@ -2219,7 +2218,7 @@ public class CollationMiscTest extends TestFmwk {
     {
         String tests[] = { "\\u00e2T", "aT" };
         String att[] = { "strength", "CaseLevel" };
-        Object attVals[] = { new Integer(Collator.PRIMARY), Boolean.TRUE };
+        Object attVals[] = { Collator.PRIMARY, Boolean.TRUE };
         String tests2[] = { "a", "A" };
         String rule = "&[first tertiary ignorable]=A=a";
         String att2[] = { "CaseLevel" };

@@ -184,7 +184,7 @@ class AnyTransliterator extends Transliterator {
             }
         }
 
-        Integer key = Integer.valueOf(source);
+        Integer key = source;
         Transliterator t = cache.get(key);
         if (t == null) {
             String sourceName = UScript.getName(source);

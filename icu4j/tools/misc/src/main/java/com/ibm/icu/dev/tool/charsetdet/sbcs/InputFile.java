@@ -140,7 +140,7 @@ public class InputFile implements NGramList.NGramKeyMapper
             value += (bytes[b] & 0xFF);
         }
 
-        return new Integer(value);
+        return value;
     }
     
     public byte[] encode(char[] chars)

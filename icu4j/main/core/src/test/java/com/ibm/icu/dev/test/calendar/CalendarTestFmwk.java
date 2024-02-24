@@ -278,8 +278,8 @@ public class CalendarTestFmwk extends CoreTestFmwk {
                     h[0] = new HashMap();
                     h[1] = new HashMap();
                 }
-                h[0].put(new Integer(minActual), nub);
-                h[1].put(new Integer(maxActual), nub);
+                h[0].put(minActual, nub);
+                h[1].put(maxActual, nub);
 
                 if (minActual < minLow || minActual > minHigh) {
                     errln("Fail: " + ymdToString(cal) +
@@ -320,8 +320,8 @@ public class CalendarTestFmwk extends CoreTestFmwk {
                     cal.getGreatestMinimum(f) : cal.getMaximum(f);
                 // If either the top of the range or the bottom was never
                 // seen, then there may be a problem.
-                if (h[k].get(new Integer(rangeLow)) == null ||
-                    h[k].get(new Integer(rangeHigh)) == null) {
+                if (h[k].get(rangeLow) == null ||
+                    h[k].get(rangeHigh) == null) {
                     fullRangeSeen = false;
                 }
                 buf.append(k==0 ? " minima seen=(" : "; maxima seen=(");
