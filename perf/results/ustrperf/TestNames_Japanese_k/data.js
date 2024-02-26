@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708968163658,
+  "lastUpdate": 1708970911453,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64894,6 +64894,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 38.8866,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "6d15faab4806df96e6cba4a6bb0e9a2e67b4c630",
+          "message": "ICU-22677 update CONTRIBUTING.md\n\n- https://github.com/unicode-org/.github/issues/12",
+          "timestamp": "2024-02-26T11:44:35-06:00",
+          "tree_id": "de4512e32457c48a61848ad3c63ceb31c2f5cc13",
+          "url": "https://github.com/unicode-org/icu/commit/6d15faab4806df96e6cba4a6bb0e9a2e67b4c630"
+        },
+        "date": 1708970823643,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.1874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6433,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 22.5073,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.6021,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 33.185,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 33.4104,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 21.6159,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.1151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 86.3471,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.4669,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 40.453,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 42.3427,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
