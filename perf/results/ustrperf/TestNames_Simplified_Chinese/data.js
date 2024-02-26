@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1708970953213,
+  "lastUpdate": 1708981339316,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -64990,6 +64990,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.0757,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "ea1c6da07fa345dd485408caee51703bc95c0454",
+          "message": "ICU-22677 update LICENSE and README.md and pom.xml\n\n- https://github.com/unicode-org/.github/issues/15\n- use Unicode-3.0 in pom instead of raw license link\n- https://github.com/unicode-org/.github/issues/15",
+          "timestamp": "2024-02-26T14:34:59-06:00",
+          "tree_id": "f428ed2e6edb51b10fcbfb60669bba6fa40e4b79",
+          "url": "https://github.com/unicode-org/icu/commit/ea1c6da07fa345dd485408caee51703bc95c0454"
+        },
+        "date": 1708981263829,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 17.8338,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.2758,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 22.1343,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 25.0535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 30.4983,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 30.2315,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 21.1815,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 14.6675,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 80.4989,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.164,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 38.963,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.8212,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
