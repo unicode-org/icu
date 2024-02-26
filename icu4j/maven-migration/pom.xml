@@ -104,7 +104,7 @@
 
   <licenses>
     <license>
-      <name>Unicode/ICU License</name>
+      <name>Unicode-3.0</name>
       <url>https://raw.githubusercontent.com/unicode-org/icu/main/LICENSE</url>
       <distribution>repo</distribution>
     </license>
