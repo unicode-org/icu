@@ -1799,7 +1799,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of speed: beaufort
-     * @draft ICU 73
+     * @stable ICU 73
      */
     public static final MeasureUnit BEAUFORT = MeasureUnit.internalGetInstance("speed", "beaufort");
 
