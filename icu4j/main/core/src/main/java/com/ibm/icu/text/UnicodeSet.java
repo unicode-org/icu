@@ -3939,7 +3939,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * constructors, applyPattern(), and closeOver().
      * It can be ORed together with other, unrelated options.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     public static final int SIMPLE_CASE_INSENSITIVE = 6;
 

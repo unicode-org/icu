@@ -13,7 +13,7 @@ import java.util.Set;
  * above.  A concrete SimplePersonName object that does store the field values directly
  * is provided.
  *
- * @draft ICU 73
+ * @stable ICU 73
  * @see SimplePersonName
  */
 public interface PersonName {
@@ -22,32 +22,32 @@ public interface PersonName {
 
     /**
      * Identifiers for the name fields supported by the PersonName object.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     enum NameField {
         /**
          * Contains titles such as "Mr.", "Dr." (in English these typically
          * precede the name)
-         * @draft ICU 73
+         * @stable ICU 73
          */
         TITLE("title"),
 
         /**
          * The given name.  May contain more than one token.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         GIVEN("given"),
 
         /**
          * Additional given names.  (In English, this is usually the "middle name" and
          * may contain more than one word.)
-         * @draft ICU 73
+         * @stable ICU 73
          */
         GIVEN2("given2"),
 
         /**
          * The surname.  In Spanish, this is the patronymic surname.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         SURNAME("surname"),
 
@@ -55,21 +55,21 @@ public interface PersonName {
          * Additional surnames.  This is only used in a few languages, such as Spanish,
          * where it is the matronymic surname.  (In most languages, multiple surnames all
          * just go in the SURNAME field.)
-         * @draft ICU 73
+         * @stable ICU 73
          */
         SURNAME2("surname2"),
 
         /**
          * Generational qualifiers that in English generally follow the actual name,
          * such as "Jr." or "III".
-         * @draft ICU 73
+         * @stable ICU 73
          */
         GENERATION("generation"),
 
         /**
          * Professional qualifiers that in English generally follow the actual name,
          * such as "M.D." or "J.D.".
-         * @draft ICU 73
+         * @stable ICU 73
          */
         CREDENTIALS("credentials");
 
@@ -81,7 +81,7 @@ public interface PersonName {
 
         /**
          * Returns the NameField's display name.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         @Override
         public String toString() {
@@ -106,7 +106,7 @@ public interface PersonName {
 
     /**
      * Identifiers for the name field modifiers supported by the PersonName and PersonNameFormatter objects.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     enum FieldModifier {
         /**
@@ -114,7 +114,7 @@ public interface PersonName {
          * if "given" is "James", "given-informal" might be "Jimmy".  Only applied to the "given"
          * field.  If the PersonName object doesn't apply this modifier, PersonNameFormatter just
          * uses the unmodified version of "given".
-         * @draft ICU 73
+         * @stable ICU 73
          */
         INFORMAL("informal"),
 
@@ -123,7 +123,7 @@ public interface PersonName {
          * "van den Hul", this requests just the prefixes ("van den").  Only applied to the "surname"
          * field.  If the PersonName object doesn't apply this modifier, PersonNameFormatter
          * assumes there are no prefixes.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         PREFIX("prefix"),
 
@@ -132,7 +132,7 @@ public interface PersonName {
          * "van den Hul", this requests just the main word ("Hul").  Only applied to the "surname"
          * field.  If the implementing class doesn't apply this modifier, PersonNameFormatter
          * assumes the entire "surname" field is the "core".
-         * @draft ICU 73
+         * @stable ICU 73
          */
         CORE("core"),
 
@@ -140,7 +140,7 @@ public interface PersonName {
          * Requests an initial for the specified field.  PersonNameFormatter will do
          * this algorithmically, but a PersonName object can apply this modifier itself if it wants
          * different initial-generation logic (or stores the initial separately).
-         * @draft ICU 73
+         * @stable ICU 73
          */
         INITIAL("initial"),
 
@@ -149,14 +149,14 @@ public interface PersonName {
          * (this usually differs from "initial" in that "initial" often adds a period and "monogram"
          * never does).  PersonNameFormatter will do this algorithmically, but a PersonName object can
          * apply this modifier itself if it wants different monogram-generation logic.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         MONOGRAM("monogram"),
 
         /**
          * Requests the field value converted to ALL CAPS.  PersonName objects
          * generally won't need to handle this modifier themselves.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         ALL_CAPS("allCaps"),
 
@@ -174,7 +174,7 @@ public interface PersonName {
          * Requests the field value with the first grapheme of each word converted to titlecase.
          * A PersonName object might handle this modifier itself to capitalize words more
          * selectively.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         INITIAL_CAP("initialCap"),
 
@@ -202,7 +202,7 @@ public interface PersonName {
 
         /**
          * Returns the FieldModifier's display name.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         @Override
         public String toString() {
@@ -211,7 +211,7 @@ public interface PersonName {
 
         /**
          * Returns the appropriate fieldModifier for its display name.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         public static FieldModifier forString(String name) {
             for (FieldModifier modifier : values()) {
@@ -225,27 +225,27 @@ public interface PersonName {
 
     /**
      * An enum to specify the preferred field order for the name.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     enum PreferredOrder {
         /**
          * Indicates the name has no preferred field order, and that the formatter should deduce the
          * proper field order based on the locales of the name and the formatter.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         DEFAULT,
 
         /**
          * Indicates that the name should be formatted in given-first order, even when the formatter
          * would normally guess that it should be formatted in surname-first order.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         GIVEN_FIRST,
 
         /**
          * Indicates that the name should be formatted in surname-first order, even when the formatter
          * would normally guess that it should be formatted in given-first order.
-         * @draft ICU 73
+         * @stable ICU 73
          */
         SURNAME_FIRST
     }
@@ -257,7 +257,7 @@ public interface PersonName {
      * An implementing class is allowed to return null here to indicate the name's locale is unknown.
      *
      * @return The name's locale, or null if it's not known.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     public Locale getNameLocale();
 
@@ -267,7 +267,7 @@ public interface PersonName {
      * and the formatter.  But this can be used to force a particular field order, generally in cases
      * where the deduction logic in PersonNameFormatter would guess wrong.
      * @return The name's preferred field order.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     public PreferredOrder getPreferredOrder();
 
@@ -281,7 +281,7 @@ public interface PersonName {
      *                   DIDN'T handle.  This parameter may not be null, and must either be mutable or empty.
      * @return The value of the requested field, optionally modified by some or all of the requested modifiers, or
      * null if the requested field isn't present in the name.
-     * @draft ICU 73
+     * @stable ICU 73
      */
     public String getFieldValue(NameField identifier, Set<FieldModifier> modifiers);
 }
