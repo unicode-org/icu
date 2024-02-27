@@ -124,7 +124,7 @@ jobs:
           cd icu4c/source;
           ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
           make clean;
-          make -j -l2.5 ICU4J_ROOT=../../../icu4j icu4j-data-install;
+          make -j -l4.5 ICU4J_ROOT=../../../icu4j icu4j-data-install;
           cd ../..
       - name: ICU4J
         run: |
@@ -165,7 +165,7 @@ jobs:
           cd icu4c/source;
           ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
           make clean;
-          make -j -l2.5 ICU4J_ROOT=../../../icu4j icu4j-data-install;
+          make -j -l4.5 ICU4J_ROOT=../../../icu4j icu4j-data-install;
           cd ../..
       - name: ICU4J
         run: |

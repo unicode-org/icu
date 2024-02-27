@@ -61,7 +61,7 @@ jobs:
           mkdir build;
           cd build;
           ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=$PREFIX --enable-tracing;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
           ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
           make install;
           PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
@@ -88,7 +88,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
       - name: Test Dependency
         run: |
           cd icu4c/source/test/depstest;
@@ -123,7 +123,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux ${{ matrix.build_option }};
-          make -j -l2.5 tests;
+          make -j -l4.5 tests;
       - name: Test
         run: |
           cd icu4c/source;
@@ -145,8 +145,8 @@ jobs:
           mkdir build;
           cd build;
           ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix=$PREFIX;
-          make -j -l2.5 check;
-          make -j -l2.5 install;
+          make -j -l4.5 check;
+          make -j -l4.5 install;
           cd $PREFIX/bin;
           LD_LIBRARY_PATH=../lib ./icuinfo
 
@@ -160,7 +160,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
         env:
           CPPFLAGS: -fsanitize=address
           LDFLAGS: -fsanitize=address
@@ -174,7 +174,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
         env:
           CPPFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
           CFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
@@ -189,7 +189,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux --disable-renaming;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
         env:
           CC: clang
           CXX: clang++
@@ -208,9 +208,9 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
-          make -j -l2.5;
-          make -j -l2.5 -C test;
-          make -j -l2.5 -C test/intltest check
+          make -j -l4.5;
+          make -j -l4.5 -C test;
+          make -j -l4.5 -C test/intltest check
         env:
           INTLTEST_OPTS: utility/MultithreadTest
           CPPFLAGS: -fsanitize=thread
@@ -226,7 +226,7 @@ jobs:
         run: |
           cd icu4c/source;
           PYTHON=python3 ./runConfigureICU MacOSX;
-          make -j -l2.5 check
+          make -j -l4.5 check
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
@@ -238,14 +238,14 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
           rm lib/libicudata.so*;
           cp -P stubdata/libicudata.so* lib;
 
           cd test/cintltst;
           echo 'Running ICU4C cintltst with stubdata.';
           # Note: 'Elapsed Time: ' is printed by makefile upon final success.
-          CINTLTST_OPTS=-w make -j -l2.5 check 2>&1 | tee stubdata_ctest.log;
+          CINTLTST_OPTS=-w make -j -l4.5 check 2>&1 | tee stubdata_ctest.log;
           if ! grep 'Elapsed Time: ' stubdata_ctest.log
           then
             echo
@@ -259,7 +259,7 @@ jobs:
 
           cd ../intltest;
           echo 'Running ICU4C intltest with stubdata.';
-          INTLTEST_OPTS=-w make -j -l2.5 check 2>&1 | tee stubdata_intltest.log;
+          INTLTEST_OPTS=-w make -j -l4.5 check 2>&1 | tee stubdata_intltest.log;
           if ! grep 'Elapsed Time: ' stubdata_intltest.log
           then
             echo
@@ -279,7 +279,7 @@ jobs:
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1";
-          make -j -l2.5 check
+          make -j -l4.5 check
 
   # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
   u-override-cxx-allocation-is-0-test:
@@ -290,7 +290,7 @@ jobs:
           cd icu4c/source;
           ./runConfigureICU Linux CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0";
           make clean;
-          make -j -l2.5 check
+          make -j -l4.5 check
 
   # Test LSTM
   lstm-test:
@@ -301,7 +301,7 @@ jobs:
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
           make clean;
-          make -j -l2.5 check
+          make -j -l4.5 check
 
   # Test adaboost
   adaboost-test:
@@ -312,7 +312,7 @@ jobs:
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
           make clean;
-          make -j -l2.5 check
+          make -j -l4.5 check
 
   # Build and run testmap
   testmap:
@@ -322,10 +322,10 @@ jobs:
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          make -j -l2.5 check;
+          make -j -l4.5 check;
           CONFIG_FILES=test/testmap/Makefile ./config.status;
           cd test/testmap;
-          make -j -l2.5 check | grep '*** PASS PASS PASS, test PASSED!!!!!!!!'
+          make -j -l4.5 check | grep '*** PASS PASS PASS, test PASSED!!!!!!!!'
 
   # Copyright scan
   copyright-scan:
@@ -392,7 +392,7 @@ jobs:
         run: |
           cd icu4c/source/;
           ./runConfigureICU Linux;
-          make -j -l2.5 tests;
+          make -j -l4.5 tests;
 
   # Run header tests with UCONFIG_NO_XXX variations.
   uconfig-header-tests:
@@ -436,7 +436,7 @@ jobs:
           cd icu4c/source/;
           mkdir /tmp/icu_cnfg;
           ./runConfigureICU Linux --prefix=/tmp/icu_cnfg;
-          make -j -l2.5 install;
+          make -j -l4.5 install;
       - name: Test
         env:
           UCONFIG_NO: ${{ matrix.uconfig_cppflags }}
@@ -546,7 +546,7 @@ jobs:
           CINTLTST_OPTS: -w
         run: |
           cd icu4c/source
-          make -j -l2.5 check
+          make -j -l4.5 check
   
   # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
   icu4c-uconfig-no-conversion:
@@ -562,8 +562,8 @@ jobs:
       - name: Run make for stubdata, common, i18n
         run: |
           cd icu4c/source
-          pushd stubdata && make -j -l2.5 && popd
+          pushd stubdata && make -j -l4.5 && popd
           # Ensure lib directory for output object file exists
           mkdir -p lib
-          pushd common && make -j -l2.5 && popd
-          pushd i18n && make -j -l2.5 && popd
+          pushd common && make -j -l4.5 && popd
+          pushd i18n && make -j -l4.5 && popd

@@ -40,7 +40,7 @@ jobs:
           CXXFLAGS: -gdwarf-4
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l2.5 tests;
+          ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l4.5 tests;
       - name: Test iotest with valgrind
         run: |
           cd icu4c/source/test/iotest
@@ -85,7 +85,7 @@ jobs:
           CXXFLAGS: -gdwarf-4
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l2.5 tests;
+          ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l4.5 tests;
       - name: Check all top path in intltest is covered
         run: |
           cd icu4c/source/test/intltest;
