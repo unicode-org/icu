@@ -48,7 +48,7 @@ jobs:
         run: |
           cd icu4c/source/;
           ./runConfigureICU Linux;
-          make -j -l2.5 tests;
+          make -j -l4.5 tests;
       - name: Test different locales as LC_ALL
         run: |
           echo "This job run the environment test of the following Locales";
@@ -65,7 +65,7 @@ jobs:
               for test_dir in iotest cintltst intltest
               do
                   cd $test_dir;
-                  LC_ALL=$loc make -j -l2.5 check;
+                  LC_ALL=$loc make -j -l4.5 check;
                   cd ..;
               done
 
@@ -107,7 +107,7 @@ jobs:
         run: |
           cd icu4c/source/;
           ./runConfigureICU Linux;
-          make -j -l2.5 tests;
+          make -j -l4.5 tests;
       - name: Test different locales as TZ
         run: |
           echo "This job run the environment test of the following TimeZones";
@@ -125,7 +125,7 @@ jobs:
               for test_dir in iotest cintltst intltest
               do
                   cd $test_dir;
-                  TZ=$tz make -j -l2.5 check;
+                  TZ=$tz make -j -l4.5 check;
                   cd ..;
               done
 
