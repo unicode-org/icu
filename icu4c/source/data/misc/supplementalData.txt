@@ -27934,9 +27934,6 @@ supplementalData:table(nofallback){
                 49990000,
                 57376941,
             }
-            tok{
-                populationShareF:int{40100000}
-            }
             tr{
                 populationShareF:int{47100000}
             }
@@ -28583,9 +28580,6 @@ supplementalData:table(nofallback){
             }
             vmf{
                 populationShareF:int{48600000}
-            }
-            vo{
-                populationShareF:int{0}
             }
         }
         DG{
