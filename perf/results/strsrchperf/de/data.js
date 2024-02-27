@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709040547679,
+  "lastUpdate": 1709063029512,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22102,6 +22102,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 38.6886,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "3df505b5116218a7a4be976ba6bd8f802d84a7ff",
+          "message": "ICU-22532 Increase Github Actions CI parallelism from 2 to 4",
+          "timestamp": "2024-02-27T10:58:09-08:00",
+          "tree_id": "4d130cf878d425c7f4f0e10ee2c31848590a3829",
+          "url": "https://github.com/unicode-org/icu/commit/3df505b5116218a7a4be976ba6bd8f802d84a7ff"
+        },
+        "date": 1709062948296,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 18.9029,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 37.3208,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
