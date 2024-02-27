@@ -1065,6 +1065,9 @@ public final class UScript {
     /** @stable ICU 72 */
     public static final int NAG_MUNDARI = 199; /* Nagm */
 
+    /** @stable ICU 75 */
+    public static final int ARABIC_NASTALIQ = 200; /* Aran */
+
     /**
      * One more than the highest normal UScript code.
      * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
@@ -1072,7 +1075,7 @@ public final class UScript {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 200;
+    public static final int CODE_LIMIT   = 201;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
