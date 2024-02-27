@@ -12,10 +12,12 @@ on:
       - 'maint/maint*'
     paths:
       - 'docs/**'
+      - '.github/workflows/**'
   pull_request:
     branches: '**'
     paths:
       - 'docs/**'
+      - '.github/workflows/**'
   workflow_dispatch:
     # To trigger the Env Test workflow manually, follow the instructions in
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow

@@ -13,10 +13,12 @@ on:
       - 'maint/maint*'
     paths:
       - 'icu4c/**'
+      - '.github/workflows/**'
   pull_request:
     branches: '**'
     paths:
       - 'icu4c/**'
+      - '.github/workflows/**'
 
 permissions:
   contents: read

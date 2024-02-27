@@ -12,10 +12,12 @@ on:
       - 'maint/maint*'
     paths:
       - 'icu4j/**'
+      - '.github/workflows/**'
   pull_request:
     branches: '**'
     paths:
       - 'icu4j/**'
+      - '.github/workflows/**'
   workflow_dispatch:
     # To trigger the Env Test workflow manually, follow the instructions in
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
