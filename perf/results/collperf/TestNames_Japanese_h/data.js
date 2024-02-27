@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709040827357,
+  "lastUpdate": 1709063259476,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36934,6 +36934,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5752887.6551,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "3df505b5116218a7a4be976ba6bd8f802d84a7ff",
+          "message": "ICU-22532 Increase Github Actions CI parallelism from 2 to 4",
+          "timestamp": "2024-02-27T10:58:09-08:00",
+          "tree_id": "4d130cf878d425c7f4f0e10ee2c31848590a3829",
+          "url": "https://github.com/unicode-org/icu/commit/3df505b5116218a7a4be976ba6bd8f802d84a7ff"
+        },
+        "date": 1709063177726,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 230.6443,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 19691463.4705,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5266307.8705,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19269808.8743,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5738118.648,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
