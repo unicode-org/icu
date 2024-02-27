@@ -17,7 +17,8 @@ trigger:
     - '*'
     exclude:
     - .github/*
-    - .ci-builds/.azure-pipelines.yml
+    - .ci-builds/.azure-pipelines-icu4c.yml
+    - .ci-builds/.azure-pipelines-icu4j.yml
     - .ci-builds/.azure-valgrind.yml
     - docs/*
     - tools/*
