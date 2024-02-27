@@ -780,6 +780,20 @@ public class MeasureUnitImpl {
 
         @Override
         public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
+            String special1 = this.conversionRates.getSpecialMappingName(o1);
+            String special2 = this.conversionRates.getSpecialMappingName(o2);
+            if (special1 != null || special2 != null) {
+                if (special1 == null) {
+                    // non-specials come first
+                    return -1;
+                }
+                if (special2 == null) {
+                    // non-specials come first
+                    return 1;
+                }
+                // both are specials, compare lexicographically
+                return special1.compareTo(special2);
+            }
             BigDecimal factor1 = this.conversionRates.getFactorToBase(o1).getConversionRate();
             BigDecimal factor2 = this.conversionRates.getFactorToBase(o2).getConversionRate();
 
