@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709132712131,
+  "lastUpdate": 1709139514274,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18118,6 +18118,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.7389553308090164,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "a1925abf4f070541d7fb795acdc5be0e7cae6211",
+          "message": "ICU-22534 CLDR 45 alpha2 integration to ICU",
+          "timestamp": "2024-02-28T08:28:08-08:00",
+          "tree_id": "0abd28798029ee7d35b38061fcda8f5b1de32c78",
+          "url": "https://github.com/unicode-org/icu/commit/a1925abf4f070541d7fb795acdc5be0e7cae6211"
+        },
+        "date": 1709139431085,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.739067679977469,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
