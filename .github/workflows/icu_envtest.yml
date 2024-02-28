@@ -123,6 +123,8 @@ jobs:
 
           do
               echo "============================================";
+              echo "zdump of the system timezone $tz";
+              zdump $tz;
               echo "Start Tests under TZ=$tz TimeZone";
               for test_dir in iotest cintltst intltest
               do
