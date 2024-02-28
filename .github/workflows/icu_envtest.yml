@@ -116,6 +116,8 @@ jobs:
           sedarg=${begin},${end}p;
           find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|sed -n ${sedarg}|cut -d '/' -f5-50;
 
+          echo "The tzdb version on this machine is:";
+          head -1 /usr/share/zoneinfo/tzdata.zi;
           cd icu4c/source/test;
           for tz in `find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|sed -n ${sedarg}|cut -d '/' -f5-50`;
 
