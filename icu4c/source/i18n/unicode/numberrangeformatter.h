@@ -508,7 +508,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      * Disassociate the locale from this formatter.
      *
      * @return The fluent chain.
-     * @draft ICU 74
+     * @draft ICU 75
      */
     UnlocalizedNumberRangeFormatter withoutLocale() const &;
 
@@ -517,7 +517,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      *
      * @return The fluent chain.
      * @see #withoutLocale
-     * @draft ICU 74
+     * @draft ICU 75
      */
     UnlocalizedNumberRangeFormatter withoutLocale() &&;
 #endif // U_HIDE_DRAFT_API
