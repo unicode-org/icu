@@ -192,15 +192,6 @@ static const int UMALQURA_MONTHLENGTH[] = {
                             0x06AA,           0x0AD6,           0x055D,           0x029D
 };
 
-int32_t getUmalqura_MonthLength(int32_t y, int32_t m) {
-    int32_t mask = (int32_t) (0x01 << (11 - m));    // set mask for bit corresponding to month
-    if((UMALQURA_MONTHLENGTH[y] & mask) == 0 )
-        return 29;
-    else
-        return 30;
-
-}
-
 //-------------------------------------------------------------------------
 // Constructors...
 //-------------------------------------------------------------------------
@@ -311,8 +302,7 @@ static const int8_t umAlQuraYrStartEstimateFix[] = {
 /**
 * Determine whether a year is a leap year in the Islamic civil calendar
 */
-UBool IslamicCalendar::civilLeapYear(int32_t year)
-{
+inline bool civilLeapYear(int32_t year) {
     return (14 + 11 * year) % 30 < 11;
 }
 
@@ -877,7 +867,8 @@ int32_t IslamicUmalquraCalendar::handleGetMonthLength(int32_t extendedYear, int3
         }
         return length;
     }
-    return getUmalqura_MonthLength(extendedYear - UMALQURA_YEAR_START, month);
+    int32_t mask = (int32_t) (0x01 << (11 - month));    // set mask for bit corresponding to month
+    return ((UMALQURA_MONTHLENGTH[extendedYear - UMALQURA_YEAR_START] & mask) == 0) ? 29 : 30;
 }
 
 /**
@@ -926,28 +917,31 @@ void IslamicUmalquraCalendar::handleComputeFields(int32_t julianDay, UErrorCode 
         month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
         month = month < 11 ? month : 11;
     } else {
-        int y =UMALQURA_YEAR_START-1, m =0;
-        long d = 1;
+        // Estimate a value y which is closer to but not greater than the year.
+        // It is the inverse function of the logic inside
+        // IslamicUmalquraCalendar::yearStart().
+        year = ((double(days) - (460322.05 + 0.5)) / 354.36720)
+            + UMALQURA_YEAR_START - 1;
+        month = 0;
+        int32_t d = 1;
+        // need a slight correction to some
         while (d > 0) {
-            y++;
-            d = days - yearStart(y) +1;
-            if (d == handleGetYearLength(y)) {
-                m=11;
+            d = days - yearStart(++year) + 1;
+            int32_t yearLength = handleGetYearLength(year);
+            if (d == yearLength) {
+                month = 11;
                 break;
             }
-            if (d < handleGetYearLength(y)){
-                int monthLen = handleGetMonthLength(y, m);
-                m=0;
-                while(d > monthLen){
+            if (d < yearLength){
+                int32_t monthLen = handleGetMonthLength(year, month);
+                for (month = 0;
+                     d > monthLen;
+                     monthLen = handleGetMonthLength(year, ++month)) {
                     d -= monthLen;
-                    m++;
-                    monthLen = handleGetMonthLength(y, m);
                 }
                 break;
             }
         }
-        year = y;
-        month = m;
     }
 
     dayOfMonth = (days - monthStart(year, month)) + 1;

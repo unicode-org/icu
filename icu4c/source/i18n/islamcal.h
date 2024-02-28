@@ -198,11 +198,6 @@ class U_I18N_API IslamicCalendar : public Calendar {
 
  protected:
   /**
-   * Determine whether a year is a leap year in the Islamic civil calendar
-   */
-  static UBool civilLeapYear(int32_t year);
-
-  /**
    * Return the day # on which the given year starts.  Days are counted
    * from the Hijri epoch, origin 0.
    */
