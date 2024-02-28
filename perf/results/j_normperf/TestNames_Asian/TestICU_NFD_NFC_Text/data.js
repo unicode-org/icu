@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709147979925,
+  "lastUpdate": 1709148024450,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -36148,6 +36148,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.528150346901732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "ceca6c412016f3b7581db2a4385a4a34d38878d9",
+          "message": "ICU-22274 display tz db version on the test machine.",
+          "timestamp": "2024-02-28T11:07:32-08:00",
+          "tree_id": "2742a04788fee4f5ebfd1baf1bec021addaf7dea",
+          "url": "https://github.com/unicode-org/icu/commit/ceca6c412016f3b7581db2a4385a4a34d38878d9"
+        },
+        "date": 1709147936277,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.71458585351961,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
