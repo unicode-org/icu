@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709215410004,
+  "lastUpdate": 1709225765870,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18268,6 +18268,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.0222236624206857,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "96fb7ae73a78aec7e1a5f3a51e830fa44e0d12df",
+          "message": "ICU-22534 ICU4J 75 frontload API change report",
+          "timestamp": "2024-02-29T08:49:43-08:00",
+          "tree_id": "1e9219cff79569154a8a687958c3f398d584af06",
+          "url": "https://github.com/unicode-org/icu/commit/96fb7ae73a78aec7e1a5f3a51e830fa44e0d12df"
+        },
+        "date": 1709225684327,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 2.9130273342126713,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
