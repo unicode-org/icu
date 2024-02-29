@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709233987342,
+  "lastUpdate": 1709235099632,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -66718,6 +66718,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.6724,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "devnexen@gmail.com",
+            "name": "David Carlier",
+            "username": "devnexen"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "35353f2d7fcc3041ea4ebf03974146026cff2e43",
+          "message": "ICU-22671 format_date should use c++ nullptr instead of 0 for udat_open/DateFormat::create\n\n- [x] Required: Issue filed: https://unicode-org.atlassian.net/browse/ICU-22671\n- [x] Required: The PR title must be prefixed with a JIRA Issue number. <!-- For example: \"ICU-1234 Fix xyz\" -->\n- [x] Required: The PR description must include the link to the Jira Issue, for example by completing the URL in the first checklist item\n- [x] Required: Each commit message must be prefixed with a JIRA Issue number. <!-- For example: \"ICU-1234 Fix xyz\" -->\n- [ ] Issue accepted (done by Technical Committee after discussion)\n- [ ] Tests included, if applicable\n- [ ] API docs and/or User Guide docs changed or added, if applicable",
+          "timestamp": "2024-02-29T20:02:20+01:00",
+          "tree_id": "87eb69e1268f5ed4c01bde0e688a6763d9d6eb61",
+          "url": "https://github.com/unicode-org/icu/commit/35353f2d7fcc3041ea4ebf03974146026cff2e43"
+        },
+        "date": 1709235020293,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.9824,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.9816,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 33.0929,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 43.0788,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 36.9913,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 29.1862,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.7471,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 111.2331,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.1119,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 38.3588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.4302,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
