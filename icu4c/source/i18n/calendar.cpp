@@ -3279,7 +3279,9 @@ double Calendar::computeMillisInDay() {
             // Don't normalize here; let overflow bump into the next period.
             // This is consistent with how we handle other fields.
             millisInDay += internalGet(UCAL_HOUR);
-            millisInDay += 12 * internalGet(UCAL_AM_PM); // Default works for unset AM_PM
+            // Treat even number as AM and odd nubmber as PM to align with the
+            // logic in roll()
+            millisInDay += (internalGet(UCAL_AM_PM) % 2 == 0) ? 0 : 12;
         }
     }
 
