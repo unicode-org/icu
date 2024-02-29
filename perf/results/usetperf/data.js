@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709233492002,
+  "lastUpdate": 1709234727892,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54286,6 +54286,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1463.4877,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "devnexen@gmail.com",
+            "name": "David Carlier",
+            "username": "devnexen"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "35353f2d7fcc3041ea4ebf03974146026cff2e43",
+          "message": "ICU-22671 format_date should use c++ nullptr instead of 0 for udat_open/DateFormat::create\n\n- [x] Required: Issue filed: https://unicode-org.atlassian.net/browse/ICU-22671\n- [x] Required: The PR title must be prefixed with a JIRA Issue number. <!-- For example: \"ICU-1234 Fix xyz\" -->\n- [x] Required: The PR description must include the link to the Jira Issue, for example by completing the URL in the first checklist item\n- [x] Required: Each commit message must be prefixed with a JIRA Issue number. <!-- For example: \"ICU-1234 Fix xyz\" -->\n- [ ] Issue accepted (done by Technical Committee after discussion)\n- [ ] Tests included, if applicable\n- [ ] API docs and/or User Guide docs changed or added, if applicable",
+          "timestamp": "2024-02-29T20:02:20+01:00",
+          "tree_id": "87eb69e1268f5ed4c01bde0e688a6763d9d6eb61",
+          "url": "https://github.com/unicode-org/icu/commit/35353f2d7fcc3041ea4ebf03974146026cff2e43"
+        },
+        "date": 1709234645819,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77843.4791,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177848.4565,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.0582,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.6854,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8709.6424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 31685.7827,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1462.4414,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
