@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709236195756,
+  "lastUpdate": 1709246643755,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18268,6 +18268,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.9206268782750546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "aa3e49fa9a706e332528e807fe327b99f271f61b",
+          "message": "ICU-22274 Add zdump info while env test fail",
+          "timestamp": "2024-02-29T14:36:14-08:00",
+          "tree_id": "329040e8e7af4b84568bb10d0ac6a2d676478b17",
+          "url": "https://github.com/unicode-org/icu/commit/aa3e49fa9a706e332528e807fe327b99f271f61b"
+        },
+        "date": 1709246563463,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9202770033780168,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
