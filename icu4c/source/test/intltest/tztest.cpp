@@ -156,10 +156,18 @@ TimeZoneTest::TestGenericAPI()
         // Africa/Casablanca Europe/Dublin America/Godthab America/Nuuk
         if (id == u"Africa/Casablanca" || id == u"Europe/Dublin" ||
             id == u"America/Godthab" || id == u"America/Nuuk" ||
-            id == u"Africa/El_Aaiun") {
+            id == u"Africa/El_Aaiun" ||
+            id == u"Asia/Qostanay" ||  // Due to changes in tz2024a
+            id == u"Asia/Almaty" ||  // Due to changes in tz2024a
+            id == u"America/Scoresbysund"  // break after the update of tz2023d
+            ) {
           logKnownIssue( "ICU-22274", "detectHostTimeZone()'s raw offset != host timezone's offset in TimeZone " + id);
         } else {
-          errln("FAIL: detectHostTimeZone()'s raw offset != host timezone's offset");
+          errln("FAIL: detectHostTimeZone()'s raw offset != host timezone's offset.\n"
+                "hostZone->getRawOffset()=%d\n"
+                "but uprv_timezone() return %d and "
+                "uprv_timezone() * -1000=%d",
+                hostZoneRawOffset, tzoffset, tzoffset * -1000);
         }
     }
     delete hostZone;
