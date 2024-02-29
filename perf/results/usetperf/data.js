@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709234727892,
+  "lastUpdate": 1709237005796,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -54364,6 +54364,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1462.4414,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "929cd9bb4f8c24e0f41e82f9c18bc1abd8b9019b",
+          "message": "ICU-22520 Standardize return on error for all locale functions.\n\n· No function should do anything if an error has already occurred.\n· On error, a value of 0, nullptr, {}, etc., should be returned.\n· Values shouldn't have overloaded meanings (eg. index or found).\n· Values that are never used should not be returned at all.",
+          "timestamp": "2024-02-29T20:42:03+01:00",
+          "tree_id": "daece93bdabb4edb08a320d09120ccbf862a1aaf",
+          "url": "https://github.com/unicode-org/icu/commit/929cd9bb4f8c24e0f41e82f9c18bc1abd8b9019b"
+        },
+        "date": 1709236887346,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77794.7976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177738.9068,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5487,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.6815,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 9023.4294,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 33386.6663,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1542.6236,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
