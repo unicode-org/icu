@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709150854335,
+  "lastUpdate": 1709169925391,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -29020,6 +29020,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.8965,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "0563859d8cf7c0d3dfea3b576adca25667d77c17",
+          "message": "ICU-22679 Optimize calendar code for edge cases\n\nSee #2853",
+          "timestamp": "2024-02-28T17:08:24-08:00",
+          "tree_id": "9dda80fe6701d9733fcad429d95e8d4934836be9",
+          "url": "https://github.com/unicode-org/icu/commit/0563859d8cf7c0d3dfea3b576adca25667d77c17"
+        },
+        "date": 1709169798136,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 7.3479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 2.7407,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.8942,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
