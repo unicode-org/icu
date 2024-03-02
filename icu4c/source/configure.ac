@@ -683,22 +683,7 @@ AC_SUBST(GENCCODE_ASSEMBLY)
 AC_MSG_RESULT($GENCCODE_ASSEMBLY)
 
 # Checks for header files
-AC_CHECK_HEADERS(inttypes.h)
-if test $ac_cv_header_inttypes_h = no; then
- U_HAVE_INTTYPES_H=0
- CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INTTYPES_H=0"
-else
- U_HAVE_INTTYPES_H=1
-fi
-if test "$CC" = ccc; then
- AC_MSG_RESULT("C compiler set to CCC ${CC}" )
- case "${host}" in
-        alpha*-*-*) U_HAVE_INTTYPES_H=0;
-        CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INTTYPES_H=0"
- esac
-fi
 
-AC_SUBST(U_HAVE_INTTYPES_H)
 
 AC_CHECK_HEADERS(dirent.h)
 if test $ac_cv_header_dirent_h = no; then
@@ -910,48 +895,6 @@ else
     U_HAVE_STRTOD_L=0
 fi
 AC_SUBST(U_HAVE_STRTOD_L)
-
-# Checks for typedefs
-AC_CHECK_TYPE(int8_t,signed char)
-AC_CHECK_TYPE(uint8_t,unsigned char)
-AC_CHECK_TYPE(int16_t,signed short)
-AC_CHECK_TYPE(uint16_t,unsigned short)
-AC_CHECK_TYPE(int32_t,signed long)
-AC_CHECK_TYPE(uint32_t,unsigned long)
-AC_CHECK_TYPE(int64_t,signed long long)
-AC_CHECK_TYPE(uint64_t,unsigned long long)
-
-if test $ac_cv_type_int8_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT8_T=0"
-fi
-
-if test $ac_cv_type_uint8_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT8_T=0"
-fi
-
-if test $ac_cv_type_int16_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT16_T=0"
-fi
-
-if test $ac_cv_type_uint16_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT16_T=0"
-fi
-
-if test $ac_cv_type_int32_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT32_T=0"
-fi
-
-if test $ac_cv_type_uint32_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT32_T=0"
-fi
-
-if test $ac_cv_type_int64_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT64_T=0"
-fi
-
-if test $ac_cv_type_uint64_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT64_T=0"
-fi
 
 # Do various wchar_t related checks
 AC_CHECK_HEADER(wchar.h)

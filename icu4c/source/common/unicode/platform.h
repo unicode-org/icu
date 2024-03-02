@@ -302,51 +302,6 @@
 #   define U_PLATFORM_IS_DARWIN_BASED 0
 #endif
 
-/**
- * \def U_HAVE_STDINT_H
- * Defines whether stdint.h is available. It is a C99 standard header.
- * We used to include inttypes.h which includes stdint.h but we usually do not need
- * the additional definitions from inttypes.h.
- * @internal
- */
-#ifdef U_HAVE_STDINT_H
-    /* Use the predefined value. */
-#elif U_PLATFORM_USES_ONLY_WIN32_API
-#   if defined(__BORLANDC__) || U_PLATFORM == U_PF_MINGW || (defined(_MSC_VER) && _MSC_VER>=1600)
-        /* Windows Visual Studio 9 and below do not have stdint.h & inttypes.h, but VS 2010 adds them. */
-#       define U_HAVE_STDINT_H 1
-#   else
-#       define U_HAVE_STDINT_H 0
-#   endif
-#elif U_PLATFORM == U_PF_SOLARIS
-    /* Solaris has inttypes.h but not stdint.h. */
-#   define U_HAVE_STDINT_H 0
-#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51) && defined(_POWER)
-    /* PPC AIX <= 4.3 has inttypes.h but not stdint.h. */
-#   define U_HAVE_STDINT_H 0
-#else
-#   define U_HAVE_STDINT_H 1
-#endif
-
-/**
- * \def U_HAVE_INTTYPES_H
- * Defines whether inttypes.h is available. It is a C99 standard header.
- * We include inttypes.h where it is available but stdint.h is not.
- * @internal
- */
-#ifdef U_HAVE_INTTYPES_H
-    /* Use the predefined value. */
-#elif U_PLATFORM == U_PF_SOLARIS
-    /* Solaris has inttypes.h but not stdint.h. */
-#   define U_HAVE_INTTYPES_H 1
-#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51) && defined(_POWER)
-    /* PPC AIX <= 4.3 has inttypes.h but not stdint.h. */
-#   define U_HAVE_INTTYPES_H 1
-#else
-    /* Most platforms have both inttypes.h and stdint.h, or neither. */
-#   define U_HAVE_INTTYPES_H U_HAVE_STDINT_H
-#endif
-
 /*===========================================================================*/
 /** @{ Compiler and environment features                                     */
 /*===========================================================================*/
