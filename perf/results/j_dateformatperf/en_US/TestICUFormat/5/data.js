@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709579740710,
+  "lastUpdate": 1709589796979,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18448,6 +18448,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 254.47365990239098,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "73744ea41f03b20a9d6dc6ed09a56781e89dacb4",
+          "message": "ICU-22633 Fix overflow cause by large AM PM value\n\nFix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=66771",
+          "timestamp": "2024-03-04T13:48:24-08:00",
+          "tree_id": "3ded34e62e794fcf69617141e91ea325fc6602da",
+          "url": "https://github.com/unicode-org/icu/commit/73744ea41f03b20a9d6dc6ed09a56781e89dacb4"
+        },
+        "date": 1709589524393,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 257.0078958474377,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
