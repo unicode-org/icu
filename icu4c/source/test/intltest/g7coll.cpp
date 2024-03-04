@@ -115,7 +115,7 @@ void G7CollationTest::TestG7Locales(/* char* par */)
         if (rules.isEmpty() &&
                 (locale == Locale::getCanadaFrench() || locale == Locale::getJapanese())) {
             dataerrln("%s Collator missing rule string", locale.getName());
-            if (logKnownIssue("10671", "TestG7Locales does not test ignore-punctuation")) {
+            if (logKnownIssue("ICU-10671", "TestG7Locales does not test ignore-punctuation")) {
                 continue;
             }
         } else {

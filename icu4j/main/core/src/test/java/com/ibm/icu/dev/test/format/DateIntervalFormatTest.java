@@ -1815,7 +1815,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                 String firstPart = patternInfo.getFirstPart();
                 String secondPart = patternInfo.getSecondPart();
                 if (!matches(dateFormatPattern, firstPart, secondPart)) {
-                    if (logKnownIssue("11585", "incompatible pattern between date format and date interval format")) {
+                    if (logKnownIssue("ICU-11585", "incompatible pattern between date format and date interval format")) {
                         logln("For skeleton " + skeleton + "/locale " + locale + ": mismatch between date format «"
                                 + dateFormatPattern + "» and date interval format «" + firstPart + secondPart + "».");
                     } else {

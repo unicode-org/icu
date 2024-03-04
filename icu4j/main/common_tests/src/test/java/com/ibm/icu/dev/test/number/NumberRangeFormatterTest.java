@@ -967,7 +967,6 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
         }
 
         {
-            // TODO(CLDR-14111): Add spacing between range separator and sign
             LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter
                 .withLocale(ULocale.forLanguageTag("de-CH"));
             String actual = lnrf.formatRange(2, -3).toString();

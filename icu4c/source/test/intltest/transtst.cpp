@@ -2151,7 +2151,7 @@ void TransliteratorTest::TestSTV() {
         for (j=0; j<3; ++j) {
             if (SOURCES[j] == nullptr) continue;
             if (s.caseCompare(SOURCES[j],0)==0) {
-                if (j!=2 || !logKnownIssue("21911", "ICU4C cannot create inverse of (or unregister) Any-Xxxx/Variant transform created from both-direction transform")) {
+                if (j!=2 || !logKnownIssue("ICU-21911", "ICU4C cannot create inverse of (or unregister) Any-Xxxx/Variant transform created from both-direction transform")) {
                     errln((UnicodeString)"FAIL: unregister(" + s + "-*) failed");
                 }
             }
@@ -3685,7 +3685,7 @@ void TransliteratorTest::TestIncrementalProgress() {
 #if UCONFIG_NO_BREAK_ITERATION
                          && id.compare((UnicodeString)"Latin-Thai/") != 0
 #endif
-                         && !(logKnownIssue("21911", "ICU4C cannot create inverse of Any-Xxxx/Variant transform created from both-direction transform") &&
+                         && !(logKnownIssue("ICU-21911", "ICU4C cannot create inverse of Any-Xxxx/Variant transform created from both-direction transform") &&
                                 id.startsWith((UnicodeString)"Any-") &&
                                 (id.endsWith((UnicodeString)"/UNGEGN") || id.startsWith((UnicodeString)"Any-Ethiopic/") || id.startsWith((UnicodeString)"Any-Braille/") ||
                                  id.endsWith((UnicodeString)"/Gurage_2013") || id.endsWith((UnicodeString)"/Gutgarts") || id.endsWith((UnicodeString)"/Tekie_Alibekit") ||
