@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709590276008,
+  "lastUpdate": 1709593263640,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -42118,6 +42118,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 12.9662,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "232362bf17948316c6a50035b8d79a31bb304ffa",
+          "message": "ICU-22520 Use operator* instead of calling std::optional::value().\n\nThere's a subtle difference between these two ways of accessing the\nvalue of an optional and that is that the value() method can throw an\nexception if there isn't any value, but operator* won't do that (it's\njust undefined behavior if there isn't any value).\n\nICU4C code never tries to access any optional value without first\nchecking that it exists, but the ability of the value() method to throw\nan exception in case there wasn't any such check first is the reason why\nstd::exception symbols previously could show up in debug builds.\n\nThis reverts the changes that were made to dependencies.txt by\ncommit dc70b5a056b618c014c71e8bfd45f3dd9145e9fe.",
+          "timestamp": "2024-03-04T23:40:15+01:00",
+          "tree_id": "44e638be633151a9d900c294538752dcc64edc5d",
+          "url": "https://github.com/unicode-org/icu/commit/232362bf17948316c6a50035b8d79a31bb304ffa"
+        },
+        "date": 1709593177738,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 14.2922,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 10.614,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 10.6226,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 11.9711,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 12.9466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 12.94,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
