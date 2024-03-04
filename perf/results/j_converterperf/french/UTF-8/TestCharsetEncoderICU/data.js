@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709246996592,
+  "lastUpdate": 1709570113786,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18358,6 +18358,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.8693534633034947,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "71b9b88200db7524f9693a3c8c9d3a5cb9d3d84a",
+          "message": "ICU-22319 Fix number range semanticallyEquivalent\n\nSee #2385",
+          "timestamp": "2024-03-04T08:23:00-08:00",
+          "tree_id": "9fe77b95af0f062eecf225a96aca74cfd9cc5375",
+          "url": "https://github.com/unicode-org/icu/commit/71b9b88200db7524f9693a3c8c9d3a5cb9d3d84a"
+        },
+        "date": 1709569980011,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.8820902450412027,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
