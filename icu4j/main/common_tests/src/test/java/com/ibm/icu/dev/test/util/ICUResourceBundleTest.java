@@ -717,9 +717,8 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
         }
 
         Set<String> localLangExceptions = new HashSet<>();
-        if (logKnownIssue("cldrbug:17001", "No localized language name for nmg, vmw")) {
+        if (logKnownIssue("ICU-22681", "No localized language name for nmg")) {
             localLangExceptions.add("nmg");
-            localLangExceptions.add("vmw");
         }
 
         for (int i = 0; i < locales.length; ++i) {

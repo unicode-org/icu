@@ -1037,7 +1037,6 @@ void NumberRangeFormatterTest::test21358_SignPosition() {
     }
 
     {
-        // TODO(CLDR-14111): Add spacing between range separator and sign
         LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter::withLocale("de-CH");
         UnicodeString actual = lnrf.formatFormattableRange(2, -3, status).toString(status);
         assertEquals("Positive to negative range", u"2–-3", actual);
