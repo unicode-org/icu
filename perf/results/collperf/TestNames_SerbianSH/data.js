@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709247271125,
+  "lastUpdate": 1709570509599,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37852,6 +37852,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16545836.0223,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "71b9b88200db7524f9693a3c8c9d3a5cb9d3d84a",
+          "message": "ICU-22319 Fix number range semanticallyEquivalent\n\nSee #2385",
+          "timestamp": "2024-03-04T08:23:00-08:00",
+          "tree_id": "9fe77b95af0f062eecf225a96aca74cfd9cc5375",
+          "url": "https://github.com/unicode-org/icu/commit/71b9b88200db7524f9693a3c8c9d3a5cb9d3d84a"
+        },
+        "date": 1709570425184,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 324.7173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35518846.3726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14936598.4324,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 36288049.6979,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16682326.5888,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
