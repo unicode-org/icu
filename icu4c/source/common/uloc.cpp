@@ -716,25 +716,12 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(buffer, bufferCapacity);
-    ulocimp_getKeywordValue(localeID, keywordName, sink, *status);
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(buffer, bufferCapacity, reslen, status);
-    }
-
-    return reslen;
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        buffer, bufferCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getKeywordValue(localeID, keywordName, sink, status);
+        },
+        *status);
 }
 
 U_EXPORT void
@@ -1881,25 +1868,12 @@ uloc_getParent(const char*    localeID,
                int32_t parentCapacity,
                UErrorCode* err)
 {
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(parent, parentCapacity);
-    ulocimp_getParent(localeID, sink, *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(parent, parentCapacity, reslen, err);
-    }
-
-    return reslen;
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        parent, parentCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getParent(localeID, sink, status);
+        },
+        *err);
 }
 
 U_EXPORT void
@@ -1938,32 +1912,19 @@ uloc_getLanguage(const char*    localeID,
          UErrorCode* err)
 {
     /* uloc_getLanguage will return a 2 character iso-639 code if one exists. *CWB*/
-
-    if (err==nullptr || U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(language, languageCapacity);
-    ulocimp_getSubtags(
-            localeID,
-            &sink,
-            nullptr,
-            nullptr,
-            nullptr,
-            nullptr,
-            *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t length = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-        return length;
-    }
-
-    return u_terminateChars(language, languageCapacity, length, err);
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        language, languageCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    &sink,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    status);
+        },
+        *err);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1972,31 +1933,19 @@ uloc_getScript(const char*    localeID,
          int32_t scriptCapacity,
          UErrorCode* err)
 {
-    if(err==nullptr || U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(script, scriptCapacity);
-    ulocimp_getSubtags(
-            localeID,
-            nullptr,
-            &sink,
-            nullptr,
-            nullptr,
-            nullptr,
-            *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t length = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-        return length;
-    }
-
-    return u_terminateChars(script, scriptCapacity, length, err);
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        script, scriptCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    nullptr,
+                    &sink,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    status);
+        },
+        *err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -2005,31 +1954,19 @@ uloc_getCountry(const char* localeID,
             int32_t countryCapacity,
             UErrorCode* err)
 {
-    if(err==nullptr || U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(country, countryCapacity);
-    ulocimp_getSubtags(
-            localeID,
-            nullptr,
-            nullptr,
-            &sink,
-            nullptr,
-            nullptr,
-            *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t length = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-        return length;
-    }
-
-    return u_terminateChars(country, countryCapacity, length, err);
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        country, countryCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    nullptr,
+                    nullptr,
+                    &sink,
+                    nullptr,
+                    nullptr,
+                    status);
+        },
+        *err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -2038,31 +1975,19 @@ uloc_getVariant(const char* localeID,
                 int32_t variantCapacity,
                 UErrorCode* err)
 {
-    if(err==nullptr || U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(variant, variantCapacity);
-    ulocimp_getSubtags(
-            localeID,
-            nullptr,
-            nullptr,
-            nullptr,
-            &sink,
-            nullptr,
-            *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t length = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-        return length;
-    }
-
-    return u_terminateChars(variant, variantCapacity, length, err);
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        variant, variantCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    &sink,
+                    nullptr,
+                    status);
+        },
+        *err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -2071,25 +1996,12 @@ uloc_getName(const char* localeID,
              int32_t nameCapacity,
              UErrorCode* err)
 {
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(name, nameCapacity);
-    ulocimp_getName(localeID, sink, *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(name, nameCapacity, reslen, err);
-    }
-
-    return reslen;
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        name, nameCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getName(localeID, sink, status);
+        },
+        *err);
 }
 
 U_EXPORT void
@@ -2106,25 +2018,12 @@ uloc_getBaseName(const char* localeID,
                  int32_t nameCapacity,
                  UErrorCode* err)
 {
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(name, nameCapacity);
-    ulocimp_getBaseName(localeID, sink, *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(name, nameCapacity, reslen, err);
-    }
-
-    return reslen;
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        name, nameCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getBaseName(localeID, sink, status);
+        },
+        *err);
 }
 
 U_EXPORT void
@@ -2141,25 +2040,12 @@ uloc_canonicalize(const char* localeID,
                   int32_t nameCapacity,
                   UErrorCode* err)
 {
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(name, nameCapacity);
-    ulocimp_canonicalize(localeID, sink, *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(name, nameCapacity, reslen, err);
-    }
-
-    return reslen;
+    return ByteSinkUtil::viaByteSinkToTerminatedChars(
+        name, nameCapacity,
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_canonicalize(localeID, sink, status);
+        },
+        *err);
 }
 
 U_EXPORT void

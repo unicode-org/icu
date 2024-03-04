@@ -9,10 +9,10 @@
 #include "unicode/stringpiece.h"
 #include "unicode/umachine.h"
 #include "unicode/ulocbuilder.h"
+#include "bytesinkutil.h"
 #include "cstring.h"
 #include "ustr_imp.h"
 
-using icu::CheckedArrayByteSink;
 using icu::StringPiece;
 
 #define EXTERNAL(i) (reinterpret_cast<ULocaleBuilder*>(i))
@@ -134,17 +134,12 @@ int32_t ulocbld_buildLanguageTag(ULocaleBuilder* builder,
         return 0;
     }
     icu::Locale l = INTERNAL(builder)->build(*err);
-    if (U_FAILURE(*err)) { return 0; }
-    CheckedArrayByteSink sink(buffer, bufferCapacity);
-    l.toLanguageTag(sink, *err);
-    if (U_FAILURE(*err)) { return 0; }
-    int32_t reslen = sink.NumberOfBytesAppended();
-    if (sink.Overflowed()) {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(buffer, bufferCapacity, reslen, err);
-    }
-    return reslen;
+    return icu::ByteSinkUtil::viaByteSinkToTerminatedChars(
+        buffer, bufferCapacity,
+        [&](icu::ByteSink& sink, UErrorCode& status) {
+            l.toLanguageTag(sink, status);
+        },
+        *err);
 }
 
 UBool ulocbld_copyErrorTo(const ULocaleBuilder* builder, UErrorCode *outErrorCode) {
