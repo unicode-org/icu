@@ -610,7 +610,7 @@ const Locale *LocaleMatcher::getBestMatch(const Locale &desiredLocale, UErrorCod
     std::optional<int32_t> suppIndex = getBestSuppIndex(
         getMaximalLsrOrUnd(likelySubtags, desiredLocale, errorCode),
         nullptr, errorCode);
-    return U_SUCCESS(errorCode) && suppIndex.has_value() ? supportedLocales[suppIndex.value()]
+    return U_SUCCESS(errorCode) && suppIndex.has_value() ? supportedLocales[*suppIndex]
                                                          : defaultLocale;
 }
 
@@ -622,7 +622,7 @@ const Locale *LocaleMatcher::getBestMatch(Locale::Iterator &desiredLocales,
     }
     LocaleLsrIterator lsrIter(likelySubtags, desiredLocales, ULOCMATCH_TEMPORARY_LOCALES);
     std::optional<int32_t> suppIndex = getBestSuppIndex(lsrIter.next(errorCode), &lsrIter, errorCode);
-    return U_SUCCESS(errorCode) && suppIndex.has_value() ? supportedLocales[suppIndex.value()]
+    return U_SUCCESS(errorCode) && suppIndex.has_value() ? supportedLocales[*suppIndex]
                                                          : defaultLocale;
 }
 
@@ -645,7 +645,7 @@ LocaleMatcher::Result LocaleMatcher::getBestMatchResult(
     if (U_FAILURE(errorCode) || !suppIndex.has_value()) {
         return Result(nullptr, defaultLocale, -1, -1, false);
     } else {
-        return Result(&desiredLocale, supportedLocales[suppIndex.value()], 0, suppIndex.value(), false);
+        return Result(&desiredLocale, supportedLocales[*suppIndex], 0, *suppIndex, false);
     }
 }
 
@@ -659,8 +659,8 @@ LocaleMatcher::Result LocaleMatcher::getBestMatchResult(
     if (U_FAILURE(errorCode) || !suppIndex.has_value()) {
         return Result(nullptr, defaultLocale, -1, -1, false);
     } else {
-        return Result(lsrIter.orphanRemembered(), supportedLocales[suppIndex.value()],
-                      lsrIter.getBestDesiredIndex(), suppIndex.value(), true);
+        return Result(lsrIter.orphanRemembered(), supportedLocales[*suppIndex],
+                      lsrIter.getBestDesiredIndex(), *suppIndex, true);
     }
 }
 
