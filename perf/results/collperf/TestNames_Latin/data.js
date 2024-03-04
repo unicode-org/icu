@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709580274338,
+  "lastUpdate": 1709590117615,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37906,6 +37906,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 1306556.153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "73744ea41f03b20a9d6dc6ed09a56781e89dacb4",
+          "message": "ICU-22633 Fix overflow cause by large AM PM value\n\nFix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=66771",
+          "timestamp": "2024-03-04T13:48:24-08:00",
+          "tree_id": "3ded34e62e794fcf69617141e91ea325fc6602da",
+          "url": "https://github.com/unicode-org/icu/commit/73744ea41f03b20a9d6dc6ed09a56781e89dacb4"
+        },
+        "date": 1709590035117,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 285.8279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 2969823.1391,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1311535.592,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 2712849.4715,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 1279905.6599,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
