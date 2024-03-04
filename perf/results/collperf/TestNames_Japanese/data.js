@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709590238587,
+  "lastUpdate": 1709593193883,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37960,6 +37960,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5811552.3968,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "232362bf17948316c6a50035b8d79a31bb304ffa",
+          "message": "ICU-22520 Use operator* instead of calling std::optional::value().\n\nThere's a subtle difference between these two ways of accessing the\nvalue of an optional and that is that the value() method can throw an\nexception if there isn't any value, but operator* won't do that (it's\njust undefined behavior if there isn't any value).\n\nICU4C code never tries to access any optional value without first\nchecking that it exists, but the ability of the value() method to throw\nan exception in case there wasn't any such check first is the reason why\nstd::exception symbols previously could show up in debug builds.\n\nThis reverts the changes that were made to dependencies.txt by\ncommit dc70b5a056b618c014c71e8bfd45f3dd9145e9fe.",
+          "timestamp": "2024-03-04T23:40:15+01:00",
+          "tree_id": "44e638be633151a9d900c294538752dcc64edc5d",
+          "url": "https://github.com/unicode-org/icu/commit/232362bf17948316c6a50035b8d79a31bb304ffa"
+        },
+        "date": 1709593046156,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 225.4946,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20936978.8567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5321375.895,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20837370.7785,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5772300.0736,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
