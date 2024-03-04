@@ -35,7 +35,6 @@
 #include "cstring.h"
 #include "loclikelysubtags.h"
 #include "ulocimp.h"
-#include "ustr_imp.h"
 
 namespace {
 
@@ -274,28 +273,12 @@ uloc_addLikelySubtags(const char* localeID,
                       char* maximizedLocaleID,
                       int32_t maximizedLocaleIDCapacity,
                       UErrorCode* status) {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    icu::CheckedArrayByteSink sink(
-            maximizedLocaleID, maximizedLocaleIDCapacity);
-
-    ulocimp_addLikelySubtags(localeID, sink, *status);
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(
-                maximizedLocaleID, maximizedLocaleIDCapacity, reslen, status);
-    }
-
-    return reslen;
+    return icu::ByteSinkUtil::viaByteSinkToTerminatedChars(
+        maximizedLocaleID, maximizedLocaleIDCapacity,
+        [&](icu::ByteSink& sink, UErrorCode& status) {
+            ulocimp_addLikelySubtags(localeID, sink, status);
+        },
+        *status);
 }
 
 U_EXPORT void
@@ -316,28 +299,12 @@ uloc_minimizeSubtags(const char* localeID,
                      char* minimizedLocaleID,
                      int32_t minimizedLocaleIDCapacity,
                      UErrorCode* status) {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    icu::CheckedArrayByteSink sink(
-            minimizedLocaleID, minimizedLocaleIDCapacity);
-
-    ulocimp_minimizeSubtags(localeID, sink, false, *status);
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(
-                minimizedLocaleID, minimizedLocaleIDCapacity, reslen, status);
-    }
-
-    return reslen;
+    return icu::ByteSinkUtil::viaByteSinkToTerminatedChars(
+        minimizedLocaleID, minimizedLocaleIDCapacity,
+        [&](icu::ByteSink& sink, UErrorCode& status) {
+            ulocimp_minimizeSubtags(localeID, sink, false, status);
+        },
+        *status);
 }
 
 U_EXPORT void

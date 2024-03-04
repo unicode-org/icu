@@ -7,11 +7,14 @@
 #ifndef BYTESINKUTIL_H
 #define BYTESINKUTIL_H
 
+#include <type_traits>
+
 #include "unicode/utypes.h"
 #include "unicode/bytestream.h"
 #include "unicode/edits.h"
 #include "cmemory.h"
 #include "uassert.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -56,6 +59,40 @@ public:
     static UBool appendUnchanged(const uint8_t *s, const uint8_t *limit,
                                  ByteSink &sink, uint32_t options, Edits *edits,
                                  UErrorCode &errorCode);
+
+    /**
+     * Calls a lambda that writes to a ByteSink with a CheckedArrayByteSink
+     * and then returns through u_terminateChars(), in order to implement
+     * the classic ICU4C C API writing to a fix sized buffer on top of a
+     * contemporary C++ API.
+     *
+     * @param buffer receiving buffer
+     * @param capacity capacity of receiving buffer
+     * @param lambda that gets called with the sink as an argument
+     * @param status set to U_BUFFER_OVERFLOW_ERROR on overflow
+     * @return number of bytes written, or needed (in case of overflow)
+     * @internal
+     */
+    template <typename F,
+              typename = std::enable_if_t<
+                  std::is_invocable_r_v<void, F, ByteSink&, UErrorCode&>>>
+    static int32_t viaByteSinkToTerminatedChars(char* buffer, int32_t capacity,
+                                                F&& lambda,
+                                                UErrorCode& status) {
+        if (U_FAILURE(status)) { return 0; }
+        CheckedArrayByteSink sink(buffer, capacity);
+        lambda(sink, status);
+        if (U_FAILURE(status)) { return 0; }
+
+        int32_t reslen = sink.NumberOfBytesAppended();
+
+        if (sink.Overflowed()) {
+            status = U_BUFFER_OVERFLOW_ERROR;
+            return reslen;
+        }
+
+        return u_terminateChars(buffer, capacity, reslen, &status);
+    }
 
 private:
     static void appendNonEmptyUnchanged(const uint8_t *s, int32_t length,

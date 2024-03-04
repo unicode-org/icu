@@ -16,7 +16,6 @@
 #include "unicode/putil.h"
 #include "unicode/uenum.h"
 #include "unicode/uloc.h"
-#include "ustr_imp.h"
 #include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
@@ -2570,25 +2569,12 @@ uloc_toLanguageTag(const char* localeID,
                    int32_t langtagCapacity,
                    UBool strict,
                    UErrorCode* status) {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    icu::CheckedArrayByteSink sink(langtag, langtagCapacity);
-    ulocimp_toLanguageTag(localeID, sink, strict, *status);
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(langtag, langtagCapacity, reslen, status);
-    }
-
-    return reslen;
+    return icu::ByteSinkUtil::viaByteSinkToTerminatedChars(
+        langtag, langtagCapacity,
+        [&](icu::ByteSink& sink, UErrorCode& status) {
+            ulocimp_toLanguageTag(localeID, sink, strict, status);
+        },
+        *status);
 }
 
 
@@ -2672,25 +2658,12 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t localeIDCapacity,
                     int32_t* parsedLength,
                     UErrorCode* status) {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    icu::CheckedArrayByteSink sink(localeID, localeIDCapacity);
-    ulocimp_forLanguageTag(langtag, -1, sink, parsedLength, *status);
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (sink.Overflowed()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(localeID, localeIDCapacity, reslen, status);
-    }
-
-    return reslen;
+    return icu::ByteSinkUtil::viaByteSinkToTerminatedChars(
+        localeID, localeIDCapacity,
+        [&](icu::ByteSink& sink, UErrorCode& status) {
+            ulocimp_forLanguageTag(langtag, -1, sink, parsedLength, status);
+        },
+        *status);
 }
 
 
