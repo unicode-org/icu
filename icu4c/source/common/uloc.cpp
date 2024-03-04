@@ -1154,12 +1154,12 @@ std::optional<int16_t> _findIndex(const char* const* list, const char* key)
 U_CFUNC const char*
 uloc_getCurrentCountryID(const char* oldID){
     std::optional<int16_t> offset = _findIndex(DEPRECATED_COUNTRIES, oldID);
-    return offset.has_value() ? REPLACEMENT_COUNTRIES[offset.value()] : oldID;
+    return offset.has_value() ? REPLACEMENT_COUNTRIES[*offset] : oldID;
 }
 U_CFUNC const char*
 uloc_getCurrentLanguageID(const char* oldID){
     std::optional<int16_t> offset = _findIndex(DEPRECATED_LANGUAGES, oldID);
-    return offset.has_value() ? REPLACEMENT_LANGUAGES[offset.value()] : oldID;
+    return offset.has_value() ? REPLACEMENT_LANGUAGES[*offset] : oldID;
 }
 
 namespace {
@@ -1225,7 +1225,7 @@ _getLanguage(const char* localeID,
         buffer[3] = '\0';
         std::optional<int16_t> offset = _findIndex(LANGUAGES_3, buffer);
         if (offset.has_value()) {
-            const char* const alias = LANGUAGES[offset.value()];
+            const char* const alias = LANGUAGES[*offset];
             sink->Append(alias, (int32_t)uprv_strlen(alias));
             return;
         }
@@ -1306,7 +1306,7 @@ _getRegion(const char* localeID,
         buffer[3] = '\0';
         std::optional<int16_t> offset = _findIndex(COUNTRIES_3, buffer);
         if (offset.has_value()) {
-            const char* const alias = COUNTRIES[offset.value()];
+            const char* const alias = COUNTRIES[*offset];
             sink->Append(alias, (int32_t)uprv_strlen(alias));
             return;
         }
@@ -1465,10 +1465,10 @@ ulocimp_getSubtags(
 
     ulocimp_getSubtags(
             localeID,
-            languageSink.has_value() ? &languageSink.value() : nullptr,
-            scriptSink.has_value() ? &scriptSink.value() : nullptr,
-            regionSink.has_value() ? &regionSink.value() : nullptr,
-            variantSink.has_value() ? &variantSink.value() : nullptr,
+            languageSink.has_value() ? &*languageSink : nullptr,
+            scriptSink.has_value() ? &*scriptSink : nullptr,
+            regionSink.has_value() ? &*regionSink : nullptr,
+            variantSink.has_value() ? &*variantSink : nullptr,
             pEnd,
             status);
 }
@@ -2183,7 +2183,7 @@ uloc_getISO3Language(const char* localeID)
     if (U_FAILURE(err))
         return "";
     std::optional<int16_t> offset = _findIndex(LANGUAGES, lang.data());
-    return offset.has_value() ? LANGUAGES_3[offset.value()] : "";
+    return offset.has_value() ? LANGUAGES_3[*offset] : "";
 }
 
 U_CAPI const char*  U_EXPORT2
@@ -2199,7 +2199,7 @@ uloc_getISO3Country(const char* localeID)
     if (U_FAILURE(err))
         return "";
     std::optional<int16_t> offset = _findIndex(COUNTRIES, cntry.data());
-    return offset.has_value() ? COUNTRIES_3[offset.value()] : "";
+    return offset.has_value() ? COUNTRIES_3[*offset] : "";
 }
 
 U_CAPI uint32_t  U_EXPORT2

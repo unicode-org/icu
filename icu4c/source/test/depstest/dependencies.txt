@@ -139,12 +139,6 @@ group: cplusplus
     # "Calls the current terminate handler."
     std::terminate()
 
-    # ICU4C doesn't actually use C++ exceptions, but the standard library does,
-    # so these symbols can end up in debug builds.
-    "std::exception::~exception()"
-    "typeinfo for std::exception"
-    "vtable for std::exception"
-
 group: iostream
     "std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)"
     "std::basic_ios<char, std::char_traits<char> >::eof() const"
