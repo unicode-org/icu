@@ -673,7 +673,6 @@ U_NL_LANGINFO_CODESET
 U_HAVE_NL_LANGINFO_CODESET
 U_IS_BIG_ENDIAN
 U_HAVE_DIRENT_H
-U_HAVE_INTTYPES_H
 GENCCODE_ASSEMBLY
 HAVE_MMAP
 LIB_THREAD
@@ -2214,60 +2213,6 @@ $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } # ac_fn_c_check_func
-
-# ac_fn_c_check_type LINENO TYPE VAR INCLUDES
-# -------------------------------------------
-# Tests whether TYPE exists after having included INCLUDES, setting cache
-# variable VAR accordingly.
-ac_fn_c_check_type ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  eval "$3=no"
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-int
-main ()
-{
-if (sizeof ($2))
-	 return 0;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-int
-main ()
-{
-if (sizeof (($2)))
-	    return 0;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-else
-  eval "$3=yes"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-
-} # ac_fn_c_check_type
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -6464,33 +6409,6 @@ esac
 $as_echo "$GENCCODE_ASSEMBLY" >&6; }
 
 # Checks for header files
-for ac_header in inttypes.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "inttypes.h" "ac_cv_header_inttypes_h" "$ac_includes_default"
-if test "x$ac_cv_header_inttypes_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_INTTYPES_H 1
-_ACEOF
-
-fi
-
-done
-
-if test $ac_cv_header_inttypes_h = no; then
- U_HAVE_INTTYPES_H=0
- CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INTTYPES_H=0"
-else
- U_HAVE_INTTYPES_H=1
-fi
-if test "$CC" = ccc; then
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: \"C compiler set to CCC ${CC}\" " >&5
-$as_echo "\"C compiler set to CCC ${CC}\" " >&6; }
- case "${host}" in
-        alpha*-*-*) U_HAVE_INTTYPES_H=0;
-        CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INTTYPES_H=0"
- esac
-fi
-
 
 
 for ac_header in dirent.h
@@ -7183,128 +7101,6 @@ else
     U_HAVE_STRTOD_L=0
 fi
 
-
-# Checks for typedefs
-ac_fn_c_check_type "$LINENO" "int8_t" "ac_cv_type_int8_t" "$ac_includes_default"
-if test "x$ac_cv_type_int8_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define int8_t signed char
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "uint8_t" "ac_cv_type_uint8_t" "$ac_includes_default"
-if test "x$ac_cv_type_uint8_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define uint8_t unsigned char
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "int16_t" "ac_cv_type_int16_t" "$ac_includes_default"
-if test "x$ac_cv_type_int16_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define int16_t signed short
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "uint16_t" "ac_cv_type_uint16_t" "$ac_includes_default"
-if test "x$ac_cv_type_uint16_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define uint16_t unsigned short
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "int32_t" "ac_cv_type_int32_t" "$ac_includes_default"
-if test "x$ac_cv_type_int32_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define int32_t signed long
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "uint32_t" "ac_cv_type_uint32_t" "$ac_includes_default"
-if test "x$ac_cv_type_uint32_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define uint32_t unsigned long
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "int64_t" "ac_cv_type_int64_t" "$ac_includes_default"
-if test "x$ac_cv_type_int64_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define int64_t signed long long
-_ACEOF
-
-fi
-
-ac_fn_c_check_type "$LINENO" "uint64_t" "ac_cv_type_uint64_t" "$ac_includes_default"
-if test "x$ac_cv_type_uint64_t" = xyes; then :
-
-else
-
-cat >>confdefs.h <<_ACEOF
-#define uint64_t unsigned long long
-_ACEOF
-
-fi
-
-
-if test $ac_cv_type_int8_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT8_T=0"
-fi
-
-if test $ac_cv_type_uint8_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT8_T=0"
-fi
-
-if test $ac_cv_type_int16_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT16_T=0"
-fi
-
-if test $ac_cv_type_uint16_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT16_T=0"
-fi
-
-if test $ac_cv_type_int32_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT32_T=0"
-fi
-
-if test $ac_cv_type_uint32_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT32_T=0"
-fi
-
-if test $ac_cv_type_int64_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT64_T=0"
-fi
-
-if test $ac_cv_type_uint64_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT64_T=0"
-fi
 
 # Do various wchar_t related checks
 ac_fn_c_check_header_mongrel "$LINENO" "wchar.h" "ac_cv_header_wchar_h" "$ac_includes_default"
