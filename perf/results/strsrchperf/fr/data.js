@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709668343654,
+  "lastUpdate": 1709679573183,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22894,6 +22894,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.3398,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "53568e8dfc4cf2b7a93e196b9d098d98767d7d14",
+          "message": "ICU-22520 Refactor CharString & CharStringByteSink into helper.\n\nThe repeated sequence of allocating a CharString and CharStringByteSink,\nbefore calling some function that writes into this, can be moved into a\nsingle shared helper function which then is used to give all ulocimp.h\nfunctions that write to ByteSink an overload that instead returns a\nCharString, to make call sites look like perfectly normal C++ code.",
+          "timestamp": "2024-03-05T23:44:50+01:00",
+          "tree_id": "05f2d9648d01aee7166cb6265e5e15e4d42a7e38",
+          "url": "https://github.com/unicode-org/icu/commit/53568e8dfc4cf2b7a93e196b9d098d98767d7d14"
+        },
+        "date": 1709679486879,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 22.4361,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.5764,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
