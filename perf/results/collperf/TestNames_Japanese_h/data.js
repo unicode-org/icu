@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709668530466,
+  "lastUpdate": 1709679764510,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38230,6 +38230,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5747498.9136,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "53568e8dfc4cf2b7a93e196b9d098d98767d7d14",
+          "message": "ICU-22520 Refactor CharString & CharStringByteSink into helper.\n\nThe repeated sequence of allocating a CharString and CharStringByteSink,\nbefore calling some function that writes into this, can be moved into a\nsingle shared helper function which then is used to give all ulocimp.h\nfunctions that write to ByteSink an overload that instead returns a\nCharString, to make call sites look like perfectly normal C++ code.",
+          "timestamp": "2024-03-05T23:44:50+01:00",
+          "tree_id": "05f2d9648d01aee7166cb6265e5e15e4d42a7e38",
+          "url": "https://github.com/unicode-org/icu/commit/53568e8dfc4cf2b7a93e196b9d098d98767d7d14"
+        },
+        "date": 1709679679271,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 207.2138,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20652100.4438,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5244720.0872,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20095481.4042,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5794246.4238,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
