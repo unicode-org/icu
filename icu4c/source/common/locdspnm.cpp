@@ -634,13 +634,9 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
     UnicodeString temp2;
     const char* key;
     while ((key = e->next((int32_t *)0, status)) != nullptr) {
-      CharString value;
-      {
-        CharStringByteSink sink(&value);
-        loc.getKeywordValue(key, sink, status);
-      }
-      if (U_FAILURE(status)) {
-        return result;
+        auto value = loc.getKeywordValue<CharString>(key, status);
+        if (U_FAILURE(status)) {
+            return result;
       }
       keyDisplayName(key, temp, true);
       temp.findAndReplace(formatOpenParen, formatReplaceOpenParen);

@@ -43,6 +43,16 @@ private:
     CharString& dest_;
 };
 
+// CharString doesn't provide the public API that StringByteSink requires a
+// string class to have so this template specialization replaces the default
+// implementation of StringByteSink<CharString> with CharStringByteSink.
+template<>
+class StringByteSink<CharString> : public CharStringByteSink {
+ public:
+  StringByteSink(CharString* dest) : CharStringByteSink(dest) { }
+  StringByteSink(CharString* dest, int32_t /*initialAppendCapacity*/) : CharStringByteSink(dest) { }
+};
+
 class U_COMMON_API ByteSinkUtil {
 public:
     ByteSinkUtil() = delete;  // all static

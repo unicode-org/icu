@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include "bytesinkutil.h"  // CharStringByteSink
+#include "bytesinkutil.h"  // StringByteSink<CharString>
 #include "charstr.h"
 #include "cstring.h"
 #include "ulocimp.h"
@@ -183,9 +183,7 @@ _copyExtensions(const Locale& from, icu::StringEnumeration *keywords,
     }
     const char* key;
     while ((key = keywords->next(nullptr, errorCode)) != nullptr) {
-        CharString value;
-        CharStringByteSink sink(&value);
-        from.getKeywordValue(key, sink, errorCode);
+        auto value = from.getKeywordValue<CharString>(key, errorCode);
         if (U_FAILURE(errorCode)) { return; }
         if (uprv_strcmp(key, kAttributeKey) == 0) {
             transform(value.data(), value.length());
@@ -307,10 +305,8 @@ LocaleBuilder& LocaleBuilder::addUnicodeLocaleAttribute(
         return *this;
     }
 
-    CharString attributes;
-    CharStringByteSink sink(&attributes);
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    extensions_->getKeywordValue(kAttributeKey, sink, localErrorCode);
+    auto attributes = extensions_->getKeywordValue<CharString>(kAttributeKey, localErrorCode);
     if (U_FAILURE(localErrorCode)) {
         CharString new_attributes(value_str.data(), status_);
         // No attributes, set the attribute.
@@ -362,9 +358,7 @@ LocaleBuilder& LocaleBuilder::removeUnicodeLocaleAttribute(
     }
     if (extensions_ == nullptr) { return *this; }
     UErrorCode localErrorCode = U_ZERO_ERROR;
-    CharString attributes;
-    CharStringByteSink sink(&attributes);
-    extensions_->getKeywordValue(kAttributeKey, sink, localErrorCode);
+    auto attributes = extensions_->getKeywordValue<CharString>(kAttributeKey, localErrorCode);
     // get failure, just return
     if (U_FAILURE(localErrorCode)) { return *this; }
     // Do not have any attributes, just return.

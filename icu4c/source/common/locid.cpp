@@ -1521,13 +1521,12 @@ AliasReplacer::replaceTransformedExtensions(
     const char* tkey = ultag_getTKeyStart(str);
     int32_t tlangLen = (tkey == str) ? 0 :
         ((tkey == nullptr) ? len : static_cast<int32_t>((tkey - str - 1)));
-    CharStringByteSink sink(&output);
     if (tlangLen > 0) {
         Locale tlang = LocaleBuilder()
             .setLanguageTag(StringPiece(str, tlangLen))
             .build(status);
         tlang.canonicalize(status);
-        tlang.toLanguageTag(sink, status);
+        output = tlang.toLanguageTag<CharString>(status);
         if (U_FAILURE(status)) {
             return false;
         }
@@ -1728,9 +1727,7 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
             while ((key = iter->next(nullptr, status)) != nullptr) {
                 if (uprv_strcmp("sd", key) == 0 || uprv_strcmp("rg", key) == 0 ||
                         uprv_strcmp("t", key) == 0) {
-                    CharString value;
-                    CharStringByteSink valueSink(&value);
-                    locale.getKeywordValue(key, valueSink, status);
+                    auto value = locale.getKeywordValue<CharString>(key, status);
                     if (U_FAILURE(status)) {
                         status = U_ZERO_ERROR;
                         continue;
@@ -2628,11 +2625,7 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName,
         return;
     }
 
-    CharString legacy_value;
-    {
-        CharStringByteSink sink(&legacy_value);
-        getKeywordValue(legacy_key, sink, status);
-    }
+    auto legacy_value = getKeywordValue<CharString>(legacy_key, status);
 
     if (U_FAILURE(status)) {
         return;

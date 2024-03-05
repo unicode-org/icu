@@ -403,12 +403,8 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
 }
 
 CharString getKeyWordValue(const Locale &locale, StringPiece kw, UErrorCode &status) {
-    CharString result;
-    if (U_FAILURE(status)) { return result; }
-    {
-        CharStringByteSink sink(&result);
-        locale.getKeywordValue(kw, sink, status);
-    }
+    if (U_FAILURE(status)) { return {}; }
+    auto result = locale.getKeywordValue<CharString>(kw, status);
     if (U_SUCCESS(status) && result.isEmpty()) {
         status = U_MISSING_RESOURCE_ERROR;
     }
