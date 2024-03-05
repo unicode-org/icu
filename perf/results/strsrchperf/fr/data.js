@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709605194784,
+  "lastUpdate": 1709667114036,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22822,6 +22822,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 51.0385,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "02a1bfc59f1bf1e42b5d1b6c47748dfa630db691",
+          "message": "ICU-22520 Refactor CheckedArrayByteSink & u_terminateChars into helper.\n\nThe repeated sequence of allocating a CheckedArrayByteSink, calling some\nfunction that writes into this, then checking for overflow and returning\nthrough u_terminateChars() can all be moved into a single shared helper\nfunction.",
+          "timestamp": "2024-03-05T20:09:54+01:00",
+          "tree_id": "85abd6c4dac2643292ea7b98160cb22c4ab4e08a",
+          "url": "https://github.com/unicode-org/icu/commit/02a1bfc59f1bf1e42b5d1b6c47748dfa630db691"
+        },
+        "date": 1709667020961,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 23.5651,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 51.594,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
