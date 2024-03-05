@@ -2718,11 +2718,7 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
     UResourceDataEntry *entry;
     if(openType != URES_OPEN_DIRECT) {
         /* first "canonicalize" the locale ID */
-        CharString canonLocaleID;
-        {
-            CharStringByteSink sink(&canonLocaleID);
-            ulocimp_getBaseName(localeID, sink, *status);
-        }
+        CharString canonLocaleID = ulocimp_getBaseName(localeID, *status);
         if(U_FAILURE(*status)) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return nullptr;
@@ -3059,11 +3055,7 @@ static void getParentForFunctionalEquivalent(const char*      localeID,
     // If none there, use normal truncation parent
     if (U_FAILURE(subStatus) || parent.isEmpty()) {
         subStatus = U_ZERO_ERROR;
-        parent.clear();
-        {
-            CharStringByteSink sink(&parent);
-            ulocimp_getParent(localeID, sink, subStatus);
-        }
+        parent = ulocimp_getParent(localeID, subStatus);
     }
 }
 
@@ -3074,7 +3066,6 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 {
     CharString defVal; /* default value for given locale */
     CharString defLoc; /* default value for given locale */
-    CharString base; /* base locale */
     CharString found;
     CharString parent;
     CharString full;
@@ -3083,18 +3074,11 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     UErrorCode subStatus = U_ZERO_ERROR;
     int32_t length = 0;
     if(U_FAILURE(*status)) return 0;
-    CharString kwVal;
-    {
-        CharStringByteSink sink(&kwVal);
-        ulocimp_getKeywordValue(locid, keyword, sink, subStatus);
-    }
+    CharString kwVal = ulocimp_getKeywordValue(locid, keyword, subStatus);
     if(kwVal == DEFAULT_TAG) {
         kwVal.clear();
     }
-    {
-        CharStringByteSink sink(&base);
-        ulocimp_getBaseName(locid, sink, subStatus);
-    }
+    CharString base = ulocimp_getBaseName(locid, subStatus);
 #if defined(URES_TREE_DEBUG)
     fprintf(stderr, "getFunctionalEquivalent: \"%s\" [%s=%s] in %s - %s\n", 
             locid, keyword, kwVal.data(), base.data(), u_errorName(subStatus));

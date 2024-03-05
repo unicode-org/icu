@@ -22,7 +22,6 @@
 #include "unicode/usetiter.h"
 #include "unicode/utf16.h"
 #include "ustr_imp.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -523,11 +522,7 @@ ucurr_forLocale(const char* locale,
     }
 
     UErrorCode localStatus = U_ZERO_ERROR;
-    CharString currency;
-    {
-        CharStringByteSink sink(&currency);
-        ulocimp_getKeywordValue(locale, "currency", sink, localStatus);
-    }
+    CharString currency = ulocimp_getKeywordValue(locale, "currency", localStatus);
     int32_t resLen = currency.length();
 
     if (U_SUCCESS(localStatus) && resLen == 3 && uprv_isInvariantString(currency.data(), resLen)) {
@@ -602,11 +597,7 @@ ucurr_forLocale(const char* locale,
 
     if ((U_FAILURE(localStatus)) && strchr(id.data(), '_') != 0) {
         // We don't know about it.  Check to see if we support the variant.
-        CharString parent;
-        {
-            CharStringByteSink sink(&parent);
-            ulocimp_getParent(locale, sink, *ec);
-        }
+        CharString parent = ulocimp_getParent(locale, *ec);
         *ec = U_USING_FALLBACK_WARNING;
         // TODO: Loop over the parent rather than recursing and
         // looking again for a currency keyword.
@@ -645,10 +636,7 @@ static UBool fallback(CharString& loc) {
         loc.truncate(3);
         loc.append("001", status);
     } else {
-        CharString tmp;
-        CharStringByteSink sink(&tmp);
-        ulocimp_getParent(loc.data(), sink, status);
-        loc = std::move(tmp);
+        loc = ulocimp_getParent(loc.data(), status);
     }
  /*
     char *i = uprv_strrchr(loc, '_');
@@ -703,11 +691,7 @@ ucurr_getName(const char16_t* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    CharString loc;
-    {
-        CharStringByteSink sink(&loc);
-        ulocimp_getName(locale, sink, ec2);
-    }
+    CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -805,11 +789,7 @@ ucurr_getPluralName(const char16_t* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    CharString loc;
-    {
-        CharStringByteSink sink(&loc);
-        ulocimp_getName(locale, sink, ec2);
-    }
+    CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -1000,11 +980,7 @@ collectCurrencyNames(const char* locale,
     // Look up the Currencies resource for the given locale.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    CharString loc;
-    {
-        CharStringByteSink sink(&loc);
-        ulocimp_getName(locale, sink, ec2);
-    }
+    CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
     }

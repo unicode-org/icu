@@ -19,7 +19,6 @@
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "tzgnames.h"
 #include "cmemory.h"
@@ -328,11 +327,7 @@ TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status)
     int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
     if (regionLen == 0) {
         UErrorCode tempStatus = U_ZERO_ERROR;
-        CharString loc;
-        {
-            CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, tempStatus);
-        }
+        CharString loc = ulocimp_addLikelySubtags(fLocale.getName(), tempStatus);
 
         regionLen = uloc_getCountry(loc.data(), fTargetRegion, sizeof(fTargetRegion), &tempStatus);
         if (U_SUCCESS(tempStatus)) {

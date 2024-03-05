@@ -63,7 +63,6 @@
 #include "sharedcalendar.h"
 #include "unifiedcache.h"
 #include "ulocimp.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 
 #if !UCONFIG_NO_SERVICE
@@ -259,20 +258,12 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     // e.g ja_JP_TRADITIONAL -> ja_JP@calendar=japanese
     // NOTE: Since ICU-20187, ja_JP_TRADITIONAL no longer canonicalizes, and
     // the Gregorian calendar is returned instead.
-    CharString canonicalName;
-    {
-        CharStringByteSink sink(&canonicalName);
-        ulocimp_canonicalize(locid, sink, status);
-    }
+    CharString canonicalName = ulocimp_canonicalize(locid, status);
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;
     }
 
-    CharString calTypeBuf;
-    {
-        CharStringByteSink sink(&calTypeBuf);
-        ulocimp_getKeywordValue(canonicalName.data(), "calendar", sink, status);
-    }
+    CharString calTypeBuf = ulocimp_getKeywordValue(canonicalName.data(), "calendar", status);
     if (U_SUCCESS(status)) {
         calType = getCalendarType(calTypeBuf.data());
         if (calType != CALTYPE_UNKNOWN) {

@@ -178,15 +178,8 @@ Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
         canonicalize = true; // always canonicalize host ID
     }
 
-    CharString localeNameBuf;
-    {
-        CharStringByteSink sink(&localeNameBuf);
-        if (canonicalize) {
-            ulocimp_canonicalize(id, sink, status);
-        } else {
-            ulocimp_getName(id, sink, status);
-        }
-    }
+    CharString localeNameBuf =
+        canonicalize ? ulocimp_canonicalize(id, status) : ulocimp_getName(id, status);
 
     if (U_FAILURE(status)) {
         return gDefaultLocale;
@@ -2083,11 +2076,7 @@ Locale::addLikelySubtags(UErrorCode& status) {
         return;
     }
 
-    CharString maximizedLocaleID;
-    {
-        CharStringByteSink sink(&maximizedLocaleID);
-        ulocimp_addLikelySubtags(fullName, sink, status);
-    }
+    CharString maximizedLocaleID = ulocimp_addLikelySubtags(fullName, status);
 
     if (U_FAILURE(status)) {
         return;
@@ -2109,11 +2098,7 @@ Locale::minimizeSubtags(bool favorScript, UErrorCode& status) {
         return;
     }
 
-    CharString minimizedLocaleID;
-    {
-        CharStringByteSink sink(&minimizedLocaleID);
-        ulocimp_minimizeSubtags(fullName, sink, favorScript, status);
-    }
+    CharString minimizedLocaleID = ulocimp_minimizeSubtags(fullName, favorScript, status);
 
     if (U_FAILURE(status)) {
         return;
@@ -2164,17 +2149,12 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
     // parsing. Therefore the code here explicitly calls uloc_forLanguageTag()
     // and then Locale::init(), instead of just calling the normal constructor.
 
-    CharString localeID;
     int32_t parsedLength;
-    {
-        CharStringByteSink sink(&localeID);
-        ulocimp_forLanguageTag(
-                tag.data(),
-                tag.length(),
-                sink,
-                &parsedLength,
-                status);
-    }
+    CharString localeID = ulocimp_forLanguageTag(
+            tag.data(),
+            tag.length(),
+            &parsedLength,
+            status);
 
     if (U_FAILURE(status)) {
         return result;
@@ -2561,9 +2541,7 @@ Locale::createKeywords(UErrorCode &status) const
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
-            CharString keywords;
-            CharStringByteSink sink(&keywords);
-            ulocimp_getKeywords(variantStart+1, '@', sink, false, status);
+            CharString keywords = ulocimp_getKeywords(variantStart + 1, '@', false, status);
             if (U_SUCCESS(status) && !keywords.isEmpty()) {
                 result = new KeywordEnumeration(keywords.data(), keywords.length(), 0, status);
                 if (!result) {
@@ -2590,9 +2568,7 @@ Locale::createUnicodeKeywords(UErrorCode &status) const
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
-            CharString keywords;
-            CharStringByteSink sink(&keywords);
-            ulocimp_getKeywords(variantStart+1, '@', sink, false, status);
+            CharString keywords = ulocimp_getKeywords(variantStart + 1, '@', false, status);
             if (U_SUCCESS(status) && !keywords.isEmpty()) {
                 result = new UnicodeKeywordEnumeration(keywords.data(), keywords.length(), 0, status);
                 if (!result) {

@@ -26,7 +26,6 @@
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -836,11 +835,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
     }
 
     /* get the keyword value */
-    CharString keywordValue;
-    {
-        CharStringByteSink sink(&keywordValue);
-        ulocimp_getKeywordValue(locale, keyword, sink, *status);
-    }
+    CharString keywordValue = ulocimp_getKeywordValue(locale, keyword, *status);
 
     /* 
      * if the keyword is equal to currency .. then to get the display name 

@@ -21,7 +21,6 @@
 #include "utracimp.h"
 #include "ucol_imp.h"
 #include "ulocimp.h"
-#include "bytesinkutil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uresimp.h"
@@ -451,22 +450,14 @@ ucol_prepareShortStringOpen( const char *definition,
     ucol_sit_readSpecs(&s, definition, parseError, status);
     ucol_sit_calculateWholeLocale(&s, *status);
 
-    CharString buffer;
-    {
-        CharStringByteSink sink(&buffer);
-        ulocimp_canonicalize(s.locale.data(), sink, *status);
-    }
+    CharString buffer = ulocimp_canonicalize(s.locale.data(), *status);
 
     UResourceBundle *b = ures_open(U_ICUDATA_COLL, buffer.data(), status);
     /* we try to find stuff from keyword */
     UResourceBundle *collations = ures_getByKey(b, "collations", nullptr, status);
     UResourceBundle *collElem = nullptr;
-    CharString keyBuffer;
-    {
-        // if there is a keyword, we pick it up and try to get elements
-        CharStringByteSink sink(&keyBuffer);
-        ulocimp_getKeywordValue(buffer.data(), "collation", sink, *status);
-    }
+    // if there is a keyword, we pick it up and try to get elements
+    CharString keyBuffer = ulocimp_getKeywordValue(buffer.data(), "collation", *status);
     if(keyBuffer.isEmpty()) {
       // no keyword
       // we try to find the default setting, which will give us the keyword value
@@ -523,11 +514,7 @@ ucol_openFromShortString( const char *definition,
 #ifdef UCOL_TRACE_SIT
     fprintf(stderr, "DEF %s, DATA %s, ERR %s\n", definition, s.locale.data(), u_errorName(*status));
 #endif
-    CharString buffer;
-    {
-        CharStringByteSink sink(&buffer);
-        ulocimp_canonicalize(s.locale.data(), sink, *status);
-    }
+    CharString buffer = ulocimp_canonicalize(s.locale.data(), *status);
 
     UCollator *result = ucol_open(buffer.data(), status);
     int32_t i = 0;

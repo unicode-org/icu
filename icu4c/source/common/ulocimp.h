@@ -53,6 +53,12 @@ uloc_getCurrentCountryID(const char* oldID);
 U_CFUNC const char* 
 uloc_getCurrentLanguageID(const char* oldID);
 
+U_EXPORT icu::CharString
+ulocimp_getKeywords(const char* localeID,
+                    char prev,
+                    bool valuesToo,
+                    UErrorCode& status);
+
 U_EXPORT void
 ulocimp_getKeywords(const char* localeID,
                     char prev,
@@ -60,20 +66,37 @@ ulocimp_getKeywords(const char* localeID,
                     bool valuesToo,
                     UErrorCode& status);
 
+U_EXPORT icu::CharString
+ulocimp_getName(const char* localeID,
+                UErrorCode& err);
+
 U_EXPORT void
 ulocimp_getName(const char* localeID,
                 icu::ByteSink& sink,
                 UErrorCode& err);
+
+U_EXPORT icu::CharString
+ulocimp_getBaseName(const char* localeID,
+                    UErrorCode& err);
 
 U_EXPORT void
 ulocimp_getBaseName(const char* localeID,
                     icu::ByteSink& sink,
                     UErrorCode& err);
 
+U_EXPORT icu::CharString
+ulocimp_canonicalize(const char* localeID,
+                     UErrorCode& err);
+
 U_EXPORT void
 ulocimp_canonicalize(const char* localeID,
                      icu::ByteSink& sink,
                      UErrorCode& err);
+
+U_EXPORT icu::CharString
+ulocimp_getKeywordValue(const char* localeID,
+                        const char* keywordName,
+                        UErrorCode& status);
 
 U_EXPORT void
 ulocimp_getKeywordValue(const char* localeID,
@@ -145,10 +168,19 @@ ulocimp_getSubtags(
             status);
 }
 
+U_EXPORT icu::CharString
+ulocimp_getParent(const char* localeID,
+                  UErrorCode& err);
+
 U_EXPORT void
 ulocimp_getParent(const char* localeID,
                   icu::ByteSink& sink,
                   UErrorCode& err);
+
+U_EXPORT icu::CharString
+ulocimp_toLanguageTag(const char* localeID,
+                      bool strict,
+                      UErrorCode& status);
 
 /**
  * Writes a well-formed language tag for this locale ID.
@@ -174,6 +206,12 @@ ulocimp_toLanguageTag(const char* localeID,
                       icu::ByteSink& sink,
                       bool strict,
                       UErrorCode& err);
+
+U_EXPORT icu::CharString
+ulocimp_forLanguageTag(const char* langtag,
+                       int32_t tagLen,
+                       int32_t* parsedLength,
+                       UErrorCode& status);
 
 /**
  * Returns a locale ID for the specified BCP47 language tag string.
@@ -232,6 +270,10 @@ U_EXPORT icu::CharString
 ulocimp_getRegionForSupplementalData(const char *localeID, bool inferRegion,
                                      UErrorCode& status);
 
+U_EXPORT icu::CharString
+ulocimp_addLikelySubtags(const char* localeID,
+                         UErrorCode& status);
+
 /**
  * Add the likely subtags for a provided locale ID, per the algorithm described
  * in the following CLDR technical report:
@@ -265,6 +307,11 @@ U_EXPORT void
 ulocimp_addLikelySubtags(const char* localeID,
                          icu::ByteSink& sink,
                          UErrorCode& err);
+
+U_EXPORT icu::CharString
+ulocimp_minimizeSubtags(const char* localeID,
+                        bool favorScript,
+                        UErrorCode& status);
 
 /**
  * Minimize the subtags for a provided locale ID, per the algorithm described
