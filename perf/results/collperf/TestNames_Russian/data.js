@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709605450191,
+  "lastUpdate": 1709667297360,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38014,6 +38014,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 122160.9912,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "02a1bfc59f1bf1e42b5d1b6c47748dfa630db691",
+          "message": "ICU-22520 Refactor CheckedArrayByteSink & u_terminateChars into helper.\n\nThe repeated sequence of allocating a CheckedArrayByteSink, calling some\nfunction that writes into this, then checking for overflow and returning\nthrough u_terminateChars() can all be moved into a single shared helper\nfunction.",
+          "timestamp": "2024-03-05T20:09:54+01:00",
+          "tree_id": "85abd6c4dac2643292ea7b98160cb22c4ab4e08a",
+          "url": "https://github.com/unicode-org/icu/commit/02a1bfc59f1bf1e42b5d1b6c47748dfa630db691"
+        },
+        "date": 1709667212759,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 551.6576,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 625483.9919,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87306.6736,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 552990.8073,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 121873.2466,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
