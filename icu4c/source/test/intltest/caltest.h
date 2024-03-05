@@ -338,6 +338,7 @@ public: // package
     void Test22633IndianOverflow();
     void Test22633IslamicUmalquraOverflow();
     void Test22633PersianOverflow();
+    void Test22633HebrewOverflow();
     void Test22633AMPMOverflow();
 
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
