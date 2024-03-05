@@ -22,7 +22,6 @@
 #include "unicode/utf16.h"
 
 #include "tznames_impl.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -2161,11 +2160,7 @@ TZDBTimeZoneNames::TZDBTimeZoneNames(const Locale& locale)
     int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
     if (regionLen == 0) {
         UErrorCode status = U_ZERO_ERROR;
-        CharString loc;
-        {
-            CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, status);
-        }
+        CharString loc = ulocimp_addLikelySubtags(fLocale.getName(), status);
         ulocimp_getSubtags(loc.data(), nullptr, nullptr, &fRegion, nullptr, nullptr, status);
         if (U_SUCCESS(status)) {
             useWorld = false;

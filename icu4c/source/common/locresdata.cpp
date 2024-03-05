@@ -24,7 +24,6 @@
 #include "unicode/putil.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "ulocimp.h"
@@ -162,11 +161,7 @@ _uloc_getOrientationHelper(const char* localeId,
 
     if (U_FAILURE(status)) { return result; }
 
-    icu::CharString localeBuffer;
-    {
-        icu::CharStringByteSink sink(&localeBuffer);
-        ulocimp_canonicalize(localeId, sink, status);
-    }
+    icu::CharString localeBuffer = ulocimp_canonicalize(localeId, status);
 
     if (U_FAILURE(status)) { return result; }
 

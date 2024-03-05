@@ -28,7 +28,6 @@
  */
 
 #include "locmap.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -1181,11 +1180,7 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
     // Check any for keywords.
     if (uprv_strchr(localeID, '@'))
     {
-        icu::CharString collVal;
-        {
-            icu::CharStringByteSink sink(&collVal);
-            ulocimp_getKeywordValue(localeID, "collation", sink, *status);
-        }
+        icu::CharString collVal = ulocimp_getKeywordValue(localeID, "collation", *status);
         if (U_SUCCESS(*status) && !collVal.isEmpty())
         {
             // If it contains the keyword collation, return 0 so that the LCID lookup table will be used.
@@ -1194,10 +1189,7 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
         else
         {
             // If the locale ID contains keywords other than collation, just use the base name.
-            {
-                icu::CharStringByteSink sink(&baseName);
-                ulocimp_getBaseName(localeID, sink, *status);
-            }
+            baseName = ulocimp_getBaseName(localeID, *status);
             if (U_SUCCESS(*status) && !baseName.isEmpty())
             {
                 mylocaleID = baseName.data();
@@ -1206,11 +1198,7 @@ uprv_convertToLCIDPlatform(const char* localeID, UErrorCode* status)
     }
 
     // this will change it from de_DE@collation=phonebook to de-DE-u-co-phonebk form
-    icu::CharString asciiBCP47Tag;
-    {
-        icu::CharStringByteSink sink(&asciiBCP47Tag);
-        ulocimp_toLanguageTag(mylocaleID, sink, false, *status);
-    }
+    icu::CharString asciiBCP47Tag = ulocimp_toLanguageTag(mylocaleID, false, *status);
 
     if (U_SUCCESS(*status))
     {

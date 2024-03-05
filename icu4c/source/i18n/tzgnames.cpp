@@ -21,7 +21,6 @@
 #include "unicode/strenum.h"
 #include "unicode/vtzone.h"
 
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -410,12 +409,7 @@ TZGNCore::initialize(const Locale& locale, UErrorCode& status) {
     const char* region = fLocale.getCountry();
     int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
     if (regionLen == 0) {
-        CharString loc;
-        {
-            CharStringByteSink sink(&loc);
-            ulocimp_addLikelySubtags(fLocale.getName(), sink, status);
-        }
-
+        CharString loc = ulocimp_addLikelySubtags(fLocale.getName(), status);
         ulocimp_getSubtags(loc.data(), nullptr, nullptr, &fTargetRegion, nullptr, nullptr, status);
         if (U_FAILURE(status)) {
             cleanup();

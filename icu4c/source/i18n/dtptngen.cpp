@@ -29,7 +29,6 @@
 #include "unicode/ustring.h"
 #include "unicode/rep.h"
 #include "unicode/region.h"
-#include "bytesinkutil.h"
 #include "cpputils.h"
 #include "mutex.h"
 #include "umutex.h"
@@ -904,15 +903,7 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString&
             &localStatus);
         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
         // now get the calendar key value from that locale
-        destination.clear();
-        {
-            CharStringByteSink sink(&destination);
-            ulocimp_getKeywordValue(
-                localeWithCalendarKey,
-                "calendar",
-                sink,
-                localStatus);
-        }
+        destination = ulocimp_getKeywordValue(localeWithCalendarKey, "calendar", localStatus);
         // If the input locale was invalid, don't fail with missing resource error, instead
         // continue with default of Gregorian.
         if (U_FAILURE(localStatus) && localStatus != U_MISSING_RESOURCE_ERROR) {

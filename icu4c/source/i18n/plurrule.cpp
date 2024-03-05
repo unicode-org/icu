@@ -22,7 +22,6 @@
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
 #include "unicode/numberrangeformatter.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -861,9 +860,7 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
 
         for (;;) {
             {
-                CharString tmp;
-                CharStringByteSink sink(&tmp);
-                ulocimp_getParent(parentLocaleName.data(), sink, status);
+                CharString tmp = ulocimp_getParent(parentLocaleName.data(), status);
                 if (tmp.isEmpty()) break;
                 parentLocaleName = std::move(tmp);
             }

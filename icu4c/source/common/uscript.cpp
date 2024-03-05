@@ -18,7 +18,6 @@
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
 #include "unicode/uloc.h"
-#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -132,11 +131,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     if(U_FAILURE(*err) || length != 0) {
         return length;
     }
-    icu::CharString likely;
-    {
-        icu::CharStringByteSink sink(&likely);
-        ulocimp_addLikelySubtags(nameOrAbbrOrLocale, sink, internalErrorCode);
-    }
+    icu::CharString likely = ulocimp_addLikelySubtags(nameOrAbbrOrLocale, internalErrorCode);
     if(U_SUCCESS(internalErrorCode) && internalErrorCode != U_STRING_NOT_TERMINATED_WARNING) {
         length = getCodesFromLocale(likely.data(), fillIn, capacity, err);
         if(U_FAILURE(*err) || length != 0) {

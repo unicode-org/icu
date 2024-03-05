@@ -587,6 +587,23 @@ compareKeywordStructs(const void * /*context*/, const void *left, const void *ri
 
 }  // namespace
 
+U_EXPORT CharString
+ulocimp_getKeywords(const char* localeID,
+                    char prev,
+                    bool valuesToo,
+                    UErrorCode& status)
+{
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getKeywords(localeID,
+                                prev,
+                                sink,
+                                valuesToo,
+                                status);
+        },
+        status);
+}
+
 U_EXPORT void
 ulocimp_getKeywords(const char* localeID,
                     char prev,
@@ -724,6 +741,18 @@ uloc_getKeywordValue(const char* localeID,
         *status);
 }
 
+U_EXPORT CharString
+ulocimp_getKeywordValue(const char* localeID,
+                        const char* keywordName,
+                        UErrorCode& status)
+{
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getKeywordValue(localeID, keywordName, sink, status);
+        },
+        status);
+}
+
 U_EXPORT void
 ulocimp_getKeywordValue(const char* localeID,
                         const char* keywordName,
@@ -749,9 +778,8 @@ ulocimp_getKeywordValue(const char* localeID,
     }
 
     if (_hasBCP47Extension(localeID)) {
-      CharStringByteSink sink(&tempBuffer);
-      ulocimp_forLanguageTag(localeID, -1, sink, nullptr, status);
-      tmpLocaleID = U_SUCCESS(status) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
+        tempBuffer = ulocimp_forLanguageTag(localeID, -1, nullptr, status);
+        tmpLocaleID = U_SUCCESS(status) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
     } else {
         tmpLocaleID=localeID;
     }
@@ -1367,66 +1395,66 @@ _getVariant(const char* localeID,
 
 U_EXPORT CharString
 ulocimp_getLanguage(const char* localeID, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
-    CharString language;
-    CharStringByteSink sink(&language);
-    ulocimp_getSubtags(
-            localeID,
-            &sink,
-            nullptr,
-            nullptr,
-            nullptr,
-            nullptr,
-            status);
-    return language;
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    &sink,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    status);
+        },
+        status);
 }
 
 U_EXPORT CharString
 ulocimp_getScript(const char* localeID, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
-    CharString script;
-    CharStringByteSink sink(&script);
-    ulocimp_getSubtags(
-            localeID,
-            nullptr,
-            &sink,
-            nullptr,
-            nullptr,
-            nullptr,
-            status);
-    return script;
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    nullptr,
+                    &sink,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    status);
+        },
+        status);
 }
 
 U_EXPORT CharString
 ulocimp_getRegion(const char* localeID, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
-    CharString region;
-    CharStringByteSink sink(&region);
-    ulocimp_getSubtags(
-            localeID,
-            nullptr,
-            nullptr,
-            &sink,
-            nullptr,
-            nullptr,
-            status);
-    return region;
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    nullptr,
+                    nullptr,
+                    &sink,
+                    nullptr,
+                    nullptr,
+                    status);
+        },
+        status);
 }
 
 U_EXPORT CharString
 ulocimp_getVariant(const char* localeID, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
-    CharString variant;
-    CharStringByteSink sink(&variant);
-    ulocimp_getSubtags(
-            localeID,
-            nullptr,
-            nullptr,
-            nullptr,
-            &sink,
-            nullptr,
-            status);
-    return variant;
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getSubtags(
+                    localeID,
+                    nullptr,
+                    nullptr,
+                    nullptr,
+                    &sink,
+                    nullptr,
+                    status);
+        },
+        status);
 }
 
 U_EXPORT void
@@ -1641,8 +1669,7 @@ uloc_openKeywords(const char* localeID,
     const char* tmpLocaleID;
 
     if (_hasBCP47Extension(localeID)) {
-        CharStringByteSink sink(&tempBuffer);
-        ulocimp_forLanguageTag(localeID, -1, sink, nullptr, *status);
+        tempBuffer = ulocimp_forLanguageTag(localeID, -1, nullptr, *status);
         tmpLocaleID = U_SUCCESS(*status) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeID;
     } else {
         if (localeID==nullptr) {
@@ -1665,9 +1692,7 @@ uloc_openKeywords(const char* localeID,
 
     /* keywords are located after '@' */
     if((tmpLocaleID = locale_getKeywordsStart(tmpLocaleID)) != nullptr) {
-        CharString keywords;
-        CharStringByteSink sink(&keywords);
-        ulocimp_getKeywords(tmpLocaleID+1, '@', sink, false, *status);
+        CharString keywords = ulocimp_getKeywords(tmpLocaleID + 1, '@', false, *status);
         if (U_FAILURE(*status)) {
             return nullptr;
         }
@@ -1728,8 +1753,7 @@ _canonicalize(const char* localeID,
             }
         }
 
-        CharStringByteSink tempSink(&tempBuffer);
-        ulocimp_forLanguageTag(localeIDPtr, -1, tempSink, nullptr, err);
+        tempBuffer = ulocimp_forLanguageTag(localeIDPtr, -1, nullptr, err);
         tmpLocaleID = U_SUCCESS(err) && !tempBuffer.isEmpty() ? tempBuffer.data() : localeIDPtr;
     } else {
         if (localeID==nullptr) {
@@ -1876,6 +1900,17 @@ uloc_getParent(const char*    localeID,
         *err);
 }
 
+U_EXPORT CharString
+ulocimp_getParent(const char* localeID,
+                  UErrorCode& err)
+{
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getParent(localeID, sink, status);
+        },
+        err);
+}
+
 U_EXPORT void
 ulocimp_getParent(const char* localeID,
                   icu::ByteSink& sink,
@@ -2004,6 +2039,17 @@ uloc_getName(const char* localeID,
         *err);
 }
 
+U_EXPORT CharString
+ulocimp_getName(const char* localeID,
+                UErrorCode& err)
+{
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getName(localeID, sink, status);
+        },
+        err);
+}
+
 U_EXPORT void
 ulocimp_getName(const char* localeID,
                 ByteSink& sink,
@@ -2026,6 +2072,17 @@ uloc_getBaseName(const char* localeID,
         *err);
 }
 
+U_EXPORT CharString
+ulocimp_getBaseName(const char* localeID,
+                    UErrorCode& err)
+{
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_getBaseName(localeID, sink, status);
+        },
+        err);
+}
+
 U_EXPORT void
 ulocimp_getBaseName(const char* localeID,
                     ByteSink& sink,
@@ -2046,6 +2103,17 @@ uloc_canonicalize(const char* localeID,
             ulocimp_canonicalize(localeID, sink, status);
         },
         *err);
+}
+
+U_EXPORT CharString
+ulocimp_canonicalize(const char* localeID,
+                     UErrorCode& err)
+{
+    return ByteSinkUtil::viaByteSinkToCharString(
+        [&](ByteSink& sink, UErrorCode& status) {
+            ulocimp_canonicalize(localeID, sink, status);
+        },
+        err);
 }
 
 U_EXPORT void
@@ -2118,17 +2186,9 @@ uloc_getLCID(const char* localeID)
     if (uprv_strchr(localeID, '@')) {
         // uprv_convertToLCID does not support keywords other than collation.
         // Remove all keywords except collation.
-        CharString collVal;
-        {
-            CharStringByteSink sink(&collVal);
-            ulocimp_getKeywordValue(localeID, "collation", sink, status);
-        }
+        CharString collVal = ulocimp_getKeywordValue(localeID, "collation", status);
         if (U_SUCCESS(status) && !collVal.isEmpty()) {
-            CharString tmpLocaleID;
-            {
-                CharStringByteSink sink(&tmpLocaleID);
-                ulocimp_getBaseName(localeID, sink, status);
-            }
+            CharString tmpLocaleID = ulocimp_getBaseName(localeID, status);
             ulocimp_setKeywordValue("collation", collVal.data(), tmpLocaleID, status);
             if (U_SUCCESS(status)) {
                 return uprv_convertToLCID(langID.data(), tmpLocaleID.data(), &status);
