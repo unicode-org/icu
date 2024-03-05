@@ -195,6 +195,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(Test22633IndianOverflow);
     TESTCASE_AUTO(Test22633IslamicUmalquraOverflow);
     TESTCASE_AUTO(Test22633PersianOverflow);
+    TESTCASE_AUTO(Test22633HebrewOverflow);
     TESTCASE_AUTO(Test22633AMPMOverflow);
 
     TESTCASE_AUTO(TestAddOverflow);
@@ -5678,6 +5679,19 @@ void CalendarTest::Test22633PersianOverflow() {
         UCAL_YEAR, status);
     assertFalse("Should not return success", U_SUCCESS(status));
 }
+
+void CalendarTest::Test22633HebrewOverflow() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(Calendar::createInstance(Locale("en@calendar=hebrew"), status), status);
+    U_ASSERT(U_SUCCESS(status));
+    cal->clear();
+    cal->roll(UCAL_JULIAN_DAY, -335544321, status);
+    assertTrue("Should return success", U_SUCCESS(status));
+    cal->roll(UCAL_JULIAN_DAY, -1812424430, status);
+    assertEquals("Should return U_ILLEGAL_ARGUMENT_ERROR",
+                 U_ILLEGAL_ARGUMENT_ERROR, status);
+}
+
 void CalendarTest::Test22633AMPMOverflow() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(Calendar::createInstance(Locale("en"), status), status);
