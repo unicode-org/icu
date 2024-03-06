@@ -636,3 +636,30 @@ jobs:
       inputs:
         PathtoPublish: 'icuexportdata_tag-goes-here.zip'
         ArtifactName: 'icuexportdata_output'
+#-------------------------------------------------------------------------
+# Builds MSVC with cpp exceptions turned off
+- job: ICU4C_MSVC_x64_Release_NoExceptions
+  displayName: 'C: MSVC 64-bit Release No Exceptions'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2022'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: '/p:_HAS_EXCEPTIONS=0'
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
