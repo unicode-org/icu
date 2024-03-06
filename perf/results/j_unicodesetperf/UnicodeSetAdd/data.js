@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709719455794,
+  "lastUpdate": 1709765970446,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18418,6 +18418,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 7.469361197105997,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "e0a711c0a4c7684651cbd02ae247590aa551bc54",
+          "message": "ICU-22633 Fix Hebrew overflow issue",
+          "timestamp": "2024-03-06T14:52:19-08:00",
+          "tree_id": "b7fdb0b7e1a286ccee7480ec69d92328383e36b7",
+          "url": "https://github.com/unicode-org/icu/commit/e0a711c0a4c7684651cbd02ae247590aa551bc54"
+        },
+        "date": 1709765884999,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 7.248785172783682,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
