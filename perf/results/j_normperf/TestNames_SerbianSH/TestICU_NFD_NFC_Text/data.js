@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709816258560,
+  "lastUpdate": 1709816284951,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37078,6 +37078,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.840559318495227,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "89cf56333f3361470e4250e594c16c96b9634549",
+          "message": "ICU-22534 BRS#27 fix CI-Exhaustive-Main breakage for locale qaa",
+          "timestamp": "2024-03-07T13:47:49+01:00",
+          "tree_id": "94a75a796461a1fdb8406e8ebea6cbf7cadf6836",
+          "url": "https://github.com/unicode-org/icu/commit/89cf56333f3361470e4250e594c16c96b9634549"
+        },
+        "date": 1709816188062,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.523380646968558,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
