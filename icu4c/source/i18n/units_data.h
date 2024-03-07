@@ -31,7 +31,7 @@ class U_I18N_API ConversionRateInfo : public UMemory {
     ConversionRateInfo() {}
     ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
                        StringPiece offset, UErrorCode &status)
-        : sourceUnit(), baseUnit(), factor(), offset(), special() {
+        : sourceUnit(), baseUnit(), factor(), offset(), specialMappingName() {
         this->sourceUnit.append(sourceUnit, status);
         this->baseUnit.append(baseUnit, status);
         this->factor.append(factor, status);
@@ -41,7 +41,7 @@ class U_I18N_API ConversionRateInfo : public UMemory {
     CharString baseUnit;
     CharString factor;
     CharString offset;
-    CharString special;
+    CharString specialMappingName; // the name of a special mapping used instead of factor + optional offset.
     CharString systems;
 };
 

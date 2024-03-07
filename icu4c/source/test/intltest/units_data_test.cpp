@@ -52,6 +52,8 @@ void UnitsDataTest::testGetUnitCategory() {
         // Tests are:
         // {"liter-per-100-kilometer", "consumption"},
         // {"mile-per-gallon", "consumption"},
+        // {"knot", "speed"},
+        // {"beaufort", "speed"},
         {"cubic-meter-per-meter", "consumption"},
         {"meter-per-cubic-meter", "consumption"},
         {"kilogram-meter-per-square-meter-square-second", "pressure"},
@@ -78,9 +80,7 @@ void UnitsDataTest::testGetAllConversionRates() {
               cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
         assertTrue("sourceUnit", cri->sourceUnit.length() > 0);
         assertTrue("baseUnit", cri->baseUnit.length() > 0);
-        if (!logKnownIssue("ICU-22655", "Implement support for Beaufort conversion")) {
-            assertTrue("factor || special", cri->factor.length() > 0 || cri->special.length() > 0);
-        }
+        assertTrue("factor || special", cri->factor.length() > 0 || cri->specialMappingName.length() > 0);
     }
 }
 

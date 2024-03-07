@@ -91,7 +91,7 @@ class ConversionRateDataSink : public ResourceSink {
                 } else if (uprv_strcmp(key, "offset") == 0) {
                     offset = value.getUnicodeString(status);
                 } else if (uprv_strcmp(key, "special") == 0) {
-                    special = value.getUnicodeString(status);
+                    special = value.getUnicodeString(status); // the name of a special mapping used instead of factor + optional offset.
                 } else if (uprv_strcmp(key, "systems") == 0) {
                     systems = value.getUnicodeString(status);
                 }
@@ -116,7 +116,7 @@ class ConversionRateDataSink : public ResourceSink {
                     trimSpaces(cr->factor, status);
                 }
                 if (!offset.isBogus()) cr->offset.appendInvariantChars(offset, status);
-                if (!special.isBogus()) cr->offset.appendInvariantChars(special, status);
+                if (!special.isBogus()) cr->specialMappingName.appendInvariantChars(special, status);
                 cr->systems.appendInvariantChars(systems, status);
             }
         }
