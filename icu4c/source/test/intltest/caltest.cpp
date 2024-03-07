@@ -5650,6 +5650,15 @@ void CalendarTest::Test22633ChineseOverflow() {
     cal->set(UCAL_EXTENDED_YEAR, -1594662558);
     cal->get(UCAL_YEAR, status);
     assertTrue("Should return success", U_SUCCESS(status));
+
+    cal->setTime(17000065021099877464213620139773683829419175940649608600213244013003611130029599692535053209683880603725167923910423116397083334648012657787978113960494455603744210944.000000, status);
+    cal->add(UCAL_YEAR, 1935762034, status);
+    assertTrue("Should return falure", U_FAILURE(status));
+
+    status = U_ZERO_ERROR;
+    cal->set(UCAL_ERA, 1651667877);
+    cal->add(UCAL_YEAR, 1935762034, status);
+    assertTrue("Should return falure", U_FAILURE(status));
 }
 void CalendarTest::Test22633IndianOverflow() {
     UErrorCode status = U_ZERO_ERROR;
