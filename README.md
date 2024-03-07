@@ -22,6 +22,8 @@ Azure Pipelines | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/stat
 Azure Pipelines (Exhaustive Tests) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Exhaustive-Main?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=361&branchName=main)
 Azure Pipelines (Valgrind ICU4C) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Valgrind?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=364&branchName=main)
 Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/icu.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:icu)
+OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/unicode-org/icu/badge)](https://securityscorecards.dev/viewer/?uri=github.com/unicode-org/icu)
+
 
 
 ### Subdirectories and Information
@@ -31,11 +33,11 @@ Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/
 - [`tools/`](./tools/) Tools
 - [`vendor/`](./vendor/) Vendor dependencies
 
-### License
+### Copyright & Licenses
 
-Please see [./icu4c/LICENSE](./icu4c/LICENSE) (C and J are under an identical license file.)
+Copyright © 2016-2024 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
 
-> Copyright © 2016 and later Unicode, Inc. and others. All Rights Reserved.
-Unicode and the Unicode Logo are registered trademarks 
-of Unicode, Inc. in the U.S. and other countries.
-[Terms of Use and License](http://www.unicode.org/copyright.html)
+The project is released under [LICENSE](./LICENSE).
+
+A CLA is required to contribute to this project - please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) file (or start a Pull Request) for more information.
+

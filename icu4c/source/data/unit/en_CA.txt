@@ -173,15 +173,15 @@ en_CA{
             }
         }
         mass{
-            metric-ton{
-                dnam{"tonnes"}
-                one{"{0} tonne"}
-                other{"{0} tonnes"}
-            }
             stone{
                 dnam{"stone"}
                 one{"{0} stone"}
                 other{"{0} stone"}
+            }
+            tonne{
+                dnam{"tonnes"}
+                one{"{0} tonne"}
+                other{"{0} tonnes"}
             }
         }
         pressure{
@@ -326,6 +326,9 @@ en_CA{
             }
         }
         area{
+            square-inch{
+                per{"{0}/sq in"}
+            }
             square-meter{
                 dnam{"metres²"}
             }
@@ -349,9 +352,24 @@ en_CA{
             }
         }
         duration{
+            hour{
+                per{"{0}/hr"}
+            }
             minute{
                 one{"{0}min"}
                 other{"{0}min"}
+            }
+            month{
+                per{"{0}/mo"}
+            }
+            second{
+                per{"{0}/sec"}
+            }
+            week{
+                per{"{0}/wk"}
+            }
+            year{
+                per{"{0}/yr"}
             }
         }
         electric{
@@ -390,12 +408,6 @@ en_CA{
                 dnam{"W"}
             }
         }
-        pressure{
-            bar{
-                one{"{0}bar"}
-                other{"{0}bars"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -412,6 +424,9 @@ en_CA{
             fahrenheit{
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"deg"}
             }
         }
         volume{
@@ -598,31 +613,11 @@ en_CA{
                 per{"{0}/yr"}
             }
         }
-        energy{
-            electronvolt{
-                dnam{"electronvolts"}
-            }
-            kilojoule{
-                dnam{"kilojoules"}
-            }
-            kilowatt-hour{
-                dnam{"kW-hours"}
-            }
-            therm-us{
-                dnam{"US therms"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
                 one{"{0} kWh/100 km"}
                 other{"{0} kWh/100 km"}
-            }
-        }
-        graphics{
-            dot{
-                one{"{0} dot"}
-                other{"{0} dots"}
             }
         }
         length{
@@ -639,7 +634,6 @@ en_CA{
                 other{"{0} ct"}
             }
             grain{
-                dnam{"grains"}
                 one{"{0} grain"}
                 other{"{0} grains"}
             }
@@ -650,13 +644,6 @@ en_CA{
         pressure{
             bar{
                 dnam{"bars"}
-                one{"{0} bar"}
-                other{"{0} bars"}
-            }
-            inch-ofhg{
-                dnam{"in Hg"}
-                one{"{0} in Hg"}
-                other{"{0} in Hg"}
             }
             millimeter-ofhg{
                 dnam{"mm Hg"}
@@ -738,7 +725,6 @@ en_CA{
                 other{"{0} fl drams"}
             }
             drop{
-                dnam{"drops"}
                 one{"{0} drops"}
                 other{"{0} drops"}
             }
@@ -765,7 +751,6 @@ en_CA{
                 per{"{0}/gal"}
             }
             jigger{
-                dnam{"jiggers"}
                 one{"{0} jiggers"}
                 other{"{0} jiggers"}
             }
@@ -773,7 +758,6 @@ en_CA{
                 dnam{"litres"}
             }
             pinch{
-                dnam{"pinches"}
                 one{"{0} pinches"}
                 other{"{0} pinches"}
             }

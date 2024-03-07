@@ -7,7 +7,7 @@
 # created by: Markus W. Scherer
 cmake_minimum_required(VERSION 2.6)
 project(ICU_UNI_TOOLS)
-set(CMAKE_CXX_FLAGS "-std=c++11 -fsanitize=bounds")
+set(CMAKE_CXX_FLAGS "-std=c++17 -fsanitize=bounds")
 set(CMAKE_LD_FLAGS "-fsanitize=bounds")
 # This requires an icudefs.txt file with contents like the following:
 # Location (--prefix) of where ICU was installed.

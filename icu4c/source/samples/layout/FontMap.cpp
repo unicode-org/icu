@@ -23,17 +23,20 @@
 #include "GUISupport.h"
 #include "FontMap.h"
 
+using icu::LEFontInstance;
+using icu::scriptCodeCount;
+
 FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSupport, LEErrorCode &status)
     : fPointSize(pointSize), fFontCount(0), fAscent(0), fDescent(0), fLeading(0), fGUISupport(guiSupport)
 {
     le_int32 defaultFont = -1, i, script;
-    le_bool haveFonts = FALSE;
+    le_bool haveFonts = false;
 
 /**/
     for (i = 0; i < scriptCodeCount; i += 1) {
         fFontIndices[i] = -1;
-        fFontNames[i] = NULL;
-        fFontInstances[i] = NULL;
+        fFontNames[i] = nullptr;
+        fFontInstances[i] = nullptr;
     }
  /**/
 
@@ -46,14 +49,14 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
 
     file = fopen(fileName, "r");
 
-    if (file == NULL) {
+    if (file == nullptr) {
         sprintf(errorMessage, "Could not open the font map file: %s.", fileName);
         fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
         status = LE_FONT_FILE_NOT_FOUND_ERROR;
         return;
     }
 
-    while (fgets(buffer, BUFFER_SIZE, file) != NULL) {
+    while (fgets(buffer, BUFFER_SIZE, file) != nullptr) {
         UScriptCode scriptCode;
         UErrorCode scriptStatus = U_ZERO_ERROR;
 
@@ -70,7 +73,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
 
         if (strcmp(scriptName, "DEFAULT") == 0) {
             defaultFont = getFontIndex(fontName);
-            haveFonts = TRUE;
+            haveFonts = true;
             continue;
         }
 
@@ -91,7 +94,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
         }
 
         fFontIndices[script] = getFontIndex(fontName);
-        haveFonts = TRUE;
+        haveFonts = true;
     }
 
     if (defaultFont >= 0) {
@@ -116,13 +119,13 @@ FontMap::~FontMap()
     le_int32 font;
 
     for (font = 0; font < fFontCount; font += 1) {
-        if (fFontNames[font] != NULL) {
+        if (fFontNames[font] != nullptr) {
             delete[] (char *) fFontNames[font];
         }
     }
 
     for (font = 0; font < fFontCount; font += 1) {
-        if (fFontInstances[font] != NULL) {
+        if (fFontInstances[font] != nullptr) {
             delete fFontInstances[font];
         }
     }
@@ -199,12 +202,12 @@ char *FontMap::strip(char *s)
 const LEFontInstance *FontMap::getScriptFont(le_int32 scriptCode, LEErrorCode &status)
 {
     if (LE_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     if (scriptCode <= -1 || scriptCode >= scriptCodeCount) {
         status = LE_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
 
@@ -214,16 +217,16 @@ const LEFontInstance *FontMap::getScriptFont(le_int32 scriptCode, LEErrorCode &s
         sprintf(errorMessage, "No font was set for script %s", uscript_getName((UScriptCode) scriptCode));
         fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
         status = LE_FONT_FILE_NOT_FOUND_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    if (fFontInstances[fontIndex] == NULL) {
+    if (fFontInstances[fontIndex] == nullptr) {
         fFontInstances[fontIndex] = openFont(fFontNames[fontIndex], fPointSize, status);
 
         if (LE_FAILURE(status)) {
             sprintf(errorMessage, "Could not open font file %s", fFontNames[fontIndex]);
             fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -263,7 +266,7 @@ void FontMap::getMaxMetrics()
         LEErrorCode status = LE_NO_ERROR;
         le_int32 ascent, descent, leading;
 
-        if (fFontInstances[i] == NULL) {
+        if (fFontInstances[i] == nullptr) {
             fFontInstances[i] = openFont(fFontNames[i], fPointSize, status);
 
             if (LE_FAILURE(status)) {

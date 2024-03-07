@@ -258,6 +258,9 @@ km{
         "America:Chihuahua"{
             ec{"ជីហួហួ"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"ស៊ីអ៊ូដាដ ហ៊ូអារ៉េស"}
+        }
         "America:Coral_Harbour"{
             ec{"អាទីកូកាន"}
         }
@@ -462,9 +465,6 @@ km{
         "America:New_York"{
             ec{"ញូវយ៉ក"}
         }
-        "America:Nipigon"{
-            ec{"នីពីកុន"}
-        }
         "America:Nome"{
             ec{"ណូម"}
         }
@@ -485,9 +485,6 @@ km{
         }
         "America:Panama"{
             ec{"ប៉ាណាម៉ា"}
-        }
-        "America:Pangnirtung"{
-            ec{"ប៉ាងនីទុង"}
         }
         "America:Paramaribo"{
             ec{"ប៉ារ៉ាម៉ារីបូ"}
@@ -510,9 +507,6 @@ km{
         "America:Punta_Arenas"{
             ec{"ពុនតា អារ៉េណា"}
         }
-        "America:Rainy_River"{
-            ec{"រ៉េនីរីវើ"}
-        }
         "America:Rankin_Inlet"{
             ec{"រ៉ាន់ឃីន​អ៊ីនឡិត"}
         }
@@ -527,9 +521,6 @@ km{
         }
         "America:Rio_Branco"{
             ec{"រីយ៉ូប្រានកូ"}
-        }
-        "America:Santa_Isabel"{
-            ec{"សាន់តាអ៊ីសាប៊ែល"}
         }
         "America:Santarem"{
             ec{"សាន់តារឹម"}
@@ -576,9 +567,6 @@ km{
         "America:Thule"{
             ec{"ធុឡេ"}
         }
-        "America:Thunder_Bay"{
-            ec{"សាន់ដឺ​បេ"}
-        }
         "America:Tijuana"{
             ec{"ទីយ្យូអាណា"}
         }
@@ -599,9 +587,6 @@ km{
         }
         "America:Yakutat"{
             ec{"យ៉ាគូតាត"}
-        }
-        "America:Yellowknife"{
-            ec{"យេឡូណៃ"}
         }
         "Antarctica:Casey"{
             ec{"កាសី"}
@@ -927,9 +912,6 @@ km{
         "Australia:Broken_Hill"{
             ec{"ប្រូកខិនហីល"}
         }
-        "Australia:Currie"{
-            ec{"ខូរៀ"}
-        }
         "Australia:Darwin"{
             ec{"ដាវីន"}
         }
@@ -1112,9 +1094,6 @@ km{
         "Europe:Ulyanovsk"{
             ec{"អុលយ៉ាណូវស្កិ៍"}
         }
-        "Europe:Uzhgorod"{
-            ec{"អ៊ុយហ្គោរ៉ូដ"}
-        }
         "Europe:Vaduz"{
             ec{"វ៉ាឌូស"}
         }
@@ -1135,9 +1114,6 @@ km{
         }
         "Europe:Zagreb"{
             ec{"សាគ្រែប"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ហ្សាប៉ូរ៉ូហ្ស៊ីយ៉េ"}
         }
         "Europe:Zurich"{
             ec{"ហ៊្សូរីច"}
@@ -1219,9 +1195,6 @@ km{
         }
         "Pacific:Honolulu"{
             ec{"ហូណូលូលូ"}
-        }
-        "Pacific:Johnston"{
-            ec{"ចនស្តុន"}
         }
         "Pacific:Kanton"{
             ec{"កាន់តុន"}
@@ -1637,9 +1610,6 @@ km{
             lg{"ម៉ោង​នៅ​ឡតហៅ"}
             ls{"ម៉ោង​ស្តង់ដារ​នៅ​ឡត​ហៅ"}
         }
-        "meta:Macquarie"{
-            ls{"ម៉ោង​នៅ​កោះ​ម៉ាកគែរី"}
-        }
         "meta:Magadan"{
             ld{"ម៉ោង​នៅ​ម៉ាហ្កាដាន​នារដូវ​ក្ដៅ"}
             lg{"ម៉ោង​នៅ​ម៉ាហ្កាដាន"}
@@ -1664,11 +1634,6 @@ km{
         }
         "meta:Mawson"{
             ls{"ម៉ោង​នៅ​ម៉ៅ​សាន់"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"ម៉ោង​ពេល​ថ្ងៃ​នៅ​ម៉ិកស៊ិកភាគពាយព្យ"}
-            lg{"ម៉ោង​នៅ​ម៉ិកស៊ិកភាគពាយព្យ"}
-            ls{"ម៉ោង​ស្តង់ដារនៅ​ម៉ិកស៊ិកភាគពាយព្យ"}
         }
         "meta:Mexico_Pacific"{
             ld{"ម៉ោង​ពេល​ថ្ងៃ​នៅ​ប៉ាស៊ីហ្វិក​ម៉ិកស៊ិក"}
@@ -1889,10 +1854,8 @@ km{
         "meta:Yukon"{
             ls{"ម៉ោងនៅយូខន់"}
         }
-        fallbackFormat{"{1} ({0})"}
         gmtFormat{"ម៉ោង​សកល {0}"}
         gmtZeroFormat{"ម៉ោង​សកល"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"ម៉ោង​នៅ​ {0}"}
         regionFormatDaylight{"ម៉ោង​ពេល​ថ្ងៃ​នៅ​ {0}"}
         regionFormatStandard{"ម៉ោង​ស្តង់ដារ​នៅ ​{0}"}

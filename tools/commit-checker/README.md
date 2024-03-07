@@ -49,12 +49,14 @@ Note 1: These examples assume that your remote named "upstream" points to unicod
 
 Note 2: Please change the previous-release tag (release-63-1, release-64-2, etc) to the correct version at the time you run the tool!
 
+Note 3: The left side of the rev-range should be an ancestor of the right side of the rev-range.
+
 ### Preview the Report
 
 To preview the report, render the Markdown file in your favorite Markdown preview tool, like grip:
 
-    $ pip3 install grip
-    $ grip REPORT.md
+    $ pipenv install --dev
+    $ pipenv run grip REPORT.md
      * Running on http://localhost:6419/ (Press CTRL+C to quit)
  
 ### Sending for Review

@@ -10,7 +10,7 @@
 #ifndef __XMLREADER_H
 #define __XMLREADER_H
 
-#include "LETypes.h"
+#include "layout/LETypes.h"
 #include "letest.h"
 
 typedef void (*TestCaseCallback) (const char *testID,

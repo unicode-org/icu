@@ -126,13 +126,13 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     status = U_ZERO_ERROR;
     for (int32_t i = 0; i < (int32_t)UNUM_CURRENCY_SPACING_COUNT; i++) {
         UnicodeString enCurrencyPattern = en.getPatternForCurrencySpacing(
-             (UCurrencySpacing)i, TRUE, status);
+             (UCurrencySpacing)i, true, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:en");
             status = U_ZERO_ERROR;
         }
         UnicodeString frCurrencyPattern = fr.getPatternForCurrencySpacing(
-             (UCurrencySpacing)i, TRUE, status);
+             (UCurrencySpacing)i, true, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:fr");
         }
@@ -144,13 +144,13 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     status = U_ZERO_ERROR;
     for (int32_t i = 0; i < UNUM_CURRENCY_SPACING_COUNT; i++) {
         UnicodeString enCurrencyPattern = en.getPatternForCurrencySpacing(
-            (UCurrencySpacing)i, FALSE, status);
+            (UCurrencySpacing)i, false, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:en");
             status = U_ZERO_ERROR;
         }
         UnicodeString frCurrencyPattern = fr.getPatternForCurrencySpacing(
-             (UCurrencySpacing)i, FALSE, status);
+             (UCurrencySpacing)i, false, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:fr");
         }
@@ -161,9 +161,9 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     // Test set curerncySpacing APIs
     status = U_ZERO_ERROR;
     UnicodeString dash = UnicodeString("-");
-    en.setPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, TRUE, dash);
+    en.setPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, true, dash);
     UnicodeString enCurrencyInsert = en.getPatternForCurrencySpacing(
-        UNUM_CURRENCY_INSERT, TRUE, status);
+        UNUM_CURRENCY_INSERT, true, status);
     if (dash != enCurrencyInsert) {
         errln("Error: Failed to setCurrencyInsert for locale:en");
     }
@@ -238,7 +238,7 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
                  "", lastResort->getSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol));
     lastResort->setSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol, ",");
     assertEquals("last-resort NaN",
-                 UnicodeString((UChar)0xfffd), lastResort->getSymbol(DecimalFormatSymbols::kNaNSymbol));
+                 UnicodeString((char16_t)0xfffd), lastResort->getSymbol(DecimalFormatSymbols::kNaNSymbol));
     lastResort->setSymbol(DecimalFormatSymbols::kNaNSymbol, "NaN");
     // Check that now all of the symbols match root.
     for(int32_t i = 0; i < DecimalFormatSymbols::kFormatSymbolCount; ++i) {
@@ -253,9 +253,9 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
 void IntlTestDecimalFormatSymbols::testDigitSymbols() {
     // This test does more in ICU4J than in ICU4C right now.
     // In ICU4C, it is basically just a test for codePointZero and getConstDigitSymbol.
-    UChar defZero = u'0';
+    char16_t defZero = u'0';
     UChar32 osmanyaZero = U'\U000104A0';
-    static const UChar* osmanyaDigitStrings[] = {
+    static const char16_t* osmanyaDigitStrings[] = {
         u"\U000104A0", u"\U000104A1", u"\U000104A2", u"\U000104A3", u"\U000104A4",
         u"\U000104A5", u"\U000104A6", u"\U000104A7", u"\U000104A8", u"\U000104A9"
     };
@@ -278,7 +278,7 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
             ? DecimalFormatSymbols::kZeroDigitSymbol
             : static_cast<DecimalFormatSymbols::ENumberFormatSymbol>
                 (DecimalFormatSymbols::kOneDigitSymbol + i - 1);
-        symbols.setSymbol(key, UnicodeString(osmanyaDigitStrings[i]), FALSE);
+        symbols.setSymbol(key, UnicodeString(osmanyaDigitStrings[i]), false);
     }
     // NOTE: in ICU4J, the calculation of codePointZero is smarter;
     // in ICU4C, it is more conservative and is only set if propagateDigits is true.
@@ -294,7 +294,7 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
     // Check Osmanya codePointZero
     symbols.setSymbol(
         DecimalFormatSymbols::kZeroDigitSymbol,
-        UnicodeString(osmanyaDigitStrings[0]), TRUE);
+        UnicodeString(osmanyaDigitStrings[0]), true);
     if (osmanyaZero != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be Osmanya code point zero");
     }
@@ -327,7 +327,7 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
     }
 
     // Setting a digit somewhere in the middle should invalidate codePointZero
-    symbols.setSymbol(DecimalFormatSymbols::kOneDigitSymbol, u"foo", FALSE);
+    symbols.setSymbol(DecimalFormatSymbols::kOneDigitSymbol, u"foo", false);
     if (-1 != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be invalid");
     }

@@ -129,7 +129,7 @@ int main() {
     }
     std::cout << "0};\n\n";
 
-    std::cout << "    static const UChar RECaseFixData[] = {";
+    std::cout << "    static const char16_t RECaseFixData[] = {";
     for (int i=0; i<outString.length(); i++) {
         if (i % 10 == 0) {
             std::cout << "\n        ";

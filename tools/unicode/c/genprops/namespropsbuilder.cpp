@@ -155,7 +155,7 @@ static UDataInfo dataInfo={
 
     U_IS_BIG_ENDIAN,
     U_CHARSET_FAMILY,
-    sizeof(UChar),
+    sizeof(char16_t),
     0,
 
     {0x75, 0x6e, 0x61, 0x6d},     /* dataFormat="unam" */
@@ -249,7 +249,7 @@ static void
 compress(UErrorCode &errorCode);
 
 static void
-compressLines(void);
+compressLines();
 
 static int16_t
 compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop);
@@ -302,27 +302,27 @@ NamesPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
     U_ASSERT(props.start==props.end);
 
-    const char *names[4]={ NULL, NULL, NULL, NULL };
+    const char *names[4]={ nullptr, nullptr, nullptr, nullptr };
     int16_t lengths[4]={ 0, 0, 0, 0 };
 
     /* get the character name */
-    if(props.name!=NULL) {
+    if(props.name!=nullptr) {
         names[0]=props.name;
         lengths[0]=(int16_t)uprv_strlen(props.name);
         parseName(names[0], lengths[0]);
     }
 
     CharString buffer;
-    if(props.nameAlias!=NULL) {
+    if(props.nameAlias!=nullptr) {
         /*
          * Only use "correction" aliases for now, from Unicode 6.1 NameAliases.txt with 3 fields per line.
          * TODO: Work on ticket #8963 to deal with multiple type:alias pairs per character.
          */
         const char *corr=uprv_strstr(props.nameAlias, "correction=");
-        if(corr!=NULL) {
+        if(corr!=nullptr) {
             corr+=11;  // skip "correction="
             const char *limit=uprv_strchr(corr, ',');
-            if(limit!=NULL) {
+            if(limit!=nullptr) {
                 buffer.append(corr, limit-corr, errorCode);
                 names[3]=buffer.data();
                 lengths[3]=(int16_t)(limit-corr);
@@ -358,7 +358,7 @@ parseName(const char *name, int16_t length) {
         wordLength=(int16_t)(limit-start);
         if(wordLength>1) {
             word=findWord(name+start, wordLength);
-            if(word==NULL) {
+            if(word==nullptr) {
                 word=addWord(name+start, wordLength);
             }
             countWord(word);
@@ -372,7 +372,7 @@ parseName(const char *name, int16_t length) {
         if(prevStart!=-1) {
             wordLength=limit-prevStart;
             word=findWord(name+prevStart, wordLength);
-            if(word==NULL) {
+            if(word==nullptr) {
                 word=addWord(name+prevStart, wordLength);
             }
             countWord(word);
@@ -495,7 +495,7 @@ compress(UErrorCode &errorCode) {
 
     /* sort the words in reverse order by weight */
     uprv_sortArray(words, wordCount, sizeof(Word),
-                   compareWords, NULL, false, &errorCode);
+                   compareWords, nullptr, false, &errorCode);
 
     /* remove the words that do not save anything */
     while(wordCount>0 && words[wordCount-1].weight<1) {
@@ -543,7 +543,7 @@ compress(UErrorCode &errorCode) {
         /* sort these words in reverse order by weight */
         errorCode=U_ZERO_ERROR;
         uprv_sortArray(words+tokenCount, wordCount-tokenCount, sizeof(Word),
-                        compareWords, NULL, false, &errorCode);
+                        compareWords, nullptr, false, &errorCode);
 
         /* remove the words that do not save anything */
         while(wordCount>0 && words[wordCount-1].weight<1) {
@@ -629,7 +629,7 @@ compress(UErrorCode &errorCode) {
 
 static void
 compressLines() {
-    Line *line=NULL;
+    Line *line=nullptr;
     uint32_t i=0, inLine, outLine=0xffffffff /* (uint32_t)(-1) */,
              groupMSB=0xffff, lineCount2;
     int16_t groupTop=0;
@@ -768,7 +768,7 @@ NamesPropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UError
     if(U_FAILURE(errorCode)) { return; }
 
     UNewDataMemory *pData=udata_create(path, "icu", "unames", &dataInfo,
-                                       withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+                                       withCopyright ? U_COPYRIGHT_STRING : nullptr, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops: udata_create(%s, unames.icu) failed - %s\n",
                 path, u_errorName(errorCode));
@@ -938,7 +938,7 @@ findWord(const char *s, int16_t length) {
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static Word *
@@ -1121,9 +1121,9 @@ allocWord(uint32_t length) {
 
 PropsBuilder *
 createNamesPropsBuilder(UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return nullptr; }
     PropsBuilder *pb=new NamesPropsBuilder(errorCode);
-    if(pb==NULL) {
+    if(pb==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
     return pb;

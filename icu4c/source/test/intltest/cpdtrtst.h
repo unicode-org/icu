@@ -29,18 +29,18 @@
  */
 class CompoundTransliteratorTest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     /*Tests the constructors */
-    void TestConstruction(void);
+    void TestConstruction();
     /*Tests the function clone, and operator==()*/
-    void TestCloneEqual(void);
+    void TestCloneEqual();
     /*Tests the function getCount()*/
-    void TestGetCount(void);
+    void TestGetCount();
     /*Tests the function getTransliterator() and setTransliterators() and adoptTransliterators()*/
-    void TestGetSetAdoptTransliterator(void);
+    void TestGetSetAdoptTransliterator();
     /*Tests the function handleTransliterate()*/
-    void TestTransliterate(void);
+    void TestTransliterate();
 
     //======================================================================
     // Support methods
@@ -49,7 +49,7 @@ public:
     /**
      * Splits a UnicodeString
      */
-    UnicodeString* split(const UnicodeString& str, UChar seperator, int32_t& count);
+    UnicodeString* split(const UnicodeString& str, char16_t seperator, int32_t& count);
 
     void expect(const CompoundTransliterator& t,
                 const UnicodeString& source,

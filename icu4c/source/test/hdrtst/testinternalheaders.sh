@@ -17,7 +17,7 @@ for file in `ls common/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -DU_COMMON_IMPLEMENTATION -O0 ht_temp.cpp ;
+    $CXX -c -std=c++17 -I common -DU_COMMON_IMPLEMENTATION -O0 ht_temp.cpp ;
     if [ $? != 0 ] ; then
         ERROR_EXIT=1
     fi
@@ -27,7 +27,7 @@ for file in `ls i18n/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -DU_I18N_IMPLEMENTATION -O0 ht_temp.cpp ;
+    $CXX -c -std=c++17 -I common -I i18n -DU_I18N_IMPLEMENTATION -O0 ht_temp.cpp ;
     if [ $? != 0 ] ; then
         ERROR_EXIT=1
     fi
@@ -37,7 +37,7 @@ for file in `ls io/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -I io -DU_IO_IMPLEMENTATION -O0 ht_temp.cpp ;
+    $CXX -c -std=c++17 -I common -I i18n -I io -DU_IO_IMPLEMENTATION -O0 ht_temp.cpp ;
     if [ $? != 0 ] ; then
         ERROR_EXIT=1
     fi
@@ -61,7 +61,7 @@ for file in `ls tools/toolutil/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -O0 ht_temp.cpp ;
+    $CXX -c -std=c++17 -I common -I i18n -I io -I tools/toolutil -O0 ht_temp.cpp ;
     if [ $? != 0 ] ; then
         ERROR_EXIT=1
     fi
@@ -78,7 +78,7 @@ for tool in escapesrc genccode gencmn gencolusb gennorm2 genren gentest icupkg i
         echo $file
         echo '#include "'$file'"' > ht_temp.cpp ;
         echo 'void noop() {}' >> ht_temp.cpp ;
-        $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -I tools/$tool -O0 ht_temp.cpp ;
+        $CXX -c -std=c++17 -I common -I i18n -I io -I tools/toolutil -I tools/$tool -O0 ht_temp.cpp ;
         if [ $? != 0 ] ; then
             ERROR_EXIT=1
         fi
@@ -91,7 +91,7 @@ for file in `ls tools/ctestfw/unicode/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -O0 ht_temp.cpp ;
+    $CXX -c -std=c++17 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -O0 ht_temp.cpp ;
     if [ $? != 0 ] ; then
         ERROR_EXIT=1
     fi
@@ -113,7 +113,7 @@ for test in intltest iotest testmap thaitest fuzzer; do
         echo $file
         echo '#include "'$file'"' > ht_temp.cpp ;
         echo 'void noop() {}' >> ht_temp.cpp ;
-        $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -I test/$test -O0 ht_temp.cpp ;
+        $CXX -c -std=c++17 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -I test/$test -O0 ht_temp.cpp ;
         if [ $? != 0 ] ; then
             ERROR_EXIT=1
         fi

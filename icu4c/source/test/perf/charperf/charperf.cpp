@@ -41,7 +41,7 @@ int main(int argc, const char *argv[])
     if (U_FAILURE(status)){
         return status;
     }
-    if (test.run() == FALSE){
+    if (test.run() == false){
         fprintf(stderr, "FAILED: Tests could not be run please check the "
             "arguments.\n");
         return -1;
@@ -122,9 +122,9 @@ UPerfFunction* CharPerformanceTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(21, TestStdLibIsWhiteSpace);
         default: 
             name = ""; 
-            return NULL;
+            return nullptr;
     }
-    return NULL;
+    return nullptr;
 }
 
 UPerfFunction* CharPerformanceTest::TestIsAlpha()

@@ -1,7 +1,7 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -17,6 +17,7 @@
 */
 
 
+#include <stdbool.h>
 #include <time.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
@@ -50,18 +51,18 @@ static int32_t fail;
  */
 
 static uint32_t
-randul()
+randul(void)
 {
     uint32_t l=0;
     int32_t i;
-    static UBool initialized = FALSE;
+    static UBool initialized = false;
     if (!initialized)
     {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
     /* Assume rand has at least 12 bits of precision */
-    
+
     for (i=0; i<(int32_t)sizeof(l); ++i)
         ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
@@ -71,7 +72,7 @@ randul()
  * Return a random double x where 0.0 <= x < 1.0.
  */
 static double
-randd()
+randd(void)
 {
     return ((double)randul()) / UINT32_MAX;
 }
@@ -165,16 +166,16 @@ typedef enum E_Where E_Where;
     } \
 } UPRV_BLOCK_MACRO_END
 /*#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); } */
-static void 
-CONFIRM_ErrorCode(UErrorCode actual,UErrorCode expected) 
+static void
+CONFIRM_ErrorCode(UErrorCode actual,UErrorCode expected)
 {
-  if ((expected)==(actual)) 
-  { 
-    record_pass(); 
-  } else { 
-    record_fail();  
+  if ((expected)==(actual))
+  {
+    record_pass();
+  } else {
+    record_fail();
     /*log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); */
-    log_err("returned  %s  instead of %s\n", myErrorName(actual), myErrorName(expected)); 
+    log_err("returned  %s  instead of %s\n", myErrorName(actual), myErrorName(expected));
   }
 }
 
@@ -195,12 +196,12 @@ param[] =
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "root",         U_ZERO_ERROR,             e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-  { "te",           U_ZERO_ERROR,             e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "root",         U_ZERO_ERROR,             e_Root,    { true, false, false }, { true, false, false } },
+  { "te",           U_ZERO_ERROR,             e_te,      { false, true, false }, { true, true, false  } },
+  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { false, false, true }, { true, true, true   } },
+  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { false, true, false }, { true, true, false  } },
+  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { false, false, true }, { true, true, true   } },
+  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { true, false, false }, { true, false, false } }
 };
 
 static int32_t bundles_count = UPRV_LENGTHOF(param);
@@ -223,7 +224,7 @@ static void TestCLDRVersion(void);
 void addNEWResourceBundleTest(TestNode** root)
 {
     addTest(root, &TestErrorCodes,            "tsutil/creststn/TestErrorCodes");
-#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION   
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestEmptyBundle,           "tsutil/creststn/TestEmptyBundle");
     addTest(root, &TestConstruction1,         "tsutil/creststn/TestConstruction1");
     addTest(root, &TestResourceBundles,       "tsutil/creststn/TestResourceBundles");
@@ -234,8 +235,8 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestErrorConditions,       "tsutil/creststn/TestErrorConditions");
     addTest(root, &TestDecodedBundle,         "tsutil/creststn/TestDecodedBundle");
     addTest(root, &TestResourceLevelAliasing, "tsutil/creststn/TestResourceLevelAliasing");
-    addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess"); 
-    addTest(root, &TestTicket9804,            "tsutil/creststn/TestTicket9804"); 
+    addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess");
+    addTest(root, &TestTicket9804,            "tsutil/creststn/TestTicket9804");
     addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath");
     addTest(root, &TestCLDRStyleAliases,      "tsutil/creststn/TestCLDRStyleAliases");
     addTest(root, &TestFallbackCodes,         "tsutil/creststn/TestFallbackCodes");
@@ -247,7 +248,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
     addTest(root, &TestGetVersionColl,        "tsutil/creststn/TestGetVersionColl");
     addTest(root, &TestAliasConflict,         "tsutil/creststn/TestAliasConflict");
-    addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues"); 
+    addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues");
     addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
 }
@@ -322,7 +323,7 @@ static void TestErrorCodes(void) {
 
 #if !UCONFIG_NO_COLLATION
   /** Now, with the collation bundle **/
- 
+
   /* first bundle should return fallback warning */
   r = ures_open(U_ICUDATA_COLL, "sr_YU_VOJVODINA", &status);
   checkStatus(__LINE__, U_USING_FALLBACK_WARNING, status);
@@ -375,12 +376,12 @@ static void TestAliasConflict(void) {
 
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
-    if(U_FAILURE(status)) { 
+    if(U_FAILURE(status)) {
         log_err_status(status, "Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(iw);
     result = ures_getStringByKey(he, "ExemplarCharacters", &resultLen, &status);
-    if(U_FAILURE(status) || result == NULL) { 
+    if(U_FAILURE(status) || result == NULL) {
         log_err_status(status, "Failed to get resource ExemplarCharacters with %s\n", myErrorName(status));
     }
     ures_close(he);
@@ -389,7 +390,7 @@ static void TestAliasConflict(void) {
     for(i = 0; i < size; i++) {
         status = U_ZERO_ERROR;
         norway = ures_open(NULL, norwayNames[i], &status);
-        if(U_FAILURE(status)) { 
+        if(U_FAILURE(status)) {
             log_err_status(status, "Failed to get resource with %s for %s\n", myErrorName(status), norwayNames[i]);
             continue;
         }
@@ -402,11 +403,11 @@ static void TestAliasConflict(void) {
     }
 }
 
-static void TestDecodedBundle(){
-   
+static void TestDecodedBundle(void){
+
     UErrorCode error = U_ZERO_ERROR;
-   
-    UResourceBundle* resB; 
+
+    UResourceBundle* resB;
 
     const UChar* srcFromRes;
     int32_t len;
@@ -478,7 +479,7 @@ static void TestDecodedBundle(){
     ures_close(resB);
 }
 
-static void TestNewTypes() {
+static void TestNewTypes(void) {
     UResourceBundle* theBundle = NULL;
     char action[256];
     const char* testdatapath;
@@ -633,14 +634,14 @@ static void TestNewTypes() {
             "\\\\u206A-\\\\u206F \\\\uFEFF \\\\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD "
             "\\U00100000-\\U0010FFFD \\uFDD0-\\uFDEF \\uFFFE-\\uFFFF \\U0001FFFE-\\U0001FFFF \\U0002FFFE-\\U0002FFFF "
             );
-        strcat(pattern, 
+        strcat(pattern,
             "\\U0003FFFE-\\U0003FFFF \\U0004FFFE-\\U0004FFFF \\U0005FFFE-\\U0005FFFF \\U0006FFFE-\\U0006FFFF "
             "\\U0007FFFE-\\U0007FFFF \\U0008FFFE-\\U0008FFFF \\U0009FFFE-\\U0009FFFF \\U000AFFFE-\\U000AFFFF "
             "\\U000BFFFE-\\U000BFFFF \\U000CFFFE-\\U000CFFFF \\U000DFFFE-\\U000DFFFF \\U000EFFFE-\\U000EFFFF "
             "\\U000FFFFE-\\U000FFFFF \\U0010FFFE-\\U0010FFFF \\uD800-\\uDFFF \\\\uFFF9 \\\\uFFFA \\\\uFFFB "
             "\\uFFFC \\uFFFD \\u2FF0-\\u2FFB \\u0340 \\u0341 \\\\u200E \\\\u200F \\\\u202A \\\\u202B \\\\u202C "
             );
-        strcat(pattern, 
+        strcat(pattern,
             "\\\\u202D \\\\u202E \\\\u206A \\\\u206B \\\\u206C \\\\u206D \\\\u206E \\\\u206F \\U000E0001 \\U000E0020-\\U000E007F "
             "]"
             );
@@ -713,8 +714,8 @@ static void TestNewTypes() {
                 log_err("Could not get testincludeUTF resource from testtypes bundle. Error: %s\n",u_errorName(status));
             }else{
                 /* open the file */
-                const char* cp = NULL; 
-                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,FALSE,FALSE,&status);
+                const char* cp = NULL;
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,false,false,&status);
                 len = 0;
                 if(U_SUCCESS(status)){
                     const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
@@ -752,7 +753,7 @@ static void TestNewTypes() {
             }else{
                 /* open the file */
                 const char* cp=NULL;
-                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,FALSE,FALSE,&status);
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,false,false,&status);
                 len = 0;
                 if(U_SUCCESS(status)){
                     const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
@@ -780,7 +781,7 @@ static void TestNewTypes() {
 
 }
 
-static void TestEmptyTypes() {
+static void TestEmptyTypes(void) {
     UResourceBundle* theBundle = NULL;
     char action[256];
     const char* testdatapath;
@@ -800,7 +801,7 @@ static void TestEmptyTypes() {
         log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    
+
     theBundle = ures_open(testdatapath, "testtypes", &status);
 
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -925,11 +926,11 @@ static void TestEmptyTypes() {
     ures_close(theBundle);
 }
 
-static void TestEmptyBundle(){
+static void TestEmptyBundle(void){
     UErrorCode status = U_ZERO_ERROR;
     const char* testdatapath=NULL;
     UResourceBundle *resb=0, *dResB=0;
-    
+
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
@@ -941,16 +942,16 @@ static void TestEmptyBundle(){
     if(U_SUCCESS(status)){
         dResB =  ures_getByKey(resb,"test",dResB,&status);
         if(status!= U_MISSING_RESOURCE_ERROR){
-            log_err("Did not get the expected error from an empty resource bundle. Expected : %s Got: %s\n", 
-                u_errorName(U_MISSING_RESOURCE_ERROR),u_errorName(status)); 
+            log_err("Did not get the expected error from an empty resource bundle. Expected : %s Got: %s\n",
+                u_errorName(U_MISSING_RESOURCE_ERROR),u_errorName(status));
         }
     }
     ures_close(dResB);
     ures_close(resb);
 }
 
-static void TestBinaryCollationData(){
-#if !UCONFIG_NO_COLLATION 
+static void TestBinaryCollationData(void){
+#if !UCONFIG_NO_COLLATION
     UErrorCode status=U_ZERO_ERROR;
     const char*      locale="te";
     const char* testdatapath;
@@ -982,7 +983,7 @@ static void TestBinaryCollationData(){
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(ures_getType(coll), URES_TABLE);
-        binColl=ures_getByKey(coll, "%%CollationBin", binColl, &status);  
+        binColl=ures_getByKey(coll, "%%CollationBin", binColl, &status);
         if(U_SUCCESS(status)){
             CONFIRM_ErrorCode(status, U_ZERO_ERROR);
             CONFIRM_INT_EQ(ures_getType(binColl), URES_BINARY);
@@ -1007,7 +1008,7 @@ static void TestBinaryCollationData(){
 #endif
 }
 
-static void TestAPI() {
+static void TestAPI(void) {
     UErrorCode status=U_ZERO_ERROR;
     int32_t len=0;
     const char* key=NULL;
@@ -1019,9 +1020,9 @@ static void TestAPI() {
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
-    
+
     log_verbose("Testing ures_openU()......\n");
-    
+
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
@@ -1087,7 +1088,7 @@ static void TestAPI() {
         log_err("ERROR: calling getNextString where index out of bounds should return U_INDEX_OUTOFBOUNDS_ERROR, Got : %s\n",
                        myErrorName(status));
     }
-    ures_resetIterator(teRes);    
+    ures_resetIterator(teRes);
     /*Test ures_getNextResource() where resource is table*/
     status=U_ZERO_ERROR;
 #if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
@@ -1169,7 +1170,7 @@ static void TestAPI() {
     free(utestdatapath);
 }
 
-static void TestErrorConditions(){
+static void TestErrorConditions(void){
     UErrorCode status=U_ZERO_ERROR;
     const char *key=NULL;
     const UChar *value=NULL;
@@ -1183,8 +1184,8 @@ static void TestErrorConditions(){
     UResourceBundle *teFillin2=NULL;
     uint8_t *binResult = NULL;
     int32_t resultLen;
-    
-    
+
+
     testdatapath = loadTestData(&status);
     if(U_FAILURE(status))
     {
@@ -1194,7 +1195,7 @@ static void TestErrorConditions(){
     len = (int32_t)strlen(testdatapath);
     utestdatapath = (UChar*) malloc(sizeof(UChar) *(len+10));
     u_uastrcpy(utestdatapath, testdatapath);
-  
+
     /*Test ures_openU with status != U_ZERO_ERROR*/
     log_verbose("Testing ures_openU() with status != U_ZERO_ERROR.....\n");
     status=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1245,65 +1246,65 @@ static void TestErrorConditions(){
     }
     /*Test ures_getType() with UResourceBundle = NULL should return URES_NONE==-1*/
     status=U_ZERO_ERROR;
-    if(ures_getType(NULL) != URES_NONE){  
+    if(ures_getType(NULL) != URES_NONE){
         log_err("ERROR: ures_getType() should return URES_NONE when UResourceBundle=NULL.  Got =%d\n", ures_getType(NULL));
     }
     /*Test ures_getKey() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
-    if(ures_getKey(NULL) != NULL){  
+    if(ures_getKey(NULL) != NULL){
         log_err("ERROR: ures_getKey() should return NULL when UResourceBundle=NULL.  Got =%d\n", ures_getKey(NULL));
     }
     /*Test ures_hasNext() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
-    if(ures_hasNext(NULL) != FALSE){  
-        log_err("ERROR: ures_hasNext() should return FALSE when UResourceBundle=NULL.  Got =%d\n", ures_hasNext(NULL));
+    if(ures_hasNext(NULL) != false){
+        log_err("ERROR: ures_hasNext() should return false when UResourceBundle=NULL.  Got =%d\n", ures_hasNext(NULL));
     }
     /*Test ures_get() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
     if(ures_getStringByKey(NULL, "string_only_in_te", &resultLen, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_get is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getByKey() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
     teFillin=ures_getByKey(NULL, "string_only_in_te", teFillin, &status);
     if( teFillin != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getByKey is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getByKey() with status != U_ZERO_ERROR*/
     teFillin=ures_getByKey(NULL, "string_only_in_te", teFillin, &status);
     if(teFillin != NULL ){
         log_err("ERROR: ures_getByKey is supposed to fail when errorCode != U_ZERO_ERROR\n");
-    } 
+    }
     /*Test ures_getStringByKey() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
     if(ures_getStringByKey(NULL, "string_only_in_te", &len, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getStringByKey is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getStringByKey() with status != U_ZERO_ERROR*/
     if(ures_getStringByKey(teRes, "string_only_in_te", &len, &status) != NULL){
         log_err("ERROR: ures_getStringByKey is supposed to fail when status != U_ZERO_ERROR. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getString() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
     if(ures_getString(NULL, &len, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getString is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getString() with status != U_ZERO_ERROR*/
     if(ures_getString(teRes, &len, &status) != NULL){
         log_err("ERROR: ures_getString is supposed to fail when status != U_ZERO_ERROR. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getBinary() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
     if(ures_getBinary(NULL, &len, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getBinary is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
-    } 
+    }
     /*Test ures_getBinary(0 status != U_ILLEGAL_ARGUMENT_ERROR*/
     status=U_ZERO_ERROR;
     coll = ures_getByKey(teRes, "collations", coll, &status);
@@ -1315,7 +1316,7 @@ static void TestErrorConditions(){
     if(binResult != NULL){
         log_err("ERROR: ures_getBinary() with status != U_ZERO_ERROR is supposed to fail\n");
     }
-        
+
     /*Test ures_getNextResource() with status != U_ZERO_ERROR*/
     teFillin=ures_getNextResource(teRes, teFillin, &status);
     if(teFillin != NULL){
@@ -1325,7 +1326,7 @@ static void TestErrorConditions(){
     status=U_ZERO_ERROR;
     teFillin=ures_getNextResource(NULL, teFillin, &status);
     if(teFillin != NULL || status != U_ILLEGAL_ARGUMENT_ERROR){
-        log_err("ERROR: ures_getNextResource() with UResourceBundle = NULL is supposed to fail.  Expected : U_IILEGAL_ARGUMENT_ERROR, Got : %s\n", 
+        log_err("ERROR: ures_getNextResource() with UResourceBundle = NULL is supposed to fail.  Expected : U_IILEGAL_ARGUMENT_ERROR, Got : %s\n",
                                           myErrorName(status));
     }
     /*Test ures_getNextString with errorCode != U_ZERO_ERROR*/
@@ -1360,7 +1361,7 @@ static void TestErrorConditions(){
     if(status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getByIndex() with UResourceBundle=NULL is supposed to fail\n Expected: U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
                                     myErrorName(status));
-    } 
+    }
     /*Test ures_getStringByIndex with errorCode != U_ZERO_ERROR*/
     status=U_ZERO_ERROR;
     teFillin=ures_getByKey(teRes, "array_only_in_te", teFillin, &status);
@@ -1375,21 +1376,21 @@ static void TestErrorConditions(){
     if(value != NULL || status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getStringByIndex() with UResourceBundle=NULL is supposed to fail\n Expected: U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
                                     myErrorName(status));
-    } 
+    }
     /*Test ures_getStringByIndex with UResourceBundle = NULL */
     status=U_ZERO_ERROR;
     value=(UChar*)ures_getStringByIndex(teFillin, 9999, &len, &status);
     if(value != NULL || status != U_MISSING_RESOURCE_ERROR){
         log_err("ERROR: ures_getStringByIndex() with index that is too big is supposed to fail\n Expected: U_MISSING_RESOURCE_ERROR, Got: %s\n",
                                     myErrorName(status));
-    } 
+    }
     /*Test ures_getInt() where UResourceBundle = NULL */
     status=U_ZERO_ERROR;
     if(ures_getInt(NULL, &status) != -1 && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getInt() with UResourceBundle = NULL should fail. Expected: U_IILEGAL_ARGUMENT_ERROR, Got: %s\n",
                            myErrorName(status));
     }
-    /*Test ures_getInt() where status != U_ZERO_ERROR */  
+    /*Test ures_getInt() where status != U_ZERO_ERROR */
     if(ures_getInt(teRes, &status) != -1){
         log_err("ERROR: ures_getInt() with errorCode != U_ZERO_ERROR should fail\n");
     }
@@ -1400,20 +1401,20 @@ static void TestErrorConditions(){
     ures_close(binColl);
     ures_close(teRes);
     free(utestdatapath);
-    
+
 
 }
 
-static void TestGetVersion(){
+static void TestGetVersion(void){
     UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
     UVersionInfo maxVersionArray = {0x50, 0xff, 0xcf, 0xcf};
     UVersionInfo versionArray;
     UErrorCode status= U_ZERO_ERROR;
-    UResourceBundle* resB = NULL; 
+    UResourceBundle* resB = NULL;
     int i=0, j = 0;
     int locCount = uloc_countAvailable();
     const char *locName = "root";
-    
+
     log_verbose("The ures_getVersion tests begin : \n");
 
     for(j = -1; j < locCount; j++) {
@@ -1432,7 +1433,7 @@ static void TestGetVersion(){
             if (versionArray[i] < minVersionArray[i] ||
                 versionArray[i] > maxVersionArray[i])
             {
-                log_err("Testing ures_getVersion(%-5s) - unexpected result: %d.%d.%d.%d\n", 
+                log_err("Testing ures_getVersion(%-5s) - unexpected result: %d.%d.%d.%d\n",
                     locName, versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
                 break;
             }
@@ -1442,13 +1443,13 @@ static void TestGetVersion(){
 }
 
 
-static void TestGetVersionColl(){
+static void TestGetVersionColl(void){
 #if !UCONFIG_NO_COLLATION
     UVersionInfo minVersionArray = {0x00, 0x00, 0x00, 0x00};
     UVersionInfo maxVersionArray = {0x50, 0x80, 0xcf, 0xcf};
     UVersionInfo versionArray;
     UErrorCode status= U_ZERO_ERROR;
-    UResourceBundle* resB = NULL;   
+    UResourceBundle* resB = NULL;
     UEnumeration *locs= NULL;
     int i=0;
     const char *locName = "root";
@@ -1487,7 +1488,7 @@ static void TestGetVersionColl(){
             if (versionArray[i] < minVersionArray[i] ||
                 versionArray[i] > maxVersionArray[i])
             {
-                log_err("Testing ures_getVersion(%-5s) - unexpected result: %d.%d.%d.%d\n", 
+                log_err("Testing ures_getVersion(%-5s) - unexpected result: %d.%d.%d.%d\n",
                     locName, versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
                 break;
             }
@@ -1506,7 +1507,7 @@ static void TestGetVersionColl(){
 #endif  /* !UCONFIG_NO_COLLATION */
 }
 
-static void TestResourceBundles()
+static void TestResourceBundles(void)
 {
     // The test expectation only works if the default locale is not one of the
     // locale bundle in the testdata which have those info. Therefore, we skip
@@ -1524,21 +1525,21 @@ static void TestResourceBundles()
         return;
     }
 
-    testTag("only_in_Root", TRUE, FALSE, FALSE);
-    testTag("in_Root_te", TRUE, TRUE, FALSE);
-    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-    testTag("only_in_te", FALSE, TRUE, FALSE);
-    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-    testTag("nonexistent", FALSE, FALSE, FALSE);
+    testTag("only_in_Root", true, false, false);
+    testTag("in_Root_te", true, true, false);
+    testTag("in_Root_te_te_IN", true, true, true);
+    testTag("in_Root_te_IN", true, false, true);
+    testTag("only_in_te", false, true, false);
+    testTag("only_in_te_IN", false, false, true);
+    testTag("in_te_te_IN", false, true, true);
+    testTag("nonexistent", false, false, false);
 
     log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 
 }
 
 
-static void TestConstruction1()
+static void TestConstruction1(void)
 {
     // The test expectation only works if the default locale is not one of the
     // locale bundle in the testdata which have those info. Therefore, we skip
@@ -1574,7 +1575,7 @@ static void TestConstruction1()
         log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    
+
     log_verbose("Testing ures_open()......\n");
 
     empty = ures_open(testdatapath, "testempty", &status);
@@ -1671,7 +1672,7 @@ static UBool testTag(const char* frag,
     if(U_FAILURE(status))
     {
         log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
-        return FALSE;
+        return false;
     }
 
     is_in[0] = in_Root;
@@ -1714,7 +1715,7 @@ static UBool testTag(const char* frag,
                     expected_resource_status = U_USING_FALLBACK_WARNING;
 
                 log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
-                            param[i].name, 
+                            param[i].name,
                             i,
                             frag,
                             j,
@@ -1859,7 +1860,7 @@ static UBool testTag(const char* frag,
         }
 
 
-        /*--------------2dArray------------------------------------------------- */  
+        /*--------------2dArray------------------------------------------------- */
 
         strcpy(tag,"array_2d_");
         strcat(tag,frag);
@@ -1976,7 +1977,7 @@ static UBool testTag(const char* frag,
             CONFIRM_INT_EQ(bundleType, URES_TABLE);
 
             tag_count=ures_getSize(tags);
-            CONFIRM_INT_GE((int32_t)tag_count, (int32_t)0); 
+            CONFIRM_INT_GE((int32_t)tag_count, (int32_t)0);
 
             for(idx=0; idx <tag_count; idx++){
                 UResourceBundle *tagelement=NULL;
@@ -2053,17 +2054,17 @@ static UBool testTag(const char* frag,
     return (UBool)(failNum == fail);
 }
 
-static void record_pass()
+static void record_pass(void)
 {
     ++pass;
 }
 
-static void record_fail()
+static void record_fail(void)
 {
     ++fail;
 }
 
-static void TestPreventFallback() {
+static void TestPreventFallback(void) {
     UResourceBundle* theBundle = NULL;
     const char* testdatapath;
     UErrorCode status = U_ZERO_ERROR;
@@ -2123,7 +2124,7 @@ static void TestPreventFallback() {
  * are set correctly
  */
 
-static void TestFallback()
+static void TestFallback(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *fr_FR = NULL;
@@ -2155,7 +2156,7 @@ static void TestFallback()
     subResource = ures_getByKey(fr_FR, "layout", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get layout from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get layout from fr_FR, got %s\n",
             u_errorName(status));
     }
 
@@ -2166,10 +2167,10 @@ static void TestFallback()
     junk = tres_getString(fr_FR, -1, "ExemplarCharacters", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
     {
-        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get ExemplarCharacters from fr_FR, got %d\n", 
+        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get ExemplarCharacters from fr_FR, got %d\n",
             status);
     }
-    
+
     status = U_ZERO_ERROR;
 
     ures_close(fr_FR);
@@ -2180,7 +2181,7 @@ static void TestFallback()
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         const UChar* version = NULL;
-        static const UChar versionStr[] = u"42"; // 42 in nn_NO or in a parent bundle/root
+        static const UChar versionStr[] = u"45"; // 45 in nn_NO or in a parent bundle/root
 
         if(U_FAILURE(err)) {
             log_data_err("Expected success when trying to test no_NO_NY aliased to nn_NO for Version "
@@ -2221,7 +2222,7 @@ static void TestFallback()
 static void TestResourceLevelAliasing(void) {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *aliasB = NULL, *tb = NULL;
-    UResourceBundle *en = NULL, *uk = NULL, *testtypes = NULL;  
+    UResourceBundle *en = NULL, *uk = NULL, *testtypes = NULL;
     const char* testdatapath = NULL;
     const UChar *string = NULL, *sequence = NULL;
     /*const uint8_t *binary = NULL, *binSequence = NULL;*/
@@ -2235,7 +2236,7 @@ static void TestResourceLevelAliasing(void) {
         log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    
+
     aliasB = ures_open(testdatapath, "testaliases", &status);
 
     if(U_FAILURE(status))
@@ -2272,22 +2273,22 @@ static void TestResourceLevelAliasing(void) {
       if((uk == NULL) || U_FAILURE(status)) {
         log_err_status(status, "Couldn't findResource('ja/calendar/gregorian/DateTimePatterns/2') err %s\n", u_errorName(status));
         goto cleanup;
-      } 
-      
+      }
+
       sequence = tres_getString(uk, -1, NULL, &seqLen, &status);
-      
+
       tb = ures_getByKey(aliasB, "referencingalias", tb, &status);
       string = tres_getString(tb, -1, NULL, &strLen, &status);
-      
+
       if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
         log_err("Referencing alias didn't get the right string (1)\n");
       }
-      
+
       string = tres_getString(aliasB, -1, "referencingalias", &strLen, &status);
       if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
         log_err("Referencing alias didn't get the right string (2)\n");
       }
-      
+
       checkStatus(__LINE__, U_ZERO_ERROR, status);
       tb = ures_getByKey(aliasB, "DateTimePatterns", tb, &status);
       checkStatus(__LINE__, U_ZERO_ERROR, status);
@@ -2295,7 +2296,7 @@ static void TestResourceLevelAliasing(void) {
       checkStatus(__LINE__, U_ZERO_ERROR, status);
       string = tres_getString(tb, -1, NULL, &strLen, &status);
       checkStatus(__LINE__, U_ZERO_ERROR, status);
-      
+
       if(U_FAILURE(status)) {
         log_err("%s trying to get string via separate getters\n", u_errorName(status));
       } else if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
@@ -2308,18 +2309,18 @@ static void TestResourceLevelAliasing(void) {
       s = buffer;
       uk = ures_findSubResource(testtypes, s, uk, &status);
       sequence = tres_getString(uk, -1, NULL, &seqLen, &status);
-      
+
       tb = ures_getByKey(aliasB, "simplealias", tb, &status);
       string = tres_getString(tb, -1, NULL, &strLen, &status);
-      
+
       if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
         log_err("Referencing alias didn't get the right string (4)\n");
       }
-      
+
       /* test indexed aliasing */
-      
+
       en = ures_findResource("/ICUDATA-zone/en/zoneStrings/3/0", en, &status);
-      
+
       if(status != U_MISSING_RESOURCE_ERROR) {
         log_err("Index lookup in a table resource didn't get U_MISSING_RESOURCE_ERROR!\n");
       }
@@ -2333,7 +2334,7 @@ static void TestResourceLevelAliasing(void) {
                 "KeyAlias2PDT",
                 "KeyAlias3LosAngeles"
         };
-        
+
         const char* strings[] = {
                 "America/Los_Angeles",
                 "Pacific Standard Time",
@@ -2361,7 +2362,7 @@ static void TestResourceLevelAliasing(void) {
                 }
             }
             for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
-                result = tres_getString(tb, i, NULL, &resultLen, &status); 
+                result = tres_getString(tb, i, NULL, &resultLen, &status);
                 if(U_FAILURE(status)){
                     log_err("(2) Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
                     continue;
@@ -2431,7 +2432,7 @@ static void TestDirectAccess(void) {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *t = NULL, *t2 = NULL;
     const char* key = NULL;
-    
+
     char buffer[100];
     char *s;
     /*const char* testdatapath=loadTestData(&status);
@@ -2439,7 +2440,7 @@ static void TestDirectAccess(void) {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }*/
-    
+
     t = ures_findResource("/testdata/te/zoneStrings/3/2", t, &status);
     if(U_FAILURE(status)) {
         log_data_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
@@ -2460,7 +2461,7 @@ static void TestDirectAccess(void) {
             log_err("Got a strange key, expected NULL, got %s\n", key);
         }
     }
-    
+
     t = ures_findResource("ja/ExemplarCharacters", t, &status);
     if(U_FAILURE(status)) {
         log_data_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
@@ -2471,14 +2472,14 @@ static void TestDirectAccess(void) {
             log_err("Got a strange key, expected 'ExemplarCharacters', got %s\n", key);
         }
     }
-    
+
     t2 = ures_open(U_ICUDATA_LANG, "sr", &status);
     if(U_FAILURE(status)) {
         log_err_status(status, "Couldn't open 'sr' resource bundle, error %s\n", u_errorName(status));
         log_data_err("No 'sr', no test - you have bigger problems than testing direct access. "
                      "You probably have no data! Aborting this test\n");
     }
-    
+
     if(U_SUCCESS(status)) {
         strcpy(buffer, "Languages/hr");
         s = buffer;
@@ -2587,7 +2588,7 @@ static void TestJB3763(void) {
 
 static void TestGetKeywordValues(void) {
     UEnumeration *kwVals;
-    UBool foundStandard = FALSE;
+    UBool foundStandard = false;
     UErrorCode status = U_ZERO_ERROR;
     const char *kw;
 #if !UCONFIG_NO_COLLATION
@@ -2598,14 +2599,14 @@ static void TestGetKeywordValues(void) {
     while((kw=uenum_next(kwVals, NULL, &status))) {
         log_verbose("  %s\n", kw);
         if(!strcmp(kw,"standard")) {
-            if(foundStandard == FALSE) {
-                foundStandard = TRUE;
+            if(foundStandard == false) {
+                foundStandard = true;
             } else {
                 log_err("'standard' was found twice in the keyword list.\n");
             }
         }
     }
-    if(foundStandard == FALSE) {
+    if(foundStandard == false) {
         log_err_status(status, "'standard' was not found in the keyword list.\n");
     }
     uenum_close(kwVals);
@@ -2614,7 +2615,7 @@ static void TestGetKeywordValues(void) {
     }
     status = U_ZERO_ERROR;
 #endif
-    foundStandard = FALSE;
+    foundStandard = false;
     kwVals = ures_getKeywordValues( "ICUDATA", "calendar", &status);
 
     log_verbose("Testing getting calendar keyword values:\n");
@@ -2622,14 +2623,14 @@ static void TestGetKeywordValues(void) {
     while((kw=uenum_next(kwVals, NULL, &status))) {
         log_verbose("  %s\n", kw);
         if(!strcmp(kw,"japanese")) {
-            if(foundStandard == FALSE) {
-                foundStandard = TRUE;
+            if(foundStandard == false) {
+                foundStandard = true;
             } else {
                 log_err("'japanese' was found twice in the calendar keyword list.\n");
             }
         }
     }
-    if(foundStandard == FALSE) {
+    if(foundStandard == false) {
         log_err_status(status, "'japanese' was not found in the calendar keyword list.\n");
     }
     uenum_close(kwVals);
@@ -2641,8 +2642,8 @@ static void TestGetKeywordValues(void) {
 static void TestGetFunctionalEquivalentOf(const char *path, const char *resName, const char *keyword, UBool truncate, const char * const testCases[]) {
     int32_t i;
     for(i=0;testCases[i];i+=3) {
-        UBool expectAvail = (testCases[i][0]=='t')?TRUE:FALSE;
-        UBool gotAvail = FALSE;
+        UBool expectAvail = (testCases[i][0]=='t')?true:false;
+        UBool gotAvail = false;
         const char *inLocale = testCases[i+1];
         const char *expectLocale = testCases[i+2];
         char equivLocale[256];
@@ -2653,14 +2654,14 @@ static void TestGetFunctionalEquivalentOf(const char *path, const char *resName,
             resName, keyword, inLocale,
             &gotAvail, truncate, &status);
         if(U_FAILURE(status) || (len <= 0)) {
-            log_err_status(status, "FAIL: got len %d, err %s  on #%d: %c\t%s\t%s\n",  
+            log_err_status(status, "FAIL: got len %d, err %s  on #%d: %c\t%s\t%s\n",
                 len, u_errorName(status),
                 i/3,expectAvail?'t':'f', inLocale, expectLocale);
         } else {
             log_verbose("got:  %c   %s\n", expectAvail?'t':'f',equivLocale);
 
             if((gotAvail != expectAvail) || strcmp(equivLocale, expectLocale)) {
-                log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",  
+                log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",
                     gotAvail?'t':'f', equivLocale,
                     i/3,
                     expectAvail?'t':'f', inLocale, expectLocale);
@@ -2709,6 +2710,31 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "nl@collation=stroke",            "root",
         "f",    "nl_NL@collation=stroke",         "root",
         "f",    "nl_NL_EEXT@collation=stroke",    "root",
+        /* Additions to test aliased locales */
+        "f",    "yue_HK",                         "zh@collation=stroke",
+        "f",    "yue_Hant",                       "zh@collation=stroke",
+        "f",    "yue_Hant_HK",                    "zh@collation=stroke",
+        "f",    "yue@collation=stroke",           "zh@collation=stroke",
+        "f",    "yue@collation=pinyin",           "zh",
+        "f",    "yue_CN",                         "zh",
+        "f",    "yue_Hans",                       "zh",
+        "f",    "yue_Hans_CN",                    "zh",
+        "f",    "yue_Hans@collation=pinyin",      "zh",
+        "f",    "yue_Hans@collation=stroke",      "zh@collation=stroke",
+        "f",    "mo",                             "mo",
+        "t",    "no",                             "no",
+        "t",    "nb",                             "no",
+        "t",    "nn",                             "no",
+        "f",    "ars",                            "ar",
+        /* Additions to test locales without resources */
+        "f",    "en_CN",                          "root",
+        "f",    "zh_Hant_CN",                     "zh@collation=stroke",
+        "f",    "zh_Hant_US",                     "zh@collation=stroke",
+        "f",    "zh_Hans_US",                     "zh",
+        "f",    "yue_TW",                         "zh@collation=stroke",
+        "f",    "yue_US",                         "zh@collation=stroke",
+        "f",    "ja_CN",                          "ja",
+        "f",    "ja_US",                          "ja",
         NULL
     };
 #endif  /* !UCONFIG_NO_COLLATION */
@@ -2724,9 +2750,9 @@ static void TestGetFunctionalEquivalent(void) {
     };
 
 #if !UCONFIG_NO_COLLATION
-    TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", TRUE, collCases);
+    TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", true, collCases);
 #endif
-    TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", FALSE, calCases);
+    TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", false, calCases);
 
 #if !UCONFIG_NO_COLLATION
     log_verbose("Testing error conditions:\n");
@@ -2734,11 +2760,11 @@ static void TestGetFunctionalEquivalent(void) {
         char equivLocale[256] = "???";
         int32_t len;
         UErrorCode status = U_ZERO_ERROR;
-        UBool gotAvail = FALSE;
+        UBool gotAvail = false;
 
         len = ures_getFunctionalEquivalent(equivLocale, 255, U_ICUDATA_COLL,
-            "calendar", "calendar", "ar_EG@calendar=islamic", 
-            &gotAvail, FALSE, &status);
+            "calendar", "calendar", "ar_EG@calendar=islamic",
+            &gotAvail, false, &status);
         (void)len;    /* Suppress set but not used warning. */
 
         if(status == U_MISSING_RESOURCE_ERROR) {
@@ -2758,14 +2784,14 @@ static void TestXPath(void) {
     const UChar* result = NULL;
     const UChar expResult[] = { 0x0063, 0x006F, 0x0072, 0x0072, 0x0065, 0x0063, 0x0074, 0x0000 }; /* "correct" */
     /*const UChar expResult[] = { 0x0074, 0x0065, 0x0069, 0x006E, 0x0064, 0x0065, 0x0073, 0x0074, 0x0000 }; *//*teindest*/
-    
+
     const char *testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    
+
     log_verbose("Testing ures_open()......\n");
 
     rb = ures_open(testdatapath, "te_IN", &status);
@@ -2842,12 +2868,12 @@ static void TestCLDRStyleAliases(void) {
       resource[0]='a';
       resource[1]='0'+i;
       resource[2]=0;
-      /* instead of sprintf(resource, "a%i", i); */
+      /* instead of snprintf(resource, "a%i", i); */
       a = ures_getByKeyWithFallback(alias, resource, a, &status);
       result = tres_getString(a, -1, NULL, &len, &status);
       u_charsToUChars(expects[i], expected, (int32_t)strlen(expects[i])+1);
       if(U_FAILURE(status) || !result || u_strcmp(result, expected)) {
-        log_err("CLDR style aliases failed resource with name \"%s\" resource, exp %s, got %S (%s)\n", resource, expects[i], result, myErrorName(status)); 
+        log_err("CLDR style aliases failed resource with name \"%s\" resource, exp %s, got %S (%s)\n", resource, expects[i], result, myErrorName(status));
         status = U_ZERO_ERROR;
       }
     }
@@ -2929,7 +2955,7 @@ tres_getString(const UResourceBundle *resB,
     length16 = *length;
 
     /* try the UTF-8 variant of ures_getStringXYZ() */
-    for(forceCopy = FALSE; forceCopy <= TRUE; ++forceCopy) {
+    for(forceCopy = false; forceCopy <= true; ++forceCopy) {
         p8 = buffer8;
         length8 = (int32_t)sizeof(buffer8);
         if(idx >= 0) {
@@ -3013,7 +3039,7 @@ tres_getString(const UResourceBundle *resB,
  * UTF-16 ures_getStringXYZ() that are called internally.
  */
 static void
-TestGetUTF8String() {
+TestGetUTF8String(void) {
     UResourceBundle *res;
     const char *testdatapath;
     char buffer8[16];
@@ -3037,7 +3063,7 @@ TestGetUTF8String() {
     /* one good call */
     status = U_ZERO_ERROR;
     length8 = (int32_t)sizeof(buffer8);
-    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, FALSE, &status);
+    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, false, &status);
     (void)s8;    /* Suppress set but not used warning. */
     if(status != U_ZERO_ERROR) {
         log_err("ures_getUTF8StringByKey(testdata/root string) malfunctioned - %s\n", u_errorName(status));
@@ -3046,7 +3072,7 @@ TestGetUTF8String() {
     /* negative capacity */
     status = U_ZERO_ERROR;
     length8 = -1;
-    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, FALSE, &status);
+    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, false, &status);
     if(status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ures_getUTF8StringByKey(capacity<0) malfunctioned - %s\n", u_errorName(status));
     }
@@ -3054,7 +3080,7 @@ TestGetUTF8String() {
     /* capacity>0 but dest=NULL */
     status = U_ZERO_ERROR;
     length8 = (int32_t)sizeof(buffer8);
-    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", NULL, &length8, FALSE, &status);
+    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", NULL, &length8, false, &status);
     if(status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ures_getUTF8StringByKey(dest=NULL capacity>0) malfunctioned - %s\n", u_errorName(status));
     }
@@ -3084,7 +3110,7 @@ static void TestCLDRVersion(void) {
     log_info("ulocdata_getCLDRVersion() returned: '%s'\n", tmp);
   }
 
-  
+
   /* setup from resource bundle */
   {
     UResourceBundle *res;
@@ -3114,12 +3140,12 @@ static void TestCLDRVersion(void) {
 
 
   u_versionToString(testExpect,tmp);
-  log_verbose("(data) ExpectCLDRVersionAtLeast { %s }\n", tmp); 
+  log_verbose("(data) ExpectCLDRVersionAtLeast { %s }\n", tmp);
   if(memcmp(cldrVersion, testExpect, sizeof(UVersionInfo)) < 0) {
     log_data_err("CLDR version is too old, expect at least %s.", tmp);
   }
   u_versionToString(testCurrent,tmp);
-  log_verbose("(data) CurrentCLDRVersion { %s }\n", tmp); 
+  log_verbose("(data) CurrentCLDRVersion { %s }\n", tmp);
   switch(memcmp(cldrVersion, testCurrent, sizeof(UVersionInfo))) {
     case 0: break; /* OK- current. */
     case -1: log_info("CLDR version is behind 'current' (for testdata/root.txt) %s. Some things may fail.\n", tmp); break;

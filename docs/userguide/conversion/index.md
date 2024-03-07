@@ -141,7 +141,7 @@ Unicode.
         references](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
     7.  For data exchange (rather than pure display), turn off fallback
-        mappings: `ucnv_setFallback(cnv, FALSE)`;
+        mappings: `ucnv_setFallback(cnv, false)`;
 
     8.  For some text formats, especially XML and HTML, it is possible to set an
         "escape callback" function that turns unmappable Unicode code points

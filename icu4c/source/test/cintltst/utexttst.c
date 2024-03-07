@@ -15,6 +15,8 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
+
 #include "unicode/utypes.h"
 #include "unicode/utext.h"
 #include "unicode/ustring.h"
@@ -35,9 +37,9 @@ addUTextTest(TestNode** root)
 
 
 #define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((x)==FALSE) { \
+    if ((x)==false) { \
         log_err("Test failure in file %s at line %d\n", __FILE__, __LINE__); \
-        gFailed = TRUE; \
+        gFailed = true; \
     } \
 } UPRV_BLOCK_MACRO_END
 
@@ -46,7 +48,7 @@ addUTextTest(TestNode** root)
     if (U_FAILURE(status)) { \
         log_err("Test failure in file %s at line %d. Error = \"%s\"\n", \
                 __FILE__, __LINE__, u_errorName(status)); \
-        gFailed = TRUE; \
+        gFailed = true; \
    } \
 } UPRV_BLOCK_MACRO_END
 
@@ -63,7 +65,7 @@ addUTextTest(TestNode** root)
 
 static void TestAPI(void) {
     UErrorCode      status = U_ZERO_ERROR;
-    UBool           gFailed = FALSE;
+    UBool           gFailed = false;
     (void)gFailed;   /* Suppress set but not used warning. */
 
     /* Open    */
@@ -100,7 +102,7 @@ static void TestAPI(void) {
         status = U_ZERO_ERROR;
         uta = utext_openUChars(NULL, uString, -1, &status);
         TEST_SUCCESS(status);
-        utb = utext_clone(NULL, uta, FALSE, FALSE, &status);
+        utb = utext_clone(NULL, uta, false, false, &status);
         TEST_SUCCESS(status);
         TEST_ASSERT(utb != NULL);
         TEST_ASSERT(utb != uta);
@@ -124,11 +126,11 @@ static void TestAPI(void) {
         TEST_ASSERT(uta!=NULL);
         TEST_SUCCESS(status);
         b = utext_isLengthExpensive(uta);
-        TEST_ASSERT(b==TRUE);
+        TEST_ASSERT(b==true);
         len = utext_nativeLength(uta);
         TEST_ASSERT(len == u_strlen(uString));
         b = utext_isLengthExpensive(uta);
-        TEST_ASSERT(b==FALSE);
+        TEST_ASSERT(b==false);
 
         c = utext_char32At(uta, 0);
         TEST_ASSERT(c==uString[0]);
@@ -158,17 +160,17 @@ static void TestAPI(void) {
 
         utext_setNativeIndex(uta, 0);
         b = utext_moveIndex32(uta, 1);
-        TEST_ASSERT(b==TRUE);
+        TEST_ASSERT(b==true);
         i = utext_getNativeIndex(uta);
         TEST_ASSERT(i==1);
 
         b = utext_moveIndex32(uta, u_strlen(uString)-1);
-        TEST_ASSERT(b==TRUE);
+        TEST_ASSERT(b==true);
         i = utext_getNativeIndex(uta);
         TEST_ASSERT(i==u_strlen(uString));
 
         b = utext_moveIndex32(uta, 1);
-        TEST_ASSERT(b==FALSE);
+        TEST_ASSERT(b==false);
         i = utext_getNativeIndex(uta);
         TEST_ASSERT(i==u_strlen(uString));
 
@@ -270,10 +272,10 @@ static void TestAPI(void) {
         TEST_SUCCESS(status);
 
         b = utext_isWritable(uta);
-        TEST_ASSERT(b == FALSE);
+        TEST_ASSERT(b == false);
 
         b = utext_hasMetaData(uta);
-        TEST_ASSERT(b == FALSE);
+        TEST_ASSERT(b == false);
 
         utext_replace(uta,
                       0, 1,     /* start, limit */
@@ -285,7 +287,7 @@ static void TestAPI(void) {
         utext_copy(uta,
                    0, 1,         /* start, limit      */
                    2,            /* destination index */
-                   FALSE,        /* move flag         */
+                   false,        /* move flag         */
                    &status);
         TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 

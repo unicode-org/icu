@@ -26,18 +26,18 @@
 
 #include "strengthprobe.h"
 
-StrengthProbe::StrengthProbe(CompareFn comparer, GetSortKeyFn getter, UChar SE, 
-                             UChar B0, UChar B1, UChar B2, UChar B3) :
+StrengthProbe::StrengthProbe(CompareFn comparer, GetSortKeyFn getter, char16_t SE,
+                             char16_t B0, char16_t B1, char16_t B2, char16_t B3) :
 SE(SE),
 B0(B0), B1(B1), B2(B2), B3(B3),
 utilFirstP(&utilFirst), utilSecondP(&utilSecond),
-frenchSecondary(FALSE),
+frenchSecondary(false),
 comparer(comparer), skgetter(getter)
 {
 }
 
 int
-StrengthProbe::setProbeChars(UChar B0, UChar B1, UChar B2, UChar B3)
+StrengthProbe::setProbeChars(char16_t B0, char16_t B1, char16_t B2, char16_t B3)
 {
   this->B0 = B0;
   this->B1 = B1;
@@ -97,7 +97,7 @@ StrengthProbe::checkSanity()
 }
 
 UBool 
-StrengthProbe::probePrefix(const Line &x, const Line &y, UChar first, UChar second) {
+StrengthProbe::probePrefix(const Line &x, const Line &y, char16_t first, char16_t second) {
   utilFirst.name[0] = first;
   utilFirst.name[1] = SE;
   u_strcpy(utilFirst.name+2, x.name);
@@ -111,14 +111,14 @@ StrengthProbe::probePrefix(const Line &x, const Line &y, UChar first, UChar seco
   utilSecond.len = y.len+2;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
 UBool 
-StrengthProbe::probeSuffix(const Line &x, const Line &y, UChar first, UChar second) {
+StrengthProbe::probeSuffix(const Line &x, const Line &y, char16_t first, char16_t second) {
   u_strcpy(utilFirst.name, x.name);
   utilFirst.name[x.len] = SE;
   utilFirst.name[x.len+1] = first;
@@ -131,14 +131,14 @@ StrengthProbe::probeSuffix(const Line &x, const Line &y, UChar first, UChar seco
   utilSecond.len = y.len + 2;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
 UBool 
-StrengthProbe::probePrefixNoSep(const Line &x, const Line &y, UChar first, UChar second) {
+StrengthProbe::probePrefixNoSep(const Line &x, const Line &y, char16_t first, char16_t second) {
   utilFirst.name[0] = first;
   u_strcpy(utilFirst.name+1, x.name);
   utilFirst.name[x.len+1] = 0;
@@ -150,14 +150,14 @@ StrengthProbe::probePrefixNoSep(const Line &x, const Line &y, UChar first, UChar
   utilSecond.len = y.len + 1;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
 UBool 
-StrengthProbe::probeSuffixNoSep(const Line &x, const Line &y, UChar first, UChar second) {
+StrengthProbe::probeSuffixNoSep(const Line &x, const Line &y, char16_t first, char16_t second) {
   u_strcpy(utilFirst.name, x.name);
   utilFirst.name[x.len] = first;
   utilFirst.name[x.len+1] = 0;
@@ -168,9 +168,9 @@ StrengthProbe::probeSuffixNoSep(const Line &x, const Line &y, UChar first, UChar
   utilSecond.len = y.len + 1;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
@@ -364,19 +364,19 @@ StrengthProbe::isFrenchSecondary(UErrorCode &status) {
   int32_t result = compare(utilFirst, utilSecond);
 
   if(result < 0) {
-    return FALSE;
+    return false;
   } else if(result > 0) {
-    frenchSecondary = TRUE;
-    return TRUE;
+    frenchSecondary = true;
+    return true;
   } else {
     status = U_INTERNAL_PROGRAM_ERROR;
-    return FALSE;
+    return false;
   }
 }
 
 UBool
 StrengthProbe::isUpperFirst(UErrorCode &status) {
-  UChar i = 0;
+  char16_t i = 0;
   int32_t result = 0;
   int32_t upper = 0, lower = 0, equal = 0;
   for(i = 0x41; i < 0x5B; i++) {
@@ -393,12 +393,12 @@ StrengthProbe::isUpperFirst(UErrorCode &status) {
   }
   
   if(lower == 0 && equal == 0) {
-    return TRUE;
+    return true;
   }
   if(upper == 0 && equal == 0) {
-    return FALSE;
+    return false;
   }
   status = U_INTERNAL_PROGRAM_ERROR;
-  return FALSE;
+  return false;
 }
 

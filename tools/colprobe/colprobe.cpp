@@ -49,7 +49,7 @@
 //  Stubs for Windows API functions when building on UNIXes.
 //
 typedef int DWORD;
-inline int CompareStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
+inline int CompareStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;};
 #include <sys/time.h>
 unsigned long timeGetTime() {
     struct timeval t;
@@ -58,7 +58,7 @@ unsigned long timeGetTime() {
     val += t.tv_usec / 1000;
     return val;
 };
-inline int LCMapStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
+inline int LCMapStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;};
 const int LCMAP_SORTKEY = 0;
 #define MAKELCID(a,b) 0
 const int SORT_DEFAULT = 0;
@@ -66,10 +66,10 @@ const int SORT_DEFAULT = 0;
 
 #include "line.h"
 
-static UBool gVerbose = FALSE;
-static UBool gDebug = FALSE;
-static UBool gQuiet = FALSE;
-static UBool gExemplar = FALSE;
+static UBool gVerbose = false;
+static UBool gDebug = false;
+static UBool gQuiet = false;
+static UBool gExemplar = false;
 
 DWORD          gWinLCID;
 int            gCount;
@@ -80,26 +80,26 @@ Line          source;
 Line          target;
 Line          *gSource = &source;
 Line          *gTarget = &target;
-Hashtable     gElements(FALSE);
-Hashtable     gExpansions(FALSE);
+Hashtable     gElements(false);
+Hashtable     gExpansions(false);
 CompareFn gComparer;
 
-const UChar separatorChar = 0x0030;
+const char16_t separatorChar = 0x0030;
 
-UFILE *out = NULL;
-UFILE *err = NULL;
-UFILE *log = NULL; 
+UFILE *out = nullptr;
+UFILE *err = nullptr;
+UFILE *log = nullptr; 
 
 const char *progName = "colprobe";
 
-const char *gLocale = NULL;
+const char *gLocale = nullptr;
 //char platform[256];
 int32_t platformIndex = -1;
 int32_t gPlatformNo = 0;
 int32_t gPlatformIndexes[10];
 int32_t gLocaleNo = 0;
 const char* gLocales[100];
-UBool gRulesStdin = FALSE;
+UBool gRulesStdin = false;
 
 enum {
   HELP1,
@@ -217,17 +217,17 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
     return;
   }
   if(options[VERBOSE].doesOccur) {
-    gVerbose = TRUE;
+    gVerbose = true;
   }
   if(options[DEBUG].doesOccur) {
-    gDebug = TRUE;
-    gVerbose = TRUE;
+    gDebug = true;
+    gVerbose = true;
   }
   if(options[EXEMPLAR].doesOccur) {
-    gExemplar = TRUE;
+    gExemplar = true;
   }
   if(options[QUIET].doesOccur) {
-    gQuiet = TRUE;
+    gQuiet = true;
   }
 /*
   for(i = 8; i < 9; i++) {
@@ -236,7 +236,7 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
       usage(progName);
       status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    if(options[i].value == NULL) {
+    if(options[i].value == nullptr) {
       u_fprintf(err, "Option %s needs an argument!\n", options[i].longName);
       usage(progName);
       status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -249,7 +249,7 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
   // In that case, we test only ICU and don't need 
   // a locale.
   if(options[RULESSTDIN].doesOccur) {
-    gRulesStdin = TRUE;
+    gRulesStdin = true;
     addPlatform("icu");
     return;
   } 
@@ -286,10 +286,10 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
 
 }
 
-void printRules(const UChar *name, int32_t len, UFILE *file) {
+void printRules(const char16_t *name, int32_t len, UFILE *file) {
   // very rudimentary pretty rules print
   int32_t i = 0;
-  UChar toPrint[16384];
+  char16_t toPrint[16384];
   int32_t toPrintIndex = 0;
   for(i = 0; i < len; i++) {
     if(name[i] == 0x0026) {
@@ -314,7 +314,7 @@ void printRules(const UChar *name, int32_t len, UFILE *file) {
 
 }
 
-void escapeString(const UChar *name, int32_t len, UFILE *file) {
+void escapeString(const char16_t *name, int32_t len, UFILE *file) {
   u_fprintf(file, "%U", name);
 /*
   int32_t j = 0;
@@ -357,15 +357,15 @@ int32_t
 setArray(Line **array, Hashtable *table = &gElements) {
   int32_t size = table->count();
   int32_t hashIndex = -1;
-  const UHashElement *hashElement = NULL;
+  const UHashElement *hashElement = nullptr;
   int32_t count = 0;
-  while((hashElement = table->nextElement(hashIndex)) != NULL) {
+  while((hashElement = table->nextElement(hashIndex)) != nullptr) {
     array[count++] = (Line *)hashElement->value.pointer;
   }
   return size;
 }
 
-UBool trySwamped(Line **smaller, Line **greater, UChar chars[2], CompareFn comparer) {
+UBool trySwamped(Line **smaller, Line **greater, char16_t chars[2], CompareFn comparer) {
   u_strcpy(gSource->name, (*smaller)->name);
   gSource->name[(*smaller)->len] = separatorChar;
   gSource->name[(*smaller)->len+1] = chars[0];
@@ -379,13 +379,13 @@ UBool trySwamped(Line **smaller, Line **greater, UChar chars[2], CompareFn compa
   gTarget->len = (*greater)->len+2;
 
   if(comparer(&gSource, &gTarget) > 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
-UBool trySwamps(Line **smaller, Line **greater, UChar chars[2], CompareFn comparer) {
+UBool trySwamps(Line **smaller, Line **greater, char16_t chars[2], CompareFn comparer) {
   gSource->name[0] = chars[0];
   gSource->name[1] = separatorChar;
   u_strcpy(gSource->name+2, (*smaller)->name);
@@ -397,9 +397,9 @@ UBool trySwamps(Line **smaller, Line **greater, UChar chars[2], CompareFn compar
   gTarget->len = (*greater)->len+2;
 
   if(comparer(&gSource, &gTarget) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
@@ -407,28 +407,28 @@ UColAttributeValue
 probeStrength(Line** prevLine, Line **currLine, CompareFn comparer) {
   // Primary swamps secondary
   // have pairs where [0] 2> [1]
-  UChar primSwamps[][2] = {
+  char16_t primSwamps[][2] = {
     { 0x00E0, 0x0061 },
     { 0x0450, 0x0435 },
     { 0x31a3, 0x310d }
   };
   // Secondary swamps tertiary
   // have pairs where [0] 3> [1]
-  UChar secSwamps[][2] = {
+  char16_t secSwamps[][2] = {
     { 0x0053, 0x0073 },
     { 0x0415, 0x0435 },
     { 0x31b6, 0x310e }
   };
   // Secondary is swamped by primary
   // have pairs where [0] 1> [1]
-  UChar secSwamped[][2] = {
+  char16_t secSwamped[][2] = {
     { 0x0062, 0x0061 },
     { 0x0436, 0x0454 },
     { 0x310e, 0x310d }
   };
   // Tertiary is swamped by secondary
   // have pairs where [0] 2> [1]
-  UChar terSwamped[][2] = {
+  char16_t terSwamped[][2] = {
     { 0x00E0, 0x0061 },
     { 0x0450, 0x0435 },
     { 0x31a3, 0x310d }
@@ -523,13 +523,13 @@ void printLine(Line *line, UFILE *file) {
   }
 }
 
-void printOrdering(Line **lines, int32_t size, UFILE *file, UBool useLinks = FALSE) {
+void printOrdering(Line **lines, int32_t size, UFILE *file, UBool useLinks = false) {
   int32_t i = 0;
 
   //printLine(*lines);
   //escapeALine(*lines); // Print first line
 
-  Line *line = NULL;
+  Line *line = nullptr;
   Line *previous = *lines;
   if(previous->isReset) {
     u_fprintf(file, "\n& ");
@@ -585,8 +585,8 @@ noteExpansion(Line **gLines, Line *line, int32_t size, CompareFn comparer) {
   UnicodeString key(line->name, line->len);
   //Line *toInsert = (Line *)gElements.get(key);
   Line *toInsert = (Line *)gExpansions.get(key);
-  if(toInsert != NULL) {
-    toInsert->isExpansion = TRUE;
+  if(toInsert != nullptr) {
+    toInsert->isExpansion = true;
     u_strcpy(toInsert->expansionString, line->expansionString);
     toInsert->expLen = line->expLen;
     toInsert->previous->next = toInsert->next;
@@ -594,7 +594,7 @@ noteExpansion(Line **gLines, Line *line, int32_t size, CompareFn comparer) {
     gElements.remove(key);
   } else {
     toInsert = new Line(*line); 
-    toInsert->isExpansion = TRUE;
+    toInsert->isExpansion = true;
     gElements.put(UnicodeString(toInsert->name, toInsert->len), toInsert, status);
   }
 
@@ -625,8 +625,8 @@ noteExpansion(Line **gLines, Line *line, int32_t size, CompareFn comparer) {
 void
 positionExpansions(Line **gLines, int32_t size, CompareFn comparer) {
   int result = 0;
-  Line *line = NULL;
-  Line *toMove = NULL;
+  Line *line = nullptr;
+  Line *toMove = nullptr;
   int32_t i = 0, j = 0;
   Line **sortedExpansions = new Line*[gExpansions.count()];
   int32_t sortedExpansionsSize = setArray(sortedExpansions, &gExpansions);
@@ -657,7 +657,7 @@ positionExpansions(Line **gLines, int32_t size, CompareFn comparer) {
           u_fprintf(log, "Positioned expansion without moving ");
           printLine(toMove, log);
           u_fprintf(log, " new ordering: \n");
-          printOrdering(gLines, size, log, TRUE);
+          printOrdering(gLines, size, log, true);
         }
         break;
       } else {
@@ -693,32 +693,32 @@ positionExpansions(Line **gLines, int32_t size, CompareFn comparer) {
             u_fprintf(log, "Positioned expansion ");
             printLine(toMove, log);
             u_fprintf(log, " new ordering: \n");
-            printOrdering(gLines, size, log, TRUE);
+            printOrdering(gLines, size, log, true);
           }
           if(toMove->strength == UCOL_IDENTICAL) {
             // check for craziness such as s = ss/s
             // such line would consist of previous (or next) concatenated with the expansion value
             // make a test
-            UChar fullString[256];
+            char16_t fullString[256];
             u_strcpy(fullString, toMove->previous->name);
             u_strcat(fullString, toMove->expansionString);
             if(u_strcmp(fullString, toMove->name) == 0) {
               toMove->previous->next = toMove->next;
               toMove->next->previous = toMove->previous;
-              toMove->isRemoved = TRUE;
+              toMove->isRemoved = true;
               u_fprintf(log, "Removed: ");
               printLine(toMove, log);
               u_fprintf(log, "\n");
             } 
           } else if(toMove->next->strength == UCOL_IDENTICAL) {
-            UChar fullString[256];
+            char16_t fullString[256];
             u_strcpy(fullString, toMove->next->name);
             u_strcat(fullString, toMove->expansionString);
             if(u_strcmp(fullString, toMove->name) == 0) {
               toMove->next->strength = toMove->strength;
               toMove->previous->next = toMove->next;
               toMove->next->previous = toMove->previous;
-              toMove->isRemoved = TRUE;
+              toMove->isRemoved = true;
               u_fprintf(log, "Removed because of back: ");
               printLine(toMove, log);
               u_fprintf(log, "\n");
@@ -740,18 +740,18 @@ noteExpansion(Line *line) {
   UErrorCode status = U_ZERO_ERROR;
   UnicodeString key(line->name, line->len);
   Line *el = (Line *)gElements.get(key);
-  if(el != NULL) {
-    el->isExpansion = TRUE;
+  if(el != nullptr) {
+    el->isExpansion = true;
     u_strcpy(el->expansionString, line->expansionString);
     el->expLen = line->expLen;
   } else {
     Line *toInsert = new Line(*line); 
-    toInsert->isExpansion = TRUE;
+    toInsert->isExpansion = true;
     gElements.put(UnicodeString(line->name, line->len), toInsert, status);
   }
 
   Line *el2 = (Line *)gExpansions.get(key);
-  el2->isExpansion = TRUE;
+  el2->isExpansion = true;
   u_strcpy(el2->expansionString, line->expansionString);
   el2->expLen = line->expLen;
 
@@ -766,7 +766,7 @@ void
 noteContraction(Line *line) {
   UErrorCode status = U_ZERO_ERROR;
   Line *toInsert = new Line(*line); 
-  toInsert->isContraction = TRUE;
+  toInsert->isContraction = true;
   gElements.put(UnicodeString(line->name, line->len), toInsert, status);
   if(gVerbose) {
     u_fprintf(log, "Adding contraction\n");
@@ -800,16 +800,16 @@ analyzeContractions(Line** lines, int32_t size, CompareFn comparer) {
   UColAttributeValue strength = UCOL_OFF;
   UColAttributeValue currStrength = UCOL_OFF;
   Line **prevLine = lines;
-  Line **currLine = NULL;
-  Line **backupLine = NULL;
-  UBool prevIsContraction = FALSE, currIsContraction = FALSE;
+  Line **currLine = nullptr;
+  Line **backupLine = nullptr;
+  UBool prevIsContraction = false, currIsContraction = false;
   // Problem here is detecting a contraction that is at the very end of the sorted list
   for(i = 1; i < size; i++) {
     currLine = lines+i;
     strength = probeStrength(prevLine, currLine, comparer);
     if(strength == UCOL_OFF || strength != (*currLine)->strength) {
-      prevIsContraction = FALSE;
-      currIsContraction = FALSE;
+      prevIsContraction = false;
+      currIsContraction = false;
       if(!outOfOrder) {
         if(gVerbose) {
           u_fprintf(log, "Possible contractions: ");
@@ -832,7 +832,7 @@ analyzeContractions(Line** lines, int32_t size, CompareFn comparer) {
         (strength = probeStrength(prevLine, (backupLine = lines+j), comparer)) == UCOL_OFF) {
         j++;
         // if we skipped more than one, it might be in fact a contraction
-        prevIsContraction = TRUE;
+        prevIsContraction = true;
       }
       if(prevIsContraction) {
         noteContraction(*prevLine);
@@ -857,7 +857,7 @@ analyzeContractions(Line** lines, int32_t size, CompareFn comparer) {
       while(j >= 0 && 
         (strength = probeStrength((backupLine = lines+j), currLine, comparer)) == UCOL_OFF) {
         j--;
-        currIsContraction = TRUE;
+        currIsContraction = true;
       }
       if(currIsContraction) {
         if(gVerbose) {
@@ -899,7 +899,7 @@ detectContractions(Line **gLines, Line *lines, int32_t size, CompareFn comparer)
   Line::copyArray(backupLines, lines, size); 
   // detect contractions
 
-  Line **gLinesBackup = NULL; //new Line*[size]; 
+  Line **gLinesBackup = nullptr; //new Line*[size]; 
 
   for(i = 0; i < size; i++) {
     // preserve index and previous
@@ -911,7 +911,7 @@ detectContractions(Line **gLines, Line *lines, int32_t size, CompareFn comparer)
     }
 
     if((noContractions += analyzeContractions(gLines, size, comparer)) && gDebug) {
-      if(gLinesBackup == NULL) {
+      if(gLinesBackup == nullptr) {
         gLinesBackup = new Line*[size];
       }
       // Show the sorted doubles, for debugging
@@ -946,7 +946,7 @@ detectExpansions(Line **gLines, int32_t size, CompareFn comparer) {
     strength = UCOL_OFF, previousStrength = UCOL_OFF;
   Line start, end, src;
   Line *startP = &start, *endP = &end, *srcP = &src;
-  Line *current = NULL;
+  Line *current = nullptr;
   memset(startP, 0, sizeof(Line));
   memset(endP, 0, sizeof(Line));
   memset(srcP, 0, sizeof(Line));
@@ -1002,7 +1002,7 @@ detectExpansions(Line **gLines, int32_t size, CompareFn comparer) {
           // check whether it is a contraction that is the same as an expansion
           // or a multi character that doesn't do anything
           current->addExpansionHit(i, j);
-          current->isExpansion = TRUE;
+          current->isExpansion = true;
           current->expIndex = k;
           // cache expansion
           gExpansions.put(UnicodeString(current->name, current->len), current, status); //new Line(*current)
@@ -1020,15 +1020,15 @@ detectExpansions(Line **gLines, int32_t size, CompareFn comparer) {
   }
   // now we have identified possible expansions. We need to find out how do they expand. 
   // Let's iterate over expansions cache - it's easier.
-  const UHashElement *el = NULL;
+  const UHashElement *el = nullptr;
   int32_t hashIndex = -1;
   Line *doubles = new Line[size*10]; 
   Line **sorter = new Line*[size*10];
   int32_t currSize = 0;
   int32_t newSize = 0;
-  Line *prev = NULL;
-  Line *next = NULL;
-  Line *origin = NULL;
+  Line *prev = nullptr;
+  Line *next = nullptr;
+  Line *origin = nullptr;
   int result = 0;
   // Make a list of things in the vincinity of expansion candidate
   // in expansionPrefixes and expansionAfter we have stored the
@@ -1048,7 +1048,7 @@ detectExpansions(Line **gLines, int32_t size, CompareFn comparer) {
   // AD < \u00E4/ = ae <<< aE <<< Ae
   // we choose 'e'.
 
-  while((el = gExpansions.nextElement(hashIndex)) != NULL) {
+  while((el = gExpansions.nextElement(hashIndex)) != nullptr) {
     newSize = 0;
     current = (Line *)el->value.pointer;
     currSize = size*current->expansionPrefixesSize;
@@ -1124,7 +1124,7 @@ detectExpansions(Line **gLines, int32_t size, CompareFn comparer) {
 
 UBool
 isTailored(Line *line, UErrorCode &status) {
-  UBool result = FALSE;
+  UBool result = false;
   UCollationElements *tailoring = ucol_openElements(gCol, line->name, line->len, &status);
   UCollationElements *uca = ucol_openElements(gUCA, line->name, line->len, &status);
 
@@ -1139,7 +1139,7 @@ isTailored(Line *line, UErrorCode &status) {
       ucaElement = ucol_next(uca, &status);
     } while(ucaElement == 0);
     if(tailElement != ucaElement) {
-      result = TRUE;
+      result = true;
       break;
     }
   } while (tailElement != UCOL_NULLORDER && ucaElement != UCOL_NULLORDER);
@@ -1153,15 +1153,15 @@ void
 reduceUntailored(Line **gLines, int32_t size){
   UErrorCode status = U_ZERO_ERROR;
   Line *current = *(gLines);
-  Line *previous = NULL;
+  Line *previous = nullptr;
   while(current) {
     // if the current line is not tailored according to the UCA
     if(!isTailored(current, status)) {
       // we remove it
-      current->isRemoved = TRUE;
+      current->isRemoved = true;
     } else {
       // if it's tailored 
-      if(current->previous && current->previous->isRemoved == TRUE) {
+      if(current->previous && current->previous->isRemoved == true) {
         previous = current->previous;
         while(previous && (previous->strength > current->strength || previous->isExpansion || previous->isContraction) && previous->isRemoved) {
           if(previous->previous && previous->previous->isRemoved) {
@@ -1171,9 +1171,9 @@ reduceUntailored(Line **gLines, int32_t size){
           }
         }
         if(previous) {
-          previous->isReset = TRUE;
+          previous->isReset = true;
         } else {
-          (*(gLines))->isReset = TRUE;
+          (*(gLines))->isReset = true;
         }
       }
     }
@@ -1231,20 +1231,20 @@ constructAndAnalyze(Line **gLines, Line *lines, int32_t size, CompareFn comparer
 
   if(gVerbose) {
     u_fprintf(log, "After positioning expansions:\n");
-    printOrdering(gLines, size, log, TRUE);
+    printOrdering(gLines, size, log, true);
   }
   //reduceUntailored(gLines, size);
   if(!gQuiet) {
     u_fprintf(out, "Final result\n");
   }
-  printOrdering(gLines, size, out, TRUE);
-  printOrdering(gLines, size, log, TRUE);
+  printOrdering(gLines, size, out, true);
+  printOrdering(gLines, size, log, true);
 }
 
 // Check whether upper case comes before lower case or vice-versa
 int32_t 
-checkCaseOrdering(void) {
-  UChar stuff[][3] = {
+checkCaseOrdering() {
+  char16_t stuff[][3] = {
     { 0x0061, separatorChar, 0x0061}, //"aa",
     { 0x0061, separatorChar, 0x0041 }, //"a\\u00E0",
     { 0x0041, separatorChar, 0x0061 }, //"\\u00E0a",
@@ -1287,8 +1287,8 @@ checkCaseOrdering(void) {
 
 // Check whether the secondaries are in the straight or reversed order
 int32_t 
-checkSecondaryOrdering(void) {
-  UChar stuff[][5] = {
+checkSecondaryOrdering() {
+  char16_t stuff[][5] = {
     { 0x0061, separatorChar, 0x0061, separatorChar, 0x00E0 }, //"aa",
     { 0x0061, separatorChar, 0x00E0, separatorChar, 0x0061 }, //"a\\u00E0",
     { 0x00E0, separatorChar, 0x0061, separatorChar, 0x0061 }, //"\\u00E0a",
@@ -1351,7 +1351,7 @@ void removeIgnorableChars(UnicodeSet &exemplarUSet, CompareFn comparer, UErrorCo
         primaryIgnorables.add(exemplarUSetIter.getString());
       }
     } else { // process code point
-      UBool isError = FALSE;
+      UBool isError = false;
       UChar32 codePoint = exemplarUSetIter.getCodepoint();
       currLine->len = 0;
       U16_APPEND(currLine->name, currLine->len, 25, codePoint, isError);
@@ -1372,14 +1372,14 @@ void removeIgnorableChars(UnicodeSet &exemplarUSet, CompareFn comparer, UErrorCo
   UnicodeString removedPattern;
   if(ignorables.size()) {
     u_fprintf(log, "Ignorables:\n");
-    ignorables.toPattern(removedPattern, TRUE);
+    ignorables.toPattern(removedPattern, true);
     removedPattern.setCharAt(removedPattern.length(), 0);
     escapeString(removedPattern.getBuffer(), removedPattern.length(), log);
     u_fprintf(log, "\n");
   }
   if(primaryIgnorables.size()) {
     u_fprintf(log, "Primary ignorables:\n");
-    primaryIgnorables.toPattern(removedPattern, TRUE);
+    primaryIgnorables.toPattern(removedPattern, true);
     removedPattern.setCharAt(removedPattern.length(), 0);
     escapeString(removedPattern.getBuffer(), removedPattern.length(), log);
     u_fprintf(log, "\n");
@@ -1415,7 +1415,7 @@ void addUtilityChars(UnicodeSet &exemplarUSet, UErrorCode &status) {
 void
 getExemplars(const char *locale, UnicodeSet &exemplars, UErrorCode &status) {
   // first we fill out structures with exemplar characters.
-  UResourceBundle *res = ures_open(NULL, locale, &status);
+  UResourceBundle *res = ures_open(nullptr, locale, &status);
   int32_t exemplarLength = 0;
   UnicodeString exemplarString = ures_getUnicodeStringByKey(res, "ExemplarCharacters", &status);
   exemplars.clear();
@@ -1443,7 +1443,7 @@ prepareStartingSet(UnicodeSet &exemplarUSet, CompareFn comparer, UErrorCode &sta
     numberOfUsedScripts++;
     UnicodeSet scriptSet(UnicodeString(scriptSetPattern, ""), status);
     exemplarUSet.removeAll(scriptSet);
-    exemplarUSet.toPattern(pattern, TRUE);
+    exemplarUSet.toPattern(pattern, true);
   }
   exemplarUSet.clear();
 
@@ -1484,7 +1484,7 @@ prepareStartingSet(UnicodeSet &exemplarUSet, CompareFn comparer, UErrorCode &sta
   if(!tailoredContained) {
     ((UnicodeSet *)tailored)->removeAll(exemplarUSet);
     UnicodeString pattern;
-    ((UnicodeSet *)tailored)->toPattern(pattern, TRUE);
+    ((UnicodeSet *)tailored)->toPattern(pattern, true);
   }
   uset_close(tailored);
 */
@@ -1514,7 +1514,7 @@ void
 processCollator(UCollator *col, UErrorCode &status) {
   int32_t i = 0;
   gCol = col;
-  UChar ruleString[16384];
+  char16_t ruleString[16384];
   int32_t ruleStringLength = ucol_getRulesEx(gCol, UCOL_TAILORING_ONLY, ruleString, 16384);
   if(!gQuiet) {
     u_fprintf(out, "ICU rules:\n");
@@ -1583,7 +1583,7 @@ processCollator(UCollator *col, UErrorCode &status) {
         u_memcpy(currLine->name, exemplarUSetIter.getString().getBuffer(), exemplarUSetIter.getString().length());
         currLine->len = exemplarUSetIter.getString().length();
       } else { // process code point
-        UBool isError = FALSE;
+        UBool isError = false;
         currLine->len = 0;
         U16_APPEND(currLine->name, currLine->len, 25, exemplarUSetIter.getCodepoint(), isError);
       }
@@ -1622,9 +1622,9 @@ UBool
 hasCollationElements(const char *locName) {
 
   UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *ColEl = NULL;
+  UResourceBundle *ColEl = nullptr;
 
-  UResourceBundle *loc = ures_open(NULL, locName, &status);;
+  UResourceBundle *loc = ures_open(nullptr, locName, &status);;
 
   if(U_SUCCESS(status)) {
     status = U_ZERO_ERROR;
@@ -1632,12 +1632,12 @@ hasCollationElements(const char *locName) {
     if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
       ures_close(ColEl);
       ures_close(loc);
-      return TRUE;
+      return true;
     }
     ures_close(ColEl);
     ures_close(loc);
   }
-  return FALSE;
+  return false;
 }
 
 int
@@ -1653,13 +1653,13 @@ main(int argc,
   uset_add(wsp, 0x0041);
   uset_remove(wsp, 0x0041);
   UnicodeString pat;
-  ((UnicodeSet *)wsp)->toPattern(pat, TRUE);
+  ((UnicodeSet *)wsp)->toPattern(pat, true);
   pat.setCharAt(pat.length(), 0);
   escapeString(pat.getBuffer(), pat.length(), log);
   u_fflush(log);
 */
 
-  UTransliterator *anyHex = utrans_open("[^\\u000a\\u0020-\\u007f] Any-Hex/Java", UTRANS_FORWARD, NULL, 0, NULL, &status);
+  UTransliterator *anyHex = utrans_open("[^\\u000a\\u0020-\\u007f] Any-Hex/Java", UTRANS_FORWARD, nullptr, 0, nullptr, &status);
   u_fsettransliterator(log, U_WRITE, anyHex, &status);
 
   processArgs(argc, argv, status);
@@ -1677,8 +1677,8 @@ main(int argc,
 
   if(gRulesStdin) {
     char buffer[1024];
-    UChar ruleBuffer[16384];
-    UChar *rules = ruleBuffer;
+    char16_t ruleBuffer[16384];
+    char16_t *rules = ruleBuffer;
     int32_t maxRuleLen = 16384;
     int32_t rLen = 0;
     while(gets(buffer)) {
@@ -1709,7 +1709,7 @@ main(int argc,
       }
     } else { // do the loop through all the locales
       int32_t noOfLoc = uloc_countAvailable();
-      const char *locName = NULL;
+      const char *locName = nullptr;
       for(i = 0; i<noOfLoc; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);

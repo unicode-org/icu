@@ -53,7 +53,7 @@ UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
     UCollator     *myCollator = 0;
     if (U_FAILURE(*status))
     {
-        return FALSE;
+        return false;
     }
     u_uastrcpy(source, "This is a test.");
     u_uastrcpy(target, "THIS IS A TEST.");
@@ -63,7 +63,7 @@ UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
         /*Report the error with display name... */
         fprintf(stderr,
         "Failed to create the collator for : \"%s\"\n", dispName);
-        return FALSE;
+        return false;
     }
     result = ucol_strcoll(myCollator, source, u_strlen(source), target, u_strlen(target));
     /* result is 1, secondary differences only for ignorable space characters*/
@@ -71,7 +71,7 @@ UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
     {
         fprintf(stderr,
         "Comparing two strings with only secondary differences in C failed.\n");
-        return FALSE;
+        return false;
     }
     /* To compare them with just primary differences */
     ucol_setStrength(myCollator, UCOL_PRIMARY);
@@ -81,7 +81,7 @@ UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
     {
         fprintf(stderr,
         "Comparing two strings with no differences in C failed.\n");
-        return FALSE;
+        return false;
     }
 
     /* Now, do the same comparison with keys */
@@ -93,10 +93,10 @@ UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
     {
         fprintf(stderr,
         "Comparing two strings with sort keys in C failed.\n");
-        return FALSE;
+        return false;
     }
     ucol_close(myCollator);
-    return TRUE;
+    return true;
 }
 ```
 
@@ -122,7 +122,7 @@ UBool collateWithLocaleInCPP(const Locale& locale, UErrorCode& status)
     Collator      *myCollator = 0;
     if (U_FAILURE(status))
     {
-        return FALSE;
+        return false;
     }
     myCollator = Collator::createInstance(locale, status);
     if (U_FAILURE(status)){
@@ -130,7 +130,7 @@ UBool collateWithLocaleInCPP(const Locale& locale, UErrorCode& status)
         /*Report the error with display name... */
         fprintf(stderr,
         "%s: Failed to create the collator for : \"%s\"\n", dispName);
-        return FALSE;
+        return false;
     }
     result = myCollator->compare(source, target);
     /* result is 1, secondary differences only for ignorable space characters*/
@@ -138,7 +138,7 @@ UBool collateWithLocaleInCPP(const Locale& locale, UErrorCode& status)
     {
         fprintf(stderr,
         "Comparing two strings with only secondary differences in C failed.\n");
-        return FALSE;
+        return false;
     }
     /* To compare them with just primary differences */
     myCollator->setStrength(Collator::PRIMARY);
@@ -148,7 +148,7 @@ UBool collateWithLocaleInCPP(const Locale& locale, UErrorCode& status)
     {
         fprintf(stderr,
         "Comparing two strings with no differences in C failed.\n");
-        return FALSE;
+        return false;
     }
     /* Now, do the same comparison with keys */
     myCollator->getCollationKey(source, sourceKey, status);
@@ -160,10 +160,10 @@ UBool collateWithLocaleInCPP(const Locale& locale, UErrorCode& status)
     {
         fprintf(stderr,
         "%s: Comparing two strings with sort keys in C failed.\n");
-        return FALSE;
+        return false;
     }
     delete myCollator;
-    return TRUE;
+    return true;
 }
 ```
 
@@ -175,7 +175,7 @@ int main()
 {
    UErrorCode status = U_ZERO_ERROR;
    fprintf(stdout, "\n");
-   if (collateWithLocaleInCPP(Locale("en", "US"), status) != TRUE)
+   if (collateWithLocaleInCPP(Locale("en", "US"), status) != true)
    {
         fprintf(stderr,
         "Collate with locale in C++ failed.\n");
@@ -185,7 +185,7 @@ int main()
    }
    status = U_ZERO_ERROR;
    fprintf(stdout, "\n");
-   if (collateWithLocaleInC("en_US", &status) != TRUE)
+   if (collateWithLocaleInC("en_US", &status) != true)
    {
         fprintf(stderr,
         "%s: Collate with locale in C failed.\n");

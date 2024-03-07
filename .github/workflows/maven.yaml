@@ -2,38 +2,41 @@ name: Publish icu4j.jar/utilities.jar to GH Maven
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+env:
+  SHARED_MVN_ARGS: '--show-version'
+
+permissions:
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           lfs: true
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
-          java-version: 1.8
-      - name: icu4j ant releaseCLDR
-        run: ant -noinput releaseCLDR -f icu4j/build.xml
+          distribution: 'temurin'
+          java-version: '11'
+      - name: icu4j and releaseCLDR
+        run: |
+          cd icu4j
+          mvn ${SHARED_MVN_ARGS} clean install -DskipTests -DskipIT -P with_sources
       - name: deploy it
         run: |
-          MYVERSION=$(sed -n -e 's%^\s*maven.pom.ver[ =]*%%p' < icu4j/build.properties)-$(echo ${GITHUB_REF} | cut -d/ -f3- | tr ./ _-)
-          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA}, version ${MYVERSION}
-          mvn deploy:deploy-file -DgroupId=com.ibm.icu \
-            -DartifactId=icu4j-for-cldr \
-            -Dversion=${MYVERSION} \
-            -Dpackaging=jar \
-            -Dfile=icu4j/release_cldr/icu4j.jar \
-            -Dsources=icu4j/release_cldr/icu4j-src.jar \
-            -DrepositoryId=github \
-            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY}
-          mvn deploy:deploy-file -DgroupId=com.ibm.icu \
-            -DartifactId=utilities-for-cldr \
-            -Dversion=${MYVERSION} \
-            -Dpackaging=jar \
-            -Dfile=icu4j/release_cldr/utilities.jar \
-            -Dsources=icu4j/release_cldr/utilities-src.jar \
-            -DrepositoryId=github \
-            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY}
+          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
+          cd icu4j
+          mvn deploy ${SHARED_MVN_ARGS} \
+            -pl :icu4j,:utilities-for-cldr,:icu4j-root \
+            -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
+            -P cldr_utilities,with_sources
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # Note: can use 0.0.0-${GITHUB_SHA} as the version for hash-based.

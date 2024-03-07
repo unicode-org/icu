@@ -15,6 +15,8 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
+
 #include "unicode/utypes.h"
 #include "unicode/utf8.h"
 #include "unicode/utf_old.h"
@@ -121,7 +123,7 @@ addUTF8Test(TestNode** root)
     addTest(root, &TestSurrogates,              "utf8tst/TestSurrogates");
 }
 
-static void TestCodeUnitValues()
+static void TestCodeUnitValues(void)
 {
     static const uint8_t codeunit[]={0x00, 0x65, 0x7e, 0x7f, 0xc2, 0xc4, 0xf0, 0xf4, 0x80, 0x81, 0xbc, 0xbe,};
 
@@ -160,7 +162,7 @@ static void TestCodeUnitValues()
     }
 }
 
-static void TestCharLength()
+static void TestCharLength(void)
 {
     static const uint32_t codepoint[]={
         1, 0x0061,
@@ -195,7 +197,7 @@ static void TestCharLength()
               log_verbose("The no: of code units for %lx is %d\n",c, U8_LENGTH(c));
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
-        multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
+        multiple=(UBool)(codepoint[i] == 1 ? false : true);
         if(UTF8_NEED_MULTIPLE_UCHAR(c) != multiple){
               log_err("ERROR: UTF8_NEED_MULTIPLE_UCHAR failed for %lx\n", c);
         }
@@ -203,7 +205,7 @@ static void TestCharLength()
     }
 }
 
-static void TestGetChar()
+static void TestGetChar(void)
 {
     static const uint8_t input[]={
     /*  code unit,*/
@@ -263,7 +265,7 @@ static void TestGetChar()
         }
         expected=result[i+1];
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
-        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
+        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, false);
         if(c != expected){
             log_err("ERROR: UTF8_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
@@ -280,7 +282,7 @@ static void TestGetChar()
             log_err("ERROR: U8_GET_OR_FFFD failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
-        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, TRUE);
+        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, true);
         if(c != result[i+2]){
             log_err("ERROR: UTF8_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
@@ -289,7 +291,7 @@ static void TestGetChar()
     }
 }
 
-static void TestNextPrevChar() {
+static void TestNextPrevChar(void) {
     static const uint8_t input[]={
         0x61,
         0xf0, 0x90, 0x90, 0x81,
@@ -347,7 +349,7 @@ static void TestNextPrevChar() {
         expected=result[i];  // next_safe_ns
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, FALSE);
+        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, false);
         if(setOffset != movedOffset[j]) {
             log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j], setOffset);
@@ -379,7 +381,7 @@ static void TestNextPrevChar() {
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, TRUE);
+        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, true);
         if(setOffset != movedOffset[j]) {
             log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j], setOffset);
@@ -399,7 +401,7 @@ static void TestNextPrevChar() {
         expected=result[i+2];  // prev_safe_ns
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_PREV_CHAR_SAFE(input, 0, setOffset, c, FALSE);
+        UTF8_PREV_CHAR_SAFE(input, 0, setOffset, c, false);
         if(setOffset != movedOffset[j+1]) {
             log_err("ERROR: UTF8_PREV_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j+1], setOffset);
@@ -431,7 +433,7 @@ static void TestNextPrevChar() {
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
+        UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, true);
         if(setOffset != movedOffset[j+1]) {
             log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j+1], setOffset);
@@ -448,7 +450,7 @@ static void TestNextPrevChar() {
 }
 
 /* keep this in sync with utf16tst.c's TestNulTerminated() */
-static void TestNulTerminated() {
+static void TestNulTerminated(void) {
     static const uint8_t input[]={
         /*  0 */  0x61,
         /*  1 */  0xf0, 0x90, 0x90, 0x81,
@@ -542,7 +544,7 @@ static void TestNulTerminated() {
     } while(c!=0);
 }
 
-static void TestNextPrevNonCharacters() {
+static void TestNextPrevNonCharacters(void) {
     /* test non-characters */
     static const uint8_t nonChars[]={
         0xef, 0xb7, 0x90,       /* U+fdd0 */
@@ -570,13 +572,13 @@ static void TestNextPrevNonCharacters() {
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(idx=0; idx<(int32_t)sizeof(nonChars);) {
         UChar32 expected= nonChars[idx]<0xf0 ? 0xffff : 0x10ffff;
-        UTF8_NEXT_CHAR_SAFE(nonChars, idx, sizeof(nonChars), ch, TRUE);
+        UTF8_NEXT_CHAR_SAFE(nonChars, idx, sizeof(nonChars), ch, true);
         if(ch!=expected) {
             log_err("UTF8_NEXT_CHAR_SAFE(strict, before %d) failed to read a non-character\n", idx);
         }
     }
     for(idx=(int32_t)sizeof(nonChars); idx>0;) {
-        UTF8_PREV_CHAR_SAFE(nonChars, 0, idx, ch, TRUE);
+        UTF8_PREV_CHAR_SAFE(nonChars, 0, idx, ch, true);
         UChar32 expected= nonChars[idx]<0xf0 ? 0xffff : 0x10ffff;
         if(ch!=expected) {
             log_err("UTF8_PREV_CHAR_SAFE(strict, at %d) failed to read a non-character\n", idx);
@@ -585,7 +587,7 @@ static void TestNextPrevNonCharacters() {
 #endif
 }
 
-static void TestNextPrevCharUnsafe() {
+static void TestNextPrevCharUnsafe(void) {
     /*
      * Use a (mostly) well-formed UTF-8 string and test at code point boundaries.
      * The behavior of _UNSAFE macros for ill-formed strings is undefined.
@@ -655,7 +657,7 @@ static void TestNextPrevCharUnsafe() {
     }
 }
 
-static void TestFwdBack() {
+static void TestFwdBack(void) {
     static const uint8_t input[]={
         0x61,
         0xF0, 0x90, 0x90, 0x81,
@@ -767,7 +769,7 @@ static void TestFwdBack() {
 #pragma optimize( "", off )
 #endif
 
-static void TestFwdBackUnsafe() {
+static void TestFwdBackUnsafe(void) {
     /*
      * Use a (mostly) well-formed UTF-8 string and test at code point boundaries.
      * The behavior of _UNSAFE macros for ill-formed strings is undefined.
@@ -857,7 +859,7 @@ static void TestFwdBackUnsafe() {
 #pragma optimize( "", on )
 #endif
 
-static void TestSetChar() {
+static void TestSetChar(void) {
     static const uint8_t input[]
         = {0x61, 0xe4, 0xba, 0x8c, 0x7f, 0xfe, 0x62, 0xc5, 0x7f, 0x61, 0x80, 0x80, 0xe0, 0x00 };
     static const int16_t start_safe[]
@@ -899,7 +901,7 @@ static void TestSetChar() {
     }
 }
 
-static void TestSetCharUnsafe() {
+static void TestSetCharUnsafe(void) {
     static const uint8_t input[]
         = {0x61, 0xe4, 0xba, 0x8c, 0x7f, 0x2e, 0x62, 0xc5, 0x7f, 0x61, 0x80, 0x80, 0xe0, 0x80, 0x80, 0x00 };
     static const int16_t start_unsafe[]
@@ -944,7 +946,7 @@ static void TestSetCharUnsafe() {
     }
 }
 
-static void TestTruncateIfIncomplete() {
+static void TestTruncateIfIncomplete(void) {
     // Difference from U8_SET_CP_START():
     // U8_TRUNCATE_IF_INCOMPLETE() does not look at s[length].
     // Therefore, if the last byte is a lead byte, then this macro truncates
@@ -1002,7 +1004,7 @@ static void TestTruncateIfIncomplete() {
     }
 }
 
-static void TestAppendChar(){
+static void TestAppendChar(void){
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
     static const uint8_t s[11]={0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x00};
     static const uint32_t test[]={
@@ -1171,7 +1173,7 @@ static void TestAppendChar(){
 #endif
 }
 
-static void TestAppend() {
+static void TestAppend(void) {
     static const UChar32 codePoints[]={
         0x61, 0xdf, 0x901, 0x3040,
         0xac00, 0xd800, 0xdbff, 0xdcde,
@@ -1215,11 +1217,11 @@ static void TestAppend() {
     }
 
     length=0;
-    wrongIsError=FALSE;
+    wrongIsError=false;
     for(i=0; i<UPRV_LENGTHOF(codePoints); ++i) {
         c=codePoints[i];
         expectIsError= c<0 || 0x10ffff<c || U_IS_SURROGATE(c);
-        isError=FALSE;
+        isError=false;
 
         U8_APPEND(buffer, length, UPRV_LENGTHOF(buffer), c, isError);
         wrongIsError|= isError!=expectIsError;
@@ -1233,7 +1235,7 @@ static void TestAppend() {
 }
 
 static void
-TestSurrogates() {
+TestSurrogates(void) {
     static const uint8_t b[]={
         0xc3, 0x9f,             /*  00DF */
         0xed, 0x9f, 0xbf,       /*  D7FF */

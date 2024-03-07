@@ -100,7 +100,7 @@ CollationBaseDataBuilder::~CollationBaseDataBuilder() {
 void
 CollationBaseDataBuilder::init(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    if(trie != NULL) {
+    if(trie != nullptr) {
         errorCode = U_INVALID_STATE_ERROR;
         return;
     }
@@ -138,8 +138,8 @@ CollationBaseDataBuilder::init(UErrorCode &errorCode) {
 
     // Add a mapping for the first-unassigned boundary,
     // which is the AlphabeticIndex overflow boundary.
-    UnicodeString s((UChar)0xfdd1);  // Script boundary contractions start with U+FDD1.
-    s.append((UChar)0xfdd0);  // Zzzz script sample character U+FDD0.
+    UnicodeString s((char16_t)0xfdd1);  // Script boundary contractions start with U+FDD1.
+    s.append((char16_t)0xfdd0);  // Zzzz script sample character U+FDD0.
     int64_t ce = Collation::makeCE(Collation::FIRST_UNASSIGNED_PRIMARY);
     add(UnicodeString(), s, &ce, 1, errorCode);
 

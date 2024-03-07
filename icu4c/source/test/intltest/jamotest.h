@@ -31,13 +31,13 @@ public:
     virtual ~JamoTest();
 private:
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
-                        char* par=NULL) override;
+                        char* par=nullptr) override;
 
-    void TestJamo(void);
+    void TestJamo();
     
-    void TestRealText(void);
+    void TestRealText();
 
-    void TestPiecemeal(void);
+    void TestPiecemeal();
 
     //======================================================================
     // Support methods

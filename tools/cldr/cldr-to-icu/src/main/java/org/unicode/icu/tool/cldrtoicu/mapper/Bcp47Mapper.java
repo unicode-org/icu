@@ -48,6 +48,8 @@ public final class Bcp47Mapper {
     private static final AttributeKey TYPE_ALIASES = keyOf("type", "alias");
     private static final AttributeKey PREFERRED_TYPE_NAME = keyOf("type", "preferred");
 
+    private static final AttributeKey TYPE_IANA = keyOf("type", "iana");
+
     // Deprecation of the data is not the same as deprecation of attributes themselves. This
     // deprecation relates to identifying data which exists, but is not longer the right way to
     // represent things (which means it can be important for clients to know about).
@@ -66,6 +68,7 @@ public final class Bcp47Mapper {
     private static final RbPath RB_TYPE_ALIAS = RbPath.of("typeAlias", "timezone:alias");
     private static final RbPath RB_MAP_ALIAS = RbPath.of("typeMap", "timezone:alias");
     private static final RbPath RB_BCP_ALIAS = RbPath.of("bcpTypeAlias", "tz:alias");
+    private static final RbPath RB_IANAMAP_ALIAS = RbPath.of("ianaMap", "timezone:alias");
 
     private static final CldrDataProcessor<Bcp47Mapper> BCP47_PROCESSOR;
     static {
@@ -127,6 +130,7 @@ public final class Bcp47Mapper {
         keyData.add(RB_TYPE_ALIAS, "/ICUDATA/timezoneTypes/typeAlias/timezone");
         keyData.add(RB_MAP_ALIAS, "/ICUDATA/timezoneTypes/typeMap/timezone");
         keyData.add(RB_BCP_ALIAS, "/ICUDATA/timezoneTypes/bcpTypeAlias/tz");
+        keyData.add(RB_IANAMAP_ALIAS, "/ICUDATA/timezoneTypes/ianaMap/timezone");
     }
 
     private final class ValueCollector {
@@ -166,6 +170,7 @@ public final class Bcp47Mapper {
             RbPath typeMapPrefix = RbPath.of("typeMap", keyAlias);
 
             List<String> typeAliases = TYPE_ALIASES.listOfValuesFrom(value);
+            String icuTypeName = typeName;
             if (typeAliases.isEmpty()) {
                 // Generate type map entry using empty value (an empty value indicates same
                 // type name is used for both BCP47 and legacy type).
@@ -179,7 +184,18 @@ public final class Bcp47Mapper {
                     .skip(1)
                     .map(Bcp47Mapper::quoteAlias)
                     .forEach(a -> icuData.add(typeAliasPrefix.extendBy(a), mainAlias));
+                icuTypeName = mainAlias;
             }
+
+            // The 'iana' attribute was introduced in CLDR 44 for provide IANA zone.tab ID mapping
+            // for timezones.xml.
+            Optional<String> iana = TYPE_IANA.optionalValueFrom(value);
+            if (iana.isPresent()) {
+                assert icuTypeName != null;
+                RbPath ianaMapPrefix = RbPath.of("ianaMap", keyAlias);
+                icuData.add(ianaMapPrefix.extendBy(quoteAlias(icuTypeName)), iana.get());
+            }
+
             addInfoAttributes(keyName, typeName, value.getValueAttributes());
         }
 

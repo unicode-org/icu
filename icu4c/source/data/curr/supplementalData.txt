@@ -1159,6 +1159,10 @@ supplementalData:table(nofallback){
                     1468155904,
                 }
                 id{"CUC"}
+                to:intvector{
+                    374,
+                    -1067136001,
+                }
             }
             {
                 from:intvector{
@@ -1195,10 +1199,21 @@ supplementalData:table(nofallback){
         CW{
             {
                 from:intvector{
+                    398,
+                    -1848751104,
+                }
+                id{"XCG"}
+            }
+            {
+                from:intvector{
                     299,
                     -1821388800,
                 }
                 id{"ANG"}
+                to:intvector{
+                    400,
+                    1805081599,
+                }
             }
         }
         CX{
@@ -1941,10 +1956,21 @@ supplementalData:table(nofallback){
         HR{
             {
                 from:intvector{
+                    389,
+                    1785321856,
+                }
+                id{"EUR"}
+            }
+            {
+                from:intvector{
                     179,
                     1456854016,
                 }
                 id{"HRK"}
+                to:intvector{
+                    389,
+                    -1300045441,
+                }
             }
             {
                 from:intvector{
@@ -3761,11 +3787,10 @@ supplementalData:table(nofallback){
         SL{
             {
                 from:intvector{
-                    383,
-                    -496241664,
+                    385,
+                    -1223776256,
                 }
                 id{"SLE"}
-                tender{"false"}
             }
             {
                 from:intvector{
@@ -3773,6 +3798,10 @@ supplementalData:table(nofallback){
                     1072291840,
                 }
                 id{"SLL"}
+                to:intvector{
+                    396,
+                    -1034816513,
+                }
             }
             {
                 from:intvector{
@@ -3931,10 +3960,21 @@ supplementalData:table(nofallback){
         SX{
             {
                 from:intvector{
+                    398,
+                    -1848751104,
+                }
+                id{"XCG"}
+            }
+            {
+                from:intvector{
                     299,
                     -1821388800,
                 }
                 id{"ANG"}
+                to:intvector{
+                    400,
+                    1805081599,
+                }
             }
         }
         SY{

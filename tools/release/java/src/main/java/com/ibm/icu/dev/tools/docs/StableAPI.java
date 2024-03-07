@@ -552,7 +552,9 @@ public class StableAPI {
                                       //  TODO: notify about this difference, separately
                 "[ ]*U_NOEXCEPT", "", // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is
                                       //  retroactive)
+                "[ ]*noexcept", "",
                 "[ ]*(override|U_OVERRIDE)", "", // remove U_OVERRIDE and override
+
                 // Simplify possibly-covariant functions to void*
                 "^([^\\* ]+)\\*(.*)::(clone|safeClone|cloneAsThawed|freeze|createBufferClone)\\((.*)", "void*$2::$3($4",
                 "\\s+$", "", // remove trailing spaces.
@@ -809,7 +811,7 @@ public class StableAPI {
         // report.setParameter("leftStatus", leftStatus);
         report.setParameter("leftVer", leftVer);
         // report.setParameter("rightStatus", rightStatus);
-        report.setParameter("ourYear", new Integer(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
+        report.setParameter("ourYear", Integer.valueOf(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
         report.setParameter("rightVer", rightVer);
         report.setParameter("rightMilestone", rightMilestone);
         report.setParameter("leftMilestone", leftMilestone);

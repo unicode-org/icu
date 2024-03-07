@@ -118,7 +118,7 @@ class UVector32;
 * @see     RuleBasedCollator
 * @version 1.8 Jan 16 2001
 */
-class U_I18N_API CollationElementIterator U_FINAL : public UObject {
+class U_I18N_API CollationElementIterator final : public UObject {
 public: 
 
     // CollationElementIterator public data member ------------------------------
@@ -171,7 +171,7 @@ public:
     * Resets the cursor to the beginning of the string.
     * @stable ICU 2.0
     */
-    void reset(void);
+    void reset();
 
     /**
     * Gets the ordering priority of the next character in the string.
@@ -263,7 +263,7 @@ public:
     * @return the offset of the character.
     * @stable ICU 2.0
     */
-    int32_t getOffset(void) const;
+    int32_t getOffset() const;
 
     /**
     * Sets the offset of the currently processed character in the source string.

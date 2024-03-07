@@ -37,7 +37,7 @@ public:
     UCharsTrieTest();
     virtual ~UCharsTrieTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
     void TestBuilder();
     void TestEmpty();
     void Test_a();
@@ -84,7 +84,7 @@ extern IntlTest *createUCharsTrieTest() {
     return new UCharsTrieTest();
 }
 
-UCharsTrieTest::UCharsTrieTest() : builder_(NULL) {
+UCharsTrieTest::UCharsTrieTest() : builder_(nullptr) {
     IcuTestErrorCode errorCode(*this, "UCharsTrieTest()");
     builder_=new UCharsTrieBuilder(errorCode);
 }
@@ -343,12 +343,12 @@ class Generator {
 public:
     Generator() : value(4711), num(0) {}
     void next() {
-        UChar c;
+        char16_t c;
         s.truncate(0);
-        s.append(c=(UChar)(value>>16));
-        s.append((UChar)(value>>4));
+        s.append(c=(char16_t)(value>>16));
+        s.append((char16_t)(value>>4));
         if(value&1) {
-            s.append((UChar)value);
+            s.append((char16_t)value);
         }
         set.add(c);
         value+=((value>>5)&0x7ff)*3+1;
@@ -807,7 +807,7 @@ UCharsTrie *UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataL
         errln("builder.buildUnicodeString() before & after build() returned same array");
     }
     if(errorCode.isFailure()) {
-        return NULL;
+        return nullptr;
     }
     // Tries from either build() method should be identical but
     // UCharsTrie does not implement equals().
@@ -913,19 +913,19 @@ void UCharsTrieTest::checkNext(UCharsTrie &trie,
         }
         // Compare the final current() with whether next() can actually continue.
         trie.saveState(state);
-        UBool nextContinues=FALSE;
+        UBool nextContinues=false;
         for(int32_t c=0x20; c<0xe000; ++c) {
             if(c==0x80) {
                 c=0xd800;  // Check for ASCII and surrogates but not all of the BMP.
             }
             if(trie.resetToState(state).next(c)) {
-                nextContinues=TRUE;
+                nextContinues=true;
                 break;
             }
         }
         if((result==USTRINGTRIE_INTERMEDIATE_VALUE)!=nextContinues) {
             errln("(trie.current()==USTRINGTRIE_INTERMEDIATE_VALUE) contradicts "
-                  "(trie.next(some UChar)!=USTRINGTRIE_NO_MATCH) after end of %s", data[i].s);
+                  "(trie.next(some char16_t)!=USTRINGTRIE_NO_MATCH) after end of %s", data[i].s);
         }
         trie.reset();
     }
@@ -1079,7 +1079,7 @@ void UCharsTrieTest::checkIterator(UCharsTrie::Iterator &iter,
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     for(int32_t i=0; i<dataLength; ++i) {
         if(!iter.hasNext()) {
-            errln("trie iterator hasNext()=FALSE for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator hasNext()=false for item %d: %s", (int)i, data[i].s);
             break;
         }
         UBool hasNext=iter.next(errorCode);
@@ -1087,7 +1087,7 @@ void UCharsTrieTest::checkIterator(UCharsTrie::Iterator &iter,
             break;
         }
         if(!hasNext) {
-            errln("trie iterator next()=FALSE for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator next()=false for item %d: %s", (int)i, data[i].s);
             break;
         }
         UnicodeString expectedString=UnicodeString(data[i].s, -1, US_INV).unescape();
@@ -1106,11 +1106,11 @@ void UCharsTrieTest::checkIterator(UCharsTrie::Iterator &iter,
         }
     }
     if(iter.hasNext()) {
-        errln("trie iterator hasNext()=TRUE after all items");
+        errln("trie iterator hasNext()=true after all items");
     }
     UBool hasNext=iter.next(errorCode);
     errorCode.errIfFailureAndReset("trie iterator next() after all items");
     if(hasNext) {
-        errln("trie iterator next()=TRUE after all items");
+        errln("trie iterator next()=true after all items");
     }
 }

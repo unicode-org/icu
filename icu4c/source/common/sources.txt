@@ -43,6 +43,7 @@ locutil.cpp
 lsr.cpp
 lstmbe.cpp
 messagepattern.cpp
+mlbe.cpp
 normalizer2.cpp
 normalizer2impl.cpp
 normlzr.cpp
@@ -138,6 +139,8 @@ ulist.cpp
 uloc.cpp
 uloc_keytype.cpp
 uloc_tag.cpp
+ulocale.cpp
+ulocbuilder.cpp
 umapfile.cpp
 umath.cpp
 umutablecptrie.cpp

@@ -186,7 +186,7 @@ main(int argc,
 
 /* Usage information */
 static void
-usage()
+usage(void)
 {  
   puts("Usage: icudate [OPTIONS]");
   puts("Options:");
@@ -207,7 +207,7 @@ usage()
 
 /* Version information */
 static void
-version()
+version(void)
 {
   UErrorCode status = U_ZERO_ERROR;
   const char *tzVer;

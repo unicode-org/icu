@@ -29,11 +29,11 @@ class RBBIAPITest: public IntlTest {
 public:
    
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
     /**
      * Tests Constructor behaviour of RuleBasedBreakIterator
      **/
-   // void TestConstruction(void);   
+   // void TestConstruction();   
     /**
      * Tests clone() and equals() methods of RuleBasedBreakIterator         
      **/
@@ -53,23 +53,23 @@ public:
      /**
       * Testing the iteration methods of RuleBasedBreakIterator
       **/
-    void TestIteration(void);
+    void TestIteration();
 
-    void TestFilteredBreakIteratorBuilder(void);
+    void TestFilteredBreakIteratorBuilder();
 
     /**
      * Tests creating RuleBasedBreakIterator from rules strings.
      **/
-    void TestBuilder(void);
+    void TestBuilder();
 
-    void TestRoundtripRules(void);
+    void TestRoundtripRules();
 
     void RoundtripRule(const char *dataFile);
 
     /**
      * Test getting and using binary (compiled) rules.
      **/
-    void TestGetBinaryRules(void);
+    void TestGetBinaryRules();
 
     /**
      * Tests grouping effect of 'single quotes' in rules.
@@ -83,6 +83,7 @@ public:
     void TestRuleStatusVec();
 
     void TestBug2190();
+    void TestBug22580();
 
     void TestBoilerPlate();
 

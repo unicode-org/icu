@@ -25,12 +25,12 @@ public:
      * This test confirms the correct behavior of add when incrementing
      * through subsequent days.
      */
-    virtual void TestRog(void);
+    virtual void TestRog();
     /**
      * Test the handling of the day of the week, checking for correctness and
      * for correct minimum and maximum values.
      */
-    virtual void TestDOW943(void);
+    virtual void TestDOW943();
     /**
      * test subroutine use by TestDOW943
      */
@@ -38,23 +38,25 @@ public:
     /**
      * Confirm that cloned Calendar objects do not inadvertently share substructures.
      */
-    virtual void TestClonesUnique908(void);
+    virtual void TestClonesUnique908();
     /**
      * Confirm that the Gregorian cutoff value works as advertised.
      */
-    virtual void TestGregorianChange768(void);
+    virtual void TestGregorianChange768();
     /**
      * Confirm the functioning of the field disambiguation algorithm.
      */
-    virtual void TestDisambiguation765(void);
+    virtual void TestDisambiguation765();
     /**
      * Test various API methods for API completeness.
      */
-    virtual void TestGenericAPI(void); // New to C++ -- needs to be back ported to Java
+    virtual void TestGenericAPI(); // New to C++ -- needs to be back ported to Java
 
-    virtual void TestWOY(void);
+    virtual void TestWOY();
 
-    virtual void TestDebug(void);
+    virtual void TestDebug();
+
+    virtual void TestClearMonth();
 
 public: // package
     /**
@@ -70,7 +72,7 @@ public:
     /**
      * Confirm that the offset between local time and GMT behaves as expected.
      */
-    virtual void TestGMTvsLocal4064654(void);
+    virtual void TestGMTvsLocal4064654();
 
 public: // package
     /**
@@ -83,15 +85,15 @@ public:
      * The operations of adding and setting should not exhibit pathological
      * dependence on the order of operations.  This test checks for this.
      */
-    virtual void TestAddSetOrder621(void);
+    virtual void TestAddSetOrder621();
     /**
      * Confirm that adding to various fields works.
      */
-    virtual void TestAdd520(void);
+    virtual void TestAdd520();
     /**
      * Execute and test adding and rolling in GregorianCalendar extensively.
      */
-    virtual void TestAddRollExtensive(void);
+    virtual void TestAddRollExtensive();
 
 public: // package
     // internal utility routine for checking date
@@ -108,7 +110,7 @@ public:
      * Test that setting of fields works.  In particular, make sure that all instances
      * of GregorianCalendar don't share a static instance of the fields array.
      */
-    virtual void TestFieldSet4781(void);
+    virtual void TestFieldSet4781();
 /*    virtual void TestSerialize337();
 
 public: // package
@@ -121,13 +123,13 @@ public:
      * Verify that the seconds of a Calendar can be zeroed out through the
      * expected sequence of operations.
      */
-    virtual void TestSecondsZero121(void);
+    virtual void TestSecondsZero121();
     /**
      * Verify that a specific sequence of adding and setting works as expected;
      * it should not vary depending on when and whether the get method is
      * called.
      */
-    virtual void TestAddSetGet0610(void);
+    virtual void TestAddSetGet0610();
 
 public: // package
     // internal routine for checking date
@@ -137,7 +139,7 @@ public:
     /**
      * Verify that various fields on a known date are set correctly.
      */
-    virtual void TestFields060(void);
+    virtual void TestFields060();
 
 public: // package
     static int32_t EXPECTED_FIELDS[];
@@ -148,7 +150,7 @@ public:
      * Verify that various fields on a known date are set correctly.  In this
      * case, the start of the epoch (January 1 1970).
      */
-    virtual void TestEpochStartFields(void);
+    virtual void TestEpochStartFields();
 
 public: // package
     static int32_t EPOCH_FIELDS[];
@@ -158,11 +160,11 @@ public:
      * Test that the days of the week progress properly when add is called repeatedly
      * for increments of 24 days.
      */
-    virtual void TestDOWProgression(void);
+    virtual void TestDOWProgression();
     /**
      * Test newly added fields - DOW_LOCAL and YEAR_WOY
      */
-    virtual void TestDOW_LOCALandYEAR_WOY(void);
+    virtual void TestDOW_LOCALandYEAR_WOY();
     // test subroutine used by TestDOW_LOCALandYEAR_WOY
     virtual void doYEAR_WOYLoop(Calendar *cal,
         SimpleDateFormat *sdf, int32_t times, UErrorCode& status);
@@ -171,8 +173,8 @@ public:
         int times, UCalendarDateFields field, UCalendarDateFields field2,
         UErrorCode& errorCode);
 
-    void TestYWOY(void);
-    void TestJD(void);
+    void TestYWOY();
+    void TestJD();
 
     void yearAddTest(Calendar& cal, UErrorCode& status);
 
@@ -202,7 +204,7 @@ public: // package
      * Clone the specified calendar, and determine its earliest supported date
      * by setting the extended year to the minimum value.
      * @param cal Calendar (will be cloned)
-     * @param isGregorian output: returns 'TRUE' if the calendar's class is GregorianCalendar
+     * @param isGregorian output: returns 'true' if the calendar's class is GregorianCalendar
      * @param status error code
      */
     static UDate minDateOfCalendar(const Calendar& cal, UBool &isGregorian, UErrorCode& status);
@@ -211,40 +213,40 @@ public: // package
      * Construct a calendar of the specified locale, and determine its earliest supported date
      * by setting the extended year to the minimum value.
      * @param locale locale of calendar to check
-     * @param isGregorian output: returns 'TRUE' if the calendar's class is GregorianCalendar
+     * @param isGregorian output: returns 'true' if the calendar's class is GregorianCalendar
      * @param status error code
      */
     static UDate minDateOfCalendar(const Locale& locale, UBool &isGregorian, UErrorCode& status);
 
   // internal - for other test use
  public:
-    void Test6703(void);
-    void Test3785(void);
-    void Test1624(void);
-    void TestIslamicUmAlQura(void);
-    void TestIslamicTabularDates(void);
+    void Test6703();
+    void Test3785();
+    void Test1624();
+    void TestIslamicUmAlQura();
+    void TestIslamicTabularDates();
 
     /**
      * Test the time stamp array recalculation during heavy Calendar usage
      */
-    void TestTimeStamp(void);
+    void TestTimeStamp();
     /**
      * Test the ISO8601 calendar type
      */
-    void TestISO8601(void);
+    void TestISO8601();
 
     /**
      * Test cases for [set|get][Repeated|Skipped]WallTimeOption
      */
-    void TestAmbiguousWallTimeAPIs(void);
-    void TestRepeatedWallTime(void);
-    void TestSkippedWallTime(void);
+    void TestAmbiguousWallTimeAPIs();
+    void TestRepeatedWallTime();
+    void TestSkippedWallTime();
 
-    void TestCloneLocale(void);
+    void TestCloneLocale();
 
-    void TestTimeZoneInLocale(void);
+    void TestTimeZoneInLocale();
 
-    void TestHebrewMonthValidation(void);
+    void TestHebrewMonthValidation();
 
     /*
      * utility methods for TestIslamicUmAlQura
@@ -252,11 +254,103 @@ public: // package
     void setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status);
     void setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status);
 
-    void TestWeekData(void);
+    void TestWeekData();
 
-    void TestAddAcrossZoneTransition(void);
+    void TestAddAcrossZoneTransition();
 
-    void TestChineseCalendarMapping(void);
+    void TestChineseCalendarMapping();
+
+    void TestBasicConversionGregorian();
+    void TestBasicConversionISO8601();
+    void TestBasicConversionJapanese();
+    void TestBasicConversionBuddhist();
+    void TestBasicConversionTaiwan();
+    void TestBasicConversionPersian();
+    void TestBasicConversionIslamic();
+    void TestBasicConversionIslamicTBLA();
+    void TestBasicConversionIslamicCivil();
+    void TestBasicConversionIslamicRGSA();
+    void TestBasicConversionIslamicUmalqura();
+    void TestBasicConversionHebrew();
+    void TestBasicConversionChinese();
+    void TestBasicConversionDangi();
+    void TestBasicConversionIndian();
+    void TestBasicConversionCoptic();
+    void TestBasicConversionEthiopic();
+    void TestBasicConversionEthiopicAmeteAlem();
+
+    void AsssertCalendarFieldValue(
+        Calendar* cal, double time, const char* type,
+        int32_t era, int32_t year, int32_t month, int32_t week_of_year,
+        int32_t week_of_month, int32_t date, int32_t day_of_year, int32_t day_of_week,
+        int32_t day_of_week_in_month, int32_t am_pm, int32_t hour, int32_t hour_of_day,
+        int32_t minute, int32_t second, int32_t millisecond, int32_t zone_offset,
+        int32_t dst_offset, int32_t year_woy, int32_t dow_local, int32_t extended_year,
+        int32_t julian_day, int32_t milliseconds_in_day, int32_t is_leap_month);
+
+    void TestChineseCalendarMonthInSpecialYear();
+    void TestGregorianCalendarInTemporalLeapYear();
+    void TestChineseCalendarInTemporalLeapYear();
+    void TestDangiCalendarInTemporalLeapYear();
+    void TestHebrewCalendarInTemporalLeapYear();
+    void TestIslamicCalendarInTemporalLeapYear();
+    void TestIslamicCivilCalendarInTemporalLeapYear();
+    void TestIslamicUmalquraCalendarInTemporalLeapYear();
+    void TestIslamicRGSACalendarInTemporalLeapYear();
+    void TestIslamicTBLACalendarInTemporalLeapYear();
+    void TestPersianCalendarInTemporalLeapYear();
+    void TestIndianCalendarInTemporalLeapYear();
+    void TestTaiwanCalendarInTemporalLeapYear();
+    void TestJapaneseCalendarInTemporalLeapYear();
+    void TestBuddhistCalendarInTemporalLeapYear();
+    void TestCopticCalendarInTemporalLeapYear();
+    void TestEthiopicCalendarInTemporalLeapYear();
+    void TestEthiopicAmeteAlemCalendarInTemporalLeapYear();
+
+    void TestChineseCalendarGetTemporalMonthCode();
+    void TestDangiCalendarGetTemporalMonthCode();
+    void TestHebrewCalendarGetTemporalMonthCode();
+    void TestCopticCalendarGetTemporalMonthCode();
+    void TestEthiopicCalendarGetTemporalMonthCode();
+    void TestEthiopicAmeteAlemCalendarGetTemporalMonthCode();
+
+    void TestGregorianCalendarSetTemporalMonthCode();
+    void TestChineseCalendarSetTemporalMonthCode();
+    void TestHebrewCalendarSetTemporalMonthCode();
+    void TestCopticCalendarSetTemporalMonthCode();
+    void TestEthiopicCalendarSetTemporalMonthCode();
+
+    void TestMostCalendarsOrdinalMonthSet();
+    void TestChineseCalendarOrdinalMonthSet();
+    void TestDangiCalendarOrdinalMonthSet();
+    void TestHebrewCalendarOrdinalMonthSet();
+
+    void TestCalendarAddOrdinalMonth();
+    void TestCalendarRollOrdinalMonth();
+    void TestLimitsOrdinalMonth();
+    void TestActualLimitsOrdinalMonth();
+    void TestDangiOverflowIsLeapMonthBetween22507();
+
+    void TestFWWithISO8601();
+    void TestAddOverflow();
+    void TestRollWeekOfYear();
+    void Test22633ChineseOverflow();
+    void Test22633IndianOverflow();
+    void Test22633IslamicUmalquraOverflow();
+    void Test22633PersianOverflow();
+    void Test22633HebrewOverflow();
+    void Test22633AMPMOverflow();
+
+    void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
+    void TestFirstDayOfWeek();
+
+    void TestChineseCalendarComputeMonthStart();
+
+    void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
+    void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);
+    void Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* cal);
+    void RunChineseCalendarGetTemporalMonthCode(Calendar* cal);
+    void RunCECalendarGetTemporalMonthCode(Calendar* cal);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

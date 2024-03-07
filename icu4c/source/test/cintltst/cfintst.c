@@ -75,7 +75,7 @@ void addFinnishCollTest(TestNode** root)
 }
 
 
-static void TestTertiary( )
+static void TestTertiary(void)
 {
     
     int32_t i;
@@ -93,7 +93,7 @@ static void TestTertiary( )
     ucol_close(myCollation);
 }
 
-static void TestPrimary()
+static void TestPrimary(void)
 {
     
     int32_t i;

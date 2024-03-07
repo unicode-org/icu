@@ -26,25 +26,63 @@
 //supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@tender="false"]
      ; /CurrencyMap/$1/<FIFO>/id ; values=$2
      ; /CurrencyMap/$1/<FIFO>/tender ; values=false
-//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@iso4217="(%W)"]
-     ; /CurrencyMap/$1/<FIFO>/id ; values=$3
-     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
-//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@iso4217="(%W)"][@tender="false"]
-     ; /CurrencyMap/$1/<FIFO>/id ; values=$3
-     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, Etc/UTC)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@tz="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, $4)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, Etc/UTC)
      ; /CurrencyMap/$1/<FIFO>/tender ; values=false
-//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@to="(%W)"][@iso4217="(%W)"]
-     ; /CurrencyMap/$1/<FIFO>/id ; values=$4
-     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
-     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($3, to)
-//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@to="(%W)"][@iso4217="(%W)"][@tender="false"]
-     ; /CurrencyMap/$1/<FIFO>/id ; values=$4
-     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
-     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($3, to)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@tz="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, $4)
      ; /CurrencyMap/$1/<FIFO>/tender ; values=false
-//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@to="(%W)"][@iso4217="(%W)"][@tender="false"]
-     ; /CurrencyMap/$1/<FIFO>/id ; values=$3
-     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($2, to)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, Etc/UTC)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, Etc/UTC)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@tz="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, $5)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, $5)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@to-tz="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, Etc/UTC)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, $5)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@tz="(%W)"][@to-tz="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, $5)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, $6)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, Etc/UTC)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, Etc/UTC)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@tz="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, $5)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, $5)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@to-tz="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, Etc/UTC)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, $5)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@from="(%W)"][@to="(%W)"][@tz="(%W)"][@to-tz="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($3, from, $5)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($4, to, $6)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@to="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($3, to, Etc/UTC)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@to="(%W)"][@tz="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($3, to, $4)
      ; /CurrencyMap/$1/<FIFO>/tender ; values=false
 //supplementalData/currencyData/fractions/info[@iso4217="(%W)"][@digits="(%N)"][@rounding="(%N)"][@cashDigits="(%N)"][@cashRounding="(%N)"] ; /CurrencyMeta/$1:intvector ; values=$2 $3 $4 $5
 //supplementalData/currencyData/fractions/info[@iso4217="(%W)"][@digits="(%N)"][@rounding="(%N)"][@cashRounding="(%N)"] ; /CurrencyMeta/$1:intvector ; values=$2 $3 $2 $4
@@ -134,13 +172,26 @@
     ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
 
 //supplementalData/calendarData/calendar[@type="(%W)"]/calendarSystem[@type="(%W)"] ; /calendarData/$1/system ; values=$2
-//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"][@named="(%W)"]
+//supplementalData/calendarData/calendar[@type="(%W)"]/inheritEras[@calendar="(%W)"] ; /calendarData/$1/inheritEras ; values=$2
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@named="(%W)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
     ; /calendarData/$1/eras/$2/named ; values=$5
-//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"]
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@code="%A"][@aliases="%A"]
+    ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"][@code="%A"]
+    ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%N)"][@(start|end)="(%A)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
 
 # units.xml
+
+//supplementalData/unitPrefixes/unitPrefix[@type="(%W)"][@symbol="(%W)"][@power10="(%A)"]
+    ; /unitPrefixes/$1/symbol ; values=$2
+    ; /unitPrefixes/$1/power10 ; values=$3
+
+//supplementalData/unitPrefixes/unitPrefix[@type="(%W)"][@symbol="(%W)"][@power2="(%A)"]
+    ; /unitPrefixes/$1/symbol ; values=$2
+    ; /unitPrefixes/$1/power2 ; values=$3
 
 //supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"](?:[@status="%W"])?
     ; /unitConstants/$1 ; values="$2"
@@ -148,23 +199,54 @@
 //supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"](?:[@status="%W"])?
     ; /unitQuantities/<FIFO>/$1 ; values="$2"
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values=1
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values=1
     ; /convertUnits/$1/offset ; values=$3
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"](?:[@systems="%W"])?
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/offset ; values=$4
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@special="(%A)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/special ; values=$3
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+    ; /convertUnits/$1/systems ; values="$3"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/systems ; values="$4"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+    ; /convertUnits/$1/offset ; values=$3
+    ; /convertUnits/$1/systems ; values="$4"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/offset ; values=$4
+    ; /convertUnits/$1/systems ; values="$5"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@special="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/special ; values=$3
+    ; /convertUnits/$1/systems ; values="$4"
 
 # note the following will go into metadata.txt, not units.txt
 //supplementalData/metadata/alias/(unit|usage)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]
@@ -228,6 +310,7 @@
 //supplementalData/languageMatching/languageMatches[@type="(%B)"]/languageMatch[@desired="(%A)"][@supported="(%A)"][@percent="(%N)"] ; /languageMatching/$1/<FIFO> ; values=$2 $3 $4 0
 
 # likelySubtags.xml
+//supplementalData/likelySubtags/likelySubtag[@from="(%A)"][@to="(%A)"][@origin="%A"] ; /$1 ; values=$2
 //supplementalData/likelySubtags/likelySubtag[@from="(%A)"][@to="(%A)"] ; /$1 ; values=$2
 
 # metaZones.xml - metaZones.txt
@@ -258,6 +341,7 @@
 //supplementalData/gender/personList[@type="(%W)"][@locales="(%W)"] ; /genderList/$2 ; values=$1
 
 # locale info
+//supplementalData/parentLocales[@component="(%A)"]/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales%$1/$2 ; values=$3
 //supplementalData/parentLocales/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales/$1 ; values=$2
 
 # personName formats

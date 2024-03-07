@@ -146,7 +146,7 @@ so{
         IL{"Israaʼiil"}
         IM{"Jasiiradda Isle of Man"}
         IN{"Hindiya"}
-        IO{"Dhul xadeedka Badweynta Hindiya ee Biritishka"}
+        IO{"Dhul xadeedka Badweynta Hindiya ee Ingiriiska"}
         IQ{"Ciraaq"}
         IR{"Iiraan"}
         IS{"Ayslaand"}
@@ -298,14 +298,16 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Gobol aan la aqoonin"}
     }
+    Countries%chagos{
+        IO{"Chagos Archipelago"}
+    }
     Countries%short{
         GB{"UK"}
-        PS{"Palestine (translation hint: Warning, see info panel on right.)"}
+        PS{"Falastiin"}
     }
     Countries%variant{
         CD{"Jamhuuriyadda Dimuqaadiga Kongo"}
         CG{"Jamhuuriyadda Kongo"}
-        CI{"Ivory Coast (translation hint: Warning, see info panel on right.)"}
         CZ{"Jamhuuriyadda Jek"}
         FK{"Jasiiradaha Fookland"}
         NZ{"Aotearoa New Zealand"}

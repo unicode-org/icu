@@ -53,11 +53,13 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testFieldPositions);
         TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(toObject);
+        TESTCASE_AUTO(locale);
         TESTCASE_AUTO(testGetDecimalNumbers);
         TESTCASE_AUTO(test21684_Performance);
         TESTCASE_AUTO(test21358_SignPosition);
         TESTCASE_AUTO(test21683_StateLeak);
         TESTCASE_AUTO(testCreateLNRFFromNumberingSystemInSkeleton);
+        TESTCASE_AUTO(test22288_DifferentStartEndSettings);
     TESTCASE_AUTO_END;
 }
 
@@ -917,6 +919,23 @@ void NumberRangeFormatterTest::toObject() {
     }
 }
 
+void NumberRangeFormatterTest::locale() {
+    IcuTestErrorCode status(*this, "locale");
+
+    LocalizedNumberRangeFormatter lnf = NumberRangeFormatter::withLocale("en")
+        .identityFallback(UNUM_IDENTITY_FALLBACK_RANGE);
+    UnlocalizedNumberRangeFormatter unf1 = lnf.withoutLocale();
+    UnlocalizedNumberRangeFormatter unf2 = NumberRangeFormatter::with()
+        .identityFallback(UNUM_IDENTITY_FALLBACK_RANGE)
+        .locale("ar-EG")
+        .withoutLocale();
+
+    FormattedNumberRange res1 = unf1.locale("bn").formatFormattableRange(5, 5, status);
+    assertEquals(u"res1", u"\u09EB\u2013\u09EB", res1.toTempString(status));
+    FormattedNumberRange res2 = unf2.locale("ja-JP").formatFormattableRange(5, 5, status);
+    assertEquals(u"res2", u"5\uFF5E5", res2.toTempString(status));
+}
+
 void NumberRangeFormatterTest::testGetDecimalNumbers() {
     IcuTestErrorCode status(*this, "testGetDecimalNumbers");
 
@@ -987,7 +1006,7 @@ void NumberRangeFormatterTest::test21358_SignPosition() {
         u"CHF≈5’000.00",
         u"CHF 5’000.00–5’000’000.00");
 
-    // TODO(CLDR-13044): Move the sign to the inside of the number
+    // TODO(ICU-21420): Move the sign to the inside of the number
     assertFormatRange(
         u"Approximately sign position with currency spacing",
         NumberRangeFormatter::with()
@@ -1018,7 +1037,6 @@ void NumberRangeFormatterTest::test21358_SignPosition() {
     }
 
     {
-        // TODO(CLDR-14111): Add spacing between range separator and sign
         LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter::withLocale("de-CH");
         UnicodeString actual = lnrf.formatFormattableRange(2, -3, status).toString(status);
         assertEquals("Positive to negative range", u"2–-3", actual);
@@ -1139,6 +1157,27 @@ cleanup:
     unumrf_close(nrf);
     unumrf_closeResult(result);
     ucfpos_close(fpos);
+}
+
+void NumberRangeFormatterTest::test22288_DifferentStartEndSettings() {
+    IcuTestErrorCode status(*this, "test22288_DifferentStartEndSettings");
+    LocalizedNumberRangeFormatter lnrf(NumberRangeFormatter
+            ::withLocale("en")
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterFirst(
+                NumberFormatter::with()
+                    .unit(CurrencyUnit("USD", status))
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                    .precision(Precision::integer())
+                    .roundingMode(UNUM_ROUND_FLOOR))
+            .numberFormatterSecond(
+                NumberFormatter::with()
+                    .unit(CurrencyUnit("USD", status))
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                    .precision(Precision::integer())
+                    .roundingMode(UNUM_ROUND_CEILING)));
+        FormattedNumberRange result = lnrf.formatFormattableRange(2.5, 2.5, status);
+        assertEquals("Should format successfully", u"2–3 US dollars", result.toString(status));
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(

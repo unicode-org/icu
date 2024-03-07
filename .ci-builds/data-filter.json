@@ -24,7 +24,8 @@
     },
     "brkitr_dictionaries": {
       "blacklist": ["cjdict"]
-    }
+    },
+    "lang_tree": "exclude"
   },
   "resourceFilters": [
     {

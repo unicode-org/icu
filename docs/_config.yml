@@ -14,7 +14,7 @@ url: "https://unicode-org.github.io" # the base hostname & protocol for your sit
 twitter_username: unicode
 github_username:  unicode-org
 
-remote_theme: pmarsceill/just-the-docs
+theme: just-the-docs
 
 # GitHub uses its own markdown renderer called CommonMarkGhPages.
 #

@@ -278,6 +278,32 @@ TEST(DoubleToShortest) {
   builder.Reset();
   CHECK(dc6.ToShortest(-Double::NaN(), &builder));
   CHECK_EQ("NaN", builder.Finalize());
+
+  // Test examples with one significant digit.
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT;
+  DoubleToStringConverter dc7(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc8(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc9(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+
+  builder.Reset();
+  CHECK(dc7.ToShortest(0.0009, &builder));
+  CHECK_EQ("9e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc8.ToShortest(0.0009, &builder));
+  CHECK_EQ("9.e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc9.ToShortest(0.0009, &builder));
+  CHECK_EQ("9.0e-4", builder.Finalize());
 }
 
 
@@ -1259,6 +1285,32 @@ TEST(DoubleToPrecision) {
   builder.Reset();
   CHECK(dc5.ToPrecision(2000080, 5, &builder));
   CHECK_EQ("2.0001e6", builder.Finalize());
+
+  // Test examples with one significant digit.
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT;
+  DoubleToStringConverter dc12(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc13(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+  flags = DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT_IN_EXPONENTIAL |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT_IN_EXPONENTIAL;
+  DoubleToStringConverter dc14(flags, NULL, NULL, 'e', 0, 0, 0, 0);
+
+  builder.Reset();
+  CHECK(dc12.ToPrecision(0.0009, 1, &builder));
+  CHECK_EQ("9e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc13.ToPrecision(0.0009, 1, &builder));
+  CHECK_EQ("9.e-4", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc14.ToPrecision(0.0009, 1, &builder));
+  CHECK_EQ("9.0e-4", builder.Finalize());
 }
 
 
@@ -2072,14 +2124,14 @@ static double StrToD(const char* str, int flags, double empty_string_value,
                      uc16 separator = StringToDoubleConverter::kNoSeparator) {
   StringToDoubleConverter converter(flags, empty_string_value, Double::NaN(),
                                     NULL, NULL, separator);
-  double result = converter.StringToDouble(str, strlen(str),
+  int len = static_cast<int>(strlen(str));
+  double result = converter.StringToDouble(str, len,
                                            processed_characters_count);
   *processed_all =
       ((strlen(str) == static_cast<unsigned>(*processed_characters_count)));
 
   uc16 buffer16[256];
   DOUBLE_CONVERSION_ASSERT(strlen(str) < DOUBLE_CONVERSION_ARRAY_SIZE(buffer16));
-  int len = strlen(str);
   for (int i = 0; i < len; i++) {
     buffer16[i] = str[i];
   }
@@ -4186,25 +4238,25 @@ static float StrToF16(const uc16* str16, int length, int flags,
                       bool* processed_all) {
   StringToDoubleConverter converter(flags, empty_string_value, Double::NaN(),
                                     NULL, NULL);
-  double result =
+  float result =
       converter.StringToFloat(str16, length, processed_characters_count);
   *processed_all = (length == *processed_characters_count);
   return result;
 }
 
 
-static double StrToF(const char* str, int flags, double empty_string_value,
-                     int* processed_characters_count, bool* processed_all) {
+static float StrToF(const char* str, int flags, double empty_string_value,
+                    int* processed_characters_count, bool* processed_all) {
   StringToDoubleConverter converter(flags, empty_string_value, Single::NaN(),
                                     NULL, NULL);
-  float result = converter.StringToFloat(str, strlen(str),
+  int len = static_cast<int>(strlen(str));
+  float result = converter.StringToFloat(str, len,
                                          processed_characters_count);
   *processed_all =
       ((strlen(str) == static_cast<unsigned>(*processed_characters_count)));
 
   uc16 buffer16[256];
   DOUBLE_CONVERSION_ASSERT(strlen(str) < DOUBLE_CONVERSION_ARRAY_SIZE(buffer16));
-  int len = strlen(str);
   for (int i = 0; i < len; i++) {
     buffer16[i] = str[i];
   }

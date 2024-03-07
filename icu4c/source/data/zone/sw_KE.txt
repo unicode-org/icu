@@ -219,9 +219,6 @@ sw_KE{
             lg{"Saa za Krasnoyarsk"}
             ls{"Saa za Wastani za Krasnoyask"}
         }
-        "meta:Macquarie"{
-            ls{"Saa za Makwuarie"}
-        }
         "meta:Magadan"{
             ld{"Saa za Majira ya Joto za Magadan"}
             lg{"Saa za Magadan"}
@@ -237,11 +234,6 @@ sw_KE{
             ld{"Saa za Majira ya Joto za Morisi"}
             lg{"Saa za Morisi"}
             ls{"Saa za Wastani za Morisi"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Saa za Mchana za Kaskazini Magharibi mwa Meksiko"}
-            lg{"Saa za Kaskazini Magharibi mwa Meksiko"}
-            ls{"Saa za Wastani za Kaskazini Magharibi mwa Meksiko"}
         }
         "meta:Mongolia"{
             ld{"Saa za Majira ya Joto za Ulaanbaatar"}

@@ -115,7 +115,7 @@ static int32_t binarySearch(const uint16_t *array, int32_t len, uint16_t value)
 }
 
 IteratedChar::IteratedChar() : 
-charValue(0), index(-1), nextIndex(0), error(FALSE), done(FALSE)
+charValue(0), index(-1), nextIndex(0), error(false), done(false)
 {
     // nothing else to do.
 }
@@ -125,14 +125,14 @@ charValue(0), index(-1), nextIndex(0), error(FALSE), done(FALSE)
     charValue = 0;
     index     = -1;
     nextIndex = 0;
-    error     = FALSE;
-    done      = FALSE;
+    error     = false;
+    done      = false;
 }*/
 
 int32_t IteratedChar::nextByte(InputText *det)
 {
     if (nextIndex >= det->fRawLength) {
-        done = TRUE;
+        done = true;
 
         return -1;
     }
@@ -240,16 +240,16 @@ CharsetRecog_sjis::~CharsetRecog_sjis()
 
 UBool CharsetRecog_sjis::nextChar(IteratedChar* it, InputText* det) const {
     it->index = it->nextIndex;
-    it->error = FALSE;
+    it->error = false;
 
     int32_t firstByte = it->charValue = it->nextByte(det);
 
     if (firstByte < 0) {
-        return FALSE;
+        return false;
     }
 
     if (firstByte <= 0x7F || (firstByte > 0xA0 && firstByte <= 0xDF)) {
-        return TRUE;
+        return true;
     }
 
     int32_t secondByte = it->nextByte(det);
@@ -260,10 +260,10 @@ UBool CharsetRecog_sjis::nextChar(IteratedChar* it, InputText* det) const {
 
     if (! ((secondByte >= 0x40 && secondByte <= 0x7F) || (secondByte >= 0x80 && secondByte <= 0xFE))) {
         // Illegal second byte value.
-        it->error = TRUE;
+        it->error = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 UBool CharsetRecog_sjis::match(InputText* det, CharsetMatch *results) const {
@@ -293,17 +293,17 @@ UBool CharsetRecog_euc::nextChar(IteratedChar* it, InputText* det) const {
     int32_t thirdByte  = 0;
 
     it->index = it->nextIndex;
-    it->error = FALSE;
+    it->error = false;
     firstByte = it->charValue = it->nextByte(det);
 
     if (firstByte < 0) {
         // Ran off the end of the input data
-        return FALSE;
+        return false;
     }
 
     if (firstByte <= 0x8D) {
         // single byte char
-        return TRUE;
+        return true;
     }
 
     secondByte = it->nextByte(det);
@@ -315,10 +315,10 @@ UBool CharsetRecog_euc::nextChar(IteratedChar* it, InputText* det) const {
     if (firstByte >= 0xA1 && firstByte <= 0xFE) {
         // Two byte Char
         if (secondByte < 0xA1) {
-            it->error = TRUE;
+            it->error = true;
         }
 
-        return TRUE;
+        return true;
     }
 
     if (firstByte == 0x8E) {
@@ -329,10 +329,10 @@ UBool CharsetRecog_euc::nextChar(IteratedChar* it, InputText* det) const {
         // Treat it like EUC-JP.  If the data really was EUC-TW, the following two
         //   bytes will look like a well formed 2 byte char.
         if (secondByte < 0xA1) {
-            it->error = TRUE;
+            it->error = true;
         }
 
-        return TRUE;
+        return true;
     }
 
     if (firstByte == 0x8F) {
@@ -343,11 +343,11 @@ UBool CharsetRecog_euc::nextChar(IteratedChar* it, InputText* det) const {
 
         if (thirdByte < 0xa1) {
             // Bad second byte or ran off the end of the input data with a non-ASCII first byte.
-            it->error = TRUE;
+            it->error = true;
         }
     }
 
-    return TRUE;
+    return true;
 
 }
 
@@ -405,16 +405,16 @@ UBool CharsetRecog_big5::nextChar(IteratedChar* it, InputText* det) const
     int32_t firstByte;
 
     it->index = it->nextIndex;
-    it->error = FALSE;
+    it->error = false;
     firstByte = it->charValue = it->nextByte(det);
 
     if (firstByte < 0) {
-        return FALSE;
+        return false;
     }
 
     if (firstByte <= 0x7F || firstByte == 0xFF) {
         // single byte character.
-        return TRUE;
+        return true;
     }
 
     int32_t secondByte = it->nextByte(det);
@@ -424,10 +424,10 @@ UBool CharsetRecog_big5::nextChar(IteratedChar* it, InputText* det) const
     // else we'll handle the error later.
 
     if (secondByte < 0x40 || secondByte == 0x7F || secondByte == 0xFF) {
-        it->error = TRUE;
+        it->error = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 const char *CharsetRecog_big5::getName() const
@@ -459,17 +459,17 @@ UBool CharsetRecog_gb_18030::nextChar(IteratedChar* it, InputText* det) const {
     int32_t fourthByte = 0;
 
     it->index = it->nextIndex;
-    it->error = FALSE;
+    it->error = false;
     firstByte = it->charValue = it->nextByte(det);
 
     if (firstByte < 0) {
         // Ran off the end of the input data
-        return FALSE;
+        return false;
     }
 
     if (firstByte <= 0x80) {
         // single byte char
-        return TRUE;
+        return true;
     }
 
     secondByte = it->nextByte(det);
@@ -481,7 +481,7 @@ UBool CharsetRecog_gb_18030::nextChar(IteratedChar* it, InputText* det) const {
     if (firstByte >= 0x81 && firstByte <= 0xFE) {
         // Two byte Char
         if ((secondByte >= 0x40 && secondByte <= 0x7E) || (secondByte >=80 && secondByte <= 0xFE)) {
-            return TRUE;
+            return true;
         }
 
         // Four byte char
@@ -494,16 +494,16 @@ UBool CharsetRecog_gb_18030::nextChar(IteratedChar* it, InputText* det) const {
                 if (fourthByte >= 0x30 && fourthByte <= 0x39) {
                     it->charValue = (it->charValue << 16) | (thirdByte << 8) | fourthByte;
 
-                    return TRUE;
+                    return true;
                 }
             }
         }
 
         // Something wasn't valid, or we ran out of data (-1).
-        it->error = TRUE;
+        it->error = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 const char *CharsetRecog_gb_18030::getName() const

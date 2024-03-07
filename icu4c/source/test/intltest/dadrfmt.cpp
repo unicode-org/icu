@@ -42,11 +42,11 @@ DataDrivenFormatTest::~DataDrivenFormatTest() {
 
 void DataDrivenFormatTest::runIndexedTest(int32_t index, UBool exec,
         const char* &name, char* /*par */) {
-    if (driver != NULL) {
+    if (driver != nullptr) {
         if (exec) {
             //  logln("Begin ");
         }
-        const DataMap *info= NULL;
+        const DataMap *info= nullptr;
         UErrorCode status= U_ZERO_ERROR;
         TestData *testData = driver->createTestData(index, status);
         if (U_SUCCESS(status)) {
@@ -108,25 +108,25 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         return;
     }
 
-    const DataMap *currentCase= NULL;
+    const DataMap *currentCase= nullptr;
     // Start the processing
     int n = 0;
     while (testData->nextCase(currentCase, status)) {
         char calLoc[256] = "";
         DateTimeStyleSet styleSet;
         UnicodeString pattern;
-        UBool usePattern = FALSE;
+        UBool usePattern = false;
         (void)usePattern;   // Suppress unused warning.
         CalendarFieldsSet fromSet;
         UDate fromDate = 0;
-        UBool useDate = FALSE;
+        UBool useDate = false;
         
         UDate now = Calendar::getNow();
         
         ++n;
 
         char theCase[200];
-        sprintf(theCase, "case %d:", n);
+        snprintf(theCase, sizeof(theCase), "case %d:", n);
         UnicodeString caseString(theCase, "");
         
         // load params
@@ -156,14 +156,14 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
             continue;
         }
                 
-        DateFormat *format = NULL;
+        DateFormat *format = nullptr;
         
         // Process: 'locale'
         locale.extract(0, locale.length(), calLoc, (const char*)0); // default codepage.  Invariant codepage doesn't have '@'!
         Locale loc(calLoc);
         if(spec.startsWith(kPATTERN)) {
             pattern = UnicodeString(spec,kPATTERN.length());
-            usePattern = TRUE;
+            usePattern = true;
             format = new SimpleDateFormat(pattern, loc, status);
             if(U_FAILURE(status)) {
                 errln("case %d: could not create SimpleDateFormat from pattern: %s", n, u_errorName(status));
@@ -175,7 +175,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                 continue;
             }
             format = DateFormat::createDateTimeInstance((DateFormat::EStyle)styleSet.getDateStyle(), (DateFormat::EStyle)styleSet.getTimeStyle(), loc);
-            if(format == NULL ) {
+            if(format == nullptr ) {
                 errln("case %d: could not create SimpleDateFormat from styles.", n);
                 continue;
             }
@@ -196,11 +196,11 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         // parse 'date'
         if(date.startsWith(kMILLIS)) {
             UnicodeString millis = UnicodeString(date, kMILLIS.length());
-            useDate = TRUE;
+            useDate = true;
             fromDate = udbg_stod(millis);
         } else if(date.startsWith(kRELATIVE_MILLIS)) {
             UnicodeString millis = UnicodeString(date, kRELATIVE_MILLIS.length());
-            useDate = TRUE;
+            useDate = true;
             fromDate = udbg_stod(millis) + now;
         } else if(date.startsWith(kRELATIVE_ADD)) {
             UnicodeString add = UnicodeString(date, kRELATIVE_ADD.length());  // "add" is a string indicating which fields to add
@@ -208,7 +208,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                 errln("case %d: could not parse date as RELATIVE_ADD calendar fields: %s", n, u_errorName(status));
                 continue;
             }
-            useDate=TRUE;
+            useDate=true;
             cal->clear();
             cal->setTime(now, status);
             for (int q=0; q<UCAL_FIELD_COUNT; q++) {
@@ -327,12 +327,12 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
 }
 
 void DataDrivenFormatTest::processTest(TestData *testData) {
-    //Format *cal= NULL;
-    //const UChar *arguments= NULL;
+    //Format *cal= nullptr;
+    //const char16_t *arguments= nullptr;
     //int32_t argLen = 0;
     char testType[256] = "";
-    const DataMap *settings= NULL;
-    //const UChar *type= NULL;
+    const DataMap *settings= nullptr;
+    //const char16_t *type= nullptr;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString testSetting;
     int n = 0;

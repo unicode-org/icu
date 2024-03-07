@@ -229,7 +229,7 @@ public:
             // unnormalized suffix as a read-only alias (does not copy characters)
             UnicodeString unnormalized=s.tempSubString(spanQCYes);
             // set the fcdString to the FCD prefix as a read-only alias
-            fcdString.setTo(FALSE, s.getBuffer(), spanQCYes);
+            fcdString.setTo(false, s.getBuffer(), spanQCYes);
             // automatic copy-on-write, and append the FCD'ed suffix
             fcd.normalizeSecondAndAppend(fcdString, unnormalized, errorCode);
             ps=&fcdString;

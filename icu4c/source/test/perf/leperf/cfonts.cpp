@@ -7,8 +7,8 @@
  *
  */
 
-#include "LETypes.h"
-#include "loengine.h"
+#include "layout/LETypes.h"
+#include "layout/loengine.h"
 #include "PortableFontInstance.h"
 #include "SimpleFontInstance.h"
 

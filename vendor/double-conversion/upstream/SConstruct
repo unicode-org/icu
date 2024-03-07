@@ -16,7 +16,7 @@ optimize = ARGUMENTS.get('optimize', 0)
 env.Replace(CXX = ARGUMENTS.get('CXX', 'g++'))
 
 # for shared lib, requires scons 2.3.0
-env['SHLIBVERSION'] = '3.0.0'
+env['SHLIBVERSION'] = '3.2.0'
 
 CCFLAGS = []
 if int(debug):

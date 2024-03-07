@@ -1,10 +1,10 @@
 ﻿# UCA_Rules_SHORT.txt
-# Date: 2022-05-17, 01:30:07 GMT
-# © 2022 Unicode®, Inc.
+# Date: 2023-08-11, 17:59:32 GMT
+# © 2023 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
-# UCA Version: 15.0.0
-# UCD Version: 15.0.0
+# UCA Version: 15.1.0
+# UCD Version: 15.1.0
 # For a description of the format and usage, see
 # http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files
 
@@ -202,8 +202,6 @@
     =	 ༷
     =	 ༾
     =	 ༿
-    =	 ྂ
-    =	 ྃ
     =	 ྆
     =	 ྇
     =	 ࿆
@@ -361,13 +359,13 @@
     =	 '\U00013436'
     =	 '\U00013437'
     =	 '\U00013438'
-    =	 𓐹
-    =	 𓐺
-    =	 𓐻
-    =	 𓐼
-    =	 𓐽
-    =	 𓐾
-    =	 𓐿
+    =	 '\U00013439'
+    =	 '\U0001343A'
+    =	 '\U0001343B'
+    =	 '\U0001343C'
+    =	 '\U0001343D'
+    =	 '\U0001343E'
+    =	 '\U0001343F'
     =	 𓑀
     =	 𓑇
     =	 𓑈
@@ -1399,6 +1397,8 @@
     =	 ಁ
     =	 ഁ
     =	 ඁ
+    =	 ྂ
+    =	 ྃ
     =	 ᬀ
     =	 ᬁ
     =	 ꣅ
@@ -1601,7 +1601,6 @@
   <<	 ⃧
   <<	 ⃨
   <<	 ⃩
-  <<	 𐇽
 # TODO: There are several problems with this file.
 # See https://unicode-org.atlassian.net/browse/CLDR-6745
 &'\u202F'  # TODO: reset to the last space, not [last regular]
@@ -1974,22 +1973,24 @@
  <	 𒿲
  <	 ''
    <<<	 ＇
- <	 ‘
- <	 ’
- <	 ‚
- <	 ‛
+  <<	 ‘
+  <<	 ’
+  <<	 ‚
+  <<	 ‛
+  <<	 ‎׳‎
  <	 ‹
  <	 ›
  <	 '"'
    <<<	 ＂
- <	 “
- <	 ”
- <	 „
- <	 ‟
- <	 ⹂
- <	 〝
- <	 〞
- <	 〟
+  <<	 “
+  <<	 ”
+  <<	 „
+  <<	 ‟
+  <<	 ⹂
+  <<	 〝
+  <<	 〞
+  <<	 〟
+  <<	 ‎״‎
  <	 «
  <	 »
  <	 '('
@@ -2402,8 +2403,6 @@
  <	 ‎׀‎
  <	 ‎׃‎
  <	 ‎׆‎
- <	 ‎׳‎
- <	 ‎״‎
  <	 ‎܊‎
  <	 ‎܋‎
  <	 ‎܌‎
@@ -2545,6 +2544,7 @@
  <	 𑱄
  <	 𑱅
  <	 𐬹
+ <	 ‎𐩿‎
  <	 ‎𐫰‎
  <	 ‎𐫱‎
  <	 ‎𐫲‎
@@ -2615,7 +2615,6 @@
  <	 𝪉
  <	 𝪊
  <	 𝪋
- <	 ‎𐩿‎
 # TODO: do not try to set this: <	 [variable top]
 &\u30FD  # TODO: instead, reset to the last symbol so that maxVariable=symbol works
  <	 '`'
@@ -9146,6 +9145,11 @@
  <	 ⿹
  <	 ⿺
  <	 ⿻
+ <	 ⿼
+ <	 ⿽
+ <	 ⿾
+ <	 ⿿
+ <	 ㇯
  <	 ㇀
  <	 ㇁
  <	 ㇂
@@ -9262,7 +9266,6 @@
  <	 ₤
  <	 ₥
  <	 ₦
- <	 ₧
  <	 ₩
    <<<	 ￦
  <	 ₪
@@ -12307,6 +12310,7 @@
    <<<	 ⓟ
    <<<	 P
    <<<	 Ｐ
+   <<<	 ₧ / ts
    <<<	 ℙ
     =	 𝐏
     =	 𝑃

@@ -147,10 +147,8 @@ AC_SUBST(ENABLE_RELEASE)
 : ${CXXFLAGS=""}
 
 # Checks for compilers
-AC_PROG_CC([clang gcc cc c99 c89 xlc_r xlc cl.exe icc])
-# Make sure that we try clang++ first, which provides C++11 support.
-# The g++ compiler is less likely to support C++11.
-AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
+AC_PROG_CC([cc clang gcc c99 c89 xlc_r xlc cl.exe icc])
+AC_PROG_CXX([c++ clang++ g++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
 
 # pkg-config is needed for harfbuzz support
 PKG_PROG_PKG_CONFIG([0.20])
@@ -173,6 +171,21 @@ if test "$GCC" = yes; then
         fi
         if test "$ENABLE_RELEASE" = 1; then
             CXXFLAGS="$CXXFLAGS -O2"
+        fi
+    fi
+    # if CFLAGS does not have a "-std=" setting, set it now to -std=c11,
+    # and check that the compiler still works.
+    if ! echo "$CFLAGS" | grep '\-std=' >/dev/null 2>&1; then
+        OLD_CFLAGS="${CFLAGS}"
+        CFLAGS="$CFLAGS -std=c11"
+        AC_MSG_CHECKING([[if we have a C11 compiler]])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[c11_okay=yes],[c11_okay=no])
+        AC_MSG_RESULT($c11_okay)
+        if [[ $c11_okay = yes ]]; then
+            AC_MSG_NOTICE([Adding CFLAGS option -std=c11])
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -std=c11"
+        else
+            CFLAGS="$OLD_CFLAGS"
         fi
     fi
 fi
@@ -198,8 +211,6 @@ fi
 
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 #AC_CHECK_PROG(STRIP, strip, strip, true)
-
-m4_ifndef([AX_CHECK_COMPILE_FLAG], [AC_MSG_ERROR(['autoconf-archive' is missing])])
 
 # TODO(ICU-20301): Remove fallback to Python 2.
 AC_CHECK_PROGS(PYTHON, python3 "py -3" python "py")
@@ -515,17 +526,17 @@ else
 fi
 
 if [[ "$GXX" = yes ]]; then
-    # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++11,
+    # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++17,
     # and check that the compiler still works.
     if ! echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1; then
         OLD_CXXFLAGS="${CXXFLAGS}"
-        CXXFLAGS="$CXXFLAGS -std=c++11"
-        AC_MSG_CHECKING([[if we have a C++11 compiler]])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx11_okay=yes],[cxx11_okay=no])
-        AC_MSG_RESULT($cxx11_okay)
-        if [[ $cxx11_okay = yes ]]; then
-            AC_MSG_NOTICE([Adding CXXFLAGS option -std=c++11])
-            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -std=c++11"
+        CXXFLAGS="$CXXFLAGS -std=c++17"
+        AC_MSG_CHECKING([[if we have a C++17 compiler]])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx17_okay=yes],[cxx17_okay=no])
+        AC_MSG_RESULT($cxx17_okay)
+        if [[ $cxx17_okay = yes ]]; then
+            AC_MSG_NOTICE([Adding CXXFLAGS option -std=c++17])
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -std=c++17"
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
@@ -672,22 +683,7 @@ AC_SUBST(GENCCODE_ASSEMBLY)
 AC_MSG_RESULT($GENCCODE_ASSEMBLY)
 
 # Checks for header files
-AC_CHECK_HEADERS(inttypes.h)
-if test $ac_cv_header_inttypes_h = no; then
- U_HAVE_INTTYPES_H=0
- CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INTTYPES_H=0"
-else
- U_HAVE_INTTYPES_H=1
-fi
-if test "$CC" = ccc; then
- AC_MSG_RESULT("C compiler set to CCC ${CC}" )
- case "${host}" in
-        alpha*-*-*) U_HAVE_INTTYPES_H=0;
-        CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INTTYPES_H=0"
- esac
-fi
 
-AC_SUBST(U_HAVE_INTTYPES_H)
 
 AC_CHECK_HEADERS(dirent.h)
 if test $ac_cv_header_dirent_h = no; then
@@ -900,56 +896,6 @@ else
 fi
 AC_SUBST(U_HAVE_STRTOD_L)
 
-# Check if C++17 std::string_view is available.
-AC_LANG_PUSH([C++])
-AC_CHECK_TYPE(std::string_view, [], [], [[#include <string_view>]])
-if test "x$ac_cv_type_std__string_view" = xyes; then :
-  CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRING_VIEW=1"
-fi
-AC_LANG_POP([C++])
-
-# Checks for typedefs
-AC_CHECK_TYPE(int8_t,signed char)
-AC_CHECK_TYPE(uint8_t,unsigned char)
-AC_CHECK_TYPE(int16_t,signed short)
-AC_CHECK_TYPE(uint16_t,unsigned short)
-AC_CHECK_TYPE(int32_t,signed long)
-AC_CHECK_TYPE(uint32_t,unsigned long)
-AC_CHECK_TYPE(int64_t,signed long long)
-AC_CHECK_TYPE(uint64_t,unsigned long long)
-
-if test $ac_cv_type_int8_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT8_T=0"
-fi
-
-if test $ac_cv_type_uint8_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT8_T=0"
-fi
-
-if test $ac_cv_type_int16_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT16_T=0"
-fi
-
-if test $ac_cv_type_uint16_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT16_T=0"
-fi
-
-if test $ac_cv_type_int32_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT32_T=0"
-fi
-
-if test $ac_cv_type_uint32_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT32_T=0"
-fi
-
-if test $ac_cv_type_int64_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_INT64_T=0"
-fi
-
-if test $ac_cv_type_uint64_t = no; then
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_UINT64_T=0"
-fi
-
 # Do various wchar_t related checks
 AC_CHECK_HEADER(wchar.h)
 if test "$ac_cv_header_wchar_h" = no
@@ -1149,7 +1095,7 @@ AC_ARG_WITH(data-packaging,
         library  shared library (.dll/.so/etc.)
         static   static library (.a/.lib/etc.)
         auto     build shared if possible (default)
-           See https://unicode-org.github.io/icu/userguide/icudata for more info.],
+           See https://unicode-org.github.io/icu/userguide/icu_data for more info.],
 	[case "${withval}" in
                 files|archive|library) datapackaging=$withval ;;
 		auto) datapackaging=$withval ;;
@@ -1313,16 +1259,6 @@ fi
 
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
-
-AC_LANG_PUSH([C++])
-# Silence a Clang warning about ambiguous operators with C++20 rewritten
-# expressions that possibly or maybe even probably is a mistake (ICU-20973).
-AX_CHECK_COMPILE_FLAG(
-  [-Wambiguous-reversed-operator],
-  [CXXFLAGS+=" -Wno-ambiguous-reversed-operator"],
-  [],
-  [-Werror])
-AC_LANG_POP([C++])
 
 if test "${CC}" = "clang"; then
    CLANGCFLAGS="-Qunused-arguments -Wno-parentheses-equality"

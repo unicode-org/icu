@@ -31,17 +31,17 @@ public:
 
 private:
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
-                        char* par=NULL) override;
+                        char* par=nullptr) override;
 
-    void TestInstantiation(void);
+    void TestInstantiation();
     
-    void TestSimpleRules(void);
+    void TestSimpleRules();
 
-    void TestInlineSet(void);
+    void TestInlineSet();
 
-    void TestAnchors(void);
+    void TestAnchors();
 
-    void TestPatternQuoting(void);
+    void TestPatternQuoting();
 
     /**
      * Create some inverses and confirm that they work.  We have to be
@@ -51,325 +51,325 @@ private:
      * F' != I.  However, if we are careful about the input, we will
      * get the expected results.
      */
-    void TestRuleBasedInverse(void);
+    void TestRuleBasedInverse();
 
     /**
      * Basic test of keyboard.
      */
-    void TestKeyboard(void);
+    void TestKeyboard();
 
     /**
      * Basic test of keyboard with cursor.
      */
-    void TestKeyboard2(void);
+    void TestKeyboard2();
 
     /**
      * Test keyboard transliteration with back-replacement.
      */
-    void TestKeyboard3(void);
+    void TestKeyboard3();
     
     void keyboardAux(const Transliterator& t,
                      const char* DATA[], int32_t DATA_length);
     
-    void TestArabic(void);
+    void TestArabic();
 
     /**
      * Compose the Kana transliterator forward and reverse and try
      * some strings that should come out unchanged.
      */
-    void TestCompoundKana(void);
+    void TestCompoundKana();
 
     /**
      * Compose the hex transliterators forward and reverse.
      */
-    void TestCompoundHex(void);
+    void TestCompoundHex();
 
     /**
      * Do some basic tests of filtering.
      */
-    void TestFiltering(void);
+    void TestFiltering();
 
     /**
      * Regression test for bugs found in Greek transliteration.
      */
-    void TestJ277(void);
+    void TestJ277();
 
     /**
      * Prefix, suffix support in hex transliterators.
      */
-    void TestJ243(void);
+    void TestJ243();
 
     /**
      * Parsers need better syntax error messages.
      */
-    void TestJ329(void);
+    void TestJ329();
 
     /**
      * Test segments and segment references.
      */
-    void TestSegments(void);
+    void TestSegments();
     
     /**
      * Test cursor positioning outside of the key
      */
-    void TestCursorOffset(void);
+    void TestCursorOffset();
     
     /**
      * Test zero length and > 1 char length variable values.  Test
      * use of variable refs in UnicodeSets.
      */
-    void TestArbitraryVariableValues(void);
+    void TestArbitraryVariableValues();
 
     /**
      * Confirm that the contextStart, contextLimit, start, and limit
      * behave correctly. J474.
      */
-    void TestPositionHandling(void);
+    void TestPositionHandling();
 
     /**
      * Test the Hiragana-Katakana transliterator.
      */
-    void TestHiraganaKatakana(void);
+    void TestHiraganaKatakana();
 
     /**
      * Test cloning / copy constructor of RBT.
      */
-    void TestCopyJ476(void);
+    void TestCopyJ476();
 
     /**
      * Test inter-Indic transliterators.  These are composed.
      * ICU4C Jitterbug 483.
      */
-    void TestInterIndic(void);
+    void TestInterIndic();
 
     /**
      * Test filter syntax in IDs. (J918)
      */
-    void TestFilterIDs(void);
+    void TestFilterIDs();
 
     /**
      * Test the case mapping transliterators.
      */
-    void TestCaseMap(void);
+    void TestCaseMap();
 
     /**
      * Test the name mapping transliterators.
      */
-    void TestNameMap(void);
+    void TestNameMap();
 
     /**
      * Test liberalized ID syntax.  1006c
      */
-    void TestLiberalizedID(void);
+    void TestLiberalizedID();
     /**
      * Test Jitterbug 912
      */
-    void TestCreateInstance(void);
+    void TestCreateInstance();
 
-    void TestNormalizationTransliterator(void);
+    void TestNormalizationTransliterator();
 
-    void TestCompoundRBT(void);
+    void TestCompoundRBT();
 
-    void TestCompoundFilter(void);
+    void TestCompoundFilter();
 
-    void TestRemove(void);
+    void TestRemove();
 
-    void TestToRules(void);
+    void TestToRules();
 
-    void TestContext(void);
+    void TestContext();
 
-    void TestSupplemental(void);
+    void TestSupplemental();
 
-    void TestQuantifier(void);
+    void TestQuantifier();
 
     /**
      * Test Source-Target/Variant.
      */
-    void TestSTV(void);
+    void TestSTV();
 
-    void TestCompoundInverse(void);
+    void TestCompoundInverse();
 
-    void TestNFDChainRBT(void);
+    void TestNFDChainRBT();
 
     /**
      * Inverse of "Null" should be "Null". (J21)
      */
-    void TestNullInverse(void);
+    void TestNullInverse();
     
     /**
      * Check ID of inverse of alias. (J22)
      */
-    void TestAliasInverseID(void);
+    void TestAliasInverseID();
     
     /**
      * Test IDs of inverses of compound transliterators. (J20)
      */
-    void TestCompoundInverseID(void);
+    void TestCompoundInverseID();
     
     /**
      * Test undefined variable.
      */
-    void TestUndefinedVariable(void);
+    void TestUndefinedVariable();
     
     /**
      * Test empty context.
      */
-    void TestEmptyContext(void);
+    void TestEmptyContext();
 
     /**
      * Test compound filter ID syntax
      */
-    void TestCompoundFilterID(void);
+    void TestCompoundFilterID();
 
     /**
      * Test new property set syntax
      */
-    void TestPropertySet(void);
+    void TestPropertySet();
 
     /**
      * Test various failure points of the new 2.0 engine.
      */
-    void TestNewEngine(void);
+    void TestNewEngine();
 
     /**
      * Test quantified segment behavior.  We want:
      * ([abc])+ > x $1 x; applied to "cba" produces "xax"
      */
-    void TestQuantifiedSegment(void);
+    void TestQuantifiedSegment();
 
     /* Devanagari-Latin rules Test */
-    void TestDevanagariLatinRT(void);
+    void TestDevanagariLatinRT();
 
     /* Telugu-Latin rules Test */
-    void TestTeluguLatinRT(void);
+    void TestTeluguLatinRT();
     
     /* Gujarati-Latin rules Test */
-    void TestGujaratiLatinRT(void);
+    void TestGujaratiLatinRT();
     
     /* Sanskrit-Latin rules Test */
-    void TestSanskritLatinRT(void);
+    void TestSanskritLatinRT();
     
     /* Test Compound Indic-Latin transliterators*/
-    void TestCompoundLatinRT(void);
+    void TestCompoundLatinRT();
 
     /* Test bindi and tippi for Gurmukhi */
-    void TestGurmukhiDevanagari(void);
+    void TestGurmukhiDevanagari();
     /**
      * Test instantiation from a locale.
      */
-    void TestLocaleInstantiation(void);        
+    void TestLocaleInstantiation();        
     
     /**
      * Test title case handling of accent (should ignore accents)
      */
-    void TestTitleAccents(void);
+    void TestTitleAccents();
 
     /**
      * Basic test of a locale resource based rule.
      */
-    void TestLocaleResource(void);
+    void TestLocaleResource();
 
     /**
      * Make sure parse errors reference the right line.
      */
-    void TestParseError(void);
+    void TestParseError();
 
     /**
      * Make sure sets on output are disallowed.
      */
-    void TestOutputSet(void);
+    void TestOutputSet();
 
     /**
      * Test the use variable range pragma, making sure that use of
      * variable range characters is detected and flagged as an error.
      */
-    void TestVariableRange(void);
+    void TestVariableRange();
 
     /**
      * Test invalid post context error handling
      */
-    void TestInvalidPostContext(void);
+    void TestInvalidPostContext();
 
     /**
      * Test ID form variants
      */
-    void TestIDForms(void);
+    void TestIDForms();
 
     /**
      * Mark's toRules test.
      */
-    void TestToRulesMark(void);
+    void TestToRulesMark();
 
     /**
      * Test Escape and Unescape transliterators.
      */
-    void TestEscape(void);
+    void TestEscape();
 
-    void TestAnchorMasking(void);
+    void TestAnchorMasking();
 
     /**
      * Make sure display names of variants look reasonable.
      */
-    void TestDisplayName(void);
+    void TestDisplayName();
     
     /** 
      * Check to see if case mapping works correctly.
      */
-    void TestSpecialCases(void);
+    void TestSpecialCases();
     /**
      * Check to see that incremental gets at least part way through a reasonable string.
      */
-    void TestIncrementalProgress(void);
+    void TestIncrementalProgress();
 
     /** 
      * Check that casing handles surrogates.
      */
-    void TestSurrogateCasing (void);
+    void TestSurrogateCasing();
 
-    void TestFunction(void);
+    void TestFunction();
 
-    void TestInvalidBackRef(void);
+    void TestInvalidBackRef();
 
-    void TestMulticharStringSet(void);
+    void TestMulticharStringSet();
 
-    void TestUserFunction(void);
+    void TestUserFunction();
 
-    void TestAnyX(void);
+    void TestAnyX();
 
-    void TestAny(void);
+    void TestAny();
 
-    void TestSourceTargetSet(void);
+    void TestSourceTargetSet();
 
-    void TestPatternWhiteSpace(void);
+    void TestPatternWhiteSpace();
 
-    void TestAllCodepoints(void);
+    void TestAllCodepoints();
 
-    void TestBoilerplate(void);
+    void TestBoilerplate();
 
-    void TestAlternateSyntax(void);
+    void TestAlternateSyntax();
 
-    void TestRuleStripping(void);
+    void TestRuleStripping();
 
-    void TestHalfwidthFullwidth(void);
+    void TestHalfwidthFullwidth();
 
-    void TestThai(void);
+    void TestThai();
 
     /**
      * Tests the multiple-pass syntax
      */
-    void TestBeginEnd(void);
+    void TestBeginEnd();
 
     /**
      * Tests that toRules() works right with the multiple-pass syntax
      */
-    void TestBeginEndToRules(void);
+    void TestBeginEndToRules();
 
     /**
      * Tests the registerAlias() function
      */
-    void TestRegisterAlias(void);
+    void TestRegisterAlias();
 
-    void TestBasicTransliteratorEvenWithoutData(void);
+    void TestBasicTransliteratorEvenWithoutData();
     //======================================================================
     // Support methods
     //======================================================================

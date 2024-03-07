@@ -8,6 +8,9 @@ keyTypeData:table(nofallback){
         }
         tz:alias{"/ICUDATA/timezoneTypes/bcpTypeAlias/tz"}
     }
+    ianaMap{
+        timezone:alias{"/ICUDATA/timezoneTypes/ianaMap/timezone"}
+    }
     keyInfo{
         deprecated{
             kh{"true"}
@@ -49,6 +52,7 @@ keyTypeData:table(nofallback){
         lw{""}
         m0{""}
         measure{"ms"}
+        mu{""}
         numbers{"nu"}
         rg{""}
         s0{""}
@@ -70,9 +74,7 @@ keyTypeData:table(nofallback){
         deprecated{
             co{
                 direct{"true"}
-            }
-            tz{
-                camtr{"true"}
+                reformed{"true"}
             }
         }
     }
@@ -444,6 +446,7 @@ keyTypeData:table(nofallback){
             xbc{""}
             xbd{""}
             xcd{""}
+            xcg{""}
             xdr{""}
             xeu{""}
             xfo{""}
@@ -616,6 +619,11 @@ keyTypeData:table(nofallback){
             imperial{"uksystem"}
             metric{""}
             ussystem{""}
+        }
+        mu{
+            celsius{""}
+            fahrenhe{""}
+            kelvin{""}
         }
         numbers{
             adlm{""}

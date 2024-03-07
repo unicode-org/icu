@@ -27,11 +27,11 @@ U_NAMESPACE_BEGIN
 
 class BuilderReorderingBuffer {
 public:
-    BuilderReorderingBuffer() : fLength(0), fLastStarterIndex(-1), fDidReorder(FALSE) {}
+    BuilderReorderingBuffer() : fLength(0), fLastStarterIndex(-1), fDidReorder(false) {}
     void reset() {
         fLength=0;
         fLastStarterIndex=-1;
-        fDidReorder=FALSE;
+        fDidReorder=false;
     }
     int32_t length() const { return fLength; }
     UBool isEmpty() const { return fLength==0; }
@@ -197,14 +197,14 @@ class CompositionBuilder : public Norms::Enumerator {
 public:
     CompositionBuilder(Norms &n) : Norms::Enumerator(n) {}
     /** Adds a composition mapping for the first character in a round-trip mapping. */
-    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE;
+    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) override;
 };
 
 class Decomposer : public Norms::Enumerator {
 public:
-    Decomposer(Norms &n) : Norms::Enumerator(n), didDecompose(FALSE) {}
+    Decomposer(Norms &n) : Norms::Enumerator(n), didDecompose(false) {}
     /** Decomposes each character of the current mapping. Sets didDecompose if any. */
-    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE;
+    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) override;
     UBool didDecompose;
 };
 

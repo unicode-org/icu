@@ -430,11 +430,19 @@ UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(const NFS<UNF>& other)
     // No additional fields to assign
 }
 
+UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(const impl::MacroProps &macros) {
+    fMacros = macros;
+}
+
+UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(impl::MacroProps &&macros) {
+    fMacros = macros;
+}
+
 // Make default copy constructor call the NumberFormatterSettings copy constructor.
-UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UNF&& src) U_NOEXCEPT
+UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UNF&& src) noexcept
         : UNF(static_cast<NFS<UNF>&&>(src)) {}
 
-UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(NFS<UNF>&& src) U_NOEXCEPT
+UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(NFS<UNF>&& src) noexcept
         : NFS<UNF>(std::move(src)) {
     // No additional fields to assign
 }
@@ -445,7 +453,7 @@ UnlocalizedNumberFormatter& UnlocalizedNumberFormatter::operator=(const UNF& oth
     return *this;
 }
 
-UnlocalizedNumberFormatter& UnlocalizedNumberFormatter::operator=(UNF&& src) U_NOEXCEPT {
+UnlocalizedNumberFormatter& UnlocalizedNumberFormatter::operator=(UNF&& src) noexcept {
     NFS<UNF>::operator=(static_cast<NFS<UNF>&&>(src));
     // No additional fields to assign
     return *this;
@@ -461,10 +469,10 @@ LocalizedNumberFormatter::LocalizedNumberFormatter(const NFS<LNF>& other)
     lnfCopyHelper(static_cast<const LNF&>(other), localStatus);
 }
 
-LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&& src) U_NOEXCEPT
+LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&& src) noexcept
         : LNF(static_cast<NFS<LNF>&&>(src)) {}
 
-LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) U_NOEXCEPT
+LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) noexcept
         : NFS<LNF>(std::move(src)) {
     lnfMoveHelper(std::move(static_cast<LNF&&>(src)));
 }
@@ -477,7 +485,7 @@ LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(const LNF& other) 
     return *this;
 }
 
-LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(LNF&& src) U_NOEXCEPT {
+LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(LNF&& src) noexcept {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
     lnfMoveHelper(std::move(src));
     return *this;
@@ -725,6 +733,18 @@ int32_t LocalizedNumberFormatter::getCallCount() const {
 }
 
 // Note: toFormat defined in number_asformat.cpp
+
+UnlocalizedNumberFormatter LocalizedNumberFormatter::withoutLocale() const & {
+    MacroProps macros(fMacros);
+    macros.locale = Locale();
+    return UnlocalizedNumberFormatter(macros);
+}
+
+UnlocalizedNumberFormatter LocalizedNumberFormatter::withoutLocale() && {
+    MacroProps macros(std::move(fMacros));
+    macros.locale = Locale();
+    return UnlocalizedNumberFormatter(std::move(macros));
+}
 
 const DecimalFormatSymbols* LocalizedNumberFormatter::getDecimalFormatSymbols() const {
     return fMacros.symbols.getDecimalFormatSymbols();

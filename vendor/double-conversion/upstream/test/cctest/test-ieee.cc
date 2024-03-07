@@ -88,18 +88,18 @@ TEST(Single_AsDiyFp) {
   DiyFp diy_fp = Single(ordered).AsDiyFp();
   CHECK_EQ(0x2 - 0x7F - 23, diy_fp.e());
   // The 23 mantissa bits, plus the implicit 1 in bit 24 as a uint32_t.
-  CHECK_EQ(0xA34567, diy_fp.f());
+  CHECK_EQ(0xA34567u, diy_fp.f());
 
   uint32_t min_float32 = 0x00000001;
   diy_fp = Single(min_float32).AsDiyFp();
   CHECK_EQ(-0x7F - 23 + 1, diy_fp.e());
   // This is a denormal; so no hidden bit.
-  CHECK_EQ(1, diy_fp.f());
+  CHECK_EQ(1u, diy_fp.f());
 
   uint32_t max_float32 = 0x7f7fffff;
   diy_fp = Single(max_float32).AsDiyFp();
   CHECK_EQ(0xFE - 0x7F - 23, diy_fp.e());
-  CHECK_EQ(0x00ffffff, diy_fp.f());
+  CHECK_EQ(0x00ffffffu, diy_fp.f());
 }
 
 
@@ -459,5 +459,9 @@ TEST(SignalingNanSingle) {
   CHECK(nan.IsNan());
   CHECK(nan.IsQuietNan());
   CHECK(Single(std::numeric_limits<float>::quiet_NaN()).IsQuietNan());
+#ifndef _MSC_VER
+  // Visual studio has a bug for generating signaling NaNs:
+  // https://developercommunity.visualstudio.com/t/stdnumeric-limitssignaling-nan-returns-quiet-nan/155064
   CHECK(Single(std::numeric_limits<float>::signaling_NaN()).IsSignalingNan());
+#endif
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* © 2023 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>icu4j-root</artifactId>
+    <version>74.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>utilities-for-cldr</artifactId>
+  <packaging>jar</packaging>
+
+  <properties>
+    <proj.displayname>Utilities</proj.displayname>
+    <mf.Automatic-Module-Name>com.ibm.icu.utilities</mf.Automatic-Module-Name>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+           <execution>
+               <id>add-source</id>
+               <phase>generate-sources</phase>
+               <goals>
+                  <goal>add-source</goal>
+               </goals>
+               <configuration>
+                  <sources>
+                    <source>../misc/src/main/java/com/ibm/icu/dev/tool/shared</source>
+                    <source>../../main/framework/src/test/java/com/ibm/icu/dev/util</source>
+                    <source>../../main/translit/src/test/java/com/ibm/icu/dev/util</source>
+                  </sources>
+               </configuration>
+           </execution>
+         </executions>
+       </plugin>
+       <plugin>
+         <!-- Since this artifact is built from bits and pieces generating javadoc
+           for it fails (can't access references). And we don't really need it.
+           We publish the sources, and most IDEs can access the doc from there.
+         -->
+         <artifactId>maven-javadoc-plugin</artifactId>
+         <configuration>
+           <skip>true</skip>
+         </configuration>
+       </plugin>
+       <plugin>
+         <!-- We don't want this deployed to Maven Central. So by default we skip it. -->
+         <artifactId>maven-deploy-plugin</artifactId>
+         <configuration>
+           <skip>true</skip>
+         </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>cldr_utilities</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- Only deploy when the `cldr_utilities` profile is active,
+              otherwise it will also be deployed to Maven Central.
+              We only invoke this profile when we want to deploy to the GitHub Maven repository.
+              We can even try to specify it here with `altDeploymentRepository`.
+            -->
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+              <skip>false</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

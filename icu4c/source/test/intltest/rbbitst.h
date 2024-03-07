@@ -17,6 +17,8 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <stdio.h>
+
 #include <memory>
 
 #include "intltest.h"
@@ -42,7 +44,7 @@ public:
     RBBITest();
     virtual ~RBBITest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     void TestGetAvailableLocales();
     void TestGetDisplayName();
@@ -95,6 +97,15 @@ public:
     void TestBug13590();
     void TestLSTMThai();
     void TestLSTMBurmese();
+    void TestRandomAccess();
+    void TestExternalBreakEngineWithFakeTaiLe();
+    void TestExternalBreakEngineWithFakeYue();
+    void TestBug22579();
+    void TestBug22581();
+    void TestBug22584();
+    void TestBug22585();
+    void TestBug22602();
+    void TestBug22636();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();
@@ -119,7 +130,7 @@ private:
      **/
 
     void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed,
-        int32_t loopCount, UBool useUText);
+        int32_t loopCount, UBool useUText, FILE *exportFile, UBool scalarsOnly);
 
     // Run one of the Unicode Consortium boundary test data files.
     void runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi);
@@ -142,7 +153,7 @@ private:
      *  Unicode boundary specifications.
      *  @param testCase the test data string.
      *  @param fileName the Unicode test data file name.
-     *  @return FALSE if the test case should be run, TRUE if it should be skipped.
+     *  @return false if the test case should be run, true if it should be skipped.
      */
     UBool testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName);
 

@@ -58,25 +58,25 @@ void ExitingErrorCode::handleFailure() const {
 
 static int
 toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destString) {
-    UChar src[2];
+    char16_t src[2];
     int32_t srcLength=0;
     U16_APPEND_UNSAFE(src, srcLength, c);
-    UChar *dest;
+    char16_t *dest;
     int32_t destLength;
     dest=destString.getBuffer(32);
-    if(dest==NULL) {
-        return FALSE;
+    if(dest==nullptr) {
+        return false;
     }
     UErrorCode errorCode=U_ZERO_ERROR;
     destLength=usprep_prepare(prep, src, srcLength,
                               dest, destString.getCapacity(),
-                              USPREP_DEFAULT, NULL, &errorCode);
+                              USPREP_DEFAULT, nullptr, &errorCode);
     destString.releaseBuffer(destLength);
     if(errorCode==U_STRINGPREP_PROHIBITED_ERROR) {
         return -1;
     } else {
-        // Returns FALSE=0 for U_STRINGPREP_UNASSIGNED_ERROR and processing errors,
-        // TRUE=1 if c is valid or mapped.
+        // Returns false=0 for U_STRINGPREP_UNASSIGNED_ERROR and processing errors,
+        // true=1 if c is valid or mapped.
         return U_SUCCESS(errorCode);
     }
 }
@@ -100,7 +100,7 @@ printLine(UChar32 start, UChar32 end, Status status, const icu::UnicodeString &m
     printf("; %s", statusNames[status]);
     if(status==MAPPED || status==DEVIATION || !mapping.isEmpty()) {
         printf(" ;");
-        const UChar *buffer=mapping.getBuffer();
+        const char16_t *buffer=mapping.getBuffer();
         int32_t length=mapping.length();
         int32_t i=0;
         UChar32 c;
@@ -158,12 +158,12 @@ main(int argc, const char *argv[]) {
     // derived sets
     icu::LocalUStringPrepProfilePointer namePrep(usprep_openByType(USPREP_RFC3491_NAMEPREP, errorCode));
     const icu::Normalizer2 *nfkc_cf=
-        icu::Normalizer2::getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, errorCode);
+        icu::Normalizer2::getInstance(nullptr, "nfkc_cf", UNORM2_COMPOSE, errorCode);
     errorCode.assertSuccess();
 
     // HACK: The StringPrep API performs a BiDi check according to the data.
     // We need to override that for this data generation, by resetting an internal flag.
-    namePrep->checkBiDi=FALSE;
+    namePrep->checkBiDi=false;
 
     icu::UnicodeSet baseExclusionSet;
     icu::UnicodeString cString, mapping, namePrepResult;
@@ -207,7 +207,7 @@ main(int argc, const char *argv[]) {
         addAll(unassignedSet);
 
     const icu::Normalizer2 *nfd=
-        icu::Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
+        icu::Normalizer2::getInstance(nullptr, "nfc", UNORM2_DECOMPOSE, errorCode);
     errorCode.assertSuccess();
 
     icu::UnicodeSet ignoredSet;  // will be a subset of mappedSet
@@ -240,7 +240,7 @@ main(int argc, const char *argv[]) {
         add(0x2e);  // not mapped, simply valid
     UBool madeChange;
     do {
-        madeChange=FALSE;
+        madeChange=false;
         {
             removeSet.clear();
             icu::UnicodeSetIterator iter(validSet);
@@ -250,7 +250,7 @@ main(int argc, const char *argv[]) {
                     fprintf(stderr, "U+%04lX valid -> disallowed: NFD not wholly valid\n", (long)c);
                     disallowedSet.add(c);
                     removeSet.add(c);
-                    madeChange=TRUE;
+                    madeChange=true;
                 }
             }
             validSet.removeAll(removeSet);
@@ -267,7 +267,7 @@ main(int argc, const char *argv[]) {
                     fprintf(stderr, "U+%04lX mapped -> disallowed: NFD of mapping not wholly valid\n", (long)c);
                     disallowedSet.add(c);
                     removeSet.add(c);
-                    madeChange=TRUE;
+                    madeChange=true;
                 }
             }
             mappedSet.removeAll(removeSet);

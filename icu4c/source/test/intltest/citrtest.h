@@ -19,24 +19,24 @@ class CharIterTest: public IntlTest {
 public:
     CharIterTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     /**
      * Test Constructors and operators ==, != and a few other methods
      **/
-    void TestConstructionAndEquality(void);
+    void TestConstructionAndEquality();
     /**
      * Test Constructors and operators ==, != and a few other methods for UChariter
      **/
-    void TestConstructionAndEqualityUChariter(void);
+    void TestConstructionAndEqualityUChariter();
     /**
      * test the iteration functionality in different ways
      **/
-    void TestIteration(void);
+    void TestIteration();
      /**
      * test the iteration functionality in different ways with  unicodestring of UChar32's
      **/
-    void TestIterationUChar32(void);
+    void TestIterationUChar32();
 
     void TestUCharIterator();
     void TestUCharIterator(UCharIterator *iter, CharacterIterator &ci, const char *moves, const char *which);

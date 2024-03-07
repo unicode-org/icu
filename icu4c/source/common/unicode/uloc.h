@@ -26,9 +26,9 @@
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
 
-/**    
+/**
  * \file
- * \brief  C API: Locale 
+ * \brief C API: Locale ID functionality similar to C++ class Locale
  *
  * <h2> ULoc C API for Locale </h2>
  * A <code>Locale</code> represents a specific geographical, political,
@@ -1158,19 +1158,20 @@ uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
  *
  * If localeID is already in the maximal form, or there is no data available
  * for maximization, it will be copied to the output buffer.  For example,
- * "und-Zzzz" cannot be maximized, since there is no reasonable maximization.
+ * "sh" cannot be maximized, since there is no reasonable maximization.
  *
  * Examples:
  *
+ * "und_Zzzz" maximizes to "en_Latn_US"
+ *
  * "en" maximizes to "en_Latn_US"
  *
- * "de" maximizes to "de_Latn_US"
+ * "de" maximizes to "de_Latn_DE"
  *
  * "sr" maximizes to "sr_Cyrl_RS"
  *
- * "sh" maximizes to "sr_Latn_RS" (Note this will not reverse.)
+ * "zh_Hani" maximizes to "zh_Hani_CN"
  *
- * "zh_Hani" maximizes to "zh_Hans_CN" (Note this will not reverse.)
  *
  * @param localeID The locale to maximize
  * @param maximizedLocaleID The maximized locale

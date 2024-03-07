@@ -6,18 +6,18 @@ es_MX{
     MoreInformation{"[...]"}
     NumberElements{
         latn{
-            patterns{
-                percentFormat{"#,##0%"}
-            }
             patternsLong{
                 decimalFormat{
                     1000000000000{
+                        one{"0 billón"}
                         other{"0 billones"}
                     }
                     10000000000000{
+                        one{"00 billones"}
                         other{"00 billones"}
                     }
                     100000000000000{
+                        one{"000 billones"}
                         other{"000 billones"}
                     }
                 }
@@ -154,26 +154,30 @@ es_MX{
             }
         }
         gregorian{
+            AmPmMarkersNarrow{
+                "a. m.",
+                "p. m.",
+            }
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
                 "d MMM y",
                 "dd/MM/yy",
-                "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
             }
             DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
                 "yMMMMEEEEd",
                 "yMMMMd",
                 "yMMMd",
@@ -194,27 +198,15 @@ es_MX{
                 yMMMEd{"EEE, d 'de' MMM 'de' y"}
                 yQQQ{"QQQ y"}
             }
-            dayNames{
-                format{
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
-                }
-            }
             dayPeriod{
-                format{
+                stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
                     narrow{
-                        evening1{"de la tarde"}
-                        morning1{"de la madrugada"}
-                        morning2{"mañana"}
-                        night1{"de la noche"}
-                        noon{"del mediodía"}
+                        am{"a. m."}
+                        pm{"p. m."}
                     }
                 }
             }
@@ -264,7 +256,6 @@ es_MX{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
                 }
-                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                 }
@@ -308,27 +299,21 @@ es_MX{
                     y{"d/M/y – d/M/y"}
                 }
             }
-            quarters{
+            monthNames{
                 format{
-                    wide{
-                        "1.er trimestre",
-                        "2.º trimestre",
-                        "3.er trimestre",
-                        "4.º trimestre",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1T",
-                        "2T",
-                        "3T",
-                        "4T",
-                    }
-                    wide{
-                        "1.er trimestre",
-                        "2.º trimestre",
-                        "3.er trimestre",
-                        "4.º trimestre",
+                    abbreviated{
+                        "ene",
+                        "feb",
+                        "mar",
+                        "abr",
+                        "may",
+                        "jun",
+                        "jul",
+                        "ago",
+                        "sep",
+                        "oct",
+                        "nov",
+                        "dic",
                     }
                 }
             }
@@ -359,7 +344,7 @@ es_MX{
         day-narrow{
             relativeTime{
                 future{
-                    one{"dentro de {0} día"}
+                    one{"en {0} día"}
                     other{"en {0} días"}
                 }
             }
@@ -515,12 +500,6 @@ es_MX{
                 "0"{"este martes"}
                 "1"{"el martes próximo"}
             }
-            relativeTime{
-                future{
-                    one{"dentro de {0} martes"}
-                    other{"dentro de {0} martes"}
-                }
-            }
         }
         wed{
             relative{
@@ -564,14 +543,6 @@ es_MX{
                 "1"{"el año próximo"}
             }
         }
-        year-narrow{
-            relativeTime{
-                future{
-                    one{"en {0} a"}
-                    other{"en {0} a"}
-                }
-            }
-        }
         year-short{
             relativeTime{
                 future{
@@ -585,9 +556,8 @@ es_MX{
         UK{"imperial"}
     }
     personNames{
-        foreignSpaceReplacement{" "}
         namePattern{
-            givenFirst-long-referring-formal{"{prefix} {given} {given2} {surname} {surname2}"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {surname2}"}
         }
     }
 }

@@ -29,7 +29,7 @@ public:
         // nothing, too
     }
 
-    static const UChar *readFile(const char *fileName, GUISupport *guiSupport, int32_t &charCount);
+    static const char16_t *readFile(const char *fileName, GUISupport *guiSupport, int32_t &charCount);
 };
 
 #endif

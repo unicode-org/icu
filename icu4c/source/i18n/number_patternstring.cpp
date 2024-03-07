@@ -968,7 +968,7 @@ PatternStringUtils::convertLocalized(const UnicodeString& input, const DecimalFo
     UnicodeString result;
     int state = 0;
     for (int offset = 0; offset < input.length(); offset++) {
-        UChar ch = input.charAt(offset);
+        char16_t ch = input.charAt(offset);
 
         // Handle a quote character (state shift)
         if (ch == u'\'') {
@@ -1056,7 +1056,9 @@ void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& 
                                                     PatternSignType patternSignType,
                                                     bool approximately,
                                                     StandardPlural::Form plural,
-                                                    bool perMilleReplacesPercent, UnicodeString& output) {
+                                                    bool perMilleReplacesPercent,
+                                                    bool dropCurrencySymbols,
+                                                    UnicodeString& output) {
 
     // Should the output render '+' where '-' would normally appear in the pattern?
     bool plusReplacesMinusSign = (patternSignType == PATTERN_SIGN_TYPE_POS_SIGN)
@@ -1129,6 +1131,9 @@ void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& 
         }
         if (perMilleReplacesPercent && candidate == u'%') {
             candidate = u'‰';
+        }
+        if (dropCurrencySymbols && candidate == u'\u00A4') {
+            continue;
         }
         output.append(candidate);
     }

@@ -20,27 +20,27 @@ class PUtilTest : public IntlTest {
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
 
-//    void testIEEEremainder(void);
-    void testMaxMin(void);
+//    void testIEEEremainder();
+    void testMaxMin();
 
 private:
 //    void remainderTest(double x, double y, double exp);
     void maxMinTest(double a, double b, double exp, UBool max);
 
     // the actual tests; methods return the number of errors
-    void testNaN(void);
-    void testPositiveInfinity(void);
-    void testNegativeInfinity(void);
-    void testZero(void);
+    void testNaN();
+    void testPositiveInfinity();
+    void testNegativeInfinity();
+    void testZero();
 
     // subtests of testNaN
-    void testIsNaN(void);
-    void NaNGT(void);
-    void NaNLT(void);
-    void NaNGTE(void);
-    void NaNLTE(void);
-    void NaNE(void);
-    void NaNNE(void);
+    void testIsNaN();
+    void NaNGT();
+    void NaNLT();
+    void NaNGTE();
+    void NaNLTE();
+    void NaNE();
+    void NaNNE();
 
 };
  

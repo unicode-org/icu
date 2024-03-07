@@ -146,7 +146,7 @@ fil{
         IL{"Israel"}
         IM{"Isle of Man"}
         IN{"India"}
-        IO{"British Indian Ocean Territory"}
+        IO{"Teritoryo sa Karagatan ng British Indian"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
@@ -267,7 +267,7 @@ fil{
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
-        TR{"Turkey"}
+        TR{"Türkiye"}
         TT{"Trinidad & Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
@@ -298,6 +298,9 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi Kilalang Rehiyon"}
     }
+    Countries%chagos{
+        IO{"Chagos Archipelago"}
+    }
     Countries%short{
         GB{"U.K."}
         HK{"Hong Kong"}
@@ -314,6 +317,5 @@ fil{
         FK{"Falkland Islands (Islas Malvinas)"}
         NZ{"Aotearoa New Zealand"}
         TL{"East Timor"}
-        TR{"Türkiye"}
     }
 }

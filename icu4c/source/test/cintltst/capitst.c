@@ -19,6 +19,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,16 +48,16 @@ static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
     uint8_t b;
 
     if (position + 1 < len)
-        position += sprintf(buffer + position, "[");
+        position += snprintf(buffer + position, len-position, "[");
     while ((b = *sortkey++) != 0) {
         if (b == 1 && position + 5 < len) {
-            position += sprintf(buffer + position, "%02X . ", b);
+            position += snprintf(buffer + position, len-position,  "%02X . ", b);
         } else if (b != 1 && position + 3 < len) {
-            position += sprintf(buffer + position, "%02X ", b);
+            position += snprintf(buffer + position, len-position, "%02X ", b);
         }
     }
     if (position + 3 < len)
-        position += sprintf(buffer + position, "%02X]", b);
+        position += snprintf(buffer + position, len-position, "%02X]", b);
     return buffer;
 }
 
@@ -270,7 +271,7 @@ void TestGetDefaultRules(){
 /* Collator Properties
  ucol_open, ucol_strcoll,  getStrength/setStrength
  getDecomposition/setDecomposition, getDisplayName*/
-void TestProperty()
+void TestProperty(void)
 {
     UCollator *col, *ruled;
     const UChar *rules;
@@ -448,7 +449,7 @@ void TestProperty()
 }
 
 /* Test RuleBasedCollator and getRules*/
-void TestRuleBasedColl()
+void TestRuleBasedColl(void)
 {
     UCollator *col1, *col2, *col3, *col4;
     UCollationElements *iter1, *iter2;
@@ -531,7 +532,7 @@ void TestRuleBasedColl()
         log_err("ERROR: CollationElement iterator creation failed.: %s\n", myErrorName(status));
         return;
     }
-    while (TRUE) {
+    while (true) {
         /* testing with en since thai has its own tailoring */
         int32_t ce = ucol_next(iter1, &status);
         int32_t ce2 = ucol_next(iter2, &status);
@@ -561,7 +562,7 @@ void TestRuleBasedColl()
     ucol_close(col1);
 }
 
-void TestCompare()
+void TestCompare(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UCollator *col;
@@ -611,7 +612,7 @@ void TestCompare()
 ---------------------------------------------
  tests decomposition setting
 */
-void TestDecomposition() {
+void TestDecomposition(void) {
     UErrorCode status = U_ZERO_ERROR;
     UCollator *en_US, *el_GR, *vi_VN;
     en_US = ucol_open("en_US", &status);
@@ -650,7 +651,7 @@ void TestDecomposition() {
 
 #define CLONETEST_COLLATOR_COUNT 4
 
-void TestSafeClone() {
+void TestSafeClone(void) {
     UChar test1[6];
     UChar test2[6];
     static const UChar umlautUStr[] = {0x00DC, 0};
@@ -807,7 +808,7 @@ void TestSafeClone() {
     }
 }
 
-void TestClone() {
+void TestClone(void) {
     UChar test1[6];
     UChar test2[6];
     static const UChar umlautUStr[] = {0x00DC, 0};
@@ -925,7 +926,7 @@ void TestClone() {
     }
 }
 
-void TestCloneBinary(){
+void TestCloneBinary(void){
     UErrorCode err = U_ZERO_ERROR;
     UCollator * col = ucol_open("en_US", &err);
     UCollator * c;
@@ -1045,7 +1046,7 @@ static void TestBengaliSortKey(void)
     TestOpenVsOpenRules ensures that collators from ucol_open and ucol_openRules
     will generate identical sort keys
 */
-void TestOpenVsOpenRules(){
+void TestOpenVsOpenRules(void){
 
     /* create an array of all the locales */
     int32_t numLocales = uloc_countAvailable();
@@ -1188,7 +1189,7 @@ void TestOpenVsOpenRules(){
 ----------------------------------------------------------------------------
  ctor -- Tests the getSortKey
 */
-void TestSortKey()
+void TestSortKey(void)
 {
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL, *sortkEmpty = NULL;
     int32_t sortklen, osortklen;
@@ -1281,8 +1282,8 @@ void TestSortKey()
 
       for(i=0;i<sortklen;i++)
         {
-          sprintf(junk2+strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
-          sprintf(junk3+strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
+          snprintf(junk2+strlen(junk2), sizeof(junk2)-strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
+          snprintf(junk3+strlen(junk3), sizeof(junk3)-strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
         }
 
       log_verbose("%s\n", junk2);
@@ -1333,7 +1334,7 @@ void TestSortKey()
     free(sortk2);
 
 }
-void TestHashCode()
+void TestHashCode(void)
 {
     uint8_t *sortk1, *sortk2, *sortk3;
     int32_t sortk1len, sortk2len, sortk3len;
@@ -1387,7 +1388,7 @@ void TestHashCode()
  * Tests the UCollatorElements API.
  *
  */
-void TestElemIter()
+void TestElemIter(void)
 {
     int32_t offset;
     int32_t order1, order2, order3;
@@ -1517,7 +1518,7 @@ doAssert( (ucol_tertiaryOrder(order1) != ucol_tertiaryOrder(order3)), "The terti
     log_verbose("testing CollationElementIterator ends...\n");
 }
 
-void TestGetLocale() {
+void TestGetLocale(void) {
   UErrorCode status = U_ZERO_ERROR;
   const char *rules = "&a<x<y<z";
   UChar rlz[256] = {0};
@@ -1618,7 +1619,7 @@ void TestGetLocale() {
 }
 
 
-void TestGetAll()
+void TestGetAll(void)
 {
     int32_t i, count;
     count=ucol_countAvailable();
@@ -1645,7 +1646,7 @@ static int compare_teststruct(const void *string1, const void *string2) {
     return(strcmp((const char *)((struct teststruct *)string1)->key, (const char *)((struct teststruct *)string2)->key));
 }
 
-void TestBounds() {
+void TestBounds(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     UCollator *coll = ucol_open("sh", &status);
@@ -1860,7 +1861,7 @@ void TestSortKeyBufferOverrun(void) {
     ucol_close(coll);
 }
 
-static void TestAttribute()
+static void TestAttribute(void)
 {
     UErrorCode error = U_ZERO_ERROR;
     UCollator *coll = ucol_open(NULL, &error);
@@ -1963,7 +1964,7 @@ static void TestAttribute()
     ucol_close(coll);
 }
 
-void TestGetTailoredSet() {
+void TestGetTailoredSet(void) {
   struct {
     const char *rules;
     const char *tests[20];
@@ -2196,7 +2197,7 @@ static void TestShortString(void)
             locale = NULL;
         }
 
-        coll = ucol_openFromShortString(testCases[i].input, FALSE, &parseError, &status);
+        coll = ucol_openFromShortString(testCases[i].input, false, &parseError, &status);
         if(status != testCases[i].expectedStatus) {
             log_err_status(status, "Got status '%s' that is different from expected '%s' for '%s'\n",
                 u_errorName(status), u_errorName(testCases[i].expectedStatus), testCases[i].input);
@@ -2212,7 +2213,7 @@ static void TestShortString(void)
             }
 
             ucol_normalizeShortDefinitionString(testCases[i].input, normalizedBuffer, 256, &parseError, &status);
-            fromNormalized = ucol_openFromShortString(normalizedBuffer, FALSE, &parseError, &status);
+            fromNormalized = ucol_openFromShortString(normalizedBuffer, false, &parseError, &status);
             ucol_getShortDefinitionString(fromNormalized, locale, fromNormalizedBuffer, 256, &status);
 
             if(strcmp(fromShortBuffer, fromNormalizedBuffer)) {
@@ -2254,9 +2255,9 @@ doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, co
     if(!uset_containsAll(ref, set)) {
         log_err("%s: Some stuff from %s is not present in the set\n", locale, inSet);
         uset_removeAll(set, ref);
-        bufLen = uset_toPattern(set, buffer, UPRV_LENGTHOF(buffer), TRUE, status);
+        bufLen = uset_toPattern(set, buffer, UPRV_LENGTHOF(buffer), true, status);
         log_info("    missing: %s\n", aescstrdup(buffer, bufLen));
-        bufLen = uset_toPattern(ref, buffer, UPRV_LENGTHOF(buffer), TRUE, status);
+        bufLen = uset_toPattern(ref, buffer, UPRV_LENGTHOF(buffer), true, status);
         log_info("    total: size=%i  %s\n", uset_getItemCount(ref), aescstrdup(buffer, bufLen));
     }
 
@@ -2351,9 +2352,9 @@ TestGetContractionsAndUnsafes(void)
             log_err_status(status, "Unable to open collator for locale %s ==> %s\n", tests[i].locale, u_errorName(status));
             continue;
         }
-        ucol_getContractionsAndExpansions(coll, conts, exp, TRUE, &status);
+        ucol_getContractionsAndExpansions(coll, conts, exp, true, &status);
         doSetsTest(tests[i].locale, conts, set, tests[i].inConts, tests[i].outConts, &status);
-        setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
+        setLen = uset_toPattern(conts, buffer, setBufferLen, true, &status);
         if(U_SUCCESS(status)) {
             /*log_verbose("Contractions %i: %s\n", uset_getItemCount(conts), aescstrdup(buffer, setLen));*/
         } else {
@@ -2361,7 +2362,7 @@ TestGetContractionsAndUnsafes(void)
             status = U_ZERO_ERROR;
         }
         doSetsTest(tests[i].locale, exp, set, tests[i].inExp, tests[i].outExp, &status);
-        setLen = uset_toPattern(exp, buffer, setBufferLen, TRUE, &status);
+        setLen = uset_toPattern(exp, buffer, setBufferLen, true, &status);
         if(U_SUCCESS(status)) {
             /*log_verbose("Expansions %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));*/
         } else {
@@ -2372,7 +2373,7 @@ TestGetContractionsAndUnsafes(void)
         noConts = ucol_getUnsafeSet(coll, conts, &status);
         (void)noConts;   /* Suppress set but not used warning */
         doSetsTest(tests[i].locale, conts, set, tests[i].unsafeCodeUnits, tests[i].safeCodeUnits, &status);
-        setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
+        setLen = uset_toPattern(conts, buffer, setBufferLen, true, &status);
         if(U_SUCCESS(status)) {
             log_verbose("Unsafe %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));
         } else {
@@ -2520,10 +2521,10 @@ static UBool uenum_contains(UEnumeration *e, const char *s, UErrorCode *status) 
     uenum_reset(e, status);
     while(((t = uenum_next(e, NULL, status)) != NULL) && U_SUCCESS(*status)) {
         if(uprv_strcmp(s, t) == 0) {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 static void TestGetKeywordValuesForLocale(void) {
@@ -2551,14 +2552,14 @@ static void TestGetKeywordValuesForLocale(void) {
     UEnumeration *keywordValues = NULL;
     int32_t i, n, size;
     const char *locale = NULL, *value = NULL;
-    UBool errorOccurred = FALSE;
+    UBool errorOccurred = false;
 
     for (i = 0; i < UPRV_LENGTHOF(PREFERRED) && !errorOccurred; i++) {
         locale = PREFERRED[i][0];
         value = NULL;
         size = 0;
 
-        keywordValues = ucol_getKeywordValuesForLocale("collation", locale, TRUE, &status);
+        keywordValues = ucol_getKeywordValuesForLocale("collation", locale, true, &status);
         if (keywordValues == NULL || U_FAILURE(status)) {
             log_err_status(status, "Error getting keyword values: %s\n", u_errorName(status));
             break;
@@ -2572,7 +2573,7 @@ static void TestGetKeywordValuesForLocale(void) {
                     log_err("Keyword value \"%s\" missing for locale: %s\n", value, locale);
                 } else {
                     log_err("While getting keyword value from locale: %s got this error: %s\n", locale, u_errorName(status));
-                    errorOccurred = TRUE;
+                    errorOccurred = true;
                     break;
                 }
             }

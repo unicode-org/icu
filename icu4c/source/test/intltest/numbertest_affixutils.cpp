@@ -18,7 +18,7 @@ class DefaultSymbolProvider : public SymbolProvider {
   public:
     DefaultSymbolProvider(UErrorCode &status) : fSymbols(Locale("ar_SA"), status) {}
 
-    UnicodeString getSymbol(AffixPatternType type) const U_OVERRIDE {
+    UnicodeString getSymbol(AffixPatternType type) const override {
         switch (type) {
             case TYPE_MINUS_SIGN:
                 return u"−";

@@ -40,7 +40,7 @@ using namespace icu;
 //
 //  The following variables contain parameters that may be set from the command line.
 //
-const char *pattern = NULL;     // The regular expression
+const char *pattern = nullptr;     // The regular expression
 int        firstFileNum;        //  argv index of the first file name
 UBool      displayFileName = false;
 UBool      displayLineNum  = false;
@@ -52,7 +52,7 @@ UBool      displayLineNum  = false;
 const char *fileName;      
 int         fileLen;              // Length, in UTF-16 Code Units.  
 
-UChar      *ucharBuf = 0;         // Buffer, holds converted file.  (Simple minded program, always reads
+char16_t   *ucharBuf = 0;         // Buffer, holds converted file.  (Simple minded program, always reads
                                   //   the whole file at once.
 
 char       *charBuf = 0;          // Buffer, for original, unconverted file data.
@@ -313,7 +313,7 @@ void readFile(const char *name) {
             u_errorName(status));
         return;
     }
-    if(encoding!=NULL ){
+    if(encoding!=nullptr ){
         charDataStart  += signatureLength;
         rawFileLen     -= signatureLength;
     }
@@ -329,11 +329,11 @@ void readFile(const char *name) {
     }
 
     //
-    // Convert the file data to UChar.
+    // Convert the file data to char16_t.
     //  Preflight first to determine required buffer size.
     //
     uint32_t destCap = ucnv_toUChars(conv,
-                       NULL,           //  dest,
+                       nullptr,           //  dest,
                        0,              //  destCapacity,
                        charDataStart,
                        rawFileLen,
@@ -344,7 +344,7 @@ void readFile(const char *name) {
     };
     
     status = U_ZERO_ERROR;
-    ucharBuf = (UChar *)realloc(ucharBuf, (destCap+1) * sizeof(UChar));
+    ucharBuf = (char16_t *)realloc(ucharBuf, (destCap+1) * sizeof(char16_t));
     ucnv_toUChars(conv,
         ucharBuf,           //  dest,
         destCap+1,
@@ -390,7 +390,7 @@ void nextLine(int  startPos) {
         if (lineEnd >= fileLen) {
             return;
         }
-        UChar c = ucharBuf[lineEnd];
+        char16_t c = ucharBuf[lineEnd];
         lineEnd++;
         if (c == 0x0a   ||       // Line Feed
             c == 0x0c   ||       // Form Feed
@@ -426,7 +426,7 @@ void printMatch() {
 
     // If we haven't already created a converter for output, do it now.
     if (outConverter == 0) {
-        outConverter = ucnv_open(NULL, &status);
+        outConverter = ucnv_open(nullptr, &status);
         if (U_FAILURE(status)) {
             fprintf(stderr, "ugrep:  Error opening default converter: \"%s\"\n",
                 u_errorName(status));

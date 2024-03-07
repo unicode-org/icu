@@ -22,7 +22,7 @@ system_symbols:
     exp_and_tanhf
     stdlib_qsort
     system_locale
-    stdio_input stdio_output file_io readlink_function dir_io mmap_functions dlfcn
+    stdio_input stdio_output file_io dir_io mmap_functions dlfcn
     # C++
     cplusplus iostream
     std_mutex
@@ -48,6 +48,9 @@ group: std_mutex
     std::condition_variable::~condition_variable()
     std::condition_variable_any::condition_variable_any()
     std::condition_variable_any::~condition_variable_any()
+    pthread_once
+    pthread_mutex_lock
+    pthread_mutex_unlock
 
 group: ubsan
     # UBSan=UndefinedBehaviorSanitizer, clang -fsanitize=bounds
@@ -107,11 +110,8 @@ group: file_io
     # Additional symbols in an optimized build.
     __xstat
 
-group: readlink_function
-    readlink  # putil.cpp uprv_tzname() calls this in a hack to get the time zone name
-
 group: dir_io
-    opendir closedir readdir  # for a hack to get the time zone name
+    opendir closedir readdir readlink realpath # for a hack to get the time zone name
 
 group: mmap_functions  # for memory-mapped data loading
     mmap munmap
@@ -125,6 +125,7 @@ group: cplusplus
     # even when no code actually uses it.
     # ICU must not _use_ the global operator delete.
     "operator delete(void*)"
+    "operator delete(void*, unsigned long)"
     # ICU also must not use the global operator new.
     # "operator new[](unsigned long)"
 
@@ -145,6 +146,7 @@ group: iostream
     "std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)"
     std::ios_base::Init::Init()
     std::ios_base::Init::~Init()
+    std::ios_base_library_init()
     std::istream::get()
     std::istream::putback(char)
     # Additional symbols in an optimized build.
@@ -211,7 +213,7 @@ group: breakiterator
     brkiter.o brkeng.o ubrk.o
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
     rbbidata.o rbbirb.o rbbi_cache.o
-    dictionarydata.o dictbe.o lstmbe.o
+    dictionarydata.o dictbe.o lstmbe.o mlbe.o
     # BreakIterator::makeInstance() factory implementation makes for circular dependency
     # between BreakIterator base and FilteredBreakIteratorBuilder.
     filteredbrk.o
@@ -348,7 +350,7 @@ group: uniset_core
 group: icu_utility_with_props
     util_props.o
   deps
-    icu_utility uchar ucase
+    icu_utility uchar ucase uprops
 
 group: icu_utility
     util.o
@@ -650,17 +652,21 @@ group: resourcebundle
     locbased.o
     loclikely.o
     localebuilder.o
+    ulocale.o
+    ulocbuilder.o
+    loclikelysubtags.o
   deps
     udata ucol_swp
     sort stringenumeration uhash uvector
     uscript_props propname
     bytesinkutil
     errorcode
+    lsr
 
 group: localematcher
     localematcher.o
   deps
-    resourcebundle localeprioritylist loclikelysubtags locdistance lsr
+    resourcebundle localeprioritylist locdistance
 
 group: localeprioritylist
     localeprioritylist.o
@@ -670,12 +676,7 @@ group: localeprioritylist
 group: locdistance
     locdistance.o
   deps
-    loclikelysubtags
-
-group: loclikelysubtags
-    loclikelysubtags.o
-  deps
-    lsr resourcebundle
+    resourcebundle
 
 group: lsr
     lsr.o
@@ -866,7 +867,7 @@ group: platform
     PIC system_misc system_debug malloc_functions ubsan
     c_strings c_string_formatting
     floating_point system_locale
-    stdio_input readlink_function dir_io
+    stdio_input dir_io
     dlfcn  # Move related code into icuplug.c?
     cplusplus
     std_mutex
@@ -915,7 +916,7 @@ group: charset_detector
 group: spoof_detection
     uspoof.o uspoof_build.o uspoof_conf.o uspoof_impl.o scriptset.o
   deps
-    uniset_props regex unorm uscript
+    uniset_props regex unorm uscript ubidi
 
 group: alphabetic_index
     alphaindex.o
@@ -993,6 +994,7 @@ group: number_output
     # PluralRules internals:
     unifiedcache
     display_options
+    icu_utility_with_props
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
@@ -1007,6 +1009,9 @@ group: numberformatter
     number_scientific.o
     currpinf.o
     numrange_fluent.o numrange_impl.o
+    # NOTE: This could go into its own dependency block, but it would require
+    # refactoring more of the dependencies (e.g. removing class methods).
+    number_simple.o
   deps
     decnumber double_conversion formattable units unitsformatter
     listformatter number_representation number_output
@@ -1078,7 +1083,7 @@ group: formatting
     measfmt.o quantityformatter.o
     # dateformat
     astro.o buddhcal.o calendar.o cecal.o chnsecal.o coptccal.o dangical.o ethpccal.o
-    gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o japancal.o persncal.o taiwncal.o
+    gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o iso8601cal.o japancal.o persncal.o taiwncal.o
     erarules.o  # mostly for Japanese eras
     ucal.o
     basictz.o olsontz.o rbtz.o simpletz.o timezone.o tzrule.o tztrans.o

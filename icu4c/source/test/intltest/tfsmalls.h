@@ -23,7 +23,7 @@ class TestFormatSmallClasses: public IntlTest {
      *    FieldPosition in test_FieldPosition(),
      *    Formattable in test_Formattable().
      **/    
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 };
 
 #endif

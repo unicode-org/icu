@@ -71,6 +71,7 @@ lv{
         bez{"bena"}
         bfd{"bafutu"}
         bg{"bulgāru"}
+        bgc{"harjanvi"}
         bgn{"rietumbeludžu"}
         bho{"bhodžpūru"}
         bi{"bišlamā"}
@@ -696,9 +697,9 @@ lv{
             gregorian{"Gregora kalendārs"}
             hebrew{"ebreju kalendārs"}
             indian{"Indijas nacionālais kalendārs"}
-            islamic{"islāma kalendārs"}
-            islamic-civil{"islāma pilsoņu kalendārs"}
-            islamic-umalqura{"islāma kalendārs (Umm al-kura)"}
+            islamic{"Hidžrī kalendārs"}
+            islamic-civil{"Hidžrī kalendārs (pilsoņu)"}
+            islamic-umalqura{"Hidžrī kalendārs (Umm al-kura)"}
             iso8601{"ISO 8601 kalendārs"}
             japanese{"japāņu kalendārs"}
             persian{"persiešu kalendārs"}
@@ -756,7 +757,6 @@ lv{
             phonebook{"tālruņu grāmatas kārtošanas secība"}
             phonetic{"Fonētiskā kārtošanas secība"}
             pinyin{"piņjiņa kārtošanas secība"}
-            reformed{"Reformētā kārtošanas secība"}
             search{"vispārīga meklēšana"}
             searchjl{"Meklēt pēc Hangul sākuma līdzskaņa"}
             standard{"standarta kārtošanas secība"}
@@ -859,10 +859,11 @@ lv{
     }
     characterLabelPattern{
         all{"{0} — visas"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — saderība"}
         enclosed{"{0} — noslēgtās"}
         extended{"{0} — speciālās"}
+        facing-left{"{0} skatās pa kreisi"}
+        facing-right{"{0} skatās pa labi"}
         historic{"{0} — vēsturiskās"}
         miscellaneous{"{0} — dažādi"}
         other{"{0} — citas"}
@@ -879,10 +880,5 @@ lv{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}
         territory{"Reģions: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

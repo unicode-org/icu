@@ -1,0 +1,110 @@
+# Copyright (C) 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks
+# for Valgrind
+
+name: GHA CI Valgrind
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+    paths:
+      - 'icu4c/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'icu4c/**'
+      - '.github/workflows/**'
+
+permissions:
+  contents: read
+
+jobs:
+  clang-valgrind-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install valgrind
+        run: |
+          set -ex;
+          sudo apt-get -y update;
+          sudo apt-get install -y valgrind;
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build with debug enable
+        env:
+          CC: clang
+          CFLAGS: -gdwarf-4
+          CXX: clang++
+          CXXFLAGS: -gdwarf-4
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l4.5 tests;
+      - name: Test iotest with valgrind
+        run: |
+          cd icu4c/source/test/iotest
+          LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH \
+              valgrind --tool=memcheck --error-exitcode=1 --leak-check=full \
+              --show-reachable=yes ./iotest
+      - name: Test cintltst with valgrind
+        run: |
+          cd icu4c/source/test/cintltst
+          LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH \
+              valgrind --tool=memcheck --error-exitcode=1 --leak-check=full \
+              --show-reachable=yes ./cintltst
+      - name: Test icuinfo with valgrind
+        run: |
+          cd icu4c/source/tools/icuinfo
+          LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH \
+              valgrind --tool=memcheck --error-exitcode=1 --leak-check=full \
+              --show-reachable=yes ./icuinfo;
+
+  clang-valgrind-intltest:
+    runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other test.
+      fail-fast: false
+      matrix:
+        case: [utility, normalize, collator, regex, format, translit,
+              rbbi, rbnf, rbnfrt, icuserv, idna, convert, rbnfp, csdet,
+              spoof, bidi]
+    steps:
+      - name: Install valgrind
+        run: |
+          set -ex;
+          sudo apt-get -y update;
+          sudo apt-get install -y valgrind;
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build with debug enable
+        env:
+          CC: clang
+          CFLAGS: -gdwarf-4
+          CXX: clang++
+          CXXFLAGS: -gdwarf-4
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug Linux --disable-renaming && make -j -l4.5 tests;
+      - name: Check all top path in intltest is covered
+        run: |
+          cd icu4c/source/test/intltest;
+          if [ $(LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH \
+              ./intltest LIST |
+              egrep "^   [a-z]+$" | awk '{print $1;}' | sort | tr '\n' '|') != \
+              "bidi|collate|convert|csdet|format|icuserv|idna|normalize|rbbi|rbnf|rbnfp|rbnfrt|regex|spoof|translit|utility|" ]
+          then
+              echo ICU has made changes to the top level tests in intltest!
+              echo Please update this workflow file to include those top level tests in
+              echo the "case" list.
+              exit -1
+          fi
+
+      - name: Test with valgrind
+        run: |
+          cd icu4c/source/test/intltest
+          LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH \
+              valgrind --tool=memcheck --error-exitcode=1 --leak-check=full \
+              --show-reachable=yes ./intltest ${{ matrix.case }};

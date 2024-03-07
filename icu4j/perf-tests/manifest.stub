@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: ICU for Java Performance Tests
-Specification-Version: @SPECVERSION@
-Specification-Vendor: Unicode, Inc.
-Implementation-Title: ICU for Java Performance Tests
-Implementation-Version: @IMPLVERSION@
-Implementation-Vendor: Unicode, Inc.
-Implementation-Vendor-Id: org.unicode
-Copyright-Info: @COPYRIGHT@

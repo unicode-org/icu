@@ -24,7 +24,7 @@ static void dtitvfmtPreDefined() {
     u_printf("===============================================================================\n");
 
     //! [dtitvfmtPreDefined]
-    UFILE *out = u_finit(stdout, NULL, "UTF-8");
+    UFILE *out = u_finit(stdout, nullptr, "UTF-8");
     UErrorCode status =U_ZERO_ERROR;
     // create 3 Date Intervals
     UnicodeString data[] = {
@@ -86,7 +86,7 @@ static void dtitvfmtCustomized() {
     u_printf("\n");
     u_printf("================================================================================\n");
     //! [dtitvfmtCustomized]
-    UFILE *out = u_finit(stdout, NULL, "UTF-8");
+    UFILE *out = u_finit(stdout, nullptr, "UTF-8");
     UErrorCode status =U_ZERO_ERROR;
     UnicodeString data[] = {
         UnicodeString("2007-9-10 10:10:10"),

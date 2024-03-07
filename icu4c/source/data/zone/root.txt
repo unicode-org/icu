@@ -2,13 +2,31 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 root{
-    Version{"42"}
+    Version{"45"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
         }
+        "Africa:Sao_Tome"{
+            ec{"São Tomé"}
+        }
+        "America:Asuncion"{
+            ec{"Asunción"}
+        }
+        "America:Bahia_Banderas"{
+            ec{"Bahía de Banderas"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
+        }
+        "America:Ciudad_Juarez"{
+            ec{"Ciudad Juárez"}
+        }
         "America:Coral_Harbour"{
             ec{"Atikokan"}
+        }
+        "America:Curacao"{
+            ec{"Curaçao"}
         }
         "America:Godthab"{
             ec{"Nuuk"}
@@ -40,6 +58,9 @@ root{
         "America:Lower_Princes"{
             ec{"Lower Prince’s Quarter"}
         }
+        "America:Merida"{
+            ec{"Mérida"}
+        }
         "America:North_Dakota:Beulah"{
             ec{"Beulah, North Dakota"}
         }
@@ -53,7 +74,7 @@ root{
             ec{"Ittoqqortoormiit"}
         }
         "America:St_Barthelemy"{
-            ec{"St. Barthelemy"}
+            ec{"St. Barthélemy"}
         }
         "America:St_Johns"{
             ec{"St. John’s"}
@@ -102,6 +123,9 @@ root{
         }
         "Europe:Kiev"{
             ec{"Kyiv"}
+        }
+        "Indian:Reunion"{
+            ec{"Réunion"}
         }
         "Pacific:Ponape"{
             ec{"Pohnpei"}

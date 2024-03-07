@@ -94,7 +94,7 @@ extern IntlTest *createDisplayOptionsTest();
 void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // for all format tests, always set default Locale and TimeZone to ENGLISH and PST.
-    TimeZone* saveDefaultTimeZone = NULL;
+    TimeZone* saveDefaultTimeZone = nullptr;
     Locale  saveDefaultLocale = Locale::getDefault();
     if (exec) {
         saveDefaultTimeZone = TimeZone::createDefault();

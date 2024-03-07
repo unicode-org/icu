@@ -13,9 +13,9 @@
     <property name="res.dir" value="${out.dir}/res"/>
     <property name="xml.dir" value="${out.dir}/xml"/>
 
-    <property name="base.url" value="https://www.currency-iso.org/dam/downloads/lists/"/>
-    <property name="current.xml" value="list_one.xml"/>
-    <property name="historic.xml" value="list_three.xml"/>
+    <property name="base.url" value="https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/"/>
+    <property name="current.xml" value="list-one.xml"/>
+    <property name="historic.xml" value="list-three.xml"/>
 
 <target name="build" depends="check, resource" description="Verify ICU's local data and generate ISO 4217 alpha-numeric code mapping data resource"/>
 

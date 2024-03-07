@@ -29,21 +29,21 @@
 
 class UPrinter {
   UFILE *out;
-  UChar buffer[256];
+  char16_t buffer[256];
   UBool _on;
   char _locale[256];
 public:
-  UPrinter(FILE *file, const char *locale, const char *encoding, UBool transliterateNonPrintable=TRUE);
+  UPrinter(FILE *file, const char *locale, const char *encoding, UBool transliterateNonPrintable=true);
   UPrinter(const char *name, const char *locale, const char *encoding, UTransliterator *trans, UBool transliterateNonPrintable);
   ~UPrinter();
-  void log(const UnicodeString &string, UBool nl = FALSE);
-  void log(const UChar *string, UBool nl = FALSE);
-  //void log(const char *string, UBool nl = FALSE);
-  void log(const Line *line, UBool nl = FALSE);
+  void log(const UnicodeString &string, UBool nl = false);
+  void log(const char16_t *string, UBool nl = false);
+  //void log(const char *string, UBool nl = false);
+  void log(const Line *line, UBool nl = false);
   void log(const char *fmt, ...);
-  void off(void);
-  void on(void);
-  UBool isOn(void) {
+  void off();
+  void on();
+  UBool isOn() {
     return _on;
   };
 };

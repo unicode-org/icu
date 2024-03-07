@@ -17,8 +17,9 @@
 
 /*The main root for C API tests*/
 
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -46,7 +47,7 @@
 /* Array used as a queue */
 static void * ctst_allocated_stuff[CTST_MAX_ALLOC] = {0};
 static int ctst_allocated = 0;
-static UBool ctst_free = FALSE;
+static UBool ctst_free = false;
 static int ctst_allocated_total = 0;
 
 #define CTST_LEAK_CHECK 1
@@ -112,12 +113,12 @@ int main(int argc, const char* const argv[])
      *  Whether or not this test succeeds, we want to cleanup and reinitialize
      *  with a data path so that data loading from individual files can be tested.
      */
-    defaultDataFound = TRUE;
+    defaultDataFound = true;
     u_init(&errorCode);
     if (U_FAILURE(errorCode)) {
         fprintf(stderr,
             "#### Note:  ICU Init without build-specific setDataDirectory() failed. %s\n", u_errorName(errorCode));
-        defaultDataFound = FALSE;
+        defaultDataFound = false;
     }
     u_cleanup();
 #ifdef URES_DEBUG
@@ -294,7 +295,7 @@ static void ctest_appendToDataDirectory(const char *toAppend)
 */
 
 /* returns the path to icu/source/data */
-const char *  ctest_dataSrcDir()
+const char *  ctest_dataSrcDir(void)
 {
     static const char *dataSrcDir = NULL;
 
@@ -361,7 +362,7 @@ const char *  ctest_dataSrcDir()
 }
 
 /* returns the path to icu/source/data/out */
-const char *ctest_dataOutDir()
+const char *ctest_dataOutDir(void)
 {
     static const char *dataOutDir = NULL;
 
@@ -379,7 +380,10 @@ const char *ctest_dataOutDir()
     */
 #if defined (U_TOPBUILDDIR)
     {
-        dataOutDir = U_TOPBUILDDIR "data"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+        dataOutDir = U_TOPBUILDDIR
+                "data" U_FILE_SEP_STRING
+                "out" U_FILE_SEP_STRING
+                "build" U_FILE_SEP_STRING;
     }
 #else
 
@@ -435,7 +439,7 @@ const char *ctest_dataOutDir()
  *                       picked up via a static (build time) reference, but the
  *                       tests dynamically load some data.
  */
-void ctest_setICU_DATA() {
+void ctest_setICU_DATA(void) {
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
@@ -450,7 +454,7 @@ void ctest_setICU_DATA() {
  *    The ICU data directory must be preserved across these operations.
  *    Here is a helper function to assist with that.
  */
-static char *safeGetICUDataDirectory() {
+static char *safeGetICUDataDirectory(void) {
     const char *dataDir = u_getDataDirectory();  /* Returned string vanashes with u_cleanup */
     char *retStr = NULL;
     if (dataDir != NULL) {
@@ -460,23 +464,23 @@ static char *safeGetICUDataDirectory() {
     return retStr;
 }
 
-UBool ctest_resetICU() {
+UBool ctest_resetICU(void) {
     UErrorCode   status = U_ZERO_ERROR;
     char         *dataDir = safeGetICUDataDirectory();
 
     u_cleanup();
     if (!initArgs(gOrigArgc, gOrigArgv, NULL, NULL)) {
         /* Error already displayed. */
-        return FALSE;
+        return false;
     }
     u_setDataDirectory(dataDir);
     free(dataDir);
     u_init(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "u_init failed with %s\n", u_errorName(status));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 UChar* CharsToUChars(const char* str) {
@@ -527,7 +531,7 @@ char *aescstrdup(const UChar* unichars,int32_t length){
     target = newString;
     targetLimit = newString+sizeof(char) * 8 * (length +1);
     ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, &cb, &p, &errorCode);
-    ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,TRUE,&errorCode);
+    ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,true,&errorCode);
     ucnv_close(conv);
     *target = '\0';
     return newString;
@@ -662,7 +666,7 @@ void *ctst_malloc(size_t size) {
   ctst_allocated_total++;
     if(ctst_allocated >= CTST_MAX_ALLOC - 1) {
         ctst_allocated = 0;
-        ctst_free = TRUE;
+        ctst_free = true;
     }
     if(ctst_allocated_stuff[ctst_allocated]) {
         free(ctst_allocated_stuff[ctst_allocated]);
@@ -671,9 +675,9 @@ void *ctst_malloc(size_t size) {
 }
 
 #ifdef CTST_LEAK_CHECK
-static void ctst_freeAll() {
+static void ctst_freeAll(void) {
     int i;
-    if(ctst_free == FALSE) { /* only free up to the allocated mark */
+    if(ctst_free == false) { /* only free up to the allocated mark */
         for(i=0; i<ctst_allocated; i++) {
             free(ctst_allocated_stuff[i]);
             ctst_allocated_stuff[i] = NULL;
@@ -698,14 +702,14 @@ U_CFUNC UBool assertSuccessCheck(const char* msg, UErrorCode* ec, UBool possible
         } else {
             log_err_status(*ec, "FAIL: %s (%s)\n", msg, u_errorName(*ec));
         }
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
     U_ASSERT(ec!=NULL);
-    return assertSuccessCheck(msg, ec, FALSE);
+    return assertSuccessCheck(msg, ec, false);
 }
 
 /* if 'condition' is a UBool, the compiler complains bitterly about
@@ -733,14 +737,14 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
     if (uprv_strcmp(expected, actual) != 0) {
         log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
                 message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got \"%s\"\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
@@ -755,7 +759,7 @@ U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
         if (expected[i] != actual[i]) {
             log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
                     message, austrdup(actual), austrdup(expected));
-            return FALSE;
+            return false;
         }
         UChar curr = expected[i];
         U_ASSERT(curr == actual[i]);
@@ -766,48 +770,48 @@ U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
 #ifdef VERBOSE_ASSERTIONS
     log_verbose("Ok: %s; got \"%s\"\n", message, austrdup(actual));
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertIntEquals(const char* message, int64_t expected, int64_t actual) {
     if (expected != actual) {
         log_err("FAIL: %s; got \"%d\"; expected \"%d\"\n",
                 message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got \"%d\"\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertPtrEquals(const char* message, const void* expected, const void* actual) {
     if (expected != actual) {
         log_err("FAIL: %s; got 0x%llx; expected 0x%llx\n",
                 message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got 0x%llx\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertDoubleEquals(const char *message, double expected, double actual) {
     if (expected != actual) {
         log_err("FAIL: %s; got \"%f\"; expected \"%f\"\n", message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got \"%f\"\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 #endif

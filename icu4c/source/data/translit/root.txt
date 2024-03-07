@@ -21,6 +21,9 @@ root:table(nofallback){
                 resource:process(transliterator){"Any_Accents.txt"}
             }
         }
+        Amharic-Amharic/Geminate{
+            alias{"am_Ethi-am_Ethi/Geminate"}
+        }
         Amharic-Latin/BGN{
             alias{"am-am_Latn/BGN"}
         }
@@ -332,8 +335,8 @@ root:table(nofallback){
         }
         Ethi-Latn{
             file{
-                direction{"REVERSE"}
-                resource:process(transliterator){"Latn_Ethi.txt"}
+                direction{"FORWARD"}
+                resource:process(transliterator){"Ethi_Latn.txt"}
             }
         }
         Ethi-Latn/ALALOC{
@@ -342,16 +345,34 @@ root:table(nofallback){
                 resource:process(transliterator){"Ethi_Latn_ALALOC.txt"}
             }
         }
+        Ethi-Latn/ALALOC_Geminate{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"Ethi_Latn_ALALOC_Geminate.txt"}
+            }
+        }
         Ethi-Latn/Aethiopi{
             file{
                 direction{"FORWARD"}
                 resource:process(transliterator){"Ethi_Latn_Aethiopi.txt"}
             }
         }
+        Ethi-Latn/Aethiopi_Geminate{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"Ethi_Latn_Aethiopi_Geminate.txt"}
+            }
+        }
         Ethi-Latn/Beta_Metsehaf{
             file{
                 direction{"FORWARD"}
                 resource:process(transliterator){"Ethi_Latn_Beta_Metsehaf.txt"}
+            }
+        }
+        Ethi-Latn/Beta_Metsehaf_Geminate{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"Ethi_Latn_Beta_Metsehaf_Geminate.txt"}
             }
         }
         Ethi-Latn/ES3842{
@@ -366,6 +387,12 @@ root:table(nofallback){
                 resource:process(transliterator){"Ethi_Latn_IES_JES_1964.txt"}
             }
         }
+        Ethi-Latn/IES_JES_1964_Geminate{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"Ethi_Latn_IES_JES_1964_Geminate.txt"}
+            }
+        }
         Ethi-Latn/Lambdin{
             file{
                 direction{"FORWARD"}
@@ -378,10 +405,10 @@ root:table(nofallback){
                 resource:process(transliterator){"Ethi_Latn_SERA.txt"}
             }
         }
-        Ethi-Sarb{
+        Ethi-Latn/Williamson{
             file{
-                direction{"FORWARD"}
-                resource:process(transliterator){"Ethi_Sarb.txt"}
+                direction{"REVERSE"}
+                resource:process(transliterator){"Latn_Ethi_Williamson.txt"}
             }
         }
         Ethi-sgw_Ethi/Gurage_2013{
@@ -405,8 +432,17 @@ root:table(nofallback){
         Ethiopic-Latin/ALALOC{
             alias{"Ethi-Latn/ALALOC"}
         }
+        Ethiopic-Latin/ALALOC_Geminate{
+            alias{"Ethi-Latn/ALALOC_Geminate"}
+        }
         Ethiopic-Latin/Aethiopica{
             alias{"Ethi-Latn/Aethiopi"}
+        }
+        Ethiopic-Latin/Aethiopica_Geminate{
+            alias{"Ethi-Latn/Aethiopi_Geminate"}
+        }
+        Ethiopic-Latin/BetaMetsehaf_Geminate{
+            alias{"Ethi-Latn/Beta_Metsehaf_Geminate"}
         }
         Ethiopic-Latin/Beta_Metsehaf{
             alias{"Ethi-Latn/Beta_Metsehaf"}
@@ -417,6 +453,9 @@ root:table(nofallback){
         Ethiopic-Latin/IES_JES_1964{
             alias{"Ethi-Latn/IES_JES_1964"}
         }
+        Ethiopic-Latin/IES_JES_1964_Geminate{
+            alias{"Ethi-Latn/IES_JES_1964_Geminate"}
+        }
         Ethiopic-Latin/Lambdin{
             alias{"Ethi-Latn/Lambdin"}
         }
@@ -426,17 +465,23 @@ root:table(nofallback){
         Ethiopic-Latin/Tekie_Alibekit{
             alias{"byn_Ethi-byn_Latn/Tekie_Alibekit"}
         }
+        Ethiopic-Latin/Williamson{
+            alias{"Ethi-Latn/Williamson"}
+        }
         Ethiopic-Latin/Xaleget{
             alias{"byn_Ethi-byn_Latn/Xaleget"}
-        }
-        Ethiopic-Musnad{
-            alias{"Ethi-Sarb"}
         }
         Fullwidth-Halfwidth{
             file{
                 direction{"FORWARD"}
                 resource:process(transliterator){"Fullwidth_Halfwidth.txt"}
             }
+        }
+        Geez-Ethiopic{
+            alias{"Sarb-gz_Ethi"}
+        }
+        Geez-Musnad{
+            alias{"gz_Ethi-Sarb"}
         }
         Geor-Latn{
             file{
@@ -1029,6 +1074,12 @@ root:table(nofallback){
         Latin-Ethiopic/Tekie_Alibekit{
             alias{"byn_Latn-byn_Ethi/Tekie_Alibekit"}
         }
+        Latin-Ethiopic/Williamson{
+            alias{"Latn-Ethi/Williamson"}
+        }
+        Latin-Ethiopic/Xalaget{
+            alias{"byn_Latn-byn_Ethi/Xaleget"}
+        }
         Latin-Georgian{
             alias{"Latn-Geor"}
         }
@@ -1148,8 +1199,8 @@ root:table(nofallback){
         }
         Latn-Ethi{
             file{
-                direction{"FORWARD"}
-                resource:process(transliterator){"Latn_Ethi.txt"}
+                direction{"REVERSE"}
+                resource:process(transliterator){"Ethi_Latn.txt"}
             }
         }
         Latn-Ethi/ALALOC{
@@ -1186,6 +1237,12 @@ root:table(nofallback){
             file{
                 direction{"REVERSE"}
                 resource:process(transliterator){"Ethi_Latn_SERA.txt"}
+            }
+        }
+        Latn-Ethi/Williamson{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"Latn_Ethi_Williamson.txt"}
             }
         }
         Latn-Geor{
@@ -1407,9 +1464,6 @@ root:table(nofallback){
         Mongolian-Latin/BGN{
             alias{"mn-mn_Latn/BGN"}
         }
-        Musnad-Ethiopic{
-            alias{"Sarb-Ethi"}
-        }
         Myanmar-Latin{
             alias{"my-my_Latn"}
         }
@@ -1548,10 +1602,10 @@ root:table(nofallback){
         Russian-Latin/BGN{
             alias{"ru-ru_Latn/BGN"}
         }
-        Sarb-Ethi{
+        Sarb-gz_Ethi{
             file{
                 direction{"REVERSE"}
-                resource:process(transliterator){"Ethi_Sarb.txt"}
+                resource:process(transliterator){"gz_Ethi_Sarb.txt"}
             }
         }
         Serbian-Latin/BGN{
@@ -1857,6 +1911,9 @@ root:table(nofallback){
         am-Ethi-t-am-brai{
             alias{"am_Brai-am_Ethi"}
         }
+        am-Ethi-t-am-ethi-m0-geminate{
+            alias{"am_Ethi-am_Ethi/Geminate"}
+        }
         am-Ethi-t-d0-morse{
             alias{"am_Ethi-d0_Morse"}
         }
@@ -1978,6 +2035,12 @@ root:table(nofallback){
             file{
                 direction{"FORWARD"}
                 resource:process(transliterator){"am_Ethi_am_Brai.txt"}
+            }
+        }
+        am_Ethi-am_Ethi/Geminate{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"am_Ethi_am_Ethi_Geminate.txt"}
             }
         }
         am_Ethi-d0_Morse{
@@ -2133,6 +2196,9 @@ root:table(nofallback){
         byn-Ethi-t-byn-latn-m0-tekieali{
             alias{"byn_Latn-byn_Ethi/Tekie_Alibekit"}
         }
+        byn-Ethi-t-byn-latn-m0-xaleget{
+            alias{"byn_Latn-byn_Ethi/Xaleget"}
+        }
         byn-Latn-t-byn-ethi-m0-tekieali{
             alias{"byn_Ethi-byn_Latn/Tekie_Alibekit"}
         }
@@ -2155,6 +2221,12 @@ root:table(nofallback){
             file{
                 direction{"REVERSE"}
                 resource:process(transliterator){"byn_Ethi_byn_Latn_Tekie_Alibekit.txt"}
+            }
+        }
+        byn_Latn-byn_Ethi/Xaleget{
+            file{
+                direction{"REVERSE"}
+                resource:process(transliterator){"byn_Ethi_byn_Latn_Xaleget.txt"}
             }
         }
         ch-am{
@@ -2624,6 +2696,15 @@ root:table(nofallback){
         }
         fa-t-zu{
             alias{"zu-fa"}
+        }
+        gz-Ethi-t-und-sarb{
+            alias{"Sarb-gz_Ethi"}
+        }
+        gz_Ethi-Sarb{
+            file{
+                direction{"FORWARD"}
+                resource:process(transliterator){"gz_Ethi_Sarb.txt"}
+            }
         }
         ha-NE-t-ha{
             alias{"ha-ha_NE"}
@@ -3588,7 +3669,7 @@ root:table(nofallback){
         und-Ethi-t-und-cyrl-m0-gutgarts{
             alias{"Cyrl-Ethi/Gutgarts"}
         }
-        und-Ethi-t-und-latn{
+        und-Ethi-t-und-lant{
             alias{"Latn-Ethi"}
         }
         und-Ethi-t-und-latn-m0-aethiopi{
@@ -3609,8 +3690,8 @@ root:table(nofallback){
         und-Ethi-t-und-latn-m0-sera{
             alias{"Latn-Ethi/SERA"}
         }
-        und-Ethi-t-und-sarb{
-            alias{"Sarb-Ethi"}
+        und-Ethi-t-und-latn-m0-williams{
+            alias{"Latn-Ethi/Williamson"}
         }
         und-Geor-t-und-latn{
             alias{"Latn-Geor"}
@@ -3730,7 +3811,7 @@ root:table(nofallback){
             alias{"Telu-Knda"}
         }
         und-Latn-t-s0-ascii{
-            alias{"Latin-ASCII"}
+            alias{"ASCII-Latin"}
         }
         und-Latn-t-und-arab{
             alias{"Arab-Latn"}
@@ -3759,11 +3840,20 @@ root:table(nofallback){
         und-Latn-t-und-ethi-m0-aethiopi{
             alias{"Ethi-Latn/Aethiopi"}
         }
+        und-Latn-t-und-ethi-m0-aethiopi-geminate{
+            alias{"Ethi-Latn/Aethiopi_Geminate"}
+        }
         und-Latn-t-und-ethi-m0-alaloc{
             alias{"Ethi-Latn/ALALOC"}
         }
+        und-Latn-t-und-ethi-m0-alaloc-geminate{
+            alias{"Ethi-Latn/ALALOC_Geminate"}
+        }
         und-Latn-t-und-ethi-m0-betamets{
             alias{"Ethi-Latn/Beta_Metsehaf"}
+        }
+        und-Latn-t-und-ethi-m0-betamets-geminate{
+            alias{"Ethi-Latn/Beta_Metsehaf_Geminate"}
         }
         und-Latn-t-und-ethi-m0-es3842{
             alias{"Ethi-Latn/ES3842"}
@@ -3771,11 +3861,17 @@ root:table(nofallback){
         und-Latn-t-und-ethi-m0-iesjes-1964{
             alias{"Ethi-Latn/IES_JES_1964"}
         }
+        und-Latn-t-und-ethi-m0-iesjes-1964-geminate{
+            alias{"Ethi-Latn/IES_JES_1964_Geminate"}
+        }
         und-Latn-t-und-ethi-m0-lambdin{
             alias{"Ethi-Latn/Lambdin"}
         }
         und-Latn-t-und-ethi-m0-sera{
             alias{"Ethi-Latn/SERA"}
+        }
+        und-Latn-t-und-ethi-m0-williams{
+            alias{"Ethi-Latn/Williamson"}
         }
         und-Latn-t-und-geor{
             alias{"Geor-Latn"}
@@ -3891,8 +3987,8 @@ root:table(nofallback){
         und-Orya-t-und-telu{
             alias{"Telu-Orya"}
         }
-        und-Sarb-t-und-ethi{
-            alias{"Ethi-Sarb"}
+        und-Sarb-t-gz-ethi{
+            alias{"gz_Ethi-Sarb"}
         }
         und-Syrc-t-und-latn{
             alias{"Latn-Syrc"}
@@ -3972,9 +4068,6 @@ root:table(nofallback){
         und-t-d0-accents{
             alias{"Any-Accents"}
         }
-        und-t-d0-ascii{
-            alias{"Latin-ASCII"}
-        }
         und-t-d0-fwidth{
             alias{"Halfwidth-Fullwidth"}
         }
@@ -3989,6 +4082,9 @@ root:table(nofallback){
         }
         und-t-s0-publish{
             alias{"Publishing-Any"}
+        }
+        und-t-und-latn-d0-ascii{
+            alias{"Latin-ASCII"}
         }
         und_FONIPA-ar{
             file{

@@ -7,7 +7,7 @@ import static java.lang.Integer.parseInt;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,12 +34,13 @@ final class IcuFunctions {
      * <ul>
      *   <li>args[0] = ISO date string (e.g. "2019-05-23")
      *   <li>args[1] = Date field type name (e.g. "from")
+     *   <li>args[2] = Timezone for ISO date string, as CLDR canonical “long” time zone ID; Etc/UTC for most
      * </ul>
      */
     static final NamedFunction DATE_FN =
-        NamedFunction.create("date", 2, args -> {
+        NamedFunction.create("date", 3, args -> {
             long millis =
-                DateFieldType.toEnum(args.get(1)).toEpochMillis(LocalDate.parse(args.get(0)));
+                DateFieldType.toEnum(args.get(1)).toEpochMillis(LocalDate.parse(args.get(0)), args.get(2));
             // Strictly speaking the masking is redundant and could be removed.
             int hiBits = (int) ((millis >>> 32) & 0xFFFFFFFFL);
             int loBits = (int) (millis & 0xFFFFFFFFL);
@@ -187,8 +188,9 @@ final class IcuFunctions {
             this.adjustFn = adjustFn;
         }
 
-        long toEpochMillis(LocalDate date) {
-            return adjustFn.apply(date).toInstant(ZoneOffset.UTC).toEpochMilli();
+        long toEpochMillis(LocalDate date, String tzid) {
+            // Need to check whether Java ZoneId handles all CLDR canonical “long” time zone IDs 
+            return adjustFn.apply(date).atZone(ZoneId.of(tzid)).toInstant().toEpochMilli();
         }
 
         static DateFieldType toEnum(String value) {

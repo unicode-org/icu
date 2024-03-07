@@ -37,11 +37,9 @@ italic styles.
 ICU provides multiple text access interfaces which were added over time. If
 simple strings cannot be used, then consider the following:
 
-1.  [UText](utext.md): Added in ICU4C 3.4 as a technology preview. Intended to
-    be the strategic text access API for use with ICU. C API, high performance,
-    writable, supports native indexes for efficient non-UTF-16 text storage. So
-    far (3.4) only supported in BreakIterator. Some API changes are anticipated
-    for ICU 3.6.
+1.  [UText](utext.md): Intended to be the strategic text access API for use
+    with ICU. C API, high performance, writable, supports native indexes for
+    efficient non-UTF-16 text storage.
 
 2.  Replaceable (Java & C++) and UReplaceable (C): Writable, designed for use
     with Transliterator.
@@ -445,7 +443,7 @@ when it is constructed from a NULL `UChar *` pointer, then the UnicodeString
 object becomes "bogus". This can be tested with the isBogus() function. A
 UnicodeString can be put into the "bogus" state explicitly with the setToBogus()
 function. This is different from an empty string (although a "bogus" string also
-returns TRUE from isEmpty()) and may be used equivalently to NULL in `UChar *` C
+returns true from isEmpty()) and may be used equivalently to NULL in `UChar *` C
 APIs (or null references in Java, or NULL values in SQL). A string remains
 "bogus" until a non-bogus string value is assigned to it. For complete details
 of the behavior of "bogus" strings see the description of the setToBogus()

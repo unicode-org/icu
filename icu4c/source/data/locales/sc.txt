@@ -2,18 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sc{
-    AuxExemplarCharacters{"[ª á â å ä ã æ ç é ê ë í î ï k ñ º ó ô ö õ ø œ q ß ú û ü w x y ÿ]"}
-    ExemplarCharacters{"[a à b c d e è f g h i ì j l m n o ò p r s t u ù v z]"}
+    AuxExemplarCharacters{"[ªáâåäã æ ç éêë íîï k ñ ºóôöõø œ q ß úûü w x yÿ]"}
+    ExemplarCharacters{"[aà b c d eè f g h iì j l m n oò p r s t uù v z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T {TZ} U V W X Y Z]"}
-    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … · ' ‘ ’ \u0022 “ ” « » ( ) \\[ \\] @ * / \\& # ′ ″]"}
+    ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … · '‘’ \u0022“” « » ( ) \\[ \\] @ * / \\& # ′ ″]"}
     NumberElements{
         latn{
             patterns{
-                accountingFormat{"#,##0.00 ¤"}
-                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
-                currencyFormat%noCurrency{"#,##0.00"}
             }
             patternsLong{
                 decimalFormat{
@@ -198,8 +194,32 @@ sc{
                 }
             }
             intervalFormats{
-                GyMMMd{
-                    d{"d–d MMM y G"}
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
         }
@@ -287,91 +307,11 @@ sc{
                             "fritu minore",
                             "fritu mannu",
                         }
-                        narrow{
-                            "incumintzu de su beranu",
-                            "abba dae chelu",
-                            "ischidada de sos boborrotos",
-                            "ecuinòtziu de beranu",
-                            "luminosu e craru",
-                            "abba pro trigu",
-                            "incumintzu de s’istiu",
-                            "maturatzione minore",
-                            "trigu in ispigas",
-                            "solstìtziu de istiu",
-                            "afogu minore",
-                            "afogu mannu",
-                            "incumintzu de s’atòngiu",
-                            "acabu de s’afogu",
-                            "lentore biancu",
-                            "ecuinòtziu de atòngiu",
-                            "lentore fritu",
-                            "achirrada de su ghiliore",
-                            "incumintzu de s’ierru",
-                            "nie minore",
-                            "nie mannu",
-                            "solstìtziu de ierru",
-                            "fritu minore",
-                            "fritu mannu",
-                        }
-                        wide{
-                            "incumintzu de su beranu",
-                            "abba dae chelu",
-                            "ischidada de sos boborrotos",
-                            "ecuinòtziu de beranu",
-                            "luminosu e craru",
-                            "abba pro trigu",
-                            "incumintzu de s’istiu",
-                            "maturatzione minore",
-                            "trigu in ispigas",
-                            "solstìtziu de istiu",
-                            "afogu minore",
-                            "afogu mannu",
-                            "incumintzu de s’atòngiu",
-                            "acabu de s’afogu",
-                            "lentore biancu",
-                            "ecuinòtziu de atòngiu",
-                            "lentore fritu",
-                            "achirrada de su ghiliore",
-                            "incumintzu de s’ierru",
-                            "nie minore",
-                            "nie mannu",
-                            "solstìtziu de ierru",
-                            "fritu minore",
-                            "fritu mannu",
-                        }
                     }
                 }
                 zodiacs{
                     format{
                         abbreviated{
-                            "sòrighe",
-                            "boe",
-                            "tigre",
-                            "cunillu",
-                            "dragu",
-                            "serpente",
-                            "caddu",
-                            "craba",
-                            "martinica",
-                            "puddu",
-                            "cane",
-                            "porcu",
-                        }
-                        narrow{
-                            "sòrighe",
-                            "boe",
-                            "tigre",
-                            "cunillu",
-                            "dragu",
-                            "serpente",
-                            "caddu",
-                            "craba",
-                            "martinica",
-                            "puddu",
-                            "cane",
-                            "porcu",
-                        }
-                        wide{
                             "sòrighe",
                             "boe",
                             "tigre",
@@ -472,30 +412,9 @@ sc{
                         "su de dòighi meses",
                     }
                 }
-                stand-alone{
-                    wide{
-                        "su de unu mese",
-                        "su de duos meses",
-                        "su de tres meses",
-                        "su de bator meses",
-                        "su de chimbe meses",
-                        "su de ses meses",
-                        "su de sete meses",
-                        "su de oto meses",
-                        "su de nove meses",
-                        "su de deghe meses",
-                        "su de ùndighi meses",
-                        "su de dòighi meses",
-                    }
-                }
             }
             monthPatterns{
                 format{
-                    wide{
-                        leap{"{0} bis"}
-                    }
-                }
-                stand-alone{
                     wide{
                         leap{"{0} bis"}
                     }
@@ -511,6 +430,35 @@ sc{
                 wide{
                     "in antis de Diocletzianu",
                     "annu de sos màrtires",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
             monthNames{
@@ -534,180 +482,30 @@ sc{
             }
         }
         dangi{
-            cyclicNameSets{
-                solarTerms{
-                    format{
-                        abbreviated{
-                            "incumintzu de su beranu",
-                            "abba dae chelu",
-                            "ischidada de sos boborrotos",
-                            "ecuinòtziu de beranu",
-                            "luminosu e craru",
-                            "abba pro trigu",
-                            "incumintzu de s’istiu",
-                            "maturatzione minore",
-                            "trigu in ispigas",
-                            "solstìtziu de istiu",
-                            "afogu minore",
-                            "afogu mannu",
-                            "incumintzu de s’atòngiu",
-                            "acabu de s’afogu",
-                            "lentore biancu",
-                            "ecuinòtziu de atòngiu",
-                            "lentore fritu",
-                            "achirrada de su ghiliore",
-                            "incumintzu de s’ierru",
-                            "nie minore",
-                            "nie mannu",
-                            "solstìtziu de ierru",
-                            "fritu minore",
-                            "fritu mannu",
-                        }
-                        narrow{
-                            "incumintzu de su beranu",
-                            "abba dae chelu",
-                            "ischidada de sos boborrotos",
-                            "ecuinòtziu de beranu",
-                            "luminosu e craru",
-                            "abba pro trigu",
-                            "incumintzu de s’istiu",
-                            "maturatzione minore",
-                            "trigu in ispigas",
-                            "solstìtziu de istiu",
-                            "afogu minore",
-                            "afogu mannu",
-                            "incumintzu de s’atòngiu",
-                            "acabu de s’afogu",
-                            "lentore biancu",
-                            "ecuinòtziu de atòngiu",
-                            "lentore fritu",
-                            "achirrada de su ghiliore",
-                            "incumintzu de s’ierru",
-                            "nie minore",
-                            "nie mannu",
-                            "solstìtziu de ierru",
-                            "fritu minore",
-                            "fritu mannu",
-                        }
-                        wide{
-                            "incumintzu de su beranu",
-                            "abba dae chelu",
-                            "ischidada de sos boborrotos",
-                            "ecuinòtziu de beranu",
-                            "luminosu e craru",
-                            "abba pro trigu",
-                            "incumintzu de s’istiu",
-                            "maturatzione minore",
-                            "trigu in ispigas",
-                            "solstìtziu de istiu",
-                            "afogu minore",
-                            "afogu mannu",
-                            "incumintzu de s’atòngiu",
-                            "acabu de s’afogu",
-                            "lentore biancu",
-                            "ecuinòtziu de atòngiu",
-                            "lentore fritu",
-                            "achirrada de su ghiliore",
-                            "incumintzu de s’ierru",
-                            "nie minore",
-                            "nie mannu",
-                            "solstìtziu de ierru",
-                            "fritu minore",
-                            "fritu mannu",
-                        }
-                    }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
                 }
-                zodiacs{
-                    format{
-                        abbreviated{
-                            "sòrighe",
-                            "boe",
-                            "tigre",
-                            "cunillu",
-                            "dragu",
-                            "serpente",
-                            "caddu",
-                            "craba",
-                            "martinica",
-                            "puddu",
-                            "cane",
-                            "porcu",
-                        }
-                        narrow{
-                            "sòrighe",
-                            "boe",
-                            "tigre",
-                            "cunillu",
-                            "dragu",
-                            "serpente",
-                            "caddu",
-                            "craba",
-                            "martinica",
-                            "puddu",
-                            "cane",
-                            "porcu",
-                        }
-                        wide{
-                            "sòrighe",
-                            "boe",
-                            "tigre",
-                            "cunillu",
-                            "dragu",
-                            "serpente",
-                            "caddu",
-                            "craba",
-                            "martinica",
-                            "puddu",
-                            "cane",
-                            "porcu",
-                        }
-                    }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
                 }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "su de unu mese",
-                        "su de duos meses",
-                        "su de tres meses",
-                        "su de bator meses",
-                        "su de chimbe meses",
-                        "su de ses meses",
-                        "su de sete meses",
-                        "su de oto meses",
-                        "su de nove meses",
-                        "su de deghe meses",
-                        "su de ùndighi meses",
-                        "su de dòighi meses",
-                    }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
-                stand-alone{
-                    wide{
-                        "su de unu mese",
-                        "su de duos meses",
-                        "su de tres meses",
-                        "su de bator meses",
-                        "su de chimbe meses",
-                        "su de ses meses",
-                        "su de sete meses",
-                        "su de oto meses",
-                        "su de nove meses",
-                        "su de deghe meses",
-                        "su de ùndighi meses",
-                        "su de dòighi meses",
-                    }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
-            }
-            monthPatterns{
-                format{
-                    wide{
-                        leap{"{0} bis"}
-                    }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
-                stand-alone{
-                    wide{
-                        leap{"{0} bis"}
-                    }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
         }
@@ -717,13 +515,38 @@ sc{
                     "a.Inc.",
                     "p.Inc.",
                 }
-                narrow{
-                    "a.Inc.",
-                    "p.Inc.",
-                }
                 wide{
                     "in antis de s’Incarnatzione",
                     "a pustis de s’Incarnatzione",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
             monthNames{
@@ -915,14 +738,6 @@ sc{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            AmPmMarkersAbbr{
-                "AM",
-                "PM",
-            }
             AmPmMarkersNarrow{
                 "m.",
                 "b.",
@@ -989,24 +804,6 @@ sc{
                         "che",
                         "sàb",
                     }
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "G",
-                        "C",
-                        "S",
-                    }
-                    short{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mèr",
-                        "giò",
-                        "che",
-                        "sàb",
-                    }
                     wide{
                         "domìniga",
                         "lunis",
@@ -1018,15 +815,6 @@ sc{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mèr",
-                        "giò",
-                        "che",
-                        "sàb",
-                    }
                     narrow{
                         "D",
                         "L",
@@ -1035,40 +823,6 @@ sc{
                         "G",
                         "C",
                         "S",
-                    }
-                    short{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mèr",
-                        "giò",
-                        "che",
-                        "sàb",
-                    }
-                    wide{
-                        "domìniga",
-                        "lunis",
-                        "martis",
-                        "mèrcuris",
-                        "giòbia",
-                        "chenàbura",
-                        "sàbadu",
-                    }
-                }
-            }
-            dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"AM"}
-                        pm{"PM"}
-                    }
-                    narrow{
-                        am{"AM"}
-                        pm{"PM"}
-                    }
-                    wide{
-                        am{"AM"}
-                        pm{"PM"}
                     }
                 }
             }
@@ -1200,20 +954,6 @@ sc{
                         "stA",
                         "nad",
                     }
-                    narrow{
-                        "G",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "L",
-                        "T",
-                        "A",
-                        "C",
-                        "S",
-                        "S",
-                        "N",
-                    }
                     wide{
                         "ghennàrgiu",
                         "freàrgiu",
@@ -1230,20 +970,6 @@ sc{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "ghe",
-                        "fre",
-                        "mar",
-                        "abr",
-                        "maj",
-                        "làm",
-                        "trì",
-                        "aus",
-                        "cab",
-                        "stG",
-                        "stA",
-                        "nad",
-                    }
                     narrow{
                         "G",
                         "F",
@@ -1257,20 +983,6 @@ sc{
                         "S",
                         "S",
                         "N",
-                    }
-                    wide{
-                        "ghennàrgiu",
-                        "freàrgiu",
-                        "martzu",
-                        "abrile",
-                        "maju",
-                        "làmpadas",
-                        "trìulas",
-                        "austu",
-                        "cabudanni",
-                        "santugaine",
-                        "santandria",
-                        "nadale",
                     }
                 }
             }
@@ -1281,32 +993,6 @@ sc{
                         "T2",
                         "T3",
                         "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1u trimestre",
-                        "2u trimestre",
-                        "3u trimestre",
-                        "4u trimestre",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
                     }
                     wide{
                         "1u trimestre",
@@ -1322,11 +1008,37 @@ sc{
                 abbreviated{
                     "a.m.",
                 }
-                narrow{
-                    "a.m.",
-                }
                 wide{
                     "annu de su mundu",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
             monthNames{
@@ -1370,6 +1082,35 @@ sc{
             eras{
                 wide{
                     "era Saka",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
             monthNames{
@@ -1417,6 +1158,35 @@ sc{
                     "era de s’Egira",
                 }
             }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1450,16 +1220,73 @@ sc{
                 }
             }
         }
+        japanese{
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+            }
+        }
         persian{
             eras{
                 abbreviated{
                     "a.p.",
                 }
-                narrow{
-                    "a.p.",
-                }
                 wide{
                     "annu persianu",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
             monthNames{
@@ -1504,6 +1331,35 @@ sc{
                 wide{
                     "in antis de sa R.d.T.",
                     "R.d.T.",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h B – h B"}
+                }
+                Bhm{
+                    B{"h:mm B – h:mm B"}
+                }
+                Gy{
+                    G{"G y – G y"}
+                }
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
             }
         }
@@ -1615,51 +1471,13 @@ sc{
                 }
             }
         }
-        day-narrow{
-            dn{"die"}
-            relativeTime{
-                future{
-                    one{"intro de {0} die"}
-                    other{"intro de {0} dies"}
-                }
-                past{
-                    one{"{0} die a como"}
-                    other{"{0} dies a como"}
-                }
-            }
-        }
-        day-short{
-            dn{"die"}
-            relativeTime{
-                future{
-                    one{"intro de {0} die"}
-                    other{"intro de {0} dies"}
-                }
-                past{
-                    one{"{0} die a como"}
-                    other{"{0} dies a como"}
-                }
-            }
-        }
         dayOfYear{
             dn{"die de s’annu"}
         }
         dayperiod{
             dn{"AM/PM"}
         }
-        dayperiod-narrow{
-            dn{"AM/PM"}
-        }
-        dayperiod-short{
-            dn{"AM/PM"}
-        }
         era{
-            dn{"era"}
-        }
-        era-narrow{
-            dn{"era"}
-        }
-        era-short{
             dn{"era"}
         }
         fri{
@@ -1676,23 +1494,6 @@ sc{
                 past{
                     one{"{0} chenàbura a como"}
                     other{"{0} chenàburas a como"}
-                }
-            }
-        }
-        fri-narrow{
-            relative{
-                "-1"{"che. colada"}
-                "0"{"custa che."}
-                "1"{"che. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} che."}
-                    other{"intro de {0} che."}
-                }
-                past{
-                    one{"{0} che. a como"}
-                    other{"{0} che. a como"}
                 }
             }
         }
@@ -1730,10 +1531,6 @@ sc{
             }
         }
         hour-narrow{
-            dn{"ora"}
-            relative{
-                "0"{"cust’ora"}
-            }
             relativeTime{
                 future{
                     one{"intro de {0} o"}
@@ -1742,22 +1539,6 @@ sc{
                 past{
                     one{"{0} o a como"}
                     other{"{0} o a como"}
-                }
-            }
-        }
-        hour-short{
-            dn{"ora"}
-            relative{
-                "0"{"cust’ora"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} ora"}
-                    other{"intro de {0} oras"}
-                }
-                past{
-                    one{"{0} ora a como"}
-                    other{"{0} oras a como"}
                 }
             }
         }
@@ -1778,10 +1559,6 @@ sc{
             }
         }
         minute-narrow{
-            dn{"min."}
-            relative{
-                "0"{"custu minutu"}
-            }
             relativeTime{
                 future{
                     one{"intro de {0} m"}
@@ -1795,9 +1572,6 @@ sc{
         }
         minute-short{
             dn{"min."}
-            relative{
-                "0"{"custu minutu"}
-            }
             relativeTime{
                 future{
                     one{"intro de {0} min."}
@@ -1823,23 +1597,6 @@ sc{
                 past{
                     one{"{0} lunis a como"}
                     other{"{0} lunis a como"}
-                }
-            }
-        }
-        mon-narrow{
-            relative{
-                "-1"{"lun. coladu"}
-                "0"{"custu lun."}
-                "1"{"lun. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} lun."}
-                    other{"intro de {0} lun."}
-                }
-                past{
-                    one{"{0} lun. a como"}
-                    other{"{0} lun. a como"}
                 }
             }
         }
@@ -1878,40 +1635,6 @@ sc{
                 }
             }
         }
-        month-narrow{
-            relative{
-                "-1"{"su mese coladu"}
-                "0"{"custu mese"}
-                "1"{"su mese chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} mese"}
-                    other{"intro de {0} meses"}
-                }
-                past{
-                    one{"{0} mese a como"}
-                    other{"{0} meses a como"}
-                }
-            }
-        }
-        month-short{
-            relative{
-                "-1"{"su mese coladu"}
-                "0"{"custu mese"}
-                "1"{"su mese chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} mese"}
-                    other{"intro de {0} meses"}
-                }
-                past{
-                    one{"{0} mese a como"}
-                    other{"{0} meses a como"}
-                }
-            }
-        }
         quarter{
             dn{"trimestre"}
             relative{
@@ -1927,24 +1650,6 @@ sc{
                 past{
                     one{"{0} trimestre a como"}
                     other{"{0} trimestres a como"}
-                }
-            }
-        }
-        quarter-narrow{
-            dn{"trim."}
-            relative{
-                "-1"{"su trim. coladu"}
-                "0"{"custu trim."}
-                "1"{"su trim. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} trim."}
-                    other{"intro de {0} trim."}
-                }
-                past{
-                    one{"{0} trim. a como"}
-                    other{"{0} trim. a como"}
                 }
             }
         }
@@ -1983,23 +1688,6 @@ sc{
                 }
             }
         }
-        sat-narrow{
-            relative{
-                "-1"{"sàb. coladu"}
-                "0"{"custu sàb."}
-                "1"{"sàb. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} sàb."}
-                    other{"intro de {0} sàb."}
-                }
-                past{
-                    one{"{0} sàb. a como"}
-                    other{"{0} sàb. a como"}
-                }
-            }
-        }
         sat-short{
             relative{
                 "-1"{"sàb. coladu"}
@@ -2034,10 +1722,6 @@ sc{
             }
         }
         second-narrow{
-            dn{"seg."}
-            relative{
-                "0"{"como"}
-            }
             relativeTime{
                 future{
                     one{"intro de {0} s"}
@@ -2051,9 +1735,6 @@ sc{
         }
         second-short{
             dn{"seg."}
-            relative{
-                "0"{"como"}
-            }
             relativeTime{
                 future{
                     one{"intro de {0} seg."}
@@ -2079,23 +1760,6 @@ sc{
                 past{
                     one{"{0} domìniga a como"}
                     other{"{0} domìnigas a como"}
-                }
-            }
-        }
-        sun-narrow{
-            relative{
-                "-1"{"dom. colada"}
-                "0"{"custa dom."}
-                "1"{"dom. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} dom."}
-                    other{"intro de {0} dom."}
-                }
-                past{
-                    one{"{0} dom. a como"}
-                    other{"{0} dom. a como"}
                 }
             }
         }
@@ -2133,23 +1797,6 @@ sc{
                 }
             }
         }
-        thu-narrow{
-            relative{
-                "-1"{"giò. colada"}
-                "0"{"custa giò."}
-                "1"{"giò. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} giò."}
-                    other{"intro de {0} giò."}
-                }
-                past{
-                    one{"{0} giò. a como"}
-                    other{"{0} giò. a como"}
-                }
-            }
-        }
         thu-short{
             relative{
                 "-1"{"giò. colada"}
@@ -2184,23 +1831,6 @@ sc{
                 }
             }
         }
-        tue-narrow{
-            relative{
-                "-1"{"mar. coladu"}
-                "0"{"custu mar."}
-                "1"{"mar. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} mar."}
-                    other{"intro de {0} mar."}
-                }
-                past{
-                    one{"{0} mar. a como"}
-                    other{"{0} mar. a como"}
-                }
-            }
-        }
         tue-short{
             relative{
                 "-1"{"mar. coladu"}
@@ -2232,23 +1862,6 @@ sc{
                 past{
                     one{"{0} mèrcuris a como"}
                     other{"{0} mèrcuris a como"}
-                }
-            }
-        }
-        wed-narrow{
-            relative{
-                "-1"{"mèr. coladu"}
-                "0"{"custu mèr."}
-                "1"{"mèr. chi intrat"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} mèr."}
-                    other{"intro de {0} mèr."}
-                }
-                past{
-                    one{"{0} mèr. a como"}
-                    other{"{0} mèr. a como"}
                 }
             }
         }
@@ -2288,33 +1901,8 @@ sc{
                 }
             }
         }
-        week-narrow{
-            dn{"ch."}
-            relative{
-                "-1"{"sa chida colada"}
-                "0"{"custa chida"}
-                "1"{"sa chida chi intrat"}
-            }
-            relativePeriod{"sa chida de {0}"}
-            relativeTime{
-                future{
-                    one{"intro de {0} ch."}
-                    other{"intro de {0} ch."}
-                }
-                past{
-                    one{"{0} ch. a como"}
-                    other{"{0} ch. a como"}
-                }
-            }
-        }
         week-short{
             dn{"ch."}
-            relative{
-                "-1"{"sa chida colada"}
-                "0"{"custa chida"}
-                "1"{"sa chida chi intrat"}
-            }
-            relativePeriod{"sa chida de {0}"}
             relativeTime{
                 future{
                     one{"intro de {0} ch."}
@@ -2329,17 +1917,11 @@ sc{
         weekOfMonth{
             dn{"chida de su mese"}
         }
-        weekOfMonth-narrow{
-            dn{"ch. de su mese"}
-        }
         weekOfMonth-short{
             dn{"ch. de su mese"}
         }
         weekday{
             dn{"die de sa chida"}
-        }
-        weekday-narrow{
-            dn{"die de sa ch."}
         }
         weekday-short{
             dn{"die de sa ch."}
@@ -2365,47 +1947,8 @@ sc{
                 }
             }
         }
-        year-narrow{
-            dn{"annu"}
-            relative{
-                "-1"{"ocannu coladu"}
-                "0"{"ocannu"}
-                "1"{"ocannu chi benit"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} annu"}
-                    other{"intro de {0} annos"}
-                }
-                past{
-                    one{"{0} annu a como"}
-                    other{"{0} annos a como"}
-                }
-            }
-        }
-        year-short{
-            dn{"annu"}
-            relative{
-                "-1"{"ocannu coladu"}
-                "0"{"ocannu"}
-                "1"{"ocannu chi benit"}
-            }
-            relativeTime{
-                future{
-                    one{"intro de {0} annu"}
-                    other{"intro de {0} annos"}
-                }
-                past{
-                    one{"{0} annu a como"}
-                    other{"{0} annos a como"}
-                }
-            }
-        }
         zone{
             dn{"fusu oràriu"}
-        }
-        zone-narrow{
-            dn{"fusu"}
         }
         zone-short{
             dn{"fusu"}
@@ -2416,25 +1959,7 @@ sc{
             2{"{0} o {1}"}
             end{"{0} o {1}"}
         }
-        or-narrow{
-            2{"{0} o {1}"}
-            end{"{0} o {1}"}
-        }
-        or-short{
-            2{"{0} o {1}"}
-            end{"{0} o {1}"}
-        }
         standard{
-            2{"{0} e {1}"}
-            end{"{0} e {1}"}
-        }
-        standard-narrow{
-            end{"{0} e {1}"}
-        }
-        standard-short{
-            end{"{0} e {1}"}
-        }
-        unit{
             2{"{0} e {1}"}
             end{"{0} e {1}"}
         }
@@ -2443,10 +1968,6 @@ sc{
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
-        }
-        unit-short{
-            2{"{0} e {1}"}
-            end{"{0} e {1}"}
         }
     }
     measurementSystemNames{
@@ -2460,19 +1981,25 @@ sc{
                 "und",
                 "sc",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
-            givenFirst-long-addressing-formal{"{prefix} {surname}"}
+            givenFirst-long-addressing-formal{"{title} {surname}"}
             givenFirst-long-addressing-informal{"{given-informal}"}
             givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
-            givenFirst-long-referring-formal{"{prefix} {given} {given2} {surname} {surname2}"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {surname2}"}
             givenFirst-long-referring-informal{"{given-informal} {surname}"}
-            givenFirst-medium-addressing-formal{"{prefix} {surname}"}
+            givenFirst-medium-addressing-formal{"{title} {surname}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
-            givenFirst-medium-referring-formal{"{prefix} {given} {given2-initial} {surname} {surname2}"}
+            givenFirst-medium-referring-formal{"{title} {given} {given2-initial} {surname} {surname2}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
-            givenFirst-short-addressing-formal{"{prefix} {surname}"}
+            givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
             givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
@@ -2484,18 +2011,18 @@ sc{
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
             sorting-short-referring-formal{"{surname-prefix} {surname-core}, {given-initial} {given2-initial}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
-            surnameFirst-long-addressing-formal{"{prefix} {surname} {surname2}"}
+            surnameFirst-long-addressing-formal{"{title} {surname} {surname2}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
-            surnameFirst-long-referring-formal{"{surname} {surname2} {given} {given2} {suffix}"}
+            surnameFirst-long-referring-formal{"{credentials} {title} {surname} {surname2} {given} {given2}"}
             surnameFirst-long-referring-informal{"{surname} {given-informal}"}
-            surnameFirst-medium-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-medium-addressing-formal{"{title} {surname}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
             surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-medium-referring-formal{"{surname} {surname2} {prefix} {given} {given2-initial} {suffix}"}
+            surnameFirst-medium-referring-formal{"{surname} {surname2} {title} {given} {given2-initial}, {credentials}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
-            surnameFirst-short-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-short-addressing-formal{"{title} {surname}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}

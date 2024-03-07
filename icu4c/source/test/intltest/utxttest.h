@@ -29,7 +29,7 @@ public:
     UTextTest();
     virtual ~UTextTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
     void TextTest();
     void ErrorTest();
     void FreezeTest();
@@ -39,6 +39,7 @@ public:
     void Ticket10983();
     void Ticket12130();
     void Ticket13344();
+    void AccessChangesChunkSize();
 
 private:
     struct m {                              // Map between native indices & code points.

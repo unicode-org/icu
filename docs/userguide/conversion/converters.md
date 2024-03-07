@@ -350,7 +350,7 @@ UConverter* newCnv = ucnv_safeClone(oldCnv, 0, &bufferSize, &err)
 
 3.  In conversions to Unicode from Multi-byte encodings or conversions from
     Unicode involving surrogates, if (a) only a partial byte sequence is
-    retrieved from the source buffer, (b) the "flush" parameter is set to "TRUE"
+    retrieved from the source buffer, (b) the "flush" parameter is set to "true"
     and (c) the end of source is reached, then the callback is called with
     `U_TRUNCATED_CHAR_FOUND`.
 
@@ -368,7 +368,7 @@ calling:
     direction.
 
 The converters are reset implicitly when the conversion functions are called
-with the "flush" parameter set to "TRUE" and the source is consumed.
+with the "flush" parameter set to "true" and the source is consumed.
 
 ### Error
 
@@ -774,12 +774,12 @@ can be used.
 In such a scenario, the inner write does not occur unless a buffer overflow
 occurs OR 'flush' is true. So, the 'write' and resetting of the target and
 targetLimit pointers would only happen
-`if (err == U_BUFFER_OVERFLOW_ERROR || flush == TRUE)`
+`if (err == U_BUFFER_OVERFLOW_ERROR || flush == true)`
 
-The flush parameter on each conversion call should be set to FALSE, until the
+The flush parameter on each conversion call should be set to false, until the
 conversion call is called for the last time for the buffer. This is because the
 conversion is stateful. On the last conversion call, the flush parameter should
-be set to TRUE. More details are mentioned in the API reference in
+be set to true. More details are mentioned in the API reference in
 [ucnv.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
 ### 4. Pre-flighting

@@ -13,9 +13,9 @@
 
 TestData::TestData(const char* testName)
 : name(testName),
-fInfo(NULL),
-fCurrSettings(NULL),
-fCurrCase(NULL),
+fInfo(nullptr),
+fCurrSettings(nullptr),
+fCurrCase(nullptr),
 fSettingsSize(0),
 fCasesSize(0),
 fCurrentSettings(0),
@@ -25,13 +25,13 @@ fCurrentCase(0)
 }
 
 TestData::~TestData() {
-  if(fInfo != NULL) {
+  if(fInfo != nullptr) {
     delete fInfo;
   }
-  if(fCurrSettings != NULL) {
+  if(fCurrSettings != nullptr) {
     delete fCurrSettings;
   }
-  if(fCurrCase != NULL) {
+  if(fCurrCase != nullptr) {
     delete fCurrCase;
   }
 }
@@ -45,10 +45,10 @@ const char * TestData::getName() const
 
 RBTestData::RBTestData(const char* testName)
 : TestData(testName),
-fData(NULL),
-fHeaders(NULL),
-fSettings(NULL),
-fCases(NULL)
+fData(nullptr),
+fHeaders(nullptr),
+fSettings(nullptr),
+fCases(nullptr)
 {
 }
 
@@ -56,26 +56,26 @@ RBTestData::RBTestData(UResourceBundle *data, UResourceBundle *headers, UErrorCo
 : TestData(ures_getKey(data)),
 fData(data),
 fHeaders(headers),
-fSettings(NULL),
-fCases(NULL)
+fSettings(nullptr),
+fCases(nullptr)
 {
   UErrorCode intStatus = U_ZERO_ERROR;
-  UResourceBundle *currHeaders = ures_getByKey(data, "Headers", NULL, &intStatus);
+  UResourceBundle *currHeaders = ures_getByKey(data, "Headers", nullptr, &intStatus);
   if(intStatus == U_ZERO_ERROR) {
     ures_close(fHeaders);
     fHeaders = currHeaders;
   } else {
     intStatus = U_ZERO_ERROR;
   }
-  fSettings = ures_getByKey(data, "Settings", NULL, &intStatus);
+  fSettings = ures_getByKey(data, "Settings", nullptr, &intStatus);
   fSettingsSize = ures_getSize(fSettings);
-  UResourceBundle *info = ures_getByKey(data, "Info", NULL, &intStatus);
+  UResourceBundle *info = ures_getByKey(data, "Info", nullptr, &intStatus);
   if(U_SUCCESS(intStatus)) {
     fInfo = new RBDataMap(info, status);
   } else {
     intStatus = U_ZERO_ERROR;
   }
-  fCases = ures_getByKey(data, "Cases", NULL, &status);
+  fCases = ures_getByKey(data, "Cases", nullptr, &status);
   fCasesSize = ures_getSize(fCases);
 
   ures_close(info);
@@ -94,50 +94,50 @@ UBool RBTestData::getInfo(const DataMap *& info, UErrorCode &/*status*/) const
 {
   if(fInfo) {
     info = fInfo;
-    return TRUE;
+    return true;
   } else {
-    info = NULL;
-    return FALSE;
+    info = nullptr;
+    return false;
   }
 }
 
 UBool RBTestData::nextSettings(const DataMap *& settings, UErrorCode &status)
 {
   UErrorCode intStatus = U_ZERO_ERROR;
-  UResourceBundle *data = ures_getByIndex(fSettings, fCurrentSettings++, NULL, &intStatus);
+  UResourceBundle *data = ures_getByIndex(fSettings, fCurrentSettings++, nullptr, &intStatus);
   if(U_SUCCESS(intStatus)) {
     // reset the cases iterator
     fCurrentCase = 0;
-    if(fCurrSettings == NULL) {
+    if(fCurrSettings == nullptr) {
       fCurrSettings = new RBDataMap(data, status);
     } else {
       ((RBDataMap *)fCurrSettings)->init(data, status);
     }
     ures_close(data);
     settings = fCurrSettings;
-    return TRUE;
+    return true;
   } else {
-    settings = NULL;
-    return FALSE;
+    settings = nullptr;
+    return false;
   }
 }
 
 UBool RBTestData::nextCase(const DataMap *& nextCase, UErrorCode &status)
 {
   UErrorCode intStatus = U_ZERO_ERROR;
-  UResourceBundle *currCase = ures_getByIndex(fCases, fCurrentCase++, NULL, &intStatus);
+  UResourceBundle *currCase = ures_getByIndex(fCases, fCurrentCase++, nullptr, &intStatus);
   if(U_SUCCESS(intStatus)) {
-    if(fCurrCase == NULL) {
+    if(fCurrCase == nullptr) {
       fCurrCase = new RBDataMap(fHeaders, currCase, status);
     } else {
       ((RBDataMap *)fCurrCase)->init(fHeaders, currCase, status);
     }
     ures_close(currCase);
     nextCase = fCurrCase;
-    return TRUE;
+    return true;
   } else {
-    nextCase = NULL;
-    return FALSE;
+    nextCase = nullptr;
+    return false;
   }
 }
 

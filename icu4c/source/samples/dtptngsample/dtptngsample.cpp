@@ -41,7 +41,7 @@ static void getBestPatternExample() {
 
     const char* filename = "sample.txt";
     /* open a UTF-8 file for writing */
-    UFILE* f = u_fopen(filename, "w", NULL,"UTF-8");
+    UFILE* f = u_fopen(filename, "w", nullptr,"UTF-8");
     UnicodeString dateReturned;
     UErrorCode status =U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
@@ -121,7 +121,7 @@ static void replaceFieldTypesExample() {
        u_printf(" Use replaceFieldTypes API to replace zone 'zzzz' with 'vvvv'\n");
        u_printf("========================================================================\n");
        //! [replaceFieldTypesExample]
-        UFILE *out = u_finit(stdout, NULL, "UTF-8");
+        UFILE *out = u_finit(stdout, nullptr, "UTF-8");
         UErrorCode status =U_ZERO_ERROR;
         UnicodeString pattern,dateReturned;
         Locale locale =Locale::getFrance();

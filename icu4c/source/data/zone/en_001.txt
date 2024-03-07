@@ -27,6 +27,9 @@ en_001{
         "Atlantic:St_Helena"{
             ec{"St Helena"}
         }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+        }
         "Pacific:Honolulu"{
             sd{"∅∅∅"}
             sg{"∅∅∅"}

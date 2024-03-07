@@ -21,14 +21,14 @@
 
 class IdnaConfTest: public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
     IdnaConfTest();
     virtual ~IdnaConfTest();
 private:
-    void Test(void);
+    void Test();
 
     // for test file handling
-    UChar* base;
+    char16_t* base;
     int len ;
     int curOffset;
 

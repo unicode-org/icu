@@ -140,6 +140,7 @@
 # CLDR path to emit values in different places in an array.
 
 # Time patterns (4 x values)
+# (Entries with alt="*" on pattern are ignored)
 //ldml/dates/calendars/calendar[@type="(%A)"]/(timeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns
 
@@ -207,6 +208,7 @@
 
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/appendItems/appendItem[@request="(%A)"] ; /calendar/$1/appendItems/$2
 
+# (Entries with alt="*" on dateFormatItem are ignored)
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/availableFormats/dateFormatItem[@id="(%A)"]                ; /calendar/$1/availableFormats/$2
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/availableFormats/dateFormatItem[@id="(%A)"][@count="(%A)"] ; /calendar/$1/availableFormats/$2/$3
 
@@ -354,11 +356,19 @@
 //ldml/personNames/foreignSpaceReplacement[@xml:space="(%A)"]              ; /personNames/foreignSpaceReplacement
 //ldml/personNames/foreignSpaceReplacement[@alt="(%A)"] ; /personNames/foreignSpaceReplacement%$1
 //ldml/personNames/foreignSpaceReplacement              ; /personNames/foreignSpaceReplacement
+//ldml/personNames/nativeSpaceReplacement[@xml:space="(%A)"][@alt="(%A)"] ; /personNames/nativeSpaceReplacement%$2
+//ldml/personNames/nativeSpaceReplacement[@xml:space="(%A)"]              ; /personNames/nativeSpaceReplacement
+//ldml/personNames/nativeSpaceReplacement[@alt="(%A)"] ; /personNames/nativeSpaceReplacement%$1
+//ldml/personNames/nativeSpaceReplacement              ; /personNames/nativeSpaceReplacement
 //ldml/personNames/initialPattern[@type="(%A)"][@alt="(%A)"] ; /personNames/initialPattern/$1%$2
 //ldml/personNames/initialPattern[@type="(%A)"]              ; /personNames/initialPattern/$1
+//ldml/personNames/parameterDefault[@parameter="(%A)"][@alt="(%A)"] ; /personNames/parameterDefault/$1%$2
+//ldml/personNames/parameterDefault[@parameter="(%A)"]              ; /personNames/parameterDefault/$1
 //ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern ;           /personNames/namePattern/$1-$2-$3-$4
 //ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="1"] ; /personNames/namePattern/$1-$2-$3-$4
 //ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="2"] ; /personNames/namePattern/$1-$2-$3-$4
+//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/alias[@source="locale"][@path="../personName[@order='(%A)'][@length='(%A)'][@usage='(%A)'][@formality='(%A)']"]
+     ; /personNames/namePattern/$1-$2-$3-$4:alias ; values=/LOCALE/personNames/namePattern/$5-$6-$7-$8
 
 # Misc
 

@@ -36,13 +36,13 @@
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("Test Failure at file %s, line %d: \"%s\" is false.", __FILE__, __LINE__, #expr); \
     } \
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT_MSG(expr, msg) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         dataerrln("Test Failure at file %s, line %d, %s: \"%s\" is false.", __FILE__, __LINE__, msg, #expr); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -95,6 +95,7 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testSpoofAPI);
     TESTCASE_AUTO(testSkeleton);
+    TESTCASE_AUTO(testBidiSkeleton);
     TESTCASE_AUTO(testAreConfusable);
     TESTCASE_AUTO(testInvisible);
     TESTCASE_AUTO(testConfData);
@@ -140,12 +141,27 @@ void IntlTestSpoof::testSpoofAPI() {
         TEST_ASSERT(UnicodeString("lllOO") == dest);
         TEST_ASSERT(&dest == &retStr);
     TEST_TEARDOWN;
+
+    TEST_SETUP
+        // Example from UTS #55, Section 5.1.3 https://www.unicode.org/reports/tr55/#General-Security-Profile
+        // of a minimal pair with a ZWNJ in Persian.
+        const UnicodeString behrooz(u"بهروز");
+        const UnicodeString update(u"به‌روز");
+        // These strings differ only by a ZWNJ.
+        TEST_ASSERT(UnicodeString(update).findAndReplace(u"\u200C", u"") == behrooz);
+        int32_t checkResults = uspoof_areConfusableUnicodeString(sc, behrooz, update, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, checkResults);
+    TEST_TEARDOWN;
 }
 
+#define CHECK_SKELETON(type, input, expected)                                                           \
+    UPRV_BLOCK_MACRO_BEGIN { checkSkeleton(sc, type, input, expected, __LINE__); }                      \
+    UPRV_BLOCK_MACRO_END
 
-#define CHECK_SKELETON(type, input, expected) UPRV_BLOCK_MACRO_BEGIN { \
-    checkSkeleton(sc, type, input, expected, __LINE__); \
-} UPRV_BLOCK_MACRO_END
+#define CHECK_BIDI_SKELETON(type, input, expected)                                                           \
+    UPRV_BLOCK_MACRO_BEGIN { checkBidiSkeleton(sc, type, input, expected, __LINE__); }                      \
+    UPRV_BLOCK_MACRO_END
 
 
 // testSkeleton.   Spot check a number of confusable skeleton substitutions from the 
@@ -215,6 +231,15 @@ void IntlTestSpoof::testSkeleton() {
     TEST_TEARDOWN;
 }
 
+void IntlTestSpoof::testBidiSkeleton() {
+    TEST_SETUP
+    CHECK_BIDI_SKELETON(u"A1<שׂ", UBIDI_LTR, u"Al<ש\u0307");
+    CHECK_BIDI_SKELETON(u"Αשֺ>1", UBIDI_LTR, u"Al<ש\u0307");
+    CHECK_BIDI_SKELETON(u"A1<שׂ", UBIDI_RTL, u"ש\u0307>Al");
+    CHECK_BIDI_SKELETON(u"Αשֺ>1", UBIDI_RTL, u"l<ש\u0307A");
+    TEST_TEARDOWN;
+}
+
 
 //
 //  Run a single confusable skeleton transformation test case.
@@ -240,6 +265,31 @@ void IntlTestSpoof::checkSkeleton(const USpoofChecker *sc, uint32_t type,
     }
 }
 
+//
+//  Run a single confusable bidiSkeleton transformation test case.
+//
+void IntlTestSpoof::checkBidiSkeleton(const USpoofChecker *sc, const UnicodeString &input,
+                                      UBiDiDirection direction, const UnicodeString &expected,
+                                      int32_t lineNum) {
+    UnicodeString uInput = input.unescape();
+    UnicodeString uExpected = expected.unescape();
+
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString actual;
+    uspoof_getBidiSkeletonUnicodeString(sc, direction, uInput, actual, &status);
+    if (U_FAILURE(status)) {
+        errln("File %s, Line %d, Test case from line %d, status is %s", __FILE__, __LINE__, lineNum,
+              u_errorName(status));
+        return;
+    }
+    if (uExpected != actual) {
+        errln("File %s, Line %d, Test case from line %d, Actual and Expected skeletons differ.",
+              __FILE__, __LINE__, lineNum);
+        errln(UnicodeString(" Actual   Skeleton: \"") + actual + UnicodeString("\"\n") +
+              UnicodeString(" Expected Skeleton: \"") + uExpected + UnicodeString("\""));
+    }
+}
+
 void IntlTestSpoof::testAreConfusable() {
     TEST_SETUP
         UnicodeString s1("A long string that will overflow stack buffers.  A long string that will overflow stack buffers. "
@@ -247,6 +297,20 @@ void IntlTestSpoof::testAreConfusable() {
         UnicodeString s2("A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. "
                          "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. ");
         int32_t result = uspoof_areConfusableUnicodeString(sc, s1, s2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, result);
+
+    TEST_TEARDOWN;
+}
+
+void IntlTestSpoof::testAreBidiConfusable() {
+    TEST_SETUP
+        const UnicodeString jHyphen2(u"J-2");
+        // The following string has RLMs around the 2–, flipping it; it uses an
+        // EN DASH instead of the HYPHEN-MINUS above.
+        const UnicodeString j2Dash(u"J\u200F2\u2013\u200F");
+        TEST_ASSERT(j2Dash == u"J‏2–‏");
+        int32_t result = uspoof_areBidiConfusableUnicodeString(sc, UBIDI_LTR, jHyphen2, j2Dash, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, result);
 
@@ -293,7 +357,7 @@ static UnicodeString parseHex(const UnicodeString &in) {
     UnicodeString result;
     UChar32 cc = 0;
     for (int32_t i=0; i<in.length(); i++) {
-        UChar c = in.charAt(i);
+        char16_t c = in.charAt(i);
         if (c == 0x20) {   // Space
             if (cc > 0) {
                result.append(cc);
@@ -320,18 +384,18 @@ static UnicodeString parseHex(const UnicodeString &in) {
 // Minimum of 4 digits, no leading zeroes for positions 5 and up.
 //
 static void appendHexUChar(UnicodeString &dest, UChar32 c) {
-    UBool   doZeroes = FALSE;    
+    UBool   doZeroes = false;    
     for (int bitNum=28; bitNum>=0; bitNum-=4) {
         if (bitNum <= 12) {
-            doZeroes = TRUE;
+            doZeroes = true;
         }
         int hexDigit = (c>>bitNum) & 0x0f;
         if (hexDigit != 0 || doZeroes) {
-            doZeroes = TRUE;
-            dest.append((UChar)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
+            doZeroes = true;
+            dest.append((char16_t)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
         }
     }
-    dest.append((UChar)0x20);
+    dest.append((char16_t)0x20);
 }
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
@@ -341,7 +405,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 //
 void IntlTestSpoof::testConfData() {
     char buffer[2000];
-    if (getUnidataPath(buffer) == NULL) {
+    if (getUnidataPath(buffer) == nullptr) {
         errln("Skipping test spoof/testConfData. Unable to find path to source/data/unidata/.");
         return;
     }
@@ -384,9 +448,16 @@ void IntlTestSpoof::testConfData() {
             continue;
         }
 
+        if (u_hasBinaryProperty(from.char32At(0), UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
+            // The source character is a default ignorable code point.
+            // Skip this case; the second step in obtaining a skeleton is to remove DIs,
+            // so the mapping in this line of confusables.txt will never be applied.
+            continue;
+        }
+
         UnicodeString rawExpected = parseHex(parseLine.group(2, status));
         UnicodeString expected;
-        Normalizer::decompose(rawExpected, FALSE /*NFD*/, 0, expected, status);
+        Normalizer::decompose(rawExpected, false /*NFD*/, 0, expected, status);
         TEST_ASSERT_SUCCESS(status);
 
         int32_t skeletonType = 0;
@@ -440,7 +511,7 @@ void IntlTestSpoof::testScriptSet() {
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(!(s1 == s2));
     TEST_ASSERT(s1.test(USCRIPT_ARABIC, status));
-    TEST_ASSERT(s1.test(USCRIPT_GREEK, status) == FALSE);
+    TEST_ASSERT(s1.test(USCRIPT_GREEK, status) == false);
 
     status = U_ZERO_ERROR;
     s1.reset(USCRIPT_ARABIC, status);
@@ -512,7 +583,7 @@ void IntlTestSpoof::testScriptSet() {
           case 1: TEST_ASSERT_EQ(USCRIPT_VAI, n); break;
           case 2: TEST_ASSERT_EQ(USCRIPT_AFAKA, n); break;
           case 3: TEST_ASSERT_EQ(-1, (int32_t)n); break;
-          default: TEST_ASSERT(FALSE);
+          default: TEST_ASSERT(false);
         }
     }
     TEST_ASSERT_SUCCESS(status);
@@ -596,14 +667,14 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setAllowedChars(sc, allowedChars.toUSet(), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             uspoof_setChecks(sc, USPOOF_RESTRICTION_LEVEL, &status);
-            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, nullptr, &status);
             
             // we want to fail if the text is (say) MODERATE and the testLevel is ASCII
             int32_t expectedValue = 0;
             if (expectedLevel > levelSetInSpoofChecker) {
                 expectedValue |= USPOOF_RESTRICTION_LEVEL;
             }
-            sprintf(msgBuffer, "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
+            snprintf(msgBuffer, sizeof(msgBuffer), "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
                     testNum, levelIndex, expectedValue, actualValue);
             TEST_ASSERT_MSG(expectedValue == actualValue, msgBuffer);
             TEST_ASSERT_SUCCESS(status);
@@ -613,7 +684,7 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setAllowedChars(sc, allowedChars.toUSet(), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             uspoof_setChecks(sc, USPOOF_AUX_INFO | USPOOF_RESTRICTION_LEVEL, &status);
-            int32_t result = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            int32_t result = uspoof_checkUnicodeString(sc, testString, nullptr, &status);
             TEST_ASSERT_SUCCESS(status);
             if (U_SUCCESS(status)) {
                 TEST_ASSERT_EQ(expectedLevel, result & USPOOF_RESTRICTION_LEVEL_MASK);
@@ -647,7 +718,7 @@ void IntlTestSpoof::testMixedNumbers() {
     UErrorCode status = U_ZERO_ERROR;
     for (int32_t testNum=0; testNum < UPRV_LENGTHOF(tests); testNum++) {
         char msgBuf[100];
-        sprintf(msgBuf, "testNum = %d ", testNum);
+        snprintf(msgBuf, sizeof(msgBuf), "testNum = %d ", testNum);
         Test &test = tests[testNum];
 
         status = U_ZERO_ERROR;
@@ -692,7 +763,7 @@ void IntlTestSpoof::testBug12825() {
     TEST_ASSERT_SUCCESS(status);
     uspoof_setChecks(sc.getAlias(), USPOOF_ALL_CHECKS | USPOOF_AUX_INFO, &status);
     TEST_ASSERT_SUCCESS(status);
-    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), NULL, &status);
+    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
 }
 

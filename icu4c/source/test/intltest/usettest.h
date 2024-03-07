@@ -34,7 +34,7 @@ public:
     ~UnicodeSetTest();
 
 private:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     void Testj2268();
 
@@ -44,42 +44,44 @@ private:
      */
     void TestToPattern();
     
-    void TestPatterns(void);
-    void TestCategories(void);
-    void TestAddRemove(void);
-    void TestCloneEqualHash(void);
+    void TestPatterns();
+    void TestCategories();
+    void TestAddRemove();
+    void TestCloneEqualHash();
 
     /**
      * Make sure minimal representation is maintained.
      */
-    void TestMinimalRep(void);
+    void TestMinimalRep();
 
-    void TestAPI(void);
+    void TestAPI();
 
-    void TestIteration(void);
+    void TestIteration();
 
-    void TestStrings(void);
+    void TestStrings();
 
-    void TestScriptSet(void);
+    void TestScriptSet();
 
     /**
      * Test the [:Latin:] syntax.
      */
-    void TestPropertySet(void);
+    void TestPropertySet();
 
-    void TestClone(void);
+    void TestClone();
 
-    void TestIndexOf(void);
+    void TestIndexOf();
 
-    void TestExhaustive(void);
+    void TestExhaustive();
 
-    void TestCloseOver(void);
+    void TestCloseOver();
+    void TestCloseOverSimpleCaseFolding();
+    void TestCloseOverLargeSets();
 
-    void TestEscapePattern(void);
+    void TestEscapePattern();
 
-    void TestInvalidCodePoint(void);
+    void TestInvalidCodePoint();
 
-    void TestSymbolTable(void);
+    void TestSymbolTable();
 
     void TestSurrogate();
 
@@ -188,7 +190,7 @@ private:
                   uint32_t whichSpans,
                   const char *testName, int32_t index);
     void testSpanBothUTFs(const UnicodeSetWithStrings *sets[4],
-                          const UChar *s16, int32_t length16,
+                          const char16_t *s16, int32_t length16,
                           uint32_t whichSpans,
                           const char *testName, int32_t index);
     void testSpanContents(const UnicodeSetWithStrings *sets[4], uint32_t whichSpans, const char *testName);

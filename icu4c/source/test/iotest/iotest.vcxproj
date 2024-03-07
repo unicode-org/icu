@@ -34,7 +34,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\tools\ctestfw;..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
       <PrecompiledHeaderOutputFile>$(OutDir)\iotest.pch</PrecompiledHeaderOutputFile>
@@ -72,7 +71,6 @@
     <ClCompile Include="filetst.c" />
     <ClCompile Include="iotest.cpp" />
     <ClCompile Include="stream.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="strtst.c" />
     <ClCompile Include="trnstst.c" />

@@ -330,7 +330,6 @@ public:
     const UnicodeString& getDateTimeFormat() const;
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
     /**
      * dateTimeFormats are message patterns used to compose combinations of date
      * and time patterns. There are four length styles, corresponding to the
@@ -351,7 +350,7 @@ public:
      *              in/out parameter; if no failure status is already set,
      *              it will be set according to result of the function (e.g.
      *              U_ILLEGAL_ARGUMENT_ERROR for style out of range).
-     * @draft ICU 71
+     * @stable ICU 71
      */
     void setDateTimeFormat(UDateFormatStyle style, const UnicodeString& dateTimeFormat,
                             UErrorCode& status);
@@ -371,11 +370,10 @@ public:
      *              or the contents of the string, may no longer be valid if
      *              setDateTimeFormat is called, or the DateTimePatternGenerator
      *              object is deleted.
-     * @draft ICU 71
+     * @stable ICU 71
      */
     const UnicodeString& getDateTimeFormat(UDateFormatStyle style,
                             UErrorCode& status) const;
-#endif /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
     /**
@@ -573,7 +571,7 @@ public:
      *
      * @stable ICU 3.8
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID();
 
 private:
     /**
@@ -658,9 +656,9 @@ private:
     static void U_CALLCONV loadAllowedHourFormatsData(UErrorCode &status);
     void getAllowedHourFormats(const Locale &locale, UErrorCode &status);
 
-    struct AppendItemFormatsSink;
-    struct AppendItemNamesSink;
-    struct AvailableFormatsSink;
+    struct U_HIDDEN AppendItemFormatsSink;
+    struct U_HIDDEN AppendItemNamesSink;
+    struct U_HIDDEN AvailableFormatsSink;
 } ;// end class DateTimePatternGenerator
 
 U_NAMESPACE_END

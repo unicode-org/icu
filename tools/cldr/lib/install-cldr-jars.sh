@@ -42,7 +42,7 @@ function run_with_logging() {
     read -p "Show log file? " -n 1 -r
     echo
     if [[ "${REPLY}" =~ ^[Yy]$ ]] ; then
-      less -X "${LOG_FILE}"
+      less -RX "${LOG_FILE}"
     fi
     echo "Log file: ${LOG_FILE}"
     exit 1

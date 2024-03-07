@@ -46,10 +46,10 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
         errcheckln(status, UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -96,20 +96,20 @@ DateFormatMiscTests::test4097450()
     };
     
 /*    UBool dresult [] = {
-        TRUE, 
-        FALSE, 
-        FALSE,  
-        TRUE,
-        TRUE, 
-        FALSE, 
-        FALSE,  
-        TRUE,
-        FALSE,
-        FALSE,
-        TRUE, 
-        FALSE,
-        FALSE, 
-        FALSE
+        true, 
+        false, 
+        false,  
+        true,
+        true, 
+        false, 
+        false,  
+        true,
+        false,
+        false,
+        true, 
+        false,
+        false, 
+        false
     };*/
 
     UErrorCode status = U_ZERO_ERROR;
@@ -290,7 +290,7 @@ void
 DateFormatMiscTests::test4117335()
 {
     //UnicodeString bc = "\u7d00\u5143\u524d";
-    UChar bcC [] = {
+    char16_t bcC [] = {
         0x7D00,
         0x5143,
         0x524D
@@ -298,21 +298,21 @@ DateFormatMiscTests::test4117335()
     UnicodeString bc(bcC, 3, 3);
 
     //UnicodeString ad = "\u897f\u66a6";
-    UChar adC [] = {
+    char16_t adC [] = {
         0x897F,
         0x66A6
     };
     UnicodeString ad(adC, 2, 2);
     
     //UnicodeString jstLong = "\u65e5\u672c\u6a19\u6e96\u6642";
-    UChar jstLongC [] = {
+    char16_t jstLongC [] = {
         0x65e5,
         0x672c,
         0x6a19,
         0x6e96,
         0x6642
     };
-    UChar jdtLongC [] = {0x65E5, 0x672C, 0x590F, 0x6642, 0x9593};
+    char16_t jdtLongC [] = {0x65E5, 0x672C, 0x590F, 0x6642, 0x9593};
 
     UnicodeString jstLong(jstLongC, 5, 5);
 

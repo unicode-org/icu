@@ -28,39 +28,39 @@ SimpleFwdCharIterator::SimpleFwdCharIterator(const UnicodeString& s) {
 
     fHashCode = kInvalidHashCode;
     fLen = s.length();
-    fStart = new UChar[fLen];
-    if(fStart == NULL) {
-        fBogus = TRUE;
+    fStart = new char16_t[fLen];
+    if(fStart == nullptr) {
+        fBogus = true;
     } else {
         fEnd = fStart+fLen;
         fCurrent = fStart;
-        fBogus = FALSE;
+        fBogus = false;
         s.extract(0, fLen, fStart);          
     }
     
 }
 #endif
 
-SimpleFwdCharIterator::SimpleFwdCharIterator(UChar *s, int32_t len, UBool adopt) {
+SimpleFwdCharIterator::SimpleFwdCharIterator(char16_t *s, int32_t len, UBool adopt) {
 
     fHashCode = kInvalidHashCode;
 
     fLen = len==-1 ? u_strlen(s) : len;
 
-    if(adopt == FALSE) {
-        fStart = new UChar[fLen];
-        if(fStart == NULL) {
-            fBogus = TRUE;
+    if(adopt == false) {
+        fStart = new char16_t[fLen];
+        if(fStart == nullptr) {
+            fBogus = true;
         } else {
             uprv_memcpy(fStart, s, fLen);
             fEnd = fStart+fLen;
             fCurrent = fStart;
-            fBogus = FALSE;
+            fBogus = false;
         }
-    } else { // adopt = TRUE
+    } else { // adopt = true
         fCurrent = fStart = s;
         fEnd = fStart + fLen;
-        fBogus = FALSE;
+        fBogus = false;
     }
 
 }
@@ -91,7 +91,7 @@ bool SimpleFwdCharIterator::operator==(const ForwardCharacterIterator& that) con
 }
 #endif
 
-int32_t SimpleFwdCharIterator::hashCode(void) const {
+int32_t SimpleFwdCharIterator::hashCode() const {
     if (fHashCode == kInvalidHashCode)
     {
         UHashTok key;
@@ -101,11 +101,11 @@ int32_t SimpleFwdCharIterator::hashCode(void) const {
     return fHashCode;
 }
         
-UClassID SimpleFwdCharIterator::getDynamicClassID(void) const {
-    return NULL;
+UClassID SimpleFwdCharIterator::getDynamicClassID() const {
+    return nullptr;
 }
 
-UChar SimpleFwdCharIterator::nextPostInc(void) {
+char16_t SimpleFwdCharIterator::nextPostInc() {
     if(fCurrent == fEnd) {
         return ForwardCharacterIterator::DONE;
     } else {
@@ -113,7 +113,7 @@ UChar SimpleFwdCharIterator::nextPostInc(void) {
     }
 }
         
-UChar32 SimpleFwdCharIterator::next32PostInc(void) {
+UChar32 SimpleFwdCharIterator::next32PostInc() {
     return ForwardCharacterIterator::DONE;
 }
         

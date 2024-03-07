@@ -258,6 +258,9 @@ ka{
         "America:Chihuahua"{
             ec{"ჩიჰუაჰუა"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"სიუდად-ხუარესი"}
+        }
         "America:Coral_Harbour"{
             ec{"ატიკოკანი"}
         }
@@ -462,9 +465,6 @@ ka{
         "America:New_York"{
             ec{"ნიუ-იორკი"}
         }
-        "America:Nipigon"{
-            ec{"ნიპიგონი"}
-        }
         "America:Nome"{
             ec{"ნომი"}
         }
@@ -485,9 +485,6 @@ ka{
         }
         "America:Panama"{
             ec{"პანამა"}
-        }
-        "America:Pangnirtung"{
-            ec{"პანგნირტუნგი"}
         }
         "America:Paramaribo"{
             ec{"პარამარიბო"}
@@ -510,9 +507,6 @@ ka{
         "America:Punta_Arenas"{
             ec{"პუნტა-არენასი"}
         }
-        "America:Rainy_River"{
-            ec{"რეინი რივერი"}
-        }
         "America:Rankin_Inlet"{
             ec{"რენკინ ინლეტი"}
         }
@@ -527,9 +521,6 @@ ka{
         }
         "America:Rio_Branco"{
             ec{"რიო ბრანკო"}
-        }
-        "America:Santa_Isabel"{
-            ec{"სანტა ისაბელი"}
         }
         "America:Santarem"{
             ec{"სანტარემი"}
@@ -576,9 +567,6 @@ ka{
         "America:Thule"{
             ec{"თულე"}
         }
-        "America:Thunder_Bay"{
-            ec{"თანდერ ბეი"}
-        }
         "America:Tijuana"{
             ec{"ტიხუანა"}
         }
@@ -599,9 +587,6 @@ ka{
         }
         "America:Yakutat"{
             ec{"იაკუტატი"}
-        }
-        "America:Yellowknife"{
-            ec{"იელოუნაიფი"}
         }
         "Antarctica:Casey"{
             ec{"კეისი"}
@@ -927,9 +912,6 @@ ka{
         "Australia:Broken_Hill"{
             ec{"ბროუკენ ჰილი"}
         }
-        "Australia:Currie"{
-            ec{"ქური"}
-        }
         "Australia:Darwin"{
             ec{"დარვინი"}
         }
@@ -1112,9 +1094,6 @@ ka{
         "Europe:Ulyanovsk"{
             ec{"ულიანოვსკი"}
         }
-        "Europe:Uzhgorod"{
-            ec{"უჟგოროდი"}
-        }
         "Europe:Vaduz"{
             ec{"ვადუცი"}
         }
@@ -1135,9 +1114,6 @@ ka{
         }
         "Europe:Zagreb"{
             ec{"ზაგრები"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"ზაპოროჟიე"}
         }
         "Europe:Zurich"{
             ec{"ციურიხი"}
@@ -1219,9 +1195,6 @@ ka{
         }
         "Pacific:Honolulu"{
             ec{"ჰონოლულუ"}
-        }
-        "Pacific:Johnston"{
-            ec{"ჯონსტონი"}
         }
         "Pacific:Kanton"{
             ec{"კანტონი"}
@@ -1637,9 +1610,6 @@ ka{
             lg{"ლორდ-ჰაუს დრო"}
             ls{"ლორდ-ჰაუს სტანდარტული დრო"}
         }
-        "meta:Macquarie"{
-            ls{"მაქკუორის კუნძულის დრო"}
-        }
         "meta:Magadan"{
             ld{"მაგადანის ზაფხულის დრო"}
             lg{"მაგადანის დრო"}
@@ -1664,11 +1634,6 @@ ka{
         }
         "meta:Mawson"{
             ls{"მოუსონის დრო"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"ჩრდილო-დასავლეთ მექსიკის ზაფხულის დრო"}
-            lg{"ჩრდილო-აღმოსავლეთ მექსიკის დრო"}
-            ls{"ჩრდილო-დასავლეთ მექსიკის დრო"}
         }
         "meta:Mexico_Pacific"{
             ld{"მექსიკის წყნარი ოკეანის ზაფხულის დრო"}
@@ -1889,10 +1854,6 @@ ka{
         "meta:Yukon"{
             ls{"იუკონის დრო"}
         }
-        fallbackFormat{"{1} ({0})"}
-        gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"დრო: {0}"}
         regionFormatDaylight{"{0} ზაფხულის დრო"}
         regionFormatStandard{"{0} სტანდარტული დრო"}

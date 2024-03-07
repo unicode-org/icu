@@ -30,9 +30,6 @@ en_CA{
         "Atlantic:St_Helena"{
             ec{"Saint Helena"}
         }
-        "Etc:Unknown"{
-            ec{"unknown city"}
-        }
         "meta:Afghanistan"{
             ss{"AFT"}
         }
@@ -169,9 +166,6 @@ en_CA{
         "meta:Greenland_Eastern"{
             sg{"EGT"}
         }
-        "meta:Gulf"{
-            ss{"N/A"}
-        }
         "meta:Guyana"{
             ss{"GYT"}
         }
@@ -227,11 +221,6 @@ en_CA{
         }
         "meta:Maldives"{
             ss{"MVT"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Northwest Mexico Daylight Saving Time"}
-            lg{"Northwest Mexico Time"}
-            ls{"Northwest Mexico Standard Time"}
         }
         "meta:Mexico_Pacific"{
             ld{"Mexican Pacific Daylight Saving Time"}

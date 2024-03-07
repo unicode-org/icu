@@ -27,7 +27,7 @@ CollationKanaTest::CollationKanaTest()
         errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
-        myCollation = NULL;
+        myCollation = nullptr;
         return;
     }
 }
@@ -37,7 +37,7 @@ CollationKanaTest::~CollationKanaTest()
     delete myCollation;
 }
 
-const UChar CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
     {0xff9E, 0x0000},
     {0x3042, 0x0000},
     {0x30A2, 0x0000},
@@ -46,7 +46,7 @@ const UChar CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LE
     {0x30A2, 0x30FC, 0x30C8, 0x0000}                               /*  6 */
 };
 
-const UChar CollationKanaTest::testTargetCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testTargetCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
     {0xFF9F, 0x0000},
     {0x30A2, 0x0000},
     {0x3042, 0x3042, 0x0000},
@@ -64,35 +64,35 @@ const Collator::EComparisonResult CollationKanaTest::results[] = {
     Collator::LESS,    //Collator::GREATER /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*//*  6 */
 };
 
-const UChar CollationKanaTest::testBaseCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testBaseCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x30AB, 0x0000},
   {0x30AB, 0x30AD, 0x0000},
   {0x30AD, 0x0000},
   {0x30AD, 0x30AD, 0x0000}
 };
 
-const UChar CollationKanaTest::testPlainDakutenHandakutenCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testPlainDakutenHandakutenCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x30CF, 0x30AB, 0x0000},
   {0x30D0, 0x30AB, 0x0000},
   {0x30CF, 0x30AD, 0x0000},
   {0x30D0, 0x30AD, 0x0000}
 };
 
-const UChar CollationKanaTest::testSmallLargeCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testSmallLargeCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x30C3, 0x30CF, 0x0000},
   {0x30C4, 0x30CF, 0x0000},
   {0x30C3, 0x30D0, 0x0000},
   {0x30C4, 0x30D0, 0x0000}
 };
 
-const UChar CollationKanaTest::testKatakanaHiraganaCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testKatakanaHiraganaCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x3042, 0x30C3, 0x0000},
   {0x30A2, 0x30C3, 0x0000},
   {0x3042, 0x30C4, 0x0000},
   {0x30A2, 0x30C4, 0x0000}
 };
 
-const UChar CollationKanaTest::testChooonKigooCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testChooonKigooCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   /*0*/ {0x30AB, 0x30FC, 0x3042, 0x0000},
   /*1*/ {0x30AB, 0x30FC, 0x30A2, 0x0000},
   /*2*/ {0x30AB, 0x30A4, 0x3042, 0x0000},
@@ -127,7 +127,7 @@ void CollationKanaTest::TestBase()
 }
 
 /* Testing plain, Daku-ten, Handaku-ten letters */
-void CollationKanaTest::TestPlainDakutenHandakuten(void)
+void CollationKanaTest::TestPlainDakutenHandakuten()
 {
     int32_t i;
     myCollation->setStrength(Collator::SECONDARY);
@@ -139,7 +139,7 @@ void CollationKanaTest::TestPlainDakutenHandakuten(void)
 /* 
 * Test Small, Large letters
 */
-void CollationKanaTest::TestSmallLarge(void)
+void CollationKanaTest::TestSmallLarge()
 {
   int32_t i;
   UErrorCode status = U_ZERO_ERROR;
@@ -152,7 +152,7 @@ void CollationKanaTest::TestSmallLarge(void)
 /*
 * Test Katakana, Hiragana letters
 */
-void CollationKanaTest::TestKatakanaHiragana(void)
+void CollationKanaTest::TestKatakanaHiragana()
 {
   int32_t i;
   UErrorCode status = U_ZERO_ERROR;
@@ -167,7 +167,7 @@ void CollationKanaTest::TestKatakanaHiragana(void)
 /*
 * Test Choo-on kigoo
 */
-void CollationKanaTest::TestChooonKigoo(void)
+void CollationKanaTest::TestChooonKigoo()
 {
   int32_t i;
   UErrorCode status = U_ZERO_ERROR;

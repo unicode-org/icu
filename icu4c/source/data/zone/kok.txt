@@ -258,6 +258,9 @@ kok{
         "America:Chihuahua"{
             ec{"चिहुआहुआ"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"सिउदाद जुआरेज"}
+        }
         "America:Coral_Harbour"{
             ec{"अतिकोकॉन"}
         }
@@ -462,9 +465,6 @@ kok{
         "America:New_York"{
             ec{"न्यु यॉर्क"}
         }
-        "America:Nipigon"{
-            ec{"निपिगोन"}
-        }
         "America:Nome"{
             ec{"नोमे"}
         }
@@ -486,9 +486,6 @@ kok{
         "America:Panama"{
             ec{"पनामा"}
         }
-        "America:Pangnirtung"{
-            ec{"पंगनिर्टुंग"}
-        }
         "America:Paramaribo"{
             ec{"परामारिबो"}
         }
@@ -509,9 +506,6 @@ kok{
         }
         "America:Punta_Arenas"{
             ec{"पुंटा अरेनास"}
-        }
-        "America:Rainy_River"{
-            ec{"पावसाळी न्हंय"}
         }
         "America:Rankin_Inlet"{
             ec{"रँकिन इनलॅट"}
@@ -573,9 +567,6 @@ kok{
         "America:Thule"{
             ec{"थुले"}
         }
-        "America:Thunder_Bay"{
-            ec{"थंडर बे"}
-        }
         "America:Tijuana"{
             ec{"तिजुआना"}
         }
@@ -596,9 +587,6 @@ kok{
         }
         "America:Yakutat"{
             ec{"याकुटाट"}
-        }
-        "America:Yellowknife"{
-            ec{"यलोक्नायफ"}
         }
         "Antarctica:Casey"{
             ec{"केसी"}
@@ -924,9 +912,6 @@ kok{
         "Australia:Broken_Hill"{
             ec{"ब्रोकन हिल"}
         }
-        "Australia:Currie"{
-            ec{"क्युरी"}
-        }
         "Australia:Darwin"{
             ec{"डार्विन"}
         }
@@ -1109,9 +1094,6 @@ kok{
         "Europe:Ulyanovsk"{
             ec{"उल्यानोव्स्क"}
         }
-        "Europe:Uzhgorod"{
-            ec{"उझगोरोड"}
-        }
         "Europe:Vaduz"{
             ec{"वडुज"}
         }
@@ -1132,9 +1114,6 @@ kok{
         }
         "Europe:Zagreb"{
             ec{"झाग्रेब"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"झापोरोझे"}
         }
         "Europe:Zurich"{
             ec{"झुरिच"}
@@ -1213,9 +1192,6 @@ kok{
         }
         "Pacific:Guam"{
             ec{"गुआम"}
-        }
-        "Pacific:Johnston"{
-            ec{"जॉन्स्टन"}
         }
         "Pacific:Kanton"{
             ec{"कांटोन"}
@@ -1632,9 +1608,6 @@ kok{
             lg{"लॉर्ड होवे वेळ"}
             ls{"लॉर्ड होवे प्रमाणित वेळ"}
         }
-        "meta:Macquarie"{
-            ls{"मॅक्वेरी आयलँड वेळ"}
-        }
         "meta:Magadan"{
             ld{"मगादान ग्रीष्म वेळ"}
             lg{"मगादान वेळ"}
@@ -1659,11 +1632,6 @@ kok{
         }
         "meta:Mawson"{
             ls{"मॉसन वेळ"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"वायव्य मेक्सिको डेलायट वेळ"}
-            lg{"वायव्य मेक्सिको वेळ"}
-            ls{"वायव्य मेक्सिको प्रमाणीत वेळ"}
         }
         "meta:Mexico_Pacific"{
             ld{"मेक्सिकन प्रशांत डेलायट वेळ"}
@@ -1884,10 +1852,6 @@ kok{
         "meta:Yukon"{
             ls{"युकॉन वेळ"}
         }
-        fallbackFormat{"{1} ({0})"}
-        gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} वेळ"}
         regionFormatDaylight{"{0} डेलायट वेळ"}
         regionFormatStandard{"{0} प्रमाणित वेळ"}

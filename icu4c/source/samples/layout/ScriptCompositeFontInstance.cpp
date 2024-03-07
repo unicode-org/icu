@@ -25,6 +25,9 @@
 
 #include "ScriptCompositeFontInstance.h"
 
+using icu::LEFontInstance;
+using icu::scriptCodeCount;
+
 const char ScriptCompositeFontInstance::fgClassID=0;
 
 ScriptCompositeFontInstance::ScriptCompositeFontInstance(FontMap *fontMap)
@@ -36,7 +39,7 @@ ScriptCompositeFontInstance::ScriptCompositeFontInstance(FontMap *fontMap)
 ScriptCompositeFontInstance::~ScriptCompositeFontInstance()
 {
     delete fFontMap;
-    fFontMap = NULL;
+    fFontMap = nullptr;
 }
 
 void ScriptCompositeFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
@@ -63,24 +66,24 @@ le_bool ScriptCompositeFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 poi
         return font->getGlyphPoint(LE_GET_GLYPH(glyph), pointNumber, point);
     }
 
-    return FALSE;
+    return false;
 }
 
 const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit, le_int32 script, LEErrorCode &success) const
 {
     if (LE_FAILURE(success)) {
-        return NULL;
+        return nullptr;
     }
 
-    if (chars == NULL || *offset < 0 || limit < 0 || *offset >= limit || script < 0 || script >= scriptCodeCount) {
+    if (chars == nullptr || *offset < 0 || limit < 0 || *offset >= limit || script < 0 || script >= scriptCodeCount) {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     const LEFontInstance *result = fFontMap->getScriptFont(script, success);
 
     if (LE_FAILURE(success)) {
-        return NULL;
+        return nullptr;
     }
 
     *offset = limit;

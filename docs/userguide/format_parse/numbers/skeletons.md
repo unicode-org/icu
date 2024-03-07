@@ -200,6 +200,13 @@ To round to the nearest nickel, for example, use the skeleton
 `precision-increment/0.05`.  For more information on the decimal number
 syntax, see [Scale](#scale).
 
+`precision-increment/dddd` implies minimum and maximum fraction digits equal to the
+precision of the decimal. There is not currently a way in skeleton syntax to specify
+an arbitrary min/max fraction digits when a rounding increment is used.
+
+All rounding occurs after the number is scaled, such as in scientific notation or
+the `scale` skeleton.
+
 #### Fraction Precision
 
 The following are examples of fraction-precision stems:
@@ -231,7 +238,7 @@ the API docs for UNumberRoundingPriority.
 | `.##/@@@r` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withSignificantDigits(3, 3, RELAXED)` |
 | `.00/@##` | Exactly 2 fraction digits, but do not <br/> display more than 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withMaxDigits(3)` |
 | `.00/@##s` | Same as above | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(1, 3, STRICT)` |
-| `.00/@##s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
+| `.00/@@@s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
 
 Precisely, the option follows the syntax of the significant digits stem (see below),
 but one of the following must be true:

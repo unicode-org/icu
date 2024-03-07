@@ -28,6 +28,7 @@ en{
         lw{"Line Breaks In Words Setting"}
         m0{"Transform Rules"}
         ms{"Measurement System"}
+        mu{"Measurement Unit"}
         numbers{"Numbers"}
         rg{"Region For Supplemental Data"}
         s0{"Transform Source"}
@@ -43,7 +44,7 @@ en{
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
-        ace{"Achinese"}
+        ace{"Acehnese"}
         ach{"Acoli"}
         ada{"Adangme"}
         ady{"Adyghe"}
@@ -101,6 +102,7 @@ en{
         bfd{"Bafut"}
         bfq{"Badaga"}
         bg{"Bulgarian"}
+        bgc{"Haryanvi"}
         bgn{"Western Balochi"}
         bho{"Bhojpuri"}
         bi{"Bislama"}
@@ -109,6 +111,7 @@ en{
         bjn{"Banjar"}
         bkm{"Kom"}
         bla{"Siksiká"}
+        blo{"Anii"}
         blt{"Tai Dam"}
         bm{"Bambara"}
         bn{"Bangla"}
@@ -217,7 +220,7 @@ en{
         fa_AF{"Dari"}
         fan{"Fang"}
         fat{"Fanti"}
-        ff{"Fulah"}
+        ff{"Fula"}
         fi{"Finnish"}
         fil{"Filipino"}
         fit{"Tornedalen Finnish"}
@@ -271,6 +274,7 @@ en{
         hdn{"Northern Haida"}
         he{"Hebrew"}
         hi{"Hindi"}
+        hi_Latn{"Hindi (Latin)"}
         hif{"Fiji Hindi"}
         hil{"Hiligaynon"}
         hit{"Hittite"}
@@ -363,6 +367,7 @@ en{
         kv{"Komi"}
         kw{"Cornish"}
         kwk{"Kwakʼwala"}
+        kxv{"Kuvi"}
         ky{"Kyrgyz"}
         la{"Latin"}
         lad{"Ladino"}
@@ -417,7 +422,7 @@ en{
         mgo{"Metaʼ"}
         mh{"Marshallese"}
         mi{"Māori"}
-        mic{"Mi'kmaq"}
+        mic{"Mi'kmaw"}
         min{"Minangkabau"}
         mk{"Macedonian"}
         ml{"Malayalam"}
@@ -538,7 +543,7 @@ en{
         rwk{"Rwa"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
-        sah{"Sakha"}
+        sah{"Yakut"}
         sam{"Samaritan Aramaic"}
         saq{"Samburu"}
         sas{"Sasak"}
@@ -662,6 +667,7 @@ en{
         vi{"Vietnamese"}
         vls{"West Flemish"}
         vmf{"Main-Franconian"}
+        vmw{"Makhuwa"}
         vo{"Volapük"}
         vot{"Votic"}
         vro{"Võro"}
@@ -677,6 +683,7 @@ en{
         xal{"Kalmyk"}
         xh{"Xhosa"}
         xmf{"Mingrelian"}
+        xnr{"Kangri"}
         xog{"Soga"}
         yao{"Yao"}
         yap{"Yapese"}
@@ -956,11 +963,11 @@ en{
             gregorian{"Gregorian Calendar"}
             hebrew{"Hebrew Calendar"}
             indian{"Indian National Calendar"}
-            islamic{"Islamic Calendar"}
-            islamic-civil{"Islamic Calendar (tabular, civil epoch)"}
-            islamic-rgsa{"Islamic Calendar (Saudi Arabia, sighting)"}
-            islamic-tbla{"Islamic Calendar (tabular, astronomical epoch)"}
-            islamic-umalqura{"Islamic Calendar (Umm al-Qura)"}
+            islamic{"Hijri Calendar"}
+            islamic-civil{"Hijri Calendar (tabular, civil epoch)"}
+            islamic-rgsa{"Hijri Calendar (Saudi Arabia, sighting)"}
+            islamic-tbla{"Hijri Calendar (tabular, astronomical epoch)"}
+            islamic-umalqura{"Hijri Calendar (Umm al-Qura)"}
             iso8601{"ISO-8601 Calendar"}
             japanese{"Japanese Calendar"}
             persian{"Persian Calendar"}
@@ -1020,7 +1027,6 @@ en{
             phonebook{"Phonebook Sort Order"}
             phonetic{"Phonetic Sort Order"}
             pinyin{"Pinyin Sort Order"}
-            reformed{"Reformed Sort Order"}
             search{"General-Purpose Search"}
             searchjl{"Search By Hangul Initial Consonant"}
             standard{"Standard Sort Order"}
@@ -1172,6 +1178,11 @@ en{
             metric{"Metric System"}
             uksystem{"Imperial Measurement System"}
             ussystem{"US Measurement System"}
+        }
+        mu{
+            celsius{"Celsius"}
+            fahrenhe{"Fahrenheit"}
+            kelvin{"Kelvin"}
         }
         numbers{
             adlm{"Adlam Digits"}
@@ -1354,6 +1365,8 @@ en{
         compatibility{"{0} — compatibility"}
         enclosed{"{0} — enclosed"}
         extended{"{0} — extended"}
+        facing-left{"{0} facing left"}
+        facing-right{"{0} facing right"}
         historic{"{0} — historic"}
         miscellaneous{"{0} — miscellaneous"}
         other{"{0} — other"}

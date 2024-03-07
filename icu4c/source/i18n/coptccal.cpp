@@ -57,8 +57,11 @@ CopticCalendar::getType() const
 //-------------------------------------------------------------------------
 
 int32_t
-CopticCalendar::handleGetExtendedYear()
+CopticCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t eyear;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         eyear = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
@@ -67,8 +70,11 @@ CopticCalendar::handleGetExtendedYear()
         int32_t era = internalGet(UCAL_ERA, CE);
         if (era == BCE) {
             eyear = 1 - internalGet(UCAL_YEAR, 1); // Convert to extended year
-        } else {
+        } else if (era == CE){
             eyear = internalGet(UCAL_YEAR, 1); // Default to year 1
+        } else {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
         }
     }
     return eyear;
@@ -92,8 +98,26 @@ CopticCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/)
     internalSet(UCAL_ERA, era);
     internalSet(UCAL_YEAR, year);
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DATE, day);
     internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
+}
+
+constexpr uint32_t kCopticRelatedYearDiff = 284;
+
+int32_t CopticCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kCopticRelatedYearDiff;
+}
+
+void CopticCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kCopticRelatedYearDiff);
 }
 
 /**
@@ -142,21 +166,6 @@ CopticCalendar::getJDEpochOffset() const
     return COPTIC_JD_EPOCH_OFFSET;
 }
 
-
-#if 0
-// We do not want to introduce this API in ICU4C.
-// It was accidentally introduced in ICU4J as a public API.
-
-//-------------------------------------------------------------------------
-// Calendar system Conversion methods...
-//-------------------------------------------------------------------------
-
-int32_t
-CopticCalendar::copticToJD(int32_t year, int32_t month, int32_t day)
-{
-    return CECalendar::ceToJD(year, month, day, COPTIC_JD_EPOCH_OFFSET);
-}
-#endif
 
 U_NAMESPACE_END
 

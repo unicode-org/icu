@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 qu{
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
     units{
         acceleration{
             meter-per-square-second{
@@ -16,12 +11,7 @@ qu{
         }
         area{
             acre{
-                dnam{"acre"}
                 other{"{0} acre"}
-            }
-            dunam{
-                dnam{"dunam"}
-                other{"{0} dunam"}
             }
             hectare{
                 dnam{"hectárea"}
@@ -71,37 +61,37 @@ qu{
             1024p7{"zebi{0}"}
             1024p8{"yobe{0}"}
             10p-1{"deci{0}"}
-            10p-12{"{0} picómetro"}
+            10p-12{"pico{0}"}
             10p-15{"femto{0}"}
             10p-18{"atto{0}"}
-            10p-2{"{0} centímetro"}
+            10p-2{"centi{0}"}
             10p-21{"zepto{0}"}
             10p-24{"yocto{0}"}
-            10p-3{"{0} mg"}
+            10p-3{"milli{0}"}
             10p-6{"micro{0}"}
             10p-9{"nano{0}"}
             10p1{"deka{0}"}
-            10p12{"{0} Tbyte"}
-            10p15{"{0} petabyte"}
+            10p12{"tera{0}"}
+            10p15{"peta{0}"}
             10p18{"exa{0}"}
             10p2{"{0} hectopa"}
             10p21{"zetta{0}"}
             10p24{"yotta{0}"}
-            10p3{"{0} kilómetro"}
-            10p6{"{0} megabyte"}
-            10p9{"{0} gigahz"}
+            10p3{"kilo{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
             per{"{0} sapa {1}"}
             power2{
                 other{
                     _{
-                        _{"{0} metro cuadrado"}
+                        _{"{0} cuadrado"}
                     }
                 }
             }
             power3{
                 other{
                     _{
-                        _{"{0} metro cubico"}
+                        _{"{0} cubico"}
                     }
                 }
             }
@@ -139,7 +129,6 @@ qu{
             hour{
                 dnam{"hora"}
                 other{"{0} hora"}
-                per{"{0}/h"}
             }
             microsecond{
                 dnam{"microsegundo"}
@@ -180,6 +169,12 @@ qu{
                 dnam{"wata"}
                 other{"{0} wata"}
                 per{"{0} sapa wata"}
+            }
+        }
+        energy{
+            foodcalorie{
+                dnam{"Calorias"}
+                other{"{0} calorias"}
             }
         }
         force{
@@ -261,7 +256,6 @@ qu{
             kilometer{
                 dnam{"kilómetro"}
                 other{"{0} kilómetro"}
-                per{"{0}/km"}
             }
             light-year{
                 dnam{"años luz"}
@@ -270,7 +264,6 @@ qu{
             meter{
                 dnam{"metro"}
                 other{"{0} metro"}
-                per{"{0}/m"}
             }
             micrometer{
                 dnam{"micrómetro"}
@@ -328,13 +321,9 @@ qu{
             }
         }
         mass{
-            grain{
-                dnam{"grano"}
-                other{"{0} grano"}
-            }
-            stone{
-                dnam{"catorce libras"}
-                other{"{0} catorce libras"}
+            tonne{
+                dnam{"toneladas metricas"}
+                other{"{0} toneladas metricas"}
             }
         }
         pressure{
@@ -428,10 +417,6 @@ qu{
                 dnam{"trago"}
                 other{"{0} trago"}
             }
-            drop{
-                dnam{"gota"}
-                other{"{0} gota"}
-            }
             fluid-ounce{
                 dnam{"Onza líquida"}
                 other{"{0} US Onza líquida"}
@@ -454,10 +439,6 @@ qu{
                 dnam{"hectolitro"}
                 other{"{0} hectolitro"}
             }
-            jigger{
-                dnam{"medida"}
-                other{"{0} medida"}
-            }
             liter{
                 dnam{"litro"}
                 other{"{0} litro"}
@@ -470,10 +451,6 @@ qu{
             milliliter{
                 dnam{"mililitro"}
                 other{"{0} mililitro"}
-            }
-            pinch{
-                dnam{"pizca"}
-                other{"{0} pizca"}
             }
             pint{
                 dnam{"pinta"}
@@ -489,7 +466,6 @@ qu{
             }
             quart-imperial{
                 dnam{"Imp. cuarta"}
-                other{"{0} Imp. cuarta"}
             }
             tablespoon{
                 dnam{"cucharada"}
@@ -503,11 +479,7 @@ qu{
     }
     unitsNarrow{
         compound{
-            10p-1{"{0} dL"}
-            10p12{"{0} TB"}
-            10p15{"{0} byte PB"}
-            10p3{"{0} km"}
-            10p6{"{0} byte MB"}
+            10p15{"P{0}"}
         }
         duration{
             day{
@@ -516,11 +488,9 @@ qu{
             }
             hour{
                 dnam{"hora"}
-                other{"{0} h"}
             }
             millisecond{
                 dnam{"milisegundo"}
-                other{"{0} ms"}
             }
             month{
                 dnam{"killa"}
@@ -528,7 +498,6 @@ qu{
             }
             second{
                 dnam{"segundo"}
-                other{"{0} s"}
             }
             week{
                 dnam{"semana"}
@@ -540,24 +509,17 @@ qu{
             }
         }
         length{
-            centimeter{
-                dnam{"cm"}
-                other{"{0} cm"}
-            }
             kilometer{
-                dnam{"km"}
                 other{"{0}km"}
             }
             meter{
                 dnam{"metro"}
-                other{"{0} m"}
-            }
-            millimeter{
-                dnam{"mm"}
-                other{"{0} mm"}
             }
         }
         volume{
+            cup{
+                dnam{"taza"}
+            }
             liter{
                 dnam{"litro"}
                 other{"{0} litro"}
@@ -571,9 +533,7 @@ qu{
             }
         }
         compound{
-            10p-1{"{0} dl"}
             10p15{"{0} PB"}
-            10p6{"{0} MB"}
         }
         concentr{
             item{

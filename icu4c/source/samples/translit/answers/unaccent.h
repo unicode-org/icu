@@ -11,6 +11,10 @@
 #include "unicode/translit.h"
 #include "unicode/normlzr.h"
 
+using icu::Normalizer;
+using icu::Replaceable;
+using icu::Transliterator;
+
 class UnaccentTransliterator : public Transliterator {
     
  public:
@@ -39,7 +43,7 @@ class UnaccentTransliterator : public Transliterator {
     /**
      * Unaccent a single character using normalizer.
      */
-    UChar unaccent(UChar c) const;
+    char16_t unaccent(char16_t c) const;
 
     Normalizer normalizer;
 };

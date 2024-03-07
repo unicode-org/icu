@@ -50,7 +50,7 @@ class CalendarCaseTest: public CalendarTest {
    * @param field which field
    * @param value expected value
    * @param status err status 
-   * @return boolean indicating success (TRUE) or failure (FALSE) of the test.
+   * @return boolean indicating success (true) or failure (false) of the test.
    */
   UBool checkField(Calendar *cal, UCalendarDateFields field, int32_t value, UErrorCode &status);
 

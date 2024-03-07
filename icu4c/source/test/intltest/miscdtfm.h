@@ -24,9 +24,9 @@ class DateFormatMiscTests : public IntlTest {
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
 
-    void test4097450(void);
-    void test4099975(void);
-    void test4117335(void);
+    void test4097450();
+    void test4099975();
+    void test4117335();
 
 protected:
     UBool failure(UErrorCode status, const char* msg);

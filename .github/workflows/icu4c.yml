@@ -1,0 +1,571 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA ICU4C
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+    paths:
+      - 'icu4c/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'icu4c/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+permissions:
+  contents: read
+
+jobs:
+
+  # ICU4C docs build using doxygen..
+  icu4c-docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C doc
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux --disable-renaming;
+           # Fail if 'warning:' appears in doxygen's output, but ignore warnings from file Doxyfile.
+           # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
+          set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
+
+  # gcc debug build.
+  # Includes dependency checker.
+  # Note - the dependency checker needs to be run on both a debug and an optimized build.
+  # This one (gcc) for debug, and linux clang (see job below) for optimized.
+  #
+  # Test both out-of-source and in-source builds. This one (gcc) for out-of-source,
+  # and linux clang (below) for in-source.
+  #
+  # Invokes test/hdrtst to check public headers compliance.
+  gcc-debug-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with gcc
+        env:
+          PREFIX: /tmp/icu-prefix
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=$PREFIX --enable-tracing;
+          make -j -l4.5 check;
+          ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
+          make install;
+          PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
+
+  # clang release build with some options to enforce useful constraints.
+  # Includes dependency checker on an in-source, optimized build.
+  # Includes checking @draft etc. API tags vs. ifndef guards like
+  # U_HIDE_DRAFT_API and U_FORCE_HIDE_DRAFT_API.
+  # (FORCE guards make this tool pass but won't compile to working code.
+  # See the testtagsguards.sh script for details.)
+  clang-release-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install doxygen
+        run: |
+          sudo apt-get -y install doxygen;
+      - name: Build ICU4C with clang
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux/clang;
+          make -j -l4.5 check;
+      - name: Test Dependency
+        run: |
+          cd icu4c/source/test/depstest;
+          python3 depstest.py ../../../source/;
+      - name: Test Tags Guards
+        run: |
+          cd icu4c;
+          source/test/hdrtst/testtagsguards.sh;
+      - name: Make Dist
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+        run: |
+          cd icu4c/source;
+          make dist
+
+  # clang build with some options
+  clang-options-build-and-test:
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other options.
+      fail-fast: false
+      matrix:
+        build_option:
+         [ --enable-static, --enable-static --disable-shared ]
+         # --disable-shared has a build problem.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ICU4C with clang
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux/clang ${{ matrix.build_option }};
+          make -j -l4.5 tests;
+      - name: Test
+        run: |
+          cd icu4c/source;
+          make check;
+
+  # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
+  gcc-10-stdlib17:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with gcc 10 and c++17 and extra warnings.
+        env:
+          PREFIX: /tmp/icu-prefix
+          CC: gcc-10
+          CXX: g++-10
+          CXXFLAGS: -std=c++17 -Wextra
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix=$PREFIX;
+          make -j -l4.5 check;
+          make -j -l4.5 install;
+          cd $PREFIX/bin;
+          LD_LIBRARY_PATH=../lib ./icuinfo
+
+  # Clang Linux with address sanitizer.
+  clang-asan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with clang and asan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming --enable-tracing;
+          make -j -l4.5 check;
+        env:
+          CPPFLAGS: -fsanitize=address
+          LDFLAGS: -fsanitize=address
+  # Clang Linux with undefined-behavior sanitizer.
+  clang-ubsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with clang and ubsan +alignment
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming;
+          make -j -l4.5 check;
+        env:
+          CPPFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
+          CFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
+          LDFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
+  # Control Flow Integrity.
+  clang-cfi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with clang using CFI
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux --disable-renaming;
+          make -j -l4.5 check;
+        env:
+          CC: clang
+          CXX: clang++
+          # add -fsanitize=cfi-vcall -fsanitize=cfi-icall  later
+          CXXFLAGS: -flto -fvisibility=hidden -fsanitize=cfi-derived-cast -fno-sanitize-trap=cfi -fno-inline-functions -fno-inline -fno-omit-frame-pointer -O1
+          # add -fsanitize=cfi-vcall -fsanitize=cfi-icall  later
+          LDFLAGS: -flto -fvisibility=hidden -fuse-ld=gold -fsanitize=cfi-derived-cast -fsanitize=cfi-unrelated-cast -fno-sanitize-trap=cfi -fsanitize-cfi-icall-generalize-pointers
+
+  # Clang Linux with thread sanitizer.
+  clang-tsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with clang and tsan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux/clang --disable-renaming
+          make -j -l4.5;
+          make -j -l4.5 -C test;
+          make -j -l4.5 -C test/intltest check
+        env:
+          INTLTEST_OPTS: utility/MultithreadTest
+          CPPFLAGS: -fsanitize=thread
+          LDFLAGS: -fsanitize=thread
+
+  # MacOS with clang
+  macos-clang:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C with clang on MacOS
+        run: |
+          cd icu4c/source;
+          PYTHON=python3 ./runConfigureICU MacOSX;
+          make -j -l4.5 check
+
+  # Run ICU4C tests with stubdata.
+  run-with-stubdata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C tests with stubdata
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j -l4.5 check;
+          rm lib/libicudata.so*;
+          cp -P stubdata/libicudata.so* lib;
+
+          cd test/cintltst;
+          echo 'Running ICU4C cintltst with stubdata.';
+          # Note: 'Elapsed Time: ' is printed by makefile upon final success.
+          CINTLTST_OPTS=-w make -j -l4.5 check 2>&1 | tee stubdata_ctest.log;
+          if ! grep 'Elapsed Time: ' stubdata_ctest.log
+          then
+            echo
+            echo cintltst run with stubdata failed
+            echo
+            echo See
+            echo https://unicode-org.github.io/icu/processes/release/tasks/integration.html#run-tests-without-icu-data
+            echo for how to reproduce and debug the failure
+            exit 1
+          fi
+
+          cd ../intltest;
+          echo 'Running ICU4C intltest with stubdata.';
+          INTLTEST_OPTS=-w make -j -l4.5 check 2>&1 | tee stubdata_intltest.log;
+          if ! grep 'Elapsed Time: ' stubdata_intltest.log
+          then
+            echo
+            echo intltest run with stubdata failed
+            echo
+            echo See
+            echo https://unicode-org.github.io/icu/processes/release/tasks/integration.html#run-tests-without-icu-data
+            echo for how to reproduce and debug the failure
+            exit 1
+          fi
+
+  # Test U_CHARSET_IS_UTF8
+  u-charset-is-utf8-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1";
+          make -j -l4.5 check
+
+  # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
+  u-override-cxx-allocation-is-0-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0";
+          make clean;
+          make -j -l4.5 check
+
+  # Test LSTM
+  lstm-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd icu4c/source;
+          ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j -l4.5 check
+
+  # Test adaboost
+  adaboost-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd icu4c/source;
+          ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j -l4.5 check
+
+  # Build and run testmap
+  testmap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j -l4.5 check;
+          CONFIG_FILES=test/testmap/Makefile ./config.status;
+          cd test/testmap;
+          make -j -l4.5 check | grep '*** PASS PASS PASS, test PASSED!!!!!!!!'
+
+  # Copyright scan
+  copyright-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: perl tools/scripts/cpysearch/cpyscan.pl
+
+  # Check compilation of internal headers.
+  internal-header-compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
+
+  # Check source files for valid UTF-8 and for absence of BOM.
+  valid-UTF-8-and-no-BOM-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: tools/scripts/icu-file-utf8-check.py
+
+  # Run unit tests with UCONFIG_NO_XXX variations.
+  uconfig-unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
+      fail-fast: false
+      matrix:
+        uconfig_cppflags:
+         # Ignore the following two.
+         # - "-DUCONFIG_NO_FILE_IO=1"
+         # - "-DUCONFIG_NO_CONVERSION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1"
+         - "-DUCONFIG_NO_NORMALIZATION=1"
+         - "-DUCONFIG_NO_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_IDNA=1"
+         - "-DUCONFIG_NO_COLLATION=1"
+         - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_TRANSLITERATION=1"
+         - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
+         - "-DUCONFIG_NO_SERVICE=1"
+         - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         # Turn on all the options in one test.
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verify no additional new UCONFIG_NO_xxx added
+        run: |
+          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
+          expected_count="12";
+          count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
+          if [ $expected_count != $count ]; then
+              echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $expected_count;
+              echo "Currently UCONFIG_NO_* defined in uconfig.h:";
+              egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h;
+              exit -1
+          fi
+      - name: Build and Test
+        env:
+          CPPFLAGS: ${{ matrix.uconfig_cppflags }}
+        run: |
+          cd icu4c/source/;
+          ./runConfigureICU Linux;
+          make -j -l4.5 tests;
+
+  # Run header tests with UCONFIG_NO_XXX variations.
+  uconfig-header-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
+      fail-fast: false
+      matrix:
+        uconfig_cppflags:
+         # Ignore the following two.
+         # - "-DUCONFIG_NO_FILE_IO=1"
+         # - "-DUCONFIG_NO_CONVERSION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1"
+         - "-DUCONFIG_NO_NORMALIZATION=1"
+         - "-DUCONFIG_NO_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_IDNA=1"
+         - "-DUCONFIG_NO_COLLATION=1"
+         - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_TRANSLITERATION=1"
+         - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
+         - "-DUCONFIG_NO_SERVICE=1"
+         - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         # Turn on all the options in one test.
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verify no additional new UCONFIG_NO_xxx added
+        run: |
+          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
+          count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
+          if [ "12" != $count ]; then
+              echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $count;
+              echo "Currently UCONFIG_NO_* defined in uconfig.h:";
+              egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h;
+              exit -1
+          fi
+      - name: Build and Install
+        run: |
+          cd icu4c/source/;
+          mkdir /tmp/icu_cnfg;
+          ./runConfigureICU Linux --prefix=/tmp/icu_cnfg;
+          make -j -l4.5 install;
+      - name: Test
+        env:
+          UCONFIG_NO: ${{ matrix.uconfig_cppflags }}
+        run: |
+          cd icu4c/source/;
+          PATH=/tmp/icu_cnfg/bin:$PATH make -C test/hdrtst check;
+
+  # Build Unicode update tools
+  unicode-update-tools:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: bazelbuild/setup-bazelisk@v2
+    - name: Get CI Linux runner VM version
+      id: linux-version
+      run: |
+        echo "LINUX_VERSION=$(grep -F VERSION_ID /etc/os-release | cut -d'"' -f2)" >> $GITHUB_OUTPUT
+    - name: Mount bazel cache
+      uses: actions/cache@v3
+      with:
+        path: "~/.cache/bazel"
+        key: bazel-${{ runner.os }}-${{ steps.linux-version.outputs.LINUX_VERSION }}
+
+    - name: Generate the data
+      run: |
+        export ICU_SRC=`pwd`;
+        icu4c/source/data/unidata/generate.sh;
+        if $?
+        then
+          echo
+          echo Build of Unicode update tools failed.
+          echo See
+          echo https://unicode-org.github.io/icu/processes/unicode-update#bazel-build-process
+          echo for how to reproduce and debug the failure
+          exit 1
+        fi
+
+        git diff --exit-code;
+        if $?
+        then
+          echo
+          echo ICU unicode data has changed!
+          echo Did you forget to include the changed data files in this PR?
+          exit 1
+        fi
+
+# Build and run ICU4C samples
+  icu4c-test-samples:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+
+      - name: ICU4C configure and build
+        run: |
+          # Perform an out-of-source build of icu4c
+          mkdir /tmp/icu_samples
+          cd icu4c/source
+          ./runConfigureICU Linux -prefix=/tmp/icu_samples
+          make install
+          # Reference the paths in the new build
+          cd samples
+          # To clean all the test binaries
+          make clean-samples-recursive
+          # To rebuild them all
+          echo "Make all samples"
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make all-samples-recursive
+          # To run all tests serially
+          echo "Run all samples"
+          pwd
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make check-samples-recursive
+
+  # https://unicode-org.github.io/icu/processes/release/tasks/integration.html#verify-that-icu4c-tests-pass-without-collation-rule-strings
+  icu4c-without-collation-rule-strings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install hjson dependency
+        run: |
+          sudo apt-get install python3-pip
+          pip3 install hjson
+      - name: Create data filter file to remove collation rule strings
+        run: |
+          cat > icu4c/coll-norules.hjson <<EOL
+          {
+            resourceFilters: [
+              {
+                categories: [
+                  coll_tree
+                ]
+                rules: [
+                  -/UCARules
+                  -/collations/*/Sequence
+                ]
+              }
+            ]
+          }
+          EOL
+      - name: Configure ICU4C with the data filter file
+        env:
+          ICU_DATA_FILTER_FILE: ../coll-norules.hjson
+        run: |
+          cd icu4c/source
+          ./runConfigureICU Linux
+      - name: Run tests with data-errors-as-warnings
+        env:
+          INTLTEST_OPTS: -w
+          CINTLTST_OPTS: -w
+        run: |
+          cd icu4c/source
+          make -j -l4.5 check
+  
+  # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
+  icu4c-uconfig-no-conversion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set UCONFIG_NO_CONVERSION and configure ICU4C
+        env:
+          UCONFIG_NO_CONVERSION: 1
+        run: |
+          cd icu4c/source
+          ./runConfigureICU Linux
+      - name: Run make for stubdata, common, i18n
+        run: |
+          cd icu4c/source
+          pushd stubdata && make -j -l4.5 && popd
+          # Ensure lib directory for output object file exists
+          mkdir -p lib
+          pushd common && make -j -l4.5 && popd
+          pushd i18n && make -j -l4.5 && popd

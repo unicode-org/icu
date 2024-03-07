@@ -10,6 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
 
+#include <stdbool.h>
+
 #include "unicode/ureldatefmt.h"
 #include "unicode/unum.h"
 #include "unicode/udisplaycontext.h"
@@ -346,7 +348,7 @@ static const RelDateTimeFormatTestItem fmtTestItems[] = {
 
 enum { kUBufMax = 64, kBBufMax = 256 };
 
-static void TestRelDateFmt()
+static void TestRelDateFmt(void)
 {
     const RelDateTimeFormatTestItem *itemPtr;
     log_verbose("\nTesting ureldatefmt_open(), ureldatefmt_format(), ureldatefmt_formatNumeric() with various parameters\n");
@@ -427,7 +429,7 @@ static void TestRelDateFmt()
     }
 }
 
-static void TestNumericField()
+static void TestNumericField(void)
 {
     const RelDateTimeFormatTestItem *itemPtr;
     log_verbose("\nTesting ureldatefmt_open(), ureldatefmt_formatForFields(), ureldatefmt_formatNumericForFields() with various parameters\n");
@@ -482,8 +484,8 @@ static void TestNumericField()
 
                 FieldsDat expectedAttr = itemPtr->expectedAttributes[iOffset*2];
                 UConstrainedFieldPosition* cfpos = ucfpos_open(&status);
-                UBool foundNumeric = FALSE;
-                while (TRUE) {
+                UBool foundNumeric = false;
+                while (true) {
                     foundNumeric = ufmtval_nextPosition(ureldatefmt_resultAsValue(fv, &status), cfpos, &status);
                     if (!foundNumeric) {
                         break;
@@ -537,8 +539,8 @@ static void TestNumericField()
 
                 FieldsDat expectedAttr = itemPtr->expectedAttributes[iOffset*2 + 1];
                 UConstrainedFieldPosition* cfpos = ucfpos_open(&status);
-                UBool foundNumeric = FALSE;
-                while (TRUE) {
+                UBool foundNumeric = false;
+                while (true) {
                     foundNumeric = ufmtval_nextPosition(ureldatefmt_resultAsValue(fv, &status), cfpos, &status);
                     if (!foundNumeric) {
                         break;
@@ -589,7 +591,7 @@ static const CombineDateTimeTestItem combTestItems[] = {
     { NULL,  (UDateRelativeDateTimeFormatterStyle)0, (UDisplayContext)0, NULL, NULL, NULL } /* terminator */
 };
 
-static void TestCombineDateTime()
+static void TestCombineDateTime(void)
 {
     const CombineDateTimeTestItem *itemPtr;
     log_verbose("\nTesting ureldatefmt_combineDateAndTime() with various parameters\n");
@@ -643,7 +645,7 @@ static void TestCombineDateTime()
     }
 }
 
-static void TestFields() {
+static void TestFields(void) {
     UErrorCode ec = U_ZERO_ERROR;
     URelativeDateTimeFormatter* fmt = ureldatefmt_open(
         "en-us",

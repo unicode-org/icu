@@ -63,8 +63,11 @@ const char *BuddhistCalendar::getType() const
     return "buddhist";
 }
 
-int32_t BuddhistCalendar::handleGetExtendedYear()
+int32_t BuddhistCalendar::handleGetExtendedYear(UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // EXTENDED_YEAR in BuddhistCalendar is a Gregorian year.
     // The default value of EXTENDED_YEAR is 1970 (Buddhist 2513)
     int32_t year;
@@ -76,13 +79,6 @@ int32_t BuddhistCalendar::handleGetExtendedYear()
                 + kBuddhistEraStart;
     }
     return year;
-}
-
-int32_t BuddhistCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
-
-                                                  UBool useMonth) const
-{
-    return GregorianCalendar::handleComputeMonthStart(eyear, month, useMonth);
 }
 
 void BuddhistCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
@@ -138,7 +134,7 @@ static icu::UInitOnce gBCInitOnce {};
 
 UBool BuddhistCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 static void U_CALLCONV

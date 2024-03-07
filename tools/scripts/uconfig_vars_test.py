@@ -110,7 +110,7 @@ def RunUnitTests(uconfig_no_list, test_results):
             print('Last 25 lines:\n%s\n' % '\n'.join(conf_log.decode('utf-8').splitlines()[-25:]))
             sys.exit(1)
         print('Running unit tests with %s set to 1.' % uconfig_no)
-        run_log, exit_code = RunCmd('make -j2 check')
+        run_log, exit_code = RunCmd('make -j -l2.5 check')
         test_results[uconfig_no]['unit_test'] = (exit_code == 0)
         test_results[uconfig_no]['u_log_tail'] = \
             '\n'.join(run_log.decode('utf-8').splitlines()[-50:])
@@ -126,7 +126,7 @@ def RunUnitTests(uconfig_no_list, test_results):
         print('Last 25 lines:\n%s\n' % '\n'.join(conf_log.decode('utf-8').splitlines()[-25:]))
         sys.exit(1)
     print('Running unit tests with all flags set to 1.')
-    run_log, exit_code = RunCmd('make -j2 check')
+    run_log, exit_code = RunCmd('make -j -l2.5 check')
     test_results['all_flags']['unit_test'] = (exit_code == 0)
     test_results['all_flags']['u_log_tail'] = \
         '\n'.join(run_log.decode('utf-8').splitlines()[-50:])
@@ -153,7 +153,7 @@ def RunHeaderTests(uconfig_no_list, test_results):
         print('Last 25 lines:\n%s\n' % '\n'.join(conf_log.decode('utf-8').splitlines()[-25:]))
         sys.exit(1)
 
-    inst_log, exit_code = RunCmd('make -j2 install')
+    inst_log, exit_code = RunCmd('make -j -l2.5 install')
     if exit_code != 0:
         print('make install failed!')
         print('Last 25 lines:\n%s\n' % '\n'.join(inst_log.decode('utf-8').splitlines()[-25:]))

@@ -3,40 +3,26 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fi{
     AuxExemplarCharacters{
-        "[á à ă â ã ą ā ć č ċ ç ď ð đ é è ê ě ë ė ę ē ğ ǧ ģ ǥ ȟ ħ í î ï İ į ī ı ǩ ķ ĺ"
-        " ľ ļ ł ń ň ñ ņ ŋ ó ò ô ő õ œ ŕ ř ś ŝ ş ș ß ť ţ ț ŧ ú ù û ů ű ų ū ý ÿ ü ź ż ʒ"
-        " ǯ þ æ ø]"
+        "[áàăâãąā ćčċç ďð đ éèêěëėęē ğǧģ ǥ ȟħ íîïİįī ı ǩķ ĺľļł ńňñņ ŋ óòôőõ œ ŕř śŝşș"
+        " ß ťţț ŧ úùûůűųū ýÿü źż ʒǯ þ æ ø]"
     }
     Ellipsis{
-        final{"{0}…"}
-        initial{"…{0}"}
-        medial{"{0}…{1}"}
         word-final{"{0}…"}
         word-initial{"…{0}"}
         word-medial{"{0}…{1}"}
     }
-    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s š t u v w x y z ž å ä ö]"}
+    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r sš t u v w x y zž å ä ö]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Å Ä Ö]"}
     ExemplarCharactersNumbers{"[  , % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – , ; \\: ! ? . … ’ ” » ( ) \\[ \\] § @ * / \\\\ \\& #]"}
-    MoreInformation{"?"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – , ; \\: ! ? . … ’ ” » ( ) \\[ \\] § @ * / \\\\ \\& #]"}
     NumberElements{
-        default{"latn"}
         latn{
             miscPatterns{
-                approximately{"~{0}"}
                 atLeast{"vähintään {0}"}
-                atMost{"≤{0}"}
-                range{"{0}–{1}"}
             }
             patterns{
-                accountingFormat{"#,##0.00 ¤"}
-                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
-                currencyFormat%noCurrency{"#,##0.00"}
-                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
-                scientificFormat{"#E0"}
             }
             patternsLong{
                 decimalFormat{
@@ -193,18 +179,10 @@ fi{
                 }
             }
             symbols{
-                approximatelySign{"~"}
                 decimal{","}
-                exponential{"E"}
                 group{" "}
-                infinity{"∞"}
-                list{";"}
                 minusSign{"−"}
                 nan{"epäluku"}
-                perMille{"‰"}
-                percentSign{"%"}
-                plusSign{"+"}
-                superscriptingExponent{"×"}
                 timeSeparator{"."}
             }
         }
@@ -224,61 +202,9 @@ fi{
                 other{"{0} päivää"}
             }
         }
-        minimumGroupingDigits{"1"}
-        native{"latn"}
     }
     calendar{
         buddhist{
-            DateTimePatterns{
-                "H.mm.ss zzzz",
-                "H.mm.ss z",
-                "H.mm.ss",
-                "H.mm",
-                "cccc d. MMMM y G",
-                "d. MMMM y G",
-                "d.M.y G",
-                "d.M.y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMccccd",
-                "GyMMMMd",
-                "GyMd",
-                "GGGGGyMd",
-            }
-            availableFormats{
-                Ed{"E d."}
-                Gy{"y G"}
-                GyMMM{"LLL y G"}
-                GyMMMEd{"E d. MMM y G"}
-                GyMMMd{"d. MMM y G"}
-                MEd{"E d.M."}
-                MMMEd{"ccc d. MMM"}
-                MMMMd{"d. MMMM"}
-                MMMd{"d. MMM"}
-                Md{"d.M."}
-                y{"y G"}
-                yyyy{"y G"}
-                yyyyM{"L.y G"}
-                yyyyMEd{"E d.M.y G"}
-                yyyyMM{"M.y G"}
-                yyyyMMM{"LLL y G"}
-                yyyyMMMEd{"E d. MMM y G"}
-                yyyyMMMM{"LLLL y G"}
-                yyyyMMMMccccd{"cccc d. MMMM y G"}
-                yyyyMMMd{"d. MMM y G"}
-                yyyyMd{"d.M.y G"}
-                yyyyQQQ{"QQQ y G"}
-                yyyyQQQQ{"QQQQ y G"}
-            }
             eras{
                 wide{
                     "buddhalainen aika",
@@ -333,21 +259,6 @@ fi{
         coptic{
             monthNames{
                 format{
-                    abbreviated{
-                        "thoutkuuta",
-                        "paopikuuta",
-                        "hathorkuuta",
-                        "koiakkuuta",
-                        "tobikuuta",
-                        "meshirkuuta",
-                        "paremhatkuuta",
-                        "paremoudekuuta",
-                        "pashonskuuta",
-                        "paonikuuta",
-                        "epipkuuta",
-                        "mesorikuuta",
-                        "pi-kogi-enavotkuuta",
-                    }
                     wide{
                         "thoutkuuta",
                         "paopikuuta",
@@ -401,21 +312,6 @@ fi{
         ethiopic{
             monthNames{
                 format{
-                    abbreviated{
-                        "mäskärämkuuta",
-                        "ṭəqəmtkuuta",
-                        "ḫədarkuuta",
-                        "taḫśaśkuuta",
-                        "ṭərrkuuta",
-                        "yäkatitkuuta",
-                        "mägabitkuuta",
-                        "miyazyakuuta",
-                        "gənbotkuuta",
-                        "sänekuuta",
-                        "ḥamlekuuta",
-                        "nähasekuuta",
-                        "ṗagumenkuuta",
-                    }
                     wide{
                         "mäskärämkuuta",
                         "ṭəqəmtkuuta",
@@ -486,7 +382,7 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
-                "{1} {0}",
+                "{1} 'klo' {0}",
             }
             DateTimeSkeletons{
                 "Hmmsszzzz",
@@ -499,10 +395,8 @@ fi{
                 "GGGGGyMd",
             }
             availableFormats{
-                Bh{"h B"}
                 Bhm{"h.mm B"}
                 Bhms{"h.mm.ss B"}
-                E{"ccc"}
                 EBhm{"E h.mm B"}
                 EBhms{"E h.mm.ss B"}
                 EHm{"E HH.mm"}
@@ -518,14 +412,11 @@ fi{
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
-                M{"L"}
                 MEd{"E d.M."}
-                MMM{"LLL"}
                 MMMEd{"ccc d. MMM"}
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d.M."}
-                d{"d"}
                 h{"h a"}
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
@@ -572,8 +463,8 @@ fi{
                 }
                 GyMMMEd{
                     G{"E d.M.y – E d.M.y G"}
-                    M{"E d.M. – E d.M.y G"}
-                    d{"E d.M. – E d.M.y G"}
+                    M{"E d.M. – E d.M.y G"}
+                    d{"E d.M. – E d.M.y G"}
                     y{"E d.M.y – E d.M.y G"}
                 }
                 GyMMMM{
@@ -584,7 +475,7 @@ fi{
                 GyMMMMEd{
                     G{"E d. MMMM y G – E d. MMMM y G"}
                     M{"E d. MMMM – E d. MMMM y G"}
-                    d{"E d. – E d. MMMM y G"}
+                    d{"E d. – E d. MMMM y G"}
                     y{"E d. MMMM y – E d. MMMM y G"}
                 }
                 GyMMMMd{
@@ -623,15 +514,15 @@ fi{
                     M{"L.–L."}
                 }
                 MEd{
-                    M{"E d.M. – E d.M."}
-                    d{"E d. – E d.M."}
+                    M{"E d.M. – E d.M."}
+                    d{"E d. – E d.M."}
                 }
                 MMM{
                     M{"LLL–LLLL"}
                 }
                 MMMEd{
                     M{"E d. MMMM – E d. MMMM"}
-                    d{"E d. – E d. MMMM"}
+                    d{"E d. – E d. MMMM"}
                 }
                 MMMM{
                     M{"LLL–LLLL"}
@@ -684,7 +575,7 @@ fi{
                 }
                 yMMMEd{
                     M{"E d. MMMM – E d. MMMM y G"}
-                    d{"E d. – E d. MMMM y G"}
+                    d{"E d. – E d. MMMM y G"}
                     y{"E d. MMMM y – E d. MMMM y G"}
                 }
                 yMMMM{
@@ -704,15 +595,7 @@ fi{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "ap.",
-                "ip.",
-            }
             AmPmMarkersAbbr{
-                "ap.",
-                "ip.",
-            }
-            AmPmMarkersNarrow{
                 "ap.",
                 "ip.",
             }
@@ -735,7 +618,7 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
-                "{1} {0}",
+                "{1} 'klo' {0}",
             }
             DateTimeSkeletons{
                 "Hmmsszzzz",
@@ -747,14 +630,9 @@ fi{
                 "yMd",
                 "yMd",
             }
-            appendItems{
-                Timezone{"{0} {1}"}
-            }
             availableFormats{
-                Bh{"h B"}
                 Bhm{"h.mm B"}
                 Bhms{"h.mm.ss B"}
-                E{"ccc"}
                 EBhm{"E h.mm B"}
                 EBhms{"E h.mm.ss B"}
                 EHm{"E H.mm"}
@@ -774,9 +652,7 @@ fi{
                 Hms{"H.mm.ss"}
                 Hmsv{"H.mm.ss v"}
                 Hmv{"H.mm v"}
-                M{"L"}
                 MEd{"E d.M."}
-                MMM{"LLL"}
                 MMMEd{"ccc d. MMM"}
                 MMMMEd{"ccc d. MMMM"}
                 MMMMW{
@@ -786,14 +662,12 @@ fi{
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d.M."}
-                d{"d"}
                 h{"h a"}
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 hmsv{"h.mm.ss a v"}
                 hmv{"h.mm a v"}
                 ms{"m.ss"}
-                y{"y"}
                 yM{"L.y"}
                 yMEd{"E d.M.y"}
                 yMM{"M.y"}
@@ -823,24 +697,6 @@ fi{
                         "pe",
                         "la",
                     }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "K",
-                        "T",
-                        "P",
-                        "L",
-                    }
-                    short{
-                        "su",
-                        "ma",
-                        "ti",
-                        "ke",
-                        "to",
-                        "pe",
-                        "la",
-                    }
                     wide{
                         "sunnuntaina",
                         "maanantaina",
@@ -852,15 +708,6 @@ fi{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "su",
-                        "ma",
-                        "ti",
-                        "ke",
-                        "to",
-                        "pe",
-                        "la",
-                    }
                     narrow{
                         "S",
                         "M",
@@ -869,15 +716,6 @@ fi{
                         "T",
                         "P",
                         "L",
-                    }
-                    short{
-                        "su",
-                        "ma",
-                        "ti",
-                        "ke",
-                        "to",
-                        "pe",
-                        "la",
                     }
                     wide{
                         "sunnuntai",
@@ -923,36 +761,28 @@ fi{
                 stand-alone{
                     abbreviated{
                         afternoon1{"iltap."}
-                        am{"ap."}
                         evening1{"ilta"}
                         midnight{"keskiyö"}
                         morning1{"aamu"}
                         morning2{"aamup."}
                         night1{"yö"}
-                        noon{"keskip."}
-                        pm{"ip."}
                     }
                     narrow{
                         afternoon1{"ip."}
-                        am{"ap."}
                         evening1{"ilta"}
                         midnight{"ky."}
                         morning1{"aamu"}
                         morning2{"ap."}
                         night1{"yö"}
                         noon{"kp."}
-                        pm{"ip."}
                     }
                     wide{
                         afternoon1{"iltapäivä"}
-                        am{"ap."}
                         evening1{"ilta"}
-                        midnight{"keskiyö"}
                         morning1{"aamu"}
                         morning2{"aamupäivä"}
                         night1{"yö"}
                         noon{"keskipäivä"}
-                        pm{"ip."}
                     }
                 }
             }
@@ -1010,7 +840,7 @@ fi{
                 }
                 GyMMMEd{
                     G{"E d.M.y – E d.M.y G"}
-                    M{"E d.M. – E d.M.y G"}
+                    M{"E d.M. – E d.M.y G"}
                     d{"E d.M – E d.M.y G"}
                     y{"E d.M.y – E d.M.y G"}
                 }
@@ -1022,7 +852,7 @@ fi{
                 GyMMMMEd{
                     G{"E d. MMMM y G – E d. MMMM y G"}
                     M{"E d. MMMM – E d. MMMM y G"}
-                    d{"E d. – E d. MMMM y G"}
+                    d{"E d. – E d. MMMM y G"}
                     y{"E d. MMMM y – E d. MMMM y G"}
                 }
                 GyMMMMd{
@@ -1061,22 +891,22 @@ fi{
                     M{"L.–L."}
                 }
                 MEd{
-                    M{"E d.M. – E d.M."}
-                    d{"E d. – E d.M."}
+                    M{"E d.M. – E d.M."}
+                    d{"E d. – E d.M."}
                 }
                 MMM{
                     M{"LLL–LLLL"}
                 }
                 MMMEd{
                     M{"E d. MMMM – E d. MMMM"}
-                    d{"E d. – E d. MMMM"}
+                    d{"E d. – E d. MMMM"}
                 }
                 MMMM{
                     M{"LLL–LLLL"}
                 }
                 MMMMEd{
                     M{"E d. MMMM – E d. MMMM"}
-                    d{"E d. – E d. MMMM"}
+                    d{"E d. – E d. MMMM"}
                 }
                 MMMMd{
                     M{"d. MMMM – d. MMMM"}
@@ -1112,9 +942,6 @@ fi{
                     a{"h a – h a v"}
                     h{"h–h a v"}
                 }
-                y{
-                    y{"y–y"}
-                }
                 yM{
                     M{"LLL–LLLL y"}
                     y{"LLLL y – LLLL y"}
@@ -1130,7 +957,7 @@ fi{
                 }
                 yMMMEd{
                     M{"E d. MMMM – E d. MMMM y"}
-                    d{"E d. – E d. MMMM y"}
+                    d{"E d. – E d. MMMM y"}
                     y{"E d. MMMM y – E d. MMMM y"}
                 }
                 yMMMM{
@@ -1139,7 +966,7 @@ fi{
                 }
                 yMMMMEd{
                     M{"E d. MMMM – E d. MMMM y"}
-                    d{"E d. – E d. MMMM y"}
+                    d{"E d. – E d. MMMM y"}
                     y{"E d. MMMM y – E d. MMMM y"}
                 }
                 yMMMMd{
@@ -1173,20 +1000,6 @@ fi{
                         "lokak.",
                         "marrask.",
                         "jouluk.",
-                    }
-                    narrow{
-                        "T",
-                        "H",
-                        "M",
-                        "H",
-                        "T",
-                        "K",
-                        "H",
-                        "E",
-                        "S",
-                        "L",
-                        "M",
-                        "J",
                     }
                     wide{
                         "tammikuuta",
@@ -1256,32 +1069,6 @@ fi{
                         "3. nelj.",
                         "4. nelj.",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. neljännes",
-                        "2. neljännes",
-                        "3. neljännes",
-                        "4. neljännes",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1. nelj.",
-                        "2. nelj.",
-                        "3. nelj.",
-                        "4. nelj.",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                     wide{
                         "1. neljännes",
                         "2. neljännes",
@@ -1333,22 +1120,6 @@ fi{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "tišrí",
-                        "hešván",
-                        "kislév",
-                        "tevét",
-                        "ševát",
-                        "adár I",
-                        "adár",
-                        "nisán",
-                        "ijjár",
-                        "siván",
-                        "tammúz",
-                        "ab",
-                        "elúl",
-                        "adár II",
-                    }
                     narrow{
                         "T",
                         "H",
@@ -1392,20 +1163,6 @@ fi{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "chaitrakuuta",
-                        "vaisakhakuuta",
-                        "jyaisthakuuta",
-                        "asadhakuuta",
-                        "sravanakuuta",
-                        "bhadrakuuta",
-                        "asvinakuuta",
-                        "kartikakuuta",
-                        "agrahayanakuuta",
-                        "pausakuuta",
-                        "maghakuuta",
-                        "phalgunakuuta",
-                    }
                     wide{
                         "chaitrakuuta",
                         "vaisakhakuuta",
@@ -1476,49 +1233,6 @@ fi{
                         "dhu-l-hiddža",
                     }
                 }
-                stand-alone{
-                    wide{
-                        "muharram",
-                        "safar",
-                        "rabi’ al-awwal",
-                        "rabi’ al-akhir",
-                        "džumada-l-ula",
-                        "džumada-l-akhira",
-                        "radžab",
-                        "ša’ban",
-                        "ramadan",
-                        "šawwal",
-                        "dhu-l-qa’da",
-                        "dhu-l-hiddža",
-                    }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "H.mm.ss zzzz",
-                "H.mm.ss z",
-                "H.mm.ss",
-                "H.mm",
-                "cccc d. MMMM y G",
-                "d. MMMM y G",
-                "d.M.y G",
-                "d.M.y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMccccd",
-                "GyMMMMd",
-                "GyMd",
-                "GGGGGyMd",
             }
         }
         persian{
@@ -1529,20 +1243,6 @@ fi{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "farvardinkuuta",
-                        "ordibeheštkuuta",
-                        "khordadkuuta",
-                        "tirkuuta",
-                        "mordadkuuta",
-                        "šahrivarkuuta",
-                        "mehrkuuta",
-                        "abankuuta",
-                        "azarkuuta",
-                        "deykuuta",
-                        "bahmankuuta",
-                        "esfandkuuta",
-                    }
                     wide{
                         "farvardinkuuta",
                         "ordibeheštkuuta",
@@ -1596,10 +1296,6 @@ fi{
                     "e. Kiinan tasav.",
                     "Minguo",
                 }
-                narrow{
-                    "e. Kiinan tasav.",
-                    "Minguo",
-                }
                 wide{
                     "ennen Kiinan tasavaltaa",
                     "Minguo",
@@ -1641,15 +1337,12 @@ fi{
         half_width_form_variant{"ideografin puolikkaan levyiset muotovariantit"}
         han_characters{"han-merkit"}
         han_radicals{"han-radikaalit"}
-        hanja{"hanja"}
         hanzi_simplified{"hanzi (yksinkertaistettu)"}
         hanzi_traditional{"hanzi (perinteinen)"}
         heart{"sydän"}
         historic_scripts{"historialliset kirjoitusjärjestelmät"}
         ideographic_desc_characters{"ideogrammien kuvausmerkit"}
         japanese_kana{"japanilainen kana-kirjoitusjärjestelmä"}
-        kanbun{"kanbun"}
-        kanji{"kanji"}
         keycap{"näppäin"}
         leftwards_arrows{"vasemmalle osoittavat nuolet"}
         leftwards_rightwards_arrows{"vasemmalle ja oikealle osoittavat nuolet"}
@@ -1710,9 +1403,7 @@ fi{
         }
     }
     delimiters{
-        alternateQuotationEnd{"’"}
         alternateQuotationStart{"’"}
-        quotationEnd{"”"}
         quotationStart{"”"}
     }
     fields{
@@ -1733,26 +1424,6 @@ fi{
                 past{
                     one{"{0} päivä sitten"}
                     other{"{0} päivää sitten"}
-                }
-            }
-        }
-        day-narrow{
-            dn{"pv"}
-            relative{
-                "-1"{"eilen"}
-                "-2"{"toissap."}
-                "0"{"tänään"}
-                "1"{"huom."}
-                "2"{"ylihuom."}
-            }
-            relativeTime{
-                future{
-                    one{"{0} pv päästä"}
-                    other{"{0} pv päästä"}
-                }
-                past{
-                    one{"{0} pv sitten"}
-                    other{"{0} pv sitten"}
                 }
             }
         }
@@ -1779,28 +1450,13 @@ fi{
         dayOfYear{
             dn{"vuodenpäivä"}
         }
-        dayOfYear-narrow{
-            dn{"vuodenpv"}
-        }
         dayOfYear-short{
             dn{"vuodenpv"}
         }
         dayperiod{
             dn{"vuorokaudenaika"}
         }
-        dayperiod-narrow{
-            dn{"vuorokaudenaika"}
-        }
-        dayperiod-short{
-            dn{"vuorokaudenaika"}
-        }
         era{
-            dn{"aikakausi"}
-        }
-        era-narrow{
-            dn{"aikakausi"}
-        }
-        era-short{
             dn{"aikakausi"}
         }
         fri{
@@ -1817,23 +1473,6 @@ fi{
                 past{
                     one{"{0} perjantai sitten"}
                     other{"{0} perjantaita sitten"}
-                }
-            }
-        }
-        fri-narrow{
-            relative{
-                "-1"{"viime pe"}
-                "0"{"tänä pe"}
-                "1"{"ensi pe"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} pe päästä"}
-                    other{"{0} pe päästä"}
-                }
-                past{
-                    one{"{0} pe sitten"}
-                    other{"{0} pe sitten"}
                 }
             }
         }
@@ -1870,22 +1509,6 @@ fi{
                 }
             }
         }
-        hour-narrow{
-            dn{"t"}
-            relative{
-                "0"{"tunnin sisällä"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} t päästä"}
-                    other{"{0} t päästä"}
-                }
-                past{
-                    one{"{0} t sitten"}
-                    other{"{0} t sitten"}
-                }
-            }
-        }
         hour-short{
             dn{"t"}
             relative{
@@ -1915,22 +1538,6 @@ fi{
                 past{
                     one{"{0} minuutti sitten"}
                     other{"{0} minuuttia sitten"}
-                }
-            }
-        }
-        minute-narrow{
-            dn{"min"}
-            relative{
-                "0"{"minuutin sisällä"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} min päästä"}
-                    other{"{0} min päästä"}
-                }
-                past{
-                    one{"{0} min sitten"}
-                    other{"{0} min sitten"}
                 }
             }
         }
@@ -1967,23 +1574,6 @@ fi{
                 }
             }
         }
-        mon-narrow{
-            relative{
-                "-1"{"viime ma"}
-                "0"{"tänä ma"}
-                "1"{"ensi ma"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} ma päästä"}
-                    other{"{0} ma päästä"}
-                }
-                past{
-                    one{"{0} ma sitten"}
-                    other{"{0} ma sitten"}
-                }
-            }
-        }
         mon-short{
             relative{
                 "-1"{"viime ma"}
@@ -2016,24 +1606,6 @@ fi{
                 past{
                     one{"{0} kuukausi sitten"}
                     other{"{0} kuukautta sitten"}
-                }
-            }
-        }
-        month-narrow{
-            dn{"kk"}
-            relative{
-                "-1"{"viime kk"}
-                "0"{"tässä kk"}
-                "1"{"ensi kk"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} kk päästä"}
-                    other{"{0} kk päästä"}
-                }
-                past{
-                    one{"{0} kk sitten"}
-                    other{"{0} kk sitten"}
                 }
             }
         }
@@ -2126,23 +1698,6 @@ fi{
                 }
             }
         }
-        sat-narrow{
-            relative{
-                "-1"{"viime la"}
-                "0"{"tänä la"}
-                "1"{"ensi la"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} la päästä"}
-                    other{"{0} la päästä"}
-                }
-                past{
-                    one{"{0} la sitten"}
-                    other{"{0} la sitten"}
-                }
-            }
-        }
         sat-short{
             relative{
                 "-1"{"viime la"}
@@ -2176,27 +1731,8 @@ fi{
                 }
             }
         }
-        second-narrow{
-            dn{"s"}
-            relative{
-                "0"{"nyt"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} s päästä"}
-                    other{"{0} s päästä"}
-                }
-                past{
-                    one{"{0} s sitten"}
-                    other{"{0} s sitten"}
-                }
-            }
-        }
         second-short{
             dn{"s"}
-            relative{
-                "0"{"nyt"}
-            }
             relativeTime{
                 future{
                     one{"{0} s päästä"}
@@ -2222,23 +1758,6 @@ fi{
                 past{
                     one{"{0} sunnuntai sitten"}
                     other{"{0} sunnuntaita sitten"}
-                }
-            }
-        }
-        sun-narrow{
-            relative{
-                "-1"{"viime su"}
-                "0"{"tänä su"}
-                "1"{"ensi su"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} su päästä"}
-                    other{"{0} su päästä"}
-                }
-                past{
-                    one{"{0} su sitten"}
-                    other{"{0} su sitten"}
                 }
             }
         }
@@ -2276,23 +1795,6 @@ fi{
                 }
             }
         }
-        thu-narrow{
-            relative{
-                "-1"{"viime to"}
-                "0"{"tänä to"}
-                "1"{"ensi to"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} to päästä"}
-                    other{"{0} to päästä"}
-                }
-                past{
-                    one{"{0} to sitten"}
-                    other{"{0} to sitten"}
-                }
-            }
-        }
         thu-short{
             relative{
                 "-1"{"viime to"}
@@ -2327,23 +1829,6 @@ fi{
                 }
             }
         }
-        tue-narrow{
-            relative{
-                "-1"{"viime ti"}
-                "0"{"tänä ti"}
-                "1"{"ensi ti"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} ti päästä"}
-                    other{"{0} ti päästä"}
-                }
-                past{
-                    one{"{0} ti sitten"}
-                    other{"{0} ti sitten"}
-                }
-            }
-        }
         tue-short{
             relative{
                 "-1"{"viime ti"}
@@ -2375,23 +1860,6 @@ fi{
                 past{
                     one{"{0} keskiviikko sitten"}
                     other{"{0} keskiviikkoa sitten"}
-                }
-            }
-        }
-        wed-narrow{
-            relative{
-                "-1"{"viime ke"}
-                "0"{"tänä ke"}
-                "1"{"ensi ke"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} ke päästä"}
-                    other{"{0} ke päästä"}
-                }
-                past{
-                    one{"{0} ke sitten"}
-                    other{"{0} ke sitten"}
                 }
             }
         }
@@ -2431,25 +1899,6 @@ fi{
                 }
             }
         }
-        week-narrow{
-            dn{"vk"}
-            relative{
-                "-1"{"viime vk"}
-                "0"{"tällä vk"}
-                "1"{"ensi vk"}
-            }
-            relativePeriod{"päivän {0} viikolla"}
-            relativeTime{
-                future{
-                    one{"{0} vk päästä"}
-                    other{"{0} vk päästä"}
-                }
-                past{
-                    one{"{0} vk sitten"}
-                    other{"{0} vk sitten"}
-                }
-            }
-        }
         week-short{
             dn{"vk"}
             relative{
@@ -2457,7 +1906,6 @@ fi{
                 "0"{"tällä vk"}
                 "1"{"ensi vk"}
             }
-            relativePeriod{"päivän {0} viikolla"}
             relativeTime{
                 future{
                     one{"{0} vk päästä"}
@@ -2472,26 +1920,14 @@ fi{
         weekOfMonth{
             dn{"kuukauden viikko"}
         }
-        weekOfMonth-narrow{
-            dn{"kuukauden vk"}
-        }
         weekOfMonth-short{
             dn{"kuukauden vk"}
         }
         weekday{
             dn{"viikonpäivä"}
         }
-        weekday-narrow{
-            dn{"viikonpäivä"}
-        }
-        weekday-short{
-            dn{"viikonpäivä"}
-        }
         weekdayOfMonth{
             dn{"kuukauden viikonpäivä"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"kuukauden vk päivä"}
         }
         weekdayOfMonth-short{
             dn{"kuukauden vk päivä"}
@@ -2511,24 +1947,6 @@ fi{
                 past{
                     one{"{0} vuosi sitten"}
                     other{"{0} vuotta sitten"}
-                }
-            }
-        }
-        year-narrow{
-            dn{"v"}
-            relative{
-                "-1"{"viime v"}
-                "0"{"tänä v"}
-                "1"{"ensi v"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} v päästä"}
-                    other{"{0} v päästä"}
-                }
-                past{
-                    one{"{0} v sitten"}
-                    other{"{0} v sitten"}
                 }
             }
         }
@@ -2553,37 +1971,19 @@ fi{
         zone{
             dn{"aikavyöhyke"}
         }
-        zone-narrow{
-            dn{"aikavyöhyke"}
-        }
-        zone-short{
-            dn{"aikavyöhyke"}
-        }
     }
     listPattern{
         or{
             2{"{0} tai {1}"}
             end{"{0} tai {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
         standard{
             2{"{0} ja {1}"}
             end{"{0} ja {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
-        }
-        standard-short{
-            2{"{0} ja {1}"}
-            end{"{0} ja {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
         unit{
             2{"{0} ja {1}"}
             end{"{0} ja {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}
@@ -2594,8 +1994,6 @@ fi{
         unit-short{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -2606,32 +2004,32 @@ fi{
     parse{
         date{
             lenient{
-                "[\\--/]",
-                "[\\:∶]",
+                "[\\- ‑ . /]",
+                "[\\: ∶]",
             }
         }
         general{
             lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
+                "[.．․﹒ 。｡︒]",
+                "['＇’ ՚ ᾽᾿ ʼ]",
+                "[%％﹪ ٪]",
+                "[‰ ؉]",
+                "[\$＄﹩]",
+                "[£ ₤]",
                 "[¥￥]",
                 "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
+                "[₹ ₨ {Rp} {Rs}]",
             }
         }
         number{
             lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
+                "[\\-－﹣ ‑ ‒ −⁻₋ ➖]",
+                "[,，﹐︐ ، ٫ 、﹑､︑]",
+                "[+＋﬩﹢⁺₊ ➕]",
             }
             stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
+                "[,，﹐︐ ٫]",
+                "[.．․﹒ ｡]",
             }
         }
     }
@@ -2641,17 +2039,24 @@ fi{
                 "und",
                 "fi",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
-            givenFirst-long-addressing-formal{"{prefix} {surname} {surname2}"}
+            givenFirst-long-addressing-formal{"{title} {surname} {surname2}"}
             givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {surname2}, {credentials}"}
             givenFirst-long-referring-informal{"{given} {surname}"}
-            givenFirst-medium-addressing-formal{"{prefix} {surname}"}
+            givenFirst-medium-addressing-formal{"{title} {surname}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
             givenFirst-medium-referring-informal{"{given} {given2} {surname} {surname2}"}
-            givenFirst-short-addressing-formal{"{prefix} {surname}"}
+            givenFirst-short-addressing-formal{"{title} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
             givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
@@ -2663,20 +2068,25 @@ fi{
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
             sorting-short-referring-formal{"{surname-prefix} {surname-core}, {given-initial} {given2-initial}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
-            surnameFirst-long-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
-            surnameFirst-long-referring-formal{"{surname} {surname2} {given} {given2}, {prefix} {suffix}"}
+            surnameFirst-long-referring-formal{"{surname} {surname2} {given} {given2}, {title} {credentials}"}
             surnameFirst-long-referring-informal{"{surname} {given}"}
-            surnameFirst-medium-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-medium-addressing-formal{"{title} {surname}"}
             surnameFirst-medium-addressing-informal{"{given-informal}"}
-            surnameFirst-medium-referring-formal{"{surname} {surname2} {given}, {prefix}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {surname2} {given}, {title}"}
             surnameFirst-medium-referring-informal{"{surname} {given}"}
-            surnameFirst-short-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-short-addressing-formal{"{title} {surname}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}
             surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
             surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+        parameterDefault{
+            formality{"informal"}
         }
     }
 }

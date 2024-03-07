@@ -62,6 +62,7 @@ public final class SupplementalData {
 
     private static final PathMatcher PARENT_LOCALE =
         PathMatcher.of("//supplementalData/parentLocales/parentLocale[@parent=*]");
+    private static final AttributeKey COMPONENT = keyOf("parentLocales", "component");
     private static final AttributeKey PARENT = keyOf("parentLocale", "parent");
     private static final AttributeKey LOCALES = keyOf("parentLocale", "locales");
 
@@ -123,7 +124,9 @@ public final class SupplementalData {
                             alias,
                             alias.typeKey.valueFrom(v),
                             alias.replacementKey.valueFrom(v)));
-                } else if (PARENT_LOCALE.matches(v.getPath())) {
+                } else if (PARENT_LOCALE.matches(v.getPath()) && !COMPONENT.optionalValueFrom(v).isPresent()) {
+                    // CLDR-16253 added component-specific parents, which we ignore for now.
+                    // TODO(ICU-22289): Handle these properly.
                     String p = PARENT.valueFrom(v);
                     LOCALES.listOfValuesFrom(v).forEach(c -> parentLocaleMap.put(c, p));
                 } else if (CALENDER_PREFERENCE.matches(v.getPath())) {

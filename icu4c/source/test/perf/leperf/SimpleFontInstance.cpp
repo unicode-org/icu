@@ -54,7 +54,7 @@ const void *SimpleFontInstance::getFontTable(LETag tableTag) const
         return CanonShaping::glyphDefinitionTable;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void SimpleFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
@@ -133,6 +133,6 @@ float SimpleFontInstance::getScaleFactorY() const
 
 le_bool SimpleFontInstance::getGlyphPoint(LEGlyphID /*glyph*/, le_int32 /*pointNumber*/, LEPoint &/*point*/) const
 {
-    return FALSE;
+    return false;
 }
 

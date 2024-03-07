@@ -302,7 +302,7 @@ public:
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise. U_MISSING_RESOURCE_ERROR will be returned if the resource data
      *                 requests a calendar type which has not been installed.
-     * @return         A Calendar if created successfully. NULL otherwise.
+     * @return         A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(UErrorCode& success);
@@ -316,7 +316,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(TimeZone* zoneToAdopt, UErrorCode& success);
@@ -329,7 +329,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(const TimeZone& zone, UErrorCode& success);
@@ -341,7 +341,7 @@ public:
      * @param success  Indicates the success/failure of Calendar creation. Filled in
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
-     * @return         A Calendar if created successfully. NULL otherwise.
+     * @return         A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(const Locale& aLocale, UErrorCode& success);
@@ -356,7 +356,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
@@ -370,7 +370,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
@@ -413,7 +413,7 @@ public:
      * @return   The current UTC time in milliseconds.
      * @stable ICU 2.0
      */
-    static UDate U_EXPORT2 getNow(void);
+    static UDate U_EXPORT2 getNow();
 
     /**
      * Gets this Calendar's time as milliseconds. May involve recalculation of time due
@@ -826,7 +826,7 @@ public:
     /**
      * Sets the calendar's time zone to be the one passed in. The Calendar takes ownership
      * of the TimeZone; the caller is no longer responsible for deleting it.  If the
-     * given time zone is NULL, this function has no effect.
+     * given time zone is nullptr, this function has no effect.
      *
      * @param value  The given time zone.
      * @stable ICU 2.0
@@ -850,7 +850,7 @@ public:
      * @return   The time zone object associated with this calendar.
      * @stable ICU 2.0
      */
-    const TimeZone& getTimeZone(void) const;
+    const TimeZone& getTimeZone() const;
 
     /**
      * Returns the time zone owned by this calendar. The caller owns the returned object
@@ -860,7 +860,7 @@ public:
      * @return   The time zone object which was associated with this calendar.
      * @stable ICU 2.0
      */
-    TimeZone* orphanTimeZone(void);
+    TimeZone* orphanTimeZone();
 
     /**
      * Queries if the current date for this Calendar is in Daylight Savings Time.
@@ -870,7 +870,7 @@ public:
      *           false, otherwise.
      * @stable ICU 2.0
      */
-    virtual UBool inDaylightTime(UErrorCode& status) const = 0;
+    virtual UBool inDaylightTime(UErrorCode& status) const;
 
     /**
      * Specifies whether or not date/time interpretation is to be lenient. With lenient
@@ -892,7 +892,7 @@ public:
      * @return   True tells that date/time interpretation is to be lenient.
      * @stable ICU 2.0
      */
-    UBool isLenient(void) const;
+    UBool isLenient() const;
 
     /**
      * Sets the behavior for handling wall time repeating multiple times
@@ -925,7 +925,7 @@ public:
      * @see #setRepeatedWallTimeOption
      * @stable ICU 49
      */
-    UCalendarWallTimeOption getRepeatedWallTimeOption(void) const;
+    UCalendarWallTimeOption getRepeatedWallTimeOption() const;
 
     /**
      * Sets the behavior for handling skipped wall time at positive time zone offset
@@ -960,7 +960,7 @@ public:
      * @see #setSkippedWallTimeOption
      * @stable ICU 49
      */
-    UCalendarWallTimeOption getSkippedWallTimeOption(void) const;
+    UCalendarWallTimeOption getSkippedWallTimeOption() const;
 
     /**
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
@@ -977,7 +977,7 @@ public:
      * @return   The first day of the week.
      * @deprecated ICU 2.6 use the overload with error code
      */
-    EDaysOfWeek getFirstDayOfWeek(void) const;
+    EDaysOfWeek getFirstDayOfWeek() const;
 #endif  /* U_HIDE_DEPRECATED_API */
 
     /**
@@ -1009,7 +1009,7 @@ public:
      * @return   The minimal days required in the first week of the year.
      * @stable ICU 2.0
      */
-    uint8_t getMinimalDaysInFirstWeek(void) const;
+    uint8_t getMinimalDaysInFirstWeek() const;
 
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
@@ -1232,12 +1232,13 @@ public:
      * resolving of time into time fields.
      * @stable ICU 2.0
      */
-    void clear(void);
+    void clear();
 
     /**
      * Clears the value in the given time field, both making it unset and assigning it a
      * value of zero. This field value will be determined during the next resolving of
-     * time into time fields.
+     * time into time fields. Clearing UCAL_ORDINAL_MONTH or UCAL_MONTH will
+     * clear both fields.
      *
      * @param field  The time field to be cleared.
      * @stable ICU 2.6.
@@ -1259,7 +1260,7 @@ public:
      *           same class ID. Objects of other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const override = 0;
+    virtual UClassID getDynamicClassID() const override = 0;
 
     /**
      * Returns the calendar type name string for this Calendar object.
@@ -1347,7 +1348,64 @@ public:
      * this calendar system, false otherwise.
      * @stable ICU 4.4
      */
-    virtual UBool isWeekend(void) const;
+    virtual UBool isWeekend() const;
+
+    /**
+     * Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to * setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     *
+     * @param status        ICU Error Code
+     * @return       True if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     * @stable ICU 73
+     */
+    virtual bool inTemporalLeapYear(UErrorCode& status) const;
+
+    /**
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year and suffixed by an
+     * optional literal grapheme "L" if this is a leap month in a lunisolar
+     * calendar. The 25 possible values are "M01" .. "M13" and "M01L" .. "M12L".
+     * For the Hebrew calendar, the values are "M01" .. "M12" for non-leap year, and
+     * "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @param status        ICU Error Code
+     * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
+     * @stable ICU 73
+     */
+    virtual const char* getTemporalMonthCode(UErrorCode& status) const;
+
+    /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+     * is a leap month in a lunisolar calendar. The 25 possible values are
+     * "M01" .. "M13" and "M01L" .. "M12L". For Hebrew calendar, the values are
+     * "M01" .. "M12" for non-leap years, and "M01" .. "M05", "M05L", "M06"
+     * .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @param temporalMonth  The value to be set for temporal monthCode.
+     * @param status        ICU Error Code
+     *
+     * @stable ICU 73
+     */
+    virtual void setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
 
 protected:
 
@@ -1491,6 +1549,30 @@ protected:
     inline int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
 #endif  /* U_HIDE_INTERNAL_API */
 
+    /**
+     * Use this function instead of internalGet(UCAL_MONTH). The implementation
+     * check the timestamp of UCAL_MONTH and UCAL_ORDINAL_MONTH and use the
+     * one set later. The subclass should override it to conver the value of UCAL_ORDINAL_MONTH
+     * to UCAL_MONTH correctly if UCAL_ORDINAL_MONTH has higher priority.
+     *
+     * @return       The value for the UCAL_MONTH.
+     * @internal
+     */
+    virtual int32_t internalGetMonth() const;
+
+    /**
+     * Use this function instead of internalGet(UCAL_MONTH, defaultValue). The implementation
+     * check the timestamp of UCAL_MONTH and UCAL_ORDINAL_MONTH and use the
+     * one set later. The subclass should override it to conver the value of UCAL_ORDINAL_MONTH
+     * to UCAL_MONTH correctly if UCAL_ORDINAL_MONTH has higher priority.
+     *
+     * @param defaultValue a default value used if the UCAL_MONTH and
+     *   UCAL_ORDINAL are both unset.
+     * @return       The value for the UCAL_MONTH.
+     * @internal
+     */
+    virtual int32_t internalGetMonth(int32_t defaultValue) const;
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * Sets the value for a given time field.  This is a fast internal method for
@@ -1569,7 +1651,6 @@ protected:
      */
     virtual int32_t getLimit(UCalendarDateFields field, ELimitType limitType) const;
 
-
     /**
      * Return the Julian day number of day before the first day of the
      * given month in the given extended year.  Subclasses should override
@@ -1583,7 +1664,7 @@ protected:
      * day of the given month and year
      * @internal
      */
-    virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
+    virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month,
                                                    UBool useMonth) const  = 0;
 
     /**
@@ -1610,20 +1691,22 @@ protected:
      * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields (such
      * as UCAL_ERA) specific to the calendar system, depending on which set of
      * fields is newer.
+     * @param status        ICU Error Code
      * @return the extended year
      * @internal
      */
-    virtual int32_t handleGetExtendedYear() = 0;
+    virtual int32_t handleGetExtendedYear(UErrorCode& status) = 0;
 
     /**
      * Subclasses may override this.  This method calls
      * handleGetMonthLength() to obtain the calendar-specific month
      * length.
      * @param bestField which field to use to calculate the date
+     * @param status        ICU Error Code
      * @return julian day specified by calendar fields.
      * @internal
      */
-    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField);
+    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode &status);
 
     /**
      * Subclasses must override this to convert from week fields
@@ -1647,10 +1730,11 @@ protected:
     /**
      * Compute the Julian day from fields.  Will determine whether to use
      * the JULIAN_DAY field directly, or other fields.
+     * @param status        ICU Error Code
      * @return the julian day
      * @internal
      */
-    int32_t computeJulianDay();
+    int32_t computeJulianDay(UErrorCode &status);
 
     /**
      * Compute the milliseconds in the day from the fields.  This is a
@@ -1723,6 +1807,13 @@ protected:
     static const UFieldResolutionTable kDOWPrecedence[];
 
     /**
+     * Precedence table for Months
+     * @see #resolveFields
+     * @internal
+     */
+    static const UFieldResolutionTable kMonthPrecedence[];
+
+    /**
      * Given a precedence table, return the newest field combination in
      * the table, or UCAL_FIELD_COUNT if none is found.
      *
@@ -1749,7 +1840,7 @@ protected:
      * match, then UCAL_FIELD_COUNT is returned.
      * @internal
      */
-    UCalendarDateFields resolveFields(const UFieldResolutionTable *precedenceTable);
+    UCalendarDateFields resolveFields(const UFieldResolutionTable *precedenceTable) const;
 #endif  /* U_HIDE_INTERNAL_API */
 
 
@@ -1821,7 +1912,7 @@ protected:
      * @return     the current time without recomputing.
      * @stable ICU 2.0
      */
-    UDate        internalGetTime(void) const     { return fTime; }
+    UDate internalGetTime() const { return fTime; }
 
     /**
      * Set the current time without affecting flags or fields.
@@ -2092,7 +2183,7 @@ private:
 
     /**
      * Time zone affects the time calculation done by Calendar. Calendar subclasses use
-     * the time zone data to produce the local time. Always set; never NULL.
+     * the time zone data to produce the local time. Always set; never nullptr.
      */
     TimeZone*   fZone;
 
@@ -2249,7 +2340,7 @@ private:
      * @return   Day number from 1..7 (SUN..SAT).
      * @internal
      */
-    static uint8_t julianDayToDayOfWeek(double julian);
+    static uint8_t julianDayToDayOfWeek(int32_t julian);
 #endif  /* U_HIDE_INTERNAL_API */
 
  private:
@@ -2269,7 +2360,7 @@ private:
      * @return a StringEnumeration over the locales available at the time of the call
      * @internal
      */
-    static StringEnumeration* getAvailableLocales(void);
+    static StringEnumeration* getAvailableLocales();
 
     /**
      * Register a new Calendar factory.  The factory will be adopted.
@@ -2374,7 +2465,7 @@ private:
 
 private:
     /**
-     * Cast TimeZone used by this object to BasicTimeZone, or NULL if the TimeZone
+     * Cast TimeZone used by this object to BasicTimeZone, or nullptr if the TimeZone
      * is not an instance of BasicTimeZone.
      */
     BasicTimeZone* getBasicTimeZone() const;

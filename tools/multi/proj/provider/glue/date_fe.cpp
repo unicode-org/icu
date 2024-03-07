@@ -36,9 +36,9 @@
   public:  static DateFormat *create(UDateFormatStyle  timeStyle, \
                                                     UDateFormatStyle  dateStyle, \
                                                     const char        *locale, \
-                                                    const UChar       *tzID, \
+                                                    const char16_t    *tzID, \
                                                     int32_t           tzIDLength, \
-                                                    const UChar       *pattern,  \
+                                                    const char16_t    *pattern,  \
                                                     int32_t           patternLength,  \
                                                       UErrorCode        *status, const Locale &loc, const char *ver); \
   private: UDateFormat *_this; GLUE_SYM_V( DateFormat, x ) ( UDateFormat* tn ); \
@@ -48,7 +48,7 @@
     static void* getStaticClassID() ;                                   \
     virtual UnicodeString& format(  Calendar& cal, UnicodeString& appendTo, FieldPosition& pos) const; \
     virtual void parse( const UnicodeString& text, Calendar& cal, ParsePosition& pos) const; \
-    virtual Format* clone(void) const; \
+    virtual Format* clone() const; \
   public: static int32_t countAvailable();                              \
 public: static int32_t appendAvailable(UnicodeString* strs, int32_t i, int32_t count); \
   }; \
@@ -87,9 +87,9 @@ DateFormat *
 GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,
                                                     const char        *locale,
-                                                    const UChar       *tzID,
+                                                    const char16_t    *tzID,
                                                     int32_t           tzIDLength,
-                                                    const UChar       *pattern,
+                                                    const char16_t    *pattern,
                                                     int32_t           patternLength,
                                                     UErrorCode        *status,
                                   const Locale &loc, const char */*ver*/) {
@@ -102,7 +102,7 @@ GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
                                       pattern,
                                       patternLength,
                                       status);
-    if(U_FAILURE(*status)) return NULL; // TODO: ERR?
+    if(U_FAILURE(*status)) return nullptr; // TODO: ERR?
     DateFormat *c =  new GLUE_SYM( DateFormat ) ( uc );
 #if DATE_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " udat_open=%s ->> %p\n", loc.getName(), (void*)c);
@@ -117,7 +117,7 @@ UnicodeString& GLUE_SYM (DateFormat ) :: format(  Calendar& cal, UnicodeString& 
 #endif
   int32_t len = appendTo.length();
 
-  UChar junk[200];
+  char16_t junk[200];
   UErrorCode status = U_ZERO_ERROR;
 
   UFieldPosition pos2;
@@ -142,9 +142,9 @@ void  GLUE_SYM (DateFormat ) :: parse( const UnicodeString& text, Calendar& cal,
   return;
 }
 
-Format*  GLUE_SYM (DateFormat ) :: clone(void) const
+Format*  GLUE_SYM (DateFormat ) :: clone() const
 {
-  return NULL;
+  return nullptr;
 }
 
 
@@ -170,7 +170,7 @@ int32_t GLUE_SYM ( DateFormat ) :: appendAvailable(UnicodeString* strs, int32_t 
 #if DATE_FE_DEBUG
          { 
             char foo[999];
-            const UChar *ss = strs[i+j].getTerminatedBuffer();
+            const char16_t *ss = strs[i+j].getTerminatedBuffer();
             u_austrcpy(foo, ss);
             //            fprintf(stderr,  "VCF " ICUGLUE_VER_STR " appending [%d+%d=%d] <<%s>>\n", i, j, i+j, foo);
         }
@@ -204,9 +204,9 @@ public:
   virtual DateFormat *createFormat(UDateFormatStyle  timeStyle,
                                    UDateFormatStyle  dateStyle,
                                    const char        *locale,
-                                   const UChar       *tzID,
+                                   const char16_t    *tzID,
                                    int32_t           tzIDLength,
-                                   const UChar       *pattern,
+                                   const char16_t    *pattern,
                                    int32_t           patternLength,
                                    UErrorCode        *status);
   virtual const UnicodeString *getSupportedIDs(int32_t &count, UErrorCode &status);
@@ -219,9 +219,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION( VersionDateFormatFactory )
 DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,
                                                     const char        *locale,
-                                                    const UChar       *tzID,
+                                                    const char16_t    *tzID,
                                                     int32_t           tzIDLength,
-                                                    const UChar       *pattern,
+                                                    const char16_t    *pattern,
                                                     int32_t           patternLength,
                                                        UErrorCode        *status) {
     Locale loc(locale);
@@ -231,7 +231,7 @@ DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
     fprintf(stderr,  "VCF:CC %s\n", loc.getName());
 #endif
     int32_t len = loc.getKeywordValue("sp", provider, 200, *status);
-    if(U_FAILURE(*status)||len==0) return NULL;
+    if(U_FAILURE(*status)||len==0) return nullptr;
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:KWV> %s/%d\n", u_errorName(*status), len);
 #endif
@@ -239,7 +239,7 @@ DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:KWV %s\n", provider);
 #endif
-    if(strncmp(provider,"icu",3)) return NULL;
+    if(strncmp(provider,"icu",3)) return nullptr;
     const char *icuver=provider+3;
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:ICUV %s\n", icuver);
@@ -254,17 +254,17 @@ DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
     fprintf(stderr,  "VCF:CC %s failed\n", loc.getName());
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 
-static const UnicodeString *gLocalesDate = NULL;
+static const UnicodeString *gLocalesDate = nullptr;
 static  int32_t gLocCountDate = 0; 
 
 
 const UnicodeString
 *VersionDateFormatFactory::getSupportedIDs(int32_t &count, UErrorCode &/*status*/) {
-  if(gLocalesDate==NULL) {
+  if(gLocalesDate==nullptr) {
     count = 0;
     
     
@@ -305,16 +305,16 @@ const UnicodeString
 #include <stdio.h>
 #include <unicode/uversion.h>
 
-//static URegistryKey rkdate = NULL;
+//static URegistryKey rkdate = nullptr;
 
 static VersionDateFormatFactory vdf;
 
 extern "C" UDateFormat *versionDateFormatOpener(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,
                                                     const char        *locale,
-                                                    const UChar       *tzID,
+                                                    const char16_t    *tzID,
                                                     int32_t           tzIDLength,
-                                                    const UChar       *pattern,
+                                                    const char16_t    *pattern,
                                                     int32_t           patternLength,
                                                        UErrorCode        *status) {
   DateFormat *df = vdf.createFormat(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status);

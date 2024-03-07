@@ -21,14 +21,14 @@
 #include "unicode/fieldpos.h"
 #include "unicode/fmtable.h"
 
-/*static UBool chkstatus( UErrorCode &status, char* msg = NULL )
+/*static UBool chkstatus( UErrorCode &status, char* msg = nullptr )
 {
     UBool ok = (status == U_ZERO_ERROR);
     if (!ok) it_errln( msg );
     return ok;
 }*/
 
-void test_ParsePosition( void )
+void test_ParsePosition()
 {
     ParsePosition* pp1 = new ParsePosition();
     if (pp1 && (pp1->getIndex() == 0)) {
@@ -78,7 +78,7 @@ void test_ParsePosition( void )
 
 #include "unicode/decimfmt.h"
 
-void test_FieldPosition_example( void )
+void test_FieldPosition_example()
 {
     //***** no error detection yet !!!!!!!
     //***** this test is for compiler checks and visual verification only.
@@ -87,12 +87,12 @@ void test_FieldPosition_example( void )
     int32_t dNumSize = UPRV_LENGTHOF(doubleNum);
 
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
+    DecimalFormat* fmt = dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(status));
     if (U_FAILURE(status)) {
         it_dataerrln("NumberFormat::createInstance() error");
         return;
     }
-    fmt->setDecimalSeparatorAlwaysShown(TRUE);
+    fmt->setDecimalSeparatorAlwaysShown(true);
     
     const int32_t tempLen = 20;
     char temp[tempLen];
@@ -115,7 +115,7 @@ void test_FieldPosition_example( void )
 
 }
 
-void test_FieldPosition( void )
+void test_FieldPosition()
 {
 
     FieldPosition fp( 7 );
@@ -130,16 +130,16 @@ void test_FieldPosition( void )
     if ( fph->getField() != 3) it_errln("*** FP getField or heap constr.");
     delete fph;
 
-    UBool err1 = FALSE;
-    UBool err2 = FALSE;
-    UBool err3 = FALSE;
+    UBool err1 = false;
+    UBool err2 = false;
+    UBool err3 = false;
     for (int32_t i = -50; i < 50; i++ ) {
         fp.setField( i+8 );
         fp.setBeginIndex( i+6 );
         fp.setEndIndex( i+7 );
-        if (fp.getField() != i+8)  err1 = TRUE;
-        if (fp.getBeginIndex() != i+6) err2 = TRUE;
-        if (fp.getEndIndex() != i+7) err3 = TRUE;
+        if (fp.getField() != i+8)  err1 = true;
+        if (fp.getBeginIndex() != i+6) err2 = true;
+        if (fp.getEndIndex() != i+7) err3 = true;
     }
     if (!err1) {
         it_logln("FP setField and getField tested.");
@@ -161,7 +161,7 @@ void test_FieldPosition( void )
 
 }
 
-void test_Formattable( void )
+void test_Formattable()
 {
     UErrorCode status = U_ZERO_ERROR;
     Formattable* ftp = new Formattable();
@@ -271,10 +271,10 @@ void test_Formattable( void )
     int32_t i, res_cnt;
     const Formattable* res_array = ft_arr.getArray( res_cnt );
     if (res_cnt == ft_cnt) {
-        UBool same  = TRUE;
+        UBool same  = true;
         for (i = 0; i < res_cnt; i++ ) {
             if (res_array[i] != ftarray[i]) {
-                same = FALSE;
+                same = false;
             }
         }
         if (same) {
@@ -294,7 +294,7 @@ void test_Formattable( void )
     
     res_array = fta.getArray(res_cnt, status = U_ZERO_ERROR);
     if (status == U_INVALID_FORMAT_ERROR){
-        if (res_cnt == 0 && res_array == NULL){
+        if (res_cnt == 0 && res_array == nullptr){
             it_logln("FT getArray with status tested on non array");
         } else {
             it_errln("*** FT getArray with status return values are not consistent");

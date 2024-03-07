@@ -78,6 +78,53 @@ To build ICU4J with custom data, you must first build ICU4C with custom data
 and then generate the JAR file.  For more information on building ICU4J, read the
 [ICU4J Readme](../icu4j/).
 
+### Default Configuration
+
+By default (without a configuration file and without option flags),
+the ICU data file includes all of the data in the ICU source tree.
+
+Since ICU 73 (2023q2), there is an exception:
+By default, the "big5han" and "gb2312han" collation tailorings are omitted.
+These mimic the order of their respective charsets, are relatively large, and rarely used.
+(See [ICU-22285](https://unicode-org.atlassian.net/browse/ICU-22285).)
+
+The default configuration is equivalent to a filter file like this:
+
+    {
+      "resourceFilters": [
+        {
+          "categories": [
+            "coll_tree"
+          ],
+          "rules": [
+            "-/collations/big5han",
+            "-/collations/gb2312han"
+          ]
+        }
+      ]
+    }
+
+If you do want to include these collation tailorings,
+you can configure ICU with a filter file which has the opposite effect:
+
+    {
+      "resourceFilters": [
+        {
+          "categories": [
+            "coll_tree"
+          ],
+          "rules": [
+            "+/collations/big5han",
+            "+/collations/gb2312han"
+          ]
+        }
+      ]
+    }
+
+Alternatively, if you want to make sure to include *all* collation tailorings,
+you can use a single filter rule like `+/collations` or `+/collations/*`
+rather than listing each tailoring by its full, explicit path.
+
 ### Locale Slicing
 
 The simplest way to slice ICU data is by locale.  The ICU Data Build Tool
@@ -233,6 +280,7 @@ summarizes the ICU data files and their corresponding features and categories:
 | StringPrep | `"stringprep"` | sprep/\*.txt | 193 KiB |
 | Time Zones | `"misc"` <br/> `"zone_tree"` <br/> `"zone_supplemental"` | misc/metaZones.txt <br/> misc/timezoneTypes.txt <br/> misc/windowsZones.txt <br/> misc/zoneinfo64.txt <br/> zone/\*.txt <br/> zone/tzdbNames.txt | 41 KiB <br/> 20 KiB <br/> 22 KiB <br/> 151 KiB <br/> **2.7 MiB** <br/> 4.8 KiB |
 | Transliteration | `"translit"` | translit/\*.txt | 685 KiB |
+| Unicode Emoji<br/>Properties | `"uemoji"` | in/uemoji.icu | 13 KiB |
 | Unicode Character <br/> Names | `"unames"` | in/unames.icu | 269 KiB |
 | Unicode Text Layout | `"ulayout"` | in/ulayout.icu | 14 KiB |
 | Units | `"unit_tree"` | unit/\*.txt | **1.7 MiB** |

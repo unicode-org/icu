@@ -15,6 +15,8 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
+
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "cstring.h"
@@ -168,7 +170,7 @@ static void TestAPI(void)
 
 /* test invariant-character handling */
 static void
-TestInvariant() {
+TestInvariant(void) {
     /* all invariant graphic chars and some control codes (not \n!) */
     const char invariantChars[]=
         "\t\r \"%&'()*+,-./"
@@ -304,7 +306,7 @@ static int32_t getSign(int32_t n) {
 }
 
 static void
-TestCompareInvEbcdicAsAscii() {
+TestCompareInvEbcdicAsAscii(void) {
     static const char *const invStrings[][2]={
         /* invariant-character strings in ascending ASCII order */
         /* EBCDIC       native */
@@ -357,7 +359,7 @@ static const UChar *asciiInvChars =
     u"0123456789 \"%&'()*+,-./:;<=>?_";
 
 static void
-TestLocaleAtSign() {
+TestLocaleAtSign(void) {
     static const char *invLocale = "de-Latn_DE@PHONEBOOK";
     for (int32_t i = 0;; ++i) {
         char ic = invLocale[i];
@@ -372,19 +374,19 @@ TestLocaleAtSign() {
 
 // The at sign is not an invariant character.
 static void
-TestNoInvariantAtSign() {
+TestNoInvariantAtSign(void) {
     for (int32_t i = 0;; ++i) {
         char ic = nativeInvChars[i];
         UBool actual = uprv_isAtSign(ic);
         if (actual) {
-            log_err("uprv_isAtSign(invariant '%c')=TRUE is wrong\n", ic);
+            log_err("uprv_isAtSign(invariant '%c')=true is wrong\n", ic);
         }
         if (ic == 0) { break; }
     }
 }
 
 static void
-TestInvCharToAscii() {
+TestInvCharToAscii(void) {
     for (int32_t i = 0;; ++i) {
         char ic = nativeInvChars[i];
         uint8_t ac = (uint8_t)asciiInvChars[i];

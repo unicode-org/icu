@@ -267,7 +267,7 @@ ms{
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
-        TR{"Turki"}
+        TR{"Turkiye"}
         TT{"Trinidad dan Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
@@ -298,6 +298,9 @@ ms{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
     }
+    Countries%chagos{
+        IO{"Kepulauan Chagos"}
+    }
     Countries%short{
         GB{"UK"}
         HK{"Hong Kong"}
@@ -315,6 +318,6 @@ ms{
         NZ{"Aotearoa New Zealand"}
         SZ{"Swaziland"}
         TL{"Timor Timur"}
-        TR{"Türkiye"}
+        TR{"Turki"}
     }
 }

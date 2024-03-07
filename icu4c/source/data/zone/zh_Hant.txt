@@ -259,6 +259,9 @@ zh_Hant{
         "America:Chihuahua"{
             ec{"奇華華"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"華雷斯"}
+        }
         "America:Coral_Harbour"{
             ec{"阿蒂科肯"}
         }
@@ -463,9 +466,6 @@ zh_Hant{
         "America:New_York"{
             ec{"紐約"}
         }
-        "America:Nipigon"{
-            ec{"尼皮岡"}
-        }
         "America:Nome"{
             ec{"諾姆"}
         }
@@ -486,9 +486,6 @@ zh_Hant{
         }
         "America:Panama"{
             ec{"巴拿馬"}
-        }
-        "America:Pangnirtung"{
-            ec{"潘尼爾東"}
         }
         "America:Paramaribo"{
             ec{"巴拉馬利波"}
@@ -511,9 +508,6 @@ zh_Hant{
         "America:Punta_Arenas"{
             ec{"蓬塔阿雷納斯"}
         }
-        "America:Rainy_River"{
-            ec{"雨河鎮"}
-        }
         "America:Rankin_Inlet"{
             ec{"蘭今灣"}
         }
@@ -528,9 +522,6 @@ zh_Hant{
         }
         "America:Rio_Branco"{
             ec{"里約布蘭"}
-        }
-        "America:Santa_Isabel"{
-            ec{"聖伊薩貝爾"}
         }
         "America:Santarem"{
             ec{"聖塔倫"}
@@ -577,9 +568,6 @@ zh_Hant{
         "America:Thule"{
             ec{"杜里"}
         }
-        "America:Thunder_Bay"{
-            ec{"珊德灣"}
-        }
         "America:Tijuana"{
             ec{"提華納"}
         }
@@ -600,9 +588,6 @@ zh_Hant{
         }
         "America:Yakutat"{
             ec{"雅庫塔"}
-        }
-        "America:Yellowknife"{
-            ec{"耶洛奈夫"}
         }
         "Antarctica:Casey"{
             ec{"凱西"}
@@ -928,9 +913,6 @@ zh_Hant{
         "Australia:Broken_Hill"{
             ec{"布羅肯希爾"}
         }
-        "Australia:Currie"{
-            ec{"克黎"}
-        }
         "Australia:Darwin"{
             ec{"達爾文"}
         }
@@ -1113,9 +1095,6 @@ zh_Hant{
         "Europe:Ulyanovsk"{
             ec{"烏里揚諾夫斯克"}
         }
-        "Europe:Uzhgorod"{
-            ec{"烏茲哥洛"}
-        }
         "Europe:Vaduz"{
             ec{"瓦都茲"}
         }
@@ -1136,9 +1115,6 @@ zh_Hant{
         }
         "Europe:Zagreb"{
             ec{"札格瑞布"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"札波羅結"}
         }
         "Europe:Zurich"{
             ec{"蘇黎世"}
@@ -1220,9 +1196,6 @@ zh_Hant{
         }
         "Pacific:Honolulu"{
             ec{"檀香山"}
-        }
-        "Pacific:Johnston"{
-            ec{"強斯頓"}
         }
         "Pacific:Kanton"{
             ec{"坎頓島"}
@@ -1704,9 +1677,6 @@ zh_Hant{
             lg{"澳門時間"}
             ls{"澳門標準時間"}
         }
-        "meta:Macquarie"{
-            ls{"麥覺理時間"}
-        }
         "meta:Magadan"{
             ld{"馬加丹夏令時間"}
             lg{"馬加丹時間"}
@@ -1731,11 +1701,6 @@ zh_Hant{
         }
         "meta:Mawson"{
             ls{"莫森時間"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"墨西哥西北部夏令時間"}
-            lg{"墨西哥西北部時間"}
-            ls{"墨西哥西北部標準時間"}
         }
         "meta:Mexico_Pacific"{
             ld{"墨西哥太平洋夏令時間"}
@@ -1970,11 +1935,6 @@ zh_Hant{
             ls{"育空地區時間"}
         }
         fallbackFormat{"{1}（{0}）"}
-        gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}時間"}
-        regionFormatDaylight{"{0} (+1)"}
-        regionFormatStandard{"{0} (+0)"}
     }
 }

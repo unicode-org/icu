@@ -16,8 +16,8 @@
 
 #include "unicode/utypes.h"
 
-#include "LETypes.h"
-#include "loengine.h"
+#include "layout/LETypes.h"
+#include "layout/loengine.h"
 #include "gsupport.h"
 #include "rsurface.h"
 
@@ -25,7 +25,7 @@ typedef void fm_fontMap;
 
 U_CDECL_BEGIN
 
-gs_guiSupport *gs_gnomeGuiSupportOpen();
+gs_guiSupport *gs_gnomeGuiSupportOpen(void);
 void gs_gnomeGuiSupportClose(gs_guiSupport *guiSupport);
 
 rs_surface *rs_gnomeRenderingSurfaceOpen(GtkWidget *theWidget);

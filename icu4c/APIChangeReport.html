@@ -5,31 +5,31 @@
 	-->
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4C API Comparison: ICU 70 with ICU 71</title>
+<title>ICU4C API Comparison: ICU 74 with ICU 75</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="#_top"></a>
-<h1>ICU4C API Comparison: ICU 70 with ICU 71</h1>
+<h1>ICU4C API Comparison: ICU 74 with ICU 75</h1>
 <div id="toc">
 <ul>
 <li>
-<a href="#removed">Removed from ICU 70</a>
+<a href="#removed">Removed from ICU 74</a>
 </li>
 <li>
-<a href="#deprecated">Deprecated or Obsoleted in ICU 71</a>
+<a href="#deprecated">Deprecated or Obsoleted in ICU 75</a>
 </li>
 <li>
-<a href="#changed">Changed in  ICU 71</a>
+<a href="#changed">Changed in  ICU 75</a>
 </li>
 <li>
-<a href="#promoted">Promoted to stable in ICU 71</a>
+<a href="#promoted">Promoted to stable in ICU 75</a>
 </li>
 <li>
-<a href="#added">Added in ICU 71</a>
+<a href="#added">Added in ICU 75</a>
 </li>
 <li>
-<a href="#other">Other existing drafts in ICU 71</a>
+<a href="#other">Other existing drafts in ICU 75</a>
 </li>
 <li>
 <a href="#simplifications">Signature Simplifications</a>
@@ -38,411 +38,524 @@
 <hr>
 </div>
 <a name="removed"></a>
-<h2>Removed from ICU 70</h2>
+<h2>Removed from ICU 74</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
+<th>File</th><th>API</th><th>ICU 74</th><th>ICU 75</th>
 </tr>
 </THEAD>
+<tr class="row1">
+<td class="file">caniter.h</td><td class="proto"><tt>static</tt> void icu::CanonicalIterator::permute(UnicodeString&amp;, bool, Hashtable*, UErrorCode&amp;)</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_HAVE_INTTYPES_H</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_HAVE_STDINT_H</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="deprecated"></a>
-<h2>Deprecated or Obsoleted in ICU 71</h2>
+<h2>Deprecated or Obsoleted in ICU 75</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
+<th>File</th><th>API</th><th>ICU 74</th><th>ICU 75</th>
 </tr>
 </THEAD>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">const char* icu::number::FormattedNumber::getGender(UErrorCode&amp;) const</td><td class="">Internal<br>ICU 69</td><td>Deprecated<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_safeClone(const UConverter*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 71</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">ucol.h</td><td class="proto">UCollator* ucol_safeClone(const UCollator*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 71</span></span></td>
-</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="changed"></a>
-<h2>Changed in  ICU 71 (old, new)</h2>
+<h2>Changed in  ICU 75 (old, new)</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
+<th>File</th><th>API</th><th>ICU 74</th><th>ICU 75</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">basictz.h</td><td class="proto">void icu::BasicTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">calendar.h</td><td class="proto">bool icu::Calendar::inTemporalLeapYear(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withPrefix(UMeasurePrefix, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">calendar.h</td><td class="proto">const char* icu::Calendar::getTemporalMonthCode(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto">UMeasurePrefix icu::MeasureUnit::getPrefix(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">calendar.h</td><td class="proto">void icu::Calendar::setTemporalMonthCode(const char*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramOfglucosePerDeciliter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getBeaufort()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramOfglucosePerDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBeaufort(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withSignificantDigits(int32_t, int32_t, UNumberRoundingPriority) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfCeiling</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::trailingZeroDisplay(UNumberTrailingZeroDisplay) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfFloor</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">const char* icu::number::FormattedNumber::getGender(UErrorCode&amp;) const</td><td class="">Internal<br>ICU 69</td><td>Deprecated<br>
-<span class=""><span></span></span></td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfOdd</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">rbtz.h</td><td class="proto">void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::format(SimpleNumber, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">simpletz.h</td><td class="proto">void icu::SimpleTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::formatInt64(int64_t, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ubrk.h</td><td class="proto">UBreakIterator* ubrk_clone(const UBreakIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumber&amp; icu::number::SimpleNumber::operator=(SimpleNumber&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumberFormatter&amp; icu::number::SimpleNumberFormatter::operator=(SimpleNumberFormatter&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber()=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber(SimpleNumber&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::~SimpleNumber()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter()=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter(SimpleNumberFormatter&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto">void ucal_getTimeZoneOffsetFromLocal(const UCalendar*, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t*, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::~SimpleNumberFormatter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_safeClone(const UConverter*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 71</span></span></td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumber icu::number::SimpleNumber::forInt64(int64_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto">UCollator* ucol_safeClone(const UCollator*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 71</span></span></td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocale(const icu::Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uniset.h</td><td class="proto">UnicodeSet&amp; icu::UnicodeSet::retain(const UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndGroupingStrategy(const icu::Locale&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_CEILING</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndSymbolsAndGroupingStrategy(const icu::Locale&amp;, const DecimalFormatSymbols&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_FLOOR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::multiplyByPowerOfTen(int32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_ODD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setSign(USimpleNumberSign, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UCalendarDateFields::UCAL_ORDINAL_MONTH</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">uset.h</td><td class="proto"><tt>enum</tt> ::USET_SIMPLE_CASE_INSENSITIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumber* usnum_openForInt64(int64_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocale(const char*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocaleAndGroupingStrategy(const char*, UNumberGroupingStrategy, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_HIDE_IF_WHOLE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_MINUS_SIGN</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_complementAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_NO_SIGN</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_complementRange(USet*, UChar32, UChar32)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_PLUS_SIGN</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_complementString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_close(USimpleNumber*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_removeAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_multiplyByPowerOfTen(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_retainAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setSign(USimpleNumber*, USimpleNumberSign, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_retainString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setToInt64(USimpleNumber*, int64_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">vtzone.h</td><td class="proto">void icu::VTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_close(USimpleNumberFormatter*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_format(const USimpleNumberFormatter*, USimpleNumber*, UFormattedNumber*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_formatInt64(const USimpleNumberFormatter*, int64_t, UFormattedNumber*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="promoted"></a>
-<h2>Promoted to stable in ICU 71</h2>
+<h2>Promoted to stable in ICU 75</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
+<th>File</th><th>API</th><th>ICU 74</th><th>ICU 75</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">basictz.h</td><td class="proto">void icu::BasicTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">calendar.h</td><td class="proto">bool icu::Calendar::inTemporalLeapYear(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withPrefix(UMeasurePrefix, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">calendar.h</td><td class="proto">const char* icu::Calendar::getTemporalMonthCode(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto">UMeasurePrefix icu::MeasureUnit::getPrefix(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">calendar.h</td><td class="proto">void icu::Calendar::setTemporalMonthCode(const char*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramOfglucosePerDeciliter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getBeaufort()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramOfglucosePerDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBeaufort(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withSignificantDigits(int32_t, int32_t, UNumberRoundingPriority) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfCeiling</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::trailingZeroDisplay(UNumberTrailingZeroDisplay) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfFloor</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">rbtz.h</td><td class="proto">void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">numfmt.h</td><td class="proto"><tt>enum</tt>  							icu::NumberFormat::ERoundingMode::kRoundHalfOdd</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">simpletz.h</td><td class="proto">void icu::SimpleTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::format(SimpleNumber, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ubrk.h</td><td class="proto">UBreakIterator* ubrk_clone(const UBreakIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">FormattedNumber icu::number::SimpleNumberFormatter::formatInt64(int64_t, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumber&amp; icu::number::SimpleNumber::operator=(SimpleNumber&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">SimpleNumberFormatter&amp; icu::number::SimpleNumberFormatter::operator=(SimpleNumberFormatter&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber()=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::SimpleNumber(SimpleNumber&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumber::~SimpleNumber()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter()=default</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto">void ucal_getTimeZoneOffsetFromLocal(const UCalendar*, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t*, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::SimpleNumberFormatter(SimpleNumberFormatter&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_clone(const UConverter*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
+<td class="file">simplenumberformatter.h</td><td class="proto">icu::number::SimpleNumberFormatter::~SimpleNumberFormatter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">ucol.h</td><td class="proto">UCollator* ucol_clone(const UCollator*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumber icu::number::SimpleNumber::forInt64(int64_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uniset.h</td><td class="proto">UnicodeSet&amp; icu::UnicodeSet::retain(const UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocale(const icu::Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_CEILING</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndGroupingStrategy(const icu::Locale&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_FLOOR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto"><tt>static</tt> SimpleNumberFormatter icu::number::SimpleNumberFormatter::forLocaleAndSymbolsAndGroupingStrategy(const icu::Locale&amp;, const DecimalFormatSymbols&amp;, UNumberGroupingStrategy, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_ODD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::multiplyByPowerOfTen(int32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setSign(USimpleNumberSign, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UCalendarDateFields::UCAL_ORDINAL_MONTH</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ARABIC_NASTALIQ</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 75</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 75.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">uset.h</td><td class="proto"><tt>enum</tt> ::USET_SIMPLE_CASE_INSENSITIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumber* usnum_openForInt64(int64_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_HIDE_IF_WHOLE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocale(const char*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_complementAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">USimpleNumberFormatter* usnumf_openForLocaleAndGroupingStrategy(const char*, UNumberGroupingStrategy, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_complementRange(USet*, UChar32, UChar32)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_MINUS_SIGN</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_complementString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_NO_SIGN</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_removeAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto"><tt>enum</tt> USimpleNumberSign::UNUM_SIMPLE_NUMBER_PLUS_SIGN</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_retainAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_close(USimpleNumber*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_retainString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_multiplyByPowerOfTen(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">vtzone.h</td><td class="proto">void icu::VTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setSign(USimpleNumber*, USimpleNumberSign, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setToInt64(USimpleNumber*, int64_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_close(USimpleNumberFormatter*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_format(const USimpleNumberFormatter*, USimpleNumber*, UFormattedNumber*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnumf_formatInt64(const USimpleNumberFormatter*, int64_t, UFormattedNumber*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 73</td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="added"></a>
-<h2>Added in ICU 71</h2>
+<h2>Added in ICU 75</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
+<th>File</th><th>API</th><th>ICU 74</th><th>ICU 75</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">dtptngen.h</td><td class="proto">const UnicodeString&amp; icu::DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
+<td class="file">caniter.h</td><td class="proto"><tt>static</tt> void icu::CanonicalIterator::permute(UnicodeString&amp;, bool, Hashtable*, UErrorCode&amp;, int32_t depth=)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">dtptngen.h</td><td class="proto">void icu::DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">UnlocalizedNumberFormatter icu::number::LocalizedNumberFormatter::withoutLocale() &amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 75</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">NounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">UnlocalizedNumberFormatter icu::number::LocalizedNumberFormatter::withoutLocale() const &amp;</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 75</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::incrementExact(uint64_t, int16_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
+<td class="file">numberrangeformatter.h</td><td class="proto">UnlocalizedNumberRangeFormatter icu::number::LocalizedNumberRangeFormatter::withoutLocale() &amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 75</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_clone(const UConverter*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
+<td class="file">numberrangeformatter.h</td><td class="proto">UnlocalizedNumberRangeFormatter icu::number::LocalizedNumberRangeFormatter::withoutLocale() const &amp;</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 75</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto">UCollator* ucol_clone(const UCollator*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">udatpg.h</td><td class="proto">const UChar* udatpg_getDateTimeFormatForStyle(const UDateTimePatternGenerator*, UDateFormatStyle, int32_t*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">udatpg.h</td><td class="proto">void udatpg_setDateTimeFormatForStyle(UDateTimePatternGenerator*, UDateFormatStyle, const UChar*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatFields::UNUM_APPROXIMATELY_SIGN_FIELD</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 71</span></span></td>
+<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ARABIC_NASTALIQ</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 75</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 75.">(Born Stable)</b></td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="other"></a>
-<h2>Other existing drafts in ICU 71</h2>
+<h2>Other existing drafts in ICU 75</h2>
 <div class="other">
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
+<th>File</th><th>API</th><th>ICU 74</th><th>ICU 75</th>
 </tr>
 </THEAD>
 <tr class="row1">
 <td class="file">measfmt.h</td><td class="proto">void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 53</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getItem()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGasolineEnergyDensity()</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getKilowattHourPer100Kilometer()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGasolineEnergyDensity(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createItem(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">measure.h</td><td class="proto">bool icu::Measure::operator!=(const UObject&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHourPer100Kilometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">normalizer2.h</td><td class="proto"><tt>static</tt> const Normalizer2* icu::Normalizer2::getNFKCSimpleCasefoldInstance(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row0">
-<td class="file">numberrangeformatter.h</td><td class="proto">icu::number::FormattedNumberRange::FormattedNumberRange()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::roundTo(int32_t, UNumberFormatRoundingMode, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uchar.h</td><td class="proto">bool u_stringHasBinaryProperty(const UChar*, int32_t, UProperty)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setMinimumFractionDigits(uint32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_BASIC_EMOJI</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::setMinimumIntegerDigits(uint32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_EMOJI_KEYCAP_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">simplenumberformatter.h</td><td class="proto">void icu::number::SimpleNumber::truncateStart(uint32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_FLAG_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">timezone.h</td><td class="proto"><tt>static</tt> UnicodeString&amp; icu::TimeZone::getIanaID(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">ucal.h</td><td class="proto">int32_t ucal_getIanaTimeZoneID(const UChar*, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_TAG_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_IDS_UNARY_OPERATOR</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_ZWJ_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_ID_COMPAT_MATH_CONTINUE</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_ID_COMPAT_MATH_START</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
-<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_NARROW_QUARTERS</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">ulocale.h</td><td class="proto">UEnumeration* ulocale_getKeywords(const ULocale*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row0">
-<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_STANDALONE_NARROW_QUARTERS</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">ulocale.h</td><td class="proto">UEnumeration* ulocale_getUnicodeKeywords(const ULocale*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
-<td class="file">uformattedvalue.h</td><td class="proto"><tt>enum</tt> UFieldCategory::UFIELD_CATEGORY_NUMBER_RANGE_SPAN</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">ulocale.h</td><td class="proto">ULocale* ulocale_openForLanguageTag(const char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row0">
-<td class="file">uniset.h</td><td class="proto">bool icu::UnicodeSet::hasStrings() const</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">ulocale.h</td><td class="proto">ULocale* ulocale_openForLocaleID(const char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocale.h</td><td class="proto">bool ulocale_isBogus(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getBaseName(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getLanguage(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getLocaleID(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getRegion(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getScript(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocale.h</td><td class="proto">const char* ulocale_getVariant(const ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocale.h</td><td class="proto">int32_t ulocale_getKeywordValue(const ULocale*, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocale.h</td><td class="proto">int32_t ulocale_getUnicodeKeywordValue(const ULocale*, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocale.h</td><td class="proto">void ulocale_close(ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">ULocale* ulocbld_buildULocale(ULocaleBuilder*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">ULocaleBuilder* ulocbld_open()</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">bool ulocbld_copyErrorTo(const ULocaleBuilder*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">int32_t ulocbld_buildLanguageTag(ULocaleBuilder*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">int32_t ulocbld_buildLocaleID(ULocaleBuilder*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_addUnicodeLocaleAttribute(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_adoptULocale(ULocaleBuilder*, ULocale*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_clear(ULocaleBuilder*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_clearExtensions(ULocaleBuilder*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_close(ULocaleBuilder*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_removeUnicodeLocaleAttribute(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setExtension(ULocaleBuilder*, char, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLanguage(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLanguageTag(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setLocale(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setRegion(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setScript(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setUnicodeLocaleKeyword(ULocaleBuilder*, const char*, int32_t, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">ulocbuilder.h</td><td class="proto">void ulocbld_setVariant(ULocaleBuilder*, const char*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFKCSimpleCasefoldInstance(UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 <tr class="row1">
 <td class="file">uregex.h</td><td class="proto"><tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ</td><td class="" colspan="2" align="center">Draft<br>ICU 2.4</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">bool uset_hasStrings(const USet*)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_roundTo(USimpleNumber*, int32_t, UNumberFormatRoundingMode, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">int32_t uset_getRangeCount(const USet*)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumFractionDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
 </tr>
 <tr class="row0">
-<td class="file">usetiter.h</td><td class="proto">UnicodeSetIterator&amp; icu::UnicodeSetIterator::skipToStrings()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_setMinimumIntegerDigits(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row1">
+<td class="file">usimplenumberformatter.h</td><td class="proto">void usnum_truncateStart(USimpleNumber*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 73</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">icu::UnicodeString&amp; uspoof_getBidiSkeletonUnicodeString(const USpoofChecker*, UBiDiDirection, const icu::UnicodeString&amp;, icu::UnicodeString&amp;, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getBidiSkeleton(const USpoofChecker*, UBiDiDirection, const UChar*, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">int32_t uspoof_getBidiSkeletonUTF8(const USpoofChecker*, UBiDiDirection, const char*, int32_t, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">uint32_t uspoof_areBidiConfusable(const USpoofChecker*, UBiDiDirection, const UChar*, int32_t, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row0">
+<td class="file">uspoof.h</td><td class="proto">uint32_t uspoof_areBidiConfusableUTF8(const USpoofChecker*, UBiDiDirection, const char*, int32_t, const char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
+</tr>
+<tr class="row1">
+<td class="file">uspoof.h</td><td class="proto">uint32_t uspoof_areBidiConfusableUnicodeString(const USpoofChecker*, UBiDiDirection, const icu::UnicodeString&amp;, const icu::UnicodeString&amp;, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 74</td>
 </tr>
 </table>
 </div>
@@ -460,7 +573,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Thu Mar 10 11:12:56 PST 2022<br>
+<i><font size="-1">Contents generated by StableAPI tool on Thu Mar 07 10:40:19 PST 2024<br>
         Copyright &copy; 2017 and later: Unicode, Inc. and others.<br>
         License &amp; terms of use: http://www.unicode.org/copyright.html
     </font></i>

@@ -62,7 +62,7 @@ void cpp_main()
                 
 
 /* Creating and using text boundaries */
-int main( void )
+int main()
 {
   puts("Date-Calendar sample program");
 

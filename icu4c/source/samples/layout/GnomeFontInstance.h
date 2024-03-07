@@ -34,6 +34,8 @@
 #include "FontTableCache.h"
 #include "cmaps.h"
 
+using icu::LEFontInstance;
+
 class GnomeSurface : public RenderingSurface
 {
 public:

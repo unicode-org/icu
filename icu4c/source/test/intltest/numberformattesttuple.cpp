@@ -39,7 +39,10 @@ static Numberformattesttuple_EnumConversion gRoundingEnum[] = {
     {"halfEven", DecimalFormat::kRoundHalfEven},
     {"halfDown", DecimalFormat::kRoundHalfDown},
     {"halfUp", DecimalFormat::kRoundHalfUp},
-    {"unnecessary", DecimalFormat::kRoundUnnecessary}};
+    {"unnecessary", DecimalFormat::kRoundUnnecessary},
+    {"halfOdd", DecimalFormat::kRoundHalfOdd},
+    {"halfCeiling", DecimalFormat::kRoundHalfCeiling},
+    {"halfFloor", DecimalFormat::kRoundHalfFloor}};
 
 static Numberformattesttuple_EnumConversion gCurrencyUsageEnum[] = {
     {"standard", UCURR_USAGE_STANDARD},
@@ -137,9 +140,9 @@ static void strToInt(
     }
     int32_t len = str.length();
     int32_t start = 0;
-    UBool neg = FALSE;
+    UBool neg = false;
     if (len > 0 && str[0] == 0x2D) { // negative
-        neg = TRUE;
+        neg = true;
         start = 1;
     }
     if (start == len) {
@@ -148,7 +151,7 @@ static void strToInt(
     }
     int64_t value = 0;
     for (int32_t i = start; i < len; ++i) {
-        UChar ch = str[i];
+        char16_t ch = str[i];
         if (ch < 0x30 || ch > 0x39) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
@@ -161,12 +164,12 @@ static void strToInt(
 
 static void intToStr(
         const void *intPtr, UnicodeString &appendTo) {
-    UChar buffer[20];
+    char16_t buffer[20];
     // int64_t such that all int32_t values can be negated
     int64_t xSigned = *static_cast<const int32_t *>(intPtr);
     uint32_t x;
     if (xSigned < 0) {
-        appendTo.append((UChar)0x2D);
+        appendTo.append((char16_t)0x2D);
         x = static_cast<uint32_t>(-xSigned);
     } else {
         x = static_cast<uint32_t>(xSigned);
@@ -192,7 +195,7 @@ static void doubleToStr(
         const void *doublePtr, UnicodeString &appendTo) {
     char buffer[256];
     double x = *static_cast<const double *>(doublePtr);
-    sprintf(buffer, "%f", x);
+    snprintf(buffer, sizeof(buffer), "%f", x);
     appendTo.append(buffer);
 }
 
@@ -346,19 +349,19 @@ NumberFormatTestTuple::setField(
         const UnicodeString &fieldValue,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     if (fieldId == kNumberFormatTestTupleFieldCount) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return false;
     }
     gFieldData[fieldId].ops->toValue(
             fieldValue, getMutableFieldAddress(fieldId), status);
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    setFlag(fieldId, TRUE);
-    return TRUE;
+    setFlag(fieldId, true);
+    return true;
 }
 
 UBool
@@ -366,20 +369,20 @@ NumberFormatTestTuple::clearField(
         ENumberFormatTestTupleField fieldId, 
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     if (fieldId == kNumberFormatTestTupleFieldCount) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return false;
     }
-    setFlag(fieldId, FALSE);
-    return TRUE;
+    setFlag(fieldId, false);
+    return true;
 }
 
 void
 NumberFormatTestTuple::clear() {
     for (int32_t i = 0; i < kNumberFormatTestTupleFieldCount; ++i) {
-        setFlag(i, FALSE);
+        setFlag(i, false);
     }
 }
 
@@ -387,7 +390,7 @@ UnicodeString &
 NumberFormatTestTuple::toString(
         UnicodeString &appendTo) const {
     appendTo.append("{");
-    UBool first = TRUE;
+    UBool first = true;
     for (int32_t i = 0; i < kNumberFormatTestTupleFieldCount; ++i) {
         if (!isFlag(i)) {
             continue;
@@ -395,7 +398,7 @@ NumberFormatTestTuple::toString(
         if (!first) {
             appendTo.append(", ");
         }
-        first = FALSE;
+        first = false;
         appendTo.append(gFieldData[i].name);
         appendTo.append(": ");
         gFieldData[i].ops->toString(getFieldAddress(i), appendTo);

@@ -56,7 +56,7 @@ The ICU homepage also links to related information about writing internationaliz
 | Online ICU Demos                                   | <https://icu4c-demos.unicode.org/icu-bin/icudemos>                           |
 | Contacts and Bug Reports/Feature Requests          | <https://icu.unicode.org/contacts>                                   |
 
-**Important:** Please make sure you understand the [Copyright and License Information](https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE).
+**Important:** Please make sure you understand the [Copyright and License Information](https://github.com/unicode-org/icu/blob/main/LICENSE).
 
 ## What Is New In The Current Release?
 

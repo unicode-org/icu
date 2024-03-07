@@ -210,7 +210,7 @@ U_CAPI double uprv_getSieveTime(double *marginOfError) {
     meanSieveTime = uprv_getMeanTime(times, &samples,&meanSieveME);
     calcSieveTime=true;
   }
-  if(marginOfError!=NULL) {
+  if(marginOfError!=nullptr) {
     *marginOfError = meanSieveME;
   }
   return meanSieveTime;

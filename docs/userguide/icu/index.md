@@ -104,6 +104,6 @@ included, building, installing, etc.
 
 ## ICU License
 
-Current license: <https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE>
+Current license: <https://github.com/unicode-org/icu/blob/main/LICENSE>
 
 See also FAQ section ["How is the ICU licensed"](icufaq/index#how-is-icu-licensed)

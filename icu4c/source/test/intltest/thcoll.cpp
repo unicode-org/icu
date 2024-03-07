@@ -77,7 +77,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
  * gets the same results when comparing lines one to another
  * using regular and iterative comparison.
  */
-void CollationThaiTest::TestNamesList(void) {
+void CollationThaiTest::TestNamesList() {
     if (coll == 0) {
         errln("Error: could not construct Thai collator");
         return;
@@ -98,7 +98,7 @@ void CollationThaiTest::TestNamesList(void) {
     UnicodeString lastWord, word;
     //int32_t failed = 0;
     int32_t wordCount = 0;
-    while (names.readLineSkippingComments(word, ec, FALSE) && U_SUCCESS(ec)) {
+    while (names.readLineSkippingComments(word, ec, false) && U_SUCCESS(ec)) {
 
         // Show the first 8 words being compared, so we can see what's happening
         ++wordCount;
@@ -124,7 +124,7 @@ void CollationThaiTest::TestNamesList(void) {
  * sorted order, and confirm that the collator compares each line as
  * preceding the following line.
  */
-void CollationThaiTest::TestDictionary(void) {
+void CollationThaiTest::TestDictionary() {
     if (coll == 0) {
         errln("Error: could not construct Thai collator");
         return;
@@ -145,7 +145,7 @@ void CollationThaiTest::TestDictionary(void) {
     UnicodeString lastWord, word;
     int32_t failed = 0;
     int32_t wordCount = 0;
-    while (riwords.readLineSkippingComments(word, ec, FALSE) && U_SUCCESS(ec)) {
+    while (riwords.readLineSkippingComments(word, ec, false) && U_SUCCESS(ec)) {
 
         // Show the first 8 words being compared, so we can see what's happening
         ++wordCount;
@@ -203,7 +203,7 @@ void CollationThaiTest::TestDictionary(void) {
  * Odd corner conditions taken from "How to Sort Thai Without Rewriting Sort",
  * by Doug Cooper, http://seasrc.th.net/paper/thaisort.zip
  */
-void CollationThaiTest::TestCornerCases(void) {
+void CollationThaiTest::TestCornerCases() {
     const char* TESTS[] = {
         // Shorter words precede longer
         "\\u0e01",                               "<",    "\\u0e01\\u0e01",
@@ -340,19 +340,19 @@ UnicodeString& CollationThaiTest::parseChars(UnicodeString& result,
     return result = CharsToUnicodeString(chars);
 }
 
-UCollator *thaiColl = NULL;
+UCollator *thaiColl = nullptr;
 
 U_CDECL_BEGIN
 static int U_CALLCONV
 StrCmp(const void *p1, const void *p2) {
-  return ucol_strcoll(thaiColl, *(UChar **) p1, -1,  *(UChar **)p2, -1);
+  return ucol_strcoll(thaiColl, *(char16_t **) p1, -1,  *(char16_t **)p2, -1);
 }
 U_CDECL_END
 
 
 #define LINES 6
 
-void CollationThaiTest::TestInvalidThai(void) {
+void CollationThaiTest::TestInvalidThai() {
   const char *tests[LINES] = {
     "\\u0E44\\u0E01\\u0E44\\u0E01",
     "\\u0E44\\u0E01\\u0E01\\u0E44",
@@ -362,9 +362,9 @@ void CollationThaiTest::TestInvalidThai(void) {
     "\\u0E01\\u0E44\\u0E44\\u0E01",
   };
 
-  UChar strings[LINES][20];
+  char16_t strings[LINES][20];
 
-  UChar *toSort[LINES];
+  char16_t *toSort[LINES];
 
   int32_t i = 0, j = 0, len = 0;
 
@@ -377,7 +377,7 @@ void CollationThaiTest::TestInvalidThai(void) {
     return;
   }
 
-  CollationElementIterator* c = ((RuleBasedCollator *)coll)->createCollationElementIterator( iteratorText );
+  CollationElementIterator* c = (dynamic_cast<RuleBasedCollator*>(coll))->createCollationElementIterator( iteratorText );
 
   for(i = 0; i < UPRV_LENGTHOF(tests); i++) {
     len = u_unescape(tests[i], strings[i], 20);
@@ -385,7 +385,7 @@ void CollationThaiTest::TestInvalidThai(void) {
     toSort[i] = strings[i];
   }
 
-  qsort (toSort, LINES, sizeof (UChar *), StrCmp);
+  qsort (toSort, LINES, sizeof (char16_t *), StrCmp);
 
   for (i=0; i < LINES; i++)
   {
@@ -407,7 +407,7 @@ void CollationThaiTest::TestInvalidThai(void) {
   delete c;
 }
 
-void CollationThaiTest::TestReordering(void) {
+void CollationThaiTest::TestReordering() {
   // Until UCA 4.1, the collation code swapped Thai/Lao prevowels with the following consonants,
   // resulting in consonant+prevowel == prevowel+consonant.
   // From UCA 5.0 on, there are order-reversing contractions for prevowel+consonant.

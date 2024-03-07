@@ -26,6 +26,10 @@
 #include "unicont.h"
 #include "cmemory.h" // for UPRV_LENGTHOF
 
+using icu::UObject;
+using icu::UnicodeSet;
+using icu::UnicodeSetIterator;
+
 /*
  * Hash table for up to 1k 64-bit words, for 1 bit per BMP code point.
  * Hashes 64-bit words and maps them to 16-bit integers which are
@@ -93,7 +97,7 @@ public:
             return;
         }
         BMPBitHash *bitHash=new BMPBitHash;
-        if(bitHash==NULL || restSet==NULL) {
+        if(bitHash==nullptr || restSet==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -154,7 +158,7 @@ public:
         if(bitHash->countKeys()>UPRV_LENGTHOF(shortBits)) {
             bits=(int64_t *)uprv_malloc(bitHash->countKeys()*8);
         }
-        if(bits!=NULL) {
+        if(bits!=nullptr) {
             bitHash->invert(bits);
         } else {
             bits=shortBits;

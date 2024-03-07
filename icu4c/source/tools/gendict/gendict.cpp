@@ -34,6 +34,7 @@
 #include "ucbuf.h"
 #include "toolutil.h"
 #include "cstring.h"
+#include "writesrc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,10 +56,11 @@ static UOption options[]={
     UOPTION_VERBOSE,            /* 2 */
     UOPTION_ICUDATADIR,         /* 4 */
     UOPTION_COPYRIGHT,          /* 5 */
-    { "uchars", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0}, /* 6 */
-    { "bytes", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0}, /* 7 */
-    { "transform", NULL, NULL, NULL, '\1', UOPT_REQUIRES_ARG, 0}, /* 8 */
-    UOPTION_QUIET,              /* 9 */
+    { "uchars", nullptr, nullptr, nullptr, '\1', UOPT_NO_ARG, 0}, /* 6 */
+    { "bytes", nullptr, nullptr, nullptr, '\1', UOPT_NO_ARG, 0}, /* 7 */
+    { "transform", nullptr, nullptr, nullptr, '\1', UOPT_REQUIRES_ARG, 0}, /* 8 */
+    { "toml", nullptr, nullptr, nullptr, '\1', UOPT_NO_ARG, 0}, /* 9 */
+    UOPTION_QUIET,              /* 10 */
 };
 
 enum arguments {
@@ -70,6 +72,7 @@ enum arguments {
     ARG_UCHARS,
     ARG_BYTES,
     ARG_TRANSFORM,
+    ARG_TOML,
     ARG_QUIET
 };
 
@@ -90,7 +93,8 @@ static void usageAndDie(UErrorCode retCode) {
            "\t--uchars            output a UCharsTrie (mutually exclusive with -b!)\n"
            "\t--bytes             output a BytesTrie (mutually exclusive with -u!)\n"
            "\t--transform         the kind of transform to use (eg --transform offset-40A3,\n"
-           "\t                    which specifies an offset transform with constant 0x40A3)\n",
+           "\t                    which specifies an offset transform with constant 0x40A3)\n"
+           "\t--toml              output the trie in toml format (default is binary),\n",
             u_getDataDirectory());
     exit(retCode);
 }
@@ -127,7 +131,7 @@ public:
     // it will be returned in status
     // isBytesTrie != 0 will produce a BytesTrieBuilder,
     // isBytesTrie == 0 will produce a UCharsTrieBuilder
-    DataDict(UBool isBytesTrie, UErrorCode &status) : bt(NULL), ut(NULL), 
+    DataDict(UBool isBytesTrie, UErrorCode &status) : bt(nullptr), ut(nullptr), 
         transformConstant(0), transformType(DictionaryData::TRANSFORM_NONE) {
         if (isBytesTrie) {
             bt = new BytesTrieBuilder(status);
@@ -217,23 +221,23 @@ public:
 };
 #endif
 
-static const UChar LINEFEED_CHARACTER = 0x000A;
-static const UChar CARRIAGE_RETURN_CHARACTER = 0x000D;
+static const char16_t LINEFEED_CHARACTER = 0x000A;
+static const char16_t CARRIAGE_RETURN_CHARACTER = 0x000D;
 
 static UBool readLine(UCHARBUF *f, UnicodeString &fileLine, IcuToolErrorCode &errorCode) {
     int32_t lineLength;
-    const UChar *line = ucbuf_readline(f, &lineLength, errorCode);
-    if(line == NULL || errorCode.isFailure()) { return FALSE; }
+    const char16_t *line = ucbuf_readline(f, &lineLength, errorCode);
+    if(line == nullptr || errorCode.isFailure()) { return false; }
     // Strip trailing CR/LF, comments, and spaces.
-    const UChar *comment = u_memchr(line, 0x23, lineLength);  // '#'
-    if(comment != NULL) {
+    const char16_t *comment = u_memchr(line, 0x23, lineLength);  // '#'
+    if(comment != nullptr) {
         lineLength = (int32_t)(comment - line);
     } else {
         while(lineLength > 0 && (line[lineLength - 1] == CARRIAGE_RETURN_CHARACTER || line[lineLength - 1] == LINEFEED_CHARACTER)) { --lineLength; }
     }
     while(lineLength > 0 && u_isspace(line[lineLength - 1])) { --lineLength; }
-    fileLine.setTo(FALSE, line, lineLength);
-    return TRUE;
+    fileLine.setTo(false, line, lineLength);
+    return true;
 }
 
 //----------------------------------------------------------------------------
@@ -276,7 +280,7 @@ int  main(int argc, char **argv) {
         u_setDataDirectory(options[ARG_ICUDATADIR].value);
     }
 
-    const char *copyright = NULL;
+    const char *copyright = nullptr;
     if (options[ARG_COPYRIGHT].doesOccur) {
         copyright = U_COPYRIGHT_STRING;
     }
@@ -293,19 +297,21 @@ int  main(int argc, char **argv) {
 
     IcuToolErrorCode status("gendict/main()");
 
+    UBool isToml = options[ARG_TOML].doesOccur;
+
 #if UCONFIG_NO_BREAK_ITERATION || UCONFIG_NO_FILE_IO
-    const char* outDir=NULL;
+    const char* outDir=nullptr;
 
     UNewDataMemory *pData;
     char msg[1024];
     UErrorCode tempstatus = U_ZERO_ERROR;
 
     /* write message with just the name */ // potential for a buffer overflow here...
-    sprintf(msg, "gendict writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
+    snprintf(msg, sizeof(msg), "gendict writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */
-    pData = udata_create(outDir, NULL, outFileName, &dataInfo, NULL, &tempstatus);
+    pData = udata_create(outDir, nullptr, outFileName, &dataInfo, nullptr, &tempstatus);
     udata_writeBlock(pData, msg, strlen(msg));
     udata_finish(pData, &tempstatus);
     return (int)tempstatus;
@@ -314,7 +320,7 @@ int  main(int argc, char **argv) {
     //  Read in the dictionary source file
     if (verbose) { printf("Opening file %s...\n", wordFileName); }
     const char *codepage = "UTF-8";
-    LocalUCHARBUFPointer f(ucbuf_open(wordFileName, &codepage, TRUE, FALSE, status));
+    LocalUCHARBUFPointer f(ucbuf_open(wordFileName, &codepage, true, false, status));
     if (status.isFailure()) {
         fprintf(stderr, "error opening input file: ICU Error \"%s\"\n", status.errorName());
         exit(status.reset());
@@ -331,13 +337,13 @@ int  main(int argc, char **argv) {
 
     UnicodeString fileLine;
     if (verbose) { puts("Adding words to dictionary..."); }
-    UBool hasValues = FALSE;
-    UBool hasValuelessContents = FALSE;
+    UBool hasValues = false;
+    UBool hasValuelessContents = false;
     int lineCount = 0;
     int wordCount = 0;
     int minlen = 255;
     int maxlen = 0;
-    UBool isOk = TRUE;
+    UBool isOk = true;
     while (readLine(f.getAlias(), fileLine, status)) {
         lineCount++;
         if (fileLine.isEmpty()) continue;
@@ -347,7 +353,7 @@ int  main(int argc, char **argv) {
         for (keyLen = 0; keyLen < fileLine.length() && !u_isspace(fileLine[keyLen]); ++keyLen) {}
         if (keyLen == 0) {
             fprintf(stderr, "Error: no word on line %i!\n", lineCount);
-            isOk = FALSE;
+            isOk = false;
             continue;
         }
         int32_t valueStart;
@@ -359,7 +365,7 @@ int  main(int argc, char **argv) {
             int32_t valueLength = fileLine.length() - valueStart;
             if (valueLength > 15) {
                 fprintf(stderr, "Error: value too long on line %i!\n", lineCount);
-                isOk = FALSE;
+                isOk = false;
                 continue;
             }
             char s[16];
@@ -368,17 +374,17 @@ int  main(int argc, char **argv) {
             unsigned long value = uprv_strtoul(s, &end, 0);
             if (end == s || *end != 0 || (int32_t)uprv_strlen(s) != valueLength || value > 0xffffffff) {
                 fprintf(stderr, "Error: value syntax error or value too large on line %i!\n", lineCount);
-                isOk = FALSE;
+                isOk = false;
                 continue;
             }
             dict.addWord(fileLine.tempSubString(0, keyLen), (int32_t)value, status);
-            hasValues = TRUE;
+            hasValues = true;
             wordCount++;
             if (keyLen < minlen) minlen = keyLen;
             if (keyLen > maxlen) maxlen = keyLen;
         } else {
             dict.addWord(fileLine.tempSubString(0, keyLen), 0, status);
-            hasValuelessContents = TRUE;
+            hasValuelessContents = true;
             wordCount++;
             if (keyLen < minlen) minlen = keyLen;
             if (keyLen > maxlen) maxlen = keyLen;
@@ -417,38 +423,59 @@ int  main(int argc, char **argv) {
         exit(status.reset());
     }
     if (verbose) { puts("Opening output file..."); }
-    UNewDataMemory *pData = udata_create(NULL, NULL, outFileName, &dataInfo, copyright, status);
-    if (status.isFailure()) {
-        fprintf(stderr, "gendict: could not open output file \"%s\", \"%s\"\n", outFileName, status.errorName());
-        exit(status.reset());
-    }
 
-    if (verbose) { puts("Writing to output file..."); }
-    int32_t indexes[DictionaryData::IX_COUNT] = {
-        DictionaryData::IX_COUNT * sizeof(int32_t), 0, 0, 0, 0, 0, 0, 0
-    };
-    int32_t size = outDataSize + indexes[DictionaryData::IX_STRING_TRIE_OFFSET];
-    indexes[DictionaryData::IX_RESERVED1_OFFSET] = size;
-    indexes[DictionaryData::IX_RESERVED2_OFFSET] = size;
-    indexes[DictionaryData::IX_TOTAL_SIZE] = size;
+    if (isToml) {
+        FILE* f = fopen(outFileName, "w");
+        if (f == nullptr) {
+            fprintf(stderr, "gendict: could not open output file \"%s\"\n", outFileName);
+            exit(status.reset());
+        }
+        fprintf(f, "trie_type = \"%s\"\n", isBytesTrie ? "bytes" : "uchars");
+        fprintf(f, "has_values = %s\n", hasValues ? "true" : "false");
+        int32_t transform = dict.getTransform();
+        bool isOffset = (transform & DictionaryData::TRANSFORM_TYPE_MASK) == DictionaryData::TRANSFORM_TYPE_OFFSET;
+        int32_t offset = transform & DictionaryData::TRANSFORM_OFFSET_MASK;
+        fprintf(f, "transform_type = \"%s\"\n", isOffset ? "offset" : "none");
+        fprintf(f, "transform_offset = %d\n", offset);
 
-    indexes[DictionaryData::IX_TRIE_TYPE] = isBytesTrie ? DictionaryData::TRIE_TYPE_BYTES : DictionaryData::TRIE_TYPE_UCHARS;
-    if (hasValues) {
-        indexes[DictionaryData::IX_TRIE_TYPE] |= DictionaryData::TRIE_HAS_VALUES;
-    }
+        usrc_writeArray(f, "trie_data = [\n  ",  outData, isBytesTrie ? 8 : 16, outDataSize, "  ", "\n]\n");
 
-    indexes[DictionaryData::IX_TRANSFORM] = dict.getTransform();
-    udata_writeBlock(pData, indexes, sizeof(indexes));
-    udata_writeBlock(pData, outData, outDataSize);
-    size_t bytesWritten = udata_finish(pData, status);
-    if (status.isFailure()) {
-        fprintf(stderr, "gendict: error \"%s\" writing the output file\n", status.errorName());
-        exit(status.reset());
-    }
 
-    if (bytesWritten != (size_t)size) {
-        fprintf(stderr, "Error writing to output file \"%s\"\n", outFileName);
-        exit(U_INTERNAL_PROGRAM_ERROR);
+        fclose(f);
+    } else {
+        UNewDataMemory *pData = udata_create(nullptr, nullptr, outFileName, &dataInfo, copyright, status);
+        if (status.isFailure()) {
+            fprintf(stderr, "gendict: could not open output file \"%s\", \"%s\"\n", outFileName, status.errorName());
+            exit(status.reset());
+        }
+
+        if (verbose) { puts("Writing to output file..."); }
+        int32_t indexes[DictionaryData::IX_COUNT] = {
+            DictionaryData::IX_COUNT * sizeof(int32_t), 0, 0, 0, 0, 0, 0, 0
+        };
+        int32_t size = outDataSize + indexes[DictionaryData::IX_STRING_TRIE_OFFSET];
+        indexes[DictionaryData::IX_RESERVED1_OFFSET] = size;
+        indexes[DictionaryData::IX_RESERVED2_OFFSET] = size;
+        indexes[DictionaryData::IX_TOTAL_SIZE] = size;
+
+        indexes[DictionaryData::IX_TRIE_TYPE] = isBytesTrie ? DictionaryData::TRIE_TYPE_BYTES : DictionaryData::TRIE_TYPE_UCHARS;
+        if (hasValues) {
+            indexes[DictionaryData::IX_TRIE_TYPE] |= DictionaryData::TRIE_HAS_VALUES;
+        }
+
+        indexes[DictionaryData::IX_TRANSFORM] = dict.getTransform();
+        udata_writeBlock(pData, indexes, sizeof(indexes));
+        udata_writeBlock(pData, outData, outDataSize);
+        size_t bytesWritten = udata_finish(pData, status);
+        if (status.isFailure()) {
+            fprintf(stderr, "gendict: error \"%s\" writing the output file\n", status.errorName());
+            exit(status.reset());
+        }
+
+        if (bytesWritten != (size_t)size) {
+            fprintf(stderr, "Error writing to output file \"%s\"\n", outFileName);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
     }
 
     if (!quiet) { printf("%s: done writing\t%s (%ds).\n", progName, outFileName, elapsedTime()); }
@@ -463,7 +490,7 @@ int  main(int argc, char **argv) {
             printf("%s -> %i\n", s.data(), val);
         }
     } else {
-        UCharsTrie::Iterator it((const UChar *)outData, outDataSize, status);
+        UCharsTrie::Iterator it((const char16_t *)outData, outDataSize, status);
         while (it.hasNext()) {
             it.next(status);
             const UnicodeString s = it.getString();

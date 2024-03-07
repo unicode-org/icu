@@ -114,7 +114,12 @@ static ExpectedResult kJapaneseShort[] = {
   {1.23456789E11, "1200\\u5104"},
   {1.23456789E12, "1.2\\u5146"},
   {1.23456789E13, "12\\u5146"},
-  {1.23456789E14, "120\\u5146"}};
+  {1.23456789E14, "120\\u5146"},
+  {1.23456789E15, "1200\\u5146"},
+  {1.23456789E16, "1.2\\u4EAC"},
+  {1.23456789E17, "12\\u4EAC"},
+  {1.23456789E18, "120\\u4EAC"},
+  {1.23456789E19, "1200\\u4EAC"}};
 
 static ExpectedResult kSwahiliShort[] = {
   {1234.0, "elfu\\u00a01.2"},
@@ -249,7 +254,7 @@ private:
     void CheckLocale(
         const Locale& locale, UNumberCompactStyle style,
         const ExpectedResult* expectedResults, int32_t expectedResultLength);
-    void CheckLocaleWithCurrency(const Locale& locale, UNumberCompactStyle style, const UChar* currency,
+    void CheckLocaleWithCurrency(const Locale& locale, UNumberCompactStyle style, const char16_t* currency,
                                  const ExpectedResult* expectedResults, int32_t expectedResultLength);
     void CheckExpectedResult(
         const CompactDecimalFormat* cdf, const ExpectedResult* expectedResult,
@@ -489,7 +494,7 @@ void CompactDecimalFormatTest::TestBug12975() {
     if (assertSuccess("", status, true, __FILE__, __LINE__)) {
         UnicodeString resultCdf;
         cdf->format(12000, resultCdf);
-        LocalPointer<DecimalFormat> df((DecimalFormat*) DecimalFormat::createInstance(locale, status));
+        LocalPointer<DecimalFormat> df(dynamic_cast<DecimalFormat*>(DecimalFormat::createInstance(locale, status)));
         UnicodeString resultDefault;
         df->format(12000, resultDefault);
         assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
@@ -508,14 +513,14 @@ void CompactDecimalFormatTest::CheckLocale(const Locale& locale, UNumberCompactS
     return;
   }
   char description[256];
-  sprintf(description,"%s - %s", locale.getName(), StyleStr(style));
+  snprintf(description, sizeof(description), "%s - %s", locale.getName(), StyleStr(style));
   for (int32_t i = 0; i < expectedResultLength; i++) {
     CheckExpectedResult(cdf.getAlias(), &expectedResults[i], description);
   }
 }
 
 void CompactDecimalFormatTest::CheckLocaleWithCurrency(const Locale& locale, UNumberCompactStyle style,
-                                                       const UChar* currency,
+                                                       const char16_t* currency,
                                                        const ExpectedResult* expectedResults,
                                                        int32_t expectedResultLength) {
     UErrorCode status = U_ZERO_ERROR;
@@ -527,7 +532,7 @@ void CompactDecimalFormatTest::CheckLocaleWithCurrency(const Locale& locale, UNu
     cdf->setCurrency(currency, status);
     assertSuccess("Failed to set currency", status);
     char description[256];
-    sprintf(description,"%s - %s", locale.getName(), StyleStr(style));
+    snprintf(description, sizeof(description), "%s - %s", locale.getName(), StyleStr(style));
     for (int32_t i = 0; i < expectedResultLength; i++) {
         CheckExpectedResult(cdf.getAlias(), &expectedResults[i], description);
     }
@@ -550,7 +555,7 @@ CompactDecimalFormat*
 CompactDecimalFormatTest::createCDFInstance(const Locale& locale, UNumberCompactStyle style, UErrorCode& status) {
   CompactDecimalFormat* result = CompactDecimalFormat::createInstance(locale, style, status);
   if (U_FAILURE(status)) {
-    return NULL;
+    return nullptr;
   }
   // All tests are written for two significant digits, so we explicitly set here
   // in case default significant digits change.

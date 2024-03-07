@@ -78,7 +78,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
     };
 
     // Expected offsets by void getOffset(UDate date, UBool local, int32_t& rawOffset,
-    // int32_t& dstOffset, UErrorCode& ec) with local=TRUE
+    // int32_t& dstOffset, UErrorCode& ec) with local=true
     // or void getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt, UTimeZoneLocalOption duplicatedTimeOpt,
     // int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) with
     // nonExistingTimeOpt=STANDARD_*/duplicatedTimeOpt=STANDARD_*
@@ -131,7 +131,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
     // Set up TimeZone objects - OlsonTimeZone, SimpleTimeZone and RuleBasedTimeZone
     BasicTimeZone *TESTZONES[NUM_TIMEZONES];
 
-    TESTZONES[0] = (BasicTimeZone*)TimeZone::createTimeZone("America/Los_Angeles");
+    TESTZONES[0] = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("America/Los_Angeles"));
     TESTZONES[1] = new SimpleTimeZone(-8*HOUR, "Simple Pacific Time",
                                         UCAL_APRIL, 1, UCAL_SUNDAY, 2*HOUR,
                                         UCAL_OCTOBER, -1, UCAL_SUNDAY, 2*HOUR, status);
@@ -219,11 +219,11 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
     }
 
     // Test getOffset(UDate date, UBool local, int32_t& rawOffset,
-    // int32_t& dstOffset, UErrorCode& ec) with local = TRUE
+    // int32_t& dstOffset, UErrorCode& ec) with local = true
     for (int32_t i = 0; i < NUM_TIMEZONES; i++) {
         for (int32_t m = 0; m < NUM_DATES; m++) {
             status = U_ZERO_ERROR;
-            TESTZONES[i]->getOffset(MILLIS[m], TRUE, rawOffset, dstOffset, status);
+            TESTZONES[i]->getOffset(MILLIS[m], true, rawOffset, dstOffset, status);
             if (U_FAILURE(status)) {
                 errln((UnicodeString)"getOffset(date,local,rawOfset,dstOffset,ec) failed for TESTZONES[" + i + "]");
             } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {

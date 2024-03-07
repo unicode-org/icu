@@ -43,7 +43,7 @@ CollationFinnishTest::~CollationFinnishTest()
     delete myCollation;
 }
 
-const UChar CollationFinnishTest::testSourceCases[][CollationFinnishTest::MAX_TOKEN_LEN] = {
+const char16_t CollationFinnishTest::testSourceCases[][CollationFinnishTest::MAX_TOKEN_LEN] = {
     {0x77, 0x61, 0x74, 0},  // "wat"
     {0x76, 0x61, 0x74, 0},  // "vat"
     {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b, 0},
@@ -51,7 +51,7 @@ const UChar CollationFinnishTest::testSourceCases[][CollationFinnishTest::MAX_TO
     {0x77, 0x61, 0x74, 0}   // "wat"
 };
 
-const UChar CollationFinnishTest::testTargetCases[][CollationFinnishTest::MAX_TOKEN_LEN] = {
+const char16_t CollationFinnishTest::testTargetCases[][CollationFinnishTest::MAX_TOKEN_LEN] = {
     {0x76, 0x61, 0x74, 0},  // "vat"
     {0x77, 0x61, 0x79, 0},
     {0x61, 0x78, 0x62, 0x65, 0x63, 0x6b, 0},

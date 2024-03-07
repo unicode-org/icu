@@ -25,7 +25,7 @@
 
 class IntlTestTransliterator: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 };
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -18,6 +18,7 @@
 *   Test internal sorting functions.
 */
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "unicode/utypes.h"
@@ -39,7 +40,7 @@ SortTest(void) {
 
     /* sort small array (stable) */
     errorCode=U_ZERO_ERROR;
-    uprv_sortArray(small, UPRV_LENGTHOF(small), sizeof(small[0]), uprv_uint16Comparator, NULL, TRUE, &errorCode);
+    uprv_sortArray(small, UPRV_LENGTHOF(small), sizeof(small[0]), uprv_uint16Comparator, NULL, true, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(small) failed - %s\n", u_errorName(errorCode));
         return;
@@ -57,7 +58,7 @@ SortTest(void) {
     }
 
     /* sort medium array (stable) */
-    uprv_sortArray(medium, UPRV_LENGTHOF(medium), sizeof(medium[0]), uprv_int32Comparator, NULL, TRUE, &errorCode);
+    uprv_sortArray(medium, UPRV_LENGTHOF(medium), sizeof(medium[0]), uprv_int32Comparator, NULL, true, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(medium) failed - %s\n", u_errorName(errorCode));
         return;
@@ -71,7 +72,7 @@ SortTest(void) {
 
     /* sort large array (not stable) */
     errorCode=U_ZERO_ERROR;
-    uprv_sortArray(large, UPRV_LENGTHOF(large), sizeof(large[0]), uprv_uint32Comparator, NULL, FALSE, &errorCode);
+    uprv_sortArray(large, UPRV_LENGTHOF(large), sizeof(large[0]), uprv_uint32Comparator, NULL, false, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(large) failed - %s\n", u_errorName(errorCode));
         return;
@@ -165,7 +166,7 @@ static void StableSortTest(void) {
     printLines(lines);
 
     uprv_sortArray(lines, NUM_LINES, (int32_t)sizeof(Line),
-                   linesComparator, coll, TRUE, &errorCode);
+                   linesComparator, coll, true, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray() failed - %s\n", u_errorName(errorCode));
         return;
@@ -178,7 +179,7 @@ static void StableSortTest(void) {
     for(i=1; i<NUM_LINES; ++i) {
         Line *q=p+1;  /* =lines+i */
         /* Binary comparison first, for speed. In this case, equal strings must be identical. */
-        int32_t diff=u_strCompare(p->s, STR_LEN, q->s, STR_LEN, FALSE);
+        int32_t diff=u_strCompare(p->s, STR_LEN, q->s, STR_LEN, false);
         if(diff==0) {
             if(p->recordNumber>=q->recordNumber) {
                 log_err("equal strings %d and %d out of order at sorted index %d\n",

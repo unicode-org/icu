@@ -258,6 +258,9 @@ fa{
         "America:Chihuahua"{
             ec{"چیواوا"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"سیوداد خوارز"}
+        }
         "America:Coral_Harbour"{
             ec{"اتکوکان"}
         }
@@ -462,9 +465,6 @@ fa{
         "America:New_York"{
             ec{"نیویورک"}
         }
-        "America:Nipigon"{
-            ec{"نیپیگان"}
-        }
         "America:Nome"{
             ec{"نوم"}
         }
@@ -485,9 +485,6 @@ fa{
         }
         "America:Panama"{
             ec{"پاناما"}
-        }
-        "America:Pangnirtung"{
-            ec{"پانگنیرتونگ"}
         }
         "America:Paramaribo"{
             ec{"پاراماریبو"}
@@ -510,9 +507,6 @@ fa{
         "America:Punta_Arenas"{
             ec{"پونتا آرناس"}
         }
-        "America:Rainy_River"{
-            ec{"رینی‌ریور"}
-        }
         "America:Rankin_Inlet"{
             ec{"خلیجک رنکین"}
         }
@@ -527,9 +521,6 @@ fa{
         }
         "America:Rio_Branco"{
             ec{"ریوبرانکو"}
-        }
-        "America:Santa_Isabel"{
-            ec{"سانتا ایزابل"}
         }
         "America:Santarem"{
             ec{"سنتارم"}
@@ -576,9 +567,6 @@ fa{
         "America:Thule"{
             ec{"تول"}
         }
-        "America:Thunder_Bay"{
-            ec{"تاندربی"}
-        }
         "America:Tijuana"{
             ec{"تیخوانا"}
         }
@@ -599,9 +587,6 @@ fa{
         }
         "America:Yakutat"{
             ec{"یاکوتات"}
-        }
-        "America:Yellowknife"{
-            ec{"یلونایف"}
         }
         "Antarctica:Casey"{
             ec{"کیسی"}
@@ -927,9 +912,6 @@ fa{
         "Australia:Broken_Hill"{
             ec{"بروکن‌هیل"}
         }
-        "Australia:Currie"{
-            ec{"کوری"}
-        }
         "Australia:Darwin"{
             ec{"داروین"}
         }
@@ -1112,9 +1094,6 @@ fa{
         "Europe:Ulyanovsk"{
             ec{"اولیانوفسک"}
         }
-        "Europe:Uzhgorod"{
-            ec{"اوژگورود"}
-        }
         "Europe:Vaduz"{
             ec{"فادوتس"}
         }
@@ -1135,9 +1114,6 @@ fa{
         }
         "Europe:Zagreb"{
             ec{"زاگرب"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"زاپوروژیا"}
         }
         "Europe:Zurich"{
             ec{"زوریخ"}
@@ -1220,9 +1196,6 @@ fa{
         "Pacific:Honolulu"{
             ec{"هونولولو"}
         }
-        "Pacific:Johnston"{
-            ec{"جانستون"}
-        }
         "Pacific:Kanton"{
             ec{"کانتون"}
         }
@@ -1299,7 +1272,7 @@ fa{
             ls{"وقت افغانستان"}
         }
         "meta:Africa_Central"{
-            ls{"وقت مرکز افریقا"}
+            ls{"وقت مرکز آفریقا"}
         }
         "meta:Africa_Eastern"{
             ls{"وقت شرق افریقا"}
@@ -1663,9 +1636,6 @@ fa{
             lg{"وقت ماکائو"}
             ls{"وقت عادی ماکائو"}
         }
-        "meta:Macquarie"{
-            ls{"وقت جزیرهٔ مکواری"}
-        }
         "meta:Magadan"{
             ld{"وقت تابستانی ماگادان"}
             lg{"وقت ماگادان"}
@@ -1690,11 +1660,6 @@ fa{
         }
         "meta:Mawson"{
             ls{"وقت ماوسون"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"وقت تابستانی شمال غرب مکزیک"}
-            lg{"وقت شمال غرب مکزیک"}
-            ls{"وقت عادی شمال غرب مکزیک"}
         }
         "meta:Mexico_Pacific"{
             ld{"وقت تابستانی شرق مکزیک"}
@@ -1928,7 +1893,6 @@ fa{
         "meta:Yukon"{
             ls{"وقت یوکان"}
         }
-        fallbackFormat{"{1} ({0})"}
         gmtFormat{"{0} گرینویچ"}
         gmtZeroFormat{"گرینویچ"}
         hourFormat{"‎+HH:mm;‎−HH:mm"}

@@ -21,7 +21,7 @@ public:
     CharsetDetectionTest();
     virtual ~CharsetDetectionTest();
 
-    virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     virtual void ConstructionTest();
     virtual void UTF8Test();

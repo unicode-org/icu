@@ -137,16 +137,15 @@ es_US{
                 yMMMEd{"EEE, d 'de' MMM 'de' y"}
                 yQQQ{"QQQ y"}
             }
-            dayNames{
-                format{
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
                     narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
+                        am{"a. m."}
+                        pm{"p. m."}
                     }
                 }
             }
@@ -172,7 +171,6 @@ es_US{
                 MMMd{
                     d{"d–d 'de' MMM"}
                 }
-                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                 }
@@ -297,14 +295,6 @@ es_US{
                 }
             }
         }
-        tue{
-            relativeTime{
-                future{
-                    one{"dentro de {0} martes"}
-                    other{"dentro de {0} martes"}
-                }
-            }
-        }
         wed-short{
             relative{
                 "-1"{"el mie. pasado"}
@@ -351,16 +341,9 @@ es_US{
         UK{"imperial"}
     }
     personNames{
-        nameOrderLocales{
-            surnameFirst{
-                "ja",
-                "ko",
-                "zh",
-            }
-        }
         namePattern{
             sorting-long-referring-formal{
-                "{surname}, {prefix} {given} {given2}",
+                "{surname}, {title} {given} {given2}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-long-referring-informal{
@@ -368,7 +351,7 @@ es_US{
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-medium-referring-formal{
-                "{surname}, {prefix} {given} {given2-initial}",
+                "{surname}, {title} {given} {given2-initial}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-medium-referring-informal{
@@ -376,7 +359,7 @@ es_US{
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-short-referring-formal{
-                "{surname}, {prefix} {given-initial} {given2-initial} {suffix}",
+                "{surname}, {title} {given} {given2}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-short-referring-informal{

@@ -22,7 +22,7 @@ UPerfFunction::~UPerfFunction() {}
 
 static const char delim = '/';
 static int32_t execCount = 0;
-UPerfTest* UPerfTest::gTest = NULL;
+UPerfTest* UPerfTest::gTest = nullptr;
 static const int MAXLINES = 40000;
 const char UPerfTest::gUsageString[] =
     "Usage: %s [OPTIONS] [FILES]\n"
@@ -81,16 +81,16 @@ static UOption options[OPTIONS_COUNT+20]={
 };
 
 UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status)
-        : _argc(argc), _argv(argv), _addUsage(NULL),
-          ucharBuf(NULL), encoding(""),
-          uselen(FALSE),
-          fileName(NULL), sourceDir("."),
-          lines(NULL), numLines(0), line_mode(TRUE),
-          buffer(NULL), bufferLen(0),
-          verbose(FALSE), bulk_mode(FALSE),
+        : _argc(argc), _argv(argv), _addUsage(nullptr),
+          ucharBuf(nullptr), encoding(""),
+          uselen(false),
+          fileName(nullptr), sourceDir("."),
+          lines(nullptr), numLines(0), line_mode(true),
+          buffer(nullptr), bufferLen(0),
+          verbose(false), bulk_mode(false),
           passes(1), iterations(0), time(0),
-          locale(NULL) {
-    init(NULL, 0, status);
+          locale(nullptr) {
+    init(nullptr, 0, status);
 }
 
 UPerfTest::UPerfTest(int32_t argc, const char* argv[],
@@ -98,14 +98,14 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[],
                      const char *addUsage,
                      UErrorCode& status)
         : _argc(argc), _argv(argv), _addUsage(addUsage),
-          ucharBuf(NULL), encoding(""),
-          uselen(FALSE),
-          fileName(NULL), sourceDir("."),
-          lines(NULL), numLines(0), line_mode(TRUE),
-          buffer(NULL), bufferLen(0),
-          verbose(FALSE), bulk_mode(FALSE),
+          ucharBuf(nullptr), encoding(""),
+          uselen(false),
+          fileName(nullptr), sourceDir("."),
+          lines(nullptr), numLines(0), line_mode(true),
+          buffer(nullptr), bufferLen(0),
+          verbose(false), bulk_mode(false),
           passes(1), iterations(0), time(0),
-          locale(NULL) {
+          locale(nullptr) {
     init(addOptions, addOptionsCount, status);
 }
 
@@ -114,7 +114,7 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     //initialize the argument list
     U_MAIN_INIT_ARGS(_argc, _argv);
 
-    resolvedFileName = NULL;
+    resolvedFileName = nullptr;
 
     // add specific options
     int32_t optionsCount = OPTIONS_COUNT;
@@ -138,7 +138,7 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     }
 
     if(options[VERBOSE].doesOccur) {
-        verbose = TRUE;
+        verbose = true;
     }
 
     if(options[SOURCEDIR].doesOccur) {
@@ -150,7 +150,7 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     }
 
     if(options[USELEN].doesOccur) {
-        uselen = TRUE;
+        uselen = true;
     }
 
     if(options[FILE_NAME].doesOccur){
@@ -173,13 +173,13 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     }
 
     if(options[LINE_MODE].doesOccur) {
-        line_mode = TRUE;
-        bulk_mode = FALSE;
+        line_mode = true;
+        bulk_mode = false;
     }
 
     if(options[BULK_MODE].doesOccur) {
-        bulk_mode = TRUE;
-        line_mode = FALSE;
+        bulk_mode = true;
+        line_mode = false;
     }
     
     if(options[LOCALE].doesOccur) {
@@ -187,11 +187,11 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     }
 
     int32_t len = 0;
-    if(fileName!=NULL){
+    if(fileName!=nullptr){
         //pre-flight
-        ucbuf_resolveFileName(sourceDir, fileName, NULL, &len, &status);
+        ucbuf_resolveFileName(sourceDir, fileName, nullptr, &len, &status);
         resolvedFileName = (char*) uprv_malloc(len);
-        if(resolvedFileName==NULL){
+        if(resolvedFileName==nullptr){
             status= U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -199,7 +199,7 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
             status = U_ZERO_ERROR;
         }
         ucbuf_resolveFileName(sourceDir, fileName, resolvedFileName, &len, &status);
-        ucharBuf = ucbuf_open(resolvedFileName,&encoding,TRUE,FALSE,&status);
+        ucharBuf = ucbuf_open(resolvedFileName,&encoding,true,false,&status);
 
         if(U_FAILURE(status)){
             printf("Could not open the input file %s. Error: %s\n", fileName, u_errorName(status));
@@ -210,22 +210,22 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
 
 ULine* UPerfTest::getLines(UErrorCode& status){
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
-    if (lines != NULL) {
+    if (lines != nullptr) {
         return lines;  // don't do it again
     }
     lines     = new ULine[MAXLINES];
     int maxLines = MAXLINES;
     numLines=0;
-    const UChar* line=NULL;
+    const char16_t* line=nullptr;
     int32_t len =0;
     for (;;) {
         line = ucbuf_readline(ucharBuf,&len,&status);
-        if(line == NULL || U_FAILURE(status)){
+        if(line == nullptr || U_FAILURE(status)){
             break;
         }
-        lines[numLines].name  = new UChar[len];
+        lines[numLines].name  = new char16_t[len];
         lines[numLines].len   = len;
         memcpy(lines[numLines].name, line, len * U_SIZEOF_UCHAR);
 
@@ -234,11 +234,11 @@ ULine* UPerfTest::getLines(UErrorCode& status){
         if (numLines >= maxLines) {
             maxLines += MAXLINES;
             ULine *newLines = new ULine[maxLines];
-            if(newLines == NULL) {
+            if(newLines == nullptr) {
                 fprintf(stderr, "Out of memory reading line %d.\n", (int)numLines);
                 status= U_MEMORY_ALLOCATION_ERROR;
                 delete []lines;
-                return NULL;
+                return nullptr;
             }
 
             memcpy(newLines, lines, numLines*sizeof(ULine));
@@ -248,12 +248,12 @@ ULine* UPerfTest::getLines(UErrorCode& status){
     }
     return lines;
 }
-const UChar* UPerfTest::getBuffer(int32_t& len, UErrorCode& status){
+const char16_t* UPerfTest::getBuffer(int32_t& len, UErrorCode& status){
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     len = ucbuf_size(ucharBuf);
-    buffer =  (UChar*) uprv_malloc(U_SIZEOF_UCHAR * (len+1));
+    buffer =  (char16_t*) uprv_malloc(U_SIZEOF_UCHAR * (len+1));
     u_strncpy(buffer,ucbuf_getBuffer(ucharBuf,&bufferLen,&status),len);
     buffer[len]=0;
     len = bufferLen;
@@ -264,12 +264,12 @@ UBool UPerfTest::run(){
         // Testing all methods
         return runTest();
     }
-    UBool res=FALSE;
+    UBool res=false;
     // Test only the specified function
     for (int i = 1; i < _remainingArgc; ++i) {
         if (_argv[i][0] != '-') {
             char* name = (char*) _argv[i];
-            if(verbose==TRUE){
+            if(verbose==true){
                 //fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
                 //fprintf(stdout, "\n%s:\n", name);
             }
@@ -282,7 +282,7 @@ UBool UPerfTest::run(){
             res = runTest( name, parameter );
             if (!res || (execCount <= 0)) {
                 fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
-                return FALSE;
+                return false;
             }
         }
     }
@@ -290,7 +290,7 @@ UBool UPerfTest::run(){
 }
 UBool UPerfTest::runTest(char* name, char* par ){
     UBool rval;
-    char* pos = NULL;
+    char* pos = nullptr;
 
     if (name)
         pos = strchr( name, delim ); // check if name contains path (by looking for '/')
@@ -298,15 +298,15 @@ UBool UPerfTest::runTest(char* name, char* par ){
         path = pos+1;   // store subpath for calling subtest
         *pos = 0;       // split into two strings
     }else{
-        path = NULL;
+        path = nullptr;
     }
 
     if (!name || (name[0] == 0) || (strcmp(name, "*") == 0)) {
-        rval = runTestLoop( NULL, NULL );
+        rval = runTestLoop( nullptr, nullptr );
 
     }else if (strcmp( name, "LIST" ) == 0) {
         this->usage();
-        rval = TRUE;
+        rval = true;
 
     }else{
         rval = runTestLoop( name, par );
@@ -335,7 +335,7 @@ UPerfFunction* UPerfTest::runIndexedTest( int32_t /*index*/, UBool /*exec*/, con
     }
     */
     fprintf(stderr,"*** runIndexedTest needs to be overridden! ***");
-    return NULL;
+    return nullptr;
 }
 
 
@@ -344,7 +344,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
     int32_t    index = 0;
     const char*   name;
     UBool  run_this_test;
-    UBool  rval = FALSE;
+    UBool  rval = false;
     UErrorCode status = U_ZERO_ERROR;
     UPerfTest* saveTest = gTest;
     gTest = this;
@@ -353,31 +353,31 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
     int32_t n = 1;
     long ops;
     do {
-        this->runIndexedTest( index, FALSE, name );
+        this->runIndexedTest( index, false, name );
         if (!name || (name[0] == 0))
             break;
         if (!testname) {
-            run_this_test = TRUE;
+            run_this_test = true;
         }else{
             run_this_test = (UBool) (strcmp( name, testname ) == 0);
         }
         if (run_this_test) {
-            UPerfFunction* testFunction = this->runIndexedTest( index, TRUE, name, par );
+            UPerfFunction* testFunction = this->runIndexedTest( index, true, name, par );
             execCount++;
-            rval=TRUE;
-            if(testFunction==NULL){
-                fprintf(stderr,"%s function returned NULL", name);
-                return FALSE;
+            rval=true;
+            if(testFunction==nullptr){
+                fprintf(stderr,"%s function returned nullptr", name);
+                return false;
             }
             ops = testFunction->getOperationsPerIteration();
             if (ops < 1) {
                 fprintf(stderr, "%s returned an illegal operations/iteration()\n", name);
-                return FALSE;
+                return false;
             }
             if(iterations == 0) {
                 n = time;
                 // Run for specified duration in seconds
-                if(verbose==TRUE){
+                if(verbose==true){
                     fprintf(stdout,"= %s calibrating %i seconds \n", name, (int)n);
                 }
 
@@ -394,7 +394,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                         loops = (int)((double)n / t * loops + 0.5);
                         if (loops == 0) {
                             fprintf(stderr,"Unable to converge on desired duration");
-                            return FALSE;
+                            return false;
                         }
                     }
                     //System.out.println("# " + meth.getName() + " x " + loops);
@@ -412,7 +412,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
             long events = -1;
 
             for(int32_t ps =0; ps < passes; ps++){
-                if(verbose==TRUE){
+                if(verbose==true){
                     fprintf(stdout,"= %s begin " ,name);
                     if(iterations > 0) {
                         fprintf(stdout, "%i\n", (int)loops);
@@ -431,7 +431,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 }
                 events = testFunction->getEventsPerIteration();
                 //print info only in verbose mode
-                if(verbose==TRUE){
+                if(verbose==true){
                     if(events == -1){
                         fprintf(stdout, "= %s end: %f loops: %i operations: %li \n", name, t, (int)loops, ops);
                     }else{
@@ -475,22 +475,22 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
 /**
 * Print a usage message for this test class.
 */
-void UPerfTest::usage( void )
+void UPerfTest::usage()
 {
     puts(gUsageString);
-    if (_addUsage != NULL) {
+    if (_addUsage != nullptr) {
         puts(_addUsage);
     }
 
     UBool save_verbose = verbose;
-    verbose = TRUE;
+    verbose = true;
     fprintf(stdout,"Test names:\n");
     fprintf(stdout,"-----------\n");
 
     int32_t index = 0;
-    const char* name = NULL;
+    const char* name = nullptr;
     do{
-        this->runIndexedTest( index, FALSE, name );
+        this->runIndexedTest( index, false, name );
         if (!name)
             break;
         fprintf(stdout, "%s\n", name);
@@ -518,13 +518,13 @@ UBool UPerfTest::callTest( UPerfTest& testToBeCalled, char* par )
 }
 
 UPerfTest::~UPerfTest(){
-    if(lines!=NULL){
+    if(lines!=nullptr){
         delete[] lines;
     }
-    if(buffer!=NULL){
+    if(buffer!=nullptr){
         uprv_free(buffer);
     }
-    if(resolvedFileName!=NULL){
+    if(resolvedFileName!=nullptr){
         uprv_free(resolvedFileName);
     }
     ucbuf_close(ucharBuf);

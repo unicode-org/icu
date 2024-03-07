@@ -330,31 +330,31 @@ public:
                             int32_t count);
 
     /**
-     * Returns NULL and 0.
+     * Returns nullptr and 0.
      * Before ICU 4.8, this used to return the choice limits array.
      *
      * @param count Will be set to 0.
-     * @return NULL
+     * @return nullptr
      * @deprecated ICU 4.8 Use the MessagePattern class to analyze a ChoiceFormat pattern.
      */
     virtual const double* getLimits(int32_t& count) const;
 
     /**
-     * Returns NULL and 0.
+     * Returns nullptr and 0.
      * Before ICU 4.8, this used to return the limit booleans array.
      *
      * @param count Will be set to 0.
-     * @return NULL
+     * @return nullptr
      * @deprecated ICU 4.8 Use the MessagePattern class to analyze a ChoiceFormat pattern.
      */
     virtual const UBool* getClosures(int32_t& count) const;
 
     /**
-     * Returns NULL and 0.
+     * Returns nullptr and 0.
      * Before ICU 4.8, this used to return the array of choice strings.
      *
      * @param count Will be set to 0.
-     * @return NULL
+     * @return nullptr
      * @deprecated ICU 4.8 Use the MessagePattern class to analyze a ChoiceFormat pattern.
      */
     virtual const UnicodeString* getFormats(int32_t& count) const;
@@ -454,7 +454,7 @@ public:
      *                  other classes have different class IDs.
      * @deprecated ICU 49 Use MessageFormat instead, with plural and select arguments.
      */
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * Returns the class ID for this class.  This is useful only for
@@ -467,7 +467,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @deprecated ICU 49 Use MessageFormat instead, with plural and select arguments.
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID();
 
 private:
     /**

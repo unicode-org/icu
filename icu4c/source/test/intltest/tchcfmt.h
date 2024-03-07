@@ -25,24 +25,24 @@ class TestChoiceFormat: public IntlTest {
     /** 
      *    tests basic functionality in a simple example
      **/
-    void TestSimpleExample(void); 
+    void TestSimpleExample(); 
     /**
      *    tests functionality in a more complex example,
      *    and extensive API functionality.
      *    See verbose message output statements for specifically tested API
      **/
-    void TestComplexExample(void);
+    void TestComplexExample();
 
     /**
      * Test new closure API
      */
-    void TestClosures(void);
+    void TestClosures();
 
     /**
      * Test applyPattern
      */
-    void TestPatterns(void);
-    void TestChoiceFormatToPatternOverflow(void);
+    void TestPatterns();
+    void TestChoiceFormatToPatternOverflow();
 
     void _testPattern(const char* pattern,
                       UBool isValid,
@@ -52,7 +52,7 @@ class TestChoiceFormat: public IntlTest {
     /** 
      *    runs tests in local functions:
      **/
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

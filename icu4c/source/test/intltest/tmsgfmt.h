@@ -22,28 +22,28 @@
  */
 class TestMessageFormat: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     /**
      * regression test for a specific bug regarding ChoiceFormat boundaries
      **/
-    void testBug1(void);
+    void testBug1();
     /**
      * regression test for a specific bug regarding MessageFormat using ChoiceFormat
      **/
-    void testBug2(void);
+    void testBug2();
     /**
      * regression test for a specific bug involving NumberFormat and Locales
      **/
-    void testBug3(void);
+    void testBug3();
     /** 
      * test MessageFormat with various given patterns
      **/
-    void PatternTest(void);
+    void PatternTest();
     /** 
      * test MesageFormat formatting functionality in a simple example
      **/
-    void sample(void);
+    void sample();
 
     /** 
     * tests the static MessageFormat::format method
@@ -103,18 +103,18 @@ public:
      * In addition to the methods their name suggests,
      * they often test other methods as well.
      **/
-    void testCopyConstructor(void);
-    void testCopyConstructor2(void);
-    void testAssignment(void);
-    void testClone(void);
-    void testEquals(void);
-    void testNotEquals(void);
-    void testSetLocale(void);
-    void testFormat(void);
-    void testParse(void);
-    void testAdopt(void);
-    void TestTurkishCasing(void);
-    void testAutoQuoteApostrophe(void);
+    void testCopyConstructor();
+    void testCopyConstructor2();
+    void testAssignment();
+    void testClone();
+    void testEquals();
+    void testNotEquals();
+    void testSetLocale();
+    void testFormat();
+    void testParse();
+    void testAdopt();
+    void TestTurkishCasing();
+    void testAutoQuoteApostrophe();
     void testCoverage();
     void testGetFormatNames();
     void TestTrimArgumentName();

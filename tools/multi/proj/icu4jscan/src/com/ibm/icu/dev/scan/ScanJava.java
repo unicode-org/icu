@@ -42,7 +42,7 @@ public class ScanJava extends SimpleScan {
         
         try {
         Locale available[] = Collator.getAvailableLocales();
-        locs.setAttribute("total", new Integer(available.length).toString());
+        locs.setAttribute("total", Integer.toString(available.length));
         System.err.println("Begin coll!");
             String locinfo = "";
             
@@ -78,7 +78,7 @@ public class ScanJava extends SimpleScan {
         
         try {
         Locale available[] = Locale.getAvailableLocales();
-        locs.setAttribute("total", new Integer(available.length).toString());
+        locs.setAttribute("total", Integer.toString(available.length));
         
             String locinfo = "";
             

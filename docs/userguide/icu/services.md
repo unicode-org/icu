@@ -32,18 +32,18 @@ for a broad range of languages.
 
 ICU provides basic Unicode support for the following:
 
-*   [Unicode strings](strings/index.md)
+*   [Unicode strings](../strings/index)
 
     ICU includes type definitions for UTF-16 strings and code points. It also
     contains many C `u_string` functions and the C++ `UnicodeString` class with many
     additional string functions.
 
-*   [Unicode properties](strings/properties.md)
+*   [Unicode properties](../strings/properties)
 
     ICU includes the C definitions and functions found in `uchar.h` as well as
     some macros found in `utf.h`. It also includes the C++ Unicode class.
 
-*   [Unicode string iteration](strings/characteriterator.md)
+*   [Unicode string iteration](../strings/characteriterator)
 
     In C, ICU uses the macros in `utf.h` for the iteration of strings. In C++, ICU
     uses the characterIterator and its subclasses.
@@ -116,22 +116,22 @@ Date and time routines manage independent date and time functions in
 milliseconds since January 1, 1970 (0:00:00.000 UTC). Points in time before then
 are represented as negative numbers.
 
-ICU provides the following [classes](datetime/index.md) to support calendars and
+ICU provides the following [classes](../datetime/index) to support calendars and
 time zones:
 
-*   [`Calendar`](datetime/calendar/index#calendar)
+*   [`Calendar`](../datetime/calendar/index#calendar)
     
     The abstract superclass for extracting calendar-related attributes from a `Date` value.
 
-*   [`GregorianCalendar`](datetime/calendar/index#gregoriancalendar)
+*   [`GregorianCalendar`](../datetime/calendar/index#gregoriancalendar)
     
     A concrete class for representing a Gregorian calendar.
 
-*   [`TimeZone`](datetime/timezone/index.md)
+*   [`TimeZone`](../datetime/timezone/index)
     
     An abstract superclass for representing a time zone.
 
-*   [`SimpleTimeZone`](datetime/timezone/index.md)
+*   [`SimpleTimeZone`](../datetime/timezone/index)
     
     A concrete class for representing a time zone for use with a Gregorian calendar.
 
@@ -165,35 +165,35 @@ See [Formatting and Parsing Classes](format_parse/index#formatting-and-parsing-c
 
 #### Formatting Numbers
 
-*   [`NumberFormat`](format_parse/numbers/index#formatting-numbers)
+*   [`NumberFormat`](../format_parse/numbers/index#formatting-numbers)
     NumberFormat provides the basic fields and methods to format number objects
     and number primitives into localized strings and parse localized strings to
     number objects.
 
-*   [`DecimalFormat`](format_parse/numbers/index#decimalformat)
+*   [`DecimalFormat`](../format_parse/numbers/index#decimalformat)
     DecimalFormat provides the methods used to format number objects and number
     primitives into localized strings and parse localized strings into number
     objects in base 10.
 
-*   [`DecimalFormatSymbols`](format_parse/numbers/index#decimalformatsymbols)
+*   [`DecimalFormatSymbols`](../format_parse/numbers/index#decimalformatsymbols)
     DecimalFormatSymbols is a concrete class used by DecimalFormat to access
     localized number strings such as the grouping separators, the decimal
     separator, and the percent sign.
 
 #### Formatting Dates and Times
 
-*   [`DateFormat`](format_parse/datetime/index.md)
+*   [`DateFormat`](../format_parse/datetime/index)
     
     `DateFormat` provides the basic fields and methods for formatting date objects
     to localized strings and parsing date and time strings to date objects.
 
-*   [`SimpleDateFormat`](format_parse/datetime/index.md)
+*   [`SimpleDateFormat`](../format_parse/datetime/index)
     
     `SimpleDateFormat` is a concrete class used to format date objects to
     localized strings and to parse date and time strings to date objects using a
     `GregorianCalendar`.
 
-*   [`DateFormatSymbols`](format_parse/datetime/index.md)
+*   [`DateFormatSymbols`](../format_parse/datetime/index)
     
     `DateFormatSymbols` is a concrete class used to access localized date and time
     formatting strings, such as names of the months, days of the week, and the
@@ -201,13 +201,13 @@ See [Formatting and Parsing Classes](format_parse/index#formatting-and-parsing-c
 
 #### Formatting Messages
 
-*   [`MessageFormat`](format_parse/messages/index.md)
+*   [`MessageFormat`](../format_parse/messages/index)
     
     `MessageFormat` is a concrete class used to produce a language-specific user
     message that contains numbers, currency, percentages, date, time, and string
     variables.
 
-*   [`ChoiceFormat`](format_parse/messages/index.md)
+*   [`ChoiceFormat`](../format_parse/messages/index)
     
     `ChoiceFormat` is a concrete class used to map strings to ranges of numbers
     and to handle plural words and name series in user messages.
@@ -247,19 +247,19 @@ associated with base characters (such as 'a' and 'b'), accent marks (such as
 ICU provides the following collation classes for sorting and searching natural
 language text according to locale-specific rules:
 
-*   [`Collator`](collation/architecture.md) is the abstract base class of all classes that compare strings.
+*   [`Collator`](../collation/architecture) is the abstract base class of all classes that compare strings.
 
-*   [`CollationElementIterator`](collation/architecture.md) is a concrete iterator class that provides an
+*   [`CollationElementIterator`](../collation/architecture) is a concrete iterator class that provides an
     iterator for stepping through each character of a locale-specific string
     according to the rules of a specific collator object.
 
-*   [`RuleBasedCollator`](collation/architecture.md) is the only built-in 
+*   [`RuleBasedCollator`](../collation/architecture) is the only built-in 
     implementation of the collator. It
     provides a sophisticated mechanism for comparing strings in a
     language-specific manner, and an interface that allows the user to
     specifically customize the sorting order.
 
-*   [`CollationKey`](collation/architecture.md)  is an object that enables the fast sorting of strings by
+*   [`CollationKey`](../collation/architecture)  is an object that enables the fast sorting of strings by
     representing a string as a sort key under the rules of a specific collator
     object.
 
@@ -307,25 +307,25 @@ that it recognizes text boundaries according to the particular locale ID.
 
 ICU provides the following classes for iterating over locale-specific text:
 
-*   [`BreakIterator`](boundaryanalysis/index.md)
+*   [`BreakIterator`](../boundaryanalysis/index)
     
     The abstract base class that defines the operations for finding and getting
     the positions of logical breaks in a string of text: characters, words,
     sentences, and potential line breaks.
 
-*   [`CharacterIterator`](strings/characteriterator.md)
+*   [`CharacterIterator`](../strings/characteriterator)
     
     The abstract base class for forward and backward iteration over a string of
     Unicode characters.
 
-*   [`StringCharacterIterator`](strings/index.md)
+*   [`StringCharacterIterator`](../strings/index)
     
     A concrete class for forward and backward iteration over a string of Unicode
     characters. `StringCharacterIterator` inherits from `CharacterIterator`.
 
 ### Paragraph Layout
 
-See [Paragraph Layout](./layoutengine/paragraph.md) for more details.
+See [Paragraph Layout](../layoutengine/paragraph) for more details.
 
 ## Locale-Dependent Operations
 

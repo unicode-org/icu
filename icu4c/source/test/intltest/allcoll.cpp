@@ -24,7 +24,7 @@ CollationDummyTest::CollationDummyTest()
 : myCollation(0)
 {
     /*UErrorCode status = U_ZERO_ERROR;
-    UnicodeString rules(TRUE, DEFAULTRULEARRAY, UPRV_LENGTHOF(DEFAULTRULEARRAY));
+    UnicodeString rules(true, DEFAULTRULEARRAY, UPRV_LENGTHOF(DEFAULTRULEARRAY));
     UnicodeString newRules("& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ");
     rules += newRules;
     myCollation = new RuleBasedCollator(rules, status);
@@ -32,7 +32,7 @@ CollationDummyTest::CollationDummyTest()
 
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString ruleset("& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ");
-    if (myCollation != NULL)
+    if (myCollation != nullptr)
     {
       delete myCollation;
     }
@@ -153,7 +153,7 @@ void CollationDummyTest::TestIdentical()
     }
 }
 
-void CollationDummyTest::TestJB581(void)
+void CollationDummyTest::TestJB581()
 {
     UErrorCode status = U_ZERO_ERROR;
 

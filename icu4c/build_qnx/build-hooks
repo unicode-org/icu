@@ -1,0 +1,81 @@
+# © 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+function hook_preconfigure {
+	if [ "${TARGET_SYSNAME}" == "nto" ]; then
+# set the current directory for use in configure_opts
+		CURDIR="${PWD}"
+# prefix is the base path where files are installed in the target filesystem.  It is also
+# the base path for all architecture independent files
+		configure_opts="${configure_opts} --prefix=/usr"
+# exec-prefix is the base path for architecture dependent files.
+		configure_opts="${configure_opts} --exec-prefix=/${cpudir}/usr"
+		configure_opts="${configure_opts} --with-cross-build=${CURDIR}/../linux-x86_64-o"
+		configure_opts="${configure_opts} --with-data-packaging=auto"
+		configure_opts="${configure_opts} --srcdir=../../source"
+
+		CFLAGS="$CFLAGS -fPIC"
+		CPPFLAGS="$CPPFLAGS -fPIC"
+		CXXFLAGS="$CXXFLAGS -std=gnu++17"
+	else
+# prefix is the base path where architecture independent files are installed in the target filesystem
+		configure_opts="${configure_opts} --prefix=/"
+		configure_opts="${configure_opts} --srcdir=../../source"
+	fi
+}
+
+function hook_configure {
+    if [ -z "${ac_version}" ]; then
+        unset _guess
+        _pat='/[Gg]enerated.*[Aa]utoconf/s/.*\([1-9]\.[0-9][0-9]*\).*/\1/p'
+        [ "${_guess}" ] || _guess=$(../../source/configure --version | sed -n -e "${_pat}")
+        [ "${_guess}" ] || _guess=$(sed -n -e "1,10{
+            ${_pat}
+        }" <../../source/configure)
+        AutoconfVersion ${_guess}
+    fi
+    ../../source/configure \
+        ${ac_host:+"--host=${ac_host}"} \
+        ${ac_build:+"--build=${ac_build}"} \
+        ${configure_opts} \
+        ${ac_params:+${CC:+"CC=${CC}"}} \
+        ${ac_params:+${CFLAGS:+"CFLAGS=-O2 ${CFLAGS}"}} \
+        ${ac_params:+${CPPFLAGS:+"CPPFLAGS=${CPPFLAGS}"}} \
+        ${ac_params:+${LDFLAGS:+"LDFLAGS=${LDFLAGS}"}} \
+        ${ac_params:+${CXX:+"CXX=${CXX}"}} \
+        ${ac_params:+${CXXFLAGS:+"CXXFLAGS=-O2 ${CXXFLAGS}"}} \
+        ${ac_params:+${ac_autotools:+${ac_autotools}}} \
+        || Error "configure failed";
+}
+
+
+function hook_premake {
+	if [ "${TARGET_SYSNAME}" == "nto" ]; then
+		DESTDIR=${DESTDIR:-${INSTALL_ROOT_nto}}
+		export DESTDIR
+	fi
+}
+
+function hook_postmake {
+	if [ "${TARGET_SYSNAME}" == "linux" ]; then
+		make -fMakefile config/icucross.mk
+		make -fMakefile config/icucross.inc
+	fi
+
+	if [ "${TARGET_SYSNAME}" == "nto" ]; then
+		if [ -e "data/out/tmp/icudt72l.dat" ]; then
+			cp -fv data/out/tmp/icudt72l.dat "${DESTDIR}/usr/share/icu/"
+		fi
+		cd test
+		JLEVEL=4 make all-recursive
+		cd -
+		mkdir -p ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests/test/testdata
+		mkdir -p ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests/data/out
+		cp test/cintltst/cintltst ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests
+		cp test/intltest/intltest ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests
+		cp test/iotest/iotest ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests
+		cp -r data/out/build ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests/data/out
+		cp -r test/testdata/out ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests/test/testdata
+		cp -r ../../source/test/testdata ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests/test
+		cp -r ../../source/data ${INSTALL_ROOT_nto}/${cpudir}/usr/bin/icu_tests/
+	fi
+}

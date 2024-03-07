@@ -20,7 +20,7 @@
 #include "layout/LEFontInstance.h"
 
 #ifndef USING_ICULEHB
-#include "CanonShaping.h"
+#include "layout/CanonShaping.h"
 #endif
 
 #include "SimpleFontInstance.h"
@@ -55,7 +55,7 @@ const void *SimpleFontInstance::getFontTable(LETag tableTag, size_t &length) con
         return CanonShaping::glyphDefinitionTable;
     }
 #endif
-    return NULL;
+    return nullptr;
 }
 
 void SimpleFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const

@@ -153,13 +153,15 @@ FormattedStringBuilder::insertCodePoint(int32_t index, UChar32 codePoint, Field 
     if (U_FAILURE(status)) {
         return count;
     }
+    auto charPtr = getCharPtr();
+    auto fieldPtr = getFieldPtr();
     if (count == 1) {
-        getCharPtr()[position] = (char16_t) codePoint;
-        getFieldPtr()[position] = field;
+        charPtr[position] = (char16_t) codePoint;
+        fieldPtr[position] = field;
     } else {
-        getCharPtr()[position] = U16_LEAD(codePoint);
-        getCharPtr()[position + 1] = U16_TRAIL(codePoint);
-        getFieldPtr()[position] = getFieldPtr()[position + 1] = field;
+        charPtr[position] = U16_LEAD(codePoint);
+        charPtr[position + 1] = U16_TRAIL(codePoint);
+        fieldPtr[position] = fieldPtr[position + 1] = field;
     }
     return count;
 }
@@ -380,7 +382,7 @@ UnicodeString FormattedStringBuilder::toUnicodeString() const {
 
 const UnicodeString FormattedStringBuilder::toTempUnicodeString() const {
     // Readonly-alias constructor:
-    return UnicodeString(FALSE, getCharPtr() + fZero, fLength);
+    return UnicodeString(false, getCharPtr() + fZero, fLength);
 }
 
 UnicodeString FormattedStringBuilder::toDebugString() const {

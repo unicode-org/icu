@@ -24,6 +24,7 @@
 #include "cintltst.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include <stdbool.h>
 #include <string.h>
 
 /* get the sign of an integer */
@@ -71,7 +72,7 @@ static const char* raw[3][4] = {
     {   "English_United States", "French_France", "Croatian_Croatia", "English_United States"}
 };
 
-static void setUpDataTable()
+static void setUpDataTable(void)
 {
     int32_t i,j;
     if(dataTable == NULL) {
@@ -87,7 +88,7 @@ static void setUpDataTable()
     }
 }
 
-static void cleanUpDataTable()
+static void cleanUpDataTable(void)
 {
     int32_t i,j;
     if(dataTable != NULL) {
@@ -103,7 +104,7 @@ static void cleanUpDataTable()
 }
 
 /*Tests  for u_strcat(),u_strcmp(), u_strlen(), u_strcpy(),u_strncat(),u_strncmp(),u_strncpy, u_uastrcpy(),u_austrcpy(), u_uastrncpy(); */
-static void TestStringFunctions()
+static void TestStringFunctions(void)
 {
     int32_t i,j,k;
     UChar temp[512];
@@ -445,19 +446,19 @@ static void TestStringFunctions()
                 log_err("error: u_strncmpCodePointOrder(2)!=u_memcmpCodePointOrder(2) for string %d and the following one\n", i);
             }
 
-            /* test u_strCompare(TRUE) */
+            /* test u_strCompare(true) */
             len1=u_strlen(strings[i]);
             len2=u_strlen(strings[i+1]);
-            if( u_strCompare(strings[i], -1, strings[i+1], -1, TRUE)>=0 ||
-                u_strCompare(strings[i], -1, strings[i+1], len2, TRUE)>=0 ||
-                u_strCompare(strings[i], len1, strings[i+1], -1, TRUE)>=0 ||
-                u_strCompare(strings[i], len1, strings[i+1], len2, TRUE)>=0
+            if( u_strCompare(strings[i], -1, strings[i+1], -1, true)>=0 ||
+                u_strCompare(strings[i], -1, strings[i+1], len2, true)>=0 ||
+                u_strCompare(strings[i], len1, strings[i+1], -1, true)>=0 ||
+                u_strCompare(strings[i], len1, strings[i+1], len2, true)>=0
             ) {
                 log_err("error: u_strCompare(code point order) fails for string %d and the following one\n", i);
             }
 
-            /* test u_strCompare(FALSE) */
-            r1=u_strCompare(strings[i], -1, strings[i+1], -1, FALSE);
+            /* test u_strCompare(false) */
+            r1=u_strCompare(strings[i], -1, strings[i+1], -1, false);
             r2=u_strcmp(strings[i], strings[i+1]);
             if(_SIGN(r1)!=_SIGN(r2)) {
                 log_err("error: u_strCompare(code unit order)!=u_strcmp() for string %d and the following one\n", i);
@@ -466,10 +467,10 @@ static void TestStringFunctions()
             /* test u_strCompareIter() */
             uiter_setString(&iter1, strings[i], len1);
             uiter_setString(&iter2, strings[i+1], len2);
-            if(u_strCompareIter(&iter1, &iter2, TRUE)>=0) {
+            if(u_strCompareIter(&iter1, &iter2, true)>=0) {
                 log_err("error: u_strCompareIter(code point order) fails for string %d and the following one\n", i);
             }
-            r1=u_strCompareIter(&iter1, &iter2, FALSE);
+            r1=u_strCompareIter(&iter1, &iter2, false);
             if(_SIGN(r1)!=_SIGN(u_strcmp(strings[i], strings[i+1]))) {
                 log_err("error: u_strCompareIter(code unit order)!=u_strcmp() for string %d and the following one\n", i);
             }
@@ -479,7 +480,7 @@ static void TestStringFunctions()
     cleanUpDataTable();
 }
 
-static void TestStringSearching()
+static void TestStringSearching(void)
 {
     const UChar testString[] = {0x0061, 0x0062, 0x0063, 0x0064, 0x0064, 0x0061, 0};
     const UChar testSurrogateString[] = {0xdbff, 0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0};
@@ -690,7 +691,7 @@ static void TestStringSearching()
  * There are some new functions, too - just test them all.
  */
 static void
-TestSurrogateSearching() {
+TestSurrogateSearching(void) {
     static const UChar s[]={
         /* 0       1       2     3       4     5       6     7       8       9    10 11 */
         0x61, 0xd801, 0xdc02, 0x61, 0xdc02, 0x61, 0xd801, 0x61, 0xd801, 0xdc02, 0x61, 0
@@ -978,7 +979,7 @@ TestSurrogateSearching() {
     }
 }
 
-static void TestStringCopy()
+static void TestStringCopy(void)
 {
     UChar temp[40];
     UChar *result=0;
@@ -1097,7 +1098,7 @@ static void TestStringCopy()
 /* test u_unescape() and u_unescapeAt() ------------------------------------- */
 
 static void
-TestUnescape() {
+TestUnescape(void) {
     static UChar buffer[200];
     
     static const char* input =
@@ -1129,7 +1130,7 @@ TestUnescape() {
 }
 
 static void
-TestUnescapeRepeatedSurrogateLead20725() {
+TestUnescapeRepeatedSurrogateLead20725(void) {
     const int32_t repeat = 20000;
     const int32_t srclen = repeat * 6 + 1;
     char *src = (char*)malloc(srclen);
@@ -1196,7 +1197,7 @@ _testStrHasMoreChar32Than(const UChar *s, int32_t i, int32_t length, int32_t num
 }
 
 static void
-TestCountChar32() {
+TestCountChar32(void) {
     static const UChar string[]={
         0x61, 0x62, 0xd800, 0xdc00,
         0xd801, 0xdc01, 0x63, 0xd802,
@@ -1312,7 +1313,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter1->hasNext(iter1)) {
-        log_err("%s->hasNext() at the start returns FALSE\n", n1);
+        log_err("%s->hasNext() at the start returns false\n", n1);
         return;
     }
 
@@ -1322,7 +1323,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter2->hasNext(iter2)) {
-        log_err("%s->hasNext() at the start returns FALSE\n", n2);
+        log_err("%s->hasNext() at the start returns false\n", n2);
         return;
     }
 
@@ -1336,11 +1337,11 @@ compareIterators(UCharIterator *iter1, const char *n1,
     } while(c1>=0);
 
     if(iter1->hasNext(iter1)) {
-        log_err("%s->hasNext() at the end returns TRUE\n", n1);
+        log_err("%s->hasNext() at the end returns true\n", n1);
         return;
     }
     if(iter2->hasNext(iter2)) {
-        log_err("%s->hasNext() at the end returns TRUE\n", n2);
+        log_err("%s->hasNext() at the end returns true\n", n2);
         return;
     }
 
@@ -1377,7 +1378,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter1->hasPrevious(iter1)) {
-        log_err("%s->hasPrevious() at the end returns FALSE\n", n1);
+        log_err("%s->hasPrevious() at the end returns false\n", n1);
         return;
     }
 
@@ -1387,7 +1388,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter2->hasPrevious(iter2)) {
-        log_err("%s->hasPrevious() at the end returns FALSE\n", n2);
+        log_err("%s->hasPrevious() at the end returns false\n", n2);
         return;
     }
 
@@ -1401,11 +1402,11 @@ compareIterators(UCharIterator *iter1, const char *n1,
     } while(c1>=0);
 
     if(iter1->hasPrevious(iter1)) {
-        log_err("%s->hasPrevious() at the start returns TRUE\n", n1);
+        log_err("%s->hasPrevious() at the start returns true\n", n1);
         return;
     }
     if(iter2->hasPrevious(iter2)) {
-        log_err("%s->hasPrevious() at the start returns TRUE\n", n2);
+        log_err("%s->hasPrevious() at the start returns true\n", n2);
         return;
     }
 }
@@ -1497,7 +1498,7 @@ testIteratorState(UCharIterator *iter1, UCharIterator *iter2, const char *n, int
 }
 
 static void
-TestUCharIterator() {
+TestUCharIterator(void) {
     static const UChar text[]={
         0x61, 0x62, 0x63, 0xd801, 0xdffd, 0x78, 0x79, 0x7a, 0
     };

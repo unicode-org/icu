@@ -661,7 +661,7 @@ root{
             "%%tamil-thousands:",
             "0: =%tamil=;",
             "1000: <<\u0BF2[>>];",
-            "%zDefault:",
+            "%zz-default:",
             "0: =#,##0=;",
         }
         OrdinalRules{
@@ -685,5 +685,5 @@ root{
             "0: =#,##0.#=.;",
         }
     }
-    Version{"42"}
+    Version{"45"}
 }

@@ -21,6 +21,8 @@
 #include "FontMap.h"
 #include "GnomeFontMap.h"
 
+using icu::LEFontInstance;
+
 GnomeFontMap::GnomeFontMap(FT_Library engine, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, LEErrorCode &status)
     : FontMap(fileName, pointSize, guiSupport, status), fEngine(engine)
 {
@@ -38,7 +40,7 @@ const LEFontInstance *GnomeFontMap::openFont(const char *fontName, le_int16 poin
 
     if (LE_FAILURE(status)) {
       delete result;
-      result = NULL;
+      result = nullptr;
     }
 
     return result;

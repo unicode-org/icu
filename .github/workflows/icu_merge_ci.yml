@@ -8,50 +8,101 @@ name: GHA ICU Merge CI
 on:
   push:
     branches:
-      - main	
+      - main
       - 'maint/maint*'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+
+env:
+  SHARED_MVN_ARGS: '--show-version --no-transfer-progress'
+
+permissions:
+  contents: read
 
 jobs:
 
-  # Test ICU4J with little-endian ICU4C data only
-  icu4j-little-endian-data-test:
+  # Initialize the Maven artifact cache
+  # Uses Java 8 because Java version not deemed significant for downloading
+  # artifacts
+  #
+  # This job is created according to the cache strategy of reuse from a single job:
+  # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
+  icu4j-mvn-init-cache:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Download all of the artifacts needed for the code and build plugins
+      - name: Download all artifacts
+        run: |
+          cd icu4j;
+          mvn ${SHARED_MVN_ARGS} dependency:go-offline -P '!old_jdk_taglet'
+
+  # Test ICU4J with little-endian ICU4C data only
+  icu4j-little-endian-data-test:
+    needs: icu4j-mvn-init-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '11'
       - name: ICU4J little-endian
         run: |
           cd icu4c/source;
           ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux;
-          make -j2 check;
+          make -j -l4.5 check;
           mkdir /tmp/icu4j_data_test;
           cp -P data/out/tmp/icudt*l* /tmp/icu4j_data_test/
           cd ../../icu4j;
-          ant clean;
-          ant -Dicu4c.data.path=/tmp/icu4j_data_test check;
+          mvn ${SHARED_MVN_ARGS} clean;
+          mvn ${SHARED_MVN_ARGS} -Dicu4c.data.path=/tmp/icu4j_data_test install
 
   # Compile libraries used by all ICU4C performance tests.
   icu4c-store-perf-libs:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build ICU libraries
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          make -j 2 all;
+          make -j -l4.5 all;
           cd lib;
           cp -Ps ../tools/ctestfw/libicutest* .
       - name: Upload ICU libraries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -59,6 +110,8 @@ jobs:
 
   # Assorted ICU4C performance tests
   icu4c-performance-tests:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     needs: icu4c-store-perf-libs
     strategy:
       fail-fast: false
@@ -74,13 +127,17 @@ jobs:
             file: "-f ../../icu4j/perf-tests/data/conversion/xuzhimo.txt"
             flag: "-e gb18030"
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -89,7 +146,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }})
+          (cd test/perf && make -j -l4.5 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }})
           LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 ${{ matrix.file }} ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -109,6 +166,8 @@ jobs:
 
   # Assorted ICU4C performance tests using data files
   icu4c-performance-tests-with-files:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     needs: icu4c-store-perf-libs
     strategy:
       fail-fast: false
@@ -142,13 +201,17 @@ jobs:
           - perf: normperf
             data: TestNames_Simplified_Chinese
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -159,7 +222,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }} && mkdir -p results/${{ matrix.perf }}/${{ matrix.data }})
+          (cd test/perf && make -j -l4.5 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }} && mkdir -p results/${{ matrix.perf }}/${{ matrix.data }})
           LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 -f $DATA_FILE_PATH/${{ matrix.data }}.txt ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/${{ matrix.data }}/output.txt
 
       - name: Store performance test results
@@ -179,6 +242,8 @@ jobs:
 
   # String search performance test
   icu4c-strsrchperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     needs: icu4c-store-perf-libs
     strategy:
       fail-fast: false
@@ -201,13 +266,17 @@ jobs:
           - locale: zh
             data: udhr_cmn_hans
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create directory for lib files
         run: mkdir icu4c/source/perflib
       - name: Get ICU libs
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: icu-perf-libs
           path: icu4c/source/lib
@@ -218,7 +287,7 @@ jobs:
         run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
-          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/strsrchperf && mkdir -p results/strsrchperf/${{ matrix.locale }})
+          (cd test/perf && make -j -l4.5 everything && mkdir -p results && mkdir -p results/strsrchperf && mkdir -p results/strsrchperf/${{ matrix.locale }})
           LD_LIBRARY_PATH=lib ./test/perf/strsrchperf/strsrchperf -b Test_ICU_Forward_Search Test_ICU_Backward_Search -t 5 -p 10 -L ${{ matrix.locale }} -f $DATA_FILE_PATH/${{ matrix.data }}.txt | tee test/perf/results/strsrchperf/${{ matrix.locale }}/output.txt
 
       - name: Store performance test results
@@ -238,21 +307,37 @@ jobs:
 
   # ICU4J performance test for Unicode sets
   icu4j-unicodesetperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
         perf: [UnicodeSetAdd, UnicodeSetContains, UnicodeSetIterate]
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '8'
 
       - name: Build and run unicodesetperf test
@@ -263,12 +348,11 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          ant;
-          ant perf-tests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           git status
           cd perf-tests;
           mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
-          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -287,19 +371,35 @@ jobs:
 
   # ICU4J performance test for character APIs
   icu4j-ucharacterperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
+
+    permissions:
+      contents: write
+      deployments: write
 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '8'
 
       - name: Build and run ucharacterperf test
@@ -310,11 +410,10 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          ant;
-          ant perf-tests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_ucharacterperf;
-          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -333,22 +432,38 @@ jobs:
 
   # ICU4J performance test for decimal formatting
   icu4j-decimalformatperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
         perf: [TestICUConstruction, TestICUParse, TestICUFormat]
         locale: [en_US, de_DE]
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '8'
 
       - name: Build and run decimalformatperf
@@ -359,15 +474,14 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          ant;
-          ant perf-tests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -386,6 +500,9 @@ jobs:
 
   # ICU4J performance test for normalization
   icu4j-normperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -393,16 +510,29 @@ jobs:
         source_text: [TestNames_Asian, TestNames_Chinese, TestNames_SerbianSH]
         mode: [-l]
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '8'
 
       - name: Build and run normperf
@@ -415,15 +545,14 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          ant;
-          ant perf-tests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
           cat perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
@@ -443,6 +572,9 @@ jobs:
 
   # ICU4J performance test for encoding conversion
   icu4j-converterperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -517,16 +649,29 @@ jobs:
             source_text: english
             perf: TestCharsetEncoderICU
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '8'
 
       - name: Build and run converterperf
@@ -539,15 +684,14 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
           cd icu4j;
-          ant;
-          ant perf-tests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar:../icu4j-charset.jar com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/*:../main/charset/target/* com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -566,6 +710,9 @@ jobs:
 
   # ICU4J performance test for date formatting
   icu4j-dateformatperf:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
+    needs: icu4j-mvn-init-cache
     strategy:
       fail-fast: false
       matrix:
@@ -585,16 +732,29 @@ jobs:
             parms: '"dddd MMM yyyy" "15 Jan 2007" 1'
             perf: TestICUFormat
 
+    permissions:
+      contents: write
+      deployments: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - name: Lookup read-only cache of local Maven repository
+        uses: actions/cache@v3
         with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+          lookup-only: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
           java-version: '8'
 
       - name: Extract identifying digit and parameter.
@@ -610,15 +770,14 @@ jobs:
           git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2
           git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2
           cd icu4j;
-          ant;
-          ant perf-tests;
+          mvn ${SHARED_MVN_ARGS} verify -DskipITs -DskipTests;
           cd perf-tests;
           mkdir -p perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }};
           # Delay execution by random number of seconds. Spreading execution of multiple
           # tests over 180 secs. minimizes the possibility of push conflicts when storing
           # tests results in the data branch.
           sleep $(($RANDOM % 180));
-          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.DateFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} ${{ env.PARM }} -r 1 | tee perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }}/output.txt
+          java -cp ./target/*:../tools/misc/target/*:../main/core/target/* com.ibm.icu.dev.test.perf.DateFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} ${{ env.PARM }} -r 1 | tee perf/results/j_dateformatperf/${{ matrix.locale }}/${{ matrix.perf }}/${{ env.DDIR }}/output.txt
 
       - name: Store performance test results
         uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
@@ -637,11 +796,13 @@ jobs:
 
   # Retrieve performance test results and upload results to remote repository
   perf-test-data-move:
+    # Run performance tests only on the main branch of the ICU repository.
+    if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     name: Copy perf data to remote repo for visualization
     needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf, icu4j-unicodesetperf, icu4j-ucharacterperf, icu4j-decimalformatperf, icu4j-normperf, icu4j-converterperf, icu4j-dateformatperf]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Switch to benchmark data storage branch.
         run: |
@@ -656,4 +817,3 @@ jobs:
           publish_branch: main
           publish_dir: ./perf
           keep_files: true
-

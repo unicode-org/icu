@@ -774,8 +774,6 @@ bs_Cyrl{
             gregorian{"грегоријански календар"}
             hebrew{"хебрејски календар"}
             indian{"Индијски национални календар"}
-            islamic{"исламски календар"}
-            islamic-civil{"Исламски цивилни календар"}
             iso8601{"ISO-8601 календар"}
             japanese{"јапански календар"}
             persian{"персијски календар"}
@@ -925,15 +923,5 @@ bs_Cyrl{
             one{"{0} потез"}
             other{"{0} потеза"}
         }
-    }
-    codePatterns{
-        language{"{0}"}
-        script{"{0}"}
-        territory{"{0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

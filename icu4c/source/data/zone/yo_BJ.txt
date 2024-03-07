@@ -195,11 +195,6 @@ yo_BJ{
             lg{"Àkókò Máríshúshì"}
             ls{"Àkókò Àfɛnukò Máríshúshì"}
         }
-        "meta:Mexico_Northwest"{
-            ld{"Àkókò Ojúmɔmɔ Apá Ìwɔ̀ Oorùn Mɛ́shíkò"}
-            lg{"Àkókò Apá Ìwɔ̀ Oorùn Mɛ́shíkò"}
-            ls{"Àkókò Àfɛnukò Apá Ìwɔ̀ Oorùn Mɛ́shíkò"}
-        }
         "meta:Mexico_Pacific"{
             ld{"Àkókò Ojúmɔmɔ Pásífíìkì Mɛ́síkò"}
             lg{"Àkókò Pásífíìkì Mɛ́shíkò"}

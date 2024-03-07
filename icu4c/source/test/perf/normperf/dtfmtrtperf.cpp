@@ -32,9 +32,9 @@ UPerfFunction* DateTimeRoundTripPerfTest::runIndexedTest(int32_t index, UBool ex
         TESTCASE(3,RoundTripLocale21);    // 21 locales w/ reverse order
         default: 
             name = ""; 
-            return NULL;
+            return nullptr;
     }
-    return NULL;
+    return nullptr;
 
 }
 
@@ -69,7 +69,7 @@ int main(int argc, const char* argv[]){
         return status;
     }
 
-    if(test.run()==FALSE){
+    if(test.run()==false){
 		cout << "run failed!" << endl;
         fprintf(stderr,"FAILED: Tests could not be run please check the arguments.\n");
         return -1;

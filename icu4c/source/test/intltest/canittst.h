@@ -38,10 +38,10 @@ public:
     CanonicalIteratorTest();
     virtual ~CanonicalIteratorTest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
-    void TestCanonicalIterator(void);
-    void TestExhaustive(void);
+    void TestCanonicalIterator();
+    void TestExhaustive();
     void TestBasic();
     void TestAPI();
     UnicodeString collectionToString(Hashtable *col);

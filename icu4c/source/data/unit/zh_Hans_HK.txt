@@ -18,6 +18,13 @@ zh_Hans_HK{
             }
         }
     }
+    unitsNarrow{
+        concentr{
+            karat{
+                other{"{0}开"}
+            }
+        }
+    }
     unitsShort{
         temperature{
             kelvin{

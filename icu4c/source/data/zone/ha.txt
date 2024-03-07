@@ -12,27 +12,6 @@ ha{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Arewacin Dakota"}
         }
-        "Asia:Aden"{
-            ec{"Aden"}
-        }
-        "Asia:Amman"{
-            ec{"Amman"}
-        }
-        "Asia:Baghdad"{
-            ec{"Baghdad"}
-        }
-        "Asia:Bahrain"{
-            ec{"Bahrain"}
-        }
-        "Asia:Baku"{
-            ec{"Baku"}
-        }
-        "Asia:Bangkok"{
-            ec{"Bangkok"}
-        }
-        "Asia:Beirut"{
-            ec{"Beirut"}
-        }
         "Etc:UTC"{
             ls{"Hadewa Lokaci na Duniya"}
         }
@@ -387,9 +366,6 @@ ha{
             lg{"Lokacin Lord Howe"}
             ls{"Tsayayyen Lokacin Lord Howe"}
         }
-        "meta:Macquarie"{
-            ls{"Lokacin Macquarie Island"}
-        }
         "meta:Magadan"{
             ld{"Lokacin Bazara na Magadan"}
             lg{"Lokacin Magadan"}
@@ -414,11 +390,6 @@ ha{
         }
         "meta:Mawson"{
             ls{"Lokacin Mawson"}
-        }
-        "meta:Mexico_Northwest"{
-            ld{"Lokacin Rana na Arewa Maso Yammacin Mekziko"}
-            lg{"Lokacin Arewa Maso Yammacin Mekziko"}
-            ls{"Tsayayyen Lokacin Arewa Maso Yammacin Mekziko"}
         }
         "meta:Mexico_Pacific"{
             ld{"Lokacin Rana na Mekziko Pacific"}

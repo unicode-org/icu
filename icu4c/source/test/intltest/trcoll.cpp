@@ -29,7 +29,7 @@ CollationTurkishTest::~CollationTurkishTest()
     delete myCollation;
 }
 
-const UChar CollationTurkishTest::testSourceCases[][CollationTurkishTest::MAX_TOKEN_LEN] = {
+const char16_t CollationTurkishTest::testSourceCases[][CollationTurkishTest::MAX_TOKEN_LEN] = {
     {0x73, 0x0327, 0},
     {0x76, 0x00E4, 0x74, 0},
     {0x6f, 0x6c, 0x64, 0},
@@ -43,7 +43,7 @@ const UChar CollationTurkishTest::testSourceCases[][CollationTurkishTest::MAX_TO
     {0x69, 0x64, 0x65, 0x61, 0}
 };
 
-const UChar CollationTurkishTest::testTargetCases[][CollationTurkishTest::MAX_TOKEN_LEN] = {
+const char16_t CollationTurkishTest::testTargetCases[][CollationTurkishTest::MAX_TOKEN_LEN] = {
     {0x75, 0x0308, 0},
     {0x76, 0x62, 0x74, 0},
     {0x00D6, 0x61, 0x79, 0},

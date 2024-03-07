@@ -1,0 +1,14 @@
+// © 2022 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
+//
+// Include Japanese adaboost model.
+{
+  "featureFilters": {
+    "brkitr_adaboost": {
+      "includelist": [
+	    "jaml"
+      ]
+    }
+  }
+}

@@ -65,7 +65,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN {\
-    if ((expr)==FALSE) {\
+    if ((expr)==false) {\
         errln("UVectorTest failure at line %d.\n", __LINE__);\
     }\
 } UPRV_BLOCK_MACRO_END
@@ -155,12 +155,12 @@ void UVectorTest::UStack_API() {
     delete a;
 
     status = U_ZERO_ERROR;
-    a = new UStack(NULL, NULL, 2000, status);
+    a = new UStack(nullptr, nullptr, 2000, status);
     TEST_CHECK_STATUS(status);
     delete a;
 
     status = U_ZERO_ERROR;
-    a = new UStack(NULL, UVectorTest_compareCstrings, status);
+    a = new UStack(nullptr, UVectorTest_compareCstrings, status);
     TEST_ASSERT(a->empty());
     a->push((void*)"abc", status);
     TEST_ASSERT(!a->empty());
@@ -181,7 +181,7 @@ void UVectorTest::UStack_API() {
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV neverTRUE(const UElement /*key1*/, const UElement /*key2*/) {
-    return FALSE;
+    return false;
 }
 
 U_CDECL_END
@@ -190,18 +190,18 @@ void UVectorTest::Hashtable_API() {
     UErrorCode status = U_ZERO_ERROR;
     Hashtable *a = new Hashtable(status);
     TEST_ASSERT((a->puti("a", 1, status) == 0));
-    TEST_ASSERT((a->find("a") != NULL));
-    TEST_ASSERT((a->find("b") == NULL));
+    TEST_ASSERT((a->find("a") != nullptr));
+    TEST_ASSERT((a->find("b") == nullptr));
     TEST_ASSERT((a->puti("b", 2, status) == 0));
-    TEST_ASSERT((a->find("b") != NULL));
+    TEST_ASSERT((a->find("b") != nullptr));
     TEST_ASSERT((a->removei("a") == 1));
-    TEST_ASSERT((a->find("a") == NULL));
+    TEST_ASSERT((a->find("a") == nullptr));
 
     /* verify that setValueComparator works */
     Hashtable b(status);
     TEST_ASSERT((!a->equals(b)));
     TEST_ASSERT((b.puti("b", 2, status) == 0));
-    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be FALSE by default.
+    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be false by default.
     b.setValueComparator(uhash_compareLong);
     TEST_ASSERT((!a->equals(b)));
     a->setValueComparator(uhash_compareLong);
@@ -210,9 +210,9 @@ void UVectorTest::Hashtable_API() {
 
     /* verify that setKeyComparator works */
     TEST_ASSERT((a->puti("a", 1, status) == 0));
-    TEST_ASSERT((a->find("a") != NULL));
+    TEST_ASSERT((a->find("a") != nullptr));
     a->setKeyComparator(neverTRUE);
-    TEST_ASSERT((a->find("a") == NULL));
+    TEST_ASSERT((a->find("a") == nullptr));
 
     delete a;
 }

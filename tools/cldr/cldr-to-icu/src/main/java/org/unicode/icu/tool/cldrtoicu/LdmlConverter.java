@@ -82,8 +82,6 @@ public final class LdmlConverter {
     // TODO: Do all supplemental data in one go and split similarly to locale data (using RbPath).
     private static final Predicate<CldrPath> GENDER_LIST_PATHS =
         supplementalMatcher("gender");
-    private static final Predicate<CldrPath> LIKELY_SUBTAGS_PATHS =
-        supplementalMatcher("likelySubtags");
     private static final Predicate<CldrPath> METAZONE_PATHS =
         supplementalMatcher("metaZones", "primaryZones");
     private static final Predicate<CldrPath> METADATA_PATHS =
@@ -113,7 +111,8 @@ public final class LdmlConverter {
             "convertUnits",
             "unitConstants",
             "unitQuantities",
-            "unitPreferenceData");
+            "unitPreferenceData",
+            "unitPrefixes");
     private static final Predicate<CldrPath> GRAMMATICAL_FEATURES_PATHS =
         supplementalMatcher("grammaticalData");
     private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
@@ -153,7 +152,6 @@ public final class LdmlConverter {
         RBNF(LDML),
         DAY_PERIODS(SUPPLEMENTAL),
         GENDER_LIST(SUPPLEMENTAL),
-        LIKELY_SUBTAGS(SUPPLEMENTAL),
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
         UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
@@ -298,6 +296,13 @@ public final class LdmlConverter {
             // TODO: Remove the following skip when ICU-20997 is fixed
             if (id.contains("VALENCIA") || id.contains("TARASK")) {
                 System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
+                continue;
+            }
+            // Now that former CLDR see locales are in common, there are some language
+            // variants that are not at a high enough coverage level to pick up.
+            // TODO need a better way of handling this.
+             if (id.contains("POLYTON")) {
+                System.out.println("(skipping " + id + ", insufficient coverage level)");
                 continue;
             }
 
@@ -473,10 +478,6 @@ public final class LdmlConverter {
 
             case GENDER_LIST:
                 processSupplemental("genderList", GENDER_LIST_PATHS, "misc", false);
-                break;
-
-            case LIKELY_SUBTAGS:
-                processSupplemental("likelySubtags", LIKELY_SUBTAGS_PATHS, "misc", false);
                 break;
 
             case SUPPLEMENTAL_DATA:

@@ -64,7 +64,7 @@ yo{
         BM{"Bémúdà"}
         BN{"Búrúnẹ́lì"}
         BO{"Bọ̀lífíyà"}
-        BQ{"Káríbíánì ti Nẹ́dálándì"}
+        BQ{"Kàríbíánì ti Nẹ́dálándì"}
         BR{"Bàràsílì"}
         BS{"Bàhámásì"}
         BT{"Bútánì"}
@@ -88,7 +88,7 @@ yo{
         CR{"Kuusita Ríkà"}
         CU{"Kúbà"}
         CV{"Etíokun Kápé féndè"}
-        CW{"Kúrásáò"}
+        CW{"Curaçao"}
         CX{"Erékùsù Christmas"}
         CY{"Kúrúsì"}
         CZ{"Ṣẹ́ẹ́kì"}
@@ -181,7 +181,7 @@ yo{
         MC{"Monako"}
         MD{"Modofia"}
         ME{"Montenegro"}
-        MF{"Ìlú Mátíìnì"}
+        MF{"Ìlú Màtìnì"}
         MG{"Madasika"}
         MH{"Etikun Máṣali"}
         MK{"Àríwá Macedonia"}
@@ -298,6 +298,12 @@ yo{
         ZW{"Ṣimibabe"}
         ZZ{"Àgbègbè àìmọ̀"}
     }
+    Countries%biot{
+        IO{"Àlà-ilẹ̀ Bírítéènì ní Etíkun Índíà"}
+    }
+    Countries%chagos{
+        IO{"Àkójọpọ̀ Àwọn Erékùṣù Ṣágòsì"}
+    }
     Countries%short{
         HK{"Hong Kong"}
         MO{"Màkáò"}
@@ -309,6 +315,5 @@ yo{
         NZ{"Sílándì Titun ti Atìríà"}
         SZ{"Síwásìlandì"}
         TL{"Ìlà Òòrùn Tímọ̀"}
-        TR{"Èdè Tọọki"}
     }
 }

@@ -32,7 +32,7 @@ public:
     CollationRegressionTest();
     virtual ~CollationRegressionTest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     // @bug 4048446
     //
@@ -237,12 +237,19 @@ public:
     void TestTrailingComment();
     void TestBeforeWithTooStrongAfter();
 
+    // Test use-of-uninitialized-value
+    void TestICU22277();
+
+    void TestICU22517();
+
+    void TestICU22555InfinityLoop();
+
 private:
     //------------------------------------------------------------------------
     // Internal utilities
     //
     void compareArray(Collator &c,
-                    const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN],
+                    const char16_t tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                     int32_t testCount);
 
     void assertEqual(CollationElementIterator &i1, CollationElementIterator &i2);

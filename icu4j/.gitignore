@@ -1,1 +1,7 @@
 /release_cldr
+
+# Eclipse IDE generated files
+dependency-reduced-pom.xml
+.project
+.settings
+.classpath

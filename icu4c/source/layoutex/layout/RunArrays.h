@@ -222,13 +222,13 @@ private:
 };
 
 inline RunArray::RunArray()
-    : UObject(), fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
+    : UObject(), fClientArrays(false), fLimits(nullptr), fCount(0), fCapacity(0)
 {
     // nothing else to do...
 }
 
 inline RunArray::RunArray(const RunArray & /*other*/)
-    : UObject(), fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
+    : UObject(), fClientArrays(false), fLimits(nullptr), fCount(0), fCapacity(0)
 {
     // nothing else to do...
 }
@@ -383,13 +383,13 @@ private:
 };
 
 inline FontRuns::FontRuns()
-    : RunArray(0), fFonts(NULL)
+    : RunArray(0), fFonts(nullptr)
 {
     // nothing else to do...
 }
 
 inline FontRuns::FontRuns(const FontRuns & /*other*/)
-    : RunArray(0), fFonts(NULL)
+    : RunArray(0), fFonts(nullptr)
 {
     // nothing else to do...
 }
@@ -523,13 +523,13 @@ private:
 };
 
 inline LocaleRuns::LocaleRuns()
-    : RunArray(0), fLocales(NULL)
+    : RunArray(0), fLocales(nullptr)
 {
     // nothing else to do...
 }
 
 inline LocaleRuns::LocaleRuns(const LocaleRuns & /*other*/)
-    : RunArray(0), fLocales(NULL)
+    : RunArray(0), fLocales(nullptr)
 {
     // nothing else to do...
 }
@@ -657,13 +657,13 @@ private:
 };
 
 inline ValueRuns::ValueRuns()
-    : RunArray(0), fValues(NULL)
+    : RunArray(0), fValues(nullptr)
 {
     // nothing else to do...
 }
 
 inline ValueRuns::ValueRuns(const ValueRuns & /*other*/)
-    : RunArray(0), fValues(NULL)
+    : RunArray(0), fValues(nullptr)
 {
     // nothing else to do...
 }

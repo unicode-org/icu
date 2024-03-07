@@ -6,13 +6,11 @@ bs_Cyrl{
     units{
         area{
             acre{
-                dnam{"акре"}
                 few{"{0} акре"}
                 one{"{0} акра"}
                 other{"{0} акри"}
             }
             hectare{
-                dnam{"хектари"}
                 few{"{0} хектара"}
                 one{"{0} хектар"}
                 other{"{0} хектара"}
@@ -66,7 +64,6 @@ bs_Cyrl{
                 other{"{0} вијекова"}
             }
             day{
-                dnam{"дани"}
                 few{"{0} дана"}
                 one{"{0} дан"}
                 other{"{0} дана"}
@@ -77,13 +74,6 @@ bs_Cyrl{
                 few{"{0} деценије"}
                 one{"{0} деценија"}
                 other{"{0} деценија"}
-            }
-            hour{
-                dnam{"сати"}
-                few{"{0} сата"}
-                one{"{0} сат"}
-                other{"{0} сати"}
-                per{"{0} по сату"}
             }
             microsecond{
                 dnam{"микросекунде"}
@@ -118,21 +108,18 @@ bs_Cyrl{
                 other{"{0} наносекунди"}
             }
             second{
-                dnam{"секунде"}
                 few{"{0} секунде"}
                 one{"{0} секунда"}
                 other{"{0} секунди"}
                 per{"{0} у секунди"}
             }
             week{
-                dnam{"седмице"}
                 few{"{0} седмице"}
                 one{"{0} седмица"}
                 other{"{0} седмица"}
                 per{"{0} седмично"}
             }
             year{
-                dnam{"година"}
                 few{"{0} године"}
                 one{"{0} година"}
                 other{"{0} година"}
@@ -140,12 +127,6 @@ bs_Cyrl{
             }
         }
         graphics{
-            dot-per-centimeter{
-                dnam{"тачке по центиметру"}
-            }
-            dot-per-inch{
-                dnam{"тачке по инчу"}
-            }
             megapixel{
                 dnam{"мегапиксели"}
             }
@@ -250,22 +231,11 @@ bs_Cyrl{
     }
     unitsNarrow{
         duration{
-            hour{
-                few{"{0} сата"}
-                one{"{0} сат"}
-                other{"{0} сати"}
-            }
             month{
                 dnam{"мјесец"}
-                few{"{0} мјес."}
-                one{"{0} мјес."}
-                other{"{0} мјес."}
             }
             week{
                 dnam{"седмица"}
-                few{"{0} сед."}
-                one{"{0} сед."}
-                other{"{0} сед."}
             }
         }
     }

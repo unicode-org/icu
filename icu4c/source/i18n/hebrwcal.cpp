@@ -20,10 +20,11 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "cmemory.h"
+#include "cstring.h"
 #include "umutex.h"
 #include <float.h>
-#include "gregoimp.h" // Math
-#include "astro.h" // CalendarAstronomer
+#include "gregoimp.h" // ClockMath
+#include "astro.h" // CalendarCache
 #include "uhash.h"
 #include "ucln_in.h"
 
@@ -63,6 +64,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+    {        0,        0,       11,       12}, // ORDINAL_MONTH
 };
 
 /**
@@ -134,13 +136,13 @@ static const int16_t  LEAP_MONTH_START[][3] = {
     {  383,        384,        385  },          // Elul
 };
 
-static icu::CalendarCache *gCache =  NULL;
+static icu::CalendarCache *gCache =  nullptr;
 
 U_CDECL_BEGIN
-static UBool calendar_hebrew_cleanup(void) {
+static UBool calendar_hebrew_cleanup() {
     delete gCache;
-    gCache = NULL;
-    return TRUE;
+    gCache = nullptr;
+    return true;
 }
 U_CDECL_END
 
@@ -217,7 +219,8 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
         return;
     }
     switch (field) {
-  case UCAL_MONTH: 
+  case UCAL_MONTH:
+  case UCAL_ORDINAL_MONTH:
       {
           // We can't just do a set(MONTH, get(MONTH) + amount).  The
           // reason is ADAR_1.  Suppose amount is +2 and we land in
@@ -239,7 +242,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
                   }
                   month -= ELUL+1;
                   ++year;
-                  acrossAdar1 = TRUE;
+                  acrossAdar1 = true;
               }
           } else {
               acrossAdar1 = (month > ADAR_1); // started after ADAR_1?
@@ -253,7 +256,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
                   }
                   month += ELUL+1;
                   --year;
-                  acrossAdar1 = TRUE;
+                  acrossAdar1 = true;
               }
           }
           set(UCAL_MONTH, month);
@@ -315,6 +318,7 @@ void HebrewCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode&
     }
     switch (field) {
   case UCAL_MONTH:
+  case UCAL_ORDINAL_MONTH:
       {
           int32_t month = get(UCAL_MONTH, status);
           int32_t year = get(UCAL_YEAR, status);
@@ -390,14 +394,15 @@ static const int32_t BAHARAD = 11*HOUR_PARTS + 204;
 int32_t HebrewCalendar::startOfYear(int32_t year, UErrorCode &status)
 {
     ucln_i18n_registerCleanup(UCLN_I18N_HEBREW_CALENDAR, calendar_hebrew_cleanup);
-    int32_t day = CalendarCache::get(&gCache, year, status);
+    int64_t day = CalendarCache::get(&gCache, year, status);
 
     if (day == 0) {
         // # of months before year
-        int32_t months = (int32_t)ClockMath::floorDivide((235 * (int64_t)year - 234), (int64_t)19);
+        int64_t months = ClockMath::floorDivideInt64(
+            (235LL * (int64_t)year - 234LL), 19LL);
 
-        int64_t frac = (int64_t)months * MONTH_FRACT + BAHARAD;  // Fractional part of day #
-        day  = months * 29 + (int32_t)(frac / DAY_PARTS);        // Whole # part of calculation
+        int64_t frac = months * MONTH_FRACT + BAHARAD;  // Fractional part of day #
+        day  = months * 29LL + frac / DAY_PARTS;        // Whole # part of calculation
         frac = frac % DAY_PARTS;                        // Time of day
 
         int32_t wd = (day % 7);                        // Day of week (0 == Monday)
@@ -419,8 +424,14 @@ int32_t HebrewCalendar::startOfYear(int32_t year, UErrorCode &status)
             // Prevents 382-day years.
             day += 1;
         }
-        CalendarCache::put(&gCache, year, day, status);
+        if (day > INT32_MAX || day < INT32_MIN) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        CalendarCache::put(&gCache, year, static_cast<int32_t>(day), status);
     }
+    // Out of range value is alread rejected before putting into cache.
+    U_ASSERT(INT32_MIN <= day  &&  day <= INT32_MAX);
     return day;
 }
 
@@ -474,7 +485,7 @@ int32_t HebrewCalendar::yearType(int32_t year) const
 */
 UBool HebrewCalendar::isLeapYear(int32_t year) {
     //return (year * 12 + 17) % 19 >= 12;
-    int32_t x = (year*12 + 17) % 19;
+    int64_t x = (year*12LL + 17) % 19;
     return x >= ((x < 0) ? -7 : 12);
 }
 
@@ -534,7 +545,11 @@ int32_t HebrewCalendar::handleGetYearLength(int32_t eyear) const {
 }
 
 void HebrewCalendar::validateField(UCalendarDateFields field, UErrorCode &status) {
-    if (field == UCAL_MONTH && !isLeapYear(handleGetExtendedYear()) && internalGet(UCAL_MONTH) == ADAR_1) {
+    if ((field == UCAL_MONTH || field == UCAL_ORDINAL_MONTH)
+        && !isLeapYear(handleGetExtendedYear(status)) && internalGetMonth() == ADAR_1) {
+        if (U_FAILURE(status)) {
+            return;
+        }
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -607,6 +622,11 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
     internalSet(UCAL_ERA, 0);
     internalSet(UCAL_YEAR, year);
     internalSet(UCAL_EXTENDED_YEAR, year);
+    int32_t ordinal_month = month;
+    if (!isLeap && ordinal_month > ADAR_1) {
+      ordinal_month--;
+    }
+    internalSet(UCAL_ORDINAL_MONTH, ordinal_month);
     internalSet(UCAL_MONTH, month);
     internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);       
@@ -619,7 +639,10 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
 /**
 * @internal
 */
-int32_t HebrewCalendar::handleGetExtendedYear() {
+int32_t HebrewCalendar::handleGetExtendedYear(UErrorCode& status ) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
@@ -633,7 +656,7 @@ int32_t HebrewCalendar::handleGetExtendedYear() {
 * Return JD of start of given month/year.
 * @internal
 */
-int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
+int64_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
     UErrorCode status = U_ZERO_ERROR;
     // Resolve out-of-range months.  This is necessary in order to
     // obtain the correct year.  We correct to
@@ -649,7 +672,7 @@ int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
         month -= monthsInYear(eyear++);
     }
 
-    int32_t day = startOfYear(eyear, status);
+    int64_t day = startOfYear(eyear, status);
 
     if(U_FAILURE(status)) {
         return 0;
@@ -663,20 +686,24 @@ int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
         }
     }
 
-    return (int) (day + 347997);
+    return day + 347997LL;
 }
 
-UBool
-HebrewCalendar::inDaylightTime(UErrorCode& status) const
+constexpr uint32_t kHebrewRelatedYearDiff = -3760;
+
+int32_t HebrewCalendar::getRelatedYear(UErrorCode &status) const
 {
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
-        return FALSE;
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kHebrewRelatedYearDiff;
+}
 
-    // Force an update of the state of the Calendar.
-    ((HebrewCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
+void HebrewCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kHebrewRelatedYearDiff);
 }
 
 /**
@@ -690,7 +717,7 @@ static icu::UInitOnce  gSystemDefaultCenturyInit        {};
 
 UBool HebrewCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 static void U_CALLCONV initializeSystemDefaultCentury()
@@ -724,6 +751,51 @@ int32_t HebrewCalendar::defaultCenturyStartYear() const {
     return gSystemDefaultCenturyStartYear;
 }
 
+bool HebrewCalendar::inTemporalLeapYear(UErrorCode& status) const {
+    if (U_FAILURE(status)) return false;
+    int32_t eyear = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) return false;
+    return isLeapYear(eyear);
+}
+
+static const char * const gTemporalMonthCodesForHebrew[] = {
+    "M01", "M02", "M03", "M04", "M05", "M05L", "M06",
+    "M07", "M08", "M09", "M10", "M11", "M12", nullptr
+};
+
+const char* HebrewCalendar::getTemporalMonthCode(UErrorCode& status) const {
+    int32_t month = get(UCAL_MONTH, status);
+    if (U_FAILURE(status)) return nullptr;
+    return gTemporalMonthCodesForHebrew[month];
+}
+
+void HebrewCalendar::setTemporalMonthCode(const char* code, UErrorCode& status )
+{
+    if (U_FAILURE(status)) return;
+    int32_t len = static_cast<int32_t>(uprv_strlen(code));
+    if (len == 3 || len == 4) {
+        for (int m = 0; gTemporalMonthCodesForHebrew[m] != nullptr; m++) {
+            if (uprv_strcmp(code, gTemporalMonthCodesForHebrew[m]) == 0) {
+                set(UCAL_MONTH, m);
+                return;
+            }
+        }
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+}
+
+int32_t HebrewCalendar::internalGetMonth() const {
+    if (resolveFields(kMonthPrecedence) == UCAL_ORDINAL_MONTH) {
+        int32_t ordinalMonth = internalGet(UCAL_ORDINAL_MONTH);
+        HebrewCalendar *nonConstThis = (HebrewCalendar*)this; // cast away const
+
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t year = nonConstThis->handleGetExtendedYear(status);
+        U_ASSERT(U_SUCCESS(status));
+        return ordinalMonth + (((!isLeapYear(year)) && (ordinalMonth > ADAR_1)) ? 1: 0);
+    }
+    return Calendar::internalGetMonth();
+}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HebrewCalendar)
 

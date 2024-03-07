@@ -333,7 +333,7 @@ ig{
         }
         LSL{
             "LSL",
-            "This is not a translation",
+            "Ego loti obodo Lesotho",
         }
         LYD{
             "LYD",
@@ -499,9 +499,13 @@ ig{
             "SHP",
             "Ego Pound obodo St Helena",
         }
+        SLE{
+            "SLE",
+            "Ego Leone obodo Sierra Leone",
+        }
         SLL{
             "SLL",
-            "Ego Leone obodo Sierra Leone",
+            "Ego Leone obodo Sierra Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -651,9 +655,6 @@ ig{
         BND{
             other{"Ego dollars obodo Brunei"}
         }
-        BRL{
-            other{"Real Brazil"}
-        }
         BWP{
             other{"Ego pulas obodo Bostwana"}
         }
@@ -665,9 +666,6 @@ ig{
         }
         CDF{
             other{"Ego francs mba Congo"}
-        }
-        CNY{
-            other{"Yuan China"}
         }
         CRC{
             other{"Ego colóns obodo Costa Rica"}
@@ -690,29 +688,17 @@ ig{
         FJD{
             other{"Ego dollars obodo Fijian"}
         }
-        GBP{
-            other{"Pound British"}
-        }
         HRK{
             other{"Ego kunas obodo Croatia"}
         }
-        INR{
-            other{"Rupee India"}
-        }
         IQD{
             other{"Ego dinars obodo Iraq"}
-        }
-        JPY{
-            other{"Yen Japan"}
         }
         KYD{
             other{"Ego dollars obodo Cayman Islands"}
         }
         LBP{
             other{"Ego Pound Obodo Lebanon"}
-        }
-        LSL{
-            other{"This is not a translation"}
         }
         MDL{
             other{"Ego leu mba Moldova"}
@@ -741,17 +727,11 @@ ig{
         RON{
             other{"Ego leu Obodo Romania"}
         }
-        RUB{
-            other{"Ruble Russia"}
-        }
         SBD{
             other{"Ego dollars obodo Solomon Islands"}
         }
         SCR{
             other{"Ego rupees obodo Seychelles"}
-        }
-        SRD{
-            other{"Dollar Surinamese"}
         }
         SSP{
             other{"Ego pounds mba ọdịda anyanwụ Sudan"}
@@ -795,5 +775,8 @@ ig{
         ZMW{
             other{"Ego kwachas obodo Zambia"}
         }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
     }
 }

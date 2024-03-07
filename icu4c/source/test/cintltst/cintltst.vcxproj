@@ -34,7 +34,6 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(OutDir)\cintltst.pch</PrecompiledHeaderOutputFile>
@@ -88,9 +87,6 @@
     <ClCompile Include="cmsccoll.c" />
     <ClCompile Include="cturtst.c" />
     <ClCompile Include="encoll.c" />
-    <ClCompile Include="usrchdat.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="usrchtst.c" />
     <ClCompile Include="chashtst.c" />
     <ClCompile Include="sorttest.c" />
@@ -127,6 +123,8 @@
     <ClCompile Include="utmstest.c" />
     <ClCompile Include="cldrtest.c" />
     <ClCompile Include="cloctst.c" />
+    <ClCompile Include="ulocaletst.c" />
+    <ClCompile Include="ulocbuildertst.c" />
     <ClCompile Include="cposxtst.c" />
     <ClCompile Include="crelativedateformattest.c" />
     <ClCompile Include="crestst.c" />
@@ -177,6 +175,7 @@
     <ClInclude Include="cjaptst.h" />
     <ClInclude Include="cturtst.h" />
     <ClInclude Include="encoll.h" />
+    <ClInclude Include="usrchdat.inc" />
     <ClInclude Include="ccapitst.h" />
     <ClInclude Include="nccbtst.h" />
     <ClInclude Include="ncnvfbts.h" />

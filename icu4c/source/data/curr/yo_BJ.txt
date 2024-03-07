@@ -611,9 +611,6 @@ yo_BJ{
         RSD{
             other{"àwɔn dínárì Sàbíà"}
         }
-        RUB{
-            other{"Owó ruble ti ilɛ̀ Rɔ́shíà"}
-        }
         RWF{
             other{"àwɔn faransi Ruwanda"}
         }
@@ -629,8 +626,11 @@ yo_BJ{
         SHP{
             other{"àwɔn pɔ́n-un Elena"}
         }
-        SLL{
+        SLE{
             other{"àwɔn líónì Sira Líonì"}
+        }
+        SLL{
+            other{"àwɔn líónì Sira Líonì (1964—2022)"}
         }
         SOS{
             other{"àwɔ́n shílè Somali"}
@@ -653,9 +653,6 @@ yo_BJ{
         UGX{
             other{"àwɔn shile Uganda"}
         }
-        USD{
-            other{"Dɔ́là ti Orílɛ̀-Èdè Amɛ́ríkà"}
-        }
         UYU{
             other{"àwɔn pɛ́sò Úrúgúwè"}
         }
@@ -670,9 +667,6 @@ yo_BJ{
         }
         XOF{
             other{"àwɔn faransì ìwɔ̀-oorùn Afíríkà"}
-        }
-        XXX{
-            other{"owóníná àìmɔ̀"}
         }
         ZMW{
             other{"àwɔn kàwasà Sámbíà"}

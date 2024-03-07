@@ -73,9 +73,9 @@ static const double kNumbersToTest[]{0, 91827.3645, -0.22222};
  *     numberpermutationtest.txt
  * To regenerate that file, run intltest with the -e and -G options.
  * On Linux, from icu4c/source:
- *     make -j8 tests && (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest -e -G format/NumberTest/NumberPermutationTest)
+ *     make -j -l2.5 tests && (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest -e -G format/NumberTest/NumberPermutationTest)
  * After re-generating the file, copy it into icu4j:
- *     cp test/testdata/numberpermutationtest.txt ../../icu4j/main/tests/core/src/com/ibm/icu/dev/data/numberpermutationtest.txt
+ *     cp test/testdata/numberpermutationtest.txt ../../icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/numberpermutationtest.txt
  */
 void NumberPermutationTest::testPermutations() {
     IcuTestErrorCode status(*this, "testPermutations");
@@ -163,7 +163,7 @@ outerEnd:
 
     // Compare it to the golden file
     const char* codePage = "UTF-8";
-    LocalUCHARBUFPointer f(ucbuf_open(goldenFilePath.data(), &codePage, TRUE, FALSE, status));
+    LocalUCHARBUFPointer f(ucbuf_open(goldenFilePath.data(), &codePage, true, false, status));
     if (!assertSuccess("Can't open data file", status)) {
         return;
     }
@@ -171,7 +171,7 @@ outerEnd:
     int32_t lineNumber = 1;
     int32_t lineLength;
     for (const auto& actualLine : resultLines) {
-        const UChar* lineBuf = ucbuf_readline(f.getAlias(), &lineLength, status);
+        const char16_t* lineBuf = ucbuf_readline(f.getAlias(), &lineLength, status);
         if (lineBuf == nullptr) {
             errln("More lines generated than are in the data file!");
             break;

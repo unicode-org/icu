@@ -55,6 +55,7 @@ class DateIntervalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
+class SimpleNumberFormatter;
 }
 
 /**
@@ -1056,7 +1057,7 @@ public:
      * with this date-time formatter.
      * @stable ICU 2.0
      */
-    virtual const DateFormatSymbols* getDateFormatSymbols(void) const;
+    virtual const DateFormatSymbols* getDateFormatSymbols() const;
 
     /**
      * Set the date/time formatting symbols.  The caller no longer owns the
@@ -1084,7 +1085,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -1097,7 +1098,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const override;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * Set the calendar to be used by this date format. Initially, the default
@@ -1132,7 +1133,7 @@ public:
      * @return the time zone format associated with this date/time formatter.
      * @internal ICU 49 technology preview
      */
-    virtual const TimeZoneFormat* getTimeZoneFormat(void) const;
+    virtual const TimeZoneFormat* getTimeZoneFormat() const;
 
     /**
      * Set a particular UDisplayContext value in the formatter, such as
@@ -1215,16 +1216,16 @@ public:
      * @return   locale in this simple date formatter
      * @internal ICU 4.0
      */
-    const Locale& getSmpFmtLocale(void) const;
+    const Locale& getSmpFmtLocale() const;
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
     friend class DateFormat;
     friend class DateIntervalFormat;
 
-    void initializeDefaultCentury(void);
+    void initializeDefaultCentury();
 
-    void initializeBooleanAttributes(void);
+    void initializeBooleanAttributes();
 
     SimpleDateFormat() = delete; // default constructor not implemented
 
@@ -1316,7 +1317,7 @@ private:
 
     /**
      * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
-     * @param adoptZone  Zone to be adopted, or NULL for TimeZone::createDefault().
+     * @param adoptZone  Zone to be adopted, or nullptr for TimeZone::createDefault().
      * @param locale Locale of the calendar
      * @param status Error code
      * @return the newly constructed fCalendar
@@ -1349,7 +1350,7 @@ private:
      * @param field the date field being parsed.
      * @param stringArray the string array to parsed.
      * @param stringArrayCount the size of the array.
-     * @param monthPattern pointer to leap month pattern, or NULL if none.
+     * @param monthPattern pointer to leap month pattern, or nullptr if none.
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
      * @return the new start position if matching succeeded; a negative number
@@ -1358,6 +1359,22 @@ private:
     int32_t matchString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
                         const UnicodeString* stringArray, int32_t stringArrayCount,
                         const UnicodeString* monthPattern, Calendar& cal) const;
+
+    /**
+     * Private code-size reduction function used by subParse. Only for UCAL_MONTH
+     * @param text the time text being parsed.
+     * @param start where to start parsing.
+     * @param wideStringArray the wide string array to parsed.
+     * @param shortStringArray the short string array to parsed.
+     * @param stringArrayCount the size of the string arrays.
+     * @param cal a Calendar set to the date and time to be formatted
+     *            into a date/time string.
+     * @return the new start position if matching succeeded; a negative number
+     * indicating matching failure, otherwise.
+     */
+    int32_t matchAlphaMonthStrings(const UnicodeString& text, int32_t start,
+                        const UnicodeString* wideStringArray, const UnicodeString* shortStringArray,
+                        int32_t stringArrayCount, Calendar& cal) const;
 
     /**
      * Private code-size reduction function used by subParse.
@@ -1416,14 +1433,14 @@ private:
      * @param patLoc
      * @param numericLeapMonthFormatter If non-null, used to parse numeric leap months.
      * @param tzTimeType the type of parsed time zone - standard, daylight or unknown (output).
-     *      This parameter can be NULL if caller does not need the information.
+     *      This parameter can be nullptr if caller does not need the information.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, char16_t ch, int32_t count,
                      UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
                      int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType,
-                     int32_t *dayPeriod=NULL) const;
+                     int32_t *dayPeriod=nullptr) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
@@ -1504,14 +1521,9 @@ private:
     int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos) const;
 
     /**
-     * Initialize LocalizedNumberFormatter instances used for speedup.
+     * Initialize SimpleNumberFormat instance
      */
-    void initFastNumberFormatters(UErrorCode& status);
-
-    /**
-     * Delete the LocalizedNumberFormatter instances used for speedup.
-     */
-    void freeFastNumberFormatters();
+    void initSimpleNumberFormatter(UErrorCode &status);
 
     /**
      * Initialize NumberFormat instances used for numbering system overrides.
@@ -1583,12 +1595,12 @@ private:
      * A pointer to an object containing the strings to use in formatting (e.g.,
      * month and day names, AM and PM strings, time zone names, etc.)
      */
-    DateFormatSymbols*  fSymbols;   // Owned
+    DateFormatSymbols*  fSymbols = nullptr;   // Owned
 
     /**
      * The time zone formatter
      */
-    TimeZoneFormat* fTimeZoneFormat;
+    TimeZoneFormat* fTimeZoneFormat = nullptr;
 
     /**
      * If dates have ambiguous years, we map them into the century starting
@@ -1619,34 +1631,29 @@ private:
         int32_t hash;
         NSOverride *next;
         void free();
-        NSOverride() : snf(NULL), hash(0), next(NULL) {
+        NSOverride() : snf(nullptr), hash(0), next(nullptr) {
         }
         ~NSOverride();
     };
 
     /**
-     * The number format in use for each date field. NULL means fall back
+     * The number format in use for each date field. nullptr means fall back
      * to fNumberFormat in DateFormat.
      */
-    const SharedNumberFormat    **fSharedNumberFormatters;
-
-    enum NumberFormatterKey {
-        SMPDTFMT_NF_1x10,
-        SMPDTFMT_NF_2x10,
-        SMPDTFMT_NF_3x10,
-        SMPDTFMT_NF_4x10,
-        SMPDTFMT_NF_2x2,
-        SMPDTFMT_NF_COUNT
-    };
+    const SharedNumberFormat    **fSharedNumberFormatters = nullptr;
 
     /**
-     * Number formatters pre-allocated for fast performance on the most common integer lengths.
+     * Number formatter pre-allocated for fast performance
+     * 
+     * This references the decimal symbols from fNumberFormatter if it is an instance
+     * of DecimalFormat (and is otherwise null). This should always be cleaned up before
+     * destroying fNumberFormatter.
      */
-    const number::LocalizedNumberFormatter* fFastNumberFormatters[SMPDTFMT_NF_COUNT] = {};
+    const number::SimpleNumberFormatter* fSimpleNumberFormatter = nullptr;
 
     UBool fHaveDefaultCentury;
 
-    const BreakIterator* fCapitalizationBrkIter;
+    const BreakIterator* fCapitalizationBrkIter = nullptr;
 };
 
 inline UDate

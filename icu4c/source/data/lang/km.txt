@@ -49,6 +49,7 @@ km{
         bem{"បេមបា"}
         bez{"បេណា"}
         bg{"ប៊ុលហ្ការី"}
+        bgc{"ហារីយ៉ាន់វី"}
         bgn{"បាឡូជីខាងលិច"}
         bho{"បូចពូរី"}
         bi{"ប៊ីស្លាម៉ា"}
@@ -325,6 +326,7 @@ km{
         pt_PT{"ព័រទុយហ្គាល់ (អឺរ៉ុប)"}
         qu{"ហ្គិកឈួ"}
         quc{"គីចឈី"}
+        raj{"រ៉ាចាស់ថានី"}
         rap{"រ៉ាប៉ានូ"}
         rar{"រ៉ារ៉ូតុងហ្គាន"}
         rhg{"រ៉ូហ៊ីងយ៉ា"}
@@ -656,10 +658,11 @@ km{
     }
     characterLabelPattern{
         all{"{0} — ទាំងអស់"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — ភាពត្រូវគ្នា"}
         enclosed{"{0} — បិទជិត"}
         extended{"{0} — ពង្រីក"}
+        facing-left{"{0} បែរមុខទៅឆ្វេង"}
+        facing-right{"{0} បែរមុខទៅស្ដាំ"}
         historic{"{0} — ជាប្រវត្តិសាស្ត្រ"}
         miscellaneous{"{0} — ផ្សេងៗ"}
         other{"{0} — ផ្សេងទៀត"}
@@ -677,7 +680,5 @@ km{
     }
     localeDisplayPattern{
         keyTypePattern{"{0}៖ {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

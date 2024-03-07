@@ -56,7 +56,7 @@ class RBBIMonkeyTest: public IntlTest {
     RBBIMonkeyTest();
     virtual ~RBBIMonkeyTest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
     void testMonkey();
 
 
@@ -116,7 +116,7 @@ class BreakRules: public UObject {
 
     void compileRules(UCHARBUF *rules, UErrorCode &status);
 
-    const CharClass *getClassForChar(UChar32 c, int32_t *iter=NULL) const;
+    const CharClass *getClassForChar(UChar32 c, int32_t *iter=nullptr) const;
 
 
     RBBIMonkeyImpl    *fMonkeyImpl;        // Pointer back to the owning MonkeyImpl instance.
@@ -217,7 +217,7 @@ class RBBIMonkeyImpl: public UObject {
         RBBIMonkeyImpl *fMonkeyImpl;
       public:
         RBBIMonkeyThread(RBBIMonkeyImpl *impl) : fMonkeyImpl(impl) {}
-        void run() U_OVERRIDE { fMonkeyImpl->runTest(); }
+        void run() override { fMonkeyImpl->runTest(); }
     };
   private:
     void openBreakRules(const char *fileName, UErrorCode &status);

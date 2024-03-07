@@ -69,7 +69,7 @@ enum {
   kBBufMax = 256
 };
 
-static void TestUListFmt() {
+static void TestUListFmt(void) {
     const ListFmtTestEntry * lftep;
     for (lftep = listFmtTestEntries; lftep->locale != NULL ; lftep++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -135,7 +135,7 @@ static void TestUListFmt() {
     }
 }
 
-static void TestUListFmtToValue() {
+static void TestUListFmtToValue(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UListFormatter* fmt = ulistfmt_open("en", &ec);
     UFormattedList* fl = ulistfmt_openResult(&ec);
@@ -216,7 +216,7 @@ static void TestUListFmtToValue() {
     ulistfmt_closeResult(fl);
 }
 
-static void TestUListOpenStyled() {
+static void TestUListOpenStyled(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UListFormatter* fmt = ulistfmt_openForType("en", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_SHORT, &ec);
     UFormattedList* fl = ulistfmt_openResult(&ec);
@@ -256,7 +256,7 @@ static void TestUListOpenStyled() {
 
 #include <stdio.h>
 
-static void TestUList21871_A() {
+static void TestUList21871_A(void) {
     UErrorCode status = U_ZERO_ERROR;
     UListFormatter *fmt = ulistfmt_openForType("en", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, &status);
     assertSuccess("ulistfmt_openForType", &status);
@@ -304,7 +304,7 @@ static void TestUList21871_A() {
     ulistfmt_close(fmt);
 }
 
-static void TestUList21871_B() {
+static void TestUList21871_B(void) {
     UErrorCode status = U_ZERO_ERROR;
     UListFormatter *fmt = ulistfmt_openForType("en", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, &status);
     assertSuccess("ulistfmt_openForType", &status);

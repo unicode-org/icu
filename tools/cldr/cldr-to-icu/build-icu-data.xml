@@ -13,7 +13,7 @@
 <!-- TODO: Add things like copying of a template directory and deleting previous files
      (perhaps always generate into a temporary directory and copy back to avoid having
       inconsistent state when the conversion is cancelled). -->
-<project name="Convert" default="all" basedir=".">
+<project name="Convert" default="all" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
 
     <target name="all" depends="init-args, prepare-jar, clean, convert"/>
 
@@ -43,14 +43,28 @@
              so it is recommended that for testing, it be set to another value.  -->
         <property name="outDir" value="${basedir}/../../../icu4c/source/data/"/>
 
+        <!-- The output directory into which to write generated C/C++ code.  By default
+             this will overwrite (without deletion) the generated C/C++ files in this
+             ICU release, so it is recommended that for testing, it be set to another value. -->
+        <property name="genCCodeDir" value="${basedir}/../../../icu4c/source/"/>
+
+        <!-- The output directory into which to write generated Java code.  By default
+             this will overwrite (without deletion) the generated Java files in this
+             ICU release, so it is recommended that for testing, it be set to another value. -->
+        <property name="genJavaCodeDir" value="${basedir}/../../../icu4j/main/core"/>
+        
+        <!-- Set this to true to prevent build-icu-data.xml from generating the generated
+             ICU source files -->
+        <property name="dontGenCode" value="false" />
+
         <!-- The directory in which the additional ICU XML data is stored. -->
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
         <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
-        <property name="icuVersion" value="72.0.1.0"/>
+        <property name="icuVersion" value="75.0.1.0"/>
 
         <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
-        <property name="icuDataVersion" value="72.0.1.0"/>
+        <property name="icuDataVersion" value="75.0.1.0"/>
 
         <!-- An override for the CLDR version string (icuver.txt and others). This will be
              extracted from the CLDR library used for building the data if not set here. -->
@@ -115,6 +129,9 @@
             <arg line="-f build-icu-data.xml convert-impl -DcldrDir=${cldrDataDir}"/>
             <!-- List all properties in the "convert-impl" task (except cldrDir). -->
             <arg value="-DoutDir=${outDir}"/>
+            <arg value="-DgenCCodeDir=${genCCodeDir}"/>
+            <arg value="-DgenJavaCodeDir=${genJavaCodeDir}"/>
+            <arg value="-DdontGenCode=${dontGenCode}"/>
             <arg value="-DspecialsDir=${specialsDir}"/>
             <arg value="-DoutputTypes=${outputTypes}"/>
             <arg value="-DicuVersion=${icuVersion}"/>
@@ -131,6 +148,11 @@
          default properties and the configuration in the "<convert>" element below. -->
     <target name="convert-impl">
         <taskdef name="convert" classname="org.unicode.icu.tool.cldrtoicu.ant.ConvertIcuDataTask">
+            <classpath>
+                <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="generateCode" classname="org.unicode.icu.tool.cldrtoicu.ant.GenerateCodeTask">
             <classpath>
                 <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
             </classpath>
@@ -159,10 +181,10 @@
                 af, agq, ak, am, ar, ars, as, asa, ast, az, az_AZ, az_Cyrl
 
                 // B
-                bas, be, bem, bez, bg, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
+                bas, be, bem, bez, bg, bgc, bho, blo, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
 
                 // C
-                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cy
+                ca, ccp, ce, ceb, cgg, chr, ckb, cs, csw, cv, cy
 
                 // D
                 da, dav, de, dje, doi, dsb, dua, dyo, dz
@@ -180,62 +202,62 @@
                 ha, haw, he, hi, hi_Latn, hr, hsb, hu, hy
 
                 // I
-                ia, id, ig, ii, in, in_ID, is, it, iw, iw_IL
+                ia, id, ie, ig, ii, in, in_ID, is, it, iw, iw_IL
 
                 // J
                 ja, jgo, jmc, jv
 
                 // K
                 ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
-                ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, ky
+                ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, kxv, kxv_Deva, kxv_IN, kxv_Orya, kxv_Telu, ky
 
                 // L
-                lag, lb, lg, lkt, ln, lo, lrc, lt, lu, luo, luy, lv
+                lag, lb, lg, lij, lkt, lmo, ln, lo, lrc, lt, lu, luo, luy, lv
 
                 // M
                 mai, mas, mer, mfe, mg, mgh, mgo, mi, mk, ml, mn, mni, mni_IN, mo, mr, ms
                 mt, mua, my, mzn
 
                 // N
-                naq, nb, nd, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nus, nyn
+                naq, nb, nd, nds, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nqo, nus, nyn
 
                 // O
-                om, or, os
+                oc, om, or, os
 
                 // P
-                pa, pa_Arab, pa_IN, pa_PK, pcm, pl, ps, pt
+                pa, pa_Arab, pa_IN, pa_PK, pcm, pl, prg, ps, pt
 
                 // Q
                 qu
 
                 // R
-                rm, rn, ro, rof, ru, rw, rwk
+                raj, rm, rn, ro, rof, ru, rw, rwk
 
                 // S
-                sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
+                sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_IN, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
                 shi, shi_Latn, shi_MA, si, sk, sl, smn, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn
-                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw
+                sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw, syr, szl
 
                 // T
-                ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tr, tt, twq, tzm
+                ta, te, teo, tg, th, ti, tk, tl, tl_PH, to, tok, tr, tt, twq, tzm
 
                 // U
                 ug, uk, ur, uz, uz_AF, uz_Arab, uz_Cyrl, uz_UZ
 
                 // V
-                vai, vai_LR, vai_Latn, vi, vun
+                vai, vai_LR, vai_Latn, vec, vi, vmw, vun
 
                 // W
                 wae, wo
 
                 // X
-                xh, xog
+                xh, xnr, xog
 
                 // Y
                 yav, yi, yo, yrl, yue, yue_CN, yue_HK, yue_Hans
 
                 // Z
-                zgh, zh, zh_CN, zh_HK, zh_Hant, zh_MO, zh_SG, zh_TW, zu
+                za, zgh, zh, zh_CN, zh_HK, zh_Hant, zh_MO, zh_SG, zh_TW, zu
             </localeIds>
 
             <!-- The following elements configure directories in which a subset of the available
@@ -289,7 +311,7 @@
                     id_ID, id, ig, in, in_ID, is, it, iw_IL, iw, ja,
 
                     // K-P
-                    ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lkt, ln, lo, lt, lv,
+                    ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lij, lkt, ln, lo, lt, lv,
                     mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO,
                     om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
@@ -327,14 +349,14 @@
 
                     // Q-Z
                     qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, th, tr,
-                    uk, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
+                    uk, vec, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
                 </localeIds>
             </directory>
 
             <directory dir="brkitr" inheritLanguageSubtag="zh_Hant">
                 <localeIds>
                     root,
-                    de, el, en, en_US_POSIX, en_US, es, fr, it, ja, pt, ru, zh_Hant, zh
+                    de, el, en, en_US_POSIX, en_US, es, fi, fr, it, ja, ko, pt, ru, sv, zh_Hant, zh
                 </localeIds>
             </directory>
 
@@ -375,10 +397,17 @@
                           source="//path/to/value[@attr='bar']"
                           locales="xx,yy_ZZ"/> -->
         </convert>
+        
+        <generateCode cldrDir="${cldrDir}" cOutDir="${genCCodeDir}" javaOutDir="${genJavaCodeDir}" unless:true="${dontGenCode}" />
     </target>
 
     <target name="clean" depends="init-args, prepare-jar">
         <taskdef name="outputDirectories" classname="org.unicode.icu.tool.cldrtoicu.ant.CleanOutputDirectoryTask">
+            <classpath>
+                <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="generateCode" classname="org.unicode.icu.tool.cldrtoicu.ant.GenerateCodeTask">
             <classpath>
                 <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
             </classpath>
@@ -398,6 +427,7 @@
              -->
         <outputDirectories root="${outDir}" forceDelete="${forceDelete}">
             <dir name="brkitr">
+                <retain path="adaboost"/>
                 <retain path="dictionaries"/>
                 <retain path="lstm"/>
                 <retain path="rules"/>
@@ -436,6 +466,7 @@
                 <retain path="tzdbNames.txt"/>
             </dir>
         </outputDirectories>
+        
+        <generateCode cOutDir="${genCCodeDir}" javaOutDir="${genJavaCodeDir}" action="clean" />
     </target>
 </project>
-

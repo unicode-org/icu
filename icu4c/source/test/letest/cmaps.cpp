@@ -57,7 +57,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
 {
     le_uint16 i;
     le_uint16 nSubtables = SWAPW(cmap->numberSubtables);
-    const CMAPEncodingSubtable *subtable = NULL;
+    const CMAPEncodingSubtable *subtable = nullptr;
     le_bool found = false;
     le_uint16 foundPlatformID = 0xFFFF;
     le_uint16 foundPlatformSpecificID = 0xFFFF;
@@ -128,7 +128,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
       (void)foundPlatformSpecificID;
     } else {
       printf("%s:%d: could not find subtable.\n", __FILE__, __LINE__);
-      return NULL;
+      return nullptr;
     }
 
     le_uint16 tableFormat = SWAPW(subtable->format);
@@ -150,7 +150,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
     }
 
     printf("%s:%d: Unknown format %x.\n", __FILE__, __LINE__, (SWAPW(subtable->format)));
-    return NULL;
+    return nullptr;
 }
 
 CMAPFormat4Mapper::CMAPFormat4Mapper(const CMAPTable *cmap, const CMAPFormat4Encoding *header)

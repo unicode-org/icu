@@ -23,6 +23,8 @@
 #include "GUISupport.h"
 #include "FontMap.h"
 
+using icu::LEFontInstance;
+
 #define BUFFER_SIZE 128
 
 class GnomeFontMap : public FontMap

@@ -124,7 +124,7 @@ public:
      * @return current index in the text being searched.
      * @stable ICU 2.0
      */
-    virtual int32_t getOffset(void) const = 0;
+    virtual int32_t getOffset() const = 0;
 
     /**
     * Sets the text searching attributes located in the enum 
@@ -163,7 +163,7 @@ public:
     * @see #last
     * @stable ICU 2.0
     */
-    int32_t getMatchedStart(void) const;
+    int32_t getMatchedStart() const;
 
     /**
      * Returns the length of text in the string which matches the search 
@@ -179,8 +179,8 @@ public:
      * @see #last
      * @stable ICU 2.0
      */
-    int32_t getMatchedLength(void) const;
-    
+    int32_t getMatchedLength() const;
+
     /**
      * Returns the text that was matched by the most recent call to 
      * <tt>first</tt>, <tt>next</tt>, <tt>previous</tt>, or <tt>last</tt>.
@@ -206,7 +206,7 @@ public:
      *                found, but the match's start or end index is not a 
      *                boundary as determined by the <tt>BreakIterator</tt>, 
      *                the match will be rejected and another will be searched 
-     *                for. If this parameter is <tt>NULL</tt>, no break
+     *                for. If this parameter is <tt>nullptr</tt>, no break
      *                detection is attempted.
      * @param status for errors if it occurs
      * @see BreakIterator
@@ -218,13 +218,13 @@ public:
      * Returns the BreakIterator that is used to restrict the points at 
      * which matches are detected.  This will be the same object that was 
      * passed to the constructor or to <tt>setBreakIterator</tt>.
-     * Note that <tt>NULL</tt> is a legal value; it means that break
+     * Note that <tt>nullptr</tt> is a legal value; it means that break
      * detection should not be attempted.
      * @return BreakIterator used to restrict matchings.
      * @see #setBreakIterator
      * @stable ICU 2.0
      */
-    const BreakIterator * getBreakIterator(void) const;
+    const BreakIterator* getBreakIterator() const;
 
     /**
      * Set the string text to be searched. Text iteration will hence begin at 
@@ -260,7 +260,7 @@ public:
      * @return text string to be searched.
      * @stable ICU 2.0
      */
-    const UnicodeString & getText(void) const;
+    const UnicodeString& getText() const;
 
     // operator overloading ----------------------------------------------
 
@@ -291,7 +291,7 @@ public:
      * @return cloned object
      * @stable ICU 2.0
      */
-    virtual SearchIterator* safeClone(void) const = 0;
+    virtual SearchIterator* safeClone() const = 0;
 
     /**
      * Returns the first index at which the string text matches the search 
@@ -452,13 +452,13 @@ protected:
      *                boundary as determined by the <tt>BreakIterator</tt>, 
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
-     *                is <tt>NULL</tt>, no break detection is attempted.  
+     *                is <tt>nullptr</tt>, no break detection is attempted.
      * @see #handleNext
      * @see #handlePrev
      * @stable ICU 2.0
      */
     SearchIterator(const UnicodeString &text, 
-                         BreakIterator *breakiter = NULL);
+                         BreakIterator *breakiter = nullptr);
 
     /**
      * Constructor for use by subclasses.
@@ -474,12 +474,12 @@ protected:
      *                boundary as determined by the <tt>BreakIterator</tt>, 
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
-     *                is <tt>NULL</tt>, no break detection is attempted.
+     *                is <tt>nullptr</tt>, no break detection is attempted.
      * @see #handleNext
      * @see #handlePrev
      * @stable ICU 2.0
      */
-    SearchIterator(CharacterIterator &text, BreakIterator *breakiter = NULL);
+    SearchIterator(CharacterIterator &text, BreakIterator *breakiter = nullptr);
 
     // protected methods --------------------------------------------------
 

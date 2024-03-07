@@ -519,9 +519,13 @@ yo{
             "SHP",
             "Pọ́n-un Elena",
         }
+        SLE{
+            "SLE",
+            "Líónì Sira Líonì",
+        }
         SLL{
             "SLL",
-            "Líónì Sira Líonì",
+            "Líónì Sira Líonì (1964—2022)",
         }
         SOS{
             "SOS",
@@ -663,9 +667,6 @@ yo{
             "ZWD",
             "Dọla ti Orílẹ́ède Siibabuwe",
         }
-    }
-    Currencies%narrow{
-        KRW{"₩"}
     }
     CurrencyPlurals{
         ALL{
@@ -854,9 +855,6 @@ yo{
         NAD{
             other{"àwọn dọla Namibíà"}
         }
-        NGN{
-            other{"Náírà Nàìjíríà"}
-        }
         NIO{
             other{"àwọn kọ̀dóbà Naikarágúà"}
         }
@@ -881,9 +879,6 @@ yo{
         RSD{
             other{"àwọn dínárì Sàbíà"}
         }
-        RUB{
-            other{"Owó ruble ti ilẹ̀ Rọ́ṣíà"}
-        }
         RWF{
             other{"àwọn faransi Ruwanda"}
         }
@@ -899,8 +894,11 @@ yo{
         SHP{
             other{"àwọn pọ́n-un Elena"}
         }
-        SLL{
+        SLE{
             other{"àwọn líónì Sira Líonì"}
+        }
+        SLL{
+            other{"àwọn líónì Sira Líonì (1964—2022)"}
         }
         SOS{
             other{"àwọ́n ṣílè Somali"}
@@ -926,9 +924,6 @@ yo{
         UGX{
             other{"àwọn ṣile Uganda"}
         }
-        USD{
-            other{"Dọ́là ti Orílẹ̀-Èdè Amẹ́ríkà"}
-        }
         UYU{
             other{"àwọn pẹ́sò Úrúgúwè"}
         }
@@ -943,9 +938,6 @@ yo{
         }
         XOF{
             other{"àwọn faransì ìwọ̀-oorùn Afíríkà"}
-        }
-        XXX{
-            other{"owóníná àìmọ̀"}
         }
         ZAR{
             other{"rándì Gúúsù Afíríkà"}

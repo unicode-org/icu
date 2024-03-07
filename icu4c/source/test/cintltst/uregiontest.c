@@ -15,6 +15,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdbool.h>
+
 #include "unicode/ustring.h"
 #include "unicode/uregion.h"
 #include "unicode/uenum.h"
@@ -360,7 +362,7 @@ static KnownRegion knownRegions[] = {
     };
 
 
-static void TestKnownRegions() {
+static void TestKnownRegions(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -387,7 +389,7 @@ static void TestKnownRegions() {
     }
 }
 
-static void TestGetContainedRegions() {
+static void TestGetContainedRegions(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -416,7 +418,7 @@ static void TestGetContainedRegions() {
     }
 }
 
-static void TestGroupingChildren() {
+static void TestGroupingChildren(void) {
     const char* testGroupings[] = {
         "003", "021,013,029",
         "419", "013,029,005",
@@ -468,7 +470,7 @@ static void TestGroupingChildren() {
     }
 }
 
-static void TestGetContainedRegionsWithType() {
+static void TestGetContainedRegionsWithType(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -497,7 +499,7 @@ static void TestGetContainedRegionsWithType() {
     }
 }
 
-static void TestGetContainingRegion() {        
+static void TestGetContainingRegion(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -521,7 +523,7 @@ static void TestGetContainingRegion() {
     }
 }
 
-static void TestGetContainingRegionWithType() {        
+static void TestGetContainingRegionWithType(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
@@ -561,7 +563,7 @@ static const char ** expectPrefRegionsTestData[] = {
     NULL
 };
 
-static void TestGetPreferredValues() {
+static void TestGetPreferredValues(void) {
     const char *** testDataPtr = expectPrefRegionsTestData;
     const char ** regionListPtr;
     while ( (regionListPtr = *testDataPtr++) != NULL ) {
@@ -575,11 +577,11 @@ static void TestGetPreferredValues() {
                     const char * preferredCode;
                     while ( (preferredCode = *regionListPtr++) != NULL ) {
                         const char *check;
-                        UBool found = FALSE;
+                        UBool found = false;
                         uenum_reset(preferredRegions, &status);
                         while ((check = uenum_next(preferredRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
                             if ( !uprv_strcmp(check,preferredCode) ) {
-                                found = TRUE;
+                                found = true;
                                 break;
                             }
                         }
@@ -598,7 +600,7 @@ static void TestGetPreferredValues() {
     }
 }
 
-static void TestContains() {
+static void TestContains(void) {
     const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;

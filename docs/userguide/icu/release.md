@@ -30,4 +30,4 @@ Changes in previous releases can also be found the main [ICU download page](http
 
 ## License Information
 
-The ICU projects (ICU4C and ICU4J) are hosted by the [Unicode Consortium](http://www.unicode.org/). The ICU binary and source files are distributed under the [UNICODE DATA FILES AND SOFTWARE LICENSE](http://www.unicode.org/copyright.html). The full copy of the license and third party software licenses are available in [LICENSE](https://github.com/unicode-org/icu/blob/main/icu4j/main/shared/licenses/LICENSE) file included in this package.
+The ICU projects (ICU4C and ICU4J) are hosted by the [Unicode Consortium](https://www.unicode.org/). The ICU binary and source files are distributed under the [Unicode Data Files and Software License](https://www.unicode.org/license.txt). The full copy of the license and third party software licenses are available in the [LICENSE](https://github.com/unicode-org/icu/blob/main/LICENSE) file included in this package.

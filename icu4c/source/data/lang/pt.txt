@@ -71,6 +71,7 @@ pt{
         bez{"bena"}
         bfd{"bafut"}
         bg{"búlgaro"}
+        bgc{"hariani"}
         bgn{"balúchi ocidental"}
         bho{"bhojpuri"}
         bi{"bislamá"}
@@ -304,6 +305,7 @@ pt{
         li{"limburguês"}
         lil{"lillooet"}
         lkt{"lacota"}
+        lmo{"lombardo"}
         ln{"lingala"}
         lo{"laosiano"}
         lol{"mongo"}
@@ -585,6 +587,7 @@ pt{
         zh_Hant{"chinês mandarim (tradicional)"}
     }
     Languages%menu{
+        ckb{"curdo, central"}
         yue{"cantonês (tradicional)"}
         zh{"chinês, mandarim"}
     }
@@ -752,9 +755,9 @@ pt{
             gregorian{"Calendário Gregoriano"}
             hebrew{"Calendário Hebraico"}
             indian{"Calendário Nacional Indiano"}
-            islamic{"Calendário Islâmico"}
-            islamic-civil{"Calendário Civil Islâmico"}
-            islamic-umalqura{"Calendário Islâmico (Umm al-Qura)"}
+            islamic{"Calendário Hegírico"}
+            islamic-civil{"Calendário Hegírico (tabular, época civil)"}
+            islamic-umalqura{"Calendário Hegírico (Umm al‑Qura)"}
             iso8601{"Calendário ISO-8601"}
             japanese{"Calendário Japonês"}
             persian{"Calendário Persa"}
@@ -806,7 +809,6 @@ pt{
             phonebook{"Ordem de lista telefônica"}
             phonetic{"Ordem de classificação fonética"}
             pinyin{"Ordem Pin-yin"}
-            reformed{"Ordem reformulada"}
             search{"Pesquisa de uso geral"}
             searchjl{"Pesquisar por consonante inicial hangul"}
             standard{"Ordem padrão"}
@@ -932,10 +934,11 @@ pt{
     }
     characterLabelPattern{
         all{"{0} — todos"}
-        category-list{"{0}: {1}"}
         compatibility{"{0} — compatibilidade"}
         enclosed{"{0} — fechado"}
         extended{"{0} — estendido"}
+        facing-left{"{0} de frente para a esquerda"}
+        facing-right{"{0} de frente para a direita"}
         historic{"{0} — histórico"}
         miscellaneous{"{0} — diversos"}
         other{"{0} — outro"}
@@ -951,10 +954,5 @@ pt{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}
         territory{"Região: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

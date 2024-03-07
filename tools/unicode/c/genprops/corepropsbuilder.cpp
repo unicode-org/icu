@@ -95,7 +95,7 @@ Formally, the file contains the following structures:
 
     P  const uint32_t props32[i1-i0];
     E  const uint32_t exceptions[i2-i1];
-    U  const UChar uchars[2*(i3-i2)];
+    U  const char16_t uchars[2*(i3-i2)];
 
     AT serialized trie for additional properties (byte size: 4*(i4-i3))
     PV const uint32_t propsVectors[(i6-i4)/i5][i5]==uint32_t propsVectors[i6-i4];
@@ -337,7 +337,7 @@ private:
 };
 
 CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
-        : pTrie(NULL), props2Trie(NULL), pv(NULL) {
+        : pTrie(nullptr), props2Trie(nullptr), pv(nullptr) {
     pTrie=utrie2_open(0, 0, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: corepropsbuilder utrie2_open() failed - %s\n",
@@ -521,7 +521,7 @@ CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newVa
 
     int32_t type=props.getIntProp(UCHAR_NUMERIC_TYPE);
     const char *nvString=props.numericValue;
-    if(type!=U_NT_NONE && nvString==NULL && start==end) {
+    if(type!=U_NT_NONE && nvString==nullptr && start==end) {
         fprintf(stderr, "genprops error: cp line has Numeric_Type but no Numeric_Value\n");
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -532,13 +532,13 @@ CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newVa
     }
 
     int32_t ntv=UPROPS_NTV_NONE;  // numeric type & value
-    if(nvString!=NULL && uprv_strcmp(nvString, "NaN")!=0) {
+    if(nvString!=nullptr && uprv_strcmp(nvString, "NaN")!=0) {
         int32_t digitValue=props.digitValue;
         if( type<=U_NT_NONE || U_NT_NUMERIC<type ||
             ((type==U_NT_DECIMAL || type==U_NT_DIGIT) && digitValue<0)
         ) {
             fprintf(stderr, "genprops error: nt=%d but nv=%s\n",
-                    (int)type, nvString==NULL ? "NULL" : nvString);
+                    (int)type, nvString==nullptr ? "nullptr" : nvString);
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
@@ -729,11 +729,11 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     ) {
         UnicodeString codes;  // vector of 16-bit UScriptCode values
         UnicodeSetIterator iter(props.scx);
-        while(iter.next()) { codes.append((UChar)iter.getCodepoint()); }
+        while(iter.next()) { codes.append((char16_t)iter.getCodepoint()); }
 
         // Set bit 15 on the last script code, for termination.
         int32_t length=codes.length();
-        codes.setCharAt(length-1, (UChar)(codes[length-1]|0x8000));
+        codes.setCharAt(length-1, (char16_t)(codes[length-1]|0x8000));
         // Find this list of codes in the Script_Extensions data so far, or add this list.
         int32_t index=scriptExtensions.indexOf(codes);
         if(index<0) {
@@ -752,7 +752,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             // Store an additional pair of 16-bit units for an unusual main Script code
             // together with the Script_Extensions index.
             UnicodeString codeIndexPair;
-            codeIndexPair.append((UChar)script).append((UChar)index);
+            codeIndexPair.append((char16_t)script).append((char16_t)index);
             index=scriptExtensions.indexOf(codeIndexPair);
             if(index<0) {
                 index=scriptExtensions.length();
@@ -826,12 +826,12 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     }
 
     int32_t pvRows;
-    upvec_getArray(pv, &pvRows, NULL);
+    upvec_getArray(pv, &pvRows, nullptr);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     /* round up scriptExtensions to multiple of 4 bytes */
     if(scriptExtensions.length()&1) {
-        scriptExtensions.append((UChar)0);
+        scriptExtensions.append((char16_t)0);
     }
 
     /* set indexes */
@@ -880,12 +880,12 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
     int32_t pvRows;
-    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, nullptr);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     FILE *f=usrc_create(path, "uchar_props_data.h", 2016,
                         "icu/tools/unicode/c/genprops/corepropsbuilder.cpp");
-    if(f==NULL) {
+    if(f==nullptr) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }
@@ -896,21 +896,21 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "",
         "};\n\n");
     usrc_writeUTrie2Arrays(f,
-        "static const uint16_t propsTrie_index[%ld]={\n", NULL,
+        "static const uint16_t propsTrie_index[%ld]={\n", nullptr,
         pTrie,
         "\n};\n\n");
     usrc_writeUTrie2Struct(f,
         "static const UTrie2 propsTrie={\n",
-        pTrie, "propsTrie_index", NULL,
+        pTrie, "propsTrie_index", nullptr,
         "};\n\n");
 
     usrc_writeUTrie2Arrays(f,
-        "static const uint16_t propsVectorsTrie_index[%ld]={\n", NULL,
+        "static const uint16_t propsVectorsTrie_index[%ld]={\n", nullptr,
         props2Trie,
         "\n};\n\n");
     usrc_writeUTrie2Struct(f,
         "static const UTrie2 propsVectorsTrie={\n",
-        props2Trie, "propsVectorsTrie_index", NULL,
+        props2Trie, "propsVectorsTrie_index", nullptr,
         "};\n\n");
 
     usrc_writeArray(f,
@@ -941,11 +941,11 @@ CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
     if(U_FAILURE(errorCode)) { return; }
 
     int32_t pvRows;
-    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, nullptr);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     UNewDataMemory *pData=udata_create(path, "icu", "uprops", &dataInfo,
-                                       withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+                                       withCopyright ? U_COPYRIGHT_STRING : nullptr, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops: udata_create(%s, uprops.icu) failed - %s\n",
                 path, u_errorName(errorCode));
@@ -974,9 +974,9 @@ CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
 
 PropsBuilder *
 createCorePropsBuilder(UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return nullptr; }
     PropsBuilder *pb=new CorePropsBuilder(errorCode);
-    if(pb==NULL) {
+    if(pb==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
     return pb;

@@ -50,7 +50,7 @@
                           break
 
 #define EXHAUSTIVE(id,test) case id:                            \
-                              if(quick==FALSE){                 \
+                              if(quick==false){                 \
                                   name = #test;                 \
                                   if (exec){                    \
                                       logln(#test "---");       \
@@ -118,7 +118,7 @@ class Legal {
 public:
     Legal() {}
     virtual ~Legal() {}
-    virtual UBool is(const UnicodeString& /*sourceString*/) const {return TRUE;}
+    virtual UBool is(const UnicodeString& /*sourceString*/) const {return true;}
 };
 
 class LegalJamo : public Legal {
@@ -129,34 +129,34 @@ public:
     LegalJamo() {}
     virtual ~LegalJamo() {}
     virtual UBool is(const UnicodeString& sourceString) const override;
-            int   getType(UChar c) const;
+            int   getType(char16_t c) const;
 };
 
 UBool LegalJamo::is(const UnicodeString& sourceString) const {
     int t;
     UnicodeString decomp;
     UErrorCode ec = U_ZERO_ERROR;
-    Normalizer::decompose(sourceString, FALSE, 0, decomp, ec); 
+    Normalizer::decompose(sourceString, false, 0, decomp, ec); 
     if (U_FAILURE(ec)) {
-        return FALSE;
+        return false;
     }      
     for (int i = 0; i < decomp.length(); ++i) { // don't worry about surrogates             
         switch (getType(decomp.charAt(i))) {
         case 0: t = getType(decomp.charAt(i+1));
-                if (t != 0 && t != 1) { return FALSE; }
+                if (t != 0 && t != 1) { return false; }
                 break;
         case 1: t = getType(decomp.charAt(i-1));
-                if (t != 0 && t != 1) { return FALSE; }
+                if (t != 0 && t != 1) { return false; }
                 break;
         case 2: t = getType(decomp.charAt(i-1));
-                if (t != 1 && t != 2) { return FALSE; }
+                if (t != 1 && t != 2) { return false; }
                 break;
         }
     }              
-    return TRUE;
+    return true;
 }
 
-int LegalJamo::getType(UChar c) const {
+int LegalJamo::getType(char16_t c) const {
     if (0x1100 <= c && c <= 0x1112) 
         return 0;
     else if (0x1161 <= c && c  <= 0x1175) 
@@ -174,53 +174,53 @@ public:
 
     virtual UBool is(const UnicodeString& sourceString) const override;
 
-    static UBool isVowel(UChar c);
+    static UBool isVowel(char16_t c);
     
-    static UBool isRho(UChar c);
+    static UBool isRho(char16_t c);
 };
 
 UBool LegalGreek::is(const UnicodeString& sourceString) const { 
     UnicodeString decomp;
     UErrorCode ec = U_ZERO_ERROR;
-    Normalizer::decompose(sourceString, FALSE, 0, decomp, ec);
+    Normalizer::decompose(sourceString, false, 0, decomp, ec);
                 
     // modern is simpler: don't care about anything but a grave
-    if (full == FALSE) {
+    if (full == false) {
         // A special case which is legal but should be
         // excluded from round trip
         // if (sourceString == UnicodeString("\\u039C\\u03C0", "")) {
-        //    return FALSE;
+        //    return false;
         // }       
         for (int32_t i = 0; i < decomp.length(); ++i) {
-            UChar c = decomp.charAt(i);
+            char16_t c = decomp.charAt(i);
             // exclude all the accents
             if (c == 0x0313 || c == 0x0314 || c == 0x0300 || c == 0x0302
                 || c == 0x0342 || c == 0x0345
-                ) return FALSE;
+                ) return false;
         }
-        return TRUE;
+        return true;
     }
 
     // Legal greek has breathing marks IFF there is a vowel or RHO at the start
     // IF it has them, it has exactly one.
     // IF it starts with a RHO, then the breathing mark must come before the second letter.
     // Since there are no surrogates in greek, don't worry about them
-    UBool firstIsVowel = FALSE;
-    UBool firstIsRho = FALSE;
-    UBool noLetterYet = TRUE;
+    UBool firstIsVowel = false;
+    UBool firstIsRho = false;
+    UBool noLetterYet = true;
     int32_t breathingCount = 0;
     int32_t letterCount = 0;
     for (int32_t i = 0; i < decomp.length(); ++i) {
-        UChar c = decomp.charAt(i);
+        char16_t c = decomp.charAt(i);
         if (u_isalpha(c)) {
             ++letterCount;
             if (noLetterYet) {
-                noLetterYet =  FALSE;
+                noLetterYet =  false;
                 firstIsVowel = isVowel(c);
                 firstIsRho = isRho(c);
             }
             if (firstIsRho && letterCount == 2 && breathingCount == 0) {
-                return FALSE;
+                return false;
             }
         }
         if (c == 0x0313 || c == 0x0314) {
@@ -232,7 +232,7 @@ UBool LegalGreek::is(const UnicodeString& sourceString) const {
     return breathingCount == 0;
 }
 
-UBool LegalGreek::isVowel(UChar c) {
+UBool LegalGreek::isVowel(char16_t c) {
     switch (c) {
     case 0x03B1:
     case 0x03B5:
@@ -248,18 +248,18 @@ UBool LegalGreek::isVowel(UChar c) {
     case 0x039F:
     case 0x03A5:
     case 0x03A9:
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-UBool LegalGreek::isRho(UChar c) {
+UBool LegalGreek::isRho(char16_t c) {
     switch (c) {
     case 0x03C1:
     case 0x03A1:
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 namespace {
@@ -402,38 +402,38 @@ void RTTest::setPairLimit(int32_t limit) {
 }
 
 UBool RTTest::isSame(const UnicodeString& a, const UnicodeString& b) {
-    if (a == b) return TRUE;
-    if (a.caseCompare(b, U_FOLD_CASE_DEFAULT)==0 && isCamel(a)) return TRUE;
+    if (a == b) return true;
+    if (a.caseCompare(b, U_FOLD_CASE_DEFAULT)==0 && isCamel(a)) return true;
     UnicodeString aa, bb;
     UErrorCode ec = U_ZERO_ERROR;
-    Normalizer::decompose(a, FALSE, 0, aa, ec);
-    Normalizer::decompose(b, FALSE, 0, bb, ec);
-    if (aa == bb) return TRUE;
-    if (aa.caseCompare(bb, U_FOLD_CASE_DEFAULT)==0 && isCamel(aa)) return TRUE;
-    return FALSE;
+    Normalizer::decompose(a, false, 0, aa, ec);
+    Normalizer::decompose(b, false, 0, bb, ec);
+    if (aa == bb) return true;
+    if (aa.caseCompare(bb, U_FOLD_CASE_DEFAULT)==0 && isCamel(aa)) return true;
+    return false;
 }
 
 UBool RTTest::isCamel(const UnicodeString& a) {
     // see if string is of the form aB; e.g. lower, then upper or title
     UChar32 cp;
-    UBool haveLower = FALSE;
+    UBool haveLower = false;
     for (int32_t i = 0; i < a.length(); i += U16_LENGTH(cp)) {
         cp = a.char32At(i);
         int8_t t = u_charType(cp);
         switch (t) {
         case U_UPPERCASE_LETTER:
-            if (haveLower) return TRUE;
+            if (haveLower) return true;
             break;
         case U_TITLECASE_LETTER:
-            if (haveLower) return TRUE;
+            if (haveLower) return true;
             // fall through, since second letter is lower.
             U_FALLTHROUGH;
         case U_LOWERCASE_LETTER:
-            haveLower = TRUE;
+            haveLower = true;
             break;
         }
     }
-    return FALSE;
+    return false;
 }
 
 void RTTest::test(const UnicodeString& sourceRangeVal,
@@ -494,7 +494,7 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
     this->toTarget.addAll(okAnyway);
 
     this->roundtripExclusionsSet.clear();
-    if (roundtripExclusions != NULL && strlen(roundtripExclusions) > 0) {
+    if (roundtripExclusions != nullptr && strlen(roundtripExclusions) > 0) {
         this->roundtripExclusionsSet.applyPattern(UnicodeString(roundtripExclusions, -1, US_INV), status);
         if (U_FAILURE(status)) {
             parent->errln("FAIL: UnicodeSet::applyPattern(%s)", roundtripExclusions);
@@ -513,12 +513,12 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
 
     if (errorCount > 0) {
         char str[100];
-        int32_t length = transliteratorID.extract(str, 100, NULL, status);
+        int32_t length = transliteratorID.extract(str, 100, nullptr, status);
         str[length] = 0;
         parent->errln("FAIL: %s errors: %d %s", str, errorCount, (errorCount > errorLimit ? " (at least!)" : " ")); // + ", see " + logFileName);
     } else {
         char str[100];
-        int32_t length = transliteratorID.extract(str, 100, NULL, status);
+        int32_t length = transliteratorID.extract(str, 100, nullptr, status);
         str[length] = 0;
         parent->logln("%s ok", str);
     }
@@ -527,13 +527,13 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
 UBool RTTest::checkIrrelevants(Transliterator *t, 
                                const UnicodeString& irrelevants) {
     for (int i = 0; i < irrelevants.length(); ++i) {
-        UChar c = irrelevants.charAt(i);
+        char16_t c = irrelevants.charAt(i);
         UnicodeString srcStr(c);
         UnicodeString targ = srcStr;
         t->transliterate(targ);
-        if (srcStr == targ) return TRUE;
+        if (srcStr == targ) return true;
     }
-    return FALSE;
+    return false;
 }
 
 void RTTest::test2(UBool quickRt, int32_t density) {
@@ -544,18 +544,18 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     TransliteratorPointer sourceToTarget(
         Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
                                        status));
-    if ((Transliterator *)sourceToTarget == NULL) {
+    if (sourceToTarget == nullptr) {
         parent->dataerrln("FAIL: createInstance(" + transliteratorID +
-                   ") returned NULL. Error: " + u_errorName(status)
+                   ") returned nullptr. Error: " + u_errorName(status)
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
         
                 return;
     }
     TransliteratorPointer targetToSource(sourceToTarget->createInverse(status));
-    if ((Transliterator *)targetToSource == NULL) {
+    if (targetToSource == nullptr) {
         parent->errln("FAIL: " + transliteratorID +
-                   ".createInverse() returned NULL. Error:" + u_errorName(status)          
+                   ".createInverse() returned nullptr. Error:" + u_errorName(status)          
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
         return;
@@ -568,10 +568,10 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     // string is from NFC_NO in the UCD
     UnicodeString irrelevants = CharsToUnicodeString("\\u2000\\u2001\\u2126\\u212A\\u212B\\u2329"); 
 
-    if (checkIrrelevants(sourceToTarget, irrelevants) == FALSE) {
+    if (checkIrrelevants(sourceToTarget, irrelevants) == false) {
         logFails("Source-Target, irrelevants");
     }
-    if (checkIrrelevants(targetToSource, irrelevants) == FALSE) {
+    if (checkIrrelevants(targetToSource, irrelevants) == false) {
         logFails("Target-Source, irrelevants");
     }
             
@@ -580,7 +580,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
       UnicodeString rules = "";
        
       UParseError parseError;
-      rules = sourceToTarget->toRules(rules, TRUE);
+      rules = sourceToTarget->toRules(rules, true);
       // parent->logln((UnicodeString)"toRules => " + rules);
       TransliteratorPointer sourceToTarget2(Transliterator::createFromRules(
                                                        "s2t2", rules, 
@@ -591,7 +591,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
           return;
       }
 
-      rules = targetToSource->toRules(rules, FALSE);
+      rules = targetToSource->toRules(rules, false);
       TransliteratorPointer targetToSource2(Transliterator::createFromRules(
                                                        "t2s2", rules, 
                                                        UTRANS_FORWARD,
@@ -643,16 +643,16 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         UnicodeString srcStr((UChar32)c);
         UnicodeString targ = srcStr;
         sourceToTarget->transliterate(targ);
-        if (toTarget.containsAll(targ) == FALSE
-            || badCharacters.containsSome(targ) == TRUE) {
+        if (toTarget.containsAll(targ) == false
+            || badCharacters.containsSome(targ) == true) {
             UnicodeString targD;
-            Normalizer::decompose(targ, FALSE, 0, targD, status);
+            Normalizer::decompose(targ, false, 0, targD, status);
             if (U_FAILURE(status)) {
                 parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                 return;
             }
-            if (toTarget.containsAll(targD) == FALSE || 
-                badCharacters.containsSome(targD) == TRUE) {
+            if (toTarget.containsAll(targD) == false || 
+                badCharacters.containsSome(targD) == true) {
                 logWrongScript("Source-Target", srcStr, targ);
                 failSourceTarg.add(c);
                 continue;
@@ -660,7 +660,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         }
 
         UnicodeString cs2;
-        Normalizer::decompose(srcStr, FALSE, 0, cs2, status);
+        Normalizer::decompose(srcStr, false, 0, cs2, status);
         if (U_FAILURE(status)) {
             parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
             return;
@@ -693,23 +693,23 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             srcStr += (UChar32)d;
             UnicodeString targ = srcStr;
             sourceToTarget->transliterate(targ);
-            if (toTarget.containsAll(targ) == FALSE || 
-                badCharacters.containsSome(targ) == TRUE)
+            if (toTarget.containsAll(targ) == false || 
+                badCharacters.containsSome(targ) == true)
             {
                 UnicodeString targD;
-                Normalizer::decompose(targ, FALSE, 0, targD, status);
+                Normalizer::decompose(targ, false, 0, targD, status);
                 if (U_FAILURE(status)) {
                     parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                     return;
                 }
-                if (toTarget.containsAll(targD) == FALSE ||
-                    badCharacters.containsSome(targD) == TRUE) {
+                if (toTarget.containsAll(targD) == false ||
+                    badCharacters.containsSome(targD) == true) {
                     logWrongScript("Source-Target", srcStr, targ);
                     continue;
                 }
             }
             UnicodeString cs2;
-            Normalizer::decompose(srcStr, FALSE, 0, cs2, status);
+            Normalizer::decompose(srcStr, false, 0, cs2, status);
             if (U_FAILURE(status)) {
                 parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                 return;
@@ -744,35 +744,35 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         reverse = targ;
         sourceToTarget->transliterate(reverse);
 
-        if (toSource.containsAll(targ) == FALSE ||
-            badCharacters.containsSome(targ) == TRUE) {
+        if (toSource.containsAll(targ) == false ||
+            badCharacters.containsSome(targ) == true) {
             UnicodeString targD;
-            Normalizer::decompose(targ, FALSE, 0, targD, status);
+            Normalizer::decompose(targ, false, 0, targD, status);
             if (U_FAILURE(status)) {
                 parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
                 return;
             }
-            if (toSource.containsAll(targD) == FALSE) {
+            if (toSource.containsAll(targD) == false) {
                 logWrongScript("Target-Source", srcStr, targ);
                 failTargSource.add(c);
                 continue;
             }
-            if (badCharacters.containsSome(targD) == TRUE) {
+            if (badCharacters.containsSome(targD) == true) {
                 logWrongScript("Target-Source*", srcStr, targ);
                 failTargSource.add(c);
                 continue;
             }
         }
-        if (isSame(srcStr, reverse) == FALSE && 
-            roundtripExclusionsSet.contains(c) == FALSE
-            && roundtripExclusionsSet.contains(srcStr)==FALSE) {
+        if (isSame(srcStr, reverse) == false && 
+            roundtripExclusionsSet.contains(c) == false
+            && roundtripExclusionsSet.contains(srcStr)==false) {
             logRoundTripFailure(srcStr,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
             failRound.add(c);
             continue;
         } 
         
         UnicodeString targ2;
-        Normalizer::decompose(targ, FALSE, 0, targ2, status);
+        Normalizer::decompose(targ, false, 0, targ2, status);
         if (U_FAILURE(status)) {
             parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
             return;
@@ -819,34 +819,34 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             reverse = targ;
             sourceToTarget->transliterate(reverse);
 
-            if (toSource.containsAll(targ) == FALSE || 
-                badCharacters.containsSome(targ) == TRUE) 
+            if (toSource.containsAll(targ) == false || 
+                badCharacters.containsSome(targ) == true) 
             {
                 targD.truncate(0);  // empty the variable without construction/destruction
-                Normalizer::decompose(targ, FALSE, 0, targD, status);
+                Normalizer::decompose(targ, false, 0, targD, status);
                 if (U_FAILURE(status)) {
                     parent->errln("FAIL: Internal error during decomposition%s\n", 
                                u_errorName(status));
                     return;
                 }
-                if (toSource.containsAll(targD) == FALSE 
-                    || badCharacters.containsSome(targD) == TRUE)
+                if (toSource.containsAll(targD) == false 
+                    || badCharacters.containsSome(targD) == true)
                 {
                     logWrongScript("Target-Source", srcStr, targ);
                     continue;
                 }
             }
-            if (isSame(srcStr, reverse) == FALSE && 
-                roundtripExclusionsSet.contains(c) == FALSE&&
-                roundtripExclusionsSet.contains(d) == FALSE &&
-                roundtripExclusionsSet.contains(srcStr)== FALSE)
+            if (isSame(srcStr, reverse) == false && 
+                roundtripExclusionsSet.contains(c) == false&&
+                roundtripExclusionsSet.contains(d) == false &&
+                roundtripExclusionsSet.contains(srcStr)== false)
             {
                 logRoundTripFailure(srcStr,targetToSource->getID(), targ, sourceToTarget->getID(),reverse);
                 continue;
             } 
         
             targ2.truncate(0);  // empty the variable without construction/destruction
-            Normalizer::decompose(targ, FALSE, 0, targ2, status);
+            Normalizer::decompose(targ, false, 0, targ2, status);
             if (U_FAILURE(status)) {
                 parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
                 return;
@@ -914,7 +914,7 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
                                  const UnicodeString& to,
                                  const UnicodeString& backID,
                                  const UnicodeString& back) {
-    if (legalSource->is(from) == FALSE) return; // skip illegals
+    if (legalSource->is(from) == false) return; // skip illegals
 
     parent->errln((UnicodeString)"FAIL Roundtrip: " +
                from + "(" + TestUtility::hex(from) + ") => " +
@@ -994,7 +994,7 @@ void TransliteratorRoundTripTest::TestJamo() {
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\u1100-\\u1112 \\u1161-\\u1175 \\u11A8-\\u11C2]", 
                          ""), 
-           NULL, this, quick, legal);
+           nullptr, this, quick, legal);
     delete legal;
 }
 
@@ -1004,7 +1004,7 @@ void TransliteratorRoundTripTest::TestHangul() {
     if (quick) t.setPairLimit(1000);
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\uAC00-\\uD7A4]", ""), 
-           NULL, this, quick, legal, 1);
+           nullptr, this, quick, legal, 1);
     delete legal;
 }
 
@@ -1023,7 +1023,7 @@ static void writeStringInU8(FILE *out, const UnicodeString &s) {
     for (i=0; i<s.length(); i=s.moveIndex32(i, 1)) {
         UChar32  c = s.char32At(i);
         uint8_t  bufForOneChar[10];
-        UBool    isError = FALSE;
+        UBool    isError = false;
         int32_t  destIdx = 0;
         U8_APPEND(bufForOneChar, destIdx, (int32_t)sizeof(bufForOneChar), c, isError);
         U_ASSERT(!isError);
@@ -1118,7 +1118,7 @@ void TransliteratorRoundTripTest::TestGreek() {
     // It is left in its current state as a regression test.
 
     RTTest test("Latin-Greek");
-    LegalGreek *legal = new LegalGreek(TRUE);
+    LegalGreek *legal = new LegalGreek(true);
 
     test.test(UnicodeString("[a-zA-Z]", ""), 
         UnicodeString("[\\u003B\\u00B7[[:Greek:]&[:Letter:]]-["
@@ -1143,7 +1143,7 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
     // It is left in its current state as a regression test.
 
     RTTest test("Latin-Greek/UNGEGN");
-    LegalGreek *legal = new LegalGreek(FALSE);
+    LegalGreek *legal = new LegalGreek(false);
 
     test.test(UnicodeString("[a-zA-Z]", ""), 
         UnicodeString("[\\u003B\\u00B7[[:Greek:]&[:Letter:]]-["
@@ -1165,7 +1165,7 @@ void TransliteratorRoundTripTest::Testel() {
     // It is left in its current state as a regression test.
 
     RTTest test("Latin-el");
-    LegalGreek *legal = new LegalGreek(FALSE);
+    LegalGreek *legal = new LegalGreek(false);
 
     test.test(UnicodeString("[a-zA-Z]", ""), 
         UnicodeString("[\\u003B\\u00B7[[:Greek:]&[:Letter:]]-["
@@ -1209,18 +1209,18 @@ LegalHebrew::LegalHebrew(UErrorCode& error){
 }
 UBool LegalHebrew::is(const UnicodeString& sourceString)const{
  
-    if (sourceString.length() == 0) return TRUE;
+    if (sourceString.length() == 0) return true;
     // don't worry about surrogates.
     for (int i = 0; i < sourceString.length(); ++i) {
-        UChar ch = sourceString.charAt(i);
-        UChar next = i+1 == sourceString.length() ? 0x0000 : sourceString.charAt(i);
+        char16_t ch = sourceString.charAt(i);
+        char16_t next = i+1 == sourceString.length() ? 0x0000 : sourceString.charAt(i);
         if (FINAL.contains(ch)) {
-            if (LETTER.contains(next)) return FALSE;
+            if (LETTER.contains(next)) return false;
         } else if (NON_FINAL.contains(ch)) {
-            if (!LETTER.contains(next)) return FALSE;
+            if (!LETTER.contains(next)) return false;
         }
     }
-    return TRUE;
+    return true;
 }
 void TransliteratorRoundTripTest::TestHebrew() {
     logKnownIssue( "cldrbug:1911");
@@ -1244,7 +1244,7 @@ void TransliteratorRoundTripTest::TestCyrillic() {
     Legal *legal = new Legal();
 
     test.test(UnicodeString("[a-zA-Z\\u0110\\u0111\\u02BA\\u02B9]", ""), 
-              UnicodeString("[[\\u0400-\\u045F] & [:Age=3.2:]]", ""), NULL, this, quick, 
+              UnicodeString("[[\\u0400-\\u045F] & [:Age=3.2:]]", ""), nullptr, this, quick, 
               legal);
 
     delete legal;
@@ -1270,21 +1270,21 @@ UBool LegalIndic::is(const UnicodeString& sourceString) const{
     
     // A vowel sign cannot be the first char
     if(vowelSignSet.contains(cp)){
-        return FALSE;
+        return false;
     }else if(avagraha.contains(cp)){
-        return FALSE;
+        return false;
     }else if(virama.contains(cp)){
-        return FALSE;
+        return false;
     }else if(nukta.contains(cp)){
-        return FALSE;
+        return false;
     }else if(sanskritStressSigns.contains(cp)){
-        return FALSE;
+        return false;
     }else if(chandrabindu.contains(cp) && 
                 ((sourceString.length()>1) && 
                     vowelSignSet.contains(sourceString.charAt(1)))){
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 LegalIndic::LegalIndic(){
         UErrorCode status = U_ZERO_ERROR;
@@ -1329,7 +1329,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
         UErrorCode status = U_ZERO_ERROR;
         UParseError parseError;
         TransliteratorPointer t1(Transliterator::createInstance("[\\u0964-\\u0965\\u0981-\\u0983\\u0985-\\u098C\\u098F-\\u0990\\u0993-\\u09A8\\u09AA-\\u09B0\\u09B2\\u09B6-\\u09B9\\u09BC\\u09BE-\\u09C4\\u09C7-\\u09C8\\u09CB-\\u09CD\\u09D7\\u09DC-\\u09DD\\u09DF-\\u09E3\\u09E6-\\u09FA];NFD;Bengali-InterIndic;InterIndic-Gujarati;NFC;",UTRANS_FORWARD, parseError, status));
-        if((Transliterator *)t1 != NULL){
+        if(t1 != nullptr){
             TransliteratorPointer t2(t1->createInverse(status));
             if(U_FAILURE(status)){
                 errln("FAIL: could not create the Inverse:-( \n");
@@ -1587,13 +1587,13 @@ static const char * const interIndicArray[] = {
     "[\\u0BF0\\u0BF1\\u0BF2]" /*roundtrip exclusions*/,
 
     "Latin-Telugu",latinForIndic, "[:Telugu:]", 
-    NULL /*roundtrip exclusions*/,
+    nullptr /*roundtrip exclusions*/,
 
     "Latin-Kannada",latinForIndic, "[:Kannada:]", 
-    NULL /*roundtrip exclusions*/,
+    nullptr /*roundtrip exclusions*/,
 
     "Latin-Malayalam",latinForIndic, "[:Malayalam:]", 
-    NULL /*roundtrip exclusions*/  
+    nullptr /*roundtrip exclusions*/  
 };
 
 void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[],
@@ -1605,7 +1605,7 @@ void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[
 }
 
 void TransliteratorRoundTripTest::TestInterIndic() {
-    //TestDebug("Latin-Gurmukhi", latinForIndic, "[:Gurmukhi:]","[\\u0965\\u0a02\\u0a72\\u0a73\\u0a74]",TRUE);
+    //TestDebug("Latin-Gurmukhi", latinForIndic, "[:Gurmukhi:]","[\\u0965\\u0a02\\u0a72\\u0a73\\u0a74]",true);
     int32_t num = UPRV_LENGTHOF(interIndicArray)/INTER_INDIC_ARRAY_WIDTH;
     if(quick){
         logln("Testing only 5 of %i. Skipping rest (use -e for exhaustive)",num);

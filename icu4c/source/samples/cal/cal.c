@@ -201,7 +201,7 @@ main(int argc,
 
 /* Usage information */
 static void
-usage()
+usage(void)
 {  
     puts("Usage: icucal [OPTIONS] [[MONTH] YEAR]");
     puts("");
@@ -219,7 +219,7 @@ usage()
 
 /* Version information */
 static void
-version()
+version(void)
 {
     printf("icucal version %s (ICU version %s), created by Stephen F. Booth.\n", 
         CAL_VERSION, U_ICU_VERSION); 

@@ -18,6 +18,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -27,7 +28,7 @@ int main(int argc, const char* const argv[]) {
     ures_close(ures_open(NULL, NULL, &status));
     if (status != U_ZERO_ERROR) {
         printf("uloc_getDefault = %s\n", uloc_getDefault());
-        printf("Locale available in ICU = %s\n", status == U_ZERO_ERROR ? "TRUE" : "FALSE");
+        printf("Locale available in ICU = %s\n", status == U_ZERO_ERROR ? "true" : "false");
     }
     if (strcmp(ucnv_getDefaultName(), "US-ASCII") == 0) {
         printf("uprv_getDefaultCodepage = %s\n", uprv_getDefaultCodepage());

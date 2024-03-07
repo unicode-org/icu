@@ -71,17 +71,17 @@ static const DateIntervalFormatTestItem testItems[] = {
     { "de", "Hm",       CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 12.0*_HOUR, u"08:00\u201320:00 Uhr" },
     { "de", "Hm",       CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 31.0*_DAY,  u"27.9.2010, 08:00\u2009\u2013\u200928.10.2010, 08:00" },
     { "ja", "MMMd",     CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   u"9月27日～28日" },
-    { "cs", "MMMEd",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"po 27. 9. \u2013 pá 26. 11." },
+    { "cs", "MMMEd",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"po 27. 9.\u2009\u2013\u2009pá 26. 11." },
     { "cs", "yMMMM",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"září\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   u"září 2010" },
 #if !UCONFIG_NO_BREAK_ITERATION
-    { "cs", "MMMEd",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"Po 27. 9. \u2013 pá 26. 11." },
+    { "cs", "MMMEd",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"Po 27. 9.\u2009\u2013\u2009pá 26. 11." },
     { "cs", "yMMMM",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"Září\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   u"Září 2010" },
-    { "cs", "MMMEd",    CAP_LIST,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"Po 27. 9. \u2013 pá 26. 11." },
+    { "cs", "MMMEd",    CAP_LIST,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"Po 27. 9.\u2009\u2013\u2009pá 26. 11." },
     { "cs", "yMMMM",    CAP_LIST,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"Září\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_LIST,  tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   u"Září 2010" },
-    { "cs", "MMMEd",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"po 27. 9. \u2013 pá 26. 11." },
+    { "cs", "MMMEd",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"po 27. 9.\u2009\u2013\u2009pá 26. 11." },
 #endif
     { "cs", "yMMMM",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"září\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   u"září 2010" },
@@ -94,7 +94,7 @@ enum {
     kFormatBufLen = 128
 };
 
-static void TestDateIntervalFormat()
+static void TestDateIntervalFormat(void)
 {
     const DateIntervalFormatTestItem * testItemPtr;
     UErrorCode status = U_ZERO_ERROR;
@@ -317,7 +317,7 @@ static const LocaleAndSkeletonItem locSkelItems[] = {
 
 enum { kSizeUBuf = 96, kSizeBBuf = 192 };
 
-static void TestFPos_SkelWithSeconds()
+static void TestFPos_SkelWithSeconds(void)
 {
 	const LocaleAndSkeletonItem * locSkelItemPtr;
 	for (locSkelItemPtr = locSkelItems; locSkelItemPtr->locale != NULL; locSkelItemPtr++) {
@@ -359,7 +359,7 @@ static void TestFPos_SkelWithSeconds()
     }
 }
 
-static void TestFormatToResult() {
+static void TestFormatToResult(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UDateIntervalFormat* fmt = udtitvfmt_open("de", u"dMMMMyHHmm", -1, zoneGMT, -1, &ec);
     UFormattedDateInterval* fdi = udtitvfmt_openResult(&ec);
@@ -420,7 +420,7 @@ static void TestFormatToResult() {
     udtitvfmt_closeResult(fdi);
 }
 
-static void TestFormatCalendarToResult() {
+static void TestFormatCalendarToResult(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UCalendar* ucal1 = ucal_open(zoneGMT, -1, "de", UCAL_DEFAULT, &ec);
     ucal_setMillis(ucal1, Date201009270800, &ec);

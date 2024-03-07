@@ -43,7 +43,7 @@ CollationGermanTest::CollationGermanTest()
         errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
-        myCollation = NULL;
+        myCollation = nullptr;
     }
 }
 
@@ -52,7 +52,7 @@ CollationGermanTest::~CollationGermanTest()
     delete myCollation;
 }
 
-const UChar CollationGermanTest::testSourceCases[][CollationGermanTest::MAX_TOKEN_LEN] =
+const char16_t CollationGermanTest::testSourceCases[][CollationGermanTest::MAX_TOKEN_LEN] =
 {
     {0x47, 0x72, 0x00F6, 0x00DF, 0x65, 0},
     {0x61, 0x62, 0x63, 0},
@@ -68,7 +68,7 @@ const UChar CollationGermanTest::testSourceCases[][CollationGermanTest::MAX_TOKE
     {0x53, 0x74, 0x72, 0x61, 0x00DF, 0x65, 0}
 };
 
-const UChar CollationGermanTest::testTargetCases[][CollationGermanTest::MAX_TOKEN_LEN] =
+const char16_t CollationGermanTest::testTargetCases[][CollationGermanTest::MAX_TOKEN_LEN] =
 {
     {0x47, 0x72, 0x6f, 0x73, 0x73, 0x69, 0x73, 0x74, 0},
     {0x61, 0x0308, 0x62, 0x63, 0},
@@ -104,7 +104,7 @@ const Collator::EComparisonResult CollationGermanTest::results[][2] =
 
 void CollationGermanTest::TestTertiary(/* char* par */)
 {
-    if(myCollation == NULL ) {
+    if(myCollation == nullptr ) {
         dataerrln("decoll: cannot start test, collator is null\n");
         return;
     }
@@ -120,7 +120,7 @@ void CollationGermanTest::TestTertiary(/* char* par */)
 }
 void CollationGermanTest::TestPrimary(/* char* par */)
 {
-    if(myCollation == NULL ) {
+    if(myCollation == nullptr ) {
         dataerrln("decoll: cannot start test, collator is null\n");
         return;
     }

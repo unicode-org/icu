@@ -22,7 +22,7 @@
  * verifies that it works on a basic level.
  */
 class IntlTestDateFormatAPI: public IntlTest {
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
 private:
     /**
@@ -32,17 +32,17 @@ private:
     /**
      * Test that the equals method works correctly.
      */
-    void TestEquals(void);
+    void TestEquals();
 
     /**
      * Test that no parse or format methods are hidden.
      */
-    void TestNameHiding(void);
+    void TestNameHiding();
 
     /**
      * Add better code coverage.
      */
-    void TestCoverage(void);
+    void TestCoverage();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

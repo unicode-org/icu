@@ -36,7 +36,7 @@
 #include "unicode/putil.h"
 #include "idnaconf.h"
 
-static const UChar unicodeIn[][41] ={
+static const char16_t unicodeIn[][41] ={
     { 
         0x0644, 0x064A, 0x0647, 0x0645, 0x0627, 0x0628, 0x062A, 0x0643, 0x0644,
         0x0645, 0x0648, 0x0634, 0x0639, 0x0631, 0x0628, 0x064A, 0x061F, 0x0000
@@ -240,7 +240,7 @@ typedef struct ErrorCases ErrorCases;
 
 static const struct ErrorCases{
 
-    UChar unicode[100];
+    char16_t unicode[100];
     const char *ascii;
     UErrorCode expected;
     UBool useSTD3ASCIIRules;
@@ -259,7 +259,7 @@ static const struct ErrorCases{
         },
         "www.XN--8mb5595fsoa28orucya378bqre2tcwop06c5qbw82a1rffmae0361dea96b.com",
         U_IDNA_PROHIBITED_ERROR,
-        FALSE, FALSE, TRUE
+        false, false, true
     },
 
     {
@@ -273,7 +273,7 @@ static const struct ErrorCases{
         "www.XN--6lA2Bz548Fj1GuA391Bf1Gb1N59Ab29A7iA.com",
 
         U_IDNA_UNASSIGNED_ERROR,
-        FALSE, FALSE, TRUE
+        false, false, true
     },
     {
         { 
@@ -286,7 +286,7 @@ static const struct ErrorCases{
         },
         "www.xn--ghBGI4851OiyA33VqrD6Az86C4qF83CtRv93D5xBk15AzfG0nAgA0578DeA71C.com",
         U_IDNA_CHECK_BIDI_ERROR,
-        FALSE, FALSE, TRUE
+        false, false, true
     },
     {
         { 
@@ -301,7 +301,7 @@ static const struct ErrorCases{
         },
         "www.xn----b95Ew8SqA315Ao5FbuMlnNmhA.com",
         U_IDNA_STD3_ASCII_RULES_ERROR,
-        TRUE, FALSE, FALSE
+        true, false, false
     },
     {
         { 
@@ -318,7 +318,7 @@ static const struct ErrorCases{
         /* wrong ACE-prefix followed by valid ACE-encoded ASCII */ 
         "www.XY-----b91I0V65S96C2A355Cw1E5yCeQr19CsnP1mFfmAE0361DeA96B.com",
         U_IDNA_ACE_PREFIX_ERROR,
-        FALSE, FALSE, FALSE
+        false, false, false
     },
     /* cannot verify U_IDNA_VERIFICATION_ERROR */
 
@@ -333,7 +333,7 @@ static const struct ErrorCases{
       },
       "www.xn--989AoMsVi5E83Db1D2A355Cv1E0vAk1DwRv93D5xBh15A0Dt30A5JpSD879Ccm6FeA98C.com",
       U_IDNA_LABEL_TOO_LONG_ERROR,
-      FALSE, FALSE, TRUE
+      false, false, true
     },  
     
     { 
@@ -345,7 +345,7 @@ static const struct ErrorCases{
       },
       "www.xn--01-tvdmo.com",
       U_IDNA_CHECK_BIDI_ERROR,
-      FALSE, FALSE, TRUE
+      false, false, true
     },  
     
     { 
@@ -357,7 +357,7 @@ static const struct ErrorCases{
       },
       "www.XN--ghbgi278xia.com",
       U_IDNA_PROHIBITED_ERROR,
-      FALSE, FALSE, TRUE
+      false, false, true
     },
     { 
       {
@@ -368,7 +368,7 @@ static const struct ErrorCases{
       },
       "www.-abcde.com",
       U_IDNA_STD3_ASCII_RULES_ERROR,
-      TRUE, FALSE, FALSE
+      true, false, false
     },
     { 
       {
@@ -379,7 +379,7 @@ static const struct ErrorCases{
       },
       "www.abcde-.com",
       U_IDNA_STD3_ASCII_RULES_ERROR,
-      TRUE, FALSE, FALSE
+      true, false, false
     },
     { 
       {
@@ -390,7 +390,7 @@ static const struct ErrorCases{
       },
       "www.abcde@.com",
       U_IDNA_STD3_ASCII_RULES_ERROR,
-      TRUE, FALSE, FALSE
+      true, false, false
     },
     { 
       {
@@ -401,13 +401,13 @@ static const struct ErrorCases{
       },
       "www..com",
       U_IDNA_ZERO_LENGTH_LABEL_ERROR,
-      TRUE, FALSE, FALSE
+      true, false, false
     },
     { 
       {0},
-      NULL,
+      nullptr,
       U_ILLEGAL_ARGUMENT_ERROR,
-      TRUE, TRUE, FALSE
+      true, true, false
     }
 };
 
@@ -416,21 +416,21 @@ static const struct ErrorCases{
 
 #define MAX_DEST_SIZE 300
 
-void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
+void TestIDNA::debug(const char16_t* src, int32_t srcLength, int32_t options){
     UParseError parseError;
     UErrorCode transStatus = U_ZERO_ERROR;
     UErrorCode prepStatus  = U_ZERO_ERROR;
     NamePrepTransform* trans = NamePrepTransform::createInstance(parseError,transStatus);
     int32_t prepOptions = (((options & UIDNA_ALLOW_UNASSIGNED) != 0) ? USPREP_ALLOW_UNASSIGNED: 0);
     LocalUStringPrepProfilePointer prep(usprep_openByType(USPREP_RFC3491_NAMEPREP,&prepStatus));
-    UChar *transOut=NULL, *prepOut=NULL;
+    char16_t *transOut=nullptr, *prepOut=nullptr;
     int32_t transOutLength=0, prepOutLength=0;
     
     
     transOutLength  = trans->process(src,srcLength,transOut, 0, prepOptions>0, &parseError, transStatus);
     if( transStatus == U_BUFFER_OVERFLOW_ERROR){
         transStatus = U_ZERO_ERROR;
-        transOut    = (UChar*) malloc(U_SIZEOF_UCHAR * transOutLength);
+        transOut    = (char16_t*) malloc(U_SIZEOF_UCHAR * transOutLength);
         transOutLength = trans->process(src,srcLength,transOut, transOutLength, prepOptions>0, &parseError, transStatus);
     }
 
@@ -438,7 +438,7 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
 
     if( prepStatus == U_BUFFER_OVERFLOW_ERROR){
         prepStatus = U_ZERO_ERROR;
-        prepOut    = (UChar*) malloc(U_SIZEOF_UCHAR * prepOutLength);
+        prepOut    = (char16_t*) malloc(U_SIZEOF_UCHAR * prepOutLength);
         prepOutLength  = usprep_prepare(prep.getAlias(), src, srcLength, prepOut, prepOutLength, prepOptions, &parseError, &prepStatus);
     }
 
@@ -451,28 +451,28 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
     delete trans;
 }
 
-void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* testName, 
+void TestIDNA::testAPI(const char16_t* src, const char16_t* expected, const char* testName,
             UBool useSTD3ASCIIRules,UErrorCode expectedStatus,
             UBool doCompare, UBool testUnassigned, TestFunc func, UBool testSTD3ASCIIRules){
 
     UErrorCode status = U_ZERO_ERROR;
-    UChar destStack[MAX_DEST_SIZE];
+    char16_t destStack[MAX_DEST_SIZE];
     int32_t destLen = 0;
-    UChar* dest = NULL;
-    int32_t expectedLen = (expected != NULL) ? u_strlen(expected) : 0;
-    int32_t options = (useSTD3ASCIIRules == TRUE) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
+    char16_t* dest = nullptr;
+    int32_t expectedLen = (expected != nullptr) ? u_strlen(expected) : 0;
+    int32_t options = (useSTD3ASCIIRules == true) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
     UParseError parseError;
     int32_t tSrcLen = 0; 
-    UChar* tSrc = NULL; 
+    char16_t* tSrc = nullptr;
 
-    if(src != NULL){
+    if(src != nullptr){
         tSrcLen = u_strlen(src);
-        tSrc  =(UChar*) malloc( U_SIZEOF_UCHAR * tSrcLen );
+        tSrc  =(char16_t*) malloc( U_SIZEOF_UCHAR * tSrcLen );
         memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
     }
 
     // test null-terminated source and return value of number of UChars required
-    destLen = func(src,-1,NULL,0,options, &parseError , &status);
+    destLen = func(src,-1,nullptr,0,options, &parseError , &status);
     if (status == U_FILE_ACCESS_ERROR) {
         dataerrln("U_FILE_ACCESS_ERROR. Skipping the remainder of this test.");
         return;
@@ -483,7 +483,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
             dest = destStack;
             destLen = func(src,-1,dest,destLen+1,options, &parseError, &status);
             // TODO : compare output with expected
-            if(U_SUCCESS(status) && expectedStatus != U_IDNA_STD3_ASCII_RULES_ERROR&& (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+            if(U_SUCCESS(status) && expectedStatus != U_IDNA_STD3_ASCII_RULES_ERROR&& (doCompare==true) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                 errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source. Expected : " 
                        + prettify(UnicodeString(expected,expectedLen))
                        + " Got: " + prettify(UnicodeString(dest,destLen))
@@ -506,14 +506,14 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     } 
     if(testUnassigned ){
         status = U_ZERO_ERROR;
-        destLen = func(src,-1,NULL,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+        destLen = func(src,-1,nullptr,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
             if(destLen+1 < MAX_DEST_SIZE){
                 dest = destStack;
                 destLen = func(src,-1,dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
                 // TODO : compare output with expected
-                if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                if(U_SUCCESS(status) && (doCompare==true) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     //errln("Did not get the expected result for %s null terminated source with both options set.\n",testName);
                     errln("Did not get the expected result for "+UnicodeString(testName) +
                           " null terminated source "+ prettify(src) + 
@@ -541,14 +541,14 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     status = U_ZERO_ERROR;
 
     // test source with lengthand return value of number of UChars required
-    destLen = func(tSrc, tSrcLen, NULL,0,options, &parseError, &status);
+    destLen = func(tSrc, tSrcLen, nullptr,0,options, &parseError, &status);
     if(status == U_BUFFER_OVERFLOW_ERROR){
         status = U_ZERO_ERROR; // reset error code
         if(destLen+1 < MAX_DEST_SIZE){
             dest = destStack;
             destLen = func(src,u_strlen(src),dest,destLen+1,options, &parseError, &status);
             // TODO : compare output with expected
-            if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+            if(U_SUCCESS(status) && (doCompare==true) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                 errln("Did not get the expected result for %s with source length.\n",testName);
             }
         }else{
@@ -567,7 +567,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     if(testUnassigned){
         status = U_ZERO_ERROR;
 
-        destLen = func(tSrc,tSrcLen,NULL,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+        destLen = func(tSrc,tSrcLen,nullptr,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
@@ -575,7 +575,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
                 dest = destStack;
                 destLen = func(src,u_strlen(src),dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
                 // TODO : compare output with expected
-                if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                if(U_SUCCESS(status) && (doCompare==true) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     errln("Did not get the expected result for %s with source length and both options set.\n",testName);
                 }
             }else{
@@ -594,15 +594,15 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     }
 
     status = U_ZERO_ERROR;
-    if(testSTD3ASCIIRules==TRUE){
-        destLen = func(src,-1,NULL,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
+    if(testSTD3ASCIIRules==true){
+        destLen = func(src,-1,nullptr,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
             if(destLen+1 < MAX_DEST_SIZE){
                 dest = destStack;
                 destLen = func(src,-1,dest,destLen+1,options | UIDNA_USE_STD3_RULES, &parseError, &status);
                 // TODO : compare output with expected
-                if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                if(U_SUCCESS(status) && (doCompare==true) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     //errln("Did not get the expected result for %s null terminated source with both options set.\n",testName);
                     errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source with both options set. Expected: "+ prettify(UnicodeString(expected,expectedLen)));
         
@@ -623,7 +623,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
 
         status = U_ZERO_ERROR;
 
-        destLen = func(tSrc,tSrcLen,NULL,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
+        destLen = func(tSrc,tSrcLen,nullptr,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
@@ -631,7 +631,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
                 dest = destStack;
                 destLen = func(src,u_strlen(src),dest,destLen+1,options | UIDNA_USE_STD3_RULES, &parseError, &status);
                 // TODO : compare output with expected
-                if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                if(U_SUCCESS(status) && (doCompare==true) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     errln("Did not get the expected result for %s with source length and both options set.\n",testName);
                 }
             }else{
@@ -651,15 +651,15 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     free(tSrc);
 }
 
-void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
-                        const UChar* s2, int32_t s2Len,
+void TestIDNA::testCompare(const char16_t* s1, int32_t s1Len,
+                        const char16_t* s2, int32_t s2Len,
                         const char* testName, CompareFunc func,
                         UBool isEqual){
 
     UErrorCode status = U_ZERO_ERROR;
     int32_t retVal = func(s1,-1,s2,-1,UIDNA_DEFAULT,&status);
 
-    if(isEqual==TRUE &&  retVal !=0){
+    if(isEqual==true &&  retVal !=0){
         errln("Did not get the expected result for %s with null termniated strings.\n",testName);
     }
     if(U_FAILURE(status)){
@@ -669,7 +669,7 @@ void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
     status = U_ZERO_ERROR;
     retVal = func(s1,-1,s2,-1,UIDNA_ALLOW_UNASSIGNED,&status);
 
-    if(isEqual==TRUE &&  retVal !=0){
+    if(isEqual==true &&  retVal !=0){
         errln("Did not get the expected result for %s with null termniated strings with options set.\n", testName);
     }
     if(U_FAILURE(status)){
@@ -679,7 +679,7 @@ void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
     status = U_ZERO_ERROR;
     retVal = func(s1,s1Len,s2,s2Len,UIDNA_DEFAULT,&status);
 
-    if(isEqual==TRUE &&  retVal !=0){
+    if(isEqual==true &&  retVal !=0){
         errln("Did not get the expected result for %s with string length.\n",testName);
     }
     if(U_FAILURE(status)){
@@ -689,7 +689,7 @@ void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
     status = U_ZERO_ERROR;
     retVal = func(s1,s1Len,s2,s2Len,UIDNA_ALLOW_UNASSIGNED,&status);
 
-    if(isEqual==TRUE &&  retVal !=0){
+    if(isEqual==true &&  retVal !=0){
         errln("Did not get the expected result for %s with string length and options set.\n",testName);
     }
     if(U_FAILURE(status)){
@@ -700,11 +700,11 @@ void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
 void TestIDNA::testToASCII(const char* testName, TestFunc func){
 
     int32_t i;
-    UChar buf[MAX_DEST_SIZE];
+    char16_t buf[MAX_DEST_SIZE];
 
     for(i=0;i< UPRV_LENGTHOF(unicodeIn); i++){
         u_charsToUChars(asciiIn[i],buf, (int32_t)(strlen(asciiIn[i])+1));
-        testAPI(unicodeIn[i], buf,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
+        testAPI(unicodeIn[i], buf,testName, false,U_ZERO_ERROR, true, true, func);
         
     }
 }
@@ -712,19 +712,19 @@ void TestIDNA::testToASCII(const char* testName, TestFunc func){
 void TestIDNA::testToUnicode(const char* testName, TestFunc func){
 
     int32_t i;
-    UChar buf[MAX_DEST_SIZE];
+    char16_t buf[MAX_DEST_SIZE];
     
     for(i=0;i< UPRV_LENGTHOF(asciiIn); i++){
         u_charsToUChars(asciiIn[i],buf, (int32_t)(strlen(asciiIn[i])+1));
-        testAPI(buf,unicodeIn[i],testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
+        testAPI(buf,unicodeIn[i],testName,false,U_ZERO_ERROR, true, true, func);
     }
 }
 
 
 void TestIDNA::testIDNToUnicode(const char* testName, TestFunc func){
     int32_t i;
-    UChar buf[MAX_DEST_SIZE];
-    UChar expected[MAX_DEST_SIZE];
+    char16_t buf[MAX_DEST_SIZE];
+    char16_t expected[MAX_DEST_SIZE];
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
     UParseError parseError;
@@ -736,9 +736,9 @@ void TestIDNA::testIDNToUnicode(const char* testName, TestFunc func){
             errcheckln(status, "%s failed to convert domainNames[%i].Error: %s",testName, i, u_errorName(status));
             break;
         }
-        testAPI(buf,expected,testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
+        testAPI(buf,expected,testName,false,U_ZERO_ERROR, true, true, func);
          //test toUnicode with all labels in the string
-        testAPI(buf,expected,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
+        testAPI(buf,expected,testName, false,U_ZERO_ERROR, true, true, func);
         if(U_FAILURE(status)){
             errln( "%s failed to convert domainNames[%i].Error: %s \n",testName,i, u_errorName(status));
             break;
@@ -749,8 +749,8 @@ void TestIDNA::testIDNToUnicode(const char* testName, TestFunc func){
 
 void TestIDNA::testIDNToASCII(const char* testName, TestFunc func){
     int32_t i;
-    UChar buf[MAX_DEST_SIZE];
-    UChar expected[MAX_DEST_SIZE];
+    char16_t buf[MAX_DEST_SIZE];
+    char16_t expected[MAX_DEST_SIZE];
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
     UParseError parseError; 
@@ -762,9 +762,9 @@ void TestIDNA::testIDNToASCII(const char* testName, TestFunc func){
             errcheckln(status, "%s failed to convert domainNames[%i].Error: %s",testName,i, u_errorName(status));
             break;
         }
-        testAPI(buf,expected,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
+        testAPI(buf,expected,testName, false,U_ZERO_ERROR, true, true, func);
         //test toASCII with all labels in the string
-        testAPI(buf,expected,testName, FALSE,U_ZERO_ERROR, FALSE, TRUE, func);
+        testAPI(buf,expected,testName, false,U_ZERO_ERROR, false, true, func);
         if(U_FAILURE(status)){
             errln( "%s failed to convert domainNames[%i].Error: %s \n",testName,i, u_errorName(status));
             break;
@@ -777,27 +777,27 @@ void TestIDNA::testCompare(const char* testName, CompareFunc func){
     int32_t i;
 
 
-    UChar www[] = {0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
-    UChar com[] = {0x002E, 0x0043, 0x004F, 0x004D, 0x0000};
-    UChar buf[MAX_DEST_SIZE]={0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
+    char16_t www[] = {0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
+    char16_t com[] = {0x002E, 0x0043, 0x004F, 0x004D, 0x0000};
+    char16_t buf[MAX_DEST_SIZE]={0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
 
     UnicodeString source(www), uni0(www),uni1(www), ascii0(www), ascii1(www);
 
     uni0.append(unicodeIn[0]);
     uni0.append(com);
-    uni0.append((UChar)0x0000);
+    uni0.append((char16_t)0x0000);
 
     uni1.append(unicodeIn[1]);
     uni1.append(com);
-    uni1.append((UChar)0x0000);
+    uni1.append((char16_t)0x0000);
 
     ascii0.append(asciiIn[0]);
     ascii0.append(com);
-    ascii0.append((UChar)0x0000);
+    ascii0.append((char16_t)0x0000);
 
     ascii1.append(asciiIn[1]);
     ascii1.append(com);
-    ascii1.append((UChar)0x0000);
+    ascii1.append((char16_t)0x0000);
 
     for(i=0;i< UPRV_LENGTHOF(unicodeIn); i++){
 
@@ -809,27 +809,27 @@ void TestIDNA::testCompare(const char* testName, CompareFunc func){
         source.truncate(4);
         source.append(unicodeIn[i]);
         source.append(com);
-        source.append((UChar)0x0000);
+        source.append((char16_t)0x0000);
         // a) compare it with itself
-        const UChar* src = source.getBuffer();
+        const char16_t* src = source.getBuffer();
         int32_t srcLen = u_strlen(src); //subtract null
 
-        testCompare(src,srcLen,src,srcLen,testName, func, TRUE);
+        testCompare(src,srcLen,src,srcLen,testName, func, true);
         
         // b) compare it with asciiIn equivalent
-        testCompare(src,srcLen,buf,u_strlen(buf),testName, func,TRUE);
+        testCompare(src,srcLen,buf,u_strlen(buf),testName, func,true);
         
         // c) compare it with unicodeIn not equivalent
         if(i==0){
-            testCompare(src,srcLen,uni1.getBuffer(),uni1.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,uni1.getBuffer(),uni1.length()-1,testName, func,false);
         }else{
-            testCompare(src,srcLen,uni0.getBuffer(),uni0.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,uni0.getBuffer(),uni0.length()-1,testName, func,false);
         }
         // d) compare it with asciiIn not equivalent
         if(i==0){
-            testCompare(src,srcLen,ascii1.getBuffer(),ascii1.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,ascii1.getBuffer(),ascii1.length()-1,testName, func,false);
         }else{
-            testCompare(src,srcLen,ascii0.getBuffer(),ascii0.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,ascii0.getBuffer(),ascii0.length()-1,testName, func,false);
         }
 
     }
@@ -838,8 +838,8 @@ void TestIDNA::testCompare(const char* testName, CompareFunc func){
 #if 0
 
 static int32_t
-getNextSeperator(UChar *src,int32_t srcLength,
-                 UChar **limit){
+getNextSeperator(char16_t *src,int32_t srcLength,
+                 char16_t **limit){
     if(srcLength == -1){
         int32_t i;
         for(i=0 ; ;i++){
@@ -875,10 +875,10 @@ getNextSeperator(UChar *src,int32_t srcLength,
 
 void printPunycodeOutput(){
 
-    UChar dest[MAX_DEST_SIZE];
+    char16_t dest[MAX_DEST_SIZE];
     int32_t destCapacity=MAX_DEST_SIZE;
-    UChar* start;
-    UChar* limit;
+    char16_t* start;
+    char16_t* limit;
     int32_t labelLen=0;
     UBool caseFlags[MAX_DEST_SIZE];
     
@@ -905,13 +905,13 @@ void printPunycodeOutput(){
 
 void TestIDNA::testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
                               const char* IDNToUnicodeName, TestFunc IDNToUnicode){
-    UChar buf[MAX_DEST_SIZE];
+    char16_t buf[MAX_DEST_SIZE];
     int32_t bufLen=0;
 
     for(int32_t i=0;i< UPRV_LENGTHOF(errorCases);i++){
         ErrorCases errorCase = errorCases[i];
-        UChar* src =NULL;
-        if(errorCase.ascii != NULL){
+        char16_t* src =nullptr;
+        if(errorCase.ascii != nullptr){
             bufLen =  (int32_t)strlen(errorCase.ascii);
             u_charsToUChars(errorCase.ascii,buf, bufLen+1);
         }else{
@@ -925,16 +925,16 @@ void TestIDNA::testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
         // test toASCII
         testAPI(src,buf,
                 IDNToASCIIName, errorCase.useSTD3ASCIIRules,
-                errorCase.expected, TRUE, TRUE, IDNToASCII);
-        if(errorCase.testLabel ==TRUE){
+                errorCase.expected, true, true, IDNToASCII);
+        if(errorCase.testLabel ==true){
             testAPI(src,buf,
                 IDNToASCIIName, errorCase.useSTD3ASCIIRules,
-                errorCase.expected, FALSE,TRUE, IDNToASCII);
+                errorCase.expected, false,true, IDNToASCII);
         }
-        if(errorCase.testToUnicode ==TRUE){
-            testAPI((src==NULL)? NULL : buf,src,
+        if(errorCase.testToUnicode ==true){
+            testAPI((src==nullptr)? nullptr : buf,src,
                     IDNToUnicodeName, errorCase.useSTD3ASCIIRules,
-                    errorCase.expected, TRUE, TRUE, IDNToUnicode);   
+                    errorCase.expected, true, true, IDNToUnicode);   
         }
 
     }
@@ -945,15 +945,15 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
                                const char* IDNToASCIIName, TestFunc IDNToASCII,
                                const char* IDNToUnicodeName, TestFunc IDNToUnicode,
                                const char* toUnicodeName, TestFunc toUnicode){
-    UChar src[MAX_DEST_SIZE];
+    char16_t src[MAX_DEST_SIZE];
     int32_t srcLen=0;
-    UChar expected[MAX_DEST_SIZE];
+    char16_t expected[MAX_DEST_SIZE];
     int32_t expectedLen = 0;
     for(int32_t i=0;i< UPRV_LENGTHOF(conformanceTestCases);i++){
         const char* utf8Chars1 = conformanceTestCases[i].in;
         int32_t utf8Chars1Len = (int32_t)strlen(utf8Chars1);
         const char* utf8Chars2 = conformanceTestCases[i].out;
-        int32_t utf8Chars2Len = (utf8Chars2 == NULL) ? 0 : (int32_t)strlen(utf8Chars2);
+        int32_t utf8Chars2Len = (utf8Chars2 == nullptr) ? 0 : (int32_t)strlen(utf8Chars2);
 
         UErrorCode status = U_ZERO_ERROR;
         u_strFromUTF8(src,MAX_DEST_SIZE,&srcLen,utf8Chars1,utf8Chars1Len,&status);
@@ -961,7 +961,7 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
             errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
             continue;
         }
-        if(utf8Chars2 != NULL){
+        if(utf8Chars2 != nullptr){
             u_strFromUTF8(expected,MAX_DEST_SIZE,&expectedLen,utf8Chars2,utf8Chars2Len, &status);
             if(U_FAILURE(status)){
                 errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
@@ -972,25 +972,25 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
         if(conformanceTestCases[i].expectedStatus != U_ZERO_ERROR){
             // test toASCII
             testAPI(src,expected,
-                    IDNToASCIIName, FALSE,
+                    IDNToASCIIName, false,
                     conformanceTestCases[i].expectedStatus, 
-                    TRUE, 
+                    true, 
                     (conformanceTestCases[i].expectedStatus != U_IDNA_UNASSIGNED_ERROR),
                     IDNToASCII);
 
             testAPI(src,expected,
-                    toASCIIName, FALSE,
-                    conformanceTestCases[i].expectedStatus, TRUE, 
+                    toASCIIName, false,
+                    conformanceTestCases[i].expectedStatus, true, 
                     (conformanceTestCases[i].expectedStatus != U_IDNA_UNASSIGNED_ERROR),
                     toASCII);
         }
 
         testAPI(src,src,
-                IDNToUnicodeName, FALSE,
-                conformanceTestCases[i].expectedStatus, TRUE, TRUE, IDNToUnicode);
+                IDNToUnicodeName, false,
+                conformanceTestCases[i].expectedStatus, true, true, IDNToUnicode);
         testAPI(src,src,
-                toUnicodeName, FALSE,
-                conformanceTestCases[i].expectedStatus, TRUE, TRUE, toUnicode);
+                toUnicodeName, false,
+                conformanceTestCases[i].expectedStatus, true, true, toUnicode);
 
     }
     
@@ -998,15 +998,15 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
 */
 // test and ascertain
 // func(func(func(src))) == func(src)
-void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* testName,
+void TestIDNA::testChaining(const char16_t* src,int32_t numIterations,const char* testName,
                   UBool useSTD3ASCIIRules, UBool caseInsensitive, TestFunc func){
-    UChar even[MAX_DEST_SIZE];
-    UChar odd[MAX_DEST_SIZE];
-    UChar expected[MAX_DEST_SIZE];
+    char16_t even[MAX_DEST_SIZE];
+    char16_t odd[MAX_DEST_SIZE];
+    char16_t expected[MAX_DEST_SIZE];
     int32_t i=0,evenLen=0,oddLen=0,expectedLen=0;
     UErrorCode status = U_ZERO_ERROR;
     int32_t srcLen = u_strlen(src);
-    int32_t options = (useSTD3ASCIIRules == TRUE) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
+    int32_t options = (useSTD3ASCIIRules == true) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
     UParseError parseError;
 
     // test null-terminated source 
@@ -1031,7 +1031,7 @@ void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* t
             }
         }
     }
-    if(caseInsensitive ==TRUE){
+    if(caseInsensitive ==true){
         if( u_strCaseCompare(even,evenLen, expected,expectedLen, 0, &status) !=0 ||
             u_strCaseCompare(odd,oddLen, expected,expectedLen, 0, &status) !=0 ){
 
@@ -1068,7 +1068,7 @@ void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* t
             }
         }
     }
-    if(caseInsensitive ==TRUE){
+    if(caseInsensitive ==true){
         if( u_strCaseCompare(even,evenLen, expected,expectedLen, 0, &status) !=0 ||
             u_strCaseCompare(odd,oddLen, expected,expectedLen, 0, &status) !=0 ){
 
@@ -1106,7 +1106,7 @@ void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* t
             }
         }
     }
-    if(caseInsensitive ==TRUE){
+    if(caseInsensitive ==true){
         if( u_strCaseCompare(even,evenLen, expected,expectedLen, 0, &status) !=0 ||
             u_strCaseCompare(odd,oddLen, expected,expectedLen, 0, &status) !=0 ){
 
@@ -1141,7 +1141,7 @@ void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* t
             }
         }
     }
-    if(caseInsensitive ==TRUE){
+    if(caseInsensitive ==true){
         if( u_strCaseCompare(even,evenLen, expected,expectedLen, 0, &status) !=0 ||
             u_strCaseCompare(odd,oddLen, expected,expectedLen, 0, &status) !=0 ){
 
@@ -1158,14 +1158,14 @@ void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* t
 void TestIDNA::testChaining(const char* toASCIIName, TestFunc toASCII,
                   const char* toUnicodeName, TestFunc toUnicode){
     int32_t i;
-    UChar buf[MAX_DEST_SIZE];
+    char16_t buf[MAX_DEST_SIZE];
     
     for(i=0;i< UPRV_LENGTHOF(asciiIn); i++){
         u_charsToUChars(asciiIn[i],buf, (int32_t)(strlen(asciiIn[i])+1));
-        testChaining(buf,5,toUnicodeName, FALSE, FALSE, toUnicode);
+        testChaining(buf,5,toUnicodeName, false, false, toUnicode);
     }
     for(i=0;i< UPRV_LENGTHOF(unicodeIn); i++){
-        testChaining(unicodeIn[i], 5,toASCIIName, FALSE, TRUE, toASCII);
+        testChaining(unicodeIn[i], 5,toASCIIName, false, true, toASCII);
     }
 }
 
@@ -1176,27 +1176,27 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
     int32_t i;
 
 
-    UChar www[] = {0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
-    UChar com[] = {0x002E, 0x0043, 0x004F, 0x004D, 0x002E, /* root label separator */0x0000};
-    UChar buf[MAX_DEST_SIZE]={0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
+    char16_t www[] = {0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
+    char16_t com[] = {0x002E, 0x0043, 0x004F, 0x004D, 0x002E, /* root label separator */0x0000};
+    char16_t buf[MAX_DEST_SIZE]={0x0057, 0x0057, 0x0057, 0x002E, 0x0000};
 
     UnicodeString source(www), uni0(www),uni1(www), ascii0(www), ascii1(www);
 
     uni0.append(unicodeIn[0]);
     uni0.append(com);
-    uni0.append((UChar)0x0000);
+    uni0.append((char16_t)0x0000);
 
     uni1.append(unicodeIn[1]);
     uni1.append(com);
-    uni1.append((UChar)0x0000);
+    uni1.append((char16_t)0x0000);
 
     ascii0.append(asciiIn[0]);
     ascii0.append(com);
-    ascii0.append((UChar)0x0000);
+    ascii0.append((char16_t)0x0000);
 
     ascii1.append(asciiIn[1]);
     ascii1.append(com);
-    ascii1.append((UChar)0x0000);
+    ascii1.append((char16_t)0x0000);
 
     for(i=0;i< UPRV_LENGTHOF(unicodeIn); i++){
 
@@ -1208,34 +1208,34 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
         source.truncate(4);
         source.append(unicodeIn[i]);
         source.append(com);
-        source.append((UChar)0x0000);
+        source.append((char16_t)0x0000);
         
-        const UChar* src = source.getBuffer();
+        const char16_t* src = source.getBuffer();
         int32_t srcLen = u_strlen(src); //subtract null
         
         // b) compare it with asciiIn equivalent
-        testCompare(src,srcLen,buf,u_strlen(buf),testName, func,TRUE);
+        testCompare(src,srcLen,buf,u_strlen(buf),testName, func,true);
         
         // a) compare it with itself
-        testCompare(src,srcLen,src,srcLen,testName, func,TRUE);
+        testCompare(src,srcLen,src,srcLen,testName, func,true);
         
         
         // IDNToASCII comparison
-        testAPI(src,buf,IDNToASCIIName,FALSE,U_ZERO_ERROR,TRUE, TRUE, IDNToASCII);
+        testAPI(src,buf,IDNToASCIIName,false,U_ZERO_ERROR,true, true, IDNToASCII);
         // IDNToUnicode comparison
-        testAPI(buf,src,IDNToUnicodeName, FALSE,U_ZERO_ERROR, TRUE, TRUE, IDNToUnicode);
+        testAPI(buf,src,IDNToUnicodeName, false,U_ZERO_ERROR, true, true, IDNToUnicode);
 
         // c) compare it with unicodeIn not equivalent
         if(i==0){
-            testCompare(src,srcLen,uni1.getBuffer(),uni1.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,uni1.getBuffer(),uni1.length()-1,testName, func,false);
         }else{
-            testCompare(src,srcLen,uni0.getBuffer(),uni0.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,uni0.getBuffer(),uni0.length()-1,testName, func,false);
         }
         // d) compare it with asciiIn not equivalent
         if(i==0){
-            testCompare(src,srcLen,ascii1.getBuffer(),ascii1.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,ascii1.getBuffer(),ascii1.length()-1,testName, func,false);
         }else{
-            testCompare(src,srcLen,ascii0.getBuffer(),ascii0.length()-1,testName, func,FALSE);
+            testCompare(src,srcLen,ascii0.getBuffer(),ascii0.length()-1,testName, func,false);
         }
     }
 }   
@@ -1332,11 +1332,11 @@ static const int maxCharCount = 20;
 static uint32_t
 randul()
 {
-    static UBool initialized = FALSE;
+    static UBool initialized = false;
     if (!initialized)
     {
-        srand((unsigned)time(NULL));
-        initialized = TRUE;
+        srand((unsigned)time(nullptr));
+        initialized = true;
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
@@ -1381,8 +1381,8 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
                                         TestFunc uIDNA, const char* uIDNAName,
                                         int32_t options){
   
-    const UChar* srcUChars = src.getBuffer();
-    UChar exp[MAX_DEST_SIZE]={0};
+    const char16_t* srcUChars = src.getBuffer();
+    char16_t exp[MAX_DEST_SIZE]={0};
     int32_t expCap = MAX_DEST_SIZE, expLen=0;
     UErrorCode expStatus = U_ZERO_ERROR;
     UParseError parseError;
@@ -1394,7 +1394,7 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
     expLen = refIDNA(srcUChars, src.length()-1, exp, expCap,
                       options, &parseError, &expStatus);
 
-    UChar got[MAX_DEST_SIZE]={0};
+    char16_t got[MAX_DEST_SIZE]={0};
     int32_t gotCap = MAX_DEST_SIZE, gotLen=0;
     UErrorCode gotStatus = U_ZERO_ERROR;
 
@@ -1414,7 +1414,7 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
     // now we know that both implementations yielded same error
     if(U_SUCCESS(expStatus)){
         // compare the outputs if status == U_ZERO_ERROR
-        if(u_strCompare(exp, expLen, got, gotLen, TRUE) != 0){
+        if(u_strCompare(exp, expLen, got, gotLen, true) != 0){
             errln("Did not get the expected output while comparing " + UnicodeString(refIDNAName)
                + " with " + UnicodeString(uIDNAName)
                + " Expected: " + prettify(UnicodeString(exp, expLen))
@@ -1433,9 +1433,9 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
     return UnicodeString("");
 }
 
-void TestIDNA::testCompareReferenceImpl(const UChar* src, int32_t srcLen){
+void TestIDNA::testCompareReferenceImpl(const char16_t* src, int32_t srcLen){
     UnicodeString label(src,srcLen);
-    label.append((UChar)0x0000);
+    label.append((char16_t)0x0000);
 
     //test idnaref_toASCII and idnare
     UnicodeString asciiLabel = testCompareReferenceImpl(label, 
@@ -1456,7 +1456,7 @@ void TestIDNA::testCompareReferenceImpl(const UChar* src, int32_t srcLen){
                               UIDNA_USE_STD3_RULES | UIDNA_ALLOW_UNASSIGNED);
 
     if(asciiLabel.length()!=0){
-        asciiLabel.append((UChar)0x0000);
+        asciiLabel.append((char16_t)0x0000);
 
         // test toUnciode
         testCompareReferenceImpl(asciiLabel, 
@@ -1497,8 +1497,8 @@ void TestIDNA::TestIDNAMonkeyTest(){
     for(i=0; i<loopCount; i++){
         source.truncate(0);
         getTestSource(source);
-        source.append((UChar)0x0000);
-        const UChar* src = source.getBuffer();
+        source.append((char16_t)0x0000);
+        const char16_t* src = source.getBuffer();
         testCompareReferenceImpl(src,source.length()-1);
         testCompareReferenceImpl(src,source.length()-1);
     }
@@ -1508,8 +1508,8 @@ void TestIDNA::TestIDNAMonkeyTest(){
         source.truncate(0);
         source.append( UnicodeString(failures[i], -1, US_INV) );
         source = source.unescape();
-        source.append((UChar)0x0000);
-        const UChar *src = source.getBuffer();
+        source.append((char16_t)0x0000);
+        const char16_t *src = source.getBuffer();
         testCompareReferenceImpl(src,source.length()-1);
         //debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
     }
@@ -1525,10 +1525,10 @@ void TestIDNA::TestIDNAMonkeyTest(){
         UnicodeString expected("\\u043f\\u043e\\u0447\\u0435\\u043c\\u0443\\u0436\\u0435\\u043e\\u043d\\u0438\\u043d\\u0435\\u0433\\u043e\\u0432\\u043e\\u0440\\u044f\\u0442\\u043f\\u043e\\u0440\\u0443\\u0441\\u0441\\u043a\\u0438\\u0000", -1, US_INV);
         expected = expected.unescape();
         UnicodeString ascii("xn--b1abfaaepdrnnbgefbadotcwatmq2g4l");
-        ascii.append((UChar)0x0000);
-        testAPI(source.getBuffer(),ascii.getBuffer(), "uidna_toASCII", FALSE, U_ZERO_ERROR, TRUE, TRUE, uidna_toASCII);
+        ascii.append((char16_t)0x0000);
+        testAPI(source.getBuffer(),ascii.getBuffer(), "uidna_toASCII", false, U_ZERO_ERROR, true, true, uidna_toASCII);
         
-        testAPI(source.getBuffer(),ascii.getBuffer(), "idnaref_toASCII", FALSE, U_ZERO_ERROR, TRUE, TRUE, idnaref_toASCII);
+        testAPI(source.getBuffer(),ascii.getBuffer(), "idnaref_toASCII", false, U_ZERO_ERROR, true, true, idnaref_toASCII);
 
         testCompareReferenceImpl(source.getBuffer(), source.length()-1);
     }
@@ -1537,7 +1537,7 @@ void TestIDNA::TestIDNAMonkeyTest(){
 
 void TestIDNA::TestCompareReferenceImpl(){
 
-    UChar src [2] = {0,0};
+    char16_t src [2] = {0,0};
     int32_t srcLen = 0;
 
     // data even OK?
@@ -1551,7 +1551,7 @@ void TestIDNA::TestCompareReferenceImpl(){
     if (!assertSuccess("", dataStatus, true, __FILE__, __LINE__)) { return; }
 
     for (int32_t i = 0; i <= 0x10FFFF; i++){
-        if (quick == TRUE && i > 0x0FFF){
+        if (quick == true && i > 0x0FFF){
             return;
         }
         if(i == 0x30000){
@@ -1563,7 +1563,7 @@ void TestIDNA::TestCompareReferenceImpl(){
             src[1] = U16_TRAIL(i);
             srcLen =2;
         } else {
-            src[0] = (UChar)i;
+            src[0] = (char16_t)i;
             src[1] = 0;
             srcLen = 1;
         }
@@ -1600,16 +1600,16 @@ void TestIDNA::TestDataFile(){
 
 TestIDNA::~TestIDNA(){
     delete gPrep;
-    gPrep = NULL;
+    gPrep = nullptr;
 }
 
 NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
-    if(gPrep == NULL){
+    if(gPrep == nullptr){
         UParseError parseError;
         gPrep = NamePrepTransform::createInstance(parseError, status);
-        if(gPrep == NULL){
+        if(gPrep == nullptr){
            //status = U_MEMORY_ALLOCATION_ERROR;
-           return NULL;
+           return nullptr;
         }
     }
     return gPrep;

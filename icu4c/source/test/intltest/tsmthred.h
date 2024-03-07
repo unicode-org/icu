@@ -24,25 +24,25 @@ public:
     MultithreadTest();
     virtual ~MultithreadTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     /**
      * test that threads even work
      **/
-    void TestThreads(void);
+    void TestThreads();
 
 	/**
      * test that arabic shaping can work in threads
      **/
-    void TestArabicShapingThreads(void);
+    void TestArabicShapingThreads();
 	
 #if !UCONFIG_NO_FORMATTING
     /**
      * test that intl functions work in a multithreaded context
      **/
-    void TestThreadedIntl(void);
+    void TestThreadedIntl();
 #endif
-    void TestCollators(void);
+    void TestCollators();
     void TestString();
     void TestAnyTranslit();
     void TestUnifiedCache();

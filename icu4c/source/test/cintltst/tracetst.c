@@ -18,8 +18,9 @@
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
 #include "cintltst.h"
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /* We define the following to always test tracing, even when it's off in the library. */
@@ -112,8 +113,8 @@ static void test_format(const char *format, int32_t bufCap, int32_t indent,
 static int    gTraceEntryCount;
 static int    gTraceExitCount;
 static int    gTraceDataCount;
-static UBool  gFnNameError   = FALSE;
-static UBool  gFnFormatError = FALSE;
+static UBool  gFnNameError   = false;
+static UBool  gFnFormatError = false;
 
 static void U_CALLCONV testTraceEntry(const void *context, int32_t fnNumber) {
     (void)context; // suppress compiler warnings about unused variable
@@ -126,7 +127,7 @@ static void U_CALLCONV testTraceEntry(const void *context, int32_t fnNumber) {
     bogusFnName = utrace_functionName(-1);
     fnName = utrace_functionName(fnNumber);
     if (strcmp(fnName, bogusFnName) == 0) {
-        gFnNameError = TRUE;
+        gFnNameError = true;
     }
     /* printf("%s() Enter\n", fnName); */
 
@@ -145,14 +146,14 @@ static void U_CALLCONV testTraceExit(const void *context, int32_t fnNumber,
     bogusFnName = utrace_functionName(-1);
     fnName = utrace_functionName(fnNumber);
     if (strcmp(fnName, bogusFnName) == 0) {
-        gFnNameError = TRUE;
+        gFnNameError = true;
     }
 
     /* Verify that the format can be used.  */
     buf[0] = 0;
     utrace_vformat(buf, sizeof(buf), 0, fmt, args);
     if (strlen(buf) == 0) {
-        gFnFormatError = TRUE;
+        gFnFormatError = true;
     }
 
     /* printf("%s() %s\n", fnName, buf); */
@@ -174,14 +175,14 @@ static void U_CALLCONV testTraceData(const void *context, int32_t fnNumber, int3
     bogusFnName = utrace_functionName(-1);
     fnName = utrace_functionName(fnNumber);
     if (strcmp(fnName, bogusFnName) == 0) {
-        gFnNameError = TRUE;
+        gFnNameError = true;
     }
 
     /* Verify that the format can be used.  */
     buf[0] = 0;
     utrace_vformat(buf, sizeof(buf), 0, fmt, args);
     if (strlen(buf) == 0) {
-        gFnFormatError = TRUE;
+        gFnFormatError = true;
     }
 
     /* printf("  %s()   %s\n", fnName, buf); */
@@ -201,14 +202,14 @@ static void pseudo_ucnv_close(UConverter * cnv)
 {
     UTRACE_ENTRY_OC(UTRACE_UCNV_UNLOAD);
     UTRACE_DATA1(UTRACE_OPEN_CLOSE, "unload converter %p", cnv);
-    UTRACE_EXIT_VALUE((int32_t)TRUE);
+    UTRACE_EXIT_VALUE((int32_t)true);
 }
 #endif
 
 /*
  *   TestTraceAPI
  */
-static void TestTraceAPI() {
+static void TestTraceAPI(void) {
 
 
     UTraceEntry   *originalTEntryFunc;
@@ -226,17 +227,17 @@ static void TestTraceAPI() {
 
 
     /* verify that set/get of tracing functions returns what was set.  */
-    {
+    if (originalTContext != NULL) {
         UTraceEntry *e;
         UTraceExit  *x;
         UTraceData  *d;
         const void  *context;
         const void  *newContext = (const char *)originalTContext + 1;
-        
+
         TEST_ASSERT(originalTEntryFunc != testTraceEntry);
         TEST_ASSERT(originalTExitFunc != testTraceExit);
         TEST_ASSERT(originalTDataFunc != testTraceData);
-        
+
         utrace_setFunctions(newContext, testTraceEntry, testTraceExit, testTraceData);
         utrace_getFunctions(&context, &e, &x, &d);
         TEST_ASSERT(e == testTraceEntry);
@@ -275,8 +276,8 @@ static void TestTraceAPI() {
         gTraceEntryCount = 0;
         gTraceExitCount  = 0;
         gTraceDataCount  = 0;
-        gFnNameError     = FALSE;
-        gFnFormatError   = FALSE;
+        gFnNameError     = false;
+        gFnFormatError   = false;
         utrace_setLevel(UTRACE_OPEN_CLOSE);
 #if ENABLE_TRACING_ORIG_VAL
         cnv = ucnv_open(NULL, &status);
@@ -287,11 +288,17 @@ static void TestTraceAPI() {
         TEST_ASSERT(U_SUCCESS(status));
         pseudo_ucnv_close(cnv);
 #endif
-        TEST_ASSERT(gTraceEntryCount > 0);
-        TEST_ASSERT(gTraceExitCount  > 0);
-        TEST_ASSERT(gTraceDataCount  > 0);
-        TEST_ASSERT(gFnNameError   == FALSE);
-        TEST_ASSERT(gFnFormatError == FALSE);
+        if (originalTContext == NULL) {
+            TEST_ASSERT(gTraceEntryCount == 0);
+            TEST_ASSERT(gTraceExitCount  == 0);
+            TEST_ASSERT(gTraceDataCount  == 0);
+        } else {
+            TEST_ASSERT(gTraceEntryCount > 0);
+            TEST_ASSERT(gTraceExitCount  > 0);
+            TEST_ASSERT(gTraceDataCount  > 0);
+        }
+        TEST_ASSERT(gFnNameError   == false);
+        TEST_ASSERT(gFnFormatError == false);
     }
 
 
@@ -334,7 +341,7 @@ static void TestTraceAPI() {
             ptr = massiveBigEndianPtr.ptr;
             test_format("a 128 bit ptr %p", 50, 0, "a 128 bit ptr 10002000300040005000600070008000", __LINE__, ptr);
         } else {
-            TEST_ASSERT(FALSE);
+            TEST_ASSERT(false);
             /*  TODO:  others? */
         }
 

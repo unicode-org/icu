@@ -10,6 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdbool.h>
+
 #include "unicode/upluralrules.h"
 #include "unicode/ustring.h"
 #include "unicode/uenum.h"
@@ -74,7 +76,7 @@ enum {
     kKeywordBufLen = 32
 };
 
-static void TestPluralRules()
+static void TestPluralRules(void)
 {
     const PluralRulesTestItem * testItemPtr;
     log_verbose("\nTesting uplrules_open() and uplrules_select() with various parameters\n");
@@ -131,7 +133,7 @@ static void TestPluralRules()
     }
 }
 
-static void TestOrdinalRules() {
+static void TestOrdinalRules(void) {
     U_STRING_DECL(two, "two", 3);
     UChar keyword[8];
     int32_t length;
@@ -143,7 +145,7 @@ static void TestOrdinalRules() {
     }
     U_STRING_INIT(two, "two", 3);
     length = uplrules_select(upr, 2., keyword, 8, &errorCode);
-    if (U_FAILURE(errorCode) || u_strCompare(keyword, length, two, 3, FALSE) != 0) {
+    if (U_FAILURE(errorCode) || u_strCompare(keyword, length, two, 3, false) != 0) {
         log_data_err("uplrules_select(en-ordinal, 2) failed - %s\n", u_errorName(errorCode));
     }
     uplrules_close(upr);
@@ -187,13 +189,13 @@ static const KeywordsForLang getKeywordsItems[] = {
     { "lv", { "zero", "one", "other" } },
     { "hr", { "one", "few", "other" } },
     { "sl", { "one", "two", "few", "other" } },
-    { "he", { "one", "two", "many", "other" } },
+    { "he", { "one", "two", "other" } },
     { "cs", { "one", "few", "many", "other" } },
     { "ar", { "zero", "one", "two", "few", "many" , "other" } },
     { NULL, { NULL } }
 };
 
-static void TestGetKeywords() {
+static void TestGetKeywords(void) {
     /*
      * We don't know the order in which the enumeration will return keywords,
      * so we have an array with known keywords in a fixed order and then
@@ -211,13 +213,13 @@ static void TestGetKeywords() {
         
         /* initialize arrays for expected and get results */
         for (i = 0; i < kNumKeywords; i++) {
-            expectKeywords[i] = FALSE;
-            getKeywords[i] = FALSE;
+            expectKeywords[i] = false;
+            getKeywords[i] = false;
         }
         for (i = 0; i < kNumKeywords && itemPtr->keywords[i] != NULL; i++) {
             iKnown = getKeywordIndex(itemPtr->keywords[i]);
             if (iKnown >= 0) {
-                expectKeywords[iKnown] = TRUE;
+                expectKeywords[iKnown] = true;
             }
         }
         
@@ -237,7 +239,7 @@ static void TestGetKeywords() {
                 if (iKnown < 0) {
                     log_err("FAIL: uplrules_getKeywords for locale %s, unknown keyword %s\n", itemPtr->locale, keyword );
                 } else {
-                    getKeywords[iKnown] = TRUE;
+                    getKeywords[iKnown] = true;
                 }
                 keywordCount++;
             }
@@ -258,7 +260,7 @@ static void TestGetKeywords() {
     }
 }
 
-static void TestFormatted() {
+static void TestFormatted(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UNumberFormatter* unumf = NULL;
     UFormattedNumber* uresult = NULL;
@@ -298,7 +300,7 @@ cleanup:
     unumf_closeResult(uresult);
 }
 
-static void TestSelectRange() {
+static void TestSelectRange(void) {
     UErrorCode ec = U_ZERO_ERROR;
     UNumberRangeFormatter* unumrf = NULL;
     UFormattedNumberRange* uresult = NULL;
