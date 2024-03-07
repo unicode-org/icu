@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709816794168,
+  "lastUpdate": 1709825531626,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38284,6 +38284,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2039968.1066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a0cdb9cda5d0bcd86c06ae7a73fa45682cf90dea",
+          "message": "ICU-22597 Add MSVC build bot to build ICU4C without exceptions\n\nSee #2829",
+          "timestamp": "2024-03-07T16:14:16+01:00",
+          "tree_id": "64d107e417ae3502d6d6d12430367dd052d7d031",
+          "url": "https://github.com/unicode-org/icu/commit/a0cdb9cda5d0bcd86c06ae7a73fa45682cf90dea"
+        },
+        "date": 1709825443029,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 210.4586,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8928239.3456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2146961.3339,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8204687.9923,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2043746.7026,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
