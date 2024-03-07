@@ -231,9 +231,19 @@ int32_t ChineseCalendar::handleGetExtendedYear(UErrorCode& status) {
     if (newestStamp(UCAL_ERA, UCAL_YEAR, kUnset) <= fStamp[UCAL_EXTENDED_YEAR]) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     } else {
-        int32_t cycle = internalGet(UCAL_ERA, 1) - 1; // 0-based cycle
         // adjust to the instance specific epoch
-        year = cycle * 60 + internalGet(UCAL_YEAR, 1) - (fEpochYear - CHINESE_EPOCH_YEAR);
+        int32_t cycle = internalGet(UCAL_ERA, 1);
+        year = internalGet(UCAL_YEAR, 1);
+        // Handle int32 overflow calculation for
+        // year = year + (cycle-1) * 60 -(fEpochYear - CHINESE_EPOCH_YEAR)
+        if (uprv_add32_overflow(cycle, -1, &cycle) || // 0-based cycle
+            uprv_mul32_overflow(cycle, 60, &cycle) ||
+            uprv_add32_overflow(year, cycle, &year) ||
+            uprv_add32_overflow(year, -(fEpochYear-CHINESE_EPOCH_YEAR),
+                                &year)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
     }
     return year;
 }
