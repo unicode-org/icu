@@ -145,6 +145,9 @@ void UnitsTest::testExtractConvertibility() {
         {"percent", "portion", CONVERTIBLE},                                         //
         {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},            //
         {"second-per-meter", "meter-per-second", RECIPROCAL},                        //
+        {"mile-per-hour", "meter-per-second", CONVERTIBLE},                        //
+        {"knot", "meter-per-second", CONVERTIBLE},                        //
+        {"beaufort", "meter-per-second", CONVERTIBLE},                        //
     };
 
     for (const auto &testCase : testCases) {
@@ -299,6 +302,19 @@ void UnitsTest::testConverter() {
         {"ton", "pound", 1.0, 2000},
         {"stone", "pound", 1.0, 14},
         {"stone", "kilogram", 1.0, 6.35029},
+        // Speed
+        {"mile-per-hour", "meter-per-second", 1.0, 0.44704},
+        {"knot", "meter-per-second", 1.0, 0.514444},
+        {"beaufort", "meter-per-second", 1.0, 0.95},
+        {"beaufort", "meter-per-second", 4.0, 6.75},
+        {"beaufort", "meter-per-second", 7.0, 15.55},
+        {"beaufort", "meter-per-second", 10.0, 26.5},
+        {"beaufort", "meter-per-second", 13.0, 39.15},
+        {"beaufort", "mile-per-hour", 1.0, 2.12509},
+        {"beaufort", "mile-per-hour", 4.0, 15.099319971367215},
+        {"beaufort", "mile-per-hour", 7.0, 34.784359341445956},
+        {"beaufort", "mile-per-hour", 10.0, 59.2788},
+        {"beaufort", "mile-per-hour", 13.0, 87.5761},
         // Temperature
         {"celsius", "fahrenheit", 0.0, 32.0},
         {"celsius", "fahrenheit", 10.0, 50.0},

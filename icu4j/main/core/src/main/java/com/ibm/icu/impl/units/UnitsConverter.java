@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.util.MeasureUnit;
 
+// TODO ICU-22683: Consider splitting handling of special mappings into separate (possibly internal) class
 public class UnitsConverter {
     private BigDecimal conversionRate;
     private boolean reciprocal;
@@ -211,6 +212,7 @@ public class UnitsConverter {
         return result;
     }
 
+    // TODO per CLDR-17421 and ICU-22683: consider getting the data below from CLDR
     private static final BigDecimal[] minMetersPerSecForBeaufort = {
         // Minimum m/s (base) values for each Bft value, plus an extra artificial value;
         // when converting from Bft to m/s, the middle of the range will be used
