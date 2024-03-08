@@ -256,8 +256,12 @@ int32_t ChineseCalendar::handleGetExtendedYear(UErrorCode& status) {
  * whether or not the given month is a leap month.
  * @stable ICU 2.8
  */
-int32_t ChineseCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
-    int32_t thisStart = handleComputeMonthStart(extendedYear, month, true) -
+int32_t ChineseCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const {
+    int32_t thisStart = handleComputeMonthStart(extendedYear, month, true, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    thisStart = thisStart -
         kEpochStartAsJulianDay + 1; // Julian day -> local days
     int32_t nextStart = newMoonNear(thisStart + SYNODIC_GAP, true);
     return nextStart - thisStart;
@@ -338,16 +342,26 @@ const UFieldResolutionTable* ChineseCalendar::getFieldResolutionTable() const {
  * day of the given month and year
  * @stable ICU 2.8
  */
-int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
+int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+       return 0;
+    }
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
         double m = month;
-        eyear += (int32_t)ClockMath::floorDivide(m, 12.0, &m);
+        if (uprv_add32_overflow(eyear, ClockMath::floorDivide(m, 12.0, &m), &eyear)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
         month = (int32_t)m;
     }
 
-    int32_t gyear = eyear + fEpochYear - 1; // Gregorian year
+    int32_t gyear;
+    if (uprv_add32_overflow(eyear, fEpochYear - 1, &gyear)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     int32_t theNewYear = newYear(gyear);
     int32_t newMoon = newMoonNear(theNewYear + month * 29, true);
     
@@ -358,13 +372,14 @@ int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
 
     // Clone the calendar so we don't mess with the real one.
     LocalPointer<ChineseCalendar> work(clone());
-    if (work.isNull())
+    if (work.isNull()) {
         return 0;
+    }
 
-    UErrorCode status = U_ZERO_ERROR;
     work->computeGregorianFields(julianDay, status);
-    if (U_FAILURE(status))
+    if (U_FAILURE(status)) {
         return 0;
+    }
 
     // This will modify the MONTH and IS_LEAP_MONTH fields (only)
     work->computeChineseFields(newMoon, work->getGregorianYear(),
@@ -458,7 +473,11 @@ void ChineseCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode
             // Now do the standard roll computation on m, with the
             // allowed range of 0..n-1, where n is 12 or 13.
             int32_t n = hasLeapMonthBetweenWinterSolstices ? 13 : 12; // Months in this year
-            int32_t newM = (m + amount) % n;
+            if (uprv_add32_overflow(amount, m, &amount)) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            int32_t newM = amount % n;
             if (newM < 0) {
                 newM += n;
             }
@@ -986,7 +1005,10 @@ ChineseCalendar::setTemporalMonthCode(const char* code, UErrorCode& status )
     status = U_ILLEGAL_ARGUMENT_ERROR;
 }
 
-int32_t ChineseCalendar::internalGetMonth() const {
+int32_t ChineseCalendar::internalGetMonth(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     if (resolveFields(kMonthPrecedence) == UCAL_MONTH) {
         return internalGet(UCAL_MONTH);
     }
@@ -996,24 +1018,29 @@ int32_t ChineseCalendar::internalGetMonth() const {
     temp->set(UCAL_DATE, 1);
     // Calculate the UCAL_MONTH and UCAL_IS_LEAP_MONTH by adding number of
     // months.
-    UErrorCode status = U_ZERO_ERROR;
     temp->roll(UCAL_MONTH, internalGet(UCAL_ORDINAL_MONTH), status);
-    U_ASSERT(U_SUCCESS(status));
+    if (U_FAILURE(status)) {
+        return 0;
+    }
 
     ChineseCalendar *nonConstThis = (ChineseCalendar*)this; // cast away const
     nonConstThis->internalSet(UCAL_IS_LEAP_MONTH, temp->get(UCAL_IS_LEAP_MONTH, status));
-    U_ASSERT(U_SUCCESS(status));
     int32_t month = temp->get(UCAL_MONTH, status);
-    U_ASSERT(U_SUCCESS(status));
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     nonConstThis->internalSet(UCAL_MONTH, month);
     return month;
 }
 
-int32_t ChineseCalendar::internalGetMonth(int32_t defaultValue) const {
+int32_t ChineseCalendar::internalGetMonth(int32_t defaultValue, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     if (resolveFields(kMonthPrecedence) == UCAL_MONTH) {
         return internalGet(UCAL_MONTH, defaultValue);
     }
-    return internalGetMonth();
+    return internalGetMonth(status);
 }
 
 U_NAMESPACE_END

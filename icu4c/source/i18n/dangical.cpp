@@ -51,6 +51,8 @@ U_NAMESPACE_BEGIN
 // Constructors...
 //-------------------------------------------------------------------------
 
+const TimeZone* getDangiCalZoneAstroCalc(UErrorCode &status);
+
 DangiCalendar::DangiCalendar(const Locale& aLocale, UErrorCode& success)
 :   ChineseCalendar(aLocale, DANGI_EPOCH_YEAR, getDangiCalZoneAstroCalc(success), success)
 {
@@ -136,7 +138,7 @@ static void U_CALLCONV initDangiCalZoneAstroCalc(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_DANGI_CALENDAR, calendar_dangi_cleanup);
 }
 
-const TimeZone* DangiCalendar::getDangiCalZoneAstroCalc(UErrorCode &status) const {
+const TimeZone* getDangiCalZoneAstroCalc(UErrorCode &status) {
     umtx_initOnce(gDangiCalendarInitOnce, &initDangiCalZoneAstroCalc, status);
     return gDangiCalendarZoneAstroCalc;
 }

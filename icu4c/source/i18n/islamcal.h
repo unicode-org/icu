@@ -210,7 +210,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * @param year  The hijri year
    * @param year  The hijri month, 0-based
    */
-  virtual int64_t monthStart(int32_t year, int32_t month) const;
+  virtual int64_t monthStart(int32_t year, int32_t month, UErrorCode& status) const;
     
   /**
    * Find the day number on which a particular month of the true/lunar
@@ -250,7 +250,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * @param year  The hijri month, 0-based
    * @internal
    */
-  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const override;
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const override;
   
   /**
    * Return the number of days in the given Islamic year
@@ -266,7 +266,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
   /**
    * @internal
    */
-  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
+  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth, UErrorCode& status) const override;
 
   //-------------------------------------------------------------------------
   // Functions for converting from milliseconds to field values
@@ -468,7 +468,7 @@ class U_I18N_API IslamicCivilCalendar : public IslamicCalendar {
    * @param year  The hijri month, 0-based
    * @internal
    */
-  virtual int64_t monthStart(int32_t year, int32_t month) const override;
+  virtual int64_t monthStart(int32_t year, int32_t month, UErrorCode& status) const override;
 
   /**
    * Return the length (in days) of the given month.
@@ -477,7 +477,7 @@ class U_I18N_API IslamicCivilCalendar : public IslamicCalendar {
    * @param year  The hijri month, 0-based
    * @internal
    */
-  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const override;
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const override;
 
   /**
    * Return the number of days in the given Islamic year
@@ -651,7 +651,7 @@ class U_I18N_API IslamicUmalquraCalendar : public IslamicCalendar {
    * @param year  The hijri month, 0-based
    * @internal
    */
-  virtual int64_t monthStart(int32_t year, int32_t month) const override;
+  virtual int64_t monthStart(int32_t year, int32_t month, UErrorCode& status) const override;
 
   /**
    * Return the length (in days) of the given month.
@@ -660,7 +660,7 @@ class U_I18N_API IslamicUmalquraCalendar : public IslamicCalendar {
    * @param year  The hijri month, 0-based
    * @internal
    */
-  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const override;
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const override;
 
   /**
    * Return the number of days in the given Islamic year

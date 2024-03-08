@@ -78,10 +78,17 @@ int32_t TaiwanCalendar::handleGetExtendedYear(UErrorCode& status)
         year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     } else {
         int32_t era = internalGet(UCAL_ERA, MINGUO);
+        year = internalGet(UCAL_YEAR, 1);
         if(era == MINGUO) {
-            year =     internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
+            if (uprv_add32_overflow(year, kTaiwanEraStart, &year)) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return 0;
+            }
         } else if(era == BEFORE_MINGUO) {
-            year = 1 - internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
+            if (uprv_add32_overflow(1 + kTaiwanEraStart, -year, &year)) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return 0;
+            }
         } else {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;

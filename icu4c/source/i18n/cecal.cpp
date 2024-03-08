@@ -77,7 +77,7 @@ CECalendar::operator=(const CECalendar& right)
 //-------------------------------------------------------------------------
 
 int64_t
-CECalendar::handleComputeMonthStart(int32_t eyear,int32_t emonth, UBool /*useMonth*/) const
+CECalendar::handleComputeMonthStart(int32_t eyear,int32_t emonth, UBool /*useMonth*/, UErrorCode& /*status*/) const
 {
     int64_t year64 = eyear;
     // handle month > 12, < 0 (e.g. from add/set)

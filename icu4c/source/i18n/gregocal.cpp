@@ -538,14 +538,21 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField,
 
 int64_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
 
-                                                   UBool /* useMonth */) const
+                                                   UBool /* useMonth */, UErrorCode& status) const
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     GregorianCalendar *nonConstThis = (GregorianCalendar*)this; // cast away const
 
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        eyear += ClockMath::floorDivide(month, 12, &month);
+        if (uprv_add32_overflow(ClockMath::floorDivide(month, 12, &month),
+                                eyear, &eyear)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
     }
 
     UBool isLeap = eyear%4 == 0;
@@ -584,7 +591,7 @@ int64_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
     return julianDay;
 }
 
-int32_t GregorianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month)  const
+int32_t GregorianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& /* status */)  const
 {
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
@@ -601,10 +608,10 @@ int32_t GregorianCalendar::handleGetYearLength(int32_t eyear) const {
 
 
 int32_t
-GregorianCalendar::monthLength(int32_t month) const
+GregorianCalendar::monthLength(int32_t month, UErrorCode& status) const
 {
     int32_t year = internalGet(UCAL_EXTENDED_YEAR);
-    return handleGetMonthLength(year, month);
+    return handleGetMonthLength(year, month, status);
 }
 
 // -------------------------------------
@@ -641,10 +648,12 @@ GregorianCalendar::validateFields() const
     // specially.
     if (isSet(UCAL_DATE)) {
         int32_t date = internalGet(UCAL_DATE);
+        UErrorCode internalStatus = U_ZERO_ERROR;
         if (date < getMinimum(UCAL_DATE) ||
-            date > monthLength(internalGetMonth())) {
+            date > monthLength(internalGetMonth(internalStatus), internalStatus) ||
+            U_FAILURE(internalStatus)) {
                 return false;
-            }
+        }
     }
 
     if (isSet(UCAL_DAY_OF_YEAR)) {
@@ -821,7 +830,10 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         case UCAL_DAY_OF_MONTH:
         case UCAL_WEEK_OF_MONTH:
             {
-                int32_t max = monthLength(internalGetMonth());
+                int32_t max = monthLength(internalGetMonth(status), status);
+                if (U_FAILURE(status)) {
+                    return;
+                }
                 UDate t = internalGetTime();
                 // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
                 // additional 10 if we are after the cutover. Thus the monthStart
@@ -854,7 +866,11 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         // may be one year before or after the calendar year.
         int32_t isoYear = get(UCAL_YEAR_WOY, status);
         int32_t isoDoy = internalGet(UCAL_DAY_OF_YEAR);
-        if (internalGetMonth() == UCAL_JANUARY) {
+        int32_t month = internalGetMonth(status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (month == UCAL_JANUARY) {
             if (woy >= 52) {
                 isoDoy += handleGetYearLength(isoYear);
             }
@@ -1197,7 +1213,11 @@ int32_t GregorianCalendar::handleGetExtendedYear(UErrorCode& status) {
         break;
 
     case UCAL_YEAR_WOY:
-        year = handleGetExtendedYearFromWeekFields(internalGet(UCAL_YEAR_WOY), internalGet(UCAL_WEEK_OF_YEAR));
+        year = handleGetExtendedYearFromWeekFields(
+            internalGet(UCAL_YEAR_WOY), internalGet(UCAL_WEEK_OF_YEAR), status);
+        if (U_FAILURE(status)) {
+            return 0;
+        }
 #if defined (U_DEBUG_CAL)
         //    if(internalGet(UCAL_YEAR_WOY) != year) {
         fprintf(stderr, "%s:%d: hGEYFWF[%d,%d] ->  %d\n", 
@@ -1212,14 +1232,17 @@ int32_t GregorianCalendar::handleGetExtendedYear(UErrorCode& status) {
     return year;
 }
 
-int32_t GregorianCalendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy)
+int32_t GregorianCalendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy, UErrorCode& status)
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // convert year to extended form
     int32_t era = internalGet(UCAL_ERA, AD);
     if(era == BC) {
         yearWoy = 1 - yearWoy;
     }
-    return Calendar::handleGetExtendedYearFromWeekFields(yearWoy, woy);
+    return Calendar::handleGetExtendedYearFromWeekFields(yearWoy, woy, status);
 }
 
 

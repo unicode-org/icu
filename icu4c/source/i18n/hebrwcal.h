@@ -319,7 +319,7 @@ public:
      * implementation than the default implementation in Calendar.
      * @internal
      */
-    virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const override;
+    virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const override;
 
     /**
      * Return the number of days in the given extended year of this
@@ -369,7 +369,7 @@ public:
      * @internal
      */
     virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month,
-                                                   UBool useMonth) const override;
+                                                   UBool useMonth, UErrorCode& status) const override;
 
 
     /**
@@ -443,7 +443,7 @@ public:
   virtual void setTemporalMonthCode(const char* code, UErrorCode& status ) override;
 
  protected:
-   virtual int32_t internalGetMonth() const override;
+   virtual int32_t internalGetMonth(UErrorCode& status) const override;
 
  private: // Calendar-specific implementation
     /**

@@ -197,6 +197,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(Test22633PersianOverflow);
     TESTCASE_AUTO(Test22633HebrewOverflow);
     TESTCASE_AUTO(Test22633AMPMOverflow);
+    TESTCASE_AUTO(Test22633SetGetTimeOverflow);
 
     TESTCASE_AUTO(TestAddOverflow);
 
@@ -5719,6 +5720,56 @@ void CalendarTest::Test22633AMPMOverflow() {
     assertTrue("Should return success", U_SUCCESS(status));
 }
 
+void CalendarTest::Test22633SetGetTimeOverflow() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale locale = Locale::getEnglish();
+    LocalPointer<StringEnumeration> values(
+        Calendar::getKeywordValuesForLocale("calendar", locale, false, status),
+        status);
+    assertTrue("Should return success", U_SUCCESS(status));
+    if (U_SUCCESS(status)) {
+        const char* value = nullptr;
+        while ((value = values->next(nullptr, status)) != nullptr && U_SUCCESS(status)) {
+            bool isHebrew = strcmp("hebrew", value) == 0;
+            locale.setKeywordValue("calendar", value, status);
+            assertTrue("Should return success", U_SUCCESS(status));
+
+            LocalPointer<Calendar> cal(Calendar::createInstance(*TimeZone::getGMT(), locale, status), status);
+            assertTrue("Should return success", U_SUCCESS(status));
+
+            assertTrue("Should return success", U_SUCCESS(status));
+            for (int32_t i = 0; i < UCAL_FIELD_COUNT; i++) {
+                status = U_ZERO_ERROR;
+                cal->clear();
+                cal->set(static_cast<UCalendarDateFields>(i), INT32_MAX);
+                cal->getTime(status);
+
+                status = U_ZERO_ERROR;
+                cal->clear();
+                cal->set(static_cast<UCalendarDateFields>(i), INT32_MIN);
+                cal->getTime(status);
+
+                if (!isHebrew) {
+                    for (int32_t j = 0; j < UCAL_FIELD_COUNT; j++) {
+                        status = U_ZERO_ERROR;
+                        cal->clear();
+                        cal->set(static_cast<UCalendarDateFields>(i), INT32_MAX);
+                        cal->set(static_cast<UCalendarDateFields>(j), INT32_MAX);
+                        cal->getTime(status);
+
+                        status = U_ZERO_ERROR;
+                        cal->clear();
+                        cal->set(static_cast<UCalendarDateFields>(i), INT32_MIN);
+                        cal->set(static_cast<UCalendarDateFields>(j), INT32_MIN);
+                        cal->getTime(status);
+                    }
+                }
+            }
+            status = U_ZERO_ERROR;
+        }
+    }
+}
+
 void CalendarTest::TestChineseCalendarComputeMonthStart() {  // ICU-22639
     UErrorCode status = U_ZERO_ERROR;
 
@@ -5740,7 +5791,7 @@ void CalendarTest::TestChineseCalendarComputeMonthStart() {  // ICU-22639
                 chinese.hasLeapMonthBetweenWinterSolstices);
 
     assertEquals("monthStart", monthStart,
-                 chinese.handleComputeMonthStart(eyear, 0, false));
+                 chinese.handleComputeMonthStart(eyear, 0, false, status));
 
     // Calling a const method must not haved changed the state of the object.
     assertFalse("hasLeapMonthBetweenWinterSolstices [#2]",

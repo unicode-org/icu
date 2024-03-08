@@ -508,7 +508,7 @@ int32_t HebrewCalendar::handleGetLimit(UCalendarDateFields field, ELimitType lim
 * Returns the length of the given month in the given year
 * @internal
 */
-int32_t HebrewCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
+int32_t HebrewCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& /* status */) const {
     // Resolve out-of-range months.  This is necessary in order to
     // obtain the correct year.  We correct to
     // a 12- or 13-month year (add/subtract 12 or 13, depending
@@ -546,7 +546,7 @@ int32_t HebrewCalendar::handleGetYearLength(int32_t eyear) const {
 
 void HebrewCalendar::validateField(UCalendarDateFields field, UErrorCode &status) {
     if ((field == UCAL_MONTH || field == UCAL_ORDINAL_MONTH)
-        && !isLeapYear(handleGetExtendedYear(status)) && internalGetMonth() == ADAR_1) {
+        && !isLeapYear(handleGetExtendedYear(status)) && internalGetMonth(status) == ADAR_1) {
         if (U_FAILURE(status)) {
             return;
         }
@@ -656,8 +656,11 @@ int32_t HebrewCalendar::handleGetExtendedYear(UErrorCode& status ) {
 * Return JD of start of given month/year.
 * @internal
 */
-int64_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
-    UErrorCode status = U_ZERO_ERROR;
+int64_t HebrewCalendar::handleComputeMonthStart(
+    int32_t eyear, int32_t month, UBool /*useMonth*/, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // Resolve out-of-range months.  This is necessary in order to
     // obtain the correct year.  We correct to
     // a 12- or 13-month year (add/subtract 12 or 13, depending
@@ -665,11 +668,19 @@ int64_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
     // the leap year determines whether or not month 5 (Adar 1)
     // is present, we allow 0..12 in any given year.
     while (month < 0) {
-        month += monthsInYear(--eyear);
+        if (uprv_add32_overflow(eyear, -1, &eyear) ||
+            uprv_add32_overflow(month, monthsInYear(eyear), &month)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
     }
     // Careful: allow 0..12 in all years
     while (month > 12) {
-        month -= monthsInYear(eyear++);
+        if (uprv_add32_overflow(month, -monthsInYear(eyear), &month) ||
+            uprv_add32_overflow(eyear, 1, &eyear)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
     }
 
     int64_t day = startOfYear(eyear, status);
@@ -784,17 +795,26 @@ void HebrewCalendar::setTemporalMonthCode(const char* code, UErrorCode& status )
     status = U_ILLEGAL_ARGUMENT_ERROR;
 }
 
-int32_t HebrewCalendar::internalGetMonth() const {
+int32_t HebrewCalendar::internalGetMonth(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     if (resolveFields(kMonthPrecedence) == UCAL_ORDINAL_MONTH) {
         int32_t ordinalMonth = internalGet(UCAL_ORDINAL_MONTH);
         HebrewCalendar *nonConstThis = (HebrewCalendar*)this; // cast away const
 
-        UErrorCode status = U_ZERO_ERROR;
         int32_t year = nonConstThis->handleGetExtendedYear(status);
-        U_ASSERT(U_SUCCESS(status));
-        return ordinalMonth + (((!isLeapYear(year)) && (ordinalMonth > ADAR_1)) ? 1: 0);
+        if (U_FAILURE(status)) {
+            return 0;
+        }
+        if (isLeapYear(year) || ordinalMonth <= ADAR_1) {
+            return ordinalMonth;
+        }
+        if (!uprv_add32_overflow(ordinalMonth, 1, &ordinalMonth)) {
+            return ordinalMonth;
+        }
     }
-    return Calendar::internalGetMonth();
+    return Calendar::internalGetMonth(status);
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HebrewCalendar)

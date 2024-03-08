@@ -70,7 +70,12 @@ EthiopicCalendar::handleGetExtendedYear(UErrorCode& status)
     if (internalGet(UCAL_ERA, AMETE_MIHRET) == AMETE_MIHRET) {
         return internalGet(UCAL_YEAR, 1); // Default to year 1
     }
-    return internalGet(UCAL_YEAR, 1) - AMETE_MIHRET_DELTA;
+    int32_t year = internalGet(UCAL_YEAR, 1);
+    if (uprv_add32_overflow(year, -AMETE_MIHRET_DELTA, &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 void
@@ -194,8 +199,13 @@ EthiopicAmeteAlemCalendar::handleGetExtendedYear(UErrorCode& status)
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         return internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     }
-    return internalGet(UCAL_YEAR, 1 + AMETE_MIHRET_DELTA)
-            - AMETE_MIHRET_DELTA; // Default to year 1 of Amelete Mihret
+    // Default to year 1 of Amelete Mihret
+    int32_t year = internalGet(UCAL_YEAR, 1 + AMETE_MIHRET_DELTA);
+    if (uprv_add32_overflow(year, -AMETE_MIHRET_DELTA, &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 void
