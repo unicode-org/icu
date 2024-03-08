@@ -209,7 +209,7 @@ public:
    * @param year  The month(0-based) in Indian year
    * @internal
    */
-  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const override;
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const override;
   
   /**
    * Return the number of days in the given Indian year
@@ -225,7 +225,7 @@ public:
   /**
    * @internal
    */
-  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
+  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth, UErrorCode& status) const override;
 
   //-------------------------------------------------------------------------
   // Functions for converting from milliseconds to field values

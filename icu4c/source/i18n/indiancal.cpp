@@ -108,7 +108,7 @@ static UBool isGregorianLeap(int32_t year)
  * @param eyear  The year in Saka Era
  * @param month  The month(0-based) in Indian calendar
  */
-int32_t IndianCalendar::handleGetMonthLength(int32_t eyear, int32_t month) const {
+int32_t IndianCalendar::handleGetMonthLength(int32_t eyear, int32_t month, UErrorCode& /* status */) const {
    if (month < 0 || month > 11) {
       eyear += ClockMath::floorDivide(month, 12, &month);
    }
@@ -203,14 +203,20 @@ static double IndianToJD(int32_t year, int32_t month, int32_t date) {
  * @param eyear The year in Indian Calendar measured from Saka Era (78 AD).
  * @param month The month in Indian calendar
  */
-int64_t IndianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /* useMonth */ ) const {
+int64_t IndianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /* useMonth */, UErrorCode& status) const {
+   if (U_FAILURE(status)) {
+       return 0;
+   }
 
    //month is 0 based; converting it to 1-based 
    int32_t imonth;
 
     // If the month is out of range, adjust it into range, and adjust the extended year accordingly
    if (month < 0 || month > 11) {
-      eyear += (int32_t)ClockMath::floorDivide(month, 12, &month);
+      if (uprv_add32_overflow(eyear, ClockMath::floorDivide(month, 12, &month), &eyear)) {
+          status = U_ILLEGAL_ARGUMENT_ERROR;
+          return 0;
+      }
    }
 
    if(month == 12){

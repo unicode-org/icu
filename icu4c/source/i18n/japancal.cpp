@@ -146,8 +146,11 @@ const char *JapaneseCalendar::getType() const
     return "japanese";
 }
 
-int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear) 
+int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear, UErrorCode& status) 
 {
+    if (U_FAILURE(status)) {
+      return 0;
+    }
     int32_t era = internalGetEra();
     // TODO do we assume we can trust 'era'?  What if it is denormalized?
 
@@ -155,9 +158,10 @@ int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear)
 
     // Find out if we are at the edge of an era
     int32_t eraStart[3] = { 0,0,0 };
-    UErrorCode status = U_ZERO_ERROR;
     gJapaneseEraRules->getStartDate(era, eraStart, status);
-    U_ASSERT(U_SUCCESS(status));
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     if(eyear == eraStart[0]) {
         // Yes, we're in the first year of this era.
         return eraStart[1]  // month
@@ -210,9 +214,12 @@ int32_t JapaneseCalendar::handleGetExtendedYear(UErrorCode& status)
         }
 
         // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc
-        year = internalGet(UCAL_YEAR, 1)    // pin to minimum of year 1 (first year)
-            + eraStartYear                  // add gregorian starting year
-            - 1;                            // Subtract one because year starts at 1
+        year = internalGet(UCAL_YEAR, 1);   // pin to minimum of year 1 (first year)
+        // add gregorian starting year, subtract one because year starts at 1
+        if (uprv_add32_overflow(year, eraStartYear - 1,  &year)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
     }
     return year;
 }
@@ -223,7 +230,7 @@ void JapaneseCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status
     //Calendar::timeToFields(theTime, quick, status);
     GregorianCalendar::handleComputeFields(julianDay, status);
     int32_t year = internalGet(UCAL_EXTENDED_YEAR); // Gregorian year
-    int32_t eraIdx = gJapaneseEraRules->getEraIndex(year, internalGetMonth() + 1, internalGet(UCAL_DAY_OF_MONTH), status);
+    int32_t eraIdx = gJapaneseEraRules->getEraIndex(year, internalGetMonth(status) + 1, internalGet(UCAL_DAY_OF_MONTH), status);
 
     internalSet(UCAL_ERA, eraIdx);
     internalSet(UCAL_YEAR, year - gJapaneseEraRules->getStartYear(eraIdx, status) + 1);

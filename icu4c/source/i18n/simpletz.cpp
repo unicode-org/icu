@@ -519,7 +519,12 @@ SimpleTimeZone::getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingT
 
     rawOffsetGMT = getRawOffset();
     int32_t year, month, dom, dow, millis;
-    int32_t day = ClockMath::floorDivide(date, U_MILLIS_PER_DAY, &millis);
+    double dday = ClockMath::floorDivide(date, U_MILLIS_PER_DAY, &millis);
+    if (dday > INT32_MAX || dday < INT32_MIN) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    int32_t day = dday;
 
     Grego::dayToFields(day, year, month, dom, dow);
 

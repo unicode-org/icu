@@ -212,7 +212,7 @@ protected:
      * @param eyear the extended year
      * @internal
      */
-    virtual int32_t getDefaultMonthInYear(int32_t eyear) override;
+    virtual int32_t getDefaultMonthInYear(int32_t eyear, UErrorCode& status) override;
 
     /***
      * Called by computeJulianDay.  Returns the default day (1-based) for the month,

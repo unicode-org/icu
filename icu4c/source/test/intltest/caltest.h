@@ -340,6 +340,7 @@ public: // package
     void Test22633PersianOverflow();
     void Test22633HebrewOverflow();
     void Test22633AMPMOverflow();
+    void Test22633SetGetTimeOverflow();
 
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
     void TestFirstDayOfWeek();

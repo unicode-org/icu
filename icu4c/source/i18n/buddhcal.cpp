@@ -74,9 +74,12 @@ int32_t BuddhistCalendar::handleGetExtendedYear(UErrorCode& status)
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     } else {
-        // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
-        year = internalGet(UCAL_YEAR, kGregorianEpoch - kBuddhistEraStart)
-                + kBuddhistEraStart;
+        // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc
+        year = internalGet(UCAL_YEAR, kGregorianEpoch - kBuddhistEraStart);
+        if (uprv_add32_overflow(year, kBuddhistEraStart, &year)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
     }
     return year;
 }

@@ -88,8 +88,6 @@ class DangiCalendar : public ChineseCalendar {
 
  private:
 
-  const TimeZone* getDangiCalZoneAstroCalc(UErrorCode &status) const;
-
   // UObject stuff
  public: 
   /**

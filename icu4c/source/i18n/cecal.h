@@ -98,7 +98,7 @@ protected:
      * Return JD of start of given month/extended year
      * @internal
      */
-    virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const override;
+    virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth, UErrorCode& status) const override;
 
     /**
      * Calculate the limit for a specified type of limit and field
