@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709851648297,
+  "lastUpdate": 1709856817315,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18988,6 +18988,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 4.425543960008964,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "784056dfdbb38e88d5d768c1cc4b5e32ba3b72b3",
+          "message": "ICU-22633 Fix overflow in Chinese calendar\n\nFix issue found by https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=67256",
+          "timestamp": "2024-03-07T16:03:00-08:00",
+          "tree_id": "c96e10303abd6485e847030e7f713e193d12cd6f",
+          "url": "https://github.com/unicode-org/icu/commit/784056dfdbb38e88d5d768c1cc4b5e32ba3b72b3"
+        },
+        "date": 1709856730571,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.338644582047968,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
