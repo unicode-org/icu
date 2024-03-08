@@ -32,7 +32,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
     private final DateTimeRule dateTimeRule;
     private final int startYear;
     private final int endYear;
-	private final int DO_NOT_MERGE = 2;
+    private final int DO_NOT_MERGE = 3;
 
     /**
      * Constructs a <code>AnnualTimeZoneRule</code> with the name, the GMT offset of its
