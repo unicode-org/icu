@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1709857276895,
+  "lastUpdate": 1709950030570,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38608,6 +38608,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2091962.4008,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "4c664b2180fc0d8b597f59a6747a7665a118d833",
+          "message": "ICU-22534 Changed ExternalBreakEngine so that it's surrounded by U_HIDE_INTERNAL_API instead of U_HIDE_DRAFT_API.",
+          "timestamp": "2024-03-08T17:49:33-08:00",
+          "tree_id": "85ddcf2bb416aee6596da800f59e7ffe6c429e46",
+          "url": "https://github.com/unicode-org/icu/commit/4c664b2180fc0d8b597f59a6747a7665a118d833"
+        },
+        "date": 1709949945553,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 151.1832,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8570361.9595,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2213238.8191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7582294.8205,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2091197.9509,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
