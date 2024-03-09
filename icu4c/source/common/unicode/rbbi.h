@@ -44,7 +44,7 @@ class  UnhandledEngine;
 class  UStack;
 
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_HIDE_INTERNAL_API
 /**
  * The ExternalBreakEngine class define an abstract interface for the host environment
  * to provide a low level facility to break text for unicode text in script that the text boundary
@@ -103,7 +103,7 @@ class ExternalBreakEngine : public UObject {
                                int32_t* foundBreaks, int32_t foundBreaksCapacity,
                                UErrorCode& status) const = 0;
 };
-#endif  /* U_HIDE_DRAFT_API */
+#endif  /* U_HIDE_INTERNAL_API */
 
 
 /**
@@ -797,7 +797,7 @@ private:
     void dumpTables();
 #endif  /* U_HIDE_INTERNAL_API */
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Register a new external break engine. The external break engine will be adopted.
      * Because ICU may choose to cache break engine internally, this must
@@ -809,7 +809,7 @@ private:
      */
     static void U_EXPORT2 registerExternalBreakEngine(
                   ExternalBreakEngine* toAdopt, UErrorCode& status);
-#endif  /* U_HIDE_DRAFT_API */
+#endif  /* U_HIDE_INTERNAL_API */
 
 };
 
