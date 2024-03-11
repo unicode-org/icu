@@ -275,24 +275,36 @@ config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
 	@echo "Name: $(PACKAGE)-uc" >> $@
-	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" >> $@
-	@echo "Libs.private:" '$${baselibs}' >> $@
+ifeq ($(ENABLE_SHARED),)
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' >> $@
+else
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" >> $@
+	@echo "Libs.private:" "${ICULIBS_DT}" '$${baselibs}' >> $@
+endif
 	@echo $@ updated.
 
 config/icu-i18n.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Internationalization library" >> $@
 	@echo "Name: $(PACKAGE)-i18n" >> $@
+ifeq ($(ENABLE_SHARED),)
 	@echo "Requires: icu-uc" >> $@
-	@echo "Libs:" "${ICULIBS_I18N}" >> $@
+else
+	@echo "Requires.private: icu-uc" >> $@
+endif
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_I18N}" >> $@
 	@echo $@ updated.
 
 config/icu-io.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Stream and I/O Library" >> $@
 	@echo "Name: $(PACKAGE)-io" >> $@
+ifeq ($(ENABLE_SHARED),)
 	@echo "Requires: icu-i18n" >> $@
-	@echo "Libs:" "${ICULIBS_IO}" >> $@
+else
+	@echo "Requires.private: icu-i18n" >> $@
+endif
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_IO}" >> $@
 	@echo $@ updated.
 
 ICULEHB_LIBS=@ICULEHB_LIBS@
@@ -306,12 +318,20 @@ config/icu-lx.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Paragraph Layout library $(USING_HB)" >> $@
 	@echo "Name: $(PACKAGE)-lx" >> $@
+ifeq ($(ENABLE_SHARED),)
 ifneq ($(ICULEHB_LIBS),)
 	@echo "Requires: icu-le-hb icu-uc" >> $@
 else
 	@echo "Requires: icu-le" >> $@
 endif
-	@echo "Libs:" "${ICULIBS_LX}" >> $@
+else
+ifneq ($(ICULEHB_LIBS),)
+	@echo "Requires.private: icu-le-hb icu-uc" >> $@
+else
+	@echo "Requires.private: icu-le" >> $@
+endif
+endif
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_LX}" >> $@
 	@echo $@ updated.
 
 
