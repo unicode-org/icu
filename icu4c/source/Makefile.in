@@ -275,24 +275,24 @@ config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
 	@echo "Name: $(PACKAGE)-uc" >> $@
-	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" >> $@
-	@echo "Libs.private:" '$${baselibs}' >> $@
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" >> $@
+	@echo "Libs.private:" "${ICULIBS_DT}" '$${baselibs}' >> $@
 	@echo $@ updated.
 
 config/icu-i18n.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Internationalization library" >> $@
 	@echo "Name: $(PACKAGE)-i18n" >> $@
-	@echo "Requires: icu-uc" >> $@
-	@echo "Libs:" "${ICULIBS_I18N}" >> $@
+	@echo "Requires.private: icu-uc" >> $@
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_I18N}" >> $@
 	@echo $@ updated.
 
 config/icu-io.pc: config/icu.pc Makefile icudefs.mk
 	@cat config/icu.pc > $@
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Stream and I/O Library" >> $@
 	@echo "Name: $(PACKAGE)-io" >> $@
-	@echo "Requires: icu-i18n" >> $@
-	@echo "Libs:" "${ICULIBS_IO}" >> $@
+	@echo "Requires.private: icu-i18n" >> $@
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_IO}" >> $@
 	@echo $@ updated.
 
 ICULEHB_LIBS=@ICULEHB_LIBS@
@@ -307,11 +307,11 @@ config/icu-lx.pc: config/icu.pc Makefile icudefs.mk
 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Paragraph Layout library $(USING_HB)" >> $@
 	@echo "Name: $(PACKAGE)-lx" >> $@
 ifneq ($(ICULEHB_LIBS),)
-	@echo "Requires: icu-le-hb icu-uc" >> $@
+	@echo "Requires.private: icu-le-hb icu-uc" >> $@
 else
-	@echo "Requires: icu-le" >> $@
+	@echo "Requires.private: icu-le" >> $@
 endif
-	@echo "Libs:" "${ICULIBS_LX}" >> $@
+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_LX}" >> $@
 	@echo $@ updated.
 
 
