@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710184184574,
+  "lastUpdate": 1710184303701,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -37708,6 +37708,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.665857084388605,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tushuhei@gmail.com",
+            "name": "Shuhei Iitsuka",
+            "username": "tushuhei"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "37ecee3a0c80bb10108e7e6d4a91989756384a67",
+          "message": "ICU-22666 Update ML model to improve Japanese phrase breaking quality",
+          "timestamp": "2024-03-11T12:00:03-07:00",
+          "tree_id": "d7f8acdb1897a739dafa511a410d51885b84e5a7",
+          "url": "https://github.com/unicode-org/icu/commit/37ecee3a0c80bb10108e7e6d4a91989756384a67"
+        },
+        "date": 1710184214506,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.590309503892929,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
