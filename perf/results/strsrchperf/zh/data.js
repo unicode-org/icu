@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710043665780,
+  "lastUpdate": 1710184718716,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -23290,6 +23290,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 50.8363,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tushuhei@gmail.com",
+            "name": "Shuhei Iitsuka",
+            "username": "tushuhei"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "37ecee3a0c80bb10108e7e6d4a91989756384a67",
+          "message": "ICU-22666 Update ML model to improve Japanese phrase breaking quality",
+          "timestamp": "2024-03-11T12:00:03-07:00",
+          "tree_id": "d7f8acdb1897a739dafa511a410d51885b84e5a7",
+          "url": "https://github.com/unicode-org/icu/commit/37ecee3a0c80bb10108e7e6d4a91989756384a67"
+        },
+        "date": 1710184515445,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 21.8626,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 50.9179,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
