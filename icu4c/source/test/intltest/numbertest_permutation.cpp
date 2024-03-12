@@ -104,9 +104,9 @@ void NumberPermutationTest::testPermutations() {
 
     // Build up the golden data string as we evaluate all permutations
     std::vector<UnicodeString> resultLines;
-    resultLines.push_back(u"# © 2019 and later: Unicode, Inc. and others.");
-    resultLines.push_back(u"# License & terms of use: http://www.unicode.org/copyright.html");
-    resultLines.push_back(UnicodeString());
+    resultLines.emplace_back(u"# © 2019 and later: Unicode, Inc. and others.");
+    resultLines.emplace_back(u"# License & terms of use: http://www.unicode.org/copyright.html");
+    resultLines.emplace_back();
 
     // Take combinations of 3 orthogonal options
     for (size_t i = 0; i < skeletonParts.size() - 2; i++) {
@@ -141,7 +141,7 @@ void NumberPermutationTest::testPermutations() {
                                 }
                             }
 
-                            resultLines.push_back(UnicodeString());
+                            resultLines.emplace_back();
                         }
                     }
                 }

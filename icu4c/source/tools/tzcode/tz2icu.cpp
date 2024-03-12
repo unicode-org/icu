@@ -377,7 +377,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
                     // 32bit int by the ICU resource bundle.
                     break;
                 } else {
-                    info.transitions.push_back(Transition(transitionTimes[i], transitionTypes[i]));
+                    info.transitions.emplace_back(transitionTimes[i], transitionTypes[i]);
                 }
             }
     
@@ -393,7 +393,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
         }
     } else {
         for (i=0; i<timecnt; ++i) {
-            info.transitions.push_back(Transition(transitionTimes[i], transitionTypes[i]));
+            info.transitions.emplace_back(transitionTimes[i], transitionTypes[i]);
         }
     }
 
@@ -461,7 +461,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData) {
         for (char* p=str; p<limit; ++p) {
             char* start = p;
             while (*p != 0) ++p;
-            info.abbrs.push_back(string(start, p-start));
+            info.abbrs.emplace_back(start, p - start);
             abbroffset.push_back(start-str);
         }
 
@@ -1322,10 +1322,10 @@ void ZoneInfo::optimizeTypeList() {
 
             // Replace type list
             types.clear();
-            types.push_back(initialSimplifiedType);
+            types.emplace_back(initialSimplifiedType);
             for (set<SimplifiedZoneType>::const_iterator i=simpleset.begin(); i!=simpleset.end(); ++i) {
                 if (*i < initialSimplifiedType || initialSimplifiedType < *i) {
-                    types.push_back(*i);
+                    types.emplace_back(*i);
                 }
             }
 
