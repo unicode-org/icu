@@ -33,11 +33,9 @@ U_NAMESPACE_BEGIN
 class StringEnumeration;
 class MeasureUnitImpl;
 
-namespace number {
-namespace impl {
+namespace number::impl {
 class LongNameHandler;
-}
-} // namespace number
+} // namespace number::impl
 
 /**
  * Enumeration for unit complexity. There are three levels:

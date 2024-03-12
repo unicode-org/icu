@@ -60,10 +60,8 @@ class UFormattedNumberData;
 }
 }
 
-namespace numparse {
-namespace impl {
+namespace numparse::impl {
 class NumberParserImpl;
-}
 }
 
 /**

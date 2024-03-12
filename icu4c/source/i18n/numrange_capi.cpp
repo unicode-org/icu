@@ -24,8 +24,7 @@ using namespace icu::number::impl;
 
 
 U_NAMESPACE_BEGIN
-namespace number {
-namespace impl {
+namespace number::impl {
 
 /**
  * Implementation class for UNumberRangeFormatter. Wraps a LocalizedRangeNumberFormatter.
@@ -59,8 +58,7 @@ UFormattedNumberRangeImpl::~UFormattedNumberRangeImpl() {
     fImpl.fData = nullptr;
 }
 
-} // namespace impl
-} // namespace number
+} // namespace number::impl
 U_NAMESPACE_END
 
 

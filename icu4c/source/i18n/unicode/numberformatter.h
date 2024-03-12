@@ -93,15 +93,13 @@ class IFixedDecimal;
 class FieldPositionIteratorHandler;
 class FormattedStringBuilder;
 
-namespace numparse {
-namespace impl {
+namespace numparse::impl {
 
 // Forward declarations:
 class NumberParserImpl;
 class MultiplierParseHandler;
 
-}
-}
+} // namespace numparse::impl
 
 namespace units {
 

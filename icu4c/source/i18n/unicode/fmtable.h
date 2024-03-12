@@ -35,10 +35,9 @@
 U_NAMESPACE_BEGIN
 
 class CharString;
-namespace number {
-namespace impl {
+
+namespace number::impl {
 class DecimalQuantity;
-}
 }
 
 /**
