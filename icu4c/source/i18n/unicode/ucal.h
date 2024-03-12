@@ -474,12 +474,7 @@ enum UCalendarDateFields {
      * One more than the highest normal UCalendarDateFields value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-#ifdef U_HIDE_DRAFT_API
-    // Must include all fields that will be in structs
-    UCAL_FIELD_COUNT = UCAL_IS_LEAP_MONTH + 2,
-#else  // U_HIDE_DRAFT_API (for UCAL_ORDINAL_MONTH)
     UCAL_FIELD_COUNT = UCAL_ORDINAL_MONTH + 1,
-#endif  // U_HIDE_DRAFT_API (for UCAL_ORDINAL_MONTH)
 
 #endif  // U_FORCE_HIDE_DEPRECATED_API
 
