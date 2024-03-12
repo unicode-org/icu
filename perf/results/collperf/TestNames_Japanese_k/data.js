@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710255454437,
+  "lastUpdate": 1710261115762,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38770,6 +38770,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5750744.4416,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "18c7d48b3e527ccead8ba93abd6059dfe1329258",
+          "message": "ICU-22533 Add docs on Continuous Integration\n\nSee #2876",
+          "timestamp": "2024-03-12T09:14:24-07:00",
+          "tree_id": "1cf11c531df5cddb4a73e09f28e5d5ce3e6bd90e",
+          "url": "https://github.com/unicode-org/icu/commit/18c7d48b3e527ccead8ba93abd6059dfe1329258"
+        },
+        "date": 1710260906162,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 237.3215,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20521886.7479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5367439.6315,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19477409.5354,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5819671.7885,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
