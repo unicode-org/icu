@@ -15,8 +15,8 @@
 #include "formatted_string_builder.h"
 #include "number_types.h"
 
-U_NAMESPACE_BEGIN namespace number {
-namespace impl {
+U_NAMESPACE_BEGIN
+namespace number::impl {
 
 /**
  * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
@@ -350,8 +350,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
     AdoptingSignumModifierStore mods[StandardPlural::COUNT] = {};
 };
 
-} // namespace impl
-} // namespace number
+} // namespace number::impl
 U_NAMESPACE_END
 
 

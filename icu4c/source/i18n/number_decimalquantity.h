@@ -13,8 +13,8 @@
 #include "plurrule_impl.h"
 #include "number_types.h"
 
-U_NAMESPACE_BEGIN namespace number {
-namespace impl {
+U_NAMESPACE_BEGIN
+namespace number::impl {
 
 // Forward-declare (maybe don't want number_utils.h included here):
 class DecNum;
@@ -549,8 +549,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void switchStorage();
 };
 
-} // namespace impl
-} // namespace number
+} // namespace number::impl
 U_NAMESPACE_END
 
 

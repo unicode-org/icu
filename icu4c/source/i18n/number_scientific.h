@@ -9,8 +9,8 @@
 
 #include "number_types.h"
 
-U_NAMESPACE_BEGIN namespace number {
-namespace impl {
+U_NAMESPACE_BEGIN
+namespace number::impl {
 
 // Forward-declare
 class ScientificHandler;
@@ -59,8 +59,7 @@ class ScientificHandler : public UMemory, public MicroPropsGenerator, public Mul
     friend class ScientificModifier;
 };
 
-} // namespace impl
-} // namespace number
+} // namespace number::impl
 U_NAMESPACE_END
 
 #endif //__NUMBER_SCIENTIFIC_H__

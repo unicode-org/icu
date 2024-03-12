@@ -16,9 +16,7 @@
 #include "numparse_impl.h"
 
 U_NAMESPACE_BEGIN
-namespace number {
-namespace impl {
-
+namespace number::impl {
 
 class AutoAffixPatternProvider;
 class CurrencyPluralInfoAffixProvider;
@@ -257,9 +255,7 @@ class NumberPropertyMapper {
                                DecimalFormatProperties* exportedProperties, UErrorCode& status);
 };
 
-
-} // namespace impl
-} // namespace numparse
+} // namespace number::impl
 U_NAMESPACE_END
 
 #endif //__NUMBER_MAPPER_H__

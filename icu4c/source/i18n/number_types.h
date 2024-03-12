@@ -20,8 +20,7 @@
 #include "formatted_string_builder.h"
 
 U_NAMESPACE_BEGIN
-namespace number {
-namespace impl {
+namespace number::impl {
 
 // For convenience and historical reasons, import the Field typedef to the namespace.
 typedef FormattedStringBuilder::Field Field;
@@ -369,9 +368,7 @@ class U_I18N_API NullableValue {
     T fValue;
 };
 
-
-} // namespace impl
-} // namespace number
+} // namespace number::impl
 U_NAMESPACE_END
 
 #endif //__NUMBER_TYPES_H__
