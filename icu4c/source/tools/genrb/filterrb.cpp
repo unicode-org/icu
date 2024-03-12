@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 
 #include <iostream>
+#include <memory>
 #include <stack>
 
 #include "filterrb.h"
@@ -150,7 +151,7 @@ SimpleRuleBasedPathFilter::Tree::Tree(const Tree& other)
         : fIncluded(other.fIncluded), fChildren(other.fChildren) {
     // Note: can't use the default copy assignment because of the std::unique_ptr
     if (other.fWildcard) {
-        fWildcard.reset(new Tree(*other.fWildcard));
+        fWildcard = std::make_unique<Tree>(*other.fWildcard);
     }
 }
 
@@ -181,7 +182,7 @@ void SimpleRuleBasedPathFilter::Tree::applyRule(
     if (key == "*") {
         // Case 1: Wildcard
         if (!fWildcard) {
-            fWildcard.reset(new Tree());
+            fWildcard = std::make_unique<Tree>();
         }
         // Apply the rule to fWildcard and also to all existing children.
         it++;

@@ -4,6 +4,7 @@
 // Fuzzer for ICU RelativeDateTimeFormatter.
 
 #include <cstring>
+#include <memory>
 
 #include "fuzzer_utils.h"
 
@@ -48,8 +49,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     context = validCapitalizations[
         static_cast<int>(context) %
             (sizeof(validCapitalizations) / sizeof(UDisplayContext))];
-    formatter.reset(new icu::RelativeDateTimeFormatter(
-        locale, nullptr, style, context, status));
+    formatter =
+        std::make_unique<icu::RelativeDateTimeFormatter>(locale, nullptr, style, context, status);
 
     if (U_SUCCESS(status)) {
         URelativeDateTimeUnit unit;
