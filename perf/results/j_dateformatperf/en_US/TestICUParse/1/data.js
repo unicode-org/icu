@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710255026259,
+  "lastUpdate": 1710260570326,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18838,6 +18838,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 371.9818684622074,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "18c7d48b3e527ccead8ba93abd6059dfe1329258",
+          "message": "ICU-22533 Add docs on Continuous Integration\n\nSee #2876",
+          "timestamp": "2024-03-12T09:14:24-07:00",
+          "tree_id": "1cf11c531df5cddb4a73e09f28e5d5ce3e6bd90e",
+          "url": "https://github.com/unicode-org/icu/commit/18c7d48b3e527ccead8ba93abd6059dfe1329258"
+        },
+        "date": 1710260481419,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 375.6230801196982,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
