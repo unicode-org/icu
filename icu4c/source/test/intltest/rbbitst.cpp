@@ -1717,21 +1717,21 @@ RBBICharMonkey::RBBICharMonkey() {
     fSets             = new UVector(status);
 
     // Important: Keep class names the same as the class contents.
-    fSets->addElement(fCRLFSet, status); classNames.push_back("CRLF");
-    fSets->addElement(fControlSet, status); classNames.push_back("Control");
-    fSets->addElement(fExtendSet, status); classNames.push_back("Extended");
-    fSets->addElement(fRegionalIndicatorSet, status); classNames.push_back("RegionalIndicator");
+    fSets->addElement(fCRLFSet, status); classNames.emplace_back("CRLF");
+    fSets->addElement(fControlSet, status); classNames.emplace_back("Control");
+    fSets->addElement(fExtendSet, status); classNames.emplace_back("Extended");
+    fSets->addElement(fRegionalIndicatorSet, status); classNames.emplace_back("RegionalIndicator");
     if (!fPrependSet->isEmpty()) {
-        fSets->addElement(fPrependSet, status); classNames.push_back("Prepend");
+        fSets->addElement(fPrependSet, status); classNames.emplace_back("Prepend");
     }
-    fSets->addElement(fSpacingSet, status); classNames.push_back("Spacing");
-    fSets->addElement(fHangulSet, status); classNames.push_back("Hangul");
-    fSets->addElement(fZWJSet, status); classNames.push_back("ZWJ");
-    fSets->addElement(fExtendedPictSet, status); classNames.push_back("ExtendedPict");
-    fSets->addElement(fViramaSet, status); classNames.push_back("Virama");
-    fSets->addElement(fLinkingConsonantSet, status); classNames.push_back("LinkingConsonant");
-    fSets->addElement(fExtCccZwjSet, status); classNames.push_back("ExtCcccZwj");
-    fSets->addElement(fAnySet, status); classNames.push_back("Any");
+    fSets->addElement(fSpacingSet, status); classNames.emplace_back("Spacing");
+    fSets->addElement(fHangulSet, status); classNames.emplace_back("Hangul");
+    fSets->addElement(fZWJSet, status); classNames.emplace_back("ZWJ");
+    fSets->addElement(fExtendedPictSet, status); classNames.emplace_back("ExtendedPict");
+    fSets->addElement(fViramaSet, status); classNames.emplace_back("Virama");
+    fSets->addElement(fLinkingConsonantSet, status); classNames.emplace_back("LinkingConsonant");
+    fSets->addElement(fExtCccZwjSet, status); classNames.emplace_back("ExtCcccZwj");
+    fSets->addElement(fAnySet, status); classNames.emplace_back("Any");
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2040,31 +2040,31 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fDictionarySet);
 
     // Add classes and their names
-    fSets->addElement(fCRSet, status); classNames.push_back("CR");
-    fSets->addElement(fLFSet, status); classNames.push_back("LF");
-    fSets->addElement(fNewlineSet, status); classNames.push_back("Newline");
-    fSets->addElement(fRegionalIndicatorSet, status); classNames.push_back("RegionalIndicator");
-    fSets->addElement(fHebrew_LetterSet, status); classNames.push_back("Hebrew");
-    fSets->addElement(fALetterSet, status); classNames.push_back("ALetter");
-    fSets->addElement(fSingle_QuoteSet, status); classNames.push_back("Single Quote");
-    fSets->addElement(fDouble_QuoteSet, status); classNames.push_back("Double Quote");
+    fSets->addElement(fCRSet, status); classNames.emplace_back("CR");
+    fSets->addElement(fLFSet, status); classNames.emplace_back("LF");
+    fSets->addElement(fNewlineSet, status); classNames.emplace_back("Newline");
+    fSets->addElement(fRegionalIndicatorSet, status); classNames.emplace_back("RegionalIndicator");
+    fSets->addElement(fHebrew_LetterSet, status); classNames.emplace_back("Hebrew");
+    fSets->addElement(fALetterSet, status); classNames.emplace_back("ALetter");
+    fSets->addElement(fSingle_QuoteSet, status); classNames.emplace_back("Single Quote");
+    fSets->addElement(fDouble_QuoteSet, status); classNames.emplace_back("Double Quote");
     // Omit Katakana from fSets, which omits Katakana characters
     // from the test data. They are all in the dictionary set,
     // which this (old, to be retired) monkey test cannot handle.
     //fSets->addElement(fKatakanaSet, status);
 
-    fSets->addElement(fMidLetterSet, status); classNames.push_back("MidLetter");
-    fSets->addElement(fMidNumLetSet, status); classNames.push_back("MidNumLet");
-    fSets->addElement(fMidNumSet, status); classNames.push_back("MidNum");
-    fSets->addElement(fNumericSet, status); classNames.push_back("Numeric");
-    fSets->addElement(fFormatSet, status); classNames.push_back("Format");
-    fSets->addElement(fExtendSet, status); classNames.push_back("Extend");
-    fSets->addElement(fOtherSet, status); classNames.push_back("Other");
-    fSets->addElement(fExtendNumLetSet, status); classNames.push_back("ExtendNumLet");
-    fSets->addElement(fWSegSpaceSet, status); classNames.push_back("WSegSpace");
+    fSets->addElement(fMidLetterSet, status); classNames.emplace_back("MidLetter");
+    fSets->addElement(fMidNumLetSet, status); classNames.emplace_back("MidNumLet");
+    fSets->addElement(fMidNumSet, status); classNames.emplace_back("MidNum");
+    fSets->addElement(fNumericSet, status); classNames.emplace_back("Numeric");
+    fSets->addElement(fFormatSet, status); classNames.emplace_back("Format");
+    fSets->addElement(fExtendSet, status); classNames.emplace_back("Extend");
+    fSets->addElement(fOtherSet, status); classNames.emplace_back("Other");
+    fSets->addElement(fExtendNumLetSet, status); classNames.emplace_back("ExtendNumLet");
+    fSets->addElement(fWSegSpaceSet, status); classNames.emplace_back("WSegSpace");
 
-    fSets->addElement(fZWJSet, status); classNames.push_back("ZWJ");
-    fSets->addElement(fExtendedPictSet, status); classNames.push_back("ExtendedPict");
+    fSets->addElement(fZWJSet, status); classNames.emplace_back("ZWJ");
+    fSets->addElement(fExtendedPictSet, status); classNames.emplace_back("ExtendedPict");
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2380,19 +2380,19 @@ RBBISentMonkey::RBBISentMonkey()
     fOtherSet->removeAll(*fCloseSet);
     fOtherSet->removeAll(*fExtendSet);
 
-    fSets->addElement(fSepSet, status); classNames.push_back("Sep");
-    fSets->addElement(fFormatSet, status); classNames.push_back("Format");
-    fSets->addElement(fSpSet, status); classNames.push_back("Sp");
-    fSets->addElement(fLowerSet, status); classNames.push_back("Lower");
-    fSets->addElement(fUpperSet, status); classNames.push_back("Upper");
-    fSets->addElement(fOLetterSet, status); classNames.push_back("OLetter");
-    fSets->addElement(fNumericSet, status); classNames.push_back("Numeric");
-    fSets->addElement(fATermSet, status); classNames.push_back("ATerm");
-    fSets->addElement(fSContinueSet, status); classNames.push_back("SContinue");
-    fSets->addElement(fSTermSet, status); classNames.push_back("STerm");
-    fSets->addElement(fCloseSet, status); classNames.push_back("Close");
-    fSets->addElement(fOtherSet, status); classNames.push_back("Other");
-    fSets->addElement(fExtendSet, status); classNames.push_back("Extend");
+    fSets->addElement(fSepSet, status); classNames.emplace_back("Sep");
+    fSets->addElement(fFormatSet, status); classNames.emplace_back("Format");
+    fSets->addElement(fSpSet, status); classNames.emplace_back("Sp");
+    fSets->addElement(fLowerSet, status); classNames.emplace_back("Lower");
+    fSets->addElement(fUpperSet, status); classNames.emplace_back("Upper");
+    fSets->addElement(fOLetterSet, status); classNames.emplace_back("OLetter");
+    fSets->addElement(fNumericSet, status); classNames.emplace_back("Numeric");
+    fSets->addElement(fATermSet, status); classNames.emplace_back("ATerm");
+    fSets->addElement(fSContinueSet, status); classNames.emplace_back("SContinue");
+    fSets->addElement(fSTermSet, status); classNames.emplace_back("STerm");
+    fSets->addElement(fCloseSet, status); classNames.emplace_back("Close");
+    fSets->addElement(fOtherSet, status); classNames.emplace_back("Other");
+    fSets->addElement(fExtendSet, status); classNames.emplace_back("Extend");
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2799,55 +2799,55 @@ RBBILineMonkey::RBBILineMonkey() :
     fHH->add(u'\u2010');   // Hyphen, '‐'
 
     // Sets and names.
-    fSets->addElement(fBK, status); classNames.push_back("fBK");
-    fSets->addElement(fCR, status); classNames.push_back("fCR");
-    fSets->addElement(fLF, status); classNames.push_back("fLF");
-    fSets->addElement(fCM, status); classNames.push_back("fCM");
-    fSets->addElement(fNL, status); classNames.push_back("fNL");
-    fSets->addElement(fWJ, status); classNames.push_back("fWJ");
-    fSets->addElement(fZW, status); classNames.push_back("fZW");
-    fSets->addElement(fGL, status); classNames.push_back("fGL");
-    fSets->addElement(fCB, status); classNames.push_back("fCB");
-    fSets->addElement(fSP, status); classNames.push_back("fSP");
-    fSets->addElement(fB2, status); classNames.push_back("fB2");
-    fSets->addElement(fBA, status); classNames.push_back("fBA");
-    fSets->addElement(fBB, status); classNames.push_back("fBB");
-    fSets->addElement(fHY, status); classNames.push_back("fHY");
-    fSets->addElement(fH2, status); classNames.push_back("fH2");
-    fSets->addElement(fH3, status); classNames.push_back("fH3");
-    fSets->addElement(fCL, status); classNames.push_back("fCL");
-    fSets->addElement(fCP, status); classNames.push_back("fCP");
-    fSets->addElement(fEX, status); classNames.push_back("fEX");
-    fSets->addElement(fIN, status); classNames.push_back("fIN");
-    fSets->addElement(fJL, status); classNames.push_back("fJL");
-    fSets->addElement(fJT, status); classNames.push_back("fJT");
-    fSets->addElement(fJV, status); classNames.push_back("fJV");
-    fSets->addElement(fNS, status); classNames.push_back("fNS");
-    fSets->addElement(fOP, status); classNames.push_back("fOP");
-    fSets->addElement(fQU, status); classNames.push_back("fQU");
-    fSets->addElement(fIS, status); classNames.push_back("fIS");
-    fSets->addElement(fNU, status); classNames.push_back("fNU");
-    fSets->addElement(fPO, status); classNames.push_back("fPO");
-    fSets->addElement(fPR, status); classNames.push_back("fPR");
-    fSets->addElement(fSY, status); classNames.push_back("fSY");
-    fSets->addElement(fAI, status); classNames.push_back("fAI");
-    fSets->addElement(fAL, status); classNames.push_back("fAL");
-    fSets->addElement(fHL, status); classNames.push_back("fHL");
-    fSets->addElement(fID, status); classNames.push_back("fID");
-    fSets->addElement(fRI, status); classNames.push_back("fRI");
-    fSets->addElement(fSG, status); classNames.push_back("fSG");
-    fSets->addElement(fEB, status); classNames.push_back("fEB");
-    fSets->addElement(fEM, status); classNames.push_back("fEM");
-    fSets->addElement(fZWJ, status); classNames.push_back("fZWJ");
+    fSets->addElement(fBK, status); classNames.emplace_back("fBK");
+    fSets->addElement(fCR, status); classNames.emplace_back("fCR");
+    fSets->addElement(fLF, status); classNames.emplace_back("fLF");
+    fSets->addElement(fCM, status); classNames.emplace_back("fCM");
+    fSets->addElement(fNL, status); classNames.emplace_back("fNL");
+    fSets->addElement(fWJ, status); classNames.emplace_back("fWJ");
+    fSets->addElement(fZW, status); classNames.emplace_back("fZW");
+    fSets->addElement(fGL, status); classNames.emplace_back("fGL");
+    fSets->addElement(fCB, status); classNames.emplace_back("fCB");
+    fSets->addElement(fSP, status); classNames.emplace_back("fSP");
+    fSets->addElement(fB2, status); classNames.emplace_back("fB2");
+    fSets->addElement(fBA, status); classNames.emplace_back("fBA");
+    fSets->addElement(fBB, status); classNames.emplace_back("fBB");
+    fSets->addElement(fHY, status); classNames.emplace_back("fHY");
+    fSets->addElement(fH2, status); classNames.emplace_back("fH2");
+    fSets->addElement(fH3, status); classNames.emplace_back("fH3");
+    fSets->addElement(fCL, status); classNames.emplace_back("fCL");
+    fSets->addElement(fCP, status); classNames.emplace_back("fCP");
+    fSets->addElement(fEX, status); classNames.emplace_back("fEX");
+    fSets->addElement(fIN, status); classNames.emplace_back("fIN");
+    fSets->addElement(fJL, status); classNames.emplace_back("fJL");
+    fSets->addElement(fJT, status); classNames.emplace_back("fJT");
+    fSets->addElement(fJV, status); classNames.emplace_back("fJV");
+    fSets->addElement(fNS, status); classNames.emplace_back("fNS");
+    fSets->addElement(fOP, status); classNames.emplace_back("fOP");
+    fSets->addElement(fQU, status); classNames.emplace_back("fQU");
+    fSets->addElement(fIS, status); classNames.emplace_back("fIS");
+    fSets->addElement(fNU, status); classNames.emplace_back("fNU");
+    fSets->addElement(fPO, status); classNames.emplace_back("fPO");
+    fSets->addElement(fPR, status); classNames.emplace_back("fPR");
+    fSets->addElement(fSY, status); classNames.emplace_back("fSY");
+    fSets->addElement(fAI, status); classNames.emplace_back("fAI");
+    fSets->addElement(fAL, status); classNames.emplace_back("fAL");
+    fSets->addElement(fHL, status); classNames.emplace_back("fHL");
+    fSets->addElement(fID, status); classNames.emplace_back("fID");
+    fSets->addElement(fRI, status); classNames.emplace_back("fRI");
+    fSets->addElement(fSG, status); classNames.emplace_back("fSG");
+    fSets->addElement(fEB, status); classNames.emplace_back("fEB");
+    fSets->addElement(fEM, status); classNames.emplace_back("fEM");
+    fSets->addElement(fZWJ, status); classNames.emplace_back("fZWJ");
     // TODO: fOP30 & fCP30 overlap with plain fOP. Probably OK, but fOP/CP chars will be over-represented.
-    fSets->addElement(fOP30, status); classNames.push_back("fOP30");
-    fSets->addElement(fCP30, status); classNames.push_back("fCP30");
-    fSets->addElement(fExtPictUnassigned, status); classNames.push_back("fExtPictUnassigned");
-    fSets->addElement(fAK, status); classNames.push_back("fAK");
-    fSets->addElement(fAP, status); classNames.push_back("fAP");
-    fSets->addElement(fAS, status); classNames.push_back("fAS");
-    fSets->addElement(fVF, status); classNames.push_back("fVF");
-    fSets->addElement(fVI, status); classNames.push_back("fVI");
+    fSets->addElement(fOP30, status); classNames.emplace_back("fOP30");
+    fSets->addElement(fCP30, status); classNames.emplace_back("fCP30");
+    fSets->addElement(fExtPictUnassigned, status); classNames.emplace_back("fExtPictUnassigned");
+    fSets->addElement(fAK, status); classNames.emplace_back("fAK");
+    fSets->addElement(fAP, status); classNames.emplace_back("fAP");
+    fSets->addElement(fAS, status); classNames.emplace_back("fAS");
+    fSets->addElement(fVF, status); classNames.emplace_back("fVF");
+    fSets->addElement(fVI, status); classNames.emplace_back("fVI");
 
 
     UnicodeString CMx {uR"([[\p{Line_Break=CM}]\u200d])"};
@@ -4911,7 +4911,7 @@ void RBBITest::TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi) {
     for (int i=0; i<testString.length(); ++i) {
         bool isboundary = bi->isBoundary(i);
         int  ruleStatus = bi->getRuleStatus();
-        expectedResults.push_back(std::make_pair(isboundary, ruleStatus));
+        expectedResults.emplace_back(isboundary, ruleStatus);
     }
 
     for (int i=testString.length()-1; i>=0; --i) {
