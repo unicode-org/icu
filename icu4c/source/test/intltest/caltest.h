@@ -341,6 +341,12 @@ public: // package
     void Test22633HebrewOverflow();
     void Test22633AMPMOverflow();
     void Test22633SetGetTimeOverflow();
+    void Test22633Set2FieldsGetTimeOverflow();
+    void Test22633SetAddGetTimeOverflow();
+    void Test22633SetRollGetTimeOverflow();
+    void Test22633AddTwiceGetTimeOverflow();
+    void Test22633RollTwiceGetTimeOverflow();
+    void RunTestOnCalendars(void(TestFunc)(Calendar*, UCalendarDateFields));
 
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);
     void TestFirstDayOfWeek();

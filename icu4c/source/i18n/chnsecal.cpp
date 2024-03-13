@@ -285,11 +285,11 @@ int32_t ChineseCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
  * <p>Compute the ChineseCalendar-specific field IS_LEAP_MONTH.
  * @stable ICU 2.8
  */
-void ChineseCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/) {
+void ChineseCalendar::handleComputeFields(int32_t julianDay, UErrorCode & status) {
 
     computeChineseFields(julianDay - kEpochStartAsJulianDay, // local days
                          getGregorianYear(), getGregorianMonth(),
-                         true); // set all fields
+                         true, status); // set all fields
 }
 
 /**
@@ -364,8 +364,11 @@ int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     }
     int32_t theNewYear = newYear(gyear);
     int32_t newMoon = newMoonNear(theNewYear + month * 29, true);
-    
-    int64_t julianDay = newMoon + kEpochStartAsJulianDay;
+    int32_t julianDay;
+    if (uprv_add32_overflow(newMoon, kEpochStartAsJulianDay, &julianDay)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     // Ignore IS_LEAP_MONTH field if useMonth is false
     int32_t isLeapMonth = useMonth ? internalGet(UCAL_IS_LEAP_MONTH) : 0;
@@ -383,15 +386,22 @@ int64_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
 
     // This will modify the MONTH and IS_LEAP_MONTH fields (only)
     work->computeChineseFields(newMoon, work->getGregorianYear(),
-                               work->getGregorianMonth(), false);
+                               work->getGregorianMonth(), false, status);
 
     if (month != work->internalGet(UCAL_MONTH) ||
         isLeapMonth != work->internalGet(UCAL_IS_LEAP_MONTH)) {
         newMoon = newMoonNear(newMoon + SYNODIC_GAP, true);
-        julianDay = newMoon + kEpochStartAsJulianDay;
+        if (uprv_add32_overflow(newMoon, kEpochStartAsJulianDay, &julianDay)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+    }
+    if (uprv_add32_overflow(julianDay, -1, &julianDay)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
-    return julianDay - 1;
+    return julianDay;
 }
 
 
@@ -714,7 +724,10 @@ UBool ChineseCalendar::isLeapMonthBetween(int32_t newMoon1, int32_t newMoon2) co
  * and IS_LEAP_MONTH fields.
  */
 void ChineseCalendar::computeChineseFields(int32_t days, int32_t gyear, int32_t gmonth,
-                                  UBool setAllFields) {
+                                  UBool setAllFields, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     // Find the winter solstices before and after the target date.
     // These define the boundaries of this Chinese year, specifically,
     // the position of month 11, which always contains the solstice.
@@ -774,6 +787,22 @@ void ChineseCalendar::computeChineseFields(int32_t days, int32_t gyear, int32_t 
         }
         int32_t dayOfMonth = days - thisMoon + 1;
 
+        int32_t min_eyear = handleGetLimit(UCAL_EXTENDED_YEAR, UCAL_LIMIT_MINIMUM);
+        if (extended_year < min_eyear) {
+          if (!isLenient()) {
+           status = U_ILLEGAL_ARGUMENT_ERROR;
+           return;
+          }
+          extended_year = min_eyear;
+        }
+        int32_t max_eyear = handleGetLimit(UCAL_EXTENDED_YEAR, UCAL_LIMIT_MAXIMUM);
+        if (max_eyear < extended_year) {
+          if (!isLenient()) {
+           status = U_ILLEGAL_ARGUMENT_ERROR;
+           return;
+          }
+          extended_year = max_eyear;
+        }
         internalSet(UCAL_EXTENDED_YEAR, extended_year);
 
         // 0->0,60  1->1,1  60->1,60  61->2,1  etc.
@@ -893,7 +922,11 @@ int32_t ChineseCalendar::getRelatedYear(UErrorCode &status) const
     if (U_FAILURE(status)) {
         return 0;
     }
-    return year + kChineseRelatedYearDiff;
+    if (uprv_add32_overflow(year, kChineseRelatedYearDiff, &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 void ChineseCalendar::setRelatedYear(int32_t year)

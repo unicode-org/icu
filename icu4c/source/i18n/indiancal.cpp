@@ -316,7 +316,11 @@ int32_t IndianCalendar::getRelatedYear(UErrorCode &status) const
     if (U_FAILURE(status)) {
         return 0;
     }
-    return year + kIndianRelatedYearDiff;
+    if (uprv_add32_overflow(year, kIndianRelatedYearDiff, &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 void IndianCalendar::setRelatedYear(int32_t year)

@@ -250,7 +250,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
   virtual UBool hasNoMajorSolarTerm(int32_t newMoon) const;
   virtual UBool isLeapMonthBetween(int32_t newMoon1, int32_t newMoon2) const;
   virtual void computeChineseFields(int32_t days, int32_t gyear,
-                 int32_t gmonth, UBool setAllFields);
+                 int32_t gmonth, UBool setAllFields, UErrorCode& status);
   virtual int32_t newYear(int32_t gyear) const;
   virtual void offsetMonth(int32_t newMoon, int32_t dom, int32_t delta, UErrorCode& status);
   const TimeZone* getChineseCalZoneAstroCalc() const;

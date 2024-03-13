@@ -265,7 +265,11 @@ int32_t PersianCalendar::getRelatedYear(UErrorCode &status) const
     if (U_FAILURE(status)) {
         return 0;
     }
-    return year + kPersianRelatedYearDiff;
+    if (uprv_add32_overflow(year, kPersianRelatedYearDiff, &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 void PersianCalendar::setRelatedYear(int32_t year)

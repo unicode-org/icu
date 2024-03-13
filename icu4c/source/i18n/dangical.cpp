@@ -151,7 +151,11 @@ int32_t DangiCalendar::getRelatedYear(UErrorCode &status) const
     if (U_FAILURE(status)) {
         return 0;
     }
-    return year + kDangiRelatedYearDiff;
+    if (uprv_add32_overflow(year, kDangiRelatedYearDiff, &year)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return year;
 }
 
 void DangiCalendar::setRelatedYear(int32_t year)
