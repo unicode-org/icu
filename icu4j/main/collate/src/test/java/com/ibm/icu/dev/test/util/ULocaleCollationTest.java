@@ -242,10 +242,10 @@ public class ULocaleCollationTest extends TestFmwk {
     public void TestNameList() {
         String[][][] tests = {
                 /* name in French, name in self, minimized, modified */
-//                {{"fr-Cyrl-BE", "fr-Cyrl-CA"},
-//                    {"Français (cyrillique, Belgique)", "Français (cyrillique, Belgique)", "fr_Cyrl_BE", "fr_Cyrl_BE"},
-//                    {"Français (cyrillique, Canada)", "Français (cyrillique, Canada)", "fr_Cyrl_CA", "fr_Cyrl_CA"},
-//                },
+                {{"fr-Cyrl-BE", "fr-Cyrl-CA"},
+                    {"Français (cyrillique, Belgique)", "French (Cyrillic, Belgium)", "fr_Cyrl_BE", "fr_Cyrl_BE"},
+                    {"Français (cyrillique, Canada)", "French (Cyrillic, Canada)", "fr_Cyrl_CA", "fr_Cyrl_CA"},
+                },
                 {{"en", "de", "fr", "zh"},
                     {"Allemand", "Deutsch", "de", "de"},
                     {"Anglais", "English", "en", "en"},
@@ -253,14 +253,14 @@ public class ULocaleCollationTest extends TestFmwk {
                     {"Français", "Français", "fr", "fr"},
                 },
                 // some non-canonical names
-//                {{"iw", "iw-US", "no", "no-Cyrl", "in", "in-YU"},
-//                    {"Hébreu (États-Unis)", "עברית (ארצות הברית)", "iw_US", "iw_US"},
-//                    {"Hébreu (Israël)", "עברית (ישראל)", "iw", "iw_IL"},
-//                    {"Indonésien (Indonésie)", "Indonesia (Indonesia)", "in", "in_ID"},
-//                    {"Indonésien (Serbie)", "Indonesia (Serbia)", "in_YU", "in_YU"},
-//                    {"Norvégien (cyrillique)", "Norsk (kyrillisk)", "no_Cyrl", "no_Cyrl"},
-//                    {"Norvégien (latin)", "Norsk (latinsk)", "no", "no_Latn"},
-//                },
+                {{"iw", "iw-US", "no", "no-Cyrl", "in", "in-YU"},
+                    {"Hébreu (États-Unis)", "עברית (ארצות הברית)", "he_US", "he_US"},
+                    {"Hébreu (Israël)", "עברית (ישראל)", "he", "he_IL"},
+                    {"Indonésien (Indonésie)", "Indonesia (Indonesia)", "id", "id_ID"},
+                    {"Indonésien (Serbie)", "Indonesia (Serbia)", "id_RS", "id_RS"},
+                    {"Norvégien (cyrillique)", "Norwegian (Cyrillic)", "no_Cyrl", "no_Cyrl"},
+                    {"Norvégien (latin)", "Norsk (latinsk)", "no", "no_Latn"},
+                },
                 {{"zh-Hant-TW", "en", "en-gb", "fr", "zh-Hant", "de", "de-CH", "zh-TW"},
                     {"Allemand (Allemagne)", "Deutsch (Deutschland)", "de", "de_DE"},
                     {"Allemand (Suisse)", "Deutsch (Schweiz)", "de_CH", "de_CH"},
@@ -283,46 +283,52 @@ public class ULocaleCollationTest extends TestFmwk {
                     {"Serbe (cyrillique)", "Српски (ћирилица)", "sr", "sr_Cyrl"},
                     {"Serbe (latin)", "Srpski (latinica)", "sr_Latn", "sr_Latn"},
                 },
-//                {{"fr-Cyrl", "fr-Arab"},
-//                    {"Français (arabe)", "Français (arabe)", "fr_Arab", "fr_Arab"},
-//                    {"Français (cyrillique)", "Français (cyrillique)", "fr_Cyrl", "fr_Cyrl"},
-//                },
-//                {{"fr-Cyrl-BE", "fr-Arab-CA"},
-//                    {"Français (arabe, Canada)", "Français (arabe, Canada)", "fr_Arab_CA", "fr_Arab_CA"},
-//                    {"Français (cyrillique, Belgique)", "Français (cyrillique, Belgique)", "fr_Cyrl_BE", "fr_Cyrl_BE"},
-//                }
-        };
-        ULocale french = ULocale.FRENCH;
-        LocaleDisplayNames names = LocaleDisplayNames.getInstance(french,
-                DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU);
-        for (Type type : DisplayContext.Type.values()) {
-            logln("Contexts: " + names.getContext(type).toString());
-        }
-        Collator collator = Collator.getInstance(french);
-
-        for (String[][] test : tests) {
-            Set<ULocale> list = new LinkedHashSet<ULocale>();
-            List<UiListItem> expected = new ArrayList<UiListItem>();
-            for (String item : test[0]) {
-                list.add(new ULocale(item));
-            }
-            for (int i = 1; i < test.length; ++i) {
-                String[] rawRow = test[i];
-                expected.add(new UiListItem(new ULocale(rawRow[2]), new ULocale(rawRow[3]), rawRow[0], rawRow[1]));
-            }
-            List<UiListItem> newList = names.getUiList(list, false, collator);
-            if (!expected.equals(newList)) {
-                if (expected.size() != newList.size()) {
-                    errln(list.toString() + ": wrong size" + expected + ", " + newList);
-                } else {
-                    errln(list.toString());
-                    for (int i = 0; i < expected.size(); ++i) {
-                        assertEquals(i+"", expected.get(i), newList.get(i));
-                    }
+                {{"fr-Cyrl", "fr-Arab"},
+                    {"Français (arabe)", "French (Arabic)", "fr_Arab", "fr_Arab"},
+                    {"Français (cyrillique)", "French (Cyrillic)", "fr_Cyrl", "fr_Cyrl"},
+                },
+                {{"fr-Cyrl-BE", "fr-Arab-CA"},
+                    {"Français (arabe, Canada)", "French (Arabic, Canada)", "fr_Arab_CA", "fr_Arab_CA"},
+                    {"Français (cyrillique, Belgique)", "French (Cyrillic, Belgium)", "fr_Cyrl_BE", "fr_Cyrl_BE"},
                 }
-            } else {
-                assertEquals(list.toString(), expected, newList);
+        };
+        ULocale originalDefaultLocale = ULocale.getDefault();
+        ULocale.setDefault(ULocale.US);
+        try {
+            ULocale french = ULocale.FRENCH;
+            LocaleDisplayNames names = LocaleDisplayNames.getInstance(french,
+                    DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU);
+            for (Type type : DisplayContext.Type.values()) {
+                logln("Contexts: " + names.getContext(type).toString());
             }
+            Collator collator = Collator.getInstance(french);
+
+            for (String[][] test : tests) {
+                Set<ULocale> list = new LinkedHashSet<ULocale>();
+                List<UiListItem> expected = new ArrayList<UiListItem>();
+                for (String item : test[0]) {
+                    list.add(new ULocale(item));
+                }
+                for (int i = 1; i < test.length; ++i) {
+                    String[] rawRow = test[i];
+                    expected.add(new UiListItem(new ULocale(rawRow[2]), new ULocale(rawRow[3]), rawRow[0], rawRow[1]));
+                }
+                List<UiListItem> newList = names.getUiList(list, false, collator);
+                if (!expected.equals(newList)) {
+                    if (expected.size() != newList.size()) {
+                        errln(list.toString() + ": wrong size" + expected + ", " + newList);
+                    } else {
+//                        errln(list.toString());
+                        for (int i = 0; i < expected.size(); ++i) {
+                            assertEquals(i + "", expected.get(i), newList.get(i));
+                        }
+                    }
+                } else {
+                    assertEquals(list.toString(), expected, newList);
+                }
+            }
+        } finally {
+            ULocale.setDefault(originalDefaultLocale);
         }
     }
 
