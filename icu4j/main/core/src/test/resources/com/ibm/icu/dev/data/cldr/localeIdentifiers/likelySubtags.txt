@@ -1,7 +1,7 @@
 # Test data for Likely Subtags
-#  Copyright © 1991-2023 Unicode, Inc.
+#  Copyright © 1991-2024 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
-#  SPDX-License-Identifier: Unicode-DFS-2016
+#  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
 #
 # Test data for https://www.unicode.org/reports/tr35/tr35.html#Likely_Subtags
@@ -788,7 +788,7 @@ pt-TL ;	pt-Latn-TL ;	pt-TL ;
 qaa ;	FAIL ;	 ;	
 qaa-CH ;	FAIL ;	 ;	
 qaa-Cyrl ;	FAIL ;	 ;	
-qaa-Cyrl-CH ;	 ;	 ;	
+qaa-Cyrl-CH ;	FAIL ;	 ;	
 qu ;	qu-Latn-PE ;	qu ;	
 qu-AQ ;	qu-Latn-AQ ;	qu-AQ ;	
 qu-BO ;	qu-Latn-BO ;	qu-BO ;	

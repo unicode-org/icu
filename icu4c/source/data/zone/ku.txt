@@ -833,9 +833,6 @@ ku{
             ld{"Saeta Havînê ya Pasîfîka Meksîkayê"}
             lg{"Saeta Pasîfîka Meksîkayê"}
             ls{"Saeta Standard a Pasîfîka Meksîkayê"}
-            sd{"SHPM"}
-            sg{"SPM"}
-            ss{"SSPM"}
         }
         "meta:Mongolia"{
             ld{"Saeta Havînê ya Ûlanbatarê"}
@@ -930,9 +927,6 @@ ku{
             ld{"Saeta Havînê ya Saint Pierre û Miquelonê"}
             lg{"Saeta Saint Pierre û Miquelonê"}
             ls{"Saeta Standard a Saint Pierre û Miquelonê"}
-            sd{"SHSPM"}
-            sg{"SSPM"}
-            ss{"SSSPM"}
         }
         "meta:Pitcairn"{
             ls{"Saeta Pitcairnê"}

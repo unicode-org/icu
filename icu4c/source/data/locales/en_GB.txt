@@ -86,14 +86,6 @@ en_GB{
                 yMMMEEEEd{"EEEE d MMM y"}
                 yMMMMEEEEd{"EEEE d MMMM y"}
             }
-            dayPeriod{
-                stand-alone{
-                    narrow{
-                        am{"am"}
-                        pm{"pm"}
-                    }
-                }
-            }
             intervalFormats{
                 GyMMMEEEEd{
                     G{"EEEE d MMM y G – EEEE d MMM y G"}

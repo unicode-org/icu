@@ -1200,7 +1200,7 @@ supplementalData:table(nofallback){
             {
                 from:intvector{
                     398,
-                    -1848751104,
+                    -1834351104,
                 }
                 id{"XCG"}
             }
@@ -1212,7 +1212,7 @@ supplementalData:table(nofallback){
                 id{"ANG"}
                 to:intvector{
                     400,
-                    1805081599,
+                    1819481599,
                 }
             }
         }
@@ -3961,7 +3961,7 @@ supplementalData:table(nofallback){
             {
                 from:intvector{
                     398,
-                    -1848751104,
+                    -1834351104,
                 }
                 id{"XCG"}
             }
@@ -3973,7 +3973,7 @@ supplementalData:table(nofallback){
                 id{"ANG"}
                 to:intvector{
                     400,
-                    1805081599,
+                    1819481599,
                 }
             }
         }

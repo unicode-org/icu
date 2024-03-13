@@ -1,7 +1,7 @@
 # Test data for unit conversions
-#  Copyright © 1991-2023 Unicode, Inc.
+#  Copyright © 1991-2024 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
-#  SPDX-License-Identifier: Unicode-DFS-2016
+#  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
 #
 # Format:
@@ -182,6 +182,7 @@ resolution	;	pixel-per-inch	;	pixel-per-meter	;	5,000/127 * x	;	39370.08
 resolution	;	dot-per-centimeter	;	pixel-per-meter	;	100 * x	;	100000.0
 resolution	;	pixel-per-centimeter	;	pixel-per-meter	;	100 * x	;	100000.0
 solid-angle	;	steradian	;	square-revolution	;	4,290,444,930,214,144/169379976663492169 * x	;	25.3303
+speed	;	beaufort	;	meter-per-second	;	special:beaufort(x)	;	58.6
 speed	;	kilometer-per-hour	;	meter-per-second	;	2.5/9 * x	;	277.7778
 speed	;	mile-per-hour	;	meter-per-second	;	0.44704 * x	;	447.04
 speed	;	knot	;	meter-per-second	;	4.63/9 * x	;	514.4444
@@ -189,9 +190,9 @@ speed	;	meter-per-second	;	meter-per-second	;	1 * x	;	1,000.00
 substance-amount	;	item	;	item	;	1 * x	;	1,000.00
 substance-amount	;	mole	;	item	;	602,214,076,000,000,000,000,000 * x	;	6.022141E26
 temperature	;	rankine	;	kelvin	;	5/9 * x	;	555.5556
-temperature	;	fahrenheit	;	kelvin	;	5/9 * x - 2,298.35/9	;	810.9278
+temperature	;	fahrenheit	;	kelvin	;	5/9 * x + 2,298.35/9	;	810.9278
 temperature	;	kelvin	;	kelvin	;	1 * x	;	1,000.00
-temperature	;	celsius	;	kelvin	;	1 * x - 273.15	;	1273.15
+temperature	;	celsius	;	kelvin	;	1 * x + 273.15	;	1273.15
 typewidth	;	em	;	em	;	1 * x	;	1,000.00
 voltage	;	volt	;	kilogram-square-meter-per-cubic-second-ampere	;	1 * x	;	1000.0
 volume	;	drop	;	cubic-meter	;	0.0000001540287998046875/3 * x	;	5.134293E-5

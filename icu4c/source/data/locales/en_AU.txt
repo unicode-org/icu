@@ -161,9 +161,7 @@ en_AU{
                         noon{"midday"}
                     }
                     narrow{
-                        am{"am"}
                         noon{"midday"}
-                        pm{"pm"}
                     }
                     wide{
                         noon{"midday"}
