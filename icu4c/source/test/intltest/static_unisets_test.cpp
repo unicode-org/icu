@@ -16,7 +16,7 @@ class StaticUnicodeSetsTest : public IntlTest {
     void testSetCoverage();
     void testNonEmpty();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
   private:
     void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,

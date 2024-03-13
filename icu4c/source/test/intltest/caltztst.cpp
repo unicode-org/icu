@@ -23,8 +23,8 @@
 #include "unicode/smpdtfmt.h"
 #include "mutex.h"
 
-DateFormat*         CalendarTimeZoneTest::fgDateFormat = 0;
-Calendar*           CalendarTimeZoneTest::fgCalendar   = 0;
+DateFormat* CalendarTimeZoneTest::fgDateFormat = nullptr;
+Calendar* CalendarTimeZoneTest::fgCalendar = nullptr;
 
 UBool CalendarTimeZoneTest::failure(UErrorCode status, const char* msg, UBool possibleDataError)
 {
@@ -42,27 +42,27 @@ UBool CalendarTimeZoneTest::failure(UErrorCode status, const char* msg, UBool po
 
 DateFormat*   CalendarTimeZoneTest::getDateFormat()
 {
-    DateFormat *theFormat = 0;
+    DateFormat* theFormat = nullptr;
 
-    if (fgDateFormat != 0) // if there's something in the cache
+    if (fgDateFormat != nullptr) // if there's something in the cache
     {
         Mutex lock;
 
-        if (fgDateFormat != 0) // Someone might have grabbed it.
+        if (fgDateFormat != nullptr) // Someone might have grabbed it.
         {
             theFormat = fgDateFormat;
-            fgDateFormat = 0; // We have exclusive right to this formatter.
+            fgDateFormat = nullptr; // We have exclusive right to this formatter.
         }
     }
 
-    if(theFormat == 0) // If we weren't able to pull it out of the cache, then we have to create it.
+    if (theFormat == nullptr) // If we weren't able to pull it out of the cache, then we have to create it.
     {
         UErrorCode status = U_ZERO_ERROR;
         theFormat = new SimpleDateFormat(UnicodeString("EEE MMM dd HH:mm:ss zzz yyyy"), status);
         if (U_FAILURE(status))
         {
             delete theFormat;
-            theFormat = 0;
+            theFormat = nullptr;
             dataerrln("FAIL: Could not create SimpleDateFormat - %s", u_errorName(status));
         }
     }
@@ -72,14 +72,14 @@ DateFormat*   CalendarTimeZoneTest::getDateFormat()
 
 void CalendarTimeZoneTest::releaseDateFormat(DateFormat *adopt)
 {
-    if(fgDateFormat == 0) // If the cache is empty we must add it back.
+    if (fgDateFormat == nullptr) // If the cache is empty we must add it back.
     {
         Mutex lock;
 
-        if(fgDateFormat == 0)
+        if (fgDateFormat == nullptr)
         {
             fgDateFormat = adopt;
-            adopt = 0;
+            adopt = nullptr;
         }
     }
     else {
@@ -89,27 +89,27 @@ void CalendarTimeZoneTest::releaseDateFormat(DateFormat *adopt)
 
 Calendar*  CalendarTimeZoneTest::getCalendar()
 {
-    Calendar *theCalendar = 0;
+    Calendar* theCalendar = nullptr;
 
-    if (fgCalendar != 0) // if there's something in the cache
+    if (fgCalendar != nullptr) // if there's something in the cache
     {
         Mutex lock;
 
-        if (fgCalendar != 0) // Someone might have grabbed it.
+        if (fgCalendar != nullptr) // Someone might have grabbed it.
         {
             theCalendar = fgCalendar;
-            fgCalendar = 0; // We have exclusive right to this calendar.
+            fgCalendar = nullptr; // We have exclusive right to this calendar.
         }
     }
 
-    if(theCalendar == 0) // If we weren't able to pull it out of the cache, then we have to create it.
+    if (theCalendar == nullptr) // If we weren't able to pull it out of the cache, then we have to create it.
     {
         UErrorCode status = U_ZERO_ERROR;
         theCalendar = Calendar::createInstance(status);
         if (U_FAILURE(status))
         {
             delete theCalendar;
-            theCalendar = 0;
+            theCalendar = nullptr;
             dataerrln("FAIL: Calendar::createInstance failed: %s", u_errorName(status));
         }
     }
@@ -118,14 +118,14 @@ Calendar*  CalendarTimeZoneTest::getCalendar()
 
 void CalendarTimeZoneTest::releaseCalendar(Calendar* adopt)
 {
-    if(fgCalendar == 0) // If the cache is empty we must add it back.
+    if (fgCalendar == nullptr) // If the cache is empty we must add it back.
     {
         Mutex lock;
 
-        if(fgCalendar == 0)
+        if (fgCalendar == nullptr)
         {
             fgCalendar = adopt;
-            adopt = 0;
+            adopt = nullptr;
         }
     }
     else
@@ -148,7 +148,7 @@ CalendarTimeZoneTest::dateToString(UDate d, UnicodeString& str)
 {
     str.remove();
     DateFormat* format = getDateFormat();
-    if (format == 0)
+    if (format == nullptr)
     {
         str += "DATE_FORMAT_FAILURE";
         return str;
@@ -164,7 +164,7 @@ CalendarTimeZoneTest::dateToString(UDate d, UnicodeString& str,
 {
     str.remove();
     DateFormat* format = getDateFormat();
-    if (format == 0)
+    if (format == nullptr)
     {
         str += "DATE_FORMAT_FAILURE";
         return str;
@@ -183,7 +183,7 @@ UDate
 CalendarTimeZoneTest::date(int32_t y, int32_t m, int32_t d, int32_t hr, int32_t min, int32_t sec)
 {
     Calendar* cal = getCalendar();
-    if (cal == 0) return 0.0;
+    if (cal == nullptr) return 0.0;
     cal->clear();
     cal->set(1900 + y, m, d, hr, min, sec); // Add 1900 to follow java.util.Date protocol
     UErrorCode status = U_ZERO_ERROR;
@@ -221,7 +221,7 @@ void
 CalendarTimeZoneTest::dateToFields(UDate date, int32_t& y, int32_t& m, int32_t& d, int32_t& hr, int32_t& min, int32_t& sec)
 {
     Calendar* cal = getCalendar();
-    if (cal == 0) return;
+    if (cal == nullptr) return;
     UErrorCode status = U_ZERO_ERROR;
     cal->setTime(date, status);
     y = cal->get(UCAL_YEAR, status) - 1900;
@@ -236,9 +236,9 @@ CalendarTimeZoneTest::dateToFields(UDate date, int32_t& y, int32_t& m, int32_t& 
 void CalendarTimeZoneTest::cleanup()
 {
     delete fgDateFormat;
-    fgDateFormat = 0;
+    fgDateFormat = nullptr;
     delete fgCalendar;
-    fgCalendar   = 0;
+    fgCalendar = nullptr;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -87,7 +87,7 @@ static void sweepCache() {
     const UHashElement* elem;
     double now = (double)uprv_getUTCtime();
 
-    while ((elem = uhash_nextElement(gTimeZoneNamesCache, &pos)) != 0) {
+    while ((elem = uhash_nextElement(gTimeZoneNamesCache, &pos)) != nullptr) {
         TimeZoneNamesCacheEntry *entry = (TimeZoneNamesCacheEntry *)elem->value.pointer;
         if (entry->refCount <= 0 && (now - entry->lastAccess) > CACHE_EXPIRATION) {
             // delete this entry
@@ -128,7 +128,7 @@ private:
 };
 
 TimeZoneNamesDelegate::TimeZoneNamesDelegate()
-: fTZnamesCacheEntry(0) {
+: fTZnamesCacheEntry(nullptr) {
 }
 
 TimeZoneNamesDelegate::TimeZoneNamesDelegate(const Locale& locale, UErrorCode& status) {

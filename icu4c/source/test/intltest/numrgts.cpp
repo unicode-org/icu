@@ -1294,7 +1294,7 @@ void NumberFormatRegressionTest::Test4099404()
         logln("Bug 4099404 pattern \"000.0#0\" passed");
     }*/
     delete fmt;
-    fmt = 0;
+    fmt = nullptr;
         //try {
         fmt = new DecimalFormat(UnicodeString("0#0.000"), status);
         if( !U_FAILURE(status))

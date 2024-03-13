@@ -633,7 +633,7 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
   if (e.isValid() && U_SUCCESS(status)) {
     UnicodeString temp2;
     const char* key;
-    while ((key = e->next((int32_t *)0, status)) != nullptr) {
+    while ((key = e->next((int32_t*)nullptr, status)) != nullptr) {
         auto value = loc.getKeywordValue<CharString>(key, status);
         if (U_FAILURE(status)) {
             return result;
@@ -911,7 +911,7 @@ uldn_open(const char * locale,
           UDialectHandling dialectHandling,
           UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
-    return 0;
+    return nullptr;
   }
   if (locale == nullptr) {
     locale = uloc_getDefault();
@@ -924,7 +924,7 @@ uldn_openForContext(const char * locale,
                     UDisplayContext *contexts, int32_t length,
                     UErrorCode *pErrorCode) {
   if (U_FAILURE(*pErrorCode)) {
-    return 0;
+    return nullptr;
   }
   if (locale == nullptr) {
     locale = uloc_getDefault();

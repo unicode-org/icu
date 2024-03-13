@@ -1709,7 +1709,7 @@ U_CAPI int32_t U_EXPORT2 ures_getSize(const UResourceBundle *resB) {
 
 static const char16_t* ures_getStringWithAlias(const UResourceBundle *resB, Resource r, int32_t sIndex, int32_t *len, UErrorCode *status) {
   if(RES_GET_TYPE(r) == URES_ALIAS) {
-    const char16_t* result = 0;
+    const char16_t* result = nullptr;
     UResourceBundle *tempRes = ures_getByIndex(resB, sIndex, nullptr, status);
     result = ures_getString(tempRes, len, status);
     ures_close(tempRes);
@@ -2574,7 +2574,7 @@ U_CAPI const char16_t* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB
                         return res_getString({resB, key}, &dataEntry->fData, res, len);
                     case URES_ALIAS:
                       {
-                        const char16_t* result = 0;
+                        const char16_t* result = nullptr;
                         UResourceBundle *tempRes = ures_getByKey(resB, inKey, nullptr, status);
                         result = ures_getString(tempRes, len, status);
                         ures_close(tempRes);
@@ -2596,7 +2596,7 @@ U_CAPI const char16_t* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB
                 return res_getString({resB, key}, &resB->getResData(), res, len);
             case URES_ALIAS:
               {
-                const char16_t* result = 0;
+                const char16_t* result = nullptr;
                 UResourceBundle *tempRes = ures_getByKey(resB, inKey, nullptr, status);
                 result = ures_getString(tempRes, len, status);
                 ures_close(tempRes);
@@ -2949,7 +2949,7 @@ ures_loc_nextLocale(UEnumeration* en,
     UResourceBundle *k = nullptr;
     const char *result = nullptr;
     int32_t len = 0;
-    if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status)) != 0) {
+    if (ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status)) != nullptr) {
         result = ures_getKey(k);
         len = (int32_t)uprv_strlen(result);
     }
@@ -3043,7 +3043,7 @@ static void getParentForFunctionalEquivalent(const char*      localeID,
     // such as collation, data may have different parents than in parentLocales).
     UErrorCode subStatus = U_ZERO_ERROR;
     parent.clear();
-    if (res != NULL) {
+    if (res != nullptr) {
         ures_getByKey(res, "%%Parent", bund1, &subStatus);
         if (U_SUCCESS(subStatus)) {
             int32_t length16;
@@ -3238,9 +3238,9 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         // root and has a different language than the parent. Use of the VALID locale
         // here is similar to the procedure used at the end of the previous do-while loop
         // for all resource types.
-        if (res != NULL && uprv_strcmp(resName, "collations") == 0) {
+        if (res != nullptr && uprv_strcmp(resName, "collations") == 0) {
             const char *validLoc = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus);
-            if (U_SUCCESS(subStatus) && validLoc != NULL && validLoc[0] != 0 && uprv_strcmp(validLoc, "root") != 0) {
+            if (U_SUCCESS(subStatus) && validLoc != nullptr && validLoc[0] != 0 && uprv_strcmp(validLoc, "root") != 0) {
                 CharString validLang = ulocimp_getLanguage(validLoc, subStatus);
                 CharString parentLang = ulocimp_getLanguage(parent.data(), subStatus);
                 if (U_SUCCESS(subStatus) && validLang != parentLang) {
@@ -3421,8 +3421,8 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
     
     valuesBuf[0]=0;
     valuesBuf[1]=0;
-    
-    while((locale = uenum_next(locs, &locLen, status)) != 0) {
+
+    while ((locale = uenum_next(locs, &locLen, status)) != nullptr) {
         UResourceBundle   *bund = nullptr;
         UResourceBundle   *subPtr = nullptr;
         UErrorCode subStatus = U_ZERO_ERROR; /* don't fail if a bundle is unopenable */
@@ -3446,8 +3446,8 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
             bund = nullptr;
             continue;
         }
-        
-        while((subPtr = ures_getNextResource(&item,&subItem,&subStatus)) != 0
+
+        while ((subPtr = ures_getNextResource(&item, &subItem, &subStatus)) != nullptr
             && U_SUCCESS(subStatus)) {
             const char *k;
             int32_t i;

@@ -295,7 +295,7 @@ myUCharsToChars(char* resultOfLen4, const char16_t* currency) {
 static const int32_t*
 _findMetaData(const char16_t* currency, UErrorCode& ec) {
 
-    if (currency == 0 || *currency == 0) {
+    if (currency == nullptr || *currency == 0) {
         if (U_SUCCESS(ec)) {
             ec = U_ILLEGAL_ARGUMENT_ERROR;
         }
@@ -370,7 +370,7 @@ U_CDECL_END
 struct CReg;
 
 static UMutex gCRegLock;
-static CReg* gCRegHead = 0;
+static CReg* gCRegHead = nullptr;
 
 struct CReg : public icu::UMemory {
     CReg *next;
@@ -378,7 +378,7 @@ struct CReg : public icu::UMemory {
     char  id[ULOC_FULLNAME_CAPACITY];
 
     CReg(const char16_t* _iso, const char* _id)
-        : next(0)
+        : next(nullptr)
     {
         int32_t len = (int32_t)uprv_strlen(_id);
         if (len > (int32_t)(sizeof(id)-1)) {
@@ -407,7 +407,7 @@ struct CReg : public icu::UMemory {
             }
             *status = U_MEMORY_ALLOCATION_ERROR;
         }
-        return 0;
+        return nullptr;
     }
 
     static UBool unreg(UCurrRegistryKey key) {
@@ -595,7 +595,7 @@ ucurr_forLocale(const char* locale,
         ures_close(countryArray);
     }
 
-    if ((U_FAILURE(localStatus)) && strchr(id.data(), '_') != 0) {
+    if ((U_FAILURE(localStatus)) && strchr(id.data(), '_') != nullptr) {
         // We don't know about it.  Check to see if we support the variant.
         CharString parent = ulocimp_getParent(locale, *ec);
         *ec = U_USING_FALLBACK_WARNING;
@@ -669,13 +669,13 @@ ucurr_getName(const char16_t* currency,
     //|}
 
     if (U_FAILURE(*ec)) {
-        return 0;
+        return nullptr;
     }
 
     int32_t choice = (int32_t) nameStyle;
     if (choice < 0 || choice > 4) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     // In the future, resource bundles may implement multi-level
@@ -694,7 +694,7 @@ ucurr_getName(const char16_t* currency,
     CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     char buf[ISO_CURRENCY_CODE_LENGTH+1];
@@ -721,7 +721,7 @@ ucurr_getName(const char16_t* currency,
             break;
         default:
             *ec = U_UNSUPPORTED_ERROR;
-            return 0;
+            return nullptr;
         }
         key.append("/", ec2);
         key.append(buf, ec2);
@@ -782,7 +782,7 @@ ucurr_getPluralName(const char16_t* currency,
     //|}
 
     if (U_FAILURE(*ec)) {
-        return 0;
+        return nullptr;
     }
 
     // Use a separate UErrorCode here that does not propagate out of
@@ -792,7 +792,7 @@ ucurr_getPluralName(const char16_t* currency,
     CharString loc = ulocimp_getName(locale, ec2);
     if (U_FAILURE(ec2)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     char buf[ISO_CURRENCY_CODE_LENGTH+1];
@@ -1421,7 +1421,7 @@ currency_cache_cleanup() {
     for (int32_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
         if (currCache[i]) {
             deleteCacheEntry(currCache[i]);
-            currCache[i] = 0;
+            currCache[i] = nullptr;
         }
     }
     return true;
@@ -2703,7 +2703,7 @@ ucurr_getNumericCode(const char16_t* currency) {
     if (currency && u_strlen(currency) == ISO_CURRENCY_CODE_LENGTH) {
         UErrorCode status = U_ZERO_ERROR;
 
-        UResourceBundle *bundle = ures_openDirect(0, "currencyNumericCodes", &status);
+        UResourceBundle *bundle = ures_openDirect(nullptr, "currencyNumericCodes", &status);
         ures_getByKey(bundle, "codeMap", bundle, &status);
         if (U_SUCCESS(status)) {
             char alphaCode[ISO_CURRENCY_CODE_LENGTH+1];

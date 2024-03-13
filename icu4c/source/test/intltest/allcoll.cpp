@@ -21,7 +21,7 @@
 
 
 CollationDummyTest::CollationDummyTest()
-: myCollation(0)
+: myCollation(nullptr)
 {
     /*UErrorCode status = U_ZERO_ERROR;
     UnicodeString rules(true, DEFAULTRULEARRAY, UPRV_LENGTHOF(DEFAULTRULEARRAY));
@@ -40,7 +40,7 @@ CollationDummyTest::CollationDummyTest()
     if(U_FAILURE(status)){
         errcheckln(status, "ERROR: in creation of rule based collator from ruleset - %s", u_errorName(status));
         delete myCollation;
-        myCollation = 0;
+        myCollation = nullptr;
     }
 }
 

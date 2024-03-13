@@ -507,7 +507,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
         // This constructor doesn't fail; it uses last resort data
         fSymbols = new DateFormatSymbols(status);
         /* test for nullptr */
-        if (fSymbols == 0) {
+        if (fSymbols == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -709,7 +709,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
     fSymbols = DateFormatSymbols::createForLocale(locale, status);
     if (U_FAILURE(status)) return;
     /* test for nullptr */
-    if (fSymbols == 0) {
+    if (fSymbols == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }

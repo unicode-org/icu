@@ -32,7 +32,7 @@
 #include "sfwdchit.h"
 
 CollationFinnishTest::CollationFinnishTest()
-: myCollation(0)
+: myCollation(nullptr)
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale("fi", "FI", "", "collation=standard"),status);

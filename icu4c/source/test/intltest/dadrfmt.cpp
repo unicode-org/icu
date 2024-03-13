@@ -159,7 +159,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         DateFormat *format = nullptr;
         
         // Process: 'locale'
-        locale.extract(0, locale.length(), calLoc, (const char*)0); // default codepage.  Invariant codepage doesn't have '@'!
+        locale.extract(0, locale.length(), calLoc, (const char*)nullptr); // default codepage.  Invariant codepage doesn't have '@'!
         Locale loc(calLoc);
         if(spec.startsWith(kPATTERN)) {
             pattern = UnicodeString(spec,kPATTERN.length());

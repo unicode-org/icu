@@ -24,7 +24,7 @@ class FormattedStringBuilderTest : public IntlTest {
     void testCodePoints();
     void testInsertOverflow();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = nullptr) override;
 
   private:
     void assertEqualsImpl(const UnicodeString &a, const FormattedStringBuilder &b);

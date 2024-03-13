@@ -164,7 +164,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 //--------------------------------------------------------------------------
 void RegexPattern::init() {
     fFlags            = 0;
-    fCompiledPat      = 0;
+    fCompiledPat      = nullptr;
     fLiteralText.remove();
     fSets             = nullptr;
     fSets8            = nullptr;

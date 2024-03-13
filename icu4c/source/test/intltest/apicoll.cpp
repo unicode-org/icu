@@ -64,7 +64,7 @@ void
 CollationAPITest::TestProperty(/* char* par */)
 {
     UErrorCode success = U_ZERO_ERROR;
-    Collator *col = 0;
+    Collator *col = nullptr;
     /*
      * Expected version of the English collator.
      * Currently, the major/minor version numbers change when the builder code
@@ -155,7 +155,7 @@ CollationAPITest::TestProperty(/* char* par */)
     logln(Collator::getDisplayName(Locale::US, name));
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed if this is an English machine");
 #endif
-    delete col; col = 0;
+    delete col; col = nullptr;
     RuleBasedCollator *rcol = dynamic_cast<RuleBasedCollator*>(Collator::createInstance("da_DK",
                                                                             success));
     if (U_FAILURE(success)) {
@@ -192,7 +192,7 @@ CollationAPITest::TestProperty(/* char* par */)
     logln("Create junk collation: ");
     Locale abcd("ab", "CD", "");
     success = U_ZERO_ERROR;
-    Collator *junk = 0;
+    Collator *junk = nullptr;
     junk = Collator::createInstance(abcd, success);
 
     if (U_FAILURE(success))
@@ -420,7 +420,7 @@ CollationAPITest::TestSafeClone() {
     for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
     {
         col = someCollators[index]->safeClone();
-        if (col == 0) {
+        if (col == nullptr) {
             errln("SafeClone of collator should not return null\n");
             break;
         }
@@ -441,7 +441,7 @@ CollationAPITest::TestHashCode(/* char* par */)
 {
     logln("hashCode tests begin.");
     UErrorCode success = U_ZERO_ERROR;
-    Collator *col1 = 0;
+    Collator *col1 = nullptr;
     col1 = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
     {
@@ -449,7 +449,7 @@ CollationAPITest::TestHashCode(/* char* par */)
         return;
     }
 
-    Collator *col2 = 0;
+    Collator *col2 = nullptr;
     Locale dk("da", "DK", "");
     col2 = Collator::createInstance(dk, success);
     if (U_FAILURE(success))
@@ -458,7 +458,7 @@ CollationAPITest::TestHashCode(/* char* par */)
         return;
     }
 
-    Collator *col3 = 0;
+    Collator *col3 = nullptr;
     col3 = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
     {
@@ -499,7 +499,7 @@ void
 CollationAPITest::TestCollationKey(/* char* par */)
 {
     logln("testing CollationKey begins...");
-    Collator *col = 0;
+    Collator* col = nullptr;
     UErrorCode success=U_ZERO_ERROR;
     col = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
@@ -586,10 +586,10 @@ CollationAPITest::TestCollationKey(/* char* par */)
     const uint8_t* byteArray1 = sortk1.getByteArray(cnt1);
     const uint8_t* byteArray2 = sortk2.getByteArray(cnt2);
 
-    const uint8_t* byteArray3 = 0;
+    const uint8_t* byteArray3 = nullptr;
     byteArray3 = sortk1.getByteArray(cnt3);
 
-    const uint8_t* byteArray4 = 0;
+    const uint8_t* byteArray4 = nullptr;
     byteArray4 = sortk2.getByteArray(cnt4);
 
     CollationKey sortk4(byteArray1, cnt1), sortk5(byteArray2, cnt2);
@@ -610,8 +610,8 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortk2 == sortk7, "sortk2 == sortk7 Failed.");
     doAssert(sortk1 != sortk7, "sortk1 != sortk7 Failed.");
 
-    byteArray1 = 0;
-    byteArray2 = 0;
+    byteArray1 = nullptr;
+    byteArray2 = nullptr;
 
     sortk3 = sortk1;
     doAssert(sortk1 == sortk3, "sortk1 = sortk3 assignment Failed.");
@@ -634,7 +634,7 @@ void
 CollationAPITest::TestElemIter(/* char* par */)
 {
     logln("testing sortkey begins...");
-    Collator *col = 0;
+    Collator* col = nullptr;
     UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
@@ -794,7 +794,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     success=U_UNSUPPORTED_ERROR;
     Collator *colerror=nullptr;
     colerror=Collator::createInstance(Locale::getEnglish(), success);
-    if (colerror != 0 || success == U_ZERO_ERROR){
+    if (colerror != nullptr || success == U_ZERO_ERROR) {
         errln("Error: createInstance(UErrorCode != U_ZERO_ERROR) should just return and not create an instance\n");
     }
     int32_t position=coliter->previous(success);
@@ -958,7 +958,7 @@ void
 CollationAPITest::TestCompare(/* char* par */)
 {
     logln("The compare tests begin : ");
-    Collator *col = 0;
+    Collator* col = nullptr;
     UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success)) {
@@ -2171,7 +2171,7 @@ void TestCollator::setStrength(Collator::ECollationStrength newStrength)
 
 UClassID TestCollator::getDynamicClassID() const
 {
-    return 0;
+    return nullptr;
 }
 
 void TestCollator::getVersion(UVersionInfo info) const
@@ -2199,7 +2199,7 @@ uint32_t TestCollator::setVariableTop(const char16_t *varTop, int32_t len,
                                   UErrorCode &status)
 {
     // api not used, this is to make the compiler happy
-    if (U_SUCCESS(status) && (varTop == 0 || len < -1)) {
+    if (U_SUCCESS(status) && (varTop == nullptr || len < -1)) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
     return 0;

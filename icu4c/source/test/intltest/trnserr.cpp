@@ -64,7 +64,7 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     UTransPosition pos;
 
     Transliterator* t= Transliterator::createInstance(trans, UTRANS_FORWARD, parseError, status);
-    if(t==0 || U_FAILURE(status)){
+    if (t == nullptr || U_FAILURE(status)) {
         dataerrln("FAIL: construction of Latin-Greek - %s", u_errorName(status));
         return;
     }
@@ -136,7 +136,7 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
             errln("FAIL: The input string was modified though the offsets were out of bounds.");
     }
     Transliterator* t1= Transliterator::createInstance(bogusID, UTRANS_FORWARD, parseError, status);
-    if(t1!=0 || U_SUCCESS(status)){
+    if (t1 != nullptr || U_SUCCESS(status)) {
         delete t1;
         errln("FAIL: construction of bogus ID \"LATINGREEK-GREEKLATIN\"");
     }
@@ -263,7 +263,7 @@ void TransliteratorErrorTest::TestRBTErrors() {
 
 class StubTransliterator: public Transliterator{
 public:
-    StubTransliterator(): Transliterator(UNICODE_STRING_SIMPLE("Any-Null"), 0) {}
+    StubTransliterator(): Transliterator(UNICODE_STRING_SIMPLE("Any-Null"), nullptr) {}
     virtual void handleTransliterate(Replaceable& ,UTransPosition& offsets,UBool) const override {
         offsets.start = offsets.limit;
     }

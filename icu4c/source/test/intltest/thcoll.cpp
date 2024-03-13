@@ -45,7 +45,7 @@ CollationThaiTest::CollationThaiTest() {
         //coll->setStrength(Collator::TERTIARY);
     } else {
         delete coll;
-        coll = 0;
+        coll = nullptr;
     }
 }
 
@@ -78,7 +78,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
  * using regular and iterative comparison.
  */
 void CollationThaiTest::TestNamesList() {
-    if (coll == 0) {
+    if (coll == nullptr) {
         errln("Error: could not construct Thai collator");
         return;
     }
@@ -125,7 +125,7 @@ void CollationThaiTest::TestNamesList() {
  * preceding the following line.
  */
 void CollationThaiTest::TestDictionary() {
-    if (coll == 0) {
+    if (coll == nullptr) {
         errln("Error: could not construct Thai collator");
         return;
     }
@@ -244,7 +244,7 @@ void CollationThaiTest::TestCornerCases() {
     };
     const int32_t TESTS_length = UPRV_LENGTHOF(TESTS);
 
-    if (coll == 0) {
+    if (coll == nullptr) {
         errln("Error: could not construct Thai collator");
         return;
     }

@@ -307,7 +307,7 @@ int  main(int argc, char **argv) {
     FILE        *file;
 
     file = fopen(fileName, "rb");
-    if( file == 0 ) {
+    if (file == nullptr) {
         return nullptr;
     }
     fseek(file, 0, SEEK_END);

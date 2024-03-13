@@ -1680,7 +1680,7 @@ uloc_openKeywords(const char* localeID,
                         UErrorCode* status)
 {
     if(status==nullptr || U_FAILURE(*status)) {
-        return 0;
+        return nullptr;
     }
 
     CharString tempBuffer;
@@ -1705,7 +1705,7 @@ uloc_openKeywords(const char* localeID,
             &tmpLocaleID,
             *status);
     if (U_FAILURE(*status)) {
-        return 0;
+        return nullptr;
     }
 
     /* keywords are located after '@' */

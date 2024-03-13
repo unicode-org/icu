@@ -195,7 +195,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         current[0] = 0;
         pieces[0] = new UnicodeString[1];
         pieces_lengths[0] = 1;
-        if (pieces[0] == 0) {
+        if (pieces[0] == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             goto CleanPartialInitialization;
         }
@@ -204,7 +204,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
 
     list = new UnicodeString[source.length()];
-    if (list == 0) {
+    if (list == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         goto CleanPartialInitialization;
     }
@@ -287,7 +287,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
     if (source.length() <= 2 && source.countChar32() <= 1) {
         UnicodeString *toPut = new UnicodeString(source);
         /* test for nullptr */
-        if (toPut == 0) {
+        if (toPut == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -356,7 +356,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     Hashtable permutations(status);
     Hashtable basic(status);
     if (U_FAILURE(status)) {
-        return 0;
+        return nullptr;
     }
     result.setValueDeleter(uprv_deleteUObject);
     permutations.setValueDeleter(uprv_deleteUObject);
@@ -409,7 +409,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
 
     /* Test for buffer overflows */
     if(U_FAILURE(status)) {
-        return 0;
+        return nullptr;
     }
     // convert into a String[] to clean up storage
     //String[] finalResult = new String[result.size()];
@@ -417,7 +417,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     int32_t resultCount;
     if((resultCount = result.count()) != 0) {
         finalResult = new UnicodeString[resultCount];
-        if (finalResult == 0) {
+        if (finalResult == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
@@ -481,7 +481,7 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const cha
                 UnicodeString item = *((UnicodeString *)(ne->value.pointer));
                 UnicodeString *toAdd = new UnicodeString(prefix);
                 /* test for nullptr */
-                if (toAdd == 0) {
+                if (toAdd == nullptr) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return nullptr;
                 }

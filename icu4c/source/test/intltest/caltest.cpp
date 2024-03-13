@@ -404,7 +404,7 @@ CalendarTest::TestGenericAPI()
 
     int32_t count;
     const Locale* loc = Calendar::getAvailableLocales(count);
-    if (count < 1 || loc == 0)
+    if (count < 1 || loc == nullptr)
     {
         dataerrln("FAIL: getAvailableLocales failed");
     }
@@ -1267,7 +1267,7 @@ CalendarTest::TestFields060()
     int32_t year = 1997;
     int32_t month = UCAL_OCTOBER;
     int32_t dDate = 22;
-    GregorianCalendar *calendar = 0;
+    GregorianCalendar* calendar = nullptr;
     calendar = new GregorianCalendar(year, month, dDate, status);
     if (failure(status, "new GregorianCalendar", true)) return;
     for (int32_t i = 0; i < EXPECTED_FIELDS_length;) {
@@ -3628,12 +3628,12 @@ void CalendarTest::TestWeekData() {
         "en_GB",    "und_GB",
         "ar_EG",    "en_EG",
         "ar_SA",    "fr_SA",
-        0
+        nullptr
     };
 
     UErrorCode status;
 
-    for (int32_t i = 0; LOCALE_PAIRS[i] != 0; i += 2) {
+    for (int32_t i = 0; LOCALE_PAIRS[i] != nullptr; i += 2) {
         status = U_ZERO_ERROR;
         LocalPointer<Calendar>  cal1(Calendar::createInstance(LOCALE_PAIRS[i], status));
         LocalPointer<Calendar>  cal2(Calendar::createInstance(LOCALE_PAIRS[i + 1], status));

@@ -226,14 +226,14 @@ namespace {
 class UnicodeSetPointer {
     UnicodeSet* p;
 public:
-    inline UnicodeSetPointer() : p(0) {}
+    inline UnicodeSetPointer() : p(nullptr) {}
     inline ~UnicodeSetPointer() { delete p; }
     inline UnicodeSet* pointer() { return p; }
     inline UBool allocate() {
-        if (p == 0) {
+        if (p == nullptr) {
             p = new UnicodeSet();
         }
-        return p != 0;
+        return p != nullptr;
     }
 };
 
@@ -300,7 +300,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
 
         UChar32 c = 0;
         UBool literal = false;
-        UnicodeSet* nested = 0; // alias - do not delete
+        UnicodeSet* nested = nullptr; // alias - do not delete
 
         // -------- Check for property pattern
 
@@ -352,9 +352,9 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                         continue;
                     }
                 }
-            } else if (symbols != 0) {
+            } else if (symbols != nullptr) {
                 const UnicodeFunctor *m = symbols->lookupMatcher(c);
-                if (m != 0) {
+                if (m != nullptr) {
                     const UnicodeSet *ms = dynamic_cast<const UnicodeSet *>(m);
                     if (ms == nullptr) {
                         ec = U_MALFORMED_SET;
@@ -390,7 +390,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 patLocal.append(op);
             }
 
-            if (nested == 0) {
+            if (nested == nullptr) {
                 // lazy allocation
                 if (!scratch.allocate()) {
                     ec = U_MEMORY_ALLOCATION_ERROR;
@@ -549,7 +549,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                     c = chars.next(opts, literal, ec);
                     if (U_FAILURE(ec)) return;
                     UBool anchor = (c == u']' && !literal);
-                    if (symbols == 0 && !anchor) {
+                    if (symbols == nullptr && !anchor) {
                         c = SymbolTable::SYMBOL_REF;
                         chars.setPos(backup);
                         break; // literal '$'

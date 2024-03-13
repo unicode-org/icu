@@ -1353,7 +1353,7 @@ DateFormatSymbols::initZoneStringsArray() {
         UDate now = Calendar::getNow();
         UnicodeString tzDispName;
 
-        while ((tzid = tzids->snext(status)) != 0) {
+        while ((tzid = tzids->snext(status)) != nullptr) {
             if (U_FAILURE(status)) {
                 break;
             }

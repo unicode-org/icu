@@ -57,10 +57,10 @@ StringSearchTest::StringSearchTest()
       delete m_fr_fr_;
       delete m_de_;
       delete m_es_;
-      m_en_us_ = 0;
-      m_fr_fr_ = 0;
-      m_de_ = 0;
-      m_es_ = 0;
+      m_en_us_ = nullptr;
+      m_fr_fr_ = nullptr;
+      m_de_ = nullptr;
+      m_es_ = nullptr;
       errln("Collator creation failed with %s", u_errorName(status));
       return;
     }

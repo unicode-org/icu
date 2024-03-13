@@ -133,7 +133,7 @@ static struct {
     const char *name, *alt_name;
     const char *desc;
 } modes[] = {
-        { "files", 0,           "Uses raw data files (no effect). Installation copies all files to the target location." },
+        { "files", nullptr,     "Uses raw data files (no effect). Installation copies all files to the target location." },
 #if U_PLATFORM_HAS_WIN32_API
         { "dll",    "library",  "Generates one common data file and one shared library, <package>.dll"},
         { "common", "archive",  "Generates just the common file, <package>.dat"},
@@ -370,7 +370,7 @@ main(int argc, char* argv[]) {
     uprv_memset(&o, 0, sizeof(o));
 
     o.mode      = options[MODE].value;
-    o.version   = options[REVISION].doesOccur ? options[REVISION].value : 0;
+    o.version   = options[REVISION].doesOccur ? options[REVISION].value : nullptr;
 
     o.shortName = options[NAME].value;
     {

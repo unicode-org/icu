@@ -188,12 +188,12 @@ LocaleTest::LocaleTest()
 
 LocaleTest::~LocaleTest()
 {
-    if (dataTable != 0) {
+    if (dataTable != nullptr) {
         for (int32_t i = 0; i < 33; i++) {
             delete []dataTable[i];
         }
         delete []dataTable;
-        dataTable = 0;
+        dataTable = nullptr;
     }
 }
 
@@ -929,7 +929,7 @@ void LocaleTest::doTestDisplayNames(Locale& displayLocale, int32_t compareIndex)
 
 void LocaleTest::setUpDataTable()
 {
-    if (dataTable == 0) {
+    if (dataTable == nullptr) {
         dataTable = new UnicodeString*[33];
 
         for (int32_t i = 0; i < 33; i++) {
@@ -1492,7 +1492,7 @@ LocaleTest::date(int32_t y, int32_t m, int32_t d, int32_t hr, int32_t min, int32
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
-    if (cal == 0)
+    if (cal == nullptr)
         return 0.0;
     cal->clear();
     cal->set(1900 + y, m, d, hr, min, sec); // Add 1900 to follow java.util.Date protocol
@@ -4611,7 +4611,7 @@ void LocaleTest::TestGetLocale() {
         DateFormat* df =
             DateFormat::createDateInstance(DateFormat::kDefault,
                                            Locale::createFromName(req));
-        if (df == 0){
+        if (df == nullptr) {
             dataerrln("Error calling DateFormat::createDateInstance()");
         } else {
             SimpleDateFormat* dat = dynamic_cast<SimpleDateFormat*>(df);
@@ -4664,7 +4664,7 @@ void LocaleTest::TestGetLocale() {
         
             // After registering something, the behavior should be different
             URegistryKey key = BreakIterator::registerInstance(brk, reqLoc, UBRK_WORD, ec);
-            brk = 0; // registerInstance adopts
+            brk = nullptr; // registerInstance adopts
             if (U_FAILURE(ec)) {
                 errln("FAIL: BreakIterator::registerInstance() failed");
             } else {
@@ -4688,7 +4688,7 @@ void LocaleTest::TestGetLocale() {
                     errln("FAIL: BreakIterator::unregister() failed");
                 }
                 delete brk;
-                brk = 0;
+                brk = nullptr;
             }
 
             // After unregistering, should behave normally again
@@ -4732,7 +4732,7 @@ void LocaleTest::TestGetLocale() {
 
             // After registering something, the behavior should be different
             URegistryKey key = Collator::registerInstance(coll, reqLoc, ec);
-            coll = 0; // registerInstance adopts
+            coll = nullptr; // registerInstance adopts
             if (U_FAILURE(ec)) {
                 errln("FAIL: Collator::registerInstance() failed");
             } else {
@@ -4758,7 +4758,7 @@ void LocaleTest::TestGetLocale() {
                     errln("FAIL: Collator::unregister() failed");
                 }
                 delete coll;
-                coll = 0;
+                coll = nullptr;
             }
 
             // After unregistering, should behave normally again

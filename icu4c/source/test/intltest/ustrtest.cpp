@@ -1057,9 +1057,9 @@ UnicodeStringTest::TestMiscellaneous()
     test1.append((char16_t)7); // must not be able to modify the string here
     test1.setCharAt(3, 7);
     test1.reverse();
-    if( test1.length()!=0 ||
-        test1.charAt(0)!=0xffff || test1.charAt(3)!=0xffff ||
-        test1.getBuffer(10)!=0 || test1.getBuffer()!=0
+    if (test1.length() != 0 ||
+        test1.charAt(0) != 0xffff || test1.charAt(3) != 0xffff ||
+        test1.getBuffer(10) != nullptr || test1.getBuffer() != nullptr
     ) {
         errln("UnicodeString::getBuffer(minCapacity) allows read or write access to the UnicodeString");
     }
@@ -1190,7 +1190,7 @@ UnicodeStringTest::TestStackAllocation()
     char16_t        testString[] ={
         0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x63, 0x72, 0x61, 0x7a, 0x79, 0x20, 0x74, 0x65, 0x73, 0x74, 0x2e, 0 };
     char16_t        guardWord = 0x4DED;
-    UnicodeString*  test = 0;
+    UnicodeString* test = nullptr;
 
     test = new  UnicodeString(testString);
     if (*test != "This is a crazy test.")
@@ -1466,7 +1466,7 @@ UnicodeStringTest::TestBogus() {
     if (test1.hashCode() != test2.hashCode() || test1.hashCode() == test3.hashCode()) {
         errln("hashCode() failed");
     }
-    if(test3.getBuffer()!=0 || test3.getBuffer(20)!=0 || test3.getTerminatedBuffer()!=0) {
+    if (test3.getBuffer() != nullptr || test3.getBuffer(20) != nullptr || test3.getTerminatedBuffer() != nullptr) {
         errln("bogus.getBuffer()!=0");
     }
     if (test1.indexOf(test3) != -1) {
@@ -1485,25 +1485,25 @@ UnicodeStringTest::TestBogus() {
     // verify that non-assignment modifications fail and do not revive a bogus string
     test3.setToBogus();
     test3.append((char16_t)0x61);
-    if(!test3.isBogus() || test3.getBuffer()!=0) {
+    if (!test3.isBogus() || test3.getBuffer() != nullptr) {
         errln("bogus.append('a') worked but must not");
     }
 
     test3.setToBogus();
     test3.findAndReplace(UnicodeString((char16_t)0x61), test2);
-    if(!test3.isBogus() || test3.getBuffer()!=0) {
+    if (!test3.isBogus() || test3.getBuffer() != nullptr) {
         errln("bogus.findAndReplace() worked but must not");
     }
 
     test3.setToBogus();
     test3.trim();
-    if(!test3.isBogus() || test3.getBuffer()!=0) {
+    if (!test3.isBogus() || test3.getBuffer() != nullptr) {
         errln("bogus.trim() revived bogus but must not");
     }
 
     test3.setToBogus();
     test3.remove(1);
-    if(!test3.isBogus() || test3.getBuffer()!=0) {
+    if (!test3.isBogus() || test3.getBuffer() != nullptr) {
         errln("bogus.remove(1) revived bogus but must not");
     }
 
@@ -1584,12 +1584,12 @@ UnicodeStringTest::TestBogus() {
     }
 
     test3.setToBogus();
-    if(test3.remove().isBogus() || test3.getBuffer()==0 || !test3.isEmpty()) {
+    if (test3.remove().isBogus() || test3.getBuffer() == nullptr || !test3.isEmpty()) {
         errln("bogus.remove() failed");
     }
 
     test3.setToBogus();
-    if(test3.remove(0, INT32_MAX).isBogus() || test3.getBuffer()==0 || !test3.isEmpty()) {
+    if (test3.remove(0, INT32_MAX).isBogus() || test3.getBuffer() == nullptr || !test3.isEmpty()) {
         errln("bogus.remove(0, INT32_MAX) failed");
     }
 
@@ -1611,7 +1611,7 @@ UnicodeStringTest::TestBogus() {
     }
 
     test3.setToBogus();
-    if(!test3.isBogus() || test3.getBuffer()!=0) {
+    if (!test3.isBogus() || test3.getBuffer() != nullptr) {
         errln("setToBogus() failed to make a string bogus");
     }
 

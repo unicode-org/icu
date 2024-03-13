@@ -70,7 +70,7 @@ UnicodeString escape(const UnicodeString &source) {
 // Print the given string to stdout using the UTF-8 converter
 void uprintf(const UnicodeString &str) {
     char stackBuffer[100];
-    char *buf = 0;
+    char* buf = nullptr;
 
     int32_t bufLen = str.extract(0, 0x7fffffff, stackBuffer, sizeof(stackBuffer), "UTF-8");
     if(bufLen < sizeof(stackBuffer)) {

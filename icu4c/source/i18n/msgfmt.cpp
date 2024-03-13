@@ -1086,7 +1086,7 @@ void MessageFormat::format(int32_t msgStart, const void *plNumber,
                 // that formats the number without subtracting the offset.
                 appendTo.formatAndAppend(pluralNumber.formatter, *arg, success);
             }
-        } else if ((formatter = getCachedFormatter(i -2)) != 0) {
+        } else if ((formatter = getCachedFormatter(i - 2)) != nullptr) {
             // Handles all ArgType.SIMPLE, and formatters from setFormat() and its siblings.
             if (dynamic_cast<const ChoiceFormat*>(formatter) ||
                 dynamic_cast<const PluralFormat*>(formatter) ||

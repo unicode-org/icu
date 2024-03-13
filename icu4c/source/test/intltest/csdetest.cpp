@@ -279,7 +279,7 @@ void CharsetDetectionTest::ConstructionTest()
     const char* defDisabled[] = {
         "IBM420_rtl", "IBM420_ltr",
         "IBM424_rtl", "IBM424_ltr",
-        0
+        nullptr
     };
 
     LocalUEnumerationPointer eActive(ucsdet_getDetectableCharsets(csd.getAlias(), status));
@@ -304,7 +304,7 @@ void CharsetDetectionTest::ConstructionTest()
 
         // some charsets are disabled by default
         found = false;
-        for (int32_t i = 0; defDisabled[i] != 0; i++) {
+        for (int32_t i = 0; defDisabled[i] != nullptr; i++) {
             if (strcmp(activeName, defDisabled[i]) == 0) {
                 found = true;
                 break;

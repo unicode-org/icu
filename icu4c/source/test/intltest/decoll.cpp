@@ -35,7 +35,7 @@
 #include "sfwdchit.h"
 
 CollationGermanTest::CollationGermanTest()
-: myCollation(0)
+: myCollation(nullptr)
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::getGermany(), status);

@@ -81,7 +81,7 @@ void CompoundTransliteratorTest::TestConstruction(){
        delete cpdtrans;
 
        CompoundTransliterator *cpdtrans2=new CompoundTransliterator(transarray[i], i+1);
-       if(cpdtrans2 == 0){
+       if (cpdtrans2 == nullptr) {
            errln("Construction using CompoundTransliterator(Transliterator* const transliterators[], "
                            "int32_t count, UnicodeFilter* adoptedFilter = 0)  failed");
            continue;
@@ -131,12 +131,12 @@ void CompoundTransliteratorTest::TestCloneEqual(){
         return;
     }
     CompoundTransliterator *copyct1=new CompoundTransliterator(*ct1);
-    if(copyct1 == 0){
+    if (copyct1 == nullptr) {
         errln("copy construction failed");
         return;
     }
     CompoundTransliterator *copyct2=new CompoundTransliterator(*ct2);
-    if(copyct2 == 0){
+    if (copyct2 == nullptr) {
         errln("copy construction failed");
         return;
     }
@@ -299,7 +299,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     UnicodeString ID3("Latin-Katakana");
     Transliterator **transarray2=static_cast<Transliterator **>(uprv_malloc(sizeof(Transliterator*)*1));
     transarray2[0] = Transliterator::createInstance(ID3,UTRANS_FORWARD,parseError,status);
-    if (transarray2[0] != 0) {
+    if (transarray2[0] != nullptr) {
         ct1->adoptTransliterators(transarray2, 1);
     }
     if(ct1->getCount() != 1 || ct1->getID() != ID3){

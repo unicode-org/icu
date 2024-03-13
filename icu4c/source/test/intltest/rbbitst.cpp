@@ -895,7 +895,7 @@ void RBBITest::TestExtended() {
             if (localeMatcher.lookingAt(charIdx-1, status)) {
                 UnicodeString localeName = localeMatcher.group(1, status);
                 char localeName8[100];
-                localeName.extract(0, localeName.length(), localeName8, sizeof(localeName8), 0);
+                localeName.extract(0, localeName.length(), localeName8, sizeof(localeName8), nullptr);
                 locale = Locale::createFromName(localeName8);
                 charIdx += localeMatcher.group(0, status).length() - 1;
                 TEST_ASSERT_SUCCESS(status);

@@ -29,7 +29,7 @@ CollationIteratorTest::CollationIteratorTest()
     en_us = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getUS(), status));
     if(U_FAILURE(status)) {
       delete en_us;
-      en_us = 0;
+      en_us = nullptr;
       errcheckln(status, "Collator creation failed with %s", u_errorName(status));
       return;
     }

@@ -882,8 +882,7 @@ TimeZoneRegressionTest::Test4162593()
      * Starting time
      * Transition expected between start+1H and start+2H
      */
-    TimeZone *DATA_TZ [] = {
-      0, 0, 0 };
+    TimeZone* DATA_TZ[] = {nullptr, nullptr, nullptr};
 
     int32_t DATA_INT [] [5] = {
         // These years must be AFTER the Gregorian cutover

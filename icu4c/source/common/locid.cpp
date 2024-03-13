@@ -1845,7 +1845,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
     // without goto and without another function
     do {
         char *separator;
-        char *field[5] = {0};
+        char *field[5] = {nullptr};
         int32_t fieldLen[5] = {0};
         int32_t fieldIdx;
         int32_t variantField;
@@ -1870,7 +1870,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             U_ASSERT(baseName == nullptr);
             /*Go to heap for the fullName if necessary*/
             fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
-            if(fullName == 0) {
+            if (fullName == nullptr) {
                 fullName = fullNameBuffer;
                 break; // error: out of memory
             }
@@ -1891,7 +1891,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
         separator = field[0] = fullName;
         fieldIdx = 1;
         char* at = uprv_strchr(fullName, '@');
-        while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) != 0 &&
+        while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) != nullptr &&
                fieldIdx < UPRV_LENGTHOF(field)-1 &&
                (at == nullptr || separator < at)) {
             field[fieldIdx] = separator + 1;
