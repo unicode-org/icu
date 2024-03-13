@@ -2308,7 +2308,17 @@ public class DateIntervalFormat extends UFormat {
     private static boolean fieldExistsInSkeleton(int field, String skeleton)
     {
         String fieldChar = DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field];
-        return ( (skeleton.indexOf(fieldChar) == -1) ? false : true ) ;
+        boolean result = skeleton.contains(fieldChar);
+        if (!result) {
+            if (fieldChar.equals("M")) {
+                // if the caller specified Calendar.MONTH, check the pattern for both M and L
+                result = skeleton.contains("L");
+            } else if (fieldChar.equals("y")) {
+                // if the caller specified Calendar.YEAR, check the pattern for y, Y, u, U, and r
+                result = skeleton.contains("U") || skeleton.contains("Y") || skeleton.contains("u") || skeleton.contains("r");
+            }
+        }
+        return result;
     }
 
 
