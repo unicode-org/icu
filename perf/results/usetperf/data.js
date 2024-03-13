@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710345190404,
+  "lastUpdate": 1710371388015,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -56392,6 +56392,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1426.2891,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9a912bb51be6b0a6eec37d005e38648e06b8f43d",
+          "message": "ICU-22633 Add more Calendar overflow tests\n\nTest set+set, set+add, set+roll, add+add, roll+roll\nFix more int32_t overflow problems.\n\nOptimize both Java and C++ Hebrew Calendar month/year advancement by first consider\nevery 235 months is 19 years before iteration.",
+          "timestamp": "2024-03-13T15:48:25-07:00",
+          "tree_id": "45a0444043426c272f9739746c736db8cde3db10",
+          "url": "https://github.com/unicode-org/icu/commit/9a912bb51be6b0a6eec37d005e38648e06b8f43d"
+        },
+        "date": 1710371298173,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77785.277,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 177800.6279,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.539,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.6689,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.6812,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8349.5765,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 30802.7491,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1426.0918,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
