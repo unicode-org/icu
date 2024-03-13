@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710345572541,
+  "lastUpdate": 1710371756468,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69310,6 +69310,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 39.0456,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9a912bb51be6b0a6eec37d005e38648e06b8f43d",
+          "message": "ICU-22633 Add more Calendar overflow tests\n\nTest set+set, set+add, set+roll, add+add, roll+roll\nFix more int32_t overflow problems.\n\nOptimize both Java and C++ Hebrew Calendar month/year advancement by first consider\nevery 235 months is 19 years before iteration.",
+          "timestamp": "2024-03-13T15:48:25-07:00",
+          "tree_id": "45a0444043426c272f9739746c736db8cde3db10",
+          "url": "https://github.com/unicode-org/icu/commit/9a912bb51be6b0a6eec37d005e38648e06b8f43d"
+        },
+        "date": 1710371667370,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 18.2043,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.251,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.6699,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 26.1799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 37.3729,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 32.3915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 28.4567,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9611,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 89.6511,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 20.8321,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.5123,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 38.6012,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
