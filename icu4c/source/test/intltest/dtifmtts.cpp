@@ -2386,6 +2386,22 @@ void DateIntervalFormatTest::testTicket21939() {
         UnicodeString pattern;
         assertEquals("Wrong pattern", u"M/d/r, h:mm\u202Fa", sdf->toPattern(pattern));
     }
+    
+    // additional tests for the related ICU-22202
+    dif.adoptInstead(DateIntervalFormat::createInstance(u"Lh", Locale::getEnglish(), err));
+    if (assertSuccess("Error creating DateIntervalFormat", err)) {
+        const DateFormat* df = dif->getDateFormat();
+        const SimpleDateFormat* sdf = dynamic_cast<const SimpleDateFormat*>(df);
+        UnicodeString pattern;
+        assertEquals("Wrong pattern", u"L, h\u202Fa", sdf->toPattern(pattern));
+    }
+    dif.adoptInstead(DateIntervalFormat::createInstance(u"UH", Locale::forLanguageTag("en-u-ca-chinese", err), err));
+    if (assertSuccess("Error creating DateIntervalFormat", err)) {
+        const DateFormat* df = dif->getDateFormat();
+        const SimpleDateFormat* sdf = dynamic_cast<const SimpleDateFormat*>(df);
+        UnicodeString pattern;
+        assertEquals("Wrong pattern", u"r(U), HH", sdf->toPattern(pattern));
+    }
 }
 
 void DateIntervalFormatTest::testTicket20710_FieldIdentity() {

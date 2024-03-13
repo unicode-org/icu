@@ -2493,6 +2493,17 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
         DateFormat df = dif.getDateFormat();
         SimpleDateFormat sdf = (SimpleDateFormat)df;
         assertEquals("Wrong date format", "M/d/r, h:mm\u202Fa", sdf.toPattern());
+
+        // additional tests for the related ICU-22202
+        dif = DateIntervalFormat.getInstance("Lh", ULocale.ENGLISH);
+        df = dif.getDateFormat();
+        sdf = (SimpleDateFormat)df;
+        assertEquals("Wrong date format", "L, h a", sdf.toPattern());
+
+        dif = DateIntervalFormat.getInstance("UH", ULocale.forLanguageTag("en-u-ca-chinese"));
+        df = dif.getDateFormat();
+        sdf = (SimpleDateFormat)df;
+        assertEquals("Wrong date format", "r(U), HH", sdf.toPattern());
     }
 
     @Test
