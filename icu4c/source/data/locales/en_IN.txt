@@ -298,14 +298,6 @@ en_IN{
                 yMMMMEEEEd{"EEEE d MMMM, y"}
                 yMd{"d/M/y"}
             }
-            dayPeriod{
-                stand-alone{
-                    narrow{
-                        am{"am"}
-                        pm{"pm"}
-                    }
-                }
-            }
             intervalFormats{
                 GyMMMEEEEd{
                     G{"EEEE d MMM y G – EEEE d MMM y G"}

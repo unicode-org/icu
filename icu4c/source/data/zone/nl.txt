@@ -330,9 +330,9 @@ nl{
             ls{"West-Afrikaanse standaardtijd"}
         }
         "meta:Alaska"{
-            ld{"Alaska Daylight Time"}
-            lg{"Alaska Time"}
-            ls{"Alaska Standard Time"}
+            ld{"Alaska-zomertijd"}
+            lg{"Alaska-tijd"}
+            ls{"Alaska-standaardtijd"}
             sd{"AKDT"}
             sg{"AKT"}
             ss{"AKST"}
@@ -343,38 +343,38 @@ nl{
             ls{"Alma-Ata-standaardtijd"}
         }
         "meta:Amazon"{
-            ld{"Amazon Summer Time"}
-            lg{"Amazon Time"}
-            ls{"Amazon Standard Time"}
+            ld{"Amazone-zomertijd"}
+            lg{"Amazone-tijd"}
+            ls{"Amazone-standaardtijd"}
         }
         "meta:America_Central"{
-            ld{"Central Daylight Time"}
-            lg{"Central Time"}
-            ls{"Central Standard Time"}
+            ld{"Central-zomertijd"}
+            lg{"Central-tijd"}
+            ls{"Central-standaardtijd"}
             sd{"CDT"}
             sg{"CT"}
             ss{"CST"}
         }
         "meta:America_Eastern"{
-            ld{"Eastern Daylight Time"}
-            lg{"Eastern Time"}
-            ls{"Eastern Standard Time"}
+            ld{"Eastern-zomertijd"}
+            lg{"Eastern-tijd"}
+            ls{"Eastern-standaardtijd"}
             sd{"EDT"}
             sg{"ET"}
             ss{"EST"}
         }
         "meta:America_Mountain"{
-            ld{"Mountain Daylight Time"}
-            lg{"Mountain Time"}
-            ls{"Mountain Standard Time"}
+            ld{"Mountain-zomertijd"}
+            lg{"Mountain-tijd"}
+            ls{"Mountain-standaardtijd"}
             sd{"MDT"}
             sg{"MT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
-            ld{"Pacific Daylight Time"}
-            lg{"Pacific Time"}
-            ls{"Pacific Standard Time"}
+            ld{"Pacific-zomertijd"}
+            lg{"Pacific-tijd"}
+            ls{"Pacific-standaardtijd"}
             sd{"PDT"}
             sg{"PT"}
             ss{"PST"}
@@ -405,14 +405,14 @@ nl{
             ls{"Arabische standaardtijd"}
         }
         "meta:Argentina"{
-            ld{"Argentina Summer Time"}
-            lg{"Argentina Time"}
-            ls{"Argentina Standard Time"}
+            ld{"Argentijnse zomertijd"}
+            lg{"Argentijnse tijd"}
+            ls{"Argentijnse standaardtijd"}
         }
         "meta:Argentina_Western"{
-            ld{"Western Argentina Summer Time"}
-            lg{"Western Argentina Time"}
-            ls{"Western Argentina Standard Time"}
+            ld{"West-Argentijnse zomertijd"}
+            lg{"West-Argentijnse tijd"}
+            ls{"West-Argentijnse standaardtijd"}
         }
         "meta:Armenia"{
             ld{"Armeense zomertijd"}
@@ -420,9 +420,9 @@ nl{
             ls{"Armeense standaardtijd"}
         }
         "meta:Atlantic"{
-            ld{"Atlantic Daylight Time"}
-            lg{"Atlantic Time"}
-            ls{"Atlantic Standard Time"}
+            ld{"Atlantic-zomertijd"}
+            lg{"Atlantic-tijd"}
+            ls{"Atlantic-standaardtijd"}
             sd{"ADT"}
             sg{"AT"}
             ss{"AST"}
@@ -466,12 +466,12 @@ nl{
             ls{"Bhutaanse tijd"}
         }
         "meta:Bolivia"{
-            ls{"Bolivia Time"}
+            ls{"Boliviaanse tijd"}
         }
         "meta:Brasilia"{
-            ld{"Brasilia Summer Time"}
-            lg{"Brasilia Time"}
-            ls{"Brasilia Standard Time"}
+            ld{"Braziliaanse zomertijd"}
+            lg{"Braziliaanse tijd"}
+            ls{"Braziliaanse standaardtijd"}
         }
         "meta:Brunei"{
             ls{"Bruneise tijd"}
@@ -493,9 +493,9 @@ nl{
             ls{"Chatham-standaardtijd"}
         }
         "meta:Chile"{
-            ld{"Chile Summer Time"}
-            lg{"Chile Time"}
-            ls{"Chile Standard Time"}
+            ld{"Chileense zomertijd"}
+            lg{"Chileense tijd"}
+            ls{"Chileense standaardtijd"}
         }
         "meta:China"{
             ld{"Chinese zomertijd"}
@@ -514,9 +514,9 @@ nl{
             ls{"Cocoseilandse tijd"}
         }
         "meta:Colombia"{
-            ld{"Colombia Summer Time"}
-            lg{"Colombia Time"}
-            ls{"Colombia Standard Time"}
+            ld{"Colombiaanse zomertijd"}
+            lg{"Colombiaanse tijd"}
+            ls{"Colombiaanse standaardtijd"}
         }
         "meta:Cook"{
             ld{"Cookeilandse halve zomertijd"}
@@ -524,9 +524,9 @@ nl{
             ls{"Cookeilandse standaardtijd"}
         }
         "meta:Cuba"{
-            ld{"Cuba Daylight Time"}
-            lg{"Cuba Time"}
-            ls{"Cuba Standard Time"}
+            ld{"Cubaanse zomertijd"}
+            lg{"Cubaanse tijd"}
+            ls{"Cubaanse standaardtijd"}
         }
         "meta:Davis"{
             ls{"Davis-tijd"}
@@ -538,12 +538,12 @@ nl{
             ls{"Oost-Timorese tijd"}
         }
         "meta:Easter"{
-            ld{"Easter Island Summer Time"}
-            lg{"Easter Island Time"}
-            ls{"Easter Island Standard Time"}
+            ld{"Paaseilandse zomertijd"}
+            lg{"Paaseilandse tijd"}
+            ls{"Paaseilandse standaardtijd"}
         }
         "meta:Ecuador"{
-            ls{"Ecuador Time"}
+            ls{"Ecuadoraanse tijd"}
         }
         "meta:Europe_Central"{
             ld{"Midden-Europese zomertijd"}
@@ -573,9 +573,9 @@ nl{
             ss{"WET"}
         }
         "meta:Falkland"{
-            ld{"Falkland Islands Summer Time"}
-            lg{"Falkland Islands Time"}
-            ls{"Falkland Islands Standard Time"}
+            ld{"Falklandeilandse zomertijd"}
+            lg{"Falklandeilandse tijd"}
+            ls{"Falklandeilandse standaardtijd"}
         }
         "meta:Fiji"{
             ld{"Fijische zomertijd"}
@@ -583,7 +583,7 @@ nl{
             ls{"Fijische standaardtijd"}
         }
         "meta:French_Guiana"{
-            ls{"French Guiana Time"}
+            ls{"Frans-Guyaanse tijd"}
         }
         "meta:French_Southern"{
             ls{"Franse zuidelijke en Antarctische tijd"}
@@ -593,7 +593,7 @@ nl{
             ss{"GMT"}
         }
         "meta:Galapagos"{
-            ls{"Galapagos Time"}
+            ls{"Galapagoseilandse tijd"}
         }
         "meta:Gambier"{
             ls{"Gambiereilandse tijd"}
@@ -607,14 +607,14 @@ nl{
             ls{"Gilberteilandse tijd"}
         }
         "meta:Greenland_Eastern"{
-            ld{"East Greenland Summer Time"}
-            lg{"East Greenland Time"}
-            ls{"East Greenland Standard Time"}
+            ld{"Oost-Groenlandse zomertijd"}
+            lg{"Oost-Groenlandse tijd"}
+            ls{"Oost-Groenlandse standaardtijd"}
         }
         "meta:Greenland_Western"{
-            ld{"West Greenland Summer Time"}
-            lg{"West Greenland Time"}
-            ls{"West Greenland Standard Time"}
+            ld{"West-Groenlandse zomertijd"}
+            lg{"West-Groenlandse tijd"}
+            ls{"West-Groenlandse standaardtijd"}
         }
         "meta:Guam"{
             ls{"Guamese standaardtijd"}
@@ -623,12 +623,12 @@ nl{
             ls{"Golf-standaardtijd"}
         }
         "meta:Guyana"{
-            ls{"Guyana Time"}
+            ls{"Guyaanse tijd"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Hawaii-Aleutian Daylight Time"}
-            lg{"Hawaii-Aleutian Time"}
-            ls{"Hawaii-Aleutian Standard Time"}
+            ld{"Hawaii-Aleoetische zomertijd"}
+            lg{"Hawaii-Aleoetische tijd"}
+            ls{"Hawaii-Aleoetische standaardtijd"}
             sd{"HADT"}
             sg{"HAT"}
             ss{"HAST"}
@@ -750,9 +750,9 @@ nl{
             ls{"Mawson-tijd"}
         }
         "meta:Mexico_Pacific"{
-            ld{"Mexican Pacific Daylight Time"}
-            lg{"Mexican Pacific Time"}
-            ls{"Mexican Pacific Standard Time"}
+            ld{"Mexicaanse Pacific-zomertijd"}
+            lg{"Mexicaanse Pacific-tijd"}
+            ls{"Mexicaanse Pacific-standaardtijd"}
         }
         "meta:Mongolia"{
             ld{"Ulaanbaatar-zomertijd"}
@@ -784,9 +784,9 @@ nl{
             ls{"Nieuw-Zeelandse standaardtijd"}
         }
         "meta:Newfoundland"{
-            ld{"Newfoundland Daylight Time"}
-            lg{"Newfoundland Time"}
-            ls{"Newfoundland Standard Time"}
+            ld{"Newfoundland-zomertijd"}
+            lg{"Newfoundland-tijd"}
+            ls{"Newfoundland-standaardtijd"}
         }
         "meta:Niue"{
             ls{"Niuese tijd"}
@@ -797,9 +797,9 @@ nl{
             ls{"Norfolkeilandse standaardtijd"}
         }
         "meta:Noronha"{
-            ld{"Fernando de Noronha Summer Time"}
-            lg{"Fernando de Noronha Time"}
-            ls{"Fernando de Noronha Standard Time"}
+            ld{"Fernando de Noronha-zomertijd"}
+            lg{"Fernando de Noronha-tijd"}
+            ls{"Fernando de Noronha-standaardtijd"}
         }
         "meta:North_Mariana"{
             ls{"Noordelijk Mariaanse tijd"}
@@ -826,14 +826,14 @@ nl{
             ls{"Papoea-Nieuw-Guineese tijd"}
         }
         "meta:Paraguay"{
-            ld{"Paraguay Summer Time"}
-            lg{"Paraguay Time"}
-            ls{"Paraguay Standard Time"}
+            ld{"Paraguayaanse zomertijd"}
+            lg{"Paraguayaanse tijd"}
+            ls{"Paraguayaanse standaardtijd"}
         }
         "meta:Peru"{
-            ld{"Peru Summer Time"}
-            lg{"Peru Time"}
-            ls{"Peru Standard Time"}
+            ld{"Peruaanse zomertijd"}
+            lg{"Peruaanse tijd"}
+            ls{"Peruaanse standaardtijd"}
         }
         "meta:Philippines"{
             ld{"Filipijnse zomertijd"}
@@ -844,9 +844,9 @@ nl{
             ls{"Phoenixeilandse tijd"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"St. Pierre & Miquelon Daylight Time"}
-            lg{"St. Pierre & Miquelon Time"}
-            ls{"St. Pierre & Miquelon Standard Time"}
+            ld{"Saint Pierre en Miquelon-zomertijd"}
+            lg{"Saint Pierre en Miquelon-tijd"}
+            ls{"Saint Pierre en Miquelon-standaardtijd"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairneilandse tijd"}
@@ -933,8 +933,8 @@ nl{
         }
         "meta:Uruguay"{
             ld{"Uruguayaanse zomertijd"}
-            lg{"Uruguay Time"}
-            ls{"Uruguay Standard Time"}
+            lg{"Uruguayaanse tijd"}
+            ls{"Uruguayaanse standaardtijd"}
         }
         "meta:Uzbekistan"{
             ld{"Oezbeekse zomertijd"}
@@ -979,7 +979,7 @@ nl{
             ls{"Jekaterinenburg-standaardtijd"}
         }
         "meta:Yukon"{
-            ls{"Yukon Time"}
+            ls{"Yukon-tijd"}
         }
         regionFormat{"tijd in {0}"}
         regionFormatDaylight{"zomertijd in {0}"}

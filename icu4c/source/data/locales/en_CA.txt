@@ -244,7 +244,7 @@ en_CA{
                     }
                     narrow{
                         afternoon1{"aft"}
-                        am{"a.m."}
+                        am{"am"}
                         evening1{"eve"}
                         midnight{"mid"}
                         morning1{"mor"}

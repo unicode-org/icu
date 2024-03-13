@@ -1,9 +1,7 @@
-# Test data for unit conversions
-#  Copyright © 1991-2023 Unicode, Inc.
+# Test data for Person Name Data#  Copyright © 1991-2024 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
-#  SPDX-License-Identifier: Unicode-DFS-2016
+#  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
-#
 # CLDR person name formatting test data for: vi
 #
 # Test lines have the following structure:
