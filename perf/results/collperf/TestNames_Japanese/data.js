@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710345039157,
+  "lastUpdate": 1710371233064,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39094,6 +39094,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5792273.2574,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9a912bb51be6b0a6eec37d005e38648e06b8f43d",
+          "message": "ICU-22633 Add more Calendar overflow tests\n\nTest set+set, set+add, set+roll, add+add, roll+roll\nFix more int32_t overflow problems.\n\nOptimize both Java and C++ Hebrew Calendar month/year advancement by first consider\nevery 235 months is 19 years before iteration.",
+          "timestamp": "2024-03-13T15:48:25-07:00",
+          "tree_id": "45a0444043426c272f9739746c736db8cde3db10",
+          "url": "https://github.com/unicode-org/icu/commit/9a912bb51be6b0a6eec37d005e38648e06b8f43d"
+        },
+        "date": 1710371143849,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 209.0618,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20896274.8322,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5283620.0408,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20003599.7059,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5766700.2456,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
