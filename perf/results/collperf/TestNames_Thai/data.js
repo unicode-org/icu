@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710297871381,
+  "lastUpdate": 1710310389898,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38986,6 +38986,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2077527.183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d43d216febe18d37ad840cbac3f953b989b65965",
+          "message": "ICU-22633 Test and fix int32_t overflow for Calendar set\n\nAdd test to set with INT32_MAX and INT32_MIN then call getTime()\nand fix all the undefined errors.",
+          "timestamp": "2024-03-12T16:46:53-07:00",
+          "tree_id": "8df8456fe2ad6a4a7d889b4e460b61d4f2803cc9",
+          "url": "https://github.com/unicode-org/icu/commit/d43d216febe18d37ad840cbac3f953b989b65965"
+        },
+        "date": 1710310298972,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 365.1611,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12052950.2842,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 1996827.6028,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11127561.4059,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2014131.0109,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
