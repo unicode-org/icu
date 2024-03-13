@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     // Create a Greek-Latin Transliterator
     greek_latin = Transliterator::createInstance("Greek-Latin");
-    if (greek_latin == 0) {
+    if (greek_latin == nullptr) {
         printf("ERROR: Transliterator::createInstance() failed\n");
         exit(1);
     }

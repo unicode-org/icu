@@ -23,7 +23,7 @@ U_CFUNC int c_main();
 
 void printUnicodeString(const UnicodeString &s) {
     char charBuf[1000];
-    s.extract(0, s.length(), charBuf, sizeof(charBuf)-1, 0);   
+    s.extract(0, s.length(), charBuf, sizeof(charBuf) - 1, nullptr);
     charBuf[sizeof(charBuf)-1] = 0;          
     printf("%s", charBuf);
 }

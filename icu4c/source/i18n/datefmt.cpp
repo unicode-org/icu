@@ -122,8 +122,8 @@ DateFmtBestPatternKey::~DateFmtBestPatternKey() { }
 
 
 DateFormat::DateFormat()
-:   fCalendar(0),
-    fNumberFormat(0),
+:   fCalendar(nullptr),
+    fNumberFormat(nullptr),
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
 }
@@ -132,8 +132,8 @@ DateFormat::DateFormat()
 
 DateFormat::DateFormat(const DateFormat& other)
 :   Format(other),
-    fCalendar(0),
-    fNumberFormat(0),
+    fCalendar(nullptr),
+    fNumberFormat(nullptr),
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     *this = other;

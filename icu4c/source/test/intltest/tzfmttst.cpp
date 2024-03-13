@@ -538,13 +538,13 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
     UBool REALLY_VERBOSE = false;
 
     // These patterns are ambiguous at DST->STD local time overlap
-    const char* AMBIGUOUS_DST_DECESSION[] = { "v", "vvvv", "V", "VV", "VVV", "VVVV", 0 };
+    const char* AMBIGUOUS_DST_DECESSION[] = { "v", "vvvv", "V", "VV", "VVV", "VVVV", nullptr };
 
     // These patterns are ambiguous at STD->STD/DST->DST local time overlap
-    const char* AMBIGUOUS_NEGATIVE_SHIFT[] = { "z", "zzzz", "v", "vvvv", "V", "VV", "VVV", "VVVV", 0 };
+    const char* AMBIGUOUS_NEGATIVE_SHIFT[] = { "z", "zzzz", "v", "vvvv", "V", "VV", "VVV", "VVVV", nullptr };
 
     // These patterns only support integer minutes offset
-    const char* MINUTES_OFFSET[] = { "X", "XX", "XXX", "x", "xx", "xxx", 0 };
+    const char* MINUTES_OFFSET[] = { "X", "XX", "XXX", "x", "xx", "xxx", nullptr };
 
     // Workaround for #6338
     //UnicodeString BASEPATTERN("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -988,9 +988,9 @@ TimeZoneFormatTest::TestISOFormat() {
         },
         // 108000000
         {
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0
+            nullptr, nullptr, nullptr, nullptr, nullptr,
+            nullptr, nullptr, nullptr, nullptr, nullptr,
+            nullptr
         }
     };
 
@@ -998,7 +998,7 @@ TimeZoneFormatTest::TestISOFormat() {
         "X", "XX", "XXX", "XXXX", "XXXXX",
         "x", "xx", "xxx", "xxxx", "xxxxx",
         "Z", // equivalent to "xxxx"
-        0
+        nullptr
     };
 
     const int32_t MIN_OFFSET_UNIT[] = {
@@ -1019,7 +1019,7 @@ TimeZoneFormatTest::TestISOFormat() {
     for (uint32_t i = 0; i < UPRV_LENGTHOF(OFFSET); i++) {
         SimpleTimeZone* tz = new SimpleTimeZone(OFFSET[i], UnicodeString("Zone Offset:") + OFFSET[i] + "ms");
         sdf->adoptTimeZone(tz);
-        for (int32_t j = 0; PATTERN[j] != 0; j++) {
+        for (int32_t j = 0; PATTERN[j] != nullptr; j++) {
             sdf->applyPattern(UnicodeString(PATTERN[j]));
             UnicodeString result;
             sdf->format(d, result);
@@ -1048,8 +1048,8 @@ TimeZoneFormatTest::TestISOFormat() {
         return;
     }
     for (int32_t i = 0; ISO_STR[i][0] != nullptr; i++) {
-        for (int32_t j = 0; PATTERN[j] != 0; j++) {
-            if (ISO_STR[i][j] == 0) {
+        for (int32_t j = 0; PATTERN[j] != nullptr; j++) {
+            if (ISO_STR[i][j] == nullptr) {
                 continue;
             }
             ParsePosition pos(0);
@@ -1156,7 +1156,7 @@ TimeZoneFormatTest::TestFormat() {
             UTZFMT_TIME_TYPE_UNKNOWN
         },
 
-        {0, 0, 0.0, UTZFMT_STYLE_GENERIC_LOCATION, 0, UTZFMT_TIME_TYPE_UNKNOWN}
+        {nullptr, nullptr, 0.0, UTZFMT_STYLE_GENERIC_LOCATION, nullptr, UTZFMT_TIME_TYPE_UNKNOWN}
     };
 
     for (int32_t i = 0; DATA[i].locale; i++) {
@@ -1246,7 +1246,7 @@ TimeZoneFormatTest::TestFormatTZDBNames() {
             UTZFMT_TIME_TYPE_STANDARD
         },
 
-        {0, 0, 0.0, UTZFMT_STYLE_GENERIC_LOCATION, 0, UTZFMT_TIME_TYPE_UNKNOWN}
+        {nullptr, nullptr, 0.0, UTZFMT_STYLE_GENERIC_LOCATION, nullptr, UTZFMT_TIME_TYPE_UNKNOWN}
     };
 
     for (int32_t i = 0; DATA[i].locale; i++) {
@@ -1290,14 +1290,14 @@ TimeZoneFormatTest::TestFormatCustomZone() {
         { "abc", 3600000, "GMT+01:00" },                    // unknown ID
         { "$abc", -3600000, "GMT-01:00" },                 // unknown, with ASCII variant char '$'
         { "\\u00c1\\u00df\\u00c7", 5400000, "GMT+01:30"},    // unknown, with non-ASCII chars
-        { 0, 0, 0 }
+        { nullptr, 0, nullptr }
     };
 
     UDate now = Calendar::getNow();
 
     for (int32_t i = 0; ; i++) {
         const char *id = TESTDATA[i].id;
-        if (id == 0) {
+        if (id == nullptr) {
             break;
         }
         UnicodeString tzid = UnicodeString(id, -1, US_INV).unescape();

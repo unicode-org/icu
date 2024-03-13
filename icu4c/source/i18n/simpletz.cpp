@@ -731,7 +731,7 @@ UBool SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
     if (U_FAILURE(status)) return false;
     GregorianCalendar *gc = new GregorianCalendar(*this, status);
     /* test for nullptr */
-    if (gc == 0) {
+    if (gc == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return false;
     }

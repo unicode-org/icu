@@ -18,7 +18,7 @@ using icu::UnicodeString;
  */
 UnaccentTransliterator::UnaccentTransliterator() :
     normalizer("", Normalizer::DECOMP),
-    Transliterator("Unaccent", 0) {
+    Transliterator("Unaccent", nullptr) {
 }
 
 /**

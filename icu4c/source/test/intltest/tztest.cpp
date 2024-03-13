@@ -342,7 +342,7 @@ void
 TimeZoneTest::TestPRTOffset()
 {
     TimeZone* tz = TimeZone::createTimeZone("PRT");
-    if (tz == 0) {
+    if (tz == nullptr) {
         errln("FAIL: TimeZone(PRT) is null");
     }
     else {
@@ -494,7 +494,7 @@ TimeZoneTest::TestGetAvailableIDs913()
         const UnicodeString* id = s->snext(ec);
         if (i==0 || i==middle || i==(s_length-1)) {
         TimeZone *z = TimeZone::createTimeZone(*id);
-        if (z == 0) {
+        if (z == nullptr) {
             errln(UnicodeString("FAIL: createTimeZone(") +
                   *id + ") -> 0");
         } else if (z->getID(str) != *id) {
@@ -552,18 +552,18 @@ TimeZoneTest::TestGetAvailableIDs913()
     logln(buf);
 
     TimeZone *tz = TimeZone::createTimeZone("PST");
-    if (tz != 0) logln("getTimeZone(PST) = " + tz->getID(str));
+    if (tz != nullptr) logln("getTimeZone(PST) = " + tz->getID(str));
     else errln("FAIL: getTimeZone(PST) = null");
     delete tz;
     tz = TimeZone::createTimeZone("America/Los_Angeles");
-    if (tz != 0) logln("getTimeZone(America/Los_Angeles) = " + tz->getID(str));
+    if (tz != nullptr) logln("getTimeZone(America/Los_Angeles) = " + tz->getID(str));
     else errln("FAIL: getTimeZone(PST) = null");
     delete tz;
 
     // @bug 4096694
     tz = TimeZone::createTimeZone("NON_EXISTENT");
     UnicodeString temp;
-    if (tz == 0)
+    if (tz == nullptr)
         errln("FAIL: getTimeZone(NON_EXISTENT) = null");
     else if (tz->getID(temp) != UCAL_UNKNOWN_ZONE_ID)
         errln("FAIL: getTimeZone(NON_EXISTENT) = " + temp);
@@ -1229,10 +1229,10 @@ void TimeZoneTest::TestCustomParse()
         {u"GMT-๑๒",          (-((12*60)*60))}, // ICU-22637
         {u"GMT-๑๒:๓๔",       (-((12*60+34)*60))}, // ICU-22637
         {u"GMT+๑๒:๓๔:๕๖",    ((12*60+34)*60+56)}, // ICU-22637
-        {0,           0}
+        {nullptr, 0}
     };
 
-    for (i=0; kData[i].customId != 0; i++) {
+    for (i = 0; kData[i].customId != nullptr; i++) {
         UnicodeString id(kData[i].customId);
         int32_t exp = kData[i].expectedOffset;
         TimeZone *zone = TimeZone::createTimeZone(id);
@@ -1888,14 +1888,14 @@ void TimeZoneTest::TestHistorical() {
         {"America/Goose_Bay", -84391200, -3*H}, // Sun Apr 30 03:00:00 GMT-03:00 1967
         {"America/Goose_Bay", -68670001, -3*H}, // Sun Oct 29 01:59:59 GMT-03:00 1967
         {"America/Goose_Bay", -68670000, -4*H}, // Sun Oct 29 01:00:00 GMT-04:00 1967
-        {0, 0, 0}
+        {nullptr, 0, 0}
     };
-    
-    for (int32_t i=0; DATA[i].id!=0; ++i) {
+
+    for (int32_t i = 0; DATA[i].id != nullptr; ++i) {
         const char* id = DATA[i].id;
         TimeZone *tz = TimeZone::createTimeZone(id);
         UnicodeString s;
-        if (tz == 0) {
+        if (tz == nullptr) {
             errln("FAIL: Cannot create %s", id);
         } else if (tz->getID(s) != UnicodeString(id)) {
             dataerrln((UnicodeString)"FAIL: createTimeZone(" + id + ") => " + s);
@@ -2217,7 +2217,7 @@ void TimeZoneTest::TestCanonicalID() {
         {"Pacific/Truk", "Pacific/Port_Moresby"},
         {"Pacific/Wake", "Pacific/Funafuti"},
         {"Pacific/Wallis", "Pacific/Funafuti"},
-        {0, 0}
+        {nullptr, nullptr}
     };
 
     // Following IDs are aliases of Etc/GMT in CLDR,
@@ -2230,7 +2230,7 @@ void TimeZoneTest::TestCanonicalID() {
         "Etc/UCT", "UCT",
         "Etc/UTC", "UTC",
         "Etc/Universal", "Universal",
-        "Etc/Zulu", "Zulu", 0
+        "Etc/Zulu", "Zulu", nullptr
     };
 
     // Walk through equivalency groups
@@ -2263,7 +2263,7 @@ void TimeZoneTest::TestCanonicalID() {
                 continue;
             }
             // Some exceptional cases
-            for (k = 0; excluded1[k].alias != 0; k++) {
+            for (k = 0; excluded1[k].alias != nullptr; k++) {
                 if (tmpCanonical == excluded1[k].alias) {
                     tmpCanonical = excluded1[k].zone;
                     break;
@@ -2284,7 +2284,7 @@ void TimeZoneTest::TestCanonicalID() {
         if (bFoundCanonical == false) {
             // test exclusion because of differences between Olson tzdata and CLDR
             UBool isExcluded = false;
-            for (k = 0; excluded2[k] != 0; k++) {
+            for (k = 0; excluded2[k] != nullptr; k++) {
                 if (*tzid == UnicodeString(excluded2[k])) {
                     isExcluded = true;
                     break;
@@ -2310,21 +2310,21 @@ void TimeZoneTest::TestCanonicalID() {
         {"GMT+430", "GMT+04:30", false},
         {"GMT-12:15", "GMT-12:15", false},
         {"GMT-091015", "GMT-09:10:15", false},
-        {"GMT+1:90", 0, false},
+        {"GMT+1:90", nullptr, false},
         {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", true},
         {"Etc/Unknown", "Etc/Unknown", false},
-        {"bogus", 0, false},
-        {"", 0, false},
+        {"bogus", nullptr, false},
+        {"", nullptr, false},
         {"America/Marigot", "America/Marigot", true},     // Olson link, but CLDR canonical (#8953)
         {"Europe/Bratislava", "Europe/Bratislava", true}, // Same as above
-        {0, 0, false}
+        {nullptr, nullptr, false}
     };
 
     UBool isSystemID;
-    for (i = 0; data[i].id != 0; i++) {
+    for (i = 0; data[i].id != nullptr; i++) {
         TimeZone::getCanonicalID(UnicodeString(data[i].id), canonicalID, isSystemID, ec);
         if (U_FAILURE(ec)) {
-            if (ec != U_ILLEGAL_ARGUMENT_ERROR || data[i].expected != 0) {
+            if (ec != U_ILLEGAL_ARGUMENT_ERROR || data[i].expected != nullptr) {
                 errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
                     + "\") returned status U_ILLEGAL_ARGUMENT_ERROR");
             }
@@ -2472,10 +2472,10 @@ void TimeZoneTest::TestGetRegion()
         // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
         {"Atlantic/Jan_Mayen",              "SJ"},
         {"Pacific/Truk",                    "FM"},
-        {"Etc/Unknown",                     0},  // CLDR canonical, but not a sysmte zone ID
-        {"bogus",                           0},  // bogus
-        {"GMT+08:00",                       0},  // a custom ID, not a system zone ID
-        {0, 0}
+        {"Etc/Unknown",                     nullptr},  // CLDR canonical, but not a sysmte zone ID
+        {"bogus",                           nullptr},  // bogus
+        {"GMT+08:00",                       nullptr},  // a custom ID, not a system zone ID
+        {nullptr, nullptr}
     };
 
     int32_t i;
@@ -2485,7 +2485,7 @@ void TimeZoneTest::TestGetRegion()
         sts = U_ZERO_ERROR;
         TimeZone::getRegion(data[i].id, region, sizeof(region), sts);
         if (U_SUCCESS(sts)) {
-            if (data[i].region == 0) {
+            if (data[i].region == nullptr) {
                 errln((UnicodeString)"Fail: getRegion(\"" + data[i].id + "\") returns "
                     + region + " [expected: U_ILLEGAL_ARGUMENT_ERROR]");
             } else if (uprv_strcmp(region, data[i].region) != 0) {
@@ -2493,7 +2493,7 @@ void TimeZoneTest::TestGetRegion()
                     + region + " [expected: " + data[i].region + "]");
             }
         } else if (sts == U_ILLEGAL_ARGUMENT_ERROR) {
-            if (data[i].region != 0) {
+            if (data[i].region != nullptr) {
                 dataerrln((UnicodeString)"Fail: getRegion(\"" + data[i].id
                     + "\") returns error status U_ILLEGAL_ARGUMENT_ERROR [expected: "
                     + data[i].region + "]");
@@ -2574,10 +2574,10 @@ void TimeZoneTest::TestGetWindowsID() {
         {"Asia/Khandyga",           "Yakutsk Standard Time"},
         {"Australia/Eucla",         "Aus Central W. Standard Time"}, // formerly no Windows ID mapping, now has one
         {"Bogus",                   ""},
-        {0,                         0},
+        {nullptr,                   nullptr},
     };
 
-    for (int32_t i = 0; TESTDATA[i].id != 0; i++) {
+    for (int32_t i = 0; TESTDATA[i].id != nullptr; i++) {
         UErrorCode sts = U_ZERO_ERROR;
         UnicodeString windowsID;
 
@@ -2593,19 +2593,19 @@ void TimeZoneTest::TestGetIDForWindowsID() {
         const char *region;
         const char *id;
     } TESTDATA[] = {
-        {"Eastern Standard Time",   0,      "America/New_York"},
-        {"Eastern Standard Time",   "US",   "America/New_York"},
-        {"Eastern Standard Time",   "CA",   "America/Toronto"},
-        {"Eastern Standard Time",   "CN",   "America/New_York"},
-        {"China Standard Time",     0,      "Asia/Shanghai"},
-        {"China Standard Time",     "CN",   "Asia/Shanghai"},
-        {"China Standard Time",     "HK",   "Asia/Hong_Kong"},
-        {"Mid-Atlantic Standard Time",  0,  ""}, // No tz database mapping
-        {"Bogus",                   0,      ""},
-        {0,                         0,      0},
+        {"Eastern Standard Time",      nullptr, "America/New_York"},
+        {"Eastern Standard Time",      "US",    "America/New_York"},
+        {"Eastern Standard Time",      "CA",    "America/Toronto"},
+        {"Eastern Standard Time",      "CN",    "America/New_York"},
+        {"China Standard Time",        nullptr, "Asia/Shanghai"},
+        {"China Standard Time",        "CN",    "Asia/Shanghai"},
+        {"China Standard Time",        "HK",    "Asia/Hong_Kong"},
+        {"Mid-Atlantic Standard Time", nullptr, ""}, // No tz database mapping
+        {"Bogus",                      nullptr, ""},
+        {nullptr,                      nullptr, nullptr},
     };
 
-    for (int32_t i = 0; TESTDATA[i].winid != 0; i++) {
+    for (int32_t i = 0; TESTDATA[i].winid != nullptr; i++) {
         UErrorCode sts = U_ZERO_ERROR;
         UnicodeString id;
 
@@ -2661,7 +2661,7 @@ void TimeZoneTest::TestGetIanaID() {
         const char16_t* expected;
     } TESTDATA[] = {
         {u"",                   UNKNOWN},
-        {0,                     UNKNOWN},
+        {nullptr,               UNKNOWN},
         {UNKNOWN,               UNKNOWN},
         {u"America/New_York",   u"America/New_York"},
         {u"Asia/Calcutta",      u"Asia/Kolkata"},
@@ -2671,10 +2671,10 @@ void TimeZoneTest::TestGetIanaID() {
         {u"Etc/GMT+20",         UNKNOWN},
         {u"PST8PDT",            u"PST8PDT"},
         {u"GMT-08:00",          UNKNOWN},
-        {0,                     0}
+        {nullptr,               nullptr}
     };
 
-    for (int32_t i = 0; TESTDATA[i].expected != 0; i++) {
+    for (int32_t i = 0; TESTDATA[i].expected != nullptr; i++) {
         UErrorCode sts = U_ZERO_ERROR;
         UnicodeString inputID(TESTDATA[i].id);
         UnicodeString ianaID;

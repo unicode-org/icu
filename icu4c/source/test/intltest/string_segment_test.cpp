@@ -16,7 +16,7 @@ class StringSegmentTest : public IntlTest {
     void testGetCodePoint();
     void testCommonPrefixLength();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 };
 
 static const char16_t* SAMPLE_STRING = u"📻 radio 📻";

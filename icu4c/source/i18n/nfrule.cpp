@@ -118,7 +118,7 @@ NFRule::makeRules(UnicodeString& description,
     // description string)
     NFRule* rule1 = new NFRule(rbnf, description, status);
     /* test for nullptr */
-    if (rule1 == 0) {
+    if (rule1 == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -162,7 +162,7 @@ NFRule::makeRules(UnicodeString& description,
             // goes SECOND in the rule set's rule list)
             rule2 = new NFRule(rbnf, UnicodeString(), status);
             /* test for nullptr */
-            if (rule2 == 0) {
+            if (rule2 == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }

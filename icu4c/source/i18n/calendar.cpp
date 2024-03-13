@@ -741,7 +741,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
         delete zone;
         return;
     }
-    if(zone == 0) {
+    if (zone == nullptr) {
 #if defined (U_DEBUG_CAL)
         fprintf(stderr, "%s:%d: ILLEGAL ARG because timezone cannot be 0\n",
             __FILE__, __LINE__);

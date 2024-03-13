@@ -53,7 +53,7 @@ BasicNormalizerTest::TestNormalizerAPI() {
         errln("error in Normalizer(Normalizer(CharacterIterator)).clone()->next().hashCode()==copy.hashCode()");
     }
     delete clone;
-    clone=0;
+    clone = nullptr;
 
     // test compose() and decompose()
     UnicodeString tel, nfkc, nfkd;

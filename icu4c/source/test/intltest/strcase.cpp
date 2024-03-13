@@ -42,7 +42,7 @@ public:
     StringCaseTest();
     virtual ~StringCaseTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
     void TestCaseConversion();
 
@@ -1671,7 +1671,7 @@ void StringCaseTest::TestBug13127() {
     // Test case crashed when the bug was present.
     const char16_t *s16 = u"日本語";
     UnicodeString s(true, s16, -1);
-    s.toTitle(0, Locale::getEnglish());
+    s.toTitle(nullptr, Locale::getEnglish());
 }
 
 void StringCaseTest::TestInPlaceTitle() {

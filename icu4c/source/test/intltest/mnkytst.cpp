@@ -31,7 +31,7 @@
 
 CollationMonkeyTest::CollationMonkeyTest()
 : source("-abcdefghijklmnopqrstuvwxyz#&^$@", ""),
-  myCollator(0)
+  myCollator(nullptr)
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollator = Collator::createInstance("en_US", status);

@@ -488,7 +488,7 @@ ucol_openFromShortString( const char *definition,
     UTRACE_ENTRY_OC(UTRACE_UCOL_OPEN_FROM_SHORT_STRING);
     UTRACE_DATA1(UTRACE_INFO, "short string = \"%s\"", definition);
 
-    if(U_FAILURE(*status)) return 0;
+    if (U_FAILURE(*status)) return nullptr;
 
     UParseError internalParseError;
 

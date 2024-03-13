@@ -215,7 +215,7 @@ pl_getLineVisualRun(const pl_line *line, le_int32 runIndex)
     ParagraphLayout::Line *ll = (ParagraphLayout::Line *) line;
 
     if (ll == nullptr) {
-        return 0;
+        return nullptr;
     }
 
     return (pl_visualRun *) ll->getVisualRun(runIndex);

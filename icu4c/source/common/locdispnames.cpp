@@ -59,7 +59,7 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
     int32_t length;
 
     buffer=result.getBuffer(ULOC_FULLNAME_CAPACITY);
-    if(buffer==0) {
+    if (buffer == nullptr) {
         result.truncate(0);
         return result;
     }
@@ -71,7 +71,7 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
-        if(buffer==0) {
+        if (buffer == nullptr) {
             result.truncate(0);
             return result;
         }
@@ -99,7 +99,7 @@ Locale::getDisplayScript(const Locale &displayLocale,
     int32_t length;
 
     buffer=result.getBuffer(ULOC_FULLNAME_CAPACITY);
-    if(buffer==0) {
+    if (buffer == nullptr) {
         result.truncate(0);
         return result;
     }
@@ -111,7 +111,7 @@ Locale::getDisplayScript(const Locale &displayLocale,
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
-        if(buffer==0) {
+        if (buffer == nullptr) {
             result.truncate(0);
             return result;
         }
@@ -139,7 +139,7 @@ Locale::getDisplayCountry(const Locale &displayLocale,
     int32_t length;
 
     buffer=result.getBuffer(ULOC_FULLNAME_CAPACITY);
-    if(buffer==0) {
+    if (buffer == nullptr) {
         result.truncate(0);
         return result;
     }
@@ -151,7 +151,7 @@ Locale::getDisplayCountry(const Locale &displayLocale,
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
-        if(buffer==0) {
+        if (buffer == nullptr) {
             result.truncate(0);
             return result;
         }
@@ -179,7 +179,7 @@ Locale::getDisplayVariant(const Locale &displayLocale,
     int32_t length;
 
     buffer=result.getBuffer(ULOC_FULLNAME_CAPACITY);
-    if(buffer==0) {
+    if (buffer == nullptr) {
         result.truncate(0);
         return result;
     }
@@ -191,7 +191,7 @@ Locale::getDisplayVariant(const Locale &displayLocale,
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
-        if(buffer==0) {
+        if (buffer == nullptr) {
             result.truncate(0);
             return result;
         }
@@ -219,7 +219,7 @@ Locale::getDisplayName(const Locale &displayLocale,
     int32_t length;
 
     buffer=result.getBuffer(ULOC_FULLNAME_CAPACITY);
-    if(buffer==0) {
+    if (buffer == nullptr) {
         result.truncate(0);
         return result;
     }
@@ -231,7 +231,7 @@ Locale::getDisplayName(const Locale &displayLocale,
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
-        if(buffer==0) {
+        if (buffer == nullptr) {
             result.truncate(0);
             return result;
         }

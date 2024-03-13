@@ -22,7 +22,7 @@ using icu::LESwaps;
 FontObject::FontObject(char *fileName)
   : directory(nullptr), numTables(0), searchRange(0),entrySelector(0),
     cmapTable(nullptr), cmSegCount(0), cmSearchRange(0), cmEntrySelector(0),
-    cmEndCodes(nullptr), cmStartCodes(nullptr), cmIdDelta(0), cmIdRangeOffset(0),
+    cmEndCodes(nullptr), cmStartCodes(nullptr), cmIdDelta(nullptr), cmIdRangeOffset(nullptr),
     headTable(nullptr), hmtxTable(nullptr), numGlyphs(0), numOfLongHorMetrics(0), file(nullptr)
 {
     file = fopen(fileName, "rb");
@@ -140,7 +140,7 @@ void FontObject::initUnicodeCMAP()
 {
     CMAPEncodingSubtable *encodingSubtable = findCMAP(3, 1);
 
-    if (encodingSubtable == 0 ||
+    if (encodingSubtable == nullptr ||
         SWAPW(encodingSubtable->format) != 4) {
         printf("Can't find unicode 'cmap'");
         return;

@@ -1557,7 +1557,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // our rule list is an array of the appropriate size
     fRuleSets = (NFRuleSet **)uprv_malloc((numRuleSets + 1) * sizeof(NFRuleSet *));
     /* test for nullptr */
-    if (fRuleSets == 0) {
+    if (fRuleSets == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }

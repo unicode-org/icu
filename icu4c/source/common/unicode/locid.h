@@ -273,10 +273,10 @@ public:
      * @see uloc_getDefault
      * @stable ICU 2.0
      */
-    Locale( const   char * language,
-            const   char * country  = 0,
-            const   char * variant  = 0,
-            const   char * keywordsAndValues = 0);
+    Locale(const char* language,
+           const char* country = nullptr,
+           const char* variant = nullptr,
+           const char* keywordsAndValues = nullptr);
 
     /**
      * Initializes a Locale object from another Locale object.

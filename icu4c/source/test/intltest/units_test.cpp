@@ -471,7 +471,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
         return;
     }
     UnicodeString uExpected = UnicodeString::fromUTF8(utf8Expected);
-    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, status);
+    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), nullptr, status);
     unum_close(nf);
     if (status.errIfFailureAndReset("unum_parseDouble(\"%s\") failed", utf8Expected)) {
         return;

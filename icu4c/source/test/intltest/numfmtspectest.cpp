@@ -64,7 +64,8 @@ public:
     void TestPercent();
     void TestPerMilli();
     void TestPadding();
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
+
 private:
     void assertPatternFr(
             const char *expected, double x, const char *pattern, UBool possibleDataError=false);

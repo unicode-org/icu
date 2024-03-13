@@ -127,17 +127,17 @@ void UCAConformanceTest::openTestFile(const char *type)
 
     testFile = fopen(buffer, "rb");
 
-    if(testFile == 0) {
+    if (testFile == nullptr) {
         uprv_strcpy(buffer+bufLen, "_SHORT");
         uprv_strcat(buffer, ext);
         testFile = fopen(buffer, "rb");
 
-        if(testFile == 0) {
+        if (testFile == nullptr) {
             uprv_strcpy(buffer+bufLen, "_STUB");
             uprv_strcat(buffer, ext);
             testFile = fopen(buffer, "rb");
 
-            if (testFile == 0) {
+            if (testFile == nullptr) {
                 *(buffer+bufLen) = 0;
                 dataerrln("Could not open any of the conformance test files, tried opening base %s\n", buffer);
                 return;        
@@ -172,7 +172,7 @@ normalizeResult(int32_t result) {
 
 void UCAConformanceTest::testConformance(const Collator *coll) 
 {
-    if(testFile == 0) {
+    if (testFile == nullptr) {
         return;
     }
     uint32_t skipFlags = 0;

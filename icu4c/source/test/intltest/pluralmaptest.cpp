@@ -36,7 +36,7 @@ public:
     void TestIterate();
     void TestEqual();
     void TestCopyAndAssign();
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
     void addVariant(
             PluralMapBase::Category v,
             const UnicodeString &value,

@@ -42,7 +42,7 @@ int32_t DateFormatRoundTripTest::SPARSENESS = 0;
 int32_t DateFormatRoundTripTest::TRIALS = 4;
 int32_t DateFormatRoundTripTest::DEPTH = 5;
 
-DateFormatRoundTripTest::DateFormatRoundTripTest() : dateFormat(0) {
+DateFormatRoundTripTest::DateFormatRoundTripTest() : dateFormat(nullptr) {
 }
 
 DateFormatRoundTripTest::~DateFormatRoundTripTest() {
@@ -517,12 +517,12 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
 
 const UnicodeString& DateFormatRoundTripTest::fullFormat(UDate d) {
     UErrorCode ec = U_ZERO_ERROR;
-    if (dateFormat == 0) {
+    if (dateFormat == nullptr) {
         dateFormat = new SimpleDateFormat((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", ec);
-        if (U_FAILURE(ec) || dateFormat == 0) {
+        if (U_FAILURE(ec) || dateFormat == nullptr) {
             fgStr = "[FAIL: SimpleDateFormat constructor]";
             delete dateFormat;
-            dateFormat = 0;
+            dateFormat = nullptr;
             return fgStr;
         }
     }

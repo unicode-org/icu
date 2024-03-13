@@ -1445,8 +1445,8 @@ main(int argc, char* argv[])
 
     // initial check for the default converter
     errorCode = U_ZERO_ERROR;
-    cnv = ucnv_open(0, &errorCode);
-    if(cnv != 0) {
+    cnv = ucnv_open(nullptr, &errorCode);
+    if (cnv != nullptr) {
         // ok
         ucnv_close(cnv);
     } else {
@@ -1463,7 +1463,7 @@ main(int argc, char* argv[])
 
     // try more data
     cnv = ucnv_open(TRY_CNV_2, &errorCode);
-    if(cnv != 0) {
+    if (cnv != nullptr) {
         // ok
         ucnv_close(cnv);
     } else {
@@ -1477,7 +1477,7 @@ main(int argc, char* argv[])
         }
     }
 
-    UResourceBundle *rb = ures_open(0, "en", &errorCode);
+    UResourceBundle *rb = ures_open(nullptr, "en", &errorCode);
     ures_close(rb);
     if(U_FAILURE(errorCode)) {
         fprintf(stdout,
@@ -1536,7 +1536,7 @@ main(int argc, char* argv[])
 #endif
 
     free(_testDataPath);
-    _testDataPath = 0;
+    _testDataPath = nullptr;
 
     Locale lastDefaultLocale;
     if (originalLocale != lastDefaultLocale) {
@@ -2222,7 +2222,7 @@ static char ASSERT_BUF[256];
 static const char* extractToAssertBuf(const UnicodeString& message) {
     UnicodeString buf;
     escape(message, buf);
-    buf.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF)-1, 0);
+    buf.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF) - 1, nullptr);
     ASSERT_BUF[sizeof(ASSERT_BUF)-1] = 0;
     return ASSERT_BUF;
 }
@@ -2362,7 +2362,7 @@ char16_t *IntlTest::ReadAndConvertFile(const char *fileName, int &ulen, const ch
     //  Open the file.
     //
     f = fopen(fileName, "rb");
-    if (f == 0) {
+    if (f == nullptr) {
         dataerrln("Error opening test data file %s\n", fileName);
         status = U_FILE_ACCESS_ERROR;
         return nullptr;
@@ -2437,7 +2437,7 @@ cleanUpAndReturn:
     if (U_FAILURE(status)) {
         errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
         delete []retPtr;
-        retPtr = 0;
+        retPtr = nullptr;
         ulen   = 0;
     }
     return retPtr;

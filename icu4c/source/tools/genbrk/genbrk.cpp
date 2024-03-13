@@ -208,7 +208,7 @@ int  main(int argc, char **argv) {
     char        *ruleBufferC;
 
     file = fopen(ruleFileName, "rb");
-    if( file == 0 ) {
+    if (file == nullptr) {
         fprintf(stderr, "Could not open file \"%s\"\n", ruleFileName);
         exit(-1);
     }

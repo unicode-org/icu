@@ -2529,7 +2529,7 @@ void NumberFormatTest::TestIllegalPatterns() {
         // Unquoted special characters in the suffix are illegal
         "-:000.000|###",
         "+:000.000'|###'",
-        0
+        nullptr
     };
     for (int32_t i=0; DATA[i]; ++i) {
         const char* pat=DATA[i];
@@ -2560,7 +2560,7 @@ static const char* KEYWORDS[] = {
     /*6*/ "perr:", // <pattern or '-'> <invalid string>
     /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
     /*8*/ "fpc:", // <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
-    0
+    nullptr
 };
 
 /**
@@ -2570,7 +2570,7 @@ static const char* KEYWORDS[] = {
  * the list.
  */
 static int32_t keywordIndex(const UnicodeString& tok) {
-    for (int32_t i=0; KEYWORDS[i]!=0; ++i) {
+    for (int32_t i = 0; KEYWORDS[i] != nullptr; ++i) {
         if (tok==KEYWORDS[i]) {
             return i;
         }
@@ -2606,8 +2606,8 @@ void NumberFormatTest::TestCases() {
     TokenIterator tokens(&reader);
 
     Locale loc("en", "US", "");
-    DecimalFormat *ref = 0, *fmt = 0;
-    MeasureFormat *mfmt = 0;
+    DecimalFormat *ref = nullptr, *fmt = nullptr;
+    MeasureFormat* mfmt = nullptr;
     UnicodeString pat, tok, mloc, str, out, where, currAmt;
     Formattable n;
 
@@ -2761,7 +2761,7 @@ void NumberFormatTest::TestCases() {
                 testpat = pat;
             }
             if (exppat == "-") exppat = testpat;
-            DecimalFormat* f = 0;
+            DecimalFormat* f = nullptr;
             UErrorCode ec2 = U_ZERO_ERROR;
             if (existingPat) {
                 f = fmt;

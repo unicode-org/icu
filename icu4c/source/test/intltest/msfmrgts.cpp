@@ -208,7 +208,7 @@ void MessageFormatRegressionTest::Test4031438()
         //if(objs[7/*params.length*/] != nullptr)
         //    errln("Parse failed with more than expected arguments");
 
-        NumberFormat *fmt = 0;
+        NumberFormat* fmt = nullptr;
         UnicodeString temp, temp1;
 
         for (int i = 0; i < count; i++) {
@@ -702,7 +702,7 @@ void MessageFormatRegressionTest::Test4118592()
     failure(status, "new messageFormat");
     UnicodeString pattern("{0,choice,1#YES|2#NO}");
     UnicodeString prefix("");
-    Formattable *objs = 0;
+    Formattable* objs = nullptr;
 
     for (int i = 0; i < 5; i++) {
         UnicodeString formatted;

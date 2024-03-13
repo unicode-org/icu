@@ -831,7 +831,8 @@ public:
     RelativeDateTimeFormatterTest() {
     }
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
+    void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
+
 private:
     void TestEnglish();
     void TestEnglishCaps();

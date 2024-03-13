@@ -71,7 +71,7 @@ U_CFUNC char uconvmsg_dat[];
 #define DEFAULT_BUFSZ   4096
 #define UCONVMSG "uconvmsg"
 
-static UResourceBundle *gBundle = 0;    /* Bundle containing messages. */
+static UResourceBundle *gBundle = nullptr; /* Bundle containing messages. */
 
 /*
  * Initialize the message bundle so that message strings can be fetched
@@ -138,17 +138,17 @@ static struct callback_ent {
     const void *touctxt;
 } transcode_callbacks[] = {
     { "substitute",
-      UCNV_FROM_U_CALLBACK_SUBSTITUTE, 0,
-      UCNV_TO_U_CALLBACK_SUBSTITUTE, 0 },
+      UCNV_FROM_U_CALLBACK_SUBSTITUTE, nullptr,
+      UCNV_TO_U_CALLBACK_SUBSTITUTE, nullptr },
     { "skip",
-      UCNV_FROM_U_CALLBACK_SKIP, 0,
-      UCNV_TO_U_CALLBACK_SKIP, 0 },
+      UCNV_FROM_U_CALLBACK_SKIP, nullptr,
+      UCNV_TO_U_CALLBACK_SKIP, nullptr },
     { "stop",
-      UCNV_FROM_U_CALLBACK_STOP, 0,
-      UCNV_TO_U_CALLBACK_STOP, 0 },
+      UCNV_FROM_U_CALLBACK_STOP, nullptr,
+      UCNV_TO_U_CALLBACK_STOP, nullptr },
     { "escape",
-      UCNV_FROM_U_CALLBACK_ESCAPE, 0,
-      UCNV_TO_U_CALLBACK_ESCAPE, 0},
+      UCNV_FROM_U_CALLBACK_ESCAPE, nullptr,
+      UCNV_TO_U_CALLBACK_ESCAPE, nullptr },
     { "escape-icu",
       UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_ICU,
       UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_ICU },
@@ -186,7 +186,7 @@ static const struct callback_ent *findCallback(const char *name) {
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 /* Print converter information. If lookfor is set, only that converter will
@@ -590,8 +590,8 @@ ConvertFile::convertFile(const char *pname,
 {
     FILE *infile;
     UBool ret = true;
-    UConverter *convfrom = 0;
-    UConverter *convto = 0;
+    UConverter *convfrom = nullptr;
+    UConverter *convto = nullptr;
     UErrorCode err = U_ZERO_ERROR;
     UBool flush;
     UBool closeFile = false;
@@ -606,7 +606,7 @@ ConvertFile::convertFile(const char *pname,
     size_t rd, wr;
 
 #if !UCONFIG_NO_TRANSLITERATION
-    Transliterator *t = 0;      // Transliterator acting on Unicode data.
+    Transliterator *t = nullptr;// Transliterator acting on Unicode data.
     UnicodeString chunk;        // One chunk of the text being collected for transformation.
 #endif
     UnicodeString u;            // String to do the transliteration.
@@ -619,9 +619,9 @@ ConvertFile::convertFile(const char *pname,
 
     // Open the correct input file or connect to stdin for reading input
 
-    if (infilestr != 0 && strcmp(infilestr, "-")) {
+    if (infilestr != nullptr && strcmp(infilestr, "-")) {
         infile = fopen(infilestr, "rb");
-        if (infile == 0) {
+        if (infile == nullptr) {
             UnicodeString str1(infilestr, "");
             str1.append((UChar32) 0);
             UnicodeString str2(strerror(errno), "");
@@ -681,7 +681,7 @@ ConvertFile::convertFile(const char *pname,
 
             if (t) {
                 delete t;
-                t = 0;
+                t = nullptr;
             }
             goto error_exit;
         }
@@ -702,7 +702,7 @@ ConvertFile::convertFile(const char *pname,
             u_wmsg_errorName(err));
         goto error_exit;
     }
-    ucnv_setToUCallBack(convfrom, toucallback, touctxt, 0, 0, &err);
+    ucnv_setToUCallBack(convfrom, toucallback, touctxt, nullptr, nullptr, &err);
     if (U_FAILURE(err)) {
         initMsg(pname);
         u_wmsg(stderr, "cantSetCallback", u_wmsg_errorName(err));
@@ -717,7 +717,7 @@ ConvertFile::convertFile(const char *pname,
             u_wmsg_errorName(err));
         goto error_exit;
     }
-    ucnv_setFromUCallBack(convto, fromucallback, fromuctxt, 0, 0, &err);
+    ucnv_setFromUCallBack(convto, fromucallback, fromuctxt, nullptr, nullptr, &err);
     if (U_FAILURE(err)) {
         initMsg(pname);
         u_wmsg(stderr, "cantSetCallback", u_wmsg_errorName(err));
@@ -1103,16 +1103,16 @@ main(int argc, char **argv)
 
     size_t bufsz = DEFAULT_BUFSZ;
 
-    const char *fromcpage = 0;
-    const char *tocpage = 0;
-    const char *translit = 0;
-    const char *outfilestr = 0;
+    const char *fromcpage = nullptr;
+    const char *tocpage = nullptr;
+    const char *translit = nullptr;
+    const char *outfilestr = nullptr;
     UBool fallback = false;
 
     UConverterFromUCallback fromucallback = UCNV_FROM_U_CALLBACK_STOP;
-    const void *fromuctxt = 0;
+    const void *fromuctxt = nullptr;
     UConverterToUCallback toucallback = UCNV_TO_U_CALLBACK_STOP;
-    const void *touctxt = 0;
+    const void *touctxt = nullptr;
 
     char **iter, **remainArgv, **remainArgvLimit;
     char **end = argv + argc;
@@ -1120,7 +1120,7 @@ main(int argc, char **argv)
     const char *pname;
 
     UBool printConvs = false, printCanon = false, printTranslits = false;
-    const char *printName = 0;
+    const char *printName = nullptr;
 
     UBool verbose = false;
     UErrorCode status = U_ZERO_ERROR;
@@ -1322,9 +1322,9 @@ main(int argc, char **argv)
     }
 
     // Open the correct output file or connect to stdout for reading input
-    if (outfilestr != 0 && strcmp(outfilestr, "-")) {
+    if (outfilestr != nullptr && strcmp(outfilestr, "-")) {
         outfile = fopen(outfilestr, "wb");
-        if (outfile == 0) {
+        if (outfile == nullptr) {
             UnicodeString str1(outfilestr, "");
             UnicodeString str2(strerror(errno), "");
             initMsg(pname);
@@ -1361,7 +1361,7 @@ main(int argc, char **argv)
     } else {
         if (!cf.convertFile(
                 pname, fromcpage, toucallback, touctxt, tocpage,
-                fromucallback, fromuctxt, fallback, translit, 0,
+                fromucallback, fromuctxt, fallback, translit, nullptr,
                 outfile, verbose)
         ) {
             goto error_exit;

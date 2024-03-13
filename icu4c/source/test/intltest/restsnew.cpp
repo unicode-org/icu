@@ -164,12 +164,12 @@ param[] =
     // "IN" means inherits
     // "NE" or "ne" means "does not exist"
 
-    { "root",       0,   U_ZERO_ERROR,             e_Root,      { true, false, false }, { true, false, false } },
-    { "te",         0,   U_ZERO_ERROR,             e_te,        { false, true, false }, { true, true, false  } },
-    { "te_IN",      0,   U_ZERO_ERROR,             e_te_IN,     { false, false, true }, { true, true, true   } },
-    { "te_NE",      0,   U_USING_FALLBACK_WARNING, e_te,        { false, true, false }, { true, true, false  } },
-    { "te_IN_NE",   0,   U_USING_FALLBACK_WARNING, e_te_IN,     { false, false, true }, { true, true, true   } },
-    { "ne",         0,   U_USING_DEFAULT_WARNING,  e_Root,      { true, false, false }, { true, false, false } }
+    { "root",       nullptr,   U_ZERO_ERROR,             e_Root,      { true, false, false }, { true, false, false } },
+    { "te",         nullptr,   U_ZERO_ERROR,             e_te,        { false, true, false }, { true, true, false  } },
+    { "te_IN",      nullptr,   U_ZERO_ERROR,             e_te_IN,     { false, false, true }, { true, true, true   } },
+    { "te_NE",      nullptr,   U_USING_FALLBACK_WARNING, e_te,        { false, true, false }, { true, true, false  } },
+    { "te_IN_NE",   nullptr,   U_USING_FALLBACK_WARNING, e_te_IN,     { false, false, true }, { true, true, true   } },
+    { "ne",         nullptr,   U_USING_DEFAULT_WARNING,  e_Root,      { true, false, false }, { true, false, false } }
 };
 
 static int32_t bundles_count = UPRV_LENGTHOF(param);

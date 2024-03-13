@@ -193,13 +193,13 @@ U_CAPI UCalendar* U_EXPORT2
 ucal_clone(const UCalendar* cal,
            UErrorCode*      status)
 {
-  if(U_FAILURE(*status)) return 0;
-  
+  if (U_FAILURE(*status)) return nullptr;
+
   Calendar* res = ((Calendar*)cal)->clone();
 
-  if(res == 0) {
+  if (res == nullptr) {
     *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
+    return nullptr;
   }
 
   return (UCalendar*) res;
@@ -544,7 +544,7 @@ ucal_getLimit(    const    UCalendar*              cal,
               UCalendarDateFields     field,
               UCalendarLimitType      type,
               UErrorCode        *status) UPRV_NO_SANITIZE_UNDEFINED {
-    if(status==0 || U_FAILURE(*status)) {
+    if (status == nullptr || U_FAILURE(*status)) {
         return -1;
     }
     if (field < 0 || UCAL_FIELD_COUNT <= field) {
@@ -600,13 +600,13 @@ ucal_getTZDataVersion(UErrorCode* status)
 U_CAPI int32_t U_EXPORT2
 ucal_getCanonicalTimeZoneID(const char16_t* id, int32_t len,
                             char16_t* result, int32_t resultCapacity, UBool *isSystemID, UErrorCode* status) {
-    if(status == 0 || U_FAILURE(*status)) {
+    if (status == nullptr || U_FAILURE(*status)) {
         return 0;
     }
     if (isSystemID) {
         *isSystemID = false;
     }
-    if (id == 0 || len == 0 || result == 0 || resultCapacity <= 0) {
+    if (id == nullptr || len == 0 || result == nullptr || resultCapacity <= 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

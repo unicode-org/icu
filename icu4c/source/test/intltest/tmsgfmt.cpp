@@ -81,7 +81,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
 void TestMessageFormat::testBug3()
 {
     double myNumber = -123456;
-    DecimalFormat *form = 0;
+    DecimalFormat* form = nullptr;
     Locale locale[] = {
         Locale("ar", "", ""),
         Locale("be", "", ""),
@@ -374,7 +374,7 @@ void TestMessageFormat::PatternTest()
 
 void TestMessageFormat::sample() 
 {
-    MessageFormat *form = 0;
+    MessageFormat* form = nullptr;
     UnicodeString buffer1, buffer2;
     UErrorCode success = U_ZERO_ERROR;
     form = new MessageFormat("There are {0} files on {1}", success);
@@ -863,7 +863,7 @@ void TestMessageFormat::testCopyConstructor()
     UErrorCode success = U_ZERO_ERROR;
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
-    MessageFormat *y = 0;
+    MessageFormat* y = nullptr;
     y = new MessageFormat(*x);
     if ( (*x == *y) && 
          (*x != *z) && 
@@ -922,7 +922,7 @@ void TestMessageFormat::testClone()
     UErrorCode success = U_ZERO_ERROR;
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
-    MessageFormat *y = 0;
+    MessageFormat* y = nullptr;
     y = x->clone();
     if ( (*x == *y) && 
          (*x != *z) && 
@@ -1210,8 +1210,8 @@ void TestMessageFormat::testAdopt()
     int32_t count, countCmp;
     const Format** formats = msg.getFormats(count);
     const Format** formatsCmp = msgCmp.getFormats(countCmp);
-    const Format** formatsChg = 0;
-    const Format** formatsAct = 0;
+    const Format** formatsChg = nullptr;
+    const Format** formatsAct = nullptr;
     int32_t countAct;
     const Format* a;
     const Format* b;

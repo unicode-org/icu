@@ -281,7 +281,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, nullptr, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumTest";
@@ -290,7 +290,7 @@ public:
   NumTest(const char *pat, const char *num, double expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
-      fFmt(0),
+      fFmt(nullptr),
       fPat(pat, -1, US_INV),
       fString(num,-1,US_INV),
       fStr(fString.getTerminatedBuffer()),
@@ -409,7 +409,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, nullptr, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumFmtTest";
@@ -418,7 +418,7 @@ public:
   NumFmtTest(const char *pat, const char *num, double expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
-      fFmt(0),
+      fFmt(nullptr),
       fPat(pat, -1, US_INV),
       fString(num,-1,US_INV),
       fStr(fString.getTerminatedBuffer()),
@@ -496,29 +496,29 @@ protected:
   virtual UNumberFormat* initFmt() {
     switch(fMode) {
     case kPattern:
-      return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
+      return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, nullptr, &setupStatus);
     case kApplyPattern:
       {
-        UNumberFormat *fmt = unum_open(UNUM_DECIMAL, nullptr, -1, TEST_LOCALE, 0, &setupStatus);
+        UNumberFormat *fmt = unum_open(UNUM_DECIMAL, nullptr, -1, TEST_LOCALE, nullptr, &setupStatus);
         unum_applyPattern(fmt, false, fPat.getTerminatedBuffer(), -1, nullptr, &setupStatus);
         return fmt;
       }
     case kGroupOff:
       {
-        UNumberFormat *fmt = unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, 0, &setupStatus);
+        UNumberFormat *fmt = unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, TEST_LOCALE, nullptr, &setupStatus);
         unum_setAttribute(fmt, UNUM_GROUPING_USED, UNUM_NO);
         return fmt;
       }
     case kApplyGroupOff:
       {
-        UNumberFormat *fmt = unum_open(UNUM_DECIMAL, nullptr, -1, TEST_LOCALE, 0, &setupStatus);
+        UNumberFormat *fmt = unum_open(UNUM_DECIMAL, nullptr, -1, TEST_LOCALE, nullptr, &setupStatus);
         unum_applyPattern(fmt, false, fPat.getTerminatedBuffer(), -1, nullptr, &setupStatus);
         unum_setAttribute(fmt, UNUM_GROUPING_USED, UNUM_NO);
         return fmt;
       }
     default:
     case kDefault:
-      return unum_open(UNUM_DEFAULT, nullptr, -1, TEST_LOCALE, 0, &setupStatus);
+      return unum_open(UNUM_DEFAULT, nullptr, -1, TEST_LOCALE, nullptr, &setupStatus);
     }
   }
   virtual const char *getClassName() {
@@ -542,7 +542,7 @@ public:
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fMode(mode),
       fExpect(expect),
-      fFmt(0),
+      fFmt(nullptr),
       fPat(pat, -1, US_INV),
       fString(num,-1,US_INV),
       fStr(fString.getTerminatedBuffer()),
@@ -633,7 +633,7 @@ public:
   NumFmtStringPieceTest(const char *pat, const char *num, const StringPiece& expect, const char *FILE, int LINE)
     : HowExpensiveTest("(n/a)",FILE, LINE),
       fExpect(expect),
-      fFmt(0),
+      fFmt(nullptr),
       fPat(pat, -1, US_INV),
       fString(num,-1,US_INV),
       fStr(fString.getTerminatedBuffer()),

@@ -1816,9 +1816,9 @@ void UnicodeSetTest::TestSurrogate() {
         "[abc\\uD800\\uDC00]",
         // "[abc\uD800\uDC00]", // Can't do this on C -- only Java
         "[abc\\U00010000]",
-        0
+        nullptr
     };
-    for (int i=0; DATA[i] != 0; ++i) {
+    for (int i = 0; DATA[i] != nullptr; ++i) {
         UErrorCode ec = U_ZERO_ERROR;
         logln((UnicodeString)"Test pattern " + i + " :" + UnicodeString(DATA[i], -1, US_INV));
         UnicodeString str = UnicodeString(DATA[i], -1, US_INV);

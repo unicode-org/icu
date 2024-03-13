@@ -162,14 +162,14 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     if (U_FAILURE(fStatus))
     { 
         dataerrln((UnicodeString)"**** FAIL: createXxxInstance failed. - " + u_errorName(fStatus));
-        if (fFormat != 0)
+        if (fFormat != nullptr)
             errln("**** FAIL: Non-null format returned by createXxxInstance upon failure.");
         delete fFormat;
-        fFormat = 0;
+        fFormat = nullptr;
         return;
     }
-                    
-    if (fFormat == 0)
+
+    if (fFormat == nullptr)
     {
         errln((UnicodeString)"**** FAIL: Null format returned by createXxxInstance.");
         return;

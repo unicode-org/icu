@@ -111,7 +111,7 @@ IntlTestDateFormat::testLocale(/*char* par, */const Locale& locale, const Unicod
 
 void IntlTestDateFormat::testFormat(/* char* par */)
 {
-    if (fFormat == 0)
+    if (fFormat == nullptr)
     {
         dataerrln("FAIL: DateFormat creation failed");
         return;
