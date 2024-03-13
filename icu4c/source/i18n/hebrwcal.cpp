@@ -136,6 +136,10 @@ static const int16_t  LEAP_MONTH_START[][3] = {
     {  383,        384,        385  },          // Elul
 };
 
+// There are 235 months in 19 years cycle.
+static const int32_t MONTHS_IN_CYCLE = 235;
+static const int32_t YEARS_IN_CYCLE = 19;
+
 static icu::CalendarCache *gCache =  nullptr;
 
 U_CDECL_BEGIN
@@ -227,12 +231,23 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
           // ADAR_1 -- then we have to bump to ADAR_2 aka ADAR.  But
           // if amount is -2 and we land in ADAR_1, then we have to
           // bump the other way -- down to SHEVAT.  - Alan 11/00
-          int32_t month = get(UCAL_MONTH, status);
+          int64_t month = get(UCAL_MONTH, status);
           int32_t year = get(UCAL_YEAR, status);
           UBool acrossAdar1;
           if (amount > 0) {
               acrossAdar1 = (month < ADAR_1); // started before ADAR_1?
               month += amount;
+              // We know there are total 235 months in every 19 years. To speed
+              // up the iteration, we first fast forward in the multiple of 235
+              // months for 19 years before the iteration which check the leap year.
+              if (month >= MONTHS_IN_CYCLE) {
+                  if (uprv_add32_overflow(year, (month / MONTHS_IN_CYCLE) * YEARS_IN_CYCLE, &year)) {
+                      status = U_ILLEGAL_ARGUMENT_ERROR;
+                      return;
+                  }
+                  month %= MONTHS_IN_CYCLE;
+              }
+
               for (;;) {
                   if (acrossAdar1 && month>=ADAR_1 && !isLeapYear(year)) {
                       ++month;
@@ -247,6 +262,16 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
           } else {
               acrossAdar1 = (month > ADAR_1); // started after ADAR_1?
               month += amount;
+              // We know there are total 235 months in every 19 years. To speed
+              // up the iteration, we first fast forward in the multiple of 235
+              // months for 19 years before the iteration which check the leap year.
+              if (month <= -MONTHS_IN_CYCLE) {
+                  if (uprv_add32_overflow(year, (month / MONTHS_IN_CYCLE) * YEARS_IN_CYCLE, &year)) {
+                      status = U_ILLEGAL_ARGUMENT_ERROR;
+                      return;
+                  }
+                  month %= MONTHS_IN_CYCLE;
+              }
               for (;;) {
                   if (acrossAdar1 && month<=ADAR_1 && !isLeapYear(year)) {
                       --month;
@@ -485,7 +510,7 @@ int32_t HebrewCalendar::yearType(int32_t year) const
 */
 UBool HebrewCalendar::isLeapYear(int32_t year) {
     //return (year * 12 + 17) % 19 >= 12;
-    int64_t x = (year*12LL + 17) % 19;
+    int64_t x = (year*12LL + 17) % YEARS_IN_CYCLE;
     return x >= ((x < 0) ? -7 : 12);
 }
 
@@ -620,6 +645,23 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
     int dayOfMonth = dayOfYear - (isLeap ? LEAP_MONTH_START[month][type] : MONTH_START[month][type]);
 
     internalSet(UCAL_ERA, 0);
+    // Check out of bound year
+    int32_t min_year = handleGetLimit(UCAL_EXTENDED_YEAR, UCAL_LIMIT_MINIMUM);
+    if (year < min_year) {
+      if (!isLenient()) {
+       status = U_ILLEGAL_ARGUMENT_ERROR;
+       return;
+      }
+      year = min_year;
+    }
+    int32_t max_year = handleGetLimit(UCAL_EXTENDED_YEAR, UCAL_LIMIT_MAXIMUM);
+    if (max_year < year) {
+      if (!isLenient()) {
+       status = U_ILLEGAL_ARGUMENT_ERROR;
+       return;
+      }
+      year = max_year;
+    }
     internalSet(UCAL_YEAR, year);
     internalSet(UCAL_EXTENDED_YEAR, year);
     int32_t ordinal_month = month;
@@ -667,6 +709,16 @@ int64_t HebrewCalendar::handleComputeMonthStart(
     // on the year) but since we _always_ number from 0..12, and
     // the leap year determines whether or not month 5 (Adar 1)
     // is present, we allow 0..12 in any given year.
+
+    // The month could be in large value, we first roll 235 months to 19 years
+    // before the while loop.
+    if (month <= -MONTHS_IN_CYCLE || month >= MONTHS_IN_CYCLE) {
+        if (uprv_add32_overflow(eyear, (month / MONTHS_IN_CYCLE) * YEARS_IN_CYCLE, &eyear)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        month %= MONTHS_IN_CYCLE;
+    }
     while (month < 0) {
         if (uprv_add32_overflow(eyear, -1, &eyear) ||
             uprv_add32_overflow(month, monthsInYear(eyear), &month)) {

@@ -879,7 +879,10 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
                 isoDoy -= handleGetYearLength(isoYear - 1);
             }
         }
-        woy += amount;
+        if (uprv_add32_overflow(woy, amount, &woy)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
         // Do fast checks to avoid unnecessary computation:
         if (woy < 1 || woy > 52) {
             // Determine the last week of the ISO year.
