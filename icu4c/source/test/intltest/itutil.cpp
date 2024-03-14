@@ -46,6 +46,7 @@ extern IntlTest *createPluralMapTest();
 #if !UCONFIG_NO_FORMATTING
 extern IntlTest *createStaticUnicodeSetsTest();
 #endif
+static IntlTest *createUHashTest();
 
 void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
@@ -80,6 +81,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
 #endif
     TESTCASE_AUTO_CLASS(LocaleBuilderTest);
     TESTCASE_AUTO_CREATE_CLASS(LocaleMatcherTest);
+    TESTCASE_AUTO_CREATE_CLASS(UHashTest);
     TESTCASE_AUTO_END;
 }
 
@@ -904,4 +906,46 @@ void EnumSetTest::TestEnumSet() {
     assertFalse(WHERE, flags.get(THING1));
     assertFalse(WHERE, flags.get(THING2));
     assertFalse(WHERE, flags.get(THING3));
+}
+
+/** UHashTest **/
+#include "uhash.h"
+#include <string_view>
+
+class UHashTest : public IntlTest {
+public:
+    UHashTest() = default;
+    virtual void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
+    void TestStringView();
+};
+
+static IntlTest* createUHashTest() {
+    return new UHashTest();
+}
+
+void UHashTest::runIndexedTest(int32_t index, UBool exec, const char*& name, char*  /*par*/) {
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestStringView);
+    TESTCASE_AUTO_END;
+}
+
+void UHashTest::TestStringView() {
+    IcuTestErrorCode status(*this, "TestStringView");
+    LocalUHashtablePointer table(
+        uhash_open(uhash_hashIStringView, uhash_compareIStringView, nullptr, status));
+    if (status.errIfFailureAndReset("uhash_open") ||
+        !assertTrue("uhash_open", table.isValid())) {
+        return;
+    }
+
+    std::string_view key("aaa");
+    std::string_view value("bbb");
+
+    uhash_put(table.getAlias(), &key, &value, status);
+    if (status.errIfFailureAndReset("uhash_put")) return;
+
+    std::string_view lookup("AAA");
+
+    auto* result = static_cast<std::string_view*>(uhash_get(table.getAlias(), &lookup));
+    assertTrue("uhash_get", result == &value);
 }
