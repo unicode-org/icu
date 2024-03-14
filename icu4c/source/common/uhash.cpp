@@ -12,6 +12,8 @@
 ******************************************************************************
 */
 
+#include <string_view>
+
 #include "uhash.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
@@ -944,6 +946,12 @@ uhash_hashIChars(const UHashTok key) {
     return s == nullptr ? 0 : ustr_hashICharsN(s, static_cast<int32_t>(uprv_strlen(s)));
 }
 
+U_CAPI int32_t U_EXPORT2
+uhash_hashIStringView(const UHashTok key) {
+    const std::string_view* s = static_cast<std::string_view*>(key.pointer);
+    return s == nullptr ? 0 : ustr_hashICharsN(s->data(), static_cast<int32_t>(s->size()));
+}
+
 U_CAPI UBool U_EXPORT2
 uhash_equals(const UHashtable* hash1, const UHashtable* hash2){
     int32_t count1, count2, pos, i;
@@ -1049,6 +1057,29 @@ uhash_compareIChars(const UHashTok key1, const UHashTok key2) {
         ++p2;
     }
     return (UBool)(*p1 == *p2);
+}
+
+U_CAPI UBool U_EXPORT2
+uhash_compareIStringView(const UHashTok key1, const UHashTok key2) {
+    const std::string_view* p1 = static_cast<std::string_view*>(key1.pointer);
+    const std::string_view* p2 = static_cast<std::string_view*>(key2.pointer);
+    if (p1 == p2) {
+        return true;
+    }
+    if (p1 == nullptr || p2 == nullptr) {
+        return false;
+    }
+    const std::string_view& v1 = *p1;
+    const std::string_view& v2 = *p2;
+    if (v1.size() != v2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < v1.size(); ++i) {
+        if (uprv_tolower(v1[i]) != uprv_tolower(v2[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /********************************************************************
