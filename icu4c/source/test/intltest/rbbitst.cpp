@@ -3303,14 +3303,36 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
-        //           Don't break between Hyphens and letters if a break precedes the hyphen.
-        //           Formerly this was a Finnish tailoring.
-        //           Moved to root in ICU 63. This is an ICU customization, not in UAX-14.
-        //           ^($HY | $HH) $AL;
-        if (fAL->contains(thisChar) && (fHY->contains(prevChar) || fHH->contains(prevChar)) &&
-                prevPosX2 == -1) {
-            setAppliedRule(pos, "LB 20.09");
-            continue;
+        // Don't break between Hyphens and letters if a break or a space precedes the hyphen.
+        // Formerly this was a Finnish tailoring.
+        // (sot | BK | CR | LF | NL | SP | ZW | CB | GL) ( HY | [\u2010] ) × AL
+        if (fAL->contains(thisChar) && (fHY->contains(prevChar) || fHH->contains(prevChar))) {
+            // sot ( HY | [\u2010] ) × AL.
+            if (prevPos == 0) {
+                setAppliedRule(pos, "LB 20a");
+                continue;
+            }
+            // prevPosX2 is -1 if there was a break; but the UAX #14 rules can
+            // look through breaks.
+            int breakObliviousPrevPosX2 = fText->moveIndex32(prevPos, -1);
+            if (fBK->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fCR->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fLF->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fNL->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fSP->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fGL->contains(fText->char32At(breakObliviousPrevPosX2)) ||
+                fZW->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                setAppliedRule(pos, "LB 20a");
+                continue;
+            }
+            while (breakObliviousPrevPosX2 > 0 &&
+                    fCM->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                breakObliviousPrevPosX2 = fText->moveIndex32(breakObliviousPrevPosX2, -1);
+            }
+            if (fCB->contains(fText->char32At(breakObliviousPrevPosX2))) {
+                setAppliedRule(pos, "LB 20a");
+                continue;
+            }
         }
 
         if (fBA->contains(thisChar) ||

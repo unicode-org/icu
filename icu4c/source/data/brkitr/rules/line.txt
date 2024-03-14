@@ -312,11 +312,23 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 [$LB20NonBreaks - $HL] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 [$LB20NonBreaks - $HL] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
-# LB 20.09    Don't break between Hyphens and Letters when there is a break preceding the hyphen.
-#             Originally added as a Finnish tailoring, now promoted to default ICU behavior.
-#             Note: this is not default UAX-14 behaviour. See issue ICU-8151.
+# LB 20a      Don't break between Hyphens and Letters when there is a break preceding the hyphen.
+#             Originally added as a Finnish tailoring, promoted to default ICU behavior (ICU-8151),
+#             and then to default UAX #14 behaviour (UTC-179-C32).
 #
 ^($HY | $HH) $CM* $ALPlus;
+$GL ($HY | $HH) $CM* $ALPlus; 
+# Non-breaking CB from LB8a:
+$CB $CM* $ZWJ ($HY | $HH) $CM* $ALPlus;
+# Non-breaking SP from LB14:
+$OP $CM* $SP+ ($HY | $HH) $CM* $ALPlus; 
+# Non-breaking SP from LB15a:
+($OP $CM* $SP+ | [$OP $QU $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+^([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+# Non-breaking SP from LB15a following LB15b:
+$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
+^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $CM* $ALPlus;
 
 # LB 21        x   (BA | HY | NS)
 #           BB x
