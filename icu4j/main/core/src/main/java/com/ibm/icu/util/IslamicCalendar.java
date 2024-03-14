@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Date;
 import java.util.Locale;
+import java.util.function.IntConsumer;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarCache;
@@ -171,13 +172,14 @@ public class IslamicCalendar extends Calendar {
     private static final long HIJRA_MILLIS = -42521587200000L;    // 7/16/622 AD 00:00
 
     /**
-     * Friday EPOC
+     * Friday EPOCH
      */
-    private static final long CIVIL_EPOC = 1948440; // CE 622 July 16 Friday (Julian calendar) / CE 622 July 19 (Gregorian calendar)
+    private static final long CIVIL_EPOCH = 1948440; // CE 622 July 16 Friday (Julian calendar) / CE 622 July 19 (Gregorian calendar)
+                                                     //
     /**
-     * Thursday EPOC
+     * Thursday EPOCH
      */
-    private static final long ASTRONOMICAL_EPOC = 1948439; // CE 622 July 15 Thursday (Julian calendar)
+    private static final long ASTRONOMICAL_EPOCH = 1948439; // CE 622 July 15 Thursday (Julian calendar)
 
     //-------------------------------------------------------------------------
     // Constructors...
@@ -319,6 +321,301 @@ public class IslamicCalendar extends Calendar {
         this.set(Calendar.SECOND, second);
     }
 
+    // Private interface for different Islamic calendar algorithms.
+    private interface Algorithm {
+        /**
+         * Returns <code>true</code> if this object is using the fixed-cycle civil
+         * calendar, or <code>false</code> if using the religious, astronomical
+         * calendar.
+         */
+        public boolean isCivil();
+
+        /**
+         * Return the type the algorithm implement.
+         */
+        public CalculationType getType();
+
+        /**
+         * Return the epoch used by this algorithm.
+         */
+        public long epoch();
+
+        /**
+         * Return the day # on which the given year starts. Days are counted
+         * from the Hijri epoch, origin 0.
+         *
+         * @param year  The hijri year
+         */
+        public long yearStart(int year);
+
+        /**
+         * Return the day # on which the given month starts. Days are counted
+         * from the Hijri epoch, origin 0.
+         *
+         * @param year  The hijri year
+         * @param month  The hijri month, 0-based
+         */
+        public long monthStart(int year, int month);
+
+        /**
+         * Return the length (in days) of the given month.
+         *
+         * @param year  The hijri year
+         * @param month The hijri month, 0-based
+         */
+        public int monthLength(int year, int month);
+
+        /**
+         * Return the length (in days) of the given year.
+         *
+         * @param year  The hijri year
+         */
+        public int yearLength(int year);
+
+        /**
+         * Compute the year, month, dayOfMonth, and dayOfYear of the given julian days
+         * and current time and feed the caculuated results to the consumers.
+         * @param julianDays
+         * @param current the time in millisecond.
+         * @param yearConsumer consumer to take the year result.
+         * @param monthConsumer consumer to take the month result.
+         * @param dayOfMonthConsumer consumer to take the dayOfMonth result.
+         * @param dayOfYearConsumer consumer to take the dayOfYear result.
+         */
+        public void compute(long julianDays, long current,
+            IntConsumer yearConsumer, IntConsumer monthConsumer,
+            IntConsumer dayOfMonthConsumer, IntConsumer dayOfYearConsumer);
+    };
+
+    /**
+     * Algorithm which implement the rules for CalculationType.ISLAMIC.
+     */
+    static private class IslamicAlgorithm implements Algorithm {
+        public boolean isCivil() {
+            return false;
+        }
+        public CalculationType getType() {
+            return CalculationType.ISLAMIC;
+        }
+        public long epoch() {
+            return CIVIL_EPOCH;
+        }
+        public long yearStart(int year) {
+            return monthStart(year, 0);
+        }
+        public long monthStart(int year, int month) {
+            // Normalize year/month in case month is outside the normal bounds, which may occur
+            // in the case of an add operation
+            return trueMonthStart(12*((year + month / 12)-1) + (month % 12));
+        }
+        public int monthLength(int year, int month) {
+            month += 12*(year-1);
+            return (int)(trueMonthStart(month+1) - trueMonthStart(month));
+        }
+        public int yearLength(int year) {
+            int month = 12*(year-1);
+            return (int)(trueMonthStart(month + 12) - trueMonthStart(month));
+        }
+        public void compute(long julianDays, long current,
+            IntConsumer yearConsumer, IntConsumer monthConsumer,
+            IntConsumer dayOfMonthConsumer, IntConsumer dayOfYearConsumer) {
+            long days = julianDays - epoch();
+            // Guess at the number of elapsed full months since the epoch
+            int month = (int)Math.floor(days / CalendarAstronomer.SYNODIC_MONTH);
+            long monthStart = (long)Math.floor(month * CalendarAstronomer.SYNODIC_MONTH - 1);
+            if (days - monthStart >= 25 && moonAge(current) > 0) {
+                // If we're near the end of the month, assume next month and search backwards
+                month++;
+            }
+            // Find out the last time that the new moon was actually visible at this longitude
+            // This returns midnight the night that the moon was visible at sunset.
+            while ((monthStart = trueMonthStart(month)) > days) {
+                // If it was after the date in question, back up a month and try again
+                month--;
+            }
+            int year = month >=  0 ? ((month / 12) + 1) : ((month + 1 ) / 12);
+            month = ((month % 12) + 12 ) % 12;
+            yearConsumer.accept(year);
+            monthConsumer.accept(month);
+            dayOfMonthConsumer.accept((int)(days - monthStart(year, month)) + 1);
+            dayOfYearConsumer.accept((int)(days - yearStart(year) + 1));
+        }
+    };
+
+    /**
+     * Algorithm which implement the rules for CalculationType.ISLAMIC_CIVIL.
+     */
+    static private class CivilAlgorithm implements Algorithm {
+        public boolean isCivil() {
+            return true;
+        }
+        public CalculationType getType() {
+            return CalculationType.ISLAMIC_CIVIL;
+        }
+        public long epoch() {
+            return CIVIL_EPOCH;
+        }
+        public long yearStart(int year) {
+            return (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
+        }
+        public long monthStart(int year, int month) {
+            // Normalize year/month in case month is outside the normal bounds, which may occur
+            // in the case of an add operation
+            return (long)Math.ceil(29.5*(month % 12)) + yearStart(year + month / 12);
+        }
+        public int monthLength(int year, int month) {
+            int length = 29;
+            if (month % 2 == 0) {
+                ++length;
+            }
+            if (month == DHU_AL_HIJJAH && civilLeapYear(year)) {
+                ++length;
+            }
+            return length;
+        }
+        public int yearLength(int year) {
+            return 354 + (civilLeapYear(year) ? 1 : 0);
+        }
+        public void compute(long julianDays, long current,
+            IntConsumer yearConsumer, IntConsumer monthConsumer,
+            IntConsumer dayOfMonthConsumer, IntConsumer dayOfYearConsumer) {
+            long days = julianDays - epoch();
+            // Use the civil calendar approximation, which is just arithmetic
+            int year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
+            int month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
+            month = Math.min(month, 11);
+            yearConsumer.accept(year);
+            monthConsumer.accept(month);
+            dayOfMonthConsumer.accept((int)(days - monthStart(year, month)) + 1);
+            dayOfYearConsumer.accept((int)(days - yearStart(year) + 1));
+        }
+    };
+
+    /**
+     * Algorithm which implement the rules for CalculationType.ISLAMIC_TBLA.
+     * Mostly the same as CivilAlgorithm, except it return false for isCivil and use different
+     * epoch value.
+     */
+    static private class TBLAAlgorithm extends CivilAlgorithm {
+        public boolean isCivil() {
+            return false;
+        }
+        public CalculationType getType() {
+            return CalculationType.ISLAMIC_TBLA;
+        }
+        public long epoch() {
+            return ASTRONOMICAL_EPOCH;
+        }
+    };
+
+    /**
+     * Algorithm which implement the rules for CalculationType.ISLAMIC_UMALQURA.
+     */
+    static private class UmalquraAlgorithm implements Algorithm {
+        public boolean isCivil() {
+            return false;
+        }
+        public CalculationType getType() {
+            return CalculationType.ISLAMIC_UMALQURA;
+        }
+        public long epoch() {
+            return CIVIL_EPOCH;
+        }
+        public long yearStart(int year) {
+            if (year < UMALQURA_YEAR_START || year > UMALQURA_YEAR_END) {
+                return CIVIL_ALGORITHM.yearStart(year);
+            }
+            int index = year - UMALQURA_YEAR_START;
+            // rounded least-squares fit of the dates previously calculated from UMALQURA_MONTHLENGTH iteration
+            int yrStartLinearEstimate = (int)((354.36720 * index) + 460322.05 + 0.5);
+            // need a slight correction to some
+            return yrStartLinearEstimate + UMALQURA_YEAR_START_ESTIMATE_FIX[index];
+        }
+        public long monthStart(int year, int month) {
+            // Normalize year/month in case month is outside the normal bounds, which may occur
+            // in the case of an add operation
+            year += month / 12;
+            month %= 12;
+            if (year < UMALQURA_YEAR_START) {
+                return CIVIL_ALGORITHM.monthStart(year, month);
+            }
+            long ms = yearStart(year);
+            for(int i=0; i< month; i++) {
+                ms+= monthLength(year, i);
+            }
+            return ms;
+        }
+        public int monthLength(int year, int month) {
+            if (year < UMALQURA_YEAR_START || year > UMALQURA_YEAR_END) {
+                return CIVIL_ALGORITHM.monthLength(year, month);
+            }
+            int index = (year - UMALQURA_YEAR_START);     // calculate year offset into bit map array
+            int mask = (0x01 << (11 - month));                  // set mask for bit corresponding to month
+            if((UMALQURA_MONTHLENGTH[index] & mask) != 0) {
+                return 30;
+            }
+            return 29;
+        }
+        public int yearLength(int year) {
+            if (year < UMALQURA_YEAR_START  || year > UMALQURA_YEAR_END) {
+                return CIVIL_ALGORITHM.yearLength(year);
+            }
+            int length = 0;
+            for(int i = 0; i < 12; i++) {
+                length += monthLength(year, i);
+            }
+            return length;
+        }
+        public void compute(long julianDays, long current,
+            IntConsumer yearConsumer, IntConsumer monthConsumer,
+            IntConsumer dayOfMonthConsumer, IntConsumer dayOfYearConsumer) {
+            long days = julianDays - epoch();
+            if( days < yearStart(UMALQURA_YEAR_START)) {
+                CIVIL_ALGORITHM.compute(julianDays, current,
+                    yearConsumer, monthConsumer, dayOfMonthConsumer, dayOfYearConsumer);
+                return;
+            }
+            // Estimate a value y which is closer to but not greater than the year.
+            // It is the inverse function of the logic inside yearStart() about the
+            // linear estimate.
+            int year = (int)((days - (460322.05 + 0.5)) / 354.36720) + UMALQURA_YEAR_START - 1;
+            int month = 0;
+            long monthStart;
+            long d = 1;
+            while (d > 0) {
+                year++;
+                d = days - yearStart(year) +1;
+                int yearLength = yearLength(year);
+                if (d == yearLength) {
+                    month = 11;
+                    break;
+                } else if (d < yearLength) {
+                    int monthLen = monthLength(year, month);
+                    for (month = 0; d > monthLen; monthLen = monthLength(year, ++month)) {
+                        d -= monthLen;
+                    }
+                    break;
+                }
+            }
+            yearConsumer.accept(year);
+            monthConsumer.accept(month);
+            dayOfMonthConsumer.accept((int)(days - monthStart(year, month)) + 1);
+            dayOfYearConsumer.accept((int)(days - yearStart(year) + 1));
+        }
+    };
+
+    private static Algorithm ISLAMIC_ALGORITHM;
+    private static Algorithm CIVIL_ALGORITHM;
+    private static Algorithm TBLA_ALGORITHM;
+    private static Algorithm UMALQURA_ALGORITHM;
+
+    static {
+        ISLAMIC_ALGORITHM = new IslamicAlgorithm();
+        CIVIL_ALGORITHM = new CivilAlgorithm();
+        TBLA_ALGORITHM = new TBLAAlgorithm();
+        UMALQURA_ALGORITHM = new UmalquraAlgorithm();
+    };
+
     /**
      * Determines whether this object uses the fixed-cycle Islamic civil calendar
      * or an approximation of the religious, astronomical calendar.
@@ -330,13 +627,12 @@ public class IslamicCalendar extends Calendar {
      */
     public void setCivil(boolean beCivil)
     {
-        civil = beCivil;
-
         if (beCivil && cType != CalculationType.ISLAMIC_CIVIL) {
             // The fields of the calendar will become invalid, because the calendar
             // rules are different
             long m = getTimeInMillis();
             cType = CalculationType.ISLAMIC_CIVIL;
+            algorithm = CIVIL_ALGORITHM;
             clear();
             setTimeInMillis(m);
         } else if(!beCivil && cType != CalculationType.ISLAMIC) {
@@ -344,9 +640,11 @@ public class IslamicCalendar extends Calendar {
             // rules are different
             long m = getTimeInMillis();
             cType = CalculationType.ISLAMIC;
+            algorithm = ISLAMIC_ALGORITHM;
             clear();
             setTimeInMillis(m);
         }
+        civil = algorithm.isCivil();
     }
 
     /**
@@ -357,10 +655,7 @@ public class IslamicCalendar extends Calendar {
      * @discouraged ICU 57 use getCalculationType() instead
      */
     public boolean isCivil() {
-        if(cType == CalculationType.ISLAMIC_CIVIL) {
-            return true;
-        }
-        return false;
+        return algorithm.isCivil();
     }
 
     //-------------------------------------------------------------------------
@@ -587,51 +882,7 @@ public class IslamicCalendar extends Calendar {
      * from the Hijri epoch, origin 0.
      */
     private long yearStart(int year) {
-        long ys = 0;
-        if (cType == CalculationType.ISLAMIC_CIVIL
-                || cType == CalculationType.ISLAMIC_TBLA
-                || (cType == CalculationType.ISLAMIC_UMALQURA && (year < UMALQURA_YEAR_START || year > UMALQURA_YEAR_END))) {
-            ys = (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
-        } else if(cType == CalculationType.ISLAMIC) {
-            ys = trueMonthStart(12*(year-1));
-        } else if(cType == CalculationType.ISLAMIC_UMALQURA){
-            year -= UMALQURA_YEAR_START;
-            // rounded least-squares fit of the dates previously calculated from UMALQURA_MONTHLENGTH iteration
-            int yrStartLinearEstimate = (int)((354.36720 * year) + 460322.05 + 0.5);
-            // need a slight correction to some
-            ys = yrStartLinearEstimate + UMALQURA_YEAR_START_ESTIMATE_FIX[year];
-        }
-        return ys;
-    }
-
-    /**
-     * Return the day # on which the given month starts.  Days are counted
-     * from the Hijri epoch, origin 0.
-     *
-     * @param year  The hijri year
-     * @param month  The hijri month, 0-based
-     */
-    private long monthStart(int year, int month) {
-        // Normalize year/month in case month is outside the normal bounds, which may occur
-        // in the case of an add operation
-        int realYear = year + month / 12;
-        int realMonth = month % 12;
-        long ms = 0;
-        if (cType == CalculationType.ISLAMIC_CIVIL
-                || cType == CalculationType.ISLAMIC_TBLA
-                || (cType == CalculationType.ISLAMIC_UMALQURA && year < UMALQURA_YEAR_START )) {
-            ms = (long)Math.ceil(29.5*realMonth)
-                    + (realYear-1)*354 + (long)Math.floor((3+11*realYear)/30.0);
-        } else if(cType == CalculationType.ISLAMIC) {
-            ms = trueMonthStart(12*(realYear-1) + realMonth);
-        } else if(cType == CalculationType.ISLAMIC_UMALQURA) {
-            ms = yearStart(year);
-            for(int i=0; i< month; i++) {
-                ms+= handleGetMonthLength(year, i);
-            }
-        }
-
-        return ms;
+        return algorithm.yearStart(year);
     }
 
     /**
@@ -728,6 +979,8 @@ public class IslamicCalendar extends Calendar {
      */
     private CalculationType cType = CalculationType.ISLAMIC_CIVIL;
 
+    private transient Algorithm algorithm = CIVIL_ALGORITHM;
+
     //----------------------------------------------------------------------
     // Calendar framework
     //----------------------------------------------------------------------
@@ -741,32 +994,7 @@ public class IslamicCalendar extends Calendar {
      */
     @Override
     protected int handleGetMonthLength(int extendedYear, int month) {
-
-        int length;
-
-        if (cType == CalculationType.ISLAMIC_CIVIL
-                || cType == CalculationType.ISLAMIC_TBLA
-                || (cType == CalculationType.ISLAMIC_UMALQURA && (extendedYear < UMALQURA_YEAR_START  || extendedYear > UMALQURA_YEAR_END) )) {
-            length = 29 + (month+1) % 2;
-            if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
-                length++;
-            }
-        }
-        else if (cType == CalculationType.ISLAMIC) {
-            month = 12*(extendedYear-1) + month;
-            length = (int)( trueMonthStart(month+1) - trueMonthStart(month) );
-        }
-        else { // cType == CalculationType.ISLAMIC_UMALQURA should be true at this point and not null.
-            int idx = (extendedYear - UMALQURA_YEAR_START);     // calculate year offset into bit map array
-            int mask = (0x01 << (11 - month));                  // set mask for bit corresponding to month
-            if((UMALQURA_MONTHLENGTH[idx] & mask) == 0 ) {
-                length = 29;
-            }
-            else {
-                length = 30;
-            }
-        }
-        return length;
+        return algorithm.monthLength(extendedYear, month);
     }
 
     /**
@@ -775,20 +1003,7 @@ public class IslamicCalendar extends Calendar {
      */
     @Override
     protected int handleGetYearLength(int extendedYear) {
-        int length =0;
-        if (cType == CalculationType.ISLAMIC_CIVIL
-                || cType == CalculationType.ISLAMIC_TBLA
-                || (cType == CalculationType.ISLAMIC_UMALQURA && (extendedYear < UMALQURA_YEAR_START  || extendedYear > UMALQURA_YEAR_END) )) {
-            length =  354 + (civilLeapYear(extendedYear) ? 1 : 0);
-        } else if (cType == CalculationType.ISLAMIC) {
-            int month = 12*(extendedYear-1);
-            length =  (int)(trueMonthStart(month + 12) - trueMonthStart(month));
-        } else if (cType == CalculationType.ISLAMIC_UMALQURA) {
-            for(int i=0; i<12; i++)
-                length += handleGetMonthLength(extendedYear, i);
-        }
-
-        return length;
+        return algorithm.yearLength(extendedYear);
     }
 
     //-------------------------------------------------------------------------
@@ -805,7 +1020,7 @@ public class IslamicCalendar extends Calendar {
      */
     @Override
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
-        return (int)(monthStart(eyear, month) + ((cType ==  CalculationType.ISLAMIC_TBLA)? ASTRONOMICAL_EPOC: CIVIL_EPOC) - 1);
+        return (int)(algorithm.monthStart(eyear, month) + algorithm.epoch()- 1);
     }
 
     //-------------------------------------------------------------------------
@@ -844,84 +1059,18 @@ public class IslamicCalendar extends Calendar {
      */
     @Override
     protected void handleComputeFields(int julianDay) {
-        int year =0, month=0, dayOfMonth=0, dayOfYear=0;
-        long monthStart;
-        long days = julianDay - CIVIL_EPOC;
-
-        if (cType == CalculationType.ISLAMIC_CIVIL || cType == CalculationType.ISLAMIC_TBLA) {
-            if (cType == CalculationType.ISLAMIC_TBLA) {
-                days = julianDay - ASTRONOMICAL_EPOC;
-            }
-            // Use the civil calendar approximation, which is just arithmetic
-            year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
-            month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
-            month = Math.min(month, 11);
-        } else if (cType == CalculationType.ISLAMIC){
-            // Guess at the number of elapsed full months since the epoch
-            int months = (int)Math.floor(days / CalendarAstronomer.SYNODIC_MONTH);
-
-            monthStart = (long)Math.floor(months * CalendarAstronomer.SYNODIC_MONTH - 1);
-
-            if ( days - monthStart >= 25 && moonAge(internalGetTimeInMillis()) > 0) {
-                // If we're near the end of the month, assume next month and search backwards
-                months++;
-            }
-
-            // Find out the last time that the new moon was actually visible at this longitude
-            // This returns midnight the night that the moon was visible at sunset.
-            while ((monthStart = trueMonthStart(months)) > days) {
-                // If it was after the date in question, back up a month and try again
-                months--;
-            }
-
-            year = months >=  0 ? ((months / 12) + 1) : ((months + 1 ) / 12);
-            month = ((months % 12) + 12 ) % 12;
-        } else if (cType == CalculationType.ISLAMIC_UMALQURA) {
-            long umalquraStartdays = yearStart(UMALQURA_YEAR_START);
-            if( days < umalquraStartdays) {
-                // Use Civil calculation
-                year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
-                month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
-                month = Math.min(month, 11);
-            } else {
-                int y =UMALQURA_YEAR_START-1, m =0;
-                long d = 1;
-                while(d > 0) {
-                    y++;
-                    d = days - yearStart(y) +1;
-                    if(d == handleGetYearLength(y)) {
-                        m=11;
-                        break;
-                    } else if(d < handleGetYearLength(y) ) {
-                        int monthLen = handleGetMonthLength(y, m);
-                        m=0;
-                        while(d > monthLen) {
-                            d -= monthLen;
-                            m++;
-                            monthLen = handleGetMonthLength(y, m);
-                        }
-                        break;
-                    }
-                }
-                year = y;
-                month = m;
-            }
-        }
-
-
-        dayOfMonth = (int)(days - monthStart(year, month)) + 1;
-
-        // Now figure out the day of the year.
-        dayOfYear = (int)(days - monthStart(year, 0) + 1);
-
-
-        internalSet(ERA, 0);
-        internalSet(YEAR, year);
-        internalSet(EXTENDED_YEAR, year);
-        internalSet(MONTH, month);
-        internalSet(ORDINAL_MONTH, month);
-        internalSet(DAY_OF_MONTH, dayOfMonth);
-        internalSet(DAY_OF_YEAR, dayOfYear);
+        algorithm.compute(julianDay, internalGetTimeInMillis(),
+            year -> {
+                internalSet(ERA, 0);
+                internalSet(YEAR, year);
+                internalSet(EXTENDED_YEAR, year);
+            },
+            month -> {
+                internalSet(MONTH, month);
+                internalSet(ORDINAL_MONTH, month);
+            },
+            dayOfMonth -> { internalSet(DAY_OF_MONTH, dayOfMonth); },
+            dayOfYear -> { internalSet(DAY_OF_YEAR, dayOfYear); });
     }
 
     /**
@@ -971,12 +1120,22 @@ public class IslamicCalendar extends Calendar {
      */
     public void setCalculationType(CalculationType type) {
         cType = type;
-
-        // ensure civil property is up-to-date
-        if(cType == CalculationType.ISLAMIC_CIVIL)
-            civil = true;
-        else
-            civil = false;
+        switch (cType) {
+            case ISLAMIC_UMALQURA:
+                algorithm = UMALQURA_ALGORITHM;
+                break;
+            case ISLAMIC:
+                algorithm = ISLAMIC_ALGORITHM;
+                break;
+            case ISLAMIC_TBLA:
+                algorithm = TBLA_ALGORITHM;
+                break;
+            case ISLAMIC_CIVIL:
+            default:
+                algorithm = CIVIL_ALGORITHM;
+                break;
+        }
+        civil = algorithm.isCivil();
     }
 
     /**
@@ -985,7 +1144,7 @@ public class IslamicCalendar extends Calendar {
      * @stable ICU 55
      */
     public CalculationType getCalculationType() {
-        return cType;
+        return algorithm.getType();
     }
 
     /**
@@ -1012,26 +1171,17 @@ public class IslamicCalendar extends Calendar {
      */
     @Override
     public String getType() {
-        if (cType == null) {
-            // TODO: getType() is called during Islamic calendar
-            // construction and might be null at that point. We should
-            // check the initialization sequence. See ticket#10425.
-            return "islamic";
-        }
-        return cType.bcpType();
+        return algorithm.getType().bcpType();
     }
 
     private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException {
         in.defaultReadObject();
-
         if (cType == null) {
             // The serialized data was created by an ICU version before CalculationType
             // was introduced.
             cType = civil ? CalculationType.ISLAMIC_CIVIL : CalculationType.ISLAMIC;
-        } else {
-            // Make sure 'civil' is consistent with CalculationType
-            civil = (cType == CalculationType.ISLAMIC_CIVIL);
         }
+        setCalculationType(cType);
     }
 
     //-------------------------------------------------------------------------
