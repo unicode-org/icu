@@ -1339,14 +1339,30 @@ _getVariant(const char* localeID,
             char prev,
             ByteSink* sink,
             const char** pEnd,
-            bool needSeparator) {
-    bool hasVariant = false;
+            bool needSeparator,
+            UErrorCode& status) {
+    if (U_FAILURE(status)) return;
     if (pEnd != nullptr) { *pEnd = localeID; }
 
+    // Reasonable upper limit for variants
+    // There are no strict limitation of the syntax of variant in the legacy
+    // locale format. If the locale is constructed from unicode_locale_id
+    // as defined in UTS35, then we know each unicode_variant_subtag
+    // could have max length of 8 ((alphanum{5,8} | digit alphanum{3})
+    // 179 would allow 20 unicode_variant_subtag with sep in the
+    // unicode_locale_id
+    // 8*20 + 1*(20-1) = 179
+    constexpr int32_t MAX_VARIANTS_LENGTH = 179;
+
     /* get one or more variant tags and separate them with '_' */
-    if(_isIDSeparator(prev)) {
+    int32_t index = 0;
+    if (_isIDSeparator(prev)) {
         /* get a variant string after a '-' or '_' */
-        while(!_isTerminator(*localeID)) {
+        for (index=0; !_isTerminator(localeID[index]); index++) {
+            if (index >= MAX_VARIANTS_LENGTH) { // same as length > MAX_VARIANTS_LENGTH
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
             if (needSeparator) {
                 if (sink != nullptr) {
                     sink->Append("_", 1);
@@ -1354,26 +1370,28 @@ _getVariant(const char* localeID,
                 needSeparator = false;
             }
             if (sink != nullptr) {
-                char c = (char)uprv_toupper(*localeID);
+                char c = (char)uprv_toupper(localeID[index]);
                 if (c == '-') c = '_';
                 sink->Append(&c, 1);
             }
-            hasVariant = true;
-            localeID++;
         }
-        if (pEnd != nullptr) { *pEnd = localeID; }
+        if (pEnd != nullptr) { *pEnd = localeID+index; }
     }
 
     /* if there is no variant tag after a '-' or '_' then look for '@' */
-    if(!hasVariant) {
-        if(prev=='@') {
+    if (index == 0) {
+        if (prev=='@') {
             /* keep localeID */
         } else if((localeID=locale_getKeywordsStart(localeID))!=nullptr) {
             ++localeID; /* point after the '@' */
         } else {
             return;
         }
-        while(!_isTerminator(*localeID)) {
+        for(; !_isTerminator(localeID[index]); index++) {
+            if (index >= MAX_VARIANTS_LENGTH) { // same as length > MAX_VARIANTS_LENGTH
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
             if (needSeparator) {
                 if (sink != nullptr) {
                     sink->Append("_", 1);
@@ -1381,13 +1399,12 @@ _getVariant(const char* localeID,
                 needSeparator = false;
             }
             if (sink != nullptr) {
-                char c = (char)uprv_toupper(*localeID);
+                char c = (char)uprv_toupper(localeID[index]);
                 if (c == '-' || c == ',') c = '_';
                 sink->Append(&c, 1);
             }
-            localeID++;
         }
-        if (pEnd != nullptr) { *pEnd = localeID; }
+        if (pEnd != nullptr) { *pEnd = localeID + index; }
     }
 }
 
@@ -1560,7 +1577,8 @@ ulocimp_getSubtags(
         }
         const char* begin = localeID + 1;
         const char* end = nullptr;
-        _getVariant(begin, *localeID, variant, &end, false);
+        _getVariant(begin, *localeID, variant, &end, false, status);
+        if (U_FAILURE(status)) { return; }
         U_ASSERT(end != nullptr);
         if (end != begin && pEnd != nullptr) { *pEnd = end; }
     }
@@ -1853,7 +1871,8 @@ _canonicalize(const char* localeID,
             }
 
             CharStringByteSink s(&tag);
-            _getVariant(tmpLocaleID+1, '@', &s, nullptr, !variant.isEmpty());
+            _getVariant(tmpLocaleID+1, '@', &s, nullptr, !variant.isEmpty(), err);
+            if (U_FAILURE(err)) { return; }
         }
 
         /* Look up the ID in the canonicalization map */

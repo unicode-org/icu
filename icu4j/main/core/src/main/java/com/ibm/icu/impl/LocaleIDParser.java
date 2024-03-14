@@ -365,6 +365,15 @@ public final class LocaleIDParser {
         }
     }
 
+    // There are no strict limitation of the syntax of variant in the legacy
+    // locale format. If the locale is constructed from unicode_locale_id
+    // as defined in UTS35, then we know each unicode_variant_subtag
+    // could have max length of 8 ((alphanum{5,8} | digit alphanum{3})
+    // 179 would allow 20 unicode_variant_subtag with sep in the
+    // unicode_locale_id
+    // 8*20 + 1*(20-1) = 179
+    private static final int MAX_VARIANTS_LENGTH = 179;
+
     /**
      * Advance index past variant, and accumulate normalized variant in buffer.  This ignores
      * the codepage information from POSIX ids.  Index must be immediately after the country
@@ -432,10 +441,12 @@ public final class LocaleIDParser {
                     c = UNDERSCORE;
                 }
                 append(c);
+                if (buffer.length() - oldBlen > MAX_VARIANTS_LENGTH) {
+                    throw new IllegalArgumentException("variants is too long");
+                }
             }
         }
         --index; // unget
-
         return oldBlen;
     }
 

@@ -212,6 +212,7 @@ static int32_t bundles_count = UPRV_LENGTHOF(param);
 static void TestDecodedBundle(void);
 static void TestGetKeywordValues(void);
 static void TestGetFunctionalEquivalent(void);
+static void TestGetFunctionalEquivalentVariantLengthLimit(void);
 static void TestCLDRStyleAliases(void);
 static void TestFallbackCodes(void);
 static void TestGetUTF8String(void);
@@ -249,7 +250,10 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetVersionColl,        "tsutil/creststn/TestGetVersionColl");
     addTest(root, &TestAliasConflict,         "tsutil/creststn/TestAliasConflict");
     addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues");
-    addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
+    addTest(root, &TestGetFunctionalEquivalent,
+            "tsutil/creststn/TestGetFunctionalEquivalent");
+    addTest(root, &TestGetFunctionalEquivalentVariantLengthLimit,
+            "tsutil/creststn/TestGetFunctionalEquivalentVariantLengthLimit");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
 }
 
@@ -2775,6 +2779,100 @@ static void TestGetFunctionalEquivalent(void) {
         }
     }
 #endif
+}
+
+static void TestGetFunctionalEquivalentVariantLengthLimit(void) {
+    static const char valid[] =
+        "_"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678";
+
+    static const char invalid[] =
+        "_"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678X";  // One character too long.
+
+    static const char localeExpected[] = "_@calendar=gregorian";
+    const int32_t reslenExpected = uprv_strlen(localeExpected);
+
+    char buffer[UPRV_LENGTHOF(invalid)];
+    UErrorCode status;
+
+    status = U_ZERO_ERROR;
+    int32_t reslen = ures_getFunctionalEquivalent(
+        buffer,
+        UPRV_LENGTHOF(buffer),
+        NULL,
+        "calendar",
+        "calendar",
+        valid,
+        NULL,
+        false,
+        &status);
+    if (U_FAILURE(status)) {
+        log_err("Unexpected error in ures_getFunctionalEquivalent(): %s\n",
+                myErrorName(status));
+    } else if (reslenExpected != reslen) {
+        log_err("Expected length %d but got length %d.\n",
+                reslenExpected, reslen);
+    } else if (uprv_strcmp(localeExpected, buffer) != 0) {
+        log_err("Expected locale \"%s\" but got locale \"%s\"\n",
+                localeExpected, buffer);
+    }
+
+    status = U_ZERO_ERROR;
+    ures_getFunctionalEquivalent(
+        buffer,
+        UPRV_LENGTHOF(buffer),
+        NULL,
+        "calendar",
+        "calendar",
+        invalid,
+        NULL,
+        false,
+        &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        // The variants are known to be too long, parsing must fail.
+        log_err("Unexpected error in ures_getFunctionalEquivalent(), expected "
+                "U_ILLEGAL_ARGUMENT_ERROR but got %s.\n",
+                myErrorName(status));
+    }
 }
 
 static void TestXPath(void) {

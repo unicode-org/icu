@@ -25,6 +25,8 @@
  **/
 static void TestBasicGetters(void);
 static void TestPrefixes(void);
+static void TestVariantLengthLimit(void);
+
 /**
  * Use Locale to access Resource file data and compare against expected values
  **/

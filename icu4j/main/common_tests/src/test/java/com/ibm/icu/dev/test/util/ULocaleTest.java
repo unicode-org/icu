@@ -5438,6 +5438,63 @@ public class ULocaleTest extends CoreTestFmwk {
 
     }
 
+
+    @Test
+    public void TestVariantLengthWithinLimit() {
+        String valid =
+            "_" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678";
+
+        ULocale locale = new ULocale(valid);
+        Assert.assertEquals(valid.substring(2), locale.getVariant());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestVariantLengthOverLimit() {
+        String invalid =
+            "_" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678X";  // One character too long.
+        ULocale locale = new ULocale(invalid);
+    }
+
     @Test
     public void TestLocaleCanonicalizationFromFile() throws IOException {
         BufferedReader testFile = TestUtil.getDataReader("cldr/localeIdentifiers/localeCanonicalization.txt");
