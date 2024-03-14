@@ -202,6 +202,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestBug11421);         // Must run early in list to trigger failure.
     TESTCASE_AUTO(TestBasicGetters);
+    TESTCASE_AUTO(TestVariantLengthLimit);
     TESTCASE_AUTO(TestSimpleResourceInfo);
     TESTCASE_AUTO(TestDisplayNames);
     TESTCASE_AUTO(TestSimpleObjectStuff);
@@ -403,6 +404,69 @@ void LocaleTest::TestBasicGetters() {
         errln("Locale.clone() failed");
     }
     delete pb;
+}
+
+void LocaleTest::TestVariantLengthLimit() {
+    static constexpr char valid[] =
+        "_"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678";
+
+    static constexpr char invalid[] =
+        "_"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678X";  // One character too long.
+
+    constexpr const char* variantsExpected = valid + 2;  // Skip initial "__".
+
+    Locale validLocale(valid);
+    if (validLocale.isBogus()) {
+        errln("Valid locale is unexpectedly bogus.");
+    } else if (uprv_strcmp(variantsExpected, validLocale.getVariant()) != 0) {
+        errln("Expected variants \"%s\" but got variants \"%s\"\n",
+              variantsExpected, validLocale.getVariant());
+    }
+
+    Locale invalidLocale(invalid);
+    if (!invalidLocale.isBogus()) {
+        errln("Invalid locale is unexpectedly NOT bogus.");
+    }
 }
 
 void LocaleTest::TestParallelAPIValues() {

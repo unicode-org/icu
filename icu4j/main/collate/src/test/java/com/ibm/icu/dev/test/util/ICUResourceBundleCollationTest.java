@@ -150,6 +150,70 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
     }
 
     @Test
+    public void TestGetFunctionalEquivalentVariantLengthWithinLimit() {
+        String valid =
+            "_" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678";
+
+        ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(
+            ICUData.ICU_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+            "calendar", "calendar", new ULocale(valid), new boolean[1], false);
+        ULocale localeExpected = new ULocale("_@calendar=gregorian");
+        if(!equivLocale.equals(localeExpected)) {
+            errln("Get unexpected locale:" + equivLocale.toString() +
+                " while expecting " + localeExpected.toString());
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestGetFunctionalEquivalentVariantLengthOverLimit() {
+        String invalid =
+            "_" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678" +
+            "_12345678X";  // One character too long.
+        ULocale equivLocale2 = ICUResourceBundle.getFunctionalEquivalent(
+            ICUData.ICU_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+            "calendar", "calendar", new ULocale(invalid), new boolean[1], false);
+    }
+
+    @Test
     public void TestOpen(){
         UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
         if(bundle==null){

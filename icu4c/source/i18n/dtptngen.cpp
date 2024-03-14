@@ -511,6 +511,11 @@ enum AllowedHourFormat{
 void
 DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status, UBool skipStdPatterns) {
     //const char *baseLangName = locale.getBaseName(); // unused
+    if (U_FAILURE(status)) { return; }
+    if (locale.isBogus()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
     skipMatcher = nullptr;
     fAvailableFormatKeyHash=nullptr;

@@ -224,6 +224,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestBasicGetters);
     TESTCASE(TestNullDefault);
     TESTCASE(TestPrefixes);
+    TESTCASE(TestVariantLengthLimit);
     TESTCASE(TestSimpleResourceInfo);
     TESTCASE(TestDisplayNames);
     TESTCASE(TestGetDisplayScriptPreFlighting21160);
@@ -568,6 +569,82 @@ static void TestPrefixes(void) {
     }
 }
 
+static void TestVariantLengthLimit(void) {
+    static const char valid[] =
+        "_"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678";
+
+    static const char invalid[] =
+        "_"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678"
+        "_12345678X";  // One character too long.
+
+    const char* const variantsExpected = valid + 2;  // Skip initial "__".
+    const int32_t reslenExpected = uprv_strlen(variantsExpected);
+
+    char buffer[UPRV_LENGTHOF(invalid)];
+    UErrorCode status;
+
+    status = U_ZERO_ERROR;
+    int32_t reslen =
+        uloc_getVariant(valid, buffer, UPRV_LENGTHOF(buffer), &status);
+    if (U_FAILURE(status)) {
+        log_err("Unexpected error in uloc_getVariant(): %s\n",
+                myErrorName(status));
+    } else if (reslenExpected != reslen) {
+        log_err("Expected length %d but got length %d.\n",
+                reslenExpected, reslen);
+    } else if (uprv_strcmp(variantsExpected, buffer) != 0) {
+        log_err("Expected variants \"%s\" but got variants \"%s\"\n",
+                variantsExpected, buffer);
+    }
+
+    status = U_ZERO_ERROR;
+    uloc_getVariant(invalid, buffer, UPRV_LENGTHOF(buffer), &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        // The variants are known to be too long, parsing must fail.
+        log_err("Unexpected error in uloc_getVariant(), expected "
+                "U_ILLEGAL_ARGUMENT_ERROR but got %s.\n",
+                myErrorName(status));
+    }
+}
 
 /* testing uloc_getISO3Language(), uloc_getISO3Country(),  */
 static void TestSimpleResourceInfo(void) {
