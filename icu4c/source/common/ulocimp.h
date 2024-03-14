@@ -11,6 +11,7 @@
 #define ULOCIMP_H
 
 #include <cstddef>
+#include <optional>
 #include <string_view>
 
 #include "unicode/bytestream.h"
@@ -53,6 +54,18 @@ uloc_getCurrentCountryID(const char* oldID);
 
 U_CFUNC const char* 
 uloc_getCurrentLanguageID(const char* oldID);
+
+U_EXPORT std::optional<std::string_view>
+ulocimp_toBcpKeyWithFallback(std::string_view keyword);
+
+U_EXPORT std::optional<std::string_view>
+ulocimp_toBcpTypeWithFallback(std::string_view keyword, std::string_view value);
+
+U_EXPORT std::optional<std::string_view>
+ulocimp_toLegacyKeyWithFallback(std::string_view keyword);
+
+U_EXPORT std::optional<std::string_view>
+ulocimp_toLegacyTypeWithFallback(std::string_view keyword, std::string_view value);
 
 U_EXPORT icu::CharString
 ulocimp_getKeywords(const char* localeID,
@@ -392,17 +405,17 @@ ultag_isVariantSubtags(const char* s, int32_t len);
 const char*
 ultag_getTKeyStart(const char* localeID);
 
-U_EXPORT const char*
-ulocimp_toBcpKey(const char* key);
+U_EXPORT std::optional<std::string_view>
+ulocimp_toBcpKey(std::string_view key);
 
-U_EXPORT const char*
-ulocimp_toLegacyKey(const char* key);
+U_EXPORT std::optional<std::string_view>
+ulocimp_toLegacyKey(std::string_view key);
 
-U_EXPORT const char*
-ulocimp_toBcpType(const char* key, const char* type);
+U_EXPORT std::optional<std::string_view>
+ulocimp_toBcpType(std::string_view key, std::string_view type);
 
-U_EXPORT const char*
-ulocimp_toLegacyType(const char* key, const char* type);
+U_EXPORT std::optional<std::string_view>
+ulocimp_toLegacyType(std::string_view key, std::string_view type);
 
 /* Function for testing purpose */
 U_EXPORT const char* const*
