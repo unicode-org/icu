@@ -516,6 +516,11 @@ StringTest::TestStringPieceStringView() {
 
     assertEquals("size()", piece.size(), view.size());
     assertEquals("data()", piece.data(), view.data());
+
+    std::string_view v2 = piece;  // Internal implicit conversion.
+
+    assertEquals("size()", piece.size(), v2.size());
+    assertEquals("data()", piece.data(), v2.data());
 }
 
 void
