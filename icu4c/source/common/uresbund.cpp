@@ -3074,9 +3074,12 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     UErrorCode subStatus = U_ZERO_ERROR;
     int32_t length = 0;
     if(U_FAILURE(*status)) return 0;
-    CharString kwVal = ulocimp_getKeywordValue(locid, keyword, subStatus);
-    if(kwVal == DEFAULT_TAG) {
-        kwVal.clear();
+    CharString kwVal;
+    if (keyword != nullptr && *keyword != '\0') {
+        kwVal = ulocimp_getKeywordValue(locid, keyword, subStatus);
+        if (kwVal == DEFAULT_TAG) {
+            kwVal.clear();
+        }
     }
     CharString base = ulocimp_getBaseName(locid, subStatus);
 #if defined(URES_TREE_DEBUG)

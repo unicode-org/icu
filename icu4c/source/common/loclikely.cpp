@@ -19,6 +19,7 @@
 *   that then do not depend on resource bundle code and likely-subtags data.
 */
 
+#include <string_view>
 #include <utility>
 
 #include "unicode/bytestream.h"
@@ -388,7 +389,7 @@ U_NAMESPACE_END
 
 namespace {
 icu::CharString
-GetRegionFromKey(const char* localeID, const char* key, UErrorCode& status) {
+GetRegionFromKey(const char* localeID, std::string_view key, UErrorCode& status) {
     icu::CharString result;
 
     // First check for keyword value

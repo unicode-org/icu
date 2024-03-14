@@ -835,7 +835,10 @@ uloc_getDisplayKeywordValue(   const char* locale,
     }
 
     /* get the keyword value */
-    CharString keywordValue = ulocimp_getKeywordValue(locale, keyword, *status);
+    CharString keywordValue;
+    if (keyword != nullptr && *keyword != '\0') {
+        keywordValue = ulocimp_getKeywordValue(locale, keyword, *status);
+    }
 
     /* 
      * if the keyword is equal to currency .. then to get the display name 
