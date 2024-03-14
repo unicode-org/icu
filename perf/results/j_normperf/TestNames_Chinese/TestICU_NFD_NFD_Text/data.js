@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710370653825,
+  "lastUpdate": 1710430833861,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19318,6 +19318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 4.3267968739194576,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dragan@unicode.org",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "committer": {
+            "email": "131725218+DraganBesevic@users.noreply.github.com",
+            "name": "DraganBesevic",
+            "username": "DraganBesevic"
+          },
+          "distinct": true,
+          "id": "b396885aae1f515df35688ea72943583c0268836",
+          "message": "ICU-22534 Integrate CLDR 45 release alpha 3, part 4, update supplementalData to rollback root changes",
+          "timestamp": "2024-03-14T08:30:09-07:00",
+          "tree_id": "f69bb6ee4a6dc2f409eb5f8f54bc026d0ddd6e71",
+          "url": "https://github.com/unicode-org/icu/commit/b396885aae1f515df35688ea72943583c0268836"
+        },
+        "date": 1710430739417,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.331692276972942,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
