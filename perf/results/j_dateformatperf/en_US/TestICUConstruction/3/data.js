@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710452435419,
+  "lastUpdate": 1710453709329,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -18898,6 +18898,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1976.7568367577974,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "c771fc444f2338479b29e0eeea70e94fec13f154",
+          "message": "ICU-22523 Cut down the large tables in the APIs docs for SimpleDateFormat and included a link to the full table\nin the LDML spec.",
+          "timestamp": "2024-03-14T14:32:29-07:00",
+          "tree_id": "80ad61486be23ce247654c1c6bfd12026cae9169",
+          "url": "https://github.com/unicode-org/icu/commit/c771fc444f2338479b29e0eeea70e94fec13f154"
+        },
+        "date": 1710453623166,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1931.8472772215282,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
