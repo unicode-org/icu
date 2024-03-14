@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710454104357,
+  "lastUpdate": 1710459733006,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -30490,6 +30490,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 2.2994,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "104214aeae7c944070ff886eed787ac24287d334",
+          "message": "ICU-22532 Use previous Ubuntu version for ICU4C in GH Actions CI for now",
+          "timestamp": "2024-03-14T16:20:49-07:00",
+          "tree_id": "2fe1713b545f938b9613e074d8a2943b295ce169",
+          "url": "https://github.com/unicode-org/icu/commit/104214aeae7c944070ff886eed787ac24287d334"
+        },
+        "date": 1710459646182,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 9.5116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.0555,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 2.2996,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
