@@ -2597,13 +2597,7 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
         return;
     }
 
-    // TODO: Remove the need for a const char* to a NUL terminated buffer.
-    const CharString keywordName_nul(keywordName, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    ulocimp_getKeywordValue(fullName, keywordName_nul.data(), sink, status);
+    ulocimp_getKeywordValue(fullName, keywordName, sink, status);
 }
 
 void

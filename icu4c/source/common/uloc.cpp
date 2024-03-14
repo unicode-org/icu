@@ -31,6 +31,7 @@
 */
 
 #include <optional>
+#include <string_view>
 
 #include "unicode/bytestream.h"
 #include "unicode/errorcode.h"
@@ -551,17 +552,17 @@ namespace {
  * @param status return status (keyword too long)
  * @return the keyword name
  */
-CharString locale_canonKeywordName(const char* keywordName, UErrorCode& status)
+CharString locale_canonKeywordName(std::string_view keywordName, UErrorCode& status)
 {
   if (U_FAILURE(status)) { return {}; }
   CharString result;
 
-  for (; *keywordName != 0; keywordName++) {
-    if (!UPRV_ISALPHANUM(*keywordName)) {
+  for (char c : keywordName) {
+    if (!UPRV_ISALPHANUM(c)) {
       status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
       return {};
     }
-    result.append(uprv_tolower(*keywordName), status);
+    result.append(uprv_tolower(c), status);
   }
   if (result.isEmpty()) {
     status = U_ILLEGAL_ARGUMENT_ERROR; /* empty keyword name */
@@ -733,6 +734,11 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 {
+    if (U_FAILURE(*status)) { return 0; }
+    if (keywordName == nullptr || *keywordName == '\0') {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     return ByteSinkUtil::viaByteSinkToTerminatedChars(
         buffer, bufferCapacity,
         [&](ByteSink& sink, UErrorCode& status) {
@@ -743,7 +749,7 @@ uloc_getKeywordValue(const char* localeID,
 
 U_EXPORT CharString
 ulocimp_getKeywordValue(const char* localeID,
-                        const char* keywordName,
+                        std::string_view keywordName,
                         UErrorCode& status)
 {
     return ByteSinkUtil::viaByteSinkToCharString(
@@ -755,13 +761,13 @@ ulocimp_getKeywordValue(const char* localeID,
 
 U_EXPORT void
 ulocimp_getKeywordValue(const char* localeID,
-                        const char* keywordName,
+                        std::string_view keywordName,
                         icu::ByteSink& sink,
                         UErrorCode& status)
 {
     if (U_FAILURE(status)) { return; }
 
-    if (localeID == nullptr || keywordName == nullptr || keywordName[0] == 0) {
+    if (localeID == nullptr || keywordName.empty()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
