@@ -7,6 +7,8 @@
 **********************************************************************
 */
 
+#include <optional>
+#include <string_view>
 #include <utility>
 
 #include "unicode/bytestream.h"
@@ -1374,27 +1376,28 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool str
                     bcpValue = nullptr;
                 }
             } else if (isBcpUExt) {
-                bcpKey = uloc_toUnicodeLocaleKey(key);
-                if (bcpKey == nullptr) {
+                std::optional<std::string_view> optBcpKey = ulocimp_toBcpKeyWithFallback(key);
+                if (!optBcpKey.has_value()) {
                     if (strict) {
                         status = U_ILLEGAL_ARGUMENT_ERROR;
                         break;
                     }
                     continue;
                 }
+                bcpKey = optBcpKey->data();
 
-                /* we've checked buf is null-terminated above */
-                bcpValue = uloc_toUnicodeLocaleType(key, buf.data());
-                if (bcpValue == nullptr) {
+                std::optional<std::string_view> optBcpValue =
+                    ulocimp_toBcpTypeWithFallback(key, buf.toStringPiece());
+                if (!optBcpValue.has_value()) {
                     if (strict) {
                         status = U_ILLEGAL_ARGUMENT_ERROR;
                         break;
                     }
                     continue;
                 }
-                if (bcpValue == buf.data()) {
+                if (optBcpValue->data() == buf.data()) {
                     /*
-                    When uloc_toUnicodeLocaleType(key, buf) returns the
+                    When ulocimp_toBcpTypeWithFallback(key, buf) returns the
                     input value as is, the value is well-formed, but has
                     no known mapping. This implementation normalizes the
                     value to lower case
@@ -1412,6 +1415,8 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, bool str
 
                     T_CString_toLowerCase(extBuf->data());
                     bcpValue = extBuf->data();
+                } else {
+                    bcpValue = optBcpValue->data();
                 }
             } else {
                 if (*key == PRIVATEUSE) {
@@ -1669,33 +1674,28 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                 const char *pKey = nullptr;    /* LDML key */
                 const char *pType = nullptr;   /* LDML type */
 
-                char bcpKeyBuf[3];          /* BCP key length is always 2 for now */
-
                 U_ASSERT(pBcpKey != nullptr);
 
-                if (bcpKeyLen >= static_cast<int32_t>(sizeof(bcpKeyBuf))) {
+                /* BCP key length is always 2 for now */
+                if (bcpKeyLen != 2) {
                     /* the BCP key is invalid */
                     status = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
-                U_ASSERT(bcpKeyLen <= 2);
-
-                uprv_strncpy(bcpKeyBuf, pBcpKey, bcpKeyLen);
-                bcpKeyBuf[bcpKeyLen] = 0;
 
                 /* u extension key to LDML key */
-                pKey = uloc_toLegacyKey(bcpKeyBuf);
-                if (pKey == nullptr) {
+                std::optional<std::string_view> legacyKey = ulocimp_toLegacyKeyWithFallback(
+                    {pBcpKey, static_cast<std::string_view::size_type>(bcpKeyLen)});
+                if (!legacyKey.has_value()) {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
-                if (pKey == bcpKeyBuf) {
+                if (legacyKey->data() == pBcpKey) {
                     /*
                     The key returned by toLegacyKey points to the input buffer.
                     We normalize the result key to lower case.
                     */
-                    T_CString_toLowerCase(bcpKeyBuf);
-                    icu::CharString* key = kwdBuf.create(bcpKeyBuf, bcpKeyLen, status);
+                    icu::CharString* key = kwdBuf.create(pBcpKey, bcpKeyLen, status);
                     if (key == nullptr) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                         return;
@@ -1703,36 +1703,37 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     if (U_FAILURE(status)) {
                         return;
                     }
+                    T_CString_toLowerCase(key->data());
                     pKey = key->data();
+                } else {
+                    pKey = legacyKey->data();
                 }
 
                 if (pBcpType) {
-                    icu::CharString bcpTypeBuf(pBcpType, bcpTypeLen, status);
-                    if (U_FAILURE(status)) {
-                        return;
-                    }
-
                     /* BCP type to locale type */
-                    pType = uloc_toLegacyType(pKey, bcpTypeBuf.data());
-                    if (pType == nullptr) {
+                    std::optional<std::string_view> legacyType = ulocimp_toLegacyTypeWithFallback(
+                        pKey, {pBcpType, static_cast<std::string_view::size_type>(bcpTypeLen)});
+                    if (!legacyType.has_value()) {
                         status = U_ILLEGAL_ARGUMENT_ERROR;
                         return;
                     }
-                    if (pType == bcpTypeBuf.data()) {
+                    if (legacyType->data() == pBcpType) {
                         /*
                         The type returned by toLegacyType points to the input buffer.
                         We normalize the result type to lower case.
                         */
-                        /* normalize to lower case */
-                        T_CString_toLowerCase(bcpTypeBuf.data());
-                        if (icu::CharString* type =
-                                kwdBuf.create(std::move(bcpTypeBuf), status)) {
-                            if (U_FAILURE(status)) { return; }
-                            pType = type->data();
-                        } else {
+                        icu::CharString* type = kwdBuf.create(pBcpType, bcpTypeLen, status);
+                        if (type == nullptr) {
                             status = U_MEMORY_ALLOCATION_ERROR;
                             return;
                         }
+                        if (U_FAILURE(status)) {
+                            return;
+                        }
+                        T_CString_toLowerCase(type->data());
+                        pType = type->data();
+                    } else {
+                        pType = legacyType->data();
                     }
                 } else {
                     /* typeless - default type value is "yes" */

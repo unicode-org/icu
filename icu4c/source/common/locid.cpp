@@ -31,6 +31,8 @@
 ******************************************************************************
 */
 
+#include <optional>
+#include <string_view>
 #include <utility>
 
 #include "unicode/bytestream.h"
@@ -1570,8 +1572,8 @@ AliasReplacer::replaceTransformedExtensions(
              // Split the "tkey-tvalue" pair string so that we can canonicalize the tvalue.
              *const_cast<char*>(tvalue++) = '\0'; // NUL terminate tkey
              output.append(tfield, status).append('-', status);
-             const char* bcpTValue = ulocimp_toBcpType(tfield, tvalue);
-             output.append((bcpTValue == nullptr) ? tvalue : bcpTValue, status);
+             std::optional<std::string_view> bcpTValue = ulocimp_toBcpType(tfield, tvalue);
+             output.append(bcpTValue.has_value() ? *bcpTValue : tvalue, status);
         }
     }
     if (U_FAILURE(status)) {
@@ -2608,33 +2610,26 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName,
         return;
     }
 
-    // TODO: Remove the need for a const char* to a NUL terminated buffer.
-    const CharString keywordName_nul(keywordName, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    const char* legacy_key = uloc_toLegacyKey(keywordName_nul.data());
-    if (legacy_key == nullptr) {
+    std::optional<std::string_view> legacy_key = ulocimp_toLegacyKeyWithFallback(keywordName);
+    if (!legacy_key.has_value()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    auto legacy_value = getKeywordValue<CharString>(legacy_key, status);
+    auto legacy_value = getKeywordValue<CharString>(*legacy_key, status);
 
     if (U_FAILURE(status)) {
         return;
     }
 
-    const char* unicode_value = uloc_toUnicodeLocaleType(
-            keywordName_nul.data(), legacy_value.data());
-
-    if (unicode_value == nullptr) {
+    std::optional<std::string_view> unicode_value =
+        ulocimp_toBcpTypeWithFallback(keywordName, legacy_value.toStringPiece());
+    if (!unicode_value.has_value()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    sink.Append(unicode_value, static_cast<int32_t>(uprv_strlen(unicode_value)));
+    sink.Append(unicode_value->data(), static_cast<int32_t>(unicode_value->size()));
 }
 
 void
@@ -2699,32 +2694,25 @@ Locale::setUnicodeKeywordValue(StringPiece keywordName,
         return;
     }
 
-    // TODO: Remove the need for a const char* to a NUL terminated buffer.
-    const CharString keywordName_nul(keywordName, status);
-    const CharString keywordValue_nul(keywordValue, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    const char* legacy_key = uloc_toLegacyKey(keywordName_nul.data());
-    if (legacy_key == nullptr) {
+    std::optional<std::string_view> legacy_key = ulocimp_toLegacyKeyWithFallback(keywordName);
+    if (!legacy_key.has_value()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    const char* legacy_value = nullptr;
+    std::string_view value;
 
-    if (!keywordValue_nul.isEmpty()) {
-        legacy_value =
-            uloc_toLegacyType(keywordName_nul.data(), keywordValue_nul.data());
-
-        if (legacy_value == nullptr) {
+    if (!keywordValue.empty()) {
+        std::optional<std::string_view> legacy_value =
+            ulocimp_toLegacyTypeWithFallback(keywordName, keywordValue);
+        if (!legacy_value.has_value()) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
+        value = *legacy_value;
     }
 
-    setKeywordValue(legacy_key, legacy_value, status);
+    setKeywordValue(*legacy_key, value, status);
 }
 
 const char *
