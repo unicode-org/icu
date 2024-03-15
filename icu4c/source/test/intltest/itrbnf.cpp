@@ -79,6 +79,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(27, TestMinMaxIntegerDigitsIgnored);
         TESTCASE(28, TestNorwegianSpellout);
         TESTCASE(29, TestNumberingSystem);
+        TESTCASE(30, TestDFRounding);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1272,6 +1273,73 @@ IntlTestRBNF::TestDurations()
     delete formatter;
 }
 
+void IntlTestRBNF::TestDFRounding()
+{
+    // test for ICU-22611
+    UParseError parseError;
+    UErrorCode err = U_ZERO_ERROR;
+    
+    // no decimal places
+    LocalPointer<RuleBasedNumberFormat> nf0(new RuleBasedNumberFormat(u"1000/1000: <##K<;", parseError, err));
+    if (U_FAILURE(err)) {
+        errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
+    } else {
+        static const char* const integerTestData[][2] = {
+            { "-1400", "-1K" },
+            { "-1900", "-2K" },
+            { "1400",  "1K"  },
+            { "1900",  "2K"  },
+            { nullptr, nullptr }
+        };
+        doTest(nf0.getAlias(), integerTestData, false);
+    }
+    
+    // 1 decimal place
+    LocalPointer<RuleBasedNumberFormat> nf1(new RuleBasedNumberFormat(u"1000/1000: <##.0K<;", parseError, err));
+    if (U_FAILURE(err)) {
+        errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
+    } else {
+        static const char* const oneDecimalPlaceTestData[][2] = {
+            { "-1440", "-1.4K" },
+            { "1890",  "1.9K"  },
+            { nullptr, nullptr }
+        };
+        doTest(nf1.getAlias(), oneDecimalPlaceTestData, false);
+    }
+    
+    // with modulus substitution
+    LocalPointer<RuleBasedNumberFormat> nfMod(new RuleBasedNumberFormat(u"1000/1000: <##<K>##>; -x: ->>;", parseError, err));
+    if (U_FAILURE(err)) {
+        errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
+    } else {
+        static const char* const integerTestData[][2] = {
+            { "-1400", "-1K400" },
+            { "-1900", "-1K900" },
+            { "1400",  "1K400"  },
+            { "1900",  "1K900"  },
+            { nullptr, nullptr }
+        };
+        doTest(nfMod.getAlias(), integerTestData, false);
+    }
+
+    // no decimal places, but with rounding mode set to ROUND_FLOOR
+    LocalPointer<RuleBasedNumberFormat> nfFloor(new RuleBasedNumberFormat(u"1000/1000: <##K<;", parseError, err));
+    nfFloor->setMaximumFractionDigits(0);
+    nfFloor->setRoundingMode(NumberFormat::kRoundFloor);
+    if (U_FAILURE(err)) {
+        errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
+    } else {
+        static const char* const integerTestData[][2] = {
+            { "-1400", "-2K" },
+            { "-1900", "-2K" },
+            { "1400",  "1K"  },
+            { "1900",  "1K"  },
+            { nullptr, nullptr }
+        };
+        doTest(nfFloor.getAlias(), integerTestData, false);
+    }
+}
+
 void 
 IntlTestRBNF::TestSpanishSpellout() 
 {
@@ -1565,6 +1633,7 @@ IntlTestRBNF::TestGermanSpellout()
             { "200", "zwei\\u00ADhundert" },
             { "579", "f\\u00fcnf\\u00ADhundert\\u00ADneun\\u00ADund\\u00ADsiebzig" },
             { "1,000", "ein\\u00ADtausend" },
+            { "1,101", "ein\\u00adtausend\\u00adein\\u00adhundert\\u00adeins" },
             { "2,000", "zwei\\u00ADtausend" },
             { "3,004", "drei\\u00ADtausend\\u00ADvier" },
             { "4,567", "vier\\u00ADtausend\\u00ADf\\u00fcnf\\u00ADhundert\\u00ADsieben\\u00ADund\\u00ADsechzig" },
@@ -1583,6 +1652,30 @@ IntlTestRBNF::TestGermanSpellout()
         };
         doLenientParseTest(formatter, lpTestData);
 #endif
+        
+        static const char* testDataYear[][2] = {
+            { "101", "ein\\u00adhundert\\u00adeins" },
+            { "900", "neun\\u00adhundert" },
+            { "1,001", "ein\\u00adtausend\\u00adeins" },
+            { "1,100", "elf\\u00adhundert" },
+            { "1,101", "elf\\u00adhundert\\u00adeins" },
+            { "1,234", "zw\\u00f6lf\\u00adhundert\\u00advier\\u00adund\\u00addrei\\u00dfig" },
+            { "2,001", "zwei\\u00adtausend\\u00adeins" },
+            { "10,001", "zehn\\u00adtausend\\u00adeins" },
+            { "-100", "minus ein\\u00adhundert" },
+            { "12.34", "12,3" },
+            { nullptr, nullptr }
+        };
+
+        status = U_ZERO_ERROR;
+        formatter->setDefaultRuleSet("%spellout-numbering-year", status);
+        if (U_SUCCESS(status)) {
+            logln("testing year rules");
+            doTest(formatter, testDataYear, false);
+        }
+        else {
+            errln("Can't test year rules");
+        }
     }
     delete formatter;
 }

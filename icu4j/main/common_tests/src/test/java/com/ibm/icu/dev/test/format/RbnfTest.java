@@ -376,6 +376,40 @@ public class RbnfTest extends CoreTestFmwk {
         doParsingTest(formatter, testDataLenient, true);
     }
 
+    @Test
+    public void TestDFRounding() {
+        // test for ICU-22611
+        RuleBasedNumberFormat nf;
+
+        // no decimal places
+        nf = new RuleBasedNumberFormat("1000/1000: <##K<;");
+        assertEquals("-1K", nf.format(-1400));
+        assertEquals("-2K", nf.format(-1900));
+        assertEquals("1K", nf.format(1400));
+        assertEquals("2K", nf.format(1900));
+
+        // 1 decimal place
+        nf = new RuleBasedNumberFormat("1000/1000: <##.0K<;");
+        assertEquals("-1.4K", nf.format(-1440));
+        assertEquals("1.9K", nf.format(1890));
+
+        // with modulus substitution
+        nf = new RuleBasedNumberFormat("1000/1000: <##<K>##>; -x: ->>;");
+        assertEquals("-1K400", nf.format(-1400));
+        assertEquals("-1K900", nf.format(-1900));
+        assertEquals("1K400", nf.format(1400));
+        assertEquals("1K900", nf.format(1900));
+
+        // no decimal places, but with rounding mode set to ROUND_FLOOR
+        nf = new RuleBasedNumberFormat("1000/1000: <##K<;");
+        nf.setMaximumFractionDigits(0);
+        nf.setRoundingMode(BigDecimal.ROUND_FLOOR);
+        assertEquals("-2K", nf.format(-1400));
+        assertEquals("-2K", nf.format(-1900));
+        assertEquals("1K", nf.format(1400));
+        assertEquals("1K", nf.format(1900));
+    }
+
     /**
      * Perform a simple spot check on the Spanish spellout rules
      */
@@ -551,6 +585,7 @@ public class RbnfTest extends CoreTestFmwk {
                 { "200", "zwei\u00ADhundert" },
                 { "579", "f\u00fcnf\u00ADhundert\u00ADneun\u00ADund\u00ADsiebzig" },
                 { "1,000", "ein\u00ADtausend" },
+                { "1,101", "ein\u00adtausend\u00adein\u00adhundert\u00adeins" },
                 { "2,000", "zwei\u00ADtausend" },
                 { "3,004", "drei\u00ADtausend\u00ADvier" },
                 { "4,567", "vier\u00ADtausend\u00ADf\u00fcnf\u00ADhundert\u00ADsieben\u00ADund\u00ADsechzig" },
@@ -566,6 +601,23 @@ public class RbnfTest extends CoreTestFmwk {
         };
 
         doParsingTest(formatter, testDataLenient, true);
+
+        String[][] testDataYear = {
+                { "101", "ein\u00adhundert\u00adeins" },
+                { "900", "neun\u00adhundert" },
+                { "1,001", "ein\u00adtausend\u00adeins" },
+                { "1,100", "elf\u00adhundert" },
+                { "1,101", "elf\u00adhundert\u00adeins" },
+                { "1,234", "zw\u00f6lf\u00adhundert\u00advier\u00adund\u00addrei\u00dfig" },
+                { "2,001", "zwei\u00adtausend\u00adeins" },
+                { "10,001", "zehn\u00adtausend\u00adeins" },
+                { "-100", "minus ein\u00adhundert" },
+                { "12.34", "12,3" },
+        };
+
+        formatter.setDefaultRuleSet("%spellout-numbering-year");
+        logln("testing year rules");
+        doTest(formatter, testDataYear, false);
     }
 
     /**

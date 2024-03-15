@@ -112,7 +112,7 @@ final class NFRule {
     /**
      * The RuleBasedNumberFormat that owns this rule
      */
-    private final RuleBasedNumberFormat formatter;
+    final RuleBasedNumberFormat formatter;
 
     //-----------------------------------------------------------------------
     // construction
@@ -728,6 +728,13 @@ final class NFRule {
      */
     public long getDivisor() {
         return power(radix, exponent);
+    }
+
+    /**
+     * Internal function used by the rounding code in MultiplierSubstitution.
+     */
+    boolean hasModulusSubstitution() {
+        return (sub1 instanceof ModulusSubstitution) || (sub2 instanceof ModulusSubstitution);
     }
 
     //-----------------------------------------------------------------------

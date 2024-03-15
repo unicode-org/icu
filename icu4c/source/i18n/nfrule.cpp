@@ -721,6 +721,14 @@ int64_t NFRule::getDivisor() const
     return util64_pow(radix, exponent);
 }
 
+/**
+ * Internal function to facilitate numerical rounding.  See the explanation in MultiplierSubstitution::transformNumber().
+ */
+bool NFRule::hasModulusSubstitution() const
+{
+    return (sub1 != nullptr && sub1->isModulusSubstitution()) || (sub2 != nullptr && sub2->isModulusSubstitution());
+}
+
 
 //-----------------------------------------------------------------------
 // formatting

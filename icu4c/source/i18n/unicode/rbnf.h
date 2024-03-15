@@ -436,7 +436,16 @@ enum URBNFRuleSetTag {
  *   <tr>
  *     <td>&lt;&lt;</td>
  *     <td>in normal rule</td>
- *     <td>Divide the number by the rule's divisor and format the quotient</td>
+ *     <td>Divide the number by the rule's divisor, perform floor() on the quotient,
+ *         and format the resulting value.<br>
+ *         If there is a DecimalFormat pattern between the &lt; characters and the
+ *         rule does NOT also contain a &gt;&gt; substitution, we DON'T perform
+ *         floor() on the quotient-- the quotient is passed through to the DecimalFormat
+ *         intact.  That is, for the value 1,900:<br>
+ *         - "1/1000: &lt;&lt; thousand;" will produce "one thousand"<br>
+ *         - "1/1000: &lt;0&lt; thousand;" will produce "2 thousand" (NOT "1 thousand")<br>
+ *         - "1/1000: &lt;0&lt; seconds &gt;0&gt; milliseconds;" will produce "1 second 900 milliseconds"
+ *     </td>
  *   </tr>
  *   <tr>
  *     <td></td>
