@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include <algorithm>
+#include <array>
 #include <set>
 #include <sstream>
 #include <stdio.h>
@@ -22,6 +23,7 @@
 #include <string.h>
 #include <utility>
 #include <vector>
+#include <string_view>
 
 #include "unicode/brkiter.h"
 #include "unicode/localpointer.h"
@@ -4178,7 +4180,12 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         if (numIterations == -1 && loopCount % 10 == 0) {
             // If test is running in an infinite loop, display a periodic tic so
             //   we can tell that it is making progress.
-            fprintf(stderr, ".");
+            constexpr std::array<std::string_view, 5> monkeys{"🙈", "🙉", "🙊", "🐵", "🐒"};
+            fprintf(stderr, monkeys[m_seed % monkeys.size()].data());
+            if (loopCount % 1'000'000 == 0) {
+                fprintf(stderr, "\nTested %d million random strings with %d errors…\n",
+                        loopCount / 1'000'000, getErrors());
+            }
         }
         // Save current random number seed, so that we can recreate the random numbers
         //   for this loop iteration in event of an error.
