@@ -20,6 +20,10 @@
  * See source code repository history for changes.
  */
 
+#ifndef UCHAR_TYPE
+#define UCHAR_TYPE char16_t
+#endif
+
 #include <unicode/utypes.h>
 #include <unicode/putil.h>
 #include <unicode/ucnv.h>

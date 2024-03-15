@@ -377,9 +377,17 @@ typedef int8_t UBool;
 #endif
 
 #if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || \
-        defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION)
+        defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION) || \
+        defined(U_TOOLUTIL_IMPLEMENTATION)
     // Inside the ICU library code, never configurable.
     typedef char16_t UChar;
+#elif defined(T_CTEST_IMPLEMENTATION)
+    // internally to ctestfw, we want to use char16_t in C++ and uint_16 in C
+    #if U_CPLUSPLUS_VERSION != 0
+        typedef char16_t UChar;
+    #else
+        typedef uint16_t UChar;
+    #endif
 #elif defined(UCHAR_TYPE)
     typedef UCHAR_TYPE UChar;
 #elif U_CPLUSPLUS_VERSION != 0
