@@ -1192,7 +1192,7 @@ double CalendarAstronomer::getMoonPhase() {
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON() {
+CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON() {
     return  CalendarAstronomer::MoonAge(0);
 }
 
@@ -1212,7 +1212,7 @@ const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON() {
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-const CalendarAstronomer::MoonAge CalendarAstronomer::FULL_MOON() {
+CalendarAstronomer::MoonAge CalendarAstronomer::FULL_MOON() {
     return   CalendarAstronomer::MoonAge(CalendarAstronomer::PI);
 }
 /**
