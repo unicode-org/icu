@@ -157,15 +157,11 @@ U_CDECL_BEGIN
  */
 static UBool U_CALLCONV tzfmt_cleanup()
 {
-    if (gZoneIdTrie != nullptr) {
-        delete gZoneIdTrie;
-    }
+    delete gZoneIdTrie;
     gZoneIdTrie = nullptr;
     gZoneIdTrieInitOnce.reset();
 
-    if (gShortZoneIdTrie != nullptr) {
-        delete gShortZoneIdTrie;
-    }
+    delete gShortZoneIdTrie;
     gShortZoneIdTrie = nullptr;
     gShortZoneIdTrieInitOnce.reset();
 

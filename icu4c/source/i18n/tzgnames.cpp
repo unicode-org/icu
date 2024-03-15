@@ -144,9 +144,7 @@ TimeZoneGenericNameMatchInfo::TimeZoneGenericNameMatchInfo(UVector* matches)
 }
 
 TimeZoneGenericNameMatchInfo::~TimeZoneGenericNameMatchInfo() {
-    if (fMatches != nullptr) {
-        delete fMatches;
-    }
+    delete fMatches;
 }
 
 int32_t
@@ -208,9 +206,7 @@ GNameSearchHandler::GNameSearchHandler(uint32_t types)
 }
 
 GNameSearchHandler::~GNameSearchHandler() {
-    if (fResults != nullptr) {
-        delete fResults;
-    }
+    delete fResults;
 }
 
 UBool
@@ -430,12 +426,8 @@ TZGNCore::initialize(const Locale& locale, UErrorCode& status) {
 
 void
 TZGNCore::cleanup() {
-    if (fLocaleDisplayNames != nullptr) {
-        delete fLocaleDisplayNames;
-    }
-    if (fTimeZoneNames != nullptr) {
-        delete fTimeZoneNames;
-    }
+    delete fLocaleDisplayNames;
+    delete fTimeZoneNames;
 
     uhash_close(fLocationNamesMap);
     uhash_close(fPartialLocationNamesMap);
@@ -869,9 +861,7 @@ TZGNCore::loadStrings(const UnicodeString& tzCanonicalID) {
             }
         }
     }
-    if (mzIDs != nullptr) {
-        delete mzIDs;
-    }
+    delete mzIDs;
 }
 
 int32_t
@@ -1026,9 +1016,7 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
         return gmatchInfo;
     }
 
-    if (results != nullptr) {
-        delete results;
-    }
+    delete results;
 
     // All names are not yet loaded into the local trie.
     // Load all available names into the trie. This could be very heavy.
@@ -1045,9 +1033,7 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
                     nonConstThis->loadStrings(*tzID);
                 }
             }
-            if (tzIDs != nullptr) {
-                delete tzIDs;
-            }
+            delete tzIDs;
 
             if (U_SUCCESS(status)) {
                 nonConstThis->fGNamesTrieFullyLoaded = true;
@@ -1242,9 +1228,7 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
                 }
             }
             if (U_FAILURE(status)) {
-                if (tzgnCore != nullptr) {
-                    delete tzgnCore;
-                }
+                delete tzgnCore;
                 if (newKey != nullptr) {
                     uprv_free(newKey);
                 }

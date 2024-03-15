@@ -103,9 +103,7 @@ void openOK(GtkObject */*object*/, gpointer data)
     gchar *title = prettyTitle(fileName);
     GtkWidget *area = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(app), "area"));
 
-    if (context->paragraph != nullptr) {
-      delete context->paragraph;
-    }
+    delete context->paragraph;
 
     context->paragraph = newPara;
     gtk_window_set_title(GTK_WINDOW(app), title);
@@ -287,9 +285,7 @@ void closeSample(GtkWidget *app)
 {
   Context *context = (Context *) gtk_object_get_data(GTK_OBJECT(app), "context");
 
-  if (context->paragraph != nullptr) {
-    delete context->paragraph;
-  }
+  delete context->paragraph;
 
   delete context;
 

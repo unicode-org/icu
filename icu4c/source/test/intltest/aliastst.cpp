@@ -278,12 +278,8 @@ void LocaleAliasTest::TestUResourceBundle() {
         log("   new:");
         logln(us2);
 
-        if (rb1!=nullptr) {
-            delete rb1;
-        }
-        if (rb2!=nullptr) {
-            delete rb2;
-        }
+        delete rb1;
+        delete rb2;
     }
 
 }

@@ -241,9 +241,7 @@ ResourceBundle::~ResourceBundle()
     if (fResource != nullptr) {
         ures_close(fResource);
     }
-    if(fLocale != nullptr) {
-      delete(fLocale);
-    }
+    delete fLocale;
 }
 
 ResourceBundle *

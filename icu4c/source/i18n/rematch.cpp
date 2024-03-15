@@ -165,9 +165,7 @@ RegexMatcher::~RegexMatcher() {
         fPattern = nullptr;
     }
 
-    if (fInput) {
-        delete fInput;
-    }
+    delete fInput;
     if (fInputText) {
         utext_close(fInputText);
     }

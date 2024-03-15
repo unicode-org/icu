@@ -92,9 +92,7 @@ TestZIDEnumeration::TestZIDEnumeration(UBool all)
 }
 
 TestZIDEnumeration::~TestZIDEnumeration() {
-    if (tzenum != nullptr) {
-        delete tzenum;
-    }
+    delete tzenum;
 }
 
 const UnicodeString*

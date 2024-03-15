@@ -182,9 +182,7 @@ TimeZoneNamesDelegate::TimeZoneNamesDelegate(const Locale& locale, UErrorCode& s
             }
         }
         if (U_FAILURE(status)) {
-            if (tznames != nullptr) {
-                delete tznames;
-            }
+            delete tznames;
             if (newKey != nullptr) {
                 uprv_free(newKey);
             }
@@ -403,9 +401,7 @@ TimeZoneNames::MatchInfoCollection::MatchInfoCollection()
 }
 
 TimeZoneNames::MatchInfoCollection::~MatchInfoCollection() {
-    if (fMatches != nullptr) {
-        delete fMatches;
-    }
+    delete fMatches;
 }
 
 void

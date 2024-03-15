@@ -233,9 +233,7 @@ void RegexPattern::zap() {
     for (i=1; i<fSets->size(); i++) {
         UnicodeSet *s;
         s = (UnicodeSet *)fSets->elementAt(i);
-        if (s != nullptr) {
-            delete s;
-        }
+        delete s;
     }
     delete fSets;
     fSets = nullptr;

@@ -70,8 +70,8 @@ public:
 
     virtual long getEventsPerIteration(){
         int loops = LOOPS;
-        if (catICU) { delete catICU;}
-        if (catStd) { delete catStd;}
+        delete catICU;
+        delete catStd;
 
         if (bCatenatePrealloc) {
 
