@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710510697497,
+  "lastUpdate": 1710540883083,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39472,6 +39472,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5659672.2784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "f7099878188df5e054ea44b9d52cf89d2da176f7",
+          "message": "ICU-22679 Refactor Islamic Calendar and Optmize starting condition of loop.\n\nRefactor different rules into implementation of private interface Algorithm.\nSince IslamicCalendar is public in Java (not in C++), we cannot put them into different subclass of Calendar and have to let them use the same class and object since the caller UNFORTUNALLY can call setCalculationType and setCivil to change the object to different rule. With this refactoring, we group the formula for the same rule into the same Algorithm\nimplementaiton and now we only do the if/switch check in the constructor or during the call of setCalculationType and setCivil only. The calculation operation is then just delegate the work to the assigned concrete Algorithm.\n\nImprove the efficency while the month is very large. Apply the same optimization in PR 2853 which estimate starting point of year iteration based on an inverse calculation.\n\nICU-22679 change parameter name\n\nICU-22679 Use Consumer",
+          "timestamp": "2024-03-15T15:01:51-07:00",
+          "tree_id": "42fa3f6af46f32cb581e5eb0847bc217a07ea48c",
+          "url": "https://github.com/unicode-org/icu/commit/f7099878188df5e054ea44b9d52cf89d2da176f7"
+        },
+        "date": 1710540789319,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 209.2538,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 20984462.255,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5259268.9222,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 19964657.8895,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5757821.0669,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
