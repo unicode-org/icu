@@ -171,7 +171,7 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
      * Gets an "unsafe" UnicodeString that is valid only as long as the FormattedStringBuilder is alive and
      * unchanged. Slightly faster than toUnicodeString().
      */
-    const UnicodeString toTempUnicodeString() const;
+    UnicodeString toTempUnicodeString() const;
 
     UnicodeString toDebugString() const;
 

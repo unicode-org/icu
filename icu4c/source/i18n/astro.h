@@ -598,7 +598,7 @@ public:
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
    */
-  static const MoonAge NEW_MOON();
+  static MoonAge NEW_MOON();
 
   /**
    * Constant representing the moon's first quarter.
@@ -612,7 +612,7 @@ public:
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
    */
-  static const MoonAge FULL_MOON();
+  static MoonAge FULL_MOON();
 
   /**
    * Constant representing the moon's last quarter.
