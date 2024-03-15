@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710460597558,
+  "lastUpdate": 1710510434606,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19168,6 +19168,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.331937794354701,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "5401c12018bc3a46be70a3c6c6492a20b373d7e2",
+          "message": "ICU-22621 Clang-Tidy: modernize-use-nullptr\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/modernize/use-nullptr.html",
+          "timestamp": "2024-03-15T14:31:54+01:00",
+          "tree_id": "b9d654baf70786bce9d43ae0ea8fddb6d58db1e1",
+          "url": "https://github.com/unicode-org/icu/commit/5401c12018bc3a46be70a3c6c6492a20b373d7e2"
+        },
+        "date": 1710510337401,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.567303990460485,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
