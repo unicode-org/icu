@@ -251,6 +251,7 @@ $SP $IS $CM* $CMX / [^ $CanFollowIS $NU $CM];
 
 #
 # LB 15d Do not break before numeric separators (IS), even after spaces.
+# SP IS QU is handled below as part of LB 19.
 
 [$LB8NonBreaks - $SP] $IS;
 $SP $IS $CM* [$CanFollowIS {eof}];
@@ -273,19 +274,43 @@ $LB18NonBreaks = [$LB8NonBreaks - [$SP]];
 $LB18Breaks    = [$LB8Breaks $SP];
 
 
-# LB 19
-#         x QU
+# LB 19 and LB 19a.
+# Instead of implementing both as keep-together rules as in UAX #14, we have an
+# East_Asian_Width and General_Category-insensitive keep-together rule
+# equivalent to the old LB19 × QU and QU ×, and then we poke holes into it based
+# on context.  This avoids having to do manual chaining over multiple characters
+# with many other rules over multiple characters, as a keep-together LB19a would
+# overlap in context with at least LB14, LB15a, LB15a, LB15d, LB30a, and itself.
 $LB18NonBreaks $CM* $QU;
 ^$CM+               $QU;
 
-#         QU  x
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL $BA]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}] - [$OP $GL $BA]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]]                    / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX          / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+
 $QU $CM* .;
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+[$LB18NonBreaks & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+^[$CM & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [\p{Pf} & $QU] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+
+$SP [$IS & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [$QU & \p{Pi}] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+$SP [$IS & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [$QU & \p{Pi}] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+$SP [$IS & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [$QU & \p{Pf}]           / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+$SP [$IS & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* [$QU & \p{Pf}] $CM* $CMX / [ [\p{ea=F}\p{ea=W}\p{ea=H}] - [$NS $BA $EX $CL $IN $IS $GL $CM]];
+
+^$CM*           [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+^$CM*           [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
 # LB 20
 #        <break>  $CB
 #        $CB   <break>
 #
 $LB20NonBreaks = [$LB18NonBreaks - $CB];
+
+[$LB20NonBreaks - $HL] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]]           / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
+[$LB20NonBreaks - $HL] $CM* [$BA & [\p{ea=F}\p{ea=W}\p{ea=H}]] $CM* $CMX / [\p{Pi} & $QU] $CM* [ [\p{ea=F}\p{ea=W}\p{ea=H}] - $CM];
 
 # LB 20.09    Don't break between Hyphens and Letters when there is a break preceding the hyphen.
 #             Originally added as a Finnish tailoring, now promoted to default ICU behavior.
