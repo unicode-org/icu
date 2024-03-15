@@ -717,7 +717,7 @@ IslamicCivilCalendar* IslamicCivilCalendar::clone() const {
 * from the Hijri epoch, origin 0.
 */
 int64_t IslamicCivilCalendar::yearStart(int32_t year) const{
-    return 354LL * (year-1) + ClockMath::floorDivideInt64(3 + 11LL * year, 30LL);
+    return 354LL * (year-1LL) + ClockMath::floorDivideInt64(3 + 11LL * year, 30LL);
 }
 
 /**
@@ -841,7 +841,7 @@ int32_t IslamicTBLACalendar::getEpoc() const {
  * IslamicUmalquraCalendar
  *****************************************************************************/
 IslamicUmalquraCalendar::IslamicUmalquraCalendar(const Locale& aLocale, UErrorCode& success)
-    : IslamicCalendar(aLocale, success)
+    : IslamicCivilCalendar(aLocale, success)
 {
 }
 
@@ -863,8 +863,7 @@ IslamicUmalquraCalendar* IslamicUmalquraCalendar::clone() const {
 */
 int64_t IslamicUmalquraCalendar::yearStart(int32_t year) const {
     if (year < UMALQURA_YEAR_START || year > UMALQURA_YEAR_END) {
-        return 354LL * (year-1LL) +
-            ClockMath::floorDivideInt64((11LL*year+3LL), 30LL);
+        return IslamicCivilCalendar::yearStart(year);
     }
     year -= UMALQURA_YEAR_START;
     // rounded least-squares fit of the dates previously calculated from UMALQURA_MONTHLENGTH iteration
@@ -902,17 +901,17 @@ int64_t IslamicUmalquraCalendar::monthStart(int32_t year, int32_t month, UErrorC
 * @param year  The hijri month, 0-based
 */
 int32_t IslamicUmalquraCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month,
-                                                      UErrorCode& /* status */) const {
-    int32_t length = 0;
+                                                      UErrorCode& status) const {
     if (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END) {
-        length = 29 + (month+1) % 2;
-        if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
-            length++;
-        }
-        return length;
+        return IslamicCivilCalendar::handleGetMonthLength(extendedYear, month, status);
     }
+    int32_t length = 29;
     int32_t mask = (int32_t) (0x01 << (11 - month));    // set mask for bit corresponding to month
-    return ((UMALQURA_MONTHLENGTH[extendedYear - UMALQURA_YEAR_START] & mask) == 0) ? 29 : 30;
+    int32_t index = extendedYear - UMALQURA_YEAR_START;
+    if ((UMALQURA_MONTHLENGTH[index] & mask) != 0) {
+        length++;
+    }
+    return length;
 }
 
 /**
@@ -921,15 +920,15 @@ int32_t IslamicUmalquraCalendar::handleGetMonthLength(int32_t extendedYear, int3
 */
 int32_t IslamicUmalquraCalendar::handleGetYearLength(int32_t extendedYear) const {
     if (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END) {
-        return 354 + (civilLeapYear(extendedYear) ? 1 : 0);
+        return IslamicCivilCalendar::handleGetYearLength(extendedYear);
     }
-    int len = 0;
+    int length = 0;
     UErrorCode internalStatus = U_ZERO_ERROR;
     for(int i=0; i<12; i++) {
-        len += handleGetMonthLength(extendedYear, i, internalStatus);
+        length += handleGetMonthLength(extendedYear, i, internalStatus);
     }
     U_ASSERT(U_SUCCESS(internalStatus));
-    return len;
+    return length;
 }
 
 /**
@@ -951,63 +950,54 @@ int32_t IslamicUmalquraCalendar::handleGetYearLength(int32_t extendedYear) const
 void IslamicUmalquraCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
     if (U_FAILURE(status)) return;
     int64_t year;
-    int32_t month, dayOfYear;
-    int64_t dayOfMonth;
+    int32_t month;
     int32_t days = julianDay - getEpoc();
 
-    int64_t umalquraStartdays = yearStart(UMALQURA_YEAR_START) ;
-    if (days < umalquraStartdays) {
-        //Use Civil calculation
-        year  = ClockMath::floorDivideInt64(
-            (30LL * days + 10646LL) , 10631LL );
-        month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
-        month = month < 11 ? month : 11;
-    } else {
-        // Estimate a value y which is closer to but not greater than the year.
-        // It is the inverse function of the logic inside
-        // IslamicUmalquraCalendar::yearStart().
-        year = ((double(days) - (460322.05 + 0.5)) / 354.36720)
-            + UMALQURA_YEAR_START - 1;
-        month = 0;
-        int32_t d = 1;
-        // need a slight correction to some
-        while (d > 0) {
-            d = days - yearStart(++year) + 1;
-            int32_t yearLength = handleGetYearLength(year);
-            if (d == yearLength) {
-                month = 11;
-                break;
-            }
-            if (d < yearLength){
-                int32_t monthLen = handleGetMonthLength(year, month, status);
-                for (month = 0;
-                     d > monthLen;
-                     monthLen = handleGetMonthLength(year, ++month, status)) {
-                    if (U_FAILURE(status)) {
-                        return;
-                    }
-                    d -= monthLen;
+    static int64_t kUmalquraStart = yearStart(UMALQURA_YEAR_START);
+    if (days < kUmalquraStart) {
+        IslamicCivilCalendar::handleComputeFields(julianDay, status);
+        return;
+    }
+    // Estimate a value y which is closer to but not greater than the year.
+    // It is the inverse function of the logic inside
+    // IslamicUmalquraCalendar::yearStart().
+    year = ((double(days) - (460322.05 + 0.5)) / 354.36720) + UMALQURA_YEAR_START - 1;
+    month = 0;
+    int32_t d = 1;
+    // need a slight correction to some
+    while (d > 0) {
+        d = days - yearStart(++year) + 1;
+        int32_t yearLength = handleGetYearLength(year);
+        if (d == yearLength) {
+            month = 11;
+            break;
+        }
+        if (d < yearLength){
+            int32_t monthLen = handleGetMonthLength(year, month, status);
+            for (month = 0;
+                 d > monthLen;
+                 monthLen = handleGetMonthLength(year, ++month, status)) {
+                if (U_FAILURE(status)) {
+                    return;
                 }
-                break;
+                d -= monthLen;
             }
+            break;
         }
     }
 
-    dayOfMonth = (days - monthStart(year, month, status)) + 1;
+    int32_t dayOfMonth = monthStart(year, month, status);
+    int32_t dayOfYear = monthStart(year, 0, status);
     if (U_FAILURE(status)) {
         return;
     }
-    if (dayOfMonth > INT32_MAX || dayOfMonth < INT32_MIN) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    // Now figure out the day of the year.
-    dayOfYear = (days - monthStart(year, 0, status)) + 1;
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (dayOfYear > INT32_MAX || dayOfYear < INT32_MIN) {
+    if (uprv_mul32_overflow(dayOfMonth, -1, &dayOfMonth) ||
+        uprv_add32_overflow(dayOfMonth, days, &dayOfMonth) ||
+        uprv_add32_overflow(dayOfMonth, 1, &dayOfMonth) ||
+        // Now figure out the day of the year.
+        uprv_mul32_overflow(dayOfYear, -1, &dayOfYear) ||
+        uprv_add32_overflow(dayOfYear, days, &dayOfYear) ||
+        uprv_add32_overflow(dayOfYear, 1, &dayOfYear)) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
