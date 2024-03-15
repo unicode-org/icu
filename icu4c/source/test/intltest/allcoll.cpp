@@ -32,10 +32,7 @@ CollationDummyTest::CollationDummyTest()
 
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString ruleset("& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ");
-    if (myCollation != nullptr)
-    {
-      delete myCollation;
-    }
+    delete myCollation;
     myCollation = new RuleBasedCollator(ruleset, status);
     if(U_FAILURE(status)){
         errcheckln(status, "ERROR: in creation of rule based collator from ruleset - %s", u_errorName(status));

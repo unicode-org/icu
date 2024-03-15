@@ -140,9 +140,7 @@ Transliterator::Transliterator(const UnicodeString& theID,
  * Destructor.
  */
 Transliterator::~Transliterator() {
-    if (filter) {
-        delete filter;
-    }
+    delete filter;
 }
 
 /**

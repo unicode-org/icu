@@ -60,12 +60,8 @@ nameTrans(nullptr), hexTrans(nullptr)
 CanonicalIteratorTest::~CanonicalIteratorTest()
 {
 #if !UCONFIG_NO_TRANSLITERATION
-  if(nameTrans != nullptr) {
     delete(nameTrans);
-  }
-  if(hexTrans != nullptr) {
     delete(hexTrans);
-  }
 #endif
 }
 

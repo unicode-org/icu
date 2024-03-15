@@ -274,9 +274,7 @@ void DateFormatTest::TestWallyWedel()
     StringEnumeration* ids = TimeZone::createEnumeration(status);
     if (U_FAILURE(status)) {
         dataerrln("Unable to create TimeZone enumeration.");
-        if (sdf != nullptr) {
-            delete sdf;
-        }
+        delete sdf;
         return;
     }
     ids_length = ids->count(status);
@@ -3996,9 +3994,7 @@ void DateFormatTest::TestISOEra() {
     SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("GGG yyyy-MM-dd'T'HH:mm:ss'Z"), status);
     failure(status, "new SimpleDateFormat", true);
     if (status == U_MISSING_RESOURCE_ERROR) {
-        if (fmt1 != nullptr) {
-            delete fmt1;
-        }
+        delete fmt1;
         return;
     }
     for(int i=0; i < numData; i+=2) {
@@ -4314,14 +4310,10 @@ void DateFormatTest::TestContext()
                            ", expected " + itemPtr->expectedFormat + ", got " + result);
                }
            }
-           if (sdmft) {
-               delete sdmft;
-           }
+           delete sdmft;
         }
     }
-    if (cal) {
-        delete cal;
-    }
+    delete cal;
 }
 
 // test item for a particular locale + calendar and date format

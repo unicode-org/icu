@@ -233,9 +233,7 @@ public:
     }
 
     ~ZoneIterator() {
-        if (zenum != nullptr) {
-            delete zenum;
-        }
+        delete zenum;
     }
 
     TimeZone* next() {

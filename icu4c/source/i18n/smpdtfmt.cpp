@@ -332,9 +332,7 @@ SimpleDateFormat::~SimpleDateFormat()
     if (fSharedNumberFormatters) {
         freeSharedNumberFormatters(fSharedNumberFormatters);
     }
-    if (fTimeZoneFormat) {
-        delete fTimeZoneFormat;
-    }
+    delete fTimeZoneFormat;
     delete fSimpleNumberFormatter;
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -1114,9 +1112,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
                   prevCh, handler, *workCal, status);
     }
 
-    if (calClone != nullptr) {
-        delete calClone;
-    }
+    delete calClone;
 
     return appendTo;
 }
@@ -2656,12 +2652,8 @@ ExitParse:
         cal.setTime(workCal->getTime(status), status);
     }
 
-    if (numericLeapMonthFormatter != nullptr) {
-        delete numericLeapMonthFormatter;
-    }
-    if (calClone != nullptr) {
-        delete calClone;
-    }
+    delete numericLeapMonthFormatter;
+    delete calClone;
 
     // If any Calendar calls failed, we pretend that we
     // couldn't parse the string, when in reality this isn't quite accurate--

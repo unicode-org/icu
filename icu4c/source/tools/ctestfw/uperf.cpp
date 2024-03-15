@@ -518,9 +518,7 @@ UBool UPerfTest::callTest( UPerfTest& testToBeCalled, char* par )
 }
 
 UPerfTest::~UPerfTest(){
-    if(lines!=nullptr){
-        delete[] lines;
-    }
+    delete[] lines;
     if(buffer!=nullptr){
         uprv_free(buffer);
     }

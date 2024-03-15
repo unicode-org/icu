@@ -118,9 +118,7 @@ ICULanguageBreakFactory::ICULanguageBreakFactory(UErrorCode &/*status*/) {
 }
 
 ICULanguageBreakFactory::~ICULanguageBreakFactory() {
-    if (fEngines != nullptr) {
-        delete fEngines;
-    }
+    delete fEngines;
 }
 
 void ICULanguageBreakFactory::ensureEngines(UErrorCode& status) {

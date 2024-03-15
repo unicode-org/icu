@@ -1923,10 +1923,7 @@ RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsTo
         return; // do not allow caller to set decimalFormatSymbols to nullptr
     }
 
-    if (decimalFormatSymbols != nullptr) {
-        delete decimalFormatSymbols;
-    }
-
+    delete decimalFormatSymbols;
     decimalFormatSymbols = symbolsToAdopt;
 
     {

@@ -947,9 +947,7 @@ ZNameSearchHandler::ZNameSearchHandler(uint32_t types)
 }
 
 ZNameSearchHandler::~ZNameSearchHandler() {
-    if (fResults != nullptr) {
-        delete fResults;
-    }
+    delete fResults;
 }
 
 UBool
@@ -1699,9 +1697,7 @@ void TimeZoneNamesImpl::internalLoadAllDisplayNames(UErrorCode& status) {
                 }
             }
         }
-        if (tzIDs != nullptr) {
-            delete tzIDs;
-        }
+        delete tzIDs;
     }
 }
 
@@ -1933,9 +1929,7 @@ TZDBNameSearchHandler::TZDBNameSearchHandler(uint32_t types, StringPiece region)
 }
 
 TZDBNameSearchHandler::~TZDBNameSearchHandler() {
-    if (fResults != nullptr) {
-        delete fResults;
-    }
+    delete fResults;
 }
 
 UBool

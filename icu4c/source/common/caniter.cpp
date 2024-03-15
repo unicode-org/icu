@@ -253,9 +253,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     return;
 // Common section to cleanup all local variables and reset object variables.
 CleanPartialInitialization:
-    if (list != nullptr) {
-        delete[] list;
-    }
+    delete[] list;
     cleanPieces();
 }
 
