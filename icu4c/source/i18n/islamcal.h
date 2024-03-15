@@ -579,7 +579,7 @@ class U_I18N_API IslamicTBLACalendar : public IslamicCivilCalendar {
  * IslamicUmalquraCalendar
  * This calendar is referred as "Islamic calendar, Umm al-Qura" in CLDR.
  */
-class U_I18N_API IslamicUmalquraCalendar : public IslamicCalendar {
+class U_I18N_API IslamicUmalquraCalendar : public IslamicCivilCalendar {
  public:
   /**
    * Constructs an IslamicUmalquraCalendar based on the current time in the default time zone
