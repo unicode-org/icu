@@ -218,7 +218,7 @@ void ZoneInfo::addAlias(int32_t index) {
 
 void ZoneInfo::setAliasTo(int32_t index) {
     assert(index >= 0);
-    assert(aliases.size() == 0);
+    assert(aliases.empty());
     aliasTo = index;
 }
 
@@ -999,7 +999,7 @@ void readFinalZonesAndRules(istream& in) {
     ruleIDset.clear();
     for_each(finalRules.begin(), finalRules.end(), insertRuleID);
     for_each(finalZones.begin(), finalZones.end(), eraseRuleID);
-    if (ruleIDset.size() != 0) {
+    if (!ruleIDset.empty()) {
         throw invalid_argument("Unused rules");
     }
 }
@@ -1015,7 +1015,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
   os << "  /* " << id << " */ ";
 
     if (aliasTo >= 0) {
-        assert(aliases.size() == 0);
+        assert(aliases.empty());
         os << ":int { " << aliasTo << " } "; // No endl - save room for comment.
         return;
     }
@@ -1097,7 +1097,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
     os << " }" << endl;
 
     if (ICU44PLUS) {
-        if (transitions.size() != 0) {
+        if (!transitions.empty()) {
             os << "    typeMap:bin { \"" << hex << setfill('0');
             for (trn = transitions.begin(); trn != transitions.end(); ++trn) {
                 os << setw(2) << trn->type;
@@ -1126,7 +1126,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
     }
 
     // Alias list, if any
-    if (aliases.size() != 0) {
+    if (!aliases.empty()) {
         first = true;
         if (ICU44PLUS) {
             os << "    links:intvector { ";
@@ -1240,7 +1240,7 @@ void ZoneInfo::optimizeTypeList() {
         // by inserting the dummy transition indirectly.
 
         // If there are zero transitions and one type, then leave that as-is.
-        if (transitions.size() == 0) {
+        if (transitions.empty()) {
             if (types.size() != 1) {
                 cerr << "Error: transition count = 0, type count = " << types.size() << endl;
             }
@@ -1667,7 +1667,7 @@ int main(int argc, char *argv[]) {
                 string zone, country;
                 istringstream is(line);
                 is >> zone >> country;
-                if (zone.size() == 0) continue;
+                if (zone.empty()) continue;
                 if (country.size() < 2) {
                     cerr << "Error: Can't parse " << line << " in " << ICU_REGIONS << endl;
                     return 1;
@@ -1698,8 +1698,8 @@ int main(int argc, char *argv[]) {
             string country, coord, zone;
             istringstream is(line);
             is >> country >> coord >> zone;
-            if (country.size() == 0) continue;
-            if (country.size() != 2 || zone.size() < 1) {
+            if (country.empty()) continue;
+            if (country.size() != 2 || zone.empty()) {
                 cerr << "Error: Can't parse " << line << " in " << zonetab << endl;
                 return 1;
             }
