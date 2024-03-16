@@ -35,7 +35,7 @@ BUILDDIR := $(BUILDDIR:test\\iotest/../../=)
 BUILDDIR := $(BUILDDIR:TEST\\IOTEST/../../=)
 
 CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/io
-CPPFLAGS += -DUNISTR_FROM_CHAR_EXPLICIT= -DUNISTR_FROM_STRING_EXPLICIT=
+CPPFLAGS += -DUNISTR_FROM_CHAR_EXPLICIT= -DUNISTR_FROM_STRING_EXPLICIT= -DUCHAR_TYPE=char16_t
 ifdef QNX_TARGET
 DEFS += -D'U_TOPSRCDIR="/var/icu_tests"' -D'U_TOPBUILDDIR="/var/icu_tests/"'
 else

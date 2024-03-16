@@ -52,6 +52,16 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#if U_CPLUSPLUS_VERSION == 0
+#if !U_PLATFORM_IS_DARWIN_BASED
+#include <uchar.h>
+#else
+// The <uchar.h> file does not exist in Apple SDKs (as of 3/15/24),
+// so we have to define char16_t ourselves
+typedef uint16_t char16_t;
+#endif // !U_PLATFORM_IS_DARWIN_BASED
+#endif // U_CPLUSPLUS_VERSION == 0
+
 /*==========================================================================*/
 /* For C wrappers, we use the symbol U_CAPI.                                */
 /* This works properly if the includer is C or C++.                         */
@@ -378,22 +388,13 @@ typedef int8_t UBool;
 
 #if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || \
         defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION) || \
-        defined(U_TOOLUTIL_IMPLEMENTATION)
+        defined(U_TOOLUTIL_IMPLEMENTATION) || defined(T_CTEST_IMPLEMENTATION)
     // Inside the ICU library code, never configurable.
     typedef char16_t UChar;
-#elif defined(T_CTEST_IMPLEMENTATION)
-    // internally to ctestfw, we want to use char16_t in C++ and uint_16 in C
-    #if U_CPLUSPLUS_VERSION != 0
-        typedef char16_t UChar;
-    #else
-        typedef uint16_t UChar;
-    #endif
 #elif defined(UCHAR_TYPE)
     typedef UCHAR_TYPE UChar;
-#elif U_CPLUSPLUS_VERSION != 0
-    typedef char16_t UChar;  // C++
 #else
-    typedef uint16_t UChar;  // C
+    typedef char16_t UChar;  // C++
 #endif
 
 /**

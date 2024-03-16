@@ -18,10 +18,6 @@
 *******************************************************************************
 */
 
-#ifndef UCHAR_TYPE
-#define UCHAR_TYPE char16_t
-#endif
-
 #include <fstream>
 #include <iostream>
 #include <list>

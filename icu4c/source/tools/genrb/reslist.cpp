@@ -27,10 +27,6 @@
 #   define UNISTR_FROM_STRING_EXPLICIT explicit
 #endif
 
-#ifndef UCHAR_TYPE
-#define UCHAR_TYPE char16_t
-#endif
-
 #include <assert.h>
 #include <iostream>
 #include <set>

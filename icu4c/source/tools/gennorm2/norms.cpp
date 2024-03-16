@@ -5,10 +5,6 @@
 // created: 2017jun04 Markus W. Scherer
 // (pulled out of n2builder.cpp)
 
-#ifndef UCHAR_TYPE
-#define UCHAR_TYPE char16_t
-#endif
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_NORMALIZATION

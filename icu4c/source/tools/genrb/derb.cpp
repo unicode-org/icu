@@ -17,10 +17,6 @@
 *   maintained by: Yves Arrouye <yves@realnames.com>
 */
 
-#ifndef UCHAR_TYPE
-#define UCHAR_TYPE char16_t
-#endif
-
 #include "unicode/stringpiece.h"
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"

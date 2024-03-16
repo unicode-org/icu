@@ -20,10 +20,6 @@
 *******************************************************************************
 */
 
-#ifndef UCHAR_TYPE
-#define UCHAR_TYPE char16_t
-#endif
-
 // Safer use of UnicodeString.
 #include <cstdint>
 #include "unicode/umachine.h"

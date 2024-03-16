@@ -19,10 +19,6 @@
 *******************************************************************************
 */
 
-#ifndef UCHAR_TYPE
-#define UCHAR_TYPE char16_t
-#endif
-
 #include <assert.h>
 #include "unicode/unistr.h"
 #include "reslist.h"
