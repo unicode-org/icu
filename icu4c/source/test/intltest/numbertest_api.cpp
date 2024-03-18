@@ -1680,7 +1680,7 @@ void NumberFormatterApiTest::unitUsage() {
             NumberFormatter::with().unit(MeasureUnit::getAcre()).usage("default"),
             Locale::getEnglish(),
             -uprv_getInfinity(),
-            u"-∞ km²");
+            u"-∞ sq mi");
 
 //     // TODO(icu-units#131): do we care about NaN?
 //     // TODO: on some platforms with MSVC, "-NaN sec" is returned.
@@ -3004,6 +3004,14 @@ void NumberFormatterApiTest::unitLocaleTags() {
          "celsius", 0, "default", "celsius", 0.0, u"0 degrees Celsius"},
         {u"Test the locale with ms,rg --> ms tag wins", "en-US-u-ms-metric-rg-uszzzz", "foot", 1,
          "default", "centimeter", 30.0, u"30 centimeters"},
+
+        // Test the liklihood of the languages
+        {"Test the region of `en` --> region should be US", "en", "celsius", 1, "default", "fahrenheit",
+         34.0, u"34 degrees Fahrenheit"},
+        {"Test the region of `de` --> region should be DE", "de", "celsius", 1, "default", "celsius",
+         1.0, u"1 Grad Celsius"},
+        {"Test the region of `ar` --> region should be EG", "ar", "celsius", 1, "default", "celsius",
+         1.0, u"١ درجة مئوية"},
     };
 
     for (const auto &testCase : cases) {
