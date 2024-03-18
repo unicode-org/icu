@@ -811,8 +811,6 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     el->key = tkey;
     el->val = usetNode;
     uhash_put(fSetTable, el->key, el, fRB->fStatus);
-
-    return;
 }
 
 

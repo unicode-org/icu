@@ -171,7 +171,6 @@ static void TestInt64Parse(void)
     }
 
     unum_close(nf);
-    return;
 }
 
 /* test Number Format API */

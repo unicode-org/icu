@@ -844,7 +844,6 @@ resolveAliasToConverter(uint16_t alias, uint16_t *tagNum, uint16_t *converterNum
     fprintf(stderr, "%s: warning: alias %s not found\n",
         path,
         GET_ALIAS_STR(alias));
-    return;
 }
 
 /* The knownAliases should be sorted before calling this function */

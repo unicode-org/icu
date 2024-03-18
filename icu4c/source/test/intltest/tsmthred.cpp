@@ -207,7 +207,6 @@ void TestArabicShapeThreads::doTailTest() {
             return;
         }
     }
-    return;
 }
 	
 

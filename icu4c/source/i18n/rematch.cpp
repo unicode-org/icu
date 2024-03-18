@@ -4276,7 +4276,6 @@ breakFromLoop:
     fFrame = fp;                // The active stack frame when the engine stopped.
                                 //   Contains the capture group results that we need to
                                 //    access later.
-    return;
 }
 
 
@@ -5718,8 +5717,6 @@ breakFromLoop:
     fFrame = fp;                // The active stack frame when the engine stopped.
                                 //   Contains the capture group results that we need to
                                 //    access later.
-
-    return;
 }
 
 

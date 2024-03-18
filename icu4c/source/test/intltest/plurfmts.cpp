@@ -729,7 +729,6 @@ PluralFormatTest::numberFormatTest(PluralFormat* plFmt,
             }
         }
     }
-    return;
 }
 
 

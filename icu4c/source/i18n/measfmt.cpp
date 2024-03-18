@@ -489,7 +489,6 @@ void MeasureFormat::parseObject(
         const UnicodeString & /*source*/,
         Formattable & /*result*/,
         ParsePosition& /*pos*/) const {
-    return;
 }
 
 UnicodeString &MeasureFormat::formatMeasurePerUnit(

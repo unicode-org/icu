@@ -203,7 +203,6 @@ void SimpleNumberFormatter::initialize(
     fPatternModifier = new AdoptingSignumModifierStore(patternModifier.createImmutableForPlural(StandardPlural::COUNT, status));
 
     fGroupingStrategy = groupingStrategy;
-    return;
 }
 
 FormattedNumber SimpleNumberFormatter::format(SimpleNumber value, UErrorCode &status) const {

@@ -3819,8 +3819,6 @@ void DateFormatTest::Test6726()
     delete fmtl;
     delete fmtm;
     delete fmts;
-
-    return;
 }
 
 /**

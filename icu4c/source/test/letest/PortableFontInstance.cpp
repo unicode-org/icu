@@ -187,7 +187,6 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 error_exit:
     fclose(fFile);
     fFile = nullptr;
-    return;
 }
 
 PortableFontInstance::~PortableFontInstance()

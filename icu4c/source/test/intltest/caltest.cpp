@@ -1417,8 +1417,6 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
     delete sdf;
     delete cal;
-
-    return;
 }
 
 /**
@@ -2095,8 +2093,6 @@ void CalendarTest::Test6703()
     cal = Calendar::createInstance(loc3, status);
     if (failure(status, "Calendar::createInstance")) return;
     delete cal;
-
-    return;
 }
 
 void CalendarTest::Test3785()
@@ -2142,8 +2138,6 @@ void CalendarTest::Test3785()
     if ( act2 != exp2 ) {
         errln("Unexpected result from date 2 format\n");
     }
-
-    return;
 }
 
 void CalendarTest::Test1624() {
@@ -2180,7 +2174,6 @@ void CalendarTest::Test1624() {
             }
         }
     }
-    return;
 }
 
 void CalendarTest::TestTimeStamp() {
