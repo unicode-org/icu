@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710765780498,
+  "lastUpdate": 1710765838440,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -38668,6 +38668,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.332503542272624,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "4405c543adc0c50d9b2a7f6c5c1fd05f5bfdc8fb",
+          "message": "ICU-22686 Fix Unit preferences calculation in Cpp",
+          "timestamp": "2024-03-18T13:23:58+01:00",
+          "tree_id": "1485061abb1ccc2103e964ce3a7444f13e7edff8",
+          "url": "https://github.com/unicode-org/icu/commit/4405c543adc0c50d9b2a7f6c5c1fd05f5bfdc8fb"
+        },
+        "date": 1710765747039,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.333023052337434,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
