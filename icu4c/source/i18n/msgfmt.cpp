@@ -1983,7 +1983,7 @@ UnicodeString MessageFormat::PluralSelectorProvider::select(void *ctx, double nu
         return UnicodeString(false, OTHER_STRING, 5);
     }
     context.formatter->format(context.number, context.numberString, ec);
-    auto* decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
+    const auto* decFmt = dynamic_cast<const DecimalFormat*>(context.formatter);
     if(decFmt != nullptr) {
         number::impl::DecimalQuantity dq;
         decFmt->formatToDecimalQuantity(context.number, dq, ec);

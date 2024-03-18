@@ -105,7 +105,7 @@ void ScientificModifier::getParameters(Parameters& output) const {
 }
 
 bool ScientificModifier::strictEquals(const Modifier& other) const {
-    auto* _other = dynamic_cast<const ScientificModifier*>(&other);
+    const auto* _other = dynamic_cast<const ScientificModifier*>(&other);
     if (_other == nullptr) {
         return false;
     }

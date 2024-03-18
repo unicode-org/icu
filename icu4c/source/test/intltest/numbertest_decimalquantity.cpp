@@ -353,7 +353,7 @@ void DecimalQuantityTest::testHardDoubleConversion() {
             { 4096.000000000006, u"4096.000000000006" },
             { 4096.000000000007, u"4096.000000000007" } };
 
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         DecimalQuantity q;
         q.setToDouble(cas.input);
         q.roundToInfinity();
@@ -410,7 +410,7 @@ void DecimalQuantityTest::testToDouble() {
             { "514.23", 514.23 },
             { "-3.142E-271", -3.142e-271 } };
 
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         status.setScope(cas.input);
         DecimalQuantity q;
         q.setToDecNumber({cas.input, -1}, status);

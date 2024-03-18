@@ -72,8 +72,8 @@ FormattedStringBuilder &FormattedStringBuilder::operator=(const FormattedStringB
     if (capacity > DEFAULT_CAPACITY) {
         // FIXME: uprv_malloc
         // C++ note: malloc appears in two places: here and in prepareForInsertHelper.
-        auto newChars = static_cast<char16_t *> (uprv_malloc(sizeof(char16_t) * capacity));
-        auto newFields = static_cast<Field *>(uprv_malloc(sizeof(Field) * capacity));
+        auto* newChars = static_cast<char16_t*>(uprv_malloc(sizeof(char16_t) * capacity));
+        auto* newFields = static_cast<Field*>(uprv_malloc(sizeof(Field) * capacity));
         if (newChars == nullptr || newFields == nullptr) {
             // UErrorCode is not available; fail silently.
             uprv_free(newChars);
@@ -153,8 +153,8 @@ FormattedStringBuilder::insertCodePoint(int32_t index, UChar32 codePoint, Field 
     if (U_FAILURE(status)) {
         return count;
     }
-    auto charPtr = getCharPtr();
-    auto fieldPtr = getFieldPtr();
+    auto* charPtr = getCharPtr();
+    auto* fieldPtr = getFieldPtr();
     if (count == 1) {
         charPtr[position] = (char16_t) codePoint;
         fieldPtr[position] = field;
@@ -308,8 +308,10 @@ int32_t FormattedStringBuilder::prepareForInsertHelper(int32_t index, int32_t co
         newZero = (newCapacity - newLength) / 2;
 
         // C++ note: malloc appears in two places: here and in the assignment operator.
-        auto newChars = static_cast<char16_t *> (uprv_malloc(sizeof(char16_t) * static_cast<size_t>(newCapacity)));
-        auto newFields = static_cast<Field *>(uprv_malloc(sizeof(Field) * static_cast<size_t>(newCapacity)));
+        auto* newChars =
+            static_cast<char16_t*>(uprv_malloc(sizeof(char16_t) * static_cast<size_t>(newCapacity)));
+        auto* newFields =
+            static_cast<Field*>(uprv_malloc(sizeof(Field) * static_cast<size_t>(newCapacity)));
         if (newChars == nullptr || newFields == nullptr) {
             uprv_free(newChars);
             uprv_free(newFields);

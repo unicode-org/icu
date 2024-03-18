@@ -1685,7 +1685,7 @@ void LocaleTest::Test20639_DeprecatesISO3Language() {
         {"ro", "ron"},
         {"mo", "mol"},
     };
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         Locale loc(cas.localeName);
         const char* actual = loc.getISO3Language();
         assertEquals(cas.localeName, cas.expectedISO3Language, actual);

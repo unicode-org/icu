@@ -1308,7 +1308,7 @@ SimpleDateFormat::initSimpleNumberFormatter(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    auto* df = dynamic_cast<const DecimalFormat*>(fNumberFormat);
+    const auto* df = dynamic_cast<const DecimalFormat*>(fNumberFormat);
     if (df == nullptr) {
         return;
     }
@@ -1523,7 +1523,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // "GGGG" is wide era name, "GGGGG" is narrow era name, anything else is abbreviated name
     case UDAT_ERA_FIELD:
         {
-            auto calType = cal.getType();
+            const auto* calType = cal.getType();
             if (uprv_strcmp(calType,"chinese") == 0 || uprv_strcmp(calType,"dangi") == 0) {
                 zeroPaddingNumber(currentNumberFormat,appendTo, value, 1, 9); // as in ICU4J
             } else {
@@ -2178,7 +2178,7 @@ SimpleDateFormat::zeroPaddingNumber(
     }
 
     // Check for RBNF (no clone necessary)
-    auto* rbnf = dynamic_cast<const RuleBasedNumberFormat*>(currentNumberFormat);
+    const auto* rbnf = dynamic_cast<const RuleBasedNumberFormat*>(currentNumberFormat);
     if (rbnf != nullptr) {
         FieldPosition pos(FieldPosition::DONT_CARE);
         rbnf->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
@@ -3914,7 +3914,7 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 UBool allowNegative,
                                 const NumberFormat *fmt) const {
     UnicodeString oldPrefix;
-    auto* fmtAsDF = dynamic_cast<const DecimalFormat*>(fmt);
+    const auto* fmtAsDF = dynamic_cast<const DecimalFormat*>(fmt);
     LocalPointer<DecimalFormat> df;
     if (!allowNegative && fmtAsDF != nullptr) {
         df.adoptInstead(fmtAsDF->clone());

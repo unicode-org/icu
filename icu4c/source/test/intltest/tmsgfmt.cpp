@@ -2019,7 +2019,7 @@ void TestMessageFormat::TestMessageFormatNumberSkeleton() {
             { u"{0,number,'::'0.00}", "en", 50, u"::50.00" }, // pattern literal
     };
 
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         status.setScope(cas.messagePattern);
         MessageFormat msgf(cas.messagePattern, cas.localeName, status);
         UnicodeString sb;

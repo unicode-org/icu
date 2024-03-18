@@ -5836,7 +5836,7 @@ void MeasureFormatTest::TestParseToBuiltIn() {
         {"square-yard-yard", MeasureUnit::getCubicYard()},
     };
 
-    for (auto &cas : cases) {
+    for (const auto& cas : cases) {
         MeasureUnit fromIdent = MeasureUnit::forIdentifier(cas.identifier, status);
         status.assertSuccess();
         assertEquals("forIdentifier returns a normal built-in unit when it exists",

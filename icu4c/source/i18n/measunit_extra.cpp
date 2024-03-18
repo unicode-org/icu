@@ -801,8 +801,8 @@ private:
 // Sorting function wrapping SingleUnitImpl::compareTo for use with uprv_sortArray.
 int32_t U_CALLCONV
 compareSingleUnits(const void* /*context*/, const void* left, const void* right) {
-    auto realLeft = static_cast<const SingleUnitImpl* const*>(left);
-    auto realRight = static_cast<const SingleUnitImpl* const*>(right);
+    const auto* realLeft = static_cast<const SingleUnitImpl* const*>(left);
+    const auto* realRight = static_cast<const SingleUnitImpl* const*>(right);
     return (*realLeft)->compareTo(**realRight);
 }
 

@@ -74,8 +74,8 @@ bool Modifier::semanticallyEquivalent(const Modifier& other) const {
         auto signum = static_cast<Signum>(i);
         for (size_t j=0; j<StandardPlural::COUNT; j++) {
             auto plural = static_cast<StandardPlural::Form>(j);
-            auto mod1 = paramsThis.obj->getModifier(signum, plural);
-            auto mod2 = paramsOther.obj->getModifier(signum, plural);
+            const auto* mod1 = paramsThis.obj->getModifier(signum, plural);
+            const auto* mod2 = paramsOther.obj->getModifier(signum, plural);
             if (mod1 == mod2) {
                 // Equal pointers
                 continue;
@@ -146,7 +146,7 @@ void ConstantAffixModifier::getParameters(Parameters& output) const {
 }
 
 bool ConstantAffixModifier::strictEquals(const Modifier& other) const {
-    auto* _other = dynamic_cast<const ConstantAffixModifier*>(&other);
+    const auto* _other = dynamic_cast<const ConstantAffixModifier*>(&other);
     if (_other == nullptr) {
         return false;
     }
@@ -233,7 +233,7 @@ void SimpleModifier::getParameters(Parameters& output) const {
 }
 
 bool SimpleModifier::strictEquals(const Modifier& other) const {
-    auto* _other = dynamic_cast<const SimpleModifier*>(&other);
+    const auto* _other = dynamic_cast<const SimpleModifier*>(&other);
     if (_other == nullptr) {
         return false;
     }
@@ -360,7 +360,7 @@ void ConstantMultiFieldModifier::getParameters(Parameters& output) const {
 }
 
 bool ConstantMultiFieldModifier::strictEquals(const Modifier& other) const {
-    auto* _other = dynamic_cast<const ConstantMultiFieldModifier*>(&other);
+    const auto* _other = dynamic_cast<const ConstantMultiFieldModifier*>(&other);
     if (_other == nullptr) {
         return false;
     }

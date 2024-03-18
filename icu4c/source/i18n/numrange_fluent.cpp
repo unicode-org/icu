@@ -313,7 +313,7 @@ FormattedNumberRange LocalizedNumberRangeFormatter::formatFormattableRange(
         return FormattedNumberRange(U_ILLEGAL_ARGUMENT_ERROR);
     }
 
-    auto results = new UFormattedNumberRangeData();
+    auto* results = new UFormattedNumberRangeData();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FormattedNumberRange(status);
@@ -342,7 +342,7 @@ FormattedNumberRange LocalizedNumberRangeFormatter::formatFormattableRange(
 
 void LocalizedNumberRangeFormatter::formatImpl(
         UFormattedNumberRangeData& results, bool equalBeforeRounding, UErrorCode& status) const {
-    auto* impl = getFormatter(status);
+    const auto* impl = getFormatter(status);
     if (U_FAILURE(status)) {
         return;
     }

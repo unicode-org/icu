@@ -51,7 +51,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   int32_t dst_size = size * 2;
   std::unique_ptr<char[]> dst(new char[dst_size]);
-  auto src = reinterpret_cast<const char*>(fuzzbuff.get());
+  const auto* src = reinterpret_cast<const char*>(fuzzbuff.get());
 
   switch (rnd8 % 4) {
     case 0: ucasemap_utf8ToLower(csm.get(), dst.get(), dst_size, src, size,

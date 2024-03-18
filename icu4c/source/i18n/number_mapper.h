@@ -140,9 +140,9 @@ class AutoAffixPatternProvider {
     }
 
     inline void setTo(const AffixPatternProvider* provider, UErrorCode& status) {
-        if (auto ptr = dynamic_cast<const PropertiesAffixPatternProvider*>(provider)) {
+        if (const auto* ptr = dynamic_cast<const PropertiesAffixPatternProvider*>(provider)) {
             propertiesAPP = *ptr;
-        } else if (auto ptr = dynamic_cast<const CurrencyPluralInfoAffixProvider*>(provider)) {
+        } else if (const auto* ptr = dynamic_cast<const CurrencyPluralInfoAffixProvider*>(provider)) {
             currencyPluralInfoAPP = *ptr;
         } else {
             status = U_INTERNAL_PROGRAM_ERROR;

@@ -573,7 +573,7 @@ LocalizedNumberFormatter UnlocalizedNumberFormatter::locale(const Locale& locale
 
 FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
+    auto* results = new UFormattedNumberData();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FormattedNumber(status);
@@ -592,7 +592,7 @@ FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode& s
 
 FormattedNumber LocalizedNumberFormatter::formatDouble(double value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
+    auto* results = new UFormattedNumberData();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FormattedNumber(status);
@@ -611,7 +611,7 @@ FormattedNumber LocalizedNumberFormatter::formatDouble(double value, UErrorCode&
 
 FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
+    auto* results = new UFormattedNumberData();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FormattedNumber(status);
@@ -631,7 +631,7 @@ FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErro
 FormattedNumber
 LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
+    auto* results = new UFormattedNumberData();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FormattedNumber(status);
