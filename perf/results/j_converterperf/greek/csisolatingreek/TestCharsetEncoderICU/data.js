@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710546083636,
+  "lastUpdate": 1710765346788,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19318,6 +19318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.3104178773502515,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "80b33416e80009f7a20b549be9ec8c1552b45b08",
+          "message": "ICU-22686 Fix Unit preferences calculation in Java\n\nSee #2899",
+          "timestamp": "2024-03-18T13:23:37+01:00",
+          "tree_id": "b44ec3f768b4303b0b5cf0e2d6e8c17f0de914cb",
+          "url": "https://github.com/unicode-org/icu/commit/80b33416e80009f7a20b549be9ec8c1552b45b08"
+        },
+        "date": 1710765251879,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.2903960312132505,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
