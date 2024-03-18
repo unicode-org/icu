@@ -41,7 +41,7 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-static const char16_t BEFORE[] = { 0x5b, 0x62, 0x65, 0x66, 0x6f, 0x72, 0x65, 0 };  // "[before"
+const char16_t BEFORE[] = { 0x5b, 0x62, 0x65, 0x66, 0x6f, 0x72, 0x65, 0 };  // "[before"
 const int32_t BEFORE_LENGTH = 7;
 
 }  // namespace
@@ -438,7 +438,7 @@ CollationRuleParser::parseString(int32_t i, UnicodeString &raw, UErrorCode &erro
 
 namespace {
 
-static const char *const positions[] = {
+const char* const positions[] = {
     "first tertiary ignorable",
     "last tertiary ignorable",
     "first secondary ignorable",

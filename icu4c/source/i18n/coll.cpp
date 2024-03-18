@@ -261,7 +261,7 @@ static UBool isAvailableLocaleListInitialized(UErrorCode &status) {
 
 namespace {
 
-static const struct {
+const struct {
     const char *name;
     UColAttribute attr;
 } collAttributes[] = {
@@ -274,7 +274,7 @@ static const struct {
     { "colNumeric", UCOL_NUMERIC_COLLATION }
 };
 
-static const struct {
+const struct {
     const char *name;
     UColAttributeValue value;
 } collAttributeValues[] = {
@@ -292,7 +292,7 @@ static const struct {
     { "upper", UCOL_UPPER_FIRST }
 };
 
-static const char *collReorderCodes[UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST] = {
+const char* collReorderCodes[UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST] = {
     "space", "punct", "symbol", "currency", "digit"
 };
 

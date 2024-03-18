@@ -44,7 +44,7 @@ inline int32_t safeSubtract(int32_t a, int32_t b) {
     return diff;
 }
 
-static double DOUBLE_MULTIPLIERS[] = {
+double DOUBLE_MULTIPLIERS[] = {
         1e0,
         1e1,
         1e2,
