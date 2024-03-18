@@ -42,13 +42,7 @@
 /* NULL, size_t, wchar_t */
 #include <stddef.h>
 
-/*
- * If all compilers provided all of the C99 headers and types,
- * we would just unconditionally #include <stdint.h> here
- * and not need any of the stuff after including platform.h.
- */
-
-/* Find out if we have stdint.h etc. */
+/* More platform-specific definitions. */
 #include "unicode/platform.h"
 
 /*===========================================================================*/
