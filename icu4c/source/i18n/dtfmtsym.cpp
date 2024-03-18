@@ -1454,35 +1454,35 @@ DateFormatSymbols::setLocalPatternChars(const UnicodeString& newLocalPatternChar
 namespace {
 
 // Constants declarations
-static const char16_t kCalendarAliasPrefixUChar[] = {
+const char16_t kCalendarAliasPrefixUChar[] = {
     SOLIDUS, CAP_L, CAP_O, CAP_C, CAP_A, CAP_L, CAP_E, SOLIDUS,
     LOW_C, LOW_A, LOW_L, LOW_E, LOW_N, LOW_D, LOW_A, LOW_R, SOLIDUS
 };
-static const char16_t kGregorianTagUChar[] = {
+const char16_t kGregorianTagUChar[] = {
     LOW_G, LOW_R, LOW_E, LOW_G, LOW_O, LOW_R, LOW_I, LOW_A, LOW_N
 };
-static const char16_t kVariantTagUChar[] = {
+const char16_t kVariantTagUChar[] = {
     PERCENT, LOW_V, LOW_A, LOW_R, LOW_I, LOW_A, LOW_N, LOW_T
 };
-static const char16_t kLeapTagUChar[] = {
+const char16_t kLeapTagUChar[] = {
     LOW_L, LOW_E, LOW_A, LOW_P
 };
-static const char16_t kCyclicNameSetsTagUChar[] = {
+const char16_t kCyclicNameSetsTagUChar[] = {
     LOW_C, LOW_Y, LOW_C, LOW_L, LOW_I, LOW_C, CAP_N, LOW_A, LOW_M, LOW_E, CAP_S, LOW_E, LOW_T, LOW_S
 };
-static const char16_t kYearsTagUChar[] = {
+const char16_t kYearsTagUChar[] = {
     SOLIDUS, LOW_Y, LOW_E, LOW_A, LOW_R, LOW_S
 };
-static const char16_t kZodiacsUChar[] = {
+const char16_t kZodiacsUChar[] = {
     SOLIDUS, LOW_Z, LOW_O, LOW_D, LOW_I, LOW_A, LOW_C, LOW_S
 };
-static const char16_t kDayPartsTagUChar[] = {
+const char16_t kDayPartsTagUChar[] = {
     SOLIDUS, LOW_D, LOW_A, LOW_Y, CAP_P, LOW_A, LOW_R, LOW_T, LOW_S
 };
-static const char16_t kFormatTagUChar[] = {
+const char16_t kFormatTagUChar[] = {
     SOLIDUS, LOW_F, LOW_O, LOW_R, LOW_M, LOW_A, LOW_T
 };
-static const char16_t kAbbrTagUChar[] = {
+const char16_t kAbbrTagUChar[] = {
     SOLIDUS, LOW_A, LOW_B, LOW_B, LOW_R, LOW_E, LOW_V, LOW_I, LOW_A, LOW_T, LOW_E, LOW_D
 };
 
