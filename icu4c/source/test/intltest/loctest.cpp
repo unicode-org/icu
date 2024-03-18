@@ -5711,7 +5711,7 @@ public:
 };
 
 bool isKnownSourceForCLDR17099(const std::string& s) {
-    if (s.compare("qaa-Cyrl-CH") == 0) {
+    if (s == "qaa-Cyrl-CH") {
         return true;
     }
 
