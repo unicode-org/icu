@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710766123452,
+  "lastUpdate": 1710779294865,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19408,6 +19408,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.5531545105753999,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "ce052f52c2d1d56a8b290dc67773c65204d48f1e",
+          "message": "ICU-22621 Clang-Tidy: readability-delete-null-pointer\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/readability/delete-null-pointer.html",
+          "timestamp": "2024-03-18T17:14:23+01:00",
+          "tree_id": "1885f970a8b7961735c48998405254c4395d60e5",
+          "url": "https://github.com/unicode-org/icu/commit/ce052f52c2d1d56a8b290dc67773c65204d48f1e"
+        },
+        "date": 1710779201430,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5529056677511854,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
