@@ -92,7 +92,7 @@ public class UnitPreferences {
             }
         }
 
-        String region = ULocale.getRegionForSupplementalData(locale, false);
+        String region = ULocale.getRegionForSupplementalData(locale, true);
 
         // Check the locale system tag, e.g `ms=metric`.
         String localeSystem = locale.getKeywordValue("measure");
