@@ -244,4 +244,15 @@ public class BuddhistCalendar extends GregorianCalendar {
     public String getType() {
         return "buddhist";
     }
+
+    /*
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Override
+    @Deprecated
+    protected boolean isEra0CountingBackward() {
+        return false;
+    }
 }

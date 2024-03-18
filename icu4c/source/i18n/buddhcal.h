@@ -177,6 +177,8 @@ private:
      * @internal
      */
     virtual int32_t defaultCenturyStartYear() const override;
+
+    virtual bool isEra0CountingBackward() const override { return false; }
 };
 
 U_NAMESPACE_END

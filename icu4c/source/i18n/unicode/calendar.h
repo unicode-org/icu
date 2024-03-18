@@ -1547,6 +1547,13 @@ protected:
      * @internal
      */
     inline int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
+
+    /**
+     * The year in this calendar is counting from 1 backward if the era is 0.
+     * @return The year in era 0 of this calendar is counting backward from 1.
+     * @internal
+     */
+    virtual bool isEra0CountingBackward() const { return false; }
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**

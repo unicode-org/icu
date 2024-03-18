@@ -223,6 +223,8 @@ protected:
      * @internal
      */
     virtual int32_t getDefaultDayInMonth(int32_t eyear, int32_t month) override;
+
+    virtual bool isEra0CountingBackward() const override { return false; }
 };
 
 U_NAMESPACE_END
