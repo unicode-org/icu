@@ -518,6 +518,11 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 // Test the priorities
                 {"Test the locale with mu,ms,rg --> mu tag wins", "en-US-u-mu-celsius-ms-ussystem-rg-uszzzz", "celsius", "0", "default", "celsius", "0.0", "0 degrees Celsius"},
                 {"Test the locale with ms,rg --> ms tag wins", "en-US-u-ms-metric-rg-uszzzz", "foot", "1", "default", "foot", "30.0", "30 centimeters"},
+
+                // Test the liklihood of the languages
+                {"Test the region of `en` --> region should be US", "en", "celsius", "1", "default", "fahrenheit", "34.0", "34 degrees Fahrenheit"},
+                {"Test the region of `de` --> region should be DE", "de", "celsius", "1", "default", "celsius", "1.0", "1 Grad Celsius"},
+                {"Test the region of `ar` --> region should be EG", "ar", "celsius", "1", "default", "celsius", "1.0", "١ درجة مئوية"},
         };
 
         int testIndex = 0;
@@ -1654,7 +1659,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 ULocale.ENGLISH,
                 Double.NEGATIVE_INFINITY,
                 // "-∞ km²");
-                "0 cm²");
+                "0 in²");
 
         // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
         // we get a misleading "0" out of this:
@@ -1666,7 +1671,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 ULocale.ENGLISH,
                 Double.NaN,
                 // "NaN cm²");
-                "0 cm²");
+                "0 in²");
 
         assertFormatSingle(
                 "Negative numbers: minute-and-second",
