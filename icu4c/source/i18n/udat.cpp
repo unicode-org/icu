@@ -1270,7 +1270,6 @@ udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status)
         return;
     }
     ((DateFormat*)fmt)->setContext(value, *status);
-    return;
 }
 
 U_CAPI UDisplayContext U_EXPORT2

@@ -201,7 +201,6 @@ void IdnaConfTest::Call(){
     namebase.setToBogus();
     namezone.setToBogus();
     id.remove();
-    return;
 }
 
 void IdnaConfTest::Test(){

@@ -1548,7 +1548,6 @@ void PluralRulesTest::testParseErrors() {
             errln("file %s, line %d, expected nullptr. Rules: \"%s\"", __FILE__, __LINE__, rules);
         }
     }
-    return;
 }
 
 

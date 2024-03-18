@@ -160,7 +160,6 @@ void GnomeFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
     }
 
     advance.fX = fFace->glyph->metrics.horiAdvance >> 6;
-    return;
 }
 
 le_bool GnomeFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const

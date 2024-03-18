@@ -473,8 +473,6 @@ ucnv_setSubstChars (UConverter * converter,
     * we set subChar1 to 0.
     */
     converter->subChar1 = 0;
-    
-    return;
 }
 
 U_CAPI void U_EXPORT2

@@ -1287,7 +1287,6 @@ void blueprint_helpers::parseScientificStem(const StringSegment& segment, MacroP
     fail: void();
     // throw new SkeletonSyntaxException("Invalid scientific stem", segment);
     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-    return;
 }
 
 void blueprint_helpers::parseIntegerStem(const StringSegment& segment, MacroProps& macros, UErrorCode& status) {
@@ -1305,7 +1304,6 @@ void blueprint_helpers::parseIntegerStem(const StringSegment& segment, MacroProp
         return;
     }
     macros.integerWidth = IntegerWidth::zeroFillTo(offset);
-    return;
 }
 
 bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroProps& macros,

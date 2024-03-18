@@ -34,8 +34,6 @@ SimpleFontInstance::SimpleFontInstance(float pointSize, LEErrorCode &status)
 
     fAscent  = (le_int32) yUnitsToPoints(2000.0);
     fDescent = (le_int32) yUnitsToPoints(600.0);
-
-    return;
 }
 
 SimpleFontInstance::~SimpleFontInstance()

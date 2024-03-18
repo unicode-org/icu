@@ -2609,7 +2609,6 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
         }
 
         setAppliedRule(p2, "SB12  Any x Any");
-        continue;
     }
 
     breakPos = p2;

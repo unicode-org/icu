@@ -120,7 +120,6 @@ class ConversionRateDataSink : public ResourceSink {
                 cr->systems.appendInvariantChars(systems, status);
             }
         }
-        return;
     }
 
   private:

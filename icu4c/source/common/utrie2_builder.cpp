@@ -880,8 +880,6 @@ utrie2_setRange32(UTrie2 *trie,
 
         fillBlock(newTrie->data+block, 0, rest, value, newTrie->initialValue, overwrite);
     }
-
-    return;
 }
 
 /* compaction --------------------------------------------------------------- */
