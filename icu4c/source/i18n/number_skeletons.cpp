@@ -1344,7 +1344,7 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
         // @, @@, @@@
         maxSig = minSig;
     }
-    auto& oldPrecision = static_cast<const FractionPrecision&>(macros.precision);
+    const auto& oldPrecision = static_cast<const FractionPrecision&>(macros.precision);
     if (offset < segment.length()) {
         UNumberRoundingPriority priority;
         if (maxSig == -1) {

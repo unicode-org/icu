@@ -1128,7 +1128,7 @@ void NumberRangeFormatterTest::test21683_StateLeak() {
         unumrf_formatDoubleRange(nrf, range.start, range.end, result, status);
         if (status.errIfFailureAndReset("unumrf_formatDoubleRange")) { goto cleanup; }
 
-        auto* formattedValue = unumrf_resultAsValue(result, status);
+        const auto* formattedValue = unumrf_resultAsValue(result, status);
         if (status.errIfFailureAndReset("unumrf_resultAsValue")) { goto cleanup; }
 
         int32_t utf16Length;

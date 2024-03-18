@@ -1346,7 +1346,7 @@ void NumberFormatterApiTest::unitSkeletons() {
          u"unit/kibijoule-per-furlong",          //
          u"unit/kibijoule-per-furlong"},
     };
-    for (auto &cas : cases) {
+    for (const auto& cas : cases) {
         IcuTestErrorCode status(*this, cas.msg);
         auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
         if (status.errIfFailureAndReset("NumberFormatter::forSkeleton failed")) {
@@ -1390,7 +1390,7 @@ void NumberFormatterApiTest::unitSkeletons() {
          U_NUMBER_SKELETON_SYNTAX_ERROR,                //
          U_ZERO_ERROR},
     };
-    for (auto &cas : failCases) {
+    for (const auto& cas : failCases) {
         IcuTestErrorCode status(*this, cas.msg);
         auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
         if (status.expectErrorAndReset(cas.expectedForSkelStatus, cas.msg)) {
@@ -3019,7 +3019,7 @@ void NumberFormatterApiTest::unitLocaleTags() {
         Locale locale(testCase.locale);
         auto inputUnit = MeasureUnit::forIdentifier(testCase.inputUnit, status);
         auto inputValue = testCase.inputValue;
-        auto usage = testCase.usage;
+        const auto* usage = testCase.usage;
         auto expectedOutputUnit = MeasureUnit::forIdentifier(testCase.expectedOutputUnit, status);
         UnicodeString expectedFormattedNumber = testCase.expectedFormattedNumber;
 
@@ -3050,9 +3050,9 @@ void NumberFormatterApiTest::percentParity() {
     UnlocalizedNumberFormatter uMeasurePermille = NumberFormatter::with().unit(MeasureUnit::getPermille());
 
     int32_t localeCount;
-    auto locales = Locale::getAvailableLocales(localeCount);
+    const auto* locales = Locale::getAvailableLocales(localeCount);
     for (int32_t i=0; i<localeCount; i++) {
-        auto& locale = locales[i];
+        const auto& locale = locales[i];
         UnicodeString sNoUnitPercent = uNoUnitPercent.locale(locale)
             .formatDouble(50, status).toString(status);
         UnicodeString sNoUnitPermille = uNoUnitPermille.locale(locale)
@@ -4971,10 +4971,10 @@ void NumberFormatterApiTest::signNearZero() {
         { UNUM_SIGN_NEGATIVE, -0.9, u"-1" },
         { UNUM_SIGN_NEGATIVE, -1.1, u"-1" },
     };
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         auto sign = cas.sign;
         auto input = cas.input;
-        auto expected = cas.expected;
+        const auto* expected = cas.expected;
         auto actual = NumberFormatter::with()
             .sign(sign)
             .precision(Precision::integer())
@@ -5003,11 +5003,11 @@ void NumberFormatterApiTest::signCoverage() {
     const double inputs[] = {
         -uprv_getInfinity(), -1, -0.0, 0, 1, uprv_getInfinity(), uprv_getNaN(), negNaN
     };
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         auto sign = cas.sign;
         for (int32_t i = 0; i < UPRV_LENGTHOF(inputs); i++) {
             auto input = inputs[i];
-            auto expected = cas.expectedStrings[i];
+            const auto* expected = cas.expectedStrings[i];
             auto actual = NumberFormatter::with()
                 .sign(sign)
                 .locale(Locale::getUS())

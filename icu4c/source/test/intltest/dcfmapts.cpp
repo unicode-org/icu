@@ -1191,10 +1191,10 @@ void IntlTestDecimalFormatAPI::testInvalidObject() {
         assertTrue(WHERE, dfAssignmentBogus != dfBogus);
 
         // Verify that cloning our original invalid object gives nullptr.
-        auto dfBogusClone = dfBogus.clone();
+        auto* dfBogusClone = dfBogus.clone();
         assertTrue(WHERE,  dfBogusClone == nullptr);
         // Verify that cloning our assigned invalid object gives nullptr.
-        auto dfBogusClone2 = dfAssignmentBogus.clone();
+        auto* dfBogusClone2 = dfAssignmentBogus.clone();
         assertTrue(WHERE, dfBogusClone2 == nullptr);
 
         // Verify copy constructing from an invalid object is also invalid.
@@ -1206,8 +1206,8 @@ void IntlTestDecimalFormatAPI::testInvalidObject() {
         assertTrue(WHERE, dfCopyAssign != dfGood);
         assertTrue(WHERE, dfCopyAssign != dfGood2);
         assertTrue(WHERE, dfCopyAssign != dfBogus);
-        auto dfBogusCopyClone1 = dfCopy.clone();
-        auto dfBogusCopyClone2 = dfCopyAssign.clone();
+        auto* dfBogusCopyClone1 = dfCopy.clone();
+        auto* dfBogusCopyClone2 = dfCopyAssign.clone();
         assertTrue(WHERE, dfBogusCopyClone1 == nullptr);
         assertTrue(WHERE, dfBogusCopyClone2 == nullptr);
     }
@@ -1252,7 +1252,7 @@ void IntlTestDecimalFormatAPI::testInvalidObject() {
 
             df->setLenient(true);
 
-            auto dfClone = df->clone();
+            auto* dfClone = df->clone();
             assertTrue(WHERE, dfClone == nullptr);
 
             UnicodeString dest;

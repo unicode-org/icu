@@ -9909,7 +9909,7 @@ void NumberFormatTest::Test21134_ToNumberFormatter() {
     {
         // Case 1: new formatter object
         DecimalFormat inner(u"a0b", {"en", status}, status);
-        if (auto ptr = inner.toNumberFormatter(status)) {
+        if (const auto* ptr = inner.toNumberFormatter(status)) {
             // Copy assignment
             outer1 = *ptr;
         } else {
@@ -9924,7 +9924,7 @@ void NumberFormatTest::Test21134_ToNumberFormatter() {
         inner.format(100, dummy);
         inner.format(100, dummy);
         inner.format(100, dummy);
-        if (auto ptr = inner.toNumberFormatter(status)) {
+        if (const auto* ptr = inner.toNumberFormatter(status)) {
             // Copy assignment
             outer2 = *ptr;
         } else {
@@ -9936,7 +9936,7 @@ void NumberFormatTest::Test21134_ToNumberFormatter() {
         // Case 3: currency plural info (different code path)
         LocalPointer<DecimalFormat> inner(dynamic_cast<DecimalFormat*>(
             DecimalFormat::createInstance("en-US", UNUM_CURRENCY_PLURAL, status)));
-        if (auto ptr = inner->toNumberFormatter(status)) {
+        if (const auto* ptr = inner->toNumberFormatter(status)) {
             // Copy constructor
             outer3.adoptInsteadAndCheckErrorCode(new LocalizedNumberFormatter(*ptr), status);
         } else {
@@ -10009,7 +10009,7 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
                   {u"12$", u"0 ¤¤", 0, 12},
                   {u"12$", u"0 ¤¤¤", 0, 12},
                   {u"12$", u"¤¤¤¤0", 0, 12} };
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         UnicodeString inputString(cas.inputString);
         UnicodeString patternString(cas.patternString);
         int64_t parsedStrictValue = 0;

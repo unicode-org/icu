@@ -100,7 +100,7 @@ void PatternStringTest::testExceptionOnInvalid() {
             u"0,,0,",
             u"#,##0E0"};
 
-    for (auto pattern : invalidPatterns) {
+    for (const auto* pattern : invalidPatterns) {
         UErrorCode status = U_ZERO_ERROR;
         ParsedPatternInfo patternInfo;
         PatternParser::parseToPatternInfo(pattern, patternInfo, status);

@@ -838,7 +838,7 @@ void IntlTestSpoof::testCombiningDot() {
             {false, u"iz\u0307"},
     };
 
-    for (auto& cas : cases) {
+    for (const auto& cas : cases) {
         int32_t failedChecks = uspoof_check2(sc.getAlias(), cas.input, -1, nullptr, &status);
         TEST_ASSERT_SUCCESS(status);
         int32_t expected = cas.shouldFail ? USPOOF_HIDDEN_OVERLAY : 0;

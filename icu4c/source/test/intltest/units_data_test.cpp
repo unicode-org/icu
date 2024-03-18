@@ -134,8 +134,8 @@ void UnitsDataTest::testGetPreferencesFor() {
     };
     IcuTestErrorCode status(*this, "testGetPreferencesFor");
     UnitPreferencesOpenedUp preferences(status);
-    auto *metadata = preferences.getInternalMetadata();
-    auto *unitPrefs = preferences.getInternalUnitPrefs();
+    const auto* metadata = preferences.getInternalMetadata();
+    const auto* unitPrefs = preferences.getInternalUnitPrefs();
     assertTrue(UnicodeString("Metadata count: ") + metadata->length() + " > 200",
                metadata->length() > 200);
     assertTrue(UnicodeString("Preferences count: ") + unitPrefs->length() + " > 250",
