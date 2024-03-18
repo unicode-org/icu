@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710765110335,
+  "lastUpdate": 1710765577003,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19318,6 +19318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetIterate",
             "value": 0.9204210183900782,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "4405c543adc0c50d9b2a7f6c5c1fd05f5bfdc8fb",
+          "message": "ICU-22686 Fix Unit preferences calculation in Cpp",
+          "timestamp": "2024-03-18T13:23:58+01:00",
+          "tree_id": "1485061abb1ccc2103e964ce3a7444f13e7edff8",
+          "url": "https://github.com/unicode-org/icu/commit/4405c543adc0c50d9b2a7f6c5c1fd05f5bfdc8fb"
+        },
+        "date": 1710765482734,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetIterate",
+            "value": 0.9211450781015451,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
