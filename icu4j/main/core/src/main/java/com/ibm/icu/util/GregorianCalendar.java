@@ -897,6 +897,17 @@ public class GregorianCalendar extends Calendar {
     }
 
     /*
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Override
+    @Deprecated
+    protected boolean isEra0CountingBackward() {
+        return true;
+    }
+
+    /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
         if (factory == null) {

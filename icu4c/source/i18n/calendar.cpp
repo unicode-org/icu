@@ -1826,16 +1826,11 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
             // * If era==0 and years go backwards in time, change sign of amount.
             // * Until we have new API per #9393, we temporarily hardcode knowledge of
             //   which calendars have era 0 years that go backwards.
-            UBool era0WithYearsThatGoBackwards = false;
-            int32_t era = get(UCAL_ERA, status);
-            if (era == 0) {
-                const char * calType = getType();
-                if ( uprv_strcmp(calType,"gregorian")==0 || uprv_strcmp(calType,"roc")==0 || uprv_strcmp(calType,"coptic")==0 ) {
-                    if (uprv_mul32_overflow(amount, -1, &amount)) {
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
-                        return;
-                    }
-                    era0WithYearsThatGoBackwards = true;
+            int32_t era = internalGet(UCAL_ERA);
+            if (era == 0 && isEra0CountingBackward()) {
+                if (uprv_mul32_overflow(amount, -1, &amount)) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
                 }
             }
             int32_t newYear;
@@ -1860,7 +1855,7 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
             // else we are in era 0 with newYear < 1;
             // calendars with years that go backwards must pin the year value at 0,
             // other calendars can have years < 0 in era 0
-            } else if (era0WithYearsThatGoBackwards) {
+            } else if (era == 0 && isEra0CountingBackward()) {
                 newYear = 1;
             }
             set(field, newYear);
@@ -2175,14 +2170,10 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
         //   this by applying the amount to the UCAL_EXTENDED_YEAR field; but since
         //   we would still need to handle UCAL_YEAR_WOY as below, might as well
         //   also handle UCAL_YEAR the same way.
-        int32_t era = get(UCAL_ERA, status);
-        if (era == 0) {
-          const char * calType = getType();
-          if ( uprv_strcmp(calType,"gregorian")==0 || uprv_strcmp(calType,"roc")==0 || uprv_strcmp(calType,"coptic")==0 ) {
-            if (uprv_mul32_overflow(amount, -1, &amount)) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return;
-            }
+        if (get(UCAL_ERA, status) == 0 && isEra0CountingBackward()) {
+          if (uprv_mul32_overflow(amount, -1, &amount)) {
+              status = U_ILLEGAL_ARGUMENT_ERROR;
+              return;
           }
         }
       }

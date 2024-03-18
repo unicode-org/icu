@@ -204,7 +204,7 @@ protected:
      */
     virtual int32_t getJDEpochOffset() const override;
 
-
+    virtual bool isEra0CountingBackward() const override { return true; }
 public:
     /**
      * Override Calendar Returns a unique class ID POLYMORPHICALLY. Pure virtual

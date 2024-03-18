@@ -619,6 +619,15 @@ public:
      */
     virtual void handleComputeFields(int32_t julianDay, UErrorCode &status) override;
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * The year in this calendar is counting from 1 backward if the era is 0.
+     * @return The year in era 0 of this calendar is counting backward from 1.
+     * @internal
+     */
+    virtual bool isEra0CountingBackward() const override { return true; }
+#endif  // U_HIDE_INTERNAL_API
+
  private:
     /**
      * Compute the julian day number of the given year.

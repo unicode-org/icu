@@ -3072,14 +3072,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             // * Until we have new API per #9393, we temporarily hardcode knowledge of
             //   which calendars have era 0 years that go backwards.
         {
-            boolean era0WithYearsThatGoBackwards = false;
             int era = get(ERA);
-            if (era == 0) {
-                String calType = getType();
-                if (calType.equals("gregorian") || calType.equals("roc") || calType.equals("coptic")) {
-                    amount = -amount;
-                    era0WithYearsThatGoBackwards = true;
-                }
+            if (era == 0 && isEra0CountingBackward()) {
+                amount = -amount;
             }
             int newYear = internalGet(field) + amount;
             if (era > 0 || newYear >= 1) {
@@ -3098,7 +3093,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // else we are in era 0 with newYear < 1;
                 // calendars with years that go backwards must pin the year value at 0,
                 // other calendars can have years < 0 in era 0
-            } else if (era0WithYearsThatGoBackwards) {
+            } else if (era == 0 && isEra0CountingBackward()) {
                 newYear = 1;
             }
             set(field, newYear);
@@ -3415,11 +3410,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             //   also handle YEAR the same way.
         {
             int era = get(ERA);
-            if (era == 0) {
-                String calType = getType();
-                if (calType.equals("gregorian") || calType.equals("roc") || calType.equals("coptic")) {
-                    amount = -amount;
-                }
+            if (era == 0 && isEra0CountingBackward()) {
+                amount = -amount;
             }
         }
         // Fall through into standard handling
@@ -4096,6 +4088,17 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         } else if (fields[field] < min) {
             set(field, min);
         }
+    }
+
+    /*
+     * The year in this calendar is counting from 1 backward if the era is 0.
+     * @return The year in era 0 of this calendar is counting backward from 1.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    protected boolean isEra0CountingBackward() {
+        return false;
     }
 
     /**
