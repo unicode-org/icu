@@ -29,24 +29,6 @@ U_NAMESPACE_BEGIN
 
 PropertyNames::~PropertyNames() {}
 
-// TODO: Create a concrete subclass for the default PropertyNames implementation
-// using the ICU library built-in property names API & data.
-// Currently only the genprops tool uses PreparsedUCD, and provides its own
-// PropertyNames implementation using its just-build property names data and its own code.
-// At some point, we should use PreparsedUCD in tests, and then we will need the
-// default implementation somewhere.
-#if 0
-int32_t
-PropertyNames::getPropertyEnum(const char *name) const {
-    return u_getPropertyEnum(name);
-}
-
-int32_t
-PropertyNames::getPropertyValueEnum(int32_t property, const char *name) const {
-    return u_getPropertyValueEnum((UProperty)property, name);
-}
-#endif
-
 UniProps::UniProps()
         : start(U_SENTINEL), end(U_SENTINEL),
           bmg(U_SENTINEL), bpb(U_SENTINEL),
