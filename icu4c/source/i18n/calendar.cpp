@@ -2368,6 +2368,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
                     __FILE__, __LINE__, fldName(field));
 #endif
                 ec = U_ILLEGAL_ARGUMENT_ERROR;
+                return 0;
             }
         }
         // Do a binary search
@@ -2405,6 +2406,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
                         __FILE__, __LINE__, fldName(field));
 #endif
                     ec = U_ILLEGAL_ARGUMENT_ERROR;
+                    return 0;
                 }
             }
         }

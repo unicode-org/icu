@@ -420,6 +420,9 @@ int32_t HebrewCalendar::startOfYear(int32_t year, UErrorCode &status)
 {
     ucln_i18n_registerCleanup(UCLN_I18N_HEBREW_CALENDAR, calendar_hebrew_cleanup);
     int64_t day = CalendarCache::get(&gCache, year, status);
+    if(U_FAILURE(status)) {
+        return 0;
+    }
 
     if (day == 0) {
         // # of months before year
@@ -533,7 +536,10 @@ int32_t HebrewCalendar::handleGetLimit(UCalendarDateFields field, ELimitType lim
 * Returns the length of the given month in the given year
 * @internal
 */
-int32_t HebrewCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& /* status */) const {
+int32_t HebrewCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const {
+    if(U_FAILURE(status)) {
+        return 0;
+    }
     // Resolve out-of-range months.  This is necessary in order to
     // obtain the correct year.  We correct to
     // a 12- or 13-month year (add/subtract 12 or 13, depending
@@ -606,16 +612,25 @@ void HebrewCalendar::validateField(UCalendarDateFields field, UErrorCode &status
 * @internal
 */
 void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     int32_t d = julianDay - 347997;
     double m = ClockMath::floorDivide((d * (double)DAY_PARTS), (double) MONTH_PARTS);  // Months (approx)
     int32_t year = (int32_t)(ClockMath::floorDivide((19. * m + 234.), 235.) + 1.);     // Years (approx)
     int32_t ys  = startOfYear(year, status);                   // 1st day of year
+    if (U_FAILURE(status)) {
+        return;
+    }
     int32_t dayOfYear = (d - ys);
 
     // Because of the postponement rules, it's possible to guess wrong.  Fix it.
     while (dayOfYear < 1) {
         year--;
         ys  = startOfYear(year, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
         dayOfYear = (d - ys);
     }
 
