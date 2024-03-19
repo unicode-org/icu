@@ -53,11 +53,6 @@ static void debug_chnsecal_msg(const char *pat, ...)
 #endif
 
 
-// --- The cache --
-static icu::UMutex astroLock;
-static icu::CalendarAstronomer *gAstronomer = nullptr;
-static icu::UInitOnce gAstronomerInitOnce {};
-
 // Lazy Creation & Access synchronized by class CalendarCache with a mutex.
 static icu::CalendarCache *gWinterSolsticeCache = nullptr;
 static icu::CalendarCache *gNewYearCache = nullptr;
@@ -90,10 +85,6 @@ static const int32_t SYNODIC_GAP = 25;
 
 U_CDECL_BEGIN
 static UBool calendar_chinese_cleanup() {
-    if (gAstronomer) {
-        delete gAstronomer;
-        gAstronomer = nullptr;
-    }
     if (gWinterSolsticeCache) {
         delete gWinterSolsticeCache;
         gWinterSolsticeCache = nullptr;
@@ -180,17 +171,7 @@ const TimeZone* getAstronomerTimeZone() {
     return gAstronomerTimeZone;
 }
 
-static void U_CALLCONV initAstronomer() {
-    gAstronomer = new CalendarAstronomer();
-    ucln_i18n_registerCleanup(UCLN_I18N_CHINESE_CALENDAR, calendar_chinese_cleanup);
-}
-
 } // namespace anonymous
-
-icu::CalendarAstronomer* getAstronomer() {
-    umtx_initOnce(gAstronomerInitOnce, &initAstronomer);
-    return gAstronomer;
-}
 
 //-------------------------------------------------------------------------
 // Minimum / Maximum access functions
@@ -602,13 +583,10 @@ int32_t winterSolstice(const TimeZone* timeZone, int32_t gyear) {
         // PST 1298 with a final result of Dec 14 10:31:59 PST 1299.
         double ms = daysToMillis(timeZone, Grego::fieldsToDay(gyear, UCAL_DECEMBER, 1));
 
-        umtx_lock(&astroLock);
-        getAstronomer()->setTime(ms);
-        UDate solarLong = getAstronomer()->getSunTime(CalendarAstronomer::WINTER_SOLSTICE(), true);
-        umtx_unlock(&astroLock);
-
         // Winter solstice is 270 degrees solar longitude aka Dongzhi
-        double days = millisToDays(timeZone, solarLong);
+        double days = millisToDays(timeZone,
+                                   CalendarAstronomer(ms)
+                                       .getSunTime(CalendarAstronomer::WINTER_SOLSTICE(), true));
         if (days < INT32_MIN || days > INT32_MAX) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
@@ -633,11 +611,10 @@ int32_t winterSolstice(const TimeZone* timeZone, int32_t gyear) {
  * new moon after or before <code>days</code>
  */
 int32_t newMoonNear(const TimeZone* timeZone, double days, UBool after) {
-    umtx_lock(&astroLock);
-    getAstronomer()->setTime(daysToMillis(timeZone, days));
-    UDate newMoon = getAstronomer()->getMoonTime(CalendarAstronomer::NEW_MOON(), after);
-    umtx_unlock(&astroLock);
-    return (int32_t) millisToDays(timeZone, newMoon);
+    return (int32_t) millisToDays(
+        timeZone,
+        CalendarAstronomer(daysToMillis(timeZone, days))
+              .getMoonTime(CalendarAstronomer::NEW_MOON(), after));
 }
 
 /**
@@ -660,13 +637,9 @@ int32_t synodicMonthsBetween(int32_t day1, int32_t day2) {
  * @param days days after January 1, 1970 0:00 Asia/Shanghai
  */
 int32_t majorSolarTerm(const TimeZone* timeZone, int32_t days) {
-    umtx_lock(&astroLock);
-    getAstronomer()->setTime(daysToMillis(timeZone, days));
-    UDate solarLongitude = getAstronomer()->getSunLongitude();
-    umtx_unlock(&astroLock);
-
     // Compute (floor(solarLongitude / (pi/6)) + 2) % 12
-    int32_t term = ( ((int32_t)(6 * solarLongitude / CalendarAstronomer::PI)) + 2 ) % 12;
+    int32_t term = ( ((int32_t)(6 * CalendarAstronomer(daysToMillis(timeZone, days))
+                                .getSunLongitude() / CalendarAstronomer::PI)) + 2 ) % 12;
     if (term < 1) {
         term += 12;
     }

@@ -938,12 +938,7 @@ public class IslamicCalendar extends Calendar {
      */
     static final double moonAge(long time)
     {
-        double age = 0;
-
-        synchronized(astro) {
-            astro.setTime(time);
-            age = astro.getMoonAge();
-        }
+        double age = (new CalendarAstronomer(time)).getMoonAge();
         // Convert to degrees and normalize...
         age = age * 180 / Math.PI;
         if (age > 180) {
@@ -956,9 +951,6 @@ public class IslamicCalendar extends Calendar {
     //-------------------------------------------------------------------------
     // Internal data....
     //
-
-    // And an Astronomer object for the moon age calculations
-    private static CalendarAstronomer astro = new CalendarAstronomer();
 
     private static CalendarCache cache = new CalendarCache();
 

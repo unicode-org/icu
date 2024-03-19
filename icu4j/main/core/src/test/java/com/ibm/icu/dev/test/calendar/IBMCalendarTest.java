@@ -975,7 +975,6 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         // CalendarAstronomer
         // (This class should probably be made package-private.)
         CalendarAstronomer astro = new CalendarAstronomer();
-        /*String s = */astro.local(0);
 
         // ChineseCalendar
         ChineseCalendar ccal = new ChineseCalendar(TimeZone.getDefault(),
