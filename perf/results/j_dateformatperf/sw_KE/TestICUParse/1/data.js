@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710820726991,
+  "lastUpdate": 1710860703220,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19558,6 +19558,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 399.24404476255626,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "7c22ff7541ae523d378977d7a455010edfd46730",
+          "message": "ICU-22621 Clang-Tidy: readability-string-compare\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/readability/string-compare.html",
+          "timestamp": "2024-03-19T15:55:56+01:00",
+          "tree_id": "d090d62d21b71673a2b252c5bdaccfec6294bf97",
+          "url": "https://github.com/unicode-org/icu/commit/7c22ff7541ae523d378977d7a455010edfd46730"
+        },
+        "date": 1710860608715,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 420.7005541474936,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
