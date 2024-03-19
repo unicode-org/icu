@@ -1355,8 +1355,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/utrie2perf/Makefile \
 		test/perf/leperf/Makefile \
 		test/fuzzer/Makefile \
-		samples/Makefile samples/date/Makefile \
-		samples/cal/Makefile samples/layout/Makefile])
+		samples/Makefile])
 AC_OUTPUT
 
 if test -z "$PYTHON";

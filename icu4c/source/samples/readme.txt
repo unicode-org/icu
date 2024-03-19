@@ -7,55 +7,13 @@
 This directory contains sample code using ICU4C routines. Below is a
 short description of the contents of this directory.
 
-break   - demonstrates how to use BreakIterators in C and C++.
-
-cal     - prints out a calendar. 
-
-case    - demonstrates how to do Unicode case conversion in C and C++.
-
 coll    - shows how collation compares strings
-
-csdet   -  demonstrates using ICU's CharSet Detection API
-
-date    - prints out the current date, localized. 
-
-datecal - demonstrates how a calendar object provides information
-    
-datefmt - an exercise using the date formatting API
-
-dtitvfmtsample - shows how date interval format uses predefined skeletons
-
-dtptngsample - uses DateTimePatternGenerator to create customized date/time pattern
-       
-layout   - demonstrates the ICU LayoutEngine (obsolete)
-
-legacy   - demonstrates using two versions of ICU in one application (obsolete)
-
-msgfmt   - demonstrates the use of the Message Format
-
-numfmt   - demonstrates the use of the number format
-
-plurfmtsample - uses PluralFormat and Messageformat to get Plural Form
-    
-props    - demonstrates the use of Unicode properties
 
 strsrch - demonstrates how to search for patterns in Unicode text using the usearch interface.
 
 translit - demonstrates the use of ICU transliteration
 
-uciter8 - demonstrates how to leniently read 8-bit Unicode text.
-
-ucnv     - demonstrates the use of ICU codepage conversion
-
-udata    - demonstrates the use of ICU low level data routines (reader/writer in 'all' MSVC solution)
-
-ufortune - demonstrates packaging and use of resources in an application
-
 ugrep    - demonstrates ICU Regular Expressions. 
-
-uresb    - demonstrates building and loading resource bundles
-
-ustring  - demonstrates ICU string manipulation functions
 
 
 ==
@@ -86,6 +44,3 @@ ustring  - demonstrates ICU string manipulation functions
             - type 'make all-samples' from this directory 
                (other targets:  clean-samples, check-samples)
       Note: 'make all-samples' won't work correctly in out of source builds.
-
-      Note that legacy and layout are obsolete samples that may not compile or run without
-            adjustments to their makefiles.
