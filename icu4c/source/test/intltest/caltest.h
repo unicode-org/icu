@@ -352,6 +352,7 @@ public: // package
     void TestFirstDayOfWeek();
 
     void TestChineseCalendarComputeMonthStart();
+    void Test22633HebrewLargeNegativeDay();
 
     void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
     void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);
