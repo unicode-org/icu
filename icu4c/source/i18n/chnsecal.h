@@ -198,8 +198,8 @@ class U_I18N_API ChineseCalendar : public Calendar {
   // year but that year still has a leap month and therefor is a leap year.
   UBool hasLeapMonthBetweenWinterSolstices;
   int32_t fEpochYear;   // Start year of this Chinese calendar instance.
-  const TimeZone* fZoneAstroCalc;   // Zone used for the astronomical calculation
-                                    // of this Chinese calendar instance.
+  const TimeZone* fAstronomerTimeZone;   // Zone used for the astronomical calculation
+                                         // of this Chinese calendar instance.
 
   //----------------------------------------------------------------------
   // Calendar framework
@@ -241,19 +241,7 @@ class U_I18N_API ChineseCalendar : public Calendar {
 
   static const UFieldResolutionTable CHINESE_DATE_PRECEDENCE[];
 
-  double daysToMillis(double days) const;
-  double millisToDays(double millis) const;
-  virtual int32_t winterSolstice(int32_t gyear) const;
-  virtual int32_t newMoonNear(double days, UBool after) const;
-  virtual int32_t synodicMonthsBetween(int32_t day1, int32_t day2) const;
-  virtual int32_t majorSolarTerm(int32_t days) const;
-  virtual UBool hasNoMajorSolarTerm(int32_t newMoon) const;
-  virtual UBool isLeapMonthBetween(int32_t newMoon1, int32_t newMoon2) const;
-  virtual void computeChineseFields(int32_t days, int32_t gyear,
-                 int32_t gmonth, UBool setAllFields, UErrorCode& status);
-  virtual int32_t newYear(int32_t gyear) const;
   virtual void offsetMonth(int32_t newMoon, int32_t dom, int32_t delta, UErrorCode& status);
-  const TimeZone* getChineseCalZoneAstroCalc() const;
 
   // UObject stuff
  public: 
