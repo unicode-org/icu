@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710779179502,
+  "lastUpdate": 1710806883061,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19318,6 +19318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 1929.2908854849265,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "281d8ef140d7eb2ac79065c829b5bad805a4d1df",
+          "message": "ICU-22152 Uncommented a bunch of commented-out test cases in ULocaleCollationTest.TestNameList() and made them pass again.",
+          "timestamp": "2024-03-18T17:01:14-07:00",
+          "tree_id": "86cf42effcb33f76adfeb309a4624d4a02718cee",
+          "url": "https://github.com/unicode-org/icu/commit/281d8ef140d7eb2ac79065c829b5bad805a4d1df"
+        },
+        "date": 1710806793691,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1993.4962185868603,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
