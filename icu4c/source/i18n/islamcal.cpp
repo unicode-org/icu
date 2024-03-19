@@ -55,17 +55,12 @@ static void debug_islamcal_msg(const char *pat, ...)
 // --- The cache --
 // cache of months
 static icu::CalendarCache *gMonthCache = nullptr;
-static icu::CalendarAstronomer *gIslamicCalendarAstro = nullptr;
 
 U_CDECL_BEGIN
 static UBool calendar_islamic_cleanup() {
     if (gMonthCache) {
         delete gMonthCache;
         gMonthCache = nullptr;
-    }
-    if (gIslamicCalendarAstro) {
-        delete gIslamicCalendarAstro;
-        gIslamicCalendarAstro = nullptr;
     }
     return true;
 }
@@ -264,6 +259,8 @@ int32_t IslamicCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
 // Assorted calculation utilities
 //
 
+namespace {
+
 // we could compress this down more if we need to
 static const int8_t umAlQuraYrStartEstimateFix[] = {
      0,  0, -1,  0, -1,  0,  0,  0,  0,  0, // 1300..
@@ -306,6 +303,10 @@ inline bool civilLeapYear(int32_t year) {
     return (14 + 11 * year) % 30 < 11;
 }
 
+int32_t trueMonthStart(int32_t month);
+
+} // namespace
+
 /**
 * Return the day # on which the given year starts.  Days are counted
 * from the Hijri epoch, origin 0.
@@ -336,6 +337,18 @@ int64_t IslamicCalendar::monthStart(int32_t year, int32_t month, UErrorCode& sta
     return trueMonthStart(month);
 }
 
+namespace {
+/**
+ * Return the "age" of the moon at the given time; this is the difference
+ * in ecliptic latitude between the moon and the sun.  This method simply
+ * calls CalendarAstronomer.moonAge, converts to degrees,
+ * and adjusts the resultto be in the range [-180, 180].
+ *
+ * @param time  The time at which the moon's age is desired,
+ *             in millis since 1/1/1970.
+ */
+double moonAge(UDate time);
+
 /**
 * Find the day number on which a particular month of the true/lunar
 * Islamic calendar starts.
@@ -344,82 +357,46 @@ int64_t IslamicCalendar::monthStart(int32_t year, int32_t month, UErrorCode& sta
 *
 * @return The day number on which the given month starts.
 */
-int32_t IslamicCalendar::trueMonthStart(int32_t month) const
-{
+int32_t trueMonthStart(int32_t month) {
+    ucln_i18n_registerCleanup(UCLN_I18N_ISLAMIC_CALENDAR, calendar_islamic_cleanup);
     UErrorCode status = U_ZERO_ERROR;
     int64_t start = CalendarCache::get(&gMonthCache, month, status);
 
-    if (start==0) {
+    if (U_SUCCESS(status) && start==0) {
         // Make a guess at when the month started, using the average length
         UDate origin = HIJRA_MILLIS 
             + uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH) * kOneDay;
 
         // moonAge will fail due to memory allocation error
-        double age = moonAge(origin, status);
-        if (U_FAILURE(status)) {
-            goto trueMonthStartEnd;
-        }
+        double age = moonAge(origin);
 
         if (age >= 0) {
             // The month has already started
             do {
                 origin -= kOneDay;
-                age = moonAge(origin, status);
-                if (U_FAILURE(status)) {
-                    goto trueMonthStartEnd;
-                }
+                age = moonAge(origin);
             } while (age >= 0);
         }
         else {
             // Preceding month has not ended yet.
             do {
                 origin += kOneDay;
-                age = moonAge(origin, status);
-                if (U_FAILURE(status)) {
-                    goto trueMonthStartEnd;
-                }
+                age = moonAge(origin);
             } while (age < 0);
         }
         start = ClockMath::floorDivideInt64(
             (int64_t)((int64_t)origin - HIJRA_MILLIS), (int64_t)kOneDay) + 1;
         CalendarCache::put(&gMonthCache, month, start, status);
     }
-trueMonthStartEnd :
     if(U_FAILURE(status)) {
         start = 0;
     }
     return start;
 }
 
-/**
-* Return the "age" of the moon at the given time; this is the difference
-* in ecliptic latitude between the moon and the sun.  This method simply
-* calls CalendarAstronomer.moonAge, converts to degrees, 
-* and adjusts the result to be in the range [-180, 180].
-*
-* @param time  The time at which the moon's age is desired,
-*              in millis since 1/1/1970.
-*/
-double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
-{
-    double age = 0;
-
-    static UMutex astroLock;      // pod bay door lock
-    umtx_lock(&astroLock);
-    if(gIslamicCalendarAstro == nullptr) {
-        gIslamicCalendarAstro = new CalendarAstronomer();
-        if (gIslamicCalendarAstro == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return age;
-        }
-        ucln_i18n_registerCleanup(UCLN_I18N_ISLAMIC_CALENDAR, calendar_islamic_cleanup);
-    }
-    gIslamicCalendarAstro->setTime(time);
-    age = gIslamicCalendarAstro->getMoonAge();
-    umtx_unlock(&astroLock);
-
+double moonAge(UDate time) {
     // Convert to degrees and normalize...
-    age = age * 180 / CalendarAstronomer::PI;
+    double age = CalendarAstronomer(time).getMoonAge() * 180 / CalendarAstronomer::PI;
     if (age > 180) {
         age = age - 360;
     }
@@ -427,6 +404,7 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
     return age;
 }
 
+}  // namespace
 //----------------------------------------------------------------------
 // Calendar framework
 //----------------------------------------------------------------------
@@ -536,11 +514,7 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
 
     int32_t startDate = (int32_t)uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH);
 
-    double age = moonAge(internalGetTime(), status);
-    if (U_FAILURE(status)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+    double age = moonAge(internalGetTime());
     if ( days - startDate >= 25 && age > 0) {
         // If we're near the end of the month, assume next month and search backwards
         month++;
