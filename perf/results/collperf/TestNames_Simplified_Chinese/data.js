@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710779669988,
+  "lastUpdate": 1710807491499,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39634,6 +39634,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2110563.4392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "281d8ef140d7eb2ac79065c829b5bad805a4d1df",
+          "message": "ICU-22152 Uncommented a bunch of commented-out test cases in ULocaleCollationTest.TestNameList() and made them pass again.",
+          "timestamp": "2024-03-18T17:01:14-07:00",
+          "tree_id": "86cf42effcb33f76adfeb309a4624d4a02718cee",
+          "url": "https://github.com/unicode-org/icu/commit/281d8ef140d7eb2ac79065c829b5bad805a4d1df"
+        },
+        "date": 1710807402585,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 150.3976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8529792.2463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2193137.4495,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7595205.1465,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2104927.1387,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
