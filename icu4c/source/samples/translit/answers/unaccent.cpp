@@ -13,11 +13,13 @@ using icu::Replaceable;
 using icu::Transliterator;
 using icu::UnicodeString;
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnaccentTransliterator)
+
 /**
  * Constructor
  */
 UnaccentTransliterator::UnaccentTransliterator() :
-    normalizer("", Normalizer::DECOMP),
+    normalizer("", UNORM_NFD),
     Transliterator("Unaccent", nullptr) {
 }
 

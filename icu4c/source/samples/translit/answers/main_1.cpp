@@ -9,7 +9,6 @@
  ***********************************************************************/
 
 #include "unicode/translit.h"
-#include "unicode/rbt.h"
 #include "unicode/unistr.h"
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
