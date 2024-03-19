@@ -64,9 +64,6 @@ en_CA{
             "unknown currency",
         }
     }
-    Currencies%narrow{
-        USD{"US$"}
-    }
     CurrencyPlurals{
         AFN{
             one{"Afghan afghani"}
