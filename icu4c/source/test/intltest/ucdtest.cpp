@@ -12,9 +12,11 @@
 #include "unicode/putil.h"
 #include "unicode/uscript.h"
 #include "unicode/uset.h"
+#include "charstr.h"
 #include "cstring.h"
 #include "hash.h"
 #include "patternprops.h"
+#include "ppucd.h"
 #include "normalizer2impl.h"
 #include "testutil.h"
 #include "uparse.h"
@@ -80,6 +82,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestPropertyNames);
     TESTCASE_AUTO(TestIDSUnaryOperator);
     TESTCASE_AUTO(TestIDCompatMath);
+    TESTCASE_AUTO(TestBinaryPropertyUsingPpucd);
     TESTCASE_AUTO_END;
 }
 
@@ -1023,4 +1026,94 @@ void UnicodeTest::TestIDCompatMath() {
     assertTrue("idcmStart.contains(U+2202)", idcmStart.contains(0x2202));
     assertTrue("idcmStart.contains(U+1D7C3)", idcmStart.contains(0x1D7C3));
     assertFalse("idcmStart.contains(U+1D7C4)", idcmStart.contains(0x1D7C4));
+}
+
+
+U_NAMESPACE_BEGIN
+
+class BuiltInPropertyNames : public PropertyNames {
+public:
+    ~BuiltInPropertyNames() override {}
+
+    int32_t getPropertyEnum(const char *name) const override {
+        return u_getPropertyEnum(name);
+    }
+
+    int32_t getPropertyValueEnum(int32_t property, const char *name) const override {
+        return u_getPropertyValueEnum((UProperty) property, name);
+    }
+};
+
+U_NAMESPACE_END
+
+void UnicodeTest::TestBinaryPropertyUsingPpucd() {
+    IcuTestErrorCode errorCode(*this, "TestBinaryPropertyUsingPpucd()");
+
+    // Initialize PPUCD parsing object using file in repo and using
+    // property names present in built-in data in ICU
+    char buffer[500];
+    // get path to `source/data/unidata/` including trailing `/`
+    char *unidataPath = getUnidataPath(buffer);
+    if(unidataPath == nullptr) {
+        errln("exiting early because unable to open ppucd.txt from ICU source tree");
+        return;
+    }
+    CharString ppucdPath(unidataPath, errorCode);
+    ppucdPath.appendPathPart("ppucd.txt", errorCode);    
+    PreparsedUCD ppucd(ppucdPath.data(), errorCode);
+    if(errorCode.isFailure()) {
+        errln("unable to open %s - %s\n",
+            ppucdPath.data(), errorCode.errorName());
+        return;
+    }
+    BuiltInPropertyNames builtInPropNames;
+    ppucd.setPropertyNames(&builtInPropNames);
+
+    // Define which binary properties we want to compare
+    constexpr UProperty propsUnderTest[] = {
+        UCHAR_IDS_UNARY_OPERATOR,
+        UCHAR_ID_COMPAT_MATH_START,
+        UCHAR_ID_COMPAT_MATH_CONTINUE,
+    };
+
+    // Allocate & initialize UnicodeSets per binary property from PPUCD data
+    UnicodeSet ppucdPropSets[std::size(propsUnderTest)];
+
+    // Iterate through PPUCD file, accumulating each line's data into each UnicodeSet per property
+    PreparsedUCD::LineType lineType;
+    UnicodeSet newValues;
+    while((lineType=ppucd.readLine(errorCode))!=PreparsedUCD::NO_LINE && errorCode.isSuccess()) {
+        if(ppucd.lineHasPropertyValues()) {
+            const UniProps *lineProps=ppucd.getProps(newValues, errorCode);
+
+            for(uint32_t i = 0; i < std::size(propsUnderTest); i++) {
+                UProperty prop = propsUnderTest[i];
+                if (!newValues.contains(prop)) {
+                    continue;
+                }
+                if (lineProps->binProps[prop]) {
+                    ppucdPropSets[i].add(lineProps->start, lineProps->end);
+                } else {
+                    ppucdPropSets[i].remove(lineProps->start, lineProps->end);
+                }
+            }
+        }
+    }
+
+    if(errorCode.isFailure()) {
+        errln("exiting early due to parsing error");
+        return;
+    }
+
+    // Assert that the PPUCD data and the ICU data are equivalent for all properties
+    for(uint32_t i = 0; i < std::size(propsUnderTest); i++) {
+        UnicodeSet icuPropSet;
+        UProperty prop = propsUnderTest[i];
+        icuPropSet.applyIntPropertyValue(prop, 1, errorCode);
+        std::string msg = 
+            std::string()
+            + "ICU & PPUCD versions of property "
+            + u_getPropertyName(prop, U_LONG_PROPERTY_NAME);
+        assertTrue(msg.c_str(), ppucdPropSets[i] == icuPropSet);
+    }
 }
