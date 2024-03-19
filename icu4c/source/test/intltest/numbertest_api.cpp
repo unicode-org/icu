@@ -2155,7 +2155,7 @@ void NumberFormatterApiTest::unitCurrency() {
             NumberFormatter::with().unit(USD).unitWidth(UNUM_UNIT_WIDTH_NARROW),
             Locale("en-CA"),
             5.43,
-            u"US$5.43");
+            u"$5.43");
 
     assertFormatSingle(
             u"Currency Difference between Narrow and Short (Short Version)",
@@ -4897,7 +4897,7 @@ void NumberFormatterApiTest::sign() {
                 .unitWidth(UNUM_UNIT_WIDTH_NARROW),
             Locale::getCanada(),
             -444444,
-            u"(US$444,444.00)");
+            u"($444,444.00)");
 
     assertFormatSingle(
             u"Sign Accounting Negative Short",
