@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710975598986,
+  "lastUpdate": 1710975711054,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -39448,6 +39448,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.711598507274806,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "5e95ed829495f594ed53f8fdfa86a7aca8364478",
+          "message": "ICU-22689 reminder for 16.0 update",
+          "timestamp": "2024-03-20T15:49:44-07:00",
+          "tree_id": "616e081f5edcef7a915e24bcf3bfca63d3fa9236",
+          "url": "https://github.com/unicode-org/icu/commit/5e95ed829495f594ed53f8fdfa86a7aca8364478"
+        },
+        "date": 1710975616217,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 11.653797581790682,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
