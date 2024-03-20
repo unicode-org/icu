@@ -722,23 +722,8 @@ public:
 
  public: // internal implementation
 
-    /**
-     * @return true if this calendar has the notion of a default century
-     * @internal 
-     */
-    virtual UBool haveDefaultCentury() const override;
+    DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY
 
-    /**
-     * @return the start of the default century
-     * @internal
-     */
-    virtual UDate defaultCenturyStart() const override;
-
-    /**
-     * @return the beginning year of the default century
-     * @internal 
-     */
-    virtual int32_t defaultCenturyStartYear() const override;
 };
 
 U_NAMESPACE_END

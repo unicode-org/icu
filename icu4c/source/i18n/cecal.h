@@ -106,12 +106,6 @@ protected:
      */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const override;
 
-    /**
-     * Returns true because Coptic/Ethiopic Calendar does have a default century
-     * @internal
-     */
-    virtual UBool haveDefaultCentury() const override;
-
 protected:
     /**
      * The Coptic and Ethiopic calendars differ only in their epochs.

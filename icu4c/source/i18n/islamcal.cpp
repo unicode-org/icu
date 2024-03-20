@@ -476,17 +476,11 @@ int64_t IslamicCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
 /**
 * @draft ICU 2.4
 */
-int32_t IslamicCalendar::handleGetExtendedYear(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return 0;
-    }
-    int32_t year;
+int32_t IslamicCalendar::handleGetExtendedYear(UErrorCode& /* status */) {
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
-        year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
-    } else {
-        year = internalGet(UCAL_YEAR, 1); // Default to year 1
+        return internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     }
-    return year;
+    return internalGet(UCAL_YEAR, 1); // Default to year 1
 }
 
 /**
@@ -587,7 +581,8 @@ int32_t IslamicCalendar::getRelatedYear(UErrorCode &status) const
     return gregoYearFromIslamicStart(year);
 }
 
-static int32_t firstIslamicStartYearFromGrego(int32_t year) {
+void IslamicCalendar::setRelatedYear(int32_t year)
+{
     // ad hoc conversion, improve under #10752
     // rough est for now, ok for grego 1846-2138,
     // otherwise occasionally wrong (for 3% of years)
@@ -601,69 +596,20 @@ static int32_t firstIslamicStartYearFromGrego(int32_t year) {
         offset = -(year - 1976) % 65;
         shift = 2*cycle + ((offset <= 32)? 1: 0);
     }
-    return year - 579 + shift;
+    year = year - 579 + shift;
+    set(UCAL_EXTENDED_YEAR, year);
 }
 
-void IslamicCalendar::setRelatedYear(int32_t year)
-{
-    set(UCAL_EXTENDED_YEAR, firstIslamicStartYearFromGrego(year));
-}
-
-/**
- * The system maintains a static default century start date and Year.  They are
- * initialized the first time they are used.  Once the system default century date 
- * and year are set, they do not change.
- */
-static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
-static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        {};
-
-
-UBool IslamicCalendar::haveDefaultCentury() const
-{
-    return true;
-}
-
-UDate IslamicCalendar::defaultCenturyStart() const
-{
-    // lazy-evaluate systemDefaultCenturyStart
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStart;
-}
-
-int32_t IslamicCalendar::defaultCenturyStartYear() const
-{
-    // lazy-evaluate systemDefaultCenturyStartYear
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStartYear;
-}
+IMPL_SYSTEM_DEFAULT_CENTURY(IslamicCalendar, "@calendar=islamic-civil")
 
 bool
 IslamicCalendar::inTemporalLeapYear(UErrorCode &status) const
 {
     int32_t days = getActualMaximum(UCAL_DAY_OF_YEAR, status);
-    if (U_FAILURE(status)) return false;
-    return days == 355;
-}
-
-
-U_CFUNC void U_CALLCONV
-IslamicCalendar::initializeSystemDefaultCentury()
-{
-    // initialize systemDefaultCentury and systemDefaultCenturyYear based
-    // on the current time.  They'll be set to 80 years before
-    // the current time.
-    UErrorCode status = U_ZERO_ERROR;
-    IslamicCalendar calendar(Locale("@calendar=islamic-civil"),status);
-    if (U_SUCCESS(status)) {
-        calendar.setTime(Calendar::getNow(), status);
-        calendar.add(UCAL_YEAR, -80, status);
-
-        gSystemDefaultCenturyStart = calendar.getTime(status);
-        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);
+    if (U_FAILURE(status)) {
+        return false;
     }
-    // We have no recourse upon failure unless we want to propagate the failure
-    // out.
+    return days == 355;
 }
 
 /*****************************************************************************

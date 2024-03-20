@@ -951,64 +951,7 @@ void ChineseCalendar::setRelatedYear(int32_t year)
     set(UCAL_EXTENDED_YEAR, year - kChineseRelatedYearDiff);
 }
 
-// default century
-
-static UDate     gSystemDefaultCenturyStart       = DBL_MIN;
-static int32_t   gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce gSystemDefaultCenturyInitOnce {};
-
-
-UBool ChineseCalendar::haveDefaultCentury() const
-{
-    return true;
-}
-
-UDate ChineseCalendar::defaultCenturyStart() const
-{
-    return internalGetDefaultCenturyStart();
-}
-
-int32_t ChineseCalendar::defaultCenturyStartYear() const
-{
-    return internalGetDefaultCenturyStartYear();
-}
-
-namespace { // anonymous
-
-static void U_CALLCONV initializeSystemDefaultCentury()
-{
-    // initialize systemDefaultCentury and systemDefaultCenturyYear based
-    // on the current time.  They'll be set to 80 years before
-    // the current time.
-    UErrorCode status = U_ZERO_ERROR;
-    ChineseCalendar calendar(Locale("@calendar=chinese"),status);
-    if (U_SUCCESS(status)) {
-        calendar.setTime(Calendar::getNow(), status);
-        calendar.add(UCAL_YEAR, -80, status);
-        gSystemDefaultCenturyStart     = calendar.getTime(status);
-        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);
-    }
-    // We have no recourse upon failure unless we want to propagate the failure
-    // out.
-}
-
-}  // namespace
-
-UDate
-ChineseCalendar::internalGetDefaultCenturyStart() const
-{
-    // lazy-evaluate systemDefaultCenturyStart
-    umtx_initOnce(gSystemDefaultCenturyInitOnce, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStart;
-}
-
-int32_t
-ChineseCalendar::internalGetDefaultCenturyStartYear() const
-{
-    // lazy-evaluate systemDefaultCenturyStartYear
-    umtx_initOnce(gSystemDefaultCenturyInitOnce, &initializeSystemDefaultCentury);
-    return    gSystemDefaultCenturyStartYear;
-}
+IMPL_SYSTEM_DEFAULT_CENTURY(ChineseCalendar, "@calendar=chinese")
 
 bool
 ChineseCalendar::inTemporalLeapYear(UErrorCode &status) const

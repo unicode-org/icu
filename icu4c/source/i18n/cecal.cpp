@@ -105,12 +105,6 @@ CECalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) cons
     return LIMITS[field][limitType];
 }
 
-UBool
-CECalendar::haveDefaultCentury() const
-{
-    return true;
-}
-
 //-------------------------------------------------------------------------
 // Calendar system Conversion methods...
 //-------------------------------------------------------------------------
@@ -134,13 +128,17 @@ CECalendar::jdToCE(int32_t julianDay, int32_t jdEpochOffset, int32_t& year, int3
 static const char* kMonthCode13 = "M13";
 
 const char* CECalendar::getTemporalMonthCode(UErrorCode& status) const {
-    if (get(UCAL_MONTH, status) == 12) return kMonthCode13;
+    if (get(UCAL_MONTH, status) == 12) {
+        return kMonthCode13;
+    }
     return Calendar::getTemporalMonthCode(status);
 }
 
 void
 CECalendar::setTemporalMonthCode(const char* code, UErrorCode& status) {
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (uprv_strcmp(code, kMonthCode13) == 0) {
         set(UCAL_MONTH, 12);
         set(UCAL_IS_LEAP_MONTH, 0);

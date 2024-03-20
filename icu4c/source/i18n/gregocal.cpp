@@ -355,30 +355,29 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    if(U_FAILURE(status))
+    if(U_FAILURE(status)) {
         return;
+    }
     cal->setTime(date, status);
     fGregorianCutoverYear = cal->get(UCAL_YEAR, status);
-    if (cal->get(UCAL_ERA, status) == BC) 
+    if (cal->get(UCAL_ERA, status) == BC) {
         fGregorianCutoverYear = 1 - fGregorianCutoverYear;
+    }
     fCutoverJulianDay = (int32_t)cutoverDay;
     delete cal;
 }
 
-
 void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status) {
     int32_t eyear, month, dayOfMonth, dayOfYear, unusedRemainder;
 
-
-    if(U_FAILURE(status)) { 
-        return; 
+    if(U_FAILURE(status)) {
+        return;
     }
 
 #if defined (U_DEBUG_CAL)
     fprintf(stderr, "%s:%d: jd%d- (greg's %d)- [cut=%d]\n", 
         __FILE__, __LINE__, julianDay, getGregorianDayOfYear(), fCutoverJulianDay);
 #endif
-
 
     if (julianDay >= fCutoverJulianDay) {
         month = getGregorianMonth();
@@ -776,7 +775,7 @@ double GregorianCalendar::computeJulianDayOfYear(UBool isGregorian,
 
 // -------------------------------------
 
-double 
+double
 GregorianCalendar::millisToJulianDay(UDate millis)
 {
     return (double)kEpochStartAsJulianDay + ClockMath::floorDivide(millis, (double)kOneDay);
@@ -793,9 +792,9 @@ GregorianCalendar::julianDayToMillis(double julian)
 // -------------------------------------
 
 int32_t
-GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b) 
+GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b)
 {
-    return (((stamp_a != kUnset && stamp_b != kUnset) 
+    return (((stamp_a != kUnset && stamp_b != kUnset)
         ? uprv_max(stamp_a, stamp_b)
         : (int32_t)kUnset));
 }
@@ -807,9 +806,9 @@ GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b)
 * Note: This will be made public later. [LIU]
 */
 
-void 
+void
 GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
-    roll((UCalendarDateFields) field, amount, status); 
+    roll((UCalendarDateFields) field, amount, status);
 }
 
 void
@@ -844,7 +843,7 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
                 if ((cMonthStart < fGregorianCutover) &&
                     (cMonthStart + (cMonthLen=(max-10))*kOneDay >= fGregorianCutover)) {
                         inCutoverMonth = true;
-                    }
+                }
             }
             break;
         default:
@@ -908,7 +907,8 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         if( !inCutoverMonth ) { 
             Calendar::roll(field, amount, status);
             return;
-        } else {
+        }
+        {
             // [j81] 1582 special case for DOM
             // The default computation works except when the current month
             // contains the Gregorian cutover.  We handle this special case
@@ -931,7 +931,8 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         if( !inCutoverMonth ) { 
             Calendar::roll(field, amount, status);
             return;
-        } else {
+        }
+        {
 #if defined (U_DEBUG_CAL)
             fprintf(stderr, "%s:%d: roll WOM %d ??????????????????? \n", 
                 __FILE__, __LINE__,amount);
@@ -1267,51 +1268,7 @@ GregorianCalendar::getType() const {
     return "gregorian";
 }
 
-/**
- * The system maintains a static default century start date and Year.  They are
- * initialized the first time they are used.  Once the system default century date 
- * and year are set, they do not change.
- */
-static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
-static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        {};
-
-
-UBool GregorianCalendar::haveDefaultCentury() const
-{
-    return true;
-}
-
-static void U_CALLCONV
-initializeSystemDefaultCentury()
-{
-    // initialize systemDefaultCentury and systemDefaultCenturyYear based
-    // on the current time.  They'll be set to 80 years before
-    // the current time.
-    UErrorCode status = U_ZERO_ERROR;
-    GregorianCalendar calendar(status);
-    if (U_SUCCESS(status)) {
-        calendar.setTime(Calendar::getNow(), status);
-        calendar.add(UCAL_YEAR, -80, status);
-
-        gSystemDefaultCenturyStart = calendar.getTime(status);
-        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);
-    }
-    // We have no recourse upon failure unless we want to propagate the failure
-    // out.
-}
-
-UDate GregorianCalendar::defaultCenturyStart() const {
-    // lazy-evaluate systemDefaultCenturyStart
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStart;
-}
-
-int32_t GregorianCalendar::defaultCenturyStartYear() const {
-    // lazy-evaluate systemDefaultCenturyStartYear
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStartYear;
-}
+IMPL_SYSTEM_DEFAULT_CENTURY(GregorianCalendar, "@calendar=gregory")
 
 U_NAMESPACE_END
 

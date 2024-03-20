@@ -338,32 +338,8 @@ class U_I18N_API IslamicCalendar : public Calendar {
 
   // Default century.
  protected:
-  /**
-   * Returns true because the Islamic Calendar does have a default century
-   * @internal
-   */
-  virtual UBool haveDefaultCentury() const override;
 
-  /**
-   * Returns the date of the start of the default century
-   * @return start of century - in milliseconds since epoch, 1970
-   * @internal
-   */
-  virtual UDate defaultCenturyStart() const override;
-
-  /**
-   * Returns the year in which the default century begins
-   * @internal
-   */
-  virtual int32_t defaultCenturyStartYear() const override;
-
- private:
-  /**
-   * Initializes the 100-year window that dates with 2-digit years
-   * are considered to fall within so that its start date is 80 years
-   * before the current time.
-   */
-  static void U_CALLCONV initializeSystemDefaultCentury();
+  DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY
 };
 
 /*

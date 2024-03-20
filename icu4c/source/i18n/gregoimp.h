@@ -14,6 +14,7 @@
 #ifndef GREGOIMP_H
 #define GREGOIMP_H
 #include "unicode/utypes.h"
+#include "unicode/calendar.h"
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/ures.h"
@@ -321,6 +322,46 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
   int64_t gregShift = ClockMath::floorDivideInt64(y, 400LL) - ClockMath::floorDivideInt64(y, 100LL) + 2;
   return static_cast<int32_t>(gregShift);
 }
+
+#define IMPL_SYSTEM_DEFAULT_CENTURY(T, U) \
+  /** \
+   * The system maintains a static default century start date and Year.  They \
+   * are initialized the first time they are used.  Once the system default \
+   * century date and year are set, they do not change \
+   */ \
+  namespace { \
+  static UDate           gSystemDefaultCenturyStart       = DBL_MIN; \
+  static int32_t         gSystemDefaultCenturyStartYear   = -1; \
+  static icu::UInitOnce  gSystemDefaultCenturyInit        {}; \
+  static void U_CALLCONV \
+  initializeSystemDefaultCentury() { \
+      UErrorCode status = U_ZERO_ERROR; \
+      T calendar(U, status); \
+      /* initialize systemDefaultCentury and systemDefaultCenturyYear based */ \
+      /* on the current time.  They'll be set to 80 years before */ \
+      /* the current time. */ \
+      if (U_FAILURE(status)) { \
+          return; \
+      } \
+      calendar.setTime(Calendar::getNow(), status); \
+      calendar.add(UCAL_YEAR, -80, status); \
+      gSystemDefaultCenturyStart = calendar.getTime(status); \
+      gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status); \
+      /* We have no recourse upon failure unless we want to propagate the */ \
+      /* failure out. */ \
+  } \
+  }  /* namespace */ \
+  UDate T::defaultCenturyStart() const { \
+      /* lazy-evaluate systemDefaultCenturyStart */ \
+      umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury); \
+      return gSystemDefaultCenturyStart; \
+  }   \
+  int32_t T::defaultCenturyStartYear() const { \
+      /* lazy-evaluate systemDefaultCenturyStart */ \
+      umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury); \
+      return gSystemDefaultCenturyStartYear; \
+  } \
+  UBool T::haveDefaultCentury() const { return true; }
 
 U_NAMESPACE_END
 
