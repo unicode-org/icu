@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710891715290,
+  "lastUpdate": 1710896598841,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19468,6 +19468,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.067411694237087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "7a3dfe877d9b39c025920fe457639496ac431ca1",
+          "message": "ICU-22679 Remove getType and string comparsion\n\nChange the logic of handling year in era 0 counting backwards\nto depend on a boolean virtual function instead of adding\nstring comparsion code in the base class to have specific knowledge of\nbehavior of subclass.",
+          "timestamp": "2024-03-19T17:44:37-07:00",
+          "tree_id": "f7269d69efbbb943368c48388f8d2c436614bf9f",
+          "url": "https://github.com/unicode-org/icu/commit/7a3dfe877d9b39c025920fe457639496ac431ca1"
+        },
+        "date": 1710896502142,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.0617792592122255,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
