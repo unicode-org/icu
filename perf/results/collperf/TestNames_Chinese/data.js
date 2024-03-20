@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710892251925,
+  "lastUpdate": 1710897136285,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40066,6 +40066,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2092151.646,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "7a3dfe877d9b39c025920fe457639496ac431ca1",
+          "message": "ICU-22679 Remove getType and string comparsion\n\nChange the logic of handling year in era 0 counting backwards\nto depend on a boolean virtual function instead of adding\nstring comparsion code in the base class to have specific knowledge of\nbehavior of subclass.",
+          "timestamp": "2024-03-19T17:44:37-07:00",
+          "tree_id": "f7269d69efbbb943368c48388f8d2c436614bf9f",
+          "url": "https://github.com/unicode-org/icu/commit/7a3dfe877d9b39c025920fe457639496ac431ca1"
+        },
+        "date": 1710897034662,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 155.7506,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8690236.1068,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2219538.3016,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7638172.4004,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2038777.3303,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
