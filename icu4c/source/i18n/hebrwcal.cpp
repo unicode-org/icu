@@ -686,7 +686,7 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
     internalSet(UCAL_ORDINAL_MONTH, ordinal_month);
     internalSet(UCAL_MONTH, month);
     internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
-    internalSet(UCAL_DAY_OF_YEAR, dayOfYear);       
+    internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }
 
 //-------------------------------------------------------------------------
@@ -700,13 +700,10 @@ int32_t HebrewCalendar::handleGetExtendedYear(UErrorCode& status ) {
     if (U_FAILURE(status)) {
         return 0;
     }
-    int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
-        year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
-    } else {
-        year = internalGet(UCAL_YEAR, 1); // Default to year 1
+        return internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     }
-    return year;
+    return internalGet(UCAL_YEAR, 1); // Default to year 1
 }
 
 /**
@@ -784,55 +781,16 @@ void HebrewCalendar::setRelatedYear(int32_t year)
     set(UCAL_EXTENDED_YEAR, year - kHebrewRelatedYearDiff);
 }
 
-/**
- * The system maintains a static default century start date and Year.  They are
- * initialized the first time they are used.  Once the system default century date 
- * and year are set, they do not change.
- */
-static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
-static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        {};
-
-UBool HebrewCalendar::haveDefaultCentury() const
-{
-    return true;
-}
-
-static void U_CALLCONV initializeSystemDefaultCentury()
-{
-    // initialize systemDefaultCentury and systemDefaultCenturyYear based
-    // on the current time.  They'll be set to 80 years before
-    // the current time.
-    UErrorCode status = U_ZERO_ERROR;
-    HebrewCalendar calendar(Locale("@calendar=hebrew"),status);
-    if (U_SUCCESS(status)) {
-        calendar.setTime(Calendar::getNow(), status);
-        calendar.add(UCAL_YEAR, -80, status);
-
-        gSystemDefaultCenturyStart = calendar.getTime(status);
-        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);
-    }
-    // We have no recourse upon failure unless we want to propagate the failure
-    // out.
-}
-
-
-UDate HebrewCalendar::defaultCenturyStart() const {
-    // lazy-evaluate systemDefaultCenturyStart
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStart;
-}
-
-int32_t HebrewCalendar::defaultCenturyStartYear() const {
-    // lazy-evaluate systemDefaultCenturyStartYear
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStartYear;
-}
+IMPL_SYSTEM_DEFAULT_CENTURY(HebrewCalendar, "@calendar=hebrew")
 
 bool HebrewCalendar::inTemporalLeapYear(UErrorCode& status) const {
-    if (U_FAILURE(status)) return false;
+    if (U_FAILURE(status)) {
+        return false;
+    }
     int32_t eyear = get(UCAL_EXTENDED_YEAR, status);
-    if (U_FAILURE(status)) return false;
+    if (U_FAILURE(status)) {
+        return false;
+    }
     return isLeapYear(eyear);
 }
 
@@ -843,13 +801,17 @@ static const char * const gTemporalMonthCodesForHebrew[] = {
 
 const char* HebrewCalendar::getTemporalMonthCode(UErrorCode& status) const {
     int32_t month = get(UCAL_MONTH, status);
-    if (U_FAILURE(status)) return nullptr;
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     return gTemporalMonthCodesForHebrew[month];
 }
 
 void HebrewCalendar::setTemporalMonthCode(const char* code, UErrorCode& status )
 {
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status)) {
+        return;
+    }
     int32_t len = static_cast<int32_t>(uprv_strlen(code));
     if (len == 3 || len == 4) {
         for (int m = 0; gTemporalMonthCodesForHebrew[m] != nullptr; m++) {

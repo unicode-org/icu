@@ -279,38 +279,10 @@ class U_I18N_API ChineseCalendar : public Calendar {
   virtual int32_t internalGetMonth(UErrorCode& status) const override;
 
  protected:
-  /**
-   * Returns true because the Islamic Calendar does have a default century
-   * @internal
-   */
-  virtual UBool haveDefaultCentury() const override;
 
-  /**
-   * Returns the date of the start of the default century
-   * @return start of century - in milliseconds since epoch, 1970
-   * @internal
-   */
-  virtual UDate defaultCenturyStart() const override;
-
-  /**
-   * Returns the year in which the default century begins
-   * @internal
-   */
-  virtual int32_t defaultCenturyStartYear() const override;
+  DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY
 
  private: // default century stuff.
-
-  /**
-   * Returns the beginning date of the 100-year window that dates 
-   * with 2-digit years are considered to fall within.
-   */
-  UDate         internalGetDefaultCenturyStart() const;
-
-  /**
-   * Returns the first year of the 100-year window that dates with 
-   * 2-digit years are considered to fall within.
-   */
-  int32_t          internalGetDefaultCenturyStartYear() const;
 
   ChineseCalendar() = delete; // default constructor not implemented
 

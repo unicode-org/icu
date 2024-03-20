@@ -296,24 +296,7 @@ class PersianCalendar : public Calendar {
   PersianCalendar(); // default constructor not implemented
 
  protected:
-  /**
-   * Returns true because the Persian Calendar does have a default century
-   * @internal
-   */
-  virtual UBool haveDefaultCentury() const override;
-
-  /**
-   * Returns the date of the start of the default century
-   * @return start of century - in milliseconds since epoch, 1970
-   * @internal
-   */
-  virtual UDate defaultCenturyStart() const override;
-
-  /**
-   * Returns the year in which the default century begins
-   * @internal
-   */
-  virtual int32_t defaultCenturyStartYear() const override;
+  DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY
 };
 
 U_NAMESPACE_END

@@ -196,13 +196,10 @@ int32_t PersianCalendar::handleGetExtendedYear(UErrorCode& status) {
     if (U_FAILURE(status)) {
         return 0;
     }
-    int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
-        year = internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
-    } else {
-        year = internalGet(UCAL_YEAR, 1); // Default to year 1
+        return internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     }
-    return year;
+    return internalGet(UCAL_YEAR, 1); // Default to year 1
 }
 
 /**
@@ -278,50 +275,10 @@ void PersianCalendar::setRelatedYear(int32_t year)
     set(UCAL_EXTENDED_YEAR, year - kPersianRelatedYearDiff);
 }
 
-// default century
-
-static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
-static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        {};
-
-UBool PersianCalendar::haveDefaultCentury() const
-{
-    return true;
-}
-
-static void U_CALLCONV initializeSystemDefaultCentury() {
-    // initialize systemDefaultCentury and systemDefaultCenturyYear based
-    // on the current time.  They'll be set to 80 years before
-    // the current time.
-    UErrorCode status = U_ZERO_ERROR;
-    PersianCalendar calendar(Locale("@calendar=persian"),status);
-    if (U_SUCCESS(status))
-    {
-        calendar.setTime(Calendar::getNow(), status);
-        calendar.add(UCAL_YEAR, -80, status);
-
-        gSystemDefaultCenturyStart = calendar.getTime(status);
-        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);
-    }
-    // We have no recourse upon failure unless we want to propagate the failure
-    // out.
-}
-
-UDate PersianCalendar::defaultCenturyStart() const {
-    // lazy-evaluate systemDefaultCenturyStart
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStart;
-}
-
-int32_t PersianCalendar::defaultCenturyStartYear() const {
-    // lazy-evaluate systemDefaultCenturyStartYear
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStartYear;
-}
+IMPL_SYSTEM_DEFAULT_CENTURY(PersianCalendar, "@calendar=persian")
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PersianCalendar)
 
 U_NAMESPACE_END
 
 #endif
-

@@ -166,22 +166,7 @@ public:
      */
     virtual const char * getType() const override;
 
-    /**
-     * @return false - no default century in Japanese
-     * @internal 
-     */
-    virtual UBool haveDefaultCentury() const override;
-
-    /**
-     * Not used - no default century.
-     * @internal
-     */
-    virtual UDate defaultCenturyStart() const override;
-    /**
-     * Not used - no default century.
-     * @internal
-     */
-    virtual int32_t defaultCenturyStartYear() const override;
+    DECLARE_OVERRIDE_SYSTEM_DEFAULT_CENTURY
 
 private:
     JapaneseCalendar(); // default constructor not implemented
