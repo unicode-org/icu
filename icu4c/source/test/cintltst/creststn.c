@@ -2783,7 +2783,7 @@ static void TestGetFunctionalEquivalent(void) {
 
 static void TestGetFunctionalEquivalentVariantLengthLimit(void) {
     static const char valid[] =
-        "_"
+        "en_001"
         "_12345678"
         "_12345678"
         "_12345678"
@@ -2806,7 +2806,7 @@ static void TestGetFunctionalEquivalentVariantLengthLimit(void) {
         "_12345678";
 
     static const char invalid[] =
-        "_"
+        "en_001"
         "_12345678"
         "_12345678"
         "_12345678"
@@ -2828,7 +2828,7 @@ static void TestGetFunctionalEquivalentVariantLengthLimit(void) {
         "_12345678"
         "_12345678X";  // One character too long.
 
-    static const char localeExpected[] = "_@calendar=gregorian";
+    static const char localeExpected[] = "en_001@calendar=gregorian";
     const int32_t reslenExpected = uprv_strlen(localeExpected);
 
     char buffer[UPRV_LENGTHOF(invalid)];
