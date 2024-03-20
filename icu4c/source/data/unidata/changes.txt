@@ -53,6 +53,11 @@ TODO
 - No more hardcoded spoof checker sets: Update change log.
 - In the Unicode Tools repo: Delete the org.unicode.text.tools.RecommendedSetGenerator.
 - In corepropsbuilder.cpp, remove the isA9CF hack.
+- Update instructions for hardcoded properties
+        IDS_Unary_Operator, ID_Compat_Math_Start & ID_Compat_Math_Continue:
+  + These are still hardcoded, but since ICU 75 they are tested in C++ intltest.
+  + No more need to check via grep.
+  + Still: If the test fails, then update the hardcoded implementation.
 
 ---------------------------------------------------------------------------- ***
 
