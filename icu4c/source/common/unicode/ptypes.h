@@ -57,4 +57,14 @@
 
 #include <stdint.h>
 
+// The <uchar.h> file does not exist in Apple SDKs (as of 3/15/24),
+// so we have to define char16_t ourselves (in C; it's a built-in type in C++)
+#if U_CPLUSPLUS_VERSION == 0
+#if !U_PLATFORM_IS_DARWIN_BASED
+#include <uchar.h>
+#else
+typedef uint16_t char16_t;
+#endif // !U_PLATFORM_IS_DARWIN_BASED
+#endif // U_CPLUSPLUS_VERSION == 0
+
 #endif /* _PTYPES_H */

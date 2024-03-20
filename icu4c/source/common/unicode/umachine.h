@@ -52,16 +52,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#if U_CPLUSPLUS_VERSION == 0
-#if !U_PLATFORM_IS_DARWIN_BASED
-#include <uchar.h>
-#else
-// The <uchar.h> file does not exist in Apple SDKs (as of 3/15/24),
-// so we have to define char16_t ourselves
-typedef uint16_t char16_t;
-#endif // !U_PLATFORM_IS_DARWIN_BASED
-#endif // U_CPLUSPLUS_VERSION == 0
-
 /*==========================================================================*/
 /* For C wrappers, we use the symbol U_CAPI.                                */
 /* This works properly if the includer is C or C++.                         */
@@ -394,7 +384,7 @@ typedef int8_t UBool;
 #elif defined(UCHAR_TYPE)
     typedef UCHAR_TYPE UChar;
 #else
-    typedef char16_t UChar;  // C++
+    typedef char16_t UChar;
 #endif
 
 /**
