@@ -4937,6 +4937,18 @@ void LocaleTest::TestCanonicalization()
         { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
         { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" }, /* POSIX ID */
         { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
+
+        // A very long charset name in IANA charset
+        { "ja_JP.Extended_UNIX_Code_Packed_Format_for_Japanese@B",
+          "ja_JP.Extended_UNIX_Code_Packed_Format_for_Japanese@B", "ja_JP_B" }, /* POSIX ID */
+        // A fake long charset name below the limitation
+        { "ja_JP.1234567890123456789012345678901234567890123456789012345678901234@B",
+          "ja_JP.1234567890123456789012345678901234567890123456789012345678901234@B",
+          "ja_JP_B" }, /* POSIX ID */
+        // A fake long charset name one char above the limitation
+        { "ja_JP.12345678901234567890123456789012345678901234567890123456789012345@B",
+          "BOGUS",
+          "ja_JP_B" }, /* POSIX ID */
         // NOTE: uloc_getName() works on en-BOONT, but Locale() parser considers it BOGUS
         // TODO: unify this behavior
         { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
