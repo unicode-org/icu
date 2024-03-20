@@ -1795,6 +1795,9 @@ _canonicalize(const char* localeID,
             &variant,
             &tmpLocaleID,
             err);
+    if (U_FAILURE(err)) {
+        return;
+    }
 
     if (tag.length() == I_DEFAULT_LENGTH &&
             uprv_strncmp(origLocaleID, i_default, I_DEFAULT_LENGTH) == 0) {
@@ -1823,20 +1826,27 @@ _canonicalize(const char* localeID,
 
     /* Copy POSIX-style charset specifier, if any [mr.utf8] */
     if (!OPTION_SET(options, _ULOC_CANONICALIZE) && *tmpLocaleID == '.') {
-        bool done = false;
-        do {
-            char c = *tmpLocaleID;
-            switch (c) {
-            case 0:
-            case '@':
-                done = true;
-                break;
-            default:
-                tag.append(c, err);
-                ++tmpLocaleID;
-                break;
-            }
-        } while (!done);
+        tag.append('.', err);
+        ++tmpLocaleID;
+        const char *atPos = nullptr;
+        size_t length;
+        if((atPos = uprv_strchr(tmpLocaleID, '@')) != nullptr) {
+            length = atPos - tmpLocaleID;
+        } else {
+            length = uprv_strlen(tmpLocaleID);
+        }
+        // The longest charset name we found in IANA charset registry
+        // https://www.iana.org/assignments/character-sets/ is
+        // "Extended_UNIX_Code_Packed_Format_for_Japanese" in length 45.
+        // we therefore restrict the length here to be 64 which is a power of 2
+        // number that is longer than 45.
+        constexpr size_t kMaxCharsetLength = 64;
+        if (length > kMaxCharsetLength) {
+           err = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
+           return;
+        }
+        tag.append(tmpLocaleID, static_cast<int32_t>(length), err);
+        tmpLocaleID += length;
     }
 
     /* Scan ahead to next '@' and determine if it is followed by '=' and/or ';'
