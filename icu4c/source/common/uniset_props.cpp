@@ -688,6 +688,10 @@ UBool scriptExtensionsFilter(UChar32 ch, void* context) {
     return uscript_hasScript(ch, *(UScriptCode*)context);
 }
 
+UBool idTypeFilter(UChar32 ch, void* context) {
+    return u_hasIDType(ch, *(UIdentifierType*)context);
+}
+
 }  // namespace
 
 /**
@@ -782,6 +786,10 @@ UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec)
         const UnicodeSet* inclusions = CharacterProperties::getInclusionsForProperty(prop, ec);
         UScriptCode script = (UScriptCode)value;
         applyFilter(scriptExtensionsFilter, &script, inclusions, ec);
+    } else if (prop == UCHAR_IDENTIFIER_TYPE) {
+        const UnicodeSet* inclusions = CharacterProperties::getInclusionsForProperty(prop, ec);
+        UIdentifierType idType = (UIdentifierType)value;
+        applyFilter(idTypeFilter, &idType, inclusions, ec);
     } else if (0 <= prop && prop < UCHAR_BINARY_LIMIT) {
         if (value == 0 || value == 1) {
             const USet *set = u_getBinaryPropertySet(prop, &ec);
@@ -910,6 +918,13 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 }
             case UCHAR_SCRIPT_EXTENSIONS:
                 v = u_getPropertyValueEnum(UCHAR_SCRIPT, vname.data());
+                if (v == UCHAR_INVALID_CODE) {
+                    FAIL(ec);
+                }
+                // fall through to calling applyIntPropertyValue()
+                break;
+            case UCHAR_IDENTIFIER_TYPE:
+                v = u_getPropertyValueEnum(p, vname.data());
                 if (v == UCHAR_INVALID_CODE) {
                     FAIL(ec);
                 }

@@ -47,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.8 .
+The following is a description of format version 8.0 .
 
 Data contents:
 
@@ -291,12 +291,18 @@ The value is split across bits 21..20 & 7..0.
 ICU 70 moves the emoji properties from uprops.icu to (new) uemoji.icu.
 The 6 bits in vector word 2 that stored emoji properties are unused again.
 
+--- Changes in format version 8.0 ---
+
+ICU 75 uses the vector word 2 bits 31..26 for encoded Identifier_Type bit sets.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
 
+namespace {
+
 /* UDataInfo cf. udata.h */
-static UDataInfo dataInfo={
+UDataInfo dataInfo={
     sizeof(UDataInfo),
     0,
 
@@ -306,8 +312,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 8, 0, 0 },                             /* formatVersion */
-    { 14, 0, 0, 0 }                             /* dataVersion */
+    { 8, 0, 0, 0 },                             /* formatVersion */
+    { 15, 1, 0, 0 }                             /* dataVersion */
 };
 
 inline uint32_t splitScriptCodeOrIndex(uint32_t v) {
@@ -361,7 +367,7 @@ CorePropsBuilder::setUnicodeVersion(const UVersionInfo version) {
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
-static int32_t encodeFractional20(int32_t value, int32_t den) {
+int32_t encodeFractional20(int32_t value, int32_t den) {
     if(den<20 || 640<den) { return -1; }
     int32_t frac20;
     if(value==1 || value==3 || value==5 || value==7) {
@@ -383,7 +389,7 @@ static int32_t encodeFractional20(int32_t value, int32_t den) {
     return -1;
 }
 
-static int32_t encodeFractional32(int32_t value, int32_t den) {
+int32_t encodeFractional32(int32_t value, int32_t den) {
     if(den<32 || 256<den) { return -1; }
     int32_t frac32;
     if(value==1 || value==3 || value==5 || value==7) {
@@ -406,7 +412,7 @@ static int32_t encodeFractional32(int32_t value, int32_t den) {
 }
 
 // For nt=U_NT_NUMERIC.
-static int32_t
+int32_t
 encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     const char *original=s;
     /* get a possible minus sign */
@@ -512,6 +518,54 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     return ntv;
 }
 
+uint32_t encodeIdentifierType(const UnicodeSet &idType, bool isA9CF, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return 0; }
+    if(idType.isEmpty()) {
+        fprintf(stderr, "genprops error: data line has an empty Identifier_Type\n");
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(idType.contains(U_ID_TYPE_EXCLUSION) && idType.contains(U_ID_TYPE_LIMITED_USE)) {
+        // By definition, Exclusion and Limited_Use are mutually exclusive.
+        // We rely on that for the data structure.
+        if(isA9CF) {
+            // TODO: Known bug in Unicode 15.1 and before.
+            // See PAG issue #217.
+            // See L2/24-064: UTC #179 properties feedback & recommendations
+            return (UPROPS_ID_TYPE_LIMITED_USE|UPROPS_ID_TYPE_UNCOMMON_USE)&~UPROPS_ID_TYPE_BIT;
+        }
+        fprintf(stderr,
+                "genprops error: data line has both Identifier_Type Exclusion and Limited_Use\n");
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    uint32_t result=UPROPS_ID_TYPE_NOT_CHARACTER;
+    UnicodeSetIterator iter(idType);
+    while(iter.next()) {
+        int32_t type=iter.getCodepoint();
+        if(type>=UPRV_LENGTHOF(uprops_idTypeToEncoded)) {
+            fprintf(stderr,
+                    "genprops error: data line contains unknown (new?) Identifier_Type %d\n",
+                    (int)type);
+            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        uint32_t encodedType=uprops_idTypeToEncoded[type];
+        if((encodedType & UPROPS_ID_TYPE_BIT)==0) {
+            if(idType.size()>1) {
+                fprintf(stderr,
+                        "genprops error: data line contains uncombinable Identifier_Type values\n");
+                errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                return 0;
+            }
+            result=encodedType;
+        } else {
+            result|=encodedType;
+        }
+    }
+    return result&~UPROPS_ID_TYPE_BIT;
+}
+
 void
 CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newValues,
                                   UErrorCode &errorCode) {
@@ -586,7 +640,7 @@ struct PropToBinary {
     int32_t vecWord, vecShift;
 };
 
-static const PropToBinary
+const PropToBinary
 propToBinaries[]={
     { UCHAR_WHITE_SPACE,                    1, UPROPS_WHITE_SPACE },
     { UCHAR_DASH,                           1, UPROPS_DASH },
@@ -639,7 +693,7 @@ struct PropToEnum {
     uint32_t vecMask;
 };
 
-static const PropToEnum
+const PropToEnum
 propToEnums[]={
     { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
@@ -768,25 +822,32 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         scriptX|=splitScriptCodeOrIndex(index);
         upvec_setValue(pv, start, end, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
+    if(newValues.contains(UCHAR_IDENTIFIER_TYPE)) {
+        uint32_t encodedType=encodeIdentifierType(props.idType, start==0xA9CF && start==end, errorCode);
+        upvec_setValue(
+            pv, start, end, 2,
+            encodedType << UPROPS_2_ID_TYPE_SHIFT, UPROPS_2_ID_TYPE_MASK,
+            &errorCode);
+    }
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: unable to set props2 values for %04lX..%04lX: %s\n",
                 (long)start, (long)end, u_errorName(errorCode));
     }
 }
 
-static int32_t indexes[UPROPS_INDEX_COUNT]={
+int32_t indexes[UPROPS_INDEX_COUNT]={
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0
 };
 
-static uint8_t trieBlock[100000];
-static int32_t trieSize;
-static uint8_t props2TrieBlock[100000];
-static int32_t props2TrieSize;
+uint8_t trieBlock[100000];
+int32_t trieSize;
+uint8_t props2TrieBlock[100000];
+int32_t props2TrieSize;
 
-static int32_t totalSize;
+int32_t totalSize;
 
 void
 CorePropsBuilder::build(UErrorCode &errorCode) {
@@ -971,6 +1032,8 @@ CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
         errorCode=U_INTERNAL_PROGRAM_ERROR;
     }
 }
+
+}  // namespace
 
 PropsBuilder *
 createCorePropsBuilder(UErrorCode &errorCode) {

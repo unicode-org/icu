@@ -26,6 +26,7 @@ import com.ibm.icu.impl.RuleCharacterIterator;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.StringRange;
 import com.ibm.icu.impl.UCaseProps;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.impl.UnicodeSetStringSpan;
 import com.ibm.icu.impl.Utility;
@@ -3376,6 +3377,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
     }
 
+    private static final class IdentifierTypeFilter implements Filter {
+        int idType;
+        IdentifierTypeFilter(int idType) { this.idType = idType; }
+        @Override
+        public boolean contains(int c) {
+            return UCharacterProperty.INSTANCE.hasIDType(c, idType);
+        }
+    }
+
     // VersionInfo for unassigned characters
     private static final VersionInfo NO_VERSION = VersionInfo.getInstance(0, 0, 0, 0);
 
@@ -3494,6 +3504,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         } else if (prop == UProperty.SCRIPT_EXTENSIONS) {
             UnicodeSet inclusions = CharacterPropertiesImpl.getInclusionsForProperty(prop);
             applyFilter(new ScriptExtensionsFilter(value), inclusions);
+        } else if (prop == UProperty.IDENTIFIER_TYPE) {
+            UnicodeSet inclusions = CharacterPropertiesImpl.getInclusionsForProperty(prop);
+            applyFilter(new IdentifierTypeFilter(value), inclusions);
         } else if (0 <= prop && prop < UProperty.BINARY_LIMIT) {
             if (value == 0 || value == 1) {
                 set(CharacterProperties.getBinaryPropertySet(prop));
@@ -3640,6 +3653,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 }
                 case UProperty.SCRIPT_EXTENSIONS:
                     v = UCharacter.getPropertyValueEnum(UProperty.SCRIPT, valueAlias);
+                    // fall through to calling applyIntPropertyValue()
+                    break;
+                case UProperty.IDENTIFIER_TYPE:
+                    v = UCharacter.getPropertyValueEnum(p, valueAlias);
                     // fall through to calling applyIntPropertyValue()
                     break;
                 default:
