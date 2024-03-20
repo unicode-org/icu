@@ -129,7 +129,7 @@ SED = @SED@
 # configure prevents user defined DEFS, and configure's DEFS is not needed
 # So we ignore the DEFS that comes from configure
 # U_ATTRIBUTE_DEPRECATED is defined to hide warnings about deprecated API warnings.
-DEFS = -DU_ATTRIBUTE_DEPRECATED=
+DEFS = -DU_ALL_IMPLEMENTATION -DU_ATTRIBUTE_DEPRECATED=
 # CFLAGS is for C only flags
 CFLAGS = @CFLAGS@
 # CXXFLAGS is for C++ only flags
