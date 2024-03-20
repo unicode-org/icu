@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710968335843,
+  "lastUpdate": 1710975591352,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19468,6 +19468,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2012.6470361035697,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "5e95ed829495f594ed53f8fdfa86a7aca8364478",
+          "message": "ICU-22689 reminder for 16.0 update",
+          "timestamp": "2024-03-20T15:49:44-07:00",
+          "tree_id": "616e081f5edcef7a915e24bcf3bfca63d3fa9236",
+          "url": "https://github.com/unicode-org/icu/commit/5e95ed829495f594ed53f8fdfa86a7aca8364478"
+        },
+        "date": 1710975493103,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 1951.5622482633016,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
