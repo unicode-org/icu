@@ -11,11 +11,14 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacter.HangulSyllableType;
+import com.ibm.icu.lang.UCharacter.IdentifierStatus;
+import com.ibm.icu.lang.UCharacter.IdentifierType;
 import com.ibm.icu.lang.UCharacter.NumericType;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
@@ -864,6 +867,18 @@ public final class UCharacterProperty
                 return LayoutProps.INSTANCE.maxVoValue;
             }
         },
+        new IntProperty(SRC_PROPSVEC) {  // IDENTIFIER_STATUS
+            @Override
+            int getValue(int c) {
+                int value = getAdditional(c, 2) >>> ID_TYPE_SHIFT;
+                return value >= ID_TYPE_ALLOWED_MIN ?
+                        IdentifierStatus.ALLOWED.ordinal() : IdentifierStatus.RESTRICTED.ordinal();
+            }
+            @Override
+            int getMaxValue(int which) {
+                return IdentifierStatus.ALLOWED.ordinal();
+            }
+        },
     };
 
     public int getIntPropertyValue(int c, int which) {
@@ -937,6 +952,7 @@ public final class UCharacterProperty
         } else {
             switch(which) {
             case UProperty.SCRIPT_EXTENSIONS:
+            case UProperty.IDENTIFIER_TYPE:
                 return SRC_PROPSVEC;
             default:
                 return SRC_NONE; /* undefined */
@@ -1444,20 +1460,73 @@ public final class UCharacterProperty
     /*
      * Properties in vector word 2
      * Bits
-     * 31..26   unused since ICU 70 added uemoji.icu;
-     *          in ICU 57..69 stored emoji properties
+     * 31..26   ICU 75: Identifier_Type bit set
+     *          ICU 70..74: unused
+     *          ICU 57..69: emoji properties; moved to uemoji.icu in ICU 70
      * 25..20   Line Break
      * 19..15   Sentence Break
      * 14..10   Word Break
      *  9.. 5   Grapheme Cluster Break
      *  4.. 0   Decomposition Type
      */
-    //ivate static final int PROPS_2_EXTENDED_PICTOGRAPHIC=26;  // ICU 62..69
-    //ivate static final int PROPS_2_EMOJI_COMPONENT = 27;  // ICU 60..69
-    //ivate static final int PROPS_2_EMOJI = 28;  // ICU 57..69
-    //ivate static final int PROPS_2_EMOJI_PRESENTATION = 29;  // ICU 57..69
-    //ivate static final int PROPS_2_EMOJI_MODIFIER = 30;  // ICU 57..69
-    //ivate static final int PROPS_2_EMOJI_MODIFIER_BASE = 31;  // ICU 57..69
+
+    // https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
+    // The Identifier_Type maps each code point to a *set* of one or more values.
+    // Some can be combined with others, some can only occur alone.
+    // Exclusion & Limited_Use are combinable bits, but cannot occur together.
+    // We use this forbidden combination for enumerated values.
+    // We use 6 bits for all possible combinations.
+    // If more combinable values are added, then we need to use more bits.
+    //
+    // We do not store separate data for Identifier_Status:
+    // We can derive that from the encoded Identifier_Type via a simple range check.
+
+    // vate static final int ID_TYPE_MASK = 0xfc000000;
+    private static final int ID_TYPE_SHIFT = 26;
+
+    // A high bit for use in idTypeToEncoded[] but not used in the data
+    private static final int ID_TYPE_BIT = 0x80;
+
+    // Combinable bits
+    private static final int ID_TYPE_EXCLUSION = 0x20;
+    private static final int ID_TYPE_LIMITED_USE = 0x10;
+    private static final int ID_TYPE_UNCOMMON_USE = 8;
+    private static final int ID_TYPE_TECHNICAL = 4;
+    private static final int ID_TYPE_OBSOLETE = 2;
+    private static final int ID_TYPE_NOT_XID = 1;
+
+    // Exclusive values
+    private static final int ID_TYPE_NOT_CHARACTER = 0;
+
+    // Forbidden bit combination used for enumerating other exclusive values
+    private static final int ID_TYPE_FORBIDDEN = ID_TYPE_EXCLUSION | ID_TYPE_LIMITED_USE; // 0x30
+    private static final int ID_TYPE_DEPRECATED = ID_TYPE_FORBIDDEN; // 0x30
+    private static final int ID_TYPE_DEFAULT_IGNORABLE = ID_TYPE_FORBIDDEN + 1; // 0x31
+    private static final int ID_TYPE_NOT_NFKC = ID_TYPE_FORBIDDEN + 2; // 0x32
+
+    private static final int ID_TYPE_ALLOWED_MIN = ID_TYPE_FORBIDDEN + 0xc; // 0x3c
+    private static final int ID_TYPE_INCLUSION = ID_TYPE_FORBIDDEN + 0xe; // 0x3e
+    private static final int ID_TYPE_RECOMMENDED = ID_TYPE_FORBIDDEN + 0xf; // 0x3f
+
+    /**
+     * Maps UIdentifierType to encoded bits.
+     * When UPROPS_ID_TYPE_BIT is set, then use "&" to test whether the value bit is set.
+     * When UPROPS_ID_TYPE_BIT is not set, then compare ("==") the array value with the data value.
+     */
+    private static final int[] idTypeToEncoded = {
+        ID_TYPE_NOT_CHARACTER,
+        ID_TYPE_DEPRECATED,
+        ID_TYPE_DEFAULT_IGNORABLE,
+        ID_TYPE_NOT_NFKC,
+        ID_TYPE_BIT | ID_TYPE_NOT_XID,
+        ID_TYPE_BIT | ID_TYPE_EXCLUSION,
+        ID_TYPE_BIT | ID_TYPE_OBSOLETE,
+        ID_TYPE_BIT | ID_TYPE_TECHNICAL,
+        ID_TYPE_BIT | ID_TYPE_UNCOMMON_USE,
+        ID_TYPE_BIT | ID_TYPE_LIMITED_USE,
+        ID_TYPE_INCLUSION,
+        ID_TYPE_RECOMMENDED
+    };
 
     private static final int LB_MASK          = 0x03f00000;
     private static final int LB_SHIFT         = 20;
@@ -1564,7 +1633,7 @@ public final class UCharacterProperty
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0] == 7;
+            return version[0] == 8;
         }
     }
     private static final int DATA_FORMAT = 0x5550726F;  // "UPro"
@@ -1732,6 +1801,61 @@ public final class UCharacterProperty
         for (int c : ID_COMPAT_MATH_START) {
             set.add(c);
             set.add(c + 1);
+        }
+    }
+
+    public boolean hasIDType(int c, int typeIndex) {
+        if (typeIndex < 0 || typeIndex >= idTypeToEncoded.length) {
+            return false;
+        }
+        int encodedType = idTypeToEncoded[typeIndex];
+        int value = getAdditional(c, 2) >>> ID_TYPE_SHIFT;
+        if ((encodedType & ID_TYPE_BIT) != 0) {
+            return value < ID_TYPE_FORBIDDEN && (value & encodedType) != 0;
+        } else {
+            return value == encodedType;
+        }
+    }
+
+    public boolean hasIDType(int c, IdentifierType type) {
+        return hasIDType(c, type.ordinal());
+    }
+
+    private static void maybeAddType(int value, int bit, IdentifierType t,
+            EnumSet<IdentifierType> types) {
+        if ((value & bit) != 0) {
+            types.add(t);
+        }
+    }
+
+    public int getIDTypes(int c, EnumSet<IdentifierType> types) {
+        types.clear();
+        int value = getAdditional(c, 2) >>> ID_TYPE_SHIFT;;
+        if ((value & ID_TYPE_FORBIDDEN) == ID_TYPE_FORBIDDEN || value == ID_TYPE_NOT_CHARACTER) {
+            // single value
+            IdentifierType t;
+            switch (value) {
+                case ID_TYPE_NOT_CHARACTER: t = IdentifierType.NOT_CHARACTER; break;
+                case ID_TYPE_DEPRECATED: t = IdentifierType.DEPRECATED; break;
+                case ID_TYPE_DEFAULT_IGNORABLE: t = IdentifierType.DEFAULT_IGNORABLE; break;
+                case ID_TYPE_NOT_NFKC: t = IdentifierType.NOT_NFKC; break;
+                case ID_TYPE_INCLUSION: t = IdentifierType.INCLUSION; break;
+                case ID_TYPE_RECOMMENDED: t = IdentifierType.RECOMMENDED; break;
+                default:
+                    throw new IllegalStateException(
+                            String.format("unknown IdentifierType data value 0x%02x", value));
+            }
+            types.add(t);
+            return 1;
+        } else {
+            // one or more combinable bits
+            maybeAddType(value, ID_TYPE_NOT_XID, IdentifierType.NOT_XID, types);
+            maybeAddType(value, ID_TYPE_EXCLUSION, IdentifierType.EXCLUSION, types);
+            maybeAddType(value, ID_TYPE_OBSOLETE, IdentifierType.OBSOLETE, types);
+            maybeAddType(value, ID_TYPE_TECHNICAL, IdentifierType.TECHNICAL, types);
+            maybeAddType(value, ID_TYPE_UNCOMMON_USE, IdentifierType.UNCOMMON_USE, types);
+            maybeAddType(value, ID_TYPE_LIMITED_USE, IdentifierType.LIMITED_USE, types);
+            return types.size();
         }
     }
 

@@ -53,6 +53,8 @@ public:
     void TestIDSUnaryOperator();
     void TestIDCompatMath();
     void TestBinaryPropertyUsingPpucd();
+    void TestIDStatus();
+    void TestIDType();
 
 private:
 

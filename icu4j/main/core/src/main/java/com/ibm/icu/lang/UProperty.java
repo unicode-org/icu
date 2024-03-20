@@ -852,11 +852,19 @@ public interface UProperty
     public static final int VERTICAL_ORIENTATION = 0x1018;
 
     /**
+     * Enumerated property Identifier_Status.
+     * Used for UTS #39 General Security Profile for Identifiers
+     * (https://www.unicode.org/reports/tr39/#General_Security_Profile).
+     * @draft ICU 75
+     */
+    public static final int IDENTIFIER_STATUS = 0x1019;
+
+    /**
      * One more than the last constant for enumerated/integer Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int INT_LIMIT = 0x1019;
+    public static final int INT_LIMIT = 0x101A;
 
     /**
      * Bitmask property General_Category_Mask.
@@ -1031,11 +1039,26 @@ public interface UProperty
      */
     public static final int OTHER_PROPERTY_START=SCRIPT_EXTENSIONS;
     /**
+     * Miscellaneous property Identifier_Type.
+     * Used for UTS #39 General Security Profile for Identifiers
+     * (https://www.unicode.org/reports/tr39/#General_Security_Profile).
+     *
+     * <p>Corresponds to {@link UCharacter#hasIdentifierType(int, UCharacter.IdentifierType)} and
+     * {@link UCharacter#getIdentifierTypes(int, java.util.EnumSet)}.
+     *
+     * <p>Each code point maps to a <i>set</i> of IdentifierType values.
+     *
+     * @see UCharacter#hasIdentifierType(int, UCharacter.IdentifierType)
+     * @see UCharacter#getIdentifierTypes(int, java.util.EnumSet)
+     * @draft ICU 75
+     */
+    public static final int IDENTIFIER_TYPE = 0x7001;
+    /**
      * One more than the last constant for Unicode properties with unusual value types.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int OTHER_PROPERTY_LIMIT=0x7001;
+    public static final int OTHER_PROPERTY_LIMIT = 0x7002;
 
     /**
      * Selector constants for UCharacter.getPropertyName() and

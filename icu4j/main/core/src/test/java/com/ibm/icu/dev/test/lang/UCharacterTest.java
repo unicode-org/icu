@@ -12,6 +12,7 @@ package com.ibm.icu.dev.test.lang;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -28,6 +29,8 @@ import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.CharacterProperties;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacter.IdentifierStatus;
+import com.ibm.icu.lang.UCharacter.IdentifierType;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UCharacterEnums;
@@ -4052,5 +4055,160 @@ public final class UCharacterTest extends CoreTestFmwk
         assertTrue("idcmStart.contains(U+2202)", idcmStart.contains(0x2202));
         assertTrue("idcmStart.contains(U+1D7C3)", idcmStart.contains(0x1D7C3));
         assertFalse("idcmStart.contains(U+1D7C4)", idcmStart.contains(0x1D7C4));
+    }
+
+    private static final IdentifierStatus[] ID_STATUS_VALUES = IdentifierStatus.values();
+
+    private static IdentifierStatus getIDStatus(int c) {
+        int idStatusInt = UCharacter.getIntPropertyValue(c, UProperty.IDENTIFIER_STATUS);
+        return ID_STATUS_VALUES[idStatusInt];
+    }
+
+    @Test
+    public void TestIDStatus() {
+        assertEquals("ID_Status(slash)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x2F));
+        assertEquals("ID_Status(digit 0)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x30));
+        assertEquals("ID_Status(colon)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x3A));
+        assertEquals("ID_Status(semicolon)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x3B));
+        assertEquals("ID_Status(Greek small alpha)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x03B1));
+        assertEquals("ID_Status(Greek small archaic koppa)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x03D9));
+        assertEquals("ID_Status(Hangul syllable)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0xAC00));
+        assertEquals("ID_Status(surrogate)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0xD800));
+        assertEquals("ID_Status(Arabic tail fragment)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0xFE73));
+        assertEquals("ID_Status(Hentaigana ko-3)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x1B03A));
+        assertEquals("ID_Status(Katakana small ko)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x1B155));
+        assertEquals("ID_Status(U+2EE5D)=Allowed", IdentifierStatus.ALLOWED, getIDStatus(0x2EE5D));
+        assertEquals("ID_Status(U+10FFFF)=Restricted", IdentifierStatus.RESTRICTED, getIDStatus(0x10FFFF));
+
+        // Property names work and get the correct sets.
+        UnicodeSet idStatus = new UnicodeSet("[:Identifier_Status=Allowed:]");
+        // Unicode 15.1: 112778 Allowed characters; normally grows over time
+        assertTrue("Allowed number of characters", idStatus.size() >= 112778);
+        assertFalse("Allowed.contains(slash)", idStatus.contains(0x2F));
+        assertTrue("Allowed.contains(digit 0)", idStatus.contains(0x30));
+        assertTrue("Allowed.contains(colon)", idStatus.contains(0x3A));
+        assertFalse("Allowed.contains(semicolon)", idStatus.contains(0x3B));
+        assertTrue("Allowed.contains(Greek small alpha)", idStatus.contains(0x03B1));
+        assertFalse("Allowed.contains(Greek small archaic koppa)", idStatus.contains(0x03D9));
+        assertTrue("Allowed.contains(Hangul syllable)", idStatus.contains(0xAC00));
+        assertFalse("Allowed.contains(surrogate)", idStatus.contains(0xD800));
+        assertFalse("Allowed.contains(Arabic tail fragment)", idStatus.contains(0xFE73));
+        assertFalse("Allowed.contains(Hentaigana ko-3)", idStatus.contains(0x1B03A));
+        assertTrue("Allowed.contains(Katakana small ko)", idStatus.contains(0x1B155));
+        assertTrue("Allowed.contains(U+2EE5D)", idStatus.contains(0x2EE5D));
+        assertFalse("Allowed.contains(U+10FFFF)", idStatus.contains(0x10FFFF));
+    }
+
+    private static final IdentifierType[] ID_TYPE_VALUES = IdentifierType.values();
+
+    private EnumSet<IdentifierType> getIDTypes(int c) {
+        EnumSet<IdentifierType> types =
+                EnumSet.of(IdentifierType.NOT_CHARACTER, IdentifierType.RECOMMENDED);
+        int length = UCharacter.getIdentifierTypes(c, types);
+        assertEquals(
+                String.format("getIdentifierTypes(U+%04x) length vs. set.size()", c),
+                length, types.size());
+        // Check that hasIdentifierType() agrees.
+        for (IdentifierType t : ID_TYPE_VALUES) {
+            boolean expected = types.contains(t);
+            boolean actual = UCharacter.hasIdentifierType(c, t);
+            assertEquals(
+                    String.format("getIdentifierTypes(U+%04x).contains(%s) vs. hasIdentifierType()",
+                            c, t),
+                    expected, actual);
+        }
+        return types;
+    }
+
+    @Test
+    public void TestIDType() {
+        // Note: Types other than Recommended and Inclusion may well change over time.
+        assertEquals("ID_Type(slash)", EnumSet.of(IdentifierType.NOT_XID), getIDTypes(0x2F));
+        assertEquals("ID_Type(digit 0)", EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x30));
+        assertEquals("ID_Type(colon)", EnumSet.of(IdentifierType.INCLUSION), getIDTypes(0x3A));
+        assertEquals("ID_Type(semicolon)", EnumSet.of(IdentifierType.NOT_XID), getIDTypes(0x3B));
+        assertEquals("ID_Type(Greek small alpha)",
+                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x03B1));
+        assertEquals("ID_Type(Greek small archaic koppa)",
+                EnumSet.of(IdentifierType.OBSOLETE), getIDTypes(0x03D9));
+        assertEquals("ID_Type(Hangul syllable)",
+                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0xAC00));
+        assertEquals("ID_Type(surrogate)",
+                EnumSet.of(IdentifierType.NOT_CHARACTER), getIDTypes(0xD800));
+        assertEquals("ID_Type(Arabic tail fragment)",
+                EnumSet.of(IdentifierType.TECHNICAL), getIDTypes(0xFE73));
+        assertEquals("ID_Type(Linear B syllable)",
+                EnumSet.of(IdentifierType.EXCLUSION), getIDTypes(0x10000));
+        assertEquals("ID_Type(Hentaigana ko-3)",
+                EnumSet.of(IdentifierType.OBSOLETE), getIDTypes(0x1B03A));
+        assertEquals("ID_Type(Katakana small ko)",
+                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x1B155));
+        assertEquals("ID_Type(U+2EE5D)",
+                EnumSet.of(IdentifierType.RECOMMENDED), getIDTypes(0x2EE5D));
+        assertEquals("ID_Type(U+10FFFF)",
+                EnumSet.of(IdentifierType.NOT_CHARACTER), getIDTypes(0x10FFFF));
+
+        assertEquals("ID_Type(CYRILLIC THOUSANDS SIGN)",
+                EnumSet.of(IdentifierType.NOT_XID, IdentifierType.OBSOLETE),
+                getIDTypes(0x0482));
+        assertEquals("ID_Type(SYRIAC FEMININE DOT)",
+                EnumSet.of(IdentifierType.TECHNICAL, IdentifierType.LIMITED_USE),
+                getIDTypes(0x0740));
+        assertEquals("ID_Type(NKO LETTER JONA JA)",
+                EnumSet.of(IdentifierType.OBSOLETE, IdentifierType.LIMITED_USE),
+                getIDTypes(0x07E8));
+        assertEquals("ID_Type(SYRIAC END OF PARAGRAPH)",
+                EnumSet.of(IdentifierType.NOT_XID, IdentifierType.LIMITED_USE),
+                getIDTypes(0x0700));
+        assertEquals("ID_Type(LATIN SMALL LETTER EZH)=",
+                EnumSet.of(IdentifierType.TECHNICAL, IdentifierType.UNCOMMON_USE),
+                getIDTypes(0x0292));
+        assertEquals("ID_Type(MUSICAL SYMBOL KIEVAN C CLEF)",
+                EnumSet.of(IdentifierType.NOT_XID, IdentifierType.TECHNICAL,
+                        IdentifierType.UNCOMMON_USE),
+                getIDTypes(0x1D1DE));
+        assertEquals("ID_Type(MRO LETTER TA)",
+                EnumSet.of(IdentifierType.EXCLUSION, IdentifierType.UNCOMMON_USE),
+                getIDTypes(0x16A40));
+        assertEquals("ID_Type(GREEK MUSICAL LEIMMA)",
+                EnumSet.of(IdentifierType.NOT_XID, IdentifierType.OBSOLETE),
+                getIDTypes(0x1D245));
+
+        // Property names work and get the correct sets.
+        UnicodeSet rec = new UnicodeSet("[:Identifier_Type=Recommended:]");
+        UnicodeSet incl = new UnicodeSet("[:Identifier_Type=Inclusion:]");
+        UnicodeSet limited = new UnicodeSet("[:Identifier_Type=Limited_Use:]");
+        UnicodeSet uncommon = new UnicodeSet("[:Identifier_Type=Uncommon_Use:]");
+        UnicodeSet notChar = new UnicodeSet("[:Identifier_Type=Not_Character:]");
+        // Unicode 15.1 set sizes; normally grows over time except Not_Character shrinks
+        assertTrue("Recommended number of characters", rec.size() >= 112761);
+        assertTrue("Inclusion number of characters", incl.size() >= 17);
+        assertTrue("Limited_Use number of characters", limited.size() >= 5268);
+        assertTrue("Uncommon_Use number of characters", uncommon.size() >= 398);
+        assertTrue("Not_Character number of characters",
+                   800000 <= notChar.size() && notChar.size() <= 964293);
+        assertFalse("Recommended.contains(slash)", rec.contains(0x2F));
+        assertTrue("Recommended.contains(digit 0)", rec.contains(0x30));
+        assertTrue("Inclusion.contains(colon)", incl.contains(0x3A));
+        assertTrue("Recommended.contains(U+2EE5D)", rec.contains(0x2EE5D));
+        assertTrue("Limited_Use.contains(SYRIAC FEMININE DOT)", limited.contains(0x0740));
+        assertTrue("Limited_Use.contains(NKO LETTER JONA JA)", limited.contains(0x7E8));
+        assertTrue("Not_Character.contains(surrogate)", notChar.contains(0xd800));
+        assertTrue("Not_Character.contains(U+10FFFF)", notChar.contains(0x10FFFF));
+        assertTrue("Uncommon_Use.contains(LATIN SMALL LETTER EZH)", uncommon.contains(0x0292));
+        assertTrue("Uncommon_Use.contains(MUSICAL SYMBOL KIEVAN C CLEF)", uncommon.contains(0x1D1DE));
+
+        // More mutually exclusive types, including some otherwise combinable ones.
+        UnicodeSet dep = new UnicodeSet("[:Identifier_Type=Deprecated:]");
+        UnicodeSet di = new UnicodeSet("[:Identifier_Type=Default_Ignorable:]");
+        UnicodeSet notNFKC = new UnicodeSet("[:Identifier_Type=Not_NFKC:]");
+        UnicodeSet excl = new UnicodeSet("[:Identifier_Type=Exclusion:]");
+        UnicodeSet allExclusive = new UnicodeSet();
+        allExclusive.addAll(rec).addAll(incl).addAll(limited).addAll(excl).
+                addAll(notNFKC).addAll(di).addAll(dep).addAll(notChar);
+        assertEquals("num chars in mutually exclusive types",
+                rec.size() + incl.size() + limited.size() + excl.size() +
+                    notNFKC.size() + di.size() + dep.size() + notChar.size(),
+                allExclusive.size());
     }
 }
