@@ -3343,9 +3343,9 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        if (fHL->contains(prevCharX2) &&
-                (fHY->contains(prevChar) || fBA->contains(prevChar))) {
-            setAppliedRule(pos, "LB 21a   HL (HY | BA) x");
+        if (fHL->contains(prevCharX2) && (fHY->contains(prevChar) || fBA->contains(prevChar)) &&
+            !fHL->contains(thisChar)) {
+            setAppliedRule(pos, "LB 21a   HL (HY | BA) x [^HL]");
             continue;
         }
 
