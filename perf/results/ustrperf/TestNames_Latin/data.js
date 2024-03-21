@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711027120434,
+  "lastUpdate": 1711033960235,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -71710,6 +71710,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 40.61,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e246d3b712c317d6c5e2063cc11db89da7de5094",
+          "message": "ICU-22643 Make UCHAR_TYPE work as intended with C++11, C11 & macOS.\n\nSince ICU4C requires C++11 and C11 the char16_t data type can be used\neverywhere, as long as the uchar.h header file gets included when\nbuilding as C (where it isn't a keyword as in C++), but this doesn't\nwork on macOS which for unknown reasons lacks the uchar.h header file\nand therefore needs a workaround to define char16_t.",
+          "timestamp": "2024-03-21T15:44:20+01:00",
+          "tree_id": "cbfe75eb470e11719072475b9983ed62c7db7d02",
+          "url": "https://github.com/unicode-org/icu/commit/e246d3b712c317d6c5e2063cc11db89da7de5094"
+        },
+        "date": 1711033845756,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.0491,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.8957,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 23.9854,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 32.9616,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 43.3209,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.0955,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 29.1063,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.7101,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 112.478,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 22.0088,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 39.0403,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.0457,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
