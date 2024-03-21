@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711044207226,
+  "lastUpdate": 1711047180661,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40660,6 +40660,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2085310.553,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d259da81183bd2439e19dcb17cccf57cc31cf46c",
+          "message": "ICU-22700 Fix large POSIX charset name cause hang\n\nFix fuzzer found issue of hang that caused by long POSIX charset name.\nLimit the POSIX charset name to at most 64 chars.",
+          "timestamp": "2024-03-21T11:33:52-07:00",
+          "tree_id": "19f1ada54943481c18d9ee9bdfd25ad35b76da62",
+          "url": "https://github.com/unicode-org/icu/commit/d259da81183bd2439e19dcb17cccf57cc31cf46c"
+        },
+        "date": 1711047075943,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 147.0066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8640585.0612,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2228566.7933,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7690074.6818,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2095199.4239,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
