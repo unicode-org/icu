@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711043091021,
+  "lastUpdate": 1711044207226,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40606,6 +40606,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2085419.2682,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "fbc1f33e7e8afeb92ed7498fca1a1686d8b6b9c4",
+          "message": "ICU-22679 Clean up Calendar code.\n\n1. Remove redudant implementation of default system ceuntry by using\n   macro\n2. Fold long if / else block if one block return.",
+          "timestamp": "2024-03-21T09:50:10-07:00",
+          "tree_id": "ea6f9b0200fda44e1c66b628dcef83c19d5d7adf",
+          "url": "https://github.com/unicode-org/icu/commit/fbc1f33e7e8afeb92ed7498fca1a1686d8b6b9c4"
+        },
+        "date": 1711044111069,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 147.1786,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8720052.2835,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2217633.8943,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 7731030.8738,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2085310.553,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
