@@ -1,12 +1,11 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.message2;
 
-import java.text.AttributedCharacterIterator;
-
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
+import java.text.AttributedCharacterIterator;
 
 /**
  * Not yet implemented: The result of a message formatting operation.
@@ -116,5 +115,4 @@ public class FormattedMessage implements FormattedValue {
     public AttributedCharacterIterator toCharacterIterator() {
         throw new RuntimeException("Not yet implemented.");
     }
-
 }

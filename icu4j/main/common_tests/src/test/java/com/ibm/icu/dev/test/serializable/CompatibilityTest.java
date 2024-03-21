@@ -198,6 +198,11 @@ public class CompatibilityTest extends CoreTestFmwk
     }
 
     private static final String[][] SKIP_CASES = {
+            // com.ibm.icu.message2.Mf2DataModel$OrderedMap was very drafty
+            {"ICU_72.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
+            {"ICU_73.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
+            {"ICU_74.1", "com.ibm.icu.message2.Mf2DataModel$OrderedMap"},
+
             // ICU 52+ PluralRules/PluralFormat/CurrencyPluralInfo are not
             // serialization-compatible with previous versions.
             {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo"},

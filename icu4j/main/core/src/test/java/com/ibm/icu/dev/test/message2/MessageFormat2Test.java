@@ -1,24 +1,14 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.dev.test.message2;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Formatter;
 import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
-import com.ibm.icu.message2.Mf2FunctionRegistry;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -27,6 +17,14 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Tests migrated from {@link com.ibm.icu.text.MessageFormat}, to show what they look like and that they work.
@@ -34,13 +32,13 @@ import com.ibm.icu.util.MeasureUnit;
  * <p>It does not include all the tests for edge cases and error handling, only the ones that show real functionality.</p>
  */
 @RunWith(JUnit4.class)
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"static-method", "javadoc"})
 public class MessageFormat2Test extends CoreTestFmwk {
 
     @Test
     public void test() {
         MessageFormatter mf2 = MessageFormatter.builder()
-                .setPattern("{Hello World!}").build();
+                .setPattern("Hello World!").build();
         assertEquals("simple message",
                 "Hello World!",
                 mf2.formatToString(Args.NONE));
@@ -50,32 +48,39 @@ public class MessageFormat2Test extends CoreTestFmwk {
     public void testDateFormat() {
         Date expiration = new Date(2022 - 1900, java.util.Calendar.OCTOBER, 27);
         MessageFormatter mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+                .setPattern("Your card expires on {$exp :datetime icu:skeleton=yMMMdE}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Thu, Oct 27, 2022!",
                 mf2.formatToString(Args.of("exp", expiration)));
 
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime datestyle=full}!}")
+                .setPattern("Your card expires on {$exp :datetime year=numeric month=short day=numeric weekday=short}!")
+                .build();
+        assertEquals("date format",
+                "Your card expires on Thu, Oct 27, 2022!",
+                mf2.formatToString(Args.of("exp", expiration)));
+
+        mf2 = MessageFormatter.builder()
+                .setPattern("Your card expires on {$exp :datetime dateStyle=full}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Thursday, October 27, 2022!",
                 mf2.formatToString(Args.of("exp", expiration)));
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime datestyle=long}!}")
+                .setPattern("Your card expires on {$exp :datetime dateStyle=long}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on October 27, 2022!",
                 mf2.formatToString(Args.of("exp", expiration)));
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime datestyle=medium}!}")
+                .setPattern("Your card expires on {$exp :date style=medium}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Oct 27, 2022!",
                 mf2.formatToString(Args.of("exp", expiration)));
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime datestyle=short}!}")
+                .setPattern("Your card expires on {$exp :datetime dateStyle=short}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on 10/27/22!",
@@ -83,7 +88,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
 
         Calendar cal = new GregorianCalendar(2022, Calendar.OCTOBER, 27);
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+                .setPattern("Your card expires on {$exp :datetime icu:skeleton=yMMMdE}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Thu, Oct 27, 2022!",
@@ -91,7 +96,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
 
         // Implied function based on type of the object to format
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp}!}")
+                .setPattern("Your card expires on {$exp}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on 10/27/22, 12:00\u202FAM!",
@@ -105,14 +110,14 @@ public class MessageFormat2Test extends CoreTestFmwk {
         // But we test to see if it works because it extends Calendar, which is registered.
         BuddhistCalendar calNotRegistered = new BuddhistCalendar(2022, Calendar.OCTOBER, 27);
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+                .setPattern("Your card expires on {$exp :datetime icu:skeleton=yMMMdE}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Wed, Oct 27, 1479!",
                 mf2.formatToString(Args.of("exp", calNotRegistered)));
 
         mf2 = MessageFormatter.builder()
-                .setPattern("{Your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+                .setPattern("Your card expires on {$exp :datetime icu:skeleton=yMMMdE}!")
                 .build();
         assertEquals("date format",
                 "Your card expires on Wed, Oct 27, 1479!",
@@ -122,9 +127,9 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPlural() {
         String message = ""
-                + "match {$count :plural}\n"
-                + " when 1 {You have one notification.}\n"
-                + " when * {You have {$count} notifications.}\n";
+                + ".match {$count :number}\n"
+                + " 1 {{You have one notification.}}\n"
+                + " * {{You have {$count} notifications.}}\n";
 
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
@@ -140,14 +145,14 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPluralOrdinal() {
         String message = ""
-                + "match {$place :selectordinal}\n"
-                + " when 1 {You got the gold medal}\n"
-                + " when 2 {You got the silver medal}\n"
-                + " when 3 {You got the bronze medal}\n"
-                + " when one {You got in the {$place}st place}\n"
-                + " when two {You got in the {$place}nd place}\n"
-                + " when few {You got in the {$place}rd place}\n"
-                + " when * {You got in the {$place}th place}\n"
+                + ".match {$place :number select=ordinal}\n"
+                + "  1  {{You got the gold medal}}\n"
+                + "  2  {{You got the silver medal}}\n"
+                + "  3  {{You got the bronze medal}}\n"
+                + " one {{You got in the {$place}st place}}\n"
+                + " two {{You got in the {$place}nd place}}\n"
+                + " few {{You got in the {$place}rd place}}\n"
+                + "  *  {{You got in the {$place}th place}}\n"
                 ;
 
         MessageFormatter mf2 = MessageFormatter.builder()
@@ -185,10 +190,10 @@ public class MessageFormat2Test extends CoreTestFmwk {
         @Override
         public Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions) {
             // Check that the formatter can only see the fixed options
-            Assert.assertTrue(fixedOptions.containsKey("skeleton"));
-            Assert.assertFalse(fixedOptions.containsKey("unit"));
+            Assert.assertTrue(fixedOptions.containsKey("icu:skeleton"));
+            Assert.assertFalse(fixedOptions.containsKey("icu:unit"));
 
-            Object valSkeleton = fixedOptions.get("skeleton");
+            Object valSkeleton = fixedOptions.get("icu:skeleton");
             LocalizedNumberFormatter nf = valSkeleton != null
                     ? NumberFormatter.forSkeleton(valSkeleton.toString()).locale(locale)
                     : NumberFormatter.withLocale(locale);
@@ -257,12 +262,15 @@ public class MessageFormat2Test extends CoreTestFmwk {
     }
 
     @Test
+    // Due to the many changes in how the variable resolution is done,
+    // it is now not possible to caching the formatters.
+    // Might be able to bring it back, but for now it is off.
     public void testFormatterIsCreatedOnce() {
         TemperatureFormatterFactory counter = new TemperatureFormatterFactory();
-        Mf2FunctionRegistry registry = Mf2FunctionRegistry.builder()
+        MFFunctionRegistry registry = MFFunctionRegistry.builder()
                 .setFormatter("temp", counter)
                 .build();
-        String message = "{Testing {$count :temp unit=$unit skeleton=(.00/w)}.}";
+        String message = "Testing {$count :temp unit=$unit icu:skeleton=|.00/w|}.";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setFunctionRegistry(registry)
                 .setPattern(message)
@@ -280,10 +288,10 @@ public class MessageFormat2Test extends CoreTestFmwk {
 
         // Check that the constructor was only called once,
         // and the formatter as many times as the public call to format.
-        assertEquals("cached formatter", 1, counter.constructCount);
+        assertEquals("cached formatter", 20, counter.constructCount);
         assertEquals("cached formatter", maxCount * 2, counter.formatCount);
-        assertEquals("cached formatter", 1, counter.fFormatterCount);
-        assertEquals("cached formatter", 1, counter.cFormatterCount);
+        assertEquals("cached formatter", 10, counter.fFormatterCount);
+        assertEquals("cached formatter", 10, counter.cFormatterCount);
 
         // Check that the skeleton is respected
         assertEquals("cached formatter",
@@ -299,7 +307,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 "Testing 12.54°F.",
                 mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
 
-        message = "{Testing {$count :temp unit=$unit skeleton=(.0/w)}.}";
+        message = "Testing {$count :temp unit=$unit icu:skeleton=|.0/w|}.";
         mf2 = MessageFormatter.builder()
                 .setFunctionRegistry(registry)
                 .setPattern(message)
@@ -322,11 +330,11 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPluralWithOffset() {
         String message = ""
-                + "match {$count :plural offset=2}\n"
-                + " when 1 {Anna}\n"
-                + " when 2 {Anna and Bob}\n"
-                + " when one {Anna, Bob, and {$count :number offset=2} other guest}\n"
-                + " when * {Anna, Bob, and {$count :number offset=2} other guests}\n";
+                + ".match {$count :number icu:offset=2}\n"
+                + " 1   {{Anna}}\n"
+                + " 2   {{Anna and Bob}}\n"
+                + " one {{Anna, Bob, and {$count :number icu:offset=2} other guest}}\n"
+                + " *   {{Anna, Bob, and {$count :number icu:offset=2} other guests}}\n";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -350,12 +358,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPluralWithOffsetAndLocalVar() {
         String message = ""
-                + "let $foo = {$count :number offset=2}"
-                + "match {$foo :plural}\n" // should "inherit" the offset
-                + " when 1 {Anna}\n"
-                + " when 2 {Anna and Bob}\n"
-                + " when one {Anna, Bob, and {$foo} other guest}\n"
-                + " when * {Anna, Bob, and {$foo} other guests}\n";
+                + ".local $foo = {$count :number icu:offset=2}"
+                + ".match {$foo :number}\n" // should "inherit" the offset
+                + " 1   {{Anna}}\n"
+                + " 2   {{Anna and Bob}}\n"
+                + " one {{Anna, Bob, and {$foo} other guest}}\n"
+                + " *   {{Anna, Bob, and {$foo} other guests}}\n";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -379,11 +387,11 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testPluralWithOffsetAndLocalVar2() {
         String message = ""
-                + "let $foo = {$amount :number skeleton=(.00/w)}\n"
-                + "match {$foo :plural}\n" // should "inherit" the offset
-                + " when 1 {Last dollar}\n"
-                + " when one {{$foo} dollar}\n"
-                + " when * {{$foo} dollars}\n";
+                + ".local $foo = {$amount :number icu:skeleton=|.00/w|}\n"
+                + ".match {$foo :number}\n" // should "inherit" the offset
+                + " 1   {{Last dollar}}\n"
+                + " one {{{$foo} dollar}}\n"
+                + " *   {{{$foo} dollars}}\n";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
@@ -399,28 +407,49 @@ public class MessageFormat2Test extends CoreTestFmwk {
     }
 
     @Test
-    public void testLoopOnLocalVars() {
+    public void testPluralWithOffsetAndLocalVar2Options() {
         String message = ""
-                + "let $foo = {$baz :number}\n"
-                + "let $bar = {$foo}\n"
-                + "let $baz = {$bar}\n"
-                + "{The message uses {$baz} and works}\n";
+                + ".local $foo = {$amount :number minumumFractionalDigits=2}\n"
+                + ".match {$foo :number}\n" // should "inherit" the offset
+                + " 1   {{Last dollar}}\n"
+                + " one {{{$foo} dollar}}\n"
+                + " *   {{{$foo} dollars}}\n";
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setPattern(message)
                 .build();
-        assertEquals("test local vars loop",
-                "The message uses {$bar} and works",
+        assertEquals("plural with offset",
+                "Last dollar",
                 mf2.formatToString(Args.of("amount", 1)));
+        assertEquals("plural with offset",
+                "2 dollars",
+                mf2.formatToString(Args.of("amount", 2)));
+        assertEquals("plural with offset",
+                "3 dollars",
+                mf2.formatToString(Args.of("amount", 3)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testLoopOnLocalVars() {
+        String message = ""
+                + ".local $foo = {$baz :number}\n"
+                + ".local $bar = {$foo}\n"
+                + ".local $baz = {$bar}\n"
+                + "{{The message uses {$baz} and works}}\n";
+        // Circular references on variables is now detected.
+        // So we check that this throws (see expected in the @Test above)
+        MessageFormatter.builder()
+                .setPattern(message)
+                .build();
     }
 
     @Test
     public void testVariableOptionsInSelector() {
         String messageVar = ""
-                + "match {$count :plural offset=$delta}\n"
-                + " when 1 {A}\n"
-                + " when 2 {A and B}\n"
-                + " when one {A, B, and {$count :number offset=$delta} more character}\n"
-                + " when * {A, B, and {$count :number offset=$delta} more characters}\n";
+                + ".match {$count :number icu:offset=$delta}\n"
+                + " 1   {{A}}\n"
+                + " 2   {{A and B}}\n"
+                + " one {{A, B, and {$count :number icu:offset=$delta} more character}}\n"
+                + " *   {{A, B, and {$count :number icu:offset=$delta} more characters}}\n";
         MessageFormatter mfVar = MessageFormatter.builder()
                 .setPattern(messageVar)
                 .build();
@@ -434,10 +463,10 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 mfVar.formatToString(Args.of("count", 7, "delta", 2)));
 
         String messageVar2 = ""
-                + "match {$count :plural offset=$delta}\n"
-                + " when 1 {Exactly 1}\n"
-                + " when 2 {Exactly 2}\n"
-                + " when * {Count = {$count :number offset=$delta} and delta={$delta}.}\n";
+                + ".match {$count :number icu:offset=$delta}\n"
+                + " 1 {{Exactly 1}}\n"
+                + " 2 {{Exactly 2}}\n"
+                + " * {{Count = {$count :number icu:offset=$delta} and delta={$delta}.}}\n";
         MessageFormatter mfVar2 = MessageFormatter.builder()
                 .setPattern(messageVar2)
                 .build();
@@ -473,12 +502,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void testVariableOptionsInSelectorWithLocalVar() {
         String messageFix = ""
-                + "let $offCount = {$count :number offset=2}"
-                + "match {$offCount :plural}\n"
-                + " when 1 {A}\n"
-                + " when 2 {A and B}\n"
-                + " when one {A, B, and {$offCount} more character}\n"
-                + " when * {A, B, and {$offCount} more characters}\n";
+                + ".local $offCount = {$count :number icu:offset=2}"
+                + ".match {$offCount :number}\n"
+                + " 1   {{A}}\n"
+                + " 2   {{A and B}}\n"
+                + " one {{A, B, and {$offCount} more character}}\n"
+                + " *   {{A, B, and {$offCount} more characters}}\n";
         MessageFormatter mfFix = MessageFormatter.builder()
                 .setPattern(messageFix)
                 .build();
@@ -488,12 +517,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals("test local vars loop", "A, B, and 5 more characters", mfFix.formatToString(Args.of("count", 7)));
 
         String messageVar = ""
-                + "let $offCount = {$count :number offset=$delta}"
-                + "match {$offCount :plural}\n"
-                + " when 1 {A}\n"
-                + " when 2 {A and B}\n"
-                + " when one {A, B, and {$offCount} more character}\n"
-                + " when * {A, B, and {$offCount} more characters}\n";
+                + ".local $offCount = {$count :number icu:offset=$delta}"
+                + ".match {$offCount :number}\n"
+                + " 1   {{A}}\n"
+                + " 2   {{A and B}}\n"
+                + " one {{A, B, and {$offCount} more character}}\n"
+                + " *   {{A, B, and {$offCount} more characters}}\n";
         MessageFormatter mfVar = MessageFormatter.builder()
                 .setPattern(messageVar)
                 .build();
@@ -507,11 +536,11 @@ public class MessageFormat2Test extends CoreTestFmwk {
                 mfVar.formatToString(Args.of("count", 7, "delta", 2)));
 
         String messageVar2 = ""
-                + "let $offCount = {$count :number offset=$delta}"
-                + "match {$offCount :plural}\n"
-                + " when 1 {Exactly 1}\n"
-                + " when 2 {Exactly 2}\n"
-                + " when * {Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}\n";
+                + ".local $offCount = {$count :number icu:offset=$delta}"
+                + ".match {$offCount :number}\n"
+                + " 1 {{Exactly 1}}\n"
+                + " 2 {{Exactly 2}}\n"
+                + " * {{Count = {$count}, OffCount = {$offCount}, and delta={$delta}.}}\n";
         MessageFormatter mfVar2 = MessageFormatter.builder()
                 .setPattern(messageVar2)
                 .build();

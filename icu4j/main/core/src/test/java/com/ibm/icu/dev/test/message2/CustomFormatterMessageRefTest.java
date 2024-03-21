@@ -1,24 +1,22 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.message2.PlainStringFormattedValue;
+import com.ibm.icu.message2.FormattedPlaceholder;
+import com.ibm.icu.message2.Formatter;
+import com.ibm.icu.message2.FormatterFactory;
+import com.ibm.icu.message2.MFFunctionRegistry;
+import com.ibm.icu.message2.MessageFormatter;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.message2.FormattedPlaceholder;
-import com.ibm.icu.message2.Formatter;
-import com.ibm.icu.message2.FormatterFactory;
-import com.ibm.icu.message2.MessageFormatter;
-import com.ibm.icu.message2.Mf2FunctionRegistry;
-import com.ibm.icu.message2.PlainStringFormattedValue;
 
 /**
  * Showing a custom formatter that can implement message references.
@@ -27,7 +25,7 @@ import com.ibm.icu.message2.PlainStringFormattedValue;
  * But this shows that it can be easily implemented as a custom function.</p>
  */
 @RunWith(JUnit4.class)
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"static-method", "javadoc"})
 public class CustomFormatterMessageRefTest extends CoreTestFmwk {
 
     static class ResourceManagerFactory implements FormatterFactory {
@@ -40,6 +38,7 @@ public class CustomFormatterMessageRefTest extends CoreTestFmwk {
         static class ResourceManagerFactoryImpl implements Formatter {
             final Map<String, Object> options;
 
+            @SuppressWarnings("unused")
             ResourceManagerFactoryImpl(Locale locale, Map<String, Object> options) {
                 this.options = options;
             }
@@ -56,8 +55,8 @@ public class CustomFormatterMessageRefTest extends CoreTestFmwk {
                     Properties props = (Properties) oProps;
                     Object msg = props.get(toFormat.toString());
                     MessageFormatter mf = MessageFormatter.builder()
-                        .setPattern(msg.toString())
-                        .build();
+                            .setPattern(msg.toString())
+                            .build();
                     result = mf.formatToString(options);
                 }
                 return new FormattedPlaceholder(toFormat, new PlainStringFormattedValue(result));
@@ -70,17 +69,17 @@ public class CustomFormatterMessageRefTest extends CoreTestFmwk {
         }
     }
 
-    static final Mf2FunctionRegistry REGISTRY = Mf2FunctionRegistry.builder()
+    static final MFFunctionRegistry REGISTRY = MFFunctionRegistry.builder()
             .setFormatter("msgRef", new ResourceManagerFactory())
             .build();
 
     static final Properties PROPERTIES = new Properties();
 
     @BeforeClass
-    static public void beforeClass() {
-        PROPERTIES.put("firefox", "match {$gcase :select} when genitive {Firefoxin} when * {Firefox}");
-        PROPERTIES.put("chrome", "match {$gcase :select} when genitive {Chromen} when * {Chrome}");
-        PROPERTIES.put("safari", "match {$gcase :select} when genitive {Safarin} when * {Safari}");
+    public static void beforeClass() {
+        PROPERTIES.put("firefox", ".match {$gcase :string} genitive {{Firefoxin}} * {{Firefox}}");
+        PROPERTIES.put("chrome", ".match {$gcase :string} genitive {{Chromen}} * {{Chrome}}");
+        PROPERTIES.put("safari", ".match {$gcase :string} genitive {{Safarin}} * {{Safari}}");
     }
 
     @Test
@@ -107,11 +106,11 @@ public class CustomFormatterMessageRefTest extends CoreTestFmwk {
 
         MessageFormatter mf1 = MessageFormatter.builder()
                 .setFunctionRegistry(REGISTRY)
-                .setPattern("{Please start {$browser :msgRef gcase=genitive resbundle=$res}}")
+                .setPattern("Please start {$browser :msgRef gcase=genitive resbundle=$res}")
                 .build();
         MessageFormatter mf2 = MessageFormatter.builder()
                 .setFunctionRegistry(REGISTRY)
-                .setPattern("{Please start {$browser :msgRef resbundle=$res}}")
+                .setPattern("Please start {$browser :msgRef resbundle=$res}")
                 .build();
 
         browser.replace(0, browser.length(), "firefox");

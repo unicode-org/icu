@@ -1,5 +1,5 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.message2;
 
@@ -30,12 +30,12 @@ import java.util.Set;
  * @deprecated This API is for technology preview only.
  */
 @Deprecated
-public class Mf2FunctionRegistry {
+public class MFFunctionRegistry {
     private final Map<String, FormatterFactory> formattersMap;
     private final Map<String, SelectorFactory> selectorsMap;
     private final Map<Class<?>, String> classToFormatter;
 
-    private Mf2FunctionRegistry(Builder builder) {
+    private MFFunctionRegistry(Builder builder) {
         this.formattersMap = new HashMap<>(builder.formattersMap);
         this.selectorsMap = new HashMap<>(builder.selectorsMap);
         this.classToFormatter = new HashMap<>(builder.classToFormatter);
@@ -164,7 +164,7 @@ public class Mf2FunctionRegistry {
     }
 
     /**
-     * A {@code Builder} used to build instances of {@link Mf2FunctionRegistry}.
+     * A {@code Builder} used to build instances of {@link MFFunctionRegistry}.
      *
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
@@ -176,8 +176,7 @@ public class Mf2FunctionRegistry {
         private final Map<Class<?>, String> classToFormatter = new HashMap<>();
 
         // Prevent direct creation
-        private Builder() {
-        }
+        private Builder() {}
 
         /**
          * Adds all the mapping from another registry to this one.
@@ -189,7 +188,7 @@ public class Mf2FunctionRegistry {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder addAll(Mf2FunctionRegistry functionRegistry) {
+        public Builder addAll(MFFunctionRegistry functionRegistry) {
             formattersMap.putAll(functionRegistry.formattersMap);
             selectorsMap.putAll(functionRegistry.selectorsMap);
             classToFormatter.putAll(functionRegistry.classToFormatter);
@@ -197,7 +196,7 @@ public class Mf2FunctionRegistry {
         }
 
         /**
-         * Adds a mapping from a formatter name to a {@link FormatterFactory}
+         * Adds a mapping from a formatter name to a {@link FormatterFactory}.
          *
          * @param formatterName the function name (as used in the MessageFormat 2 syntax).
          * @param formatterFactory the factory that handles the name.
@@ -287,7 +286,7 @@ public class Mf2FunctionRegistry {
         }
 
         /**
-         * Adds a mapping from a selector name to a {@link SelectorFactory}
+         * Adds a mapping from a selector name to a {@link SelectorFactory}.
          *
          * @param selectorName the function name (as used in the MessageFormat 2 syntax).
          * @param selectorFactory the factory that handles the name.
@@ -332,7 +331,7 @@ public class Mf2FunctionRegistry {
         }
 
         /**
-         * Builds an instance of {@link Mf2FunctionRegistry}.
+         * Builds an instance of {@link MFFunctionRegistry}.
          *
          * @return the function registry created.
          *
@@ -340,8 +339,8 @@ public class Mf2FunctionRegistry {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Mf2FunctionRegistry build() {
-            return new Mf2FunctionRegistry(this);
+        public MFFunctionRegistry build() {
+            return new MFFunctionRegistry(this);
         }
     }
 }

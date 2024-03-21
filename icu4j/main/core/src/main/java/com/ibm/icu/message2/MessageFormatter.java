@@ -1,5 +1,5 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.message2;
 
@@ -8,12 +8,12 @@ import java.util.Map;
 
 /**
  * <h3>Overview of {@code MessageFormatter}</h3>
- * 
+ *
  * <p>In ICU4J, the {@code MessageFormatter} class is the next iteration of {@link com.ibm.icu.text.MessageFormat}.
  * This new version will build on the lessons learned from using MessageFormat for 25 years
  * in various environments, when used directly or as a base for other public APIs.</p>
  *
- * 
+ *
  * <p>The effort to design a succesor to {@code MessageFormat} will result in a specification
  * referred to as MessageFormat 2.0.
  * The reasoning for this effort is shared in the
@@ -36,9 +36,9 @@ import java.util.Map;
  * but the final set of functions and the parameters accepted by those functions is not yet finalized.</p>
  *
  * <h3>Examples</h3>
- * 
+ *
  * <h4>Basic usage</h4>
- * 
+ *
  * <blockquote><pre>
  * import static org.junit.Assert.assertEquals;
  * import java.util.Date;
@@ -49,56 +49,57 @@ import java.util.Map;
  * import com.ibm.icu.message2.MessageFormatter;
  *
  * &#064;Test
- * public void testMf2() {
+ * public void test() {
  *     final Locale enGb = Locale.forLanguageTag("en-GB");
  *     Map<String, Object> arguments = new HashMap<>();
  *     arguments.put("name", "John");
- *     arguments.put("exp", new Date(1679971371000L));  // March 27, 2023, 7:42:51 PM
+ *     arguments.put("exp", new Date(2023 - 1900, 2, 27, 19, 42, 51));  // March 27, 2023, 7:42:51 PM
  *
  *     MessageFormatter mf2 = MessageFormatter.builder()
- *         .setPattern("{Hello {$name}, your card expires on {$exp :datetime skeleton=yMMMdE}!}")
- *         .setLocale(enGb)
- *         .build();
+ *             .setPattern("Hello {$name}, your card expires on {$exp :datetime year=numeric month=short day=numeric weekday=short}!")
+ *             .setLocale(enGb)
+ *             .build();
  *
  *     assertEquals(
- *         "Hello John, your card expires on Mon, 27 Mar 2023!",
- *         mf2.formatToString(arguments));
+ *             "Hello John, your card expires on Mon, 27 Mar 2023!",
+ *             mf2.formatToString(arguments));
  * }
  * </pre></blockquote>
- * 
+ *
  * <h4>Placeholder examples</h4>
- * 
+ *
  * <table border="1">
  *   <tr>
  *     <th>Code to set runtime value for placeholder</th>
  *     <th>Examples of placeholder in message pattern</th>
  *   </tr>
  *   <tr>
- *     <td>{@code arguments.put("name", "John")}</td>
- *     <td>{@code &#125;$name&#126;}</td>
+ *     <td><code>arguments.put("name", "John")</code></td>
+ *     <td><code>{$name}</code></td>
  *   </tr>
  *   <tr>
- *     <td>{@code arguments.put("exp", new Date(…))}</td>
- *     <td>{@code &#125;$exp :datetime skeleton=yMMMdE&#126;} <br> {@code &#125;$exp :datetime datestyle=full&#126;}</td>
+ *     <td><code>arguments.put("exp", new Date(…))</code></td>
+ *     <td><code>{$exp :datetime skeleton=year=numeric month=short day=numeric weekday=short}</code> <br>
+ *         <code>{$exp :datetime dateStyle=full}</code></td>
  *   </tr>
  *   <tr>
- *     <td>{@code arguments.put("val", 3.141592653)}</td>
- *     <td>{@code &#125;$val&#126;} <br> {@code &#125;$val :number skeleton=(.####)&#126;}</td>
+ *     <td><code>arguments.put("val", 3.141592653)</code></td>
+ *     <td><code>{$val}</code> <br> <code>{$val :number minimumFractionDigits=5}</code></td>
  *   </tr>
  *   <tr>
  *     <td>No argument for fixed values known at build time</td>
- *     <td>{@code &#125;(123456789.531) :number&#126;}</td>
+ *     <td><code>{|123456789.531| :number}</code></td>
  *   </tr>
  * </table>
- * 
+ *
  * <h4>Plural selection message</h4>
- * 
+ *
  * <blockquote><pre>
  * &#064;Test
- * public void testMf2Selection() {
- *    final String message = "match {$count :plural}\n"
- *            + " when one {You have one notification.}\n"
- *            + " when * {You have {$count} notifications.}\n";
+ * public void testSelection() {
+ *    final String message = ".match {$count :number}\n"
+ *            + " 1 {{You have one notification.}}\n"
+ *            + " * {{You have {$count} notifications.}}\n";
  *    final Locale enGb = Locale.forLanguageTag("en-GB");
  *    Map<String, Object> arguments = new HashMap<>();
  *
@@ -118,86 +119,22 @@ import java.util.Map;
  *        mf2.formatToString(arguments));
  * }
  * </pre></blockquote>
- * 
+ *
  * <h4>Built-in formatter functions</h4>
- * 
- * <p>The tech preview implementation comes with formatters for numbers ({@code number}), 
- * date / time ({@code datetime}), 
- * plural selectors ({@code plural} and {@code selectordinal}),
- * and general selector ({@code select}), 
- * very similar to what MessageFormat offers.</p>
- * 
+ *
+ * <p>The tech preview implementation comes with formatters for numbers ({@code :number}),
+ * date / time ({@code :datetime}, {@code :date}, {@code :time}),
+ * plural selectors ({@code :number} with options for {@code plural} and {@code ordinal} selection),
+ * and general selector ({@code :string}),
+ * very similar to what {@code MessageFormat} offers.</p>
+ *
  * <p>The <a target="github" href="https://github.com/unicode-org/icu/tree/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/message2">ICU test code</a>
  * covers most features, and has examples of how to make custom placeholder formatters;
  * you can look for classes that implement {@code com.ibm.icu.message2.FormatterFactory}
  * (they are named {@code Custom*Test.java}).</p>
- * 
- * <h3>Functions currently implemented</h3>
- * 
- * <p>These are the functions interpreted right now:</p>
  *
- * <table border="1">
- * <tr>
- *   <td rowspan="4">{@code datetime}</td>
- *   <td>Similar to MessageFormat's {@code date} and {@code time}.</td>
- * </tr>
- *
- *   <tr><td>{@code datestyle} and {@code timestyle}<br>
- *   Similar to {@code argStyle : short | medium | long | full}.<br>
- *   Same values are accepted, but we can use both in one placeholder,
- *   for example <code>{$due :datetime datestyle=full timestyle=long}</code>.
- *   </td></tr>
- *
- *   <tr><td>{@code pattern}<br>
- *   Similar to {@code argStyle = argStyleText}.<br>
- *   This is bad i18n practice, and will probably be dropped.<br>
- *   This is included just to support migration to MessageFormat 2.
- *   </td></tr>
- *
- *   <tr><td>{@code skeleton}<br>
- *   Same as {@code argStyle = argSkeletonText}.<br>
- *   These are the date/time skeletons as supported by {@link com.ibm.icu.text.SimpleDateFormat}.
- *   </td></tr>
- *
- * <tr>
- *   <td rowspan="4">{@code number}</td>
- *   <td>Similar to MessageFormat's {@code number}.</td>
- * </tr>
- *
- *   <tr><td>{@code skeleton}<br>
- *   These are the number skeletons as supported by {@link com.ibm.icu.number.NumberFormatter}.</td></tr>
- *
- *   <tr><td>{@code minimumFractionDigits}<br>
- *   Only implemented to be able to pass the unit tests from the ECMA tech preview implementation,
- *   which prefers options bags to skeletons.<br>
- *   TBD if the final {@number} function will support skeletons, option backs, or both.</td></tr>
- *
- *   <tr><td>{@code offset}<br>
- *   Used to support plural with an offset.</td></tr>
- *
- * <tr><td >{@code identity}</td><td>Returns the direct string value of the argument (calling {@code toString()}).</td></tr>
- *
- * <tr>
- *   <td rowspan="3">{@code plural}</td>
- *   <td>Similar to MessageFormat's {@code plural}.</td>
- * </tr>
- *
- *   <tr><td>{@code skeleton}<br>
- *   These are the number skeletons as supported by {@link com.ibm.icu.number.NumberFormatter}.<br>
- *   Can also be indirect, from a local variable of type {@code number} (recommended).</td></tr>
- *
- *   <tr><td>{@code offset}<br>
- *   Used to support plural with an offset.<br>
- *   Can also be indirect, from a local variable of type {@code number} (recommended).</td></tr>
- *
- * <tr>
- *   <td>{@code selectordinal}</td>
- *   <td>Similar to MessageFormat's {@code selectordinal}.<br>
- * For now it accepts the same parameters as {@code plural}, although there is no use case for them.<br>
- * TBD if this will be merged into {@code plural} (with some {@code kind} option) or not.</td></tr>
- *
- * <tr><td>{@code select}</td><td>Literal match, same as MessageFormat's {@code select}.</td></tr>
- * </table>
+ * <p>The complete list of valid options for each function, and how they infulence the results, can be found at
+ * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md">here</a>.<p>
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
@@ -206,36 +143,35 @@ import java.util.Map;
 public class MessageFormatter {
     private final Locale locale;
     private final String pattern;
-    private final Mf2FunctionRegistry functionRegistry;
-    private final Mf2DataModel dataModel;
-    private final Mf2DataModelFormatter modelFormatter;
+    private final MFFunctionRegistry functionRegistry;
+    private final MFDataModel.Message dataModel;
+    private final MFDataModelFormatter modelFormatter;
 
     private MessageFormatter(Builder builder) {
         this.locale = builder.locale;
         this.functionRegistry = builder.functionRegistry;
         if ((builder.pattern == null && builder.dataModel == null)
                 || (builder.pattern != null && builder.dataModel != null)) {
-            throw new IllegalArgumentException("You need to set either a pattern, or a dataModel, but not both.");
+            throw new IllegalArgumentException(
+                    "You need to set either a pattern, or a dataModel, but not both.");
         }
 
         if (builder.dataModel != null) {
             this.dataModel = builder.dataModel;
-            this.pattern = Mf2Serializer.dataModelToString(this.dataModel);
+            // this.pattern = MFSerializer.dataModelToString(this.dataModel);
+            this.pattern = MFSerializer.dataModelToString(dataModel);
         } else {
             this.pattern = builder.pattern;
-            Mf2Serializer tree = new Mf2Serializer();
-            Mf2Parser parser = new Mf2Parser(pattern, tree);
             try {
-                parser.parse_Message();
-                dataModel = tree.build();
-            } catch (Mf2Parser.ParseException pe) {
-                throw new IllegalArgumentException(
-                        "Parse error:\n"
+                this.dataModel = MFParser.parse(pattern);
+            } catch (MFParseException pe) {
+                throw new IllegalArgumentException(""
+                        + "Parse error:\n"
                         + "Message: <<" + pattern + ">>\n"
-                        + "Error:" + parser.getErrorMessage(pe) + "\n");
+                        + "Error: " + pe.getMessage() + "\n");
             }
         }
-        modelFormatter = new Mf2DataModelFormatter(dataModel, locale, functionRegistry);
+        modelFormatter = new MFDataModelFormatter(dataModel, locale, functionRegistry);
     }
 
     /**
@@ -269,7 +205,7 @@ public class MessageFormatter {
      * Get the pattern (the serialized message in MessageFormat 2 syntax) of
      * the current {@code MessageFormatter}.
      *
-     * <p>If the {@code MessageFormatter} was created from an {@link Mf2DataModel}
+     * <p>If the {@code MessageFormatter} was created from an {@link MFDataModel}
      * the this string is generated from that model.</p>
      *
      * @return the pattern.
@@ -297,7 +233,7 @@ public class MessageFormatter {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    public Mf2DataModel getDataModel() {
+    public MFDataModel.Message getDataModel() {
         return dataModel;
     }
 
@@ -330,6 +266,7 @@ public class MessageFormatter {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
+    @SuppressWarnings("static-method")
     public FormattedMessage format(Map<String, Object> arguments) {
         throw new RuntimeException("Not yet implemented.");
     }
@@ -344,12 +281,11 @@ public class MessageFormatter {
     public static class Builder {
         private Locale locale = Locale.getDefault(Locale.Category.FORMAT);
         private String pattern = null;
-        private Mf2FunctionRegistry functionRegistry = Mf2FunctionRegistry.builder().build();
-        private Mf2DataModel dataModel = null;
+        private MFFunctionRegistry functionRegistry = MFFunctionRegistry.builder().build();
+        private MFDataModel.Message dataModel = null;
 
         // Prevent direct creation
-        private Builder() {
-        }
+        private Builder() {}
 
         /**
          * Sets the locale to use for all formatting and selection operations.
@@ -384,7 +320,7 @@ public class MessageFormatter {
         }
 
         /**
-         * Sets an instance of {@link Mf2FunctionRegistry} that should register any
+         * Sets an instance of {@link MFFunctionRegistry} that should register any
          * custom functions used by the message.
          *
          * <p>There is no need to do this in order to use standard functions
@@ -399,7 +335,7 @@ public class MessageFormatter {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder setFunctionRegistry(Mf2FunctionRegistry functionRegistry) {
+        public Builder setFunctionRegistry(MFFunctionRegistry functionRegistry) {
             this.functionRegistry = functionRegistry;
             return this;
         }
@@ -415,7 +351,7 @@ public class MessageFormatter {
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        public Builder setDataModel(Mf2DataModel dataModel) {
+        public Builder setDataModel(MFDataModel.Message dataModel) {
             this.dataModel = dataModel;
             this.pattern = null;
             return this;
