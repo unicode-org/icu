@@ -1,8 +1,9 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.message2;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public interface Selector {
      * for {@code matches(1, "1")}, {@code matches(1, "one")}, and {@code matches(1, "*")}.</p>
      *
      * @param value the value to select on.
-     * @param key the key to test for matching.
+     * @param keys the key to test for matching.
      * @param variableOptions options that are not know at build time.
      * @return the formatted string.
      *
@@ -33,5 +34,5 @@ public interface Selector {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
-    boolean matches(Object value, String key, Map<String, Object> variableOptions);
+    List<String> matches(Object value, List<String> keys, Map<String, Object> variableOptions);
 }

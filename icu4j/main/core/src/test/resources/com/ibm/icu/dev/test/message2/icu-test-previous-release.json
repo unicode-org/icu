@@ -1,0 +1,390 @@
+[
+    {
+      "src": "hello",
+      "exp": "hello"
+    },
+    {
+      "src": "hello {|world|}",
+      "exp": "hello world"
+    },
+    {
+      "src": "hello {||}",
+      "exp": "hello "
+    },
+    {
+      "src": "hello {$place}",
+      "params": { "place": "world" },
+      "exp": "hello world"
+    },
+    {
+      "src": "hello {$place}",
+      "exp": "hello {$place}",
+      "errorsJs": [{ "type": "missing-var" }]
+    },
+    {
+      "src": "{$one} and {$two}",
+      "params" : { "one": 1.3, "two": 4.2 },
+      "exp": "1.3 and 4.2"
+    },
+    {
+      "src": "{$one} et {$two}",
+      "locale": "fr",
+      "params": { "one": 1.3, "two": 4.2 },
+      "exp": "1,3 et 4,2"
+    },
+    {
+      "src": "hello {|4.2| :number}",
+      "exp": "hello 4.2"
+    },
+    {
+      "locale": "ar-EG",
+      "src": "hello {|4.2| :number}",
+      "exp": "hello \u0664\u066B\u0662"
+    },
+    {
+      "src": "hello {|foo| :number}",
+      "exp": "hello {|foo|}"
+    },
+    {
+      "src": "hello {:number}",
+      "exp": "hello {|foo|}",
+      "comment": "This is different from JS, should be an error.",
+      "errors": [{ "type": "ICU4J: exception" }]
+    },
+    {
+      "src": "hello {|4.2| :number minimumFractionDigits=2}",
+      "exp": "hello 4.20"
+    },
+    {
+      "src": "hello {|4.2| :number minimumFractionDigits=|2|}",
+      "exp": "hello 4.20"
+    },
+    {
+      "src": "hello {|4.2| :number minimumFractionDigits=$foo}",
+      "params": { "foo": 2f },
+      "exp": "hello 4.20"
+    },
+    {
+      "src": "hello {|4.2| :number minimumFractionDigits=$foo}",
+      "params": { "foo": "2" },
+      "exp": "hello 4.20",
+      "errorsJs": ["invalid-type"]
+    },
+    {
+      "src": ".local $foo = {|bar|} {{bar {$foo}}}",
+      "exp": "bar bar"
+    },
+    {
+      "src": ".local $foo = {bar} {{bar {$foo}}}",
+     "params": { "foo": "foo" },
+     "expectedJs": "bar foo",
+     "comment": "It is undefined if we allow arguments to override local variables, or it is an error.  And undefined who wins if that happens, the local variable of the argument.",
+      "exp": "bar bar"
+    },
+    {
+      "src": ".local $foo = {$bar} {{bar {$foo}}}",
+      "params": { "bar": "foo" },
+      "exp": "bar foo"
+    },
+    {
+      "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
+      "params": { "bar": 4.2 },
+      "exp": "bar 4.2"
+    },
+    {
+      "src": ".local $foo = {$bar :number minimumFractionDigits=2} {{bar {$foo}}}",
+      "params": { "bar": 4.2 },
+      "exp": "bar 4.20"
+    },
+    {
+      "ignore": "Maybe. Because `minimumFractionDigits=foo`",
+      "src": ".local $foo = {$bar :number minimumFractionDigits=foo} {{bar {$foo}}}",
+      "params": { "bar": 4.2 },
+      "exp": "bar 4.2",
+      "errors": [{ "type": "invalid-type" }]
+    },
+    {
+      "src": ".local $foo = {$bar :number} {{bar {$foo}}}",
+      "params": { "bar": "foo" },
+      "exp": "bar {|foo|}"
+    },
+    {
+      "src": ".local $bar = {$baz} .local $foo = {$bar} {{bar {$foo}}}",
+      "params": { "baz": "foo" },
+      "exp": "bar foo"
+    },
+    {
+      "patternJs": ".match {$foo} 1 {{one}} * {{other}}",
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": { "foo": "1" },
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "params": { "foo": "1" },
+      "comment": "Should this be error? Plural on string?",
+      "expectedJs": "one",
+      "exp": "other"
+    },
+    {
+      "src": ".match {$foo :string} 1 {{one}} * {{other}}",
+      "params": { "foo": "1" },
+      "exp": "one"
+    },
+    {
+      "patternJs": ".match {$foo} 1 {{one}} * {{other}}",
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "params": { "foo": 1 },
+      "exp": "one"
+    },
+    {
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "params": { "foo": 1 },
+      "exp": "one"
+    },
+    {
+      "ignore": "Can't pass null in a map",
+      "src": ".match {$foo} 1 {{one}} * {{other}}",
+      "params": { "foo": null },
+      "exp": "other"
+    },
+    {
+      "srcJs": ".match {$foo} 1 {{one}} * {{other}}",
+      "src": ".match {$foo :number} 1 {{one}} * {{other}}",
+      "exp": "other",
+      "errors": [{ "type":  "missing-var" }]
+    },
+    {
+      "srcJs": ".match {$foo} one {{one}} * {{other}}",
+      "src": ".match {$foo :number} one {{one}} * {{other}}",
+      "params": { "foo": 1 },
+      "exp": "one"
+    },
+    {
+      "srcJs": ".match {$foo} 1 {{=1}} one {{one}} * {{other}}",
+      "src": ".match {$foo :number} 1 {{=1}} one {{one}} * {{other}}",
+      "params": { "foo": 1 },
+      "exp": "=1"
+    },
+    {
+      "srcJs": ".match {$foo} one {{one}} 1 {{=1}} * {{other}}",
+      "src": ".match {$foo :number} one {{one}} 1 {{=1}} * {{other}}",
+      "params": { "foo": 1 },
+      "exp": "=1"
+    },
+    {
+      "srcJs": ".match {$foo} {$bar} one one {{one one}} one * {{one other}} * * {{other}}",
+      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
+      "params": { "foo": 1, "bar": 1 },
+      "exp": "one one"
+    },
+    {
+      "srcJs": ".match {$foo} {$bar} one one {{one one}} one * {{one other}} * * {{other}}",
+      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
+      "params": { "foo": 1, "bar": 2 },
+      "exp": "one other"
+    },
+    {
+      "srcJs": ".match {$foo} {$bar} one one {{one one}} one * {{one other}} * * {{other}}",
+      "src": ".match {$foo :number} {$bar :number} one one {{one one}} one * {{one other}} * * {{other}}",
+      "params": { "foo": 2, "bar": 2 },
+      "exp": "other"
+    },
+    {
+      "srcJs": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "src": ".local $foo = {$bar} .match {$foo :number} one {{one}} * {{other}}",
+      "params": { "bar": 1 },
+      "exp": "one"
+    },
+    {
+      "srcJs": ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}",
+      "src": ".local $foo = {$bar} .match {$foo :number} one {{one}} * {{other}}",
+      "params": { "bar": 2 },
+      "exp": "other"
+    },
+    {
+      "srcJs": ".local $bar = {$none} .match {$foo} one {{one}} * {{{$bar}}}",
+      "src": ".local $bar = {$none} .match {$foo :number} one {{one}} * {{{$bar}}}",
+      "params": { "foo": 1, "none": "" },
+      "exp": "one"
+    },
+    {
+      "srcJs": ".local $bar = {$none} .match {$foo} one {{one}} * {{{$bar}}}",
+      "src": ".local $bar = {$none :number} .match {$foo} one {{one}} * {{{$bar}}}",
+      "params": { "foo": 2 },
+      "exp": "{$bar}",
+      "errors": [{ "type": "missing-var" }]
+    },
+    {
+      "src": ".local bar = {|foo|} {{$bar}}",
+      "exp": "{$bar}",
+      "errors": [{ "type": "missing-char" }, { "type": "missing-var" }]
+    },
+    {
+      "src": ".local $bar {|foo|} {{$bar}}",
+      "exp": "foo",
+      "errors": [{ "type": "missing-char" }]
+    },
+    {
+      "src": ".local $bar = |foo| {{$bar}}",
+      "exp": "{$bar}",
+      "errors": [{ "type": "missing-char" }, { "type": "junk-element" }]
+    },
+    {
+      "src": "{{#tag}}",
+      "exp": "#tag"
+    },
+    {
+      "src": "{#tag}",
+      "exp": ""
+    },
+    {
+      "src": "{#tag}content",
+      "exp": "content"
+    },
+    {
+      "src": "{#tag}content{/tag}",
+      "exp": "content"
+    },
+    {
+      "src": "{#tag}content",
+      "exp": "content"
+    },
+    {
+      "comment": "When we format markup to string we generate no output",
+      "src": "{#tag foo=bar}",
+      "exp": ""
+    },
+    {
+      "src": "{#tag foo=foo bar=$bar}",
+      "params": { "bar": "b a r" },
+      "exp": ""
+    },
+    {
+      "src": "bad {#markup/} test",
+      "exp": "bad  test",
+      "errorsJs": [{ "type":  "extra-content" }]
+    },
+    {
+      "src": "{#tag foo=bar}",
+      "exp": "",
+      "errorsJs": [{ "type":  "extra-content" }]
+    },
+    {
+      "src": "no braces",
+      "exp": "no braces",
+      "errorsJs": [{ "type":  "parse-error" }, { "type": "junk-element" }]
+    },
+    {
+      "src": "no braces {$foo}",
+      "params": { "foo": 2 },
+      "exp": "no braces 2",
+      "errorsJs": [{ "type":  "parse-error" }, { "type": "junk-element" }]
+    },
+    {
+      "src": "{missing end brace",
+      "exp": "missing end brace",
+      "errors": [{ "type": "missing-char" }]
+    },
+    {
+      "src": "{missing end {$brace",
+      "exp": "missing end {$brace}",
+      "errors": [{ "type": "missing-char" }, { "type": "missing-char" }, { "type": "missing-var" }]
+    },
+    {
+      "src": "{{extra}} content",
+      "exp": "extra",
+      "errors": [{ "type": "extra-content" }]
+    },
+    {
+      "src": "empty { }",
+      "exp": "empty ",
+      "errors": [{ "type": "parse-error" }, { "type": "junk-element" }]
+    },
+    {
+      "src": "bad {:}",
+      "exp": "bad {:}",
+      "errors": [{ "type": "empty-token" }, { "type": "missing-func" }]
+    },
+    {
+      "src": "bad {placeholder}",
+      "exp": "bad placeholder",
+      "errorsJs": [{ "type": "parse-error" }, { "type": "extra-content" }, { "type": "junk-element" }]
+    },
+    {
+      "src": "no-equal {|42| :number minimumFractionDigits 2}",
+      "exp": "no-equal 42.00",
+      "errors": [{ "type": "missing-char" }]
+    },
+    {
+      "src": "bad {:placeholder option=}",
+      "exp": "bad {:placeholder}",
+      "errors": [{ "type": "empty-token" }, { "type": "missing-func" }]
+    },
+    {
+      "src": "bad {:placeholder option value}",
+      "exp": "bad {:placeholder}",
+      "errors": [{ "type": "missing-char" }, { "type": "missing-func" }]
+    },
+    {
+      "src": "{bad {:placeholder option}}",
+      "exp": "bad {:placeholder}",
+      "errors": [{ "type": "missing-char" }, { "type": "empty-token" }, { "type": "missing-func" }]
+    },
+    {
+      "src": "{bad {$placeholder option}}",
+      "exp": "bad {$placeholder}",
+      "errors": [{ "type": "extra-content" }, { "type": "extra-content" }, { "type": "missing-var" }]
+    },
+    {
+      "src": "{no {$placeholder end}",
+      "exp": "no {$placeholder}",
+      "errors": [{ "type": "extra-content" }, { "type": "missing-var" }]
+    },
+    {
+      "src": ".match {} * {{foo}}",
+      "exp": "foo",
+      "errors": [{ "type": "parse-error" }, { "type": "bad-selector" }, { "type": "junk-element" }]
+    },
+    {
+      "src": ".match {#foo} * {{foo}}",
+      "exp": "foo",
+      "errors": [{ "type": "bad-selector" }]
+    },
+    {
+      "src": ".match {|foo|} *{{foo}}",
+      "exp": "foo",
+      "errors": [{ "type": "missing-char" }]
+    },
+    {
+      "src": ".match * {{foo}}",
+      "exp": "foo",
+      "errors": [{ "type": "empty-token" }]
+    },
+    {
+      "src": ".match {|x|} * foo",
+      "exp": "",
+      "errors": [{ "type": "key-mismatch" }, { "type": "missing-char" }]
+    },
+    {
+      "src": ".match {|x|} * {{foo}} extra",
+      "exp": "foo",
+      "errors": [{ "type": "extra-content" }]
+    },
+    {
+      "src": ".match |x| * {{foo}}",
+      "exp": "",
+      "errors": [{ "type": "empty-token" }, { "type": "extra-content" }]
+    },
+    {
+      "src": ".match {$foo} * * {{foo}}",
+      "exp": "foo",
+      "errors": [{ "type": "key-mismatch" }, { "type": "missing-var" }]
+    },
+    {
+      "src": ".match {$foo} {$bar} * {{foo}}",
+      "exp": "foo",
+      "errors": [{ "type": "key-mismatch" }, { "type": "missing-var" }, { "type": "missing-var" }]
+    }
+]
+

@@ -1,13 +1,12 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.dev.test.message2;
 
+import com.ibm.icu.message2.MessageFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.ibm.icu.message2.MessageFormatter;
 
 /**
  * Convenience class that provides the same functionality as

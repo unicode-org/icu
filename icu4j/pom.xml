@@ -59,6 +59,7 @@
 
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
+    <gson.version>2.10.1</gson.version>
 
     <proj-title>International Components for Unicode for Java</proj-title>
     <proj.displayname>${project.artifactId}</proj.displayname>

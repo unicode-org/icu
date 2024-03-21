@@ -1,5 +1,5 @@
 // © 2022 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+// License & terms of use: https://www.unicode.org/copyright.html
 
 package com.ibm.icu.message2;
 
@@ -13,14 +13,10 @@ class OptUtils {
             return (Number) value;
         }
         if (value instanceof CharSequence) {
-            String strValue = value.toString();
             try {
-                return Double.parseDouble(strValue);
+                return Double.parseDouble(value.toString());
             } catch (NumberFormatException e) {
-            }
-            try {
-                return Integer.decode(strValue);
-            } catch (NumberFormatException e) {
+                /* just ignore, we want to try more */
             }
         }
         return null;
@@ -38,15 +34,15 @@ class OptUtils {
         return null;
     }
 
-    static String getString(Map<String, Object> options, String key) {
+    static String getString(Map<String, Object> options, String key, String defaultVal) {
         Object value = options.get(key);
-        if (value == null) {
-            return null;
-        }
         if (value instanceof CharSequence) {
             return value.toString();
         }
-        return null;
+        return defaultVal;
     }
 
+    static String getString(Map<String, Object> options, String key) {
+        return getString(options, key, null);
+    }
 }
