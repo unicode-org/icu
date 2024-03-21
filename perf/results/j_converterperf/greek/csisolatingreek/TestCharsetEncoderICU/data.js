@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711060281780,
+  "lastUpdate": 1711062258902,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19978,6 +19978,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 1.3787135052998976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "b3032aba0c6cdb7e36043125e6b7f73f7648bf21",
+          "message": "ICU-22643 Verify that UCHAR_TYPE works for all public header files.",
+          "timestamp": "2024-03-21T23:18:53+01:00",
+          "tree_id": "343b9aa4526772977e25a47b9b68e46df269d768",
+          "url": "https://github.com/unicode-org/icu/commit/b3032aba0c6cdb7e36043125e6b7f73f7648bf21"
+        },
+        "date": 1711062160822,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 1.2879363804627864,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
