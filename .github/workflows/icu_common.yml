@@ -28,14 +28,14 @@ jobs:
   copyright-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: tools/scripts/icu-file-utf8-check.py
 
   # Initialize the Maven artifact cache
@@ -46,17 +46,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
       - name: Cache local Maven repository
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -72,9 +72,9 @@ jobs:
     needs: icu4j-mvn-init-cache
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: ~/.m2/repository
