@@ -20,12 +20,12 @@ using namespace icu::number::impl;
 SimpleNumber
 SimpleNumber::forInt64(int64_t value, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return SimpleNumber();
+        return {};
     }
     auto* results = new UFormattedNumberData();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return SimpleNumber();
+        return {};
     }
     results->quantity.setToLong(value);
     return SimpleNumber(results, status);

@@ -334,7 +334,7 @@ UnicodeString MutablePatternModifier::getCurrencySymbolForUnitWidth(UErrorCode& 
     case UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT:
         return fCurrencySymbols.getVariantCurrencySymbol(status);
     case UNumberUnitWidth::UNUM_UNIT_WIDTH_HIDDEN:
-        return UnicodeString();
+        return {};
     default:
         return fCurrencySymbols.getCurrencySymbol(status);
     }

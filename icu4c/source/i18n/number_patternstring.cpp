@@ -66,7 +66,7 @@ int32_t ParsedPatternInfo::getLengthFromEndpoints(const Endpoints& endpoints) {
 UnicodeString ParsedPatternInfo::getString(int32_t flags) const {
     const Endpoints& endpoints = getEndpoints(flags);
     if (endpoints.start == endpoints.end) {
-        return UnicodeString();
+        return {};
     }
     // Create a new UnicodeString
     return UnicodeString(pattern, endpoints.start, endpoints.end - endpoints.start);

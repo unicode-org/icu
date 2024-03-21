@@ -808,7 +808,7 @@ UnicodeString CalendarAstronomer::Ecliptic::toString() const
     snprintf(tmp, sizeof(tmp), "[%.5f,%.5f]", longitude*RAD_DEG, latitude*RAD_DEG);
     return UnicodeString(tmp, "");
 #else
-    return UnicodeString();
+    return {};
 #endif
 }
 
@@ -820,9 +820,10 @@ UnicodeString CalendarAstronomer::Equatorial::toString() const
         (ascension*RAD_DEG), (declination*RAD_DEG));
     return UnicodeString(tmp, "");
 #else
-    return UnicodeString();
+    return {};
 #endif
 }
+
 
 // =============== Calendar Cache ================
 

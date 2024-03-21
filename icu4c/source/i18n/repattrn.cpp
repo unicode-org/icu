@@ -577,7 +577,7 @@ UnicodeString RegexPattern::pattern() const {
     if (fPatternString != nullptr) {
         return *fPatternString;
     } else if (fPattern == nullptr) {
-        return UnicodeString();
+        return {};
     } else {
         UErrorCode status = U_ZERO_ERROR;
         int64_t nativeLen = utext_nativeLength(fPattern);

@@ -47,7 +47,7 @@ UnicodeString FieldsSet::diffFrom(const FieldsSet& other, UErrorCode& status) co
     UnicodeString str;
     if(!isSameType(other)) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return UnicodeString("U_ILLEGAL_ARGUMENT_ERROR: FieldsSet of a different type!");
+        return {"U_ILLEGAL_ARGUMENT_ERROR: FieldsSet of a different type!"};
     }
     for (int i=0; i<fieldCount(); i++) {
         if (isSet((UCalendarDateFields)i)) {
