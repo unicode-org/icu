@@ -497,7 +497,7 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 Locale
 BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
     if (type == ULOC_REQUESTED_LOCALE) {
-        return Locale(requestLocale);
+        return {requestLocale};
     }
     U_LOCALE_BASED(locBased, *this);
     return locBased.getLocale(type, status);

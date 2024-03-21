@@ -498,7 +498,7 @@ CurrencySpacingEnabledModifier::getUnicodeSet(const DecimalFormatSymbols &symbol
     // Ensure the static defaults are initialized:
     umtx_initOnce(gDefaultCurrencySpacingInitOnce, &initDefaultCurrencySpacing, status);
     if (U_FAILURE(status)) {
-        return UnicodeSet();
+        return {};
     }
 
     const UnicodeString& pattern = symbols.getPatternForCurrencySpacing(

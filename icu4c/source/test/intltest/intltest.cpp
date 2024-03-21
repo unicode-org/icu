@@ -67,8 +67,7 @@ static UBool noKnownIssues = false; // if true, don't emit known issues
 
 // [LIU] Just to get things working
 UnicodeString
-UCharToUnicodeString(char16_t c)
-{ return UnicodeString(c); }
+UCharToUnicodeString(char16_t c) { return {c}; }
 
 // [rtg] Just to get things working
 UnicodeString

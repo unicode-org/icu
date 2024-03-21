@@ -452,13 +452,13 @@ DateFormat::getBestPattern(
         UErrorCode &status) {
     UnifiedCache *cache = UnifiedCache::getInstance(status);
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
     DateFmtBestPatternKey key(locale, skeleton, status);
     const DateFmtBestPattern *patternPtr = nullptr;
     cache->get(key, patternPtr, status);
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
     UnicodeString result(patternPtr->fPattern);
     patternPtr->removeRef();

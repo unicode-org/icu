@@ -1149,11 +1149,11 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
 UnicodeString
 DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDateTimePatternMatchOptions options, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
     if (U_FAILURE(internalErrorCode)) {
         status = internalErrorCode;
-        return UnicodeString();
+        return {};
     }
     const UnicodeString *bestPattern = nullptr;
     UnicodeString dtFormat;
@@ -1166,7 +1166,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     // Replace hour metacharacters 'j', 'C' and 'J', set flags as necessary
     UnicodeString patternFormMapped = mapSkeletonMetacharacters(patternForm, &flags, status);
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
 
     resultPattern.remove();
@@ -1174,7 +1174,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     const PtnSkeleton* specifiedSkeleton = nullptr;
     bestPattern=getBestRaw(*dtMatcher, -1, distanceInfo, status, &specifiedSkeleton);
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
 
     if ( distanceInfo->missingFieldMask==0 && distanceInfo->extraFieldMask==0 ) {
@@ -1186,7 +1186,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     UnicodeString datePattern=getBestAppending(neededFields & dateMask, flags, status, options);
     UnicodeString timePattern=getBestAppending(neededFields & timeMask, flags, status, options);
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
     if (datePattern.length()==0) {
         if (timePattern.length()==0) {
@@ -1262,7 +1262,7 @@ DateTimePatternGenerator::mapSkeletonMetacharacters(const UnicodeString& pattern
                         bestAllowed = (AllowedHourFormat)fAllowedHourFormats[0];
                     } else {
                         status = U_INVALID_FORMAT_ERROR;
-                        return UnicodeString();
+                        return {};
                     }
                     if (bestAllowed == ALLOWED_HOUR_FORMAT_H || bestAllowed == ALLOWED_HOUR_FORMAT_HB || bestAllowed == ALLOWED_HOUR_FORMAT_Hb) {
                         hourChar = CAP_H;
@@ -1313,11 +1313,11 @@ DateTimePatternGenerator::replaceFieldTypes(const UnicodeString& pattern,
                                             UDateTimePatternMatchOptions options,
                                             UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
     if (U_FAILURE(internalErrorCode)) {
         status = internalErrorCode;
-        return UnicodeString();
+        return {};
     }
     dtMatcher->set(skeleton, fp);
     UnicodeString result = adjustFieldTypes(pattern, nullptr, kDTPGNoFlags, options);
@@ -1770,7 +1770,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
 UnicodeString
 DateTimePatternGenerator::getBestAppending(int32_t missingFields, int32_t flags, UErrorCode &status, UDateTimePatternMatchOptions options) {
     if (U_FAILURE(status)) {
-        return UnicodeString();
+        return {};
     }
     UnicodeString  resultPattern, tempPattern;
     const UnicodeString* tempPatternPtr;
@@ -1780,7 +1780,7 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, int32_t flags,
         const PtnSkeleton* specifiedSkeleton=nullptr;
         tempPatternPtr = getBestRaw(*dtMatcher, missingFields, distanceInfo, status, &specifiedSkeleton);
         if (U_FAILURE(status)) {
-            return UnicodeString();
+            return {};
         }
         tempPattern = *tempPatternPtr;
         resultPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, flags, options);
@@ -1800,7 +1800,7 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, int32_t flags,
             int32_t startingMask = distanceInfo->missingFieldMask;
             tempPatternPtr = getBestRaw(*dtMatcher, distanceInfo->missingFieldMask, distanceInfo, status, &specifiedSkeleton);
             if (U_FAILURE(status)) {
-                return UnicodeString();
+                return {};
             }
             tempPattern = *tempPatternPtr;
             tempPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, flags, options);

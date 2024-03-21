@@ -184,7 +184,7 @@ Notation stem_to_object::notation(skeleton::StemEnum stem) {
 MeasureUnit stem_to_object::unit(skeleton::StemEnum stem) {
     switch (stem) {
         case STEM_BASE_UNIT:
-            return MeasureUnit();
+            return {};
         case STEM_PERCENT:
             return MeasureUnit::getPercent();
         case STEM_PERMILLE:

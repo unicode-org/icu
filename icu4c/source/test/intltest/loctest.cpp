@@ -4912,9 +4912,9 @@ static Locale _canonicalize(int32_t selector, /* 0==createFromName, 1==createCan
     case 1:
         return Locale::createCanonical(localeID);
     case 2:
-        return Locale(localeID);
+        return {localeID};
     default:
-        return Locale("");
+        return {""};
     }
 }
 

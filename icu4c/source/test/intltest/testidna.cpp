@@ -1408,7 +1408,7 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
                + " Got: " + UnicodeString(u_errorName(gotStatus))
                + " for Source: "+ prettify(srcUChars) 
                + " Options: " + options);
-        return UnicodeString("");
+        return {""};
     }
     
     // now we know that both implementations yielded same error
@@ -1430,7 +1430,7 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
             + " with "+ UnicodeString(uIDNAName) 
             +" for input: " + prettify(srcUChars));
     }
-    return UnicodeString("");
+    return {""};
 }
 
 void TestIDNA::testCompareReferenceImpl(const char16_t* src, int32_t srcLen){

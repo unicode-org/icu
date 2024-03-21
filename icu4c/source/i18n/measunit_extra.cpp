@@ -546,13 +546,13 @@ public:
      */
     static Parser from(StringPiece source, UErrorCode& status) {
         if (U_FAILURE(status)) {
-            return Parser();
+            return {};
         }
         umtx_initOnce(gUnitExtrasInitOnce, &initUnitExtras, status);
         if (U_FAILURE(status)) {
-            return Parser();
+            return {};
         }
-        return Parser(source);
+        return {source};
     }
 
     MeasureUnitImpl parse(UErrorCode& status) {
@@ -663,7 +663,7 @@ private:
         } else {
             fIndex = previ;
         }
-        return Token(match);
+        return {match};
     }
 
     /**
