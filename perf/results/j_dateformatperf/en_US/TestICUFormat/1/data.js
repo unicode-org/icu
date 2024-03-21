@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711032887514,
+  "lastUpdate": 1711039504072,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19798,6 +19798,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 228.26555950846355,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "028fa70c2950a8014f424c89c37a8137c10ee77b",
+          "message": "ICU-22701 Bugfix: Make test independent of the default locale.\n\nThe original intention behind this test case was to use the root locale,\nbut ures_getFunctionalEquivalent() is implemented by calling ures_open()\nwhich sets URES_OPEN_LOCALE_DEFAULT_ROOT which will cause the default\nlocale to be loaded before the root locale.\n\nTo avoid that, pick a locale other than the root locale for the test.",
+          "timestamp": "2024-03-21T09:16:05-07:00",
+          "tree_id": "2c4b8fea7ac2a6c44545d691950b1673abb42cfa",
+          "url": "https://github.com/unicode-org/icu/commit/028fa70c2950a8014f424c89c37a8137c10ee77b"
+        },
+        "date": 1711039367116,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 250.0239017866243,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
