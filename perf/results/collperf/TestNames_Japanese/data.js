@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711026553314,
+  "lastUpdate": 1711033394069,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40444,6 +40444,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5659896.6419,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e246d3b712c317d6c5e2063cc11db89da7de5094",
+          "message": "ICU-22643 Make UCHAR_TYPE work as intended with C++11, C11 & macOS.\n\nSince ICU4C requires C++11 and C11 the char16_t data type can be used\neverywhere, as long as the uchar.h header file gets included when\nbuilding as C (where it isn't a keyword as in C++), but this doesn't\nwork on macOS which for unknown reasons lacks the uchar.h header file\nand therefore needs a workaround to define char16_t.",
+          "timestamp": "2024-03-21T15:44:20+01:00",
+          "tree_id": "cbfe75eb470e11719072475b9983ed62c7db7d02",
+          "url": "https://github.com/unicode-org/icu/commit/e246d3b712c317d6c5e2063cc11db89da7de5094"
+        },
+        "date": 1711033299059,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 212.7902,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21565575.4564,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5270528.5313,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20300839.5139,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5651064.2084,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
