@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711026725495,
+  "lastUpdate": 1711033911841,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58342,6 +58342,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1417.459,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "e246d3b712c317d6c5e2063cc11db89da7de5094",
+          "message": "ICU-22643 Make UCHAR_TYPE work as intended with C++11, C11 & macOS.\n\nSince ICU4C requires C++11 and C11 the char16_t data type can be used\neverywhere, as long as the uchar.h header file gets included when\nbuilding as C (where it isn't a keyword as in C++), but this doesn't\nwork on macOS which for unknown reasons lacks the uchar.h header file\nand therefore needs a workaround to define char16_t.",
+          "timestamp": "2024-03-21T15:44:20+01:00",
+          "tree_id": "cbfe75eb470e11719072475b9983ed62c7db7d02",
+          "url": "https://github.com/unicode-org/icu/commit/e246d3b712c317d6c5e2063cc11db89da7de5094"
+        },
+        "date": 1711033461734,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77856.3039,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166693.5102,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5691,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.369,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.2639,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8260.921,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 30400.3742,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1406.7207,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
