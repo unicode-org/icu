@@ -22,7 +22,7 @@
 #		 • no formatted with the skeleton
 #		 • no suppression of zero values (for secondary -and- units such as pound in stone-and-pound)
 #
-# Generation: Set GENERATE_TESTS in TestUnits.java to regenerate unitPreferencesTest.txt.
+# Generation: Use GenerateUnitTestData.java to regenerate unitPreferencesTest.txt.
 
 area;	default;	001;	1100000;	1100000.0;	square-meter;	11/10;	1.1;	square-kilometer
 area;	default;	001;	1000000;	1000000.0;	square-meter;	1;	1.0;	square-kilometer
@@ -473,4 +473,3 @@ year-duration;	person-age;	001;	1;	1.0;	year;	1;	year-person;	0;	0.0;	month-pers
 year-duration;	person-age;	001;	9/10;	0.9;	year;	54/5;	10.8;	month-person
 year-duration;	person-age;	001;	1/12;	0.08333333333333333;	year;	1;	1.0;	month-person
 year-duration;	person-age;	001;	3/40;	0.075;	year;	9/10;	0.9;	month-person
-
