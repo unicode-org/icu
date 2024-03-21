@@ -2564,7 +2564,6 @@ Calendar::internalSet(UCalendarDateFields field, int32_t value)
     fIsSet[field]     = true; // Remove later
 }
 
-#ifndef U_HIDE_INTERNAL_API
 /**
  * Macro for the class to declare it override
  * haveDefaultCentury, defaultCenturyStart, and
@@ -2576,6 +2575,7 @@ Calendar::internalSet(UCalendarDateFields field, int32_t value)
     virtual UDate defaultCenturyStart() const override; \
     virtual int32_t defaultCenturyStartYear() const override;
 
+#ifndef U_HIDE_INTERNAL_API
 inline int32_t  Calendar::weekNumber(int32_t dayOfPeriod, int32_t dayOfWeek)
 {
   return weekNumber(dayOfPeriod, dayOfPeriod, dayOfWeek);
