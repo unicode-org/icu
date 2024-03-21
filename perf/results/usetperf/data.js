@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710999628369,
+  "lastUpdate": 1711026725495,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58264,6 +58264,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1405.1342,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "91721504efda86122222cd559baacee9cf6be6d5",
+          "message": "ICU-22621 Clang-Tidy: modernize-return-braced-init-list\n\nhttps://releases.llvm.org/17.0.1/tools/clang/tools/extra/docs/clang-tidy/checks/modernize/return-braced-init-list.html",
+          "timestamp": "2024-03-21T13:50:45+01:00",
+          "tree_id": "6faf4b00dccbc3c1d78269aebea3221639b09e76",
+          "url": "https://github.com/unicode-org/icu/commit/91721504efda86122222cd559baacee9cf6be6d5"
+        },
+        "date": 1711026628131,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77774.9765,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166610.0303,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5691,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.4449,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.2653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8265.8512,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 30700.9424,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1417.459,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
