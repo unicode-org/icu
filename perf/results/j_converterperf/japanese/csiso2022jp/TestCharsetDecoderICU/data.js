@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711062151185,
+  "lastUpdate": 1711063445419,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19978,6 +19978,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.00910616670691162,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "142850ae2cc0900a04316b0ac51df31f4904a66d",
+          "message": "ICU-22691 Make sample code possible to compile with current ICU4C.",
+          "timestamp": "2024-03-21T23:19:54+01:00",
+          "tree_id": "a548aa932c6b235bc19c4be1b4d13e3c9faf7f6a",
+          "url": "https://github.com/unicode-org/icu/commit/142850ae2cc0900a04316b0ac51df31f4904a66d"
+        },
+        "date": 1711063314256,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.009202284642993391,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
