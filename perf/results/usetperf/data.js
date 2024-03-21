@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711044371521,
+  "lastUpdate": 1711047347409,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -58654,6 +58654,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1427.8867,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d259da81183bd2439e19dcb17cccf57cc31cf46c",
+          "message": "ICU-22700 Fix large POSIX charset name cause hang\n\nFix fuzzer found issue of hang that caused by long POSIX charset name.\nLimit the POSIX charset name to at most 64 chars.",
+          "timestamp": "2024-03-21T11:33:52-07:00",
+          "tree_id": "19f1ada54943481c18d9ee9bdfd25ad35b76da62",
+          "url": "https://github.com/unicode-org/icu/commit/d259da81183bd2439e19dcb17cccf57cc31cf46c"
+        },
+        "date": 1711047246637,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77867.5261,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166710.2109,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5591,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3583,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.2651,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8297.7466,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32149.5003,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1413.9273,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
