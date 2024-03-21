@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711041344987,
+  "lastUpdate": 1711043499756,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -19978,6 +19978,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 305.3542586183848,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "fbc1f33e7e8afeb92ed7498fca1a1686d8b6b9c4",
+          "message": "ICU-22679 Clean up Calendar code.\n\n1. Remove redudant implementation of default system ceuntry by using\n   macro\n2. Fold long if / else block if one block return.",
+          "timestamp": "2024-03-21T09:50:10-07:00",
+          "tree_id": "ea6f9b0200fda44e1c66b628dcef83c19d5d7adf",
+          "url": "https://github.com/unicode-org/icu/commit/fbc1f33e7e8afeb92ed7498fca1a1686d8b6b9c4"
+        },
+        "date": 1711043402211,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 321.83999850467205,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
