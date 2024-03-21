@@ -55,7 +55,7 @@ Individual tests can be configured in the ICU Github repository:
 7. If a new test (check) needs to be added, use the search box above the table and type the display name of the check, then click on it in the drop down list to add it to the table of required checks.
 
 
-## Github Actions Configuration
+## Github Actions
 
 ICU uses [Github Actions](https://github.com/features/actions) to run unit tests, environment tests, deployments of the User Guide, etc.
 
@@ -109,7 +109,7 @@ the workflow will not run and Github is not capable of ignoring the check in tha
 
 Open Source users can now access machines with [at least 4 cores available per job](https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/).
 
-## Azure Pipelines Configuration
+## Azure Pipelines
 
 ICU also uses [Azure Pipelines](https://azure.microsoft.com/en-us/products/devops/pipelines) to run CI jobs.
 
@@ -168,4 +168,11 @@ Note: The triggers for merges to a branch (ex: `main`) may need to be duplicated
 
 ### Caveats
 
-In order to set up a pipeline, a person must simultaneously has access to the Azure Pipelines project for ICU and to the Github ICU repository.
+In order to set up a pipeline, a person must simultaneously have access to the Azure Pipelines project for ICU and to the Github ICU repository.
+
+If an Azure Pipeline only has one job,
+that job might not be shown on a PR's main page within the list of all of the running CI checks.
+There will only be an entry with the pipeline name in the list of checks.
+However, if an Azure Pipeline has multiple jobs,
+then each of the constituent jobs of the pipeline will be represent in the list of checks,
+in addition to an entry for the pipeline itself.
