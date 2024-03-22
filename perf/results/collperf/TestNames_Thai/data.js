@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711090925396,
+  "lastUpdate": 1711132677560,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40930,6 +40930,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2118235.4267,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "13bf3c8313ff3bee2bfb72185b8615c636782aac",
+          "message": "ICU-22611 Fixed the RBNF MultiplierSubstitution to only perform floor() on the value being formatted when the\nsubstitution is using a DecimalFormat and its owning rule also has a modulus substitution.  Took out a redundant\ncall to floor().  Added a hack to allow the caller to change the rounding behavior with setRoundingMode().\nAdded appropriate unit tests. Added additional documentation of the behavior to the API docs.",
+          "timestamp": "2024-03-22T11:18:27-07:00",
+          "tree_id": "e099e514320954cf5ab0e1e49fa6af9f9126ef97",
+          "url": "https://github.com/unicode-org/icu/commit/13bf3c8313ff3bee2bfb72185b8615c636782aac"
+        },
+        "date": 1711132576894,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 372.6647,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 12542639.8921,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2072622.9452,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 11425434.5129,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2070073.9279,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
