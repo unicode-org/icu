@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711132655779,
+  "lastUpdate": 1711144334798,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40822,6 +40822,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 12320281.2732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "141e820f7134b67818a76a8050671e8eea42eeb2",
+          "message": "ICU-22690 Update ICU4J MessageFormatter to the latest spec, LDML 45",
+          "timestamp": "2024-03-22T14:39:02-07:00",
+          "tree_id": "1c50c25a8556c312e5c8b863bce4237444a709e3",
+          "url": "https://github.com/unicode-org/icu/commit/141e820f7134b67818a76a8050671e8eea42eeb2"
+        },
+        "date": 1711144234571,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 223.1,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 55872218.1754,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 11950390.4134,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 52873407.0914,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 12415650.0364,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
