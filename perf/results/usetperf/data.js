@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711091090621,
+  "lastUpdate": 1711132814607,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -59044,6 +59044,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1329.1121,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "13bf3c8313ff3bee2bfb72185b8615c636782aac",
+          "message": "ICU-22611 Fixed the RBNF MultiplierSubstitution to only perform floor() on the value being formatted when the\nsubstitution is using a DecimalFormat and its owning rule also has a modulus substitution.  Took out a redundant\ncall to floor().  Added a hack to allow the caller to change the rounding behavior with setRoundingMode().\nAdded appropriate unit tests. Added additional documentation of the behavior to the API docs.",
+          "timestamp": "2024-03-22T11:18:27-07:00",
+          "tree_id": "e099e514320954cf5ab0e1e49fa6af9f9126ef97",
+          "url": "https://github.com/unicode-org/icu/commit/13bf3c8313ff3bee2bfb72185b8615c636782aac"
+        },
+        "date": 1711132712995,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77805.3171,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166725.2208,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.559,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3573,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.2645,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8286.6467,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32236.9216,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1420.276,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
