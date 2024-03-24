@@ -66,6 +66,8 @@
 
 #include "unicode/errorcode.h"
 #include "unicode/putil.h"
+#include "unicode/uchar.h"
+#include "unicode/umutablecptrie.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "toolutil.h"
@@ -81,6 +83,50 @@ void IcuToolErrorCode::handleFailure() const {
     fprintf(stderr, "error at %s: %s\n", location, errorName());
     exit(errorCode);
 }
+
+namespace toolutil {
+
+void setCPTrieBit(UMutableCPTrie *mutableCPTrie,
+                  UChar32 start, UChar32 end, int32_t shift, bool on, UErrorCode &errorCode) {
+    uint32_t mask = U_MASK(shift);
+    uint32_t value = on ? mask : 0;
+    setCPTrieBits(mutableCPTrie, start, end, mask, value, errorCode);
+}
+
+void setCPTrieBits(UMutableCPTrie *mutableCPTrie,
+                   UChar32 start, UChar32 end, uint32_t mask, uint32_t value,
+                   UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return; }
+    // The value must not have any bits set outside of the mask.
+    if ((value & ~mask) != 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if (start == end) {
+        uint32_t oldValue = umutablecptrie_get(mutableCPTrie, start);
+        uint32_t newValue = (oldValue & ~mask) | value;
+        if (newValue != oldValue) {
+            umutablecptrie_set(mutableCPTrie, start, newValue, &errorCode);
+        }
+        return;
+    }
+    while (start <= end && U_SUCCESS(errorCode)) {
+        uint32_t oldValue;
+        UChar32 rangeEnd = umutablecptrie_getRange(
+            mutableCPTrie, start, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &oldValue);
+        if (rangeEnd > end) {
+            rangeEnd = end;
+        }
+        uint32_t newValue = (oldValue & ~mask) | value;
+        if (newValue != oldValue) {
+            umutablecptrie_setRange(mutableCPTrie, start, rangeEnd, newValue, &errorCode);
+        }
+        start = rangeEnd + 1;
+    }
+}
+
+}  // toolutil
 
 U_NAMESPACE_END
 
