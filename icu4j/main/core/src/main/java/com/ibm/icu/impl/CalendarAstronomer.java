@@ -10,7 +10,6 @@
 package com.ibm.icu.impl;
 
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * <code>CalendarAstronomer</code> is a class that can perform the calculations to

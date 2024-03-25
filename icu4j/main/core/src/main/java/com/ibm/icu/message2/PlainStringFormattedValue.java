@@ -3,11 +3,12 @@
 
 package com.ibm.icu.message2;
 
-import com.ibm.icu.text.ConstrainedFieldPosition;
-import com.ibm.icu.text.FormattedValue;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.text.AttributedCharacterIterator;
+
+import com.ibm.icu.text.ConstrainedFieldPosition;
+import com.ibm.icu.text.FormattedValue;
 
 /**
  * Very-very rough implementation of FormattedValue, packaging a string.

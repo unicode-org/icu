@@ -3,11 +3,13 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import java.io.Reader;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import com.ibm.icu.dev.test.CoreTestFmwk;
 
 /*
  * This is the equivalent of the `FromJsonTest` class in the previous release.

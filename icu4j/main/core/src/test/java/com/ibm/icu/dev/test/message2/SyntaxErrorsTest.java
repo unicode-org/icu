@@ -3,14 +3,14 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import static org.junit.Assert.fail;
-
-import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.message2.MessageFormatter;
 import java.io.Reader;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.message2.MessageFormatter;
 
 @SuppressWarnings({"static-method", "javadoc"})
 @RunWith(JUnit4.class)

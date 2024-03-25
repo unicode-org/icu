@@ -3,6 +3,13 @@
 
 package com.ibm.icu.message2;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
@@ -19,12 +26,6 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.MeasureUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Creates a {@link Formatter} doing numeric formatting, similar to <code>{exp, number}</code>

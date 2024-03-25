@@ -6,10 +6,6 @@ package com.ibm.icu.dev.test.message2;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.ibm.icu.message2.MFFunctionRegistry;
-import com.ibm.icu.message2.MessageFormatter;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
@@ -20,7 +16,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Map;
+
 import org.junit.Ignore;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.ibm.icu.message2.MFFunctionRegistry;
+import com.ibm.icu.message2.MessageFormatter;
 
 /** Utility class, has no test methods. */
 @Ignore("Utility class, has no test methods.")
