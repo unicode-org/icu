@@ -896,7 +896,7 @@ public class GregorianCalendar extends Calendar {
         return "gregorian";
     }
 
-    /*
+    /**
      * {@inheritDoc}
      * @internal
      * @deprecated This API is ICU internal only.

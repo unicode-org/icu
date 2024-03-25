@@ -245,7 +245,7 @@ public class BuddhistCalendar extends GregorianCalendar {
         return "buddhist";
     }
 
-    /*
+    /**
      * {@inheritDoc}
      * @internal
      * @deprecated This API is ICU internal only.
