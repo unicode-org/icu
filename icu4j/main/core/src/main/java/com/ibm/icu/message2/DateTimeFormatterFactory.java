@@ -3,13 +3,14 @@
 
 package com.ibm.icu.message2;
 
-import com.ibm.icu.text.DateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.ibm.icu.text.DateFormat;
 
 /**
  * Creates a {@link Formatter} doing formatting of date / time, similar to

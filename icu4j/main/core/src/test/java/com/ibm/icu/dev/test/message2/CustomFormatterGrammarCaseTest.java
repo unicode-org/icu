@@ -3,6 +3,13 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import java.util.Locale;
+import java.util.Map;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Formatter;
@@ -10,11 +17,6 @@ import com.ibm.icu.message2.FormatterFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.MessageFormatter;
 import com.ibm.icu.message2.PlainStringFormattedValue;
-import java.util.Locale;
-import java.util.Map;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 /**
  * Showing a custom formatter that can handle grammatical cases.

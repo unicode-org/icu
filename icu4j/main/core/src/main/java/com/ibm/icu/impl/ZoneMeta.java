@@ -13,14 +13,12 @@
 package com.ibm.icu.impl;
 
 import java.lang.ref.SoftReference;
-import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;

@@ -3,6 +3,10 @@
 
 package com.ibm.icu.message2;
 
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+
 import com.ibm.icu.message2.MFDataModel.Annotation;
 import com.ibm.icu.message2.MFDataModel.Attribute;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
@@ -29,9 +33,6 @@ import com.ibm.icu.message2.MFDataModel.UnsupportedStatement;
 import com.ibm.icu.message2.MFDataModel.VariableExpression;
 import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
 
 /**
  * This class serializes a MessageFormat 2 data model {@link MFDataModel.Message} to a string,
