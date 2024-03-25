@@ -109,9 +109,154 @@ MeasureUnit
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
+<li><span style='color:orange'>(draft)</span> public static enum <i>UCharacter.IdentifierStatus</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>UCharacter.IdentifierType</i></li>
+UCharacter
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int <i>getIdentifierTypes</i>(int, java.util.EnumSet&lt;UCharacter.IdentifierType&gt;)</li>
+<li><span style='color:orange'>(draft)</span> public static final boolean <i>hasIdentifierType</i>(int, UCharacter.IdentifierType)</li>
+</ul>
+UCharacter.IdentifierStatus
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierStatus ALLOWED</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierStatus RESTRICTED</li>
+</ul>
+UCharacter.IdentifierType
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType DEFAULT_IGNORABLE</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType DEPRECATED</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType EXCLUSION</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType INCLUSION</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType LIMITED_USE</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType NOT_CHARACTER</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType NOT_NFKC</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType NOT_XID</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType OBSOLETE</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType RECOMMENDED</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType TECHNICAL</li>
+<li><span style='color:orange'>(draft)</span> public static final UCharacter.IdentifierType UNCOMMON_USE</li>
+</ul>
+UProperty
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int IDENTIFIER_STATUS</li>
+<li><span style='color:orange'>(draft)</span> public static final int IDENTIFIER_TYPE</li>
+</ul>
 UScript
 <ul>
 <li><span style='color:green'>(stable)</span> public static final int ARABIC_NASTALIQ</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.message2</h3>
+<ul>
+MFDataModel.Attribute
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.LiteralOrVariableRef value</li>
+</ul>
+MFDataModel.CatchallKey
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>MFDataModel.CatchallKey</i>()</li>
+</ul>
+MFDataModel.FunctionAnnotation
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.Map&lt;java.lang.String, MFDataModel.Option&gt; options</li>
+</ul>
+MFDataModel.FunctionExpression
+<ul>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.FunctionAnnotation annotation</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
+</ul>
+MFDataModel.InputDeclaration
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.VariableExpression value</li>
+</ul>
+MFDataModel.Literal
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String value</li>
+</ul>
+MFDataModel.LiteralExpression
+<ul>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Annotation annotation</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Literal arg</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
+</ul>
+MFDataModel.LocalDeclaration
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Expression value</li>
+</ul>
+MFDataModel.Markup
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Markup.Kind kind</li>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.Map&lt;java.lang.String, MFDataModel.Option&gt; options</li>
+</ul>
+MFDataModel.Option
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.LiteralOrVariableRef value</li>
+</ul>
+MFDataModel.Pattern
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.PatternPart&gt; parts</li>
+</ul>
+MFDataModel.PatternMessage
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Declaration&gt; declarations</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Pattern pattern</li>
+</ul>
+MFDataModel.SelectMessage
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Declaration&gt; declarations</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Expression&gt; selectors</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Variant&gt; variants</li>
+</ul>
+MFDataModel.StringPart
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String value</li>
+</ul>
+MFDataModel.UnsupportedAnnotation
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String source</li>
+</ul>
+MFDataModel.UnsupportedExpression
+<ul>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.UnsupportedAnnotation annotation</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
+</ul>
+MFDataModel.UnsupportedStatement
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String body</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Expression&gt; expressions</li>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String keyword</li>
+</ul>
+MFDataModel.VariableExpression
+<ul>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Annotation annotation</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.VariableRef arg</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.Attribute&gt; attributes</li>
+</ul>
+MFDataModel.VariableRef
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String name</li>
+</ul>
+MFDataModel.Variant
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.util.List&lt;MFDataModel.LiteralOrCatchallKey&gt; keys</li>
+<li><span style='color:orange'>(draft)</span> public final MFDataModel.Pattern value</li>
+</ul>
+MFParseException
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>MFParseException</i>(java.lang.String, int)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getMessage</i>()</li>
+</ul>
+MFSerializer
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>MFSerializer</i>()</li>
 </ul>
 </ul>
 
@@ -139,6 +284,6 @@ MeasureUnit.MeasurePrefix
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Feb 28 11:47:14 PST 2024<br/>© 2024 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Mar 25 13:11:50 EDT 2024<br/>© 2024 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
 </body>
 </html>
