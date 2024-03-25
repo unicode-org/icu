@@ -467,12 +467,12 @@ version of ICU. When we prepare a new release, the serialization compatibility
 test data should be created and checked in for future testing. This task is
 usually done just before publishing release candidate.
 
-1.  Run regular ICU4J unit tests - `ant check`
-2.  Make sure the unit tests pass successfully.
-3.  Run - `ant serialTestData`
-4.  Copy a folder with ICU version (e.g. ICU_61.1) generated under <icu4j
-    root>/out/serialTestData to <icu4j
-    root>/main/core/src/test/resources/com/ibm/icu/dev/test/serializable/data.
+1.  Run regular ICU4J unit tests `mvn verify` and make sure all tests pass successfully.
+2.  Run `releases_tools/serial_test_data.sh` from `icu4j` directory.
+3.  The new ICU serialization test data folder with version number (e.g. `ICU_75.1`)
+is generated under `icu4j/target/serialTestData`. (**Note**: The version number in the output
+folder name comes from `ICU_VERSION` in `VersionInfo.java`. If the version number is still one
+for SNAPSHOT, such as `75.0.1`, you should update `ICU_VERSION` first.)
+4.  Copy the serialization data folder to `icu4j/main/core/src/test/resources/com/ibm/icu/dev/test/serializable/data`.
 5.  Delete the oldest serialization test data after ICU 3.6 (do not delete ICU_3.6) from the directory.
-    the oldest one - ICU_3.6).
-6.  Run `ant check` again before committing the changes.
+6.  Run regular ICU4J unit tests `mvn verify` again.
