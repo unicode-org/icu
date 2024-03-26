@@ -59,6 +59,7 @@ SHAREDLIBCPPFLAGS =
 ARFLAGS         = -cr
 LIBCFLAGS += -fvisibility=hidden
 LIBCXXFLAGS += -fvisibility=hidden
+SKIP_ESCAPING=1
 else
 # For a dynamically called DLL module to share access to the POSIX external
 # variables, with its caller, the DLL module must define these _SHR_* macros.
