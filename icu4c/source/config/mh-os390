@@ -52,6 +52,14 @@ endif
 ## Additional flags when building libraries and with threads
 THREADSCPPFLAGS = -D_OPEN_THREADS=3
 
+ifeq (${CC}, ibm-clang)
+SHAREDLIBCFLAGS = -dynamic
+SHAREDLIBCXXFLAGS = -dynamic
+SHAREDLIBCPPFLAGS =
+ARFLAGS         = -cr
+LIBCFLAGS += -fvisibility=hidden
+LIBCXXFLAGS += -fvisibility=hidden
+else
 # For a dynamically called DLL module to share access to the POSIX external
 # variables, with its caller, the DLL module must define these _SHR_* macros.
 SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE
@@ -71,6 +79,7 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 CFLAGS          += -Wc,DLL,ROS,RENT,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED)' $(ICU_IEEE)
 CXXFLAGS        += -Wc,DLL,ROS,RTTI,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED0X)' $(ICU_IEEE) -+
 ARFLAGS         = -cr
+endif
 
 # _MSE_PROTOS usually interacts with _XOPEN_SOURCE. It affects some standard
 # C functions that use wchar_t, and it selects behavior for
