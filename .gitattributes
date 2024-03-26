@@ -60,7 +60,7 @@ Makefile text !eol zos-working-tree-encoding=IBM-1047
 README text !eol zos-working-tree-encoding=IBM-1047
 SConscript text !eol zos-working-tree-encoding=IBM-1047
 SConstruct text !eol zos-working-tree-encoding=IBM-1047
-configure text !eol zos-working-tree-encoding=IBM-1047
+config* text !eol zos-working-tree-encoding=IBM-1047
 
 # Explicitly set the following file types as binary files.
 *.bin -text zos-working-tree-encoding=UTF-8
@@ -86,3 +86,4 @@ configure text !eol zos-working-tree-encoding=IBM-1047
 
 icu4c/source/runConfigureICU zos-working-tree-encoding=IBM-1047
 *.sub zos-working-tree-encoding=IBM-1047
+
