@@ -382,26 +382,26 @@ public class RbnfTest extends CoreTestFmwk {
         RuleBasedNumberFormat nf;
 
         // no decimal places
-        nf = new RuleBasedNumberFormat("1000/1000: <##K<;");
+        nf = new RuleBasedNumberFormat("1000/1000: <##K<;", Locale.US);
         assertEquals("-1K", nf.format(-1400));
         assertEquals("-2K", nf.format(-1900));
         assertEquals("1K", nf.format(1400));
         assertEquals("2K", nf.format(1900));
 
         // 1 decimal place
-        nf = new RuleBasedNumberFormat("1000/1000: <##.0K<;");
+        nf = new RuleBasedNumberFormat("1000/1000: <##.0K<;", Locale.US);
         assertEquals("-1.4K", nf.format(-1440));
         assertEquals("1.9K", nf.format(1890));
 
         // with modulus substitution
-        nf = new RuleBasedNumberFormat("1000/1000: <##<K>##>; -x: ->>;");
+        nf = new RuleBasedNumberFormat("1000/1000: <##<K>##>; -x: ->>;", Locale.US);
         assertEquals("-1K400", nf.format(-1400));
         assertEquals("-1K900", nf.format(-1900));
         assertEquals("1K400", nf.format(1400));
         assertEquals("1K900", nf.format(1900));
 
         // no decimal places, but with rounding mode set to ROUND_FLOOR
-        nf = new RuleBasedNumberFormat("1000/1000: <##K<;");
+        nf = new RuleBasedNumberFormat("1000/1000: <##K<;", Locale.US);
         nf.setMaximumFractionDigits(0);
         nf.setRoundingMode(BigDecimal.ROUND_FLOOR);
         assertEquals("-2K", nf.format(-1400));
