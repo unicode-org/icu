@@ -53,14 +53,12 @@ endif
 THREADSCPPFLAGS = -D_OPEN_THREADS=3
 
 ifeq (${CC}, ibm-clang)
-CFLAGS +=-m32 -mzos-float-kind=ieee -Wno-unused-command-line-argument
-CXXFLAGS +=-m32 -mzos-float-kind=ieee -Wno-unused-command-line-argument
-SHAREDLIBCFLAGS =--shared
-SHAREDLIBCXXFLAGS =--shared
-SHAREDLIBCPPFLAGS =
-ARFLAGS         = -cr
-LIBCFLAGS +=-m32 -fvisibility=hidden
-LIBCXXFLAGS +=-m32 -fvisibility=hidden
+CFLAGS +=-m32 -mzos-float-kind=ieee
+CXXFLAGS +=-m32 -mzos-float-kind=ieee
+ARFLAGS =-cr
+LIBCFLAGS +=-fvisibility=hidden
+LIBCXXFLAGS +=-fvisibility=hidden
+LDFLAGS+=-m32
 SKIP_ESCAPING=1
 else
 # For a dynamically called DLL module to share access to the POSIX external
@@ -117,13 +115,13 @@ GEN_DEPS.cc=	makedep
 COMPILE.c       = $(COMPILE_LINK_ENVVAR) $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(ICU_XPLINK_C) -c
 COMPILE.cc      = $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(ICU_XPLINK_CXX) -c
 
-# Commands to link
-LINK.c=		$(COMPILE_LINK_ENVVAR) $(CC) $(CFLAGS) $(ICU_XPLINK_L)
-LINK.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(CXXFLAGS) $(ICU_XPLINK_L)
+# # Commands to link
+# LINK.c=		$(COMPILE_LINK_ENVVAR) $(CC) $(CFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
+# LINK.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(CXXFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
 
 ## Commands for shared library (dll)
-SHLIB.c=	$(COMPILE_LINK_ENVVAR) $(CC) $(SHAREDLIBCFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
-SHLIB.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(SHAREDLIBCXXFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
+SHLIB.c=	$(COMPILE_LINK_ENVVAR) $(CC) -m32 --shared $(LDFLAGS) $(ICU_XPLINK_L)
+SHLIB.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) -m32 --shared $(LDFLAGS) $(ICU_XPLINK_L)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
