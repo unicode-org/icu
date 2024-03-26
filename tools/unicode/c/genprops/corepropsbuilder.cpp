@@ -22,7 +22,9 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ucptrie.h"
 #include "unicode/udata.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/usetiter.h"
@@ -31,6 +33,7 @@
 #include "cstring.h"
 #include "genprops.h"
 #include "propsvec.h"
+#include "toolutil.h"
 #include "uassert.h"
 #include "unewdata.h"
 #include "uprops.h"
@@ -295,6 +298,12 @@ The 6 bits in vector word 2 that stored emoji properties are unused again.
 
 ICU 75 uses the vector word 2 bits 31..26 for encoded Identifier_Type bit sets.
 
+--- Changes in format version 9.0 ---
+
+ICU 76 moves Age/Block/Script to a new code point trie.
+
+TODO: more data format updates, change dataInfo to version 9
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -339,7 +348,14 @@ private:
     UTrie2 *pTrie;
     UTrie2 *props2Trie;
     UPropsVectors *pv;
+    UMutableCPTrie *mutableABSTrie = nullptr;
+    UCPTrie *absTrie = nullptr;
+    UMutableCPTrie *mutableAgeTrie = nullptr;
+    UMutableCPTrie *mutableBlockTrie = nullptr;
+    UMutableCPTrie *mutableScriptTrie = nullptr;
     UnicodeString scriptExtensions;
+    uint8_t absTrieBlock[100000];
+    int32_t absTrieSize = 0;
 };
 
 CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
@@ -354,12 +370,22 @@ CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
         fprintf(stderr, "genprops error: corepropsbuilder upvec_open() failed - %s\n",
                 u_errorName(errorCode));
     }
+    mutableABSTrie = umutablecptrie_open(0, 0, &errorCode);
+    mutableAgeTrie = umutablecptrie_open(0, 0, &errorCode);
+    mutableBlockTrie = umutablecptrie_open(0, 0, &errorCode);
+    mutableScriptTrie = umutablecptrie_open(0, 0, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops/ABS error: umutablecptrie_open() failed: %s\n",
+                u_errorName(errorCode));
+    }
 }
 
 CorePropsBuilder::~CorePropsBuilder() {
     utrie2_close(pTrie);
     utrie2_close(props2Trie);
     upvec_close(pv);
+    umutablecptrie_close(mutableABSTrie);
+    ucptrie_close(absTrie);
 }
 
 void
@@ -695,7 +721,7 @@ struct PropToEnum {
 
 const PropToEnum
 propToEnums[]={
-    { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
+ //   { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
     { UCHAR_DECOMPOSITION_TYPE,         2, 0, UPROPS_DT_MASK },
     { UCHAR_GRAPHEME_CLUSTER_BREAK,     2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK },
@@ -712,9 +738,10 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
     UChar32 start=props.start;
     UChar32 end=props.end;
+    UChar32 pvecEnd=end;
     if(start==0 && end==0x10ffff) {
         // Also set bits for initialValue and errorValue.
-        end=UPVEC_MAX_CP;
+        pvecEnd=UPVEC_MAX_CP;
     }
 
     if(newValues.containsSome(0, UCHAR_BINARY_LIMIT-1)) {
@@ -724,7 +751,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             if(newValues.contains(p2b.prop)) {
                 uint32_t mask=U_MASK(p2b.vecShift);
                 uint32_t value= props.binProps[p2b.prop] ? mask : 0;
-                upvec_setValue(pv, start, end, p2b.vecWord, value, mask, &errorCode);
+                upvec_setValue(pv, start, pvecEnd, p2b.vecWord, value, mask, &errorCode);
             }
         }
     }
@@ -738,12 +765,13 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
                 uint32_t mask=p2e.vecMask;
                 uint32_t value=(uint32_t)(props.getIntProp(p2e.prop)<<p2e.vecShift);
                 U_ASSERT((value&mask)==value);
-                upvec_setValue(pv, start, end, p2e.vecWord, value, mask, &errorCode);
+                upvec_setValue(pv, start, pvecEnd, p2e.vecWord, value, mask, &errorCode);
             }
         }
     }
     if(newValues.contains(UCHAR_AGE)) {
-        if(props.age[0]>15 || props.age[1]>15 || props.age[2]!=0 || props.age[3]!=0) {
+        if(props.age[0]>UPROPS_ABS_AGE_MAJOR_MAX || props.age[1]>UPROPS_ABS_AGE_MINOR_MAX ||
+                props.age[2]!=0 || props.age[3]!=0) {
             char buffer[U_MAX_VERSION_STRING_LENGTH];
             u_versionToString(props.age, buffer);
             fprintf(stderr, "genprops error: age %s cannot be encoded\n", buffer);
@@ -751,9 +779,24 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             return;
         }
         uint32_t version=(props.age[0]<<4)|props.age[1];
-        upvec_setValue(pv, start, end,
+        upvec_setValue(pv, start, pvecEnd,
                        0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK,
                        &errorCode);
+        version=(props.age[0]<<3)|props.age[1];
+        toolutil::setCPTrieBits(mutableABSTrie,
+                                start, end, UPROPS_ABS_AGE_MASK, version << UPROPS_ABS_AGE_SHIFT,
+                                errorCode);
+        version=(props.age[0]<<2)|props.age[1];
+        umutablecptrie_setRange(mutableAgeTrie, start, end, version, &errorCode);
+    }
+    if (newValues.contains(UCHAR_BLOCK)) {
+        uint32_t value = props.getIntProp(UCHAR_BLOCK);
+        toolutil::setCPTrieBits(mutableABSTrie,
+                                start, end, UPROPS_ABS_BLOCK_MASK, value << UPROPS_ABS_BLOCK_SHIFT,
+                                errorCode);
+        U_ASSERT((start & 0xf) == 0);
+        U_ASSERT((end & 0xf) == 0xf);
+        umutablecptrie_setRange(mutableBlockTrie, start >> 4, end >> 4, value, &errorCode);
     }
 
     // Set the script value if the Script_Extensions revert to {Script}.
@@ -773,7 +816,11 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         // Use UPROPS_SCRIPT_X_MASK:
         // When writing a Script code, remove Script_Extensions bits as well.
         // If needed, they will get written again.
-        upvec_setValue(pv, start, end, 0, value, UPROPS_SCRIPT_X_MASK, &errorCode);
+        upvec_setValue(pv, start, pvecEnd, 0, value, UPROPS_SCRIPT_X_MASK, &errorCode);
+        toolutil::setCPTrieBits(mutableABSTrie,
+                                start, end, UPROPS_ABS_SCRIPT_X_MASK, script,
+                                errorCode);
+        umutablecptrie_setRange(mutableScriptTrie, start, end, script, &errorCode);
     }
     // Write a new (Script, Script_Extensions) value if there are Script_Extensions
     // and either Script or Script_Extensions are new on the current line.
@@ -797,11 +844,13 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
         // Encode the (Script, Script_Extensions index) pair.
         int32_t script=props.getIntProp(UCHAR_SCRIPT);
-        uint32_t scriptX;
+        uint32_t scriptX, abs_scriptX;
         if(script==USCRIPT_COMMON) {
             scriptX=UPROPS_SCRIPT_X_WITH_COMMON;
+            abs_scriptX=UPROPS_ABS_SCRIPT_X_WITH_COMMON;
         } else if(script==USCRIPT_INHERITED) {
             scriptX=UPROPS_SCRIPT_X_WITH_INHERITED;
+            abs_scriptX=UPROPS_ABS_SCRIPT_X_WITH_INHERITED;
         } else {
             // Store an additional pair of 16-bit units for an unusual main Script code
             // together with the Script_Extensions index.
@@ -813,19 +862,25 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
                 scriptExtensions.append(codeIndexPair);
             }
             scriptX=UPROPS_SCRIPT_X_WITH_OTHER;
+            abs_scriptX=UPROPS_ABS_SCRIPT_X_WITH_OTHER;
         }
-        if(index>UPROPS_MAX_SCRIPT) {
+        if(index>UPROPS_ABS_MAX_SCRIPT) {
             fprintf(stderr, "genprops: Script_Extensions indexes overflow bit fields\n");
             errorCode=U_BUFFER_OVERFLOW_ERROR;
             return;
         }
         scriptX|=splitScriptCodeOrIndex(index);
-        upvec_setValue(pv, start, end, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
+        abs_scriptX|=index;
+        upvec_setValue(pv, start, pvecEnd, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
+        toolutil::setCPTrieBits(mutableABSTrie,
+                                start, end, UPROPS_ABS_SCRIPT_X_MASK, abs_scriptX,
+                                errorCode);
+        umutablecptrie_setRange(mutableScriptTrie, start, end, abs_scriptX, &errorCode);
     }
     if(newValues.contains(UCHAR_IDENTIFIER_TYPE)) {
         uint32_t encodedType=encodeIdentifierType(props.idType, start==0xA9CF && start==end, errorCode);
         upvec_setValue(
-            pv, start, end, 2,
+            pv, start, pvecEnd, 2,
             encodedType << UPROPS_2_ID_TYPE_SHIFT, UPROPS_2_ID_TYPE_MASK,
             &errorCode);
     }
@@ -848,6 +903,28 @@ uint8_t props2TrieBlock[100000];
 int32_t props2TrieSize;
 
 int32_t totalSize;
+
+// TODO: remove after experimenting
+int32_t getCPTrieSize(UMutableCPTrie *mt, UCPTrieType type, UCPTrieValueWidth valueWidth) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UCPTrie *cpTrie = umutablecptrie_buildImmutable(mt, type, valueWidth, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/getCPTrieSize error: umutablecptrie_buildImmutable() failed: %s\n",
+                u_errorName(errorCode));
+        return -1;
+    }
+    uint8_t block[100000];
+    int32_t size = ucptrie_toBinary(cpTrie, block, sizeof(block), &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/getCPTrieSize error: ucptrie_toBinary() failed: %s (length %ld)\n",
+                u_errorName(errorCode), (long)size);
+        return -1;
+    }
+    U_ASSERT((size & 3) == 0);  // multiple of 4 bytes
+    return size;
+}
 
 void
 CorePropsBuilder::build(UErrorCode &errorCode) {
@@ -895,6 +972,23 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         scriptExtensions.append((char16_t)0);
     }
 
+    absTrie = umutablecptrie_buildImmutable(
+        mutableABSTrie, UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_32, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/ABS error: umutablecptrie_buildImmutable() failed: %s\n",
+                u_errorName(errorCode));
+        return;
+    }
+    absTrieSize = ucptrie_toBinary(absTrie, absTrieBlock, sizeof(absTrieBlock), &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/ABS error: ucptrie_toBinary() failed: %s (length %ld)\n",
+                u_errorName(errorCode), (long)trieSize);
+        return;
+    }
+    U_ASSERT((absTrieSize & 3) == 0);  // multiple of 4 bytes
+
     /* set indexes */
     int32_t offset=sizeof(indexes)/4;       /* uint32_t offset to the properties trie */
     offset+=trieSize>>2;
@@ -909,7 +1003,8 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     offset+=pvCount;
     indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]=offset;
     offset+=scriptExtensions.length()/2;
-    indexes[UPROPS_RESERVED_INDEX_7]=offset;
+    indexes[UPROPS_ABS_TRIE_INDEX]=offset;
+    // TODO offset+=absTrieSize/4;
     indexes[UPROPS_RESERVED_INDEX_8]=offset;
     indexes[UPROPS_DATA_TOP_INDEX]=offset;
     totalSize=4*offset;
@@ -924,6 +1019,9 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
         (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
         ((int32_t)U_DT_COUNT-1);
+    indexes[UPROPS_MAX_VALUES_ABS_INDEX]=
+        (((int32_t)UBLOCK_COUNT-1)<<UPROPS_ABS_BLOCK_SHIFT)|
+        (int32_t)(USCRIPT_CODE_LIMIT-1);
 
     if(!beQuiet) {
         puts("* uprops.icu stats *");
@@ -931,6 +1029,13 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         printf("size in bytes of additional props trie:%5u\n", (int)props2TrieSize);
         printf("number of additional props vectors:    %5u\n", (int)pvRows);
         printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
+        printf("size in bytes of ABS trie:             %5u\n", (int)absTrieSize);
+        printf("size in bytes of Age trie:             %5u\n",
+               (int)getCPTrieSize(mutableAgeTrie, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_8));
+        printf("size in bytes of Block trie:           %5u\n",
+               (int)getCPTrieSize(mutableBlockTrie, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_16));
+        printf("size in bytes of Script trie:          %5u\n",
+               (int)getCPTrieSize(mutableScriptTrie, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_16));
         printf("number of 16-bit scriptExtensions:     %5u\n", (int)scriptExtensions.length());
         printf("data size:                            %6ld\n", (long)totalSize);
     }

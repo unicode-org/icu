@@ -39,7 +39,7 @@ enum {
 
     UPROPS_SCRIPT_EXTENSIONS_INDEX,
 
-    UPROPS_RESERVED_INDEX_7,
+    UPROPS_ABS_TRIE_INDEX,
     UPROPS_RESERVED_INDEX_8,
 
     /* size of the data file (number of 32-bit units after the header) */
@@ -49,6 +49,8 @@ enum {
     UPROPS_MAX_VALUES_INDEX=10,
     /* maximum values for code values in vector word 2 */
     UPROPS_MAX_VALUES_2_INDEX,
+    /* maximum values for code values in the Age/Block/Script trie */
+    UPROPS_MAX_VALUES_ABS_INDEX,
 
     UPROPS_INDEX_COUNT=16
 };
@@ -117,6 +119,7 @@ enum {
 /* number of properties vector words */
 #define UPROPS_VECTOR_WORDS     3
 
+// TODO: update
 /*
  * Properties in vector word 0
  * Bits
@@ -236,6 +239,8 @@ enum {
 
 #ifdef __cplusplus
 
+namespace {
+
 // https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
 // The Identifier_Type maps each code point to a *set* of one or more values.
 // Some can be combined with others, some can only occur alone.
@@ -296,6 +301,8 @@ inline constexpr uint8_t uprops_idTypeToEncoded[] = {
     UPROPS_ID_TYPE_RECOMMENDED
 };
 
+};  // namespace
+
 #endif  // __cplusplus
 
 #define UPROPS_LB_MASK          0x03f00000
@@ -311,6 +318,47 @@ inline constexpr uint8_t uprops_idTypeToEncoded[] = {
 #define UPROPS_GCB_SHIFT        5
 
 #define UPROPS_DT_MASK          0x0000001f
+
+#ifdef __cplusplus
+
+namespace {
+
+// New, additional code point trie added in ICU 76 for Age, Block, and Script (ABS).
+//
+// Bits
+// 31..26   Age major version (0..63)
+// 25..23   Age minor version (0..7)
+// 22..13   UBlockCode
+// 12..11   3..1: Bits 10..0 = Script_Extensions index
+//          3: Script value from Script_Extensions
+//          2: Script=Inherited
+//          1: Script=Common
+//          0: Script=bits 21..20 & 7..0
+// 10.. 0   UScriptCode, or index to Script_Extensions
+
+inline constexpr uint32_t UPROPS_ABS_AGE_MASK = 0xff800000;
+inline constexpr int32_t UPROPS_ABS_AGE_SHIFT = 23;
+
+inline constexpr uint8_t UPROPS_ABS_AGE_MAJOR_MAX = 63;
+inline constexpr uint8_t UPROPS_ABS_AGE_MINOR_MAX = 7;
+
+inline constexpr uint32_t UPROPS_ABS_BLOCK_MASK = 0x007fe000;
+inline constexpr int32_t UPROPS_ABS_BLOCK_SHIFT = 13;
+
+// Script_Extensions: mask includes Script
+inline constexpr uint32_t UPROPS_ABS_SCRIPT_X_MASK = 0x00001fff;
+inline constexpr int32_t UPROPS_ABS_SCRIPT_X_SHIFT = 11;
+
+inline constexpr int32_t UPROPS_ABS_MAX_SCRIPT = 0x7ff;
+
+// UPROPS_ABS_SCRIPT_X_WITH_COMMON must be the lowest value that involves Script_Extensions.
+inline constexpr uint32_t UPROPS_ABS_SCRIPT_X_WITH_COMMON = 0x0800;
+inline constexpr uint32_t UPROPS_ABS_SCRIPT_X_WITH_INHERITED = 0x1000;
+inline constexpr uint32_t UPROPS_ABS_SCRIPT_X_WITH_OTHER = 0x1800;
+
+};  // namespace
+
+#endif  // __cplusplus
 
 /**
  * Gets the main properties value for a code point.
