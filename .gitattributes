@@ -85,3 +85,4 @@ configure text !eol zos-working-tree-encoding=IBM-1047
 *.json linguist-language=jsonc
 
 icu4c/source/runConfigureICU zos-working-tree-encoding=IBM-1047
+*.sub zos-working-tree-encoding=IBM-1047
