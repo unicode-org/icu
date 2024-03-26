@@ -44,7 +44,7 @@
 *.sln text !eol zos-working-tree-encoding=IBM-1047
 *.stub text !eol zos-working-tree-encoding=IBM-1047
 *.targets text !eol zos-working-tree-encoding=IBM-1047
-*.txt text !eol zos-working-tree-encoding=IBM-1047
+*.txt text !eol
 *.ucm text !eol zos-working-tree-encoding=IBM-1047
 *.vcproj text !eol zos-working-tree-encoding=IBM-1047
 *.vcxproj text !eol zos-working-tree-encoding=IBM-1047
