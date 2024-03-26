@@ -21,11 +21,11 @@
 *.dtd text !eol zos-working-tree-encoding=IBM-1047
 *.el text !eol zos-working-tree-encoding=IBM-1047
 *.filters text !eol zos-working-tree-encoding=IBM-1047
-*.h text !eol zos-working-tree-encoding=IBM-1047 diff=cpp
-*.htm text !eol zos-working-tree-encoding=IBM-1047 diff=html
-*.html text !eol zos-working-tree-encoding=IBM-1047 diff=html
+*.h text !eol zos-working-tree-encoding=UTF-8 diff=cpp
+*.htm text !eol zos-working-tree-encoding=UTF-8 diff=html
+*.html text !eol zos-working-tree-encoding=UTF-8 diff=html
 *.in text !eol zos-working-tree-encoding=IBM-1047
-*.java text !eol zos-working-tree-encoding=IBM-1047 diff=java
+*.java text !eol zos-working-tree-encoding=UTF-8 diff=java
 *.launch text !eol zos-working-tree-encoding=IBM-1047
 *.m4 text !eol zos-working-tree-encoding=IBM-1047
 *.mak text !eol zos-working-tree-encoding=IBM-1047
