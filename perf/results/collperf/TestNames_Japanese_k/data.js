@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711460202708,
+  "lastUpdate": 1711495986076,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41200,6 +41200,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5742222.1446,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "8a1df5a7f4ce462e4f9558258b85377c8044c652",
+          "message": "ICU-22692 Change SimpleNumber truncateAt to setMaximumIntegerDigits\n\nAlso promotes the remaining draft SimpleNumber functions to stable.\r\n\r\nSee #2892",
+          "timestamp": "2024-03-26T16:13:46-07:00",
+          "tree_id": "ecaac026d5c7da78a55d736dedd6a332dc0bc534",
+          "url": "https://github.com/unicode-org/icu/commit/8a1df5a7f4ce462e4f9558258b85377c8044c652"
+        },
+        "date": 1711495885750,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 226.6129,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21268511.4432,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5394404.9168,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 21101633.7077,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5832225.6098,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
