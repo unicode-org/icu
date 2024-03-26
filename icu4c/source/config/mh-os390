@@ -79,6 +79,8 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 CFLAGS          += -Wc,DLL,ROS,RENT,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED)' $(ICU_IEEE)
 CXXFLAGS        += -Wc,DLL,ROS,RTTI,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED0X)' $(ICU_IEEE) -+
 ARFLAGS         = -cr
+# This causes escapesrc to be built before other ICU targets.
+NEED_ESCAPING=YES
 endif
 
 # _MSE_PROTOS usually interacts with _XOPEN_SOURCE. It affects some standard
@@ -217,8 +219,6 @@ endif
 %.o: $(srcdir)/%.c
 	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
-# This causes escapesrc to be built before other ICU targets.
-NEED_ESCAPING=YES
 
 ifneq ($(SKIP_ESCAPING),)
 %.$(STATIC_O): $(srcdir)/%.cpp
