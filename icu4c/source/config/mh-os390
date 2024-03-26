@@ -53,6 +53,8 @@ endif
 THREADSCPPFLAGS = -D_OPEN_THREADS=3
 
 ifeq (${CC}, ibm-clang)
+CFLAGS +=-mzos-float-kind=ieee
+CXXFLAGS +=-mzos-float-kind=ieee
 SHAREDLIBCFLAGS = --shared
 SHAREDLIBCXXFLAGS = --shared
 SHAREDLIBCPPFLAGS =
