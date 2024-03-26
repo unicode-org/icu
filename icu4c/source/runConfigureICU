@@ -63,6 +63,7 @@ The following names can be supplied as the argument for platform:
     TRU64V5.1/CXX       Use the Compaq cxx compiler on Tru64 (OSF)
     zOS                 Use the IBM cxx compiler on z/OS (os/390)
     zOSV1R2             Use the IBM cxx compiler for z/OS 1.2
+    zOSOpenXL           Use the IBM OpenXL compiler on z/OS
 EOE
     fi
 
@@ -379,6 +380,14 @@ case $platform in
         CXX=xlC; export CXX
         RELEASE_CFLAGS="-O2 -Wc,'inline(AUTO,NOREPORT,1000,8000)'"
         RELEASE_CXXFLAGS="-O2 -Wc,'inline(AUTO,NOREPORT,1000,8000)'"
+        ;;
+    zOSOpenXL)
+        THE_OS="z/OS (OS/390)"
+        THE_COMP="IBM OpenXL"
+        CC=ibm-clang; export CC
+        CXX=ibm-clang++; export CXX
+        RELEASE_CFLAGS="-O2"
+        RELEASE_CXXFLAGS="-O2"
         ;;
     zOSV1R2)
         THE_OS="z/OS 1.2"
