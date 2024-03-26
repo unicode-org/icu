@@ -10,11 +10,11 @@
 #  "!eol" is the equivalent of "svneol=native".
 
 *.bat text !eol zos-working-tree-encoding=IBM-1047
-*.c text !eol zos-working-tree-encoding=IBM-1047 diff=cpp
-*.cc text !eol zos-working-tree-encoding=IBM-1047 diff=cpp
+*.c text !eol zos-working-tree-encoding=UTF-8 diff=cpp
+*.cc text !eol zos-working-tree-encoding=UTF-8 diff=cpp
 *.classpath text !eol zos-working-tree-encoding=IBM-1047
 *.cmd text eol=crlf
-*.cpp text !eol zos-working-tree-encoding=IBM-1047 diff=cpp
+*.cpp text !eol zos-working-tree-encoding=UTF-8 diff=cpp
 *.css text !eol zos-working-tree-encoding=IBM-1047 diff=css
 *.dsp text !eol zos-working-tree-encoding=IBM-1047
 *.dsw text !eol zos-working-tree-encoding=IBM-1047
@@ -44,11 +44,11 @@
 *.sln text !eol zos-working-tree-encoding=IBM-1047
 *.stub text !eol zos-working-tree-encoding=IBM-1047
 *.targets text !eol zos-working-tree-encoding=IBM-1047
-*.txt text !eol
-*.ucm text !eol
+*.txt text !eol zos-working-tree-encoding=UTF-8
+*.ucm text !eol zos-working-tree-encoding=UTF-8
 *.vcproj text !eol zos-working-tree-encoding=IBM-1047
 *.vcxproj text !eol zos-working-tree-encoding=IBM-1047
-*.xml text !eol
+*.xml text !eol zos-working-tree-encoding=UTF-8
 *.xsl text !eol zos-working-tree-encoding=IBM-1047
 *.xslt text !eol zos-working-tree-encoding=IBM-1047
 AUTHORS text !eol zos-working-tree-encoding=IBM-1047
@@ -85,5 +85,6 @@ config* text !eol zos-working-tree-encoding=IBM-1047
 *.json linguist-language=jsonc
 
 icu4c/source/runConfigureICU zos-working-tree-encoding=IBM-1047
+icu4c/source/install-sh zos-working-tree-encoding=IBM-1047
 *.sub zos-working-tree-encoding=IBM-1047
 
