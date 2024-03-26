@@ -120,8 +120,8 @@ COMPILE.cc      = $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) 
 # LINK.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(CXXFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
 
 ## Commands for shared library (dll)
-SHLIB.c=	$(COMPILE_LINK_ENVVAR) $(CC) -m32 --shared $(LDFLAGS) $(ICU_XPLINK_L)
-SHLIB.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) -m32 --shared $(LDFLAGS) $(ICU_XPLINK_L)
+SHLIB.c=	$(COMPILE_LINK_ENVVAR) $(CC) --shared $(LDFLAGS) $(ICU_XPLINK_L)
+SHLIB.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) --shared $(LDFLAGS) $(ICU_XPLINK_L)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
