@@ -53,8 +53,8 @@ endif
 THREADSCPPFLAGS = -D_OPEN_THREADS=3
 
 ifeq (${CC}, ibm-clang)
-SHAREDLIBCFLAGS = -dynamic
-SHAREDLIBCXXFLAGS = -dynamic
+SHAREDLIBCFLAGS = -Wl,dll -dynamic
+SHAREDLIBCXXFLAGS = -Wl,dll -dynamic
 SHAREDLIBCPPFLAGS =
 ARFLAGS         = -cr
 LIBCFLAGS += -fvisibility=hidden
@@ -113,12 +113,12 @@ COMPILE.c       = $(COMPILE_LINK_ENVVAR) $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(I
 COMPILE.cc      = $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(ICU_XPLINK_CXX) -c
 
 # Commands to link
-LINK.c=		$(COMPILE_LINK_ENVVAR) $(CC) $(CFLAGS) -Wl,dll $(LDFLAGS) $(ICU_XPLINK_L)
-LINK.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(CXXFLAGS) -Wl,dll $(LDFLAGS) $(ICU_XPLINK_L)
+LINK.c=		$(COMPILE_LINK_ENVVAR) $(CC) $(CFLAGS) $(ICU_XPLINK_L)
+LINK.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(CXXFLAGS) $(ICU_XPLINK_L)
 
 ## Commands for shared library (dll)
-SHLIB.c=	$(LINK.c)
-SHLIB.cc=	$(LINK.cc)
+SHLIB.c=	$(COMPILE_LINK_ENVVAR) $(CC) $(SHAREDLIBCFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
+SHLIB.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(SHAREDLIBCXXFLAGS) $(LDFLAGS) $(ICU_XPLINK_L)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
