@@ -53,8 +53,8 @@ endif
 THREADSCPPFLAGS = -D_OPEN_THREADS=3
 
 ifeq (${CC}, ibm-clang)
-SHAREDLIBCFLAGS = -Wl,dll -dynamic
-SHAREDLIBCXXFLAGS = -Wl,dll -dynamic
+SHAREDLIBCFLAGS = --shared
+SHAREDLIBCXXFLAGS = --shared
 SHAREDLIBCPPFLAGS =
 ARFLAGS         = -cr
 LIBCFLAGS += -fvisibility=hidden
