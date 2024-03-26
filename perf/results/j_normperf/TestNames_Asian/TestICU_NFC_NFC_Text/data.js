@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711458101117,
+  "lastUpdate": 1711458901129,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20098,6 +20098,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 4.359221819995783,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "57fc3094f9658a283ed0b6d2648c0bb8a75f3f91",
+          "message": "ICU-22534 BRS75 J Serialization test data",
+          "timestamp": "2024-03-26T08:51:38-04:00",
+          "tree_id": "3e51a606ab7c2f5c4b95e4b7e199b3ae9c2e8679",
+          "url": "https://github.com/unicode-org/icu/commit/57fc3094f9658a283ed0b6d2648c0bb8a75f3f91"
+        },
+        "date": 1711458764137,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.2942815501501235,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
