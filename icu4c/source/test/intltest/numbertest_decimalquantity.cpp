@@ -92,7 +92,7 @@ void DecimalQuantityTest::testDecimalQuantityBehaviorStandalone() {
 
     fq.setToLong(90909090909000L);
     assertToStringAndHealth(fq, u"<DecimalQuantity 0:0 long 90909090909E3>");
-    fq.setMinInteger(2);
+    fq.increaseMinIntegerTo(2);
     fq.applyMaxInteger(5);
     assertToStringAndHealth(fq, u"<DecimalQuantity 2:0 long 9E3>");
     fq.setMinFraction(3);
@@ -424,7 +424,7 @@ void DecimalQuantityTest::testMaxDigits() {
     DecimalQuantity dq;
     dq.setToDouble(876.543);
     dq.roundToInfinity();
-    dq.setMinInteger(0);
+    dq.increaseMinIntegerTo(0);
     dq.applyMaxInteger(2);
     dq.setMinFraction(0);
     dq.roundToMagnitude(-2, UNUM_ROUND_FLOOR, status);
