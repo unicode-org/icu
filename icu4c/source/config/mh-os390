@@ -55,12 +55,12 @@ THREADSCPPFLAGS = -D_OPEN_THREADS=3
 ifeq (${CC}, ibm-clang)
 CFLAGS +=-m32 -mzos-float-kind=ieee -Wno-unused-command-line-argument
 CXXFLAGS +=-m32 -mzos-float-kind=ieee -Wno-unused-command-line-argument
-SHAREDLIBCFLAGS = --shared
-SHAREDLIBCXXFLAGS = --shared
+SHAREDLIBCFLAGS =--shared
+SHAREDLIBCXXFLAGS =--shared
 SHAREDLIBCPPFLAGS =
 ARFLAGS         = -cr
-LIBCFLAGS += -fvisibility=hidden
-LIBCXXFLAGS += -fvisibility=hidden
+LIBCFLAGS +=-m32 -fvisibility=hidden
+LIBCXXFLAGS +=-m32 -fvisibility=hidden
 SKIP_ESCAPING=1
 else
 # For a dynamically called DLL module to share access to the POSIX external
