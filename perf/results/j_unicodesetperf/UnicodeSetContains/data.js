@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711495305636,
+  "lastUpdate": 1711496858755,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20338,6 +20338,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 1.7467615212595597,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "869cc60f3cc59c5d480dceebff0a9623b8b9ed96",
+          "message": "ICU-22711 Set EnvTest frequency to nightly in March/April/Sept/Oct",
+          "timestamp": "2024-03-26T16:20:08-07:00",
+          "tree_id": "a65a9d503fcbf399c3dc4891bb2e5076af8a7b55",
+          "url": "https://github.com/unicode-org/icu/commit/869cc60f3cc59c5d480dceebff0a9623b8b9ed96"
+        },
+        "date": 1711496757246,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 1.7394988226532135,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
