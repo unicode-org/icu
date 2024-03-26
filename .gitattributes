@@ -86,5 +86,6 @@ config* text !eol zos-working-tree-encoding=IBM-1047
 
 icu4c/source/runConfigureICU zos-working-tree-encoding=IBM-1047
 icu4c/source/install-sh zos-working-tree-encoding=IBM-1047
+icu4c/source/mkinstalldirs zos-working-tree-encoding=IBM-1047
 *.sub zos-working-tree-encoding=IBM-1047
 
