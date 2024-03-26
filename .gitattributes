@@ -45,10 +45,10 @@
 *.stub text !eol zos-working-tree-encoding=IBM-1047
 *.targets text !eol zos-working-tree-encoding=IBM-1047
 *.txt text !eol
-*.ucm text !eol zos-working-tree-encoding=IBM-1047
+*.ucm text !eol
 *.vcproj text !eol zos-working-tree-encoding=IBM-1047
 *.vcxproj text !eol zos-working-tree-encoding=IBM-1047
-*.xml text !eol zos-working-tree-encoding=IBM-1047
+*.xml text !eol
 *.xsl text !eol zos-working-tree-encoding=IBM-1047
 *.xslt text !eol zos-working-tree-encoding=IBM-1047
 AUTHORS text !eol zos-working-tree-encoding=IBM-1047
@@ -84,3 +84,4 @@ configure text !eol zos-working-tree-encoding=IBM-1047
 # Use JSONC for syntax highlighting on GitHub.com
 *.json linguist-language=jsonc
 
+icu4c/source/runConfigureICU zos-working-tree-encoding=IBM-1047
