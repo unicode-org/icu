@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711495989492,
+  "lastUpdate": 1711497587379,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41308,6 +41308,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 5759196.3671,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "869cc60f3cc59c5d480dceebff0a9623b8b9ed96",
+          "message": "ICU-22711 Set EnvTest frequency to nightly in March/April/Sept/Oct",
+          "timestamp": "2024-03-26T16:20:08-07:00",
+          "tree_id": "a65a9d503fcbf399c3dc4891bb2e5076af8a7b55",
+          "url": "https://github.com/unicode-org/icu/commit/869cc60f3cc59c5d480dceebff0a9623b8b9ed96"
+        },
+        "date": 1711497491127,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 206.4174,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 21054055.4015,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 5282306.4622,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 20515588.6137,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 5759050.6529,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
