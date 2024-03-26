@@ -82,8 +82,7 @@ void StaticUnicodeSetsTest::testSetCoverage() {
 #define ASSERT_IN_SET(name, foo) assertInSet(localeName, UnicodeString("" #name ""), name, foo)
 
         ASSERT_IN_SET(decimals, dfs.getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
-        if (locName==nullptr || uprv_strncmp(locName,"nqo",3) != 0 ||
-                !logKnownIssue("CLDR-17023", "Number symbols and/or parseLenients messed up for N’Ko")) {
+        if (locName==nullptr || uprv_strncmp(locName,"nqo",3) != 0) {
             ASSERT_IN_SET(grouping, dfs.getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
         }
         ASSERT_IN_SET(plusSign, dfs.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol));

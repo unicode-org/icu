@@ -618,8 +618,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
 
             if ((*tzid == "America/Miquelon" || *tzid == "America/Hermosillo" || *tzid == "America/Mazatlan")
                     && uprv_strncmp(gLocaleData->locales[locidx].getName(),"ku",2) == 0
-                    && uprv_strcmp(PATTERNS[patidx], "v") == 0
-                    && logKnownIssue("CLDR-17024", "TestTimeRoundTrip fail with tz=America/Miquelon, pattern=v, locale=ku")) {
+                    && uprv_strcmp(PATTERNS[patidx], "v") == 0) {
                 continue;
             }
 
