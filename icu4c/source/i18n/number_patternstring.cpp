@@ -768,7 +768,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         incrementQuantity.roundToInfinity();
         digitsStringScale = incrementQuantity.getLowerDisplayMagnitude();
         incrementQuantity.adjustMagnitude(-digitsStringScale);
-        incrementQuantity.setMinInteger(minInt - digitsStringScale);
+        incrementQuantity.increaseMinIntegerTo(minInt - digitsStringScale);
         UnicodeString str = incrementQuantity.toPlainString();
         if (str.charAt(0) == u'-') {
             // TODO: Unsupported operation exception or fail silently?

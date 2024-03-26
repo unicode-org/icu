@@ -309,12 +309,17 @@ usnum_setMinimumFractionDigits(USimpleNumber* unumber, int32_t minimumFractionDi
 }
 
 U_CAPI void U_EXPORT2
-usnum_truncateStart(USimpleNumber* unumber, int32_t maximumIntegerDigits, UErrorCode* ec) {
+usnum_setMaximumIntegerDigits(USimpleNumber* unumber, int32_t maximumIntegerDigits, UErrorCode* ec) {
     auto* number = USimpleNumberData::validate(unumber, *ec);
     if (U_FAILURE(*ec)) {
         return;
     }
-    number->fNumber.truncateStart(maximumIntegerDigits, *ec);
+    number->fNumber.setMaximumIntegerDigits(maximumIntegerDigits, *ec);
+}
+
+U_CAPI void U_EXPORT2
+usnum_truncateStart(USimpleNumber* unumber, int32_t maximumIntegerDigits, UErrorCode* ec) {
+    usnum_setMaximumIntegerDigits(unumber, maximumIntegerDigits, ec);
 }
 
 U_CAPI void U_EXPORT2

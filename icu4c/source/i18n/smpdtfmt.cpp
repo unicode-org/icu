@@ -2168,7 +2168,7 @@ SimpleDateFormat::zeroPaddingNumber(
         data.quantity.setToLong(value);
         number::SimpleNumber number(&data, localStatus);
         number.setMinimumIntegerDigits(minDigits, localStatus);
-        number.truncateStart(maxDigits, localStatus);
+        number.setMaximumIntegerDigits(maxDigits, localStatus);
 
         number::FormattedNumber result = fSimpleNumberFormatter->format(std::move(number), localStatus);
         if (U_FAILURE(localStatus)) {
