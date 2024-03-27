@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711549311753,
+  "lastUpdate": 1711551864580,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -40588,6 +40588,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 9.505388999472954,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "86b07da451786aaa831230e60ae0131c2ad4be6d",
+          "message": "ICU-22618 Make unisetperf/draft possible to compile.",
+          "timestamp": "2024-03-27T15:54:42+01:00",
+          "tree_id": "593befa6f98c477b64e5f17c76c607f3eb1ca638",
+          "url": "https://github.com/unicode-org/icu/commit/86b07da451786aaa831230e60ae0131c2ad4be6d"
+        },
+        "date": 1711551761404,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 9.431575485183458,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
