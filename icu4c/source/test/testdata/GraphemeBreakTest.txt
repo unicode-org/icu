@@ -1,6 +1,6 @@
-# GraphemeBreakTest-cldr-15.1.0.txt
-# Date: 2023-08-11, 17:35:48 GMT
-# © 2023 Unicode®, Inc.
+# GraphemeBreakTest-cldr-16.0.0.txt
+# Date: 2024-02-02, 23:21:03 GMT
+# © 2024 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
 #
