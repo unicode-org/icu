@@ -20,6 +20,7 @@
 #include "cmemory.h"
 #include "emojiprops.h"
 #include "genprops.h"
+#include "toolutil.h"
 #include "uassert.h"
 #include "unewdata.h"
 #include "uparse.h"
@@ -108,8 +109,6 @@ public:
     void parsePropsOfStringsLine(char *fields[][2], UErrorCode &errorCode);
 
 private:
-    void setBit(UChar32 start, UChar32 end, int32_t shift, bool on, UErrorCode &errorCode);
-    void setBits(UChar32 start, UChar32 end, uint32_t value, uint32_t mask, UErrorCode &errorCode);
     void parsePropsOfStringsFile(const char *path, UErrorCode &errorCode);
 
     static int32_t getTrieIndex(int32_t index) {
@@ -231,45 +230,11 @@ EmojiPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         for (const auto &p2b : propToBinaries) {
             U_ASSERT(p2b.shift < 8);
             if (newValues.contains(p2b.prop)) {
-                setBit(props.start, props.end, p2b.shift, props.binProps[p2b.prop], errorCode);
+                toolutil::setCPTrieBit(mutableCPTrie,
+                                       props.start, props.end, p2b.shift, props.binProps[p2b.prop],
+                                       errorCode);
             }
         }
-    }
-}
-
-void
-EmojiPropsBuilder::setBit(UChar32 start, UChar32 end, int32_t shift, bool on,
-                          UErrorCode &errorCode) {
-    uint32_t mask = U_MASK(shift);
-    uint32_t value = on ? mask : 0;
-    setBits(start, end, value, mask, errorCode);
-}
-
-void
-EmojiPropsBuilder::setBits(UChar32 start, UChar32 end, uint32_t value, uint32_t mask,
-                           UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return; }
-
-    if (start == end) {
-        uint32_t oldValue = umutablecptrie_get(mutableCPTrie, start);
-        uint32_t newValue = (oldValue & ~mask) | value;
-        if (newValue != oldValue) {
-            umutablecptrie_set(mutableCPTrie, start, newValue, &errorCode);
-        }
-        return;
-    }
-    while (start <= end && U_SUCCESS(errorCode)) {
-        uint32_t oldValue;
-        UChar32 rangeEnd = umutablecptrie_getRange(
-            mutableCPTrie, start, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &oldValue);
-        if (rangeEnd > end) {
-            rangeEnd = end;
-        }
-        uint32_t newValue = (oldValue & ~mask) | value;
-        if (newValue != oldValue) {
-            umutablecptrie_setRange(mutableCPTrie, start, rangeEnd, newValue, &errorCode);
-        }
-        start = rangeEnd + 1;
     }
 }
 
@@ -347,7 +312,8 @@ void EmojiPropsBuilder::parsePropsOfStringsLine(char *fields[][2], UErrorCode &e
         }
         uint32_t start, end;
         u_parseCodePointRange(rangeOrString, &start, &end, &errorCode);
-        setBit(start, end, EmojiProps::BIT_BASIC_EMOJI, true, errorCode);
+        toolutil::setCPTrieBit(mutableCPTrie,
+                               start, end, EmojiProps::BIT_BASIC_EMOJI, true, errorCode);
     } else {
         // Code point or string:
         // 23F0          ; Basic_Emoji                  ; alarm clock
@@ -371,7 +337,8 @@ void EmojiPropsBuilder::parsePropsOfStringsLine(char *fields[][2], UErrorCode &e
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
-            setBit(first, first, EmojiProps::BIT_BASIC_EMOJI, true, errorCode);
+            toolutil::setCPTrieBit(mutableCPTrie,
+                                   first, first, EmojiProps::BIT_BASIC_EMOJI, true, errorCode);
         } else {
             // more than one code point
             UnicodeString us(false, s, length);
