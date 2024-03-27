@@ -54,14 +54,14 @@ U_CDECL_BEGIN
 /*==========================================================================*/
 /**
  * Unicode version number, default for the current ICU version.
- * The actual Unicode Character Database (UCD) data is stored in uprops.dat
+ * The actual Unicode Character Database (UCD) data is stored in uprops.icu
  * and may be generated from UCD files from a different Unicode version.
  * Call u_getUnicodeVersion to get the actual Unicode version of the data.
  *
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "15.1"
+#define U_UNICODE_VERSION "16.0"
 
 /**
  * \file
