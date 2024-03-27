@@ -50,23 +50,17 @@ and see the change logs below.
 Unicode 16.0 update for ICU 76
 
 TODO
-- No more hardcoded spoof checker sets: Update change log.
 - In the Unicode Tools repo: Delete the org.unicode.text.tools.RecommendedSetGenerator.
 - In corepropsbuilder.cpp, remove the isA9CF hack.
-- Update instructions for hardcoded properties
-        IDS_Unary_Operator, ID_Compat_Math_Start & ID_Compat_Math_Continue:
-  + These are still hardcoded, but since ICU 75 they are tested in C++ intltest.
-  + No more need to check via grep.
-  + Still: If the test fails, then update the hardcoded implementation.
 
-https://www.unicode.org/versions/Unicode15.1.0/
-https://www.unicode.org/versions/beta-15.1.0.html
+https://www.unicode.org/versions/Unicode16.0.0/
+https://www.unicode.org/versions/beta-16.0.0.html
 https://www.unicode.org/Public/draft/
 https://www.unicode.org/reports/uax-proposed-updates.html
-https://www.unicode.org/reports/tr44/tr44-31.html
+https://www.unicode.org/reports/tr44/tr44-33.html
 
-https://unicode-org.atlassian.net/browse/ICU-22404 Unicode 15.1
-https://unicode-org.atlassian.net/browse/CLDR-16669 BRS Unicode 15.1
+https://unicode-org.atlassian.net/browse/ICU-22707 Unicode 16
+https://unicode-org.atlassian.net/browse/CLDR-17226 BRS Unicode 16
 
 https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest generation for Unicode 15.1
 
@@ -75,12 +69,12 @@ https://github.com/unicode-org/unicodetools/issues/492 adjust cldr/*BreakTest ge
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni15.1/final
+export UNICODE_DATA=$UNIDATA_ROOT/uni16.0/alpha
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
 export ICU_OUT=$ICU_ROOT/dbg
-export ICUDT=icudt74b
+export ICUDT=icudt75b
 export ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 export ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_OUT/icu4c/lib
@@ -89,12 +83,12 @@ export UNICODE_TOOLS=~/unitools/mine/src
 Elango:
 
 export UNIDATA_ROOT=~/oss/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni15.1/snapshot
+export UNICODE_DATA=$UNIDATA_ROOT/uni16.0/alpha
 export CLDR_SRC=~/oss/cldr/mine/src
 export ICU_ROOT=~/oss/icu
 export ICU_SRC=$ICU_ROOT
 export ICU_OUT=$ICU_ROOT
-export ICUDT=icudt74b
+export ICUDT=icudt75b
 export ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 export ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_OUT/icu4c/lib
@@ -120,49 +114,39 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   https://github.com/unicode-org/unicodetools/blob/main/docs/inputdata.md
 - mkdir -p $UNICODE_DATA
 - download Unicode files into $UNICODE_DATA
-  + new since Unicode 15.1:
-    for the pre-release (alpha, beta) data files,
-    download all of https://www.unicode.org/Public/draft/
-    (you can omit or discard the UCD/charts/ and UCD/ucdxml/ files/folders)
-  + if one of us produces the alpha.zip or beta.zip collection of data files for publication,
-    then we can use its contents directly (no FTP from unicode.org necessary)
-  + for final-release data files, the source of truth are the files in
-    https://www.unicode.org/Public/(version) [=UCD],
-    https://www.unicode.org/Public/UCA/(version),
-    https://www.unicode.org/Public/idna/(version),
-    etc.
   + use an FTP client; anonymous FTP from www.unicode.org at /Public/draft etc.
   + subfolders: emoji, idna, security, ucd, uca
-  + whichever way you download the files:
-    ~ inside ucd: extract Unihan.zip to "here" (.../UCD/ucd/Unihan/*.txt), delete Unihan.zip
-    ~ split Unihan into single-property files
-      ~/unitools/mine/src$ py/splitunihan.py $UNICODE_DATA/UCD/ucd/Unihan
-    ~ TODO: for updating ICU, we should not need Unihan.zip contents, correct?
+  + for pre-release (alpha, beta) data files:
+    ~ if one of us produces the alpha.zip or beta.zip collection of data files for publication,
+      then we can use its contents directly (no FTP from unicode.org necessary)
+    ~ otherwise download all of https://www.unicode.org/Public/draft/
+    ~ you can omit or discard the UCD/charts/ and UCD/ucdxml/ files/folders
+    ~ you can omit or discard UCD/ucd/Unihan.zip
   + alternate way of fetching files, if available:
     copy the files from a Unicode Tools workspace that is up to date with
     https://github.com/unicode-org/unicodetools
     and which might at this point be *ahead* of "Public"
     ~ before the Unicode release copy files from "dev" subfolders, for example
       https://github.com/unicode-org/unicodetools/tree/main/unicodetools/data/ucd/dev
+  + for final-release data files, the source of truth are the files in
+    https://www.unicode.org/Public/(version) [=UCD],
+    https://www.unicode.org/Public/UCA/(version),
+    https://www.unicode.org/Public/idna/(version),
+    etc.
 - get the CLDR version of GraphemeBreakTest.txt from CLDR (if it has been updated there already)
-    or from the UCD/cldr/ output folder of the Unicode Tools:
-    From Unicode 12/CLDR 35/ICU 64 to Unicode 15.0/CLDR 43/ICU 73,
-    CLDR used modified grapheme break rules.
-    This might happen again.
-  cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt icu4c/source/test/testdata
-    or
-  cp ~/unitools/mine/Generated/UCD/15.1.0/cldr/GraphemeBreakTest-cldr.txt icu4c/source/test/testdata/GraphemeBreakTest.txt
-  cp ~/unitools/mine/Generated/UCD/15.1.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
-  cp ~/unitools/mine/Generated/UCD/15.1.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
+  or from the UCD/cldr/ output folder of the Unicode Tools:
+  From Unicode 12/CLDR 35/ICU 64 to Unicode 15.0/CLDR 43/ICU 73,
+  CLDR used modified grapheme break rules.
+  This might happen again.
+    cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt icu4c/source/test/testdata
+  or
+    cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt icu4c/source/test/testdata/GraphemeBreakTest.txt
+    cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
+    cp ~/unitools/mine/Generated/UCD/16.0.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
   + TODO: figure out whether we need a CLDR version of LineBreakTest.txt:
     unicodetools issue #492
 - cp -v $UNICODE_DATA/security/confusables.txt $ICU4C_UNIDATA
   + TODO: modify preparseucd.py to copy this file
-
-* Note: Since Unicode 15.1, data files are no longer published with version suffixes
-  even during the alpha or beta.
-  Thus we no longer need steps & tools to remove those suffixes.
-  (remove this note next time)
 
 * process and/or copy files
 - cd $ICU_SRC/tools/unicode
@@ -215,31 +199,6 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 
   $ICU_OUT/icu4c$ echo;echo; date; make -j7 tests &> out.txt ; tail -n 30 out.txt ; date
 
-* update spoof checker UnicodeSet initializers:
-    inclusionPat & recommendedPat in i18n/uspoof.cpp
-    INCLUSION & RECOMMENDED in SpoofChecker.java
-- make sure that the Unicode Tools tree contains the latest security data files
-- go to Unicode Tools org.unicode.text.tools.RecommendedSetGenerator
-- run the tool (no special environment variables needed)
-  cd $UNICODE_TOOLS
-  mvn -s ~/.m2/settings.xml compile exec:java -Dexec.mainClass="org.unicode.text.tools.RecommendedSetGenerator" \ 
-      -Dexec.args="" -am -pl unicodetools  -DCLDR_DIR=$(cd ../../../cldr/mine/src ; pwd) -DUNICODETOOLS_REPO_DIR=$(pwd)
-- copy & paste from the Console output into the .cpp & .java files
-
-* check hardcoded IDS_Unary_Operator
-- new in Unicode 15.1, hardcoded because trivial, and unlikely to change
-- check that it has not changed:
-    (cd $UNICODE_DATA && grep -r --include=PropList.txt IDS_Unary_Operator)
-- if it has changed, then update the implementation and the tests
-- Since ICU 75, this property is tested in C++ intltest against ppucd.txt.
-
-* check hardcoded ID_Compat_Math_Start & ID_Compat_Math_Continue
-- new in Unicode 15.1, hardcoded because trivial, and unlikely to change
-- check that they have not changed:
-    (cd $UNICODE_DATA && grep -r --include=PropList.txt ID_Compat_Math)
-- if they have changed, then update the implementation and the tests
-- Since ICU 75, these properties are tested in C++ intltest against ppucd.txt.
-
 * Bazel build process
 
 See https://unicode-org.github.io/icu/processes/unicode-update#bazel-build-process
@@ -262,22 +221,18 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 - build/bootstrap/generate new files:
     icu4c/source/data/unidata/generate.sh
 
-* Since Unicode 15.1, the UTS #46 data derivation no longer looks at the decompositions (NFD).
-  These characters are now just valid, no longer disallowed_STD3_valid.
-  Remove special handling of U+2260, U+226E, U+226F (isNonASCIIDisallowedSTD3Valid())
-  from uts46.cpp & UTS46.java,
-  and special test code from uts46test.cpp & UTS46Test.java.
-  (remove this section next time)
-
 * run & fix ICU4C tests
 - Note: Some of the collation data and test data will be updated below,
   so at this time we might get some collation test failures.
   Ignore these for now.
-- fix Unicode Tools class Segmenter to generate correct *BreakTest.txt files
+- Some properties are hardcoded in the ICU libraries because they apply to
+  few character or ranges, and are not expected to change often.
+  They are tested at least in C++ intltest (e.g., against ppucd.txt).
+  If these tests fail, then update the implementation and the tests.
 - update CLDR GraphemeBreakTest.txt
     cd ~/unitools/mine/Generated
-    cp UCD/15.1.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
-    cp UCD/15.1.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
+    cp UCD/16.0.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
+    cp UCD/16.0.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
     cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt $ICU_SRC/icu4c/source/test/testdata
 - Robin or Andy helps with RBBI & spoof check test failures
 
@@ -403,30 +358,21 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 *** CLDR numbering systems
 - look for new sets of decimal digits (gc=ND & nv=4) and add to CLDR
   for example:
-    ~/icu/mine/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-15.txt
-    ~/icu/uni/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-15.1.txt
-    ~/icu/uni/src$ diff -u /tmp/icu/nv4-15.txt /tmp/icu/nv4-15.1.txt
+    ~/icu/mine/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-15.1.txt
+    ~/icu/uni/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-16.0.txt
+    ~/icu/uni/src$ diff -u /tmp/icu/nv4-15.1.txt /tmp/icu/nv4-16.0.txt
     -->
     (empty this time)
   or:
-    ~/unitools/mine/src$ diff -u unicodetools/data/ucd/15.0.0/extracted/DerivedGeneralCategory.txt unicodetools/data/ucd/dev/extracted/DerivedGeneralCategory.txt | grep '; Nd' | egrep '^\+'
+    ~/unitools/mine/src$ diff -u unicodetools/data/ucd/15.1.0/extracted/DerivedGeneralCategory.txt unicodetools/data/ucd/dev/extracted/DerivedGeneralCategory.txt | grep '; Nd' | egrep '^\+'
     -->
+    TODO
     (empty this time)
-  Unicode 15.1:
+  Unicode 16.0:
+    TODO
     (none this time)
 
 *** merge the Unicode update branch back onto the main branch
-- do not merge the icudata.jar and testdata.jar,
-  instead rebuild them from merged & tested ICU4C
-- if there is a merge conflict in icudata.jar, here is one way to deal with it:
-  +   remove icudata.jar from the commit so that rebasing is trivial
-  + ~/icu/uni/src$ git restore --source=main icu4j/main/shared/data/icudata.jar
-  + ~/icu/uni/src$ git commit -a --amend
-  +   switch to main, pull updates, switch back to the dev branch
-  + ~/icu/uni/src$ git rebase main
-  +   rebuild icudata.jar
-  + ~/icu/uni/src$ git commit -a --amend
-  + ~/icu/uni/src$ git push -f
 - make sure that changes to Unicode tools are checked in:
   https://github.com/unicode-org/unicodetools
 
@@ -512,7 +458,7 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
     ~ inside ucd: extract Unihan.zip to "here" (.../UCD/ucd/Unihan/*.txt), delete Unihan.zip
     ~ split Unihan into single-property files
       ~/unitools/mine/src$ py/splitunihan.py $UNICODE_DATA/UCD/ucd/Unihan
-    ~ TODO: for updating ICU, we should not need Unihan.zip contents, correct?
+    ~ FYI: for updating ICU, we do not actually need Unihan.zip contents
   + alternate way of fetching files, if available:
     copy the files from a Unicode Tools workspace that is up to date with
     https://github.com/unicode-org/unicodetools
