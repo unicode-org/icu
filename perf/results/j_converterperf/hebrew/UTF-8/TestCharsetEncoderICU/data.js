@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711552263834,
+  "lastUpdate": 1711553560418,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20278,6 +20278,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.754069713443019,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "4b8f8f3c48f6e04621dcdbae55b17940fcbd7d1c",
+          "message": "ICU-22628 Replace log_err() with log_knownIssue() for known failure.",
+          "timestamp": "2024-03-27T15:58:19+01:00",
+          "tree_id": "e5899efbdabd1c07b5dcd3b9427bc5909ecc6a3e",
+          "url": "https://github.com/unicode-org/icu/commit/4b8f8f3c48f6e04621dcdbae55b17940fcbd7d1c"
+        },
+        "date": 1711553455610,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.721086456143977,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
