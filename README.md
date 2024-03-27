@@ -30,8 +30,8 @@ OpenSSF Scorecard | [![OpenSSF Scorecard](https://api.securityscorecards.dev/pro
 
 ### Subdirectories and Information
 
-- [`icu4c/`](./icu4c/) [ICU for C/C++](./icu4c/readme.html)
-- [`icu4j/`](./icu4j/) [ICU for Java](./icu4j/readme.html)
+- [`icu4c/`](./icu4c/) [ICU for C/C++](https://unicode-org.github.io/icu/userguide/icu4c/)
+- [`icu4j/`](./icu4j/) [ICU for Java](https://unicode-org.github.io/icu/userguide/icu4j/)
 - [`tools/`](./tools/) Tools
 - [`vendor/`](./vendor/) Vendor dependencies
 

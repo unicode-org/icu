@@ -286,9 +286,8 @@ run \`make dist\`.
 #### Windows Binary:
 
 *   Manual process:
-    *   Build with MSVC x64 Release. (See the ICU
-        [readme.html](https://github.com/unicode-org/icu/main/blob/icu4c/readme.html)
-        file for details).
+    *   Build with MSVC x64 Release. (See
+        [Building ICU4C](../../../../userguide/icu4c/build.md) for details).
     *   Open a command prompt.
         ```
         cd C:\icu\icu4c\ (or wherever you have ICU located).
@@ -532,6 +531,10 @@ Jira.
 1.  Open <https://unicode-org.atlassian.net/issues/?filter=10007>
 2.  Use the drop-down to change the fix version to the next ICU version
 3.  Click "Save" next to the filter title
+
+## Update this document
+
+... because the next section is very much not up to date:
 
 ## Update readme
 

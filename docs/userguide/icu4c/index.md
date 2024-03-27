@@ -313,11 +313,11 @@ In the descriptions below, `<ICU>` is the full path name of the ICU4C directory 
 
 ## How To Build And Install ICU
 
-See the page on [building ICU4C](./build).
+See the page on [building ICU4C](./build.md).
 
 ## How To Package ICU
 
-See the page on [packaging ICU4C](./packaging).
+See the page on [packaging ICU4C](./packaging.md).
 
 ## Important Notes About Using ICU
 
