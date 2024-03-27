@@ -84,6 +84,7 @@ config* text !eol zos-working-tree-encoding=IBM-1047
 # Use JSONC for syntax highlighting on GitHub.com
 *.json linguist-language=jsonc
 
+#Files below should be IBM-1047 on mainframe, while other txt shall stay UTF-8
 icu4c/source/runConfigureICU zos-working-tree-encoding=IBM-1047
 icu4c/source/install-sh zos-working-tree-encoding=IBM-1047
 icu4c/source/mkinstalldirs zos-working-tree-encoding=IBM-1047
@@ -92,4 +93,5 @@ sources.txt zos-working-tree-encoding=IBM-1047
 icu4c/source/data/mappings/convrtrs.txt zos-working-tree-encoding=IBM-1047
 icu4c/source/data/misc/*.txt text !eol zos-working-tree-encoding=IBM-1047
 icu4c/source/data/sprep/*.txt text !eol zos-working-tree-encoding=IBM-1047
-icu4c/source/data/unidata//NormalizationCorrections.txt text !eol zos-working-tree-encoding=IBM-1047
+icu4c/source/data/unidata/NormalizationCorrections.txt text !eol zos-working-tree-encoding=IBM-1047
+icu4c/source/data/zone/tzdbNames.txt text !eol zos-working-tree-encoding=IBM-1047
