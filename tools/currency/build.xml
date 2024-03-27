@@ -43,8 +43,12 @@
 <target name="_downloadXml" unless="isLocalXml">
     <echo message="Downloading ISO 4217 XML data files"/>
     <mkdir dir="${xml.dir}"/>
-    <get src="${base.url}${current.xml}" dest="${xml.dir}"/>
-    <get src="${base.url}${historic.xml}" dest="${xml.dir}"/>
+    <get src="${base.url}${current.xml}" dest="${xml.dir}">
+        <header name="Accept" value="appication/xml"/>
+    </get>
+    <get src="${base.url}${historic.xml}" dest="${xml.dir}">
+        <header name="Accept" value="application/xml"/>
+    </get>
 </target>
 
 <target name="xmlData" depends="_localXml, _downloadXml" description="Prepare necessary ISO 4217 XML data files">
