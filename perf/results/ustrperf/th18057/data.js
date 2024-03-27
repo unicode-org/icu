@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711553484686,
+  "lastUpdate": 1711554350668,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -73822,6 +73822,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 41.7659,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "4b8f8f3c48f6e04621dcdbae55b17940fcbd7d1c",
+          "message": "ICU-22628 Replace log_err() with log_knownIssue() for known failure.",
+          "timestamp": "2024-03-27T15:58:19+01:00",
+          "tree_id": "e5899efbdabd1c07b5dcd3b9427bc5909ecc6a3e",
+          "url": "https://github.com/unicode-org/icu/commit/4b8f8f3c48f6e04621dcdbae55b17940fcbd7d1c"
+        },
+        "date": 1711554253359,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.1201,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 20.6749,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 24.0422,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 33.5804,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 41.2191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 37.3834,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.6474,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.1227,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 94.6378,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 21.0883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 37.9458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 39.585,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
