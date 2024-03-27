@@ -1952,6 +1952,29 @@ enum UBlockCode {
     /** @stable ICU 74 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I = 328, /*[2EBF0]*/
 
+    // New blocks in Unicode 16.0
+
+    /** @stable ICU 76 */
+    UBLOCK_EGYPTIAN_HIEROGLYPHS_EXTENDED_A = 329, /*[13460]*/
+    /** @stable ICU 76 */
+    UBLOCK_GARAY = 330, /*[10D40]*/
+    /** @stable ICU 76 */
+    UBLOCK_GURUNG_KHEMA = 331, /*[16100]*/
+    /** @stable ICU 76 */
+    UBLOCK_KIRAT_RAI = 332, /*[16D40]*/
+    /** @stable ICU 76 */
+    UBLOCK_MYANMAR_EXTENDED_C = 333, /*[116D0]*/
+    /** @stable ICU 76 */
+    UBLOCK_OL_ONAL = 334, /*[1E5D0]*/
+    /** @stable ICU 76 */
+    UBLOCK_SUNUWAR = 335, /*[11BC0]*/
+    /** @stable ICU 76 */
+    UBLOCK_SYMBOLS_FOR_LEGACY_COMPUTING_SUPPLEMENT = 336, /*[1CC00]*/
+    /** @stable ICU 76 */
+    UBLOCK_TODHRI = 337, /*[105C0]*/
+    /** @stable ICU 76 */
+    UBLOCK_TULU_TIGALARI = 338, /*[11380]*/
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UBlockCode value.
@@ -1959,7 +1982,7 @@ enum UBlockCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UBLOCK_COUNT = 329,
+    UBLOCK_COUNT = 339,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** @stable ICU 2.0 */
@@ -2702,6 +2725,8 @@ typedef enum UIndicSyllabicCategory {
     U_INSC_VOWEL_DEPENDENT,
     /** @stable ICU 63 */
     U_INSC_VOWEL_INDEPENDENT,
+    /** @stable ICU 76 */
+    U_INSC_REORDERING_KILLER,
 } UIndicSyllabicCategory;
 
 /**
