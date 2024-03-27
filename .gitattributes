@@ -92,3 +92,4 @@ sources.txt zos-working-tree-encoding=IBM-1047
 icu4c/source/data/mappings/convrtrs.txt zos-working-tree-encoding=IBM-1047
 icu4c/source/data/misc/*.txt text !eol zos-working-tree-encoding=IBM-1047
 icu4c/source/data/sprep/*.txt text !eol zos-working-tree-encoding=IBM-1047
+icu4c/source/data/unidata//NormalizationCorrections.txt text !eol zos-working-tree-encoding=IBM-1047
