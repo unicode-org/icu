@@ -416,50 +416,19 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                       ", actual_min=" + minActual);
             }
             if (maxActual < maxLow || maxActual > maxHigh) {
-                if ( uprv_strcmp(cal.getType(), "chinese") == 0 &&
-                        testMillis >= 1802044800000.0 &&
-                     logKnownIssue("ICU-12620", "chinese calendar failures for some actualMax tests")) {
-                    logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
-                          ymdToString(cal, ymd) +
-                          " Range for max of " + FIELD_NAME[f] + "(" + f +
-                          ")=" + maxLow + ".." + maxHigh +
-                          ", actual_max=" + maxActual);
-                } else {
-                    errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
-                          ymdToString(cal, ymd) +
-                          " Range for max of " + FIELD_NAME[f] + "(" + f +
-                          ")=" + maxLow + ".." + maxHigh +
-                          ", actual_max=" + maxActual);
-                }
+                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                      ymdToString(cal, ymd) +
+                      " Range for max of " + FIELD_NAME[f] + "(" + f +
+                      ")=" + maxLow + ".." + maxHigh +
+                      ", actual_max=" + maxActual);
             }
             if (v < minActual || v > maxActual) {
-                // timebomb per #9967, fix with #9972
-                if ( uprv_strcmp(cal.getType(), "dangi") == 0 &&
-                        testMillis >= 1865635198000.0  &&
-                     logKnownIssue("ICU-9972", "as per #9967")) { // Feb 2029 gregorian, end of dangi 4361
-                    logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
-                          ymdToString(cal, ymd) +
-                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
-                          ", actual=" + minActual + ".." + maxActual +
-                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
-                          maxLow + ".." + maxHigh + ")");
-                } else if ( uprv_strcmp(cal.getType(), "chinese") == 0 &&
-                        testMillis >= 1832544000000.0 &&
-                     logKnownIssue("ICU-12620", "chinese calendar failures for some actualMax tests")) {
-                    logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
-                          ymdToString(cal, ymd) +
-                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
-                          ", actual=" + minActual + ".." + maxActual +
-                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
-                          maxLow + ".." + maxHigh + ")");
-                } else {
-                    errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
-                          ymdToString(cal, ymd) +
-                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
-                          ", actual=" + minActual + ".." + maxActual +
-                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
-                          maxLow + ".." + maxHigh + ")");
-                }
+                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                      ymdToString(cal, ymd) +
+                      " " + FIELD_NAME[f] + "(" + f + ")=" + v +
+                      ", actual=" + minActual + ".." + maxActual +
+                      ", allowed=(" + minLow + ".." + minHigh + ")..(" +
+                      maxLow + ".." + maxHigh + ")");
             }
         }
         greg.add(UCAL_DAY_OF_YEAR, 1, status);
