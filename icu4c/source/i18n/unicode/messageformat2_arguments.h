@@ -10,6 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 /**
  * \file
  * \brief C++ API: Formats messages using the draft MessageFormat 2.0.
@@ -133,6 +135,8 @@ namespace message2 {
 U_NAMESPACE_END
 
 #endif // U_HIDE_DEPRECATED_API
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

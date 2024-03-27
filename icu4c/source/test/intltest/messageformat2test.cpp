@@ -4,6 +4,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/calendar.h"
 #include "messageformat2test.h"
 
@@ -1066,6 +1068,8 @@ void TestMessageFormat2::testInvalidPatterns() {
     // Disambiguating a wrong .match from an unsupported statement
     testInvalidPattern(++i, ".match {1} {{_}}", 12);
 }
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

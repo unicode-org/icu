@@ -10,6 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/localpointer.h"
 #include "unicode/messageformat2_data_model_names.h"
 
@@ -3069,6 +3071,8 @@ namespace message2 {
 U_NAMESPACE_END
 
 #endif // U_HIDE_DEPRECATED_API
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

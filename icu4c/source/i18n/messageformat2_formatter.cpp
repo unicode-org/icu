@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/messageformat2.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_cached_formatters.h"
@@ -349,5 +351,7 @@ namespace message2 {
 } // namespace message2
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

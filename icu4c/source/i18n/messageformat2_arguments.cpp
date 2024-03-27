@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/messageformat2_arguments.h"
 #include "unicode/messageformat2_data_model_names.h"
 #include "uvector.h" // U_ASSERT
@@ -51,5 +53,7 @@ namespace message2 {
 } // namespace message2
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

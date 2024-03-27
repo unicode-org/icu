@@ -367,20 +367,21 @@ jobs:
          - "-DUCONFIG_NO_IDNA=1"
          - "-DUCONFIG_NO_COLLATION=1"
          - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_MF2=1"
          - "-DUCONFIG_NO_TRANSLITERATION=1"
          - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
          - "-DUCONFIG_NO_SERVICE=1"
          - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
          # Turn on all the options in one test.
-         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
-          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
-          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
-          expected_count="12";
+          # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "13" below.
+          expected_count="13";
           count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
           if [ $expected_count != $count ]; then
               echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $expected_count;
@@ -413,21 +414,22 @@ jobs:
          - "-DUCONFIG_NO_IDNA=1"
          - "-DUCONFIG_NO_COLLATION=1"
          - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_MF2=1"
          - "-DUCONFIG_NO_TRANSLITERATION=1"
          - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
          - "-DUCONFIG_NO_SERVICE=1"
          - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
          # Turn on all the options in one test.
-         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
-          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
-          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
+          # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "13" below.
           count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
-          if [ "12" != $count ]; then
+          if [ "13" != $count ]; then
               echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $count;
               echo "Currently UCONFIG_NO_* defined in uconfig.h:";
               egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h;

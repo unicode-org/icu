@@ -4,6 +4,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/gregocal.h"
 #include "unicode/msgfmt.h"
 #include "messageformat2test.h"
@@ -151,5 +153,7 @@ void TestMessageFormat2::messageFormat1Tests() {
     testSelectFormatToPattern(testBuilder, errorCode);
     testMf1Behavior(testBuilder, errorCode);
 }
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

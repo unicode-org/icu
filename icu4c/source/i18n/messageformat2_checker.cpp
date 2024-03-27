@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "messageformat2_allocation.h"
 #include "messageformat2_checker.h"
 #include "messageformat2_macros.h"
@@ -291,5 +293,7 @@ void Checker::check(UErrorCode& status) {
 
 } // namespace message2
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

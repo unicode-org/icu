@@ -1,6 +1,8 @@
 // © 2024 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include "unicode/utypes.h"
+
 #ifndef U_HIDE_DEPRECATED_API
 
 #ifndef MESSAGEFORMAT2_ERRORS_H
@@ -15,8 +17,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/messageformat2_data_model_names.h"
-#include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
 #include "uvector.h"
@@ -144,6 +147,8 @@ namespace message2 {
 } // namespace message2
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

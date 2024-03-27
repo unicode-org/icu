@@ -4,6 +4,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "messageformat2test.h"
 
 using namespace icu::message2;
@@ -1257,4 +1259,7 @@ See https://github.com/unicode-org/message-format-wg/issues/726
 
     // TODO: tests for other function options?
 }
+
+#endif /* #if !UCONFIG_NO_MF2 */
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

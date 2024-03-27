@@ -10,6 +10,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/chariter.h"
 #include "unicode/numberformatter.h"
 #include "unicode/messageformat2_data_model_names.h"
@@ -1005,6 +1007,8 @@ class U_I18N_API FunctionOptions : public UObject {
 U_NAMESPACE_END
 
 #endif // U_HIDE_DEPRECATED_API
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

@@ -9,6 +9,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "messageformat2test_utils.h"
 #include "unicode/unistr.h"
 #include "unicode/messageformat2_formattable.h"
@@ -196,6 +198,8 @@ class ResourceManager : public Formatter {
 
 } // namespace message2
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

@@ -4,6 +4,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/calendar.h"
 #include "messageformat2test.h"
 
@@ -187,5 +189,7 @@ void TestMessageFormat2::testBuiltInFunctions() {
   testDateTime(errorCode);
   testNumbers(errorCode);
 }
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
