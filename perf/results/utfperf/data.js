@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711498957715,
+  "lastUpdate": 1711524580540,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -32128,6 +32128,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 1.9153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "rp9-next",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "4b6c85737a722fbc4dbb9e3ea8236e793e10d67b",
+          "message": "ICU-22693 Remove workaround in CI for ICU4C due to failures running ./configure",
+          "timestamp": "2024-03-27T12:43:27+05:30",
+          "tree_id": "7c6e39dd6f956a4d29ddd579fe83bceb79c07c58",
+          "url": "https://github.com/unicode-org/icu/commit/4b6c85737a722fbc4dbb9e3ea8236e793e10d67b"
+        },
+        "date": 1711524477028,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 10.0953,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.8485,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 1.9145,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
