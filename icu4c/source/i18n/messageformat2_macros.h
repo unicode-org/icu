@@ -1,16 +1,18 @@
 // © 2024 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include "unicode/utypes.h"
+
 #ifndef U_HIDE_DEPRECATED_API
 
 #ifndef MESSAGEFORMAT2_MACROS_H
 #define MESSAGEFORMAT2_MACROS_H
 
-#include "unicode/utypes.h"
-
 #if U_SHOW_CPLUSPLUS_API
 
 #if !UCONFIG_NO_FORMATTING
+
+#if !UCONFIG_NO_MF2
 
 #include "unicode/format.h"
 #include "unicode/unistr.h"
@@ -98,6 +100,8 @@ static constexpr UChar32 ID_MATCH[] = {
 
 } // namespace message2
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

@@ -4,14 +4,18 @@
 #ifndef _TESTMESSAGEFORMAT2_UTILS
 #define _TESTMESSAGEFORMAT2_UTILS
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#if !UCONFIG_NO_MF2
+
 #include "unicode/locid.h"
 #include "unicode/messageformat2_formattable.h"
 #include "unicode/messageformat2.h"
 #include "intltest.h"
 #include "messageformat2_macros.h"
 #include "messageformat2_serializer.h"
-
-#if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN namespace message2 {
 
@@ -306,6 +310,8 @@ class TestUtils {
 
 } // namespace message2
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

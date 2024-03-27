@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#if !UCONFIG_NO_MF2
+
 #include "unicode/messageformat2_arguments.h"
 #include "unicode/messageformat2_data_model.h"
 #include "unicode/messageformat2_formattable.h"
@@ -870,5 +872,7 @@ void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& 
 } // namespace message2
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_MF2 */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
