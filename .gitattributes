@@ -90,4 +90,4 @@ icu4c/source/mkinstalldirs zos-working-tree-encoding=IBM-1047
 sources.txt zos-working-tree-encoding=IBM-1047
 *.sub zos-working-tree-encoding=IBM-1047
 convrtrs.txt zos-working-tree-encoding=IBM-1047
-misc/currencyNumericCodes.txt zos-working-tree-encoding=IBM-1047
+misc/currencyNumericCodes.txt text !eol zos-working-tree-encoding=IBM-1047
