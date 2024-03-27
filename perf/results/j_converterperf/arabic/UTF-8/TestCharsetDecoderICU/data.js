@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711497131146,
+  "lastUpdate": 1711498389913,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20098,6 +20098,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.492757683240908,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "d4bc9bef26e57da2a609ab8c1ed19b6e457cc80a",
+          "message": "ICU-22611 Fixed failures in EnvTest.",
+          "timestamp": "2024-03-26T16:59:48-07:00",
+          "tree_id": "e67644c5c11a22f64b73a3bea830b054eba7533c",
+          "url": "https://github.com/unicode-org/icu/commit/d4bc9bef26e57da2a609ab8c1ed19b6e457cc80a"
+        },
+        "date": 1711498289982,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.5588436043720497,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
