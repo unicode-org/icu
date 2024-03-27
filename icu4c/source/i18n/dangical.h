@@ -118,6 +118,8 @@ class DangiCalendar : public ChineseCalendar {
    */
   const char * getType() const override;
 
+ protected:
+  virtual Setting getSetting(UErrorCode& status) const override;
 
  private:
  

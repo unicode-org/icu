@@ -15,6 +15,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "astro.h" // CalendarCache
 #include "gregoimp.h" // Math
 #include "uassert.h"
 #include "ucln_in.h"
@@ -23,6 +24,10 @@
 #include "unicode/tzrule.h"
 
 // --- The cache --
+// Lazy Creation & Access synchronized by class CalendarCache with a mutex.
+static icu::CalendarCache *gWinterSolsticeCache = nullptr;
+static icu::CalendarCache *gNewYearCache = nullptr;
+
 // gAstronomerTimeZone
 static icu::TimeZone *gAstronomerTimeZone = nullptr;
 static icu::UInitOnce gAstronomerTimeZoneInitOnce {};
@@ -35,6 +40,15 @@ static const int32_t DANGI_EPOCH_YEAR = -2332; // Gregorian year
 
 U_CDECL_BEGIN
 static UBool calendar_dangi_cleanup() {
+    if (gWinterSolsticeCache) {
+        delete gWinterSolsticeCache;
+        gWinterSolsticeCache = nullptr;
+    }
+    if (gNewYearCache) {
+        delete gNewYearCache;
+        gNewYearCache = nullptr;
+    }
+
     if (gAstronomerTimeZone) {
         delete gAstronomerTimeZone;
         gAstronomerTimeZone = nullptr;
@@ -55,7 +69,7 @@ U_NAMESPACE_BEGIN
 const TimeZone* getAstronomerTimeZone(UErrorCode &status);
 
 DangiCalendar::DangiCalendar(const Locale& aLocale, UErrorCode& success)
-:   ChineseCalendar(aLocale, DANGI_EPOCH_YEAR, getAstronomerTimeZone(success), success)
+:   ChineseCalendar(aLocale, success)
 {
 }
 
@@ -165,6 +179,12 @@ void DangiCalendar::setRelatedYear(int32_t year)
     set(UCAL_EXTENDED_YEAR, year - kDangiRelatedYearDiff);
 }
 
+ChineseCalendar::Setting DangiCalendar::getSetting(UErrorCode& status) const {
+  return { DANGI_EPOCH_YEAR,
+    getAstronomerTimeZone(status),
+    &gWinterSolsticeCache, &gNewYearCache
+  };
+}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DangiCalendar)
 

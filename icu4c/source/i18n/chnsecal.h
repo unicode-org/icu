@@ -27,6 +27,7 @@
 
 U_NAMESPACE_BEGIN
 
+class CalendarCache;
 /**
  * <code>ChineseCalendar</code> is a concrete subclass of {@link Calendar}
  * that implements a traditional Chinese calendar.  The traditional Chinese
@@ -152,23 +153,6 @@ class U_I18N_API ChineseCalendar : public Calendar {
    */
   virtual void setTemporalMonthCode(const char* code, UErrorCode& status) override;
 
- protected:
- 
-   /**
-   * Constructs a ChineseCalendar based on the current time in the default time zone
-   * with the given locale, using the specified epoch year and time zone for
-   * astronomical calculations.
-   *
-   * @param aLocale         The given locale.
-   * @param epochYear       The epoch year to use for calculation.
-   * @param zoneAstroCalc   The TimeZone to use for astronomical calculations. If null,
-   *                        will be set appropriately for Chinese calendar (UTC + 8:00).
-   * @param success         Indicates the status of ChineseCalendar object construction;
-   *                        if successful, will not be changed to an error value.
-   * @internal
-   */
-  ChineseCalendar(const Locale& aLocale, int32_t epochYear, const TimeZone* zoneAstroCalc, UErrorCode &success);
-
  public:
   /**
    * Copy Constructor
@@ -197,9 +181,6 @@ class U_I18N_API ChineseCalendar : public Calendar {
   // this value could be false for a date prior to the Winter Solstice of that
   // year but that year still has a leap month and therefor is a leap year.
   UBool hasLeapMonthBetweenWinterSolstices;
-  int32_t fEpochYear;   // Start year of this Chinese calendar instance.
-  const TimeZone* fAstronomerTimeZone;   // Zone used for the astronomical calculation
-                                         // of this Chinese calendar instance.
 
   //----------------------------------------------------------------------
   // Calendar framework
@@ -273,7 +254,14 @@ class U_I18N_API ChineseCalendar : public Calendar {
    */
   virtual const char * getType() const override;
 
+  struct Setting {
+      int32_t epochYear;
+      const TimeZone* zoneAstroCalc;
+      CalendarCache** winterSolsticeCache;
+      CalendarCache** newYearCache;
+  };
  protected:
+  virtual Setting getSetting(UErrorCode& status) const;
   virtual int32_t internalGetMonth(int32_t defaultValue, UErrorCode& status) const override;
 
   virtual int32_t internalGetMonth(UErrorCode& status) const override;
