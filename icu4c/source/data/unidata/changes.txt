@@ -95,8 +95,8 @@ export LD_LIBRARY_PATH=$ICU_OUT/icu4c/lib
 export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 
 *** Unicode version numbers
-- makedata.mak
-- uchar.h
+- icu4c/source/data/makedata.mak
+- icu4c/source/common/unicode/uchar.h
 - com.ibm.icu.util.VersionInfo
 - com.ibm.icu.dev.test.lang.UCharacterTest.VERSION_
 
@@ -104,7 +104,9 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 - Run ICU4C "configure" _after_ updating the Unicode version number in uchar.h
     so that the makefiles see the new version number.
   cd $ICU_OUT/icu4c
-  ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ../../../doconfig-clang-dbg.sh
+  ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data CXXFLAGS="-DU_USING_ICU_NAMESPACE=0 -Wimplicit-fallthrough" CPPFLAGS="-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -fsanitize=bounds" LDFLAGS=-fsanitize=bounds ../../src/icu4c/source/runConfigureICU --enable-debug --disable-release Linux/clang --prefix=/usr/local/google/home/mscherer/icu/mine/inst/icu4c > config.out 2>&1 ; tail config.out
+
+TODO
 
 *** data files & enums & parser code
 
