@@ -549,6 +549,12 @@ class U_I18N_API FunctionOptions : public UObject {
      * @deprecated This API is for technology preview only.
      */
     FunctionOptions(FunctionOptions&&);
+    /**
+     * Copy constructor.
+     *
+     * @internal ICU 75.0 technology preview
+     * @deprecated This API is for technology preview only.
+     */
     FunctionOptions& operator=(const FunctionOptions&) = delete;
  private:
     friend class MessageFormatter;
