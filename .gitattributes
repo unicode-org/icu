@@ -100,6 +100,7 @@ icu4c/source/test/testdata/filters/*.txt text !eol zos-working-tree-encoding=IBM
 icu4c/source/test/testdata/*.ucm text !eol zos-working-tree-encoding=IBM-1047
 
 #simpler to say who should stay UTF-8 from test data
+icu4c/source/test/cintltst/usrchdat.inc text !eol zos-working-tree-encoding=UTF-8
 icu4c/source/test/testdata/Burmese_graphclust_model5_heavy.txt text !eol zos-working-tree-encoding=UTF-8
 icu4c/source/test/testdata/Burmese_graphclust_model5_heavy_Test.txt text !eol zos-working-tree-encoding=UTF-8
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt text !eol zos-working-tree-encoding=UTF-8
