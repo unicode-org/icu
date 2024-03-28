@@ -53,7 +53,19 @@ namespace message2 {
          * @deprecated This API is for technology preview only.
          */
         virtual Formatter* createFormatter(const Locale& locale, UErrorCode& status) = 0;
+        /**
+         * Destructor.
+         *
+         * @internal ICU 75.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         virtual ~FormatterFactory();
+        /**
+         * Copy constructor.
+         *
+         * @internal ICU 75.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         FormatterFactory& operator=(const FormatterFactory&) = delete;
     }; // class FormatterFactory
 
@@ -76,7 +88,19 @@ namespace message2 {
          * @deprecated This API is for technology preview only.
          */
         virtual Selector* createSelector(const Locale& locale, UErrorCode& status) const = 0;
+        /**
+         * Destructor.
+         *
+         * @internal ICU 75.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         virtual ~SelectorFactory();
+        /**
+         * Copy constructor.
+         *
+         * @internal ICU 75.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         SelectorFactory& operator=(const SelectorFactory&) = delete;
     }; // class SelectorFactory
 
@@ -331,6 +355,12 @@ namespace message2 {
         virtual FormattedPlaceholder format(FormattedPlaceholder&& toFormat,
                                       FunctionOptions&& options,
                                       UErrorCode& status) const = 0;
+        /**
+         * Destructor.
+         *
+         * @internal ICU 75.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         virtual ~Formatter();
     }; // class Formatter
 
@@ -373,6 +403,12 @@ namespace message2 {
                                UErrorCode& status) const = 0;
         // Note: This takes array arguments because the internal MessageFormat code has to
         // call this method, and can't include any code that constructs std::vectors.
+        /**
+         * Destructor.
+         *
+         * @internal ICU 75.0 technology preview
+         * @deprecated This API is for technology preview only.
+         */
         virtual ~Selector();
     }; // class Selector
 

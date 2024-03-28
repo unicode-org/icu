@@ -2933,6 +2933,9 @@ namespace message2 {
              * @param status Input/output error code. Set to U_DUPLICATE_DECLARATION_ERROR
              *                   if `addBinding()` was previously called with a binding
              *                   with the same variable name as `b`.
+             *
+             * @internal ICU 75.0 technology preview
+             * @deprecated This API is for technology preview only.
              */
             Builder& addBinding(Binding&& b, UErrorCode& status);
             /**
@@ -2940,6 +2943,10 @@ namespace message2 {
              *
              * @param s The statement. Passed by move.
              * @param status Input/output error code.
+             *
+             *
+             * @internal ICU 75.0 technology preview
+             * @deprecated This API is for technology preview only.
              */
             Builder& addUnsupportedStatement(UnsupportedStatement&& s, UErrorCode& status);
             /**
