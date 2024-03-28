@@ -524,8 +524,8 @@ U_CAPI void U_EXPORT2
 u_charAge(UChar32 c, UVersionInfo versionArray) {
     if(versionArray!=nullptr) {
         uint32_t version=u_getUnicodeProperties(c, 0)>>UPROPS_AGE_SHIFT;
-        versionArray[0]=(uint8_t)(version>>4);
-        versionArray[1]=(uint8_t)(version&0xf);
+        versionArray[0]=(uint8_t)(version>>2);
+        versionArray[1]=(uint8_t)(version&3);
         versionArray[2]=versionArray[3]=0;
     }
 }

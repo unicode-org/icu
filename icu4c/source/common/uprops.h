@@ -120,7 +120,8 @@ enum {
 /*
  * Properties in vector word 0
  * Bits
- * 31..24   DerivedAge version major/minor one nibble each
+ * 31..26   Age major version (0..63)
+ * 25..24   Age minor version (0..3)
  * 23..22   3..1: Bits 21..20 & 7..0 = Script_Extensions index
  *             3: Script value from Script_Extensions
  *             2: Script=Inherited
@@ -132,7 +133,6 @@ enum {
  *  7.. 0   UScriptCode, or index to Script_Extensions
  */
 
-/* derived age: one nibble each for major and minor version numbers */
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
 
@@ -163,6 +163,9 @@ enum {
 #ifdef __cplusplus
 
 namespace {
+
+inline constexpr uint8_t UPROPS_AGE_MAJOR_MAX = 63;
+inline constexpr uint8_t UPROPS_AGE_MINOR_MAX = 3;
 
 inline uint32_t uprops_mergeScriptCodeOrIndex(uint32_t scriptX) {
     return
@@ -236,6 +239,8 @@ enum {
 
 #ifdef __cplusplus
 
+namespace {
+
 // https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
 // The Identifier_Type maps each code point to a *set* of one or more values.
 // Some can be combined with others, some can only occur alone.
@@ -295,6 +300,8 @@ inline constexpr uint8_t uprops_idTypeToEncoded[] = {
     UPROPS_ID_TYPE_INCLUSION,
     UPROPS_ID_TYPE_RECOMMENDED
 };
+
+}  // namespace
 
 #endif  // __cplusplus
 
