@@ -159,7 +159,10 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
 
 * new constants for new property values
 - preparseucd.py error:
-    ValueError: missing uchar.h enum constants for some property values: [('blk', {'Garay', 'Tulu_Tigalari', 'Todhri', 'Sunuwar', 'Egyptian_Hieroglyphs_Ext_A', 'Kirat_Rai', 'Symbols_For_Legacy_Computing_Sup', 'Myanmar_Ext_C', 'Ol_Onal', 'Gurung_Khema'}), ('sc', {'Gara', 'Onao', 'Todr', 'Krai', 'Tutg', 'Sunu', 'Gukh'}), ('InSC', {'Reordering_Killer'})]
+    ValueError: missing uchar.h enum constants for some property values:
+    [('blk', {'Garay', 'Tulu_Tigalari', 'Todhri', 'Sunuwar', 'Egyptian_Hieroglyphs_Ext_A', 'Kirat_Rai', 'Symbols_For_Legacy_Computing_Sup', 'Myanmar_Ext_C', 'Ol_Onal', 'Gurung_Khema'}),
+    ('sc', {'Gara', 'Onao', 'Todr', 'Krai', 'Tutg', 'Sunu', 'Gukh'}),
+    ('InSC', {'Reordering_Killer'})]
   = PropertyValueAliases.txt new property values (diff old & new .txt files)
     (cd $UNIDATA_ROOT && diff -u uni15.1/final/ucd/PropertyValueAliases.txt uni16/alpha/UCD/ucd/PropertyValueAliases.txt | egrep '^[-+][a-zA-Z]')
     +age; 16.0                             ; V16_0
@@ -195,7 +198,7 @@ export UNICODE_TOOLS=~/oss/unicodetools/mine/src
   + Indic_Syllabic_Category: uchar.h & UCharacter.IndicSyllabicCategory
   + after adding new API constants, run preparseucd.py again
 
-TODO
+TODO: need to update CLDR script metadata first
 
 * update Script metadata: SCRIPT_PROPS[] in uscript_props.cpp & UScript.ScriptMetadata
     (not strictly necessary for NOT_ENCODED scripts)
@@ -215,6 +218,8 @@ Consider running `bazelisk --version` outside of the $ICU_SRC folder
 to find out the latest `bazel` version, and
 copying that version number into the $ICU_SRC/.bazeliskrc config file.
 (Revert if you find incompatibilities, or, better, update our build & config files.)
+
+TODO
 
 * generate data files
 
