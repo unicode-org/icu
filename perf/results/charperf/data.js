@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711651005654,
+  "lastUpdate": 1711667401066,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -69748,6 +69748,96 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIsWhiteSpace",
             "value": 5.1863,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "070a1f420bc68042ead85ab07a73212382f0fa05",
+          "message": "ICU-22261 Add missing API tags for MessageFormat 2 methods/constants",
+          "timestamp": "2024-03-28T15:46:32-07:00",
+          "tree_id": "671aaafa383bef5c5e4e758ff62066aea7e9478c",
+          "url": "https://github.com/unicode-org/icu/commit/070a1f420bc68042ead85ab07a73212382f0fa05"
+        },
+        "date": 1711667288466,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIsAlpha",
+            "value": 4.3013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsUpper",
+            "value": 4.3259,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsLower",
+            "value": 4.6183,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsDigit",
+            "value": 4.3272,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsSpace",
+            "value": 5.2547,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsAlphaNumeric",
+            "value": 4.3307,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsPrint",
+            "value": 4.3305,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsControl",
+            "value": 4.2648,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToLower",
+            "value": 5.5289,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestToUpper",
+            "value": 5.2601,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIsWhiteSpace",
+            "value": 5.2065,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
