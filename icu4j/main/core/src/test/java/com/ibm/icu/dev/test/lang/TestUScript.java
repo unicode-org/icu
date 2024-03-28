@@ -339,6 +339,8 @@ public class TestUScript extends CoreTestFmwk {
             "Kawi", "Nag_Mundari",
             // new in ICU 75
             "Aran",
+            // new in ICU 76
+            "Garay", "Gurung_Khema", "Kirat_Rai", "Ol_Onal", "Sunuwar", "Todhri", "Tulu_Tigalari",
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",
@@ -381,6 +383,8 @@ public class TestUScript extends CoreTestFmwk {
             "Kawi", "Nagm",
             // new in ICU 75
             "Aran",
+            // new in ICU 76
+            "Gara", "Gukh", "Krai", "Onao", "Sunu", "Todr", "Tutg",
         };
         if(expectedLong.length!=(UScript.CODE_LIMIT-UScript.BALINESE)) {
             errln("need to add new script codes in lang.TestUScript.java!");
