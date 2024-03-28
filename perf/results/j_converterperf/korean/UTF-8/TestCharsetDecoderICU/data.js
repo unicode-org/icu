@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711641316798,
+  "lastUpdate": 1711642852003,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20338,6 +20338,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.232132242009915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "aff1bbaa14c21fabe0182ac2e7cad6ffceb2e59d",
+          "message": "ICU-22261 Add UCONFIG_NO_MF2 flag that can be used to disable MessageFormat 2 functionality",
+          "timestamp": "2024-03-28T08:48:35-07:00",
+          "tree_id": "ef844ca49e4caf7fdabe49f04da6b6c6a1742664",
+          "url": "https://github.com/unicode-org/icu/commit/aff1bbaa14c21fabe0182ac2e7cad6ffceb2e59d"
+        },
+        "date": 1711642748361,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.9079575867198795,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
