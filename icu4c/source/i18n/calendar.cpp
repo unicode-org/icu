@@ -3446,7 +3446,10 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCo
         if(isSet(UCAL_DAY_OF_MONTH)) {
             dayOfMonth = internalGet(UCAL_DAY_OF_MONTH,1);
         } else {
-            dayOfMonth = getDefaultDayInMonth(year, month);
+            dayOfMonth = getDefaultDayInMonth(year, month, status);
+            if (U_FAILURE(status)) {
+               return 0;
+            }
         }
         if (uprv_add32_overflow(dayOfMonth, julianDay, &dayOfMonth)) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -3654,7 +3657,7 @@ Calendar::getDefaultMonthInYear(int32_t /*eyear*/, UErrorCode& /* status */)
 }
 
 int32_t
-Calendar::getDefaultDayInMonth(int32_t /*eyear*/, int32_t /*month*/)
+Calendar::getDefaultDayInMonth(int32_t /*eyear*/, int32_t /*month*/, UErrorCode& /* status */)
 {
     return 1;
 }

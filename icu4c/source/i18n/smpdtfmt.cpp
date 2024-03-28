@@ -1576,10 +1576,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_MONTH_FIELD:
     case UDAT_STANDALONE_MONTH_FIELD:
         if (uprv_strcmp(cal.getType(),"hebrew") == 0) {
-           HebrewCalendar *hc = (HebrewCalendar*)&cal;
-           if (hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value == 6 && count >= 3 )
+           if (HebrewCalendar::isLeapYear(cal.get(UCAL_YEAR,status)) && value == 6 && count >= 3 )
                value = 13; // Show alternate form for Adar II in leap years in Hebrew calendar.
-           if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6 && count < 3 )
+           if (!HebrewCalendar::isLeapYear(cal.get(UCAL_YEAR,status)) && value >= 6 && count < 3 )
                value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
         }
         {

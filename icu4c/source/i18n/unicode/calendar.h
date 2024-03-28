@@ -2045,9 +2045,11 @@ protected:
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian.
      * @param eyear the extended year
      * @param month the month in the year
+     * @param status Output param set to failure code on function return
+     *          when this function fails.
      * @internal
      */
-    virtual int32_t getDefaultDayInMonth(int32_t eyear, int32_t month);
+    virtual int32_t getDefaultDayInMonth(int32_t eyear, int32_t month, UErrorCode& status);
 
     //-------------------------------------------------------------------------
     // Protected utility methods for use by subclasses.  These are very handy
