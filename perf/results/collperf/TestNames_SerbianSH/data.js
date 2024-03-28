@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711643256838,
+  "lastUpdate": 1711649425061,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41848,6 +41848,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 17168382.445,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "9e6173fcef468e878e43d07b928d22e782c4c8eb",
+          "message": "ICU-22536 Fix ICUServiceThreadTest flakiness\n\nSometimes getVisibleIDs() method returns a null reference which might happend\nbecause of inaccurate concurrent access. This change attempts to fix this\nICUServiceThreadTest flakiness.",
+          "timestamp": "2024-03-28T10:55:49-07:00",
+          "tree_id": "c587c10deab80b1ee85158fcc8dacdb1cbe2e0e5",
+          "url": "https://github.com/unicode-org/icu/commit/9e6173fcef468e878e43d07b928d22e782c4c8eb"
+        },
+        "date": 1711649282456,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 321.7166,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 35557523.7955,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 14862781.8195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 36431438.5546,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 16858466.5794,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
