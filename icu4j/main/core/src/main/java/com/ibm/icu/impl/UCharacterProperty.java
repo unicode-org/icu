@@ -294,10 +294,8 @@ public final class UCharacterProperty
      */
     public VersionInfo getAge(int codepoint)
     {
-        int version = getAdditional(codepoint, 0) >> AGE_SHIFT_;
-        return VersionInfo.getInstance(
-                           (version >> FIRST_NIBBLE_SHIFT_) & LAST_NIBBLE_MASK_,
-                           version & LAST_NIBBLE_MASK_, 0, 0);
+        int version = getAdditional(codepoint, 0) >>> AGE_SHIFT_;
+        return VersionInfo.getInstance(version >> 2, version & 3, 0, 0);
     }
 
     private static final int GC_CN_MASK = getMask(UCharacter.UNASSIGNED);
@@ -1547,14 +1545,6 @@ public final class UCharacterProperty
     private static final int DECOMPOSITION_TYPE_MASK_ = 0x0000001f;
 
     /**
-     * First nibble shift
-     */
-    private static final int FIRST_NIBBLE_SHIFT_ = 0x4;
-    /**
-     * Second nibble mask
-     */
-    private static final int LAST_NIBBLE_MASK_ = 0xF;
-    /**
      * Age value shift
      */
     private static final int AGE_SHIFT_ = 24;
@@ -1633,7 +1623,7 @@ public final class UCharacterProperty
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0] == 8;
+            return version[0] == 9;
         }
     }
     private static final int DATA_FORMAT = 0x5550726F;  // "UPro"
