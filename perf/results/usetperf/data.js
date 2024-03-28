@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711643251449,
+  "lastUpdate": 1711649590600,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -60292,6 +60292,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1418.3383,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "9e6173fcef468e878e43d07b928d22e782c4c8eb",
+          "message": "ICU-22536 Fix ICUServiceThreadTest flakiness\n\nSometimes getVisibleIDs() method returns a null reference which might happend\nbecause of inaccurate concurrent access. This change attempts to fix this\nICUServiceThreadTest flakiness.",
+          "timestamp": "2024-03-28T10:55:49-07:00",
+          "tree_id": "c587c10deab80b1ee85158fcc8dacdb1cbe2e0e5",
+          "url": "https://github.com/unicode-org/icu/commit/9e6173fcef468e878e43d07b928d22e782c4c8eb"
+        },
+        "date": 1711649459522,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 77799.4246,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 166694.9621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5591,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.3617,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.2642,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 8308.0087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 32329.0214,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 1426.5495,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
