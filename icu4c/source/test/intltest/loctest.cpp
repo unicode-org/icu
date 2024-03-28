@@ -5722,14 +5722,6 @@ public:
     }
 };
 
-bool isKnownSourceForCLDR17099(const std::string& s) {
-    if (s == "qaa-Cyrl-CH") {
-        return true;
-    }
-
-	return false;
-}
-
 void U_CALLCONV
 testLikelySubtagsLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
@@ -5740,9 +5732,6 @@ testLikelySubtagsLineFn(void *context,
     (void)fieldCount;
     LocaleTest* THIS = (LocaleTest*)context;
     std::string source(trim(std::string(fields[0][0], fields[0][1]-fields[0][0])));
-    if (isKnownSourceForCLDR17099(source) && THIS->logKnownIssue("CLDR-17099", "likelySubtags.txt wrong for qaa-Cyrl-CH")) {
-      return;
-    }
     std::string addLikely(trim(std::string(fields[1][0], fields[1][1]-fields[1][0])));
     std::string removeFavorScript(trim(std::string(fields[2][0], fields[2][1]-fields[2][0])));
     if (removeFavorScript.length() == 0) {
