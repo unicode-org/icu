@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711649117019,
+  "lastUpdate": 1711650492556,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20668,6 +20668,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.140917918726541,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "d83d26cc5db4ae190c3d015b83b8f377cbb0de9c",
+          "message": "ICU-9972 Fix Chinese/Dangi Calendar getActualMaximum(UCAL_DAY_OF_YEAR)\n\nAlso fix ICU-12620 which is mark duplicate of ICU-9972 just now.\nand fix ICU-22258.\n\nSeparate the new year and winter solstice cache since the calculated\nvalue for these two calendar are mostly but not always the same due\nto slightly different observation timeZone.\n\nRemove the epochYear and zoneAstroCalc from the member data\nand instead return them from a getStting() method with the two caches\nsince all four of them are constant per subclass of ChineseCalendar\nand do not need to be different per object.\n\nThe known issues in the TestLimit is caused by both Calendar get/put the\nvalue from the same cache while the calculated result depends on the\ntimeZone zoneAstroCalc.",
+          "timestamp": "2024-03-28T11:02:21-07:00",
+          "tree_id": "c838cfdfac714928118b8f24bd4dbfc7b8f0fc0f",
+          "url": "https://github.com/unicode-org/icu/commit/d83d26cc5db4ae190c3d015b83b8f377cbb0de9c"
+        },
+        "date": 1711650388108,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 2.1105073603444757,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
