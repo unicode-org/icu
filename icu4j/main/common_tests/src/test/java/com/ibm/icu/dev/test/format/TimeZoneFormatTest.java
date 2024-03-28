@@ -274,8 +274,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                 }
                             } else {
                                 // Specific or generic: raw offset must be preserved.
-                                if (inOffsets[0] != outOffsets[0] && !(LOCALES[locidx].getName().startsWith("ku") && tzids[tzidx].equals("America/Miquelon")
-                                        && logKnownIssue("CLDR-17024", "TestTimeZoneRoundTrip exhaust. fail with tz=America/Miquelon, locale=ku"))) {
+                                if (inOffsets[0] != outOffsets[0] ) {
                                     if (JDKTZ && tzids[tzidx].startsWith("SystemV/")) {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones
@@ -423,13 +422,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                     if ((id.equals("Pacific/Apia") || id.equals("Pacific/Midway") || id.equals("Pacific/Pago_Pago"))
                             && PATTERNS[patidx].equals("vvvv")
                             && logKnownIssue("11052", "Ambiguous zone name - Samoa Time")) {
-                        continue;
-                    }
-
-                    if ((id.equals("America/Miquelon") || id.equals("America/Hermosillo") || id.equals("America/Mazatlan"))
-                            && PATTERNS[patidx].equals("v")
-                            && LOCALES[locidx].getName().startsWith("ku")
-                            && logKnownIssue("CLDR-17024", "TestTimeRoundTrip fail with tz=America/Miquelon, pattern=v, locale=ku")) {
                         continue;
                     }
 
