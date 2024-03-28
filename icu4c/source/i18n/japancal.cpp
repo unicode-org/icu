@@ -171,15 +171,19 @@ int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear, UErrorCode& statu
     return month;
 }
 
-int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month) 
+int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month, UErrorCode& status) 
 {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t era = internalGetEra();
     int32_t day = 1;
 
     int32_t eraStart[3] = { 0,0,0 };
-    UErrorCode status = U_ZERO_ERROR;
     gJapaneseEraRules->getStartDate(era, eraStart, status);
-    U_ASSERT(U_SUCCESS(status));
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     if (eyear == eraStart[0] && (month == eraStart[1] - 1)) {
         return eraStart[2];
     }
