@@ -337,8 +337,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
                             }
                         } else {
                             // Specific or generic: raw offset must be preserved.
-                            if (inRaw != outRaw && !(uprv_strncmp(LOCALES[locidx].getName(),"ku",2)==0 && tzid->compare(u"America/Miquelon",16)==0
-                                    && logKnownIssue("CLDR-17024", "TestTimeZoneRoundTrip exhaustive fail with tz=America/Miquelon, locale=ku"))) {
+                            if (inRaw != outRaw && !(uprv_strncmp(LOCALES[locidx].getName(),"ku",2)==0 && tzid->compare(u"America/Miquelon",16)==0)) {
                                 errln((UnicodeString)"Raw offset round trip failed; tz=" + *tzid
                                     + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                     + ", time=" + DATES[datidx] + ", str=" + tzstr
@@ -619,8 +618,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
 
             if ((*tzid == "America/Miquelon" || *tzid == "America/Hermosillo" || *tzid == "America/Mazatlan")
                     && uprv_strncmp(gLocaleData->locales[locidx].getName(),"ku",2) == 0
-                    && uprv_strcmp(PATTERNS[patidx], "v") == 0
-                    && logKnownIssue("CLDR-17024", "TestTimeRoundTrip fail with tz=America/Miquelon, pattern=v, locale=ku")) {
+                    && uprv_strcmp(PATTERNS[patidx], "v") == 0) {
                 continue;
             }
 
