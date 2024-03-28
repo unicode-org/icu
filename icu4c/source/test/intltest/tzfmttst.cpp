@@ -337,8 +337,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
                             }
                         } else {
                             // Specific or generic: raw offset must be preserved.
-                            if (inRaw != outRaw && !(uprv_strncmp(LOCALES[locidx].getName(),"ku",2)==0 && tzid->compare(u"America/Miquelon",16)==0
-                                    && logKnownIssue("CLDR-17024", "TestTimeZoneRoundTrip exhaustive fail with tz=America/Miquelon, locale=ku"))) {
+                            if (inRaw != outRaw) {
                                 errln((UnicodeString)"Raw offset round trip failed; tz=" + *tzid
                                     + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                     + ", time=" + DATES[datidx] + ", str=" + tzstr
