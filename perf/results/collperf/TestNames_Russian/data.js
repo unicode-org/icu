@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711641630975,
+  "lastUpdate": 1711643259381,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41686,6 +41686,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 121348.6787,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "aff1bbaa14c21fabe0182ac2e7cad6ffceb2e59d",
+          "message": "ICU-22261 Add UCONFIG_NO_MF2 flag that can be used to disable MessageFormat 2 functionality",
+          "timestamp": "2024-03-28T08:48:35-07:00",
+          "tree_id": "ef844ca49e4caf7fdabe49f04da6b6c6a1742664",
+          "url": "https://github.com/unicode-org/icu/commit/aff1bbaa14c21fabe0182ac2e7cad6ffceb2e59d"
+        },
+        "date": 1711643161569,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 567.3733,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 629360.6392,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 87223.4821,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 560875.2064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 123633.3869,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
