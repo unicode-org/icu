@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711666623693,
+  "lastUpdate": 1711666707108,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41188,6 +41188,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.2840736105327055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tjc@igalia.com",
+            "name": "Tim Chevalier",
+            "username": "catamorphism"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "070a1f420bc68042ead85ab07a73212382f0fa05",
+          "message": "ICU-22261 Add missing API tags for MessageFormat 2 methods/constants",
+          "timestamp": "2024-03-28T15:46:32-07:00",
+          "tree_id": "671aaafa383bef5c5e4e758ff62066aea7e9478c",
+          "url": "https://github.com/unicode-org/icu/commit/070a1f420bc68042ead85ab07a73212382f0fa05"
+        },
+        "date": 1711666599587,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.3285150656917715,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
