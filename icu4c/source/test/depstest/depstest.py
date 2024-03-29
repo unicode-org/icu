@@ -112,6 +112,23 @@ allowed_errors = (
   ("common/umutex.o", "__once_proxy"),
   ("common/umutex.o", "__tls_get_addr"),
   ("common/unifiedcache.o", "std::__throw_system_error(int)"),
+  # Some of the MessageFormat 2 modules reference exception-related symbols
+  # in instantiations of the `std::get()` method that gets an alternative
+  # from a `std::variant`.
+  # These instantiations of `std::get()` are only called by compiler-generated
+  # code (the implementations of built-in `swap()` methods for types
+  # that include a `std::variant`; and `std::__detail::__variant::__gen_vtable_impl()`,
+  # which constructs vtables. The MessageFormat 2 code itself only calls
+  # `std::get_if()`, which is exception-free; never `std::get()`.
+  ("i18n/messageformat2_data_model.o", "typeinfo for std::exception"),
+  ("i18n/messageformat2_data_model.o", "vtable for std::exception"),
+  ("i18n/messageformat2_data_model.o", "std::exception::~exception()"),
+  ("i18n/messageformat2_formattable.o", "typeinfo for std::exception"),
+  ("i18n/messageformat2_formattable.o", "vtable for std::exception"),
+  ("i18n/messageformat2_formattable.o", "std::exception::~exception()"),
+  ("i18n/messageformat2_function_registry.o", "typeinfo for std::exception"),
+  ("i18n/messageformat2_function_registry.o", "vtable for std::exception"),
+  ("i18n/messageformat2_function_registry.o", "std::exception::~exception()")
 )
 
 def _Resolve(name, parents):

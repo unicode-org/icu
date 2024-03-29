@@ -29,7 +29,7 @@ jobs:
 
   # ICU4C docs build using doxygen..
   icu4c-docs-build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -52,7 +52,7 @@ jobs:
   #
   # Invokes test/hdrtst to check public headers compliance.
   gcc-debug-build-and-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -75,7 +75,7 @@ jobs:
   # (FORCE guards make this tool pass but won't compile to working code.
   # See the testtagsguards.sh script for details.)
   clang-release-build-and-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -117,7 +117,7 @@ jobs:
         build_option:
          [ --enable-static, --enable-static --disable-shared ]
          # --disable-shared has a build problem.
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -133,7 +133,7 @@ jobs:
 
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
   gcc-10-stdlib17:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -154,7 +154,7 @@ jobs:
 
   # Clang Linux with address sanitizer.
   clang-asan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -168,7 +168,7 @@ jobs:
           LDFLAGS: -fsanitize=address
   # Clang Linux with undefined-behavior sanitizer.
   clang-ubsan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -183,7 +183,7 @@ jobs:
           LDFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
   # Control Flow Integrity.
   clang-cfi:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -202,7 +202,7 @@ jobs:
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -232,7 +232,7 @@ jobs:
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -275,7 +275,7 @@ jobs:
 
   # Test U_CHARSET_IS_UTF8
   u-charset-is-utf8-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -285,7 +285,7 @@ jobs:
 
   # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
   u-override-cxx-allocation-is-0-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -296,7 +296,7 @@ jobs:
 
   # Test LSTM
   lstm-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -307,7 +307,7 @@ jobs:
 
   # Test adaboost
   adaboost-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -318,7 +318,7 @@ jobs:
 
   # Build and run testmap
   testmap:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: |
@@ -331,28 +331,28 @@ jobs:
 
   # Copyright scan
   copyright-scan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check compilation of internal headers.
   internal-header-compilation:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - run: tools/scripts/icu-file-utf8-check.py
 
   # Run unit tests with UCONFIG_NO_XXX variations.
   uconfig-unit-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -367,20 +367,21 @@ jobs:
          - "-DUCONFIG_NO_IDNA=1"
          - "-DUCONFIG_NO_COLLATION=1"
          - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_MF2=1"
          - "-DUCONFIG_NO_TRANSLITERATION=1"
          - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
          - "-DUCONFIG_NO_SERVICE=1"
          - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
          # Turn on all the options in one test.
-         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
-          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
-          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
-          expected_count="12";
+          # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "13" below.
+          expected_count="13";
           count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
           if [ $expected_count != $count ]; then
               echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $expected_count;
@@ -398,7 +399,7 @@ jobs:
 
   # Run header tests with UCONFIG_NO_XXX variations.
   uconfig-header-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -413,21 +414,22 @@ jobs:
          - "-DUCONFIG_NO_IDNA=1"
          - "-DUCONFIG_NO_COLLATION=1"
          - "-DUCONFIG_NO_FORMATTING=1"
+         - "-DUCONFIG_NO_MF2=1"
          - "-DUCONFIG_NO_TRANSLITERATION=1"
          - "-DUCONFIG_NO_REGULAR_EXPRESSIONS=1"
          - "-DUCONFIG_NO_SERVICE=1"
          - "-DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
          # Turn on all the options in one test.
-         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
+         - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
-          # Test that we have exactly 12 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
-          # adjust the uconfig_cppflags above to include the new one and update the "12" below.
+          # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
+          # adjust the uconfig_cppflags above to include the new one and update the "13" below.
           count=`egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h| wc -l`;
-          if [ "12" != $count ]; then
+          if [ "13" != $count ]; then
               echo "More than %s UCONFIG_NO_* defined in uconfig.h, please adjust uconfig_cppflags above to include any newly added flag" % $count;
               echo "Currently UCONFIG_NO_* defined in uconfig.h:";
               egrep "#ifndef UCONFIG_NO_" icu4c/source/common/unicode/uconfig.h;
@@ -448,7 +450,7 @@ jobs:
 
   # Build Unicode update tools
   unicode-update-tools:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
     - uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3.0.0
@@ -487,7 +489,7 @@ jobs:
 
 # Build and run ICU4C samples
   icu4c-test-samples:
-      runs-on: ubuntu-20.04
+      runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -512,7 +514,7 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/integration.html#verify-that-icu4c-tests-pass-without-collation-rule-strings
   icu4c-without-collation-rule-strings:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Install hjson dependency
@@ -552,7 +554,7 @@ jobs:
   
   # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
   icu4c-uconfig-no-conversion:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Set UCONFIG_NO_CONVERSION and configure ICU4C

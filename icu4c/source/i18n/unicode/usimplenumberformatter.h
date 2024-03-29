@@ -126,13 +126,13 @@ U_CAPI void U_EXPORT2
 usnum_multiplyByPowerOfTen(USimpleNumber* unumber, int32_t power, UErrorCode* ec);
 
 
-#ifndef U_HIDE_DRAFT_API
 /**
- * Rounds the value currently stored in the USimpleNumber to the given power of 10.
+ * Rounds the value currently stored in the USimpleNumber to the given power of 10,
+ * which can be before or after the decimal separator.
  *
- * This function immediately mutates the inner value.
+ * This function does not change minimum integer digits.
  *
- * @draft ICU 73
+ * @stable ICU 73
  */
 U_CAPI void U_EXPORT2
 usnum_roundTo(USimpleNumber* unumber, int32_t power, UNumberFormatRoundingMode roundingMode, UErrorCode* ec);
@@ -141,9 +141,7 @@ usnum_roundTo(USimpleNumber* unumber, int32_t power, UNumberFormatRoundingMode r
 /**
  * Pads the beginning of the number with zeros up to the given minimum number of integer digits.
  *
- * This setting is applied upon formatting the number.
- *
- * @draft ICU 73
+ * @stable ICU 73
  */
 U_CAPI void U_EXPORT2
 usnum_setMinimumIntegerDigits(USimpleNumber* unumber, int32_t minimumIntegerDigits, UErrorCode* ec);
@@ -152,25 +150,34 @@ usnum_setMinimumIntegerDigits(USimpleNumber* unumber, int32_t minimumIntegerDigi
 /**
  * Pads the end of the number with zeros up to the given minimum number of fraction digits.
  *
- * This setting is applied upon formatting the number.
- *
- * @draft ICU 73
+ * @stable ICU 73
  */
 U_CAPI void U_EXPORT2
 usnum_setMinimumFractionDigits(USimpleNumber* unumber, int32_t minimumFractionDigits, UErrorCode* ec);
 
 
+#ifndef U_HIDE_DRAFT_API
 /**
- * Truncates digits from the beginning of the number to the given maximum number of integer digits.
+ * Sets the number of integer digits to the given amount, truncating if necessary.
  *
- * This function immediately mutates the inner value.
+ * @draft ICU 75
+ */
+U_CAPI void U_EXPORT2
+usnum_setMaximumIntegerDigits(USimpleNumber* unumber, int32_t maximumIntegerDigits, UErrorCode* ec);
+#endif // U_HIDE_DRAFT_API
+
+
+#ifndef U_HIDE_DEPRECATED_API
+/**
+ * Alias for setMaximumIntegerDigits.
+ * Will be removed after ICU 75.
  *
- * @draft ICU 73
+ * @deprecated ICU 75
  */
 U_CAPI void U_EXPORT2
 usnum_truncateStart(USimpleNumber* unumber, int32_t maximumIntegerDigits, UErrorCode* ec);
+#endif  // U_HIDE_DEPRECATED_API
 
-#endif // U_HIDE_DRAFT_API
 
 /**
  * Sets the sign of the number: an explicit plus sign, explicit minus sign, or no sign.

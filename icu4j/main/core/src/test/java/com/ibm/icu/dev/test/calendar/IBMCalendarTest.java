@@ -2192,7 +2192,6 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         int lastDay = 1;
         String type = base.getType();
         boolean ignoreOrdinaryMonth12Bug = (!quick) && (type.equals("chinese") || type.equals("dangi"));
-        boolean ignoreICU22258 = (!quick) && type.equals("dangi");
         for (int j = 0; j < numOfDaysToTest; j++, test.setTime(test.getTime() - msInADay)) {
             g.setTime(test);
             base.clear();
@@ -2244,11 +2243,6 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 int year = base.get(Calendar.YEAR);
                 int month = base.get(Calendar.MONTH) + 1;
                 int date = base.get(Calendar.DATE);
-                if (ignoreICU22258 && (year == 4 || year == 34) && month == 12 && date == 30) {
-                    logKnownIssue("ICU-22258",
-                                  "Dangi Problem in 1988/2/17=>4/12/30 and 1958/2/18=>34/12/30");
-                    continue;
-                }
 
                 errln("Round trip conversion produces different time from " + test + " to  " +
                     result + " delta: " + (result.getTime() - test.getTime()) +

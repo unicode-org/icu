@@ -131,18 +131,24 @@ void DecimalQuantity::clear() {
     setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, and BCD data
 }
 
-void DecimalQuantity::setMinInteger(int32_t minInt) {
+void DecimalQuantity::decreaseMinIntegerTo(int32_t minInt) {
+    // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
+    U_ASSERT(minInt >= 0);
+
+    if (lReqPos > minInt) {
+        lReqPos = minInt;
+    }
+}
+
+void DecimalQuantity::increaseMinIntegerTo(int32_t minInt) {
     // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
     U_ASSERT(minInt >= 0);
 
     // Special behavior: do not set minInt to be less than what is already set.
     // This is so significant digits rounding can set the integer length.
-    if (minInt < lReqPos) {
-        minInt = lReqPos;
+    if (lReqPos < minInt) {
+        lReqPos = minInt;
     }
-
-    // Save values into internal state
-    lReqPos = minInt;
 }
 
 void DecimalQuantity::setMinFraction(int32_t minFrac) {

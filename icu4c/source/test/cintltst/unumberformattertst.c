@@ -255,9 +255,9 @@ static void TestSimpleNumberFormatterFull(void) {
     usnum_setToInt64(unumber, 98765, &ec);
     usnum_multiplyByPowerOfTen(unumber, -2, &ec);
     usnum_roundTo(unumber, -1, UNUM_ROUND_HALFDOWN, &ec);
+    usnum_setMaximumIntegerDigits(unumber, 1, &ec);
     usnum_setMinimumIntegerDigits(unumber, 4, &ec);
     usnum_setMinimumFractionDigits(unumber, 3, &ec);
-    usnum_truncateStart(unumber, 1, &ec);
     usnum_setSign(unumber, UNUM_SIMPLE_NUMBER_PLUS_SIGN, &ec);
 
     usnumf_format(uformatter, unumber, uresult, &ec);

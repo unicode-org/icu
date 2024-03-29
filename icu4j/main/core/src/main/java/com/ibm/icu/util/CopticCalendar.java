@@ -242,7 +242,7 @@ public final class CopticCalendar extends CECalendar
         return "coptic";
     }
 
-    /*
+    /**
      * {@inheritDoc}
      * @internal
      * @deprecated This API is ICU internal only.

@@ -1004,7 +1004,6 @@ void IntlCalendarTest::checkConsistency(const char* locale) {
     const char* type = base->getType();
     // Do not ignore in quick mode
     bool ignoreOrdinaryMonth12Bug = (!quick) && (strcmp("chinese", type) == 0 || strcmp("dangi", type) == 0);
-    bool ignoreICU22258 = (!quick) && (strcmp("dangi", type) == 0);
     UDate test = Calendar::getNow();
     base->setTimeZone(*(TimeZone::getGMT()));
     int32_t j;
@@ -1100,12 +1099,6 @@ void IntlCalendarTest::checkConsistency(const char* locale) {
             int32_t year = base->get(UCAL_YEAR, status);
             int32_t month = base->get(UCAL_MONTH, status) + 1;
             int32_t date = base->get(UCAL_DATE, status);
-            if (ignoreICU22258 && (year == 4 || year == 34) && month == 12 && date == 30) {
-                logKnownIssue("ICU-22258",
-                              "Dangi Problem in 1988/2/17=>4/12/30 and 1958/2/18=>34/12/30");
-                status.reset();
-                continue;
-            }
 
             errln((UnicodeString)"Round trip conversion produces different "
                   "time from " + test + " to  " + result + " delta: " +

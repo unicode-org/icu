@@ -18,6 +18,7 @@ void SimpleNumberFormatterTest::runIndexedTest(int32_t index, UBool exec, const 
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testBasic);
         TESTCASE_AUTO(testWithOptions);
+        TESTCASE_AUTO(testDigits);
         TESTCASE_AUTO(testSymbols);
         TESTCASE_AUTO(testSign);
         TESTCASE_AUTO(testCopyMove);
@@ -51,11 +52,11 @@ void SimpleNumberFormatterTest::testWithOptions() {
     IcuTestErrorCode status(*this, "testWithOptions");
 
     SimpleNumber num = SimpleNumber::forInt64(1250000, status);
+    num.setMaximumIntegerDigits(6, status);
     num.setMinimumIntegerDigits(6, status);
     num.setMinimumFractionDigits(2, status);
     num.multiplyByPowerOfTen(-2, status);
     num.roundTo(3, UNUM_ROUND_HALFUP, status);
-    num.truncateStart(4, status);
     SimpleNumberFormatter snf = SimpleNumberFormatter::forLocale("bn", status);
     FormattedNumber result = snf.format(std::move(num), status);
 
@@ -74,6 +75,152 @@ void SimpleNumberFormatterTest::testWithOptions() {
         UFIELD_CATEGORY_NUMBER,
         expectedFieldPositions,
         UPRV_LENGTHOF(expectedFieldPositions));
+}
+
+void SimpleNumberFormatterTest::testDigits() {
+    IcuTestErrorCode status(*this, "testDigits");
+
+    SimpleNumberFormatter snf = SimpleNumberFormatter::forLocaleAndGroupingStrategy(
+        "en-US",
+        UNUM_GROUPING_ON_ALIGNED,
+        status
+    );
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("no digit options",
+            u"91,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMaximumIntegerDigits(4, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("setMaximumIntegerDigits",
+            u"1,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMaximumIntegerDigits(8, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("bigger setMaximumIntegerDigits",
+            u"91,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMinimumIntegerDigits(6, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("setMinimumIntegerDigits",
+            u"091,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMinimumIntegerDigits(8, status);
+        num.setMinimumIntegerDigits(6, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("double setMinimumIntegerDigits",
+            u"091,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMaximumIntegerDigits(4, status);
+        num.setMinimumIntegerDigits(6, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("setMaximumIntegerDigits setMinimumIntegerDigits",
+            u"001,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMinimumIntegerDigits(6, status);
+        num.setMaximumIntegerDigits(4, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("setMinimumIntegerDigits setMaximumIntegerDigits",
+            u"1,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMaximumIntegerDigits(8, status);
+        num.setMinimumIntegerDigits(6, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("bigger setMaximumIntegerDigits setMinimumIntegerDigits",
+            u"091,827.3645",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.roundTo(-1, UNUM_ROUND_HALFEVEN, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("roundTo",
+            u"91,827.4",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMinimumFractionDigits(5, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("setMinimumFractionDigits",
+            u"91,827.36450",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMinimumFractionDigits(6, status);
+        num.setMinimumFractionDigits(5, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("double setMinimumFractionDigits",
+            u"91,827.36450",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.roundTo(-1, UNUM_ROUND_HALFEVEN, status);
+        num.setMinimumFractionDigits(5, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("roundTo setMinimumFractionDigits",
+            u"91,827.40000",
+            result.toTempString(status));
+    }
+
+    {
+        SimpleNumber num = SimpleNumber::forInt64(918273645, status);
+        num.multiplyByPowerOfTen(-4, status);
+        num.setMinimumFractionDigits(5, status);
+        num.roundTo(-1, UNUM_ROUND_HALFEVEN, status);
+        auto result = snf.format(std::move(num), status);
+        assertEquals("setMinimumFractionDigits roundTo",
+            u"91,827.40000",
+            result.toTempString(status));
+    }
 }
 
 void SimpleNumberFormatterTest::testSymbols() {
@@ -199,7 +346,7 @@ void SimpleNumberFormatterTest::testCAPI() {
     usnum_setToInt64(unumber.getAlias(), 2335, status);
     usnum_multiplyByPowerOfTen(unumber.getAlias(), -2, status);
     usnum_roundTo(unumber.getAlias(), -1, UNUM_ROUND_HALFEVEN, status);
-    usnum_truncateStart(unumber.getAlias(), 1, status);
+    usnum_setMaximumIntegerDigits(unumber.getAlias(), 1, status);
     usnum_setMinimumFractionDigits(unumber.getAlias(), 3, status);
     usnum_setMinimumIntegerDigits(unumber.getAlias(), 3, status);
     usnumf_format(uformatter.getAlias(), unumber.getAlias(), uresult.getAlias(), status);

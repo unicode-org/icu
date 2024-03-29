@@ -1280,7 +1280,7 @@ void IntlTestRBNF::TestDFRounding()
     UErrorCode err = U_ZERO_ERROR;
     
     // no decimal places
-    LocalPointer<RuleBasedNumberFormat> nf0(new RuleBasedNumberFormat(u"1000/1000: <##K<;", parseError, err));
+    LocalPointer<RuleBasedNumberFormat> nf0(new RuleBasedNumberFormat(u"1000/1000: <##K<;", Locale::getUS(), parseError, err));
     if (U_FAILURE(err)) {
         errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
     } else {
@@ -1295,7 +1295,7 @@ void IntlTestRBNF::TestDFRounding()
     }
     
     // 1 decimal place
-    LocalPointer<RuleBasedNumberFormat> nf1(new RuleBasedNumberFormat(u"1000/1000: <##.0K<;", parseError, err));
+    LocalPointer<RuleBasedNumberFormat> nf1(new RuleBasedNumberFormat(u"1000/1000: <##.0K<;", Locale::getUS(), parseError, err));
     if (U_FAILURE(err)) {
         errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
     } else {
@@ -1308,7 +1308,7 @@ void IntlTestRBNF::TestDFRounding()
     }
     
     // with modulus substitution
-    LocalPointer<RuleBasedNumberFormat> nfMod(new RuleBasedNumberFormat(u"1000/1000: <##<K>##>; -x: ->>;", parseError, err));
+    LocalPointer<RuleBasedNumberFormat> nfMod(new RuleBasedNumberFormat(u"1000/1000: <##<K>##>; -x: ->>;", Locale::getUS(), parseError, err));
     if (U_FAILURE(err)) {
         errcheckln(err, "FAIL: could not construct formatter - %s", u_errorName(err));
     } else {
@@ -1323,7 +1323,7 @@ void IntlTestRBNF::TestDFRounding()
     }
 
     // no decimal places, but with rounding mode set to ROUND_FLOOR
-    LocalPointer<RuleBasedNumberFormat> nfFloor(new RuleBasedNumberFormat(u"1000/1000: <##K<;", parseError, err));
+    LocalPointer<RuleBasedNumberFormat> nfFloor(new RuleBasedNumberFormat(u"1000/1000: <##K<;", Locale::getUS(), parseError, err));
     nfFloor->setMaximumFractionDigits(0);
     nfFloor->setRoundingMode(NumberFormat::kRoundFloor);
     if (U_FAILURE(err)) {

@@ -64,6 +64,18 @@ public class APIStatusConsistencyChecker {
             {"clone",       "java.lang.Object()"},
     };
 
+    // Exceptions - API status of these methods are different from the parent
+    // by intent.
+    //
+    // TODO: We should revisit this and see if we want to continue
+    // to handle these as exceptions, or update our policy.
+    static final String[][] CONSISTENCY_EXCEPTIONS = {
+          //{"<class>", "<method>"},
+            {"com.ibm.icu.text.Normalizer", "clone"},
+            {"com.ibm.icu.text.PersonNameFormatter", "toString"},
+            {"com.ibm.icu.text.SimplePersonName", "toString"},
+    };
+
     public void checkConsistency() {
         Map<String, APIInfo> classMap = new TreeMap<>();
         // Build a map of APIInfo for classes, indexed by class name
@@ -116,8 +128,19 @@ public class APIStatusConsistencyChecker {
             String classVer = clsApi.getStatusVersion();
 
             if (methodStatus != classStatus || !Objects.equals(methodVer, classVer)) {
-                pw.println("## Error ## " + methodName + " in " + fullClassName);
-                errCount++;
+                boolean isExcepted = false;
+                for (String[] exceptMethod : CONSISTENCY_EXCEPTIONS) {
+                    if (exceptMethod[0].equals(fullClassName) && exceptMethod[1].equals(methodName)) {
+                        isExcepted = true;
+                        break;
+                    }
+                }
+                if (isExcepted) {
+                    pw.println("## Info ## " + methodName + " in " + fullClassName + " (included in the exception list)");
+                } else {
+                    pw.println("## Error ## " + methodName + " in " + fullClassName);
+                    errCount++;
+                }
             }
         }
     }

@@ -14,6 +14,9 @@ on:
   schedule:
     # This cron schedule is set to run 10:23 UTC every SAT
     - cron: '23 10 * * SAT'
+    # In addition, during the major release cycle (in March/April, September/October),
+    # this cron schedule is set to run 10:21 UTC every Workday and Sunday.
+    - cron: '21 10 * MAR,APR,SEP,OCT MON-FRI,SUN'
 
 permissions:
   contents: read

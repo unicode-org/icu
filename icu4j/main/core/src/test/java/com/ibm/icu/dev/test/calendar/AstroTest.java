@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
-import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -19,7 +18,6 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.CalendarAstronomer;
-import com.ibm.icu.impl.CalendarAstronomer.Ecliptic;
 import com.ibm.icu.impl.CalendarAstronomer.Equatorial;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;

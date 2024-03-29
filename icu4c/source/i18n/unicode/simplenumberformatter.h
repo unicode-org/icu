@@ -68,44 +68,49 @@ class U_I18N_API SimpleNumber : public UMemory {
      */
     void multiplyByPowerOfTen(int32_t power, UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
-     * Rounds the value currently stored in the SimpleNumber to the given power of 10.
+     * Rounds the value currently stored in the SimpleNumber to the given power of 10,
+     * which can be before or after the decimal separator.
      *
-     * This function immediately mutates the inner value.
+     * This function does not change minimum integer digits.
      *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     void roundTo(int32_t power, UNumberFormatRoundingMode roundingMode, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
-     * Truncates the most significant digits to the given maximum number of integer digits.
+     * Sets the number of integer digits to the given amount, truncating if necessary.
      *
-     * This function immediately mutates the inner value.
+     * @draft ICU 75
+     */
+    void setMaximumIntegerDigits(uint32_t maximumIntegerDigits, UErrorCode& status);
+#endif // U_HIDE_DRAFT_API
+
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * Alias for setMaximumIntegerDigits.
+     * Will be removed after ICU 75.
      *
-     * @draft ICU 73
+     * @deprecated ICU 75
      */
     void truncateStart(uint32_t maximumIntegerDigits, UErrorCode& status);
+#endif // U_HIDE_DEPRECATED_API
 
     /**
      * Pads the beginning of the number with zeros up to the given minimum number of integer digits.
      *
-     * This setting is applied upon formatting the number. 
-     *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     void setMinimumIntegerDigits(uint32_t minimumIntegerDigits, UErrorCode& status);
 
     /**
      * Pads the end of the number with zeros up to the given minimum number of fraction digits.
      *
-     * This setting is applied upon formatting the number.
-     *
-     * @draft ICU 73
+     * @stable ICU 73
      */
     void setMinimumFractionDigits(uint32_t minimumFractionDigits, UErrorCode& status);
 
-#endif // U_HIDE_DRAFT_API
     /**
      * Sets the sign of the number: an explicit plus sign, explicit minus sign, or no sign.
      *

@@ -81,7 +81,8 @@ void SimpleNumber::setMinimumIntegerDigits(uint32_t position, UErrorCode& status
         status = U_INVALID_STATE_ERROR;
         return;
     }
-    fData->quantity.setMinInteger(position);
+    fData->quantity.decreaseMinIntegerTo(position);
+    fData->quantity.increaseMinIntegerTo(position);
 }
 
 void SimpleNumber::setMinimumFractionDigits(uint32_t position, UErrorCode& status) {
@@ -95,7 +96,7 @@ void SimpleNumber::setMinimumFractionDigits(uint32_t position, UErrorCode& statu
     fData->quantity.setMinFraction(position);
 }
 
-void SimpleNumber::truncateStart(uint32_t position, UErrorCode& status) {
+void SimpleNumber::setMaximumIntegerDigits(uint32_t position, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -103,7 +104,12 @@ void SimpleNumber::truncateStart(uint32_t position, UErrorCode& status) {
         status = U_INVALID_STATE_ERROR;
         return;
     }
+    fData->quantity.decreaseMinIntegerTo(position);
     fData->quantity.applyMaxInteger(position);
+}
+
+void SimpleNumber::truncateStart(uint32_t position, UErrorCode& status) {
+    setMaximumIntegerDigits(position, status);
 }
 
 void SimpleNumber::setSign(USimpleNumberSign sign, UErrorCode& status) {

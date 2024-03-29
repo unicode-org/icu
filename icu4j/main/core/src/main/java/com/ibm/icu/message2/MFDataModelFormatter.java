@@ -3,6 +3,13 @@
 
 package com.ibm.icu.message2;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.ibm.icu.message2.MFDataModel.Annotation;
 import com.ibm.icu.message2.MFDataModel.CatchallKey;
 import com.ibm.icu.message2.MFDataModel.Declaration;
@@ -25,13 +32,6 @@ import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CurrencyAmount;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Takes an {@link MFDataModel} and formats it to a {@link String}

@@ -4090,7 +4090,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
     }
 
-    /*
+    /**
      * The year in this calendar is counting from 1 backward if the era is 0.
      * @return The year in era 0 of this calendar is counting backward from 1.
      * @internal
