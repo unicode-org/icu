@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1711670117299,
+  "lastUpdate": 1711671729580,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -41956,6 +41956,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2035520.7821,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "1ac14c4ea71ad462988acc530adfb38ac1f9a190",
+          "message": "ICU-22534 ICU4C API change report update",
+          "timestamp": "2024-03-28T16:27:46-07:00",
+          "tree_id": "601720f89128b64848c12f4c2a9ac31cb297ef13",
+          "url": "https://github.com/unicode-org/icu/commit/1ac14c4ea71ad462988acc530adfb38ac1f9a190"
+        },
+        "date": 1711671618903,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 215.9876,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8813330.8249,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2140849.9033,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8043638.006,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2040969.7558,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
