@@ -39,9 +39,6 @@
 #                                                                 #
 ###################################################################
 
-CC=ibm-clang
-CXX=ibm-clang++
-
 ifeq (${ICU_NOT_IEEE390}, 1)
 ICU_IEEE=#M#
 else
@@ -51,7 +48,7 @@ ifeq (${OS390_XPLINK},)
 OS390_XPLINK=-m32
 endif
 ifeq (${TARGET_ICU_ARCH},)
-TARGET_ICU_ARCH=z12
+TARGET_ICU_ARCH=arch10
 endif
 ifeq (${THREADSCPPFLAGS},)
 THREADSCPPFLAGS=-D_UNIX03_SOURCE -D_UNIX03_THREADS -D_POSIX_SOURCE -D_POSIX_THREADS -D_OPEN_SYS_SOCK_IPV6=1 -D_XOPEN_SOURCE_EXTENDED=1 -DOE_SOCKETS -D_OPEN_SYS_IF_EXT=1
