@@ -29,7 +29,7 @@
 *.launch text !eol zos-working-tree-encoding=IBM-1047
 *.m4 text !eol zos-working-tree-encoding=IBM-1047
 *.mak text !eol zos-working-tree-encoding=IBM-1047
-*.md text !eol zos-working-tree-encoding=IBM-1047
+*.md text !eol zos-working-tree-encoding=UTF-8
 *.MF text !eol zos-working-tree-encoding=IBM-1047
 *.mk text !eol zos-working-tree-encoding=IBM-1047
 *.pl text !eol zos-working-tree-encoding=IBM-1047 diff=perl
@@ -41,7 +41,7 @@
 *.rc text !eol zos-working-tree-encoding=IBM-1047
 *.sh text eol=lf
 *.sed text eol=lf
-*.sln text !eol zos-working-tree-encoding=IBM-1047
+*.sln text !eol zos-working-tree-encoding=UTF-8
 *.stub text !eol zos-working-tree-encoding=IBM-1047
 *.targets text !eol zos-working-tree-encoding=IBM-1047
 *.txt text !eol zos-working-tree-encoding=UTF-8
