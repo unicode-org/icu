@@ -18,7 +18,7 @@
 #                                                                 #
 # To build a version of ICU that does not use IEEE Floating point #
 #                                                                 #
-#   export IEEE390=0                                              #
+#   export ICU_NOT_IEEE390=1                                      #
 #                                                                 #
 # To build a version of ICU which uses a two data libraries       #
 # where the smaller one is loaded first, use OS390_STUBDATA.      #
@@ -33,86 +33,43 @@
 # To build a version of ICU which exploits the C/C++ compiler     #
 # and runtime Extra Performance Linkage (XPLINK), specify         #
 #                                                                 #
-#   export OS390_XPLINK=1                                         #
+#   export OS390_XPLINK=-m32                                      #
+#   or for 64b                                                    #
+#   export OS390_XPLINK=-m64                                      #
 #                                                                 #
 ###################################################################
 
-# TODO: Fix this configuration so that icu-config will work!
-#       If statements don't work well when icu-config is generated.
-ifeq (${IEEE390},)
-IEEE390=1#M#
-endif
+CC=ibm-clang
+CXX=ibm-clang++
 
-ifeq (${IEEE390}, 1)
-ifeq (${CC}, ibm-clang)
-ICU_IEEE=-mzos-float-kind=ieee -DIEEE_754=0#M#
-else
-ICU_IEEE=-Wc,'FLOAT(IEEE)' -DIEEE_754=0#M#
-endif
-else
+ifeq (${ICU_NOT_IEEE390}, 1)
 ICU_IEEE=#M#
+else
+ICU_IEEE=-mzos-float-kind=ieee -DIEEE_754=0#M#
 endif
-
-# For a dynamically called DLL module to share access to the POSIX external
-# variables, with its caller, the DLL module must define these _SHR_* macros.
-SHAREDLIBCPPFLAGS =-D_SHR_TZNAME -D_SHR_TIMEZONE
-
-ifeq (${CC}, ibm-clang)
 ifeq (${OS390_XPLINK},)
 OS390_XPLINK=-m32
 endif
 ifeq (${TARGET_ICU_ARCH},)
 TARGET_ICU_ARCH=z12
 endif
-CFLAGS +=$(OS390_XPLINK) $(ICU_IEEE) -march=$(TARGET_ICU_ARCH) -mzos-service="$(LIBICU)_$(SO_TARGET_VERSION)"
-CXXFLAGS +=$(CFLAGS)
+ifeq (${THREADSCPPFLAGS},)
+THREADSCPPFLAGS=-D_UNIX03_SOURCE -D_UNIX03_THREADS -D_POSIX_SOURCE -D_POSIX_THREADS -D_OPEN_SYS_SOCK_IPV6=1 -D_XOPEN_SOURCE_EXTENDED=1 -DOE_SOCKETS -D_OPEN_SYS_IF_EXT=1
+endif
+
+ifeq (${OS390BATCH},1)
+DEFS+=-DOS390BATCH#M#
+endif
+
+# For a dynamically called DLL module to share access to the POSIX external
+# variables, with its caller, the DLL module must define these _SHR_* macros.
+SHAREDLIBCPPFLAGS =-D_SHR_TZNAME -D_SHR_TIMEZONE
+CFLAGS +=-std=c11 $(OS390_XPLINK) $(ICU_IEEE) -march=$(TARGET_ICU_ARCH) -mzos-service="$(LIBICU)_$(SO_TARGET_VERSION)"
+CXXFLAGS +=-std=c++17 $(OS390_XPLINK) $(ICU_IEEE) -march=$(TARGET_ICU_ARCH) -mzos-service="$(LIBICU)_$(SO_TARGET_VERSION)"
 ARFLAGS =-cr
 LIBCFLAGS +=-fvisibility=hidden
 LIBCXXFLAGS +=-fvisibility=hidden
 LDFLAGS+=$(OS390_XPLINK)
-SKIP_ESCAPING=1
-else
-## Additional flags when building libraries and with threads
-THREADSCPPFLAGS =-D_OPEN_THREADS=3
-# -Wc,expo is used to export all functions
-SHAREDLIBCFLAGS=-Wc,expo
-SHAREDLIBCXXFLAGS=-Wc,expo
-
-# TODO: Consider using  -Wc,roc,ros for making the data and strings readonly
-#       -Wc,"ros" seems to work, but not the "roc"
-# The RENT option makes the program reentrant. This may not really have the same
-#       meaning as normal reentrancy on other platforms. See the z/OS documentation
-#       for details. This is the default for C++, but not C.
-# The DLL option must be used by the callee and caller code when using shared libraries.
-# NOCSECT might be used as an optimization option.
-# -+ means accept any file extension as a C++ file. By default only .C is accepted.
-CFLAGS+=-Wc,DLL,ROS,RENT,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED)' $(ICU_IEEE)
-CXXFLAGS+=-Wc,DLL,ROS,RTTI,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED0X)' $(ICU_IEEE) -+
-ARFLAGS=-cr
-# This causes escapesrc to be built before other ICU targets.
-NEED_ESCAPING=YES
-endif
-
-# _MSE_PROTOS usually interacts with _XOPEN_SOURCE. It affects some standard
-# C functions that use wchar_t, and it selects behavior for
-# multibyte extension support (MSE) functions.
-#DEFS            += -D_MSE_PROTOS
-
-ifeq (${OS390_XPLINK}, 1)
-#SH# if [ "x$OS390_XPLINK" = "x1" ]; then
-# These lines must be the last options specified.
-# GOFF is the strategic object module format for S/390. It is required for XPLINK.
-# NOTEMPINC could be used if ICU starts using templates.
-ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs),goff'
-ICU_XPLINK_CXX    = -Wc,'xplink(backchain,storeargs),goff' -Wc,'NOTEMPINC'
-ICU_XPLINK_L      = -Wl,xplink
-#SH# fi
-endif
-
-## OS390BATCH
-ifeq (${OS390BATCH},1)
-DEFS+=-DOS390BATCH#M#
-endif
 
 ## Commands to generate dependency files
 GEN_DEPS.c=makedep                        
@@ -121,12 +78,12 @@ GEN_DEPS.cc=makedep
 ## Commands to compile
 # _CXX_STEPS="-1" is a prelink step when compiling C and C++, and
 # it's only needed for long function names
-COMPILE.c=$(COMPILE_LINK_ENVVAR) $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(ICU_XPLINK_C) -c
-COMPILE.cc=$(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(ICU_XPLINK_CXX) -c
+COMPILE.c=$(COMPILE_LINK_ENVVAR) $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=$(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands for shared library (dll)
-SHLIB.c=	$(COMPILE_LINK_ENVVAR) $(CC) --shared $(LDFLAGS) $(ICU_XPLINK_L)
-SHLIB.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) --shared $(LDFLAGS) $(ICU_XPLINK_L)
+SHLIB.c=$(COMPILE_LINK_ENVVAR) $(CC) --shared $(LDFLAGS)
+SHLIB.cc=$(COMPILE_LINK_ENVVAR) $(CXX) --shared $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=-I
@@ -233,26 +190,10 @@ endif
 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
 %.o: $(srcdir)/%.c
 	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
-
-
-ifneq ($(SKIP_ESCAPING),)
 %.$(STATIC_O): $(srcdir)/%.cpp
 	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
-else
-# convert *.cpp files to _*.cpp with \u / \U escaping
-CLEANFILES += _*.cpp
-
-# the actual escaping
-_%.cpp: $(srcdir)/%.cpp
-	@$(BINDIR)/escapesrc$(EXEEXT) $< $@
-
-%.$(STATIC_O): _%.cpp
-	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
-%.o: _%.cpp
-	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
-endif
 
 ## Dependency rules
 %.d : %.u
