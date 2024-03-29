@@ -908,7 +908,8 @@ Literal Parser::parseLiteral(UErrorCode& errorCode) {
 
   Adds the option to `options`
 */
-void Parser::parseAttribute(UVector& options, UErrorCode& errorCode) {
+template<class T>
+void Parser::parseAttribute(AttributeAdder<T>& attrAdder, UErrorCode& errorCode) {
     U_ASSERT(inBounds(source, index));
 
     U_ASSERT(source[index] == AT);
@@ -950,26 +951,7 @@ void Parser::parseAttribute(UVector& options, UErrorCode& errorCode) {
         index = savedIndex;
     }
 
-    CHECK_ERROR(errorCode);
-
-    // No duplicate check -- the spec doesn't require one
-    Option* opt = new Option(lhs, std::move(rand));
-    if (opt == nullptr) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    options.adoptElement(static_cast<void*>(opt), errorCode);
-}
-
-// `options` is a vector of Option*
-static bool hasOption(const UVector& options, const UnicodeString& optionName) {
-    for (int32_t i = 0; i < options.size(); i++) {
-        const Option* opt = static_cast<Option*>(options.elementAt(i));
-        if (opt->getName() == optionName) {
-            return true;
-        }
-    }
-    return false;
+    attrAdder.addAttribute(lhs, std::move(rand), errorCode);
 }
 
 /*
@@ -977,50 +959,8 @@ static bool hasOption(const UVector& options, const UnicodeString& optionName) {
 
   Adds the option to `optionList`
 */
-void Parser::parseOption(UVector& options, UErrorCode& errorCode) {
-    U_ASSERT(inBounds(source, index));
-
-    // Parse LHS
-    UnicodeString lhs = parseIdentifier(errorCode);
-
-    // Parse '='
-    parseTokenWithWhitespace(EQUALS, errorCode);
-
-    UnicodeString rhsStr;
-    Operand rand;
-    // Parse RHS, which is either a literal or variable
-    switch (source[index]) {
-    case DOLLAR: {
-        rand = Operand(parseVariableName(errorCode));
-        break;
-    }
-    default: {
-        // Must be a literal
-        rand = Operand(parseLiteral(errorCode));
-        break;
-    }
-    }
-    U_ASSERT(!rand.isNull());
-
-    // Finally, add the key=value mapping
-    if (hasOption(options, lhs)) {
-        errors.setDuplicateOptionName(errorCode);
-    } else {
-        Option* opt = new Option(lhs, std::move(rand));
-        if (opt == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        options.adoptElement(static_cast<void*>(opt), errorCode);
-    }
-}
-
-/*
-  Consume a name-value pair, matching the `option` nonterminal in the grammar.
-
-  Adds the option to `optionList`
-*/
-void Parser::parseOption(Operator::Builder &builder, UErrorCode& errorCode) {
+template<class T>
+void Parser::parseOption(OptionAdder<T>& addOption, UErrorCode& errorCode) {
     U_ASSERT(inBounds(source, index));
 
     // Parse LHS
@@ -1049,7 +989,7 @@ void Parser::parseOption(Operator::Builder &builder, UErrorCode& errorCode) {
     // Use a local error code, check for duplicate option error and
     // record it as with other errors
     UErrorCode status = U_ZERO_ERROR;
-    builder.addOption(lhs, std::move(rand), status);
+    addOption.addOption(lhs, std::move(rand), status);
     if (U_FAILURE(status)) {
       U_ASSERT(status == U_MF_DUPLICATE_OPTION_NAME_ERROR);
       errors.setDuplicateOptionName(errorCode);
@@ -1066,7 +1006,8 @@ void Parser::parseOption(Operator::Builder &builder, UErrorCode& errorCode) {
   Consume optional whitespace followed by a sequence of options
   (possibly empty), separated by whitespace
 */
-void Parser::parseOptions(Operator::Builder& builder, UErrorCode& errorCode) {
+template <class T>
+void Parser::parseOptions(OptionAdder<T>& addOption, UErrorCode& errorCode) {
     // Early exit if out of bounds -- no more work is possible
     CHECK_BOUNDS(source, index, parseError, errorCode);
 
@@ -1144,121 +1085,21 @@ an option or an attribute.
             index = firstWhitespace;
             break;
         }
-        parseOption(builder, errorCode);
+        parseOption(addOption, errorCode);
     }
-}
-
-/*
-  Consume optional whitespace followed by a sequence of options
-  (possibly empty), separated by whitespace
-*/
-OptionMap Parser::parseOptions(UErrorCode& errorCode) {
-    OptionMap options;
-
-    // Early exit if out of bounds -- no more work is possible
-    if (!inBounds(source, index)) {
-        ERROR(parseError, errorCode, index);
-        return options;
-    }
-
-    // Initialize options vector, which supports equality on elements
-    LocalPointer<UVector> optionVec(createStringUVector(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return options;
-    }
-/*
-Arbitrary lookahead is required to parse option lists. To see why, consider
-these rules from the grammar:
-
-expression = "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
-annotation = (function *(s option)) / reserved
-
-And this example:
-{:foo  }
-
-Derivation:
-expression -> "{" [s] (((literal / variable) [s annotation]) / annotation) [s] "}"
-           -> "{" [s] annotation [s] "}"
-           -> "{" [s] ((function *(s option)) / reserved) [s] "}"
-           -> "{" [s] function *(s option) [s] "}"
-
-In this example, knowing whether to expect a '}' or the start of another option
-after the whitespace would require arbitrary lookahead -- in other words, which
-rule should we apply?
-    *(s option) -> s option *(s option)
-  or
-    *(s option) ->
-
-The same would apply to the example {:foo k=v } (note the trailing space after "v").
-
-This is addressed using a form of backtracking and (to make the backtracking easier
-to apply) a slight refactoring to the grammar.
-
-This code is written as if the grammar is:
-  expression = "{" [s] (((literal / variable) ([s] / [s annotation])) / annotation) "}"
-  annotation = (function *(s option) [s]) / (reserved [s])
-
-Parsing the `*(s option) [s]` sequence can be done within `parseOptions()`, meaning
-that `parseExpression()` can safely require a '}' after `parseOptions()` finishes.
-
-Note that when "backtracking" really just means early exit, since only whitespace
-is involved and there's no state to save.
-*/
-
-    while(true) {
-        // If the next character is not whitespace, that means we've already
-        // parsed the entire options list (which may have been empty) and there's
-        // no trailing whitespace. In that case, exit.
-        if (!isWhitespace(source[index])) {
-            break;
-        }
-
-        // In any case other than an empty options list, there must be at least
-        // one whitespace character.
-        parseRequiredWhitespace(errorCode);
-        // Restore precondition
-        if (!inBounds(source, index)) {
-            ERROR(parseError, errorCode, index);
-            break;
-        }
-
-        // If a name character follows, then at least one more option remains
-        // in the list.
-        // Otherwise, we've consumed all the options and any trailing whitespace,
-        // and can exit.
-        // Note that exiting is sort of like backtracking: "(s option)" doesn't apply,
-        // so we back out to [s].
-        if (!isNameStart(source[index])) {
-            // We've consumed all the options (meaning that either we consumed non-empty
-            // whitespace, or consumed at least one option.)
-            // Done.
-            // Remove the whitespace from normalizedInput
-            normalizedInput.truncate(normalizedInput.length() - 1);
-            break;
-        }
-        parseOption(*optionVec, errorCode);
-    }
-
-    return OptionMap(*optionVec, errorCode);
 }
 
 /*
   Consume optional whitespace followed by a sequence of attributes
   (possibly empty), separated by whitespace
 */
-OptionMap Parser::parseAttributes(UErrorCode& errorCode) {
-    OptionMap attributes;
+template<class T>
+void Parser::parseAttributes(AttributeAdder<T>& attrAdder, UErrorCode& errorCode) {
 
     // Early exit if out of bounds -- no more work is possible
     if (!inBounds(source, index)) {
         ERROR(parseError, errorCode, index);
-        return attributes;
-    }
-
-    // Initialize options vector, which supports equality on elements
-    LocalPointer<UVector> options(createStringUVector(errorCode));
-    if (U_FAILURE(errorCode)) {
-        return attributes;
+        return;
     }
 
 /*
@@ -1297,10 +1138,8 @@ Arbitrary lookahead is required to parse attribute lists, similarly to option li
             normalizedInput.truncate(normalizedInput.length() - 1);
             break;
         }
-        parseAttribute(*options, errorCode);
+        parseAttribute(attrAdder, errorCode);
     }
-
-    return OptionMap(*options, errorCode);
 }
 
 void Parser::parseReservedEscape(UnicodeString &str, UErrorCode& errorCode) {
@@ -1490,7 +1329,6 @@ Reserved Parser::parseReservedBody(Reserved::Builder& builder, UErrorCode& statu
     return builder.build(status);
 }
 
-
 /*
   Consume a function call or reserved string, matching the `annotation`
   nonterminal in the grammar
@@ -1507,8 +1345,10 @@ Operator Parser::parseAnnotation(UErrorCode& status) {
         // Consume the function name
         FunctionName func = parseFunction(status);
         ratorBuilder.setFunctionName(std::move(func));
+
+        OptionAdder<Operator::Builder> addOptions(ratorBuilder);
         // Consume the options (which may be empty)
-        parseOptions(ratorBuilder, status);
+        parseOptions(addOptions, status);
     } else {
       // Must be reserved
       // A reserved sequence is not a parse error, but might be a formatting error
@@ -1683,8 +1523,8 @@ Expression Parser::parseExpression(UErrorCode& status) {
     }
 
     // Parse attributes
-    OptionMap attributes = parseAttributes(status);
-    exprBuilder.setAttributeMap(std::move(attributes));
+    AttributeAdder attrAdder(exprBuilder);
+    parseAttributes(attrAdder, status);
 
     // Parse optional space
     // (the last [s] in e.g. "{" [s] literal [s annotation] *(s attribute) [s] "}")
@@ -2138,13 +1978,15 @@ Markup Parser::parseMarkup(UErrorCode& status) {
     // Parse the options, which must begin with a ' '
     // if present
     if (inBounds(source, index) && isWhitespace(source[index])) {
-        builder.setOptionMap(parseOptions(status));
+        OptionAdder<Markup::Builder> optionAdder(builder);
+        parseOptions(optionAdder, status);
     }
 
     // Parse the attributes, which also must begin
     // with a ' '
     if (inBounds(source, index) && isWhitespace(source[index])) {
-        builder.setAttributeMap(parseAttributes(status));
+        AttributeAdder attrAdder(builder);
+        parseAttributes(attrAdder, status);
     }
 
     parseOptionalWhitespace(status);
