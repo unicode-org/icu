@@ -32,18 +32,18 @@
 *.md text !eol zos-working-tree-encoding=UTF-8
 *.MF text !eol zos-working-tree-encoding=IBM-1047
 *.mk text !eol zos-working-tree-encoding=IBM-1047
-*.pl text !eol zos-working-tree-encoding=IBM-1047 diff=perl
+*.pl text !eol zos-working-tree-encoding=UTF-8 diff=perl
 *.pm text !eol zos-working-tree-encoding=IBM-1047 diff=perl
 *.project text !eol zos-working-tree-encoding=IBM-1047
-*.properties text !eol zos-working-tree-encoding=IBM-1047
+*.properties text !eol zos-working-tree-encoding=UTF-8
 *.props text !eol zos-working-tree-encoding=IBM-1047
-*.py text !eol zos-working-tree-encoding=IBM-1047 diff=python
+*.py text !eol zos-working-tree-encoding=UTF-8 diff=python
 *.rc text !eol zos-working-tree-encoding=IBM-1047
 *.sh text eol=lf
 *.sed text eol=lf
 *.sln text !eol zos-working-tree-encoding=UTF-8
 *.stub text !eol zos-working-tree-encoding=IBM-1047
-*.targets text !eol zos-working-tree-encoding=IBM-1047
+*.targets text !eol zos-working-tree-encoding=UTF-8
 *.txt text !eol zos-working-tree-encoding=UTF-8
 *.ucm text !eol zos-working-tree-encoding=IBM-1047
 *.vcproj text !eol zos-working-tree-encoding=UTF-8
