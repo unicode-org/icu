@@ -627,7 +627,7 @@ private:
         } else if(norm16<minMaybeYes) {
             return getMapping(norm16);  // for yesYes; if Jamo L: harmless empty list
         } else {
-            return maybeYesCompositions+norm16-minMaybeYes;
+            return maybeYesCompositions+((norm16-minMaybeYes)>>OFFSET_SHIFT);
         }
     }
     const uint16_t *getCompositionsListForComposite(uint16_t norm16) const {
@@ -880,8 +880,7 @@ unorm_getFCD16(UChar32 c);
  *      The maybeYesCompositions array contains compositions lists for characters that
  *      combine both forward (as starters in composition pairs)
  *      and backward (as trailing characters in composition pairs).
- *      Such characters do not occur in Unicode 5.2 but are allowed by
- *      the Unicode Normalization algorithms.
+ *      Such characters occur in Unicode 16 for the first time.
  *      If there are no such characters, then minMaybeYes==MIN_NORMAL_MAYBE_YES
  *      and the maybeYesCompositions array is empty.
  *      If there are such characters, then minMaybeYes is subtracted from their norm16 values

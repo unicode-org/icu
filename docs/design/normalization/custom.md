@@ -118,7 +118,8 @@ Per starter that combines forward, old and new data stores a linear, sorted list
     *   The ICU implementation recomposes starting from a fully decomposed sequence. Therefore, the lookup value needs to indicate combines-forward only for characters that do not have a mapping. The composition table result then indicates whether a composite combines-forward, and the index to the combined mapping+composition data is then found via the index from the composite's lookup result.
     *   ICU 49 composePair() needs to know whether the first character combines forward even if it is a composite. formatVersion 2 separates the YesNo range into two parts accordingly, adding the yesNoMappingsOnly threshold.
 *   A composite cannot combine-back because the composition algorithm does not try to combine an earlier starter with the new composite.
-*   The algorithm allows for a character to both combine-back and combine-forward, although this seems like a strange situation and it does not occur in Unicode 5.2..10.
+*   The algorithm allows for a character to both combine-back and combine-forward.
+    Such characters occur in Unicode 16 for the first time.
 *   Hangul syllables are algorithmically decomposed into Jamos, and algorithmically recomposed from them. The actual mappings are not stored in the table.
 *   In the ICU implementation, recomposition is done only on a fully decomposed sequence. Composition then sees only YesYes and MaybeYes characters which do not have mappings.
 *   A character that maps to an empty string (that is, one that is deleted during normalization) does not have normalization boundaries before or after it. Its FCD value would be the worst-case 0x1ff (lccc=1, tccc=0xff). (The standard Unicode normalization forms do not delete characters, but NFKC\_Casefold and UTS #46 do.)
@@ -347,10 +348,9 @@ _The rows of the table, from bottom to top, are encoded with increasing 16-bit "
         <br />
       </td>
       <td style="width:476px;height:31px">
-        Both combine-back &amp; combine-fwd: strange but allowed
-        <br />
+        Both combine-back &amp; combine-fwd
       </td>
-      <td style="width:60px">none</td>
+      <td style="width:60px">U+1611E GURUNG KHEMA VOWEL SIGN AA</td>
       <td style="width:456px;height:31px">
         ≥minMaybeYes which is 8-aligned
         <br />
