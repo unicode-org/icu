@@ -189,10 +189,25 @@ FunctionOptions MessageFormatter::resolveOptions(const Environment& env, const O
     }
 
     if (isFormatter(functionName)) {
-        const Formatter& formatterImpl = getFormatter(context, functionName, status);
+        LocalPointer<Formatter> formatterImpl(getFormatter(functionName, status));
+        if (U_FAILURE(status)) {
+            if (status == U_MF_FORMATTING_ERROR) {
+                errs.setFormattingError(functionName, status);
+                status = U_ZERO_ERROR;
+                return {};
+            }
+            if (status == U_MF_UNKNOWN_FUNCTION_ERROR) {
+                errs.setUnknownFunction(functionName, status);
+                status = U_ZERO_ERROR;
+                return {};
+            }
+            // Other errors are non-recoverable
+            return {};
+        }
+        U_ASSERT(formatterImpl != nullptr);
 
         UErrorCode savedStatus = status;
-        FormattedPlaceholder result = formatterImpl.format(std::move(argument), std::move(options), status);
+        FormattedPlaceholder result = formatterImpl->format(std::move(argument), std::move(options), status);
         // Update errors
         if (savedStatus != status) {
             if (U_FAILURE(status)) {

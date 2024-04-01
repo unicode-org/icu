@@ -8,7 +8,6 @@
 #if !UCONFIG_NO_MF2
 
 #include "messageformat2_allocation.h"
-#include "messageformat2_cached_formatters.h"
 #include "messageformat2_evaluation.h"
 #include "messageformat2_macros.h"
 #include "uvector.h" // U_ASSERT
@@ -185,8 +184,6 @@ PrioritizedVariant::~PrioritizedVariant() {}
     EmptyEnvironment::~EmptyEnvironment() {}
 
     Closure::~Closure() {}
-
-    CachedFormatters::~CachedFormatters() {}
 
     // MessageContext methods
 
