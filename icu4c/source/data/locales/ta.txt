@@ -215,10 +215,10 @@ ta{
     calendar{
         chinese{
             DateTimePatterns{
-                "a h:mm:ss zzzz",
-                "a h:mm:ss z",
-                "a h:mm:ss",
-                "a h:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "U MMMM d, EEEE",
                 "U, d MMMM",
                 "U, d MMM",
@@ -363,10 +363,10 @@ ta{
         }
         generic{
             DateTimePatterns{
-                "a h:mm:ss zzzz",
-                "a h:mm:ss z",
-                "a h:mm:ss",
-                "a h:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE, d MMMM, y G",
                 "d MMMM, y G",
                 "d MMM, y G",
@@ -400,8 +400,8 @@ ta{
                 EBhm{"E B h:mm"}
                 EBhms{"E B h:mm:ss"}
                 Ed{"d E"}
-                Ehm{"E a h:mm"}
-                Ehms{"E a h:mm:ss"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
@@ -413,9 +413,9 @@ ta{
                 MMMd{"d MMM"}
                 MMdd{"dd-MM"}
                 Md{"d/M"}
-                h{"a h"}
-                hm{"a h:mm"}
-                hms{"a h:mm:ss"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
@@ -457,22 +457,22 @@ ta{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"a h:mm – a h:mm v"}
-                    h{"a h:mm–h:mm v"}
-                    m{"a h:mm–h:mm v"}
+                    a{"h:mm – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"a h – a h v"}
-                    h{"a h–h v"}
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y – y G"}
@@ -512,19 +512,11 @@ ta{
             }
         }
         gregorian{
-            AmPmMarkersAbbr{
-                "AM",
-                "பிற்பகல்",
-            }
-            AmPmMarkersNarrow{
-                "மு.ப",
-                "பி.ப",
-            }
             DateTimePatterns{
-                "a h:mm:ss zzzz",
-                "a h:mm:ss z",
-                "a h:mm:ss",
-                "a h:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE, d MMMM, y",
                 "d MMMM, y",
                 "d MMM, y",
@@ -558,8 +550,8 @@ ta{
                 EBhm{"E B h:mm"}
                 EBhms{"E B h:mm:ss"}
                 Ed{"d E"}
-                Ehm{"E a h:mm"}
-                Ehms{"E a h:mm:ss"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
                 GyMd{"d/M/y G"}
                 MEd{"dd-MM, E"}
                 MMMMW{
@@ -569,11 +561,11 @@ ta{
                 MMMMd{"d MMMM"}
                 MMdd{"dd-MM"}
                 Md{"d/M"}
-                h{"a h"}
-                hm{"a h:mm"}
-                hms{"a h:mm:ss"}
-                hmsv{"a h:mm:ss v"}
-                hmv{"a h:mm v"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
+                hmv{"h:mm a v"}
                 yM{"M/y"}
                 yMEd{"E, d/M/y"}
                 yMM{"MM-y"}
@@ -657,14 +649,9 @@ ta{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        am{"முற்பகல்"}
-                        pm{"பிற்பகல்"}
-                    }
                     narrow{
                         afternoon1{"மதி."}
                         afternoon2{"பிற்."}
-                        am{"மு.ப"}
                         evening1{"மா."}
                         evening2{"அந்தி மா."}
                         midnight{"நள்."}
@@ -672,11 +659,6 @@ ta{
                         morning2{"கா."}
                         night1{"இ."}
                         noon{"நண்."}
-                        pm{"பி.ப"}
-                    }
-                    wide{
-                        am{"முற்பகல்"}
-                        pm{"பிற்பகல்"}
                     }
                 }
             }
@@ -733,22 +715,22 @@ ta{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"a h:mm – a h:mm v"}
-                    h{"a h:mm – h:mm v"}
-                    m{"a h:mm – h:mm v"}
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
                 }
                 hv{
-                    a{"a h – a h v"}
-                    h{"a h – h v"}
+                    a{"h a – h a v"}
+                    h{"h – h a v"}
                 }
                 y{
                     y{"y – y"}
