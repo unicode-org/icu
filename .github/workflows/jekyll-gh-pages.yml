@@ -46,7 +46,7 @@ jobs:
           cache-version: 0 # Increment this number if you need to re-download cached gems
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@f156874f8191504dae5b037505266ed5dda6c382 # v3.0.6
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
         with:
           generator_config_file: docs/_config.yml
       - name: Build with Jekyll
