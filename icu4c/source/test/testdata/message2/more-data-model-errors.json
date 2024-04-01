@@ -1,0 +1,38 @@
+{
+    "Variant Key Mismatch": [
+        ".match {$foo :number} {$bar :number}  one{{one}}",
+        ".match {$foo :number} {$bar :number}  one {{one}}",
+        ".match {$foo :number} {$bar :number}  one  {{one}}",
+        ".match {$foo :number}  * * {{foo}}",
+        ".match {$one :number}\n  1 2 {{Too many}}\n   * {{Otherwise}}",
+        ".match {$one :number} {$two :number}\n  1 2 {{Two keys}}\n  * {{Missing a key}}\n  * * {{Otherwise}}",
+        ".match {$foo :x} {$bar :x} * {{foo}}"
+    ],
+    "Missing Fallback Variant": [
+        ".match {$one :number}\n   1 {{Value is one}}\n 2 {{Value is two}}",
+        ".match {$one :number} {$two :number}\n  1 * {{First is one}}\n  * 1 {{Second is one}}"
+    ],
+    "Missing Selector Annotation": [
+        ".match {$one}\n   1 {{Value is one}}\n    * {{Value is not one}}",
+        ".local $one = {|The one|}\n   .match {$one}\n  1 {{Value is one}}\n   * {{Value is not one}}",
+        ".match {|horse| ^private}\n   1 {{The value is one.}}   * {{The value is not one.}}",
+        ".match {$foo !select}  |1| {{one}}  * {{other}}",
+        ".match {$foo ^select}  |1| {{one}}  * {{other}}",
+        ".input {$foo} .match {$foo} one {{one}} * {{other}}",
+        ".local $foo = {$bar} .match {$foo} one {{one}} * {{other}}"
+    ],
+    "Duplicate Declaration": [
+        ".local $x = {|1|} .input {$x :number} {{{$x}}}",
+        ".input {$x :number} .input {$x :string} {{{$x}}}"
+    ],
+    "Duplicate Option Name": [
+        "{:foo a=1 b=2 a=1}",
+        "{:foo a=1 a=1}",
+        "{:foo a=1 a=2}",
+        "{|x| :foo a=1 a=2}"
+    ],
+    "Unsupported Statement": [
+        ".matc {-1} {{hello}}",
+        ".m {-1} {{hello}}"
+    ]
+}

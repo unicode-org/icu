@@ -39,7 +39,7 @@ public:
     /**
      * test MessageFormat2 with various given patterns
      **/
-    void testVariousPatterns(void);
+    void dataDrivenTests(void);
     void featureTests(void);
     void messageFormat1Tests(void);
     void testAPICustomFunctions(void);
@@ -47,28 +47,13 @@ public:
     void testCustomFunctions(void);
     // Test standard functions
     void testBuiltInFunctions(void);
-    void testDataModelErrors(void);
-    void testResolutionErrors(void);
     // Test the data model API
     void testDataModelAPI(void);
     void testAPI(void);
-    void testInvalidPatterns(void);
     void testAPISimple(void);
 
 private:
-
-    void testSemanticallyInvalidPattern(uint32_t, const UnicodeString&, UErrorCode);
-    void testRuntimeErrorPattern(uint32_t, const UnicodeString&, UErrorCode);
-    void testRuntimeWarningPattern(uint32_t, const UnicodeString&, const UnicodeString&, UErrorCode);
-    void testInvalidPattern(uint32_t, const UnicodeString&);
-    void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t);
-    void testInvalidPattern(uint32_t, const UnicodeString&, uint32_t, uint32_t);
-    void testValidPatterns(const TestResult*, int32_t, IcuTestErrorCode&);
-    void testResolutionErrors(IcuTestErrorCode&);
-    void testNoSyntaxErrors(const UnicodeString*, int32_t, IcuTestErrorCode&);
-    void jsonTests(IcuTestErrorCode&);
-    void specTests();
-    void runSpecTests(IcuTestErrorCode&);
+    void jsonTestsFromFiles(IcuTestErrorCode&);
 
     // Built-in function testing
     void testDateTime(IcuTestErrorCode&);

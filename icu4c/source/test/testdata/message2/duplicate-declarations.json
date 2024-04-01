@@ -1,0 +1,25 @@
+[
+    {
+        "src": ".local $foo = {$foo} .local $foo = {42} {{bar {$foo}}}",
+        "params": { "foo": "foo" },
+        "exp": "bar 42",
+        "errors": [{ "type": "duplicate-declaration" }]
+    },
+    {
+        "src": ".local $foo = {42} .local $foo = {42} {{bar {$foo}}}",
+        "params": { "foo": "foo" },
+        "exp": "bar 42",
+        "errors": [{ "type": "duplicate-declaration" }]
+    },
+    {
+        "src": ".local $foo = {:unknown} .local $foo = {42} {{bar {$foo}}}",
+        "params": { "foo": "foo" },
+        "exp": "bar 42",
+        "errors": [{ "type": "duplicate-declaration" }]
+    },
+    {
+        "src": ".local $x = {42} .local $y = {$x} .local $x = {13} {{{$x} {$y}}}",
+        "exp": "13 42",
+        "errors": [{ "type": "duplicate-declaration" }]
+    }
+]

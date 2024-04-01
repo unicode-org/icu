@@ -1,0 +1,20 @@
+[
+    { "src": ".match {one :string} {bar :string} one * {{one}} * * {{other}}",
+      "exp": "one" },
+    { "src": ".match {foo :string} {bar :string}one * {{one}} * * {{other}}",
+      "exp": "other" },
+    { "src": ".match {foo :string}{bar :string} one * {{one}} * * {{other}}",
+      "exp": "other" },
+    { "src": ".match {one :string}{bar :string}one * {{one}} * * {{other}}",
+      "exp": "one" },
+    { "src": ".match{foo :string} {bar :string} one * {{one}} * * {{other}}",
+      "exp": "other" },
+    { "src": ".match {foo :string} {bar :string} one * {{one}}* * {{other}}",
+      "exp": "other" },
+    { "src": ".match {foo :string} {bar :string}one * {{one}}* * {{other}}",
+      "exp": "other" },
+    { "src": ".match {foo :string} {bar :string} one *{{one}} * * {{foo}}",
+      "exp": "foo" },
+    { "src": ".match {foo :string} {bar :string} one *  {{one}} * * {{foo}}",
+      "exp": "foo" }
+]

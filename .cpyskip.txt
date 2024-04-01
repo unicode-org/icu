@@ -34,6 +34,7 @@ KEYS
 *.intaglio
 *.jar
 *.jpg
+*.json
 *.launch
 *.nrm
 *.odp
@@ -117,3 +118,4 @@ tools/unicodetools/*
 # vendor
 #
 vendor/double-conversion/upstream/*
+vendor/json/upstream/*
