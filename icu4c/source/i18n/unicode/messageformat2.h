@@ -28,7 +28,6 @@ U_NAMESPACE_BEGIN
 
 namespace message2 {
 
-    class CachedFormatters;
     class Environment;
     class MessageContext;
     class ResolvedSelector;
@@ -328,17 +327,17 @@ namespace message2 {
         const MFFunctionRegistry& getCustomMFFunctionRegistry() const;
 
         bool isCustomFormatter(const FunctionName&) const;
-        FormatterFactory* lookupFormatterFactory(MessageContext&, const FunctionName&, UErrorCode& status) const;
+        FormatterFactory* lookupFormatterFactory(const FunctionName&, UErrorCode& status) const;
         bool isBuiltInSelector(const FunctionName&) const;
         bool isBuiltInFormatter(const FunctionName&) const;
         bool isCustomSelector(const FunctionName&) const;
         const SelectorFactory* lookupSelectorFactory(MessageContext&, const FunctionName&, UErrorCode&) const;
         bool isSelector(const FunctionName& fn) const { return isBuiltInSelector(fn) || isCustomSelector(fn); }
         bool isFormatter(const FunctionName& fn) const { return isBuiltInFormatter(fn) || isCustomFormatter(fn); }
-        const Formatter* maybeCachedFormatter(MessageContext&, const FunctionName&, UErrorCode&) const;
+        const Formatter* lookupFormatter(const FunctionName&, UErrorCode&) const;
 
         Selector* getSelector(MessageContext&, const FunctionName&, UErrorCode&) const;
-        const Formatter& getFormatter(MessageContext&, const FunctionName&, UErrorCode&) const;
+        Formatter* getFormatter(const FunctionName&, UErrorCode&) const;
         bool getDefaultFormatterNameByType(const UnicodeString&, FunctionName&) const;
 
         // Checking for resolution errors
@@ -373,16 +372,6 @@ namespace message2 {
 
         // Normalized version of the input string (optional whitespace removed)
         UnicodeString normalizedInput;
-
-        // Formatter cache
-        // Must be a raw pointer to avoid including the internal header file
-        // defining CachedFormatters
-        // Owned by `this`
-        // TODO: This is an optimization that the "TemperatureFormatter" test
-        // (ported from ICU4J) was checking for; however, that test was removed
-        // in order to make `setFormatter()` safe, so maybe this should be
-        // removed too
-        CachedFormatters* cachedFormatters;
 
         // Errors -- only used while parsing and checking for data model errors; then
         // the MessageContext keeps track of errors
