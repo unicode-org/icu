@@ -575,8 +575,8 @@
     <ClCompile Include="messageformat2test.cpp" />
     <ClCompile Include="messageformat2test_custom.cpp" />
     <ClCompile Include="messageformat2test_features.cpp" />
-    <ClCompile Include="messageformat2test_fromjson.cpp" />
     <ClCompile Include="messageformat2test_icu.cpp" />
+    <ClCompile Include="messageformat2test_read_json.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">

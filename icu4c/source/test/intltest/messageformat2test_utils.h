@@ -283,12 +283,12 @@ class TestUtils {
 
     static void failExpectedSuccess(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
         tmsg.dataerrln(testCase.getTestName());
-        tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code " + ((int32_t) errorCode));
+        tmsg.logln(testCase.getTestName() + " failed test with pattern: " + testCase.getPattern() + " and error code " + UnicodeString(u_errorName(errorCode)));
         errorCode.reset();
     }
     static void failExpectedFailure(IntlTest& tmsg, const TestCase& testCase, IcuTestErrorCode& errorCode) {
         tmsg.dataerrln(testCase.getTestName());
-        tmsg.logln(testCase.getTestName() + " failed test with wrong error code; pattern: " + testCase.getPattern() + " and error code " + ((int32_t) errorCode) + "(expected error code: " + ((int32_t) testCase.expectedErrorCode()) + " )");
+        tmsg.errln(testCase.getTestName() + " failed test with wrong error code; pattern: " + testCase.getPattern() + " and error code " + UnicodeString(u_errorName(errorCode)) + " and expected error code: " + UnicodeString(u_errorName(testCase.expectedErrorCode())));
         errorCode.reset();
     }
     static void failWrongOutput(IntlTest& tmsg, const TestCase& testCase, const UnicodeString& result) {

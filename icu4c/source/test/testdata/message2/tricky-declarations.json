@@ -1,0 +1,17 @@
+[
+    { "src": ".input {$var :number minimumFractionDigits=$var2} .input {$var2 :number minimumFractionDigits=5} {{{$var} {$var2}}}",
+      "exp": "1.000 3.00000",
+      "params": { "var": 1, "var2": 3 },
+      "errors": [{ "type": "duplicate-declaration" }]
+    },
+    { "src": ".local $var = {$var2} .local $var2 = {1} {{{$var} {$var2}}}",
+      "exp": "5 1",
+      "params": { "var2": 5 },
+      "errors": [{ "type": "duplicate-declaration" }]
+    },
+    {
+        "src": ".local $var2 = {1} {{{$var2}}}",
+        "exp": "1",
+        "params": { "var2": 5 }
+    }
+]
