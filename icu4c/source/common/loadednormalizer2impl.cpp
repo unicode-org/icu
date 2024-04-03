@@ -63,7 +63,7 @@ LoadedNormalizer2Impl::isAcceptable(void * /*context*/,
         pInfo->dataFormat[1]==0x72 &&
         pInfo->dataFormat[2]==0x6d &&
         pInfo->dataFormat[3]==0x32 &&
-        pInfo->formatVersion[0]==4
+        pInfo->formatVersion[0]==5
     ) {
         // Normalizer2Impl *me=(Normalizer2Impl *)context;
         // uprv_memcpy(me->dataVersion, pInfo->dataVersion, 4);
