@@ -766,9 +766,12 @@ void computeDecompositions(const char* basename,
     std::vector<uint32_t> nonRecursive32;
     LocalUMutableCPTriePointer nonRecursiveBuilder(umutablecptrie_open(0, 0, status));
 
+    UBool uts46 = false;
+
     if (uprv_strcmp(basename, "nfkd") == 0) {
         mainNormalizer = Normalizer2::getNFKDInstance(status);
     } else if (uprv_strcmp(basename, "uts46d") == 0) {
+        uts46 = true;
         mainNormalizer = Normalizer2::getInstance(nullptr, "uts46", UNORM2_COMPOSE, status);
     } else {
         mainNormalizer = nfdNormalizer;
@@ -828,23 +831,39 @@ void computeDecompositions(const char* basename,
             nfcNormalizer->normalize(dst, nfc, status);
             nonNfdOrRoundTrips = (src == nfc);
         }
-        int32_t len = dst.toUTF32(utf32, DECOMPOSITION_BUFFER_SIZE, status);
-        if (!len || (len == 1 && utf32[0] == 0xFFFD && c != 0xFFFD)) {
-            // Characters that normalize to nothing or to U+FFFD (without the
-            // input being U+FFFD) in ICU4C's UTS 46 normalization normalize
-            // as in NFD in ICU4X's UTF 46 normalization in the interest
-            // of data size and ICU4X's normalizer being unable to handle
-            // normalizing to nothing.
-            // When UTS 46 is implemented on top of ICU4X, a preprocessing
-            // step is supposed to remove these characters before the
-            // normalization step.
-            if (uprv_strcmp(basename, "uts46d") != 0) {
-                status.set(U_INTERNAL_PROGRAM_ERROR);
-                handleError(status, __LINE__, basename);
+        if (uts46) {
+            // Work around https://unicode-org.atlassian.net/browse/ICU-22658
+            // TODO: Remove the workaround after data corresponding to
+            // https://www.unicode.org/L2/L2024/24061.htm#179-C36 lands
+            // for Unicode 16.
+            switch (c) {
+                case 0x2F868:
+                    dst.truncate(0);
+                    dst.append(UChar32(0x36FC));
+                    break;
+                case 0x2F874:
+                    dst.truncate(0);
+                    dst.append(UChar32(0x5F53));
+                    break;
+                case 0x2F91F:
+                    dst.truncate(0);
+                    dst.append(UChar32(0x243AB));
+                    break;
+                case 0x2F95F:
+                    dst.truncate(0);
+                    dst.append(UChar32(0x7AEE));
+                    break;
+                case 0x2F9BF:
+                    dst.truncate(0);
+                    dst.append(UChar32(0x45D7));
+                    break;
             }
-            nfdNormalizer->normalize(src, dst, status);
-            len = dst.toUTF32(utf32, DECOMPOSITION_BUFFER_SIZE, status);
-            if (!len || (len == 1 && utf32[0] == 0xFFFD && c != 0xFFFD)) {
+        }
+
+        int32_t len = dst.toUTF32(utf32, DECOMPOSITION_BUFFER_SIZE, status);
+
+        if (!len || (len == 1 && utf32[0] == 0xFFFD && c != 0xFFFD)) {
+            if (!uts46) {
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, __LINE__, basename);
             }
@@ -962,7 +981,13 @@ void computeDecompositions(const char* basename,
         if (!nonNfdOrRoundTrips) {
             compositionPassthroughBound = c;
         }
-        if (len == 1 && ((utf32[0] >= 0x1161 && utf32[0] <= 0x1175) || (utf32[0] >= 0x11A8 && utf32[0] <= 0x11C2))) {
+        if (!len) {
+            if (!uts46) {
+                status.set(U_INTERNAL_PROGRAM_ERROR);
+                handleError(status, __LINE__, basename);
+            }
+            pendingTrieInsertions.push_back({c, 0xFFFFFFFF, false});
+        } else if (len == 1 && ((utf32[0] >= 0x1161 && utf32[0] <= 0x1175) || (utf32[0] >= 0x11A8 && utf32[0] <= 0x11C2))) {
             // Singleton decompositions to conjoining jamo.
             if (mainNormalizer == nfdNormalizer) {
                 // Not supposed to happen in NFD
