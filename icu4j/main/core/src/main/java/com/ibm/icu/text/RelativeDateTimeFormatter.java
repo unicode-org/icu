@@ -159,11 +159,51 @@ public final class RelativeDateTimeFormatter {
 
         /**
          * Quarters
-         * @internal TODO: propose for addition in ICU 57
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 76
          */
-        @Deprecated
         QUARTERS,
+
+        /**
+         * Sundays
+         * @draft ICU 76
+         */
+        SUNDAYS,
+
+        /**
+         * Mondays
+         * @draft ICU 76
+         */
+        MONDAYS,
+
+        /**
+         * Tuesdays
+         * @draft ICU 76
+         */
+        TUESDAYS,
+
+        /**
+         * Wednesdays
+         * @draft ICU 76
+         */
+        WEDNESDAYS,
+
+        /**
+         * Thursdays
+         * @draft ICU 76
+         */
+        THURSDAYS,
+
+        /**
+         * Fridays
+         * @draft ICU 76
+         */
+        FRIDAYS,
+
+        /**
+         * Saturdays
+         * @draft ICU 76
+         */
+        SATURDAYS,
     }
 
     /**
@@ -768,8 +808,13 @@ public final class RelativeDateTimeFormatter {
             case HOUR:      relunit = RelativeUnit.HOURS; break;
             case MINUTE:    relunit = RelativeUnit.MINUTES; break;
             case SECOND:    break; // set above
-            default: // SUNDAY..SATURDAY
-                throw new UnsupportedOperationException("formatNumeric does not currently support RelativeUnit.SUNDAY..SATURDAY");
+            case SUNDAY:    relunit = RelativeUnit.SUNDAYS; break;
+            case MONDAY:    relunit = RelativeUnit.MONDAYS; break;
+            case TUESDAY:   relunit = RelativeUnit.TUESDAYS; break;
+            case WEDNESDAY: relunit = RelativeUnit.WEDNESDAYS; break;
+            case THURSDAY:  relunit = RelativeUnit.THURSDAYS; break;
+            case FRIDAY:    relunit = RelativeUnit.FRIDAYS; break;
+            case SATURDAY:  relunit = RelativeUnit.SATURDAYS; break;
         }
         Direction direction = Direction.NEXT;
         if (Double.compare(offset,0.0) < 0) { // needed to handle -0.0
@@ -1199,13 +1244,13 @@ public final class RelativeDateTimeFormatter {
             MONTH(RelativeUnit.MONTHS, AbsoluteUnit.MONTH),
             QUARTER(RelativeUnit.QUARTERS, AbsoluteUnit.QUARTER),
             YEAR(RelativeUnit.YEARS, AbsoluteUnit.YEAR),
-            SUNDAY(null, AbsoluteUnit.SUNDAY),
-            MONDAY(null, AbsoluteUnit.MONDAY),
-            TUESDAY(null, AbsoluteUnit.TUESDAY),
-            WEDNESDAY(null, AbsoluteUnit.WEDNESDAY),
-            THURSDAY(null, AbsoluteUnit.THURSDAY),
-            FRIDAY(null, AbsoluteUnit.FRIDAY),
-            SATURDAY(null, AbsoluteUnit.SATURDAY);
+            SUNDAY(RelativeUnit.SUNDAYS, AbsoluteUnit.SUNDAY),
+            MONDAY(RelativeUnit.MONDAYS, AbsoluteUnit.MONDAY),
+            TUESDAY(RelativeUnit.TUESDAYS, AbsoluteUnit.TUESDAY),
+            WEDNESDAY(RelativeUnit.WEDNESDAYS, AbsoluteUnit.WEDNESDAY),
+            THURSDAY(RelativeUnit.THURSDAYS, AbsoluteUnit.THURSDAY),
+            FRIDAY(RelativeUnit.FRIDAYS, AbsoluteUnit.FRIDAY),
+            SATURDAY(RelativeUnit.SATURDAYS, AbsoluteUnit.SATURDAY);
 
             RelativeUnit relUnit;
             AbsoluteUnit absUnit;

@@ -199,13 +199,13 @@ static const FieldsDat en_attrDef_long_midSent_min[kNumOffsets*2] = {
 static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 Tuesdays ago",       "5 Tuesdays ago",     /* -5   */
-    ""/*no data */,         ""/*no data */,       /* -2.2 */
+    "2.2 Tuesdays ago",     "2.2 Tuesdays ago",   /* -2.2 */
     "2 Tuesdays ago",       "2 Tuesdays ago",     /* -2   */
     "last Tuesday",         "1 Tuesday ago",      /* -1   */
-    ""/*no data */,         ""/*no data */,       /* -0.7 */
+    "0.7 Tuesdays ago",     "0.7 Tuesdays ago",   /* -0.7 */
     "this Tuesday",         "0 Tuesdays ago",     /* -0   */
     "this Tuesday",         "in 0 Tuesdays",      /*  0   */
-    ""/*no data */,         ""/*no data */,       /*  0.7 */
+    "in 0.7 Tuesdays",      "in 0.7 Tuesdays",    /*  0.7 */
     "next Tuesday",         "in 1 Tuesday",       /*  1   */
     "in 2 Tuesdays",        "in 2 Tuesdays",      /*  2   */
     "in 5 Tuesdays",        "in 5 Tuesdays",      /*  5   */
@@ -214,16 +214,16 @@ static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
 static const FieldsDat en_attr0_long_midSent_tues[kNumOffsets*2] = {
 /*  text           numeric           text                    numeric */
     {UDAT_REL_NUMERIC_FIELD,  0,  1}, {UDAT_REL_NUMERIC_FIELD,  0,  1}, /* "5 Tuesdays ago",       "5 Tuesdays ago",      -5   */
-    { -1, -1, -1},                    { -1, -1, -1},                    /* ""            ,         ""            ,        -2.2 */
+    {UDAT_REL_NUMERIC_FIELD,  0,  3}, {UDAT_REL_NUMERIC_FIELD,  0,  3}, /* "2.2 Tuesdays ago",     "2.2 Tuesdays ago",    -2.2 */
     {UDAT_REL_NUMERIC_FIELD,  0,  1}, {UDAT_REL_NUMERIC_FIELD,  0,  1}, /* "2 Tuesdays ago",       "2 Tuesdays ago",      -2   */
     { -1, -1, -1},                    {UDAT_REL_NUMERIC_FIELD,  0,  1}, /* "last Tuesday",         "1 Tuesday ago",       -1   */
-    { -1, -1, -1},                    { -1, -1, -1},                    /* ""            ,         ""            ,        -0.7 */
+    {UDAT_REL_NUMERIC_FIELD,  0,  3}, {UDAT_REL_NUMERIC_FIELD,  0,  3}, /* "0.7 Tuesdays ago",     "0.7 Tuesdays ago",    -0.7 */
     { -1, -1, -1},                    {UDAT_REL_NUMERIC_FIELD,  0,  1}, /* "this Tuesday",         "0 Tuesdays ago",      -0   */
     { -1, -1, -1},                    {UDAT_REL_NUMERIC_FIELD,  3,  4}, /* "this Tuesday",         "in 0 Tuesdays",        0   */
-    { -1, -1, -1},                    { -1, -1, -1},                    /* ""            ,         ""            ,         0.7 */
+    {UDAT_REL_NUMERIC_FIELD,  3,  6}, {UDAT_REL_NUMERIC_FIELD,  3,  6}, /* "in 0.7 Tuesdays",      "in 0.7 Tuesdays",      0.7 */
     { -1, -1, -1},                    {UDAT_REL_NUMERIC_FIELD,  3,  4}, /* "next Tuesday",         "in 1 Tuesday",         1   */
-    {UDAT_REL_NUMERIC_FIELD,  0,  1}, {UDAT_REL_NUMERIC_FIELD,  3,  4}, /* "in 2 Tuesdays",        "in 2 Tuesdays",        2   */
-    {UDAT_REL_NUMERIC_FIELD,  0,  1}, {UDAT_REL_NUMERIC_FIELD,  3,  4}, /* "in 5 Tuesdays",        "in 5 Tuesdays",        5   */
+    {UDAT_REL_NUMERIC_FIELD,  3,  4}, {UDAT_REL_NUMERIC_FIELD,  3,  4}, /* "in 2 Tuesdays",        "in 2 Tuesdays",        2   */
+    {UDAT_REL_NUMERIC_FIELD,  3,  4}, {UDAT_REL_NUMERIC_FIELD,  3,  4}, /* "in 5 Tuesdays",        "in 5 Tuesdays",        5   */
 };
 
 static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
@@ -287,17 +287,17 @@ static const FieldsDat ak_attrDef_long_stdAlon_sec[kNumOffsets*2] = {
 
 static const char* enIN_decDef_short_midSent_weds[kNumOffsets*2] = {
 /*  text                    numeric */
-    "5 Wed. ago",           "5 Wed. ago",         /* -5   */
-    "2.2 Wed. ago",         "2.2 Wed. ago",       /* -2.2 */
-    "2 Wed. ago",           "2 Wed. ago",         /* -2   */
-    "last Wed",             "1 Wed. ago",         /* -1   */
-    "0.7 Wed. ago",         "0.7 Wed. ago",       /* -0.7 */
-    "this Wed",             "0 Wed. ago",         /*  -0  */
-    "this Wed",             "in 0 Wed.",          /*  0   */
-    "in 0.7 Wed.",          "in 0.7 Wed.",        /*  0.7 */
+    "5 Wed ago",            "5 Wed ago",          /* -5   */
+    "2.2 Wed ago",          "2.2 Wed ago",        /* -2.2 */
+    "2 Wed ago",            "2 Wed ago",          /* -2   */
+    "last Wed",             "1 Wed ago",          /* -1   */
+    "0.7 Wed ago",          "0.7 Wed ago",        /* -0.7 */
+    "this Wed",             "0 Wed ago",          /*  -0  */
+    "this Wed",             "in 0 Wed",           /*  0   */
+    "in 0.7 Wed",           "in 0.7 Wed",         /*  0.7 */
     "next Wed",             "in 1 Wed",           /*  1   */ // in 1 Wed. missing in logical group
-    "in 2  Wed.",           "in 2 Wed.",          /*  2   */
-    "in 5  Wed.",           "in 5 Wed."           /*  5   */
+    "in 2 Wed",             "in 2 Wed",           /*  2   */
+    "in 5 Wed",             "in 5 Wed"            /*  5   */
 };
 
 static const FieldsDat enIN_attrDef_short_midSent_weds[kNumOffsets*2] = {
@@ -380,10 +380,6 @@ static void TestRelDateFmt(void)
             UChar ubufget[kUBufMax];
             int32_t ulenget;
 
-            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && offsets[iOffset] != -1.0 && offsets[iOffset] != 0.0 && offsets[iOffset] != 1.0) {
-                continue; /* we do not currently have data for this */
-            }
-
             status = U_ZERO_ERROR;
             ulenget = ureldatefmt_format(reldatefmt, offsets[iOffset], itemPtr->unit, ubufget, kUBufMax, &status);
             if ( U_FAILURE(status) ) {
@@ -400,10 +396,6 @@ static void TestRelDateFmt(void)
                         itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
                         offsets[iOffset], (int)itemPtr->unit, itemPtr->expectedResults[iOffset*2], bbufget );
                 }
-            }
-
-            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY) {
-                continue; /* we do not currently have numeric-style data for this */
             }
 
             status = U_ZERO_ERROR;
@@ -458,10 +450,6 @@ static void TestNumericField(void)
         }
 
         for (iOffset = 0; iOffset < kNumOffsets; iOffset++) {
-            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && offsets[iOffset] != -1.0 && offsets[iOffset] != 0.0 && offsets[iOffset] != 1.0) {
-                continue; /* we do not currently have data for this */
-            }
-
             /* Depend on the next one to verify the data */
             status = U_ZERO_ERROR;
             UFormattedRelativeDateTime* fv = ureldatefmt_openResult(&status);
@@ -515,11 +503,6 @@ static void TestNumericField(void)
                     }
                 }
                 ucfpos_close(cfpos);
-            }
-
-            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY) {
-                ureldatefmt_closeResult(fv);
-                continue; /* we do not currently have numeric-style data for this */
             }
 
             /* Depend on the next one to verify the data */
