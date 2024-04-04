@@ -61,6 +61,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.NEXT, RelativeUnit.YEARS, "in 0.5 years"},
                 {1.0, Direction.NEXT, RelativeUnit.YEARS, "in 1 year"},
                 {2.0, Direction.NEXT, RelativeUnit.YEARS, "in 2 years"},
+                {0.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 0 quarters"},
+                {0.5, Direction.NEXT, RelativeUnit.QUARTERS, "in 0.5 quarters"},
+                {1.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 1 quarter"},
+                {2.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 2 quarters"},
+                {0.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 0 Sundays"},
+                {0.5, Direction.NEXT, RelativeUnit.SUNDAYS, "in 0.5 Sundays"},
+                {1.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 1 Sunday"},
+                {2.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 2 Sundays"},
+                {0.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 0 Mondays"},
+                {0.5, Direction.NEXT, RelativeUnit.MONDAYS, "in 0.5 Mondays"},
+                {1.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 1 Monday"},
+                {2.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 2 Mondays"},
+                {0.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 0 Tuesdays"},
+                {0.5, Direction.NEXT, RelativeUnit.TUESDAYS, "in 0.5 Tuesdays"},
+                {1.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 1 Tuesday"},
+                {2.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 2 Tuesdays"},
+                {0.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 0 Wednesdays"},
+                {0.5, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 0.5 Wednesdays"},
+                {1.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 1 Wednesday"},
+                {2.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 2 Wednesdays"},
+                {0.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 0 Thursdays"},
+                {0.5, Direction.NEXT, RelativeUnit.THURSDAYS, "in 0.5 Thursdays"},
+                {1.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 1 Thursday"},
+                {2.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 2 Thursdays"},
+                {0.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 0 Fridays"},
+                {0.5, Direction.NEXT, RelativeUnit.FRIDAYS, "in 0.5 Fridays"},
+                {1.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 1 Friday"},
+                {2.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 2 Fridays"},
+                {0.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 0 Saturdays"},
+                {0.5, Direction.NEXT, RelativeUnit.SATURDAYS, "in 0.5 Saturdays"},
+                {1.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 1 Saturday"},
+                {2.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 2 Saturdays"},
 
                 {0.0, Direction.LAST, RelativeUnit.SECONDS, "0 seconds ago"},
                 {0.5, Direction.LAST, RelativeUnit.SECONDS, "0.5 seconds ago"},
@@ -90,6 +122,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.LAST, RelativeUnit.YEARS, "0.5 years ago"},
                 {1.0, Direction.LAST, RelativeUnit.YEARS, "1 year ago"},
                 {2.0, Direction.LAST, RelativeUnit.YEARS, "2 years ago"},
+                {0.0, Direction.LAST, RelativeUnit.QUARTERS, "0 quarters ago"},
+                {0.5, Direction.LAST, RelativeUnit.QUARTERS, "0.5 quarters ago"},
+                {1.0, Direction.LAST, RelativeUnit.QUARTERS, "1 quarter ago"},
+                {2.0, Direction.LAST, RelativeUnit.QUARTERS, "2 quarters ago"},
+                {0.0, Direction.LAST, RelativeUnit.SUNDAYS, "0 Sundays ago"},
+                {0.5, Direction.LAST, RelativeUnit.SUNDAYS, "0.5 Sundays ago"},
+                {1.0, Direction.LAST, RelativeUnit.SUNDAYS, "1 Sunday ago"},
+                {2.0, Direction.LAST, RelativeUnit.SUNDAYS, "2 Sundays ago"},
+                {0.0, Direction.LAST, RelativeUnit.MONDAYS, "0 Mondays ago"},
+                {0.5, Direction.LAST, RelativeUnit.MONDAYS, "0.5 Mondays ago"},
+                {1.0, Direction.LAST, RelativeUnit.MONDAYS, "1 Monday ago"},
+                {2.0, Direction.LAST, RelativeUnit.MONDAYS, "2 Mondays ago"},
+                {0.0, Direction.LAST, RelativeUnit.TUESDAYS, "0 Tuesdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.TUESDAYS, "0.5 Tuesdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.TUESDAYS, "1 Tuesday ago"},
+                {2.0, Direction.LAST, RelativeUnit.TUESDAYS, "2 Tuesdays ago"},
+                {0.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "0 Wednesdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.WEDNESDAYS, "0.5 Wednesdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "1 Wednesday ago"},
+                {2.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "2 Wednesdays ago"},
+                {0.0, Direction.LAST, RelativeUnit.THURSDAYS, "0 Thursdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.THURSDAYS, "0.5 Thursdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.THURSDAYS, "1 Thursday ago"},
+                {2.0, Direction.LAST, RelativeUnit.THURSDAYS, "2 Thursdays ago"},
+                {0.0, Direction.LAST, RelativeUnit.FRIDAYS, "0 Fridays ago"},
+                {0.5, Direction.LAST, RelativeUnit.FRIDAYS, "0.5 Fridays ago"},
+                {1.0, Direction.LAST, RelativeUnit.FRIDAYS, "1 Friday ago"},
+                {2.0, Direction.LAST, RelativeUnit.FRIDAYS, "2 Fridays ago"},
+                {0.0, Direction.LAST, RelativeUnit.SATURDAYS, "0 Saturdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.SATURDAYS, "0.5 Saturdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.SATURDAYS, "1 Saturday ago"},
+                {2.0, Direction.LAST, RelativeUnit.SATURDAYS, "2 Saturdays ago"},
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(new ULocale("en_US"));
         for (Object[] row : data) {
@@ -131,6 +195,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.NEXT, RelativeUnit.YEARS, "In 0.5 years"},
                 {1.0, Direction.NEXT, RelativeUnit.YEARS, "In 1 year"},
                 {2.0, Direction.NEXT, RelativeUnit.YEARS, "In 2 years"},
+                {0.0, Direction.NEXT, RelativeUnit.QUARTERS, "In 0 quarters"},
+                {0.5, Direction.NEXT, RelativeUnit.QUARTERS, "In 0.5 quarters"},
+                {1.0, Direction.NEXT, RelativeUnit.QUARTERS, "In 1 quarter"},
+                {2.0, Direction.NEXT, RelativeUnit.QUARTERS, "In 2 quarters"},
+                {0.0, Direction.NEXT, RelativeUnit.SUNDAYS, "In 0 Sundays"},
+                {0.5, Direction.NEXT, RelativeUnit.SUNDAYS, "In 0.5 Sundays"},
+                {1.0, Direction.NEXT, RelativeUnit.SUNDAYS, "In 1 Sunday"},
+                {2.0, Direction.NEXT, RelativeUnit.SUNDAYS, "In 2 Sundays"},
+                {0.0, Direction.NEXT, RelativeUnit.MONDAYS, "In 0 Mondays"},
+                {0.5, Direction.NEXT, RelativeUnit.MONDAYS, "In 0.5 Mondays"},
+                {1.0, Direction.NEXT, RelativeUnit.MONDAYS, "In 1 Monday"},
+                {2.0, Direction.NEXT, RelativeUnit.MONDAYS, "In 2 Mondays"},
+                {0.0, Direction.NEXT, RelativeUnit.TUESDAYS, "In 0 Tuesdays"},
+                {0.5, Direction.NEXT, RelativeUnit.TUESDAYS, "In 0.5 Tuesdays"},
+                {1.0, Direction.NEXT, RelativeUnit.TUESDAYS, "In 1 Tuesday"},
+                {2.0, Direction.NEXT, RelativeUnit.TUESDAYS, "In 2 Tuesdays"},
+                {0.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "In 0 Wednesdays"},
+                {0.5, Direction.NEXT, RelativeUnit.WEDNESDAYS, "In 0.5 Wednesdays"},
+                {1.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "In 1 Wednesday"},
+                {2.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "In 2 Wednesdays"},
+                {0.0, Direction.NEXT, RelativeUnit.THURSDAYS, "In 0 Thursdays"},
+                {0.5, Direction.NEXT, RelativeUnit.THURSDAYS, "In 0.5 Thursdays"},
+                {1.0, Direction.NEXT, RelativeUnit.THURSDAYS, "In 1 Thursday"},
+                {2.0, Direction.NEXT, RelativeUnit.THURSDAYS, "In 2 Thursdays"},
+                {0.0, Direction.NEXT, RelativeUnit.FRIDAYS, "In 0 Fridays"},
+                {0.5, Direction.NEXT, RelativeUnit.FRIDAYS, "In 0.5 Fridays"},
+                {1.0, Direction.NEXT, RelativeUnit.FRIDAYS, "In 1 Friday"},
+                {2.0, Direction.NEXT, RelativeUnit.FRIDAYS, "In 2 Fridays"},
+                {0.0, Direction.NEXT, RelativeUnit.SATURDAYS, "In 0 Saturdays"},
+                {0.5, Direction.NEXT, RelativeUnit.SATURDAYS, "In 0.5 Saturdays"},
+                {1.0, Direction.NEXT, RelativeUnit.SATURDAYS, "In 1 Saturday"},
+                {2.0, Direction.NEXT, RelativeUnit.SATURDAYS, "In 2 Saturdays"},
 
                 {0.0, Direction.LAST, RelativeUnit.SECONDS, "0 seconds ago"},
                 {0.5, Direction.LAST, RelativeUnit.SECONDS, "0.5 seconds ago"},
@@ -160,6 +256,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.LAST, RelativeUnit.YEARS, "0.5 years ago"},
                 {1.0, Direction.LAST, RelativeUnit.YEARS, "1 year ago"},
                 {2.0, Direction.LAST, RelativeUnit.YEARS, "2 years ago"},
+                {0.0, Direction.LAST, RelativeUnit.QUARTERS, "0 quarters ago"},
+                {0.5, Direction.LAST, RelativeUnit.QUARTERS, "0.5 quarters ago"},
+                {1.0, Direction.LAST, RelativeUnit.QUARTERS, "1 quarter ago"},
+                {2.0, Direction.LAST, RelativeUnit.QUARTERS, "2 quarters ago"},
+                {0.0, Direction.LAST, RelativeUnit.SUNDAYS, "0 Sundays ago"},
+                {0.5, Direction.LAST, RelativeUnit.SUNDAYS, "0.5 Sundays ago"},
+                {1.0, Direction.LAST, RelativeUnit.SUNDAYS, "1 Sunday ago"},
+                {2.0, Direction.LAST, RelativeUnit.SUNDAYS, "2 Sundays ago"},
+                {0.0, Direction.LAST, RelativeUnit.MONDAYS, "0 Mondays ago"},
+                {0.5, Direction.LAST, RelativeUnit.MONDAYS, "0.5 Mondays ago"},
+                {1.0, Direction.LAST, RelativeUnit.MONDAYS, "1 Monday ago"},
+                {2.0, Direction.LAST, RelativeUnit.MONDAYS, "2 Mondays ago"},
+                {0.0, Direction.LAST, RelativeUnit.TUESDAYS, "0 Tuesdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.TUESDAYS, "0.5 Tuesdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.TUESDAYS, "1 Tuesday ago"},
+                {2.0, Direction.LAST, RelativeUnit.TUESDAYS, "2 Tuesdays ago"},
+                {0.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "0 Wednesdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.WEDNESDAYS, "0.5 Wednesdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "1 Wednesday ago"},
+                {2.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "2 Wednesdays ago"},
+                {0.0, Direction.LAST, RelativeUnit.THURSDAYS, "0 Thursdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.THURSDAYS, "0.5 Thursdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.THURSDAYS, "1 Thursday ago"},
+                {2.0, Direction.LAST, RelativeUnit.THURSDAYS, "2 Thursdays ago"},
+                {0.0, Direction.LAST, RelativeUnit.FRIDAYS, "0 Fridays ago"},
+                {0.5, Direction.LAST, RelativeUnit.FRIDAYS, "0.5 Fridays ago"},
+                {1.0, Direction.LAST, RelativeUnit.FRIDAYS, "1 Friday ago"},
+                {2.0, Direction.LAST, RelativeUnit.FRIDAYS, "2 Fridays ago"},
+                {0.0, Direction.LAST, RelativeUnit.SATURDAYS, "0 Saturdays ago"},
+                {0.5, Direction.LAST, RelativeUnit.SATURDAYS, "0.5 Saturdays ago"},
+                {1.0, Direction.LAST, RelativeUnit.SATURDAYS, "1 Saturday ago"},
+                {2.0, Direction.LAST, RelativeUnit.SATURDAYS, "2 Saturdays ago"},
 
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(
@@ -206,6 +334,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.NEXT, RelativeUnit.YEARS, "in 0.5 yr."},
                 {1.0, Direction.NEXT, RelativeUnit.YEARS, "in 1 yr."},
                 {2.0, Direction.NEXT, RelativeUnit.YEARS, "in 2 yr."},
+                {0.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 0 qtrs."},
+                {0.5, Direction.NEXT, RelativeUnit.QUARTERS, "in 0.5 qtrs."},
+                {1.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 1 qtr."},
+                {2.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 2 qtrs."},
+                {0.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 0 Sun."},
+                {0.5, Direction.NEXT, RelativeUnit.SUNDAYS, "in 0.5 Sun."},
+                {1.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 1 Sun."},
+                {2.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 2 Sun."},
+                {0.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 0 Mon."},
+                {0.5, Direction.NEXT, RelativeUnit.MONDAYS, "in 0.5 Mon."},
+                {1.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 1 Mon."},
+                {2.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 2 Mon."},
+                {0.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 0 Tue."},
+                {0.5, Direction.NEXT, RelativeUnit.TUESDAYS, "in 0.5 Tue."},
+                {1.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 1 Tue."},
+                {2.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 2 Tue."},
+                {0.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 0 Wed."},
+                {0.5, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 0.5 Wed."},
+                {1.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 1 Wed."},
+                {2.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 2 Wed."},
+                {0.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 0 Thu."},
+                {0.5, Direction.NEXT, RelativeUnit.THURSDAYS, "in 0.5 Thu."},
+                {1.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 1 Thu."},
+                {2.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 2 Thu."},
+                {0.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 0 Fri."},
+                {0.5, Direction.NEXT, RelativeUnit.FRIDAYS, "in 0.5 Fri."},
+                {1.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 1 Fri."},
+                {2.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 2 Fri."},
+                {0.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 0 Sat."},
+                {0.5, Direction.NEXT, RelativeUnit.SATURDAYS, "in 0.5 Sat."},
+                {1.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 1 Sat."},
+                {2.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 2 Sat."},
 
                 {0.0, Direction.LAST, RelativeUnit.SECONDS, "0 sec. ago"},
                 {0.5, Direction.LAST, RelativeUnit.SECONDS, "0.5 sec. ago"},
@@ -235,6 +395,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.LAST, RelativeUnit.YEARS, "0.5 yr. ago"},
                 {1.0, Direction.LAST, RelativeUnit.YEARS, "1 yr. ago"},
                 {2.0, Direction.LAST, RelativeUnit.YEARS, "2 yr. ago"},
+                {0.0, Direction.LAST, RelativeUnit.QUARTERS, "0 qtrs. ago"},
+                {0.5, Direction.LAST, RelativeUnit.QUARTERS, "0.5 qtrs. ago"},
+                {1.0, Direction.LAST, RelativeUnit.QUARTERS, "1 qtr. ago"},
+                {2.0, Direction.LAST, RelativeUnit.QUARTERS, "2 qtrs. ago"},
+                {0.0, Direction.LAST, RelativeUnit.SUNDAYS, "0 Sun. ago"},
+                {0.5, Direction.LAST, RelativeUnit.SUNDAYS, "0.5 Sun. ago"},
+                {1.0, Direction.LAST, RelativeUnit.SUNDAYS, "1 Sun. ago"},
+                {2.0, Direction.LAST, RelativeUnit.SUNDAYS, "2 Sun. ago"},
+                {0.0, Direction.LAST, RelativeUnit.MONDAYS, "0 Mon. ago"},
+                {0.5, Direction.LAST, RelativeUnit.MONDAYS, "0.5 Mon. ago"},
+                {1.0, Direction.LAST, RelativeUnit.MONDAYS, "1 Mon. ago"},
+                {2.0, Direction.LAST, RelativeUnit.MONDAYS, "2 Mon. ago"},
+                {0.0, Direction.LAST, RelativeUnit.TUESDAYS, "0 Tue. ago"},
+                {0.5, Direction.LAST, RelativeUnit.TUESDAYS, "0.5 Tue. ago"},
+                {1.0, Direction.LAST, RelativeUnit.TUESDAYS, "1 Tue. ago"},
+                {2.0, Direction.LAST, RelativeUnit.TUESDAYS, "2 Tue. ago"},
+                {0.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "0 Wed. ago"},
+                {0.5, Direction.LAST, RelativeUnit.WEDNESDAYS, "0.5 Wed. ago"},
+                {1.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "1 Wed. ago"},
+                {2.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "2 Wed. ago"},
+                {0.0, Direction.LAST, RelativeUnit.THURSDAYS, "0 Thu. ago"},
+                {0.5, Direction.LAST, RelativeUnit.THURSDAYS, "0.5 Thu. ago"},
+                {1.0, Direction.LAST, RelativeUnit.THURSDAYS, "1 Thu. ago"},
+                {2.0, Direction.LAST, RelativeUnit.THURSDAYS, "2 Thu. ago"},
+                {0.0, Direction.LAST, RelativeUnit.FRIDAYS, "0 Fri. ago"},
+                {0.5, Direction.LAST, RelativeUnit.FRIDAYS, "0.5 Fri. ago"},
+                {1.0, Direction.LAST, RelativeUnit.FRIDAYS, "1 Fri. ago"},
+                {2.0, Direction.LAST, RelativeUnit.FRIDAYS, "2 Fri. ago"},
+                {0.0, Direction.LAST, RelativeUnit.SATURDAYS, "0 Sat. ago"},
+                {0.5, Direction.LAST, RelativeUnit.SATURDAYS, "0.5 Sat. ago"},
+                {1.0, Direction.LAST, RelativeUnit.SATURDAYS, "1 Sat. ago"},
+                {2.0, Direction.LAST, RelativeUnit.SATURDAYS, "2 Sat. ago"},
 
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(
@@ -281,6 +473,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.NEXT, RelativeUnit.YEARS, "in 0.5y"},
                 {1.0, Direction.NEXT, RelativeUnit.YEARS, "in 1y"},
                 {2.0, Direction.NEXT, RelativeUnit.YEARS, "in 2y"},
+                {0.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 0q"},
+                {0.5, Direction.NEXT, RelativeUnit.QUARTERS, "in 0.5q"},
+                {1.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 1q"},
+                {2.0, Direction.NEXT, RelativeUnit.QUARTERS, "in 2q"},
+                {0.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 0 Su"},
+                {0.5, Direction.NEXT, RelativeUnit.SUNDAYS, "in 0.5 Su"},
+                {1.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 1 Su"},
+                {2.0, Direction.NEXT, RelativeUnit.SUNDAYS, "in 2 Su"},
+                {0.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 0 M"},
+                {0.5, Direction.NEXT, RelativeUnit.MONDAYS, "in 0.5 M"},
+                {1.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 1 M"},
+                {2.0, Direction.NEXT, RelativeUnit.MONDAYS, "in 2 M"},
+                {0.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 0 Tu"},
+                {0.5, Direction.NEXT, RelativeUnit.TUESDAYS, "in 0.5 Tu"},
+                {1.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 1 Tu"},
+                {2.0, Direction.NEXT, RelativeUnit.TUESDAYS, "in 2 Tu"},
+                {0.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 0 W"},
+                {0.5, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 0.5 W"},
+                {1.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 1 W"},
+                {2.0, Direction.NEXT, RelativeUnit.WEDNESDAYS, "in 2 W"},
+                {0.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 0 Th"},
+                {0.5, Direction.NEXT, RelativeUnit.THURSDAYS, "in 0.5 Th"},
+                {1.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 1 Th"},
+                {2.0, Direction.NEXT, RelativeUnit.THURSDAYS, "in 2 Th"},
+                {0.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 0 F"},
+                {0.5, Direction.NEXT, RelativeUnit.FRIDAYS, "in 0.5 F"},
+                {1.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 1 F"},
+                {2.0, Direction.NEXT, RelativeUnit.FRIDAYS, "in 2 F"},
+                {0.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 0 Sa"},
+                {0.5, Direction.NEXT, RelativeUnit.SATURDAYS, "in 0.5 Sa"},
+                {1.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 1 Sa"},
+                {2.0, Direction.NEXT, RelativeUnit.SATURDAYS, "in 2 Sa"},
 
                 {0.0, Direction.LAST, RelativeUnit.SECONDS, "0s ago"},
                 {0.5, Direction.LAST, RelativeUnit.SECONDS, "0.5s ago"},
@@ -310,6 +534,38 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                 {0.5, Direction.LAST, RelativeUnit.YEARS, "0.5y ago"},
                 {1.0, Direction.LAST, RelativeUnit.YEARS, "1y ago"},
                 {2.0, Direction.LAST, RelativeUnit.YEARS, "2y ago"},
+                {0.0, Direction.LAST, RelativeUnit.QUARTERS, "0q ago"},
+                {0.5, Direction.LAST, RelativeUnit.QUARTERS, "0.5q ago"},
+                {1.0, Direction.LAST, RelativeUnit.QUARTERS, "1q ago"},
+                {2.0, Direction.LAST, RelativeUnit.QUARTERS, "2q ago"},
+                {0.0, Direction.LAST, RelativeUnit.SUNDAYS, "0 Su ago"},
+                {0.5, Direction.LAST, RelativeUnit.SUNDAYS, "0.5 Su ago"},
+                {1.0, Direction.LAST, RelativeUnit.SUNDAYS, "1 Su ago"},
+                {2.0, Direction.LAST, RelativeUnit.SUNDAYS, "2 Su ago"},
+                {0.0, Direction.LAST, RelativeUnit.MONDAYS, "0 M ago"},
+                {0.5, Direction.LAST, RelativeUnit.MONDAYS, "0.5 M ago"},
+                {1.0, Direction.LAST, RelativeUnit.MONDAYS, "1 M ago"},
+                {2.0, Direction.LAST, RelativeUnit.MONDAYS, "2 M ago"},
+                {0.0, Direction.LAST, RelativeUnit.TUESDAYS, "0 Tu ago"},
+                {0.5, Direction.LAST, RelativeUnit.TUESDAYS, "0.5 Tu ago"},
+                {1.0, Direction.LAST, RelativeUnit.TUESDAYS, "1 Tu ago"},
+                {2.0, Direction.LAST, RelativeUnit.TUESDAYS, "2 Tu ago"},
+                {0.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "0 W ago"},
+                {0.5, Direction.LAST, RelativeUnit.WEDNESDAYS, "0.5 W ago"},
+                {1.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "1 W ago"},
+                {2.0, Direction.LAST, RelativeUnit.WEDNESDAYS, "2 W ago"},
+                {0.0, Direction.LAST, RelativeUnit.THURSDAYS, "0 Th ago"},
+                {0.5, Direction.LAST, RelativeUnit.THURSDAYS, "0.5 Th ago"},
+                {1.0, Direction.LAST, RelativeUnit.THURSDAYS, "1 Th ago"},
+                {2.0, Direction.LAST, RelativeUnit.THURSDAYS, "2 Th ago"},
+                {0.0, Direction.LAST, RelativeUnit.FRIDAYS, "0 F ago"},
+                {0.5, Direction.LAST, RelativeUnit.FRIDAYS, "0.5 F ago"},
+                {1.0, Direction.LAST, RelativeUnit.FRIDAYS, "1 F ago"},
+                {2.0, Direction.LAST, RelativeUnit.FRIDAYS, "2 F ago"},
+                {0.0, Direction.LAST, RelativeUnit.SATURDAYS, "0 Sa ago"},
+                {0.5, Direction.LAST, RelativeUnit.SATURDAYS, "0.5 Sa ago"},
+                {1.0, Direction.LAST, RelativeUnit.SATURDAYS, "1 Sa ago"},
+                {2.0, Direction.LAST, RelativeUnit.SATURDAYS, "2 Sa ago"},
 
         };
         RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(
@@ -742,13 +998,13 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
         String[] en_dec0_long_midSent_tues = {
         /*  text                    numeric */
             "5 Tuesdays ago",       "5 Tuesdays ago",     /* -5   */
-            ""/*no data */,         ""/*no data */,       /* -2.2 */
+            "2.2 Tuesdays ago",     "2.2 Tuesdays ago",   /* -2.2 */
             "2 Tuesdays ago",       "2 Tuesdays ago",     /* -2   */
             "last Tuesday",         "1 Tuesday ago",      /* -1   */
-            ""/*no data */,         ""/*no data */,       /* -0.7 */
+            "0.7 Tuesdays ago",     "0.7 Tuesdays ago",   /* -0.7 */
             "this Tuesday",         "0 Tuesdays ago",     /* -0   */
             "this Tuesday",         "in 0 Tuesdays",      /*  0   */
-            ""/*no data */,         ""/*no data */,       /*  0.7 */
+            "in 0.7 Tuesdays",      "in 0.7 Tuesdays",    /*  0.7 */
             "next Tuesday",         "in 1 Tuesday",       /*  1   */
             "in 2 Tuesdays",        "in 2 Tuesdays",      /*  2   */
             "in 5 Tuesdays",        "in 5 Tuesdays",      /*  5   */
@@ -784,20 +1040,109 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
             "+5 s",                 "+5 s",               /*  5   */
         };
 
-        @SuppressWarnings("unused")
-        String[] enIN_decDef_short_midSent_weds = {
-        /*  text                    numeric */
-            "5 Wed. ago",           "5 Wed. ago",         /* -5   */
-            "2.2 Wed. ago",         "2.2 Wed. ago",       /* -2.2 */
-            "2 Wed. ago",           "2 Wed. ago",         /* -2   */
-            "last Wed",             "1 Wed. ago",         /* -1   */
-            "0.7 Wed. ago",         "0.7 Wed. ago",       /* -0.7 */
-            "this Wed",             "0 Wed. ago",         /*  -0  */
-            "this Wed",             "in 0 Wed.",          /*  0   */
-            "in 0.7 Wed.",          "in 0.7 Wed.",        /*  0.7 */
-            "next Wed",             "in 1 Wed",           /*  1   */ // in 1 Wed. missing in logical group
-            "in 2  Wed.",           "in 2 Wed.",          /*  2   */
-            "in 5  Wed.",           "in 5 Wed."           /*  5   */
+        String[] enIN_decDef_short_midSent_sunday = {
+            /*  text                    numeric */
+            "5 Sun ago",            "5 Sun ago",          /* -5   */
+            "2.2 Sun ago",          "2.2 Sun ago",        /* -2.2 */
+            "2 Sun ago",            "2 Sun ago",          /* -2   */
+            "last Sun",             "1 Sun ago",          /* -1   */
+            "0.7 Sun ago",          "0.7 Sun ago",        /* -0.7 */
+            "this Sun",             "0 Sun ago",          /*  -0  */
+            "this Sun",             "in 0 Sun",           /*  0   */
+            "in 0.7 Sun",           "in 0.7 Sun",         /*  0.7 */
+            "next Sun",             "in 1 Sun",           /*  1   */ // in 1 Sun missing in logical group
+            "in 2 Sun",             "in 2 Sun",           /*  2   */
+            "in 5 Sun",             "in 5 Sun"            /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_monday = {
+            /*  text                    numeric */
+            "5 Mon ago",            "5 Mon ago",          /* -5   */
+            "2.2 Mon ago",          "2.2 Mon ago",        /* -2.2 */
+            "2 Mon ago",            "2 Mon ago",          /* -2   */
+            "last Mon",             "1 Mon ago",          /* -1   */
+            "0.7 Mon ago",          "0.7 Mon ago",        /* -0.7 */
+            "this Mon",             "0 Mon ago",          /*  -0  */
+            "this Mon",             "in 0 Mon",           /*  0   */
+            "in 0.7 Mon",           "in 0.7 Mon",         /*  0.7 */
+            "next Mon",             "in 1 Mon",           /*  1   */ // in 1 Mon missing in logical group
+            "in 2 Mon",             "in 2 Mon",           /*  2   */
+            "in 5 Mon",             "in 5 Mon"            /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_tuesday = {
+            /*  text                    numeric */
+            "5 Tue ago",            "5 Tue ago",          /* -5   */
+            "2.2 Tue ago",          "2.2 Tue ago",        /* -2.2 */
+            "2 Tue ago",            "2 Tue ago",          /* -2   */
+            "last Tue",             "1 Tue ago",          /* -1   */
+            "0.7 Tue ago",          "0.7 Tue ago",        /* -0.7 */
+            "this Tue",             "0 Tue ago",          /*  -0  */
+            "this Tue",             "in 0 Tue",           /*  0   */
+            "in 0.7 Tue",           "in 0.7 Tue",         /*  0.7 */
+            "next Tue",             "in 1 Tue",           /*  1   */ // in 1 Tue missing in logical group
+            "in 2 Tue",             "in 2 Tue",           /*  2   */
+            "in 5 Tue",             "in 5 Tue"            /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_wednesday = {
+            /*  text                    numeric */
+            "5 Wed ago",            "5 Wed ago",          /* -5   */
+            "2.2 Wed ago",          "2.2 Wed ago",        /* -2.2 */
+            "2 Wed ago",            "2 Wed ago",          /* -2   */
+            "last Wed",             "1 Wed ago",          /* -1   */
+            "0.7 Wed ago",          "0.7 Wed ago",        /* -0.7 */
+            "this Wed",             "0 Wed ago",          /*  -0  */
+            "this Wed",             "in 0 Wed",           /*  0   */
+            "in 0.7 Wed",           "in 0.7 Wed",         /*  0.7 */
+            "next Wed",             "in 1 Wed",           /*  1   */ // in 1 Wed missing in logical group
+            "in 2 Wed",             "in 2 Wed",           /*  2   */
+            "in 5 Wed",             "in 5 Wed"            /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_thursday = {
+            /*  text                    numeric */
+            "5 Thu ago",            "5 Thu ago",          /* -5   */
+            "2.2 Thu ago",          "2.2 Thu ago",        /* -2.2 */
+            "2 Thu ago",            "2 Thu ago",          /* -2   */
+            "last Thu",             "1 Thu ago",          /* -1   */
+            "0.7 Thu ago",          "0.7 Thu ago",        /* -0.7 */
+            "this Thu",             "0 Thu ago",          /*  -0  */
+            "this Thu",             "in 0 Thu",           /*  0   */
+            "in 0.7 Thu",           "in 0.7 Thu",         /*  0.7 */
+            "next Thu",             "in 1 Thu",           /*  1   */ // in 1 Thu missing in logical group
+            "in 2 Thu",             "in 2 Thu",           /*  2   */
+            "in 5 Thu",             "in 5 Thu"            /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_friday = {
+            /*  text                    numeric */
+            "5 Fri ago",            "5 Fri ago",          /* -5   */
+            "2.2 Fri ago",          "2.2 Fri ago",        /* -2.2 */
+            "2 Fri ago",            "2 Fri ago",          /* -2   */
+            "last Fri",             "1 Fri ago",          /* -1   */
+            "0.7 Fri ago",          "0.7 Fri ago",        /* -0.7 */
+            "this Fri",             "0 Fri ago",          /*  -0  */
+            "this Fri",             "in 0 Fri",           /*  0   */
+            "in 0.7 Fri",           "in 0.7 Fri",         /*  0.7 */
+            "next Fri",             "in 1 Fri",           /*  1   */ // in 1 Fri missing in logical group
+            "in 2 Fri",             "in 2 Fri",           /*  2   */
+            "in 5 Fri",             "in 5 Fri"            /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_saturday = {
+            /*  text                    numeric */
+            "5 Sat ago",            "5 Sat ago",          /* -5   */
+            "2.2 Sat ago",          "2.2 Sat ago",        /* -2.2 */
+            "2 Sat ago",            "2 Sat ago",          /* -2   */
+            "last Sat",             "1 Sat ago",          /* -1   */
+            "0.7 Sat ago",          "0.7 Sat ago",        /* -0.7 */
+            "this Sat",             "0 Sat ago",          /*  -0  */
+            "this Sat",             "in 0 Sat",           /*  0   */
+            "in 0.7 Sat",           "in 0.7 Sat",         /*  0.7 */
+            "next Sat",             "in 1 Sat",           /*  1   */ // in 1 Sat missing in logical group
+            "in 2 Sat",             "in 2 Sat",           /*  2   */
+            "in 5 Sat",             "in 5 Sat"            /*  5   */
         };
 
         class TestRelativeDateTimeUnitItem {
@@ -834,9 +1179,21 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
                                                                     RelativeDateTimeUnit.DAY, fr_decDef_long_midSent_day),
             new TestRelativeDateTimeUnitItem("ak", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_STANDALONE,
                                                                     RelativeDateTimeUnit.SECOND, ak_decDef_long_stdAlon_sec),
-            // ICU4J RelativeDateTimeFormatter does not currently support RelativeDateTimeUnit.WEDNESDAY
-            //new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
-            //                                                        RelativeDateTimeUnit.WEDNESDAY, enIN_decDef_short_midSent_weds),
+
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.SUNDAY, enIN_decDef_short_midSent_sunday),
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.MONDAY, enIN_decDef_short_midSent_monday),
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.TUESDAY, enIN_decDef_short_midSent_tuesday),
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.WEDNESDAY, enIN_decDef_short_midSent_wednesday),
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.THURSDAY, enIN_decDef_short_midSent_thursday),
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.FRIDAY, enIN_decDef_short_midSent_friday),
+            new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                RelativeDateTimeUnit.SATURDAY, enIN_decDef_short_midSent_saturday),
         };
         for (TestRelativeDateTimeUnitItem item: items) {
             ULocale uloc = new ULocale(item.localeID);
@@ -850,16 +1207,10 @@ public class RelativeDateTimeFormatterTest extends CoreTestFmwk {
             RelativeDateTimeFormatter reldatefmt = RelativeDateTimeFormatter.getInstance(uloc, nf, item.width, item.capContext);
             for (int iOffset = 0; iOffset < offsets.length; iOffset++) {
                 double offset = offsets[iOffset];
-                if (item.unit == RelativeDateTimeUnit.TUESDAY && offset != -1.0 && offset != 0.0 && offset != 1.0) {
-                    continue; /* we do not currently have data for this */
-                }
                 String result = reldatefmt.format(offset, item.unit);
                 assertEquals("RelativeDateTimeUnit format locale "+item.localeID +", dec "+item.decPlaces +", width "+item.width + ", unit "+item.unit,
                              item.expectedResults[iOffset*2], result);
 
-                if (item.unit == RelativeDateTimeUnit.TUESDAY) {
-                    continue; /* we do not currently have numeric-style data for this */
-                }
                 result = reldatefmt.formatNumeric(offset, item.unit);
                 assertEquals("RelativeDateTimeUnit formatNum locale "+item.localeID +", dec "+item.decPlaces +", width "+item.width + ", unit "+item.unit,
                              item.expectedResults[iOffset*2 + 1], result);
