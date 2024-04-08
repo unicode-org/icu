@@ -346,6 +346,7 @@ public: // package
     void Test22633SetRollGetTimeOverflow();
     void Test22633AddTwiceGetTimeOverflow();
     void Test22633RollTwiceGetTimeOverflow();
+    void Test22730JapaneseOverflow();
     void RunTestOnCalendars(void(TestFunc)(Calendar*, UCalendarDateFields));
 
     void verifyFirstDayOfWeek(const char* locale, UCalendarDaysOfWeek expected);

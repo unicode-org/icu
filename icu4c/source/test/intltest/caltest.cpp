@@ -205,6 +205,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);
 
     TESTCASE_AUTO(Test22633HebrewLargeNegativeDay);
+    TESTCASE_AUTO(Test22730JapaneseOverflow);
 
     TESTCASE_AUTO(TestAddOverflow);
 
@@ -5874,6 +5875,16 @@ void CalendarTest::Test22633HebrewLargeNegativeDay() {
     calendar->set(UCAL_DAY_OF_YEAR, -2147483648);
     calendar->get(UCAL_HOUR, status);
     assertEquals("status return without hang", status, U_ILLEGAL_ARGUMENT_ERROR);
+}
+
+void CalendarTest::Test22730JapaneseOverflow() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> calendar(
+        Calendar::createInstance(Locale("en-u-ca-japanese"), status),
+        status);
+    calendar->clear();
+    calendar->roll(UCAL_EXTENDED_YEAR, -1946156856, status);
+    assertEquals("status return without overflow", status, U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 void CalendarTest::TestAddOverflow() {
