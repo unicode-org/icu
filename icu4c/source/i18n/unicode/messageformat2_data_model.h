@@ -42,34 +42,12 @@ static inline std::vector<T> toStdVector(const T* arr, int32_t len) {
     return result;
 }
 
-namespace message2 {
-
-    namespace data_model {
-        class Binding;
-        class Literal;
-        class Operator;
-    } // namespace data_model
-} // namespace message2
-
-/// @cond DOXYGEN_IGNORE
-// Export an explicit template instantiation of the LocalPointer that is used as a
-// data member of various MFDataModel classes.
-// (When building DLLs for Windows this is required.)
-// (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
-// for similar examples.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
+#if defined(U_REAL_MSVC)
 #pragma warning(push)
-#pragma warning(disable: 4661)
+// Ignore warning 4251 as these templates are instantiated later in this file,
+// after the classes used to instantiate them have been defined.
+#pragma warning(disable: 4251)
 #endif
-template class U_I18N_API LocalPointerBase<message2::data_model::Literal>;
-template class U_I18N_API LocalArray<message2::data_model::Literal>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-#endif
-/// @endcond
 
 namespace message2 {
     class Checker;
@@ -80,6 +58,10 @@ namespace message2 {
 
 
   namespace data_model {
+        class Binding;
+        class Literal;
+        class Operator;
+
         /**
          * The `Reserved` class represents a `reserved` annotation, as in the `reserved` nonterminal
          * in the MessageFormat 2 grammar or the `Reserved` interface
@@ -369,6 +351,21 @@ namespace message2 {
   } // namespace data_model
 } // namespace message2
 
+/// @cond DOXYGEN_IGNORE
+// Export an explicit template instantiation of the LocalPointer that is used as a
+// data member of various MFDataModel classes.
+// (When building DLLs for Windows this is required.)
+// (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
+// for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API LocalPointerBase<message2::data_model::Literal>;
+template class U_I18N_API LocalArray<message2::data_model::Literal>;
+#endif
+#if defined(U_REAL_MSVC)
+#pragma warning(pop)
+#endif
+/// @endcond
+
 U_NAMESPACE_END
 
 /// @cond DOXYGEN_IGNORE
@@ -378,7 +375,7 @@ U_NAMESPACE_END
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
 struct U_I18N_API std::_Nontrivial_dummy_type;
 template class U_I18N_API std::_Variant_storage_<false, icu::UnicodeString, icu::message2::data_model::Literal>;
 #endif
@@ -652,16 +649,8 @@ namespace message2 {
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
 template class U_I18N_API LocalPointerBase<message2::data_model::Key>;
 template class U_I18N_API LocalArray<message2::data_model::Key>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 
@@ -928,16 +917,8 @@ namespace message2 {
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
 template class U_I18N_API LocalPointerBase<message2::data_model::Option>;
 template class U_I18N_API LocalArray<message2::data_model::Option>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 
@@ -1033,7 +1014,7 @@ U_NAMESPACE_END
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
 template class U_I18N_API std::_Variant_storage_<false, icu::message2::data_model::Reserved,icu::message2::data_model::Callable>;
 #endif
 template class U_I18N_API std::variant<icu::message2::data_model::Reserved,icu::message2::data_model::Callable>;
@@ -1757,16 +1738,8 @@ namespace message2 {
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
 template class U_I18N_API LocalPointerBase<message2::data_model::Expression>;
 template class U_I18N_API LocalArray<message2::data_model::Expression>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 
@@ -2129,18 +2102,10 @@ namespace message2 {
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
 template class U_I18N_API LocalPointerBase<message2::data_model::PatternPart>;
 template class U_I18N_API LocalArray<message2::data_model::PatternPart>;
 template class U_I18N_API LocalPointerBase<message2::data_model::UnsupportedStatement>;
 template class U_I18N_API LocalArray<message2::data_model::UnsupportedStatement>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 
@@ -2641,18 +2606,10 @@ namespace message2 {
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
 template class U_I18N_API LocalPointerBase<message2::data_model::Variant>;
 template class U_I18N_API LocalPointerBase<message2::data_model::Binding>;
 template class U_I18N_API LocalArray<message2::data_model::Variant>;
 template class U_I18N_API LocalArray<message2::data_model::Binding>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 
@@ -2719,7 +2676,7 @@ U_NAMESPACE_END
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
 template class U_I18N_API std::_Variant_storage_<false, icu::message2::Matcher,icu::message2::data_model::Pattern>;
 #endif
 template class U_I18N_API std::variant<icu::message2::Matcher,icu::message2::data_model::Pattern>;

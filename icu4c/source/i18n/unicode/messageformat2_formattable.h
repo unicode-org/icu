@@ -76,12 +76,7 @@ U_NAMESPACE_END
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
-#if defined(_MSC_VER)
+#if defined(U_REAL_MSVC) && defined(_MSVC_STL_VERSION)
 template class U_I18N_API std::_Variant_storage_<false,
   double,
   int64_t,
@@ -97,9 +92,6 @@ template class U_I18N_API std::variant<double,
 				       icu::Formattable,
 				       const icu::message2::FormattableObject*,
                                        P>;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 

@@ -162,11 +162,11 @@ protected:
     T *ptr;
 private:
     // No comparison operators with other LocalPointerBases.
-    bool operator==(const LocalPointerBase<T> &other);
-    bool operator!=(const LocalPointerBase<T> &other);
+    bool operator==(const LocalPointerBase<T> &other) = delete;
+    bool operator!=(const LocalPointerBase<T> &other) = delete;
     // No ownership sharing: No copy constructor, no assignment operator.
-    LocalPointerBase(const LocalPointerBase<T> &other);
-    void operator=(const LocalPointerBase<T> &other);
+    LocalPointerBase(const LocalPointerBase<T> &other) = delete;
+    void operator=(const LocalPointerBase<T> &other) = delete;
 };
 
 /**
