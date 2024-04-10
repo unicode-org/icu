@@ -207,6 +207,17 @@
 #endif
 
 /**
+ * \def U_REAL_MSVC
+ * Defined if the compiler is the real MSVC compiler (and not something like
+ * Clang setting _MSC_VER in order to compile Windows code that requires it).
+ * Otherwise undefined.
+ * @internal
+ */
+#if (defined(_MSC_VER) && !(defined(__clang__) && __clang__)) || defined(U_IN_DOXYGEN)
+#   define U_REAL_MSVC
+#endif
+
+/**
  * \def CYGWINMSVC
  * Defined if this is Windows with Cygwin, but using MSVC rather than gcc.
  * Otherwise undefined.

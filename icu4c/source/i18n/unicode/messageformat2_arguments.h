@@ -34,19 +34,10 @@ U_NAMESPACE_BEGIN
 // (See measunit_impl.h, datefmt.h, collationiterator.h, erarules.h and others
 // for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
 template class U_I18N_API LocalPointerBase<UnicodeString>;
 template class U_I18N_API LocalPointerBase<message2::Formattable>;
 template class U_I18N_API LocalArray<UnicodeString>;
 template class U_I18N_API LocalArray<message2::Formattable>;
-#if defined(_MSC_VER)
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(pop)
-#endif
 #endif
 /// @endcond
 
