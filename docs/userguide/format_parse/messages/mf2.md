@@ -96,7 +96,7 @@ public void testMf2() {
 ```java
 @Test
 public void testMf2Selection() {
-   final String message = "match {$count :plural}"
+   final String message = ".match {$count :plural}"
            + " when 1 {You have one notification.}"
            + " when one {You have {$count} notification.}"
            + " when * {You have {$count} notifications.}";
