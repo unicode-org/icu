@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1712332255673,
+  "lastUpdate": 1712813900161,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20788,6 +20788,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.31032083547038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "29b1141f79eac6f5178f75f1d6d62c8e7a5cede4",
+          "message": "ICU-22730 Fix Japanese extended year int32 overflow",
+          "timestamp": "2024-04-10T22:17:01-07:00",
+          "tree_id": "223755abc0452969bc8ac4e7dcac4903526b0f68",
+          "url": "https://github.com/unicode-org/icu/commit/29b1141f79eac6f5178f75f1d6d62c8e7a5cede4"
+        },
+        "date": 1712813473350,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.310178264788148,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
