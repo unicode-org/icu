@@ -167,6 +167,7 @@ namespace message2 {
             friend inline void swap(Reserved& r1, Reserved& r2) noexcept {
                 using std::swap;
 
+                swap(r1.bogus, r2.bogus);
                 swap(r1.parts, r2.parts);
                 swap(r1.len, r2.len);
             }
@@ -203,11 +204,16 @@ namespace message2 {
             friend class Builder;
             friend class Operator;
 
+            // True if a copy failed; this has to be distinguished
+            // from a valid `Reserved` with empty parts
+            bool bogus = false;
+
             // Possibly-empty list of parts
             // `literal` reserved as a quoted literal; `reserved-char` / `reserved-escape`
             // strings represented as unquoted literals
             /* const */ LocalArray<Literal> parts;
             int32_t len = 0;
+
             Reserved(const UVector& parts, UErrorCode& status) noexcept;
             // Helper
             static void initLiterals(Reserved&, const Reserved&);
@@ -2255,6 +2261,7 @@ namespace message2 {
             friend inline void swap(Pattern& p1, Pattern& p2) noexcept {
                 using std::swap;
 
+                swap(p1.bogus, p2.bogus);
                 swap(p1.len, p2.len);
                 swap(p1.parts, p2.parts);
             }
@@ -2264,7 +2271,7 @@ namespace message2 {
              * @internal ICU 75.0 technology preview
              * @deprecated This API is for technology preview only.
              */
-            Pattern(const Pattern& other) noexcept;
+            Pattern(const Pattern& other);
             /**
              * Assignment operator
              *
@@ -2336,6 +2343,11 @@ namespace message2 {
             friend class message2::MessageFormatter;
             friend class message2::Serializer;
 
+            // Set to true if a copy constructor fails;
+            // needed in order to distinguish an uninitialized
+            // Pattern from a 0-length pattern
+            bool bogus = false;
+
             // Possibly-empty array of parts
             int32_t len = 0;
             LocalArray<PatternPart> parts;
@@ -2352,7 +2364,7 @@ namespace message2 {
              * @internal ICU 75.0 technology preview
              * @deprecated This API is for technology preview only.
              */
-            int32_t numParts() const { return len; }
+            int32_t numParts() const;
             /**
              * Returns the `i`th part in the pattern.
              * Precondition: i < numParts()
@@ -2367,10 +2379,8 @@ namespace message2 {
 
             // Gets around not being able to declare Pattern::Iterator as a friend
             // in PatternPart
-            static const std::variant<UnicodeString, Expression, Markup>& patternContents(const PatternPart& p) {
-                return p.piece;
-            }
-
+            static const std::variant<UnicodeString, Expression, Markup>&
+                patternContents(const PatternPart& p) { return p.piece; }
         }; // class Pattern
 
         /**
@@ -2622,7 +2632,7 @@ namespace message2 {
     class MFDataModel;
 
     #ifndef U_IN_DOXYGEN
-    class Matcher {
+    class Matcher : public UObject {
     public:
         Matcher& operator=(Matcher);
         Matcher(const Matcher&);
@@ -2637,24 +2647,32 @@ namespace message2 {
         friend inline void swap(Matcher& m1, Matcher& m2) noexcept {
             using std::swap;
 
+            if (m1.bogus) {
+                m2.bogus = true;
+                return;
+            }
+            if (m2.bogus) {
+                m1.bogus = true;
+                return;
+            }
             swap(m1.selectors, m2.selectors);
             swap(m1.numSelectors, m2.numSelectors);
             swap(m1.variants, m2.variants);
             swap(m1.numVariants, m2.numVariants);
         }
+        virtual ~Matcher();
     private:
 
         friend class MFDataModel;
 
-        Matcher(Expression* ss, int32_t ns, Variant* vs, int32_t nv) : selectors(ss), numSelectors(ns), variants(vs), numVariants(nv) {
-            if (selectors == nullptr) {
-                numSelectors = 0;
-            }
-            if (variants == nullptr) {
-                numVariants = 0;
-            }
-        }
+        Matcher(Expression* ss, int32_t ns, Variant* vs, int32_t nv);
         Matcher() {}
+
+        // A Matcher may have numSelectors=0 and numVariants=0
+        // (this is a data model error, but it's representable).
+        // So we have to keep a separate flag to track failed copies.
+        bool bogus = false;
+
         // The expressions that are being matched on.
         LocalArray<Expression> selectors;
         // The number of selectors

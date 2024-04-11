@@ -381,7 +381,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Debug
   displayName: 'C: MSVC x64 Debug (VS 2022)'
-  timeoutInMinutes: 35
+  timeoutInMinutes: 60
   pool:
     vmImage: 'windows-2022'
     demands: 
@@ -487,7 +487,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Debug_VS2019
   displayName: 'C: MSVC 32-bit Debug (VS 2019)'
-  timeoutInMinutes: 60
+  timeoutInMinutes: 90
   pool:
     vmImage: 'windows-2019'
     demands: 
