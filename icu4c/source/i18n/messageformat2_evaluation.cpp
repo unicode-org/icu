@@ -40,10 +40,8 @@ const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(int32_
 FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
     CHECK_ERROR(status);
 
-    options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, functionOptionsLen);
-    if (options == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
+    functionOptionsLen = optionsVector.size();
+    options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
 }
 
 UBool FunctionOptions::getFunctionOption(const UnicodeString& key, Formattable& option) const {
