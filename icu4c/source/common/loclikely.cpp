@@ -157,14 +157,17 @@ _uloc_addLikelySubtags(const char* localeID,
         return;
     }
 
-    if (lang.length() > 3) {
-        if (lang.length() == 4 && script.isEmpty()) {
+    if (lang.length() == 4) {
+        if (script.isEmpty()) {
             script = std::move(lang);
             lang.clear();
         } else {
             err = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
+    } else if (lang.length() > 8) {
+        err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
 
     int32_t trailingLength = (int32_t)uprv_strlen(trailing);
