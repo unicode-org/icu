@@ -113,6 +113,9 @@ static void TestEnumList(void) {
     expectInList("VED", UCURR_NON_DEPRECATED, true);
 
     expectInList("EQE", UCURR_ALL, false);
+
+    // CLDR 45 and ICU-22726
+    expectInList("XCG", UCURR_ALL, true);
 }
 
 static void TestEnumListReset(void) {
