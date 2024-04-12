@@ -1437,6 +1437,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        XCG{
+            "",
+            "",
+        }
         XDR{
             "",
             "",
@@ -3836,6 +3840,14 @@ structLocale:table(nofallback){
             other{""}
         }
         XCD{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        XCG{
             zero{""}
             one{""}
             two{""}
