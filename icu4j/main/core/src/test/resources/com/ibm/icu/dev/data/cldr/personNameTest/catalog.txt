@@ -1,3 +1,9 @@
+# Test data for unit conversions
+#  Copyright © 1991-2024 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  SPDX-License-Identifier: Unicode-3.0
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
 af.txt
 am.txt
 ar.txt
