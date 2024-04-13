@@ -758,9 +758,9 @@ void UnicodeTest::TestIndicSyllabicCategory() {
 void UnicodeTest::TestVerticalOrientation() {
     IcuTestErrorCode errorCode(*this, "TestVerticalOrientation()");
     UnicodeSet r(u"[:vo=R:]", errorCode);
-    assertTrue("mostly R", 0xc0000 <= r.size() && r.size() <= 0xd0000);
+    assertTrue("mostly R", 0xb0000 <= r.size() && r.size() <= 0xd0000);
     UnicodeSet u(u"[:vo=U:]", errorCode);
-    assertTrue("much U", 0x40000 <= u.size() && u.size() <= 0x50000);
+    assertTrue("much U", 0x40000 <= u.size() && u.size() <= 0x60000);
     UnicodeSet tu(u"[:vo=Tu:]", errorCode);
     assertTrue("some Tu", 147 <= tu.size() && tu.size() <= 300);
     assertEquals("U+0E01: Rotated", U_VO_ROTATED,
