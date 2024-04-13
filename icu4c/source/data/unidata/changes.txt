@@ -49,9 +49,6 @@ and see the change logs below.
 
 Unicode 16.0 update for ICU 76
 
-TODO
-- In corepropsbuilder.cpp, remove the isA9CF hack.
-
 https://www.unicode.org/versions/Unicode16.0.0/
 https://www.unicode.org/versions/beta-16.0.0.html
 https://www.unicode.org/Public/draft/

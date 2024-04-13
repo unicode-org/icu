@@ -3734,7 +3734,7 @@ cp;0890;-Alpha;bc=AN;CI;gc=Cf;GCB=PP;-Gr_Base;-IDC;Identifier_Status=Restricted;
 cp;0891;-Alpha;bc=AN;CI;gc=Cf;GCB=PP;-Gr_Base;-IDC;Identifier_Status=Restricted;Identifier_Type=Not_XID;-IDS;jt=U;lb=NU;na=ARABIC PIASTRE MARK ABOVE;PCM;SB=NU;WB=NU;-XIDC;-XIDS
 unassigned;0892..0896;bc=AL
 # Vowel sign for Pegon
-cp;0897;age=16.0;bc=NSM;ccc=230;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Identifier_Status=Restricted;Identifier_Type=Not_Character;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC PEPET;SB=EX;WB=Extend;-XIDS
+cp;0897;age=16.0;bc=NSM;ccc=230;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Identifier_Status=Restricted;Identifier_Type=Uncommon_Use;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC PEPET;SB=EX;WB=Extend;-XIDS
 # Additions for Quranic orthographies
 cp;0898;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Identifier_Status=Restricted;Identifier_Type=Uncommon_Use;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC SMALL HIGH WORD AL-JUZ;SB=EX;WB=Extend;-XIDS
 cp;0899;-Alpha;bc=NSM;ccc=220;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Identifier_Status=Restricted;Identifier_Type=Uncommon_Use;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC SMALL LOW WORD ISHMAAM;SB=EX;WB=Extend;-XIDS
@@ -4717,7 +4717,7 @@ cp;0C59;age=5.1;Identifier_Status=Restricted;Identifier_Type=Obsolete;InCB=Conso
 cp;0C5A;age=8.0;Identifier_Status=Restricted;Identifier_Type=Uncommon_Use;InCB=Consonant;na=TELUGU LETTER RRRA
 unassigned;0C5B
 # Historic syllable
-cp;0C5C;age=16.0;Identifier_Status=Restricted;Identifier_Type=Not_Character;InSC=Other;na=TELUGU ARCHAIC SHRII
+cp;0C5C;age=16.0;InSC=Other;na=TELUGU ARCHAIC SHRII
 # Consonant
 cp;0C5D;age=14.0;InSC=Consonant_Dead;na=TELUGU LETTER NAKAARA POLLU
 unassigned;0C5E..0C5F
@@ -4844,7 +4844,7 @@ cp;0CD5;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Right;InSC=Vowel_Dependent;lb=CM;
 cp;0CD6;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Right;InSC=Vowel_Dependent;lb=CM;na=KANNADA AI LENGTH MARK;NFC_QC=M;NFKC_QC=M;SB=EX;WB=Extend;-XIDS
 unassigned;0CD7..0CDB
 # Historic syllable
-cp;0CDC;age=16.0;Identifier_Status=Restricted;Identifier_Type=Not_Character;InSC=Other;na=KANNADA ARCHAIC SHRII
+cp;0CDC;age=16.0;InSC=Other;na=KANNADA ARCHAIC SHRII
 # Additional consonants
 cp;0CDD;age=14.0;InSC=Consonant_Dead;na=KANNADA LETTER NAKAARA POLLU
 cp;0CDE;Identifier_Status=Restricted;Identifier_Type=Obsolete;na=KANNADA LETTER FA;Name_Alias=correction=KANNADA LETTER LLLA
@@ -8538,8 +8538,8 @@ cp;1B4B;IDS;na=BALINESE LETTER ASYURA SASAK;XIDS
 cp;1B4C;age=14.0;IDS;na=BALINESE LETTER ARCHAIC JNYA;XIDS
 unassigned;1B4D
 # Punctuation
-cp;1B4E;age=16.0;-Alpha;gc=Po;-IDC;Identifier_Type=Not_Character;InSC=Other;lb=BA;na=BALINESE INVERTED CARIK SIKI;SB=XX;WB=XX;-XIDC
-cp;1B4F;age=16.0;-Alpha;gc=Po;-IDC;Identifier_Type=Not_Character;InSC=Other;lb=BA;na=BALINESE INVERTED CARIK PAREREN;SB=XX;WB=XX;-XIDC
+cp;1B4E;age=16.0;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=BA;na=BALINESE INVERTED CARIK SIKI;SB=XX;WB=XX;-XIDC
+cp;1B4F;age=16.0;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=BA;na=BALINESE INVERTED CARIK PAREREN;SB=XX;WB=XX;-XIDC
 # Digits
 cp;1B50;-Alpha;gc=Nd;InSC=Number;lb=AS;na=BALINESE DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU
 cp;1B51;-Alpha;gc=Nd;InSC=Number;lb=AS;na=BALINESE DIGIT ONE;nt=De;nv=1;SB=NU;WB=NU
@@ -8593,7 +8593,7 @@ cp;1B7C;-Alpha;gc=So;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=ID;n
 # Punctuation
 cp;1B7D;age=14.0;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=BA;na=BALINESE PANTI LANTANG;SB=ST;STerm;Term;WB=XX;-XIDC
 cp;1B7E;age=14.0;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=BA;na=BALINESE PAMADA LANTANG;SB=ST;STerm;Term;WB=XX;-XIDC
-cp;1B7F;age=16.0;-Alpha;gc=Po;-IDC;Identifier_Type=Not_Character;InSC=Other;lb=BA;na=BALINESE PANTI BAWAK;SB=XX;WB=XX;-XIDC
+cp;1B7F;age=16.0;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=BA;na=BALINESE PANTI BAWAK;SB=XX;WB=XX;-XIDC
 
 block;1B80..1BBF;age=5.1;Alpha;blk=Sundanese;gc=Lo;Gr_Base;IDC;Identifier_Type=Limited_Use;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Sund;WB=LE;XIDC;XIDS
 # 1B80..1BBF Sundanese
@@ -8894,8 +8894,8 @@ cp;1C86;cf=044A;na=CYRILLIC SMALL LETTER TALL HARD SIGN;NFKC_CF=044A;NFKC_SCF=04
 cp;1C87;cf=0463;na=CYRILLIC SMALL LETTER TALL YAT;NFKC_CF=0463;NFKC_SCF=0463;scf=0463;stc=0462;suc=0462
 cp;1C88;cf=A64B;na=CYRILLIC SMALL LETTER UNBLENDED UK;NFKC_CF=A64B;NFKC_SCF=A64B;scf=A64B;stc=A64A;suc=A64A
 # Khanty letters
-cp;1C89;age=16.0;cf=1C8A;CWL;-CWT;-CWU;gc=Lu;Identifier_Type=Not_Character;-Lower;na=CYRILLIC CAPITAL LETTER TJE;NFKC_CF=1C8A;NFKC_SCF=1C8A;SB=UP;scf=1C8A;slc=1C8A;Upper
-cp;1C8A;age=16.0;-CWCF;-CWKCF;Identifier_Type=Not_Character;na=CYRILLIC SMALL LETTER TJE;stc=1C89;suc=1C89
+cp;1C89;age=16.0;cf=1C8A;CWL;-CWT;-CWU;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;-Lower;na=CYRILLIC CAPITAL LETTER TJE;NFKC_CF=1C8A;NFKC_SCF=1C8A;SB=UP;scf=1C8A;slc=1C8A;Upper
+cp;1C8A;age=16.0;-CWCF;-CWKCF;Identifier_Status=Allowed;Identifier_Type=Recommended;na=CYRILLIC SMALL LETTER TJE;stc=1C89;suc=1C89
 unassigned;1C8B..1C8F
 
 block;1C90..1CBF;age=11.0;Alpha;blk=Georgian_Ext;Cased;CWCF;CWCM;CWKCF;CWL;gc=Lu;Gr_Base;IDC;Identifier_Status=Allowed;Identifier_Type=Recommended;IDS;lb=AL;SB=LE;sc=Geor;Upper;WB=LE;XIDC;XIDS
@@ -11042,9 +11042,9 @@ cp;2425;age=3.0;na=SYMBOL FOR DELETE FORM TWO
 # Specific symbol for control code
 cp;2426;age=3.0;na=SYMBOL FOR SUBSTITUTE FORM TWO
 # Legacy computer symbols for delete
-cp;2427;age=16.0;Identifier_Type=Not_Character;na=SYMBOL FOR DELETE SQUARE CHECKER BOARD FORM
-cp;2428;age=16.0;Identifier_Type=Not_Character;na=SYMBOL FOR DELETE RECTANGULAR CHECKER BOARD FORM
-cp;2429;age=16.0;Identifier_Type=Not_Character;na=SYMBOL FOR DELETE MEDIUM SHADE FORM
+cp;2427;age=16.0;na=SYMBOL FOR DELETE SQUARE CHECKER BOARD FORM
+cp;2428;age=16.0;na=SYMBOL FOR DELETE RECTANGULAR CHECKER BOARD FORM
+cp;2429;age=16.0;na=SYMBOL FOR DELETE MEDIUM SHADE FORM
 unassigned;242A..243F;Pat_Syn;vo=U
 
 block;2440..245F;age=1.1;bc=ON;blk=OCR;gc=So;Gr_Base;Identifier_Type=Not_XID;lb=AL;Pat_Syn;sc=Zyyy;vo=U
@@ -13849,7 +13849,7 @@ cp;2E2C;age=5.1;Identifier_Type=Obsolete Not_XID;na=SQUARED FOUR DOT PUNCTUATION
 cp;2E2D;age=5.1;Identifier_Type=Obsolete Not_XID;na=FIVE DOT MARK
 cp;2E2E;age=5.1;Identifier_Type=Obsolete Not_XID;lb=EX;na=REVERSED QUESTION MARK;SB=ST;STerm;Term
 cp;2E2F;age=5.1;Alpha;CI;Dia;gc=Lm;Identifier_Type=Obsolete Not_XID;lb=AL;na=VERTICAL TILDE;SB=LE;WB=LE
-cp;2E30;age=5.1;Identifier_Type=Obsolete Not_XID;na=RING POINT
+cp;2E30;age=5.1;Identifier_Type=Exclusion Not_XID;na=RING POINT
 cp;2E31;age=5.2;Identifier_Type=Obsolete Not_XID;na=WORD SEPARATOR MIDDLE DOT
 # Palaeotype transliteration symbol
 cp;2E32;age=6.1;Identifier_Type=Obsolete Not_XID;lb=AL;na=TURNED COMMA
@@ -14817,8 +14817,8 @@ cp;31E0;na=CJK STROKE HXWG
 cp;31E1;na=CJK STROKE HZZZG
 cp;31E2;na=CJK STROKE PG
 cp;31E3;na=CJK STROKE Q
-cp;31E4;age=16.0;Identifier_Type=Not_Character;na=CJK STROKE HZXG;scx=<script>
-cp;31E5;age=16.0;Identifier_Type=Not_Character;na=CJK STROKE SZP;scx=<script>
+cp;31E4;age=16.0;na=CJK STROKE HZXG;scx=<script>
+cp;31E5;age=16.0;na=CJK STROKE SZP;scx=<script>
 unassigned;31E6..31EE;vo=U
 # Ideographic description character
 cp;31EF;age=15.1;IDSB;na=IDEOGRAPHIC DESCRIPTION CHARACTER SUBTRACTION;scx=<script>
@@ -17592,10 +17592,10 @@ cp;A7C8;age=13.0;CWT;CWU;Identifier_Status=Allowed;Identifier_Type=Recommended;L
 cp;A7C9;age=13.0;cf=A7CA;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER S WITH SHORT STROKE OVERLAY;NFKC_CF=A7CA;NFKC_SCF=A7CA;SB=UP;scf=A7CA;slc=A7CA;Upper
 cp;A7CA;age=13.0;CWT;CWU;Identifier_Status=Allowed;Identifier_Type=Recommended;Lower;na=LATIN SMALL LETTER S WITH SHORT STROKE OVERLAY;stc=A7C9;suc=A7C9
 # Letter for Eastern Dan
-cp;A7CB;age=16.0;cf=0264;CWCF;CWKCF;CWL;gc=Lu;Identifier_Type=Not_Character;na=LATIN CAPITAL LETTER RAMS HORN;NFKC_CF=0264;NFKC_SCF=0264;SB=UP;scf=0264;slc=0264;Upper
+cp;A7CB;age=16.0;cf=0264;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER RAMS HORN;NFKC_CF=0264;NFKC_SCF=0264;SB=UP;scf=0264;slc=0264;Upper
 # Letters for Luise\u00F1o
-cp;A7CC;age=16.0;cf=A7CD;CWCF;CWKCF;CWL;gc=Lu;Identifier_Type=Not_Character;na=LATIN CAPITAL LETTER S WITH DIAGONAL STROKE;NFKC_CF=A7CD;NFKC_SCF=A7CD;SB=UP;scf=A7CD;slc=A7CD;Upper
-cp;A7CD;age=16.0;CWT;CWU;Identifier_Type=Not_Character;Lower;na=LATIN SMALL LETTER S WITH DIAGONAL STROKE;stc=A7CC;suc=A7CC
+cp;A7CC;age=16.0;cf=A7CD;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER S WITH DIAGONAL STROKE;NFKC_CF=A7CD;NFKC_SCF=A7CD;SB=UP;scf=A7CD;slc=A7CD;Upper
+cp;A7CD;age=16.0;CWT;CWU;Identifier_Status=Allowed;Identifier_Type=Recommended;Lower;na=LATIN SMALL LETTER S WITH DIAGONAL STROKE;stc=A7CC;suc=A7CC
 unassigned;A7CE..A7CF
 # Letters used in the Middle English Ormulum
 cp;A7D0;age=14.0;cf=A7D1;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER CLOSED INSULAR G;NFKC_CF=A7D1;NFKC_SCF=A7D1;SB=UP;scf=A7D1;slc=A7D1;Upper
@@ -17610,9 +17610,9 @@ cp;A7D7;age=14.0;CWT;CWU;Identifier_Status=Allowed;Identifier_Type=Recommended;L
 cp;A7D8;age=14.0;cf=A7D9;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER SIGMOID S;NFKC_CF=A7D9;NFKC_SCF=A7D9;SB=UP;scf=A7D9;slc=A7D9;Upper
 cp;A7D9;age=14.0;CWT;CWU;Identifier_Status=Allowed;Identifier_Type=Recommended;Lower;na=LATIN SMALL LETTER SIGMOID S;stc=A7D8;suc=A7D8
 # Letters used in Wakashan and Salishan languages
-cp;A7DA;age=16.0;cf=A7DB;CWCF;CWKCF;CWL;gc=Lu;Identifier_Type=Not_Character;na=LATIN CAPITAL LETTER LAMBDA;NFKC_CF=A7DB;NFKC_SCF=A7DB;SB=UP;scf=A7DB;slc=A7DB;Upper
-cp;A7DB;age=16.0;CWT;CWU;Identifier_Type=Not_Character;Lower;na=LATIN SMALL LETTER LAMBDA;stc=A7DA;suc=A7DA
-cp;A7DC;age=16.0;cf=019B;CWCF;CWKCF;CWL;gc=Lu;Identifier_Type=Not_Character;na=LATIN CAPITAL LETTER LAMBDA WITH STROKE;NFKC_CF=019B;NFKC_SCF=019B;SB=UP;scf=019B;slc=019B;Upper
+cp;A7DA;age=16.0;cf=A7DB;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER LAMBDA;NFKC_CF=A7DB;NFKC_SCF=A7DB;SB=UP;scf=A7DB;slc=A7DB;Upper
+cp;A7DB;age=16.0;CWT;CWU;Identifier_Status=Allowed;Identifier_Type=Recommended;Lower;na=LATIN SMALL LETTER LAMBDA;stc=A7DA;suc=A7DA
+cp;A7DC;age=16.0;cf=019B;CWCF;CWKCF;CWL;gc=Lu;Identifier_Status=Allowed;Identifier_Type=Recommended;na=LATIN CAPITAL LETTER LAMBDA WITH STROKE;NFKC_CF=019B;NFKC_SCF=019B;SB=UP;scf=019B;slc=019B;Upper
 unassigned;A7DD..A7F1
 # Modifier letters for Chatino (M\u00E9xico)
 cp;A7F2;age=14.0;CI;-CWCM;CWKCF;dm=0043;dt=Sup;FC_NFKC=0063;gc=Lm;Identifier_Type=Not_NFKC;Lower;na=MODIFIER LETTER CAPITAL C;NFKC_CF=0063;NFKC_QC=N;NFKC_SCF=0063;NFKD_QC=N
@@ -18141,7 +18141,7 @@ cp;A9CC;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=ID;n
 cp;A9CD;-Alpha;gc=Po;-IDC;Identifier_Type=Limited_Use Not_XID;InSC=Other;lb=ID;na=JAVANESE TURNED PADA PISELEH;SB=XX;WB=XX;-XIDC
 unassigned;A9CE
 # Syllable reduplicator
-cp;A9CF;CI;Ext;gc=Lm;Identifier_Type=Limited_Use Exclusion;IDS;InSC=Other;lb=BA;na=JAVANESE PANGRANGKEP;sc=Zyyy;scx=Bugi Java;XIDS
+cp;A9CF;CI;Ext;gc=Lm;Identifier_Type=Limited_Use Uncommon_Use;IDS;InSC=Other;lb=BA;na=JAVANESE PANGRANGKEP;sc=Zyyy;scx=Bugi Java;XIDS
 # Digits
 cp;A9D0;-Alpha;gc=Nd;InSC=Number;lb=AS;na=JAVANESE DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU
 cp;A9D1;-Alpha;gc=Nd;InSC=Number;lb=AS;na=JAVANESE DIGIT ONE;nt=De;nv=1;SB=NU;WB=NU
@@ -22614,7 +22614,7 @@ cp;105BB;CWT;CWU;Lower;na=VITHKUQI SMALL LETTER Y;stc=10594;suc=10594
 cp;105BC;CWT;CWU;Lower;na=VITHKUQI SMALL LETTER ZE;stc=10595;suc=10595
 unassigned;105BD..105BF
 
-block;105C0..105FF;age=16.0;Alpha;blk=Todhri;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Todr;WB=LE;XIDC;XIDS
+block;105C0..105FF;age=16.0;Alpha;blk=Todhri;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;lb=AL;SB=LE;sc=Todr;WB=LE;XIDC;XIDS
 # 105C0..105FF Todhri
 cp;105C0;na=TODHRI LETTER A
 cp;105C1;na=TODHRI LETTER AS
@@ -24191,7 +24191,7 @@ cp;10D38;-Alpha;bc=AN;gc=Nd;-IDS;jt=U;lb=NU;na=HANIFI ROHINGYA DIGIT EIGHT;nt=De
 cp;10D39;-Alpha;bc=AN;gc=Nd;-IDS;jt=U;lb=NU;na=HANIFI ROHINGYA DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 unassigned;10D3A..10D3F;bc=AL
 
-block;10D40..10D8F;age=16.0;Alpha;bc=R;blk=Garay;Cased;CWCM;gc=Ll;Gr_Base;IDC;IDS;lb=AL;SB=LO;sc=Gara;WB=LE;XIDC;XIDS
+block;10D40..10D8F;age=16.0;Alpha;bc=R;blk=Garay;Cased;CWCM;gc=Ll;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;lb=AL;SB=LO;sc=Gara;WB=LE;XIDC;XIDS
 # 10D40..10D8F Garay
 # Digits
 cp;10D40;-Alpha;bc=AN;-Cased;-CWCM;gc=Nd;-IDS;lb=NU;na=GARAY DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU;-XIDS
@@ -24244,7 +24244,7 @@ cp;10D6B;-Alpha;bc=NSM;-Cased;ccc=230;CI;-CWCM;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;
 cp;10D6C;-Alpha;bc=NSM;-Cased;ccc=230;CI;-CWCM;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;jt=T;lb=CM;na=GARAY COMBINING DOUBLE DOT ABOVE;SB=EX;WB=Extend;-XIDS
 # Punctuation and reduplication mark
 cp;10D6D;-Alpha;bc=NSM;-Cased;ccc=230;CI;-CWCM;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;jt=T;lb=CM;na=GARAY CONSONANT NASALIZATION MARK;SB=EX;WB=Extend;-XIDS
-cp;10D6E;-Alpha;bc=ON;-Cased;-CWCM;Dash;gc=Pd;-IDC;-IDS;lb=BA;na=GARAY HYPHEN;SB=XX;WB=XX;-XIDC;-XIDS
+cp;10D6E;-Alpha;bc=ON;-Cased;-CWCM;Dash;gc=Pd;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;lb=BA;na=GARAY HYPHEN;SB=XX;WB=XX;-XIDC;-XIDS
 cp;10D6F;-Cased;CI;-CWCM;Ext;gc=Lm;na=GARAY REDUPLICATION MARK;SB=LE
 # Lowercase consonant letters
 cp;10D70;CWT;CWU;Lower;na=GARAY SMALL LETTER A;stc=10D50;suc=10D50
@@ -24271,8 +24271,8 @@ cp;10D84;CWT;CWU;Lower;na=GARAY SMALL LETTER OLD KA;stc=10D64;suc=10D64
 cp;10D85;CWT;CWU;Lower;na=GARAY SMALL LETTER OLD NA;stc=10D65;suc=10D65
 unassigned;10D86..10D8D;bc=R
 # Mathematical symbols
-cp;10D8E;-Alpha;-Cased;-CWCM;gc=Sm;-IDC;-IDS;Math;na=GARAY PLUS SIGN;SB=XX;WB=XX;-XIDC;-XIDS
-cp;10D8F;-Alpha;-Cased;-CWCM;gc=Sm;-IDC;-IDS;Math;na=GARAY MINUS SIGN;SB=XX;WB=XX;-XIDC;-XIDS
+cp;10D8E;-Alpha;-Cased;-CWCM;gc=Sm;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;Math;na=GARAY PLUS SIGN;SB=XX;WB=XX;-XIDC;-XIDS
+cp;10D8F;-Alpha;-Cased;-CWCM;gc=Sm;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;Math;na=GARAY MINUS SIGN;SB=XX;WB=XX;-XIDC;-XIDS
 
 # No block
 unassigned;10D90..10E5F;bc=R
@@ -24372,20 +24372,20 @@ cp;10EB0;na=YEZIDI LETTER LAM WITH DOT ABOVE
 cp;10EB1;na=YEZIDI LETTER YOT WITH CIRCUMFLEX ABOVE
 unassigned;10EB2..10EBF;bc=R
 
-block;10EC0..10EFF;age=16.0;bc=NSM;blk=Arabic_Ext_C;gc=Mn;IDC;jt=T;lb=CM;SB=EX;sc=Arab;WB=Extend;XIDC
+block;10EC0..10EFF;age=16.0;bc=NSM;blk=Arabic_Ext_C;gc=Mn;IDC;Identifier_Type=Uncommon_Use;jt=T;lb=CM;SB=EX;sc=Arab;WB=Extend;XIDC
 # 10EC0..10EFF Arabic Extended-C
 unassigned;10EC0..10EC1;bc=AL
 # Letters for Pegon
-cp;10EC2;Alpha;bc=AL;gc=Lo;Gr_Base;IDS;jg=Dal;jt=R;lb=AL;na=ARABIC LETTER DAL WITH TWO DOTS VERTICALLY BELOW;SB=LE;WB=LE;XIDS
-cp;10EC3;Alpha;bc=AL;gc=Lo;Gr_Base;IDS;jg=Tah;jt=D;lb=AL;na=ARABIC LETTER TAH WITH TWO DOTS VERTICALLY BELOW;SB=LE;WB=LE;XIDS
-cp;10EC4;Alpha;bc=AL;gc=Lo;Gr_Base;IDS;jg=Kaf;jt=D;lb=AL;na=ARABIC LETTER KAF WITH TWO DOTS VERTICALLY BELOW;SB=LE;WB=LE;XIDS
+cp;10EC2;Alpha;bc=AL;gc=Lo;Gr_Base;Identifier_Status=Allowed;Identifier_Type=Recommended;IDS;jg=Dal;jt=R;lb=AL;na=ARABIC LETTER DAL WITH TWO DOTS VERTICALLY BELOW;SB=LE;WB=LE;XIDS
+cp;10EC3;Alpha;bc=AL;gc=Lo;Gr_Base;Identifier_Status=Allowed;Identifier_Type=Recommended;IDS;jg=Tah;jt=D;lb=AL;na=ARABIC LETTER TAH WITH TWO DOTS VERTICALLY BELOW;SB=LE;WB=LE;XIDS
+cp;10EC4;Alpha;bc=AL;gc=Lo;Gr_Base;Identifier_Status=Allowed;Identifier_Type=Recommended;IDS;jg=Kaf;jt=D;lb=AL;na=ARABIC LETTER KAF WITH TWO DOTS VERTICALLY BELOW;SB=LE;WB=LE;XIDS
 unassigned;10EC5..10EFB;bc=AL
 # Quranic mark used in Libya
 cp;10EFC;Alpha;CI;GCB=EX;Gr_Ext;na=ARABIC COMBINING ALEF OVERLAY
 # Quranic marks used in Turkey
-cp;10EFD;age=15.0;ccc=220;CI;Dia;GCB=EX;Gr_Ext;Identifier_Type=Uncommon_Use;InCB=Extend;na=ARABIC SMALL LOW WORD SAKTA
-cp;10EFE;age=15.0;ccc=220;CI;Dia;GCB=EX;Gr_Ext;Identifier_Type=Uncommon_Use;InCB=Extend;na=ARABIC SMALL LOW WORD QASR
-cp;10EFF;age=15.0;ccc=220;CI;Dia;GCB=EX;Gr_Ext;Identifier_Type=Uncommon_Use;InCB=Extend;na=ARABIC SMALL LOW WORD MADDA
+cp;10EFD;age=15.0;ccc=220;CI;Dia;GCB=EX;Gr_Ext;InCB=Extend;na=ARABIC SMALL LOW WORD SAKTA
+cp;10EFE;age=15.0;ccc=220;CI;Dia;GCB=EX;Gr_Ext;InCB=Extend;na=ARABIC SMALL LOW WORD QASR
+cp;10EFF;age=15.0;ccc=220;CI;Dia;GCB=EX;Gr_Ext;InCB=Extend;na=ARABIC SMALL LOW WORD MADDA
 
 block;10F00..10F2F;age=11.0;Alpha;bc=R;blk=Old_Sogdian;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;lb=AL;SB=LE;sc=Sogo;WB=LE;XIDC;XIDS
 # 10F00..10F2F Old Sogdian
@@ -25441,7 +25441,7 @@ cp;11373;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Ext
 cp;11374;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;InPC=Top;InSC=Cantillation_Mark;jt=T;lb=CM;na=COMBINING GRANTHA LETTER PA;SB=EX;-XIDS
 unassigned;11375..1137F
 
-block;11380..113FF;age=16.0;Alpha;blk=Tulu_Tigalari;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AK;SB=LE;sc=Tutg;WB=LE;XIDC;XIDS
+block;11380..113FF;age=16.0;Alpha;blk=Tulu_Tigalari;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;InSC=Consonant;lb=AK;SB=LE;sc=Tutg;WB=LE;XIDC;XIDS
 # 11380..113FF Tulu-Tigalari
 # Independent vowels
 cp;11380;InSC=Vowel_Independent;lb=AS;na=TULU-TIGALARI LETTER A
@@ -25532,11 +25532,11 @@ cp;113D2;-Alpha;bc=NSM;CI;Dia;Ext;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;
 # Vowel length mark
 cp;113D3;Dia;Ext;InSC=Other;lb=ID;na=TULU-TIGALARI SIGN PLUTA
 # Punctuation
-cp;113D4;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI DANDA;SB=XX;WB=XX;-XIDC;-XIDS
-cp;113D5;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI DOUBLE DANDA;SB=XX;WB=XX;-XIDC;-XIDS
+cp;113D4;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI DANDA;SB=XX;WB=XX;-XIDC;-XIDS
+cp;113D5;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI DOUBLE DANDA;SB=XX;WB=XX;-XIDC;-XIDS
 unassigned;113D6
-cp;113D7;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI SIGN OM PUSHPIKA;SB=XX;WB=XX;-XIDC;-XIDS
-cp;113D8;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI SIGN SHRII PUSHPIKA;SB=XX;WB=XX;-XIDC;-XIDS
+cp;113D7;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI SIGN OM PUSHPIKA;SB=XX;WB=XX;-XIDC;-XIDS
+cp;113D8;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;lb=ID;na=TULU-TIGALARI SIGN SHRII PUSHPIKA;SB=XX;WB=XX;-XIDC;-XIDS
 unassigned;113D9..113E0
 # Vedic tone marks
 cp;113E1;-Alpha;bc=NSM;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Cantillation_Mark;jt=T;lb=CM;na=TULU-TIGALARI VEDIC TONE SVARITA;SB=EX;WB=Extend;-XIDS
@@ -26046,7 +26046,7 @@ cp;116C8;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=TAKRI DIGIT EIGHT;nt=De;nv=8;SB=
 cp;116C9;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=TAKRI DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 unassigned;116CA..116CF
 
-block;116D0..116FF;age=16.0;blk=Myanmar_Ext_C;gc=Nd;Gr_Base;IDC;InSC=Number;lb=NU;nt=De;nv=0;SB=NU;sc=Mymr;WB=NU;XIDC
+block;116D0..116FF;age=16.0;blk=Myanmar_Ext_C;gc=Nd;Gr_Base;IDC;Identifier_Status=Allowed;Identifier_Type=Recommended;InSC=Number;lb=NU;nt=De;nv=0;SB=NU;sc=Mymr;WB=NU;XIDC
 # 116D0..116FF Myanmar Extended-C
 # Pao digits
 cp;116D0;na=MYANMAR PAO DIGIT ZERO
@@ -26776,7 +26776,7 @@ cp;11B08;na=DEVANAGARI SIGN REVERSED NINE-LIKE BHALE
 cp;11B09;na=DEVANAGARI SIGN MINDU
 unassigned;11B0A..11B5F
 
-block;11BC0..11BFF;age=16.0;Alpha;blk=Sunuwar;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Sunu;WB=LE;XIDC;XIDS
+block;11BC0..11BFF;age=16.0;Alpha;blk=Sunuwar;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;lb=AL;SB=LE;sc=Sunu;WB=LE;XIDC;XIDS
 # 11BC0..11BFF Sunuwar
 # Letters
 cp;11BC0;na=SUNUWAR LETTER DEVI
@@ -26813,7 +26813,7 @@ cp;11BDE;na=SUNUWAR LETTER TENTU
 cp;11BDF;na=SUNUWAR LETTER THELE
 cp;11BE0;na=SUNUWAR LETTER KLOKO
 # Punctuation
-cp;11BE1;-Alpha;gc=Po;-IDC;-IDS;na=SUNUWAR SIGN PVO;SB=XX;WB=XX;-XIDC;-XIDS
+cp;11BE1;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;na=SUNUWAR SIGN PVO;SB=XX;WB=XX;-XIDC;-XIDS
 unassigned;11BE2..11BEF
 # Digits
 cp;11BF0;-Alpha;gc=Nd;-IDS;lb=NU;na=SUNUWAR DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU;-XIDS
@@ -27322,7 +27322,7 @@ cp;11F57;-Alpha;gc=Nd;InSC=Number;lb=AS;na=KAWI DIGIT SEVEN;nt=De;nv=7;SB=NU;WB=
 cp;11F58;-Alpha;gc=Nd;InSC=Number;lb=AS;na=KAWI DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;-XIDS
 cp;11F59;-Alpha;gc=Nd;InSC=Number;lb=AS;na=KAWI DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 # Nukta
-cp;11F5A;age=16.0;-Alpha;bc=NSM;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Identifier_Type=Not_Character;InPC=Top;InSC=Nukta;jt=T;lb=CM;na=KAWI SIGN NUKTA;SB=EX;WB=Extend;-XIDS
+cp;11F5A;age=16.0;-Alpha;bc=NSM;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Nukta;jt=T;lb=CM;na=KAWI SIGN NUKTA;SB=EX;WB=Extend;-XIDS
 unassigned;11F5B..11F5F
 
 block;11FB0..11FBF;age=13.0;Alpha;blk=Lisu_Sup;gc=Lo;Gr_Base;IDC;Identifier_Type=Limited_Use;IDS;lb=AL;na=LISU LETTER YHA;SB=LE;sc=Lisu;WB=LE;XIDC;XIDS
@@ -29910,7 +29910,7 @@ cp;13454;bc=NSM;Dia;gc=Mn;GCB=EX;Gr_Ext;na=EGYPTIAN HIEROGLYPH MODIFIER DAMAGED 
 cp;13455;bc=NSM;Dia;gc=Mn;GCB=EX;Gr_Ext;na=EGYPTIAN HIEROGLYPH MODIFIER DAMAGED
 unassigned;13456..1345F;vo=U
 
-block;13460..143FF;age=16.0;Alpha;blk=Egyptian_Hieroglyphs_Ext_A;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Egyp;vo=U;WB=LE;XIDC;XIDS
+block;13460..143FF;age=16.0;Alpha;blk=Egyptian_Hieroglyphs_Ext_A;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;lb=AL;SB=LE;sc=Egyp;vo=U;WB=LE;XIDC;XIDS
 # 13460..143FF Egyptian Hieroglyphs Extended-A
 # A01. Man seated or kneeling empty handed
 cp;13460;na=EGYPTIAN HIEROGLYPH-13460
@@ -34960,7 +34960,7 @@ cp;14645;na=ANATOLIAN HIEROGLYPH A529
 cp;14646;na=ANATOLIAN HIEROGLYPH A530
 unassigned;14647..1467F;vo=U
 
-block;16100..1613F;age=16.0;Alpha;blk=Gurung_Khema;gc=Lo;Gr_Base;IDC;InSC=Consonant;lb=AS;SB=LE;sc=Gukh;WB=LE;XIDC
+block;16100..1613F;age=16.0;Alpha;blk=Gurung_Khema;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;InSC=Consonant;lb=AS;SB=LE;sc=Gukh;WB=LE;XIDC
 # 16100..1613F Gurung Khema
 # Vowel carrier
 cp;16100;IDS;InSC=Vowel_Independent;na=GURUNG KHEMA LETTER A;XIDS
@@ -35946,7 +35946,7 @@ cp;16B8D;na=PAHAWH HMONG CLAN SIGN TSWB
 cp;16B8E;na=PAHAWH HMONG CLAN SIGN KWM
 cp;16B8F;na=PAHAWH HMONG CLAN SIGN VWJ
 
-block;16D40..16D7F;age=16.0;Alpha;blk=Kirat_Rai;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Krai;WB=LE;XIDC;XIDS
+block;16D40..16D7F;age=16.0;Alpha;blk=Kirat_Rai;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Krai;WB=LE;XIDC;XIDS
 # 16D40..16D7F Kirat Rai
 # Various signs
 cp;16D40;CI;gc=Lm;InPC=Right;InSC=Bindu;na=KIRAT RAI SIGN ANUSVARA
@@ -35998,10 +35998,10 @@ cp;16D6A;dm=16D69 16D67;dt=Can;GCB=V;InPC=Right;InSC=Vowel_Dependent;na=KIRAT RA
 # Various signs
 cp;16D6B;CI;Dia;gc=Lm;InPC=Right;InSC=Pure_Killer;na=KIRAT RAI SIGN VIRAMA
 cp;16D6C;CI;Dia;gc=Lm;InPC=Right;InSC=Pure_Killer;na=KIRAT RAI SIGN SAAT
-cp;16D6D;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;na=KIRAT RAI SIGN YUPI;SB=XX;WB=XX;-XIDC;-XIDS
+cp;16D6D;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;na=KIRAT RAI SIGN YUPI;SB=XX;WB=XX;-XIDC;-XIDS
 # Punctuation
-cp;16D6E;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=BA;na=KIRAT RAI DANDA;SB=XX;WB=XX;-XIDC;-XIDS
-cp;16D6F;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=BA;na=KIRAT RAI DOUBLE DANDA;SB=XX;WB=XX;-XIDC;-XIDS
+cp;16D6E;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;lb=BA;na=KIRAT RAI DANDA;SB=XX;WB=XX;-XIDC;-XIDS
+cp;16D6F;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;InSC=Other;lb=BA;na=KIRAT RAI DOUBLE DANDA;SB=XX;WB=XX;-XIDC;-XIDS
 # Digits
 cp;16D70;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=KIRAT RAI DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU;-XIDS
 cp;16D71;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=KIRAT RAI DIGIT ONE;nt=De;nv=1;SB=NU;WB=NU;-XIDS
@@ -37583,7 +37583,7 @@ cp;18CD4;na=KHITAN SMALL SCRIPT CHARACTER-18CD4
 cp;18CD5;na=KHITAN SMALL SCRIPT CHARACTER-18CD5
 unassigned;18CD6..18CFE;vo=U
 # Indication of missing character
-cp;18CFF;age=16.0;Identifier_Type=Not_Character;-Ideo;na=KHITAN SMALL SCRIPT CHARACTER-18CFF;WB=LE
+cp;18CFF;age=16.0;-Ideo;na=KHITAN SMALL SCRIPT CHARACTER-18CFF;WB=LE
 
 block;18D00..18D7F;age=13.0;Alpha;blk=Tangut_Sup;ea=W;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;Ideo;IDS;lb=ID;SB=LE;sc=Tang;vo=U;XIDC;XIDS
 # 18D00..18D08 Tangut Supplement
@@ -38530,7 +38530,7 @@ cp;1BCA2;na=SHORTHAND FORMAT DOWN STEP;NFKC_CF=
 cp;1BCA3;na=SHORTHAND FORMAT UP STEP;NFKC_CF=
 unassigned;1BCA4..1BCAF
 
-block;1CC00..1CEBF;age=16.0;bc=ON;blk=Symbols_For_Legacy_Computing_Sup;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1CC00..1CEBF;age=16.0;bc=ON;blk=Symbols_For_Legacy_Computing_Sup;gc=So;Gr_Base;Identifier_Type=Not_XID;lb=AL;sc=Zyyy
 # 1CC00..1CEBF Symbols for Legacy Computing Supplement
 # Game sprites
 cp;1CC00;na=UP-POINTING GO-KART
@@ -38764,43 +38764,43 @@ cp;1CCD3;na=UPPER RIGHT QUADRANT STANDING KNIGHT
 cp;1CCD4;na=LOWER LEFT QUADRANT STANDING KNIGHT
 cp;1CCD5;na=LOWER RIGHT QUADRANT STANDING KNIGHT
 # Outlined uppercase Latin alphabet
-cp;1CCD6;bc=L;CWKCF;dm=0041;dt=Font;FC_NFKC=0061;na=OUTLINED LATIN CAPITAL LETTER A;NFKC_CF=0061;NFKC_QC=N;NFKC_SCF=0061;NFKD_QC=N
-cp;1CCD7;bc=L;CWKCF;dm=0042;dt=Font;FC_NFKC=0062;na=OUTLINED LATIN CAPITAL LETTER B;NFKC_CF=0062;NFKC_QC=N;NFKC_SCF=0062;NFKD_QC=N
-cp;1CCD8;bc=L;CWKCF;dm=0043;dt=Font;FC_NFKC=0063;na=OUTLINED LATIN CAPITAL LETTER C;NFKC_CF=0063;NFKC_QC=N;NFKC_SCF=0063;NFKD_QC=N
-cp;1CCD9;bc=L;CWKCF;dm=0044;dt=Font;FC_NFKC=0064;na=OUTLINED LATIN CAPITAL LETTER D;NFKC_CF=0064;NFKC_QC=N;NFKC_SCF=0064;NFKD_QC=N
-cp;1CCDA;bc=L;CWKCF;dm=0045;dt=Font;FC_NFKC=0065;na=OUTLINED LATIN CAPITAL LETTER E;NFKC_CF=0065;NFKC_QC=N;NFKC_SCF=0065;NFKD_QC=N
-cp;1CCDB;bc=L;CWKCF;dm=0046;dt=Font;FC_NFKC=0066;na=OUTLINED LATIN CAPITAL LETTER F;NFKC_CF=0066;NFKC_QC=N;NFKC_SCF=0066;NFKD_QC=N
-cp;1CCDC;bc=L;CWKCF;dm=0047;dt=Font;FC_NFKC=0067;na=OUTLINED LATIN CAPITAL LETTER G;NFKC_CF=0067;NFKC_QC=N;NFKC_SCF=0067;NFKD_QC=N
-cp;1CCDD;bc=L;CWKCF;dm=0048;dt=Font;FC_NFKC=0068;na=OUTLINED LATIN CAPITAL LETTER H;NFKC_CF=0068;NFKC_QC=N;NFKC_SCF=0068;NFKD_QC=N
-cp;1CCDE;bc=L;CWKCF;dm=0049;dt=Font;FC_NFKC=0069;na=OUTLINED LATIN CAPITAL LETTER I;NFKC_CF=0069;NFKC_QC=N;NFKC_SCF=0069;NFKD_QC=N
-cp;1CCDF;bc=L;CWKCF;dm=004A;dt=Font;FC_NFKC=006A;na=OUTLINED LATIN CAPITAL LETTER J;NFKC_CF=006A;NFKC_QC=N;NFKC_SCF=006A;NFKD_QC=N
-cp;1CCE0;bc=L;CWKCF;dm=004B;dt=Font;FC_NFKC=006B;na=OUTLINED LATIN CAPITAL LETTER K;NFKC_CF=006B;NFKC_QC=N;NFKC_SCF=006B;NFKD_QC=N
-cp;1CCE1;bc=L;CWKCF;dm=004C;dt=Font;FC_NFKC=006C;na=OUTLINED LATIN CAPITAL LETTER L;NFKC_CF=006C;NFKC_QC=N;NFKC_SCF=006C;NFKD_QC=N
-cp;1CCE2;bc=L;CWKCF;dm=004D;dt=Font;FC_NFKC=006D;na=OUTLINED LATIN CAPITAL LETTER M;NFKC_CF=006D;NFKC_QC=N;NFKC_SCF=006D;NFKD_QC=N
-cp;1CCE3;bc=L;CWKCF;dm=004E;dt=Font;FC_NFKC=006E;na=OUTLINED LATIN CAPITAL LETTER N;NFKC_CF=006E;NFKC_QC=N;NFKC_SCF=006E;NFKD_QC=N
-cp;1CCE4;bc=L;CWKCF;dm=004F;dt=Font;FC_NFKC=006F;na=OUTLINED LATIN CAPITAL LETTER O;NFKC_CF=006F;NFKC_QC=N;NFKC_SCF=006F;NFKD_QC=N
-cp;1CCE5;bc=L;CWKCF;dm=0050;dt=Font;FC_NFKC=0070;na=OUTLINED LATIN CAPITAL LETTER P;NFKC_CF=0070;NFKC_QC=N;NFKC_SCF=0070;NFKD_QC=N
-cp;1CCE6;bc=L;CWKCF;dm=0051;dt=Font;FC_NFKC=0071;na=OUTLINED LATIN CAPITAL LETTER Q;NFKC_CF=0071;NFKC_QC=N;NFKC_SCF=0071;NFKD_QC=N
-cp;1CCE7;bc=L;CWKCF;dm=0052;dt=Font;FC_NFKC=0072;na=OUTLINED LATIN CAPITAL LETTER R;NFKC_CF=0072;NFKC_QC=N;NFKC_SCF=0072;NFKD_QC=N
-cp;1CCE8;bc=L;CWKCF;dm=0053;dt=Font;FC_NFKC=0073;na=OUTLINED LATIN CAPITAL LETTER S;NFKC_CF=0073;NFKC_QC=N;NFKC_SCF=0073;NFKD_QC=N
-cp;1CCE9;bc=L;CWKCF;dm=0054;dt=Font;FC_NFKC=0074;na=OUTLINED LATIN CAPITAL LETTER T;NFKC_CF=0074;NFKC_QC=N;NFKC_SCF=0074;NFKD_QC=N
-cp;1CCEA;bc=L;CWKCF;dm=0055;dt=Font;FC_NFKC=0075;na=OUTLINED LATIN CAPITAL LETTER U;NFKC_CF=0075;NFKC_QC=N;NFKC_SCF=0075;NFKD_QC=N
-cp;1CCEB;bc=L;CWKCF;dm=0056;dt=Font;FC_NFKC=0076;na=OUTLINED LATIN CAPITAL LETTER V;NFKC_CF=0076;NFKC_QC=N;NFKC_SCF=0076;NFKD_QC=N
-cp;1CCEC;bc=L;CWKCF;dm=0057;dt=Font;FC_NFKC=0077;na=OUTLINED LATIN CAPITAL LETTER W;NFKC_CF=0077;NFKC_QC=N;NFKC_SCF=0077;NFKD_QC=N
-cp;1CCED;bc=L;CWKCF;dm=0058;dt=Font;FC_NFKC=0078;na=OUTLINED LATIN CAPITAL LETTER X;NFKC_CF=0078;NFKC_QC=N;NFKC_SCF=0078;NFKD_QC=N
-cp;1CCEE;bc=L;CWKCF;dm=0059;dt=Font;FC_NFKC=0079;na=OUTLINED LATIN CAPITAL LETTER Y;NFKC_CF=0079;NFKC_QC=N;NFKC_SCF=0079;NFKD_QC=N
-cp;1CCEF;bc=L;CWKCF;dm=005A;dt=Font;FC_NFKC=007A;na=OUTLINED LATIN CAPITAL LETTER Z;NFKC_CF=007A;NFKC_QC=N;NFKC_SCF=007A;NFKD_QC=N
+cp;1CCD6;bc=L;CWKCF;dm=0041;dt=Font;FC_NFKC=0061;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER A;NFKC_CF=0061;NFKC_QC=N;NFKC_SCF=0061;NFKD_QC=N
+cp;1CCD7;bc=L;CWKCF;dm=0042;dt=Font;FC_NFKC=0062;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER B;NFKC_CF=0062;NFKC_QC=N;NFKC_SCF=0062;NFKD_QC=N
+cp;1CCD8;bc=L;CWKCF;dm=0043;dt=Font;FC_NFKC=0063;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER C;NFKC_CF=0063;NFKC_QC=N;NFKC_SCF=0063;NFKD_QC=N
+cp;1CCD9;bc=L;CWKCF;dm=0044;dt=Font;FC_NFKC=0064;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER D;NFKC_CF=0064;NFKC_QC=N;NFKC_SCF=0064;NFKD_QC=N
+cp;1CCDA;bc=L;CWKCF;dm=0045;dt=Font;FC_NFKC=0065;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER E;NFKC_CF=0065;NFKC_QC=N;NFKC_SCF=0065;NFKD_QC=N
+cp;1CCDB;bc=L;CWKCF;dm=0046;dt=Font;FC_NFKC=0066;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER F;NFKC_CF=0066;NFKC_QC=N;NFKC_SCF=0066;NFKD_QC=N
+cp;1CCDC;bc=L;CWKCF;dm=0047;dt=Font;FC_NFKC=0067;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER G;NFKC_CF=0067;NFKC_QC=N;NFKC_SCF=0067;NFKD_QC=N
+cp;1CCDD;bc=L;CWKCF;dm=0048;dt=Font;FC_NFKC=0068;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER H;NFKC_CF=0068;NFKC_QC=N;NFKC_SCF=0068;NFKD_QC=N
+cp;1CCDE;bc=L;CWKCF;dm=0049;dt=Font;FC_NFKC=0069;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER I;NFKC_CF=0069;NFKC_QC=N;NFKC_SCF=0069;NFKD_QC=N
+cp;1CCDF;bc=L;CWKCF;dm=004A;dt=Font;FC_NFKC=006A;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER J;NFKC_CF=006A;NFKC_QC=N;NFKC_SCF=006A;NFKD_QC=N
+cp;1CCE0;bc=L;CWKCF;dm=004B;dt=Font;FC_NFKC=006B;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER K;NFKC_CF=006B;NFKC_QC=N;NFKC_SCF=006B;NFKD_QC=N
+cp;1CCE1;bc=L;CWKCF;dm=004C;dt=Font;FC_NFKC=006C;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER L;NFKC_CF=006C;NFKC_QC=N;NFKC_SCF=006C;NFKD_QC=N
+cp;1CCE2;bc=L;CWKCF;dm=004D;dt=Font;FC_NFKC=006D;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER M;NFKC_CF=006D;NFKC_QC=N;NFKC_SCF=006D;NFKD_QC=N
+cp;1CCE3;bc=L;CWKCF;dm=004E;dt=Font;FC_NFKC=006E;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER N;NFKC_CF=006E;NFKC_QC=N;NFKC_SCF=006E;NFKD_QC=N
+cp;1CCE4;bc=L;CWKCF;dm=004F;dt=Font;FC_NFKC=006F;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER O;NFKC_CF=006F;NFKC_QC=N;NFKC_SCF=006F;NFKD_QC=N
+cp;1CCE5;bc=L;CWKCF;dm=0050;dt=Font;FC_NFKC=0070;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER P;NFKC_CF=0070;NFKC_QC=N;NFKC_SCF=0070;NFKD_QC=N
+cp;1CCE6;bc=L;CWKCF;dm=0051;dt=Font;FC_NFKC=0071;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER Q;NFKC_CF=0071;NFKC_QC=N;NFKC_SCF=0071;NFKD_QC=N
+cp;1CCE7;bc=L;CWKCF;dm=0052;dt=Font;FC_NFKC=0072;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER R;NFKC_CF=0072;NFKC_QC=N;NFKC_SCF=0072;NFKD_QC=N
+cp;1CCE8;bc=L;CWKCF;dm=0053;dt=Font;FC_NFKC=0073;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER S;NFKC_CF=0073;NFKC_QC=N;NFKC_SCF=0073;NFKD_QC=N
+cp;1CCE9;bc=L;CWKCF;dm=0054;dt=Font;FC_NFKC=0074;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER T;NFKC_CF=0074;NFKC_QC=N;NFKC_SCF=0074;NFKD_QC=N
+cp;1CCEA;bc=L;CWKCF;dm=0055;dt=Font;FC_NFKC=0075;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER U;NFKC_CF=0075;NFKC_QC=N;NFKC_SCF=0075;NFKD_QC=N
+cp;1CCEB;bc=L;CWKCF;dm=0056;dt=Font;FC_NFKC=0076;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER V;NFKC_CF=0076;NFKC_QC=N;NFKC_SCF=0076;NFKD_QC=N
+cp;1CCEC;bc=L;CWKCF;dm=0057;dt=Font;FC_NFKC=0077;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER W;NFKC_CF=0077;NFKC_QC=N;NFKC_SCF=0077;NFKD_QC=N
+cp;1CCED;bc=L;CWKCF;dm=0058;dt=Font;FC_NFKC=0078;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER X;NFKC_CF=0078;NFKC_QC=N;NFKC_SCF=0078;NFKD_QC=N
+cp;1CCEE;bc=L;CWKCF;dm=0059;dt=Font;FC_NFKC=0079;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER Y;NFKC_CF=0079;NFKC_QC=N;NFKC_SCF=0079;NFKD_QC=N
+cp;1CCEF;bc=L;CWKCF;dm=005A;dt=Font;FC_NFKC=007A;Identifier_Type=Not_NFKC;na=OUTLINED LATIN CAPITAL LETTER Z;NFKC_CF=007A;NFKC_QC=N;NFKC_SCF=007A;NFKD_QC=N
 # Outlined digits
-cp;1CCF0;bc=EN;CWKCF;dm=0030;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT ZERO;NFKC_CF=0030;NFKC_QC=N;NFKC_SCF=0030;NFKD_QC=N;nt=De;nv=0;SB=NU;WB=NU;XIDC
-cp;1CCF1;bc=EN;CWKCF;dm=0031;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT ONE;NFKC_CF=0031;NFKC_QC=N;NFKC_SCF=0031;NFKD_QC=N;nt=De;nv=1;SB=NU;WB=NU;XIDC
-cp;1CCF2;bc=EN;CWKCF;dm=0032;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT TWO;NFKC_CF=0032;NFKC_QC=N;NFKC_SCF=0032;NFKD_QC=N;nt=De;nv=2;SB=NU;WB=NU;XIDC
-cp;1CCF3;bc=EN;CWKCF;dm=0033;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT THREE;NFKC_CF=0033;NFKC_QC=N;NFKC_SCF=0033;NFKD_QC=N;nt=De;nv=3;SB=NU;WB=NU;XIDC
-cp;1CCF4;bc=EN;CWKCF;dm=0034;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT FOUR;NFKC_CF=0034;NFKC_QC=N;NFKC_SCF=0034;NFKD_QC=N;nt=De;nv=4;SB=NU;WB=NU;XIDC
-cp;1CCF5;bc=EN;CWKCF;dm=0035;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT FIVE;NFKC_CF=0035;NFKC_QC=N;NFKC_SCF=0035;NFKD_QC=N;nt=De;nv=5;SB=NU;WB=NU;XIDC
-cp;1CCF6;bc=EN;CWKCF;dm=0036;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT SIX;NFKC_CF=0036;NFKC_QC=N;NFKC_SCF=0036;NFKD_QC=N;nt=De;nv=6;SB=NU;WB=NU;XIDC
-cp;1CCF7;bc=EN;CWKCF;dm=0037;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT SEVEN;NFKC_CF=0037;NFKC_QC=N;NFKC_SCF=0037;NFKD_QC=N;nt=De;nv=7;SB=NU;WB=NU;XIDC
-cp;1CCF8;bc=EN;CWKCF;dm=0038;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT EIGHT;NFKC_CF=0038;NFKC_QC=N;NFKC_SCF=0038;NFKD_QC=N;nt=De;nv=8;SB=NU;WB=NU;XIDC
-cp;1CCF9;bc=EN;CWKCF;dm=0039;dt=Font;gc=Nd;IDC;lb=NU;na=OUTLINED DIGIT NINE;NFKC_CF=0039;NFKC_QC=N;NFKC_SCF=0039;NFKD_QC=N;nt=De;nv=9;SB=NU;WB=NU;XIDC
+cp;1CCF0;bc=EN;CWKCF;dm=0030;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT ZERO;NFKC_CF=0030;NFKC_QC=N;NFKC_SCF=0030;NFKD_QC=N;nt=De;nv=0;SB=NU;WB=NU;XIDC
+cp;1CCF1;bc=EN;CWKCF;dm=0031;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT ONE;NFKC_CF=0031;NFKC_QC=N;NFKC_SCF=0031;NFKD_QC=N;nt=De;nv=1;SB=NU;WB=NU;XIDC
+cp;1CCF2;bc=EN;CWKCF;dm=0032;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT TWO;NFKC_CF=0032;NFKC_QC=N;NFKC_SCF=0032;NFKD_QC=N;nt=De;nv=2;SB=NU;WB=NU;XIDC
+cp;1CCF3;bc=EN;CWKCF;dm=0033;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT THREE;NFKC_CF=0033;NFKC_QC=N;NFKC_SCF=0033;NFKD_QC=N;nt=De;nv=3;SB=NU;WB=NU;XIDC
+cp;1CCF4;bc=EN;CWKCF;dm=0034;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT FOUR;NFKC_CF=0034;NFKC_QC=N;NFKC_SCF=0034;NFKD_QC=N;nt=De;nv=4;SB=NU;WB=NU;XIDC
+cp;1CCF5;bc=EN;CWKCF;dm=0035;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT FIVE;NFKC_CF=0035;NFKC_QC=N;NFKC_SCF=0035;NFKD_QC=N;nt=De;nv=5;SB=NU;WB=NU;XIDC
+cp;1CCF6;bc=EN;CWKCF;dm=0036;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT SIX;NFKC_CF=0036;NFKC_QC=N;NFKC_SCF=0036;NFKD_QC=N;nt=De;nv=6;SB=NU;WB=NU;XIDC
+cp;1CCF7;bc=EN;CWKCF;dm=0037;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT SEVEN;NFKC_CF=0037;NFKC_QC=N;NFKC_SCF=0037;NFKD_QC=N;nt=De;nv=7;SB=NU;WB=NU;XIDC
+cp;1CCF8;bc=EN;CWKCF;dm=0038;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT EIGHT;NFKC_CF=0038;NFKC_QC=N;NFKC_SCF=0038;NFKD_QC=N;nt=De;nv=8;SB=NU;WB=NU;XIDC
+cp;1CCF9;bc=EN;CWKCF;dm=0039;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=OUTLINED DIGIT NINE;NFKC_CF=0039;NFKC_QC=N;NFKC_SCF=0039;NFKD_QC=N;nt=De;nv=9;SB=NU;WB=NU;XIDC
 unassigned;1CCFA..1CCFF
 # Block mosaic terminal graphic characters
 cp;1CD00;na=BLOCK OCTANT-3
@@ -42393,7 +42393,7 @@ cp;1E4F8;-Alpha;gc=Nd;-IDS;lb=NU;na=NAG MUNDARI DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=
 cp;1E4F9;-Alpha;gc=Nd;-IDS;lb=NU;na=NAG MUNDARI DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 unassigned;1E4FA..1E4FF
 
-block;1E5D0..1E5FF;age=16.0;Alpha;blk=Ol_Onal;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Onao;WB=LE;XIDC;XIDS
+block;1E5D0..1E5FF;age=16.0;Alpha;blk=Ol_Onal;gc=Lo;Gr_Base;IDC;Identifier_Type=Exclusion;IDS;lb=AL;SB=LE;sc=Onao;WB=LE;XIDC;XIDS
 # 1E5D0..1E5FF Ol Onal
 # Letters
 cp;1E5D0;na=OL ONAL LETTER O
@@ -42443,7 +42443,7 @@ cp;1E5F9;-Alpha;gc=Nd;-IDS;lb=NU;na=OL ONAL DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;-
 cp;1E5FA;-Alpha;gc=Nd;-IDS;lb=NU;na=OL ONAL DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 unassigned;1E5FB..1E5FE
 # Abbreviation sign
-cp;1E5FF;-Alpha;gc=Po;-IDC;-IDS;na=OL ONAL ABBREVIATION SIGN;SB=XX;WB=XX;-XIDC;-XIDS
+cp;1E5FF;-Alpha;gc=Po;-IDC;Identifier_Type=Exclusion Not_XID;-IDS;na=OL ONAL ABBREVIATION SIGN;SB=XX;WB=XX;-XIDC;-XIDS
 
 block;1E7E0..1E7FF;age=14.0;Alpha;blk=Ethiopic_Ext_B;gc=Lo;Gr_Base;IDC;Identifier_Status=Allowed;Identifier_Type=Recommended;IDS;lb=AL;SB=LE;sc=Ethi;WB=LE;XIDC;XIDS
 # 1E7E0..1E7FF Ethiopic Extended-B
@@ -45341,20 +45341,20 @@ unassigned;1F8AE..1F8AF;ExtPict
 # Arrows for legacy computing
 cp;1F8B0;age=13.0;ExtPict;na=ARROW POINTING UPWARDS THEN NORTH WEST
 cp;1F8B1;age=13.0;ExtPict;na=ARROW POINTING RIGHTWARDS THEN CURVING SOUTH WEST
-cp;1F8B2;age=16.0;ExtPict;Identifier_Type=Not_Character;na=RIGHTWARDS ARROW WITH LOWER HOOK
-cp;1F8B3;age=16.0;ExtPict;Identifier_Type=Not_Character;na=DOWNWARDS BLACK ARROW TO BAR
-cp;1F8B4;age=16.0;ExtPict;Identifier_Type=Not_Character;na=NEGATIVE SQUARED LEFTWARDS ARROW
-cp;1F8B5;age=16.0;ExtPict;Identifier_Type=Not_Character;na=NEGATIVE SQUARED UPWARDS ARROW
-cp;1F8B6;age=16.0;ExtPict;Identifier_Type=Not_Character;na=NEGATIVE SQUARED RIGHTWARDS ARROW
-cp;1F8B7;age=16.0;ExtPict;Identifier_Type=Not_Character;na=NEGATIVE SQUARED DOWNWARDS ARROW
-cp;1F8B8;age=16.0;ExtPict;Identifier_Type=Not_Character;na=NORTH WEST ARROW FROM BAR
-cp;1F8B9;age=16.0;ExtPict;Identifier_Type=Not_Character;na=NORTH EAST ARROW FROM BAR
-cp;1F8BA;age=16.0;ExtPict;Identifier_Type=Not_Character;na=SOUTH EAST ARROW FROM BAR
-cp;1F8BB;age=16.0;ExtPict;Identifier_Type=Not_Character;na=SOUTH WEST ARROW FROM BAR
+cp;1F8B2;age=16.0;ExtPict;na=RIGHTWARDS ARROW WITH LOWER HOOK
+cp;1F8B3;age=16.0;ExtPict;na=DOWNWARDS BLACK ARROW TO BAR
+cp;1F8B4;age=16.0;ExtPict;na=NEGATIVE SQUARED LEFTWARDS ARROW
+cp;1F8B5;age=16.0;ExtPict;na=NEGATIVE SQUARED UPWARDS ARROW
+cp;1F8B6;age=16.0;ExtPict;na=NEGATIVE SQUARED RIGHTWARDS ARROW
+cp;1F8B7;age=16.0;ExtPict;na=NEGATIVE SQUARED DOWNWARDS ARROW
+cp;1F8B8;age=16.0;ExtPict;na=NORTH WEST ARROW FROM BAR
+cp;1F8B9;age=16.0;ExtPict;na=NORTH EAST ARROW FROM BAR
+cp;1F8BA;age=16.0;ExtPict;na=SOUTH EAST ARROW FROM BAR
+cp;1F8BB;age=16.0;ExtPict;na=SOUTH WEST ARROW FROM BAR
 unassigned;1F8BC..1F8BF;ExtPict
 # Arrows for Egyptology
-cp;1F8C0;age=16.0;ExtPict;Identifier_Type=Not_Character;na=LEFTWARDS ARROW FROM DOWNWARDS ARROW
-cp;1F8C1;age=16.0;ExtPict;Identifier_Type=Not_Character;na=RIGHTWARDS ARROW FROM DOWNWARDS ARROW
+cp;1F8C0;age=16.0;ExtPict;na=LEFTWARDS ARROW FROM DOWNWARDS ARROW
+cp;1F8C1;age=16.0;ExtPict;na=RIGHTWARDS ARROW FROM DOWNWARDS ARROW
 unassigned;1F8C2..1F8FF;ExtPict
 
 block;1F900..1F9FF;age=10.0;bc=ON;blk=Sup_Symbols_And_Pictographs;ea=W;Emoji;EPres;ExtPict;gc=So;Gr_Base;Identifier_Type=Not_XID;lb=ID;sc=Zyyy;vo=U
@@ -45788,10 +45788,10 @@ cp;1FA86;na=NESTING DOLLS
 # Musical instruments
 cp;1FA87;age=15.0;na=MARACAS
 cp;1FA88;age=15.0;na=FLUTE
-cp;1FA89;age=16.0;Identifier_Type=Not_Character;na=HARP
+cp;1FA89;age=16.0;na=HARP
 unassigned;1FA8A..1FA8E;ExtPict;lb=ID;vo=U
 # Miscellaneous objects
-cp;1FA8F;age=16.0;Identifier_Type=Not_Character;na=SHOVEL
+cp;1FA8F;age=16.0;na=SHOVEL
 cp;1FA90;age=12.0;na=RINGED PLANET
 cp;1FA91;age=12.0;na=CHAIR
 cp;1FA92;age=12.0;na=RAZOR
@@ -45840,7 +45840,7 @@ cp;1FABA;age=14.0;na=NEST WITH EGGS
 cp;1FABB;age=15.0;na=HYACINTH
 cp;1FABC;age=15.0;na=JELLYFISH
 cp;1FABD;age=15.0;na=WING
-cp;1FABE;age=16.0;Identifier_Type=Not_Character;na=LEAFLESS TREE
+cp;1FABE;age=16.0;na=LEAFLESS TREE
 cp;1FABF;age=15.0;na=GOOSE
 # Body parts
 cp;1FAC0;na=ANATOMICAL HEART
@@ -45851,7 +45851,7 @@ cp;1FAC3;age=14.0;EBase;lb=EB;na=PREGNANT MAN
 cp;1FAC4;age=14.0;EBase;lb=EB;na=PREGNANT PERSON
 cp;1FAC5;age=14.0;EBase;lb=EB;na=PERSON WITH CROWN
 # Miscellaneous
-cp;1FAC6;age=16.0;Identifier_Type=Not_Character;na=FINGERPRINT
+cp;1FAC6;age=16.0;na=FINGERPRINT
 unassigned;1FAC7..1FACD;ExtPict;lb=ID;vo=U
 # Animals and nature
 cp;1FACE;age=15.0;na=MOOSE
@@ -45869,10 +45869,10 @@ cp;1FAD8;age=14.0;na=BEANS
 cp;1FAD9;age=14.0;na=JAR
 cp;1FADA;age=15.0;na=GINGER ROOT
 cp;1FADB;age=15.0;na=PEA POD
-cp;1FADC;age=16.0;Identifier_Type=Not_Character;na=ROOT VEGETABLE
+cp;1FADC;age=16.0;na=ROOT VEGETABLE
 unassigned;1FADD..1FADE;ExtPict;lb=ID;vo=U
 # Miscellaneous
-cp;1FADF;age=16.0;Identifier_Type=Not_Character;na=SPLATTER
+cp;1FADF;age=16.0;na=SPLATTER
 # Faces
 cp;1FAE0;age=14.0;na=MELTING FACE
 cp;1FAE1;age=14.0;na=SALUTING FACE
@@ -45885,7 +45885,7 @@ cp;1FAE6;age=14.0;na=BITING LIP
 cp;1FAE7;age=14.0;na=BUBBLES
 # Faces
 cp;1FAE8;age=15.0;na=SHAKING FACE
-cp;1FAE9;age=16.0;Identifier_Type=Not_Character;na=FACE WITH BAGS UNDER EYES
+cp;1FAE9;age=16.0;na=FACE WITH BAGS UNDER EYES
 unassigned;1FAEA..1FAEF;ExtPict;lb=ID;vo=U
 # Hand symbols
 cp;1FAF0;age=14.0;EBase;lb=EB;na=HAND WITH INDEX FINGER AND THUMB CROSSED
@@ -46119,46 +46119,46 @@ cp;1FBC8;na=STICK FIGURE LEANING RIGHT
 cp;1FBC9;na=STICK FIGURE WITH DRESS
 cp;1FBCA;na=WHITE UP-POINTING CHEVRON
 # Terminal graphic characters
-cp;1FBCB;age=16.0;Identifier_Type=Not_Character;na=WHITE CROSS MARK
-cp;1FBCC;age=16.0;Identifier_Type=Not_Character;na=RAISED SMALL LEFT SQUARE BRACKET
-cp;1FBCD;age=16.0;Identifier_Type=Not_Character;na=BLACK SMALL UP-POINTING CHEVRON
+cp;1FBCB;age=16.0;na=WHITE CROSS MARK
+cp;1FBCC;age=16.0;na=RAISED SMALL LEFT SQUARE BRACKET
+cp;1FBCD;age=16.0;na=BLACK SMALL UP-POINTING CHEVRON
 # Block elements
-cp;1FBCE;age=16.0;Identifier_Type=Not_Character;na=LEFT TWO THIRDS BLOCK
-cp;1FBCF;age=16.0;Identifier_Type=Not_Character;na=LEFT ONE THIRD BLOCK
+cp;1FBCE;age=16.0;na=LEFT TWO THIRDS BLOCK
+cp;1FBCF;age=16.0;na=LEFT ONE THIRD BLOCK
 # Character cell diagonals
-cp;1FBD0;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL MIDDLE RIGHT TO LOWER LEFT
-cp;1FBD1;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO MIDDLE LEFT
-cp;1FBD2;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE RIGHT
-cp;1FBD3;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL MIDDLE LEFT TO LOWER RIGHT
-cp;1FBD4;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER CENTRE
-cp;1FBD5;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER CENTRE TO LOWER RIGHT
-cp;1FBD6;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER CENTRE
-cp;1FBD7;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER CENTRE TO LOWER LEFT
-cp;1FBD8;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE CENTRE TO UPPER RIGHT
-cp;1FBD9;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO MIDDLE CENTRE TO LOWER RIGHT
-cp;1FBDA;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL LOWER LEFT TO MIDDLE CENTRE TO LOWER RIGHT
-cp;1FBDB;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE CENTRE TO LOWER LEFT
-cp;1FBDC;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER CENTRE TO UPPER RIGHT
-cp;1FBDD;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO MIDDLE LEFT TO LOWER RIGHT
-cp;1FBDE;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL LOWER LEFT TO UPPER CENTRE TO LOWER RIGHT
-cp;1FBDF;age=16.0;Identifier_Type=Not_Character;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE RIGHT TO LOWER LEFT
+cp;1FBD0;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL MIDDLE RIGHT TO LOWER LEFT
+cp;1FBD1;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO MIDDLE LEFT
+cp;1FBD2;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE RIGHT
+cp;1FBD3;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL MIDDLE LEFT TO LOWER RIGHT
+cp;1FBD4;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER CENTRE
+cp;1FBD5;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER CENTRE TO LOWER RIGHT
+cp;1FBD6;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER CENTRE
+cp;1FBD7;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER CENTRE TO LOWER LEFT
+cp;1FBD8;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE CENTRE TO UPPER RIGHT
+cp;1FBD9;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO MIDDLE CENTRE TO LOWER RIGHT
+cp;1FBDA;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL LOWER LEFT TO MIDDLE CENTRE TO LOWER RIGHT
+cp;1FBDB;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE CENTRE TO LOWER LEFT
+cp;1FBDC;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER CENTRE TO UPPER RIGHT
+cp;1FBDD;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO MIDDLE LEFT TO LOWER RIGHT
+cp;1FBDE;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL LOWER LEFT TO UPPER CENTRE TO LOWER RIGHT
+cp;1FBDF;age=16.0;na=BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO MIDDLE RIGHT TO LOWER LEFT
 # Geometric shapes
-cp;1FBE0;age=16.0;Identifier_Type=Not_Character;na=TOP JUSTIFIED LOWER HALF WHITE CIRCLE
-cp;1FBE1;age=16.0;Identifier_Type=Not_Character;na=RIGHT JUSTIFIED LEFT HALF WHITE CIRCLE
-cp;1FBE2;age=16.0;Identifier_Type=Not_Character;na=BOTTOM JUSTIFIED UPPER HALF WHITE CIRCLE
-cp;1FBE3;age=16.0;Identifier_Type=Not_Character;na=LEFT JUSTIFIED RIGHT HALF WHITE CIRCLE
-cp;1FBE4;age=16.0;Identifier_Type=Not_Character;na=UPPER CENTRE ONE QUARTER BLOCK
-cp;1FBE5;age=16.0;Identifier_Type=Not_Character;na=LOWER CENTRE ONE QUARTER BLOCK
-cp;1FBE6;age=16.0;Identifier_Type=Not_Character;na=MIDDLE LEFT ONE QUARTER BLOCK
-cp;1FBE7;age=16.0;Identifier_Type=Not_Character;na=MIDDLE RIGHT ONE QUARTER BLOCK
-cp;1FBE8;age=16.0;Identifier_Type=Not_Character;na=TOP JUSTIFIED LOWER HALF BLACK CIRCLE
-cp;1FBE9;age=16.0;Identifier_Type=Not_Character;na=RIGHT JUSTIFIED LEFT HALF BLACK CIRCLE
-cp;1FBEA;age=16.0;Identifier_Type=Not_Character;na=BOTTOM JUSTIFIED UPPER HALF BLACK CIRCLE
-cp;1FBEB;age=16.0;Identifier_Type=Not_Character;na=LEFT JUSTIFIED RIGHT HALF BLACK CIRCLE
-cp;1FBEC;age=16.0;Identifier_Type=Not_Character;na=TOP RIGHT JUSTIFIED LOWER LEFT QUARTER BLACK CIRCLE
-cp;1FBED;age=16.0;Identifier_Type=Not_Character;na=BOTTOM LEFT JUSTIFIED UPPER RIGHT QUARTER BLACK CIRCLE
-cp;1FBEE;age=16.0;Identifier_Type=Not_Character;na=BOTTOM RIGHT JUSTIFIED UPPER LEFT QUARTER BLACK CIRCLE
-cp;1FBEF;age=16.0;Identifier_Type=Not_Character;na=TOP LEFT JUSTIFIED LOWER RIGHT QUARTER BLACK CIRCLE
+cp;1FBE0;age=16.0;na=TOP JUSTIFIED LOWER HALF WHITE CIRCLE
+cp;1FBE1;age=16.0;na=RIGHT JUSTIFIED LEFT HALF WHITE CIRCLE
+cp;1FBE2;age=16.0;na=BOTTOM JUSTIFIED UPPER HALF WHITE CIRCLE
+cp;1FBE3;age=16.0;na=LEFT JUSTIFIED RIGHT HALF WHITE CIRCLE
+cp;1FBE4;age=16.0;na=UPPER CENTRE ONE QUARTER BLOCK
+cp;1FBE5;age=16.0;na=LOWER CENTRE ONE QUARTER BLOCK
+cp;1FBE6;age=16.0;na=MIDDLE LEFT ONE QUARTER BLOCK
+cp;1FBE7;age=16.0;na=MIDDLE RIGHT ONE QUARTER BLOCK
+cp;1FBE8;age=16.0;na=TOP JUSTIFIED LOWER HALF BLACK CIRCLE
+cp;1FBE9;age=16.0;na=RIGHT JUSTIFIED LEFT HALF BLACK CIRCLE
+cp;1FBEA;age=16.0;na=BOTTOM JUSTIFIED UPPER HALF BLACK CIRCLE
+cp;1FBEB;age=16.0;na=LEFT JUSTIFIED RIGHT HALF BLACK CIRCLE
+cp;1FBEC;age=16.0;na=TOP RIGHT JUSTIFIED LOWER LEFT QUARTER BLACK CIRCLE
+cp;1FBED;age=16.0;na=BOTTOM LEFT JUSTIFIED UPPER RIGHT QUARTER BLACK CIRCLE
+cp;1FBEE;age=16.0;na=BOTTOM RIGHT JUSTIFIED UPPER LEFT QUARTER BLACK CIRCLE
+cp;1FBEF;age=16.0;na=TOP LEFT JUSTIFIED LOWER RIGHT QUARTER BLACK CIRCLE
 # Segmented digits
 cp;1FBF0;bc=EN;CWKCF;dm=0030;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=SEGMENTED DIGIT ZERO;NFKC_CF=0030;NFKC_QC=N;NFKC_SCF=0030;NFKD_QC=N;nt=De;nv=0;SB=NU;WB=NU;XIDC
 cp;1FBF1;bc=EN;CWKCF;dm=0031;dt=Font;gc=Nd;IDC;Identifier_Type=Not_NFKC;lb=NU;na=SEGMENTED DIGIT ONE;NFKC_CF=0031;NFKC_QC=N;NFKC_SCF=0031;NFKD_QC=N;nt=De;nv=1;SB=NU;WB=NU;XIDC
