@@ -42,7 +42,7 @@ versions of ICU, but we will assist in building other versions from source.
 **Why don't you provide project files for my MSVC version (MSVC 2008, etc)?**
 
 You can use the Cygwin build environment to build ICU from source against the
-MSVC compiler. See the [Building ICU4C](./icu4c/build) page.
+MSVC compiler. See the [Building ICU4C](./build.md) page.
 
 #### How do I install the binary versions of ICU?
 
@@ -69,8 +69,8 @@ MSVC compiler. See the [Building ICU4C](./icu4c/build) page.
 
 #### Can you help me build ICU4C for ...
 
-We can try ... make sure you read the [Building ICU4C](./icu4c/build) section and also the [ICU
-Data](../icudata.md) section. You might also [searching the icu-support
+We can try ... make sure you read the [Building ICU4C](./build.md) section and also the [ICU
+Data](../icu_data/) section. You might also [searching the icu-support
 archives](https://icu.unicode.org/contacts), and then posting a question
 there. Additionally, sites such as
 [StackOverflow](http://stackoverflow.com/search?q=icu) may have helpful tips for
@@ -146,7 +146,7 @@ upgrade-friendly.
 
 #### How do I build ICU?
 
-See the [Building ICU4C](./icu4c/build) section.
+See the [Building ICU4C](./build.md) section.
 
 #### How do I get 32- or 64-bit versions of the ICU libraries?
 
