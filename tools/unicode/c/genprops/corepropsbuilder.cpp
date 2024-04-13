@@ -522,7 +522,7 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     return ntv;
 }
 
-uint32_t encodeIdentifierType(const UnicodeSet &idType, bool isA9CF, UErrorCode &errorCode) {
+uint32_t encodeIdentifierType(const UnicodeSet &idType, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return 0; }
     if(idType.isEmpty()) {
         fprintf(stderr, "genprops error: data line has an empty Identifier_Type\n");
@@ -532,12 +532,6 @@ uint32_t encodeIdentifierType(const UnicodeSet &idType, bool isA9CF, UErrorCode 
     if(idType.contains(U_ID_TYPE_EXCLUSION) && idType.contains(U_ID_TYPE_LIMITED_USE)) {
         // By definition, Exclusion and Limited_Use are mutually exclusive.
         // We rely on that for the data structure.
-        if(isA9CF) {
-            // TODO: Known bug in Unicode 15.1 and before.
-            // See PAG issue #217.
-            // See L2/24-064: UTC #179 properties feedback & recommendations
-            return (UPROPS_ID_TYPE_LIMITED_USE|UPROPS_ID_TYPE_UNCOMMON_USE)&~UPROPS_ID_TYPE_BIT;
-        }
         fprintf(stderr,
                 "genprops error: data line has both Identifier_Type Exclusion and Limited_Use\n");
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -829,7 +823,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         upvec_setValue(pv, start, pvecEnd, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     if(newValues.contains(UCHAR_IDENTIFIER_TYPE)) {
-        uint32_t encodedType=encodeIdentifierType(props.idType, start==0xA9CF && start==end, errorCode);
+        uint32_t encodedType=encodeIdentifierType(props.idType, errorCode);
         upvec_setValue(
             pv, start, pvecEnd, 2,
             encodedType << UPROPS_2_ID_TYPE_SHIFT, UPROPS_2_ID_TYPE_MASK,
