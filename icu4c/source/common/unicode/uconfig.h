@@ -417,7 +417,7 @@
  * \def UCONFIG_NO_MF2
  * This switch turns off the experimental MessageFormat 2.0 API.
  *
- * @internal ICU 75.0 technology preview
+ * @internal ICU 75 technology preview
  * @deprecated This API is for technology preview only.
  */
 #ifndef UCONFIG_NO_MF2
