@@ -42,8 +42,8 @@ For example:
 
 *   `~/icu/mine/**src**`
     *   source tree including icu (ICU4C) & icu4j folders
-    *   setup: mkdir + git clone your fork (see the [Linux Tips
-        subpage](linux.md)) + cd to here.
+    *   setup: mkdir + git clone your fork (see the [Linux Tips subpage](linux.md)) + cd
+        to here.
     *   Use `git checkout <branch>` to switch between branches.
     *   Use `git checkout -b <newbranchname>` to create a new branch and switch
         to it.
