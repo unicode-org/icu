@@ -1,12 +1,15 @@
 <!--
 Thank you for your pull request!
 
-Please see http://site.icu-project.org/processes/contribute for general
-information on contributing to ICU.
+* General info on contributing: please see https://github.com/unicode-org/icu/blob/main/CONTRIBUTING.md
+* Ticket numbers for minor changes: for minor changes (ex: docs typos), you can reuse one of the open catch-all tickets for our next release
+  - ICU 76 ticket: docs minor fixes: typos/etc./version updates / User Guide & API docs: ICU-22722
+  - ICU 76 ticket: code warnings/version updates: ICU-22721
+* Contributors license agreement (CLA): 
+  You will be automatically asked to sign the CLA before the PR is accepted.
+  To sign the CLA: https://cla-assistant.io/unicode-org/icu
 
-You will be automatically asked to sign the contributors license agreement (CLA) before the PR is accepted.
-- sign: https://cla-assistant.io/unicode-org/icu
-- license: http://www.unicode.org/copyright.html
+  For terms of use and license, see https://www.unicode.org/terms_of_use.html
 -->
 
 ##### Checklist
