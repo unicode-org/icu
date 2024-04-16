@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1712865275101,
+  "lastUpdate": 1713234456311,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20908,6 +20908,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 9.742546231660752,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "617b094df3eb853a35f1227472178836ce625cff",
+          "message": "ICU-22723 Update PR template help text for next version's ticket numbers\n\nSee #2962",
+          "timestamp": "2024-04-15T22:22:46-04:00",
+          "tree_id": "c26fac35b7f67c3332f2b95d6860c883a1e374c3",
+          "url": "https://github.com/unicode-org/icu/commit/617b094df3eb853a35f1227472178836ce625cff"
+        },
+        "date": 1713234351523,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 9.066487316841823,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
