@@ -2,9 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.locale;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 
 public final class LSR {
@@ -147,44 +150,96 @@ public final class LSR {
         return (encodeLanguageToInt() + (27*27*27) * encodeRegionToInt(m49)) |
             (encodeScriptToInt() << 24);
     }
-    private static String toLanguage(int encoded) {
-        if (encoded == 0) return "";
-        if (encoded == 1) return "skip";
-        encoded &= 0x00ffffff;
-        encoded %= 27*27*27;
-        StringBuilder res = new StringBuilder(3);
-        res.append((char)('a' + ((encoded % 27) - 1)));
-        res.append((char)('a' + (((encoded / 27 ) % 27) - 1)));
-        if (encoded / (27 * 27) != 0) {
-            res.append((char)('a' + ((encoded / (27 * 27)) - 1)));
+
+    /**
+      * CachedDecoder uses string pools to reduce memory needed for creating
+      * strings representing lang, region and script.
+      */
+    private static class CachedDecoder {
+        private static final String[] DECODED_ZERO =
+                new String[] {/*lang=*/ "", /*script=*/ "", /*region=*/ ""};
+        private static final String[] DECODED_ONE =
+                new String[] {/*lang=*/ "skip", /*script=*/ "script", /*region=*/ ""};
+
+        // Use local string pools instead of String.intern(), because a java runtime may put interned
+        // string into the GC root, and never get released if ICU4J needs to be unloaded.
+        // String.intern() could also be slower than a simple java.util.HashMap.
+        private final HashMap<Integer, String> langsCache;
+        private final HashMap<Integer, String> scriptsCache;
+        private final HashMap<Integer, String> regionsCache;
+
+        private final String[] m49;
+
+        CachedDecoder(String[] m49) {
+            int estLangCacheCapacity = 556;  // ~= LocaleIDs._languages.length
+            langsCache = new HashMap<>(estLangCacheCapacity);
+            scriptsCache = new HashMap<>(UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT));
+            int estRegionCacheCapacity = 253;  // ~= LocaleIDs._countries.length
+            regionsCache = new HashMap<>(estRegionCacheCapacity);
+            this.m49 = m49;
         }
-        return res.toString();
-    }
-    private static String toScript(int encoded) {
-        if (encoded == 0) return "";
-        if (encoded == 1) return "script";
-        encoded = (encoded >> 24) & 0x000000ff;
-        return UScript.getShortName(encoded);
-    }
-    private static String toRegion(int encoded, String[] m49) {
-        if (encoded == 0 || encoded == 1) return "";
-        encoded &= 0x00ffffff;
-        encoded /= 27 * 27 * 27;
-        encoded %= 27 * 27;
-        if (encoded < 27) {
-            return m49[encoded];
+
+        /**
+         * @return a String[3] object where the first element is a language code, the second element
+         *   is a script code, and the third element is a region code.
+         */
+        String[] decode(int encoded) {
+            if (encoded == 0) {
+                return DECODED_ZERO;
+            }
+            if (encoded == 1) {
+                return DECODED_ONE;
+            }
+
+            int encodedLang = encoded & 0x00ffffff;
+            encodedLang %= 27*27*27;
+            String lang = langsCache.computeIfAbsent(encodedLang, CachedDecoder::toLanguage);
+
+            int encodedScript = (encoded >> 24) & 0x000000ff;
+            String script = scriptsCache.computeIfAbsent(encodedScript, UScript::getShortName);
+
+            int encodedRegion = encoded & 0x00ffffff;
+            encodedRegion /= 27 * 27 * 27;
+            encodedRegion %= 27 * 27;
+
+            String region;
+            if (encodedRegion < 27) {
+                region = m49[encodedRegion];
+            } else {
+                region = regionsCache.computeIfAbsent(encodedRegion, CachedDecoder::toRegion);
+            }
+
+            return new String[] {lang, script, region};
         }
-        StringBuilder res = new StringBuilder(3);
-        res.append((char)('A' + ((encoded % 27) - 1)));
-        res.append((char)('A' + (((encoded / 27) % 27) - 1)));
-        return res.toString();
+
+        private static String toLanguage(int encoded) {
+            StringBuilder res = new StringBuilder(3);
+            res.append((char)('a' + ((encoded % 27) - 1)));
+            res.append((char)('a' + (((encoded / 27 ) % 27) - 1)));
+            if (encoded / (27 * 27) != 0) {
+                res.append((char)('a' + ((encoded / (27 * 27)) - 1)));
+            }
+            return res.toString();
+        }
+
+        private static String toRegion(int encoded) {
+            StringBuilder res = new StringBuilder(3);
+            res.append((char)('A' + ((encoded % 27) - 1)));
+            res.append((char)('A' + (((encoded / 27) % 27) - 1)));
+            return res.toString();
+        }
     }
 
     public static LSR[] decodeInts(int[] nums, String[] m49) {
         LSR[] lsrs = new LSR[nums.length];
+
+        // The decoder uses string pools to reduce memory impact.
+        // At least 7k LSR instances are created from this path.
+        CachedDecoder decoder = new CachedDecoder(m49);
         for (int i = 0; i < nums.length; ++i) {
-            int n = nums[i];
-            lsrs[i] = new LSR(toLanguage(n), toScript(n), toRegion(n, m49), LSR.IMPLICIT_LSR);
+            int encoded = nums[i];
+            String[] lsrStrings = decoder.decode(encoded);
+            lsrs[i] = new LSR(lsrStrings[0], lsrStrings[1], lsrStrings[2], LSR.IMPLICIT_LSR);
         }
         return lsrs;
     }
