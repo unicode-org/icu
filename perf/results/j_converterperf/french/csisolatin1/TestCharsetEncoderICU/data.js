@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713234577666,
+  "lastUpdate": 1713385659388,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -21088,6 +21088,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.43324374876033045,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "3f960044b87d0e343386c3311cfe025bd163483e",
+          "message": "ICU-22722 Revised ICU4J API doc process to modern tools\n\nSee #2969",
+          "timestamp": "2024-04-17T13:20:26-07:00",
+          "tree_id": "4b529ea15644141fbce821a9e57e7075aff7d43c",
+          "url": "https://github.com/unicode-org/icu/commit/3f960044b87d0e343386c3311cfe025bd163483e"
+        },
+        "date": 1713385551255,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.43328618761266824,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
