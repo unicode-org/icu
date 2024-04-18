@@ -1523,7 +1523,7 @@ Expression Parser::parseExpression(UErrorCode& status) {
     }
 
     // Parse attributes
-    AttributeAdder attrAdder(exprBuilder);
+    AttributeAdder<Expression::Builder> attrAdder(exprBuilder);
     parseAttributes(attrAdder, status);
 
     // Parse optional space
@@ -1985,7 +1985,7 @@ Markup Parser::parseMarkup(UErrorCode& status) {
     // Parse the attributes, which also must begin
     // with a ' '
     if (inBounds(source, index) && isWhitespace(source[index])) {
-        AttributeAdder attrAdder(builder);
+        AttributeAdder<Markup::Builder> attrAdder(builder);
         parseAttributes(attrAdder, status);
     }
 
