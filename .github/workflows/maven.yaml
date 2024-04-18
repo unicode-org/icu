@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+    outputs:
+      version: ${{ steps.mvn-proj-version.outputs.version }}
+      version-type: ${{ steps.mvn-proj-version-type.outputs.version-type }}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
@@ -25,16 +28,54 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-      - name: icu4j and releaseCLDR
+      - name: Store Maven project version
+        id: mvn-proj-version
+        run: |
+          cd icu4j
+          version="`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`"
+          echo "version=$version"  # debug/info logging for our own purposes, before sending to Github
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      # Set version-type=snapshot for tags that contain SNAPSHOT,  
+      # as well as for unicode-org-internal artifacts with a dash like `icu4j-for-cldr`. 
+      - name: Assess Maven version release/snapshot
+        id: mvn-proj-version-type
+        run: |
+          if echo "${{ steps.mvn-proj-version.outputs.version }}" | grep -E "\-|SNAPSHOT"
+          then echo "version-type=snapshot" >> "$GITHUB_OUTPUT"
+          else echo "version-type=release" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Prevent manual deployment attempts of full release
+        if: github.event_name == 'workflow_dispatch' && steps.mvn-proj-version-type.outputs.version-type == 'release'
+        run: |
+          echo "Manual deployments of publishing artifacts should only be attempted for snapshot versions"
+          exit 1;
+      - name: Build artifacts (icu4j, utilities-for-cldr)
         run: |
           cd icu4j
           mvn ${SHARED_MVN_ARGS} clean install -DskipTests -DskipIT -P with_sources
-      - name: deploy it
+      # For snapshot versions, publish icu4j & utilities-for-cldr
+      - name: Deploy to Github (snapshot version)
+        if: steps.mvn-proj-version-type.outputs.version-type == 'snapshot'
         run: |
           echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
           cd icu4j
           mvn deploy ${SHARED_MVN_ARGS} \
             -pl :icu4j,:utilities-for-cldr,:icu4j-root \
+            -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
+            -P cldr_utilities,with_sources
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # For release versions, publish utilities-for-cldr,
+      # but do not publish icu4j because the Maven artifact "coordinates"
+      # will conflict with the public-facing coordinates on Maven Central
+      # ("coordinates" = groupId, artifactId, version)
+      - name: Deploy to Github (release version)
+        if: steps.mvn-proj-version-type.outputs.version-type == 'release'
+        run: |
+          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA};
+          cd icu4j
+          mvn deploy ${SHARED_MVN_ARGS} \
+            -pl :utilities-for-cldr,:icu4j-root \
             -DaltDeploymentRepository=github::https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
             -P cldr_utilities,with_sources
         env:
