@@ -768,6 +768,36 @@ void TestMessageFormat2::testResolutionErrors() {
     testRuntimeErrorPattern(++i, ".local $bar = {|42| ~plural} .match {|horse| :string}  * {{{$bar}}}",
                             U_MF_UNSUPPORTED_EXPRESSION_ERROR);
 
+    // Bad options. The spec is unclear about this -- see https://github.com/unicode-org/message-format-wg/issues/738
+    // The current behavior is to set a U_MF_FORMATTING_ERROR for any invalid options.
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :number minimumIntegerDigits=-1} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :number minimumIntegerDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :number minimumFractionDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :number maximumFractionDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :number minimumSignificantDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :number maximumSignificantDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :integer minimumIntegerDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+    testRuntimeErrorPattern(++i,
+                            ".local $foo = {1 :integer maximumSignificantDigits=foo} {{bar {$foo}}}",
+                            U_MF_FORMATTING_ERROR);
+
+    // Ideally this would cover all the options, but since there are no spec tests yet for other options,
+    // they are omitted. See https://github.com/unicode-org/message-format-wg/issues/752
+
     // Selector error
     // Here, the plural selector returns "no match" so the * variant matches
     testRuntimeWarningPattern(++i, ".match {|horse| :number}\n\
