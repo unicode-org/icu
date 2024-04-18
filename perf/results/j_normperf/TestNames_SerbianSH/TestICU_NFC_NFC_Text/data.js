@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1713478523140,
+  "lastUpdate": 1713480395781,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -20848,6 +20848,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 1.9194930945807593,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "0c02f8c0075b07424e75311e776eef662bec9413",
+          "message": "ICU-22743 Change internal functions to propagate errors up.",
+          "timestamp": "2024-04-18T15:32:59-07:00",
+          "tree_id": "93bb1aac0df9258480a5eb68fc0cbb3558fae924",
+          "url": "https://github.com/unicode-org/icu/commit/0c02f8c0075b07424e75311e776eef662bec9413"
+        },
+        "date": 1713480291222,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.9605536911130774,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
