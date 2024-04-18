@@ -302,11 +302,11 @@ MFFunctionRegistry::~MFFunctionRegistry() {
             }
         }
 
-        int32_t maxSignificantDigits = number.maximumSignificantDigits(opts);
+        int32_t maxSignificantDigits = number.maximumSignificantDigits(opts, status);
         if (!isInteger) {
-            int32_t minFractionDigits = number.minimumFractionDigits(opts);
-            int32_t maxFractionDigits = number.maximumFractionDigits(opts);
-            int32_t minSignificantDigits = number.minimumSignificantDigits(opts);
+            int32_t minFractionDigits = number.minimumFractionDigits(opts, status);
+            int32_t maxFractionDigits = number.maximumFractionDigits(opts, status);
+            int32_t minSignificantDigits = number.minimumSignificantDigits(opts, status);
             Precision p = Precision::unlimited();
             bool precisionOptions = false;
 
@@ -343,7 +343,7 @@ MFFunctionRegistry::~MFFunctionRegistry() {
         }
 
         // All other options apply to both `:number` and `:integer`
-        int32_t minIntegerDigits = number.minimumIntegerDigits(opts);
+        int32_t minIntegerDigits = number.minimumIntegerDigits(opts, status);
         nf = nf.integerWidth(IntegerWidth::zeroFillTo(minIntegerDigits));
 
         // signDisplay
@@ -478,68 +478,48 @@ static FormattedPlaceholder tryParsingNumberLiteral(const number::LocalizedNumbe
     return FormattedPlaceholder(input, FormattedValue(std::move(result)));
 }
 
-int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts) const {
+int32_t StandardFunctions::Number::intValuedOption(const FunctionOptions& opts,
+                                                   const UnicodeString& optionName,
+                                                   int32_t defaultVal,
+                                                   UErrorCode& status) const {
+    Formattable opt;
+
+    if (opts.getFunctionOption(optionName, opt)) {
+        return static_cast<int32_t>(getInt64Value(locale, opt, status));
+    }
+    return defaultVal;
+}
+
+int32_t StandardFunctions::Number::maximumFractionDigits(const FunctionOptions& opts, UErrorCode& status) const {
     Formattable opt;
 
     if (isInteger) {
         return 0;
     }
 
-    if (opts.getFunctionOption(UnicodeString("maximumFractionDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxFraction()
-    // is an error.
-    return -1;
+    return intValuedOption(opts, UnicodeString("maximumFractionDigits"), number::impl::kMaxIntFracSig, status);
 }
 
-int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts) const {
+int32_t StandardFunctions::Number::minimumFractionDigits(const FunctionOptions& opts, UErrorCode& status) const {
+    Formattable opt;
+
+    if (isInteger) {
+        return 0;
+    }
+    return intValuedOption(opts, UnicodeString("minimumFractionDigits"), 0, status);
+}
+
+int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& opts, UErrorCode& status) const {
+    Formattable opt;
+
+    return intValuedOption(opts, UnicodeString("minimumIntegerDigits"), 0, status);
+}
+
+int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts, UErrorCode& status) const {
     Formattable opt;
 
     if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumFractionDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::minFraction()
-    // is an error.
-    return -1;
-}
-
-int32_t StandardFunctions::Number::minimumIntegerDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (opts.getFunctionOption(UnicodeString("minimumIntegerDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    return 0;
-}
-
-int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOptions& opts) const {
-    Formattable opt;
-
-    if (!isInteger) {
-        if (opts.getFunctionOption(UnicodeString("minimumSignificantDigits"), opt)) {
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            int64_t val = getInt64Value(locale, opt, localErrorCode);
-            if (U_SUCCESS(localErrorCode)) {
-                return static_cast<int32_t>(val);
-            }
-        }
+        return intValuedOption(opts, UnicodeString("minimumSignificantDigits"), 0, status);
     }
     // Returning -1 indicates that the option wasn't provided or was a non-integer.
     // The caller needs to check for that case, since passing -1 to Precision::minSignificantDigits()
@@ -547,20 +527,13 @@ int32_t StandardFunctions::Number::minimumSignificantDigits(const FunctionOption
     return -1;
 }
 
-int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOptions& opts) const {
+int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOptions& opts, UErrorCode& status) const {
     Formattable opt;
 
-    if (opts.getFunctionOption(UnicodeString("maximumSignificantDigits"), opt)) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        int64_t val = getInt64Value(locale, opt, localErrorCode);
-        if (U_SUCCESS(localErrorCode)) {
-            return static_cast<int32_t>(val);
-        }
-    }
-    // Returning -1 indicates that the option wasn't provided or was a non-integer.
-    // The caller needs to check for that case, since passing -1 to Precision::maxSignificantDigits()
+    // Returning 0 indicates that the option wasn't provided.
+    // The caller needs to check for that case, since passing 0 to Precision::maxSignificantDigits()
     // is an error.
-    return -1; // Not a valid value for Precision; has to be checked
+    return intValuedOption(opts, UnicodeString("maximumSignificantDigits"), 0, status);
 }
 
 bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
